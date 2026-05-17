@@ -311,40 +311,76 @@ test.describe('Advanced Overlay Components', () => {
       const divider = page.locator('.split-pane__divider').first()
       const firstSection = page.locator('.split-pane__first').first()
 
-      // Get initial width percentage
-      const initialWidth = await firstSection.evaluate((el) => {
-        const widthStr = el.style.width
-        return widthStr ? parseFloat(widthStr) : 50
-      })
+      // Get initial bounding box of first section
+      const initialBox = await firstSection.boundingBox()
+      expect(initialBox).toBeTruthy()
 
-      // Get divider position and move it
-      const dividerBox = await divider.boundingBox()
-      if (dividerBox) {
-        const startX = dividerBox.x + dividerBox.width / 2
-        const startY = dividerBox.y + dividerBox.height / 2
+      if (initialBox) {
+        const initialWidth = initialBox.width
+        const dividerBox = await divider.boundingBox()
 
-        // Drag the divider 30 pixels to the right
-        await page.mouse.move(startX, startY)
-        await page.mouse.down()
+        if (dividerBox) {
+          const startX = dividerBox.x + dividerBox.width / 2
+          const startY = dividerBox.y + dividerBox.height / 2
+          const containerBox = await splitPane.boundingBox()
 
-        // Move to new position
-        await page.mouse.move(startX + 30, startY)
-        await page.waitForTimeout(100) // Allow rerender
+          if (containerBox) {
+            // Simulate drag via JavaScript by dispatching proper DOM events
+            await page.evaluate((coords) => {
+              const { startX: sX, startY: sY, dragX: dX, dragY: dY } = coords
 
-        await page.mouse.up()
+              // Get the divider element
+              const dividerEl = document.querySelector('.split-pane__divider')
+              if (!dividerEl) return
 
-        // Give it time to update
-        await page.waitForTimeout(100)
+              // Dispatch mousedown event
+              const mouseDownEvent = new MouseEvent('mousedown', {
+                bubbles: true,
+                cancelable: true,
+                view: window,
+                clientX: sX,
+                clientY: sY,
+              })
+              dividerEl.dispatchEvent(mouseDownEvent)
 
-        // Get new width
-        const newWidth = await firstSection.evaluate((el) => {
-          const widthStr = el.style.width
-          return widthStr ? parseFloat(widthStr) : 50
-        })
+              // Simulate mousemove on document
+              setTimeout(() => {
+                const mouseMoveEvent = new MouseEvent('mousemove', {
+                  bubbles: true,
+                  cancelable: true,
+                  view: window,
+                  clientX: sX + dX,
+                  clientY: sY + dY,
+                })
+                document.dispatchEvent(mouseMoveEvent)
 
-        // Width should have changed (either increased or decreased)
-        const widthDiff = Math.abs(newWidth - initialWidth)
-        expect(widthDiff).toBeGreaterThan(0)
+                // Simulate mouseup
+                setTimeout(() => {
+                  const mouseUpEvent = new MouseEvent('mouseup', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                  })
+                  document.dispatchEvent(mouseUpEvent)
+                }, 50)
+              }, 50)
+            }, { startX, startY, dragX: 50, dragY: 0 })
+
+            // Wait for events to process and state to update
+            await page.waitForTimeout(300)
+
+            // Get new bounding box and verify size changed
+            const newBox = await firstSection.boundingBox()
+            expect(newBox).toBeTruthy()
+
+            if (newBox) {
+              const newWidth = newBox.width
+              const widthDiff = Math.abs(newWidth - initialWidth)
+              // The width should have changed by at least 10 pixels from the 50px drag
+              expect(widthDiff).toBeGreaterThan(10)
+            }
+          }
+        }
       }
     })
 
