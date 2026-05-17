@@ -1,7 +1,7 @@
 import React from 'react'
 import './Titlebar.css'
 
-interface TitlebarProps {
+export interface TitlebarProps {
   left?: React.ReactNode
   center?: React.ReactNode
   right?: React.ReactNode

@@ -1,7 +1,7 @@
 import React from 'react'
 import './Topbar.css'
 
-interface TopbarProps {
+export interface TopbarProps {
   breadcrumbs?: Array<{
     label: string
     href?: string

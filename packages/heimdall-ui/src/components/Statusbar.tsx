@@ -1,7 +1,7 @@
 import React from 'react'
 import './Statusbar.css'
 
-interface StatusbarProps {
+export interface StatusbarProps {
   left?: React.ReactNode
   center?: React.ReactNode
   right?: React.ReactNode

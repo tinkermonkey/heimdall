@@ -2,7 +2,7 @@ import React from 'react'
 import { Icon } from './Icon'
 import './Sidebar.css'
 
-interface SidebarSection {
+export interface SidebarSection {
   title: string
   items: Array<{
     id: string
@@ -12,7 +12,7 @@ interface SidebarSection {
   }>
 }
 
-interface SidebarProps {
+export interface SidebarProps {
   sections: SidebarSection[]
   activeItemId?: string
   collapsed?: boolean

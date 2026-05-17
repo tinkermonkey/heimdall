@@ -1,54 +1,9 @@
 import React from 'react'
-import { Titlebar } from './Titlebar'
-import { Statusbar } from './Statusbar'
-import { Sidebar } from './Sidebar'
-import { Topbar } from './Topbar'
+import { Titlebar, TitlebarProps } from './Titlebar'
+import { Statusbar, StatusbarProps } from './Statusbar'
+import { Sidebar, SidebarProps } from './Sidebar'
+import { Topbar, TopbarProps } from './Topbar'
 import './ShellLayout.css'
-
-interface TitlebarProps {
-  left?: React.ReactNode
-  center?: React.ReactNode
-  right?: React.ReactNode
-  className?: string
-}
-
-interface StatusbarProps {
-  left?: React.ReactNode
-  center?: React.ReactNode
-  right?: React.ReactNode
-  className?: string
-}
-
-interface TopbarProps {
-  breadcrumbs?: Array<{
-    label: string
-    href?: string
-    onClick?: () => void
-  }>
-  searchPlaceholder?: string
-  onSearch?: (query: string) => void
-  children?: React.ReactNode
-  className?: string
-}
-
-interface SidebarSection {
-  title: string
-  items: Array<{
-    id: string
-    label: string
-    icon?: string
-    count?: number
-  }>
-}
-
-interface SidebarProps {
-  sections: SidebarSection[]
-  activeItemId?: string
-  collapsed?: boolean
-  onCollapse?: (collapsed: boolean) => void
-  onSelectItem?: (itemId: string) => void
-  className?: string
-}
 
 interface ShellLayoutProps {
   titlebar?: TitlebarProps & { hide?: boolean }
@@ -76,15 +31,15 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
 
     return (
       <div ref={ref} className={classNames} {...props}>
-        {!titlebar?.hide && <Titlebar {...(titlebar || {})} />}
+        {titlebar && !titlebar.hide && <Titlebar {...titlebar} />}
         <div className="shell-layout__main">
-          {!sidebar?.hide && <Sidebar {...(sidebar || {})} />}
+          {sidebar && !sidebar.hide && <Sidebar {...sidebar} />}
           <div className="shell-layout__content">
-            {!topbar?.hide && <Topbar {...(topbar || {})} />}
+            {topbar && !topbar.hide && <Topbar {...topbar} />}
             <div className="shell-layout__canvas">{children}</div>
           </div>
         </div>
-        {!statusbar?.hide && <Statusbar {...(statusbar || {})} />}
+        {statusbar && !statusbar.hide && <Statusbar {...statusbar} />}
       </div>
     )
   }
