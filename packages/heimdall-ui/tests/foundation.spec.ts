@@ -18,99 +18,40 @@ import {
  */
 
 test.beforeEach(async ({ page }) => {
-  // Create a minimal test page with the token layer
-  await page.setContent(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>
-        /* Import tokens directly for this test */
-        @layer base {
-          :root {
-            --shell-bg: #0b0f14;
-            --shell-surface: #1a1f26;
-            --shell-fg-1: #ffffff;
-            --shell-fg-2: #d1d5db;
-            --shell-fg-3: #9ca3af;
-
-            --canvas-bg: #ffffff;
-            --canvas-surface: #f3f4f6;
-            --canvas-card: #ffffff;
-            --canvas-bg-2: #f9fafb;
-            --canvas-fg-1: #111827;
-            --canvas-fg-2: #6b7280;
-            --canvas-fg-3: #9ca3af;
-            --canvas-border: #e5e7eb;
-            --canvas-border-strong: #d1d5db;
-
-            --accent-primary: #22d3ee;
-            --accent-primary-hover: #06b6d4;
-            --accent-primary-deep: #0e7ea3;
-
-            --status-ok: #22c55e;
-            --status-warn: #eab308;
-            --status-error: #ef4444;
-            --status-emerald: #10b981;
-            --status-amber: #f59e0b;
-            --status-rose: #f43f5e;
-            --status-violet: #8b5cf6;
-
-            --radius-sm: 4px;
-            --radius-md: 6px;
-            --radius-lg: 8px;
-            --radius-xl: 12px;
-            --radius-full: 9999px;
-
-            --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-            --font-mono: JetBrains Mono, monospace;
-          }
-
-          html {
-            font-family: var(--font-sans);
-          }
-
-          body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--canvas-bg);
-            color: var(--canvas-fg-1);
-            font-size: 1rem;
-          }
-        }
-      </style>
-    </head>
-    <body>
-      <div id="root"></div>
-    </body>
-    </html>
-  `)
+  // Navigate to a test page that loads the actual tokens.css
+  // This ensures tests verify the real token system, not hardcoded values
+  await page.goto('http://localhost:5173/?test=foundation')
+  await page.waitForLoadState('networkidle')
 })
 
 test('should have light canvas as default background color', async ({ page }) => {
   const bgColor = await getCSSVariableValue(page, '--canvas-bg')
-  expect(bgColor).toBe('#ffffff')
+  // Actual token format: RGB channels without wrapper
+  expect(bgColor.trim()).toBe('255 255 255')
 })
 
 test('should have shell background always dark', async ({ page }) => {
   const shellBg = await getCSSVariableValue(page, '--shell-bg')
-  expect(shellBg).toBe('#0b0f14')
+  // Actual token format: RGB channels
+  expect(shellBg.trim()).toBe('11 15 20')
 })
 
 test('should use cyan accent color, not orange', async ({ page }) => {
   const accentPrimary = await getCSSVariableValue(page, '--accent-primary')
-  expect(accentPrimary).toBe('#22d3ee')
+  // Actual token format: RGB channels (cyan-400)
+  expect(accentPrimary.trim()).toBe('34 211 238')
 })
 
 test('should have cyan accent hover state', async ({ page }) => {
   const accentHover = await getCSSVariableValue(page, '--accent-primary-hover')
-  expect(accentHover).toBe('#06b6d4')
+  // Actual token format: RGB channels
+  expect(accentHover.trim()).toBe('6 182 212')
 })
 
 test('should have cyan accent deep state', async ({ page }) => {
   const accentDeep = await getCSSVariableValue(page, '--accent-primary-deep')
-  expect(accentDeep).toBe('#0e7ea3')
+  // Actual token format: RGB channels
+  expect(accentDeep.trim()).toBe('14 126 163')
 })
 
 test('should support semantic status colors', async ({ page }) => {
@@ -118,9 +59,10 @@ test('should support semantic status colors', async ({ page }) => {
   const statusWarn = await getCSSVariableValue(page, '--status-warn')
   const statusError = await getCSSVariableValue(page, '--status-error')
 
-  expect(statusOk).toBe('#22c55e')
-  expect(statusWarn).toBe('#eab308')
-  expect(statusError).toBe('#ef4444')
+  // Actual token format: RGB channels (emerald for ok, amber for warn, rose for error)
+  expect(statusOk.trim()).toBe('34 197 94')
+  expect(statusWarn.trim()).toBe('234 179 8')
+  expect(statusError.trim()).toBe('239 68 68')
 })
 
 test('should have radius tokens', async ({ page }) => {
@@ -128,9 +70,9 @@ test('should have radius tokens', async ({ page }) => {
   const radiusMd = await getCSSVariableValue(page, '--radius-md')
   const radiusLg = await getCSSVariableValue(page, '--radius-lg')
 
-  expect(radiusSm).toBe('4px')
-  expect(radiusMd).toBe('6px')
-  expect(radiusLg).toBe('8px')
+  expect(radiusSm.trim()).toBe('4px')
+  expect(radiusMd.trim()).toBe('6px')
+  expect(radiusLg.trim()).toBe('8px')
 })
 
 test('should support dark-canvas class toggle', async ({ page }) => {

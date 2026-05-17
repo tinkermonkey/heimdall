@@ -15,6 +15,9 @@ import HomelabDashboardRebuilt from './examples/HomelabDashboardRebuilt'
 import PrimitivesTestPage from './test-pages/PrimitivesTestPage'
 import DataDisplayTestPage from './test-pages/DataDisplayTestPage'
 import ShellFrameworkTestPage from './test-pages/ShellFrameworkTestPage'
+import OverlayComponentsTestPage from './test-pages/OverlayComponentsTestPage'
+import AdvancedOverlayComponentsTestPage from './test-pages/AdvancedOverlayComponentsTestPage'
+import FoundationTestPage from './test-pages/FoundationTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -24,6 +27,11 @@ export default function App() {
   const exampleParam = useMemo(() => {
     const params = new URLSearchParams(window.location.search)
     return params.get('example')
+  }, [])
+
+  const testParam = useMemo(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('test')
   }, [])
 
   const tableData = [
@@ -63,6 +71,18 @@ export default function App() {
 
   if (exampleParam === 'shell-framework') {
     return <ShellFrameworkTestPage />
+  }
+
+  if (exampleParam === 'overlays') {
+    return <OverlayComponentsTestPage />
+  }
+
+  if (exampleParam === 'advanced-overlays') {
+    return <AdvancedOverlayComponentsTestPage />
+  }
+
+  if (testParam === 'foundation') {
+    return <FoundationTestPage />
   }
 
   return (

@@ -6,17 +6,17 @@ import path from 'path'
 
 test.describe('Rebuilt View Integration Tests', () => {
   test('rebuilt context studio dashboard renders without errors', async ({ page }) => {
-    // Navigate to the ContextStudioRebuilt example
-    await page.goto('http://localhost:5173/?example=rebuilt')
-    await page.waitForLoadState('networkidle')
-
-    // Check for any console errors
+    // Check for any console errors (register listener BEFORE navigation to catch load-time errors)
     const consoleErrors: string[] = []
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
         consoleErrors.push(msg.text())
       }
     })
+
+    // Navigate to the ContextStudioRebuilt example
+    await page.goto('http://localhost:5173/?example=rebuilt')
+    await page.waitForLoadState('networkidle')
 
     // Wait for the rebuilt view dashboard to render
     const heading = page.locator('h1:has-text("Dashboard")')

@@ -190,8 +190,9 @@ export async function assertLightCanvasTokens(page: Page): Promise<void> {
   const canvasBg = await getCSSVariableValue(page, '--canvas-bg')
   const shellBg = await getCSSVariableValue(page, '--shell-bg')
 
-  expect(canvasBg).toBe('#ffffff')
-  expect(shellBg).toBe('#0b0f14')
+  // Token system uses RGB channel format
+  expect(canvasBg.trim()).toBe('255 255 255')
+  expect(shellBg.trim()).toBe('11 15 20')
 }
 
 /**
@@ -200,6 +201,6 @@ export async function assertLightCanvasTokens(page: Page): Promise<void> {
 export async function assertCyanAccent(page: Page): Promise<void> {
   const accentPrimary = await getCSSVariableValue(page, '--accent-primary')
 
-  // Should be cyan, not orange
-  expect(accentPrimary).toContain('22d3ee') // cyan-400
+  // Should be cyan, not orange (RGB channel format)
+  expect(accentPrimary.trim()).toBe('34 211 238')
 }
