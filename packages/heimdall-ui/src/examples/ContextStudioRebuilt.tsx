@@ -29,8 +29,8 @@ export default function ContextStudioRebuilt() {
   return (
     <ShellLayout
       titlebar={{
-        left: <span style={{ fontSize: '14px', fontWeight: 500 }}>Context Studio</span>,
-        center: <span style={{ fontSize: '14px' }}>Knowledge Graph Management</span>,
+        left: <span className="text-sm font-medium">Context Studio</span>,
+        center: <span className="text-sm">Knowledge Graph Management</span>,
       }}
       topbar={{
         breadcrumbs: [
@@ -47,31 +47,31 @@ export default function ContextStudioRebuilt() {
       }}
       statusbar={{
         left: <span>Context Studio</span>,
-        right: <span>UI · Phase 7 · Integration Validation</span>,
+        right: <span>UI · Design System</span>,
       }}
     >
-      <div style={{ padding: '22px 26px 32px', maxWidth: '1200px' }}>
+      <div className="px-6 py-5 max-w-5xl">
         {/* Page Header */}
-        <div style={{ marginBottom: '22px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
             <Chip variant="cyan">workspace · default</Chip>
-            <span style={{ fontSize: '11px', color: 'rgb(var(--canvas-fg-3))' }}>
+            <span className="text-xs text-canvas-fg-3">
               last sync 2 min ago
             </span>
           </div>
-          <h1 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: 700, color: 'rgb(var(--canvas-fg-1))' }}>
+          <h1 className="m-0 text-2xl font-bold text-canvas-fg-1 mb-2">
             Dashboard
           </h1>
-          <span style={{ fontSize: '14px', color: 'rgb(var(--canvas-fg-2))' }}>
+          <span className="text-sm text-canvas-fg-2">
             /workspace/default
           </span>
-          <p style={{ margin: '12px 0 0 0', fontSize: '14px', color: 'rgb(var(--canvas-fg-2))' }}>
+          <p className="m-0 mt-3 text-sm text-canvas-fg-2">
             Curate knowledge graphs for retrieval-augmented generation and agents.
           </p>
         </div>
 
         {/* Stat Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '22px' }}>
+        <div className="grid grid-cols-4 gap-4 mb-6">
           <StatTile label="Taxonomies" value="3" color="cyan" />
           <StatTile
             label="Classes"
@@ -94,34 +94,11 @@ export default function ContextStudioRebuilt() {
         </div>
 
         {/* Main Content Area */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.55fr 1fr',
-            gap: '14px',
-            marginBottom: '22px',
-          }}
-        >
+        <div className="grid gap-4 mb-6" style={{ gridTemplateColumns: '1.55fr 1fr' }}>
           {/* Knowledge Graph Structure Panel */}
-          <div
-            style={{
-              border: '1px solid rgb(var(--canvas-border))',
-              borderRadius: '8px',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <div
-              style={{
-                padding: '14px 16px',
-                borderBottom: '1px solid rgb(var(--canvas-border))',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: 500 }}>
+          <div className="border border-canvas-border rounded-lg overflow-hidden flex flex-col">
+            <div className="px-4 py-3 border-b border-canvas-border flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm font-medium">
                 <Icon name="schema" size={14} />
                 Knowledge Graph Structure
               </div>
@@ -129,20 +106,14 @@ export default function ContextStudioRebuilt() {
                 Open
               </Button>
             </div>
-            <div
-              style={{
-                padding: '16px',
-                color: 'rgb(var(--canvas-fg-2))',
-                fontSize: '13px',
-              }}
-            >
-              <div style={{ marginBottom: '12px' }}>
-                <div style={{ fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', marginBottom: '6px' }}>
+            <div className="p-4 text-canvas-fg-2 text-sm">
+              <div className="mb-3">
+                <div className="text-xs font-semibold uppercase mb-1.5">
                   3 taxonomies · 128 classes
                 </div>
-                <p style={{ margin: '0 0 12px 0' }}>Core structure with 128 domain classes organized across 3 taxonomies</p>
+                <p className="m-0 mb-3">Core structure with 128 domain classes organized across 3 taxonomies</p>
               </div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <div className="flex gap-2 flex-wrap">
                 <Chip variant="cyan">organism</Chip>
                 <Chip variant="violet">climate</Chip>
                 <Chip variant="emerald">software</Chip>
@@ -151,25 +122,9 @@ export default function ContextStudioRebuilt() {
           </div>
 
           {/* Recent Activity Panel */}
-          <div
-            style={{
-              border: '1px solid rgb(var(--canvas-border))',
-              borderRadius: '8px',
-              overflow: 'hidden',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <div
-              style={{
-                padding: '14px 16px',
-                borderBottom: '1px solid rgb(var(--canvas-border))',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: 500 }}>
+          <div className="border border-canvas-border rounded-lg overflow-hidden flex flex-col">
+            <div className="px-4 py-3 border-b border-canvas-border flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm font-medium">
                 <Icon name="history" size={14} />
                 Recent activity
               </div>
@@ -177,51 +132,36 @@ export default function ContextStudioRebuilt() {
                 View all
               </Button>
             </div>
-            <div style={{ padding: '16px', color: 'rgb(var(--canvas-fg-2))', fontSize: '13px' }}>
-              <div style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid rgb(var(--canvas-border))' }}>
-                <div style={{ fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', marginBottom: '4px', color: 'rgb(var(--canvas-fg-3))' }}>
+            <div className="p-4 text-canvas-fg-2 text-sm">
+              <div className="mb-3 pb-3 border-b border-canvas-border">
+                <div className="text-xs font-semibold uppercase mb-1 text-canvas-fg-3">
                   UPDATE
                 </div>
-                <div>Updated <span style={{ fontWeight: 500 }}>organism class</span> — Added 4 new properties</div>
-                <div style={{ fontSize: '12px', marginTop: '4px', color: 'rgb(var(--canvas-fg-3))' }}>2m ago · by system</div>
+                <div>Updated <span className="font-medium">organism class</span> — Added 4 new properties</div>
+                <div className="text-xs mt-1 text-canvas-fg-3">2m ago · by system</div>
               </div>
-              <div style={{ marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid rgb(var(--canvas-border))' }}>
-                <div style={{ fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', marginBottom: '4px', color: 'rgb(var(--canvas-fg-3))' }}>
+              <div className="mb-3 pb-3 border-b border-canvas-border">
+                <div className="text-xs font-semibold uppercase mb-1 text-canvas-fg-3">
                   SYNC
                 </div>
-                <div>Synced <span style={{ fontWeight: 500 }}>individuals dataset</span> — 38 new records</div>
-                <div style={{ fontSize: '12px', marginTop: '4px', color: 'rgb(var(--canvas-fg-3))' }}>12m ago · by pipeline</div>
+                <div>Synced <span className="font-medium">individuals dataset</span> — 38 new records</div>
+                <div className="text-xs mt-1 text-canvas-fg-3">12m ago · by pipeline</div>
               </div>
               <div>
-                <div style={{ fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', marginBottom: '4px', color: 'rgb(var(--canvas-fg-3))' }}>
+                <div className="text-xs font-semibold uppercase mb-1 text-canvas-fg-3">
                   CREATE
                 </div>
-                <div>Created <span style={{ fontWeight: 500 }}>climate taxonomy</span> — Initialized with 2 classes</div>
-                <div style={{ fontSize: '12px', marginTop: '4px', color: 'rgb(var(--canvas-fg-3))' }}>1h ago · by user</div>
+                <div>Created <span className="font-medium">climate taxonomy</span> — Initialized with 2 classes</div>
+                <div className="text-xs mt-1 text-canvas-fg-3">1h ago · by user</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Active Pipelines */}
-        <div
-          style={{
-            border: '1px solid rgb(var(--canvas-border))',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            marginBottom: '22px',
-          }}
-        >
-          <div
-            style={{
-              padding: '14px 16px',
-              borderBottom: '1px solid rgb(var(--canvas-border))',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: 500 }}>
+        <div className="border border-canvas-border rounded-lg overflow-hidden mb-6">
+          <div className="px-4 py-3 border-b border-canvas-border flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm font-medium">
               <Icon name="pipeline" size={14} />
               Active pipelines
             </div>
@@ -229,26 +169,22 @@ export default function ContextStudioRebuilt() {
               All pipelines
             </Button>
           </div>
-          <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+          <div className="p-4 grid gap-4" style={{ gridTemplateColumns: '1fr 1fr' }}>
             {[
               { name: 'Ingestion Pipeline', status: 'running', progress: 75 },
               { name: 'Entity Linking', status: 'completed', progress: 100 },
             ].map((pipeline) => (
-              <div key={pipeline.name} style={{ border: '1px solid rgb(var(--canvas-border))', borderRadius: '6px', padding: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontWeight: 500, fontSize: '13px' }}>{pipeline.name}</span>
+              <div key={pipeline.name} className="border border-canvas-border rounded-sm p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-sm">{pipeline.name}</span>
                   <Chip variant={pipeline.status === 'running' ? 'cyan' : 'emerald'}>
                     {pipeline.status}
                   </Chip>
                 </div>
-                <div style={{ width: '100%', height: '4px', backgroundColor: 'rgb(var(--canvas-border))', borderRadius: '2px', overflow: 'hidden' }}>
+                <div className="w-full h-1 bg-canvas-border rounded-sm overflow-hidden">
                   <div
-                    style={{
-                      height: '100%',
-                      width: `${pipeline.progress}%`,
-                      backgroundColor: 'rgb(var(--status-cyan))',
-                      transition: 'width 0.3s ease',
-                    }}
+                    className="h-full bg-status-cyan transition-all duration-300"
+                    style={{ width: `${pipeline.progress}%` }}
                   />
                 </div>
               </div>
@@ -258,11 +194,11 @@ export default function ContextStudioRebuilt() {
 
         {/* Quick Access */}
         <div>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: 600 }}>Quick access</h3>
-          <p style={{ margin: '0 0 12px 0', fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>
+          <h3 className="m-0 mb-3 text-sm font-semibold">Quick access</h3>
+          <p className="m-0 mb-3 text-xs text-canvas-fg-2">
             Jump to common workflows
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+          <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
             {[
               { label: 'Taxonomies', description: 'Manage top-level domains', icon: 'schema' as const },
               { label: 'Classes', description: 'Define knowledge structure', icon: 'graph' as const },
@@ -273,46 +209,16 @@ export default function ContextStudioRebuilt() {
             ].map((item) => (
               <button
                 key={item.label}
-                style={{
-                  padding: '12px 14px',
-                  border: '1px solid rgb(var(--canvas-border))',
-                  borderRadius: '6px',
-                  backgroundColor: 'transparent',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  textAlign: 'left',
-                  transition: 'all 0.15s ease',
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = 'rgb(var(--canvas-surface))'
-                  ;(e.currentTarget as HTMLElement).style.borderColor = 'rgb(var(--canvas-border-strong))'
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent'
-                  ;(e.currentTarget as HTMLElement).style.borderColor = 'rgb(var(--canvas-border))'
-                }}
+                className="px-3.5 py-3 border border-canvas-border rounded-sm bg-transparent cursor-pointer flex items-center gap-3 text-left transition-all duration-150 hover:bg-canvas-surface hover:border-canvas-border-strong"
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '4px',
-                    backgroundColor: 'rgb(var(--canvas-surface))',
-                    flexShrink: 0,
-                  }}
-                >
+                <div className="flex items-center justify-center w-8 h-8 rounded-sm bg-canvas-surface flex-shrink-0">
                   <Icon name={item.icon} size={16} />
                 </div>
                 <div>
-                  <div style={{ fontWeight: 500, fontSize: '13px', marginBottom: '2px' }}>
+                  <div className="font-medium text-sm mb-0.5">
                     {item.label}
                   </div>
-                  <div style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-3))' }}>
+                  <div className="text-xs text-canvas-fg-3">
                     {item.description}
                   </div>
                 </div>

@@ -68,9 +68,11 @@ function measureBundleSize() {
 }
 
 function estimateRenderMetrics() {
-  console.log('⚡ Estimated render metrics...')
+  console.log('⚡ Estimated render metrics (targets, not measured)...')
 
   const metrics = {
+    renderMetricsEstimated: true,
+    renderMetricsNote: 'These are target estimates based on component complexity. Actual measurements should be captured using Playwright performance API in CI.',
     components: {
       average: '< 1ms',
       slowest: 'ShellLayout (5-10ms with full props)',
@@ -81,17 +83,17 @@ function estimateRenderMetrics() {
       docsAppRenderTime: '< 100ms',
     },
     notes: [
-      'Measurements taken on M1 Mac with 16GB RAM',
+      'Render metrics are estimates based on component complexity, not measured values',
       'Components use CSS-in-JS and Tailwind for styling',
-      'Render times include React component mounting and DOM painting',
-      'Actual times depend on device performance and network conditions',
+      'Render times represent target performance goals',
+      'Actual measurements should be captured using Playwright performance API',
     ],
   }
 
-  console.log(`  ✓ Individual component render: ${metrics.components.average}`)
-  console.log(`  ✓ Rebuilt view: ${metrics.integration.rebuiltViewRenderTime}`)
-  console.log(`  ✓ Preview cards: ${metrics.integration.previewCardsRenderTime}`)
-  console.log(`  ✓ Docs app: ${metrics.integration.docsAppRenderTime}\n`)
+  console.log(`  ✓ Individual component render (est): ${metrics.components.average}`)
+  console.log(`  ✓ Rebuilt view (est): ${metrics.integration.rebuiltViewRenderTime}`)
+  console.log(`  ✓ Preview cards (est): ${metrics.integration.previewCardsRenderTime}`)
+  console.log(`  ✓ Docs app (est): ${metrics.integration.docsAppRenderTime}\n`)
 
   return metrics
 }

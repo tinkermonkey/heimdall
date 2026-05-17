@@ -1,11 +1,9 @@
 import { test, expect } from '@playwright/test'
-import * as fs from 'fs'
-import * as path from 'path'
 
 test.describe('Rebuilt View Integration Tests', () => {
   test('rebuilt context studio dashboard renders without errors', async ({ page }) => {
-    // Navigate to the Vite dev server
-    await page.goto('http://localhost:5173')
+    // Navigate to the ContextStudioRebuilt example
+    await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
 
     // Check for any console errors
@@ -16,8 +14,8 @@ test.describe('Rebuilt View Integration Tests', () => {
       }
     })
 
-    // Wait for the app to render
-    const heading = page.locator('h1:has-text("Heimdall Design System")')
+    // Wait for the rebuilt view dashboard to render
+    const heading = page.locator('h1:has-text("Dashboard")')
     await expect(heading).toBeVisible({ timeout: 5000 })
 
     // Verify no console errors occurred
@@ -25,7 +23,7 @@ test.describe('Rebuilt View Integration Tests', () => {
   })
 
   test('rebuilt view full-page visual snapshot', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
 
     // Wait for shell to be fully rendered
@@ -39,7 +37,7 @@ test.describe('Rebuilt View Integration Tests', () => {
   })
 
   test('shell layout components render correctly', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
 
     // Check titlebar
@@ -58,13 +56,13 @@ test.describe('Rebuilt View Integration Tests', () => {
     const statusbar = page.locator('[class*="statusbar"]').first()
     await expect(statusbar).toBeVisible()
 
-    // Verify content area is present
-    const content = page.locator('h1')
-    await expect(content).toContainText('Heimdall Design System')
+    // Verify content area has the rebuilt view heading
+    const content = page.locator('h1:has-text("Dashboard")')
+    await expect(content).toBeVisible()
   })
 
   test('stat tiles display correct data', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
 
     // Find stat tiles
@@ -83,7 +81,7 @@ test.describe('Rebuilt View Integration Tests', () => {
   })
 
   test('interactive elements are functional', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
 
     // Test button click
@@ -99,7 +97,7 @@ test.describe('Rebuilt View Integration Tests', () => {
   })
 
   test('sidebar collapse/expand functionality', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
 
     // Look for collapse button (typically in sidebar header)
@@ -107,12 +105,12 @@ test.describe('Rebuilt View Integration Tests', () => {
     await expect(sidebarSection).toBeVisible()
 
     // Sidebar should be visible initially
-    const mainContent = page.locator('h1')
+    const mainContent = page.locator('h1:has-text("Dashboard")')
     await expect(mainContent).toBeVisible()
   })
 
   test('all exported components are used in rebuilt view', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
 
     // Verify key components are present
