@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import './Toast.css'
 import { Icon, IconName } from './Icon'
 
-type ToastVariant = 'success' | 'error' | 'warning' | 'info'
+export type ToastVariant = 'success' | 'error' | 'warning' | 'info'
 
-interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean
   onClose: () => void
   title: string

@@ -26,11 +26,11 @@ export { NavItem, type NavItemProps } from './NavItem'
 
 export { Sidebar, type SidebarProps } from './Sidebar'
 
-export { Topbar } from './Topbar'
+export { Topbar, type TopbarProps } from './Topbar'
 
 export { TabBar, type TabBarProps, type Tab } from './TabBar'
 
-export { Titlebar } from './Titlebar'
+export { Titlebar, type TitlebarProps } from './Titlebar'
 
 export { Statusbar, type StatusbarProps } from './Statusbar'
 
@@ -40,7 +40,7 @@ export { Modal, type ModalProps } from './Modal'
 
 export { ConfirmDialog, type ConfirmDialogProps, type ConfirmDialogVariant } from './ConfirmDialog'
 
-export { Toast } from './Toast'
+export { Toast, type ToastProps, type ToastVariant } from './Toast'
 
 export { CommandPalette, type Command, type CommandPaletteProps } from './CommandPalette'
 
