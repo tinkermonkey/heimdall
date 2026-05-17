@@ -44,9 +44,12 @@ function App() {
       root.style.setProperty("--shell-bg-2", "#0A0E13");
       root.style.setProperty("--shell-surface", "#10161F");
     } else if (tweaks.shellTone === "slate") {
-      root.style.setProperty("--shell-bg", "#0F1729");
-      root.style.setProperty("--shell-bg-2", "#13203A");
-      root.style.setProperty("--shell-surface", "#1B2949");
+      root.style.setProperty("--shell-bg",        "#0F1729");
+      root.style.setProperty("--shell-bg-2",      "#13203A");
+      root.style.setProperty("--shell-surface",   "#1B2949");
+      root.style.setProperty("--shell-surface-2", "#243763");
+      root.style.setProperty("--shell-border",    "#1E2A44");
+      root.style.setProperty("--shell-border-2",  "#2A3A5C");
     } else {
       root.style.setProperty("--shell-bg", "#0B0F14");
       root.style.setProperty("--shell-bg-2", "#0F141B");

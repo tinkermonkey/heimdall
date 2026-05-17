@@ -2447,15 +2447,15 @@ body:not(.tweaks-on) .tweak-only {
    Builds on the slate background palette so the whole studio reads as one piece.
 */
 body.dark-canvas {
-  --canvas-bg: #14191f; /* canvas surface — slate, sits between shell-bg and shell-surface */
-  --canvas-bg-2: #1b222a; /* table-header / inset zones */
-  --canvas-card: #1b222a; /* panels, stat tiles, drawer, pipeline-card */
-  --canvas-bd: #2a323c;
-  --canvas-bd-2: #3a4452;
-  --canvas-fg-1: #e6edf3;
-  --canvas-fg-2: #b0bac5;
-  --canvas-fg-3: #7e8a98;
-  --canvas-fg-4: #5a6573;
+  --canvas-bg:    #14203A;  /* navy work surface — one notch above --shell-bg-2 */
+  --canvas-bg-2:  #1B2949;  /* table-header / inset zones */
+  --canvas-card:  #1B2949;  /* panels, stat tiles, drawer, pipeline-card */
+  --canvas-bd:    #243763;
+  --canvas-bd-2:  #2F4476;
+  --canvas-fg-1:  #E2E8F0;  /* slate-200 */
+  --canvas-fg-2:  #94A3B8;  /* slate-400 */
+  --canvas-fg-3:  #64748B;  /* slate-500 */
+  --canvas-fg-4:  #475569;  /* slate-600 */
 }
 
 /* Hover surfaces inside dark canvas */
@@ -2593,10 +2593,9 @@ body.dark-canvas .pipeline-card-flow {
   );
 }
 
-/* Topbar tone — pull to match canvas darkness so chrome doesn't read as "lit up" */
-body.dark-canvas .topbar {
-  background: var(--shell-bg);
-}
+/* Workspace gutter — matches sidebar/topbar chrome so the canvas inner-radius reads clearly */
+body.dark-canvas .workspace { background: var(--shell-bg-2); }
+
 body.dark-canvas .topbar-search input {
   background: rgba(0, 0, 0, 0.25);
 }

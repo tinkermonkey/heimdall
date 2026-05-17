@@ -5,12 +5,13 @@
      ========================================================================= */
 
   :root {
-    /* ---- Shell Surface (always dark) ---- */
-    --shell-bg: 11 15 20;          /* #0b0f14 — outermost shell */
-    --shell-bg-2: 15 20 27;        /* #0f141b — secondary shell layer */
-    --shell-surface: 19 26 35;     /* #131a23 — surfaces/panels */
-    --shell-surface-2: 26 34 48;   /* #1a2230 — elevated surfaces */
-    --shell-border: 30 39 52;      /* #1e2734 — shell dividers */
+    /* ---- Shell Surface (always dark — slate navy) ---- */
+    --shell-bg: 15 23 41;          /* #0f1729 — outermost shell */
+    --shell-bg-2: 19 32 58;        /* #13203a — secondary shell layer */
+    --shell-surface: 27 41 73;     /* #1b2949 — surfaces/panels */
+    --shell-surface-2: 36 55 99;   /* #243763 — elevated surfaces */
+    --shell-border: 30 42 68;      /* #1e2a44 — shell dividers */
+    --shell-border-2: 42 58 92;    /* #2a3a5c — input border, scrollbar thumb */
     --shell-fg-1: 255 255 255;
     --shell-fg-2: 209 213 219;
     --shell-fg-3: 156 163 175;
@@ -165,17 +166,17 @@
     --focus-ring: 0 0 0 3px rgba(245, 158, 11, 0.18);
   }
 
-  /* ---- Dark Canvas Mode ---- */
+  /* ---- Dark Canvas Mode (slate-toned navy) ---- */
   body.dark-canvas {
-    --canvas-bg: 20 25 31;
-    --canvas-surface: 27 34 42;
-    --canvas-card: 31 38 48;
-    --canvas-bg-2: 39 46 56;
-    --canvas-fg-1: 249 250 251;
-    --canvas-fg-2: 209 213 219;
-    --canvas-fg-3: 156 163 175;
-    --canvas-border: 55 65 81;
-    --canvas-border-strong: 75 85 99;
+    --canvas-bg: 20 32 58;          /* #14203a — navy work surface */
+    --canvas-surface: 27 41 73;     /* #1b2949 — elevated panels */
+    --canvas-card: 27 41 73;        /* #1b2949 — panels, stat tiles, drawer */
+    --canvas-bg-2: 27 41 73;        /* #1b2949 — table-header / inset zones */
+    --canvas-fg-1: 226 232 240;     /* #e2e8f0 — slate-200 */
+    --canvas-fg-2: 148 163 184;     /* #94a3b8 — slate-400 */
+    --canvas-fg-3: 100 116 139;     /* #64748b — slate-500 */
+    --canvas-border: 36 55 99;      /* #243763 */
+    --canvas-border-strong: 47 68 118; /* #2f4476 */
   }
 
   /* ---- Base Element Styles ---- */

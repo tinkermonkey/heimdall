@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { ShellLayout, type IconName } from '@heimdall/ui'
+import { useState, useEffect } from 'react'
+import { ShellLayout, Icon, type IconName } from '@heimdall/ui'
 
 import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase } from './showcases/FoundationShowcase'
 import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase } from './showcases/PrimitivesShowcase'
@@ -144,6 +144,12 @@ function getLabel(id: string): string {
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [currentId, setCurrentId] = useState(DEFAULT_SHOWCASE)
+  const [darkCanvas, setDarkCanvas] = useState(() => localStorage.getItem('heimdall-dark-canvas') === '1')
+
+  useEffect(() => {
+    document.body.classList.toggle('dark-canvas', darkCanvas)
+    localStorage.setItem('heimdall-dark-canvas', darkCanvas ? '1' : '0')
+  }, [darkCanvas])
 
   const Showcase = SHOWCASE_MAP[currentId] ?? SHOWCASE_MAP[DEFAULT_SHOWCASE]
   const sectionLabel = NAV_SECTIONS.find(s => s.items.some(i => i.id === currentId))?.title ?? ''
@@ -159,6 +165,22 @@ function App() {
           { label: sectionLabel },
           { label: getLabel(currentId) },
         ],
+        children: (
+          <button
+            onClick={() => setDarkCanvas(v => !v)}
+            title={darkCanvas ? 'Switch to light canvas' : 'Switch to dark canvas'}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 28, height: 28, borderRadius: 6, border: '1px solid',
+              background: 'transparent', cursor: 'pointer',
+              borderColor: darkCanvas ? 'rgba(245,158,11,0.35)' : 'rgb(var(--shell-border))',
+              color: darkCanvas ? 'rgb(var(--accent-primary))' : 'rgb(var(--shell-fg-3))',
+              transition: 'color 120ms, border-color 120ms, background 120ms',
+            }}
+          >
+            <Icon name={darkCanvas ? 'sun' : 'moon'} size={14} />
+          </button>
+        ),
       }}
       sidebar={{
         collapsed: sidebarCollapsed,

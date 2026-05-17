@@ -103,8 +103,8 @@ Every screen is built from exactly two surfaces — shell and canvas:
 
 | Surface | Light canvas | Dark canvas |
 |---|---|---|
-| Shell bg | `#0B0F14` | `#0B0F14` (always dark) |
-| Canvas bg | `#FFFFFF` | `#14191F` |
+| Shell bg | `#0F1729` | `#0F1729` (always dark — slate navy) |
+| Canvas bg | `#FFFFFF` | `#14203A` |
 
 Dark canvas mode: add `dark-canvas` to `<body>`. Every color has an explicit override — no `filter()`/`invert()`.
 
@@ -116,13 +116,14 @@ Icon spec: Lucide-style outline, 24×24 viewBox, `strokeWidth={1.75}`, `currentC
 
 ## Key Design Tokens
 
-**Shell surface tokens (always dark navy):**
+**Shell surface tokens (always dark — slate navy):**
 ```css
---shell-bg:        #0b0f14   /* outermost shell */
---shell-bg-2:      #0f141b   /* secondary shell layer */
---shell-surface:   #131a23   /* surfaces/panels */
---shell-surface-2: #1a2230   /* elevated surfaces */
---shell-border:    #1e2734   /* shell dividers */
+--shell-bg:        #0f1729   /* outermost shell */
+--shell-bg-2:      #13203a   /* secondary shell layer */
+--shell-surface:   #1b2949   /* surfaces/panels */
+--shell-surface-2: #243763   /* elevated surfaces */
+--shell-border:    #1e2a44   /* shell dividers */
+--shell-border-2:  #2a3a5c   /* input border, scrollbar thumb */
 ```
 
 **Accent — amber is the primary brand/highlight color:**
