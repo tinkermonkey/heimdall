@@ -11,6 +11,9 @@ import {
 } from './index'
 import type { Column } from './components/Table'
 import ContextStudioRebuilt from './examples/ContextStudioRebuilt'
+import PrimitivesTestPage from './test-pages/PrimitivesTestPage'
+import DataDisplayTestPage from './test-pages/DataDisplayTestPage'
+import ShellFrameworkTestPage from './test-pages/ShellFrameworkTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -43,6 +46,18 @@ export default function App() {
 
   if (exampleParam === 'rebuilt') {
     return <ContextStudioRebuilt />
+  }
+
+  if (exampleParam === 'primitives') {
+    return <PrimitivesTestPage />
+  }
+
+  if (exampleParam === 'data-display') {
+    return <DataDisplayTestPage />
+  }
+
+  if (exampleParam === 'shell-framework') {
+    return <ShellFrameworkTestPage />
   }
 
   return (

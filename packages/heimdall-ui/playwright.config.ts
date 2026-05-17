@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const isCI = !!process.env.CI
+const useDocker = !!process.env.PLAYWRIGHT_DOCKER
 
 export default defineConfig({
   testDir: './tests',
@@ -34,4 +35,15 @@ export default defineConfig({
       },
     },
   ],
+
+  // Docker/Container configuration for OS-level rendering consistency
+  // Enable with: PLAYWRIGHT_DOCKER=1 npm test
+  ...(useDocker && {
+    webServer: {
+      command: 'docker run --rm -p 5173:5173 -v $(pwd):/app node:18 bash -c "cd /app && npm install && npm run dev"',
+      url: 'http://localhost:5173',
+      reuseExistingServer: false,
+      timeout: 120000,
+    },
+  }),
 })

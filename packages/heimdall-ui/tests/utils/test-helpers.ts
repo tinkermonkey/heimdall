@@ -1,4 +1,101 @@
 import { Page, expect } from '@playwright/test'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+/**
+ * Load self-hosted fonts (WOFF2) for tests
+ * Instead of relying on Google Fonts CDN, this loads fonts from /fonts directory
+ * Required by ADR-005 for offline CI environments and consistency
+ */
+export async function loadSelfHostedFonts(page: Page): Promise<void> {
+  const fontsCss = `
+    /* Inter — 300, 400, 500, 600, 700, 800, 900 */
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter/Inter-Light.woff2') format('woff2');
+      font-weight: 300;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter/Inter-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter/Inter-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter/Inter-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter/Inter-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter/Inter-ExtraBold.woff2') format('woff2');
+      font-weight: 800;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter/Inter-Black.woff2') format('woff2');
+      font-weight: 900;
+      font-style: normal;
+      font-display: block;
+    }
+
+    /* JetBrains Mono — 400, 500, 600 */
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('/fonts/jetbrains-mono/JetBrainsMono-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('/fonts/jetbrains-mono/JetBrainsMono-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: block;
+    }
+  `
+
+  await page.addStyleTag({ content: fontsCss })
+}
 
 /**
  * Inject CSS to freeze animations during testing
