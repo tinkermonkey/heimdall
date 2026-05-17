@@ -1,7 +1,5 @@
 import { test, expect } from '@playwright/test'
 import { freezeAnimations } from './utils/test-helpers'
-import React from 'react'
-import { Icon, Button, Chip, Badge, StatusBadge } from '../src/components'
 
 test.describe('Primitive Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -44,6 +42,7 @@ test.describe('Primitive Components', () => {
             --status-amber: 245 158 11;
             --status-rose: 244 63 94;
             --status-violet: 139 92 246;
+            --status-neutral: 107 114 128;
 
             --radius-sm: 4px;
             --radius-md: 6px;
@@ -273,7 +272,7 @@ test.describe('Primitive Components', () => {
           }
 
           .chip--neutral .chip__dot {
-            background-color: #94a3b8;
+            background-color: rgb(var(--status-neutral));
           }
 
           .chip--id-tag {
@@ -494,7 +493,7 @@ test.describe('Primitive Components', () => {
         background-color: rgb(var(--status-rose-deep));
       }
       .btn--danger:not(:disabled):active {
-        background-color: rgb(var(--status-rose-deep));
+        background-color: rgb(var(--status-rose-pressed));
       }
     `
 
@@ -517,6 +516,7 @@ test.describe('Primitive Components', () => {
             --canvas-border: 55 65 81;
             --status-rose: 244 63 94;
             --status-rose-deep: 159 18 57;
+            --status-rose-pressed: 120 10 40;
             --font-sans: Inter, sans-serif;
             --radius-md: 6px;
             --text-sm: 0.875rem;
@@ -820,7 +820,7 @@ test.describe('Primitive Components', () => {
       }
 
       .badge--neutral {
-        background-color: rgb(var(--status-amber));
+        background-color: rgb(var(--status-neutral));
       }
 
       .badge--pulse {

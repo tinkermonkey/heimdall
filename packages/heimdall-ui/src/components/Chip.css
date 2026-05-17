@@ -88,7 +88,7 @@
 }
 
 .chip--neutral .chip__dot {
-  background-color: rgb(var(--status-amber));
+  background-color: rgb(var(--status-neutral));
 }
 
 /* ID tag form */

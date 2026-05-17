@@ -90,7 +90,7 @@
 }
 
 .btn--danger:not(:disabled):active {
-  background-color: rgb(var(--status-rose-deep));
+  background-color: rgb(var(--status-rose-pressed));
 }
 
 /* Link variant */

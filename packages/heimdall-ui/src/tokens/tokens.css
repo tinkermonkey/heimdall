@@ -45,7 +45,9 @@
     --status-amber: 245 158 11;
     --status-rose: 244 63 94;
     --status-rose-deep: 159 18 57;
+    --status-rose-pressed: 120 10 40;
     --status-violet: 139 92 246;
+    --status-neutral: 107 114 128;
 
     /* ---- Semantic Color Variants (light backgrounds, borders, text) ---- */
     /* Cyan */

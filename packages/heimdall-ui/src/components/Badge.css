@@ -38,7 +38,7 @@
 }
 
 .badge--neutral {
-  background-color: rgb(var(--status-amber));
+  background-color: rgb(var(--status-neutral));
 }
 
 .badge--pulse {
@@ -111,11 +111,11 @@
 }
 
 .status-badge--neutral::before {
-  background-color: rgb(var(--status-amber));
+  background-color: rgb(var(--status-neutral));
 }
 
 .status-badge--neutral::after {
-  background-color: rgb(var(--status-amber));
+  background-color: rgb(var(--status-neutral));
 }
 
 .status-badge--pulse::before {
