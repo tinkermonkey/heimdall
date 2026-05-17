@@ -275,7 +275,6 @@ function CommandPalette({ onClose, onNav }) {
   const [q, setQ] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef(null);
-  const paletteRef = useRef(null);
   useEffect(() => {
     inputRef.current?.focus();
     const onKey = (e) => {

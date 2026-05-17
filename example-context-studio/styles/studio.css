@@ -1884,6 +1884,9 @@ table.t .row-actions {
 .palette-item.first {
   background: var(--shell-surface);
 }
+.palette-item.active {
+  background: var(--shell-surface);
+}
 .palette-item:hover {
   background: var(--shell-surface);
 }
