@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="_base.css" />
+    <style>
+      body {
+        padding: 22px 28px;
+      }
+      .label {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--canvas-fg-3);
+        margin-bottom: 14px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+      .modal-example {
+        border: 1px solid #e5e9ee;
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+        box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.55);
+        max-width: 440px;
+        margin: 0 auto;
+      }
+      .modal-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 20px 14px;
+        border-bottom: 1px solid #e5e9ee;
+      }
+      .modal-head-text {
+        flex: 1;
+      }
+      .modal-title {
+        font-size: 15.5px;
+        font-weight: 600;
+        letter-spacing: -0.005em;
+        color: #0b1220;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .modal-sub {
+        font-size: 12.5px;
+        color: #64748b;
+        margin-top: 2px;
+        line-height: 1.45;
+      }
+      .modal-x {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        background: transparent;
+        border: 1px solid transparent;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .modal-x:hover {
+        background: #f7f9fb;
+        color: #0b1220;
+      }
+      .modal-body {
+        padding: 16px 20px 20px;
+      }
+      .modal-foot {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 18px;
+        border-top: 1px solid #e5e9ee;
+        background: #fff;
+      }
+      .btn {
+        padding: 6px 12px;
+        border: 1px solid #e5e9ee;
+        border-radius: 5px;
+        background: transparent;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: inherit;
+        color: #0b1220;
+        transition: background 0.12s, border-color 0.12s;
+      }
+      .btn:hover {
+        background: #f7f9fb;
+        border-color: #d6dce3;
+      }
+      .btn-primary {
+        background: #22d3ee;
+        border-color: #22d3ee;
+        color: #0b0f14;
+      }
+      .btn-primary:hover {
+        background: #06b6d4;
+        border-color: #06b6d4;
+      }
+      .btn-danger {
+        background: #f43f5e;
+        border-color: #f43f5e;
+        color: white;
+      }
+      .btn-danger:hover {
+        background: #e11d48;
+        border-color: #e11d48;
+      }
+      .body-text {
+        font-size: 13.5px;
+        color: #475569;
+        line-height: 1.55;
+      }
+      .example-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: #0b1220;
+        margin-bottom: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="label">Modals · 10-12px radius · 80-180ms ease animation · focus trap + ESC dismissal</div>
+    <div class="grid">
+      <div>
+        <div class="example-title">Standard Modal</div>
+        <div class="modal-example">
+          <div class="modal-head">
+            <div class="modal-head-text">
+              <div class="modal-title">Create class</div>
+              <div class="modal-sub">Add to concept scheme "taxonomy"</div>
+            </div>
+            <button class="modal-x">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="body-text">Enter a title and description for the new class.</div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn">Cancel</button>
+            <button class="btn btn-primary">Create class</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="example-title">Confirm Dialog (Danger)</div>
+        <div class="modal-example">
+          <div class="modal-head">
+            <div class="modal-head-text">
+              <div class="modal-title">Delete class</div>
+            </div>
+            <button class="modal-x">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="body-text">Delete <code style="background: #f7f9fb; padding: 1px 6px; border-radius: 3px; font-family: monospace; font-size: 11px; color: #0e7ea3">cls_organism</code>? 47 individuals will be unlinked.</div>
+          </div>
+          <div class="modal-foot">
+            <button class="btn">Cancel</button>
+            <button class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

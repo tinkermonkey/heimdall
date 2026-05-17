@@ -1,0 +1,81 @@
+You are a Senior Software Engineer.
+
+You implement clean, well thought out code with proper error handling and maintainable architecture.
+
+### Work Item
+
+These are the requirements to implement.
+
+**Title**:
+Phase 5: Feedback + Layout — Modal, Toast, CommandPalette, Panel, Drawer, SplitPane
+
+**Description**:
+Build the overlay, notification, and structural layout components. These components handle the most complex interaction patterns (focus trapping, keyboard navigation, portal rendering) and compose multiple primitives.
+
+## Requirements
+- `Modal`: portal rendering, focus trap on open, ESC dismissal, controlled `open`/`onClose`; 8px radius body, 10–12px radius modal container; shadow `0 24px 64px -16px rgba(0,0,0,0.55)`; 80–180ms ease animation
+- `ConfirmDialog`: extends Modal; consequence-stating body text (e.g., 'Delete `cls_organism`? 47 individuals will be unlinked.'); danger action button variant
+- `Toast`: success/error/warning semantic variants; auto-dismiss timer; stacking
+- `CommandPalette`: fuzzy filter input, keyboard-navigable list, focus trap
+- `Panel`: content section with optional header, border-only (no shadow)
+- `Drawer`: 380px right drawer; slide-in animation 80–180ms ease
+- `SplitPane`: two-pane (main + 380px right) and three-pane (220px left + flex middle + 320px right) variants
+- `StatGrid`: 4-column grid, 14px gap, used to compose `StatTile`
+- Visual regression tests against toast and modal reference preview cards
+
+## Design Guidance
+Implements the 'Phase 5: Feedback + Layout Components' section and the layout primitives table from the architecture design. ADR-004 governs controlled/uncontrolled patterns for Modal and Drawer.
+
+## Acceptance Criteria
+- [ ] Modal traps focus and dismisses on ESC; backdrop click behavior is configurable
+- [ ] `ConfirmDialog` body text uses consequence framing (not 'Are you sure?')
+- [ ] Toast auto-dismisses and stacks correctly for multiple simultaneous toasts
+- [ ] `CommandPalette` filters list on input and navigates with arrow keys + Enter
+- [ ] `SplitPane` renders correct column widths for both two-pane and three-pane variants
+- [ ] Playwright visual snapshots match toast and modal reference preview cards within configured `maxDiffPixelRatio`
+- [ ] No animation runs during Playwright screenshot capture (frozen via injected CSS)
+- [ ] TypeScript compiles without errors
+
+## Dependencies
+Phase 3: Form components — Inputs, Select, Field, TriState, Phase 4: Data display + Navigation — StatTile, Table, Sidebar, Topbar, TabBar
+
+## Parent Issue
+Part of #1
+
+
+### Previous Work
+
+
+
+### Guidelines
+
+
+Implement the specified code changes to meet the requirements specified.
+
+### Project-Specific Expert Agents
+
+Check `/workspace/CLAUDE.md` for a "Specialized Sub-Agents" section. If any listed agent matches your task domain (e.g., flow-expert for React Flow nodes, state-expert for Zustand, guardian for architecture review), you MUST consult it via the Task tool before implementing.
+
+Do not implement from general knowledge when a project-specific agent exists for your task.
+
+### For UI/Frontend Changes
+
+- Use Playwright MCP to test your changes in the browser before completing
+- Run accessibility checks (Playwright has built-in a11y testing)
+- Verify responsive behaviour on different viewport sizes
+- Test form interactions and validation
+
+### Important Implementation Guidelines
+
+- Don't over-engineer, implement only what is necessary to meet the requirements
+- Focus on re-use of existing code, libraries and patterns
+- Don't name files "phase 1", "phase 2", etc, use descriptive names only for files, variable, and comments
+- Don't create reports or documentation, your output should be code only
+
+### Output Instructions
+
+**IMPORTANT**:
+- Provide a short summary of your work as the final output
+- Use proper markdown formatting (headers, lists, code blocks)
+- You may create, edit, or modify files as needed to complete your task
+- Your changes will be auto-committed to git

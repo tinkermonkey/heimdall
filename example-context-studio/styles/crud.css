@@ -1,3 +1,10 @@
+/* Disable animations for visual regression testing */
+.no-animations,
+.no-animations * {
+  animation: none !important;
+  transition: none !important;
+}
+
 /* ============= Modal & dialog styling ============= */
 .modal-backdrop {
   position: fixed;
