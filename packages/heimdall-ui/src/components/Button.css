@@ -86,11 +86,11 @@
 }
 
 .btn--danger:not(:disabled):hover {
-  opacity: 0.9;
+  background-color: rgb(var(--status-rose-deep));
 }
 
 .btn--danger:not(:disabled):active {
-  opacity: 0.8;
+  background-color: rgb(var(--status-rose-deep));
 }
 
 /* Link variant */

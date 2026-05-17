@@ -27,68 +27,68 @@
 
 /* Cyan variant */
 .chip--cyan {
-  color: #0e7490;
-  background-color: #ecfeff;
-  border-color: #a5f3fc;
+  color: rgb(var(--semantic-cyan-fg));
+  background-color: rgb(var(--semantic-cyan-bg));
+  border-color: rgb(var(--semantic-cyan-border));
 }
 
 .chip--cyan .chip__dot {
-  background-color: #06b6d4;
+  background-color: rgb(var(--status-cyan));
 }
 
 /* Amber variant */
 .chip--amber {
-  color: #92400e;
-  background-color: #fffbeb;
-  border-color: #fde68a;
+  color: rgb(var(--semantic-amber-fg));
+  background-color: rgb(var(--semantic-amber-bg));
+  border-color: rgb(var(--semantic-amber-border));
 }
 
 .chip--amber .chip__dot {
-  background-color: #f59e0b;
+  background-color: rgb(var(--status-amber));
 }
 
 /* Violet variant */
 .chip--violet {
-  color: #5b21b6;
-  background-color: #f5f3ff;
-  border-color: #ddd6fe;
+  color: rgb(var(--semantic-violet-fg));
+  background-color: rgb(var(--semantic-violet-bg));
+  border-color: rgb(var(--semantic-violet-border));
 }
 
 .chip--violet .chip__dot {
-  background-color: #a78bfa;
+  background-color: rgb(var(--status-violet));
 }
 
 /* Emerald variant */
 .chip--emerald {
-  color: #065f46;
-  background-color: #ecfdf5;
-  border-color: #a7f3d0;
+  color: rgb(var(--semantic-emerald-fg));
+  background-color: rgb(var(--semantic-emerald-bg));
+  border-color: rgb(var(--semantic-emerald-border));
 }
 
 .chip--emerald .chip__dot {
-  background-color: #10b981;
+  background-color: rgb(var(--status-emerald));
 }
 
 /* Rose variant */
 .chip--rose {
-  color: #9f1239;
-  background-color: #fff1f2;
-  border-color: #fecdd3;
+  color: rgb(var(--semantic-rose-fg));
+  background-color: rgb(var(--semantic-rose-bg));
+  border-color: rgb(var(--semantic-rose-border));
 }
 
 .chip--rose .chip__dot {
-  background-color: #f43f5e;
+  background-color: rgb(var(--status-rose));
 }
 
 /* Neutral variant */
 .chip--neutral {
-  color: #475569;
-  background-color: #f7f9fb;
-  border-color: #e5e9ee;
+  color: rgb(var(--semantic-neutral-fg));
+  background-color: rgb(var(--semantic-neutral-bg));
+  border-color: rgb(var(--semantic-neutral-border));
 }
 
 .chip--neutral .chip__dot {
-  background-color: #94a3b8;
+  background-color: rgb(var(--status-amber));
 }
 
 /* ID tag form */
@@ -97,10 +97,10 @@
   font-size: 11px;
   padding: 2px 7px;
   border-radius: var(--radius-sm);
-  color: #64748b;
-  background-color: #f7f9fb;
-  border-color: #e5e9ee;
-  border: 1px solid #e5e9ee;
+  color: rgb(var(--semantic-id-tag-fg));
+  background-color: rgb(var(--semantic-id-tag-bg));
+  border-color: rgb(var(--semantic-id-tag-border));
+  border: 1px solid rgb(var(--semantic-id-tag-border));
 }
 
 /* Version badge form */
@@ -109,9 +109,9 @@
   font-size: 10.5px;
   padding: 1px 7px;
   border-radius: 9999px;
-  color: #0e7ea3;
-  background-color: rgba(34, 211, 238, 0.08);
-  border: 1px solid rgba(34, 211, 238, 0.18);
+  color: rgb(var(--semantic-version-fg));
+  background-color: var(--semantic-version-bg-alpha);
+  border: 1px solid var(--semantic-version-border-alpha);
 }
 
 /* Environment pill form */
@@ -120,14 +120,14 @@
   font-size: 11px;
   padding: 3px 8px;
   border-radius: var(--radius-md);
-  color: #22d3ee;
-  background-color: rgba(34, 211, 238, 0.12);
-  border-color: rgba(34, 211, 238, 0.28);
+  color: rgb(var(--semantic-env-fg));
+  background-color: var(--semantic-env-bg-alpha);
+  border-color: var(--semantic-env-border-alpha);
   gap: 6px;
 }
 
 .chip--env .chip__dot--env {
   width: 6px;
   height: 6px;
-  background-color: #22d3ee;
+  background-color: rgb(var(--semantic-env-fg));
 }

@@ -18,27 +18,27 @@
 }
 
 .badge--cyan {
-  background-color: #22d3ee;
+  background-color: rgb(var(--status-cyan));
 }
 
 .badge--emerald {
-  background-color: #10b981;
+  background-color: rgb(var(--status-emerald));
 }
 
 .badge--amber {
-  background-color: #f59e0b;
+  background-color: rgb(var(--status-amber));
 }
 
 .badge--rose {
-  background-color: #f43f5e;
+  background-color: rgb(var(--status-rose));
 }
 
 .badge--violet {
-  background-color: #a78bfa;
+  background-color: rgb(var(--status-violet));
 }
 
 .badge--neutral {
-  background-color: #94a3b8;
+  background-color: rgb(var(--status-amber));
 }
 
 .badge--pulse {
@@ -70,28 +70,52 @@
   z-index: 1;
 }
 
+.status-badge--cyan::before {
+  background-color: rgb(var(--status-cyan));
+}
+
 .status-badge--cyan::after {
-  background-color: #22d3ee;
+  background-color: rgb(var(--status-cyan));
+}
+
+.status-badge--emerald::before {
+  background-color: rgb(var(--status-emerald));
 }
 
 .status-badge--emerald::after {
-  background-color: #10b981;
+  background-color: rgb(var(--status-emerald));
+}
+
+.status-badge--amber::before {
+  background-color: rgb(var(--status-amber));
 }
 
 .status-badge--amber::after {
-  background-color: #f59e0b;
+  background-color: rgb(var(--status-amber));
+}
+
+.status-badge--rose::before {
+  background-color: rgb(var(--status-rose));
 }
 
 .status-badge--rose::after {
-  background-color: #f43f5e;
+  background-color: rgb(var(--status-rose));
+}
+
+.status-badge--violet::before {
+  background-color: rgb(var(--status-violet));
 }
 
 .status-badge--violet::after {
-  background-color: #a78bfa;
+  background-color: rgb(var(--status-violet));
+}
+
+.status-badge--neutral::before {
+  background-color: rgb(var(--status-amber));
 }
 
 .status-badge--neutral::after {
-  background-color: #94a3b8;
+  background-color: rgb(var(--status-amber));
 }
 
 .status-badge--pulse::before {

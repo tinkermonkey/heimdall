@@ -39,10 +39,59 @@
     --status-error-bg: 254 226 226;
     --status-error-fg: 185 28 28;
     --status-error: 239 68 68;
+    --status-cyan: 34 211 238;
+    --status-cyan-deep: 14 180 160;
     --status-emerald: 16 185 129;
     --status-amber: 245 158 11;
     --status-rose: 244 63 94;
+    --status-rose-deep: 159 18 57;
     --status-violet: 139 92 246;
+
+    /* ---- Semantic Color Variants (light backgrounds, borders, text) ---- */
+    /* Cyan */
+    --semantic-cyan-fg: 14 116 144;
+    --semantic-cyan-bg: 236 255 255;
+    --semantic-cyan-border: 165 243 252;
+
+    /* Amber */
+    --semantic-amber-fg: 146 64 14;
+    --semantic-amber-bg: 255 251 235;
+    --semantic-amber-border: 253 230 138;
+
+    /* Violet */
+    --semantic-violet-fg: 91 33 182;
+    --semantic-violet-bg: 245 243 255;
+    --semantic-violet-border: 221 214 254;
+
+    /* Emerald */
+    --semantic-emerald-fg: 6 95 70;
+    --semantic-emerald-bg: 236 253 245;
+    --semantic-emerald-border: 167 243 208;
+
+    /* Rose */
+    --semantic-rose-fg: 159 18 57;
+    --semantic-rose-bg: 255 241 242;
+    --semantic-rose-border: 254 205 211;
+
+    /* Neutral */
+    --semantic-neutral-fg: 71 85 105;
+    --semantic-neutral-bg: 247 249 251;
+    --semantic-neutral-border: 229 233 238;
+
+    /* ID Tag (neutral) */
+    --semantic-id-tag-fg: 100 116 139;
+    --semantic-id-tag-bg: 247 249 251;
+    --semantic-id-tag-border: 229 233 238;
+
+    /* Version Badge */
+    --semantic-version-fg: 14 126 163;
+    --semantic-version-bg-alpha: rgba(34, 211, 238, 0.08);
+    --semantic-version-border-alpha: rgba(34, 211, 238, 0.18);
+
+    /* Environment Pill */
+    --semantic-env-fg: 34 211 238;
+    --semantic-env-bg-alpha: rgba(34, 211, 238, 0.12);
+    --semantic-env-border-alpha: rgba(34, 211, 238, 0.28);
 
     /* ---- Neutral Gray Scale ---- */
     --gray-50: 249 250 251;
