@@ -31,6 +31,17 @@ cd packages/heimdall-ui && npm run build
 cd packages/heimdall-ui && npm test
 ```
 
+**Before starting any dev server**, check whether one is already running to avoid accumulating orphaned processes:
+
+```bash
+# Check for an existing Vite dev server
+lsof -ti :5173 -ti :5174 -ti :5175 -ti :5176 2>/dev/null | head -1
+# or
+pgrep -fl "vite" 2>/dev/null
+```
+
+If a server is already running, use its existing port rather than starting a new instance. Only start a new server if none is found.
+
 ## Repository Structure
 
 ```
