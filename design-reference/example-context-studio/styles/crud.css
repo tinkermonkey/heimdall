@@ -77,7 +77,7 @@
 .modal-title em {
   font-style: normal;
   font-weight: 600;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 .modal-id {
   font-size: 10.5px;
@@ -155,15 +155,15 @@
 }
 .modal-tab.active {
   color: var(--canvas-fg);
-  border-bottom-color: var(--accent-cyan);
+  border-bottom-color: var(--accent-primary);
 }
 
 .version-pill {
   font-family: var(--mono);
   font-size: 10.5px;
-  background: rgba(34, 211, 238, 0.08);
-  color: var(--accent-cyan-deep);
-  border: 1px solid rgba(34, 211, 238, 0.18);
+  background: rgba(245, 158, 11, 0.08);
+  color: var(--accent-primary-deep);
+  border: 1px solid rgba(245, 158, 11, 0.18);
   padding: 1px 7px;
   border-radius: 999px;
   letter-spacing: 0.02em;
@@ -230,8 +230,8 @@
 }
 .input:focus {
   outline: 0;
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.13);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.13);
 }
 .input::placeholder {
   color: var(--canvas-fg-3);
@@ -283,7 +283,7 @@ select.input {
   line-height: 1.5;
 }
 .form-callout svg {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -297,7 +297,7 @@ select.input {
   padding: 1px 5px;
   border-radius: 3px;
   font-size: 11px;
-  color: var(--accent-cyan-deep);
+  color: var(--accent-primary-deep);
 }
 
 .form-row-2 {
@@ -484,8 +484,8 @@ select.input {
   justify-content: center;
 }
 .ord-row:first-child .ord-rank {
-  background: rgba(34, 211, 238, 0.14);
-  color: var(--accent-cyan);
+  background: rgba(245, 158, 11, 0.14);
+  color: var(--accent-primary);
 }
 .ord-help {
   font-size: 10.5px;
@@ -508,8 +508,8 @@ select.input {
   padding: 0 4px;
   font-size: 9.5px;
   font-weight: 700;
-  color: var(--accent-cyan-deep);
-  background: rgba(34, 211, 238, 0.18);
+  color: var(--accent-primary-deep);
+  background: rgba(245, 158, 11, 0.18);
   border-radius: 7px;
   vertical-align: 1px;
 }
@@ -538,11 +538,11 @@ select.input {
   border-color: var(--canvas-fg-3);
 }
 .scheme-radio input {
-  accent-color: var(--accent-cyan);
+  accent-color: var(--accent-primary);
 }
 .scheme-radio.selected {
-  border-color: var(--accent-cyan);
-  background: rgba(34, 211, 238, 0.04);
+  border-color: var(--accent-primary);
+  background: rgba(245, 158, 11, 0.04);
 }
 .scheme-radio-main {
   flex: 1;
@@ -629,10 +629,10 @@ select.input {
 .rel-arrow-line {
   width: 24px;
   height: 1.5px;
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
 }
 .rel-arrow-tip {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
   font-size: 11px;
   margin-left: -4px;
 }
@@ -642,7 +642,7 @@ select.input {
   height: 22px;
   align-items: center;
   justify-content: center;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
   font-size: 10px;
 }
 
@@ -709,8 +709,8 @@ select.input {
   color: var(--accent-rose, #f43f5e);
 }
 .val-row.hint .val-code {
-  background: rgba(34, 211, 238, 0.18);
-  color: var(--accent-cyan-deep);
+  background: rgba(245, 158, 11, 0.18);
+  color: var(--accent-primary-deep);
 }
 
 /* ============= Buttons ============= */
@@ -751,7 +751,7 @@ select.input {
 }
 .drawer-tab.active {
   color: var(--canvas-fg);
-  border-bottom-color: var(--accent-cyan);
+  border-bottom-color: var(--accent-primary);
 }
 
 .mini-t {
@@ -813,7 +813,7 @@ select.input {
   display: flex;
 }
 .ref-link:hover {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 
 .rel-mini {
@@ -829,13 +829,13 @@ select.input {
   font-weight: 700;
 }
 .rel-dir.out {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 .rel-dir.in {
   color: var(--accent-amber);
 }
 .cyan-text {
-  color: var(--accent-cyan-deep);
+  color: var(--accent-primary-deep);
   font-size: 11.5px;
 }
 
@@ -1003,10 +1003,10 @@ select.input {
 }
 
 .t tr.selected {
-  background: rgba(34, 211, 238, 0.05);
+  background: rgba(245, 158, 11, 0.05);
 }
 .t tr.selected td {
-  border-color: rgba(34, 211, 238, 0.16);
+  border-color: rgba(245, 158, 11, 0.16);
 }
 
 code {
@@ -1015,5 +1015,5 @@ code {
   border-radius: 3px;
   font-family: var(--mono);
   font-size: 11px;
-  color: var(--accent-cyan-deep);
+  color: var(--accent-primary-deep);
 }

@@ -1,14 +1,16 @@
-@layer base {
-  /* =========================================================================
-     Heimdall Design System — Token Layer
+/* =========================================================================
+   Heimdall Design System — Token Layer
      Two-surface architecture: shell (always dark) + canvas (light by default)
      Light canvas is :root default; dark canvas is toggled via body.dark-canvas
      ========================================================================= */
 
   :root {
     /* ---- Shell Surface (always dark) ---- */
-    --shell-bg: 11 15 20;
-    --shell-surface: 26 31 38;
+    --shell-bg: 11 15 20;          /* #0b0f14 — outermost shell */
+    --shell-bg-2: 15 20 27;        /* #0f141b — secondary shell layer */
+    --shell-surface: 19 26 35;     /* #131a23 — surfaces/panels */
+    --shell-surface-2: 26 34 48;   /* #1a2230 — elevated surfaces */
+    --shell-border: 30 39 52;      /* #1e2734 — shell dividers */
     --shell-fg-1: 255 255 255;
     --shell-fg-2: 209 213 219;
     --shell-fg-3: 156 163 175;
@@ -24,10 +26,10 @@
     --canvas-border: 229 231 235;
     --canvas-border-strong: 209 213 219;
 
-    /* ---- Accent Color (cyan brand) ---- */
-    --accent-primary: 34 211 238;        /* bright, active states */
-    --accent-primary-hover: 6 182 212;   /* hover */
-    --accent-primary-deep: 14 126 163;   /* deep/CTA */
+    /* ---- Accent Color (amber brand) ---- */
+    --accent-primary: 245 158 11;        /* #f59e0b — bright, active states */
+    --accent-primary-hover: 217 119 6;   /* #d97706 — hover */
+    --accent-primary-deep: 180 83 9;     /* #b45309 — deep/CTA */
 
     /* ---- Semantic Status Colors (unchanged from reference) ---- */
     --status-ok-bg: 220 252 231;
@@ -86,14 +88,14 @@
     --semantic-id-tag-border: 229 233 238;
 
     /* Version Badge */
-    --semantic-version-fg: 14 126 163;
-    --semantic-version-bg-alpha: rgba(34, 211, 238, 0.08);
-    --semantic-version-border-alpha: rgba(34, 211, 238, 0.18);
+    --semantic-version-fg: 180 83 9;
+    --semantic-version-bg-alpha: rgba(245, 158, 11, 0.08);
+    --semantic-version-border-alpha: rgba(245, 158, 11, 0.18);
 
     /* Environment Pill */
-    --semantic-env-fg: 34 211 238;
-    --semantic-env-bg-alpha: rgba(34, 211, 238, 0.12);
-    --semantic-env-border-alpha: rgba(34, 211, 238, 0.28);
+    --semantic-env-fg: 245 158 11;
+    --semantic-env-bg-alpha: rgba(245, 158, 11, 0.12);
+    --semantic-env-border-alpha: rgba(245, 158, 11, 0.28);
 
     /* ---- Neutral Gray Scale ---- */
     --gray-50: 249 250 251;
@@ -159,8 +161,8 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
-    /* ---- Focus Ring (cyan accent) ---- */
-    --focus-ring: 0 0 0 3px rgba(34, 211, 238, 0.13);
+    /* ---- Focus Ring (amber accent) ---- */
+    --focus-ring: 0 0 0 3px rgba(245, 158, 11, 0.18);
   }
 
   /* ---- Dark Canvas Mode ---- */
@@ -268,4 +270,3 @@
     outline: none;
     box-shadow: var(--focus-ring);
   }
-}

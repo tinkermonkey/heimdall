@@ -6,7 +6,7 @@
   height: 26px;
   padding: 0 16px;
   background: rgb(var(--shell-bg));
-  border-top: 1px solid rgb(55 65 81 / 1);
+  border-top: 1px solid rgb(var(--shell-border));
   flex-shrink: 0;
   box-sizing: border-box;
 }

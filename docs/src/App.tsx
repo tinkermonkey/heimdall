@@ -1,68 +1,179 @@
 import { useState } from 'react'
-import { ShellLayout, Icon, Sidebar } from '@heimdall/ui'
-import PrimitivesShowcase from './pages/PrimitivesShowcase'
-import DataDisplayShowcase from './pages/DataDisplayShowcase'
-import ShellFrameworkShowcase from './pages/ShellFrameworkShowcase'
-import FoundationShowcase from './pages/FoundationShowcase'
+import { ShellLayout, type IconName } from '@heimdall/ui'
 
-type ShowcaseId = 'foundations' | 'primitives' | 'data-display' | 'shell-framework'
+import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase } from './showcases/FoundationShowcase'
+import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase } from './showcases/PrimitivesShowcase'
+import { TextInputShowcase, TextAreaShowcase, NumberInputShowcase, SelectShowcase, TriStateShowcase, FieldShowcase } from './showcases/InputsShowcase'
+import { StatTileShowcase, StatGridShowcase, TableShowcase } from './showcases/DataDisplayShowcase'
+import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from './showcases/NavigationShowcase'
+import { TitlebarShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
+import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
+import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
+
+type NavSection = {
+  title: string
+  items: { id: string; label: string; icon: IconName }[]
+}
+
+const SHOWCASE_MAP: Record<string, React.ComponentType> = {
+  // Foundation
+  colors: ColorsShowcase,
+  typography: TypographyShowcase,
+  spacing: SpacingShowcase,
+  radius: RadiusShowcase,
+  // Primitives
+  icon: IconShowcase,
+  button: ButtonShowcase,
+  chip: ChipShowcase,
+  badge: BadgeShowcase,
+  // Inputs
+  'text-input': TextInputShowcase,
+  'text-area': TextAreaShowcase,
+  'number-input': NumberInputShowcase,
+  select: SelectShowcase,
+  'tri-state': TriStateShowcase,
+  field: FieldShowcase,
+  // Data Display
+  'stat-tile': StatTileShowcase,
+  'stat-grid': StatGridShowcase,
+  table: TableShowcase,
+  // Navigation
+  'nav-item': NavItemShowcase,
+  sidebar: SidebarShowcase,
+  topbar: TopbarShowcase,
+  'tab-bar': TabBarShowcase,
+  // Shell
+  titlebar: TitlebarShowcase,
+  statusbar: StatusbarShowcase,
+  'shell-layout': ShellLayoutShowcase,
+  // Overlays
+  modal: ModalShowcase,
+  'confirm-dialog': ConfirmDialogShowcase,
+  toast: ToastShowcase,
+  'command-palette': CommandPaletteShowcase,
+  // Layout
+  panel: PanelShowcase,
+  drawer: DrawerShowcase,
+  'split-pane': SplitPaneShowcase,
+}
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    title: 'Foundation',
+    items: [
+      { id: 'colors', label: 'Colors', icon: 'palette' },
+      { id: 'typography', label: 'Typography', icon: 'edit' },
+      { id: 'spacing', label: 'Spacing', icon: 'layout' },
+      { id: 'radius', label: 'Radius', icon: 'component' },
+    ],
+  },
+  {
+    title: 'Primitives',
+    items: [
+      { id: 'icon', label: 'Icon', icon: 'star' },
+      { id: 'button', label: 'Button', icon: 'component' },
+      { id: 'chip', label: 'Chip', icon: 'filter' },
+      { id: 'badge', label: 'Badge', icon: 'alert' },
+    ],
+  },
+  {
+    title: 'Inputs',
+    items: [
+      { id: 'text-input', label: 'TextInput', icon: 'edit' },
+      { id: 'text-area', label: 'TextArea', icon: 'edit' },
+      { id: 'number-input', label: 'NumberInput', icon: 'data' },
+      { id: 'select', label: 'Select', icon: 'chevronDown' },
+      { id: 'tri-state', label: 'TriState', icon: 'check' },
+      { id: 'field', label: 'Field', icon: 'layout' },
+    ],
+  },
+  {
+    title: 'Data Display',
+    items: [
+      { id: 'stat-tile', label: 'StatTile', icon: 'dashboard' },
+      { id: 'stat-grid', label: 'StatGrid', icon: 'table' },
+      { id: 'table', label: 'Table', icon: 'table' },
+    ],
+  },
+  {
+    title: 'Navigation',
+    items: [
+      { id: 'nav-item', label: 'NavItem', icon: 'menu' },
+      { id: 'sidebar', label: 'Sidebar', icon: 'layout' },
+      { id: 'topbar', label: 'Topbar', icon: 'arrowUp' },
+      { id: 'tab-bar', label: 'TabBar', icon: 'schema' },
+    ],
+  },
+  {
+    title: 'Shell',
+    items: [
+      { id: 'titlebar', label: 'Titlebar', icon: 'menu' },
+      { id: 'statusbar', label: 'Statusbar', icon: 'info' },
+      { id: 'shell-layout', label: 'ShellLayout', icon: 'layout' },
+    ],
+  },
+  {
+    title: 'Overlays',
+    items: [
+      { id: 'modal', label: 'Modal', icon: 'copy' },
+      { id: 'confirm-dialog', label: 'ConfirmDialog', icon: 'alert' },
+      { id: 'toast', label: 'Toast', icon: 'bell' },
+      { id: 'command-palette', label: 'CommandPalette', icon: 'search' },
+    ],
+  },
+  {
+    title: 'Layout',
+    items: [
+      { id: 'panel', label: 'Panel', icon: 'layout' },
+      { id: 'drawer', label: 'Drawer', icon: 'chevronLeft' },
+      { id: 'split-pane', label: 'SplitPane', icon: 'layout' },
+    ],
+  },
+]
+
+const DEFAULT_SHOWCASE = 'colors'
+
+function getLabel(id: string): string {
+  for (const section of NAV_SECTIONS) {
+    const item = section.items.find(i => i.id === id)
+    if (item) return item.label
+  }
+  return id
+}
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [currentShowcase, setCurrentShowcase] = useState<ShowcaseId>('foundations')
+  const [currentId, setCurrentId] = useState(DEFAULT_SHOWCASE)
 
-  const showcases = [
-    { id: 'foundations', label: 'Foundations', icon: 'palette' as const, description: 'Colors, typography, spacing, and tokens' },
-    { id: 'primitives', label: 'Primitives', icon: 'component' as const, description: 'Basic components: buttons, inputs, chips' },
-    { id: 'data-display', label: 'Data Display', icon: 'table' as const, description: 'Tables, stat tiles, and data visualization' },
-    { id: 'shell-framework', label: 'Shell Framework', icon: 'layout' as const, description: 'Layout components: titlebar, sidebar, topbar' },
-  ]
-
-  const renderShowcase = () => {
-    switch (currentShowcase) {
-      case 'primitives':
-        return <PrimitivesShowcase />
-      case 'data-display':
-        return <DataDisplayShowcase />
-      case 'shell-framework':
-        return <ShellFrameworkShowcase />
-      case 'foundations':
-      default:
-        return <FoundationShowcase />
-    }
-  }
+  const Showcase = SHOWCASE_MAP[currentId] ?? SHOWCASE_MAP[DEFAULT_SHOWCASE]
+  const sectionLabel = NAV_SECTIONS.find(s => s.items.some(i => i.id === currentId))?.title ?? ''
 
   return (
     <ShellLayout
       titlebar={{
-        left: <span className="text-sm font-medium">Heimdall</span>,
-        center: <span className="text-sm">Design System Documentation</span>,
+        left: <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 13, fontWeight: 600 }}>heimdall</span>,
+        center: <span style={{ fontSize: 12 }}>Design System</span>,
       }}
       topbar={{
-        breadcrumbs: [{ label: 'Components' }, { label: showcases.find(s => s.id === currentShowcase)?.label || 'Showcase' }],
-        searchPlaceholder: 'Search components...',
+        breadcrumbs: [
+          { label: sectionLabel },
+          { label: getLabel(currentId) },
+        ],
       }}
       sidebar={{
         collapsed: sidebarCollapsed,
         onCollapse: setSidebarCollapsed,
-        sections: [
-          {
-            title: 'Documentation',
-            items: showcases.map(s => ({
-              ...s,
-              id: s.id,
-              onClick: () => setCurrentShowcase(s.id as ShowcaseId),
-            })),
-          },
-        ],
-        activeItemId: currentShowcase,
+        onSelectItem: setCurrentId,
+        sections: NAV_SECTIONS,
+        activeItemId: currentId,
       }}
       statusbar={{
-        right: <span>Heimdall Design System · Documentation</span>,
+        left: <span>heimdall-ui</span>,
+        right: <span>{NAV_SECTIONS.reduce((n, s) => n + s.items.length, 0)} components</span>,
       }}
     >
-      <div className="px-6 py-5 max-w-6xl">
-        {renderShowcase()}
+      <div style={{ padding: '22px 26px 32px', maxWidth: 900 }}>
+        <Showcase />
       </div>
     </ShellLayout>
   )

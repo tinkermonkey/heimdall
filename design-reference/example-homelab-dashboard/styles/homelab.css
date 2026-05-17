@@ -142,7 +142,7 @@
 }
 .metric-row .m-bar > i {
   position: absolute; left: 0; top: 0; bottom: 0;
-  background: var(--accent-cyan-2);
+  background: var(--accent-primary-hover);
   border-radius: 999px;
 }
 .metric-row .m-bar > i[data-level="warn"] { background: var(--accent-amber); }
@@ -248,7 +248,7 @@
 .gateway-info .kv dd .ext-flag {
   font-family: var(--mono);
   font-size: 10px;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
   letter-spacing: 0.06em;
   margin-left: 6px;
 }
@@ -518,8 +518,8 @@
 }
 .chat-rail-head .title .led {
   width: 7px; height: 7px; border-radius: 999px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-cyan) 28%, transparent);
+  background: var(--accent-primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-primary) 28%, transparent);
 }
 .chat-rail-head .sub {
   font-family: var(--mono);
@@ -582,10 +582,10 @@
 }
 .bot-tab.active {
   color: var(--shell-fg-1);
-  border-bottom-color: var(--accent-cyan);
+  border-bottom-color: var(--accent-primary);
   background: var(--shell-bg-2);
 }
-.bot-tab.active .role { color: var(--accent-cyan); }
+.bot-tab.active .role { color: var(--accent-primary); }
 
 .chat-thread {
   flex: 1;
@@ -682,7 +682,7 @@
   font-family: var(--mono);
   font-size: 11px;
   background: var(--shell-bg);
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
   padding: 1px 5px;
   border-radius: 3px;
   border: 1px solid var(--shell-border);
@@ -763,7 +763,7 @@
   color: var(--shell-fg-3);
   margin-right: auto;
 }
-.composer-tools .scope b { color: var(--accent-cyan); font-weight: 500; }
+.composer-tools .scope b { color: var(--accent-primary); font-weight: 500; }
 .composer-tools .pill {
   display: inline-flex; align-items: center; gap: 5px;
   font-family: var(--mono);
@@ -788,8 +788,8 @@
   transition: border-color 100ms;
 }
 .composer-input-wrap:focus-within {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.13);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.13);
 }
 .composer-input-wrap textarea {
   resize: none;
@@ -831,14 +831,14 @@
   padding: 0 10px;
   font-family: var(--mono);
   font-size: 11px;
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
   color: #0B0F14;
   border: 0;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
 }
-.composer-foot .send:hover { background: #67E8F9; }
+.composer-foot .send:hover { background: var(--accent-primary-hover); }
 .composer-foot .send svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.2; fill: none; }
 
 /* ============================================================

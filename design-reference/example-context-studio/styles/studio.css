@@ -26,6 +26,9 @@
   --canvas-fg-4: #94a3b8;
 
   /* Accents */
+  --accent-primary: #f59e0b;
+  --accent-primary-hover: #d97706;
+  --accent-primary-deep: #b45309;
   --accent-cyan: #22d3ee;
   --accent-cyan-2: #06b6d4;
   --accent-cyan-deep: #0e7ea3;
@@ -137,7 +140,7 @@ aside.shell-context {
   width: 28px;
   height: 28px;
   border-radius: 6px;
-  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-cyan-deep) 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-primary-deep) 100%);
   display: grid;
   place-items: center;
   flex: none;
@@ -251,7 +254,7 @@ aside.shell-context {
   top: 6px;
   bottom: 6px;
   width: 2px;
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
   border-radius: 0 2px 2px 0;
 }
 .nav-item svg {
@@ -274,7 +277,7 @@ aside.shell-context {
   border-radius: 3px;
 }
 .nav-item.active .nav-count {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 /* Parent nav-item with active child — subdued indicator (no cyan bar) */
 .nav-item.active-parent {
@@ -328,7 +331,7 @@ aside.shell-context {
   height: 12px;
   transform: translateY(-50%);
   width: 1px;
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
 }
 
 .rail-footer {
@@ -436,8 +439,8 @@ aside.shell-context {
 }
 .topbar-search input:focus {
   outline: none;
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
 }
 .topbar-search input::placeholder {
   color: var(--shell-fg-4);
@@ -595,12 +598,12 @@ aside.shell-context {
   background: #1e293b;
 }
 .btn-accent {
-  background: var(--accent-cyan-deep);
+  background: var(--accent-primary-deep);
   color: #fff;
 }
 .btn-accent:hover {
-  background: var(--accent-cyan-2);
-  color: #fff;
+  background: var(--accent-primary);
+  color: #0b0f14;
 }
 .btn-ghost {
   background: transparent;
@@ -692,7 +695,7 @@ aside.shell-context {
   top: 0;
   bottom: 0;
   width: 2px;
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
 }
 .stat .label {
   font-family: var(--mono);
@@ -792,7 +795,7 @@ table.t .row-actions {
   text-align: right;
 }
 .row-link {
-  color: var(--accent-cyan-deep);
+  color: var(--accent-primary-deep);
   font-weight: 500;
   cursor: pointer;
 }
@@ -911,8 +914,8 @@ table.t .row-actions {
 }
 .input:focus {
   outline: none;
-  border-color: var(--accent-cyan-deep);
-  box-shadow: 0 0 0 3px rgba(14, 126, 163, 0.12);
+  border-color: var(--accent-primary-deep);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12);
 }
 .search-input {
   position: relative;
@@ -987,8 +990,8 @@ table.t .row-actions {
   background: var(--canvas-bg-2);
 }
 .kg-node.selected {
-  border-color: var(--accent-cyan-deep);
-  box-shadow: 0 0 0 1px var(--accent-cyan-deep);
+  border-color: var(--accent-primary-deep);
+  box-shadow: 0 0 0 1px var(--accent-primary-deep);
 }
 .kg-node .badge-tiny {
   font-size: 10px;
@@ -1671,8 +1674,8 @@ table.t .row-actions {
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-cyan) 30%, transparent);
+  background: var(--accent-primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-primary) 30%, transparent);
 }
 .ws-chip-name {
   font-family: var(--mono);
@@ -1921,7 +1924,7 @@ table.t .row-actions {
 .palette-item:hover .palette-arrow,
 .palette-item.first .palette-arrow {
   opacity: 1;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 .palette-foot {
   display: flex;
@@ -2029,7 +2032,7 @@ table.t .row-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 .ws-row-mark svg {
   stroke: currentColor;
@@ -2046,8 +2049,8 @@ table.t .row-actions {
 .ws-row-badge {
   font-family: var(--mono);
   font-size: 10px;
-  color: var(--accent-cyan);
-  border: 1px solid color-mix(in oklab, var(--accent-cyan) 35%, transparent);
+  color: var(--accent-primary);
+  border: 1px solid color-mix(in oklab, var(--accent-primary) 35%, transparent);
   padding: 1px 6px;
   border-radius: 3px;
   font-weight: 400;
@@ -2114,7 +2117,7 @@ table.t .row-actions {
 }
 .hero h1 em {
   font-style: normal;
-  background: linear-gradient(120deg, var(--accent-cyan), var(--accent-violet));
+  background: linear-gradient(120deg, var(--accent-primary), var(--accent-violet));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -2129,7 +2132,7 @@ table.t .row-actions {
 .hero .eyebrow {
   font-family: var(--mono);
   font-size: 12px;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 18px;
@@ -2141,8 +2144,8 @@ table.t .row-actions {
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 12px var(--accent-cyan);
+  background: var(--accent-primary);
+  box-shadow: 0 0 12px var(--accent-primary);
 }
 .hero .ctas {
   display: flex;
@@ -2152,7 +2155,7 @@ table.t .row-actions {
 .btn-hero {
   height: 44px;
   padding: 0 20px;
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
   color: #0b0f14;
   border-radius: 6px;
   font-weight: 600;
@@ -2245,7 +2248,7 @@ table.t .row-actions {
 .hero-tree .h-node .sw {
   width: 2.5px;
   height: 12px;
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
   margin-right: 7px;
   flex: none;
   border-radius: 1px;
@@ -2310,11 +2313,11 @@ table.t .row-actions {
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background: rgba(34, 211, 238, 0.1);
-  border: 1px solid rgba(34, 211, 238, 0.25);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   display: grid;
   place-items: center;
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 .feature .ic svg {
   width: 16px;
@@ -2473,22 +2476,22 @@ body.dark-canvas .kg-node:hover {
 
 /* Primary button — invert dark text-on-dark to a usable accent in dark canvas */
 body.dark-canvas .btn-primary {
-  background: var(--accent-cyan);
+  background: var(--accent-primary);
   color: #0b0f14;
 }
 body.dark-canvas .btn-primary:hover {
-  background: var(--accent-cyan-2);
+  background: var(--accent-primary-hover);
   color: #0b0f14;
 }
 body.dark-canvas .btn-primary svg {
   color: #0b0f14;
 }
 body.dark-canvas .row-link {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 body.dark-canvas .tab.active {
   color: var(--canvas-fg-1);
-  border-bottom-color: var(--accent-cyan);
+  border-bottom-color: var(--accent-primary);
 }
 
 /* Chips — pastel light-mode versions don't read; dark-tinted versions */
@@ -2551,9 +2554,9 @@ body.dark-canvas .pipeline-card-foot {
 
 /* Hierarchy tree — node bg + selected state */
 body.dark-canvas .kg-node.selected {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 1px var(--accent-cyan);
-  background: rgba(34, 211, 238, 0.08);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary);
+  background: rgba(245, 158, 11, 0.08);
 }
 
 /* Search input on canvas — keep transparent on dark */
@@ -2561,8 +2564,8 @@ body.dark-canvas .input {
   background: rgba(0, 0, 0, 0.2);
 }
 body.dark-canvas .input:focus {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
 }
 
 /* Scrollbar thumb on dark canvas */

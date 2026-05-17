@@ -6,7 +6,7 @@
   --graph-grid: rgba(15, 23, 42, 0.045);
   --graph-edge: #cbd5e1;
   --graph-edge-strong: #94a3b8;
-  --graph-edge-hot: var(--accent-cyan-deep);
+  --graph-edge-hot: var(--accent-primary-deep);
   --graph-edge-irrelevant: var(--accent-rose);
   --graph-cluster-life-bg: rgba(52, 211, 153, 0.06);
   --graph-cluster-life-bd: rgba(52, 211, 153, 0.3);
@@ -145,8 +145,8 @@ body.dark-canvas {
   pointer-events: none;
 }
 .graph-edge-label.is-hot rect {
-  fill: var(--accent-cyan-deep);
-  stroke: var(--accent-cyan-deep);
+  fill: var(--accent-primary-deep);
+  stroke: var(--accent-primary-deep);
 }
 .graph-edge-label.is-hot text {
   fill: #fff;
@@ -161,8 +161,8 @@ body.dark-canvas .graph-edge-label text {
   fill: var(--canvas-fg-2);
 }
 body.dark-canvas .graph-edge-label.is-hot rect {
-  fill: var(--accent-cyan);
-  stroke: var(--accent-cyan);
+  fill: var(--accent-primary);
+  stroke: var(--accent-primary);
 }
 body.dark-canvas .graph-edge-label.is-hot text {
   fill: #0b0f14;
@@ -191,20 +191,20 @@ body.dark-canvas .graph-edge-label.is-hot text {
   z-index: 2;
 }
 .graph-node:hover {
-  border-color: var(--accent-cyan-deep);
+  border-color: var(--accent-primary-deep);
   box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
   z-index: 3;
 }
 .graph-node.selected {
-  border-color: var(--accent-cyan-deep);
+  border-color: var(--accent-primary-deep);
   box-shadow:
-    0 0 0 2px var(--accent-cyan),
+    0 0 0 2px var(--accent-primary),
     0 4px 10px rgba(15, 23, 42, 0.1);
   z-index: 4;
 }
 body.dark-canvas .graph-node.selected {
   box-shadow:
-    0 0 0 2px var(--accent-cyan),
+    0 0 0 2px var(--accent-primary),
     0 4px 10px rgba(0, 0, 0, 0.5);
 }
 .graph-node.is-orphan {
@@ -251,9 +251,9 @@ body.dark-canvas .graph-node.selected {
   flex: none;
 }
 .graph-node[data-kind="individual"] .graph-node-kind {
-  color: var(--accent-cyan-deep);
-  background: rgba(34, 211, 238, 0.08);
-  border-color: rgba(34, 211, 238, 0.25);
+  color: var(--accent-primary-deep);
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
 }
 
 /* ============ Floating legend (top-left) ============ */
@@ -335,9 +335,9 @@ body.dark-canvas .graph-node.selected {
   flex: none;
 }
 .graph-legend .gl-pill.ind {
-  color: var(--accent-cyan-deep);
-  background: rgba(34, 211, 238, 0.08);
-  border-color: rgba(34, 211, 238, 0.25);
+  color: var(--accent-primary-deep);
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
 }
 .graph-legend .gl-line {
   width: 22px;
@@ -404,7 +404,7 @@ body.dark-canvas .graph-node.selected {
 }
 .gt-chip:hover {
   background: var(--canvas-card);
-  border-color: var(--accent-cyan-deep);
+  border-color: var(--accent-primary-deep);
 }
 .gt-chip.off {
   opacity: 0.4;
@@ -610,7 +610,7 @@ body.dark-canvas .gt-chip.irrelevant {
   color: var(--canvas-fg-4);
 }
 .gi-rel-dir.out {
-  color: var(--accent-cyan-deep);
+  color: var(--accent-primary-deep);
 }
 .gi-rel-pred {
   font-size: 11px;
@@ -618,10 +618,10 @@ body.dark-canvas .gt-chip.irrelevant {
   color: var(--canvas-fg-2);
 }
 .cyan-text {
-  color: var(--accent-cyan-deep);
+  color: var(--accent-primary-deep);
 }
 body.dark-canvas .cyan-text {
-  color: var(--accent-cyan);
+  color: var(--accent-primary);
 }
 .gi-rel-target {
   display: inline-flex;
@@ -642,7 +642,7 @@ body.dark-canvas .cyan-text {
   text-overflow: ellipsis;
 }
 .gi-rel-target:hover {
-  border-color: var(--accent-cyan-deep);
+  border-color: var(--accent-primary-deep);
   background: var(--canvas-bg-2);
 }
 .gi-rel-target .swatch {

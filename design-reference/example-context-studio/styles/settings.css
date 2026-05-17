@@ -67,7 +67,7 @@ body.dark-canvas .cfg-rail {
   font-weight: 500;
 }
 body.dark-canvas .cfg-rail-item.active {
-  background: var(--accent-cyan-deep);
+  background: var(--accent-primary-deep);
   color: #fff;
 }
 .cfg-rail-item.active .cfg-rail-ic svg {
@@ -452,7 +452,7 @@ body.dark-canvas .health-cell {
   background: #94a3b8;
 }
 .t-mini.running::before {
-  background: var(--accent-cyan-2);
+  background: var(--accent-primary-hover);
   animation: blinkSoft 1.6s ease-in-out infinite;
 }
 .t-mini.completed::before {
@@ -834,7 +834,7 @@ body.dark-canvas .ref-source-row {
   font-weight: 600;
 }
 body.dark-canvas .seg-pill.active {
-  background: var(--accent-cyan-deep);
+  background: var(--accent-primary-deep);
   color: #fff;
 }
 
@@ -861,7 +861,7 @@ body.dark-canvas .seg-pill.active {
   transition: background 0.16s;
 }
 .switch.on::before {
-  background: var(--accent-cyan-deep);
+  background: var(--accent-primary-deep);
 }
 .switch-knob {
   position: absolute;
@@ -977,7 +977,7 @@ body.dark-canvas .task-tabs {
   background: #94a3b8;
 }
 .task-tab-dot.running {
-  background: var(--accent-cyan-2);
+  background: var(--accent-primary-hover);
 }
 .task-tab-dot.completed {
   background: var(--accent-emerald);
@@ -1045,7 +1045,7 @@ body.dark-canvas .task-tabs {
   border-color: #a5f3fc;
 }
 .task-status-pill.running .dot {
-  background: var(--accent-cyan-2);
+  background: var(--accent-primary-hover);
   animation: blinkSoft 1.6s ease-in-out infinite;
 }
 .task-status-pill.completed {
@@ -1218,7 +1218,7 @@ body.dark-canvas .task-drawer {
   background: #94a3b8;
 }
 .tsl-node.reached.running .dot {
-  background: var(--accent-cyan-2);
+  background: var(--accent-primary-hover);
 }
 .tsl-node.reached.completed .dot {
   background: var(--accent-emerald);

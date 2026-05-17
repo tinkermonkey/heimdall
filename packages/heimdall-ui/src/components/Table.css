@@ -57,7 +57,7 @@
 }
 
 .table__row--selected {
-  background: rgba(34, 211, 238, 0.05);
+  background: rgb(var(--accent-primary) / 0.06);
 }
 
 .table__cell {

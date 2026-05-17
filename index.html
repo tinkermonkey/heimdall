@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Heimdall — Design System</title>
+    <link rel="stylesheet" href="design-reference/example-context-studio/styles/tokens.css" />
+    <link rel="stylesheet" href="design-reference/example-context-studio/styles/studio.css" />
+    <style>
+      body {
+        background: var(--shell-bg);
+        color: var(--shell-fg-1);
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      /* ---- Header ---- */
+      .idx-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 28px 40px;
+        border-bottom: 1px solid var(--shell-border);
+      }
+      .wordmark {
+        font-family: var(--mono);
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--shell-fg-1);
+        letter-spacing: -0.02em;
+      }
+      .wordmark em {
+        font-style: normal;
+        color: var(--accent-cyan);
+      }
+      .hd-sep {
+        width: 1px;
+        height: 14px;
+        background: var(--shell-border-2);
+      }
+      .hd-sub {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--shell-fg-3);
+      }
+
+      /* ---- Layout ---- */
+      main {
+        padding: 40px;
+        max-width: 1280px;
+      }
+
+      .section {
+        margin-bottom: 44px;
+      }
+      .section-label {
+        font-family: var(--mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--shell-fg-3);
+        margin-bottom: 12px;
+      }
+
+      /* ---- Cards ---- */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+        gap: 6px;
+      }
+      .card-grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        max-width: 720px;
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding: 12px 14px;
+        background: var(--shell-surface);
+        border: 1px solid var(--shell-border);
+        border-radius: 6px;
+        text-decoration: none;
+        color: inherit;
+        position: relative;
+        transition: background 100ms ease, border-color 100ms ease;
+        overflow: hidden;
+      }
+      .card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        border-radius: 0 2px 2px 0;
+        background: transparent;
+        transition: background 100ms ease;
+      }
+      .card:hover {
+        background: var(--shell-surface-2);
+        border-color: var(--shell-border-2);
+      }
+      .card:hover::before {
+        background: var(--accent-cyan);
+      }
+
+      .card-title {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--shell-fg-1);
+        line-height: 1.3;
+      }
+      .card-meta {
+        font-family: var(--mono);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--shell-fg-4);
+      }
+
+      /* Large card variant (prototypes) */
+      .card-lg {
+        padding: 20px 22px;
+        gap: 0;
+      }
+      .card-lg .card-title {
+        font-size: 14px;
+        margin-bottom: 6px;
+      }
+      .card-lg .card-desc {
+        font-size: 12px;
+        color: var(--shell-fg-2);
+        line-height: 1.65;
+        margin-bottom: 14px;
+      }
+      .card-lg .card-badge {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 9.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent-cyan);
+        border: 1px solid rgba(34, 211, 238, 0.22);
+        border-radius: 3px;
+        padding: 2px 7px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="idx-header">
+      <div class="wordmark">heimdall<em>.</em></div>
+      <div class="hd-sep"></div>
+      <div class="hd-sub">Design system</div>
+    </header>
+
+    <main>
+
+      <!-- Full prototypes -->
+      <div class="section">
+        <div class="section-label">Full prototypes</div>
+        <div class="card-grid-2">
+          <a href="design-reference/example-context-studio/Context%20Studio.html" class="card card-lg">
+            <div class="card-title">Context Studio</div>
+            <div class="card-desc">Graph-native knowledge studio. Dark shell + light canvas. Schema browser, graph view, individual records, REST explorer.</div>
+            <div class="card-badge">context-studio</div>
+          </a>
+          <a href="design-reference/example-homelab-dashboard/index.html" class="card card-lg">
+            <div class="card-title">Homelab Dashboard</div>
+            <div class="card-desc">Infrastructure monitoring dashboard. Dark shell + dark canvas. Server topology, Docker containers, metrics, AI chat.</div>
+            <div class="card-badge">homelab</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Foundation tokens -->
+      <div class="section">
+        <div class="section-label">Foundation</div>
+        <div class="card-grid">
+          <a href="design-reference/example-context-studio/preview/brand-mark.html" class="card">
+            <div class="card-title">Brand mark</div>
+            <div class="card-meta">identity</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/colors-accents.html" class="card">
+            <div class="card-title">Accents</div>
+            <div class="card-meta">color</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/colors-canvas.html" class="card">
+            <div class="card-title">Canvas</div>
+            <div class="card-meta">color</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/colors-shell.html" class="card">
+            <div class="card-title">Shell</div>
+            <div class="card-meta">color</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/colors-domains.html" class="card">
+            <div class="card-title">Domains</div>
+            <div class="card-meta">color</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/colors-intents.html" class="card">
+            <div class="card-title">Intents</div>
+            <div class="card-meta">color</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/type-scale.html" class="card">
+            <div class="card-title">Type scale</div>
+            <div class="card-meta">typography</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/type-pairing.html" class="card">
+            <div class="card-title">Type pairing</div>
+            <div class="card-meta">typography</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/type-mono-roles.html" class="card">
+            <div class="card-title">Mono roles</div>
+            <div class="card-meta">typography</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/spacing-scale.html" class="card">
+            <div class="card-title">Spacing</div>
+            <div class="card-meta">tokens</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/radius-scale.html" class="card">
+            <div class="card-title">Radius</div>
+            <div class="card-meta">tokens</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/elevation.html" class="card">
+            <div class="card-title">Elevation</div>
+            <div class="card-meta">tokens</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/iconography.html" class="card">
+            <div class="card-title">Iconography</div>
+            <div class="card-meta">icons</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Components -->
+      <div class="section">
+        <div class="section-label">Components</div>
+        <div class="card-grid">
+          <a href="design-reference/example-context-studio/preview/components-buttons.html" class="card">
+            <div class="card-title">Buttons</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-chips.html" class="card">
+            <div class="card-title">Chips</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-inputs.html" class="card">
+            <div class="card-title">Inputs</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-stats.html" class="card">
+            <div class="card-title">Stats</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-table.html" class="card">
+            <div class="card-title">Table</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-nav.html" class="card">
+            <div class="card-title">Nav</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-modal.html" class="card">
+            <div class="card-title">Modal</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-toasts.html" class="card">
+            <div class="card-title">Toasts</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-hierarchy.html" class="card">
+            <div class="card-title">Hierarchy</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-pipeline.html" class="card">
+            <div class="card-title">Pipeline</div>
+            <div class="card-meta">component</div>
+          </a>
+          <a href="design-reference/example-context-studio/preview/components-palette.html" class="card">
+            <div class="card-title">Palette</div>
+            <div class="card-meta">component</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Homelab components -->
+      <div class="section">
+        <div class="section-label">Homelab components</div>
+        <div class="card-grid">
+          <a href="design-reference/example-homelab-dashboard/preview/server-card.html" class="card">
+            <div class="card-title">Server card</div>
+            <div class="card-meta">homelab</div>
+          </a>
+          <a href="design-reference/example-homelab-dashboard/preview/cluster-stats.html" class="card">
+            <div class="card-title">Cluster stats</div>
+            <div class="card-meta">homelab</div>
+          </a>
+          <a href="design-reference/example-homelab-dashboard/preview/alerts-strip.html" class="card">
+            <div class="card-title">Alerts strip</div>
+            <div class="card-meta">homelab</div>
+          </a>
+          <a href="design-reference/example-homelab-dashboard/preview/apps-grid.html" class="card">
+            <div class="card-title">Apps grid</div>
+            <div class="card-meta">homelab</div>
+          </a>
+          <a href="design-reference/example-homelab-dashboard/preview/gateway-panel.html" class="card">
+            <div class="card-title">Gateway panel</div>
+            <div class="card-meta">homelab</div>
+          </a>
+        </div>
+      </div>
+
+    </main>
+  </body>
+</html>

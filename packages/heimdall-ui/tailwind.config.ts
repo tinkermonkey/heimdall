@@ -27,7 +27,7 @@ const config: Config = {
         'canvas-border': 'rgb(var(--canvas-border) / <alpha-value>)',
         'canvas-border-strong': 'rgb(var(--canvas-border-strong) / <alpha-value>)',
 
-        /* Accent primary (cyan) */
+        /* Accent primary (amber) */
         'accent-primary': 'rgb(var(--accent-primary) / <alpha-value>)',
         'accent-primary-hover': 'rgb(var(--accent-primary-hover) / <alpha-value>)',
         'accent-primary-deep': 'rgb(var(--accent-primary-deep) / <alpha-value>)',

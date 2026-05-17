@@ -8,7 +8,7 @@ import { loadSelfHostedFonts, freezeAnimations } from './utils/test-helpers'
 
 test.describe('Component Cross-Comparison: Reference vs React', () => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
-  const contextStudioPreviewDir = path.join(__dirname, '../../../example-context-studio/preview')
+  const contextStudioPreviewDir = path.join(__dirname, '../../../design-reference/example-context-studio/preview')
 
   const componentMappings: Array<{
     refFile: string
