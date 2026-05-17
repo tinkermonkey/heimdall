@@ -9,7 +9,6 @@ test.describe('Reference Preview Cards', () => {
   const contextStudioPreviewDir = path.join(__dirname, '../../../example-context-studio/preview')
   const homelabPreviewDir = path.join(__dirname, '../../../example-homelab-dashboard/preview')
 
-  // Get all preview HTML files from both reference designs
   const getPreviewFiles = (dir: string) => {
     const files = fs.readdirSync(dir).filter((f) => f.endsWith('.html') && f !== '_base.css')
     return files.sort()
@@ -18,7 +17,6 @@ test.describe('Reference Preview Cards', () => {
   const contextStudioFiles = getPreviewFiles(contextStudioPreviewDir)
   const homelabFiles = getPreviewFiles(homelabPreviewDir)
 
-  // Context Studio preview tests
   test.describe('Context Studio Previews', () => {
     contextStudioFiles.forEach((file) => {
       const testName = file.replace('.html', '')
@@ -27,16 +25,10 @@ test.describe('Reference Preview Cards', () => {
         const filePath = path.join(contextStudioPreviewDir, file)
         await page.goto(`file://${filePath}`)
 
-        // Wait for content to load
         await page.waitForLoadState('networkidle')
-
-        // Load self-hosted fonts (required by ADR-005 for offline CI and consistency)
         await loadSelfHostedFonts(page)
-
-        // Freeze animations for consistent snapshots
         await freezeAnimations(page)
 
-        // Capture snapshot with 1% tolerance (perfectly matching requirement)
         await expect(page).toHaveScreenshot(`${testName}.png`, {
           maxDiffPixelRatio: 0.01,
         })
@@ -44,7 +36,6 @@ test.describe('Reference Preview Cards', () => {
     })
   })
 
-  // Homelab Dashboard preview tests
   test.describe('Homelab Dashboard Previews', () => {
     homelabFiles.forEach((file) => {
       const testName = file.replace('.html', '')
@@ -71,7 +62,6 @@ test.describe('Reference Preview Cards', () => {
   })
 
   test('preview file count validation', () => {
-    // Should have at least 23 context studio preview cards and 4 homelab preview cards
     expect(contextStudioFiles.length).toBeGreaterThanOrEqual(23)
     expect(homelabFiles.length).toBeGreaterThanOrEqual(4)
   })
