@@ -59,9 +59,16 @@ function downloadFile(url, dest, redirects = 0) {
 
       if (response.statusCode !== 200) {
         file.destroy();
-        reject(new Error(`Failed to download ${url}: ${response.statusCode}`));
+        fs.unlink(dest, () => {
+          reject(new Error(`Failed to download ${url}: ${response.statusCode}`));
+        });
         return;
       }
+
+      response.on('error', (err) => {
+        file.destroy();
+        fs.unlink(dest, () => reject(err));
+      });
 
       response.pipe(file);
       file.on('finish', () => {
