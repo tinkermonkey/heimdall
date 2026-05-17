@@ -21,18 +21,13 @@ export function useFocusTrap(ref: React.RefObject<HTMLElement>, isActive: boolea
       FOCUSABLE_SELECTORS.join(',')
     ) as NodeListOf<HTMLElement>
 
-    if (focusableElements.length === 0) {
-      ref.current.focus()
-      return
-    }
-
-    const firstElement = focusableElements[0]
-    const lastElement = focusableElements[focusableElements.length - 1]
-
-    firstElement.focus()
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return
+
+      if (focusableElements.length === 0) return
+
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -47,7 +42,10 @@ export function useFocusTrap(ref: React.RefObject<HTMLElement>, isActive: boolea
       }
     }
 
-    ref.current.addEventListener('keydown', handleKeyDown)
+    if (focusableElements.length > 0) {
+      focusableElements[0].focus()
+      ref.current.addEventListener('keydown', handleKeyDown)
+    }
 
     return () => {
       ref.current?.removeEventListener('keydown', handleKeyDown)

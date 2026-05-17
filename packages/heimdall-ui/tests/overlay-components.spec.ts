@@ -94,7 +94,7 @@ test.describe('Overlay Components', () => {
       })
 
       // Overflow should be restored to its original value (empty string when not previously set)
-      expect(overflow).not.toBe('hidden')
+      expect(overflow).toBe('')
     })
 
     test('should close when close button is clicked', async ({ page }) => {
@@ -126,6 +126,136 @@ test.describe('Overlay Components', () => {
       if (await subtitle.count() > 0) {
         await expect(subtitle).toBeVisible()
       }
+    })
+
+    test('should trap focus: Tab from last focusable element wraps to first', async ({ page }) => {
+      // Open modal
+      const modalTrigger = page.locator('button:has-text("Open Modal")').first()
+      await modalTrigger.click()
+
+      const modal = page.locator('[role="dialog"]').first()
+      await expect(modal).toBeVisible()
+
+      // Find all focusable elements within the modal
+      const focusableElements = modal.locator('button, input, [tabindex]:not([tabindex="-1"])')
+      const count = await focusableElements.count()
+
+      if (count > 1) {
+        // Tab to the last focusable element
+        for (let i = 1; i < count; i++) {
+          await page.keyboard.press('Tab')
+        }
+
+        // Get the last element
+        const lastElement = focusableElements.nth(count - 1)
+        await expect(lastElement).toBeFocused()
+
+        // Tab again should wrap to first element
+        await page.keyboard.press('Tab')
+
+        const firstElement = focusableElements.first()
+        await expect(firstElement).toBeFocused()
+      }
+    })
+
+    test('should trap focus: Shift+Tab from first focusable element wraps to last', async ({ page }) => {
+      // Open modal
+      const modalTrigger = page.locator('button:has-text("Open Modal")').first()
+      await modalTrigger.click()
+
+      const modal = page.locator('[role="dialog"]').first()
+      await expect(modal).toBeVisible()
+
+      // Find all focusable elements within the modal
+      const focusableElements = modal.locator('button, input, [tabindex]:not([tabindex="-1"])')
+      const count = await focusableElements.count()
+
+      if (count > 1) {
+        // First element should be focused after modal opens
+        const firstElement = focusableElements.first()
+        await expect(firstElement).toBeFocused()
+
+        // Shift+Tab should wrap to last element
+        await page.keyboard.press('Shift+Tab')
+
+        const lastElement = focusableElements.nth(count - 1)
+        await expect(lastElement).toBeFocused()
+      }
+    })
+
+    test('should restore focus to triggering element when closed', async ({ page }) => {
+      // Get the modal trigger button
+      const modalTrigger = page.locator('button:has-text("Open Modal")').first()
+
+      // Focus on the trigger button
+      await modalTrigger.focus()
+      await expect(modalTrigger).toBeFocused()
+
+      // Open modal
+      await modalTrigger.click()
+
+      const modal = page.locator('[role="dialog"]').first()
+      await expect(modal).toBeVisible()
+
+      // Close modal via Escape
+      await page.keyboard.press('Escape')
+
+      // Focus should return to the trigger button
+      await expect(modalTrigger).toBeFocused()
+    })
+  })
+
+  test.describe('Nested Overlay Behavior', () => {
+    test('should maintain body overflow: hidden with nested overlays', async ({ page }) => {
+      // Get initial overflow
+      const initialOverflow = await page.evaluate(() => {
+        return document.body.style.overflow
+      })
+      expect(initialOverflow).not.toBe('hidden')
+
+      // Open first modal
+      const modalTrigger = page.locator('button:has-text("Open Modal")').first()
+      await modalTrigger.click()
+
+      const firstModal = page.locator('[role="dialog"]').first()
+      await expect(firstModal).toBeVisible()
+
+      const overflowFirstOpen = await page.evaluate(() => {
+        return document.body.style.overflow
+      })
+      expect(overflowFirstOpen).toBe('hidden')
+
+      // Open second modal (nested)
+      const secondModalTrigger = firstModal.locator('button:has-text("Open Modal")')
+      if (await secondModalTrigger.count() > 0) {
+        await secondModalTrigger.click()
+
+        const secondModal = page.locator('[role="dialog"]').nth(1)
+        await expect(secondModal).toBeVisible()
+
+        const overflowBothOpen = await page.evaluate(() => {
+          return document.body.style.overflow
+        })
+        expect(overflowBothOpen).toBe('hidden')
+
+        // Close second modal
+        await page.keyboard.press('Escape')
+
+        const overflowAfterSecondClose = await page.evaluate(() => {
+          return document.body.style.overflow
+        })
+        // Should still be hidden because first modal is still open
+        expect(overflowAfterSecondClose).toBe('hidden')
+      }
+
+      // Close first modal
+      await page.keyboard.press('Escape')
+
+      const overflowAfterAllClose = await page.evaluate(() => {
+        return document.body.style.overflow
+      })
+      // Should be restored to original
+      expect(overflowAfterAllClose).toBe('')
     })
   })
 
