@@ -9,7 +9,7 @@
 }
 
 .table__head {
-  background: rgb(var(--canvas-surface));
+  background: rgb(var(--canvas-bg-2));
 }
 
 .table__header {

@@ -1,8 +1,8 @@
 /* =========================================================================
-   Heimdall Design System — Token Layer
-     Two-surface architecture: shell (always dark) + canvas (light by default)
-     Light canvas is :root default; dark canvas is toggled via body.dark-canvas
-     ========================================================================= */
+  Heimdall Design System — Token Layer
+  Two-surface architecture: shell (always dark) + canvas (light by default)
+  Light canvas is :root default; dark canvas is toggled via body.dark-canvas
+  ========================================================================= */
 
   :root {
     /* ---- Shell Surface (always dark — slate navy) ---- */
@@ -12,25 +12,27 @@
     --shell-surface-2: 36 55 99;   /* #243763 — elevated surfaces */
     --shell-border: 30 42 68;      /* #1e2a44 — shell dividers */
     --shell-border-2: 42 58 92;    /* #2a3a5c — input border, scrollbar thumb */
-    --shell-fg-1: 255 255 255;
-    --shell-fg-2: 209 213 219;
-    --shell-fg-3: 156 163 175;
+    --shell-fg-1: 230 237 243;   /* #e6edf3 */
+    --shell-fg-2: 166 177 189;   /* #a6b1bd */
+    --shell-fg-3: 110 122 135;   /* #6e7a87 */
+    --shell-fg-4: 74 85 99;      /* #4a5563 */
 
     /* ---- Canvas Surface (light canvas default) ---- */
     --canvas-bg: 255 255 255;
     --canvas-surface: 255 255 255;
-    --canvas-card: 249 250 251;
-    --canvas-bg-2: 243 244 246;
-    --canvas-fg-1: 17 24 39;
-    --canvas-fg-2: 55 65 81;
-    --canvas-fg-3: 107 114 128;
-    --canvas-border: 229 231 235;
-    --canvas-border-strong: 209 213 219;
+    --canvas-card: 255 255 255;
+    --canvas-bg-2: 247 249 251;   /* #f7f9fb */
+    --canvas-fg-1: 11 18 32;      /* #0b1220 */
+    --canvas-fg-2: 71 85 105;     /* #475569 */
+    --canvas-fg-3: 100 116 139;   /* #64748b */
+    --canvas-fg-4: 148 163 184;   /* #94a3b8 */
+    --canvas-border: 229 233 238;         /* #e5e9ee */
+    --canvas-border-strong: 214 220 227;  /* #d6dce3 */
 
     /* ---- Accent Color (amber brand) ---- */
-    --accent-primary: 245 158 11;        /* #f59e0b — bright, active states */
-    --accent-primary-hover: 217 119 6;   /* #d97706 — hover */
-    --accent-primary-deep: 180 83 9;     /* #b45309 — deep/CTA */
+    --accent-primary: 251 191 36;        /* #fbbf24 — amber-400, active states */
+    --accent-primary-hover: 245 158 11;  /* #f59e0b — amber-500, hover */
+    --accent-primary-deep: 180 83 9;     /* #b45309 — amber-700, deep/CTA */
 
     /* ---- Semantic Status Colors (unchanged from reference) ---- */
     --status-ok-bg: 220 252 231;
@@ -163,20 +165,21 @@
     --space-16: 4rem;
 
     /* ---- Focus Ring (amber accent) ---- */
-    --focus-ring: 0 0 0 3px rgba(245, 158, 11, 0.18);
+    --focus-ring: 0 0 0 3px rgba(251, 191, 36, 0.18);
   }
 
   /* ---- Dark Canvas Mode (slate-toned navy) ---- */
   body.dark-canvas {
-    --canvas-bg: 20 32 58;          /* #14203a — navy work surface */
+    --canvas-bg: 11 20 38;          /* #0b1426 — canvas page, deeper than shell-bg */
     --canvas-surface: 27 41 73;     /* #1b2949 — elevated panels */
     --canvas-card: 27 41 73;        /* #1b2949 — panels, stat tiles, drawer */
-    --canvas-bg-2: 27 41 73;        /* #1b2949 — table-header / inset zones */
+    --canvas-bg-2: 19 32 58;        /* #13203a — table-header / inset zones, matches shell-bg-2 */
     --canvas-fg-1: 226 232 240;     /* #e2e8f0 — slate-200 */
     --canvas-fg-2: 148 163 184;     /* #94a3b8 — slate-400 */
     --canvas-fg-3: 100 116 139;     /* #64748b — slate-500 */
+    --canvas-fg-4: 71 85 105;       /* #475569 — slate-600 */
     --canvas-border: 36 55 99;      /* #243763 */
-    --canvas-border-strong: 47 68 118; /* #2f4476 */
+    --canvas-border-strong: 53 73 115; /* #354973 */
   }
 
   /* ---- Base Element Styles ---- */

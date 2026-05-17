@@ -48,7 +48,7 @@
   font-size: 11px;
   color: rgb(var(--canvas-fg-3));
   padding: 2px 6px;
-  background: rgb(var(--canvas-surface));
+  background: rgb(var(--canvas-bg-2));
   border-radius: var(--radius-sm);
 }
 

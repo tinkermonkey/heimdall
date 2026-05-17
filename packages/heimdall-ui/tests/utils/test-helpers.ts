@@ -166,11 +166,11 @@ export async function assertLightCanvasTokens(page: Page): Promise<void> {
   const shellBg = await getCSSVariableValue(page, '--shell-bg')
 
   expect(canvasBg.trim()).toBe('255 255 255')
-  expect(shellBg.trim()).toBe('11 15 20')
+  expect(shellBg.trim()).toBe('15 23 41')
 }
 
-export async function assertCyanAccent(page: Page): Promise<void> {
+export async function assertAmberAccent(page: Page): Promise<void> {
   const accentPrimary = await getCSSVariableValue(page, '--accent-primary')
 
-  expect(accentPrimary.trim()).toBe('34 211 238')
+  expect(accentPrimary.trim()).toBe('251 191 36')
 }

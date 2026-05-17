@@ -5,7 +5,7 @@
   padding: 11px 12px;
   border: 1px solid rgb(var(--canvas-border));
   border-radius: 7px;
-  background: rgb(var(--canvas-surface));
+  background: rgb(var(--canvas-card));
   box-shadow: 0 14px 40px -16px rgba(0, 0, 0, 0.3);
   animation: slideIn 220ms ease-out;
   max-width: 400px;

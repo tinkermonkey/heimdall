@@ -19,7 +19,7 @@
 }
 
 .modal {
-  background: rgb(var(--canvas-surface));
+  background: rgb(var(--canvas-card));
   border: 1px solid rgb(var(--canvas-border));
   border-radius: var(--radius-lg);
   box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.55);
@@ -106,5 +106,5 @@
   gap: 8px;
   padding: 12px 18px;
   border-top: 1px solid rgb(var(--canvas-border));
-  background: rgb(var(--canvas-surface));
+  background: rgb(var(--canvas-card));
 }

@@ -2,7 +2,7 @@ import { Sidebar } from '../components/Sidebar'
 
 export default function NavigationComponentTestPage() {
   return (
-    <div style={{ padding: '22px 28px', backgroundColor: '#0b0f14', minHeight: '100vh' }}>
+    <div style={{ padding: '22px 28px', backgroundColor: 'rgb(var(--shell-bg))', minHeight: '100vh' }}>
       <div
         style={{
           fontFamily: 'var(--font-mono)',

@@ -10,7 +10,7 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  background: rgb(var(--canvas-surface));
+  background: rgb(var(--canvas-card));
   border: 1px solid rgb(var(--canvas-border));
   display: flex;
   flex-direction: column;
