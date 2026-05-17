@@ -29,27 +29,29 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
   ) => {
     const classNames = ['shell-layout', className].filter(Boolean).join(' ')
 
+    const { hide: _titlebarHide, ...titlebarProps } = titlebar ?? {} as TitlebarProps & { hide?: boolean }
     const renderTitlebar = titlebar && !titlebar.hide
-    const renderTopbar = topbar && !topbar.hide
-    const renderSidebar = sidebar && !sidebar.hide
-    const renderStatusbar = statusbar && !statusbar.hide
 
-    const titlebarProps = titlebar ? { ...titlebar, hide: undefined } : undefined
-    const topbarProps = topbar ? { ...topbar, hide: undefined } : undefined
-    const sidebarProps = sidebar ? { ...sidebar, hide: undefined } : undefined
-    const statusbarProps = statusbar ? { ...statusbar, hide: undefined } : undefined
+    const { hide: _topbarHide, ...topbarProps } = topbar ?? {} as TopbarProps & { hide?: boolean }
+    const renderTopbar = topbar && !topbar.hide
+
+    const { hide: _sidebarHide, ...sidebarProps } = sidebar ?? {} as SidebarProps & { hide?: boolean }
+    const renderSidebar = sidebar && !sidebar.hide
+
+    const { hide: _statusbarHide, ...statusbarProps } = statusbar ?? {} as StatusbarProps & { hide?: boolean }
+    const renderStatusbar = statusbar && !statusbar.hide
 
     return (
       <div ref={ref} className={classNames} {...props}>
-        {renderTitlebar && titlebarProps && <Titlebar {...(titlebarProps as TitlebarProps)} />}
+        {renderTitlebar && <Titlebar {...titlebarProps} />}
         <div className="shell-layout__main">
-          {renderSidebar && sidebarProps && <Sidebar {...(sidebarProps as SidebarProps)} />}
+          {renderSidebar && <Sidebar {...sidebarProps} />}
           <div className="shell-layout__content">
-            {renderTopbar && topbarProps && <Topbar {...(topbarProps as TopbarProps)} />}
+            {renderTopbar && <Topbar {...topbarProps} />}
             <div className="shell-layout__canvas">{children}</div>
           </div>
         </div>
-        {renderStatusbar && statusbarProps && <Statusbar {...(statusbarProps as StatusbarProps)} />}
+        {renderStatusbar && <Statusbar {...statusbarProps} />}
       </div>
     )
   }
