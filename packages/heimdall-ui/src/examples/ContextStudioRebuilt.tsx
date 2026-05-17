@@ -5,8 +5,6 @@ import {
   Icon,
   StatTile,
   ShellLayout,
-  NavItem,
-  Sidebar,
 } from '../index'
 
 export default function ContextStudioRebuilt() {
@@ -20,7 +18,7 @@ export default function ContextStudioRebuilt() {
         { id: 'schema', label: 'Schema', icon: 'schema' as const, count: 128 },
         { id: 'individuals', label: 'Individuals', icon: 'data' as const, count: 12480 },
         { id: 'pipelines', label: 'Pipelines', icon: 'pipeline' as const, count: 17 },
-        { id: 'reference', label: 'Reference', icon: 'reference' as const },
+        { id: 'reference', label: 'Reference', icon: 'link' as const },
         { id: 'settings', label: 'Settings', icon: 'settings' as const },
       ],
     },
@@ -125,7 +123,7 @@ export default function ContextStudioRebuilt() {
           <div className="border border-canvas-border rounded-lg overflow-hidden flex flex-col">
             <div className="px-4 py-3 border-b border-canvas-border flex items-center justify-between">
               <div className="flex items-center gap-2 text-sm font-medium">
-                <Icon name="history" size={14} />
+                <Icon name="clock" size={14} />
                 Recent activity
               </div>
               <Button variant="ghost" size="sm">
@@ -202,10 +200,10 @@ export default function ContextStudioRebuilt() {
             {[
               { label: 'Taxonomies', description: 'Manage top-level domains', icon: 'schema' as const },
               { label: 'Classes', description: 'Define knowledge structure', icon: 'graph' as const },
-              { label: 'Properties', description: 'Property definitions', icon: 'tag' as const },
+              { label: 'Properties', description: 'Property definitions', icon: 'edit' as const },
               { label: 'Individuals', description: 'Browse populated instances', icon: 'data' as const },
               { label: 'Pipelines', description: 'Configure & run workflows', icon: 'pipeline' as const },
-              { label: 'Reference', description: 'External data sources', icon: 'reference' as const },
+              { label: 'Reference', description: 'External data sources', icon: 'link' as const },
             ].map((item) => (
               <button
                 key={item.label}
