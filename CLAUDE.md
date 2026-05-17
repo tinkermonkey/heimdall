@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A design system repository with two layers:
 
 1. **Reference prototypes** — high-fidelity static HTML examples (React 18 + Babel standalone, no build step) that serve as the visual and behavioral spec.
-2. **Production component library** — `packages/heimdall-ui/`, a TypeScript + React 18 + Tailwind CSS 3 package (`@tinkermonkey/heimdall-ui`) built with Vite.
+2. **Production component library** — repo root (`src/`, `package.json`), published as `@tinkermonkey/heimdall-ui`, built with Vite + TypeScript + Tailwind CSS 3.
 
 **Reference examples** (in `design-reference/`):
 - `design-reference/example-context-studio/` — graph-native knowledge studio (dark IDE chrome + light canvas)
@@ -21,14 +21,14 @@ A design system repository with two layers:
 open design-reference/example-context-studio/Context\ Studio.html
 open design-reference/example-homelab-dashboard/index.html
 
-# Production package — dev server
-cd packages/heimdall-ui && npm run dev
+# Production package — dev server (run from repo root)
+npm run dev
 
 # Production package — build
-cd packages/heimdall-ui && npm run build
+npm run build
 
 # Visual regression tests (Playwright)
-cd packages/heimdall-ui && npm test
+npm test
 ```
 
 **Before starting any dev server**, check whether one is already running to avoid accumulating orphaned processes:
@@ -45,7 +45,7 @@ If a server is already running, use its existing port rather than starting a new
 ## Repository Structure
 
 ```
-packages/heimdall-ui/          # Production component library (@tinkermonkey/heimdall-ui)
+(repo root)                        # Production component library (@tinkermonkey/heimdall-ui)
   src/
     components/                # All components (each has .tsx + .css)
     tokens/tokens.css          # CSS custom properties (design tokens)
@@ -65,7 +65,7 @@ design-reference/              # Static HTML reference prototypes (Babel standal
 docs/                          # Vite + React docs app (showcase pages)
 ```
 
-## Production Component Library (`packages/heimdall-ui`)
+## Production Component Library
 
 ### Component Inventory
 
@@ -182,7 +182,7 @@ Icon spec: Lucide-style outline, 24×24 viewBox, `strokeWidth={1.75}`, `currentC
 
 ## Visual Regression Tests
 
-Tests live in `packages/heimdall-ui/tests/`. Each spec captures screenshots of test pages and compares against snapshots in `tests/*.spec.ts-snapshots/`. Run `npm test` to check; run the update script to regenerate baselines after intentional changes.
+Tests live in `tests/`. Each spec captures screenshots of test pages and compares against snapshots in `tests/*.spec.ts-snapshots/`. Run `npm test` to check; run the update script to regenerate baselines after intentional changes.
 
 Test suites:
 - `primitives.spec.ts` — Button, Chip, Badge, inputs, Icon, Field
