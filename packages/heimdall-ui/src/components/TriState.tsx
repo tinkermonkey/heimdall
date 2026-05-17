@@ -7,17 +7,25 @@ interface TriStateProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
 
 export const TriState = React.forwardRef<HTMLInputElement, TriStateProps>(
   ({ indeterminate = false, className = '', ...props }, ref) => {
-    const innerRef = React.useRef<HTMLInputElement>(null)
-    const combinedRef = ref || innerRef
+    const internalRef = React.useRef<HTMLInputElement>(null)
+
+    const mergedRef = React.useCallback(
+      (node: HTMLInputElement | null) => {
+        internalRef.current = node
+        if (typeof ref === 'function') {
+          ref(node)
+        } else if (ref) {
+          ref.current = node
+        }
+      },
+      [ref]
+    )
 
     React.useEffect(() => {
-      if (typeof combinedRef === 'function') {
-        return
+      if (internalRef.current) {
+        internalRef.current.indeterminate = indeterminate
       }
-      if (combinedRef && combinedRef.current) {
-        combinedRef.current.indeterminate = indeterminate
-      }
-    }, [indeterminate, combinedRef])
+    }, [indeterminate])
 
     const classNames = [
       'tri-state',
@@ -29,7 +37,7 @@ export const TriState = React.forwardRef<HTMLInputElement, TriStateProps>(
 
     return (
       <input
-        ref={combinedRef}
+        ref={mergedRef}
         type="checkbox"
         className={classNames}
         {...props}

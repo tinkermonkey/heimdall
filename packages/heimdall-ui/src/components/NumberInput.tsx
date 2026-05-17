@@ -1,5 +1,5 @@
 import React from 'react'
-import './NumberInput.css'
+import './inputs.css'
 
 interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   mono?: boolean

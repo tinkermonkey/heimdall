@@ -16,15 +16,3 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
-
-.tri-state:checked {
-  background-color: rgb(var(--accent-primary));
-}
-
-.tri-state:indeterminate {
-  background-color: rgb(var(--accent-primary));
-}
-
-.tri-state--indeterminate {
-  background-color: rgb(var(--accent-primary));
-}

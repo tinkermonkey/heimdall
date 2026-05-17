@@ -1,5 +1,5 @@
 import React from 'react'
-import './TextArea.css'
+import './inputs.css'
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   mono?: boolean

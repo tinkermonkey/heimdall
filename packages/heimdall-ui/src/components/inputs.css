@@ -1,3 +1,6 @@
+/* Shared base styles for all input elements */
+.text-input,
+.number-input,
 .text-area {
   display: block;
   width: 100%;
@@ -9,26 +12,64 @@
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   color: rgb(var(--canvas-fg-1));
-  line-height: 1.45;
   transition: all 80ms ease-out;
   outline: none;
-  resize: vertical;
-  min-height: 64px;
 }
 
+.text-input::placeholder,
+.number-input::placeholder,
 .text-area::placeholder {
   color: rgb(var(--canvas-fg-3));
 }
 
+.text-input:focus-visible,
+.number-input:focus-visible,
 .text-area:focus-visible {
   background-color: rgb(var(--canvas-bg));
   border-color: rgb(var(--accent-primary));
   box-shadow: var(--focus-ring);
 }
 
+.text-input:disabled,
+.number-input:disabled,
 .text-area:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Text input specific */
+.text-input--mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.text-input--error {
+  border-color: rgb(var(--status-rose));
+}
+
+.text-input--error:focus-visible {
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.13);
+}
+
+/* Number input specific */
+.number-input--mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.number-input--error {
+  border-color: rgb(var(--status-rose));
+}
+
+.number-input--error:focus-visible {
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.13);
+}
+
+/* Text area specific */
+.text-area {
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 64px;
 }
 
 .text-area--mono {

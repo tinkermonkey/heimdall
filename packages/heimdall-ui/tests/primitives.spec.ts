@@ -1081,7 +1081,7 @@ test.describe('Primitive Components', () => {
       <body>
         <div class="row">
           <input type="number" class="number-input" placeholder="Default number" value="42" />
-          <input type="number" class="number-input text-input--error" placeholder="Error number" value="999" />
+          <input type="number" class="number-input number-input--error" placeholder="Error number" value="999" />
           <input type="number" class="number-input" placeholder="Disabled number" value="10" disabled />
         </div>
       </body>
@@ -1232,7 +1232,7 @@ test.describe('Primitive Components', () => {
         </div>
         <script>
           const indeterminateCheckbox = document.querySelectorAll('.tri-state')[1];
-          indeterminateCheckbox.indeterminate = false;
+          indeterminateCheckbox.indeterminate = true;
         </script>
       </body>
       </html>
