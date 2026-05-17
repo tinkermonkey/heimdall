@@ -1,7 +1,6 @@
 // Heimdall Design System
 // Public API barrel export
 
-import './fonts/fonts.css'
 import './tokens/tokens.css'
 
 export { Icon, type IconName } from './components/Icon'

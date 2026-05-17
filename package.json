@@ -17,11 +17,11 @@
     "./css": "./dist/style.css"
   },
   "scripts": {
-    "postinstall": "node scripts/download-fonts.js",
     "build": "vite build",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "dev": "vite"
+    "dev": "vite",
+    "setup": "node scripts/download-fonts.js"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
