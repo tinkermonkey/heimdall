@@ -29,3 +29,9 @@ export { Sidebar } from './Sidebar'
 export { Topbar } from './Topbar'
 
 export { TabBar } from './TabBar'
+
+export { Titlebar } from './Titlebar'
+
+export { Statusbar } from './Statusbar'
+
+export { ShellLayout } from './ShellLayout'
