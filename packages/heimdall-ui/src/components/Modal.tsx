@@ -14,7 +14,6 @@ interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
   ({ isOpen, onClose, title, subtitle, children, footer, className = '', ...props }, ref) => {
     const backdropRef = useRef<HTMLDivElement>(null)
-    const modalRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
       const handleEscape = (e: KeyboardEvent) => {

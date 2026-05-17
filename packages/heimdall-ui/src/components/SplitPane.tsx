@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import './SplitPane.css'
 
 interface SplitPaneProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,7 +30,7 @@ export const SplitPane = React.forwardRef<HTMLDivElement, SplitPaneProps>(
           if (typeof r === 'function') {
             r(element)
           } else if (r) {
-            r.current = element
+            (r as React.MutableRefObject<HTMLDivElement | null>).current = element
           }
         })
       }
