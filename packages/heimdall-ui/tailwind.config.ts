@@ -7,57 +7,57 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      /* ---- Colors — all reference CSS custom properties ---- */
+      /* ---- Colors — all reference CSS custom properties with opacity support ---- */
       colors: {
         /* Shell surface */
-        'shell-bg': 'var(--shell-bg)',
-        'shell-surface': 'var(--shell-surface)',
-        'shell-fg-1': 'var(--shell-fg-1)',
-        'shell-fg-2': 'var(--shell-fg-2)',
-        'shell-fg-3': 'var(--shell-fg-3)',
+        'shell-bg': 'rgb(var(--shell-bg) / <alpha-value>)',
+        'shell-surface': 'rgb(var(--shell-surface) / <alpha-value>)',
+        'shell-fg-1': 'rgb(var(--shell-fg-1) / <alpha-value>)',
+        'shell-fg-2': 'rgb(var(--shell-fg-2) / <alpha-value>)',
+        'shell-fg-3': 'rgb(var(--shell-fg-3) / <alpha-value>)',
 
         /* Canvas surface */
-        'canvas-bg': 'var(--canvas-bg)',
-        'canvas-surface': 'var(--canvas-surface)',
-        'canvas-card': 'var(--canvas-card)',
-        'canvas-bg-2': 'var(--canvas-bg-2)',
-        'canvas-fg-1': 'var(--canvas-fg-1)',
-        'canvas-fg-2': 'var(--canvas-fg-2)',
-        'canvas-fg-3': 'var(--canvas-fg-3)',
-        'canvas-border': 'var(--canvas-border)',
-        'canvas-border-strong': 'var(--canvas-border-strong)',
+        'canvas-bg': 'rgb(var(--canvas-bg) / <alpha-value>)',
+        'canvas-surface': 'rgb(var(--canvas-surface) / <alpha-value>)',
+        'canvas-card': 'rgb(var(--canvas-card) / <alpha-value>)',
+        'canvas-bg-2': 'rgb(var(--canvas-bg-2) / <alpha-value>)',
+        'canvas-fg-1': 'rgb(var(--canvas-fg-1) / <alpha-value>)',
+        'canvas-fg-2': 'rgb(var(--canvas-fg-2) / <alpha-value>)',
+        'canvas-fg-3': 'rgb(var(--canvas-fg-3) / <alpha-value>)',
+        'canvas-border': 'rgb(var(--canvas-border) / <alpha-value>)',
+        'canvas-border-strong': 'rgb(var(--canvas-border-strong) / <alpha-value>)',
 
         /* Accent primary (orange) */
-        'accent-primary': 'var(--accent-primary)',
-        'accent-primary-hover': 'var(--accent-primary-hover)',
-        'accent-primary-deep': 'var(--accent-primary-deep)',
+        'accent-primary': 'rgb(var(--accent-primary) / <alpha-value>)',
+        'accent-primary-hover': 'rgb(var(--accent-primary-hover) / <alpha-value>)',
+        'accent-primary-deep': 'rgb(var(--accent-primary-deep) / <alpha-value>)',
 
         /* Semantic status colors */
-        'status-ok': 'var(--status-ok)',
-        'status-ok-bg': 'var(--status-ok-bg)',
-        'status-ok-fg': 'var(--status-ok-fg)',
-        'status-warn': 'var(--status-warn)',
-        'status-warn-bg': 'var(--status-warn-bg)',
-        'status-warn-fg': 'var(--status-warn-fg)',
-        'status-error': 'var(--status-error)',
-        'status-error-bg': 'var(--status-error-bg)',
-        'status-error-fg': 'var(--status-error-fg)',
-        'status-emerald': 'var(--status-emerald)',
-        'status-amber': 'var(--status-amber)',
-        'status-rose': 'var(--status-rose)',
-        'status-violet': 'var(--status-violet)',
+        'status-ok': 'rgb(var(--status-ok) / <alpha-value>)',
+        'status-ok-bg': 'rgb(var(--status-ok-bg) / <alpha-value>)',
+        'status-ok-fg': 'rgb(var(--status-ok-fg) / <alpha-value>)',
+        'status-warn': 'rgb(var(--status-warn) / <alpha-value>)',
+        'status-warn-bg': 'rgb(var(--status-warn-bg) / <alpha-value>)',
+        'status-warn-fg': 'rgb(var(--status-warn-fg) / <alpha-value>)',
+        'status-error': 'rgb(var(--status-error) / <alpha-value>)',
+        'status-error-bg': 'rgb(var(--status-error-bg) / <alpha-value>)',
+        'status-error-fg': 'rgb(var(--status-error-fg) / <alpha-value>)',
+        'status-emerald': 'rgb(var(--status-emerald) / <alpha-value>)',
+        'status-amber': 'rgb(var(--status-amber) / <alpha-value>)',
+        'status-rose': 'rgb(var(--status-rose) / <alpha-value>)',
+        'status-violet': 'rgb(var(--status-violet) / <alpha-value>)',
 
         /* Neutral grays */
-        'gray-50': 'var(--gray-50)',
-        'gray-100': 'var(--gray-100)',
-        'gray-200': 'var(--gray-200)',
-        'gray-300': 'var(--gray-300)',
-        'gray-400': 'var(--gray-400)',
-        'gray-500': 'var(--gray-500)',
-        'gray-600': 'var(--gray-600)',
-        'gray-700': 'var(--gray-700)',
-        'gray-800': 'var(--gray-800)',
-        'gray-900': 'var(--gray-900)',
+        'gray-50': 'rgb(var(--gray-50) / <alpha-value>)',
+        'gray-100': 'rgb(var(--gray-100) / <alpha-value>)',
+        'gray-200': 'rgb(var(--gray-200) / <alpha-value>)',
+        'gray-300': 'rgb(var(--gray-300) / <alpha-value>)',
+        'gray-400': 'rgb(var(--gray-400) / <alpha-value>)',
+        'gray-500': 'rgb(var(--gray-500) / <alpha-value>)',
+        'gray-600': 'rgb(var(--gray-600) / <alpha-value>)',
+        'gray-700': 'rgb(var(--gray-700) / <alpha-value>)',
+        'gray-800': 'rgb(var(--gray-800) / <alpha-value>)',
+        'gray-900': 'rgb(var(--gray-900) / <alpha-value>)',
       },
 
       /* ---- Border Radius ---- */
@@ -81,8 +81,8 @@ const config: Config = {
 
       /* ---- Font Families ---- */
       fontFamily: {
-        sans: 'var(--font-sans)',
-        mono: 'var(--font-mono)',
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        mono: ['JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', 'Menlo', 'Consolas', 'Courier New', 'monospace'],
       },
 
       /* ---- Font Sizes ---- */
@@ -100,11 +100,11 @@ const config: Config = {
 
       /* ---- Font Weights ---- */
       fontWeight: {
-        normal: 'var(--font-weight-normal)',
-        medium: 'var(--font-weight-medium)',
-        semibold: 'var(--font-weight-semibold)',
-        bold: 'var(--font-weight-bold)',
-        extrabold: 'var(--font-weight-extrabold)',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+        extrabold: '800',
       },
 
       /* ---- Spacing ---- */

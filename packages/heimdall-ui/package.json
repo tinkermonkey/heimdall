@@ -17,6 +17,7 @@
     "./css": "./dist/style.css"
   },
   "scripts": {
+    "postinstall": "node scripts/download-fonts.js",
     "build": "vite build",
     "test": "playwright test",
     "test:ui": "playwright test --ui",

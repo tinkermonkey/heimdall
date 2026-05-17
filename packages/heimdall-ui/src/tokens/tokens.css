@@ -7,54 +7,54 @@
 
   :root {
     /* ---- Shell Surface (always dark) ---- */
-    --shell-bg: #0b0f14;
-    --shell-surface: #1a1f26;
-    --shell-fg-1: #ffffff;
-    --shell-fg-2: #d1d5db;
-    --shell-fg-3: #9ca3af;
+    --shell-bg: 11 15 20;
+    --shell-surface: 26 31 38;
+    --shell-fg-1: 255 255 255;
+    --shell-fg-2: 209 213 219;
+    --shell-fg-3: 156 163 175;
 
     /* ---- Canvas Surface (dark canvas default) ---- */
-    --canvas-bg: #14191f;
-    --canvas-surface: #1b222a;
-    --canvas-card: #1f2630;
-    --canvas-bg-2: #272e38;
-    --canvas-fg-1: #f9fafb;
-    --canvas-fg-2: #d1d5db;
-    --canvas-fg-3: #9ca3af;
-    --canvas-border: #374151;
-    --canvas-border-strong: #4b5563;
+    --canvas-bg: 20 25 31;
+    --canvas-surface: 27 34 42;
+    --canvas-card: 31 38 48;
+    --canvas-bg-2: 39 46 56;
+    --canvas-fg-1: 249 250 251;
+    --canvas-fg-2: 209 213 219;
+    --canvas-fg-3: 156 163 175;
+    --canvas-border: 55 65 81;
+    --canvas-border-strong: 75 85 99;
 
     /* ---- Accent Color (orange placeholder — TODO: swap with final hex from design) ---- */
-    --accent-primary: #f97316;       /* bright, active states */
-    --accent-primary-hover: #ea580c; /* hover */
-    --accent-primary-deep: #c2410c;  /* deep/CTA */
+    --accent-primary: 249 115 22;       /* bright, active states */
+    --accent-primary-hover: 234 88 12;  /* hover */
+    --accent-primary-deep: 194 65 12;   /* deep/CTA */
 
     /* ---- Semantic Status Colors (unchanged from reference) ---- */
-    --status-ok-bg: #dcfce7;
-    --status-ok-fg: #15803d;
-    --status-ok: #22c55e;
-    --status-warn-bg: #fef9c3;
-    --status-warn-fg: #854d0e;
-    --status-warn: #eab308;
-    --status-error-bg: #fee2e2;
-    --status-error-fg: #b91c1c;
-    --status-error: #ef4444;
-    --status-emerald: #10b981;
-    --status-amber: #f59e0b;
-    --status-rose: #f43f5e;
-    --status-violet: #8b5cf6;
+    --status-ok-bg: 220 252 231;
+    --status-ok-fg: 21 128 61;
+    --status-ok: 34 197 94;
+    --status-warn-bg: 254 249 195;
+    --status-warn-fg: 133 77 14;
+    --status-warn: 234 179 8;
+    --status-error-bg: 254 226 226;
+    --status-error-fg: 185 28 28;
+    --status-error: 239 68 68;
+    --status-emerald: 16 185 129;
+    --status-amber: 245 158 11;
+    --status-rose: 244 63 94;
+    --status-violet: 139 92 246;
 
     /* ---- Neutral Gray Scale ---- */
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-700: #374151;
-    --gray-800: #1f2937;
-    --gray-900: #111827;
+    --gray-50: 249 250 251;
+    --gray-100: 243 244 246;
+    --gray-200: 229 231 235;
+    --gray-300: 209 213 219;
+    --gray-400: 156 163 175;
+    --gray-500: 107 114 128;
+    --gray-600: 75 85 99;
+    --gray-700: 55 65 81;
+    --gray-800: 31 41 55;
+    --gray-900: 17 24 39;
 
     /* ---- Radius (from reference design) ---- */
     --radius-sm: 4px;
@@ -114,15 +114,15 @@
 
   /* ---- Light Canvas Mode (preserved for extensibility, not shipped default) ---- */
   body.light-canvas {
-    --canvas-bg: #ffffff;
-    --canvas-surface: #ffffff;
-    --canvas-card: #f9fafb;
-    --canvas-bg-2: #f3f4f6;
-    --canvas-fg-1: #111827;
-    --canvas-fg-2: #374151;
-    --canvas-fg-3: #6b7280;
-    --canvas-border: #e5e7eb;
-    --canvas-border-strong: #d1d5db;
+    --canvas-bg: 255 255 255;
+    --canvas-surface: 255 255 255;
+    --canvas-card: 249 250 251;
+    --canvas-bg-2: 243 244 246;
+    --canvas-fg-1: 17 24 39;
+    --canvas-fg-2: 55 65 81;
+    --canvas-fg-3: 107 114 128;
+    --canvas-border: 229 231 235;
+    --canvas-border-strong: 209 213 219;
   }
 
   /* ---- Base Element Styles ---- */

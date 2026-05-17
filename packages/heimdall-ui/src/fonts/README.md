@@ -1,50 +1,63 @@
 # Self-Hosted Fonts
 
-This directory contains @font-face declarations and local font file references.
+This directory contains @font-face declarations and font files downloaded via postinstall script.
 
 ## Font Sources
 
 ### Inter
-- **Source**: https://github.com/rsms/inter/releases
+- **Source**: https://github.com/rsms/inter/releases (via jsDelivr CDN)
 - **Weights**: 300, 400, 500, 600, 700, 800, 900
 - **Format**: .woff2 (modern browsers)
-- **Files**: 
-  - Inter-Light.woff2 (300)
-  - Inter-Regular.woff2 (400)
-  - Inter-Medium.woff2 (500)
-  - Inter-SemiBold.woff2 (600)
-  - Inter-Bold.woff2 (700)
-  - Inter-ExtraBold.woff2 (800)
-  - Inter-Black.woff2 (900)
 
 ### JetBrains Mono
-- **Source**: https://github.com/JetBrains/JetBrainsMono/releases
+- **Source**: https://github.com/JetBrains/JetBrainsMono/releases (via jsDelivr CDN)
 - **Weights**: 400, 500, 600
 - **Format**: .woff2 (modern browsers)
-- **Files**:
-  - JetBrainsMono-Regular.woff2 (400)
-  - JetBrainsMono-Medium.woff2 (500)
-  - JetBrainsMono-SemiBold.woff2 (600)
 
-## Font Loading
+## Installation
 
-The CSS declarations reference `/fonts/` paths which should be:
+Font files are automatically downloaded when installing dependencies:
 
-1. Served from public static assets in your application
-2. Copy font files to `public/fonts/{inter,jetbrains-mono}/`
-3. Serve via static asset middleware
+```bash
+npm install
+# or
+pnpm install
+# Font files are fetched via `postinstall` hook
+```
+
+## Font File Structure
+
+After installation, the directory structure is:
+
+```
+src/fonts/
+├── fonts.css                          # @font-face declarations
+├── inter/
+│   ├── Inter-Light.woff2
+│   ├── Inter-Regular.woff2
+│   ├── Inter-Medium.woff2
+│   ├── Inter-SemiBold.woff2
+│   ├── Inter-Bold.woff2
+│   ├── Inter-ExtraBold.woff2
+│   └── Inter-Black.woff2
+├── jetbrains-mono/
+│   ├── JetBrainsMono-Regular.woff2
+│   ├── JetBrainsMono-Medium.woff2
+│   └── JetBrainsMono-SemiBold.woff2
+└── README.md
+```
 
 ## Testing
 
-Tests verify that @font-face declarations exist, but actual font file loading requires:
+Tests verify that:
 
-1. Font files to be present in the served location
-2. Network requests to resolve successfully
-3. `font-display: block` ensures layout stability while fonts load
+1. @font-face declarations exist and are valid CSS
+2. Font files exist on the filesystem
+3. The font-display strategy ensures layout stability
 
 ## Notes
 
-- Font files are not included in the repository
-- Download directly from the sources listed above
-- Only .woff2 format is needed (modern browsers only)
-- Size: ~300KB total for both font families
+- Font files are downloaded during `postinstall`, not committed to version control
+- Only .woff2 format is used (modern browsers only)
+- Total download size: ~300KB for both font families
+- Download script: `scripts/download-fonts.js`
