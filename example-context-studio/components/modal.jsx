@@ -1,18 +1,39 @@
 // Modal / dialog primitives + form fields. All dialogs in dialogs.jsx use these.
 
-function Modal({ open, onClose, title, subtitle, children, size = "md", footer, headerAccessory }) {
+function Modal({ open, onClose, title, subtitle, children, size = "md", footer, headerAccessory, closeOnBackdrop = true }) {
+  const modalRef = useRef(null);
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
+      if (e.key === "Tab") {
+        const focusable = modalRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusable || focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
+    modalRef.current?.querySelector("button, [href], input, select, textarea")?.focus();
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
   if (!open) return null;
+  const handleBackdropClick = () => {
+    if (closeOnBackdrop) onClose();
+  };
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-backdrop" onClick={handleBackdropClick}>
       <div
+        ref={modalRef}
         className={"modal modal-" + size}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
@@ -570,7 +591,9 @@ function ToastViewport() {
       {toasts.map((t) => (
         <div key={t.id} className={"toast toast-" + t.kind}>
           <span className="toast-mark">
-            {t.kind === "success" ? <Icon name="check" size={14} /> : <Icon name="x" size={14} />}
+            {t.kind === "success" && <Icon name="check" size={14} />}
+            {t.kind === "error" && <Icon name="x" size={14} />}
+            {t.kind === "warning" && <Icon name="alert" size={14} />}
           </span>
           <div className="toast-body">
             <div className="toast-title">{t.title}</div>

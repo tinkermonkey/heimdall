@@ -1,0 +1,32 @@
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 36px;
+  padding: 0 16px;
+  background: rgb(var(--shell-bg));
+  border-bottom: 1px solid rgb(55 65 81 / 1);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.titlebar__slot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titlebar__slot--left {
+  flex: 0 0 auto;
+}
+
+.titlebar__slot--center {
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.titlebar__slot--right {
+  flex: 0 0 auto;
+}

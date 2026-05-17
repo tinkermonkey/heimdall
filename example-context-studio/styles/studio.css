@@ -44,6 +44,13 @@
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
+/* Disable animations for visual regression testing */
+.no-animations,
+.no-animations * {
+  animation: none !important;
+  transition: none !important;
+}
+
 /* ------------ Reset ------------ */
 * {
   box-sizing: border-box;
@@ -654,6 +661,15 @@ aside.shell-context {
 .panel-body {
   padding: 16px;
 }
+.panel-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--canvas-bd);
+  background: var(--canvas-bg);
+  font-size: 12px;
+}
 
 /* Stat tiles */
 .stat-grid {
@@ -1038,6 +1054,16 @@ table.t .row-actions {
 }
 
 /* Detail drawer */
+@keyframes drawer-slide-in {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
 .drawer {
   background: var(--canvas-card);
   border: 1px solid var(--canvas-bd);
@@ -1046,6 +1072,7 @@ table.t .row-actions {
   flex-direction: column;
   position: sticky;
   top: 16px;
+  animation: drawer-slide-in 0.15s ease-out;
 }
 .drawer-head {
   padding: 14px 16px;
@@ -1855,6 +1882,9 @@ table.t .row-actions {
   cursor: pointer;
 }
 .palette-item.first {
+  background: var(--shell-surface);
+}
+.palette-item.active {
   background: var(--shell-surface);
 }
 .palette-item:hover {

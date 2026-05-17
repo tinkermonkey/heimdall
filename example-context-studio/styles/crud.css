@@ -943,6 +943,10 @@ select.input {
   background: rgba(244, 63, 94, 0.16);
   color: var(--accent-rose, #f43f5e);
 }
+.toast-warning .toast-mark {
+  background: rgba(245, 158, 11, 0.16);
+  color: var(--accent-amber);
+}
 .toast-body {
   flex: 1;
   min-width: 0;

@@ -273,10 +273,20 @@ function Statusbar({ route }) {
 // ============= Command palette =============
 function CommandPalette({ onClose, onNav }) {
   const [q, setQ] = useState("");
+  const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef(null);
   useEffect(() => {
     inputRef.current?.focus();
-  }, []);
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "Tab") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   const items = useMemo(() => {
     const navItems = [];
@@ -324,6 +334,23 @@ function CommandPalette({ onClose, onNav }) {
     else onClose();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % items.length || 0);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex((i) => (i === 0 ? Math.max(0, items.length - 1) : i - 1));
+    } else if (e.key === "Enter" && items[activeIndex]) {
+      e.preventDefault();
+      onPick(items[activeIndex]);
+    }
+  };
+
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [items.length]);
+
   return (
     <div className="palette-backdrop" onClick={onClose}>
       <div
@@ -338,6 +365,7 @@ function CommandPalette({ onClose, onNav }) {
             ref={inputRef}
             value={q}
             onChange={(e) => setQ(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Search nodes, run a command, jump to…"
           />
           <span className="palette-esc">esc</span>
@@ -347,7 +375,7 @@ function CommandPalette({ onClose, onNav }) {
           {items.map((it, i) => (
             <button
               key={i}
-              className={"palette-item" + (i === 0 ? " first" : "")}
+              className={"palette-item" + (i === 0 ? " first" : "") + (i === activeIndex ? " active" : "")}
               onClick={() => onPick(it)}
             >
               <span className="palette-kind">{it.kind}</span>
