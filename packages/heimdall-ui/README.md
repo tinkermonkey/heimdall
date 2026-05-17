@@ -2,9 +2,9 @@
 
 Production component library for the Heimdall design system. Built with React 18, TypeScript, Tailwind CSS, and self-hosted fonts.
 
-## Phase 1: Foundation
+## Phase 1: Foundation & Core Components
 
-This phase establishes the token system and build infrastructure required by all subsequent component work.
+This phase establishes the token system, build infrastructure, and core component library.
 
 ### ✅ Completed
 
@@ -15,7 +15,9 @@ This phase establishes the token system and build infrastructure required by all
 - Tailwind theme extending with CSS variable references
 - Playwright testing infrastructure with animation freezing utilities
 - Base test utilities for font loading, dark-canvas toggle, and token validation
-- Barrel export at `src/index.ts` (initially empty)
+- 28 UI components across 7 categories (primitives, forms, data display, shell, navigation, dialogs, containers)
+- Comprehensive test suite (6 spec files covering foundations, primitives, data display, shell, integration, and reference previews)
+- Example applications (Homelab Dashboard and Context Studio rebuilt with design system)
 
 ### Getting Started
 
@@ -40,6 +42,15 @@ npm run test:ui
 
 ```
 src/
+├── components/                # 28 UI components
+│   ├── Icon.tsx              # Icon renderer
+│   ├── Button.tsx            # Button component
+│   ├── Modal.tsx             # Modal dialog
+│   └── [24 more components]
+├── examples/                  # Example applications
+│   ├── HomelabDashboardRebuilt.tsx
+│   └── ContextStudioRebuilt.tsx
+├── test-pages/               # Test page implementations
 ├── fonts/
 │   ├── fonts.css              # @font-face declarations
 │   ├── inter/                 # Inter font files (self-hosted)
@@ -47,12 +58,17 @@ src/
 ├── tokens/
 │   └── tokens.css             # Design tokens as CSS custom properties
 ├── index.css                  # Main stylesheet (tokens + Tailwind)
-├── index.ts                   # Barrel export (empty, for future components)
+├── index.ts                   # Barrel export (28 components)
 ├── main.tsx                   # Vite entry point
 └── App.tsx                    # Root component
 
 tests/
 ├── foundation.spec.ts         # Token system validation tests
+├── primitives.spec.ts         # Primitive components tests
+├── data-display.spec.ts       # Data display components tests
+├── shell-framework.spec.ts    # Shell framework tests
+├── rebuilt-view-integration.spec.ts  # Integration tests
+├── reference-previews.spec.ts # Reference preview tests
 └── utils/
     └── test-helpers.ts        # Test utilities
 
@@ -131,11 +147,12 @@ npm test              # Headless mode
 npm run test:ui       # Interactive UI
 ```
 
-## Next Phase: Components
+## Upcoming Work
 
-Phase 2 will introduce:
+Future phases will expand the design system with:
 
-- `Icon` — ICONS map + SVG renderer
-- `Button` — 5 variants × 2 sizes × states
-- `Chip` — 6 semantic color variants
-- Visual regression tests against reference prototypes
+- Advanced layout components
+- Data visualization components
+- Enhanced accessibility features
+- Visual regression testing refinements
+- Storybook documentation
