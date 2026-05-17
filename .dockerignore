@@ -1,0 +1,14 @@
+**/node_modules/
+.git/
+.github/
+dist/
+build/
+.turbo/
+.next/
+*.log
+.vscode/
+.idea/
+playwright-report/
+test-results/
+example-context-studio/
+example-homelab-dashboard/
