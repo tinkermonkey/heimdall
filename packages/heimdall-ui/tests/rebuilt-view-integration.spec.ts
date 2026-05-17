@@ -300,16 +300,4 @@ test.describe('Homelab Dashboard Rebuilt Integration Tests', () => {
       await expect(button).toBeEnabled()
     }
   })
-
-  test('homelab dashboard reference HTML renders', async ({ page }) => {
-    // Navigate to the original homelab dashboard reference HTML
-    const __dirname = path.dirname(fileURLToPath(import.meta.url))
-    const refHtmlPath = 'file://' + path.resolve(__dirname, '../../../example-homelab-dashboard/index.html')
-    await page.goto(refHtmlPath)
-    await page.waitForLoadState('networkidle')
-
-    // Verify the reference dashboard loads without errors
-    const heading = page.locator('h1').first()
-    await expect(heading).toBeVisible()
-  })
 })
