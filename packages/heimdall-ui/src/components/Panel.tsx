@@ -1,7 +1,7 @@
 import React from 'react'
 import './Panel.css'
 
-interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string
   subtitle?: string
   footer?: React.ReactNode

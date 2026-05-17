@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import './Drawer.css'
 import { Icon } from './Icon'
 
-interface DrawerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface DrawerProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean
   onClose: () => void
   title?: string

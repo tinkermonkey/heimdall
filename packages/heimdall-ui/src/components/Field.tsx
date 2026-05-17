@@ -1,7 +1,7 @@
 import React from 'react'
 import './Field.css'
 
-interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
   label?: React.ReactNode
   required?: boolean
   error?: React.ReactNode

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { Icon } from './Icon'
 import './Modal.css'
 
-interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean
   onClose: () => void
   title?: string

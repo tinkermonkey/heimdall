@@ -1,7 +1,7 @@
 import React from 'react'
 import './inputs.css'
 
-interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   mono?: boolean
   error?: boolean
 }

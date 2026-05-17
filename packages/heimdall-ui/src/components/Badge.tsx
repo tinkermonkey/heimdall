@@ -1,14 +1,14 @@
 import React from 'react'
 import './Badge.css'
 
-type BadgeColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
+export type BadgeColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
 
-interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
+export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?: BadgeColor
   pulse?: boolean
 }
 
-interface StatusBadgeProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface StatusBadgeProps extends React.HTMLAttributes<HTMLDivElement> {
   color?: BadgeColor
   pulse?: boolean
 }

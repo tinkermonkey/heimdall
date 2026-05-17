@@ -2,7 +2,7 @@ import React from 'react'
 import { Icon, type IconName } from './Icon'
 import './NavItem.css'
 
-interface NavItemProps {
+export interface NavItemProps {
   icon?: IconName
   label: string
   count?: number
@@ -11,18 +11,24 @@ interface NavItemProps {
   className?: string
 }
 
-export const NavItem = React.forwardRef<HTMLDivElement, NavItemProps>(
+export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(
   ({ icon, label, count, active = false, onClick, className = '', ...props }, ref) => {
     const classNames = ['nav-item', active && 'nav-item--active', className]
       .filter(Boolean)
       .join(' ')
 
     return (
-      <div ref={ref} className={classNames} onClick={onClick} {...props}>
+      <button
+        ref={ref}
+        className={classNames}
+        onClick={onClick}
+        aria-current={active ? 'page' : undefined}
+        {...props}
+      >
         {icon && <Icon name={icon} size={16} className="nav-item__icon" />}
         <span className="nav-item__label">{label}</span>
         {count !== undefined && <span className="nav-item__count">{count}</span>}
-      </div>
+      </button>
     )
   }
 )

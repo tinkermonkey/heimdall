@@ -1,7 +1,7 @@
 import React from 'react'
 import './Select.css'
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   error?: boolean
   children: React.ReactNode
 }

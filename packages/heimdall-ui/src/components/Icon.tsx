@@ -51,7 +51,7 @@ export const ICONS = {
 
 export type IconName = keyof typeof ICONS
 
-interface IconProps {
+export interface IconProps {
   name: IconName
   size?: number
   className?: string

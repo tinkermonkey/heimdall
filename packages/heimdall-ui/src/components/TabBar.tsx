@@ -1,13 +1,13 @@
 import React from 'react'
 import './TabBar.css'
 
-interface Tab {
+export interface Tab {
   id: string
   label: string
   count?: number
 }
 
-interface TabBarProps {
+export interface TabBarProps {
   tabs: Tab[]
   activeTabId: string
   onSelectTab: (tabId: string) => void

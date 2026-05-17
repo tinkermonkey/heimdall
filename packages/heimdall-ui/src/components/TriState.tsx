@@ -1,7 +1,7 @@
 import React from 'react'
 import './TriState.css'
 
-interface TriStateProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
+export interface TriStateProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {
   indeterminate?: boolean
 }
 

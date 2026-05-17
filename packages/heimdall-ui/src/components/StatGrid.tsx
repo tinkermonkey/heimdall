@@ -1,7 +1,7 @@
 import React from 'react'
 import './StatGrid.css'
 
-interface StatGridProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface StatGridProps extends React.HTMLAttributes<HTMLDivElement> {
   columns?: number
   children: React.ReactNode
 }

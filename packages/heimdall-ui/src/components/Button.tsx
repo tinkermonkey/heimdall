@@ -1,10 +1,10 @@
 import React from 'react'
 import './Button.css'
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
-type Size = 'sm' | 'md'
+export type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
+export type Size = 'sm' | 'md'
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant
   size?: Size
   children: React.ReactNode

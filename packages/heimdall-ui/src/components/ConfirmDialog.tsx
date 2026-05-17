@@ -3,7 +3,9 @@ import { Modal } from './Modal'
 import { Button } from './Button'
 import './ConfirmDialog.css'
 
-interface ConfirmDialogProps {
+export type ConfirmDialogVariant = 'primary' | 'danger'
+
+export interface ConfirmDialogProps {
   isOpen: boolean
   onClose: () => void
   onConfirm: () => void
@@ -11,7 +13,7 @@ interface ConfirmDialogProps {
   message: React.ReactNode
   confirmLabel?: string
   cancelLabel?: string
-  variant?: 'primary' | 'danger'
+  variant?: ConfirmDialogVariant
 }
 
 export const ConfirmDialog = React.forwardRef<HTMLDivElement, ConfirmDialogProps>(
@@ -29,8 +31,11 @@ export const ConfirmDialog = React.forwardRef<HTMLDivElement, ConfirmDialogProps
     ref
   ) => {
     const handleConfirm = () => {
-      onConfirm()
-      onClose()
+      try {
+        onConfirm()
+      } finally {
+        onClose()
+      }
     }
 
     return (

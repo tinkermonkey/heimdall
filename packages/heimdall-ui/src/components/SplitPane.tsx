@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import './SplitPane.css'
 
-interface SplitPaneProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface SplitPaneProps extends React.HTMLAttributes<HTMLDivElement> {
   direction?: 'horizontal' | 'vertical'
   initialSplitPercent?: number
   minSize?: number

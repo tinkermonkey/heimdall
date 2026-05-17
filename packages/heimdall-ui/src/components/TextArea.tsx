@@ -1,7 +1,7 @@
 import React from 'react'
 import './inputs.css'
 
-interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   mono?: boolean
   error?: boolean
 }

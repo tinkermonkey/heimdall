@@ -5,7 +5,7 @@ import { Sidebar, SidebarProps } from './Sidebar'
 import { Topbar, TopbarProps } from './Topbar'
 import './ShellLayout.css'
 
-interface ShellLayoutProps {
+export interface ShellLayoutProps {
   titlebar?: TitlebarProps & { hide?: boolean }
   topbar?: TopbarProps & { hide?: boolean }
   sidebar?: SidebarProps & { hide?: boolean }

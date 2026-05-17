@@ -7,10 +7,10 @@ export interface Column<T> {
   label: string
   sortable?: boolean
   width?: string
-  render?: (value: any, row: T, index: number) => React.ReactNode
+  render?: (value: T[keyof T], row: T, index: number) => React.ReactNode
 }
 
-interface TableProps<T extends Record<string, any>> {
+export interface TableProps<T extends Record<string, any>> {
   columns: Column<T>[]
   data: T[]
   rowKey: keyof T | ((row: T, index: number) => string | number)

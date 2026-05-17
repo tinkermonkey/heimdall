@@ -1,10 +1,10 @@
 import React from 'react'
 import './Chip.css'
 
-type ChipVariant = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
-type ChipForm = 'default' | 'id-tag' | 'version' | 'env'
+export type ChipVariant = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
+export type ChipForm = 'default' | 'id-tag' | 'version' | 'env'
 
-interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
+export interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: ChipVariant
   form?: ChipForm
   children: React.ReactNode

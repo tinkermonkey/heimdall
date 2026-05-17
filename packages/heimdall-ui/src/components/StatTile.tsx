@@ -1,9 +1,9 @@
 import React from 'react'
 import './StatTile.css'
 
-type StatColor = 'cyan' | 'violet' | 'amber' | 'emerald'
+export type StatColor = 'cyan' | 'violet' | 'amber' | 'emerald'
 
-interface StatTileProps {
+export interface StatTileProps {
   label: string
   value: string | number
   delta?: {

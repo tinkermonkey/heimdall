@@ -10,7 +10,7 @@ export interface Command {
   onSelect: () => void
 }
 
-interface CommandPaletteProps {
+export interface CommandPaletteProps {
   isOpen: boolean
   onClose: () => void
   commands: Command[]
@@ -45,16 +45,23 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
           onClose()
         } else if (e.key === 'ArrowDown') {
           e.preventDefault()
-          setSelectedIndex((i) => (i + 1) % filtered.length)
+          if (filtered.length > 0) {
+            setSelectedIndex((i) => (i + 1) % filtered.length)
+          }
         } else if (e.key === 'ArrowUp') {
           e.preventDefault()
-          setSelectedIndex((i) => (i - 1 + filtered.length) % filtered.length)
+          if (filtered.length > 0) {
+            setSelectedIndex((i) => (i - 1 + filtered.length) % filtered.length)
+          }
         } else if (e.key === 'Enter') {
           e.preventDefault()
           if (filtered[selectedIndex]) {
-            filtered[selectedIndex].onSelect()
-            onClose()
-            setSearch('')
+            try {
+              filtered[selectedIndex].onSelect()
+            } finally {
+              onClose()
+              setSearch('')
+            }
           }
         }
       }
@@ -104,9 +111,12 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
                     .filter(Boolean)
                     .join(' ')}
                   onClick={() => {
-                    cmd.onSelect()
-                    onClose()
-                    setSearch('')
+                    try {
+                      cmd.onSelect()
+                    } finally {
+                      onClose()
+                      setSearch('')
+                    }
                   }}
                 >
                   {cmd.icon && <Icon name={cmd.icon} size={16} />}
