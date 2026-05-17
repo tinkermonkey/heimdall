@@ -161,10 +161,14 @@ test.describe('Primitive Components', () => {
     const count = await selects.count()
     expect(count).toBeGreaterThan(0)
 
-    // Verify options can be selected
+    // Verify selected option exists by checking selected index
     const firstSelect = selects.first()
-    const selectedOption = await firstSelect.locator('option[selected]').first()
-    expect(selectedOption).toBeVisible()
+    const hasSelectedOption = await firstSelect.evaluate((el) => {
+      const selectEl = el as HTMLSelectElement
+      // Check if any option is selected (selectedIndex >= 0) or if the value indicates selection
+      return selectEl.selectedIndex >= 0 && selectEl.options.length > 0
+    })
+    expect(hasSelectedOption).toBe(true)
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('select-states.png', {

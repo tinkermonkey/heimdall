@@ -208,16 +208,16 @@ export default function PrimitivesTestPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '300px' }}>
           <Select>
             <option>Option 1</option>
-            <option selected>Option 2</option>
+            <option selected={true}>Option 2</option>
             <option>Option 3</option>
           </Select>
           <Select className="error">
             <option>Option A</option>
-            <option selected>Option B</option>
+            <option selected={true}>Option B</option>
           </Select>
           <Select disabled>
             <option>Option X</option>
-            <option selected>Option Y</option>
+            <option selected={true}>Option Y</option>
           </Select>
         </div>
       </section>

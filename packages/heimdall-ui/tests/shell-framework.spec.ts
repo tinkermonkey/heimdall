@@ -17,8 +17,8 @@ test.describe('Shell Framework Components', () => {
       const topbar = page.locator('[class*="topbar"]').first()
       await expect(topbar).toBeVisible()
 
-      // Verify breadcrumbs are rendered
-      const breadcrumbs = page.locator('[class*="breadcrumbs"]')
+      // Verify breadcrumbs are rendered (nav with breadcrumbs class)
+      const breadcrumbs = page.locator('nav.breadcrumbs').first()
       await expect(breadcrumbs).toBeVisible()
 
       // Verify search input exists

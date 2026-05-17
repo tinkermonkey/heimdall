@@ -132,8 +132,8 @@ test.describe('Data Display Components', () => {
   })
 
   test('Table data rows contain expected content', async ({ page }) => {
-    // Verify first row contains data
-    const firstDataCell = page.locator('tbody td').first()
+    // Verify first row contains data (skip checkbox column)
+    const firstDataCell = page.locator('tbody td:not(.table__cell--checkbox)').first()
     const cellContent = await firstDataCell.textContent()
 
     expect(cellContent).toBeTruthy()
