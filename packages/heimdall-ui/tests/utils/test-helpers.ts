@@ -88,23 +88,22 @@ export async function getCSSVariableValue(
 }
 
 /**
- * Assert that dark canvas tokens are correctly applied by default
+ * Assert that light canvas tokens are correctly applied by default
  */
-export async function assertDarkCanvasTokens(page: Page): Promise<void> {
+export async function assertLightCanvasTokens(page: Page): Promise<void> {
   const canvasBg = await getCSSVariableValue(page, '--canvas-bg')
   const shellBg = await getCSSVariableValue(page, '--shell-bg')
 
-  expect(canvasBg).toBe('#14191f')
+  expect(canvasBg).toBe('#ffffff')
   expect(shellBg).toBe('#0b0f14')
 }
 
 /**
- * Assert that accent color is orange (not cyan)
+ * Assert that accent color is cyan (not orange)
  */
-export async function assertOrangeAccent(page: Page): Promise<void> {
+export async function assertCyanAccent(page: Page): Promise<void> {
   const accentPrimary = await getCSSVariableValue(page, '--accent-primary')
 
-  // Should be orange, not cyan
-  expect(accentPrimary).not.toContain('22d3ee') // cyan
-  expect(accentPrimary).toContain('f97316') // orange-500
+  // Should be cyan, not orange
+  expect(accentPrimary).toContain('22d3ee') // cyan-400
 }

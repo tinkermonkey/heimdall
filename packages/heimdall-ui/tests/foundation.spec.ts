@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test'
 import {
   freezeAnimations,
   applyDarkCanvasMode,
-  assertDarkCanvasTokens,
-  assertOrangeAccent,
+  assertLightCanvasTokens,
+  assertCyanAccent,
   getCSSVariableValue,
 } from './utils/test-helpers'
 
@@ -11,8 +11,8 @@ import {
  * Foundation tests verify the token system and build infrastructure
  * These tests confirm that:
  * - CSS custom properties are correctly defined
- * - Dark canvas is the default mode
- * - Orange accent tokens are in place (not cyan)
+ * - Light canvas is the default mode
+ * - Cyan accent tokens are in place (not orange)
  * - Animation freezing works for consistent screenshots
  * - Vite build pipeline works correctly
  */
@@ -35,19 +35,19 @@ test.beforeEach(async ({ page }) => {
             --shell-fg-2: #d1d5db;
             --shell-fg-3: #9ca3af;
 
-            --canvas-bg: #14191f;
-            --canvas-surface: #1b222a;
-            --canvas-card: #1f2630;
-            --canvas-bg-2: #272e38;
-            --canvas-fg-1: #f9fafb;
-            --canvas-fg-2: #d1d5db;
+            --canvas-bg: #ffffff;
+            --canvas-surface: #f3f4f6;
+            --canvas-card: #ffffff;
+            --canvas-bg-2: #f9fafb;
+            --canvas-fg-1: #111827;
+            --canvas-fg-2: #6b7280;
             --canvas-fg-3: #9ca3af;
-            --canvas-border: #374151;
-            --canvas-border-strong: #4b5563;
+            --canvas-border: #e5e7eb;
+            --canvas-border-strong: #d1d5db;
 
-            --accent-primary: #f97316;
-            --accent-primary-hover: #ea580c;
-            --accent-primary-deep: #c2410c;
+            --accent-primary: #22d3ee;
+            --accent-primary-hover: #06b6d4;
+            --accent-primary-deep: #0e7ea3;
 
             --status-ok: #22c55e;
             --status-warn: #eab308;
@@ -88,9 +88,9 @@ test.beforeEach(async ({ page }) => {
   `)
 })
 
-test('should have dark canvas as default background color', async ({ page }) => {
+test('should have light canvas as default background color', async ({ page }) => {
   const bgColor = await getCSSVariableValue(page, '--canvas-bg')
-  expect(bgColor).toBe('#14191f')
+  expect(bgColor).toBe('#ffffff')
 })
 
 test('should have shell background always dark', async ({ page }) => {
@@ -98,19 +98,19 @@ test('should have shell background always dark', async ({ page }) => {
   expect(shellBg).toBe('#0b0f14')
 })
 
-test('should use orange accent color, not cyan', async ({ page }) => {
+test('should use cyan accent color, not orange', async ({ page }) => {
   const accentPrimary = await getCSSVariableValue(page, '--accent-primary')
-  expect(accentPrimary).toBe('#f97316')
+  expect(accentPrimary).toBe('#22d3ee')
 })
 
-test('should have orange accent hover state', async ({ page }) => {
+test('should have cyan accent hover state', async ({ page }) => {
   const accentHover = await getCSSVariableValue(page, '--accent-primary-hover')
-  expect(accentHover).toBe('#ea580c')
+  expect(accentHover).toBe('#06b6d4')
 })
 
-test('should have orange accent deep state', async ({ page }) => {
+test('should have cyan accent deep state', async ({ page }) => {
   const accentDeep = await getCSSVariableValue(page, '--accent-primary-deep')
-  expect(accentDeep).toBe('#c2410c')
+  expect(accentDeep).toBe('#0e7ea3')
 })
 
 test('should support semantic status colors', async ({ page }) => {
@@ -155,10 +155,10 @@ test('should allow animation freezing', async ({ page }) => {
   expect(animationState).toBe('paused')
 })
 
-test('should apply dark canvas tokens by default', async ({ page }) => {
-  await assertDarkCanvasTokens(page)
+test('should apply light canvas tokens by default', async ({ page }) => {
+  await assertLightCanvasTokens(page)
 })
 
-test('should have orange accent as primary color', async ({ page }) => {
-  await assertOrangeAccent(page)
+test('should have cyan accent as primary color', async ({ page }) => {
+  await assertCyanAccent(page)
 })
