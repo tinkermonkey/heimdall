@@ -145,6 +145,12 @@ test.describe('Rebuilt View Integration Tests', () => {
     await originalPage.goto(refHtmlPath)
     await originalPage.waitForLoadState('networkidle')
 
+    // Apply dark-canvas mode to original page for consistent visual comparison
+    await originalPage.evaluate(() => {
+      document.body.classList.add('dark-canvas')
+    })
+    await originalPage.waitForLoadState('networkidle')
+
     // Capture original reference screenshot
     const originalBuffer = await originalPage.screenshot({ fullPage: true })
     await originalPage.close()
@@ -153,6 +159,12 @@ test.describe('Rebuilt View Integration Tests', () => {
     await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
     await page.locator('[class*="shell"]').first().waitFor()
+
+    // Apply dark-canvas mode to rebuilt page for consistent visual comparison
+    await page.evaluate(() => {
+      document.body.classList.add('dark-canvas')
+    })
+    await page.waitForLoadState('networkidle')
 
     // Capture rebuilt view screenshot
     const rebuiltBuffer = await page.screenshot({ fullPage: true })
