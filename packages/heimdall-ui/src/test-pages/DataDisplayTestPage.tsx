@@ -43,9 +43,11 @@ export default function DataDisplayTestPage() {
     },
   ]
 
-  const handleSort = (key: string, direction: 'asc' | 'desc') => {
+  const handleSort = (key: string, direction: 'asc' | 'desc' | null) => {
     setSortKey(key)
-    setSortDirection(direction)
+    if (direction !== null) {
+      setSortDirection(direction)
+    }
   }
 
   return (

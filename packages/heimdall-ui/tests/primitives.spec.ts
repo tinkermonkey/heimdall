@@ -95,9 +95,6 @@ test.describe('Primitive Components', () => {
   })
 
   test('Badge component - status dots', async ({ page }) => {
-    // Get all badge elements
-    const badges = page.locator('[style*="width: 8px"]').filter({ hasNot: page.locator('input') })
-
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('badge-dots.png', {
       maxDiffPixelRatio: 0.1,
@@ -215,13 +212,6 @@ test.describe('Primitive Components', () => {
 
   test('Button component - click interaction', async ({ page }) => {
     const primaryButton = page.locator('button:has-text("Primary")').first()
-    let clicked = false
-
-    page.on('console', (msg) => {
-      if (msg.text().includes('click')) {
-        clicked = true
-      }
-    })
 
     await primaryButton.click()
     // Button click should be possible
@@ -230,7 +220,6 @@ test.describe('Primitive Components', () => {
 
   test('Select component - option selection', async ({ page }) => {
     const firstSelect = page.locator('select').first()
-    const initialValue = await firstSelect.inputValue()
 
     // Select a different option
     await firstSelect.selectOption('Option 3')

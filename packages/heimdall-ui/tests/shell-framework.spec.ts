@@ -76,7 +76,6 @@ test.describe('Shell Framework Components', () => {
 
     test('TabBar displays tab counts when provided', async ({ page }) => {
       // Find tabs with counts
-      const tabsWithCounts = page.locator('button[class*="tab-bar__tab"]:has([class*="tab-bar__tab-count"])')
       const countEls = page.locator('[class*="tab-bar__tab-count"]')
       const countCount = await countEls.count()
       expect(countCount).toBeGreaterThan(0)
