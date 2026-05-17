@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon } from './Icon'
+import { Icon, type IconName } from './Icon'
 import './Sidebar.css'
 
 export interface SidebarSection {
@@ -7,7 +7,7 @@ export interface SidebarSection {
   items: Array<{
     id: string
     label: string
-    icon?: string
+    icon?: IconName
     count?: number
   }>
 }
@@ -64,7 +64,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                     onClick={() => onSelectItem?.(item.id)}
                     title={collapsed ? item.label : undefined}
                   >
-                    {item.icon && <Icon name={item.icon as any} size={18} className="sidebar__item-icon" />}
+                    {item.icon && <Icon name={item.icon} size={18} className="sidebar__item-icon" />}
                     {!collapsed && <span className="sidebar__item-label">{item.label}</span>}
                     {item.count !== undefined && (
                       <span className={`sidebar__item-count ${activeItemId === item.id ? 'sidebar__item-count--active' : ''}`}>
