@@ -126,10 +126,10 @@ const config: Config = {
 
       /* ---- Ring (focus state) ---- */
       ringColor: {
-        DEFAULT: 'var(--accent-primary)',
+        DEFAULT: 'rgb(var(--accent-primary) / <alpha-value>)',
       },
       ringOffsetColor: {
-        DEFAULT: 'var(--canvas-bg)',
+        DEFAULT: 'rgb(var(--canvas-bg) / <alpha-value>)',
       },
     },
   },
