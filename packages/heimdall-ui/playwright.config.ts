@@ -11,6 +11,11 @@ export default defineConfig({
   retries: isCI ? 2 : 0,
   workers: isCI ? 1 : undefined,
   reporter: isCI ? [['line'], ['html', { outputFolder: '/tmp/playwright-report' }]] : 'html',
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.01,
+    },
+  },
   use: {
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',

@@ -6,7 +6,7 @@ FROM switchyard-orchestrator:latest
 USER root
 
 # ============================================================================
-# Playwright/Chromium system dependencies
+# Playwright/Chromium system dependencies + font rendering consistency
 # ============================================================================
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
@@ -40,8 +40,35 @@ RUN apt-get update -qq && \
         libxkbcommon0 \
         libasound2t64 \
         libatspi2.0-0 \
+        fontconfig \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# ============================================================================
+# Fontconfig: deterministic rendering (no hinting, grayscale AA)
+# Prevents pixel diffs from font rendering variations across environments
+# ============================================================================
+RUN mkdir -p /etc/fonts && \
+    cat > /etc/fonts/local.conf << 'EOF'
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <match target="font">
+    <edit name="hinting" mode="assign"><bool>false</bool></edit>
+    <edit name="autohint" mode="assign"><bool>false</bool></edit>
+    <edit name="hintstyle" mode="assign"><const>hintnone</const></edit>
+    <edit name="antialias" mode="assign"><bool>true</bool></edit>
+    <edit name="rgba" mode="assign"><const>none</const></edit>
+    <edit name="lcdfilter" mode="assign"><const>lcdnone</const></edit>
+  </match>
+</fontconfig>
+EOF
+
+# ============================================================================
+# Install project fonts system-wide for consistent file:// rendering
+# ============================================================================
+COPY packages/heimdall-ui/public/fonts /usr/share/fonts/heimdall
+RUN fc-cache -f
 
 # ============================================================================
 # Pre-install project dependencies
@@ -60,7 +87,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers
 RUN npx playwright install chromium
 
 # ============================================================================
-# Fix ownership of pre-installed node_modules
+# Fix ownership of pre-installed node_modules and browser cache
 # ============================================================================
 WORKDIR /workspace/heimdall
 RUN chown -R orchestrator:orchestrator /workspace/heimdall/packages/heimdall-ui/node_modules && \

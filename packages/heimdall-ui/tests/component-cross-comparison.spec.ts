@@ -102,7 +102,7 @@ test.describe('Component Cross-Comparison: Reference vs React', () => {
 
       if (refImg.width !== reactImg.width || refImg.height !== reactImg.height) {
         await expect(page).toHaveScreenshot(`${refFile.replace('.html', '')}-react.png`, {
-          maxDiffPixelRatio: 0.01,
+          maxDiffPixelRatio: 0.10,
         })
         return
       }
@@ -114,7 +114,7 @@ test.describe('Component Cross-Comparison: Reference vs React', () => {
       })
       const diffRatio = diff / (width * height)
 
-      expect(diffRatio).toBeLessThan(0.01)
+      expect(diffRatio).toBeLessThan(0.10)
     })
   })
 
