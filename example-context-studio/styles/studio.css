@@ -1054,6 +1054,16 @@ table.t .row-actions {
 }
 
 /* Detail drawer */
+@keyframes drawer-slide-in {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
 .drawer {
   background: var(--canvas-card);
   border: 1px solid var(--canvas-bd);
@@ -1062,6 +1072,7 @@ table.t .row-actions {
   flex-direction: column;
   position: sticky;
   top: 16px;
+  animation: drawer-slide-in 0.15s ease-out;
 }
 .drawer-head {
   padding: 14px 16px;
