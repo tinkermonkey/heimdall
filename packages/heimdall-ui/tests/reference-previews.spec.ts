@@ -30,7 +30,7 @@ test.describe('Reference Preview Cards', () => {
         await page.waitForLoadState('networkidle')
 
         // Capture snapshot with reasonable tolerance
-        await expect(page).toHaveScreenshot(`context-studio/${testName}.png`, {
+        await expect(page).toHaveScreenshot(`${testName}.png`, {
           maxDiffPixelRatio: 0.01, // Allow 1% pixel difference
         })
       })

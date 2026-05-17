@@ -192,10 +192,6 @@ test.describe('Rebuilt View Integration Tests', () => {
 
 test.describe('Homelab Dashboard Rebuilt Integration Tests', () => {
   test('rebuilt homelab dashboard renders without errors', async ({ page }) => {
-    // Navigate to the HomelabDashboardRebuilt example
-    await page.goto('http://localhost:5173/?example=homelab')
-    await page.waitForLoadState('networkidle')
-
     // Check for any console errors
     const consoleErrors: string[] = []
     page.on('console', (msg) => {
@@ -203,6 +199,10 @@ test.describe('Homelab Dashboard Rebuilt Integration Tests', () => {
         consoleErrors.push(msg.text())
       }
     })
+
+    // Navigate to the HomelabDashboardRebuilt example
+    await page.goto('http://localhost:5173/?example=homelab')
+    await page.waitForLoadState('networkidle')
 
     // Wait for the homelab dashboard to render
     const heading = page.locator('h1:has-text("Overview")')
