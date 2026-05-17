@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './Table.css'
 import { Icon } from './Icon'
 
-interface Column<T> {
+export interface Column<T> {
   key: keyof T
   label: string
   sortable?: boolean

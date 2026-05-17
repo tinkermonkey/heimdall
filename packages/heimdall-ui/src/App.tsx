@@ -9,6 +9,7 @@ import {
   ShellLayout,
   TabBar,
 } from './index'
+import type { Column } from './components/Table'
 import ContextStudioRebuilt from './examples/ContextStudioRebuilt'
 
 export default function App() {
@@ -27,7 +28,7 @@ export default function App() {
     { id: 'cls_e007', name: 'service', class: 'software', status: 'error', updated: '1h ago' },
   ]
 
-  const tableColumns = [
+  const tableColumns: Column<typeof tableData[number]>[] = [
     {
       key: 'id',
       label: 'ID',
