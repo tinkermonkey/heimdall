@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { PNG } from 'pngjs'
+import pixelmatch from 'pixelmatch'
 
 test.describe('Rebuilt View Integration Tests', () => {
   test('rebuilt context studio dashboard renders without errors', async ({ page }) => {
@@ -152,9 +154,23 @@ test.describe('Rebuilt View Integration Tests', () => {
     // Capture rebuilt view screenshot
     const rebuiltBuffer = await page.screenshot({ fullPage: true })
 
-    // Compare the two screenshots - rebuilt should match original with visual tolerance
-    expect(rebuiltBuffer).toMatchSnapshot('original-reference-baseline.png', {
-      maxDiffPixelRatio: 0.05,
+    // Parse both screenshots as PNG images
+    const origImg = PNG.sync.read(originalBuffer)
+    const rebuiltImg = PNG.sync.read(rebuiltBuffer)
+
+    // Verify dimensions match
+    expect(origImg.width).toBe(rebuiltImg.width)
+    expect(origImg.height).toBe(rebuiltImg.height)
+
+    // Perform pixel-level comparison
+    const { width, height } = origImg
+    const diffOutput = new Uint8ClampedArray(width * height * 4)
+    const diff = pixelmatch(origImg.data, rebuiltImg.data, diffOutput, width, height, {
+      threshold: 0.1,
     })
+    const diffRatio = diff / (width * height)
+
+    // Allow up to 5% pixel difference for rendering variations
+    expect(diffRatio).toBeLessThan(0.05)
   })
 })
