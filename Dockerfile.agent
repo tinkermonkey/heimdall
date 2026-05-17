@@ -67,6 +67,11 @@ RUN chown -R orchestrator:orchestrator /workspace/heimdall/packages/heimdall-ui/
     chmod -R a+r /opt/playwright-browsers
 
 # ============================================================================
+# Runtime environment
+# ============================================================================
+ENV CI=true
+
+# ============================================================================
 # Switch to runtime user
 # ============================================================================
 USER orchestrator
