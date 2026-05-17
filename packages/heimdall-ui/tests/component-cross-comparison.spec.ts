@@ -37,7 +37,7 @@ test.describe('Component Cross-Comparison: Reference vs React', () => {
     },
     {
       refFile: 'components-modal.html',
-      reactExample: 'overlay-components',
+      reactExample: 'overlays',
       testDescription: 'Modal Components',
     },
     {
@@ -67,7 +67,7 @@ test.describe('Component Cross-Comparison: Reference vs React', () => {
     },
     {
       refFile: 'components-toasts.html',
-      reactExample: 'overlay-components',
+      reactExample: 'overlays',
       testDescription: 'Toast Components',
     },
   ]
