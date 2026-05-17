@@ -35,3 +35,19 @@ export { Titlebar } from './Titlebar'
 export { Statusbar } from './Statusbar'
 
 export { ShellLayout } from './ShellLayout'
+
+export { Modal } from './Modal'
+
+export { ConfirmDialog } from './ConfirmDialog'
+
+export { Toast } from './Toast'
+
+export { CommandPalette, type Command } from './CommandPalette'
+
+export { Panel } from './Panel'
+
+export { Drawer } from './Drawer'
+
+export { SplitPane } from './SplitPane'
+
+export { StatGrid } from './StatGrid'
