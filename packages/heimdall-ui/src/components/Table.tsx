@@ -3,17 +3,17 @@ import './Table.css'
 import { Icon } from './Icon'
 
 interface Column<T> {
-  key: string
+  key: keyof T
   label: string
   sortable?: boolean
   width?: string
   render?: (value: any, row: T, index: number) => React.ReactNode
 }
 
-interface TableProps<T> {
+interface TableProps<T extends Record<string, any>> {
   columns: Column<T>[]
   data: T[]
-  rowKey: string | ((row: T, index: number) => string | number)
+  rowKey: keyof T | ((row: T, index: number) => string | number)
   selectable?: boolean
   selectedRows?: (string | number)[]
   onSelectRows?: (rowKeys: (string | number)[]) => void
@@ -22,7 +22,7 @@ interface TableProps<T> {
 }
 
 const TableComponent = React.forwardRef(
-  <T,>(
+  <T extends Record<string, any>,>(
     {
       columns,
       data,
@@ -39,11 +39,11 @@ const TableComponent = React.forwardRef(
     const [sortKey, setSortKey] = useState<string | null>(null)
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
 
-    const getRowKey = (row: any, index: number) => {
+    const getRowKey = (row: T, index: number) => {
       if (typeof rowKey === 'function') {
         return rowKey(row, index)
       }
-      return row[rowKey]
+      return row[rowKey as keyof T]
     }
 
     const handleSelectAll = () => {
@@ -87,14 +87,14 @@ const TableComponent = React.forwardRef(
             )}
             {columns.map(column => (
               <th
-                key={column.key}
+                key={String(column.key)}
                 className={`table__header ${column.sortable ? 'table__header--sortable' : ''}`}
                 style={{ width: column.width }}
-                onClick={() => column.sortable && handleSort(column.key)}
+                onClick={() => column.sortable && handleSort(String(column.key))}
               >
                 <div className="table__header-content">
                   {column.label}
-                  {sortKey === column.key && (
+                  {sortKey === String(column.key) && (
                     <Icon
                       name={sortDirection === 'asc' ? 'chevronUp' : 'chevronDown'}
                       size={14}
@@ -123,8 +123,8 @@ const TableComponent = React.forwardRef(
                   </td>
                 )}
                 {columns.map(column => (
-                  <td key={`${rowKeyValue}-${column.key}`} className="table__cell">
-                    {column.render ? column.render(row[column.key], row, index) : row[column.key]}
+                  <td key={`${rowKeyValue}-${String(column.key)}`} className="table__cell">
+                    {column.render ? column.render(row[column.key as keyof T], row, index) : row[column.key as keyof T]}
                   </td>
                 ))}
               </tr>
@@ -134,7 +134,9 @@ const TableComponent = React.forwardRef(
       </table>
     )
   }
-) as <T,>(props: TableProps<T> & { ref?: React.Ref<HTMLTableElement> }) => React.ReactElement
+) as unknown as React.ForwardRefExoticComponent<
+  TableProps<any> & React.RefAttributes<HTMLTableElement>
+> & { displayName: string }
 
 TableComponent.displayName = 'Table'
 
