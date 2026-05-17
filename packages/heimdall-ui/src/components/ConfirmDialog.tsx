@@ -31,11 +31,8 @@ export const ConfirmDialog = React.forwardRef<HTMLDivElement, ConfirmDialogProps
     ref
   ) => {
     const handleConfirm = () => {
-      try {
-        onConfirm()
-      } finally {
-        onClose()
-      }
+      onConfirm()
+      onClose()
     }
 
     return (

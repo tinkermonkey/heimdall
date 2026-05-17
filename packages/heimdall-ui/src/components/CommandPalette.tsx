@@ -64,12 +64,9 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
         } else if (e.key === 'Enter') {
           e.preventDefault()
           if (filtered[selectedIndex]) {
-            try {
-              filtered[selectedIndex].onSelect()
-            } finally {
-              onClose()
-              setSearch('')
-            }
+            filtered[selectedIndex].onSelect()
+            onClose()
+            setSearch('')
           }
         }
       }
@@ -119,12 +116,9 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
                     .filter(Boolean)
                     .join(' ')}
                   onClick={() => {
-                    try {
-                      cmd.onSelect()
-                    } finally {
-                      onClose()
-                      setSearch('')
-                    }
+                    cmd.onSelect()
+                    onClose()
+                    setSearch('')
                   }}
                 >
                   {cmd.icon && <Icon name={cmd.icon} size={16} />}
