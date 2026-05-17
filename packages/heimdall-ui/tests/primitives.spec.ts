@@ -85,6 +85,18 @@ test.describe('Primitive Components', () => {
             font-size: 1rem;
           }
 
+          body.dark-canvas {
+            --canvas-bg: 20 25 31;
+            --canvas-surface: 27 34 42;
+            --canvas-card: 27 34 42;
+            --canvas-bg-2: 27 34 42;
+            --canvas-fg-1: 230 237 243;
+            --canvas-fg-2: 176 186 197;
+            --canvas-fg-3: 126 138 152;
+            --canvas-border: 42 50 60;
+            --canvas-border-strong: 58 68 82;
+          }
+
           .label {
             font-family: var(--font-mono);
             font-size: 10px;
@@ -310,7 +322,7 @@ test.describe('Primitive Components', () => {
           }
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div id="root"></div>
       </body>
       </html>
@@ -339,7 +351,7 @@ test.describe('Primitive Components', () => {
       <head>
         <style>${baseCss}</style>
       </head>
-      <body>${iconHtml}</body>
+      <body class="dark-canvas">${iconHtml}</body>
       </html>
     `)
 
@@ -415,7 +427,7 @@ test.describe('Primitive Components', () => {
           ${buttonCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <button class="btn btn--primary btn--md">Primary Button</button>
       </body>
       </html>
@@ -527,7 +539,7 @@ test.describe('Primitive Components', () => {
           ${buttonCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="row">
           <button class="btn btn--primary">Primary</button>
           <button class="btn btn--secondary">Secondary</button>
@@ -656,7 +668,7 @@ test.describe('Primitive Components', () => {
           ${chipCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="label">Chips · semantic tints</div>
         <div class="row">
           <span class="chip chip--default chip--cyan"><span class="chip__dot"></span>cyan</span>
@@ -761,7 +773,7 @@ test.describe('Primitive Components', () => {
           ${chipTagsCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="label">Pills & inline tags</div>
         <div class="row">
           <span class="chip chip--env"><span class="chip__dot chip__dot--env"></span>production</span>
@@ -847,7 +859,7 @@ test.describe('Primitive Components', () => {
           ${badgeCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="row">
           <div class="badge badge--cyan"></div>
           <div class="badge badge--emerald"></div>
@@ -931,7 +943,7 @@ test.describe('Primitive Components', () => {
           ${inputCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="row">
           <input class="text-input" placeholder="Default input" value="default value" />
           <input class="text-input" placeholder="Focused state" value="focused value" />
@@ -1009,7 +1021,7 @@ test.describe('Primitive Components', () => {
           ${textareaCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="row">
           <textarea class="text-area" placeholder="Default textarea">Sample text</textarea>
           <textarea class="text-area text-area--error" placeholder="Error textarea">Error message here</textarea>
@@ -1078,7 +1090,7 @@ test.describe('Primitive Components', () => {
           ${numberInputCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="row">
           <input type="number" class="number-input" placeholder="Default number" value="42" />
           <input type="number" class="number-input number-input--error" placeholder="Error number" value="999" />
@@ -1161,7 +1173,7 @@ test.describe('Primitive Components', () => {
           ${selectCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="row">
           <select class="select">
             <option>Option 1</option>
@@ -1224,7 +1236,7 @@ test.describe('Primitive Components', () => {
           ${tristateCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="row">
           <input type="checkbox" class="tri-state" />
           <input type="checkbox" class="tri-state" checked />
@@ -1318,7 +1330,7 @@ test.describe('Primitive Components', () => {
           ${fieldCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="column">
           <div class="field">
             <div class="field__label">

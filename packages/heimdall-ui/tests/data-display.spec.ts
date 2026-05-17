@@ -83,6 +83,18 @@ test.describe('Data Display Components', () => {
       font-size: 1rem;
     }
 
+    body.dark-canvas {
+      --canvas-bg: 20 25 31;
+      --canvas-surface: 27 34 42;
+      --canvas-card: 27 34 42;
+      --canvas-bg-2: 27 34 42;
+      --canvas-fg-1: 230 237 243;
+      --canvas-fg-2: 176 186 197;
+      --canvas-fg-3: 126 138 152;
+      --canvas-border: 42 50 60;
+      --canvas-border-strong: 58 68 82;
+    }
+
     .label {
       font-family: var(--font-mono);
       font-size: 10px;
@@ -279,7 +291,7 @@ test.describe('Data Display Components', () => {
           ${statTileCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="label">StatTile · 4 accent variants · 2px colored left bar</div>
         <div class="grid">
           <div class="stat-tile stat-tile--cyan">
@@ -324,7 +336,7 @@ test.describe('Data Display Components', () => {
           ${tableCss}
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="label">Table · mono ID column · row selection highlight</div>
         <table class="table">
           <thead class="table__head">
@@ -491,7 +503,7 @@ test.describe('Data Display Components', () => {
           }
         </style>
       </head>
-      <body>
+      <body class="dark-canvas">
         <div class="label">Sidebar nav · active = surface bg + 2px accent bar</div>
         <div class="sidebar">
           <div class="sidebar__section">

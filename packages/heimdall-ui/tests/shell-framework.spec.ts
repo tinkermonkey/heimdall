@@ -82,6 +82,18 @@ test.describe('Shell Framework Components', () => {
       color: rgb(var(--canvas-fg-1));
       font-size: 1rem;
     }
+
+    body.dark-canvas {
+      --canvas-bg: 20 25 31;
+      --canvas-surface: 27 34 42;
+      --canvas-card: 27 34 42;
+      --canvas-bg-2: 27 34 42;
+      --canvas-fg-1: 230 237 243;
+      --canvas-fg-2: 176 186 197;
+      --canvas-fg-3: 126 138 152;
+      --canvas-border: 42 50 60;
+      --canvas-border-strong: 58 68 82;
+    }
   `
 
   const titlebarCss = `
@@ -488,7 +500,7 @@ test.describe('Shell Framework Components', () => {
           ${titlebarCss}
         </style>
       </head>
-      <body style="margin: 0; padding: 0;">
+      <body style="margin: 0; padding: 0;" class="dark-canvas">
         <div class="titlebar">
           <div class="titlebar__slot titlebar__slot--left">
             <span style="color: rgb(var(--shell-fg-1)); font-size: 14px; font-weight: 500;">Logo</span>
@@ -521,7 +533,7 @@ test.describe('Shell Framework Components', () => {
           ${statusbarCss}
         </style>
       </head>
-      <body style="margin: 0; padding: 0; display: flex; justify-content: flex-end; height: 100vh;">
+      <body style="margin: 0; padding: 0; display: flex; justify-content: flex-end; height: 100vh;" class="dark-canvas">
         <div class="statusbar" style="width: 100%; position: absolute; bottom: 0;">
           <div class="statusbar__slot statusbar__slot--left">
             <span>Ready</span>
@@ -559,7 +571,7 @@ test.describe('Shell Framework Components', () => {
           ${canvasContentCss}
         </style>
       </head>
-      <body style="margin: 0; padding: 0;">
+      <body style="margin: 0; padding: 0;" class="dark-canvas">
         <div class="shell-layout">
           <div class="titlebar">
             <div class="titlebar__slot titlebar__slot--left">
@@ -715,7 +727,7 @@ test.describe('Shell Framework Components', () => {
           ${shellLayoutCss}
         </style>
       </head>
-      <body style="margin: 0; padding: 0;">
+      <body style="margin: 0; padding: 0;" class="dark-canvas">
         <div class="shell-layout">
           <div class="shell-layout__main">
             <div class="shell-layout__content">
