@@ -1,4 +1,4 @@
-import { Column, StatTile, Table } from '@heimdall/ui'
+import { Column, StatTile, Table } from '@tinkermonkey/heimdall-ui'
 
 export default function DataDisplayShowcase() {
   const tableData = [

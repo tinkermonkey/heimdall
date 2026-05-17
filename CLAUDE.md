@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 A design system repository with two layers:
 
 1. **Reference prototypes** — high-fidelity static HTML examples (React 18 + Babel standalone, no build step) that serve as the visual and behavioral spec.
-2. **Production component library** — `packages/heimdall-ui/`, a TypeScript + React 18 + Tailwind CSS 3 package (`@heimdall/ui`) built with Vite.
+2. **Production component library** — `packages/heimdall-ui/`, a TypeScript + React 18 + Tailwind CSS 3 package (`@tinkermonkey/heimdall-ui`) built with Vite.
 
 **Reference examples** (in `design-reference/`):
 - `design-reference/example-context-studio/` — graph-native knowledge studio (dark IDE chrome + light canvas)
@@ -45,7 +45,7 @@ If a server is already running, use its existing port rather than starting a new
 ## Repository Structure
 
 ```
-packages/heimdall-ui/          # Production component library (@heimdall/ui)
+packages/heimdall-ui/          # Production component library (@tinkermonkey/heimdall-ui)
   src/
     components/                # All components (each has .tsx + .css)
     tokens/tokens.css          # CSS custom properties (design tokens)
@@ -102,8 +102,8 @@ Dark canvas is toggled by adding `dark-canvas` class to `<body>` — the token f
 Components are standard functional React with TypeScript. State management is props + React context only — no external state libraries.
 
 ```tsx
-import { Button, Icon, StatTile } from '@heimdall/ui'
-import '@heimdall/ui/css'  // import tokens + base styles once at app entry
+import { Button, Icon, StatTile } from '@tinkermonkey/heimdall-ui'
+import '@tinkermonkey/heimdall-ui/css'  // import tokens + base styles once at app entry
 ```
 
 ## Design System Architecture

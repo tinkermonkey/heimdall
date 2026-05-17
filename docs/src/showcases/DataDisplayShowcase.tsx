@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StatTile, StatGrid, Table, Chip, StatusBadge, type Column } from '@heimdall/ui'
+import { StatTile, StatGrid, Table, Chip, StatusBadge, type Column } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function StatTileShowcase() {

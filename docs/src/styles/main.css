@@ -1,9 +1,9 @@
-/* Fonts — served via Google Fonts as fallback while @heimdall/ui/css uses bundled woff2 */
+/* Fonts — served via Google Fonts as fallback while @tinkermonkey/heimdall-ui/css uses bundled woff2 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* Token overrides are intentionally omitted here.
-   @heimdall/ui/css (loaded before this file) already provides all CSS custom properties
+   @tinkermonkey/heimdall-ui/css (loaded before this file) already provides all CSS custom properties
    with correct light-canvas-default values. Redefining them here caused dark-canvas rendering. */
 
 html {

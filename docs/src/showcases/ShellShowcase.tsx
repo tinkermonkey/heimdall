@@ -1,4 +1,4 @@
-import { AppTitle, Statusbar, ShellLayout } from '@heimdall/ui'
+import { AppTitle, Statusbar, ShellLayout } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const border = 'rgb(var(--canvas-border, 229 231 235))'

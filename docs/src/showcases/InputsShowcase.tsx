@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { TextInput, TextArea, NumberInput, Select, TriState, Field } from '@heimdall/ui'
+import { TextInput, TextArea, NumberInput, Select, TriState, Field } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function TextInputShowcase() {

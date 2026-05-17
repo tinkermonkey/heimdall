@@ -1,4 +1,4 @@
-import { Button, Chip, Badge, StatusBadge, Icon } from '@heimdall/ui'
+import { Button, Chip, Badge, StatusBadge, Icon } from '@tinkermonkey/heimdall-ui'
 
 export default function PrimitivesShowcase() {
   return (

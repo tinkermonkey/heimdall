@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ShellLayout, Icon, type IconName } from '@heimdall/ui'
+import { ShellLayout, Icon, type IconName } from '@tinkermonkey/heimdall-ui'
 
 import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase } from './showcases/FoundationShowcase'
 import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase } from './showcases/PrimitivesShowcase'

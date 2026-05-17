@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Modal, ConfirmDialog, Toast, CommandPalette, Button, Field, TextInput, Select } from '@heimdall/ui'
+import { Modal, ConfirmDialog, Toast, CommandPalette, Button, Field, TextInput, Select } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function ModalShowcase() {

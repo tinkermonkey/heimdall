@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Icon, Button, Chip, Badge, StatusBadge, type IconName } from '@heimdall/ui'
+import { Icon, Button, Chip, Badge, StatusBadge, type IconName } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const ICON_NAMES: IconName[] = [

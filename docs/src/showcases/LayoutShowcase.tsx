@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Panel, Drawer, SplitPane, Button, Icon } from '@heimdall/ui'
+import { Panel, Drawer, SplitPane, Button, Icon } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const border = 'rgb(var(--canvas-border, 229 231 235))'
