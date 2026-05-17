@@ -21,8 +21,8 @@ interface TableProps<T> {
   className?: string
 }
 
-export const Table = React.forwardRef<HTMLTableElement, TableProps<any>>(
-  (
+const TableComponent = React.forwardRef(
+  <T,>(
     {
       columns,
       data,
@@ -33,8 +33,8 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps<any>>(
       onSort,
       className = '',
       ...props
-    },
-    ref
+    }: TableProps<T>,
+    ref: React.Ref<HTMLTableElement>,
   ) => {
     const [sortKey, setSortKey] = useState<string | null>(null)
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
@@ -134,8 +134,10 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps<any>>(
       </table>
     )
   }
-)
+) as <T,>(props: TableProps<T> & { ref?: React.Ref<HTMLTableElement> }) => React.ReactElement
 
-Table.displayName = 'Table'
+TableComponent.displayName = 'Table'
+
+export const Table = TableComponent
 
 export default Table

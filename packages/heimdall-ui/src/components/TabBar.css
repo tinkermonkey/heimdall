@@ -54,5 +54,5 @@
 
 .tab-bar__tab--active .tab-bar__tab-count {
   color: rgb(var(--accent-primary));
-  background: rgba(249, 115, 22, 0.1);
+  background: rgb(var(--accent-primary) / 0.1);
 }
