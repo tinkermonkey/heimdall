@@ -149,12 +149,6 @@ test.describe('Overlay Components', () => {
     })
 
     test('should call onConfirm and close when confirm button is clicked', async ({ page }) => {
-      // Track if confirm callback was called
-      const confirmCalled = await page.evaluate(() => {
-        window.confirmDialogCalled = false
-        return true
-      })
-
       // Open confirm dialog
       const confirmTrigger = page.locator('button:has-text("Open Confirm")').first()
       await confirmTrigger.click()
@@ -164,12 +158,11 @@ test.describe('Overlay Components', () => {
 
       // Click confirm button (danger variant button)
       const confirmButton = page.locator('button:has-text("Delete")').first()
-      if (await confirmButton.count() > 0) {
-        await confirmButton.click()
+      await expect(confirmButton).toBeVisible()
+      await confirmButton.click()
 
-        // Dialog should close after confirmation
-        await expect(dialog).not.toBeVisible()
-      }
+      // Dialog should close after confirmation
+      await expect(dialog).not.toBeVisible()
     })
 
     test('should close without confirming when cancel button is clicked', async ({ page }) => {

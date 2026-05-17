@@ -15,6 +15,9 @@ import {
  * - Cyan accent tokens are in place (not orange)
  * - Animation freezing works for consistent screenshots
  * - Vite build pipeline works correctly
+ *
+ * Token format: All color tokens are in RGB channels format (e.g. '255 255 255' for white).
+ * Numeric tokens (radius) are in their declared units (e.g. '4px').
  */
 
 test.beforeEach(async ({ page }) => {
@@ -26,31 +29,26 @@ test.beforeEach(async ({ page }) => {
 
 test('should have light canvas as default background color', async ({ page }) => {
   const bgColor = await getCSSVariableValue(page, '--canvas-bg')
-  // Actual token format: RGB channels without wrapper
   expect(bgColor.trim()).toBe('255 255 255')
 })
 
 test('should have shell background always dark', async ({ page }) => {
   const shellBg = await getCSSVariableValue(page, '--shell-bg')
-  // Actual token format: RGB channels
   expect(shellBg.trim()).toBe('11 15 20')
 })
 
 test('should use cyan accent color, not orange', async ({ page }) => {
   const accentPrimary = await getCSSVariableValue(page, '--accent-primary')
-  // Actual token format: RGB channels (cyan-400)
   expect(accentPrimary.trim()).toBe('34 211 238')
 })
 
 test('should have cyan accent hover state', async ({ page }) => {
   const accentHover = await getCSSVariableValue(page, '--accent-primary-hover')
-  // Actual token format: RGB channels
   expect(accentHover.trim()).toBe('6 182 212')
 })
 
 test('should have cyan accent deep state', async ({ page }) => {
   const accentDeep = await getCSSVariableValue(page, '--accent-primary-deep')
-  // Actual token format: RGB channels
   expect(accentDeep.trim()).toBe('14 126 163')
 })
 
@@ -59,7 +57,6 @@ test('should support semantic status colors', async ({ page }) => {
   const statusWarn = await getCSSVariableValue(page, '--status-warn')
   const statusError = await getCSSVariableValue(page, '--status-error')
 
-  // Actual token format: RGB channels (emerald for ok, amber for warn, rose for error)
   expect(statusOk.trim()).toBe('34 197 94')
   expect(statusWarn.trim()).toBe('234 179 8')
   expect(statusError.trim()).toBe('239 68 68')
