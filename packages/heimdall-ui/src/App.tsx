@@ -18,6 +18,7 @@ import ShellFrameworkTestPage from './test-pages/ShellFrameworkTestPage'
 import OverlayComponentsTestPage from './test-pages/OverlayComponentsTestPage'
 import AdvancedOverlayComponentsTestPage from './test-pages/AdvancedOverlayComponentsTestPage'
 import FoundationTestPage from './test-pages/FoundationTestPage'
+import NavigationComponentTestPage from './test-pages/NavigationComponentTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -79,6 +80,10 @@ export default function App() {
 
   if (exampleParam === 'advanced-overlays') {
     return <AdvancedOverlayComponentsTestPage />
+  }
+
+  if (exampleParam === 'navigation') {
+    return <NavigationComponentTestPage />
   }
 
   if (testParam === 'foundation') {

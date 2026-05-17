@@ -42,7 +42,7 @@ test.describe('Component Cross-Comparison: Reference vs React', () => {
     },
     {
       refFile: 'components-nav.html',
-      reactExample: 'shell-framework',
+      reactExample: 'navigation',
       testDescription: 'Navigation Components',
     },
     {

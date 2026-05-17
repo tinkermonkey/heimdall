@@ -85,6 +85,11 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
   `
 
   await page.addStyleTag({ content: fontsCss })
+
+  // Wait for fonts to be loaded and rendered
+  await page.evaluate(() => {
+    return document.fonts.ready
+  })
 }
 
 export async function freezeAnimations(page: Page): Promise<void> {
