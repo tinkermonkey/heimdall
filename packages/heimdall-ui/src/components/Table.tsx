@@ -21,7 +21,7 @@ interface TableProps<T extends Record<string, any>> {
   className?: string
 }
 
-const TableComponent = React.forwardRef(
+const Table = React.forwardRef(
   <T extends Record<string, any>,>(
     {
       columns,
@@ -134,12 +134,10 @@ const TableComponent = React.forwardRef(
       </table>
     )
   }
-) as unknown as React.ForwardRefExoticComponent<
-  TableProps<any> & React.RefAttributes<HTMLTableElement>
-> & { displayName: string }
+)
 
-TableComponent.displayName = 'Table'
+Table.displayName = 'Table'
 
-export const Table = TableComponent
+export { Table }
 
 export default Table

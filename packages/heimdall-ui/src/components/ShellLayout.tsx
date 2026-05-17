@@ -29,17 +29,27 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
   ) => {
     const classNames = ['shell-layout', className].filter(Boolean).join(' ')
 
+    const renderTitlebar = titlebar && !titlebar.hide
+    const renderTopbar = topbar && !topbar.hide
+    const renderSidebar = sidebar && !sidebar.hide
+    const renderStatusbar = statusbar && !statusbar.hide
+
+    const titlebarProps = titlebar ? { ...titlebar, hide: undefined } : undefined
+    const topbarProps = topbar ? { ...topbar, hide: undefined } : undefined
+    const sidebarProps = sidebar ? { ...sidebar, hide: undefined } : undefined
+    const statusbarProps = statusbar ? { ...statusbar, hide: undefined } : undefined
+
     return (
       <div ref={ref} className={classNames} {...props}>
-        {titlebar && !titlebar.hide && <Titlebar {...titlebar} />}
+        {renderTitlebar && titlebarProps && <Titlebar {...(titlebarProps as TitlebarProps)} />}
         <div className="shell-layout__main">
-          {sidebar && !sidebar.hide && <Sidebar {...sidebar} />}
+          {renderSidebar && sidebarProps && <Sidebar {...(sidebarProps as SidebarProps)} />}
           <div className="shell-layout__content">
-            {topbar && !topbar.hide && <Topbar {...topbar} />}
+            {renderTopbar && topbarProps && <Topbar {...(topbarProps as TopbarProps)} />}
             <div className="shell-layout__canvas">{children}</div>
           </div>
         </div>
-        {statusbar && !statusbar.hide && <Statusbar {...statusbar} />}
+        {renderStatusbar && statusbarProps && <Statusbar {...(statusbarProps as StatusbarProps)} />}
       </div>
     )
   }

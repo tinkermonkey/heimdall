@@ -42,6 +42,7 @@ const config: Config = {
         'status-error': 'rgb(var(--status-error) / <alpha-value>)',
         'status-error-bg': 'rgb(var(--status-error-bg) / <alpha-value>)',
         'status-error-fg': 'rgb(var(--status-error-fg) / <alpha-value>)',
+        'status-cyan': 'rgb(var(--status-cyan) / <alpha-value>)',
         'status-emerald': 'rgb(var(--status-emerald) / <alpha-value>)',
         'status-amber': 'rgb(var(--status-amber) / <alpha-value>)',
         'status-rose': 'rgb(var(--status-rose) / <alpha-value>)',
