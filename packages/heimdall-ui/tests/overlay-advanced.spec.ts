@@ -215,15 +215,14 @@ test.describe('Advanced Overlay Components', () => {
 
       // Open drawer
       const drawerTrigger = page.locator('button:has-text("Open Drawer")').first()
-      if (await drawerTrigger.count() > 0) {
-        await drawerTrigger.click()
+      await expect(drawerTrigger).toBeVisible()
+      await drawerTrigger.click()
 
-        const overflowWhenOpen = await page.evaluate(() => {
-          return document.body.style.overflow
-        })
+      const overflowWhenOpen = await page.evaluate(() => {
+        return document.body.style.overflow
+      })
 
-        expect(overflowWhenOpen).toBe('hidden')
-      }
+      expect(overflowWhenOpen).toBe('hidden')
     })
 
     test('should close when close button is clicked', async ({ page }) => {
@@ -370,19 +369,18 @@ test.describe('Advanced Overlay Components', () => {
 
     test('should support horizontal and vertical directions', async ({ page }) => {
       const splitPane = page.locator('.split-pane').first()
-      if (await splitPane.count() > 0) {
-        // Check which direction it is
-        const isHorizontal = await splitPane.evaluate((el) => {
-          return el.className.includes('split-pane--horizontal')
-        })
+      await expect(splitPane).toBeVisible()
+      // Check which direction it is
+      const isHorizontal = await splitPane.evaluate((el) => {
+        return el.className.includes('split-pane--horizontal')
+      })
 
-        const isVertical = await splitPane.evaluate((el) => {
-          return el.className.includes('split-pane--vertical')
-        })
+      const isVertical = await splitPane.evaluate((el) => {
+        return el.className.includes('split-pane--vertical')
+      })
 
-        // Should be one or the other (or default to horizontal)
-        expect(isHorizontal || isVertical).toBe(true)
-      }
+      // Should be one or the other (or default to horizontal)
+      expect(isHorizontal || isVertical).toBe(true)
     })
   })
 })
