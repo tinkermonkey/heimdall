@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test'
 import * as fs from 'fs'
 import * as path from 'path'
+import { fileURLToPath } from 'url'
 
 test.describe('Reference Preview Cards', () => {
+  const __dirname = path.dirname(fileURLToPath(import.meta.url))
   const previewDir = path.join(__dirname, '../../../example-context-studio/preview')
 
   // Get all preview HTML files

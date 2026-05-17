@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Button,
   Chip,
@@ -9,11 +9,17 @@ import {
   ShellLayout,
   TabBar,
 } from './index'
+import ContextStudioRebuilt from './examples/ContextStudioRebuilt'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
   const [activeTab, setActiveTab] = useState('overview')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+
+  const exampleParam = useMemo(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('example')
+  }, [])
 
   const tableData = [
     { id: 'cls_4f3a', name: 'organism', class: 'life', status: 'active', updated: '2m ago' },
@@ -33,6 +39,10 @@ export default function App() {
     { key: 'status', label: 'Status' },
     { key: 'updated', label: 'Updated', render: (value: string) => <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{value}</span> },
   ]
+
+  if (exampleParam === 'rebuilt') {
+    return <ContextStudioRebuilt />
+  }
 
   return (
     <ShellLayout

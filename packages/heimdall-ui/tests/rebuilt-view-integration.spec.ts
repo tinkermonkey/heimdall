@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 import { PNG } from 'pngjs'
 import pixelmatch from 'pixelmatch'
+import { fileURLToPath } from 'url'
+import path from 'path'
 
 test.describe('Rebuilt View Integration Tests', () => {
   test('rebuilt context studio dashboard renders without errors', async ({ page }) => {
@@ -74,10 +76,10 @@ test.describe('Rebuilt View Integration Tests', () => {
     // Should have at least 4 stat tiles
     expect(count).toBeGreaterThanOrEqual(4)
 
-    // Verify they contain expected labels
-    const labels = ['Classes', 'Individuals', 'Pipelines', 'Taxonomies']
+    // Verify they contain expected labels from ContextStudioRebuilt
+    const labels = ['Taxonomies', 'Classes', 'Individuals', 'Pipelines']
     for (const label of labels) {
-      const tile = page.locator(`text=${label}`)
+      const tile = page.locator(`[class*="stat"] >> text=${label}`).first()
       await expect(tile).toBeVisible()
     }
   })
@@ -138,7 +140,8 @@ test.describe('Rebuilt View Integration Tests', () => {
   }) => {
     // Load the original reference HTML
     const originalPage = await context.newPage()
-    const refHtmlPath = 'file://' + process.cwd() + '/example-context-studio/Context Studio.html'
+    const __dirname = path.dirname(fileURLToPath(import.meta.url))
+    const refHtmlPath = 'file://' + path.resolve(__dirname, '../../../example-context-studio/Context Studio.html')
     await originalPage.goto(refHtmlPath)
     await originalPage.waitForLoadState('networkidle')
 
