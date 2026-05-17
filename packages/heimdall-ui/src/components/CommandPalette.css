@@ -1,7 +1,9 @@
 .command-palette-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -96,8 +98,13 @@
 
 .command-palette__item:hover,
 .command-palette__item--selected {
-  background: rgb(var(--canvas-card));
+  background: rgb(var(--canvas-bg-2));
   color: rgb(var(--canvas-fg-1));
+}
+
+body.dark-canvas .command-palette__item:hover,
+body.dark-canvas .command-palette__item--selected {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .command-palette__item-content {

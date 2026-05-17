@@ -12,11 +12,25 @@
   overflow: hidden;
 }
 
+.shell-layout__sidebar-col {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+  align-self: stretch;
+  min-height: 0;
+}
+
 .shell-layout__content {
   display: flex;
   flex-direction: column;
   flex: 1;
   overflow: hidden;
+  background: rgb(var(--shell-bg));
+}
+
+body.dark-canvas .shell-layout__content {
+  background: rgb(var(--shell-bg-2));
 }
 
 .shell-layout__canvas {
@@ -25,6 +39,7 @@
   background: rgb(var(--canvas-bg));
   min-width: 1100px;
   padding: 22px 26px 32px;
+  border-top-left-radius: 8px;
 }
 
 .shell-layout__canvas::-webkit-scrollbar {

@@ -25,10 +25,7 @@ export default function HomelabDashboardRebuilt() {
 
   return (
     <ShellLayout
-      titlebar={{
-        left: <span className="text-sm font-medium">Homelab</span>,
-        center: <span className="text-sm">Infrastructure Monitoring</span>,
-      }}
+      appTitle={{ title: 'Homelab', version: 'v1.0.0' }}
       topbar={{
         breadcrumbs: [
           { label: 'Cluster · asgard' },

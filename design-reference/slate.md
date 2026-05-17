@@ -160,7 +160,74 @@ Without this rule the inner-radius notch disappears in dark mode. With it, sideb
 
 ---
 
-## 8. Replication recipe
+## 8. Canvas inner radius — design + CSS
+
+The canvas has a single rounded corner at its **top-left**, where it meets the topbar (above) and the sidebar (to the left). The other three corners are flush — the canvas runs to the bottom of the viewport and to the right edge of the workspace column. This one rounded corner gives the canvas a "tucked into the chrome" feel without making it look like a free-floating card.
+
+### The CSS
+
+The radius lives on a single rule in `styles/studio.css`:
+
+```css
+.canvas-area {
+  flex: 1;
+  overflow: auto;
+  border-top-left-radius: 8px;     /* the only rounded corner */
+  background: var(--canvas-bg);
+  color: var(--canvas-fg-1);
+  position: relative;
+}
+```
+
+Just 8 px, only on `border-top-left-radius`. No border, no shadow, no other corner radii. The visual effect — the "notch" at the corner — is not drawn by the canvas; it is produced by the canvas *not painting* a small wedge of its rectangle, which lets the parent (`.workspace`) show through.
+
+### Light mode
+
+`.workspace` defaults to `background: var(--shell-bg)` (`#0F1729`, the deep navy outer-frame tone). When the canvas is white in light mode, the 8 px wedge reveals that deep navy — a small dark crescent visible against the white canvas and against the slightly lighter `--shell-bg-2` topbar above. The notch reads clearly.
+
+| Layer | Color | Role at the corner |
+|---|---|---|
+| Topbar (above the canvas) | `#13203A` (`--shell-bg-2`) | top edge of the notch |
+| Sidebar (left of the canvas) | `#13203A` (`--shell-bg-2`) | left edge of the notch |
+| Workspace gutter (revealed by the radius) | `#0F1729` (`--shell-bg`) | the wedge inside the radius |
+| Canvas | `#FFFFFF` (`--canvas-bg`) | everything below/right of the radius |
+
+Three tones (white canvas, navy chrome, deeper-navy gutter) give the corner a soft three-tone bevel that reads clearly without any drawn border.
+
+### Dark mode
+
+In dark mode the canvas is `#0B1426` — *darker* than the deep navy that the workspace would otherwise paint. If the workspace kept its default `--shell-bg` (`#0F1729`), the gutter color (`#0F1729`) would sit between the canvas (`#0B1426`) and the chrome (`#13203A`) and the radius cut would read as a faint smear instead of a clean corner.
+
+Section 7 above already corrects this:
+
+```css
+body.dark-canvas .workspace { background: var(--shell-bg-2); }
+```
+
+The gutter (`#13203A`) now matches the sidebar and the topbar exactly — sidebar, topbar, and the wedge inside the radius all read as one continuous chrome surface, with the darker canvas tucked inside it.
+
+| Layer | Color | Role at the corner |
+|---|---|---|
+| Topbar (above the canvas) | `#13203A` (`--shell-bg-2`) | top edge of the notch |
+| Sidebar (left of the canvas) | `#13203A` (`--shell-bg-2`) | left edge of the notch |
+| Workspace gutter (revealed by the radius) | `#13203A` (`--shell-bg-2`, set by section 7 rule) | wedge inside the radius — same tone as sidebar+topbar |
+| Canvas | `#0B1426` (`--canvas-bg`) | everything below/right of the radius |
+
+Light mode uses **three** tones at the corner (chrome / gutter / canvas, ordered medium → dark → light) for a stepped bevel. Dark mode uses **two** tones (chrome / canvas, ordered medium → darker) for a single recessed cut. Both treatments rely on the same 8 px `border-top-left-radius` on `.canvas-area` — the difference is purely the gutter color behind it.
+
+### Replicating
+
+To reproduce this exactly in another project:
+
+1. Put the canvas inside a parent container (the equivalent of `.workspace`).
+2. Give the canvas `border-top-left-radius: 8px` and no other corner radii.
+3. In light mode, paint the parent with the deepest chrome tone (`--shell-bg`).
+4. In dark mode, paint the parent with the chrome tone that matches the sidebar and topbar (`--shell-bg-2`).
+5. Do not draw a border on the canvas — the visual is entirely cut-out negative space.
+
+---
+
+## 9. Replication recipe
 
 If you are recreating this design in a new project without the `useTweaks` machinery, the simplest approach is to hard-code the resolved values on `:root` and `body.dark-canvas` directly in CSS. The complete declaration:
 

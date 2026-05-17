@@ -92,10 +92,7 @@ export default function App() {
 
   return (
     <ShellLayout
-      titlebar={{
-        left: <span style={{ fontSize: '14px', fontWeight: 500 }}>Heimdall</span>,
-        center: <span style={{ fontSize: '14px' }}>Design System</span>,
-      }}
+      appTitle={{ title: 'Heimdall', version: 'v0.1.0' }}
       topbar={{
         breadcrumbs: [
           { label: 'Dashboard' },

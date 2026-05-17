@@ -40,6 +40,10 @@
   color: white;
 }
 
+body.dark-canvas .btn--primary {
+  color: rgb(var(--shell-bg));
+}
+
 .btn--primary:not(:disabled):hover {
   background-color: rgb(var(--accent-primary-hover));
 }

@@ -26,10 +26,7 @@ export default function ContextStudioRebuilt() {
 
   return (
     <ShellLayout
-      titlebar={{
-        left: <span className="text-sm font-medium">Context Studio</span>,
-        center: <span className="text-sm">Knowledge Graph Management</span>,
-      }}
+      appTitle={{ title: 'Context Studio', version: 'v0.4.1' }}
       topbar={{
         breadcrumbs: [
           { label: 'Workspace · default' },

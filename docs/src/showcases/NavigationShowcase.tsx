@@ -6,37 +6,57 @@ const border = 'rgb(var(--canvas-border, 229 231 235))'
 const shellBg = '#0b0f14'
 
 export function NavItemShowcase() {
-  const [active, setActive] = useState('schema')
+  const [active, setActive] = useState('cls-organism')
+
   const items = [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' as const },
-    { id: 'schema', label: 'Schema', icon: 'schema' as const, count: 128 },
+    {
+      id: 'schema', label: 'Schema', icon: 'schema' as const, count: 128,
+      children: [
+        { id: 'cls-organism', label: 'life.organism', count: 42 },
+        { id: 'cls-cell', label: 'life.cell', count: 18 },
+        { id: 'cls-gene', label: 'molecular.gene', count: 67 },
+      ],
+    },
     { id: 'data', label: 'Individuals', icon: 'data' as const, count: 12480 },
     { id: 'pipeline', label: 'Pipelines', icon: 'pipeline' as const, count: 17 },
   ]
 
   return (
     <div>
-      <PageHeader name="NavItem" description="Single navigation item for the sidebar. Active state: 2px cyan left border + shell-surface background." />
-      <ShowcaseSection label="States">
+      <PageHeader name="NavItem" description="Single navigation item for the sidebar. Active state: 2px amber left border + shell-surface background. Supports one level of sub-item hierarchy." />
+      <ShowcaseSection label="Flat and hierarchical">
         <div style={{ background: shellBg, borderRadius: 8, padding: '10px 8px', width: 280, border: `1px solid #1e2733` }}>
           {items.map(item => (
-            <NavItem
-              key={item.id}
-              icon={item.icon}
-              label={item.label}
-              count={item.count}
-              active={active === item.id}
-              onClick={() => setActive(item.id)}
-            />
+            <div key={item.id}>
+              <NavItem
+                icon={item.icon}
+                label={item.label}
+                count={item.count}
+                active={active === item.id}
+                onClick={() => setActive(item.id)}
+              />
+              {item.children && item.children.map(sub => (
+                <NavItem
+                  key={sub.id}
+                  label={sub.label}
+                  count={sub.count}
+                  depth={1}
+                  active={active === sub.id}
+                  onClick={() => setActive(sub.id)}
+                />
+              ))}
+            </div>
           ))}
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="label" type="string" description="Nav item text" />
-          <PropRow name="icon" type="IconName" description="Icon rendered left of the label" />
+          <PropRow name="icon" type="IconName" description="Icon rendered left of the label (top-level only)" />
           <PropRow name="count" type="number" description="Badge count rendered right-aligned" />
-          <PropRow name="active" type="boolean" def="false" description="Active state — cyan border + surface bg" />
+          <PropRow name="active" type="boolean" def="false" description="Active state — amber border + surface bg" />
+          <PropRow name="depth" type="0 | 1" def="0" description="Nesting depth — 1 renders as an indented sub-item without an icon" />
           <PropRow name="onClick" type="() => void" description="Click handler" />
         </PropsTable>
       </ShowcaseSection>
@@ -53,9 +73,16 @@ export function SidebarShowcase() {
       title: 'Workspace',
       items: [
         { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' as const },
-        { id: 'schema', label: 'Schema', icon: 'schema' as const, count: 128 },
+        {
+          id: 'schema', label: 'Schema', icon: 'schema' as const, count: 128,
+          children: [
+            { id: 'cls-organism', label: 'life.organism', count: 42 },
+            { id: 'cls-cell', label: 'life.cell', count: 18 },
+            { id: 'cls-gene', label: 'molecular.gene', count: 67 },
+          ],
+        },
         { id: 'data', label: 'Individuals', icon: 'data' as const, count: 12480 },
-        { id: 'pipeline', label: 'Pipelines', icon: 'pipeline' as const },
+        { id: 'pipeline', label: 'Pipelines', icon: 'pipeline' as const, count: 17 },
       ],
     },
     {

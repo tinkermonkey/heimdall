@@ -2,13 +2,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  height: 36px;
+  gap: 12px;
+  height: 48px;
   padding: 0 16px;
-  background: rgb(var(--shell-bg));
+  background: rgb(var(--shell-bg-2));
   border-bottom: 1px solid rgb(var(--shell-border));
+  border-right: 1px solid rgb(var(--shell-border));
   flex-shrink: 0;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .titlebar__slot {

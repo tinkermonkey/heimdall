@@ -114,6 +114,43 @@
   border: 1px solid var(--semantic-version-border-alpha);
 }
 
+/* ---- Dark canvas overrides — translucent tints ---- */
+body.dark-canvas .chip--cyan {
+  color: rgb(var(--status-cyan));
+  background-color: rgb(var(--status-cyan) / 0.12);
+  border-color: rgb(var(--status-cyan) / 0.25);
+}
+body.dark-canvas .chip--amber {
+  color: rgb(var(--status-amber));
+  background-color: rgb(var(--status-amber) / 0.12);
+  border-color: rgb(var(--status-amber) / 0.25);
+}
+body.dark-canvas .chip--violet {
+  color: rgb(var(--status-violet));
+  background-color: rgb(var(--status-violet) / 0.12);
+  border-color: rgb(var(--status-violet) / 0.25);
+}
+body.dark-canvas .chip--emerald {
+  color: rgb(var(--status-emerald));
+  background-color: rgb(var(--status-emerald) / 0.12);
+  border-color: rgb(var(--status-emerald) / 0.25);
+}
+body.dark-canvas .chip--rose {
+  color: rgb(var(--status-rose));
+  background-color: rgb(var(--status-rose) / 0.12);
+  border-color: rgb(var(--status-rose) / 0.25);
+}
+body.dark-canvas .chip--neutral {
+  color: rgb(var(--canvas-fg-3));
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+body.dark-canvas .chip--id-tag {
+  color: rgb(var(--canvas-fg-3));
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 /* Environment pill form */
 .chip--env {
   font-family: var(--font-mono);

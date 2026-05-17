@@ -22,9 +22,7 @@ export default function ShellFrameworkTestPage() {
 
   return (
     <ShellLayout
-      titlebar={{
-        center: <span>System Monitor</span>,
-      }}
+      appTitle={{ title: 'System Monitor' }}
       sidebar={{
         sections: [
           {

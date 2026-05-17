@@ -6,7 +6,7 @@ import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase } from './sho
 import { TextInputShowcase, TextAreaShowcase, NumberInputShowcase, SelectShowcase, TriStateShowcase, FieldShowcase } from './showcases/InputsShowcase'
 import { StatTileShowcase, StatGridShowcase, TableShowcase } from './showcases/DataDisplayShowcase'
 import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from './showcases/NavigationShowcase'
-import { TitlebarShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
+import { AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
 
@@ -43,7 +43,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   topbar: TopbarShowcase,
   'tab-bar': TabBarShowcase,
   // Shell
-  titlebar: TitlebarShowcase,
+  'app-title': AppTitleShowcase,
   statusbar: StatusbarShowcase,
   'shell-layout': ShellLayoutShowcase,
   // Overlays
@@ -107,7 +107,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Shell',
     items: [
-      { id: 'titlebar', label: 'Titlebar', icon: 'menu' },
+      { id: 'app-title', label: 'AppTitle', icon: 'menu' },
       { id: 'statusbar', label: 'Statusbar', icon: 'info' },
       { id: 'shell-layout', label: 'ShellLayout', icon: 'layout' },
     ],
@@ -156,10 +156,7 @@ function App() {
 
   return (
     <ShellLayout
-      titlebar={{
-        left: <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 13, fontWeight: 600 }}>heimdall</span>,
-        center: <span style={{ fontSize: 12 }}>Design System</span>,
-      }}
+      appTitle={{ title: 'Heimdall', version: 'v0.1.0' }}
       topbar={{
         breadcrumbs: [
           { label: sectionLabel },

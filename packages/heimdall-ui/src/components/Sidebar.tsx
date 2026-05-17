@@ -1,15 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon, type IconName } from './Icon'
 import './Sidebar.css'
 
-export interface SidebarSection {
-  title: string
-  items: Array<{
+export interface SidebarItem {
+  id: string
+  label: string
+  icon?: IconName
+  count?: number
+  children?: Array<{
     id: string
     label: string
-    icon?: IconName
     count?: number
   }>
+}
+
+export interface SidebarSection {
+  title: string
+  items: SidebarItem[]
 }
 
 export interface SidebarProps {
@@ -34,6 +41,20 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
     },
     ref
   ) => {
+    const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+
+    const toggleExpanded = (id: string) => {
+      setExpandedItems(prev => {
+        const next = new Set(prev)
+        if (next.has(id)) {
+          next.delete(id)
+        } else {
+          next.add(id)
+        }
+        return next
+      })
+    }
+
     const classNames = [
       'sidebar',
       collapsed && 'sidebar--collapsed',
@@ -57,22 +78,57 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
             <div key={section.title} className="sidebar__section">
               {!collapsed && <div className="sidebar__section-title">{section.title}</div>}
               <div className="sidebar__items">
-                {section.items.map(item => (
-                  <button
-                    key={item.id}
-                    className={`sidebar__item ${activeItemId === item.id ? 'sidebar__item--active' : ''}`}
-                    onClick={() => onSelectItem?.(item.id)}
-                    title={collapsed ? item.label : undefined}
-                  >
-                    {item.icon && <Icon name={item.icon} size={18} className="sidebar__item-icon" />}
-                    {!collapsed && <span className="sidebar__item-label">{item.label}</span>}
-                    {item.count !== undefined && (
-                      <span className={`sidebar__item-count ${activeItemId === item.id ? 'sidebar__item-count--active' : ''}`}>
-                        {item.count}
-                      </span>
-                    )}
-                  </button>
-                ))}
+                {section.items.map(item => {
+                  const hasChildren = item.children && item.children.length > 0
+                  const isExpanded = expandedItems.has(item.id)
+                  const isActive = activeItemId === item.id
+
+                  return (
+                    <React.Fragment key={item.id}>
+                      <button
+                        className={`sidebar__item ${isActive ? 'sidebar__item--active' : ''}`}
+                        onClick={() => {
+                          if (hasChildren) {
+                            toggleExpanded(item.id)
+                          } else {
+                            onSelectItem?.(item.id)
+                          }
+                        }}
+                        title={collapsed ? item.label : undefined}
+                      >
+                        {item.icon && (
+                          <Icon name={item.icon} size={18} className="sidebar__item-icon" />
+                        )}
+                        {!collapsed && (
+                          <span className="sidebar__item-label">{item.label}</span>
+                        )}
+                        {!collapsed && item.count !== undefined && (
+                          <span className="sidebar__item-count">{item.count}</span>
+                        )}
+                        {!collapsed && hasChildren && (
+                          <Icon
+                            name="chevronRight"
+                            size={14}
+                            className={`sidebar__item-chevron ${isExpanded ? 'sidebar__item-chevron--open' : ''}`}
+                          />
+                        )}
+                      </button>
+
+                      {!collapsed && hasChildren && isExpanded && item.children!.map(child => (
+                        <button
+                          key={child.id}
+                          className={`sidebar__item sidebar__item--child ${activeItemId === child.id ? 'sidebar__item--active' : ''}`}
+                          onClick={() => onSelectItem?.(child.id)}
+                        >
+                          <span className="sidebar__item-label">{child.label}</span>
+                          {child.count !== undefined && (
+                            <span className="sidebar__item-count">{child.count}</span>
+                          )}
+                        </button>
+                      ))}
+                    </React.Fragment>
+                  )
+                })}
               </div>
             </div>
           ))}

@@ -7,13 +7,19 @@ export interface NavItemProps {
   label: string
   count?: number
   active?: boolean
+  depth?: number
   onClick?: () => void
   className?: string
 }
 
 export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(
-  ({ icon, label, count, active = false, onClick, className = '', ...props }, ref) => {
-    const classNames = ['nav-item', active && 'nav-item--active', className]
+  ({ icon, label, count, active = false, depth = 0, onClick, className = '', ...props }, ref) => {
+    const classNames = [
+      'nav-item',
+      active && 'nav-item--active',
+      depth === 1 && 'nav-item--depth-1',
+      className,
+    ]
       .filter(Boolean)
       .join(' ')
 
@@ -25,7 +31,7 @@ export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(
         aria-current={active ? 'page' : undefined}
         {...props}
       >
-        {icon && <Icon name={icon} size={16} className="nav-item__icon" />}
+        {depth === 0 && icon && <Icon name={icon} size={16} className="nav-item__icon" />}
         <span className="nav-item__label">{label}</span>
         {count !== undefined && <span className="nav-item__count">{count}</span>}
       </button>

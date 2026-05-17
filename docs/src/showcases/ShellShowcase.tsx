@@ -1,36 +1,27 @@
-import { Titlebar, Statusbar, ShellLayout, Icon, Button } from '@heimdall/ui'
-import { PageHeader, ShowcaseSection, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { AppTitle, Statusbar, ShellLayout } from '@heimdall/ui'
+import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const border = 'rgb(var(--canvas-border, 229 231 235))'
 
-export function TitlebarShowcase() {
+export function AppTitleShowcase() {
   return (
     <div>
-      <PageHeader name="Titlebar" description="Fixed-height application title bar at the very top of the shell. Three slots: left, center, right." />
-      <ShowcaseSection label="Left + center + right">
-        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden' }}>
-          <Titlebar
-            left={<span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 13, fontWeight: 600 }}>heimdall</span>}
-            center={<span style={{ fontSize: 12 }}>Context Studio</span>}
-            right={
-              <div style={{ display: 'flex', gap: 6 }}>
-                <Icon name="bell" size={14} />
-                <Icon name="settings" size={14} />
-              </div>
-            }
-          />
+      <PageHeader name="AppTitle" description="Brand mark and app name at the top of the sidebar column. Amber gradient logo square, app name, and optional version tag." />
+      <ShowcaseSection label="Expanded">
+        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', width: 256 }}>
+          <AppTitle title="Heimdall" version="v0.1.0" />
         </div>
       </ShowcaseSection>
-      <ShowcaseSection label="Left only">
-        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden' }}>
-          <Titlebar left={<span style={{ fontSize: 13, fontWeight: 600 }}>Application Title</span>} />
+      <ShowcaseSection label="Collapsed (icon only)">
+        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', width: 64 }}>
+          <AppTitle title="Heimdall" version="v0.1.0" collapsed />
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="left" type="ReactNode" description="Left slot — typically app name or logo" />
-          <PropRow name="center" type="ReactNode" description="Center slot — typically page or workspace title" />
-          <PropRow name="right" type="ReactNode" description="Right slot — typically icons and actions" />
+          <PropRow name="title" type="string" description="Application name displayed next to the mark" />
+          <PropRow name="version" type="string" description="Version string rendered in mono below the title" />
+          <PropRow name="collapsed" type="boolean" def="false" description="Collapsed state — hides the text, shows mark only" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -72,11 +63,11 @@ export function StatusbarShowcase() {
 export function ShellLayoutShowcase() {
   return (
     <div>
-      <PageHeader name="ShellLayout" description="Full application shell. Composes Titlebar, Sidebar, Topbar, Statusbar and a canvas content area." />
+      <PageHeader name="ShellLayout" description="Full application shell. Composes AppTitle, Sidebar, Topbar, Statusbar and a canvas content area." />
       <ShowcaseSection label="Structure" description="ShellLayout renders the full-screen shell you're looking at right now. Each slot accepts the corresponding component's props.">
         <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', height: 320 }}>
           <ShellLayout
-            titlebar={{ left: <span style={{ fontSize: 13, fontWeight: 600 }}>heimdall</span>, center: <span style={{ fontSize: 12 }}>Demo</span> }}
+            appTitle={{ title: 'Heimdall', version: 'v0.1.0' }}
             sidebar={{
               sections: [
                 { title: 'Nav', items: [
@@ -99,7 +90,7 @@ export function ShellLayoutShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="titlebar" type="TitlebarProps & { hide? }" description="Titlebar slot. Pass hide: true to omit it." />
+          <PropRow name="appTitle" type="AppTitleProps & { hide? }" description="App title slot — brand mark + name + version at top of sidebar. Pass hide: true to omit." />
           <PropRow name="sidebar" type="SidebarProps & { hide? }" description="Sidebar slot. Pass hide: true to omit it." />
           <PropRow name="topbar" type="TopbarProps & { hide? }" description="Topbar slot. Pass hide: true to omit it." />
           <PropRow name="statusbar" type="StatusbarProps & { hide? }" description="Statusbar slot. Pass hide: true to omit it." />
