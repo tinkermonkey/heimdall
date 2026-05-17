@@ -1,0 +1,133 @@
+/* Base chip styles */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+}
+
+.chip__dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+}
+
+/* Default form (semantic color variants) */
+.chip--default {
+  border-radius: var(--radius-sm);
+  padding: 2px 7px;
+}
+
+/* Cyan variant */
+.chip--cyan {
+  color: #0e7490;
+  background-color: #ecfeff;
+  border-color: #a5f3fc;
+}
+
+.chip--cyan .chip__dot {
+  background-color: #06b6d4;
+}
+
+/* Amber variant */
+.chip--amber {
+  color: #92400e;
+  background-color: #fffbeb;
+  border-color: #fde68a;
+}
+
+.chip--amber .chip__dot {
+  background-color: #f59e0b;
+}
+
+/* Violet variant */
+.chip--violet {
+  color: #5b21b6;
+  background-color: #f5f3ff;
+  border-color: #ddd6fe;
+}
+
+.chip--violet .chip__dot {
+  background-color: #a78bfa;
+}
+
+/* Emerald variant */
+.chip--emerald {
+  color: #065f46;
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.chip--emerald .chip__dot {
+  background-color: #10b981;
+}
+
+/* Rose variant */
+.chip--rose {
+  color: #9f1239;
+  background-color: #fff1f2;
+  border-color: #fecdd3;
+}
+
+.chip--rose .chip__dot {
+  background-color: #f43f5e;
+}
+
+/* Neutral variant */
+.chip--neutral {
+  color: #475569;
+  background-color: #f7f9fb;
+  border-color: #e5e9ee;
+}
+
+.chip--neutral .chip__dot {
+  background-color: #94a3b8;
+}
+
+/* ID tag form */
+.chip--id-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  color: #64748b;
+  background-color: #f7f9fb;
+  border-color: #e5e9ee;
+  border: 1px solid #e5e9ee;
+}
+
+/* Version badge form */
+.chip--version {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  padding: 1px 7px;
+  border-radius: 9999px;
+  color: #0e7ea3;
+  background-color: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+}
+
+/* Environment pill form */
+.chip--env {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: var(--radius-md);
+  color: #22d3ee;
+  background-color: rgba(34, 211, 238, 0.12);
+  border-color: rgba(34, 211, 238, 0.28);
+  gap: 6px;
+}
+
+.chip--env .chip__dot--env {
+  width: 6px;
+  height: 6px;
+  background-color: #22d3ee;
+}
