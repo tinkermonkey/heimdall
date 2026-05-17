@@ -4,7 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import https from 'https';
-import { promises as fsPromises } from 'fs';
+
+const fsPromises = fs.promises;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fontsDir = path.join(__dirname, '../src/fonts');
@@ -31,18 +32,20 @@ const WOFF2_SIGNATURE = Buffer.from([0x77, 0x4f, 0x46, 0x32]); // 'wOF2'
 const MIN_FONT_SIZE = 1024; // Minimum reasonable font file size
 
 async function isValidWoff2File(filePath) {
+  let fd;
   try {
     const stats = await fsPromises.stat(filePath);
     if (stats.size < MIN_FONT_SIZE) {
       return false;
     }
     const buffer = Buffer.alloc(4);
-    const fd = await fsPromises.open(filePath, 'r');
+    fd = await fsPromises.open(filePath, 'r');
     await fd.read(buffer, 0, 4, 0);
-    await fd.close();
     return Buffer.compare(buffer, WOFF2_SIGNATURE) === 0;
   } catch {
     return false;
+  } finally {
+    if (fd) await fd.close().catch(() => {});
   }
 }
 
@@ -65,7 +68,7 @@ function downloadFile(url, dest, redirects = 0) {
       // Handle HTTP redirects
       if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
         file.destroy();
-        fsPromises.unlink(dest).catch(() => {}).then(() => {
+        fsPromises.unlink(dest).catch((e) => console.warn('Cleanup warning:', e.message)).then(() => {
           if (redirects >= MAX_REDIRECTS) {
             reject(new Error(`Too many redirects for ${url}`));
             return;
@@ -79,7 +82,7 @@ function downloadFile(url, dest, redirects = 0) {
 
       if (response.statusCode !== 200) {
         file.destroy();
-        fsPromises.unlink(dest).catch(() => {}).then(() => {
+        fsPromises.unlink(dest).catch((e) => console.warn('Cleanup warning:', e.message)).then(() => {
           reject(new Error(`Failed to download ${url}: ${response.statusCode}`));
         });
         return;
@@ -87,7 +90,7 @@ function downloadFile(url, dest, redirects = 0) {
 
       response.on('error', (err) => {
         file.destroy();
-        fsPromises.unlink(dest).catch(() => {}).then(() => reject(err));
+        fsPromises.unlink(dest).catch((e) => console.warn('Cleanup warning:', e.message)).then(() => reject(err));
       });
 
       response.pipe(file);
@@ -100,14 +103,14 @@ function downloadFile(url, dest, redirects = 0) {
     request.on('timeout', () => {
       request.destroy();
       file.destroy();
-      fsPromises.unlink(dest).catch(() => {}).then(() => {
+      fsPromises.unlink(dest).catch((e) => console.warn('Cleanup warning:', e.message)).then(() => {
         reject(new Error(`Request timeout for ${url}`));
       });
     });
 
     request.on('error', (err) => {
       file.destroy();
-      fsPromises.unlink(dest).catch(() => {}).then(() => reject(err));
+      fsPromises.unlink(dest).catch((e) => console.warn('Cleanup warning:', e.message)).then(() => reject(err));
     });
   });
 }
