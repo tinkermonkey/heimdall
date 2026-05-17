@@ -1,87 +1,162 @@
-import { Icon, Button, Chip, Badge, StatusBadge } from './index'
+import { useState } from 'react'
+import {
+  Icon,
+  Button,
+  Chip,
+  Badge,
+  StatusBadge,
+  StatTile,
+  Table,
+  Sidebar,
+  TabBar,
+  Topbar,
+} from './index'
 
 export default function App() {
+  const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
+  const [activeTab, setActiveTab] = useState('overview')
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+
+  const tableData = [
+    { id: 'cls_4f3a', name: 'organism', class: 'life', status: 'active', updated: '2m ago' },
+    { id: 'cls_8b21', name: 'station', class: 'climate', status: 'syncing', updated: '12m ago' },
+    { id: 'cls_e007', name: 'service', class: 'software', status: 'error', updated: '1h ago' },
+  ]
+
+  const tableColumns = [
+    {
+      key: 'id',
+      label: 'ID',
+      width: '120px',
+      render: (value: string) => <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{value}</span>,
+    },
+    { key: 'name', label: 'Name' },
+    { key: 'class', label: 'Class' },
+    { key: 'status', label: 'Status' },
+    { key: 'updated', label: 'Updated', render: (value: string) => <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{value}</span> },
+  ]
+
   return (
-    <div className="min-h-screen p-8" style={{ backgroundColor: 'rgb(var(--canvas-bg))' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <h1 style={{ fontSize: '2.25rem', fontWeight: '800', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-          Heimdall Design System
-        </h1>
-        <p style={{ color: 'rgb(var(--canvas-fg-2))', marginBottom: '2rem' }}>Phase 2: Primitive Components</p>
+    <div style={{ backgroundColor: 'rgb(var(--canvas-bg))', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Topbar
+        breadcrumbs={[
+          { label: 'Dashboard' },
+          { label: 'Overview' },
+        ]}
+        searchPlaceholder="Search entities..."
+      />
 
-        {/* Icons Section */}
-        <section style={{ marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-            Icons
-          </h2>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <Icon name="dashboard" size={24} />
-            <Icon name="plus" size={24} />
-            <Icon name="check" size={24} />
-            <Icon name="search" size={24} />
-            <Icon name="settings" size={24} />
-          </div>
-        </section>
+      <div style={{ display: 'flex', flex: 1 }}>
+        <Sidebar
+          collapsed={sidebarCollapsed}
+          onCollapse={setSidebarCollapsed}
+          sections={[
+            {
+              title: 'Workspace',
+              items: [
+                { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+                { id: 'schema', label: 'Schema', icon: 'schema', count: 128 },
+                { id: 'individuals', label: 'Individuals', icon: 'data', count: 12480 },
+                { id: 'pipelines', label: 'Pipelines', icon: 'pipeline', count: 17 },
+              ],
+            },
+          ]}
+          activeItemId="schema"
+        />
 
-        {/* Buttons Section */}
-        <section style={{ marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-            Buttons
-          </h2>
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <Button variant="primary">Primary</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="ghost">Ghost</Button>
-            <Button variant="danger">Delete</Button>
-            <Button variant="link">Link</Button>
-          </div>
-          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-            <Button variant="primary" size="sm">
-              Small
-            </Button>
-            <Button variant="secondary" size="sm">
-              Secondary
-            </Button>
-            <Button variant="primary" disabled>
-              Disabled
-            </Button>
-          </div>
-        </section>
+        <div style={{ flex: 1, padding: '22px 28px', overflowY: 'auto' }}>
+          <div style={{ maxWidth: '1200px' }}>
+            <h1 style={{ fontSize: '2.25rem', fontWeight: '800', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+              Heimdall Design System
+            </h1>
+            <p style={{ color: 'rgb(var(--canvas-fg-2))', marginBottom: '2rem' }}>Phase 4: Data Display + Navigation</p>
 
-        {/* Chips Section */}
-        <section style={{ marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-            Chips
-          </h2>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <Chip variant="cyan">cyan</Chip>
-            <Chip variant="amber">amber</Chip>
-            <Chip variant="violet">violet</Chip>
-            <Chip variant="emerald">emerald</Chip>
-            <Chip variant="rose">rose</Chip>
-            <Chip variant="neutral">neutral</Chip>
-          </div>
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-            <Chip form="env">production</Chip>
-            <Chip form="version">v1.4.2</Chip>
-            <Chip form="id-tag">cls_4f3a7e</Chip>
-          </div>
-        </section>
+            {/* StatTile Section */}
+            <section style={{ marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+                StatTile
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '2rem' }}>
+                <StatTile label="Classes" value="128" color="cyan" delta={{ value: 4, label: 'this week', direction: 'up' }} />
+                <StatTile label="Individuals" value="12,480" color="violet" delta={{ value: 312, label: 'today', direction: 'up' }} />
+                <StatTile label="Pipelines" value="17" color="amber" />
+                <StatTile label="Uptime" value="99.8%" color="emerald" delta={{ value: 0.1, label: '24h', direction: 'down' }} />
+              </div>
+            </section>
 
-        {/* Badges Section */}
-        <section>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-            Badges
-          </h2>
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <Badge color="cyan" />
-            <Badge color="emerald" />
-            <Badge color="amber" />
-            <Badge color="rose" />
-            <StatusBadge color="cyan" pulse />
-            <StatusBadge color="emerald" pulse />
+            {/* TabBar Section */}
+            <section style={{ marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+                TabBar
+              </h2>
+              <TabBar
+                tabs={[
+                  { id: 'overview', label: 'Overview', count: 3 },
+                  { id: 'details', label: 'Details', count: 12 },
+                  { id: 'activity', label: 'Activity' },
+                ]}
+                activeTabId={activeTab}
+                onSelectTab={setActiveTab}
+              />
+            </section>
+
+            {/* Table Section */}
+            <section style={{ marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+                Table
+              </h2>
+              <Table
+                columns={tableColumns}
+                data={tableData}
+                rowKey="id"
+                selectedRows={selectedRows}
+                onSelectRows={setSelectedRows}
+              />
+            </section>
+
+            {/* Primitives Section */}
+            <section style={{ marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+                Primitive Components
+              </h2>
+              <div style={{ marginBottom: '2rem' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem', color: 'rgb(var(--canvas-fg-1))' }}>
+                  Buttons
+                </h3>
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <Button variant="primary">Primary</Button>
+                  <Button variant="secondary">Secondary</Button>
+                  <Button variant="ghost">Ghost</Button>
+                  <Button variant="danger">Delete</Button>
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '2rem' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem', color: 'rgb(var(--canvas-fg-1))' }}>
+                  Chips
+                </h3>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <Chip variant="cyan">cyan</Chip>
+                  <Chip variant="amber">amber</Chip>
+                  <Chip variant="violet">violet</Chip>
+                  <Chip variant="emerald">emerald</Chip>
+                </div>
+              </div>
+
+              <div>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.75rem', color: 'rgb(var(--canvas-fg-1))' }}>
+                  Badges
+                </h3>
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                  <Badge color="cyan" />
+                  <Badge color="emerald" />
+                  <Badge color="amber" />
+                  <StatusBadge color="cyan" pulse />
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
+        </div>
       </div>
     </div>
   )

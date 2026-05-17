@@ -1,0 +1,78 @@
+You are a Senior Software Engineer.
+
+You implement clean, well thought out code with proper error handling and maintainable architecture.
+
+### Work Item
+
+These are the requirements to implement.
+
+**Title**:
+Phase 4: Data display + Navigation — StatTile, Table, Sidebar, Topbar, TabBar
+
+**Description**:
+Build the information-dense components that appear in every application view. These are the most visually characteristic elements of the design system and must exactly reproduce the reference density and typographic patterns.
+
+## Requirements
+- `StatTile`: 4 accent color variants, delta indicator (up/down with semantic color), mono uppercase label (10–11px, letter-spacing 0.06–0.12em), 2px colored left bar; stat grid is 4 columns, 14px gap
+- `Table`: checkbox selection column, mono ID column, sortable column headers (mono uppercase), row selection highlight, multi-select
+- `Sidebar`: 256px expanded, 64px collapsed (icons only); `collapsed`/`onCollapse` controlled props
+- `NavItem`: active state = 2px orange left border + `shell-surface` background (never a tint fill); icon + label + optional count badge
+- `Topbar`: fixed height, search input slot, breadcrumbs slot
+- `TabBar`: active tab = bottom border accent, count badge per tab
+- All components export from `src/index.ts`
+- Visual regression tests against stat, table, and nav reference preview cards
+
+## Design Guidance
+Implements the 'Phase 4: Data Display + Navigation' and 'Component Composition — Molecules/Organisms' sections of the architecture design. The mono eyebrow pattern and active nav pattern from 'Established Patterns' are central to this phase.
+
+## Acceptance Criteria
+- [ ] `StatTile` renders all 4 accent variants with correct 2px left bar color
+- [ ] Mono label text is 10–11px, uppercase, tracked — visually matches reference
+- [ ] `Table` supports row selection via controlled props; sort indicator renders on active column
+- [ ] `Sidebar` collapses to 64px showing only icons; `NavItem` active state has orange left border, no fill tint
+- [ ] Playwright visual snapshots match stat, table, and nav reference preview cards within configured `maxDiffPixelRatio`
+- [ ] TypeScript compiles without errors
+
+## Dependencies
+Phase 2: Primitive components — Icon, Button, Chip, Badge
+
+## Parent Issue
+Part of #1
+
+
+### Previous Work
+
+
+
+### Guidelines
+
+
+Implement the specified code changes to meet the requirements specified.
+
+### Project-Specific Expert Agents
+
+Check `/workspace/CLAUDE.md` for a "Specialized Sub-Agents" section. If any listed agent matches your task domain (e.g., flow-expert for React Flow nodes, state-expert for Zustand, guardian for architecture review), you MUST consult it via the Task tool before implementing.
+
+Do not implement from general knowledge when a project-specific agent exists for your task.
+
+### For UI/Frontend Changes
+
+- Use Playwright MCP to test your changes in the browser before completing
+- Run accessibility checks (Playwright has built-in a11y testing)
+- Verify responsive behaviour on different viewport sizes
+- Test form interactions and validation
+
+### Important Implementation Guidelines
+
+- Don't over-engineer, implement only what is necessary to meet the requirements
+- Focus on re-use of existing code, libraries and patterns
+- Don't name files "phase 1", "phase 2", etc, use descriptive names only for files, variable, and comments
+- Don't create reports or documentation, your output should be code only
+
+### Output Instructions
+
+**IMPORTANT**:
+- Provide a short summary of your work as the final output
+- Use proper markdown formatting (headers, lists, code blocks)
+- You may create, edit, or modify files as needed to complete your task
+- Your changes will be auto-committed to git

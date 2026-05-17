@@ -17,3 +17,15 @@ export { Select } from './Select'
 export { TriState } from './TriState'
 
 export { Field } from './Field'
+
+export { StatTile } from './StatTile'
+
+export { Table } from './Table'
+
+export { NavItem } from './NavItem'
+
+export { Sidebar } from './Sidebar'
+
+export { Topbar } from './Topbar'
+
+export { TabBar } from './TabBar'
