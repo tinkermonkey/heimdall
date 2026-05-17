@@ -1,0 +1,268 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="_base.css" />
+    <style>
+      .section {
+        margin-bottom: 32px;
+      }
+      .apps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 12px;
+      }
+      .app-cell {
+        display: grid;
+        grid-template-columns: 40px 1fr 80px;
+        gap: 10px;
+        align-items: center;
+        padding: 11px 12px;
+        background: var(--canvas-bg);
+        border: 1px solid var(--canvas-bd);
+        border-radius: 6px;
+        transition: background 150ms ease;
+      }
+      .app-cell:hover {
+        background: var(--shell-surface);
+      }
+      .app-ic {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 700;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .app-cell[data-host="nyx-a"] .app-ic {
+        background: var(--accent-cyan);
+      }
+      .app-cell[data-host="helios-a"] .app-ic {
+        background: var(--accent-emerald);
+      }
+      .app-cell[data-host="vega-b"] .app-ic {
+        background: var(--accent-amber);
+      }
+      .app-cell[data-host="aether-c"] .app-ic {
+        background: var(--accent-violet);
+      }
+      .app-main {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .app-main .n {
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--canvas-fg-1);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--mono);
+      }
+      .app-main .meta {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--canvas-fg-3);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .app-state {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        justify-content: flex-end;
+      }
+      .app-state[data-s="running"] {
+        color: var(--accent-emerald);
+      }
+      .app-state[data-s="running"] .dot {
+        background: var(--accent-emerald);
+      }
+      .app-state[data-s="degraded"] {
+        color: var(--accent-amber);
+      }
+      .app-state[data-s="degraded"] .dot {
+        background: var(--accent-amber);
+      }
+      .app-state[data-s="failed"] {
+        color: var(--accent-rose);
+      }
+      .app-state[data-s="failed"] .dot {
+        background: var(--accent-rose);
+      }
+      .app-state .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+      .filter-group {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      .filter-chip {
+        padding: 4px 10px;
+        border-radius: 4px;
+        background: var(--shell-surface);
+        border: 1px solid var(--canvas-bd);
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 150ms ease;
+        font-weight: 500;
+        color: var(--canvas-fg-1);
+      }
+      .filter-chip.active {
+        background: var(--accent-cyan);
+        color: #fff;
+        border-color: var(--accent-cyan);
+      }
+      .filter-chip:hover:not(.active) {
+        background: var(--canvas-bg);
+        border-color: var(--canvas-fg-3);
+      }
+      .stats {
+        display: flex;
+        gap: 16px;
+        padding: 8px 0;
+        margin-bottom: 14px;
+        font-size: 12px;
+      }
+      .stats > span {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .stats .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="eyebrow">Applications Grid</div>
+    <p style="font-size: 12px; color: var(--canvas-fg-2); margin: 0 0 14px 0;">
+      Filterable service list with status indicators and metadata
+    </p>
+
+    <div class="section">
+      <div class="filter-group">
+        <div class="filter-chip active">all · 24</div>
+        <div class="filter-chip">media · 6</div>
+        <div class="filter-chip">dev · 8</div>
+        <div class="filter-chip">ai · 4</div>
+        <div class="filter-chip">storage · 3</div>
+        <div class="filter-chip">observability · 2</div>
+        <div class="filter-chip">network · 1</div>
+      </div>
+
+      <div class="stats">
+        <span><span class="dot" style="background: var(--accent-emerald);"></span> 22 RUNNING</span>
+        <span><span class="dot" style="background: var(--accent-amber);"></span> 1 DEGRADED</span>
+        <span><span class="dot" style="background: var(--accent-rose);"></span> 1 FAILED</span>
+      </div>
+
+      <div class="apps-grid">
+        <div class="app-cell" data-host="nyx-a">
+          <div class="app-ic">PG</div>
+          <div class="app-main">
+            <div class="n">postgres</div>
+            <div class="meta">15.2 · nyx-a · primary</div>
+          </div>
+          <div class="app-state" data-s="running">
+            <span class="dot"></span>running
+          </div>
+        </div>
+
+        <div class="app-cell" data-host="helios-a">
+          <div class="app-ic">AR</div>
+          <div class="app-main">
+            <div class="n">archivebox</div>
+            <div class="meta">0.7.1 · helios-a · indexing</div>
+          </div>
+          <div class="app-state" data-s="running">
+            <span class="dot"></span>running
+          </div>
+        </div>
+
+        <div class="app-cell" data-host="vega-b">
+          <div class="app-ic">CF</div>
+          <div class="app-main">
+            <div class="n">comfyui</div>
+            <div class="meta">0.1.2 · vega-b · queue: 3</div>
+          </div>
+          <div class="app-state" data-s="degraded">
+            <span class="dot"></span>degraded
+          </div>
+        </div>
+
+        <div class="app-cell" data-host="aether-c">
+          <div class="app-ic">JA</div>
+          <div class="app-main">
+            <div class="n">jetbrains-agent</div>
+            <div class="meta">2024.1 · aether-c · active</div>
+          </div>
+          <div class="app-state" data-s="running">
+            <span class="dot"></span>running
+          </div>
+        </div>
+
+        <div class="app-cell" data-host="nyx-a">
+          <div class="app-ic">FG</div>
+          <div class="app-main">
+            <div class="n">forgejo</div>
+            <div class="meta">8.3 · nyx-a · git service</div>
+          </div>
+          <div class="app-state" data-s="failed">
+            <span class="dot"></span>failed
+          </div>
+        </div>
+
+        <div class="app-cell" data-host="helios-a">
+          <div class="app-ic">MM</div>
+          <div class="app-main">
+            <div class="n">minio</div>
+            <div class="meta">latest · helios-a · s3</div>
+          </div>
+          <div class="app-state" data-s="running">
+            <span class="dot"></span>running
+          </div>
+        </div>
+
+        <div class="app-cell" data-host="nyx-a">
+          <div class="app-ic">GF</div>
+          <div class="app-main">
+            <div class="n">grafana</div>
+            <div class="meta">10.2 · nyx-a · :3000</div>
+          </div>
+          <div class="app-state" data-s="running">
+            <span class="dot"></span>running
+          </div>
+        </div>
+
+        <div class="app-cell" data-host="aether-c">
+          <div class="app-ic">PR</div>
+          <div class="app-main">
+            <div class="n">prometheus</div>
+            <div class="meta">2.48 · aether-c · metrics</div>
+          </div>
+          <div class="app-state" data-s="running">
+            <span class="dot"></span>running
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

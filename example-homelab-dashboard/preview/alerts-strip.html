@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="_base.css" />
+    <style>
+      .section {
+        margin-bottom: 32px;
+      }
+      .alerts-strip {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        background: rgba(241, 65, 108, 0.08);
+        border: 1px solid rgba(241, 65, 108, 0.2);
+        border-radius: 6px;
+      }
+      .alerts-strip .ic {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        color: var(--accent-rose);
+        width: 20px;
+      }
+      .alert-list {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        flex: 1;
+        overflow-x: auto;
+        font-size: 12px;
+      }
+      .alert-list .a-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+        color: var(--canvas-fg-1);
+      }
+      .alert-list .sep {
+        color: var(--canvas-fg-3);
+        margin: 0 6px;
+      }
+      .sev {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--mono);
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        padding: 2px 6px;
+        border-radius: 3px;
+        flex-shrink: 0;
+      }
+      .sev.warn {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--accent-amber);
+      }
+      .sev.info {
+        background: rgba(34, 211, 238, 0.15);
+        color: var(--accent-cyan);
+      }
+      .alerts-strip .clear {
+        background: transparent;
+        border: none;
+        color: var(--accent-rose);
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 0;
+        font-family: inherit;
+      }
+      .alerts-strip .clear:hover {
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="eyebrow">Alerts Strip</div>
+    <p style="font-size: 12px; color: var(--canvas-fg-2); margin: 0 0 14px 0;">
+      Inline alert notification strip for dashboard header
+    </p>
+
+    <div class="section">
+      <div class="alerts-strip">
+        <div class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" width="13" height="13">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <div class="alert-list">
+          <span class="a-item">
+            <span class="sev warn">WARN</span>
+            MEM 81% on <code style="font-family: var(--mono); color: inherit; font-size: 11px;">aether</code> · 12m
+          </span>
+          <span class="sep">·</span>
+          <span class="a-item">
+            <span class="sev warn">WARN</span>
+            forgejo-act runner offline · 2h
+          </span>
+          <span class="sep">·</span>
+          <span class="a-item">
+            <span class="sev info">INFO</span>
+            comfyui upgrade in progress
+          </span>
+        </div>
+        <button class="clear">Open in watch-bot →</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="eyebrow">Alerts Strip · Multiple Errors</div>
+      <div style="margin-top: 14px;">
+        <div class="alerts-strip" style="background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.2);">
+          <div class="ic" style="color: var(--accent-rose);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" width="13" height="13">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div class="alert-list">
+            <span class="a-item">
+              <span class="sev" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-rose);">ERROR</span>
+              vega-b GPU cooling failure · now
+            </span>
+            <span class="sep">·</span>
+            <span class="a-item">
+              <span class="sev" style="background: rgba(239, 68, 68, 0.15); color: var(--accent-rose);">ERROR</span>
+              Disk /dev/sda is critical · 94% · 14s
+            </span>
+          </div>
+          <button class="clear" style="color: var(--accent-rose);">Emergency response →</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

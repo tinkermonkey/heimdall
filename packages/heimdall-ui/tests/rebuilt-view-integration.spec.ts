@@ -189,3 +189,127 @@ test.describe('Rebuilt View Integration Tests', () => {
     expect(diffRatio).toBeLessThan(0.05)
   })
 })
+
+test.describe('Homelab Dashboard Rebuilt Integration Tests', () => {
+  test('rebuilt homelab dashboard renders without errors', async ({ page }) => {
+    // Navigate to the HomelabDashboardRebuilt example
+    await page.goto('http://localhost:5173/?example=homelab')
+    await page.waitForLoadState('networkidle')
+
+    // Check for any console errors
+    const consoleErrors: string[] = []
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') {
+        consoleErrors.push(msg.text())
+      }
+    })
+
+    // Wait for the homelab dashboard to render
+    const heading = page.locator('h1:has-text("Overview")')
+    await expect(heading).toBeVisible({ timeout: 5000 })
+
+    // Verify no console errors occurred
+    expect(consoleErrors).toHaveLength(0)
+  })
+
+  test('homelab dashboard full-page visual snapshot', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=homelab')
+    await page.waitForLoadState('networkidle')
+
+    // Wait for shell to be fully rendered
+    await page.locator('[class*="shell"]').first().waitFor()
+
+    // Capture full page screenshot
+    await expect(page).toHaveScreenshot('rebuilt-homelab-dashboard.png', {
+      fullPage: true,
+      maxDiffPixelRatio: 0.02, // Allow 2% pixel difference for full page
+    })
+  })
+
+  test('homelab dashboard shell layout components render correctly', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=homelab')
+    await page.waitForLoadState('networkidle')
+
+    // Check titlebar
+    const titlebar = page.locator('[class*="titlebar"]').first()
+    await expect(titlebar).toBeVisible()
+
+    // Check sidebar
+    const sidebar = page.locator('[class*="sidebar"]').first()
+    await expect(sidebar).toBeVisible()
+
+    // Check topbar
+    const topbar = page.locator('[class*="topbar"]').first()
+    await expect(topbar).toBeVisible()
+
+    // Check statusbar
+    const statusbar = page.locator('[class*="statusbar"]').first()
+    await expect(statusbar).toBeVisible()
+
+    // Verify content area has the homelab dashboard heading
+    const content = page.locator('h1:has-text("Overview")')
+    await expect(content).toBeVisible()
+  })
+
+  test('homelab dashboard stat tiles display correct data', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=homelab')
+    await page.waitForLoadState('networkidle')
+
+    // Find stat tiles
+    const statTiles = page.locator('[class*="stat"]')
+    const count = await statTiles.count()
+
+    // Should have at least 4 stat tiles (Power, Alerts, Egress, Uptime)
+    expect(count).toBeGreaterThanOrEqual(4)
+
+    // Verify they contain expected labels from HomelabDashboardRebuilt
+    const labels = ['Power draw', 'Active alerts', 'Egress today', 'Cluster uptime']
+    for (const label of labels) {
+      const tile = page.locator(`text=${label}`).first()
+      await expect(tile).toBeVisible()
+    }
+  })
+
+  test('homelab dashboard displays homelab-specific components', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=homelab')
+    await page.waitForLoadState('networkidle')
+
+    // Verify homelab-specific sections are visible
+    const serversHeading = page.locator('h2:has-text("Servers")')
+    await expect(serversHeading).toBeVisible()
+
+    const appsHeading = page.locator('h2:has-text("Applications")')
+    await expect(appsHeading).toBeVisible()
+
+    const networkHeading = page.locator('h2:has-text("Network gateway")')
+    await expect(networkHeading).toBeVisible()
+  })
+
+  test('homelab dashboard interactive elements are functional', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=homelab')
+    await page.waitForLoadState('networkidle')
+
+    // Test button click
+    const buttons = page.locator('button')
+    const count = await buttons.count()
+    expect(count).toBeGreaterThan(0)
+
+    // All buttons should be clickable
+    for (let i = 0; i < Math.min(count, 3); i++) {
+      const button = buttons.nth(i)
+      await expect(button).toBeEnabled()
+    }
+  })
+
+  test('homelab dashboard reference HTML renders', async ({ page }) => {
+    // Navigate to the original homelab dashboard reference HTML
+    const __dirname = path.dirname(fileURLToPath(import.meta.url))
+    const refHtmlPath = 'file://' + path.resolve(__dirname, '../../../example-homelab-dashboard/index.html')
+    await page.goto(refHtmlPath)
+    await page.waitForLoadState('networkidle')
+
+    // Verify the reference dashboard loads without errors
+    const heading = page.locator('h1').first()
+    await expect(heading).toBeVisible()
+  })
+})

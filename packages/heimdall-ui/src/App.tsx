@@ -11,6 +11,7 @@ import {
 } from './index'
 import type { Column } from './components/Table'
 import ContextStudioRebuilt from './examples/ContextStudioRebuilt'
+import HomelabDashboardRebuilt from './examples/HomelabDashboardRebuilt'
 import PrimitivesTestPage from './test-pages/PrimitivesTestPage'
 import DataDisplayTestPage from './test-pages/DataDisplayTestPage'
 import ShellFrameworkTestPage from './test-pages/ShellFrameworkTestPage'
@@ -46,6 +47,10 @@ export default function App() {
 
   if (exampleParam === 'rebuilt') {
     return <ContextStudioRebuilt />
+  }
+
+  if (exampleParam === 'homelab') {
+    return <HomelabDashboardRebuilt />
   }
 
   if (exampleParam === 'primitives') {
