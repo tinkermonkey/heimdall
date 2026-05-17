@@ -169,7 +169,7 @@ export default function ContextStudioRebuilt() {
               All pipelines
             </Button>
           </div>
-          <div className="p-4 grid gap-4" style={{ gridTemplateColumns: '1fr 1fr' }}>
+          <div className="p-4 grid grid-cols-2 gap-4">
             {[
               { name: 'Ingestion Pipeline', status: 'running', progress: 75 },
               { name: 'Entity Linking', status: 'completed', progress: 100 },
@@ -198,7 +198,7 @@ export default function ContextStudioRebuilt() {
           <p className="m-0 mb-3 text-xs text-canvas-fg-2">
             Jump to common workflows
           </p>
-          <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          <div className="grid grid-cols-3 gap-3">
             {[
               { label: 'Taxonomies', description: 'Manage top-level domains', icon: 'schema' as const },
               { label: 'Classes', description: 'Define knowledge structure', icon: 'graph' as const },
