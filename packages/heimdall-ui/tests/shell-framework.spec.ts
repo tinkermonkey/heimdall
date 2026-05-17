@@ -13,19 +13,19 @@ test.describe('Shell Framework Components', () => {
       --shell-fg-2: 209 213 219;
       --shell-fg-3: 156 163 175;
 
-      --canvas-bg: 20 25 31;
-      --canvas-surface: 27 34 42;
-      --canvas-card: 31 38 48;
-      --canvas-bg-2: 39 46 56;
-      --canvas-fg-1: 249 250 251;
-      --canvas-fg-2: 209 213 219;
-      --canvas-fg-3: 156 163 175;
-      --canvas-border: 55 65 81;
-      --canvas-border-strong: 75 85 99;
+      --canvas-bg: 255 255 255;
+      --canvas-surface: 255 255 255;
+      --canvas-card: 249 250 251;
+      --canvas-bg-2: 243 244 246;
+      --canvas-fg-1: 17 24 39;
+      --canvas-fg-2: 55 65 81;
+      --canvas-fg-3: 107 114 128;
+      --canvas-border: 229 231 235;
+      --canvas-border-strong: 209 213 219;
 
-      --accent-primary: 249 115 22;
-      --accent-primary-hover: 234 88 12;
-      --accent-primary-deep: 194 65 12;
+      --accent-primary: 34 211 238;
+      --accent-primary-hover: 6 182 212;
+      --accent-primary-deep: 14 126 163;
 
       --status-ok: 34 197 94;
       --status-warn: 234 179 8;

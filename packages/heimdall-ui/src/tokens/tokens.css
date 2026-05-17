@@ -1,8 +1,8 @@
 @layer base {
   /* =========================================================================
      Heimdall Design System — Token Layer
-     Two-surface architecture: shell (always dark) + canvas (dark by default)
-     Dark canvas values are :root defaults, not overrides.
+     Two-surface architecture: shell (always dark) + canvas (light by default)
+     Light canvas is :root default; dark canvas is toggled via body.dark-canvas
      ========================================================================= */
 
   :root {
@@ -13,21 +13,21 @@
     --shell-fg-2: 209 213 219;
     --shell-fg-3: 156 163 175;
 
-    /* ---- Canvas Surface (dark canvas default) ---- */
-    --canvas-bg: 20 25 31;
-    --canvas-surface: 27 34 42;
-    --canvas-card: 31 38 48;
-    --canvas-bg-2: 39 46 56;
-    --canvas-fg-1: 249 250 251;
-    --canvas-fg-2: 209 213 219;
-    --canvas-fg-3: 156 163 175;
-    --canvas-border: 55 65 81;
-    --canvas-border-strong: 75 85 99;
+    /* ---- Canvas Surface (light canvas default) ---- */
+    --canvas-bg: 255 255 255;
+    --canvas-surface: 255 255 255;
+    --canvas-card: 249 250 251;
+    --canvas-bg-2: 243 244 246;
+    --canvas-fg-1: 17 24 39;
+    --canvas-fg-2: 55 65 81;
+    --canvas-fg-3: 107 114 128;
+    --canvas-border: 229 231 235;
+    --canvas-border-strong: 209 213 219;
 
-    /* ---- Accent Color (orange placeholder — TODO: swap with final hex from design) ---- */
-    --accent-primary: 249 115 22;       /* bright, active states */
-    --accent-primary-hover: 234 88 12;  /* hover */
-    --accent-primary-deep: 194 65 12;   /* deep/CTA */
+    /* ---- Accent Color (cyan brand) ---- */
+    --accent-primary: 34 211 238;        /* bright, active states */
+    --accent-primary-hover: 6 182 212;   /* hover */
+    --accent-primary-deep: 14 126 163;   /* deep/CTA */
 
     /* ---- Semantic Status Colors (unchanged from reference) ---- */
     --status-ok-bg: 220 252 231;
@@ -159,21 +159,21 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
-    /* ---- Focus Ring (orange accent) ---- */
-    --focus-ring: 0 0 0 3px rgba(249, 115, 22, 0.13);
+    /* ---- Focus Ring (cyan accent) ---- */
+    --focus-ring: 0 0 0 3px rgba(34, 211, 238, 0.13);
   }
 
-  /* ---- Light Canvas Mode (preserved for extensibility, not shipped default) ---- */
-  body.light-canvas {
-    --canvas-bg: 255 255 255;
-    --canvas-surface: 255 255 255;
-    --canvas-card: 249 250 251;
-    --canvas-bg-2: 243 244 246;
-    --canvas-fg-1: 17 24 39;
-    --canvas-fg-2: 55 65 81;
-    --canvas-fg-3: 107 114 128;
-    --canvas-border: 229 231 235;
-    --canvas-border-strong: 209 213 219;
+  /* ---- Dark Canvas Mode ---- */
+  body.dark-canvas {
+    --canvas-bg: 20 25 31;
+    --canvas-surface: 27 34 42;
+    --canvas-card: 31 38 48;
+    --canvas-bg-2: 39 46 56;
+    --canvas-fg-1: 249 250 251;
+    --canvas-fg-2: 209 213 219;
+    --canvas-fg-3: 156 163 175;
+    --canvas-border: 55 65 81;
+    --canvas-border-strong: 75 85 99;
   }
 
   /* ---- Base Element Styles ---- */

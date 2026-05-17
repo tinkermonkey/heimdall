@@ -18,7 +18,7 @@
 }
 
 .btn:focus-visible {
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.13);
+  box-shadow: var(--focus-ring);
 }
 
 /* Sizes */
