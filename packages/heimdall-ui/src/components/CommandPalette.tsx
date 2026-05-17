@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useImperativeHandle } from 'react'
 import './CommandPalette.css'
 import { Icon, type IconName } from './Icon'
+import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useBodyOverflow } from '../hooks/useBodyOverflow'
 
 export interface Command {
   id: string
@@ -22,6 +24,12 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
     const [search, setSearch] = useState('')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
+    const paletteRef = useRef<HTMLDivElement>(null)
+
+    useImperativeHandle(ref, () => paletteRef.current as HTMLDivElement)
+
+    useFocusTrap(paletteRef, isOpen)
+    useBodyOverflow(isOpen)
 
     const filtered = commands.filter((cmd) =>
       cmd.label.toLowerCase().includes(search.toLowerCase()) ||
@@ -80,7 +88,7 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
 
     return (
       <div
-        ref={ref}
+        ref={paletteRef}
         className="command-palette-backdrop"
         onClick={handleBackdropClick}
       >

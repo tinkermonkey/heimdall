@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useImperativeHandle } from 'react'
 import './Drawer.css'
 import { Icon } from './Icon'
+import { useFocusTrap } from '../hooks/useFocusTrap'
+import { useBodyOverflow } from '../hooks/useBodyOverflow'
 
 export interface DrawerProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean
@@ -13,6 +15,13 @@ export interface DrawerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
   ({ isOpen, onClose, title, position = 'right', width = '320px', children, className = '', ...props }, ref) => {
+    const drawerRef = useRef<HTMLDivElement>(null)
+
+    useImperativeHandle(ref, () => drawerRef.current as HTMLDivElement)
+
+    useFocusTrap(drawerRef, isOpen)
+    useBodyOverflow(isOpen)
+
     useEffect(() => {
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape' && isOpen) {
@@ -22,10 +31,8 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
 
       if (isOpen) {
         document.addEventListener('keydown', handleEscape)
-        document.body.style.overflow = 'hidden'
         return () => {
           document.removeEventListener('keydown', handleEscape)
-          document.body.style.overflow = 'unset'
         }
       }
     }, [isOpen, onClose])
@@ -44,7 +51,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
         onClick={handleBackdropClick}
       >
         <div
-          ref={ref}
+          ref={drawerRef}
           className={['drawer', `drawer--${position}`, className].filter(Boolean).join(' ')}
           style={{ width }}
           role="dialog"

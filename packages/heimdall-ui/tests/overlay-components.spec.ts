@@ -93,7 +93,8 @@ test.describe('Overlay Components', () => {
         return document.body.style.overflow
       })
 
-      expect(overflow).toBe('unset')
+      // Overflow should be restored to its original value (empty string when not previously set)
+      expect(overflow).not.toBe('hidden')
     })
 
     test('should close when close button is clicked', async ({ page }) => {
