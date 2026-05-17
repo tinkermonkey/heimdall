@@ -126,7 +126,10 @@ export async function assertFontsLoaded(page: Page): Promise<void> {
         const rules = Array.from(sheet.cssRules || [])
         for (const rule of rules) {
           if (rule instanceof CSSFontFaceRule) {
-            fontFaceRules.push((rule as any).family)
+            const fontFamily = rule.style.fontFamily
+            if (fontFamily) {
+              fontFaceRules.push(fontFamily.replace(/['"]/g, ''))
+            }
           }
         }
       } catch {

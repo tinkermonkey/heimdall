@@ -36,14 +36,16 @@ export default defineConfig({
     },
   ],
 
-  // Docker/Container configuration for OS-level rendering consistency
+  // Docker/Container configuration for OS-level rendering consistency (ADR-005)
   // Enable with: PLAYWRIGHT_DOCKER=1 npm test
+  // When enabled, runs both the dev server and the Playwright test runner in Docker containers
   ...(useDocker && {
     webServer: {
-      command: 'docker run --rm -p 5173:5173 -v $(pwd):/app node:18 bash -c "cd /app && npm install && npm run dev"',
+      command: 'docker run --rm -p 5173:5173 -v $(pwd):/workspace -w /workspace node:18 bash -c "npm install && npm run dev"',
       url: 'http://localhost:5173',
       reuseExistingServer: false,
       timeout: 120000,
+      env: { SHELL: '/bin/bash' },
     },
   }),
 })

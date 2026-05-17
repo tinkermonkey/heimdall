@@ -63,10 +63,22 @@ const TableInner = React.forwardRef(
     }
 
     const handleSort = (key: string) => {
-      const newDirection = sortKey === key && sortDirection === 'asc' ? 'desc' : 'asc'
-      setSortKey(key)
-      setSortDirection(newDirection)
-      onSort?.(key, newDirection)
+      if (sortKey === key) {
+        // Cycle through states: asc -> desc -> clear
+        if (sortDirection === 'asc') {
+          setSortDirection('desc')
+          onSort?.(key, 'desc')
+        } else {
+          // Clear the sort
+          setSortKey(null)
+          onSort?.(key, null as any)
+        }
+      } else {
+        // New column, start with asc
+        setSortKey(key)
+        setSortDirection('asc')
+        onSort?.(key, 'asc')
+      }
     }
 
     const classNames = ['table', className].filter(Boolean).join(' ')
@@ -94,7 +106,7 @@ const TableInner = React.forwardRef(
               >
                 <div className="table__header-content">
                   {column.label}
-                  {sortKey === String(column.key) && (
+                  {sortKey === String(column.key) && sortDirection && (
                     <Icon
                       name={sortDirection === 'asc' ? 'chevronUp' : 'chevronDown'}
                       size={14}
@@ -111,7 +123,7 @@ const TableInner = React.forwardRef(
             const rowKeyValue = getRowKey(row, index)
             const isSelected = selectedRows.includes(rowKeyValue)
             return (
-              <tr key={rowKeyValue} className={`table__row ${isSelected ? 'table__row--selected' : ''}`}>
+              <tr key={rowKeyValue} data-row-key={rowKeyValue} className={`table__row ${isSelected ? 'table__row--selected' : ''}`}>
                 {selectable && (
                   <td className="table__cell table__cell--checkbox">
                     <input
