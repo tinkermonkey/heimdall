@@ -24,13 +24,15 @@ function measureBundleSize() {
     timestamp: new Date().toISOString(),
     buildDate: new Date().toLocaleString(),
     components: {
-      count: 18, // Total exported components
+      count: 28, // Total exported components
       categories: {
-        primitives: ['Button', 'Chip', 'Badge', 'StatusBadge'],
+        primitives: ['Icon', 'Button', 'Chip', 'Badge', 'StatusBadge'],
         inputs: ['TextInput', 'TextArea', 'NumberInput', 'Select', 'TriState', 'Field'],
-        dataDisplay: ['StatTile', 'Table'],
+        dataDisplay: ['StatTile', 'StatGrid', 'Table'],
         navigation: ['NavItem', 'Sidebar', 'Topbar', 'TabBar'],
         shell: ['Titlebar', 'Statusbar', 'ShellLayout'],
+        dialogs: ['Modal', 'ConfirmDialog', 'Toast', 'CommandPalette', 'Drawer'],
+        containers: ['Panel', 'SplitPane'],
       },
     },
     bundleSizes: {},
@@ -84,7 +86,7 @@ function estimateRenderMetrics() {
     },
     notes: [
       'Render metrics are estimates based on component complexity, not measured values',
-      'Components use CSS-in-JS and Tailwind for styling',
+      'Components use plain CSS custom properties and Tailwind for styling',
       'Render times represent target performance goals',
       'Actual measurements should be captured using Playwright performance API',
     ],

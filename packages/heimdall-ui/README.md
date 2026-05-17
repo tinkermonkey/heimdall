@@ -9,8 +9,8 @@ This phase establishes the token system and build infrastructure required by all
 ### ✅ Completed
 
 - Vite + React 18 + TypeScript + Tailwind CSS build pipeline
-- CSS custom property token system (dark canvas default mode)
-- Orange accent tokens (placeholders pending final hex from design)
+- CSS custom property token system (light canvas default mode)
+- Cyan accent tokens (brand primary color)
 - Self-hosted Inter and JetBrains Mono fonts (local file declarations)
 - Tailwind theme extending with CSS variable references
 - Playwright testing infrastructure with animation freezing utilities
@@ -69,19 +69,17 @@ vite.config.ts                 # Vite build configuration
 Every screen has exactly two surfaces:
 
 - **Shell**: Always dark (`#0B0F14`)
-- **Canvas**: Dark default (`#14191F`)
+- **Canvas**: Light default (`#FFFFFF`)
 
 Token variables automatically resolve based on surface context. No component-level conditional rendering needed.
 
-#### Accent Color (Orange)
+#### Accent Color (Cyan)
 
 ```css
---accent-primary:       #f97316   /* bright, active states */
---accent-primary-hover: #ea580c   /* hover state */
---accent-primary-deep:  #c2410c   /* deep/CTA */
+--accent-primary:       #22d3ee   /* bright, active states */
+--accent-primary-hover: #06b6d4   /* hover state */
+--accent-primary-deep:  #0e7ea3   /* deep/CTA */
 ```
-
-⚠️ **TODO**: Replace orange placeholder values with final hex codes from design.
 
 #### Semantic Status Colors
 
@@ -119,8 +117,8 @@ dist/
 
 Tests validate:
 
-- Dark canvas tokens applied by default
-- Orange accent color (not cyan)
+- Light canvas tokens applied by default
+- Cyan accent color (brand primary)
 - Semantic status colors
 - Radius and spacing scale
 - Animation freezing for consistent screenshots
