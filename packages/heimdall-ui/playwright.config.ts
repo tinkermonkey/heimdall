@@ -38,7 +38,7 @@ export default defineConfig({
 
   // Docker/Container configuration for OS-level rendering consistency (ADR-005)
   // Enable with: PLAYWRIGHT_DOCKER=1 npm test
-  // When enabled, runs both the dev server and the Playwright test runner in Docker containers
+  // When enabled, runs the dev server in Docker for consistent asset serving; the browser runs on the host
   ...(useDocker && {
     webServer: {
       command: 'docker run --rm -p 5173:5173 -v $(pwd):/workspace -w /workspace node:18 bash -c "npm install && npm run dev"',

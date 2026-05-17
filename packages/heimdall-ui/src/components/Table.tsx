@@ -17,7 +17,7 @@ interface TableProps<T extends Record<string, any>> {
   selectable?: boolean
   selectedRows?: (string | number)[]
   onSelectRows?: (rowKeys: (string | number)[]) => void
-  onSort?: (key: string, direction: 'asc' | 'desc') => void
+  onSort?: (key: string, direction: 'asc' | 'desc' | null) => void
   className?: string
 }
 
@@ -71,7 +71,7 @@ const TableInner = React.forwardRef(
         } else {
           // Clear the sort
           setSortKey(null)
-          onSort?.(key, null as any)
+          onSort?.(key, null)
         }
       } else {
         // New column, start with asc
