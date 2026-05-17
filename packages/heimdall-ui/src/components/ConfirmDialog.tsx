@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal } from './Modal'
 import { Button } from './Button'
+import './ConfirmDialog.css'
 
 interface ConfirmDialogProps {
   isOpen: boolean

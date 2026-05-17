@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 50;
+  z-index: 210;
   animation: fadeIn 80ms ease-out;
 }
 
@@ -14,7 +14,7 @@
   border: 1px solid rgb(var(--canvas-border));
   display: flex;
   flex-direction: column;
-  z-index: 51;
+  z-index: 220;
 }
 
 .drawer--left {
@@ -25,6 +25,15 @@
 .drawer--right {
   right: 0;
   animation: slideInFromRight 120ms ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideInFromLeft {

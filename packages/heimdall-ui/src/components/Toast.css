@@ -9,6 +9,8 @@
   box-shadow: 0 14px 40px -16px rgba(0, 0, 0, 0.3);
   animation: slideIn 220ms ease-out;
   max-width: 400px;
+  position: relative;
+  z-index: 300;
 }
 
 @keyframes slideIn {
@@ -67,4 +69,26 @@
   color: rgb(var(--canvas-fg-2));
   margin-top: 2px;
   line-height: 1.4;
+}
+
+.toast__close {
+  background: none;
+  border: none;
+  color: rgb(var(--canvas-fg-3));
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  flex: none;
+  transition: background-color 80ms ease;
+}
+
+.toast__close:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.toast__close:active {
+  background-color: rgba(255, 255, 255, 0.12);
 }

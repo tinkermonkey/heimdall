@@ -67,6 +67,13 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
           <div className="toast__title">{title}</div>
           {subtitle && <div className="toast__subtitle">{subtitle}</div>}
         </div>
+        <button
+          className="toast__close"
+          onClick={onClose}
+          aria-label="Dismiss notification"
+        >
+          <Icon name="x" size={14} />
+        </button>
       </div>
     )
   }

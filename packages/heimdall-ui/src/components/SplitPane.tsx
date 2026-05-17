@@ -23,11 +23,22 @@ export const SplitPane = React.forwardRef<HTMLDivElement, SplitPaneProps>(
   }, ref) => {
     const [splitPercent, setSplitPercent] = useState(initialSplitPercent)
     const containerRef = useRef<HTMLDivElement>(null)
-    const isDraggingRef = useRef(false)
 
-    useEffect(() => {
+    const mergeRefs = (refs: Array<React.Ref<HTMLDivElement>>) => {
+      return (element: HTMLDivElement | null) => {
+        refs.forEach(r => {
+          if (typeof r === 'function') {
+            r(element)
+          } else if (r) {
+            r.current = element
+          }
+        })
+      }
+    }
+
+    const handleMouseDown = () => {
       const handleMouseMove = (e: MouseEvent) => {
-        if (!isDraggingRef.current || !containerRef.current) return
+        if (!containerRef.current) return
 
         const rect = containerRef.current.getBoundingClientRect()
         const isHorizontal = direction === 'horizontal'
@@ -39,25 +50,21 @@ export const SplitPane = React.forwardRef<HTMLDivElement, SplitPaneProps>(
         const size = isHorizontal ? rect.width : rect.height
 
         let newPercent = (position / size) * 100
-        newPercent = Math.max(minSize / size * 100, Math.min(newPercent, (size - maxSize) / size * 100 + 100))
+        const minPercent = minSize / size * 100
+        const maxPercent = maxSize / size * 100
+        newPercent = Math.max(minPercent, Math.min(newPercent, maxPercent))
 
         setSplitPercent(newPercent)
       }
 
       const handleMouseUp = () => {
-        isDraggingRef.current = false
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
       }
 
-      if (isDraggingRef.current) {
-        document.addEventListener('mousemove', handleMouseMove)
-        document.addEventListener('mouseup', handleMouseUp)
-
-        return () => {
-          document.removeEventListener('mousemove', handleMouseMove)
-          document.removeEventListener('mouseup', handleMouseUp)
-        }
-      }
-    }, [direction, minSize, maxSize])
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+    }
 
     const classNames = ['split-pane', `split-pane--${direction}`, className]
       .filter(Boolean)
@@ -65,7 +72,7 @@ export const SplitPane = React.forwardRef<HTMLDivElement, SplitPaneProps>(
 
     return (
       <div
-        ref={containerRef || ref}
+        ref={mergeRefs([containerRef, ref])}
         className={classNames}
         {...props}
       >
@@ -78,9 +85,7 @@ export const SplitPane = React.forwardRef<HTMLDivElement, SplitPaneProps>(
 
         <div
           className={`split-pane__divider split-pane__divider--${direction}`}
-          onMouseDown={() => {
-            isDraggingRef.current = true
-          }}
+          onMouseDown={handleMouseDown}
         />
 
         <div

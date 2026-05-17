@@ -31,6 +31,9 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
     useEffect(() => {
       if (isOpen) {
         setTimeout(() => inputRef.current?.focus(), 0)
+      } else {
+        setSearch('')
+        setSelectedIndex(0)
       }
     }, [isOpen])
 
