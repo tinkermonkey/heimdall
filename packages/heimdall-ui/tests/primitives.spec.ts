@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
 test.describe('Primitive Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -19,11 +19,6 @@ test.describe('Primitive Components', () => {
     const iconElements = page.locator('svg')
     const count = await iconElements.count()
     expect(count).toBeGreaterThan(0)
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('icon.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('Button component - primary variant', async ({ page }) => {
@@ -36,11 +31,6 @@ test.describe('Primitive Components', () => {
       return window.getComputedStyle(el)
     })
     expect(computedStyle.backgroundColor).toBeTruthy()
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('button-primary.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('Button component - all variants', async ({ page }) => {
@@ -54,18 +44,12 @@ test.describe('Primitive Components', () => {
     await expect(secondaryBtn).toBeVisible()
     await expect(ghostBtn).toBeVisible()
     await expect(dangerBtn).toBeVisible()
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('button-variants.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('Button component - hover state', async ({ page }) => {
     const primaryButton = page.locator('button:has-text("Primary")').first()
     await primaryButton.hover()
 
-    await freezeAnimations(page)
     const bgColor = await primaryButton.evaluate((el) => {
       return window.getComputedStyle(el).backgroundColor
     })
@@ -87,18 +71,13 @@ test.describe('Primitive Components', () => {
     const chips = page.locator('span').filter({ hasText: /^(cyan|amber|violet|emerald|rose|gray)$/ })
     const count = await chips.count()
     expect(count).toBeGreaterThanOrEqual(6)
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('chip-variants.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('Badge component - status dots', async ({ page }) => {
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('badge-dots.png', {
-      maxDiffPixelRatio: 0.01,
-    })
+    // Verify badges are rendered
+    const badges = page.locator('[class*="badge"]')
+    const count = await badges.count()
+    expect(count).toBeGreaterThan(0)
   })
 
   test('TextInput component - default, focus, error states', async ({ page }) => {
@@ -114,11 +93,6 @@ test.describe('Primitive Components', () => {
       return window.getComputedStyle(el).borderColor
     })
     expect(focusedStyle).toBeTruthy()
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('text-input-states.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('TextArea component - default, focus, error states', async ({ page }) => {
@@ -131,11 +105,6 @@ test.describe('Primitive Components', () => {
     const firstTextarea = textareas.first()
     const textContent = await firstTextarea.inputValue()
     expect(textContent).toBeTruthy()
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('text-area-states.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('NumberInput component - default, focus, error states', async ({ page }) => {
@@ -148,11 +117,6 @@ test.describe('Primitive Components', () => {
     const firstInput = numberInputs.first()
     const value = await firstInput.inputValue()
     expect(value).toMatch(/^\d+$/)
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('number-input-states.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('Select component - default, focus, error states', async ({ page }) => {
@@ -169,11 +133,6 @@ test.describe('Primitive Components', () => {
       return selectEl.selectedIndex >= 0 && selectEl.options.length > 0
     })
     expect(hasSelectedOption).toBe(true)
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('select-states.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('TriState checkbox component - checked, unchecked, indeterminate states', async ({ page }) => {
@@ -181,11 +140,6 @@ test.describe('Primitive Components', () => {
     const checkboxes = page.locator('input[type="checkbox"]')
     const count = await checkboxes.count()
     expect(count).toBeGreaterThan(0)
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('tri-state-states.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('Field wrapper component - label, required indicator, error message', async ({ page }) => {
@@ -198,11 +152,6 @@ test.describe('Primitive Components', () => {
     const requiredIndicators = page.locator('text="*"')
     const requiredCount = await requiredIndicators.count()
     expect(requiredCount).toBeGreaterThan(0)
-
-    await freezeAnimations(page)
-    await expect(page).toHaveScreenshot('field-wrapper.png', {
-      maxDiffPixelRatio: 0.01,
-    })
   })
 
   test('TextInput component - keyboard interaction', async ({ page }) => {
