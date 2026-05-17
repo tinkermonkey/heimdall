@@ -7,7 +7,8 @@ interface TriStateProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
 
 export const TriState = React.forwardRef<HTMLInputElement, TriStateProps>(
   ({ indeterminate = false, className = '', ...props }, ref) => {
-    const internalRef = React.useRef<HTMLInputElement>(null)
+    const internalRef: React.MutableRefObject<HTMLInputElement | null> =
+      React.useRef<HTMLInputElement>(null)
 
     const mergedRef = React.useCallback(
       (node: HTMLInputElement | null) => {
