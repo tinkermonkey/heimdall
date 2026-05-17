@@ -1,4 +1,4 @@
-import { StatTile, Table } from '@heimdall/ui'
+import { Column, StatTile, Table } from '@heimdall/ui'
 
 export default function DataDisplayShowcase() {
   const tableData = [
@@ -9,12 +9,12 @@ export default function DataDisplayShowcase() {
   ]
 
   const tableColumns = [
-    { key: 'id', label: 'ID', width: '120px' },
-    { key: 'name', label: 'Name' },
-    { key: 'class', label: 'Class' },
-    { key: 'status', label: 'Status' },
-    { key: 'updated', label: 'Updated' },
-  ]
+    { key: 'id' as const, label: 'ID', width: '120px' },
+    { key: 'name' as const, label: 'Name' },
+    { key: 'class' as const, label: 'Class' },
+    { key: 'status' as const, label: 'Status' },
+    { key: 'updated' as const, label: 'Updated' },
+  ] satisfies Column<typeof tableData[0]>[]
 
   return (
     <div>
