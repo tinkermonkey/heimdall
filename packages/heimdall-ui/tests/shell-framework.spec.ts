@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
 test.describe('Shell Framework Components', () => {
   test.describe('Topbar and TabBar Components - Visual Regression', () => {
@@ -7,6 +7,9 @@ test.describe('Shell Framework Components', () => {
       // Navigate to the shell-framework test page which renders actual React components
       await page.goto('http://localhost:5173/?example=shell-framework')
       await page.waitForLoadState('networkidle')
+
+      // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN
+      await loadSelfHostedFonts(page)
 
       // Verify fonts are loaded from the app's CSS pipeline
       await assertFontsLoaded(page)
@@ -84,7 +87,7 @@ test.describe('Shell Framework Components', () => {
     test('Topbar and TabBar visual snapshot', async ({ page }) => {
       await freezeAnimations(page)
       await expect(page).toHaveScreenshot('topbar-tabbar-full.png', {
-        maxDiffPixelRatio: 0.1,
+        maxDiffPixelRatio: 0.01,
       })
     })
 
@@ -92,7 +95,7 @@ test.describe('Shell Framework Components', () => {
       const topbar = page.locator('[class*="topbar"]').first()
       await freezeAnimations(page)
       await expect(topbar).toHaveScreenshot('topbar-breadcrumbs.png', {
-        maxDiffPixelRatio: 0.1,
+        maxDiffPixelRatio: 0.01,
       })
     })
 
@@ -100,7 +103,7 @@ test.describe('Shell Framework Components', () => {
       const tabBar = page.locator('[class*="tab-bar"]').first()
       await freezeAnimations(page)
       await expect(tabBar).toHaveScreenshot('tabbar-variants.png', {
-        maxDiffPixelRatio: 0.1,
+        maxDiffPixelRatio: 0.01,
       })
     })
   })

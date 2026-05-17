@@ -1,11 +1,14 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
 test.describe('Data Display Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the data-display test page which renders actual React components
     await page.goto('http://localhost:5173/?example=data-display')
     await page.waitForLoadState('networkidle')
+
+    // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN
+    await loadSelfHostedFonts(page)
 
     // Verify fonts are loaded from the app's CSS pipeline
     await assertFontsLoaded(page)
@@ -117,7 +120,7 @@ test.describe('Data Display Components', () => {
   test('Table static snapshot', async ({ page }) => {
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('table-full.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -182,7 +185,7 @@ test.describe('Data Display Components', () => {
   test('StatTile visual regression', async ({ page }) => {
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('stat-tiles.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 

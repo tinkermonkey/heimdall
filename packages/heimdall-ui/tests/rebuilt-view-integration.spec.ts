@@ -3,6 +3,7 @@ import { PNG } from 'pngjs'
 import pixelmatch from 'pixelmatch'
 import { fileURLToPath } from 'url'
 import path from 'path'
+import { loadSelfHostedFonts, freezeAnimations } from './utils/test-helpers'
 
 test.describe('Rebuilt View Integration Tests', () => {
   test('rebuilt context studio dashboard renders without errors', async ({ page }) => {
@@ -32,6 +33,10 @@ test.describe('Rebuilt View Integration Tests', () => {
 
     // Wait for shell to be fully rendered
     await page.locator('[class*="shell"]').first().waitFor()
+
+    // Load self-hosted fonts and freeze animations for consistent snapshot
+    await loadSelfHostedFonts(page)
+    await freezeAnimations(page)
 
     // Capture full page screenshot
     await expect(page).toHaveScreenshot('rebuilt-context-studio.png', {
@@ -145,6 +150,12 @@ test.describe('Rebuilt View Integration Tests', () => {
     await originalPage.goto(refHtmlPath)
     await originalPage.waitForLoadState('networkidle')
 
+    // Load self-hosted fonts for consistent rendering (required by ADR-005)
+    await loadSelfHostedFonts(originalPage)
+
+    // Freeze animations for consistent snapshots
+    await freezeAnimations(originalPage)
+
     // Apply dark-canvas mode to original page for consistent visual comparison
     await originalPage.evaluate(() => {
       document.body.classList.add('dark-canvas')
@@ -159,6 +170,12 @@ test.describe('Rebuilt View Integration Tests', () => {
     await page.goto('http://localhost:5173/?example=rebuilt')
     await page.waitForLoadState('networkidle')
     await page.locator('[class*="shell"]').first().waitFor()
+
+    // Load self-hosted fonts for consistent rendering (required by ADR-005)
+    await loadSelfHostedFonts(page)
+
+    // Freeze animations for consistent snapshots
+    await freezeAnimations(page)
 
     // Apply dark-canvas mode to rebuilt page for consistent visual comparison
     await page.evaluate(() => {
@@ -218,6 +235,10 @@ test.describe('Homelab Dashboard Rebuilt Integration Tests', () => {
 
     // Wait for shell to be fully rendered
     await page.locator('[class*="shell"]').first().waitFor()
+
+    // Load self-hosted fonts and freeze animations for consistent snapshot
+    await loadSelfHostedFonts(page)
+    await freezeAnimations(page)
 
     // Capture full page screenshot
     await expect(page).toHaveScreenshot('rebuilt-homelab-dashboard.png', {

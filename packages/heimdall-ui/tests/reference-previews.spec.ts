@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test'
 import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
+import { loadSelfHostedFonts, freezeAnimations } from './utils/test-helpers'
 
 test.describe('Reference Preview Cards', () => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -29,9 +30,15 @@ test.describe('Reference Preview Cards', () => {
         // Wait for content to load
         await page.waitForLoadState('networkidle')
 
-        // Capture snapshot with reasonable tolerance
+        // Load self-hosted fonts (required by ADR-005 for offline CI and consistency)
+        await loadSelfHostedFonts(page)
+
+        // Freeze animations for consistent snapshots
+        await freezeAnimations(page)
+
+        // Capture snapshot with 1% tolerance (perfectly matching requirement)
         await expect(page).toHaveScreenshot(`${testName}.png`, {
-          maxDiffPixelRatio: 0.01, // Allow 1% pixel difference
+          maxDiffPixelRatio: 0.01,
         })
       })
     })
@@ -49,9 +56,15 @@ test.describe('Reference Preview Cards', () => {
         // Wait for content to load
         await page.waitForLoadState('networkidle')
 
-        // Capture snapshot with reasonable tolerance
+        // Load self-hosted fonts (required by ADR-005 for offline CI and consistency)
+        await loadSelfHostedFonts(page)
+
+        // Freeze animations for consistent snapshots
+        await freezeAnimations(page)
+
+        // Capture snapshot with 1% tolerance (perfectly matching requirement)
         await expect(page).toHaveScreenshot(`homelab/${testName}.png`, {
-          maxDiffPixelRatio: 0.01, // Allow 1% pixel difference
+          maxDiffPixelRatio: 0.01,
         })
       })
     })

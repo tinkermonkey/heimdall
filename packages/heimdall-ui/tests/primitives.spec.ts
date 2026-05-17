@@ -22,7 +22,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('icon.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -39,7 +39,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('button-primary.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -57,7 +57,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('button-variants.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -90,14 +90,14 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('chip-variants.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
   test('Badge component - status dots', async ({ page }) => {
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('badge-dots.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -117,7 +117,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('text-input-states.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -134,7 +134,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('text-area-states.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -151,7 +151,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('number-input-states.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -172,7 +172,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('select-states.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -184,7 +184,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('tri-state-states.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 
@@ -201,7 +201,7 @@ test.describe('Primitive Components', () => {
 
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('field-wrapper.png', {
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.01,
     })
   })
 

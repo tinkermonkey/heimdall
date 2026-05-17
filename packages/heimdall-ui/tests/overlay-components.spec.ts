@@ -28,7 +28,7 @@ test.describe('Overlay Components', () => {
 
       await freezeAnimations(page)
       await expect(page).toHaveScreenshot('modal-open.png', {
-        maxDiffPixelRatio: 0.1,
+        maxDiffPixelRatio: 0.01,
       })
     })
 
@@ -275,7 +275,7 @@ test.describe('Overlay Components', () => {
 
       await freezeAnimations(page)
       await expect(page).toHaveScreenshot('confirm-dialog-open.png', {
-        maxDiffPixelRatio: 0.1,
+        maxDiffPixelRatio: 0.01,
       })
     })
 
@@ -340,7 +340,7 @@ test.describe('Overlay Components', () => {
 
       await freezeAnimations(page)
       await expect(page).toHaveScreenshot('toast-open.png', {
-        maxDiffPixelRatio: 0.1,
+        maxDiffPixelRatio: 0.01,
       })
     })
 
