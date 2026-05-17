@@ -17,6 +17,7 @@
     "./css": "./dist/style.css"
   },
   "scripts": {
+    "prepare": "vite build",
     "build": "vite build",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
