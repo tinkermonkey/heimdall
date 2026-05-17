@@ -865,4 +865,498 @@ test.describe('Primitive Components', () => {
       maxDiffPixelRatio: 0.1,
     })
   })
+
+  test('TextInput component - default, focus, error states', async ({ page }) => {
+    const inputCss = `
+      .text-input {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: rgb(var(--canvas-surface));
+        border: 1px solid rgb(var(--canvas-border));
+        border-radius: var(--radius-md);
+        padding: 7px 10px;
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        color: rgb(var(--canvas-fg-1));
+        transition: all 80ms ease-out;
+        outline: none;
+      }
+      .text-input::placeholder {
+        color: rgb(var(--canvas-fg-3));
+      }
+      .text-input:focus-visible {
+        background-color: rgb(var(--canvas-bg));
+        border-color: rgb(var(--accent-primary));
+        box-shadow: var(--focus-ring);
+      }
+      .text-input:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .text-input--mono {
+        font-family: var(--font-mono);
+        font-size: 12px;
+      }
+      .text-input--error {
+        border-color: rgb(var(--status-rose));
+      }
+      .text-input--error:focus-visible {
+        box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.13);
+      }
+    `
+
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          :root {
+            --canvas-surface: 27 34 42;
+            --canvas-bg: 20 25 31;
+            --canvas-border: 55 65 81;
+            --canvas-fg-1: 249 250 251;
+            --canvas-fg-3: 156 163 175;
+            --accent-primary: 249 115 22;
+            --status-rose: 244 63 94;
+            --font-sans: Inter, sans-serif;
+            --font-mono: JetBrains Mono, monospace;
+            --radius-md: 6px;
+            --text-sm: 0.875rem;
+            --focus-ring: 0 0 0 3px rgba(249, 115, 22, 0.13);
+          }
+          body { margin: 0; padding: 22px; background: rgb(var(--canvas-bg)); }
+          .row { display: flex; flex-direction: column; gap: 16px; max-width: 300px; }
+          ${inputCss}
+        </style>
+      </head>
+      <body>
+        <div class="row">
+          <input class="text-input" placeholder="Default input" value="default value" />
+          <input class="text-input" placeholder="Focused state" value="focused value" />
+          <input class="text-input text-input--error" placeholder="Error state" value="error value" />
+          <input class="text-input" placeholder="Disabled state" value="disabled" disabled />
+          <input class="text-input text-input--mono" placeholder="Mono input" value="mono_value" />
+        </div>
+      </body>
+      </html>
+    `)
+
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('text-input-states.png', {
+      maxDiffPixelRatio: 0.1,
+    })
+  })
+
+  test('TextArea component - default, focus, error states', async ({ page }) => {
+    const textareaCss = `
+      .text-area {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: rgb(var(--canvas-surface));
+        border: 1px solid rgb(var(--canvas-border));
+        border-radius: var(--radius-md);
+        padding: 7px 10px;
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        color: rgb(var(--canvas-fg-1));
+        line-height: 1.45;
+        transition: all 80ms ease-out;
+        outline: none;
+        resize: vertical;
+        min-height: 64px;
+      }
+      .text-area::placeholder {
+        color: rgb(var(--canvas-fg-3));
+      }
+      .text-area:focus-visible {
+        background-color: rgb(var(--canvas-bg));
+        border-color: rgb(var(--accent-primary));
+        box-shadow: var(--focus-ring);
+      }
+      .text-area:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .text-area--error {
+        border-color: rgb(var(--status-rose));
+      }
+    `
+
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          :root {
+            --canvas-surface: 27 34 42;
+            --canvas-bg: 20 25 31;
+            --canvas-border: 55 65 81;
+            --canvas-fg-1: 249 250 251;
+            --canvas-fg-3: 156 163 175;
+            --accent-primary: 249 115 22;
+            --status-rose: 244 63 94;
+            --font-sans: Inter, sans-serif;
+            --radius-md: 6px;
+            --text-sm: 0.875rem;
+            --focus-ring: 0 0 0 3px rgba(249, 115, 22, 0.13);
+          }
+          body { margin: 0; padding: 22px; background: rgb(var(--canvas-bg)); }
+          .row { display: flex; flex-direction: column; gap: 16px; max-width: 300px; }
+          ${textareaCss}
+        </style>
+      </head>
+      <body>
+        <div class="row">
+          <textarea class="text-area" placeholder="Default textarea">Sample text</textarea>
+          <textarea class="text-area text-area--error" placeholder="Error textarea">Error message here</textarea>
+          <textarea class="text-area" placeholder="Disabled textarea" disabled>Disabled text</textarea>
+        </div>
+      </body>
+      </html>
+    `)
+
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('text-area-states.png', {
+      maxDiffPixelRatio: 0.1,
+    })
+  })
+
+  test('NumberInput component - default, focus, error states', async ({ page }) => {
+    const numberInputCss = `
+      .number-input {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: rgb(var(--canvas-surface));
+        border: 1px solid rgb(var(--canvas-border));
+        border-radius: var(--radius-md);
+        padding: 7px 10px;
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        color: rgb(var(--canvas-fg-1));
+        transition: all 80ms ease-out;
+        outline: none;
+      }
+      .number-input:focus-visible {
+        background-color: rgb(var(--canvas-bg));
+        border-color: rgb(var(--accent-primary));
+        box-shadow: var(--focus-ring);
+      }
+      .number-input:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .number-input--error {
+        border-color: rgb(var(--status-rose));
+      }
+    `
+
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          :root {
+            --canvas-surface: 27 34 42;
+            --canvas-bg: 20 25 31;
+            --canvas-border: 55 65 81;
+            --canvas-fg-1: 249 250 251;
+            --accent-primary: 249 115 22;
+            --status-rose: 244 63 94;
+            --font-sans: Inter, sans-serif;
+            --radius-md: 6px;
+            --text-sm: 0.875rem;
+            --focus-ring: 0 0 0 3px rgba(249, 115, 22, 0.13);
+          }
+          body { margin: 0; padding: 22px; background: rgb(var(--canvas-bg)); }
+          .row { display: flex; flex-direction: column; gap: 16px; max-width: 300px; }
+          ${numberInputCss}
+        </style>
+      </head>
+      <body>
+        <div class="row">
+          <input type="number" class="number-input" placeholder="Default number" value="42" />
+          <input type="number" class="number-input text-input--error" placeholder="Error number" value="999" />
+          <input type="number" class="number-input" placeholder="Disabled number" value="10" disabled />
+        </div>
+      </body>
+      </html>
+    `)
+
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('number-input-states.png', {
+      maxDiffPixelRatio: 0.1,
+    })
+  })
+
+  test('Select component - default, focus, error states', async ({ page }) => {
+    const selectCss = `
+      .select {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: rgb(var(--canvas-surface));
+        border: 1px solid rgb(var(--canvas-border));
+        border-radius: var(--radius-md);
+        padding: 7px 10px;
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        color: rgb(var(--canvas-fg-1));
+        transition: all 80ms ease-out;
+        outline: none;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23d1d5db' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 32px;
+      }
+      .select:focus-visible {
+        background-color: rgb(var(--canvas-bg));
+        border-color: rgb(var(--accent-primary));
+        box-shadow: var(--focus-ring);
+      }
+      .select:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .select--error {
+        border-color: rgb(var(--status-rose));
+      }
+      .select option {
+        background-color: rgb(var(--canvas-surface));
+        color: rgb(var(--canvas-fg-1));
+      }
+      .select option:checked {
+        background-color: rgb(var(--accent-primary));
+        color: white;
+      }
+    `
+
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          :root {
+            --canvas-surface: 27 34 42;
+            --canvas-bg: 20 25 31;
+            --canvas-border: 55 65 81;
+            --canvas-fg-1: 249 250 251;
+            --accent-primary: 249 115 22;
+            --status-rose: 244 63 94;
+            --font-sans: Inter, sans-serif;
+            --radius-md: 6px;
+            --text-sm: 0.875rem;
+            --focus-ring: 0 0 0 3px rgba(249, 115, 22, 0.13);
+          }
+          body { margin: 0; padding: 22px; background: rgb(var(--canvas-bg)); }
+          .row { display: flex; flex-direction: column; gap: 16px; max-width: 300px; }
+          ${selectCss}
+        </style>
+      </head>
+      <body>
+        <div class="row">
+          <select class="select">
+            <option>Option 1</option>
+            <option selected>Option 2</option>
+            <option>Option 3</option>
+          </select>
+          <select class="select select--error">
+            <option>Option A</option>
+            <option selected>Option B</option>
+          </select>
+          <select class="select" disabled>
+            <option>Option X</option>
+            <option selected>Option Y</option>
+          </select>
+        </div>
+      </body>
+      </html>
+    `)
+
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('select-states.png', {
+      maxDiffPixelRatio: 0.1,
+    })
+  })
+
+  test('TriState checkbox component - checked, unchecked, indeterminate states', async ({ page }) => {
+    const tristateCss = `
+      .tri-state {
+        width: 18px;
+        height: 18px;
+        accent-color: rgb(var(--accent-primary));
+        cursor: pointer;
+        transition: all 80ms ease-out;
+        outline: none;
+      }
+      .tri-state:focus-visible {
+        box-shadow: var(--focus-ring);
+        border-radius: var(--radius-md);
+      }
+      .tri-state:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    `
+
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          :root {
+            --accent-primary: 249 115 22;
+            --canvas-bg: 20 25 31;
+            --radius-md: 6px;
+            --focus-ring: 0 0 0 3px rgba(249, 115, 22, 0.13);
+          }
+          body { margin: 0; padding: 22px; background: rgb(var(--canvas-bg)); }
+          .row { display: flex; gap: 20px; align-items: center; }
+          ${tristateCss}
+        </style>
+      </head>
+      <body>
+        <div class="row">
+          <input type="checkbox" class="tri-state" />
+          <input type="checkbox" class="tri-state" checked />
+          <input type="checkbox" class="tri-state" disabled />
+        </div>
+        <script>
+          const indeterminateCheckbox = document.querySelectorAll('.tri-state')[1];
+          indeterminateCheckbox.indeterminate = false;
+        </script>
+      </body>
+      </html>
+    `)
+
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('tri-state-states.png', {
+      maxDiffPixelRatio: 0.1,
+    })
+  })
+
+  test('Field wrapper component - label, required indicator, error message', async ({ page }) => {
+    const fieldCss = `
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .field__label {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-size: 11.5px;
+        font-weight: 500;
+        color: rgb(var(--canvas-fg-2));
+        letter-spacing: 0.005em;
+      }
+      .field__label > span:first-child {
+        flex: 1;
+      }
+      .field__required {
+        color: rgb(var(--status-rose));
+        margin-left: 3px;
+      }
+      .field__hint {
+        font-size: 10.5px;
+        color: rgb(var(--canvas-fg-3));
+        font-weight: 400;
+      }
+      .field__error {
+        font-size: 11px;
+        color: rgb(var(--status-rose));
+        margin-top: 2px;
+      }
+      .text-input {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: rgb(var(--canvas-surface));
+        border: 1px solid rgb(var(--canvas-border));
+        border-radius: var(--radius-md);
+        padding: 7px 10px;
+        font-family: var(--font-sans);
+        font-size: var(--text-sm);
+        color: rgb(var(--canvas-fg-1));
+        outline: none;
+      }
+      .text-input--error {
+        border-color: rgb(var(--status-rose));
+      }
+    `
+
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          :root {
+            --canvas-surface: 27 34 42;
+            --canvas-border: 55 65 81;
+            --canvas-fg-1: 249 250 251;
+            --canvas-fg-2: 209 213 219;
+            --canvas-fg-3: 156 163 175;
+            --status-rose: 244 63 94;
+            --canvas-bg: 20 25 31;
+            --font-sans: Inter, sans-serif;
+            --radius-md: 6px;
+            --text-sm: 0.875rem;
+          }
+          body { margin: 0; padding: 22px; background: rgb(var(--canvas-bg)); }
+          .column { display: flex; flex-direction: column; gap: 20px; max-width: 300px; }
+          ${fieldCss}
+        </style>
+      </head>
+      <body>
+        <div class="column">
+          <div class="field">
+            <div class="field__label">
+              <span>Class name</span>
+              <span class="field__required">*</span>
+              <span class="field__hint">snake_case</span>
+            </div>
+            <div class="field__input">
+              <input class="text-input" value="organism" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field__label">
+              <span>Description</span>
+              <span class="field__hint">Markdown supported</span>
+            </div>
+            <div class="field__input">
+              <input class="text-input" value="Organism model" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="field__label">
+              <span>Email</span>
+              <span class="field__required">*</span>
+            </div>
+            <div class="field__input">
+              <input class="text-input text-input--error" value="invalid" />
+            </div>
+            <div class="field__error">Please enter a valid email address</div>
+          </div>
+        </div>
+      </body>
+      </html>
+    `)
+
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('field-wrapper.png', {
+      maxDiffPixelRatio: 0.1,
+    })
+  })
 })
