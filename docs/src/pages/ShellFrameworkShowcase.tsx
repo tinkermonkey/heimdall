@@ -130,7 +130,7 @@ export default function ShellFrameworkShowcase() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Icon name="sidebar" size={16} />
+              <Icon name="menu" size={16} />
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 600 }}>Collapse/Expand</h4>
             </div>
             <p style={{ margin: 0, fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>
@@ -164,7 +164,7 @@ export default function ShellFrameworkShowcase() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-              <Icon name="arrow" size={16} />
+              <Icon name="arrowRight" size={16} />
               <h4 style={{ margin: 0, fontSize: '13px', fontWeight: 600 }}>Navigation</h4>
             </div>
             <p style={{ margin: 0, fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>

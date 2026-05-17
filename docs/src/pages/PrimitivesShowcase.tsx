@@ -22,8 +22,7 @@ export default function PrimitivesShowcase() {
         <h2 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: 600 }}>Button Sizes</h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           <Button size="sm">Small</Button>
-          <Button>Medium</Button>
-          <Button size="lg">Large</Button>
+          <Button size="md">Medium</Button>
         </div>
       </section>
 
