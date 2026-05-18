@@ -36,7 +36,7 @@
   gap: 0;
   align-items: center;
   padding: 18px 16px;
-  background: linear-gradient(180deg, rgba(var(--canvas-card-rgb), 0.5) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(var(--canvas-card), 0.5) 0%, transparent 100%);
   overflow-x: auto;
 }
 
