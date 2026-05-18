@@ -1,4 +1,5 @@
 import React from 'react'
+import './Sparkline.css'
 
 export type SparklineColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'neutral'
 
@@ -10,10 +11,10 @@ export interface SparklineProps extends React.SVGAttributes<SVGSVGElement> {
 }
 
 const colorClasses: Record<SparklineColor, string> = {
-  emerald: 'var(--accent-ok)',
+  emerald: 'var(--status-emerald)',
   amber: 'var(--accent-primary)',
-  rose: 'var(--accent-error)',
-  cyan: 'var(--accent-updating)',
+  rose: 'var(--status-rose)',
+  cyan: 'var(--status-cyan)',
   neutral: 'var(--canvas-fg-2)',
 }
 

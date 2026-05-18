@@ -1,4 +1,5 @@
 import React from 'react'
+import './LineChart.css'
 
 export interface LineChartSeries {
   name: string
@@ -18,7 +19,7 @@ export interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
   height?: number
 }
 
-const defaultColors = ['var(--accent-primary)', 'var(--accent-ok)', 'var(--accent-error)', 'var(--accent-updating)', 'var(--canvas-fg-2)']
+const defaultColors = ['rgb(var(--accent-primary))', 'rgb(var(--status-emerald))', 'rgb(var(--status-rose))', 'rgb(var(--status-cyan))', 'rgb(var(--canvas-fg-2))']
 
 export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   (
@@ -66,10 +67,11 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     // Generate Y-axis ticks
     const yTicks = Array.from({ length: yTickCount }, (_, i) => {
-      const value = yMin + (yRange * i) / (yTickCount - 1)
+      const divisor = yTickCount === 1 ? 1 : yTickCount - 1
+      const value = yMin + (yRange * i) / divisor
       return {
         value: value.toFixed(1),
-        y: padding.top + chartHeight - (i / (yTickCount - 1)) * chartHeight,
+        y: padding.top + chartHeight - (i / divisor) * chartHeight,
       }
     })
 
@@ -131,9 +133,11 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           {/* Data series */}
           {series.map((s, seriesIdx) => {
             const color = s.color || defaultColors[seriesIdx % defaultColors.length]
+            const seriesDataLength = s.data.length
+            const divisor = seriesDataLength === 1 ? 1 : seriesDataLength - 1
             const points = s.data.map((value, idx) => {
-              const x = padding.left + (idx / (dataPoints - 1)) * chartWidth
-              const normalizedY = (value - yMin) / yRange
+              const x = padding.left + (idx / divisor) * chartWidth
+              const normalizedY = yRange === 0 ? 0.5 : (value - yMin) / yRange
               const y = svgHeight - padding.bottom - normalizedY * chartHeight
               return { x, y, value }
             })
@@ -181,7 +185,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           {/* X-axis labels */}
           {xLabels.length > 0 &&
             xLabels.map((label, idx) => {
-              const x = padding.left + (idx / (xLabels.length - 1)) * chartWidth
+              const divisor = xLabels.length === 1 ? 1 : xLabels.length - 1
+              const x = padding.left + (idx / divisor) * chartWidth
               return (
                 <text
                   key={`x-label-${idx}`}

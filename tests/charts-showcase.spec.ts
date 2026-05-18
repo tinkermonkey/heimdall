@@ -46,11 +46,32 @@ test.describe('Chart Components', () => {
       // Each sparkline should have 2 polylines (area + line)
       expect(polylineCount).toBeGreaterThan(10)
     })
+
+    test('renders all color variant sparklines', async ({ page }) => {
+      const colors = ['emerald', 'amber', 'rose', 'cyan', 'neutral']
+      for (const color of colors) {
+        const sparkline = page.locator(`svg[data-testid="sparkline-${color}"]`)
+        await expect(sparkline).toBeVisible()
+      }
+    })
+
+    test('renders edge case sparklines', async ({ page }) => {
+      const singlePoint = page.locator('[data-testid="sparkline-single-point"]')
+      const threePoints = page.locator('[data-testid="sparkline-three-points"]')
+      const customSize = page.locator('[data-testid="sparkline-custom-size"]')
+
+      await expect(singlePoint).toBeVisible()
+      await expect(threePoints).toBeVisible()
+      await expect(customSize).toBeVisible()
+    })
   })
 
   test.describe('LineChart Component', () => {
     test('renders line chart with lines', async ({ page }) => {
-      const lines = page.locator('svg line')
+      const lineChart = page.locator('[data-testid="line-chart"]')
+      await expect(lineChart).toBeVisible()
+
+      const lines = lineChart.locator('svg line')
       const lineCount = await lines.count()
 
       // Line chart should have grid lines
@@ -58,11 +79,18 @@ test.describe('Chart Components', () => {
     })
 
     test('renders chart data points', async ({ page }) => {
-      const circles = page.locator('svg circle')
+      const lineChart = page.locator('[data-testid="line-chart"]')
+      const circles = lineChart.locator('svg circle')
       const circleCount = await circles.count()
 
       // Line chart should have data points
       expect(circleCount).toBeGreaterThan(0)
+    })
+
+    test('renders line chart with legend', async ({ page }) => {
+      const lineChart = page.locator('[data-testid="line-chart"]')
+      const legend = lineChart.locator('div').filter({ hasText: 'Series' })
+      await expect(legend.first()).toBeVisible()
     })
   })
 
@@ -93,6 +121,26 @@ test.describe('Chart Components', () => {
       // Widths should vary (not all be the same)
       const uniqueWidths = new Set(widths)
       expect(uniqueWidths.size).toBeGreaterThan(1)
+    })
+
+    test('renders progress bars with correct percent values', async ({ page }) => {
+      const progress0 = page.locator('[data-testid="progress-0"]')
+      const progress50 = page.locator('[data-testid="progress-50"]')
+      const progress100 = page.locator('[data-testid="progress-100"]')
+
+      await expect(progress0).toBeVisible()
+      await expect(progress50).toBeVisible()
+      await expect(progress100).toBeVisible()
+
+      // Verify 0% bar is empty
+      const fill0 = progress0.locator('.progress-bar__fill')
+      const width0 = await fill0.evaluate((el: HTMLElement) => el.style.width)
+      expect(parseFloat(width0)).toBe(0)
+
+      // Verify 100% bar is full
+      const fill100 = progress100.locator('.progress-bar__fill')
+      const width100 = await fill100.evaluate((el: HTMLElement) => el.style.width)
+      expect(parseFloat(width100)).toBe(100)
     })
   })
 
@@ -135,6 +183,18 @@ test.describe('Chart Components', () => {
       const valueText = await firstRow.locator('.metric-row__value').textContent()
       expect(valueText).toBeTruthy()
     })
+
+    test('renders all metric row variants with data-testid', async ({ page }) => {
+      const cpuRow = page.locator('[data-testid="metric-row-cpu"]')
+      const memoryRow = page.locator('[data-testid="metric-row-memory"]')
+      const networkRow = page.locator('[data-testid="metric-row-network"]')
+      const errorRow = page.locator('[data-testid="metric-row-error"]')
+
+      await expect(cpuRow).toBeVisible()
+      await expect(memoryRow).toBeVisible()
+      await expect(networkRow).toBeVisible()
+      await expect(errorRow).toBeVisible()
+    })
   })
 
   test.describe('Light Canvas Mode', () => {
@@ -164,15 +224,19 @@ test.describe('Chart Components', () => {
   })
 
   test.describe('Color Variants', () => {
-    test('sparklines render with different fill opacities', async ({ page }) => {
-      const polylines = page.locator('svg polyline')
-      const count = await polylines.count()
+    test('sparklines render all color variants with correct styling', async ({ page }) => {
+      const colors = ['emerald', 'amber', 'rose', 'cyan', 'neutral']
+      for (const color of colors) {
+        const svg = page.locator(`svg[data-testid="sparkline-${color}"]`)
+        const polylines = svg.locator('polyline')
 
-      // Multiple polylines = multiple sparklines
-      expect(count).toBeGreaterThan(5)
+        // Each sparkline should have area and line polylines
+        const count = await polylines.count()
+        expect(count).toBe(2)
+      }
     })
 
-    test('progress bars apply color classes', async ({ page }) => {
+    test('progress bars apply correct color classes and render', async ({ page }) => {
       const progressBars = page.locator('.progress-bar')
 
       // Get all color classes applied
@@ -186,8 +250,23 @@ test.describe('Chart Components', () => {
         }
       }
 
-      // Should have at least 2 different colors
-      expect(colors.size).toBeGreaterThan(1)
+      // Should have at least 5 different colors (all variants)
+      expect(colors.size).toBe(5)
+    })
+
+    test('all sparkline color variants render without errors', async ({ page }) => {
+      const colors = ['emerald', 'amber', 'rose', 'cyan', 'neutral']
+      for (const color of colors) {
+        const svg = page.locator(`svg[data-testid="sparkline-${color}"]`)
+
+        // Verify SVG is visible (color is rendered)
+        await expect(svg).toBeVisible()
+
+        // Check that polylines have proper fill attributes
+        const fills = svg.locator('polyline[fill]')
+        const count = await fills.count()
+        expect(count).toBeGreaterThan(0)
+      }
     })
   })
 

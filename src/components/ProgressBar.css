@@ -14,7 +14,7 @@
 }
 
 .progress-bar--emerald .progress-bar__fill {
-  background-color: rgb(var(--accent-ok));
+  background-color: rgb(var(--status-emerald));
 }
 
 .progress-bar--amber .progress-bar__fill {
@@ -22,11 +22,11 @@
 }
 
 .progress-bar--rose .progress-bar__fill {
-  background-color: rgb(var(--accent-error));
+  background-color: rgb(var(--status-rose));
 }
 
 .progress-bar--cyan .progress-bar__fill {
-  background-color: rgb(var(--accent-updating));
+  background-color: rgb(var(--status-cyan));
 }
 
 .progress-bar--neutral .progress-bar__fill {

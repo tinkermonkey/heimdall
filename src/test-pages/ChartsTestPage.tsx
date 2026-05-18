@@ -146,24 +146,24 @@ export default function ChartsTestPage() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '300px' }}>
           <div>
-            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>0%</span>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>0% (Emerald)</span>
             <ProgressBar percent={0} color="emerald" data-testid="progress-0" />
           </div>
           <div>
-            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>25%</span>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>25% (Cyan)</span>
             <ProgressBar percent={25} color="cyan" data-testid="progress-25" />
           </div>
           <div>
-            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>50%</span>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>50% (Amber)</span>
             <ProgressBar percent={50} color="amber" data-testid="progress-50" />
           </div>
           <div>
-            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>75%</span>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>75% (Rose)</span>
             <ProgressBar percent={75} color="rose" data-testid="progress-75" />
           </div>
           <div>
-            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>100%</span>
-            <ProgressBar percent={100} color="emerald" data-testid="progress-100" />
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>100% (Neutral)</span>
+            <ProgressBar percent={100} color="neutral" data-testid="progress-100" />
           </div>
         </div>
       </section>
