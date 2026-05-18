@@ -1,0 +1,46 @@
+.form-callout {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  background-color: rgb(var(--canvas-bg));
+  border: 1px solid rgb(var(--canvas-border));
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: rgb(var(--canvas-fg-1));
+}
+
+.form-callout__icon {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: rgb(var(--canvas-fg-3));
+  margin-top: 1px;
+}
+
+.form-callout__body {
+  flex: 1;
+  line-height: 1.5;
+  min-width: 0;
+}
+
+.form-callout__code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background-color: rgb(var(--canvas-card));
+  border: 1px solid rgb(var(--canvas-border));
+  border-radius: 3px;
+  padding: 2px 4px;
+  color: rgb(var(--canvas-fg-1));
+}
+
+/* No icon padding when icon is absent */
+.form-callout:has(.form-callout__icon) {
+  /* Icon is present, normal gap is applied */
+}
+
+.form-callout:not(:has(.form-callout__icon)) .form-callout__body {
+  /* No icon, body takes full width from start */
+}

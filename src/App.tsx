@@ -22,6 +22,7 @@ import NavigationComponentTestPage from './test-pages/NavigationComponentTestPag
 import ChartsTestPage from './test-pages/ChartsTestPage'
 import PagePatternsShowcase from './test-pages/PagePatternsShowcase'
 import ChatShowcase from './test-pages/ChatShowcase'
+import FormsShowcase from './test-pages/FormsShowcase'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -99,6 +100,10 @@ export default function App() {
 
   if (exampleParam === 'chat') {
     return <ChatShowcase />
+  }
+
+  if (exampleParam === 'forms') {
+    return <FormsShowcase />
   }
 
   if (testParam === 'foundation') {
