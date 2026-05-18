@@ -1,15 +1,14 @@
 import React from 'react'
-import './LineChart.css'
+import './BarChart.css'
 
-export interface LineChartSeries {
+export interface BarChartSeries {
   name: string
   data: number[]
   color?: string
-  filled?: boolean
 }
 
-export interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
-  series: LineChartSeries[]
+export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
+  series: BarChartSeries[]
   xLabels?: string[]
   yMin?: number
   yMax?: number
@@ -17,11 +16,12 @@ export interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
   legend?: boolean
   width?: number
   height?: number
+  grouped?: boolean
 }
 
 const defaultColors = ['rgb(245 158 11)', 'rgb(16 185 129)', 'rgb(244 63 94)', 'rgb(34 211 238)', 'rgb(71 85 105)']
 
-export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
+export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
   (
     {
       series,
@@ -32,6 +32,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       legend = false,
       width = 400,
       height = 200,
+      grouped = false,
       className = '',
       ...rest
     },
@@ -77,6 +78,11 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
         y: padding.top + chartHeight - (i / divisor) * chartHeight,
       }
     })
+
+    // Calculate data dimensions
+    const dataPointCount = Math.max(...series.map((s) => s.data.length))
+    const barCount = grouped ? dataPointCount : dataPointCount * series.length
+    const barWidth = chartWidth / (barCount * 1.5)
 
     return (
       <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
@@ -132,54 +138,44 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
             strokeWidth="0.5"
           />
 
-          {/* Data series */}
+          {/* Data series bars */}
           {series.map((s, seriesIdx) => {
             const color = s.color || defaultColors[seriesIdx % defaultColors.length]
             const seriesDataLength = s.data.length
-            const divisor = seriesDataLength === 1 ? 1 : seriesDataLength - 1
-            const points = s.data.map((value, idx) => {
-              const x = padding.left + (idx / divisor) * chartWidth
-              const normalizedY = yRange === 0 ? 0.5 : (value - yMin) / yRange
-              const y = svgHeight - padding.bottom - normalizedY * chartHeight
-              return { x, y, value }
-            })
-
-            const linePointsStr = points.map((p) => `${p.x},${p.y}`).join(' ')
 
             return (
               <g key={`series-${seriesIdx}`}>
-                {/* Filled area if enabled */}
-                {s.filled && (
-                  <polyline
-                    points={[
-                      `${padding.left},${svgHeight - padding.bottom}`,
-                      ...points.map((p) => `${p.x},${p.y}`),
-                      `${padding.left + chartWidth},${svgHeight - padding.bottom}`,
-                    ].join(' ')}
-                    fill={color}
-                    fillOpacity="0.1"
-                    stroke="none"
-                  />
-                )}
+                {s.data.map((value, dataIdx) => {
+                  const normalizedY = yRange === 0 ? 0 : Math.max(0, value - yMin) / yRange
+                  const barHeight = normalizedY * chartHeight
 
-                {/* Line */}
-                <polyline
-                  points={linePointsStr}
-                  fill="none"
-                  stroke={color}
-                  strokeWidth="1"
-                />
+                  let xPos: number
+                  if (grouped) {
+                    // All series side by side at each x position
+                    const xCenter = padding.left + (dataIdx + 0.5) * (chartWidth / seriesDataLength)
+                    const seriesOffset = (seriesIdx - series.length / 2 + 0.5) * barWidth
+                    xPos = xCenter + seriesOffset - barWidth / 2
+                  } else {
+                    // Stacked horizontally
+                    const barIdx = dataIdx * series.length + seriesIdx
+                    xPos = padding.left + (barIdx / barCount) * chartWidth
+                  }
 
-                {/* Data points */}
-                {points.map((p, idx) => (
-                  <circle
-                    key={`point-${seriesIdx}-${idx}`}
-                    cx={p.x}
-                    cy={p.y}
-                    r="1"
-                    fill={color}
-                  />
-                ))}
+                  const yPos = svgHeight - padding.bottom - barHeight
+
+                  return (
+                    <rect
+                      key={`bar-${seriesIdx}-${dataIdx}`}
+                      x={xPos}
+                      y={yPos}
+                      width={barWidth}
+                      height={barHeight}
+                      fill={color}
+                      stroke={color}
+                      strokeWidth="0.5"
+                    />
+                  )
+                })}
               </g>
             )
           })}
@@ -228,6 +224,6 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   }
 )
 
-LineChart.displayName = 'LineChart'
+BarChart.displayName = 'BarChart'
 
-export default LineChart
+export default BarChart

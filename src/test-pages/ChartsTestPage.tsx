@@ -1,5 +1,7 @@
 import { Sparkline } from '../components/Sparkline'
 import { LineChart } from '../components/LineChart'
+import { BarChart } from '../components/BarChart'
+import { PieChart } from '../components/PieChart'
 import { ProgressBar } from '../components/ProgressBar'
 import { MetricRow } from '../components/MetricRow'
 
@@ -126,6 +128,156 @@ export default function ChartsTestPage() {
             width={500}
             height={250}
             data-testid="line-chart"
+          />
+        </div>
+      </section>
+
+      {/* LineChart Edge Cases */}
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          LineChart · Edge Cases
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Empty Data Arrays</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <LineChart
+                series={[
+                  { name: 'Empty A', data: [], color: 'rgb(245, 158, 11)' },
+                  { name: 'Empty B', data: [], color: 'rgb(16, 185, 129)' },
+                ]}
+                width={300}
+                height={150}
+                data-testid="line-chart-empty"
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Single Point</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <LineChart
+                series={[{ name: 'Single', data: [15], color: 'rgb(245, 158, 11)' }]}
+                xLabels={['Jan']}
+                width={300}
+                height={150}
+                data-testid="line-chart-single"
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Negative Values</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <LineChart
+                series={[
+                  {
+                    name: 'Values',
+                    data: [-10, -5, 0, 5, 10, 3, -2],
+                    color: 'rgb(244, 63, 94)',
+                  },
+                ]}
+                xLabels={['A', 'B', 'C', 'D', 'E', 'F', 'G']}
+                width={300}
+                height={150}
+                data-testid="line-chart-negative"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BarChart Section */}
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          BarChart Component · Grouped & Stacked
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Grouped</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <BarChart
+                series={[
+                  { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'rgb(245, 158, 11)' },
+                  { name: 'Series B', data: [8, 12, 10, 14, 16], color: 'rgb(16, 185, 129)' },
+                ]}
+                xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
+                yMin={0}
+                yMax={25}
+                yTickCount={6}
+                legend={true}
+                grouped={true}
+                width={400}
+                height={250}
+                data-testid="bar-chart-grouped"
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Stacked</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <BarChart
+                series={[
+                  { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'rgb(245, 158, 11)' },
+                  { name: 'Series B', data: [8, 12, 10, 14, 16], color: 'rgb(16, 185, 129)' },
+                ]}
+                xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
+                yMin={0}
+                yMax={40}
+                yTickCount={6}
+                legend={true}
+                grouped={false}
+                width={400}
+                height={250}
+                data-testid="bar-chart-stacked"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* PieChart Section */}
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          PieChart Component · Distribution
+        </div>
+        <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px', maxWidth: '500px' }}>
+          <PieChart
+            segments={[
+              { name: 'Component A', value: 35, color: 'rgb(245, 158, 11)' },
+              { name: 'Component B', value: 25, color: 'rgb(16, 185, 129)' },
+              { name: 'Component C', value: 20, color: 'rgb(244, 63, 94)' },
+              { name: 'Component D', value: 20, color: 'rgb(34, 211, 238)' },
+            ]}
+            legend={true}
+            width={300}
+            height={300}
+            data-testid="pie-chart"
           />
         </div>
       </section>
