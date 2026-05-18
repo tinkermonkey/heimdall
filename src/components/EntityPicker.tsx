@@ -13,7 +13,7 @@ export interface EntityPickerResult {
 export interface EntityPickerProps
   extends Omit<
     React.HTMLAttributes<HTMLDivElement>,
-    'onChange' | 'onSelect'
+    'onChange' | 'onSelect' | 'results'
   > {
   query: string
   onQueryChange: (query: string) => void
