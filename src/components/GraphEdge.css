@@ -1,0 +1,85 @@
+.graph-edge {
+  pointer-events: none;
+}
+
+.graph-edge__line {
+  fill: none;
+  stroke: var(--graph-edge, #cbd5e1);
+  stroke-width: 1.25;
+  pointer-events: none;
+  transition:
+    stroke 0.12s,
+    stroke-width 0.12s;
+}
+
+.graph-edge__hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 14;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+.graph-edge--hot .graph-edge__line {
+  stroke: var(--accent-primary, #f59e0b);
+  stroke-width: 1.75;
+}
+
+.graph-edge--irrelevant .graph-edge__line {
+  stroke: var(--accent-rose, #ef4444);
+  stroke-dasharray: 4 4;
+  opacity: 0.85;
+}
+
+.graph-edge--irrelevant.graph-edge--hot .graph-edge__line {
+  stroke: var(--accent-rose, #ef4444);
+  stroke-width: 1.75;
+}
+
+.graph-edge__label {
+  pointer-events: none;
+}
+
+.graph-edge__label-bg {
+  fill: var(--canvas-bg, #ffffff);
+  stroke: var(--canvas-bd, #e5e7eb);
+  stroke-width: 1;
+}
+
+.graph-edge__label-text {
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  font-weight: 500;
+  fill: var(--canvas-fg-2, #6b7280);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
+
+.graph-edge--hot .graph-edge__label-bg {
+  fill: var(--accent-primary-deep, #b45309);
+  stroke: var(--accent-primary-deep, #b45309);
+}
+
+.graph-edge--hot .graph-edge__label-text {
+  fill: #fff;
+  font-weight: 600;
+}
+
+body.dark-canvas .graph-edge__label-bg {
+  fill: var(--canvas-card, #1f2937);
+  stroke: var(--canvas-bd, #374151);
+}
+
+body.dark-canvas .graph-edge__label-text {
+  fill: var(--canvas-fg-2, #d1d5db);
+}
+
+body.dark-canvas .graph-edge--hot .graph-edge__label-bg {
+  fill: var(--accent-primary, #06b6d4);
+  stroke: var(--accent-primary, #06b6d4);
+}
+
+body.dark-canvas .graph-edge--hot .graph-edge__label-text {
+  fill: #0b0f14;
+}

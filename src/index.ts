@@ -52,3 +52,22 @@ export { RelationshipBuilder, type RelationshipBuilderProps, type RelationshipBu
 export { RowMenu, type RowMenuProps, type RowMenuAction } from './components/RowMenu'
 export { PipelineCard, type PipelineCardProps, type PipelineStage } from './components/PipelineCard'
 export { FormCallout, type FormCalloutProps } from './components/FormCallout'
+export {
+  GraphCanvas,
+  GraphCanvasContext,
+  useGraphCanvas,
+  type GraphNode,
+  type GraphEdge,
+  type GraphCanvasContextValue,
+  type GraphCanvasProps,
+} from './components/GraphCanvas'
+export { GraphNode as GraphNodeComponent, type GraphNodeProps } from './components/GraphNode'
+export { GraphEdge as GraphEdgeComponent, type GraphEdgeProps } from './components/GraphEdge'
+export {
+  GraphInspector,
+  type GraphNodeMetadata,
+  type RelationshipLink,
+  type GraphInspectorProps,
+} from './components/GraphInspector'
+export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type TopologyNodeProps } from './components/TopologyNode'
+export { bezierPath, rectEdgePoint, type Point, type BezierPathResult } from './utils/graph'

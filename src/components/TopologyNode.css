@@ -1,0 +1,136 @@
+.topology-node {
+  background: var(--canvas-card, #ffffff);
+  border: 1px solid var(--canvas-bd, #e5e7eb);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 180px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  transition:
+    border-color 0.1s,
+    box-shadow 0.1s;
+  font-family: var(--font-sans, sans-serif);
+  color: var(--canvas-fg-1, #1f2937);
+}
+
+.topology-node:hover {
+  border-color: var(--accent-primary-deep, #b45309);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.topology-node__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.topology-node__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--canvas-fg-1, #1f2937);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topology-node__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  margin-left: 8px;
+  box-shadow: 0 0 8px currentColor;
+  opacity: 0.8;
+}
+
+.topology-node__role {
+  font-size: 11px;
+  color: var(--canvas-fg-3, #9ca3af);
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.topology-node__metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.topology-node__metric-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0 8px;
+  font-size: 11px;
+}
+
+.topology-node__metric-label {
+  grid-column: 1;
+  color: var(--canvas-fg-3, #9ca3af);
+  font-family: var(--font-mono, monospace);
+  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+}
+
+.topology-node__metric-value {
+  grid-column: 2;
+  grid-row: 1;
+  color: var(--canvas-fg-1, #1f2937);
+  font-weight: 600;
+  font-family: var(--font-mono, monospace);
+  white-space: nowrap;
+}
+
+.topology-node__metric-unit {
+  font-size: 9px;
+  color: var(--canvas-fg-3, #9ca3af);
+  margin-left: 2px;
+}
+
+.topology-node__metric-bar {
+  grid-column: 1 / -1;
+  height: 4px;
+  background: var(--canvas-bg-2, #f3f4f6);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.topology-node__metric-fill {
+  height: 100%;
+  width: 100%;
+  transition: width 0.3s ease-out;
+  border-radius: 2px;
+}
+
+.topology-node--ok {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.topology-node--warning {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.topology-node--error {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.topology-node--idle {
+  border-color: rgba(107, 114, 128, 0.2);
+}
+
+body.dark-canvas .topology-node {
+  background: var(--canvas-card, #1f2937);
+  border-color: var(--canvas-bd, #374151);
+  color: var(--canvas-fg-1, #f3f4f6);
+}
+
+body.dark-canvas .topology-node__title {
+  color: var(--canvas-fg-1, #f3f4f6);
+}
+
+body.dark-canvas .topology-node__metric-bar {
+  background: var(--canvas-bg-2, #111827);
+}
