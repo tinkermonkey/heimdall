@@ -123,7 +123,6 @@ test.describe('Forms Components', () => {
 
     test('edits key value', async ({ page }) => {
       const keyInput = page.locator('[data-testid^="key-input-"]').first()
-      const originalValue = await keyInput.inputValue()
       await keyInput.fill('new_key')
       const newValue = await keyInput.inputValue()
       expect(newValue).toBe('new_key')
