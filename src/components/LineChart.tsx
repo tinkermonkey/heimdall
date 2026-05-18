@@ -19,7 +19,7 @@ export interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
   height?: number
 }
 
-const defaultColors = ['rgb(var(--accent-primary))', 'rgb(var(--status-emerald))', 'rgb(var(--status-rose))', 'rgb(var(--status-cyan))', 'rgb(var(--canvas-fg-2))']
+const defaultColors = ['rgb(245 158 11)', 'rgb(16 185 129)', 'rgb(244 63 94)', 'rgb(34 211 238)', 'rgb(71 85 105)']
 
 export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   (
@@ -92,7 +92,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                 y1={tick.y}
                 x2={svgWidth - padding.right}
                 y2={tick.y}
-                stroke="rgb(var(--shell-border))"
+                stroke="rgb(30 42 68)"
                 strokeWidth="0.5"
               />
               {/* Tick label */}
@@ -101,7 +101,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                 y={tick.y + 1}
                 textAnchor="end"
                 fontSize="3"
-                fill="rgb(var(--canvas-fg-2))"
+                fill="rgb(71 85 105)"
               >
                 {tick.value}
               </text>
@@ -114,7 +114,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
             y1={padding.top}
             x2={padding.left}
             y2={svgHeight - padding.bottom}
-            stroke="rgb(var(--shell-border))"
+            stroke="rgb(30 42 68)"
             strokeWidth="0.5"
           />
 
@@ -124,7 +124,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
             y1={svgHeight - padding.bottom}
             x2={svgWidth - padding.right}
             y2={svgHeight - padding.bottom}
-            stroke="rgb(var(--shell-border))"
+            stroke="rgb(30 42 68)"
             strokeWidth="0.5"
           />
 
@@ -192,7 +192,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                   y={svgHeight - padding.bottom + 4}
                   textAnchor="middle"
                   fontSize="3"
-                  fill="rgb(var(--canvas-fg-2))"
+                  fill="rgb(71 85 105)"
                 >
                   {label}
                 </text>

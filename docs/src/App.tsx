@@ -9,6 +9,7 @@ import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from
 import { AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
+import ChartsTestPage from '../../src/test-pages/ChartsTestPage'
 
 type NavSection = {
   title: string
@@ -55,6 +56,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   panel: PanelShowcase,
   drawer: DrawerShowcase,
   'split-pane': SplitPaneShowcase,
+  // Test pages
+  charts: ChartsTestPage,
 }
 
 const NAV_SECTIONS: NavSection[] = [
@@ -143,7 +146,10 @@ function getLabel(id: string): string {
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [currentId, setCurrentId] = useState(DEFAULT_SHOWCASE)
+  const [currentId, setCurrentId] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('example') || DEFAULT_SHOWCASE
+  })
   const [darkCanvas, setDarkCanvas] = useState(() => localStorage.getItem('heimdall-dark-canvas') === '1')
 
   useEffect(() => {
@@ -153,12 +159,13 @@ function App() {
 
   const Showcase = SHOWCASE_MAP[currentId] ?? SHOWCASE_MAP[DEFAULT_SHOWCASE]
   const sectionLabel = NAV_SECTIONS.find(s => s.items.some(i => i.id === currentId))?.title ?? ''
+  const isTestPage = !NAV_SECTIONS.find(s => s.items.some(i => i.id === currentId))
 
   return (
     <ShellLayout
       appTitle={{ title: 'Heimdall', version: 'v0.1.0' }}
       topbar={{
-        breadcrumbs: [
+        breadcrumbs: isTestPage ? undefined : [
           { label: sectionLabel },
           { label: getLabel(currentId) },
         ],
@@ -179,19 +186,19 @@ function App() {
           </button>
         ),
       }}
-      sidebar={{
+      sidebar={isTestPage ? undefined : {
         collapsed: sidebarCollapsed,
         onCollapse: setSidebarCollapsed,
         onSelectItem: setCurrentId,
         sections: NAV_SECTIONS,
         activeItemId: currentId,
       }}
-      statusbar={{
+      statusbar={isTestPage ? undefined : {
         left: <span>heimdall-ui</span>,
         right: <span>{NAV_SECTIONS.reduce((n, s) => n + s.items.length, 0)} components</span>,
       }}
     >
-      <div style={{ padding: '22px 26px 32px', maxWidth: 900 }}>
+      <div style={isTestPage ? {} : { padding: '22px 26px 32px', maxWidth: 900 }}>
         <Showcase />
       </div>
     </ShellLayout>
