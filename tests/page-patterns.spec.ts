@@ -91,18 +91,10 @@ test.describe('Page Pattern Components', () => {
     })
 
     test('displays empty state when no events', async ({ page }) => {
-      const hasEmptyState = await page.evaluate(() => {
-        const emptyElement = document.querySelector('[data-testid="activity-timeline-empty"]')
-        return emptyElement !== null && emptyElement.textContent === 'No activity recorded'
-      })
-
-      if (hasEmptyState) {
-        const emptyState = page.locator('[data-testid="activity-timeline-empty"]')
-        await expect(emptyState).toContainText('No activity recorded')
-      } else {
-        const events = page.locator('[data-testid^="activity-event-"]')
-        await expect(events.first()).toBeVisible()
-      }
+      const emptyTimeline = page.locator('[data-testid="activity-timeline-empty-state"]')
+      const emptyState = emptyTimeline.locator('[data-testid="activity-timeline-empty"]')
+      await expect(emptyState).toBeVisible()
+      await expect(emptyState).toContainText('No activity yet')
     })
   })
 

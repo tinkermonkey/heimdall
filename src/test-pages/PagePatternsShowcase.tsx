@@ -126,11 +126,19 @@ export default function PagePatternsShowcase() {
         </section>
 
         {/* Activity Timeline */}
-        <section>
+        <section style={{ marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
             Recent Activity
           </h2>
           <ActivityTimeline events={activities} emptyState="No activity yet" />
+        </section>
+
+        {/* Activity Timeline - Empty State */}
+        <section>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+            Empty Activity Timeline
+          </h2>
+          <ActivityTimeline events={[]} emptyState="No activity yet" data-testid="activity-timeline-empty-state" />
         </section>
       </div>
     </ShellLayout>
