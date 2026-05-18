@@ -8,6 +8,10 @@ export interface ToolBlockData {
   output?: Array<{ key?: string; value: string }>
 }
 
+export interface ThinkingBlockData {
+  content: string
+}
+
 export interface ChatMessageProps extends React.HTMLAttributes<HTMLDivElement> {
   role: 'user' | 'bot'
   senderName: string
@@ -16,6 +20,7 @@ export interface ChatMessageProps extends React.HTMLAttributes<HTMLDivElement> {
   avatar?: string
   badge?: string
   toolBlock?: ToolBlockData
+  thinkingBlock?: ThinkingBlockData
 }
 
 export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
@@ -28,6 +33,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
       avatar,
       badge,
       toolBlock,
+      thinkingBlock,
       className = '',
       ...props
     },
@@ -52,6 +58,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
             <span className="chat-message__timestamp">{timestamp}</span>
           </div>
           <div className="chat-message__body">{body}</div>
+          {thinkingBlock && <ThinkingBlock content={thinkingBlock.content} />}
           {toolBlock && (
             <ToolBlock
               name={toolBlock.name}
@@ -89,6 +96,10 @@ export const ToolBlock = React.forwardRef<HTMLDivElement, ToolBlockProps>(
     ref
   ) => {
     const [isCollapsed, setIsCollapsed] = React.useState(collapsed)
+
+    React.useEffect(() => {
+      setIsCollapsed(collapsed)
+    }, [collapsed])
 
     const handleToggle = () => {
       const newCollapsed = !isCollapsed
@@ -137,5 +148,65 @@ export const ToolBlock = React.forwardRef<HTMLDivElement, ToolBlockProps>(
 )
 
 ToolBlock.displayName = 'ToolBlock'
+
+export interface ThinkingBlockProps extends React.HTMLAttributes<HTMLDivElement> {
+  content: string
+  collapsed?: boolean
+  onToggleCollapsed?: (collapsed: boolean) => void
+}
+
+export const ThinkingBlock = React.forwardRef<HTMLDivElement, ThinkingBlockProps>(
+  (
+    {
+      content,
+      collapsed = false,
+      onToggleCollapsed,
+      className = '',
+      ...props
+    },
+    ref
+  ) => {
+    const [isCollapsed, setIsCollapsed] = React.useState(collapsed)
+
+    React.useEffect(() => {
+      setIsCollapsed(collapsed)
+    }, [collapsed])
+
+    const handleToggle = () => {
+      const newCollapsed = !isCollapsed
+      setIsCollapsed(newCollapsed)
+      onToggleCollapsed?.(newCollapsed)
+    }
+
+    return (
+      <div
+        ref={ref}
+        className={['thinking-block', className].filter(Boolean).join(' ')}
+        data-testid="thinking-block"
+        {...props}
+      >
+        <button
+          className="thinking-block__header"
+          onClick={handleToggle}
+          aria-expanded={!isCollapsed}
+        >
+          <Icon
+            name={isCollapsed ? 'chevronRight' : 'chevronDown'}
+            size={12}
+            className="thinking-block__toggle-icon"
+          />
+          <span className="thinking-block__label">thinking</span>
+        </button>
+        {!isCollapsed && (
+          <div className="thinking-block__content">
+            {content}
+          </div>
+        )}
+      </div>
+    )
+  }
+)
+
+ThinkingBlock.displayName = 'ThinkingBlock'
 
 export default ChatMessage

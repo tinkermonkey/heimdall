@@ -86,11 +86,14 @@ export default function ChatShowcase() {
           </div>
         </section>
 
-        {/* ToolBlock States */}
+        {/* ToolBlock States & Controlled Collapse */}
         <section style={{ marginBottom: '32px' }}>
           <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: 'rgb(var(--canvas-fg-1))' }}>
-            ToolBlock States
+            ToolBlock States & Controlled Collapse
           </h2>
+          <div style={{ color: 'rgb(var(--canvas-fg-3))', fontSize: '12px', marginBottom: '16px' }}>
+            ToolBlocks support controlled state. Parent can now control expanded/collapsed state via prop updates.
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <ChatMessage
               role="bot"
@@ -130,6 +133,46 @@ export default function ChatShowcase() {
                 name: 'query_database',
                 status: 'error',
                 output: [{ value: 'Connection timeout after 30s' }],
+              }}
+            />
+          </div>
+        </section>
+
+        {/* ThinkingBlock */}
+        <section style={{ marginBottom: '32px' }}>
+          <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: 'rgb(var(--canvas-fg-1))' }}>
+            ThinkingBlock
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <ChatMessage
+              role="bot"
+              senderName="Assistant"
+              badge="EXECUTOR"
+              timestamp="11:03 AM"
+              body="I need to think through this step by step..."
+              thinkingBlock={{
+                content: `Let me break down the problem:
+1. The user asked for statistical analysis
+2. I need to first load the dataset
+3. Then calculate the distribution metrics
+4. Finally, format and return the results
+
+This will require calling analyze_distribution with the dataset parameters.`
+              }}
+            />
+
+            <ChatMessage
+              role="bot"
+              senderName="Planner"
+              badge="ARCHITECT"
+              timestamp="11:04 AM"
+              body="Creating an execution plan for this task."
+              thinkingBlock={{
+                content: `Planning approach:
+- Start with data validation
+- Initialize processing pipeline
+- Run parallel analysis tasks
+- Aggregate and sort results`
               }}
             />
           </div>
