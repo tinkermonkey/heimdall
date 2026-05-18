@@ -6,7 +6,7 @@
 }
 
 .chat-suggestions__pill {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 11px;
   color: rgb(var(--canvas-fg-2, 156, 163, 175));
   background: rgb(var(--canvas-surface, 36, 55, 99));
@@ -22,7 +22,7 @@
 
 .chat-suggestions__pill:hover {
   color: rgb(var(--canvas-fg-1));
-  background: rgb(var(--canvas-surface-2, 48, 71, 120));
+  background: rgb(var(--canvas-surface-2));
   border-color: rgb(var(--canvas-border, 30, 42, 68));
 }
 

@@ -14,7 +14,7 @@
 }
 
 .chat-composer__scope {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.06em;
   color: rgb(var(--canvas-fg-3, 107, 114, 128));
@@ -35,7 +35,7 @@
   border: 1px solid rgb(var(--canvas-border-2, 42, 58, 92));
   padding: 4px 8px;
   border-radius: 4px;
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 11px;
   color: rgb(var(--canvas-fg-2, 156, 163, 175));
 }
@@ -73,7 +73,7 @@
   min-height: 32px;
   max-height: 200px;
   padding: 8px 10px;
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.5;
   color: rgb(var(--canvas-fg-1));
@@ -88,11 +88,11 @@
   color: rgb(var(--canvas-fg-4, 107, 114, 128));
 }
 
-.chat-composer__input:focus {
+.chat-composer__input:focus-visible {
   outline: none;
   border-color: rgb(var(--accent-primary, 245, 158, 11));
   background: rgb(var(--canvas-surface, 36, 55, 99));
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  box-shadow: var(--focus-ring);
 }
 
 .chat-composer__footer {
@@ -103,7 +103,7 @@
 }
 
 .chat-composer__hint {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 10px;
   color: rgb(var(--canvas-fg-4, 107, 114, 128));
   flex: 0 0 auto;

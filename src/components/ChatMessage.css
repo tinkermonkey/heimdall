@@ -11,7 +11,7 @@
   border-radius: 5px;
   display: grid;
   place-items: center;
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
   color: #fff;
@@ -41,7 +41,7 @@
 }
 
 .chat-message__sender {
-  font-family: var(--sans);
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 500;
   color: rgb(var(--canvas-fg-1));
@@ -52,7 +52,7 @@
 }
 
 .chat-message__badge {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -61,7 +61,7 @@
 }
 
 .chat-message__timestamp {
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 10px;
   color: rgb(var(--canvas-fg-4, 107, 114, 128));
   margin-left: auto;
@@ -95,7 +95,7 @@
   background: rgb(var(--canvas-bg-2, 20, 32, 58));
   border: none;
   border-bottom: 1px solid rgb(var(--canvas-border, 30, 42, 68));
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -138,7 +138,7 @@
 
 .tool-block__output {
   padding: 8px 10px;
-  font-family: var(--mono);
+  font-family: var(--font-mono);
   font-size: 11px;
   color: rgb(var(--canvas-fg-2, 156, 163, 175));
   line-height: 1.5;

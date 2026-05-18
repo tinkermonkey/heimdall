@@ -20,6 +20,7 @@
     /* ---- Canvas Surface (light canvas default) ---- */
     --canvas-bg: 255 255 255;
     --canvas-surface: 255 255 255;
+    --canvas-surface-2: 243 244 246;  /* #f3f4f6 — elevated surfaces */
     --canvas-card: 255 255 255;
     --canvas-bg-2: 247 249 251;   /* #f7f9fb */
     --canvas-fg-1: 11 18 32;      /* #0b1220 */
@@ -172,6 +173,7 @@
   body.dark-canvas {
     --canvas-bg: 11 20 38;          /* #0b1426 — canvas page, deeper than shell-bg */
     --canvas-surface: 27 41 73;     /* #1b2949 — elevated panels */
+    --canvas-surface-2: 36 55 99;   /* #243763 — more elevated surfaces */
     --canvas-card: 27 41 73;        /* #1b2949 — panels, stat tiles, drawer */
     --canvas-bg-2: 19 32 58;        /* #13203a — table-header / inset zones, matches shell-bg-2 */
     --canvas-fg-1: 226 232 240;     /* #e2e8f0 — slate-200 */

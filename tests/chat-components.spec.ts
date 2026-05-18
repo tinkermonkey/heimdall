@@ -129,11 +129,16 @@ test.describe('Chat Components', () => {
   test('ChatSuggestions component click interaction', async ({ page }) => {
     // Find suggestion pill
     const suggestion = page.locator('button:has-text("Show me the plan")').first()
+    await expect(suggestion).toBeVisible()
+
+    // Verify suggestion is rendered and clickable
+    const suggestionText = suggestion.textContent()
+    expect(suggestionText).toContain('Show me the plan')
 
     // Click suggestion
     await suggestion.click()
 
-    // Verify click was registered (component state would change)
+    // Verify click was registered by checking component is still visible
     await expect(suggestion).toBeVisible()
   })
 
@@ -179,10 +184,7 @@ test.describe('Chat Components', () => {
     await textarea.press('Enter')
 
     // Input should be cleared on submit
-    const value = await textarea.inputValue()
-    // Note: In a real test, you might want to verify state changed
-    // For now, just verify the field is still visible
-    await expect(textarea).toBeVisible()
+    await expect(textarea).toHaveValue('')
   })
 
   test('ChatComposer keyboard interaction - Shift+Enter inserts newline', async ({ page }) => {
@@ -222,12 +224,15 @@ test.describe('Chat Components', () => {
 
     // Verify the remove button exists in the pill
     const removeButton = contextPill.locator('.chat-composer__context-remove')
-    const isVisible = await removeButton.isVisible().catch(() => false)
+    await expect(removeButton).toBeVisible()
 
-    // If button is visible, click it
-    if (isVisible) {
-      await removeButton.click()
-    }
+    // Click the remove button
+    await removeButton.click()
+
+    // Verify pill was removed (should have one fewer pills after removal)
+    const pillsAfter = composer.locator('.chat-composer__context-pill')
+    const countAfter = await pillsAfter.count()
+    expect(countAfter).toBe(0)
   })
 
   test('ChatContainer component renders bot tabs', async ({ page }) => {
