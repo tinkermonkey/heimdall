@@ -1,5 +1,6 @@
 import React from 'react'
 import './BarChart.css'
+import { chartColors } from './chartColors'
 
 export interface BarChartSeries {
   name: string
@@ -16,10 +17,7 @@ export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   legend?: boolean
   width?: number
   height?: number
-  grouped?: boolean
 }
-
-const defaultColors = ['rgb(245 158 11)', 'rgb(16 185 129)', 'rgb(244 63 94)', 'rgb(34 211 238)', 'rgb(71 85 105)']
 
 export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
   (
@@ -32,7 +30,6 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
       legend = false,
       width = 400,
       height = 200,
-      grouped = false,
       className = '',
       ...rest
     },
@@ -79,10 +76,9 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
       }
     })
 
-    // Calculate data dimensions
+    // Calculate data dimensions (grouped layout: series displayed side-by-side at each x position)
     const dataPointCount = Math.max(...series.map((s) => s.data.length))
-    const barCount = grouped ? dataPointCount : dataPointCount * series.length
-    const barWidth = chartWidth / (barCount * 1.5)
+    const barWidth = chartWidth / (dataPointCount * series.length * 1.5)
 
     return (
       <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
@@ -140,7 +136,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
 
           {/* Data series bars */}
           {series.map((s, seriesIdx) => {
-            const color = s.color || defaultColors[seriesIdx % defaultColors.length]
+            const color = s.color || chartColors[seriesIdx % chartColors.length]
             const seriesDataLength = s.data.length
 
             return (
@@ -149,17 +145,10 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
                   const normalizedY = yRange === 0 ? 0 : Math.max(0, value - yMin) / yRange
                   const barHeight = normalizedY * chartHeight
 
-                  let xPos: number
-                  if (grouped) {
-                    // All series side by side at each x position
-                    const xCenter = padding.left + (dataIdx + 0.5) * (chartWidth / seriesDataLength)
-                    const seriesOffset = (seriesIdx - series.length / 2 + 0.5) * barWidth
-                    xPos = xCenter + seriesOffset - barWidth / 2
-                  } else {
-                    // Stacked horizontally
-                    const barIdx = dataIdx * series.length + seriesIdx
-                    xPos = padding.left + (barIdx / barCount) * chartWidth
-                  }
+                  // All series side by side at each x position
+                  const xCenter = padding.left + (dataIdx + 0.5) * (chartWidth / seriesDataLength)
+                  const seriesOffset = (seriesIdx - series.length / 2 + 0.5) * barWidth
+                  const xPos = xCenter + seriesOffset - barWidth / 2
 
                   const yPos = svgHeight - padding.bottom - barHeight
 
@@ -211,7 +200,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
                     width: '8px',
                     height: '8px',
                     borderRadius: '1px',
-                    backgroundColor: s.color || defaultColors[idx % defaultColors.length],
+                    backgroundColor: s.color || chartColors[idx % chartColors.length],
                   }}
                 />
                 <span>{s.name}</span>

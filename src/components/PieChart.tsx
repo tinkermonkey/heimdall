@@ -1,5 +1,6 @@
 import React from 'react'
 import './PieChart.css'
+import { chartColors } from './chartColors'
 
 export interface PieChartSegment {
   name: string
@@ -13,8 +14,6 @@ export interface PieChartProps extends React.HTMLAttributes<HTMLDivElement> {
   width?: number
   height?: number
 }
-
-const defaultColors = ['rgb(245 158 11)', 'rgb(16 185 129)', 'rgb(244 63 94)', 'rgb(34 211 238)', 'rgb(71 85 105)']
 
 export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
   (
@@ -32,15 +31,17 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
       return null
     }
 
-    // Calculate total value
-    let total = 0
-    for (let i = 0; i < segments.length; i++) {
-      total += segments[i].value
+    // Filter out segments with zero or negative values
+    const validSegments = segments.filter((s) => s.value > 0)
+
+    if (validSegments.length === 0) {
+      return null
     }
 
-    // Handle zero or negative totals
-    if (total <= 0) {
-      return null
+    // Calculate total value from valid segments
+    let total = 0
+    for (let i = 0; i < validSegments.length; i++) {
+      total += validSegments[i].value
     }
 
     // SVG dimensions
@@ -61,7 +62,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
       percentage: number
     }> = []
 
-    segments.forEach((segment, idx) => {
+    validSegments.forEach((segment, idx) => {
       const sliceAngle = (segment.value / total) * 2 * Math.PI
       const endAngle = currentAngle + sliceAngle
       const percentage = (segment.value / total) * 100
@@ -69,7 +70,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
       slices.push({
         startAngle: currentAngle,
         endAngle: endAngle,
-        color: segment.color || defaultColors[idx % defaultColors.length],
+        color: segment.color || chartColors[idx % chartColors.length],
         value: segment.value,
         name: segment.name,
         percentage: percentage,

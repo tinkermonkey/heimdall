@@ -1,5 +1,6 @@
 import React from 'react'
 import './LineChart.css'
+import { chartColors } from './chartColors'
 
 export interface LineChartSeries {
   name: string
@@ -18,8 +19,6 @@ export interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
   width?: number
   height?: number
 }
-
-const defaultColors = ['rgb(245 158 11)', 'rgb(16 185 129)', 'rgb(244 63 94)', 'rgb(34 211 238)', 'rgb(71 85 105)']
 
 export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   (
@@ -134,7 +133,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
 
           {/* Data series */}
           {series.map((s, seriesIdx) => {
-            const color = s.color || defaultColors[seriesIdx % defaultColors.length]
+            const color = s.color || chartColors[seriesIdx % chartColors.length]
             const seriesDataLength = s.data.length
             const divisor = seriesDataLength === 1 ? 1 : seriesDataLength - 1
             const points = s.data.map((value, idx) => {
@@ -215,7 +214,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                     width: '8px',
                     height: '8px',
                     borderRadius: '1px',
-                    backgroundColor: s.color || defaultColors[idx % defaultColors.length],
+                    backgroundColor: s.color || chartColors[idx % chartColors.length],
                   }}
                 />
                 <span>{s.name}</span>

@@ -206,49 +206,23 @@ export default function ChartsTestPage() {
             marginBottom: '14px',
           }}
         >
-          BarChart Component · Grouped & Stacked
+          BarChart Component
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Grouped</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
-              <BarChart
-                series={[
-                  { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'rgb(245, 158, 11)' },
-                  { name: 'Series B', data: [8, 12, 10, 14, 16], color: 'rgb(16, 185, 129)' },
-                ]}
-                xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
-                yMin={0}
-                yMax={25}
-                yTickCount={6}
-                legend={true}
-                grouped={true}
-                width={400}
-                height={250}
-                data-testid="bar-chart-grouped"
-              />
-            </div>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Stacked</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
-              <BarChart
-                series={[
-                  { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'rgb(245, 158, 11)' },
-                  { name: 'Series B', data: [8, 12, 10, 14, 16], color: 'rgb(16, 185, 129)' },
-                ]}
-                xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
-                yMin={0}
-                yMax={40}
-                yTickCount={6}
-                legend={true}
-                grouped={false}
-                width={400}
-                height={250}
-                data-testid="bar-chart-stacked"
-              />
-            </div>
-          </div>
+        <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+          <BarChart
+            series={[
+              { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'rgb(245, 158, 11)' },
+              { name: 'Series B', data: [8, 12, 10, 14, 16], color: 'rgb(16, 185, 129)' },
+            ]}
+            xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
+            yMin={0}
+            yMax={25}
+            yTickCount={6}
+            legend={true}
+            width={400}
+            height={250}
+            data-testid="bar-chart"
+          />
         </div>
       </section>
 
