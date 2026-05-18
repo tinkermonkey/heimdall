@@ -57,16 +57,16 @@
   border-bottom: none;
 }
 
-.key-value-editor__input {
-  min-height: 32px !important;
-  padding: 6px 8px !important;
-  font-size: 13px !important;
+.key-value-editor__row .text-input {
+  min-height: 32px;
+  padding: 6px 8px;
+  font-size: 13px;
 }
 
-.key-value-editor__select {
-  min-height: 32px !important;
-  padding: 6px 8px !important;
-  font-size: 13px !important;
+.key-value-editor__row select {
+  min-height: 32px;
+  padding: 6px 8px;
+  font-size: 13px;
 }
 
 .key-value-editor__remove-btn {

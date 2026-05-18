@@ -2,11 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import './RowMenu.css'
 import { Icon, type IconName } from './Icon'
 
-export interface RowMenuAction {
+export type RowMenuAction = {
   id: string
   label: string
   icon?: IconName
   danger?: boolean
+} | {
+  type: 'separator'
 }
 
 export interface RowMenuProps {
@@ -17,15 +19,16 @@ export interface RowMenuProps {
 }
 
 export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
-  ({ actions, onAction, trigger, triggerIcon = 'moreVertical' }) => {
+  ({ actions, onAction, trigger, triggerIcon = 'moreVertical' }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const dropdownRef = useRef<HTMLDivElement>(null)
     const triggerRef = useRef<HTMLButtonElement>(null)
 
     useEffect(() => {
+      const container = (typeof ref === 'object' && ref !== null) ? ref.current : containerRef.current
       const handleClickOutside = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        if (container && !container.contains(e.target as Node)) {
           setIsOpen(false)
         }
       }
@@ -44,7 +47,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
           document.removeEventListener('keydown', handleEscape)
         }
       }
-    }, [isOpen])
+    }, [isOpen, ref])
 
     const handleActionClick = (actionId: string) => {
       onAction(actionId)
@@ -56,7 +59,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
     }
 
     return (
-      <div ref={containerRef} className="row-menu" data-testid="row-menu">
+      <div ref={ref || containerRef} className="row-menu" data-testid="row-menu">
         <button
           ref={triggerRef}
           className="row-menu__trigger"
@@ -73,22 +76,33 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
             className="row-menu__dropdown"
             data-testid="row-menu-dropdown"
           >
-            {actions.map((action) => (
-              <button
-                key={action.id}
-                className={[
-                  'row-menu__action',
-                  action.danger && 'row-menu__action--danger',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                onClick={() => handleActionClick(action.id)}
-                data-testid={`row-menu-action-${action.id}`}
-              >
-                {action.icon && <Icon name={action.icon} size={16} />}
-                <span className="row-menu__label">{action.label}</span>
-              </button>
-            ))}
+            {actions.map((action, index) => {
+              if ('type' in action && action.type === 'separator') {
+                return (
+                  <div
+                    key={`separator-${index}`}
+                    className="row-menu__separator"
+                    data-testid={`row-menu-separator-${index}`}
+                  />
+                )
+              }
+              return (
+                <button
+                  key={action.id}
+                  className={[
+                    'row-menu__action',
+                    action.danger && 'row-menu__action--danger',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  onClick={() => handleActionClick(action.id)}
+                  data-testid={`row-menu-action-${action.id}`}
+                >
+                  {action.icon && <Icon name={action.icon} size={16} />}
+                  <span className="row-menu__label">{action.label}</span>
+                </button>
+              )
+            })}
           </div>
         )}
       </div>

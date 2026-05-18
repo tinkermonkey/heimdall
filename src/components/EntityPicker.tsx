@@ -27,22 +27,23 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     onSelect,
     onClear,
     placeholder = 'Search entities...',
-  }) => {
+  }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
+      const container = (typeof ref === 'object' && ref !== null) ? ref.current : containerRef.current
       const handleClickOutside = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        if (container && !container.contains(e.target as Node)) {
           setIsOpen(false)
         }
       }
 
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [])
+    }, [ref])
 
     useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,7 +101,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     }
 
     return (
-      <div ref={containerRef} className="entity-picker">
+      <div ref={ref || containerRef} className="entity-picker">
         <div className="entity-picker__input-wrapper">
           <input
             ref={inputRef}

@@ -39,12 +39,12 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
   }, ref) => {
     const handleSourceSelect = (result: EntityPickerResult) => {
       onChange({ ...value, source: result })
-      onSourceClear()
+      onSourceQueryChange('')
     }
 
     const handleTargetSelect = (result: EntityPickerResult) => {
       onChange({ ...value, target: result })
-      onTargetClear()
+      onTargetQueryChange('')
     }
 
     const handlePredicateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

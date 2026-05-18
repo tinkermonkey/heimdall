@@ -219,6 +219,57 @@ export default function FormsShowcase() {
                 { label: 'Status', value: 'healthy' },
               ]}
             />
+
+            <PipelineCard
+              title="Sync user profiles · OAuth"
+              description="Fetch latest profile data from OAuth provider"
+              stages={[
+                { id: '1', name: 'Auth', label: 'pending', icon: 'lock', status: 'pending', statusColor: 'neutral' },
+                { id: '2', name: 'Fetch', label: 'pending', icon: 'download', status: 'pending', statusColor: 'neutral' },
+                { id: '3', name: 'Transform', label: 'pending', icon: 'edit', status: 'pending', statusColor: 'neutral' },
+                { id: '4', name: 'Write', label: 'pending', icon: 'data', status: 'pending', statusColor: 'neutral' },
+              ]}
+              status="waiting"
+              stats={[
+                { label: 'Created', value: 'now' },
+                { label: 'Est. time', value: '2m 30s' },
+                { label: 'Status', value: 'queued' },
+              ]}
+            />
+
+            <PipelineCard
+              title="Process transactions · Stripe"
+              description="Batch process pending transaction records"
+              stages={[
+                { id: '1', name: 'Query', label: 'completed', icon: 'schema', status: 'success', statusColor: 'cyan' },
+                { id: '2', name: 'Validate', label: 'in progress', icon: 'check', status: 'running', statusColor: 'amber' },
+                { id: '3', name: 'Post', label: 'pending', icon: 'send', status: 'pending', statusColor: 'neutral' },
+                { id: '4', name: 'Archive', label: 'pending', icon: 'archive', status: 'pending', statusColor: 'neutral' },
+              ]}
+              status="running"
+              stats={[
+                { label: 'Started', value: '45s ago' },
+                { label: 'Progress', value: '45%' },
+                { label: 'Status', value: 'processing' },
+              ]}
+            />
+
+            <PipelineCard
+              title="Import compliance data"
+              description="Ingest regulatory documentation from external source"
+              stages={[
+                { id: '1', name: 'Connect', label: 'completed', icon: 'link', status: 'success', statusColor: 'cyan' },
+                { id: '2', name: 'Download', label: 'completed', icon: 'download', status: 'success', statusColor: 'violet' },
+                { id: '3', name: 'Parse', label: 'failed', icon: 'alert', status: 'failed', statusColor: 'rose' },
+                { id: '4', name: 'Write', label: 'cancelled', icon: 'x', status: 'failed', statusColor: 'rose' },
+              ]}
+              status="failed"
+              stats={[
+                { label: 'Failed', value: '2m ago' },
+                { label: 'Completed', value: '2 of 4' },
+                { label: 'Error', value: 'parsing_error' },
+              ]}
+            />
           </div>
         </section>
 

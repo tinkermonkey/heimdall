@@ -35,12 +35,3 @@
   padding: 2px 4px;
   color: rgb(var(--canvas-fg-1));
 }
-
-/* No icon padding when icon is absent */
-.form-callout:has(.form-callout__icon) {
-  /* Icon is present, normal gap is applied */
-}
-
-.form-callout:not(:has(.form-callout__icon)) .form-callout__body {
-  /* No icon, body takes full width from start */
-}
