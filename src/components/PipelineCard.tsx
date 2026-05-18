@@ -25,9 +25,9 @@ export interface PipelineCardProps
 }
 
 export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
-  ({ title, description, stages, status, stats = [], ...props }, ref) => {
+  ({ title, description, stages, status, stats = [], className, ...props }, ref) => {
     return (
-      <div ref={ref} className="pipeline-card" data-testid="pipeline-card" {...props}>
+      <div ref={ref} className={['pipeline-card', className].filter(Boolean).join(' ')} data-testid="pipeline-card" {...props}>
         <div className="pipeline-card__header">
           <div>
             <h3 className="pipeline-card__title">{title}</h3>

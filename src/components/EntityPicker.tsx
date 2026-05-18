@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import './EntityPicker.css'
 import { Icon } from './Icon'
 import { Badge, type BadgeColor } from './Badge'
@@ -13,7 +13,7 @@ export interface EntityPickerResult {
 export interface EntityPickerProps
   extends Omit<
     React.HTMLAttributes<HTMLDivElement>,
-    'onChange' | 'onSelect' | 'onQuery' | 'placeholder' | 'results'
+    'onChange' | 'onSelect'
   > {
   query: string
   onQueryChange: (query: string) => void
@@ -31,6 +31,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     onSelect,
     onClear,
     placeholder = 'Search entities...',
+    className,
     ...props
   }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
@@ -81,13 +82,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
       return () => container.removeEventListener('keydown', handleKeyDown)
     }, [isOpen, results, selectedIndex, onSelect])
 
-    useEffect(() => {
-      if (typeof ref === 'function') {
-        ref(containerRef.current)
-      } else if (ref) {
-        ref.current = containerRef.current
-      }
-    }, [ref])
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onQueryChange(e.target.value)
@@ -113,7 +108,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     }
 
     return (
-      <div ref={containerRef} className="entity-picker" {...props}>
+      <div ref={containerRef} className={['entity-picker', className].filter(Boolean).join(' ')} {...props}>
         <div className="entity-picker__input-wrapper">
           <input
             ref={inputRef}

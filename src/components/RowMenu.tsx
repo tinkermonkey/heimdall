@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import './RowMenu.css'
 import { Icon, type IconName } from './Icon'
 
@@ -24,7 +24,7 @@ const isSeparator = (action: RowMenuAction): action is { type: 'separator' } => 
 }
 
 export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
-  ({ actions, onAction, trigger, triggerIcon = 'moreVertical', ...props }, ref) => {
+  ({ actions, onAction, trigger, triggerIcon = 'moreVertical', className, ...props }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const dropdownRef = useRef<HTMLDivElement>(null)
@@ -54,13 +54,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
       }
     }, [isOpen])
 
-    useEffect(() => {
-      if (typeof ref === 'function') {
-        ref(containerRef.current)
-      } else if (ref) {
-        ref.current = containerRef.current
-      }
-    }, [ref])
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
     const handleActionClick = (actionId: string) => {
       onAction(actionId)
@@ -72,7 +66,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
     }
 
     return (
-      <div ref={containerRef} className="row-menu" data-testid="row-menu" {...props}>
+      <div ref={containerRef} className={['row-menu', className].filter(Boolean).join(' ')} data-testid="row-menu" {...props}>
         <button
           ref={triggerRef}
           className="row-menu__trigger"

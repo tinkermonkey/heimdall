@@ -23,7 +23,7 @@ export interface KeyValueEditorProps
 let rowIdCounter = 0
 
 export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorProps>(
-  ({ rows, onChange, datatypeColumn = false, datatypes = ['string', 'number', 'boolean'], ...props }, ref) => {
+  ({ rows, onChange, datatypeColumn = false, datatypes = ['string', 'number', 'boolean'], className, ...props }, ref) => {
     const handleKeyChange = (id: string, newKey: string) => {
       onChange(
         rows.map((row) =>
@@ -63,7 +63,7 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
     }
 
     return (
-      <div ref={ref} className="key-value-editor" data-testid="key-value-editor" {...props}>
+      <div ref={ref} className={['key-value-editor', className].filter(Boolean).join(' ')} data-testid="key-value-editor" {...props}>
         <div className="key-value-editor__table">
           <div className="key-value-editor__header">
             <div className="key-value-editor__col key-value-editor__col--key">Key</div>

@@ -37,6 +37,7 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
     predicates = ['contains', 'relates to', 'depends on', 'is used by'],
     onSourceClear,
     onTargetClear,
+    className,
     ...props
   }, ref) => {
     const handleSourceSelect = (result: EntityPickerResult) => {
@@ -54,7 +55,7 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
     }
 
     return (
-      <div ref={ref} className="relationship-builder" data-testid="relationship-builder" {...props}>
+      <div ref={ref} className={['relationship-builder', className].filter(Boolean).join(' ')} data-testid="relationship-builder" {...props}>
         <div className="relationship-builder__column">
           <label className="relationship-builder__label">Source</label>
           <EntityPicker

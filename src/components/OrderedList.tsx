@@ -16,7 +16,7 @@ export interface OrderedListProps
 }
 
 export const OrderedList = React.forwardRef<HTMLDivElement, OrderedListProps>(
-  ({ items, onChange, primaryItemId, ...props }, ref) => {
+  ({ items, onChange, primaryItemId, className, ...props }, ref) => {
     const handleMoveUp = (index: number) => {
       if (index > 0) {
         const newItems = [...items]
@@ -34,7 +34,7 @@ export const OrderedList = React.forwardRef<HTMLDivElement, OrderedListProps>(
     }
 
     return (
-      <div ref={ref} className="ordered-list" data-testid="ordered-list" {...props}>
+      <div ref={ref} className={['ordered-list', className].filter(Boolean).join(' ')} data-testid="ordered-list" {...props}>
         {items.map((item, index) => (
           <div
             key={item.id}
