@@ -10,5 +10,8 @@ build/
 .idea/
 playwright-report/
 test-results/
-example-context-studio/
-example-homelab-dashboard/
+packages/
+docs/
+tests/
+src/
+.repair_cycle.log

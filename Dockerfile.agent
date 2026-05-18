@@ -67,15 +67,15 @@ EOF
 # ============================================================================
 # Install project fonts system-wide for consistent file:// rendering
 # ============================================================================
-COPY packages/heimdall-ui/public/fonts /usr/share/fonts/heimdall
+COPY public/fonts /usr/share/fonts/heimdall
 RUN fc-cache -f
 
 # ============================================================================
 # Pre-install project dependencies
 # ============================================================================
-WORKDIR /workspace/heimdall/packages/heimdall-ui
+WORKDIR /workspace/heimdall
 
-COPY packages/heimdall-ui/package.json packages/heimdall-ui/package-lock.json ./
+COPY package.json package-lock.json ./
 
 RUN --mount=type=cache,target=/root/.npm \
     npm ci --ignore-scripts
@@ -89,8 +89,7 @@ RUN npx playwright install chromium
 # ============================================================================
 # Fix ownership of pre-installed node_modules and browser cache
 # ============================================================================
-WORKDIR /workspace/heimdall
-RUN chown -R orchestrator:orchestrator /workspace/heimdall/packages/heimdall-ui/node_modules && \
+RUN chown -R orchestrator:orchestrator /workspace/heimdall/node_modules && \
     chmod -R a+r /opt/playwright-browsers
 
 # ============================================================================

@@ -75,8 +75,6 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
       }
     })
 
-    const dataPoints = series[0]?.data?.length || 0
-
     return (
       <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
         <svg
