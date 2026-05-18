@@ -40,3 +40,8 @@ export { FilterBar, type FilterBarProps, type FilterChip } from './components/Fi
 export { ActivityTimeline, type ActivityTimelineProps, type ActivityEvent, type ActivityEventType } from './components/ActivityTimeline'
 export { AlertStrip, type AlertStripProps, type Alert, type AlertSeverity } from './components/AlertStrip'
 export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessTile } from './components/QuickAccessGrid'
+export { ChatMessage, ToolBlock, type ChatMessageProps, type ToolBlockProps, type ToolBlockData } from './components/ChatMessage'
+export { ChatDivider, type ChatDividerProps } from './components/ChatDivider'
+export { ChatSuggestions, type ChatSuggestionsProps } from './components/ChatSuggestions'
+export { ChatComposer, type ChatComposerProps, type ContextItem } from './components/ChatComposer'
+export { ChatContainer, type ChatContainerProps, type BotTab } from './components/ChatContainer'
