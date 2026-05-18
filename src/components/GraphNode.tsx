@@ -1,7 +1,7 @@
 import React from 'react'
 import './GraphNode.css'
 
-export interface GraphNodeProps {
+export interface GraphNodeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   id: string
   x: number
   y: number
@@ -12,9 +12,6 @@ export interface GraphNodeProps {
   width?: number
   height?: number
   onSelect?: (id: string) => void
-  className?: string
-  style?: React.CSSProperties
-  [key: string]: any
 }
 
 const NODE_WIDTH = 138
@@ -34,6 +31,7 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       height = NODE_HEIGHT,
       onSelect,
       className = '',
+      style,
       ...props
     },
     ref
@@ -60,7 +58,7 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
           top: `${y - height / 2}px`,
           width: `${width}px`,
           height: `${height}px`,
-          ...props.style,
+          ...style,
         }}
         data-testid={`graph-node-${id}`}
         data-domain={domainColor}

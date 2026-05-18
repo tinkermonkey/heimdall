@@ -22,6 +22,13 @@ function getNodeWidth(label?: string): number {
   return 168
 }
 
+function getActualNodeDimensions(node: any): { width: number; height: number } {
+  return {
+    width: node.width ?? getNodeWidth(node.label),
+    height: node.height ?? NODE_HEIGHT,
+  }
+}
+
 export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
   (
     { id, sourceId, targetId, label, variant = 'default', className = '', ...props },
@@ -35,14 +42,14 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
 
       if (!sourceNode || !targetNode) return null
 
-      const sourceWidth = getNodeWidth(sourceNode.label)
-      const targetWidth = getNodeWidth(targetNode.label)
+      const sourceDims = getActualNodeDimensions(sourceNode)
+      const targetDims = getActualNodeDimensions(targetNode)
 
       const sourcePoint = rectEdgePoint(
         sourceNode.x,
         sourceNode.y,
-        sourceWidth,
-        NODE_HEIGHT,
+        sourceDims.width,
+        sourceDims.height,
         targetNode.x,
         targetNode.y
       )
@@ -50,8 +57,8 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
       const targetPoint = rectEdgePoint(
         targetNode.x,
         targetNode.y,
-        targetWidth,
-        NODE_HEIGHT,
+        targetDims.width,
+        targetDims.height,
         sourceNode.x,
         sourceNode.y
       )
@@ -69,14 +76,18 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
       .filter(Boolean)
       .join(' ')
 
+    const arrowMarkerId = `arrow-${id}`
+    const arrowRoseMarkerId = `arrow-rose-${id}`
+    const arrowCyanMarkerId = `arrow-cyan-${id}`
+
     const markerUrl =
-      variant === 'hot' ? 'url(#arrow-cyan)' : variant === 'irrelevant' ? 'url(#arrow-rose)' : 'url(#arrow)'
+      variant === 'hot' ? `url(#${arrowCyanMarkerId})` : variant === 'irrelevant' ? `url(#${arrowRoseMarkerId})` : `url(#${arrowMarkerId})`
 
     return (
       <g ref={ref} className={classNames} data-testid={`graph-edge-${id}`} {...props}>
         <defs>
           <marker
-            id="arrow"
+            id={arrowMarkerId}
             viewBox="0 0 10 10"
             refX="9"
             refY="5"
@@ -87,7 +98,7 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
             <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, #94a3b8)" />
           </marker>
           <marker
-            id="arrow-rose"
+            id={arrowRoseMarkerId}
             viewBox="0 0 10 10"
             refX="9"
             refY="5"
@@ -98,7 +109,7 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
             <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent-rose, #f87171)" />
           </marker>
           <marker
-            id="arrow-cyan"
+            id={arrowCyanMarkerId}
             viewBox="0 0 10 10"
             refX="9"
             refY="5"

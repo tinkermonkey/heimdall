@@ -1,13 +1,12 @@
 import React from 'react'
 import './GraphInspector.css'
 
-export interface GraphNodeMetadata {
+export interface GraphNodeMetadata extends Record<string, unknown> {
   id: string
   title: string
   kind?: string
   domain?: string
   description?: string
-  [key: string]: any
 }
 
 export interface RelationshipLink {

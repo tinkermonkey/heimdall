@@ -49,12 +49,14 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
       ...props.style,
     }
 
+    const slugTitle = title.replace(/\s+/g, '-').toLowerCase()
+
     return (
       <div
         ref={ref}
         className={classNames}
         style={style}
-        data-testid={`topology-node-${title}`}
+        data-testid={`topology-node-${slugTitle}`}
         onClick={onSelect}
         {...props}
       >
@@ -63,17 +65,17 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
           <div
             className="topology-node__status-dot"
             style={{ backgroundColor: statusDotColorMap[status] }}
-            data-testid={`topology-status-${title}`}
+            data-testid={`topology-status-${slugTitle}`}
             aria-label={`Status: ${status}`}
           />
         </div>
 
-        <div className="topology-node__role" data-testid={`topology-role-${title}`}>
+        <div className="topology-node__role" data-testid={`topology-role-${slugTitle}`}>
           {role}
         </div>
 
         {metrics.length > 0 && (
-          <div className="topology-node__metrics" data-testid={`topology-metrics-${title}`}>
+          <div className="topology-node__metrics" data-testid={`topology-metrics-${slugTitle}`}>
             {metrics.map((metric, idx) => (
               <div key={idx} className="topology-node__metric-row">
                 <div className="topology-node__metric-label">{metric.label}</div>

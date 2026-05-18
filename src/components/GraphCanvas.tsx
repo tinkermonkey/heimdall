@@ -8,6 +8,8 @@ export interface GraphNode {
   label: string
   kind?: string
   domainColor?: string
+  width?: number
+  height?: number
 }
 
 export interface GraphEdge {

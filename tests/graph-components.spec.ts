@@ -79,6 +79,10 @@ test.describe('Graph Canvas Components', () => {
   test('GraphInspector displays empty state when no node selected', async ({ page }) => {
     const emptyState = page.locator('[data-testid="inspector-empty"]')
 
+    // Verify empty state is visible on initial load
+    await expect(emptyState).toBeVisible()
+
+    // Click a node to dismiss the empty state
     const allNodes = page.locator('[data-testid^="graph-node-"]')
     const firstNode = allNodes.first()
 
