@@ -132,7 +132,7 @@ test.describe('Chat Components', () => {
     await expect(suggestion).toBeVisible()
 
     // Verify suggestion is rendered and clickable
-    const suggestionText = suggestion.textContent()
+    const suggestionText = await suggestion.textContent()
     expect(suggestionText).toContain('Show me the plan')
 
     // Click suggestion
