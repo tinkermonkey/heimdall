@@ -12,7 +12,8 @@ export interface PipelineStage {
   statusColor?: BadgeColor
 }
 
-export interface PipelineCardProps {
+export interface PipelineCardProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   description?: string
   stages: PipelineStage[]
@@ -24,9 +25,9 @@ export interface PipelineCardProps {
 }
 
 export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
-  ({ title, description, stages, status, stats = [] }, ref) => {
+  ({ title, description, stages, status, stats = [], ...props }, ref) => {
     return (
-      <div ref={ref} className="pipeline-card" data-testid="pipeline-card">
+      <div ref={ref} className="pipeline-card" data-testid="pipeline-card" {...props}>
         <div className="pipeline-card__header">
           <div>
             <h3 className="pipeline-card__title">{title}</h3>

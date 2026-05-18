@@ -9,7 +9,8 @@ export interface RelationshipBuilderValue {
   target?: EntityPickerResult
 }
 
-export interface RelationshipBuilderProps {
+export interface RelationshipBuilderProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value: RelationshipBuilderValue
   onChange: (value: RelationshipBuilderValue) => void
   sourceResults?: EntityPickerResult[]
@@ -36,6 +37,7 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
     predicates = ['contains', 'relates to', 'depends on', 'is used by'],
     onSourceClear,
     onTargetClear,
+    ...props
   }, ref) => {
     const handleSourceSelect = (result: EntityPickerResult) => {
       onChange({ ...value, source: result })
@@ -52,7 +54,7 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
     }
 
     return (
-      <div ref={ref} className="relationship-builder" data-testid="relationship-builder">
+      <div ref={ref} className="relationship-builder" data-testid="relationship-builder" {...props}>
         <div className="relationship-builder__column">
           <label className="relationship-builder__label">Source</label>
           <EntityPicker

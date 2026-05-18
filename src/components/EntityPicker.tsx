@@ -10,7 +10,11 @@ export interface EntityPickerResult {
   domainColor?: BadgeColor
 }
 
-export interface EntityPickerProps {
+export interface EntityPickerProps
+  extends Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    'onChange' | 'onSelect' | 'onQuery' | 'placeholder' | 'results'
+  > {
   query: string
   onQueryChange: (query: string) => void
   results?: EntityPickerResult[]
@@ -27,6 +31,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     onSelect,
     onClear,
     placeholder = 'Search entities...',
+    ...props
   }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(0)
@@ -34,7 +39,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-      const container = (typeof ref === 'object' && ref !== null) ? ref.current : containerRef.current
+      const container = containerRef.current
       const handleClickOutside = (e: MouseEvent) => {
         if (container && !container.contains(e.target as Node)) {
           setIsOpen(false)
@@ -43,12 +48,13 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
 
       document.addEventListener('mousedown', handleClickOutside)
       return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [ref])
+    }, [])
 
     useEffect(() => {
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (!isOpen) return
+      const container = containerRef.current
+      if (!container || !isOpen) return
 
+      const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           e.preventDefault()
           setIsOpen(false)
@@ -71,11 +77,17 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
         }
       }
 
-      if (isOpen) {
-        document.addEventListener('keydown', handleKeyDown)
-        return () => document.removeEventListener('keydown', handleKeyDown)
-      }
+      container.addEventListener('keydown', handleKeyDown)
+      return () => container.removeEventListener('keydown', handleKeyDown)
     }, [isOpen, results, selectedIndex, onSelect])
+
+    useEffect(() => {
+      if (typeof ref === 'function') {
+        ref(containerRef.current)
+      } else if (ref) {
+        ref.current = containerRef.current
+      }
+    }, [ref])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onQueryChange(e.target.value)
@@ -101,7 +113,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     }
 
     return (
-      <div ref={ref || containerRef} className="entity-picker">
+      <div ref={containerRef} className="entity-picker" {...props}>
         <div className="entity-picker__input-wrapper">
           <input
             ref={inputRef}

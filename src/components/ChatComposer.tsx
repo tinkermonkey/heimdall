@@ -8,7 +8,8 @@ export interface ContextItem {
   label: string
 }
 
-export interface ChatComposerProps {
+export interface ChatComposerProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onSubmit' | 'placeholder' | 'value'> {
   placeholder?: string
   value: string
   onChange: (value: string) => void
@@ -16,7 +17,6 @@ export interface ChatComposerProps {
   onContextChange?: (items: ContextItem[]) => void
   scopeLabel?: string
   contextItems?: ContextItem[]
-  className?: string
 }
 
 export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
@@ -29,7 +29,8 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       onContextChange,
       scopeLabel,
       contextItems = [],
-      className = '',
+      className,
+      ...props
     },
     ref
   ) => {
@@ -71,6 +72,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
         ref={ref}
         className={['chat-composer', className].filter(Boolean).join(' ')}
         data-testid="chat-composer"
+        {...props}
       >
         <div className="chat-composer__tools">
           {scopeLabel && (

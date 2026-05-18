@@ -12,15 +12,18 @@ export interface KeyValueRow {
   datatype?: string
 }
 
-export interface KeyValueEditorProps {
+export interface KeyValueEditorProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   rows: KeyValueRow[]
   onChange: (rows: KeyValueRow[]) => void
   datatypeColumn?: boolean
   datatypes?: string[]
 }
 
+let rowIdCounter = 0
+
 export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorProps>(
-  ({ rows, onChange, datatypeColumn = false, datatypes = ['string', 'number', 'boolean'] }, ref) => {
+  ({ rows, onChange, datatypeColumn = false, datatypes = ['string', 'number', 'boolean'], ...props }, ref) => {
     const handleKeyChange = (id: string, newKey: string) => {
       onChange(
         rows.map((row) =>
@@ -51,7 +54,7 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
 
     const handleAddRow = () => {
       const newRow: KeyValueRow = {
-        id: `row-${Date.now()}`,
+        id: `row-${++rowIdCounter}`,
         key: '',
         value: '',
         ...(datatypeColumn && { datatype: 'string' }),
@@ -60,7 +63,7 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
     }
 
     return (
-      <div ref={ref} className="key-value-editor" data-testid="key-value-editor">
+      <div ref={ref} className="key-value-editor" data-testid="key-value-editor" {...props}>
         <div className="key-value-editor__table">
           <div className="key-value-editor__header">
             <div className="key-value-editor__col key-value-editor__col--key">Key</div>
