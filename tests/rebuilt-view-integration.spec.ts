@@ -146,7 +146,7 @@ test.describe('Rebuilt View Integration Tests', () => {
     // Load the original reference HTML
     const originalPage = await context.newPage()
     const __dirname = path.dirname(fileURLToPath(import.meta.url))
-    const refHtmlPath = 'file://' + path.resolve(__dirname, '../../../design-reference/example-context-studio/Context Studio.html')
+    const refHtmlPath = 'file://' + path.resolve(__dirname, '../design-reference/example-context-studio/Context Studio.html')
     await originalPage.goto(refHtmlPath)
     await originalPage.waitForLoadState('networkidle')
 
