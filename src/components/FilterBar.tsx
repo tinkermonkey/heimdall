@@ -36,10 +36,6 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       onSearchChange?.(value)
     }
 
-    const handleRemoveFilter = (filterId: string) => {
-      onFilterRemove?.(filterId)
-    }
-
     const classNames = ['filter-bar', className].filter(Boolean).join(' ')
 
     return (
@@ -67,7 +63,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
                 <span className="filter-bar__chip-label">{filter.label}</span>
                 <button
                   className="filter-bar__chip-close"
-                  onClick={() => handleRemoveFilter(filter.id)}
+                  onClick={() => onFilterRemove?.(filter.id)}
                   aria-label={`Remove ${filter.label} filter`}
                   data-testid={`filter-chip-close-${filter.id}`}
                 >

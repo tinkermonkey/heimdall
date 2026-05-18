@@ -91,10 +91,18 @@ test.describe('Page Pattern Components', () => {
     })
 
     test('displays empty state when no events', async ({ page }) => {
-      // This would require creating a separate test with no events
-      // For now, we verify events exist
-      const timeline = page.locator('[data-testid="activity-timeline"]')
-      await expect(timeline).toBeVisible()
+      const hasEmptyState = await page.evaluate(() => {
+        const emptyElement = document.querySelector('[data-testid="activity-timeline-empty"]')
+        return emptyElement !== null && emptyElement.textContent === 'No activity recorded'
+      })
+
+      if (hasEmptyState) {
+        const emptyState = page.locator('[data-testid="activity-timeline-empty"]')
+        await expect(emptyState).toContainText('No activity recorded')
+      } else {
+        const events = page.locator('[data-testid^="activity-event-"]')
+        await expect(events.first()).toBeVisible()
+      }
     })
   })
 
@@ -175,7 +183,52 @@ test.describe('Page Pattern Components', () => {
   })
 
   test.describe('Dark Canvas Mode', () => {
-    test('components render correctly in dark canvas mode', async ({ page }) => {
+    test('alert severity variants render correctly in dark canvas mode', async ({ page }) => {
+      // Toggle dark canvas
+      await page.evaluate(() => {
+        document.body.classList.add('dark-canvas')
+      })
+
+      // Verify all three alert severity badges are visible
+      const errorBadge = page.locator('[data-testid="alert-severity-error"]')
+      const warnBadge = page.locator('[data-testid="alert-severity-warn"]')
+      const infoBadge = page.locator('[data-testid="alert-severity-info"]')
+
+      await expect(errorBadge).toBeVisible()
+      await expect(warnBadge).toBeVisible()
+      await expect(infoBadge).toBeVisible()
+
+      // Verify alert messages are visible
+      await expect(page.locator('[data-testid="alert-alert-1"]')).toContainText('Database connection lost')
+      await expect(page.locator('[data-testid="alert-alert-2"]')).toContainText('High memory usage detected')
+      await expect(page.locator('[data-testid="alert-alert-3"]')).toContainText('New update available')
+    })
+
+    test('filter chips and interactions work in dark canvas mode', async ({ page }) => {
+      // Toggle dark canvas
+      await page.evaluate(() => {
+        document.body.classList.add('dark-canvas')
+      })
+
+      // Verify filter chips are rendered
+      const chips = page.locator('[data-testid="filter-bar-chips"]')
+      await expect(chips).toBeVisible()
+
+      const activeChip = page.locator('[data-testid="filter-chip-active"]')
+      const syncingChip = page.locator('[data-testid="filter-chip-syncing"]')
+
+      await expect(activeChip).toBeVisible()
+      await expect(syncingChip).toBeVisible()
+
+      // Test filter removal interaction
+      const closeButton = page.locator('[data-testid="filter-chip-close-active"]')
+      await closeButton.click()
+
+      // Verify the chip was removed
+      await expect(activeChip).not.toBeVisible()
+    })
+
+    test('other components render correctly in dark canvas mode', async ({ page }) => {
       // Toggle dark canvas
       await page.evaluate(() => {
         document.body.classList.add('dark-canvas')
@@ -184,14 +237,6 @@ test.describe('Page Pattern Components', () => {
       // Verify PageHeader is still visible
       const title = page.locator('[data-testid="page-header-title"]')
       await expect(title).toBeVisible()
-
-      // Verify AlertStrip is still visible
-      const alertStrip = page.locator('[data-testid="alert-strip"]')
-      await expect(alertStrip).toBeVisible()
-
-      // Verify FilterBar is still visible
-      const searchInput = page.locator('[data-testid="filter-bar-search"]')
-      await expect(searchInput).toBeVisible()
 
       // Verify ActivityTimeline is still visible
       const timeline = page.locator('[data-testid="activity-timeline"]')

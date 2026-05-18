@@ -21,10 +21,6 @@ export const QuickAccessGrid = React.forwardRef<HTMLDivElement, QuickAccessGridP
   ({ tiles, onAction, columns = 4, className = '', ...props }, ref) => {
     const classNames = ['quick-access-grid', className].filter(Boolean).join(' ')
 
-    const handleTileClick = (tileId: string) => {
-      onAction?.(tileId)
-    }
-
     return (
       <div
         ref={ref}
@@ -37,7 +33,7 @@ export const QuickAccessGrid = React.forwardRef<HTMLDivElement, QuickAccessGridP
           <button
             key={tile.id}
             className="quick-access-tile"
-            onClick={() => handleTileClick(tile.id)}
+            onClick={() => onAction?.(tile.id)}
             data-testid={`quick-access-tile-${tile.id}`}
           >
             <div className="quick-access-tile__icon">
