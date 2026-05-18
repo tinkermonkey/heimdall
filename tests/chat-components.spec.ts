@@ -143,17 +143,11 @@ test.describe('Chat Components', () => {
   })
 
   test('ChatSuggestions renders nothing when empty', async ({ page }) => {
-    // Find the "Empty suggestions" section
-    const emptySectionText = page.locator('text="Empty suggestions:"')
-
-    // Get the next suggestions component (should render nothing)
-    const page_content = page.locator('div')
-
     // Count all suggestion components
     const allSuggestions = page.locator('[data-testid="chat-suggestions"]')
     const count = await allSuggestions.count()
 
-    // There should only be 1 visible (the one with suggestions)
+    // There should only be 1 visible (the one with suggestions, empty one renders null)
     expect(count).toBe(1)
   })
 
@@ -297,9 +291,8 @@ test.describe('Chat Components', () => {
     const toggleButton = page.locator('button:has-text("Toggle Dark Canvas Mode")')
     await toggleButton.click()
 
-    // Verify dark class was added
-    const body = page.locator('body')
-    await page.waitForTimeout(100) // Wait for class update
+    // Wait for class update
+    await page.waitForTimeout(100)
 
     // Verify all key components are still visible
     await expect(page.locator('[data-testid="chat-message-user-variant"]')).toBeVisible()
