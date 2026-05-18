@@ -10,6 +10,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      '@': path.resolve(__dirname, '../src'),
       // Point at source so token/component changes are live without rebuilding the package
       '@tinkermonkey/heimdall-ui/css': path.resolve(__dirname, '../src/tokens/tokens.css'),
       '@tinkermonkey/heimdall-ui': path.resolve(__dirname, '../src/index.ts'),

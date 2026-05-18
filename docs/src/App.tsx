@@ -9,6 +9,16 @@ import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from
 import { AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
+import PrimitivesTestPage from '@/test-pages/PrimitivesTestPage'
+import DataDisplayTestPage from '@/test-pages/DataDisplayTestPage'
+import OverlayComponentsTestPage from '@/test-pages/OverlayComponentsTestPage'
+import AdvancedOverlayComponentsTestPage from '@/test-pages/AdvancedOverlayComponentsTestPage'
+import FoundationTestPage from '@/test-pages/FoundationTestPage'
+import ShellFrameworkTestPage from '@/test-pages/ShellFrameworkTestPage'
+import NavigationComponentTestPage from '@/test-pages/NavigationComponentTestPage'
+import ChartsTestPage from '@/test-pages/ChartsTestPage'
+import ContextStudioRebuilt from '@/examples/ContextStudioRebuilt'
+import HomelabDashboardRebuilt from '@/examples/HomelabDashboardRebuilt'
 
 type NavSection = {
   title: string
@@ -21,11 +31,13 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   typography: TypographyShowcase,
   spacing: SpacingShowcase,
   radius: RadiusShowcase,
+  foundation: FoundationTestPage,
   // Primitives
   icon: IconShowcase,
   button: ButtonShowcase,
   chip: ChipShowcase,
   badge: BadgeShowcase,
+  primitives: PrimitivesTestPage,
   // Inputs
   'text-input': TextInputShowcase,
   'text-area': TextAreaShowcase,
@@ -37,24 +49,34 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'stat-tile': StatTileShowcase,
   'stat-grid': StatGridShowcase,
   table: TableShowcase,
+  'data-display': DataDisplayTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
   sidebar: SidebarShowcase,
   topbar: TopbarShowcase,
   'tab-bar': TabBarShowcase,
+  navigation: NavigationComponentTestPage,
   // Shell
   'app-title': AppTitleShowcase,
   statusbar: StatusbarShowcase,
   'shell-layout': ShellLayoutShowcase,
+  shell: ShellFrameworkTestPage,
   // Overlays
   modal: ModalShowcase,
   'confirm-dialog': ConfirmDialogShowcase,
   toast: ToastShowcase,
   'command-palette': CommandPaletteShowcase,
+  overlays: OverlayComponentsTestPage,
+  'advanced-overlays': AdvancedOverlayComponentsTestPage,
   // Layout
   panel: PanelShowcase,
   drawer: DrawerShowcase,
   'split-pane': SplitPaneShowcase,
+  // Charts
+  charts: ChartsTestPage,
+  // Rebuilt Examples
+  rebuilt: ContextStudioRebuilt,
+  homelab: HomelabDashboardRebuilt,
 }
 
 const NAV_SECTIONS: NavSection[] = [

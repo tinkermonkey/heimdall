@@ -1,11 +1,13 @@
 import React from 'react'
 import { AppTitle, AppTitleProps } from './AppTitle'
+import { Titlebar, TitlebarProps } from './Titlebar'
 import { Statusbar, StatusbarProps } from './Statusbar'
 import { Sidebar, SidebarProps } from './Sidebar'
 import { Topbar, TopbarProps } from './Topbar'
 import './ShellLayout.css'
 
 export interface ShellLayoutProps {
+  titlebar?: TitlebarProps & { hide?: boolean }
   appTitle?: AppTitleProps & { hide?: boolean }
   topbar?: TopbarProps & { hide?: boolean }
   sidebar?: SidebarProps & { hide?: boolean }
@@ -17,6 +19,7 @@ export interface ShellLayoutProps {
 export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
   (
     {
+      titlebar,
       appTitle,
       topbar,
       sidebar,
@@ -28,6 +31,9 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     ref
   ) => {
     const classNames = ['shell-layout', className].filter(Boolean).join(' ')
+
+    const { hide: _titlebarHide, ...titlebarProps } = titlebar ?? {} as TitlebarProps & { hide?: boolean }
+    const renderTitlebar = titlebar && !titlebar.hide
 
     const { hide: _appTitleHide, ...appTitleProps } = appTitle ?? {} as AppTitleProps & { hide?: boolean }
     const renderAppTitle = appTitle && !appTitle.hide
@@ -45,6 +51,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
 
     return (
       <div ref={ref} className={classNames} {...props}>
+        {renderTitlebar && <Titlebar {...titlebarProps} />}
         <div className="shell-layout__main">
           {renderSidebar ? (
             <div className="shell-layout__sidebar-col">

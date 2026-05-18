@@ -5,6 +5,7 @@ import {
   Icon,
   StatTile,
   ShellLayout,
+  Titlebar,
 } from '../index'
 
 export default function ContextStudioRebuilt() {
@@ -26,6 +27,7 @@ export default function ContextStudioRebuilt() {
 
   return (
     <ShellLayout
+      titlebar={{}}
       appTitle={{ title: 'Context Studio', version: 'v0.4.1' }}
       topbar={{
         breadcrumbs: [

@@ -5,6 +5,7 @@ import {
   Icon,
   StatTile,
   ShellLayout,
+  Titlebar,
 } from '../index'
 
 export default function HomelabDashboardRebuilt() {
@@ -25,6 +26,7 @@ export default function HomelabDashboardRebuilt() {
 
   return (
     <ShellLayout
+      titlebar={{}}
       appTitle={{ title: 'Homelab', version: 'v1.0.0' }}
       topbar={{
         breadcrumbs: [
