@@ -244,7 +244,7 @@ export default function FormsShowcase() {
                 { id: '1', name: 'Query', label: 'completed', icon: 'schema', status: 'success', statusColor: 'cyan' },
                 { id: '2', name: 'Validate', label: 'in progress', icon: 'check', status: 'running', statusColor: 'amber' },
                 { id: '3', name: 'Post', label: 'pending', icon: 'send', status: 'pending', statusColor: 'neutral' },
-                { id: '4', name: 'Archive', label: 'pending', icon: 'archive', status: 'pending', statusColor: 'neutral' },
+                { id: '4', name: 'Archive', label: 'pending', icon: 'lock', status: 'pending', statusColor: 'neutral' },
               ]}
               status="running"
               stats={[

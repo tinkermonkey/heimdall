@@ -18,6 +18,10 @@ export interface RowMenuProps {
   triggerIcon?: IconName
 }
 
+const isSeparator = (action: RowMenuAction): action is { type: 'separator' } => {
+  return 'type' in action && action.type === 'separator'
+}
+
 export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
   ({ actions, onAction, trigger, triggerIcon = 'moreVertical' }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
@@ -76,17 +80,14 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
             className="row-menu__dropdown"
             data-testid="row-menu-dropdown"
           >
-            {actions.map((action, index) => {
-              if ('type' in action && action.type === 'separator') {
-                return (
-                  <div
-                    key={`separator-${index}`}
-                    className="row-menu__separator"
-                    data-testid={`row-menu-separator-${index}`}
-                  />
-                )
-              }
-              return (
+            {actions.map((action, index) =>
+              isSeparator(action) ? (
+                <div
+                  key={`separator-${index}`}
+                  className="row-menu__separator"
+                  data-testid={`row-menu-separator-${index}`}
+                />
+              ) : (
                 <button
                   key={action.id}
                   className={[
@@ -102,7 +103,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
                   <span className="row-menu__label">{action.label}</span>
                 </button>
               )
-            })}
+            )}
           </div>
         )}
       </div>
