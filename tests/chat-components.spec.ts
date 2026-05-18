@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test'
-import { loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import {
+  loadSelfHostedFonts,
+  assertFontsLoaded,
+  freezeAnimations,
+  applyDarkCanvasMode,
+  removeDarkCanvasMode,
+} from './utils/test-helpers'
 
 test.describe('Chat Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -12,6 +18,14 @@ test.describe('Chat Components', () => {
 
     // Verify fonts are loaded
     await assertFontsLoaded(page)
+
+    // Freeze animations for consistent snapshots
+    await freezeAnimations(page)
+  })
+
+  test.afterEach(async ({ page }) => {
+    // Ensure we exit dark canvas mode after each test
+    await removeDarkCanvasMode(page)
   })
 
   test('ChatMessage component renders user message', async ({ page }) => {
@@ -306,5 +320,73 @@ test.describe('Chat Components', () => {
     await toggleButton.click()
     await page.waitForTimeout(100)
     await expect(page.locator('[data-testid="chat-message-user-variant"]')).toBeVisible()
+  })
+
+  test.describe('Visual Regression - Light Canvas', () => {
+    test('ChatMessage user variant visual snapshot', async ({ page }) => {
+      const userMessage = page.locator('[data-testid="chat-message-user-variant"]')
+      await expect(userMessage).toHaveScreenshot('chat-message-user-light.png')
+    })
+
+    test('ChatMessage bot variant visual snapshot', async ({ page }) => {
+      const botMessage = page.locator('[data-testid="chat-message-bot-variant"]')
+      await expect(botMessage).toHaveScreenshot('chat-message-bot-light.png')
+    })
+
+    test('ToolBlock component visual snapshot', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').first()
+      await expect(toolBlock).toHaveScreenshot('tool-block-light.png')
+    })
+
+    test('ChatDivider component visual snapshot', async ({ page }) => {
+      const divider = page.locator('[data-testid="chat-divider"]').first()
+      await expect(divider).toHaveScreenshot('chat-divider-light.png')
+    })
+
+    test('ChatComposer component visual snapshot', async ({ page }) => {
+      const composer = page.locator('[data-testid="chat-composer"]')
+      await expect(composer).toHaveScreenshot('chat-composer-light.png')
+    })
+
+    test('ChatContainer component visual snapshot', async ({ page }) => {
+      const container = page.locator('[data-testid="chat-container"]')
+      await expect(container).toHaveScreenshot('chat-container-light.png')
+    })
+  })
+
+  test.describe('Visual Regression - Dark Canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('ChatMessage user variant visual snapshot in dark mode', async ({ page }) => {
+      const userMessage = page.locator('[data-testid="chat-message-user-variant"]')
+      await expect(userMessage).toHaveScreenshot('chat-message-user-dark.png')
+    })
+
+    test('ChatMessage bot variant visual snapshot in dark mode', async ({ page }) => {
+      const botMessage = page.locator('[data-testid="chat-message-bot-variant"]')
+      await expect(botMessage).toHaveScreenshot('chat-message-bot-dark.png')
+    })
+
+    test('ToolBlock component visual snapshot in dark mode', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').first()
+      await expect(toolBlock).toHaveScreenshot('tool-block-dark.png')
+    })
+
+    test('ChatDivider component visual snapshot in dark mode', async ({ page }) => {
+      const divider = page.locator('[data-testid="chat-divider"]').first()
+      await expect(divider).toHaveScreenshot('chat-divider-dark.png')
+    })
+
+    test('ChatComposer component visual snapshot in dark mode', async ({ page }) => {
+      const composer = page.locator('[data-testid="chat-composer"]')
+      await expect(composer).toHaveScreenshot('chat-composer-dark.png')
+    })
+
+    test('ChatContainer component visual snapshot in dark mode', async ({ page }) => {
+      const container = page.locator('[data-testid="chat-container"]')
+      await expect(container).toHaveScreenshot('chat-container-dark.png')
+    })
   })
 })

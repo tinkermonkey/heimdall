@@ -1,9 +1,30 @@
 import { test, expect } from '@playwright/test'
+import {
+  freezeAnimations,
+  loadSelfHostedFonts,
+  assertFontsLoaded,
+  applyDarkCanvasMode,
+  removeDarkCanvasMode,
+} from './utils/test-helpers'
 
 test.describe('Graph Canvas Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=graph')
     await page.waitForLoadState('networkidle')
+
+    // Load self-hosted fonts
+    await loadSelfHostedFonts(page)
+
+    // Verify fonts are loaded
+    await assertFontsLoaded(page)
+
+    // Freeze animations for consistent snapshots
+    await freezeAnimations(page)
+  })
+
+  test.afterEach(async ({ page }) => {
+    // Ensure we exit dark canvas mode after each test
+    await removeDarkCanvasMode(page)
   })
 
   test('GraphCanvas renders with nodes', async ({ page }) => {
@@ -229,5 +250,53 @@ test.describe('Graph Canvas Components', () => {
     expect(gridProps.hasPosition).toBe(true)
     expect(gridProps.width).toBeGreaterThan(0)
     expect(gridProps.height).toBeGreaterThan(0)
+  })
+
+  test.describe('Visual Regression - Light Canvas', () => {
+    test('GraphCanvas with nodes visual snapshot', async ({ page }) => {
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-light.png')
+    })
+
+    test('GraphInspector panel visual snapshot', async ({ page }) => {
+      const inspector = page.locator('.graph-inspector')
+      await expect(inspector).toHaveScreenshot('graph-inspector-light.png')
+    })
+
+    test('GraphNode component visual snapshot', async ({ page }) => {
+      const node = page.locator('[data-testid="graph-node-cls_cell"]')
+      await expect(node).toHaveScreenshot('graph-node-light.png')
+    })
+
+    test('GraphEdge component visual snapshot', async ({ page }) => {
+      const edge = page.locator('[data-testid^="graph-edge-"]').first()
+      await expect(edge).toHaveScreenshot('graph-edge-light.png')
+    })
+  })
+
+  test.describe('Visual Regression - Dark Canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('GraphCanvas with nodes visual snapshot in dark mode', async ({ page }) => {
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-dark.png')
+    })
+
+    test('GraphInspector panel visual snapshot in dark mode', async ({ page }) => {
+      const inspector = page.locator('.graph-inspector')
+      await expect(inspector).toHaveScreenshot('graph-inspector-dark.png')
+    })
+
+    test('GraphNode component visual snapshot in dark mode', async ({ page }) => {
+      const node = page.locator('[data-testid="graph-node-cls_cell"]')
+      await expect(node).toHaveScreenshot('graph-node-dark.png')
+    })
+
+    test('GraphEdge component visual snapshot in dark mode', async ({ page }) => {
+      const edge = page.locator('[data-testid^="graph-edge-"]').first()
+      await expect(edge).toHaveScreenshot('graph-edge-dark.png')
+    })
   })
 })

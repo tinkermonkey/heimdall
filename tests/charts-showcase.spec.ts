@@ -23,6 +23,11 @@ test.describe('Chart Components', () => {
     await freezeAnimations(page)
   })
 
+  test.afterEach(async ({ page }) => {
+    // Ensure we exit dark canvas mode after each test
+    await removeDarkCanvasMode(page)
+  })
+
   test('page loads successfully', async ({ page }) => {
     // Basic smoke test
     const svgs = page.locator('svg')
@@ -295,6 +300,54 @@ test.describe('Chart Components', () => {
         const sparkline = row.locator('svg')
         expect(await sparkline.count()).toBeGreaterThan(0)
       }
+    })
+  })
+
+  test.describe('Visual Regression - Light Canvas', () => {
+    test('Sparkline component visual snapshot', async ({ page }) => {
+      const sparkline = page.locator('svg[data-testid="sparkline-emerald"]')
+      await expect(sparkline).toHaveScreenshot('sparkline-light.png')
+    })
+
+    test('LineChart component visual snapshot', async ({ page }) => {
+      const lineChart = page.locator('[data-testid="line-chart"]')
+      await expect(lineChart).toHaveScreenshot('line-chart-light.png')
+    })
+
+    test('ProgressBar component visual snapshot', async ({ page }) => {
+      const progressBars = page.locator('.progress-bar').first()
+      await expect(progressBars).toHaveScreenshot('progress-bar-light.png')
+    })
+
+    test('MetricRow component visual snapshot', async ({ page }) => {
+      const metricRow = page.locator('.metric-row').first()
+      await expect(metricRow).toHaveScreenshot('metric-row-light.png')
+    })
+  })
+
+  test.describe('Visual Regression - Dark Canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('Sparkline component visual snapshot in dark mode', async ({ page }) => {
+      const sparkline = page.locator('svg[data-testid="sparkline-emerald"]')
+      await expect(sparkline).toHaveScreenshot('sparkline-dark.png')
+    })
+
+    test('LineChart component visual snapshot in dark mode', async ({ page }) => {
+      const lineChart = page.locator('[data-testid="line-chart"]')
+      await expect(lineChart).toHaveScreenshot('line-chart-dark.png')
+    })
+
+    test('ProgressBar component visual snapshot in dark mode', async ({ page }) => {
+      const progressBars = page.locator('.progress-bar').first()
+      await expect(progressBars).toHaveScreenshot('progress-bar-dark.png')
+    })
+
+    test('MetricRow component visual snapshot in dark mode', async ({ page }) => {
+      const metricRow = page.locator('.metric-row').first()
+      await expect(metricRow).toHaveScreenshot('metric-row-dark.png')
     })
   })
 })

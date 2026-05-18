@@ -1,9 +1,30 @@
 import { test, expect } from '@playwright/test'
+import {
+  freezeAnimations,
+  loadSelfHostedFonts,
+  assertFontsLoaded,
+  applyDarkCanvasMode,
+  removeDarkCanvasMode,
+} from './utils/test-helpers'
 
 test.describe('Page Pattern Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://127.0.0.1:5173/?example=page-patterns')
     await page.waitForLoadState('networkidle')
+
+    // Load self-hosted fonts
+    await loadSelfHostedFonts(page)
+
+    // Verify fonts are loaded
+    await assertFontsLoaded(page)
+
+    // Freeze animations for consistent snapshots
+    await freezeAnimations(page)
+  })
+
+  test.afterEach(async ({ page }) => {
+    // Ensure we exit dark canvas mode after each test
+    await removeDarkCanvasMode(page)
   })
 
   test.describe('PageHeader', () => {
@@ -237,6 +258,64 @@ test.describe('Page Pattern Components', () => {
       // Verify QuickAccessGrid is still visible
       const grid = page.locator('[data-testid="quick-access-grid"]')
       await expect(grid).toBeVisible()
+    })
+  })
+
+  test.describe('Visual Regression - Light Canvas', () => {
+    test('PageHeader component visual snapshot', async ({ page }) => {
+      const header = page.locator('[data-testid="page-header-eyebrow"]').locator('..')
+      await expect(header).toHaveScreenshot('page-header-light.png')
+    })
+
+    test('FilterBar component visual snapshot', async ({ page }) => {
+      const filterBar = page.locator('[data-testid="filter-bar-search"]').locator('..')
+      await expect(filterBar).toHaveScreenshot('filter-bar-light.png')
+    })
+
+    test('ActivityTimeline component visual snapshot', async ({ page }) => {
+      const timeline = page.locator('[data-testid="activity-timeline"]')
+      await expect(timeline).toHaveScreenshot('activity-timeline-light.png')
+    })
+
+    test('AlertStrip component visual snapshot', async ({ page }) => {
+      const alertStrip = page.locator('[data-testid="alert-strip"]')
+      await expect(alertStrip).toHaveScreenshot('alert-strip-light.png')
+    })
+
+    test('QuickAccessGrid component visual snapshot', async ({ page }) => {
+      const grid = page.locator('[data-testid="quick-access-grid"]')
+      await expect(grid).toHaveScreenshot('quick-access-grid-light.png')
+    })
+  })
+
+  test.describe('Visual Regression - Dark Canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('PageHeader component visual snapshot in dark mode', async ({ page }) => {
+      const header = page.locator('[data-testid="page-header-eyebrow"]').locator('..')
+      await expect(header).toHaveScreenshot('page-header-dark.png')
+    })
+
+    test('FilterBar component visual snapshot in dark mode', async ({ page }) => {
+      const filterBar = page.locator('[data-testid="filter-bar-search"]').locator('..')
+      await expect(filterBar).toHaveScreenshot('filter-bar-dark.png')
+    })
+
+    test('ActivityTimeline component visual snapshot in dark mode', async ({ page }) => {
+      const timeline = page.locator('[data-testid="activity-timeline"]')
+      await expect(timeline).toHaveScreenshot('activity-timeline-dark.png')
+    })
+
+    test('AlertStrip component visual snapshot in dark mode', async ({ page }) => {
+      const alertStrip = page.locator('[data-testid="alert-strip"]')
+      await expect(alertStrip).toHaveScreenshot('alert-strip-dark.png')
+    })
+
+    test('QuickAccessGrid component visual snapshot in dark mode', async ({ page }) => {
+      const grid = page.locator('[data-testid="quick-access-grid"]')
+      await expect(grid).toHaveScreenshot('quick-access-grid-dark.png')
     })
   })
 })
