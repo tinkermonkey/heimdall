@@ -61,6 +61,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const [pan, setPan] = useState({ x: 0, y: 0 })
     const containerRef = useRef<HTMLDivElement>(null)
     const dragRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
+    const zoomRef = useRef(1)
+    const panRef = useRef({ x: 0, y: 0 })
+
+    // Keep refs in sync with state
+    useEffect(() => {
+      zoomRef.current = zoom
+    }, [zoom])
+
+    useEffect(() => {
+      panRef.current = pan
+    }, [pan])
 
     useEffect(() => {
       const container = containerRef.current
@@ -74,19 +85,19 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const cursorX = e.clientX - rect.left
         const cursorY = e.clientY - rect.top
 
-        setZoom((prevZoom) => {
-          setPan((prevPan) => {
-            const delta = e.deltaY > 0 ? -0.1 : 0.1
-            const newZoom = Math.min(2.5, Math.max(0.4, prevZoom + delta))
-            const zoomChange = newZoom - prevZoom
+        const delta = e.deltaY > 0 ? -0.1 : 0.1
+        const prevZoom = zoomRef.current
+        const newZoom = Math.min(2.5, Math.max(0.4, prevZoom + delta))
+        const zoomChange = newZoom - prevZoom
+        const newPan = {
+          x: panRef.current.x - (cursorX / prevZoom) * zoomChange,
+          y: panRef.current.y - (cursorY / prevZoom) * zoomChange,
+        }
 
-            return {
-              x: prevPan.x - (cursorX / prevZoom) * zoomChange,
-              y: prevPan.y - (cursorY / prevZoom) * zoomChange,
-            }
-          })
-          return Math.min(2.5, Math.max(0.4, prevZoom + (e.deltaY > 0 ? -0.1 : 0.1)))
-        })
+        zoomRef.current = newZoom
+        panRef.current = newPan
+        setZoom(newZoom)
+        setPan(newPan)
       }
 
       container.addEventListener('wheel', handleWheel, { passive: false })
@@ -100,7 +111,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       ) {
         return
       }
-      dragRef.current = { x: e.clientX, y: e.clientY, panX: pan.x, panY: pan.y }
+      dragRef.current = { x: e.clientX, y: e.clientY, panX: panRef.current.x, panY: panRef.current.y }
     }
 
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
