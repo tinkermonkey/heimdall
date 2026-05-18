@@ -49,6 +49,9 @@ export const ICONS = {
   layout: 'M3 3 L21 3 L21 21 L3 21 Z M3 8 L21 8 M3 3 L3 21 M8 8 L8 21',
   moon: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
   sun: 'M12 3v2M12 19v2M5.64 5.64l1.42 1.42M16.95 16.95l1.41 1.41M3 12h2M19 12h2M5.64 18.36l1.41-1.41M16.95 7.05l1.41-1.41M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7z',
+  'bar-chart': 'M3 3 L3 20 L21 20 M5 16 L5 9 M12 16 L12 5 M19 16 L19 8',
+  'trending-up': 'M23 6 L13.5 15.5 M23 6 L23 13 L16 13 M1 23 L6.5 17.5 L13 24 L23 6',
+  'trending-down': 'M23 18 L13.5 8.5 M23 18 L23 11 L16 11 M1 1 L6.5 6.5 L13 0 L23 18',
 } as const
 
 export type IconName = keyof typeof ICONS
