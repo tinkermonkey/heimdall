@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useContext, createContext } from 'react'
+import React, { useState, useRef, useCallback, useContext, createContext, useEffect } from 'react'
 import './GraphCanvas.css'
 
 export interface GraphNode {
@@ -62,28 +62,36 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const containerRef = useRef<HTMLDivElement>(null)
     const dragRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
 
-    const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
-      if (!e.ctrlKey && !e.metaKey) return
-      e.preventDefault()
+    useEffect(() => {
+      const container = containerRef.current
+      if (!container) return
 
-      const rect = containerRef.current?.getBoundingClientRect()
-      if (!rect) return
+      const handleWheel = (e: WheelEvent) => {
+        if (!e.ctrlKey && !e.metaKey) return
+        e.preventDefault()
 
-      const cursorX = e.clientX - rect.left
-      const cursorY = e.clientY - rect.top
+        const rect = container.getBoundingClientRect()
+        const cursorX = e.clientX - rect.left
+        const cursorY = e.clientY - rect.top
 
-      const delta = e.deltaY > 0 ? -0.1 : 0.1
-      const newZoom = Math.min(2.5, Math.max(0.4, zoom + delta))
-      const zoomChange = newZoom - zoom
+        setZoom((prevZoom) => {
+          setPan((prevPan) => {
+            const delta = e.deltaY > 0 ? -0.1 : 0.1
+            const newZoom = Math.min(2.5, Math.max(0.4, prevZoom + delta))
+            const zoomChange = newZoom - prevZoom
 
-      const newPan = {
-        x: pan.x - (cursorX / zoom) * zoomChange,
-        y: pan.y - (cursorY / zoom) * zoomChange,
+            return {
+              x: prevPan.x - (cursorX / prevZoom) * zoomChange,
+              y: prevPan.y - (cursorY / prevZoom) * zoomChange,
+            }
+          })
+          return Math.min(2.5, Math.max(0.4, prevZoom + (e.deltaY > 0 ? -0.1 : 0.1)))
+        })
       }
 
-      setZoom(newZoom)
-      setPan(newPan)
-    }, [zoom, pan])
+      container.addEventListener('wheel', handleWheel, { passive: false })
+      return () => container.removeEventListener('wheel', handleWheel)
+    }, [])
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
       if (
@@ -126,7 +134,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       <div
         ref={handleRef}
         className={classNames}
-        onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

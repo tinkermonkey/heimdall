@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { useGraphCanvas } from './GraphCanvas'
+import { useGraphCanvas, type GraphNode } from './GraphCanvas'
 import { bezierPath, rectEdgePoint } from '../utils/graph'
 import './GraphEdge.css'
 
@@ -22,7 +22,7 @@ function getNodeWidth(label?: string): number {
   return 168
 }
 
-function getActualNodeDimensions(node: any): { width: number; height: number } {
+function getActualNodeDimensions(node: GraphNode): { width: number; height: number } {
   return {
     width: node.width ?? getNodeWidth(node.label),
     height: node.height ?? NODE_HEIGHT,

@@ -54,15 +54,13 @@ export { PipelineCard, type PipelineCardProps, type PipelineStage } from './comp
 export { FormCallout, type FormCalloutProps } from './components/FormCallout'
 export {
   GraphCanvas,
-  GraphCanvasContext,
   useGraphCanvas,
-  type GraphNode,
-  type GraphEdge,
-  type GraphCanvasContextValue,
+  type GraphNode as GraphNodeData,
+  type GraphEdge as GraphEdgeData,
   type GraphCanvasProps,
 } from './components/GraphCanvas'
-export { GraphNode as GraphNodeComponent, type GraphNodeProps } from './components/GraphNode'
-export { GraphEdge as GraphEdgeComponent, type GraphEdgeProps } from './components/GraphEdge'
+export { GraphNode, type GraphNodeProps } from './components/GraphNode'
+export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
 export {
   GraphInspector,
   type GraphNodeMetadata,
