@@ -5,7 +5,6 @@ import {
   Icon,
   StatTile,
   ShellLayout,
-  Titlebar,
 } from '../index'
 
 export default function HomelabDashboardRebuilt() {
