@@ -1,6 +1,6 @@
 .topology-node {
-  background: var(--canvas-card, #ffffff);
-  border: 1px solid var(--canvas-bd, #e5e7eb);
+  background: rgb(var(--canvas-card));
+  border: 1px solid rgb(var(--canvas-border));
   border-radius: 8px;
   padding: 12px;
   min-width: 180px;
@@ -9,11 +9,11 @@
     border-color 0.1s,
     box-shadow 0.1s;
   font-family: var(--font-sans, sans-serif);
-  color: var(--canvas-fg-1, #1f2937);
+  color: rgb(var(--canvas-fg-1));
 }
 
 .topology-node:hover {
-  border-color: var(--accent-primary-deep, #b45309);
+  border-color: rgb(var(--accent-primary-deep));
   box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
@@ -27,7 +27,7 @@
 .topology-node__title {
   font-size: 14px;
   font-weight: 600;
-  color: var(--canvas-fg-1, #1f2937);
+  color: rgb(var(--canvas-fg-1));
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -46,7 +46,7 @@
 
 .topology-node__role {
   font-size: 11px;
-  color: var(--canvas-fg-3, #9ca3af);
+  color: rgb(var(--canvas-fg-3));
   font-family: var(--font-mono, monospace);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -68,7 +68,7 @@
 
 .topology-node__metric-label {
   grid-column: 1;
-  color: var(--canvas-fg-3, #9ca3af);
+  color: rgb(var(--canvas-fg-3));
   font-family: var(--font-mono, monospace);
   text-transform: uppercase;
   font-size: 9px;
@@ -78,7 +78,7 @@
 .topology-node__metric-value {
   grid-column: 2;
   grid-row: 1;
-  color: var(--canvas-fg-1, #1f2937);
+  color: rgb(var(--canvas-fg-1));
   font-weight: 600;
   font-family: var(--font-mono, monospace);
   white-space: nowrap;
@@ -86,14 +86,14 @@
 
 .topology-node__metric-unit {
   font-size: 9px;
-  color: var(--canvas-fg-3, #9ca3af);
+  color: rgb(var(--canvas-fg-3));
   margin-left: 2px;
 }
 
 .topology-node__metric-bar {
   grid-column: 1 / -1;
   height: 4px;
-  background: var(--canvas-bg-2, #f3f4f6);
+  background: rgb(var(--canvas-bg-2));
   border-radius: 2px;
   overflow: hidden;
 }
@@ -122,15 +122,15 @@
 }
 
 body.dark-canvas .topology-node {
-  background: var(--canvas-card, #1f2937);
-  border-color: var(--canvas-bd, #374151);
-  color: var(--canvas-fg-1, #f3f4f6);
+  background: rgb(var(--canvas-card));
+  border-color: rgb(var(--canvas-border));
+  color: rgb(var(--canvas-fg-1));
 }
 
 body.dark-canvas .topology-node__title {
-  color: var(--canvas-fg-1, #f3f4f6);
+  color: rgb(var(--canvas-fg-1));
 }
 
 body.dark-canvas .topology-node__metric-bar {
-  background: var(--canvas-bg-2, #111827);
+  background: rgb(var(--canvas-bg-2));
 }

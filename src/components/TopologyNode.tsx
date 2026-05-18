@@ -88,7 +88,7 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
                     className="topology-node__metric-fill"
                     style={{
                       width: `${metric.percent}%`,
-                      backgroundColor: metric.color ? `var(--status-${metric.color}, #06b6d4)` : 'var(--accent-primary, #06b6d4)',
+                      backgroundColor: metric.color ? `rgb(var(--status-${metric.color}))` : 'rgb(var(--accent-primary))',
                     }}
                   />
                 </div>

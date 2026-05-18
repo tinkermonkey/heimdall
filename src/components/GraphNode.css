@@ -1,10 +1,10 @@
 .graph-node {
   position: absolute;
-  background: var(--canvas-card, #ffffff);
-  border: 1px solid var(--canvas-bd-2, #d1d5db);
+  background: rgb(var(--canvas-card));
+  border: 1px solid rgb(var(--canvas-border-strong));
   font-family: var(--font-sans, sans-serif);
   font-size: 12px;
-  color: var(--canvas-fg-1, #1f2937);
+  color: rgb(var(--canvas-fg-1));
   display: inline-flex;
   align-items: center;
   padding: 0 8px 0 6px;
@@ -21,22 +21,22 @@
 }
 
 .graph-node:hover {
-  border-color: var(--accent-primary-deep, #b45309);
+  border-color: rgb(var(--accent-primary-deep));
   box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
   z-index: 3;
 }
 
 .graph-node.selected {
-  border-color: var(--accent-primary-deep, #b45309);
+  border-color: rgb(var(--accent-primary-deep));
   box-shadow:
-    0 0 0 2px var(--accent-primary, #f59e0b),
+    0 0 0 2px rgb(var(--accent-primary)),
     0 4px 10px rgba(15, 23, 42, 0.1);
   z-index: 4;
 }
 
 body.dark-canvas .graph-node.selected {
   box-shadow:
-    0 0 0 2px var(--accent-primary),
+    0 0 0 2px rgb(var(--accent-primary)),
     0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -44,21 +44,21 @@ body.dark-canvas .graph-node.selected {
   width: 3px;
   height: 16px;
   border-radius: 1px;
-  background: var(--dom-default, #6b7280);
+  background: rgb(var(--dom-default));
   margin-right: 7px;
   flex: none;
 }
 
 .graph-node[data-domain='life'] .graph-node__swatch {
-  background: var(--dom-life, #10b981);
+  background: rgb(var(--dom-life));
 }
 
 .graph-node[data-domain='climate'] .graph-node__swatch {
-  background: var(--dom-climate, #f59e0b);
+  background: rgb(var(--dom-climate));
 }
 
 .graph-node[data-domain='software'] .graph-node__swatch {
-  background: var(--dom-software, #818cf8);
+  background: rgb(var(--dom-software));
 }
 
 .graph-node__label {
@@ -74,29 +74,29 @@ body.dark-canvas .graph-node.selected {
   font-size: 9.5px;
   font-weight: 600;
   letter-spacing: 0.05em;
-  color: var(--canvas-fg-3, #9ca3af);
+  color: rgb(var(--canvas-fg-3));
   margin-left: 7px;
   padding: 1px 5px;
   border-radius: 2px;
-  background: var(--canvas-bg-2, #f3f4f6);
-  border: 1px solid var(--canvas-bd, #e5e7eb);
+  background: rgb(var(--canvas-bg-2));
+  border: 1px solid rgb(var(--canvas-border));
   flex: none;
 }
 
 .graph-node[data-kind='individual'] .graph-node__kind {
-  color: var(--accent-primary-deep, #b45309);
+  color: rgb(var(--accent-primary-deep));
   background: rgba(245, 158, 11, 0.08);
   border-color: rgba(245, 158, 11, 0.25);
 }
 
 body.dark-canvas .graph-node {
-  background: var(--canvas-card, #1f2937);
-  border-color: var(--canvas-bd-2, #374151);
-  color: var(--canvas-fg-1, #f3f4f6);
+  background: rgb(var(--canvas-card));
+  border-color: rgb(var(--canvas-border-strong));
+  color: rgb(var(--canvas-fg-1));
 }
 
 body.dark-canvas .graph-node__kind {
-  background: var(--canvas-bg-2, #111827);
-  border-color: var(--canvas-bd, #374151);
-  color: var(--canvas-fg-3, #9ca3af);
+  background: rgb(var(--canvas-bg-2));
+  border-color: rgb(var(--canvas-border));
+  color: rgb(var(--canvas-fg-3));
 }

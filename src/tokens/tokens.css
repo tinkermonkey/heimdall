@@ -165,6 +165,12 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
+    /* ---- Domain Colors (graph/topology) ---- */
+    --dom-default: 107 114 128;         /* #6b7280 — neutral gray */
+    --dom-life: 16 185 129;             /* #10b981 — emerald */
+    --dom-climate: 245 158 11;          /* #f59e0b — amber */
+    --dom-software: 129 140 248;        /* #818cf8 — indigo */
+
     /* ---- Focus Ring (amber accent) ---- */
     --focus-ring: 0 0 0 3px rgba(251, 191, 36, 0.18);
   }

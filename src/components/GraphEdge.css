@@ -21,18 +21,18 @@
 }
 
 .graph-edge--hot .graph-edge__line {
-  stroke: var(--accent-primary, #f59e0b);
+  stroke: rgb(var(--accent-primary));
   stroke-width: 1.75;
 }
 
 .graph-edge--irrelevant .graph-edge__line {
-  stroke: var(--accent-rose, #ef4444);
+  stroke: rgb(var(--status-rose));
   stroke-dasharray: 4 4;
   opacity: 0.85;
 }
 
 .graph-edge--irrelevant.graph-edge--hot .graph-edge__line {
-  stroke: var(--accent-rose, #ef4444);
+  stroke: rgb(var(--status-rose));
   stroke-width: 1.75;
 }
 
@@ -41,8 +41,8 @@
 }
 
 .graph-edge__label-bg {
-  fill: var(--canvas-bg, #ffffff);
-  stroke: var(--canvas-bd, #e5e7eb);
+  fill: rgb(var(--canvas-bg));
+  stroke: rgb(var(--canvas-border));
   stroke-width: 1;
 }
 
@@ -50,15 +50,15 @@
   font-family: var(--font-mono, monospace);
   font-size: 10.5px;
   font-weight: 500;
-  fill: var(--canvas-fg-2, #6b7280);
+  fill: rgb(var(--canvas-fg-2));
   text-anchor: middle;
   dominant-baseline: middle;
   pointer-events: none;
 }
 
 .graph-edge--hot .graph-edge__label-bg {
-  fill: var(--accent-primary-deep, #b45309);
-  stroke: var(--accent-primary-deep, #b45309);
+  fill: rgb(var(--accent-primary-deep));
+  stroke: rgb(var(--accent-primary-deep));
 }
 
 .graph-edge--hot .graph-edge__label-text {
@@ -67,17 +67,17 @@
 }
 
 body.dark-canvas .graph-edge__label-bg {
-  fill: var(--canvas-card, #1f2937);
-  stroke: var(--canvas-bd, #374151);
+  fill: rgb(var(--canvas-card));
+  stroke: rgb(var(--canvas-border));
 }
 
 body.dark-canvas .graph-edge__label-text {
-  fill: var(--canvas-fg-2, #d1d5db);
+  fill: rgb(var(--canvas-fg-2));
 }
 
 body.dark-canvas .graph-edge--hot .graph-edge__label-bg {
-  fill: var(--accent-primary, #06b6d4);
-  stroke: var(--accent-primary, #06b6d4);
+  fill: rgb(var(--accent-primary));
+  stroke: rgb(var(--accent-primary));
 }
 
 body.dark-canvas .graph-edge--hot .graph-edge__label-text {

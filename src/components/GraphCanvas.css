@@ -1,7 +1,7 @@
 .graph-canvas {
   position: relative;
-  background: var(--canvas-bg, #ffffff);
-  border: 1px solid var(--canvas-bd, #e5e7eb);
+  background: rgb(var(--canvas-bg));
+  border: 1px solid rgb(var(--canvas-border));
   border-radius: 10px;
   overflow: hidden;
   cursor: grab;
@@ -17,7 +17,7 @@
   inset: 0;
   background-image: radial-gradient(
     circle,
-    var(--canvas-fg-3, rgba(107, 114, 128, 0.3)) 1px,
+    rgba(var(--canvas-fg-3), 0.3) 1px,
     transparent 1px
   );
   background-size: 18px 18px;

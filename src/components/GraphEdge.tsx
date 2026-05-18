@@ -106,7 +106,7 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
             markerHeight="7"
             orient="auto-start-reverse"
           >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent-rose, #f87171)" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--status-rose))" />
           </marker>
           <marker
             id={arrowCyanMarkerId}
@@ -117,7 +117,7 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
             markerHeight="8"
             orient="auto-start-reverse"
           >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent-primary, #06b6d4)" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--accent-primary))" />
           </marker>
         </defs>
 
