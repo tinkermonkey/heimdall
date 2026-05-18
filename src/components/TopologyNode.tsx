@@ -23,10 +23,10 @@ export interface TopologyNodeProps extends React.HTMLAttributes<HTMLDivElement> 
 }
 
 const statusDotColorMap: Record<TopologyNodeStatus, string> = {
-  ok: 'var(--status-emerald, #10b981)',
-  warning: 'var(--status-amber, #f59e0b)',
-  error: 'var(--status-rose, #ef4444)',
-  idle: 'var(--status-neutral, #6b7280)',
+  ok: 'rgb(var(--status-emerald))',
+  warning: 'rgb(var(--status-amber))',
+  error: 'rgb(var(--status-rose))',
+  idle: 'rgb(var(--status-neutral))',
 }
 
 export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
