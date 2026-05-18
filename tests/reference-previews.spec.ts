@@ -6,8 +6,8 @@ import { loadSelfHostedFonts, freezeAnimations } from './utils/test-helpers'
 
 test.describe('Reference Preview Cards', () => {
   const __dirname = path.dirname(fileURLToPath(import.meta.url))
-  const contextStudioPreviewDir = path.join(__dirname, '../../../design-reference/example-context-studio/preview')
-  const homelabPreviewDir = path.join(__dirname, '../../../design-reference/example-homelab-dashboard/preview')
+  const contextStudioPreviewDir = path.join(__dirname, '../design-reference/example-context-studio/preview')
+  const homelabPreviewDir = path.join(__dirname, '../design-reference/example-homelab-dashboard/preview')
 
   const getPreviewFiles = (dir: string) => {
     const files = fs.readdirSync(dir).filter((f) => f.endsWith('.html') && f !== '_base.css')
