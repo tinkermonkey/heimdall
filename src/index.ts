@@ -35,3 +35,8 @@ export { Sparkline, type SparklineColor, type SparklineProps } from './component
 export { LineChart, type LineChartSeries, type LineChartProps } from './components/LineChart'
 export { ProgressBar, type ProgressBarColor, type ProgressBarProps } from './components/ProgressBar'
 export { MetricRow, type MetricRowProps } from './components/MetricRow'
+export { PageHeader, type PageHeaderProps } from './components/PageHeader'
+export { FilterBar, type FilterBarProps, type FilterChip } from './components/FilterBar'
+export { ActivityTimeline, type ActivityTimelineProps, type ActivityEvent, type ActivityEventType } from './components/ActivityTimeline'
+export { AlertStrip, type AlertStripProps, type Alert, type AlertSeverity } from './components/AlertStrip'
+export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessTile } from './components/QuickAccessGrid'

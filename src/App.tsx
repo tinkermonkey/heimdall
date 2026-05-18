@@ -20,6 +20,7 @@ import AdvancedOverlayComponentsTestPage from './test-pages/AdvancedOverlayCompo
 import FoundationTestPage from './test-pages/FoundationTestPage'
 import NavigationComponentTestPage from './test-pages/NavigationComponentTestPage'
 import ChartsTestPage from './test-pages/ChartsTestPage'
+import PagePatternsShowcase from './test-pages/PagePatternsShowcase'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -89,6 +90,10 @@ export default function App() {
 
   if (exampleParam === 'charts') {
     return <ChartsTestPage />
+  }
+
+  if (exampleParam === 'page-patterns') {
+    return <PagePatternsShowcase />
   }
 
   if (testParam === 'foundation') {
