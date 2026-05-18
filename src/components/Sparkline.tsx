@@ -63,7 +63,6 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
       .join(' ')
 
     const colorValue = colorMap[color]
-    const neutralStyle = color === 'neutral' ? { fill: 'rgb(var(--canvas-fg-2))', stroke: 'rgb(var(--canvas-fg-2))' } : undefined
 
     return (
       <svg
