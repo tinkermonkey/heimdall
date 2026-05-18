@@ -101,7 +101,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                 y={tick.y + 1}
                 textAnchor="end"
                 fontSize="3"
-                fill="rgb(71 85 105)"
+                fill="currentColor"
+                style={{ fill: 'rgb(var(--canvas-fg-2))' }}
               >
                 {tick.value}
               </text>
@@ -192,7 +193,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                   y={svgHeight - padding.bottom + 4}
                   textAnchor="middle"
                   fontSize="3"
-                  fill="rgb(71 85 105)"
+                  fill="currentColor"
+                  style={{ fill: 'rgb(var(--canvas-fg-2))' }}
                 >
                   {label}
                 </text>

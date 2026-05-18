@@ -15,7 +15,7 @@ const colorMap: Record<SparklineColor, string> = {
   amber: 'rgb(245 158 11)',
   rose: 'rgb(244 63 94)',
   cyan: 'rgb(34 211 238)',
-  neutral: 'rgb(71 85 105)',
+  neutral: '', // handled via style prop for dark canvas support
 }
 
 export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
@@ -63,6 +63,7 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
       .join(' ')
 
     const colorValue = colorMap[color]
+    const neutralStyle = color === 'neutral' ? { fill: 'rgb(var(--canvas-fg-2))', stroke: 'rgb(var(--canvas-fg-2))' } : undefined
 
     return (
       <svg
@@ -77,12 +78,19 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
         {/* Area fill */}
         <polyline
           points={areaPoints}
-          fill={colorValue}
+          fill={color === 'neutral' ? undefined : colorValue}
           fillOpacity="0.15"
           stroke="none"
+          style={color === 'neutral' ? { fill: 'rgb(var(--canvas-fg-2))', fillOpacity: '0.15' } : undefined}
         />
         {/* Line stroke */}
-        <polyline points={linePoints} fill="none" stroke={colorValue} strokeWidth="2" />
+        <polyline
+          points={linePoints}
+          fill="none"
+          stroke={color === 'neutral' ? undefined : colorValue}
+          strokeWidth="2"
+          style={color === 'neutral' ? { stroke: 'rgb(var(--canvas-fg-2))' } : undefined}
+        />
       </svg>
     )
   }

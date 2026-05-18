@@ -177,7 +177,7 @@ test.describe('Chart Components', () => {
       // Check that label text exists
       const labelText = await firstRow.locator('.metric-row__label').textContent()
       expect(labelText).toBeTruthy()
-      expect(labelText).toHaveLength(labelText!.length)
+      expect(labelText).toMatch(/CPU|Memory|Network|Error|Uptime/)
 
       // Check that value text exists
       const valueText = await firstRow.locator('.metric-row__value').textContent()
