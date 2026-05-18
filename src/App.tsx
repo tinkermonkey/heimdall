@@ -23,6 +23,7 @@ import ChartsTestPage from './test-pages/ChartsTestPage'
 import PagePatternsShowcase from './test-pages/PagePatternsShowcase'
 import ChatShowcase from './test-pages/ChatShowcase'
 import FormsShowcase from './test-pages/FormsShowcase'
+import GraphShowcase from './test-pages/GraphShowcase'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -104,6 +105,10 @@ export default function App() {
 
   if (exampleParam === 'forms') {
     return <FormsShowcase />
+  }
+
+  if (exampleParam === 'graph') {
+    return <GraphShowcase />
   }
 
   if (testParam === 'foundation') {

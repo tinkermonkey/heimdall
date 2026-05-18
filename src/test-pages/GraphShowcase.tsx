@@ -83,7 +83,7 @@ const TOPOLOGY_NODES = [
 ]
 
 export default function GraphShowcase() {
-  const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>('cls_cell')
+  const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
   const [canvasMode, setCanvasMode] = useState<'graph' | 'topology'>('graph')
 
   const selectedNode = GRAPH_NODES.find((n) => n.id === selectedNodeId)
