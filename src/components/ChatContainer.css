@@ -94,7 +94,7 @@
   flex-direction: column;
   min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: rgb(var(--canvas-border-2, 42, 58, 92)) transparent;
+  scrollbar-color: rgb(var(--canvas-border-2)) transparent;
 }
 
 .chat-container__thread::-webkit-scrollbar {

@@ -32,7 +32,7 @@
   align-items: center;
   gap: 6px;
   background: rgb(var(--canvas-surface, 36, 55, 99));
-  border: 1px solid rgb(var(--canvas-border-2, 42, 58, 92));
+  border: 1px solid rgb(var(--canvas-border-2));
   padding: 4px 8px;
   border-radius: 4px;
   font-family: var(--font-mono);
@@ -67,7 +67,7 @@
   align-items: center;
   gap: 6px;
   background: rgb(var(--canvas-surface, 36, 55, 99));
-  border: 1px solid rgb(var(--canvas-border-2, 42, 58, 92));
+  border: 1px solid rgb(var(--canvas-border-2));
   padding: 4px 8px;
   border-radius: 4px;
   font-family: var(--font-mono);
@@ -188,7 +188,7 @@
 }
 
 .chat-composer__attach-button:hover {
-  border-color: rgb(var(--canvas-border-2, 42, 58, 92));
+  border-color: rgb(var(--canvas-border-2));
   color: rgb(var(--canvas-fg-1));
 }
 

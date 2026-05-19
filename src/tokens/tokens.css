@@ -28,6 +28,7 @@
     --canvas-fg-3: 100 116 139;   /* #64748b */
     --canvas-fg-4: 148 163 184;   /* #94a3b8 */
     --canvas-border: 229 233 238;         /* #e5e9ee */
+    --canvas-border-2: 221 226 232;       /* #dde2e8 — secondary border */
     --canvas-border-strong: 214 220 227;  /* #d6dce3 */
 
     /* ---- Accent Color (amber brand) ---- */
@@ -187,6 +188,7 @@
     --canvas-fg-3: 100 116 139;     /* #64748b — slate-500 */
     --canvas-fg-4: 71 85 105;       /* #475569 — slate-600 */
     --canvas-border: 36 55 99;      /* #243763 */
+    --canvas-border-2: 42 58 92;    /* #2a3a5c — secondary border */
     --canvas-border-strong: 53 73 115; /* #354973 */
   }
 

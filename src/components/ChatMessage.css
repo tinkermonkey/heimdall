@@ -25,7 +25,7 @@
 
 .chat-message--user .chat-message__avatar {
   background: rgb(var(--canvas-surface, 20, 32, 58));
-  border: 1px solid rgb(var(--canvas-border-2, 42, 58, 92));
+  border: 1px solid rgb(var(--canvas-border-2));
   color: rgb(var(--canvas-fg-1));
 }
 
