@@ -14,6 +14,7 @@ export default function ChatShowcase() {
   const [contextItems, setContextItems] = useState([
     { id: 'schema', label: 'schema.json' },
   ])
+  const [attachments, setAttachments] = useState<any[]>([])
 
   const bots: BotTab[] = [
     { id: 'assistant', label: 'Assistant', role: 'EXECUTOR', status: 'idle' },
@@ -256,8 +257,10 @@ This will require calling analyze_distribution with the dataset parameters.`
             onChange={setComposerValue}
             onSubmit={handleComposerSubmit}
             onContextChange={setContextItems}
+            onAttachmentChange={setAttachments}
             scopeLabel="Assistant"
             contextItems={contextItems}
+            attachments={attachments}
           />
         </section>
 

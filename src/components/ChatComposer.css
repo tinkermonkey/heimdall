@@ -62,6 +62,45 @@
   color: rgb(var(--canvas-fg-1));
 }
 
+.chat-composer__attachment-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgb(var(--canvas-surface, 36, 55, 99));
+  border: 1px solid rgb(var(--canvas-border-2, 42, 58, 92));
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgb(var(--canvas-fg-2, 156, 163, 175));
+}
+
+.chat-composer__attachment-label {
+  flex: 0 0 auto;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-composer__attachment-remove {
+  display: inline-grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  flex: 0 0 auto;
+}
+
+.chat-composer__attachment-remove:hover {
+  color: rgb(var(--canvas-fg-1));
+}
+
 .chat-composer__input-wrapper {
   display: flex;
   flex-direction: column;
@@ -102,6 +141,21 @@
   gap: 8px;
 }
 
+.chat-composer__footer-start {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.chat-composer__footer-end {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
 .chat-composer__hint {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -112,4 +166,32 @@
 .chat-composer__hint b {
   font-weight: 600;
   color: rgb(var(--canvas-fg-3, 107, 114, 128));
+}
+
+.chat-composer__file-input {
+  display: none;
+}
+
+.chat-composer__attach-button {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid rgb(var(--canvas-border, 30, 42, 68));
+  border-radius: 4px;
+  color: rgb(var(--canvas-fg-2, 156, 163, 175));
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+  flex: 0 0 auto;
+}
+
+.chat-composer__attach-button:hover {
+  border-color: rgb(var(--canvas-border-2, 42, 58, 92));
+  color: rgb(var(--canvas-fg-1));
+}
+
+.chat-composer__attach-button:active {
+  background: rgb(var(--canvas-surface, 36, 55, 99));
 }

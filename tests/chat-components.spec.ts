@@ -109,6 +109,61 @@ test.describe('Chat Components', () => {
     expect(expandedAgain).toBe('true')
   })
 
+  test('ThinkingBlock component renders', async ({ page }) => {
+    // Verify thinking block is rendered
+    const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+    await expect(thinkingBlock).toBeVisible()
+
+    // Verify label is displayed
+    const label = thinkingBlock.locator('text="thinking"')
+    await expect(label).toBeVisible()
+  })
+
+  test('ThinkingBlock component expands to show content', async ({ page }) => {
+    // Find the thinking block toggle button
+    const thinkingBlockHeader = page.locator('.thinking-block__header').first()
+
+    // Get the initial aria-expanded state
+    const initialExpanded = await thinkingBlockHeader.getAttribute('aria-expanded')
+    expect(initialExpanded).toBe('true') // Should be expanded by default
+
+    // Click to collapse
+    await thinkingBlockHeader.click()
+
+    // Verify it's now collapsed
+    const collapsedExpanded = await thinkingBlockHeader.getAttribute('aria-expanded')
+    expect(collapsedExpanded).toBe('false')
+
+    // Click to expand again
+    await thinkingBlockHeader.click()
+
+    // Verify expanded
+    const expandedAgain = await thinkingBlockHeader.getAttribute('aria-expanded')
+    expect(expandedAgain).toBe('true')
+  })
+
+  test('ThinkingBlock content visibility toggles', async ({ page }) => {
+    // Find the first thinking block
+    const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+
+    // Verify content is visible initially
+    const content = thinkingBlock.locator('.thinking-block__content')
+    await expect(content).toBeVisible()
+
+    // Click header to collapse
+    const header = thinkingBlock.locator('.thinking-block__header')
+    await header.click()
+
+    // Verify content is hidden
+    await expect(content).not.toBeVisible()
+
+    // Click header to expand
+    await header.click()
+
+    // Verify content is visible again
+    await expect(content).toBeVisible()
+  })
+
   test('ChatDivider component renders', async ({ page }) => {
     // Verify divider is rendered - get the first one (in the ChatDivider section, before the full container)
     const divider = page.locator('[data-testid="chat-divider"]').first()
@@ -338,6 +393,11 @@ test.describe('Chat Components', () => {
       await expect(toolBlock).toHaveScreenshot('tool-block-light.png')
     })
 
+    test('ThinkingBlock component visual snapshot', async ({ page }) => {
+      const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+      await expect(thinkingBlock).toHaveScreenshot('thinking-block-light.png')
+    })
+
     test('ChatDivider component visual snapshot', async ({ page }) => {
       const divider = page.locator('[data-testid="chat-divider"]').first()
       await expect(divider).toHaveScreenshot('chat-divider-light.png')
@@ -372,6 +432,11 @@ test.describe('Chat Components', () => {
     test('ToolBlock component visual snapshot in dark mode', async ({ page }) => {
       const toolBlock = page.locator('[data-testid="tool-block"]').first()
       await expect(toolBlock).toHaveScreenshot('tool-block-dark.png')
+    })
+
+    test('ThinkingBlock component visual snapshot in dark mode', async ({ page }) => {
+      const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+      await expect(thinkingBlock).toHaveScreenshot('thinking-block-dark.png')
     })
 
     test('ChatDivider component visual snapshot in dark mode', async ({ page }) => {

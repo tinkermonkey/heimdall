@@ -45,7 +45,7 @@ export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessTile } from
 export { ChatMessage, ToolBlock, ThinkingBlock, type ChatMessageProps, type ToolBlockProps, type ToolBlockData, type ThinkingBlockProps, type ThinkingBlockData } from './components/ChatMessage'
 export { ChatDivider, type ChatDividerProps } from './components/ChatDivider'
 export { ChatSuggestions, type ChatSuggestionsProps } from './components/ChatSuggestions'
-export { ChatComposer, type ChatComposerProps, type ContextItem } from './components/ChatComposer'
+export { ChatComposer, type ChatComposerProps, type ContextItem, type Attachment } from './components/ChatComposer'
 export { ChatContainer, type ChatContainerProps, type BotTab } from './components/ChatContainer'
 export { EntityPicker, type EntityPickerProps, type EntityPickerResult } from './components/EntityPicker'
 export { KeyValueEditor, type KeyValueEditorProps, type KeyValueRow } from './components/KeyValueEditor'

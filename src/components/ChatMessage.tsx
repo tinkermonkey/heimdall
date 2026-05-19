@@ -78,7 +78,6 @@ export interface ToolBlockProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string
   status: 'running' | 'success' | 'error'
   output?: Array<{ key?: string; value: string }>
-  collapsed?: boolean
   onToggleCollapsed?: (collapsed: boolean) => void
 }
 
@@ -88,18 +87,13 @@ export const ToolBlock = React.forwardRef<HTMLDivElement, ToolBlockProps>(
       name,
       status,
       output = [],
-      collapsed = false,
       onToggleCollapsed,
       className = '',
       ...props
     },
     ref
   ) => {
-    const [isCollapsed, setIsCollapsed] = React.useState(collapsed)
-
-    React.useEffect(() => {
-      setIsCollapsed(collapsed)
-    }, [collapsed])
+    const [isCollapsed, setIsCollapsed] = React.useState(false)
 
     const handleToggle = () => {
       const newCollapsed = !isCollapsed
@@ -151,7 +145,6 @@ ToolBlock.displayName = 'ToolBlock'
 
 export interface ThinkingBlockProps extends React.HTMLAttributes<HTMLDivElement> {
   content: string
-  collapsed?: boolean
   onToggleCollapsed?: (collapsed: boolean) => void
 }
 
@@ -159,18 +152,13 @@ export const ThinkingBlock = React.forwardRef<HTMLDivElement, ThinkingBlockProps
   (
     {
       content,
-      collapsed = false,
       onToggleCollapsed,
       className = '',
       ...props
     },
     ref
   ) => {
-    const [isCollapsed, setIsCollapsed] = React.useState(collapsed)
-
-    React.useEffect(() => {
-      setIsCollapsed(collapsed)
-    }, [collapsed])
+    const [isCollapsed, setIsCollapsed] = React.useState(false)
 
     const handleToggle = () => {
       const newCollapsed = !isCollapsed
