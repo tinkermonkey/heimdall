@@ -63,8 +63,10 @@ export {
   type GraphCanvasProps,
   type BaseGraphNodeComponentProps,
 } from './components/GraphCanvas'
+export { type GraphCanvasContextValue } from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
+export { forceLayout, type LayoutNode, type LayoutEdge, type ForceLayoutOptions } from './utils/graphLayout'
 export {
   GraphInspector,
   type GraphNodeMetadata,

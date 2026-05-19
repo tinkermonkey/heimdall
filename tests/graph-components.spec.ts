@@ -49,23 +49,19 @@ test.describe('Graph Canvas Components', () => {
 
   test('GraphCanvas panning works on mouse drag', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
-    const stage = page.locator('.graph-stage')
+    const viewport = page.locator('[data-testid="graph-viewport"]')
 
-    const initialTransform = await stage.evaluate((el) => {
-      const style = window.getComputedStyle(el)
-      return style.transform
-    })
+    const initialTransform = await viewport.evaluate((el) => el.getAttribute('transform'))
 
-    // Get canvas bounding box and calculate positions
     const box = await canvas.boundingBox()
     if (!box) throw new Error('Canvas not visible')
 
-    const startX = box.x + 100
-    const startY = box.y + 100
-    const endX = startX + 100
-    const endY = startY + 100
+    // Click in the lower-right quadrant, away from any nodes
+    const startX = box.x + box.width - 60
+    const startY = box.y + box.height - 60
+    const endX = startX - 80
+    const endY = startY - 80
 
-    // Simulate pan by moving mouse
     await page.mouse.move(startX, startY)
     await page.mouse.down()
     await page.mouse.move(endX, endY, { steps: 10 })
@@ -73,38 +69,24 @@ test.describe('Graph Canvas Components', () => {
 
     await page.waitForTimeout(100)
 
-    const newTransform = await stage.evaluate((el) => {
-      const style = window.getComputedStyle(el)
-      return style.transform
-    })
+    const newTransform = await viewport.evaluate((el) => el.getAttribute('transform'))
 
     expect(initialTransform).not.toBe(newTransform)
   })
 
   test('GraphCanvas zoom works with scroll', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
-    const stage = page.locator('.graph-stage')
+    const viewport = page.locator('[data-testid="graph-viewport"]')
 
-    const initialTransform = await stage.evaluate((el) => {
-      const style = window.getComputedStyle(el)
-      return style.transform
-    })
+    const initialTransform = await viewport.evaluate((el) => el.getAttribute('transform'))
 
     await canvas.evaluate((el) => {
-      const wheelEvent = new WheelEvent('wheel', {
-        bubbles: true,
-        ctrlKey: true,
-        deltaY: 100,
-      })
-      el.dispatchEvent(wheelEvent)
+      el.dispatchEvent(new WheelEvent('wheel', { bubbles: true, ctrlKey: true, deltaY: 100 }))
     })
 
     await page.waitForTimeout(200)
 
-    const newTransform = await stage.evaluate((el) => {
-      const style = window.getComputedStyle(el)
-      return style.transform
-    })
+    const newTransform = await viewport.evaluate((el) => el.getAttribute('transform'))
 
     expect(initialTransform).not.toBe(newTransform)
   })
@@ -163,11 +145,14 @@ test.describe('Graph Canvas Components', () => {
   })
 
   test('GraphNode domainColor is applied correctly', async ({ page }) => {
+    // data-domain is hoisted to the SVG <g> wrapper
     const lifeNode = page.locator('[data-testid="graph-node-cls_cell"]')
     const lifeNodeDomain = await lifeNode.getAttribute('data-domain')
     expect(lifeNodeDomain).toBe('life')
 
+    // cls_co2 is positioned off the initial viewport (x=1100); check via DOM, not visibility
     const climateNode = page.locator('[data-testid="graph-node-cls_co2"]')
+    await expect(climateNode).toBeAttached()
     const climateNodeDomain = await climateNode.getAttribute('data-domain')
     expect(climateNodeDomain).toBe('climate')
   })
@@ -202,6 +187,7 @@ test.describe('Graph Canvas Components', () => {
   })
 
   test('Node selection persists across canvas interactions', async ({ page }) => {
+    // The SVG <g> wrapper gets class="selected" when the node is active
     const node1 = page.locator('[data-testid="graph-node-cls_cell"]')
     await node1.click()
 
@@ -216,9 +202,7 @@ test.describe('Graph Canvas Components', () => {
     inspectorTitle = page.locator('[data-testid="inspector-title"]')
     await expect(inspectorTitle).toContainText('Nucleus')
 
-    const node1Selected = await node1.evaluate((el) => {
-      return el.classList.contains('selected')
-    })
+    const node1Selected = await node1.evaluate((el) => el.classList.contains('selected'))
     expect(node1Selected).toBe(false)
   })
 
@@ -232,23 +216,24 @@ test.describe('Graph Canvas Components', () => {
   })
 
   test('Canvas background grid is visible', async ({ page }) => {
+    // Grid is now an SVG <rect> filled with a dot pattern; check SVG semantics
     const grid = page.locator('.graph-grid')
     await expect(grid).toBeVisible()
 
     const gridProps = await grid.evaluate((el) => {
-      const styles = window.getComputedStyle(el)
       const rect = el.getBoundingClientRect()
       return {
-        hasPosition: styles.position === 'absolute',
-        hasBackground: !!styles.backgroundColor || !!styles.backgroundImage,
+        isSvgRect: el.tagName.toLowerCase() === 'rect',
+        hasFill: el.getAttribute('fill') !== null,
         isVisible: rect.width > 0 && rect.height > 0,
         width: rect.width,
         height: rect.height,
       }
     })
 
+    expect(gridProps.isSvgRect).toBe(true)
+    expect(gridProps.hasFill).toBe(true)
     expect(gridProps.isVisible).toBe(true)
-    expect(gridProps.hasPosition).toBe(true)
     expect(gridProps.width).toBeGreaterThan(0)
     expect(gridProps.height).toBeGreaterThan(0)
   })

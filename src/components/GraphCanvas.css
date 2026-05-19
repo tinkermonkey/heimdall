@@ -12,38 +12,30 @@
   cursor: grabbing;
 }
 
+/* Off-screen div used to measure natural node dimensions before rendering */
+.graph-measure {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.graph-svg {
+  display: block;
+}
+
+/* Grid dot color via CSS — the SVG circle uses fill: currentColor */
+.graph-grid-dot {
+  fill: rgb(var(--canvas-fg-3));
+  opacity: 0.3;
+}
+
 .graph-grid {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(
-    circle,
-    rgba(var(--canvas-fg-3), 0.3) 1px,
-    transparent 1px
-  );
-  background-size: 18px 18px;
-  background-position: 0 0;
   pointer-events: none;
-  opacity: 0.5;
-}
-
-.graph-stage {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 100%;
-  height: 100%;
-  transform-origin: 50% 50%;
-  transition: transform 0.12s ease-out;
-  pointer-events: none;
-}
-
-.graph-stage > * {
-  pointer-events: auto;
 }
 
 body.dark-canvas {
-  --graph-bg: #11161d;
-  --graph-grid: rgba(255, 255, 255, 0.04);
   --graph-edge: #3a4452;
   --graph-edge-strong: #5a6573;
 }
