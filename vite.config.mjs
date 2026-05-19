@@ -12,6 +12,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@tinkermonkey/heimdall-ui/css': path.resolve(__dirname, './src/tokens/tokens.css'),
+      '@tinkermonkey/heimdall-ui': path.resolve(__dirname, './src/index.ts'),
     },
   },
   server: {

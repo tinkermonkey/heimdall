@@ -19,6 +19,11 @@ import OverlayComponentsTestPage from './test-pages/OverlayComponentsTestPage'
 import AdvancedOverlayComponentsTestPage from './test-pages/AdvancedOverlayComponentsTestPage'
 import FoundationTestPage from './test-pages/FoundationTestPage'
 import NavigationComponentTestPage from './test-pages/NavigationComponentTestPage'
+import ChartsTestPage from './test-pages/ChartsTestPage'
+import PagePatternsShowcase from './test-pages/PagePatternsShowcase'
+import ChatShowcase from './test-pages/ChatShowcase'
+import FormsShowcase from './test-pages/FormsShowcase'
+import GraphShowcase from './test-pages/GraphShowcase'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -84,6 +89,26 @@ export default function App() {
 
   if (exampleParam === 'navigation') {
     return <NavigationComponentTestPage />
+  }
+
+  if (exampleParam === 'charts') {
+    return <ChartsTestPage />
+  }
+
+  if (exampleParam === 'page-patterns') {
+    return <PagePatternsShowcase />
+  }
+
+  if (exampleParam === 'chat') {
+    return <ChatShowcase />
+  }
+
+  if (exampleParam === 'forms') {
+    return <FormsShowcase />
+  }
+
+  if (exampleParam === 'graph') {
+    return <GraphShowcase />
   }
 
   if (testParam === 'foundation') {

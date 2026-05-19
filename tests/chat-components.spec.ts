@@ -1,0 +1,480 @@
+import { test, expect } from '@playwright/test'
+import {
+  loadSelfHostedFonts,
+  assertFontsLoaded,
+  freezeAnimations,
+  applyDarkCanvasMode,
+  removeDarkCanvasMode,
+} from './utils/test-helpers'
+
+test.describe('Chat Components', () => {
+  test.beforeEach(async ({ page }) => {
+    // Navigate to the chat showcase test page
+    await page.goto('http://localhost:5173/?example=chat')
+    await page.waitForLoadState('networkidle')
+
+    // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN
+    await loadSelfHostedFonts(page)
+
+    // Verify fonts are loaded
+    await assertFontsLoaded(page)
+
+    // Freeze animations for consistent snapshots
+    await freezeAnimations(page)
+  })
+
+  test.afterEach(async ({ page }) => {
+    // Ensure we exit dark canvas mode after each test
+    await removeDarkCanvasMode(page)
+  })
+
+  test('ChatMessage component renders user message', async ({ page }) => {
+    // Verify user message is rendered
+    const userMessage = page.locator('[data-testid="chat-message-user-variant"]')
+    await expect(userMessage).toBeVisible()
+
+    // Verify avatar is displayed
+    const avatar = userMessage.locator('text="YO"').first()
+    await expect(avatar).toBeVisible()
+
+    // Verify sender name is displayed
+    const senderName = userMessage.locator('text="You"')
+    await expect(senderName).toBeVisible()
+
+    // Verify message body is displayed
+    const body = userMessage.locator('text="Can you help me analyze this dataset?"')
+    await expect(body).toBeVisible()
+
+    // Verify timestamp is displayed
+    const timestamp = userMessage.locator('text="10:30 AM"')
+    await expect(timestamp).toBeVisible()
+  })
+
+  test('ChatMessage component renders bot message', async ({ page }) => {
+    // Verify bot message is rendered
+    const botMessage = page.locator('[data-testid="chat-message-bot-variant"]')
+    await expect(botMessage).toBeVisible()
+
+    // Verify avatar is displayed
+    const avatar = botMessage.locator('.chat-message__avatar')
+    await expect(avatar).toBeVisible()
+
+    // Verify sender name is displayed
+    const senderName = botMessage.locator('.chat-message__sender')
+    await expect(senderName).toBeVisible()
+
+    // Verify badge is displayed
+    const badge = botMessage.locator('.chat-message__badge')
+    await expect(badge).toBeVisible()
+
+    // Verify message body is displayed
+    const body = botMessage.locator('.chat-message__body')
+    await expect(body).toBeVisible()
+  })
+
+  test('ToolBlock component renders in collapsed state', async ({ page }) => {
+    // Verify tool block is rendered
+    const toolBlock = page.locator('[data-testid="tool-block"]').first()
+    await expect(toolBlock).toBeVisible()
+
+    // Verify tool name is displayed
+    const toolName = toolBlock.locator('text="analyze_distribution"')
+    await expect(toolName).toBeVisible()
+
+    // Verify status indicator is displayed
+    const status = toolBlock.locator('text="success"')
+    await expect(status).toBeVisible()
+  })
+
+  test('ToolBlock component expands to show output', async ({ page }) => {
+    // Find the tool block toggle button
+    const toolBlockHeader = page.locator('.tool-block__header').first()
+
+    // Get the initial aria-expanded state
+    const initialExpanded = await toolBlockHeader.getAttribute('aria-expanded')
+    expect(initialExpanded).toBe('true') // Should be expanded by default
+
+    // Click to collapse
+    await toolBlockHeader.click()
+
+    // Verify it's now collapsed
+    const collapsedExpanded = await toolBlockHeader.getAttribute('aria-expanded')
+    expect(collapsedExpanded).toBe('false')
+
+    // Click to expand again
+    await toolBlockHeader.click()
+
+    // Verify expanded
+    const expandedAgain = await toolBlockHeader.getAttribute('aria-expanded')
+    expect(expandedAgain).toBe('true')
+  })
+
+  test('ThinkingBlock component renders', async ({ page }) => {
+    // Verify thinking block is rendered
+    const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+    await expect(thinkingBlock).toBeVisible()
+
+    // Verify label is displayed
+    const label = thinkingBlock.locator('text="thinking"')
+    await expect(label).toBeVisible()
+  })
+
+  test('ThinkingBlock component expands to show content', async ({ page }) => {
+    // Find the thinking block toggle button
+    const thinkingBlockHeader = page.locator('.thinking-block__header').first()
+
+    // Get the initial aria-expanded state
+    const initialExpanded = await thinkingBlockHeader.getAttribute('aria-expanded')
+    expect(initialExpanded).toBe('true') // Should be expanded by default
+
+    // Click to collapse
+    await thinkingBlockHeader.click()
+
+    // Verify it's now collapsed
+    const collapsedExpanded = await thinkingBlockHeader.getAttribute('aria-expanded')
+    expect(collapsedExpanded).toBe('false')
+
+    // Click to expand again
+    await thinkingBlockHeader.click()
+
+    // Verify expanded
+    const expandedAgain = await thinkingBlockHeader.getAttribute('aria-expanded')
+    expect(expandedAgain).toBe('true')
+  })
+
+  test('ThinkingBlock content visibility toggles', async ({ page }) => {
+    // Find the first thinking block
+    const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+
+    // Verify content is visible initially
+    const content = thinkingBlock.locator('.thinking-block__content')
+    await expect(content).toBeVisible()
+
+    // Click header to collapse
+    const header = thinkingBlock.locator('.thinking-block__header')
+    await header.click()
+
+    // Verify content is hidden
+    await expect(content).not.toBeVisible()
+
+    // Click header to expand
+    await header.click()
+
+    // Verify content is visible again
+    await expect(content).toBeVisible()
+  })
+
+  test('ChatDivider component renders', async ({ page }) => {
+    // Verify divider is rendered - get the first one (in the ChatDivider section, before the full container)
+    const divider = page.locator('[data-testid="chat-divider"]').first()
+    await expect(divider).toBeVisible()
+
+    // Verify label is displayed
+    const label = divider.locator('.chat-divider__label')
+    await expect(label).toBeVisible()
+  })
+
+  test('ChatSuggestions component renders pills', async ({ page }) => {
+    // Verify suggestions are rendered
+    const suggestions = page.locator('[data-testid="chat-suggestions"]')
+    await expect(suggestions).toBeVisible()
+
+    // Verify suggestion pills are rendered
+    const pills = suggestions.locator('button')
+    const pillCount = await pills.count()
+    expect(pillCount).toBe(3)
+
+    // Verify suggestion text is displayed
+    const showPlan = suggestions.locator('text="Show me the plan"')
+    await expect(showPlan).toBeVisible()
+
+    const approve = suggestions.locator('text="Approve & run"')
+    await expect(approve).toBeVisible()
+
+    const cancel = suggestions.locator('text="Cancel"')
+    await expect(cancel).toBeVisible()
+  })
+
+  test('ChatSuggestions component click interaction', async ({ page }) => {
+    // Find suggestion pill
+    const suggestion = page.locator('button:has-text("Show me the plan")').first()
+    await expect(suggestion).toBeVisible()
+
+    // Verify suggestion is rendered and clickable
+    const suggestionText = await suggestion.textContent()
+    expect(suggestionText).toContain('Show me the plan')
+
+    // Click suggestion
+    await suggestion.click()
+
+    // Verify click was registered by checking component is still visible
+    await expect(suggestion).toBeVisible()
+  })
+
+  test('ChatSuggestions renders nothing when empty', async ({ page }) => {
+    // Count all suggestion components
+    const allSuggestions = page.locator('[data-testid="chat-suggestions"]')
+    const count = await allSuggestions.count()
+
+    // There should only be 1 visible (the one with suggestions, empty one renders null)
+    expect(count).toBe(1)
+  })
+
+  test('ChatComposer component renders', async ({ page }) => {
+    // Verify composer is rendered
+    const composer = page.locator('[data-testid="chat-composer"]')
+    await expect(composer).toBeVisible()
+
+    // Verify input field is rendered
+    const input = composer.locator('textarea')
+    await expect(input).toBeVisible()
+
+    // Verify send button is rendered
+    const sendButton = composer.locator('button:has-text("send")')
+    await expect(sendButton).toBeVisible()
+  })
+
+  test('ChatComposer keyboard interaction - Enter submits', async ({ page }) => {
+    // Find textarea in the standalone ChatComposer (the one with data-testid)
+    const composer = page.locator('[data-testid="chat-composer"]')
+    const textarea = composer.locator('textarea[placeholder*="Ask assistant"]')
+    await expect(textarea).toBeVisible()
+
+    // Type text
+    await textarea.fill('Test message')
+    await expect(textarea).toHaveValue('Test message')
+
+    // Press Enter to submit
+    await textarea.press('Enter')
+
+    // Input should be cleared on submit
+    await expect(textarea).toHaveValue('')
+  })
+
+  test('ChatComposer keyboard interaction - Shift+Enter inserts newline', async ({ page }) => {
+    // Find textarea in the standalone ChatComposer (the one with data-testid)
+    const composer = page.locator('[data-testid="chat-composer"]')
+    const textarea = composer.locator('textarea[placeholder*="Ask assistant"]')
+    await expect(textarea).toBeVisible()
+
+    // Type text
+    await textarea.fill('First line')
+
+    // Press Shift+Enter to insert newline
+    await textarea.press('Shift+Enter')
+
+    // Verify newline was added
+    const value = await textarea.inputValue()
+    expect(value).toContain('\n')
+  })
+
+  test('ChatComposer displays context pills', async ({ page }) => {
+    // Verify scope label is displayed in the standalone ChatComposer
+    const composer = page.locator('[data-testid="chat-composer"]')
+    const scope = composer.locator('text="talking to"')
+    await expect(scope).toBeVisible()
+
+    // Verify context pill is rendered in the same composer
+    const contextPill = composer.locator('text="schema.json"')
+    await expect(contextPill).toBeVisible()
+  })
+
+  test('ChatComposer context pill removal', async ({ page }) => {
+    // Find the composer
+    const composer = page.locator('[data-testid="chat-composer"]')
+    await expect(composer).toBeVisible()
+
+    // Find the context pill
+    const contextPill = composer.locator('.chat-composer__context-pill').first()
+    await expect(contextPill).toBeVisible()
+
+    // Verify the remove button exists in the pill
+    const removeButton = contextPill.locator('.chat-composer__context-remove')
+    await expect(removeButton).toBeVisible()
+
+    // Click the remove button
+    await removeButton.click()
+
+    // Verify pill was removed (should have one fewer pills after removal)
+    const pillsAfter = composer.locator('.chat-composer__context-pill')
+    const countAfter = await pillsAfter.count()
+    expect(countAfter).toBe(0)
+  })
+
+  test('ChatContainer component renders bot tabs', async ({ page }) => {
+    // Scroll down to find the chat container
+    const chatContainer = page.locator('[data-testid="chat-container"]')
+    await expect(chatContainer).toBeVisible()
+
+    // Verify bot tabs are rendered
+    const botTabs = chatContainer.locator('.chat-container__bot-tab')
+    const tabCount = await botTabs.count()
+    expect(tabCount).toBeGreaterThan(0)
+
+    // Verify bot names are displayed by checking the bot label
+    const assistantLabel = chatContainer.locator('.chat-container__bot-label').first()
+    await expect(assistantLabel).toBeVisible()
+  })
+
+  test('ChatContainer bot tab switching', async ({ page }) => {
+    // Find chat container
+    const chatContainer = page.locator('[data-testid="chat-container"]')
+
+    // Find analyzer tab
+    const analyzerTab = chatContainer.locator('.chat-container__bot-tab').nth(1)
+
+    // Click analyzer tab
+    await analyzerTab.click()
+
+    // Verify it has active class/state
+    const isActive = await analyzerTab.evaluate(el =>
+      el.classList.contains('chat-container__bot-tab--active')
+    )
+    expect(isActive).toBe(true)
+  })
+
+  test('ChatContainer status indicators display correctly', async ({ page }) => {
+    // Find chat container
+    const chatContainer = page.locator('[data-testid="chat-container"]')
+
+    // Verify status indicators exist
+    const statusIndicators = chatContainer.locator('.chat-container__bot-status')
+    const count = await statusIndicators.count()
+    expect(count).toBeGreaterThan(0)
+  })
+
+  test('All chat components render in light canvas mode', async ({ page }) => {
+    // Verify page is in light mode (default)
+    const body = page.locator('body')
+    const hasDarkClass = await body.evaluate(el => el.classList.contains('dark-canvas'))
+    expect(hasDarkClass).toBe(false)
+
+    // Verify all key components are visible
+    await expect(page.locator('[data-testid="chat-message-user-variant"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-message-bot-variant"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-divider"]').first()).toBeVisible()
+    await expect(page.locator('[data-testid="chat-suggestions"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-composer"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-container"]')).toBeVisible()
+  })
+
+  test('All chat components render in dark canvas mode', async ({ page }) => {
+    // Toggle dark canvas mode
+    const toggleButton = page.locator('button:has-text("Toggle Dark Canvas Mode")')
+    await toggleButton.click()
+
+    // Wait for class update
+    await page.waitForTimeout(100)
+
+    // Verify all key components are still visible
+    await expect(page.locator('[data-testid="chat-message-user-variant"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-message-bot-variant"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-divider"]').first()).toBeVisible()
+    await expect(page.locator('[data-testid="chat-suggestions"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-composer"]')).toBeVisible()
+    await expect(page.locator('[data-testid="chat-container"]')).toBeVisible()
+
+    // Toggle back to light mode
+    await toggleButton.click()
+    await page.waitForTimeout(100)
+    await expect(page.locator('[data-testid="chat-message-user-variant"]')).toBeVisible()
+  })
+
+  test.describe('Visual Regression - Light Canvas', () => {
+    test('ChatMessage user variant visual snapshot', async ({ page }) => {
+      const userMessage = page.locator('[data-testid="chat-message-user-variant"]')
+      await expect(userMessage).toHaveScreenshot('chat-message-user-light.png')
+    })
+
+    test('ChatMessage bot variant visual snapshot', async ({ page }) => {
+      const botMessage = page.locator('[data-testid="chat-message-bot-variant"]')
+      await expect(botMessage).toHaveScreenshot('chat-message-bot-light.png')
+    })
+
+    test('ToolBlock running status visual snapshot', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(1)
+      await expect(toolBlock).toHaveScreenshot('tool-block-running-light.png')
+    })
+
+    test('ToolBlock success status visual snapshot', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(2)
+      await expect(toolBlock).toHaveScreenshot('tool-block-success-light.png')
+    })
+
+    test('ToolBlock error status visual snapshot', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(3)
+      await expect(toolBlock).toHaveScreenshot('tool-block-error-light.png')
+    })
+
+    test('ThinkingBlock component visual snapshot', async ({ page }) => {
+      const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+      await expect(thinkingBlock).toHaveScreenshot('thinking-block-light.png')
+    })
+
+    test('ChatDivider component visual snapshot', async ({ page }) => {
+      const divider = page.locator('[data-testid="chat-divider"]').first()
+      await expect(divider).toHaveScreenshot('chat-divider-light.png')
+    })
+
+    test('ChatComposer component visual snapshot', async ({ page }) => {
+      const composer = page.locator('[data-testid="chat-composer"]')
+      await expect(composer).toHaveScreenshot('chat-composer-light.png')
+    })
+
+    test('ChatContainer component visual snapshot', async ({ page }) => {
+      const container = page.locator('[data-testid="chat-container"]')
+      await expect(container).toHaveScreenshot('chat-container-light.png')
+    })
+  })
+
+  test.describe('Visual Regression - Dark Canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('ChatMessage user variant visual snapshot in dark mode', async ({ page }) => {
+      const userMessage = page.locator('[data-testid="chat-message-user-variant"]')
+      await expect(userMessage).toHaveScreenshot('chat-message-user-dark.png')
+    })
+
+    test('ChatMessage bot variant visual snapshot in dark mode', async ({ page }) => {
+      const botMessage = page.locator('[data-testid="chat-message-bot-variant"]')
+      await expect(botMessage).toHaveScreenshot('chat-message-bot-dark.png')
+    })
+
+    test('ToolBlock running status visual snapshot in dark mode', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(1)
+      await expect(toolBlock).toHaveScreenshot('tool-block-running-dark.png')
+    })
+
+    test('ToolBlock success status visual snapshot in dark mode', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(2)
+      await expect(toolBlock).toHaveScreenshot('tool-block-success-dark.png')
+    })
+
+    test('ToolBlock error status visual snapshot in dark mode', async ({ page }) => {
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(3)
+      await expect(toolBlock).toHaveScreenshot('tool-block-error-dark.png')
+    })
+
+    test('ThinkingBlock component visual snapshot in dark mode', async ({ page }) => {
+      const thinkingBlock = page.locator('[data-testid="thinking-block"]').first()
+      await expect(thinkingBlock).toHaveScreenshot('thinking-block-dark.png')
+    })
+
+    test('ChatDivider component visual snapshot in dark mode', async ({ page }) => {
+      const divider = page.locator('[data-testid="chat-divider"]').first()
+      await expect(divider).toHaveScreenshot('chat-divider-dark.png')
+    })
+
+    test('ChatComposer component visual snapshot in dark mode', async ({ page }) => {
+      const composer = page.locator('[data-testid="chat-composer"]')
+      await expect(composer).toHaveScreenshot('chat-composer-dark.png')
+    })
+
+    test('ChatContainer component visual snapshot in dark mode', async ({ page }) => {
+      const container = page.locator('[data-testid="chat-container"]')
+      await expect(container).toHaveScreenshot('chat-container-dark.png')
+    })
+  })
+})

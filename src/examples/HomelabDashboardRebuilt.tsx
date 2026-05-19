@@ -25,6 +25,7 @@ export default function HomelabDashboardRebuilt() {
 
   return (
     <ShellLayout
+      titlebar={{}}
       appTitle={{ title: 'Homelab', version: 'v1.0.0' }}
       topbar={{
         breadcrumbs: [

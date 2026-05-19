@@ -1,7 +1,8 @@
 import React from 'react'
 import './Chip.css'
+import type { StatusColor } from './statusColors'
 
-export type ChipVariant = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
+export type ChipVariant = StatusColor
 export type ChipForm = 'default' | 'id-tag' | 'version' | 'env'
 
 export interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {

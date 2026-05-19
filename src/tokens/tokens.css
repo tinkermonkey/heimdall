@@ -20,6 +20,7 @@
     /* ---- Canvas Surface (light canvas default) ---- */
     --canvas-bg: 255 255 255;
     --canvas-surface: 255 255 255;
+    --canvas-surface-2: 243 244 246;  /* #f3f4f6 — elevated surfaces */
     --canvas-card: 255 255 255;
     --canvas-bg-2: 247 249 251;   /* #f7f9fb */
     --canvas-fg-1: 11 18 32;      /* #0b1220 */
@@ -27,6 +28,7 @@
     --canvas-fg-3: 100 116 139;   /* #64748b */
     --canvas-fg-4: 148 163 184;   /* #94a3b8 */
     --canvas-border: 229 233 238;         /* #e5e9ee */
+    --canvas-border-2: 221 226 232;       /* #dde2e8 — secondary border */
     --canvas-border-strong: 214 220 227;  /* #d6dce3 */
 
     /* ---- Accent Color (amber brand) ---- */
@@ -164,6 +166,12 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
+    /* ---- Domain Colors (graph/topology) ---- */
+    --dom-default: 107 114 128;         /* #6b7280 — neutral gray */
+    --dom-life: 16 185 129;             /* #10b981 — emerald */
+    --dom-climate: 245 158 11;          /* #f59e0b — amber */
+    --dom-software: 129 140 248;        /* #818cf8 — indigo */
+
     /* ---- Focus Ring (amber accent) ---- */
     --focus-ring: 0 0 0 3px rgba(251, 191, 36, 0.18);
   }
@@ -172,6 +180,7 @@
   body.dark-canvas {
     --canvas-bg: 11 20 38;          /* #0b1426 — canvas page, deeper than shell-bg */
     --canvas-surface: 27 41 73;     /* #1b2949 — elevated panels */
+    --canvas-surface-2: 36 55 99;   /* #243763 — more elevated surfaces */
     --canvas-card: 27 41 73;        /* #1b2949 — panels, stat tiles, drawer */
     --canvas-bg-2: 19 32 58;        /* #13203a — table-header / inset zones, matches shell-bg-2 */
     --canvas-fg-1: 226 232 240;     /* #e2e8f0 — slate-200 */
@@ -179,6 +188,7 @@
     --canvas-fg-3: 100 116 139;     /* #64748b — slate-500 */
     --canvas-fg-4: 71 85 105;       /* #475569 — slate-600 */
     --canvas-border: 36 55 99;      /* #243763 */
+    --canvas-border-2: 42 58 92;    /* #2a3a5c — secondary border */
     --canvas-border-strong: 53 73 115; /* #354973 */
   }
 

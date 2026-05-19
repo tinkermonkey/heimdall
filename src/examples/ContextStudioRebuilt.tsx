@@ -26,6 +26,7 @@ export default function ContextStudioRebuilt() {
 
   return (
     <ShellLayout
+      titlebar={{}}
       appTitle={{ title: 'Context Studio', version: 'v0.4.1' }}
       topbar={{
         breadcrumbs: [
