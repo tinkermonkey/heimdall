@@ -14,6 +14,10 @@ A design system repository with two layers:
 - `design-reference/example-context-studio-design-system/` — design system variant of the studio
 - `design-reference/example-homelab-dashboard/` — homelab monitoring dashboard (same shell, dark canvas default)
 
+## Scratch Files
+
+When capturing screenshots, saving debug images, or writing any temporary working files during a session, always write them to `.scratch/` at the repo root. This directory is gitignored. Never write temporary files to the repo root or any tracked directory.
+
 ## Running Things
 
 ```bash
