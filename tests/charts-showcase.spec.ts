@@ -71,6 +71,161 @@ test.describe('Chart Components', () => {
     })
   })
 
+  test.describe('BarChart Component', () => {
+    test('renders bar chart with rectangles', async ({ page }) => {
+      const barChart = page.locator('[data-testid="bar-chart"]')
+      await expect(barChart).toBeVisible()
+
+      const bars = barChart.locator('svg rect')
+      const barCount = await bars.count()
+
+      // Bar chart should have data bars (not counting axis lines)
+      expect(barCount).toBeGreaterThan(0)
+    })
+
+    test('renders bar chart with grid lines', async ({ page }) => {
+      const barChart = page.locator('[data-testid="bar-chart"]')
+      const gridLines = barChart.locator('svg line')
+      const gridLineCount = await gridLines.count()
+
+      // Bar chart should have grid lines
+      expect(gridLineCount).toBeGreaterThan(0)
+    })
+
+    test('renders bar chart with legend', async ({ page }) => {
+      const barChart = page.locator('[data-testid="bar-chart"]')
+      const legend = barChart.locator('div').filter({ hasText: 'Series' })
+      await expect(legend.first()).toBeVisible()
+    })
+
+    test('renders bar chart with x-axis labels', async ({ page }) => {
+      const barChart = page.locator('[data-testid="bar-chart"]')
+      const xLabels = barChart.locator('svg text')
+      const xLabelCount = await xLabels.count()
+
+      // Should have x-axis labels
+      expect(xLabelCount).toBeGreaterThan(0)
+    })
+
+    test('bar chart handles empty data gracefully', async ({ page }) => {
+      const emptyChart = page.locator('[data-testid="bar-chart-empty"]')
+      // Empty chart should either be null or have no visible bars
+      const visibility = await emptyChart.count()
+      // Count should be 0 or chart should have no bars
+      if (visibility > 0) {
+        const bars = emptyChart.locator('svg rect')
+        const barCount = await bars.count()
+        expect(barCount).toBe(0)
+      }
+    })
+
+    test('bar chart handles single data point', async ({ page }) => {
+      const singleChart = page.locator('[data-testid="bar-chart-single"]')
+      const bars = singleChart.locator('svg rect')
+      const barCount = await bars.count()
+
+      // Should render the single bar
+      expect(barCount).toBeGreaterThan(0)
+
+      // Bar should have reasonable width (not infinity or too wide)
+      const bar = bars.first()
+      const width = await bar.getAttribute('width')
+      const widthNum = parseFloat(width || '0')
+      expect(widthNum).toBeGreaterThan(0)
+      expect(widthNum).toBeLessThan(100) // Should fit in viewBox
+    })
+
+    test('bar chart handles equal values without zero-height bars', async ({ page }) => {
+      const equalChart = page.locator('[data-testid="bar-chart-equal"]')
+      const bars = equalChart.locator('svg rect')
+      const barCount = await bars.count()
+
+      // Should render bars even with equal values
+      expect(barCount).toBeGreaterThan(0)
+
+      // All bars should have non-zero height
+      for (let i = 0; i < barCount; i++) {
+        const bar = bars.nth(i)
+        const height = await bar.getAttribute('height')
+        const heightNum = parseFloat(height || '0')
+        expect(heightNum).toBeGreaterThan(0)
+      }
+    })
+  })
+
+  test.describe('PieChart Component', () => {
+    test('renders pie chart with path segments', async ({ page }) => {
+      const pieChart = page.locator('[data-testid="pie-chart"]')
+      await expect(pieChart).toBeVisible()
+
+      const paths = pieChart.locator('svg path')
+      const pathCount = await paths.count()
+
+      // Pie chart should have path segments for each slice
+      expect(pathCount).toBeGreaterThan(0)
+    })
+
+    test('renders pie chart with legend', async ({ page }) => {
+      const pieChart = page.locator('[data-testid="pie-chart"]')
+      const legend = pieChart.locator('div').filter({ hasText: 'Component' })
+      await expect(legend.first()).toBeVisible()
+    })
+
+    test('pie chart segments have correct attributes', async ({ page }) => {
+      const pieChart = page.locator('[data-testid="pie-chart"]')
+      const paths = pieChart.locator('svg path')
+
+      // Each path should have a fill color
+      const pathCount = await paths.count()
+      for (let i = 0; i < pathCount; i++) {
+        const path = paths.nth(i)
+        const fill = await path.getAttribute('fill')
+        expect(fill).toBeTruthy()
+      }
+    })
+
+    test('pie chart handles empty segments gracefully', async ({ page }) => {
+      const emptyChart = page.locator('[data-testid="pie-chart-empty"]')
+      // Empty chart should either be null or have no visible paths
+      const visibility = await emptyChart.count()
+      // Count should be 0 or chart should have no paths
+      if (visibility > 0) {
+        const paths = emptyChart.locator('svg path')
+        const pathCount = await paths.count()
+        expect(pathCount).toBe(0)
+      }
+    })
+
+    test('pie chart handles zero and negative values correctly', async ({ page }) => {
+      const zeroChart = page.locator('[data-testid="pie-chart-zero-negative"]')
+      // Chart with all zero/negative should render nothing or have no segments
+      const visibility = await zeroChart.count()
+      if (visibility > 0) {
+        const paths = zeroChart.locator('svg path')
+        const pathCount = await paths.count()
+        expect(pathCount).toBe(0)
+      }
+    })
+
+    test('pie chart handles numeric values safely without NaN', async ({ page }) => {
+      const numericChart = page.locator('[data-testid="pie-chart-numeric-safe"]')
+      const paths = numericChart.locator('svg path')
+      const pathCount = await paths.count()
+
+      // Should render segments without NaN issues
+      expect(pathCount).toBeGreaterThan(0)
+
+      // All paths should have valid d attributes (not NaN)
+      for (let i = 0; i < pathCount; i++) {
+        const path = paths.nth(i)
+        const d = await path.getAttribute('d')
+        expect(d).toBeTruthy()
+        // Path should not contain NaN
+        expect(d).not.toContain('NaN')
+      }
+    })
+  })
+
   test.describe('LineChart Component', () => {
     test('renders line chart with lines', async ({ page }) => {
       const lineChart = page.locator('[data-testid="line-chart"]')
@@ -309,6 +464,16 @@ test.describe('Chart Components', () => {
       await expect(sparkline).toHaveScreenshot('sparkline-light.png')
     })
 
+    test('BarChart component visual snapshot', async ({ page }) => {
+      const barChart = page.locator('[data-testid="bar-chart"]')
+      await expect(barChart).toHaveScreenshot('bar-chart-light.png')
+    })
+
+    test('PieChart component visual snapshot', async ({ page }) => {
+      const pieChart = page.locator('[data-testid="pie-chart"]')
+      await expect(pieChart).toHaveScreenshot('pie-chart-light.png')
+    })
+
     test('LineChart component visual snapshot', async ({ page }) => {
       const lineChart = page.locator('[data-testid="line-chart"]')
       await expect(lineChart).toHaveScreenshot('line-chart-light.png')
@@ -333,6 +498,16 @@ test.describe('Chart Components', () => {
     test('Sparkline component visual snapshot in dark mode', async ({ page }) => {
       const sparkline = page.locator('svg[data-testid="sparkline-emerald"]')
       await expect(sparkline).toHaveScreenshot('sparkline-dark.png')
+    })
+
+    test('BarChart component visual snapshot in dark mode', async ({ page }) => {
+      const barChart = page.locator('[data-testid="bar-chart"]')
+      await expect(barChart).toHaveScreenshot('bar-chart-dark.png')
+    })
+
+    test('PieChart component visual snapshot in dark mode', async ({ page }) => {
+      const pieChart = page.locator('[data-testid="pie-chart"]')
+      await expect(pieChart).toHaveScreenshot('pie-chart-dark.png')
     })
 
     test('LineChart component visual snapshot in dark mode', async ({ page }) => {

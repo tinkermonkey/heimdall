@@ -27,9 +27,13 @@ export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
     // For single data point, create a flat line
     const points = data.length === 1 ? [data[0], data[0]] : data
 
-    // Find min and max for scaling
-    const min = Math.min(...points)
-    const max = Math.max(...points)
+    // Find min and max for scaling using loop to avoid stack overflow with large arrays
+    let min = Infinity
+    let max = -Infinity
+    for (let i = 0; i < points.length; i++) {
+      if (points[i] < min) min = points[i]
+      if (points[i] > max) max = points[i]
+    }
     const range = max - min
 
     // Normalize points to 0-1 range

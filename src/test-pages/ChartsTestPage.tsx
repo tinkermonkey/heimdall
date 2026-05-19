@@ -226,6 +226,64 @@ export default function ChartsTestPage() {
         </div>
       </section>
 
+      {/* BarChart Edge Cases */}
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          BarChart · Edge Cases
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Empty Data</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <BarChart
+                series={[
+                  { name: 'Empty A', data: [], color: 'rgb(245, 158, 11)' },
+                  { name: 'Empty B', data: [], color: 'rgb(16, 185, 129)' },
+                ]}
+                width={300}
+                height={150}
+                data-testid="bar-chart-empty"
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Single Point</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <BarChart
+                series={[{ name: 'Single', data: [15], color: 'rgb(245, 158, 11)' }]}
+                xLabels={['Jan']}
+                width={300}
+                height={150}
+                data-testid="bar-chart-single"
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Equal Values</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <BarChart
+                series={[
+                  { name: 'Constant', data: [10, 10, 10, 10, 10], color: 'rgb(244, 63, 94)' },
+                ]}
+                xLabels={['A', 'B', 'C', 'D', 'E']}
+                width={300}
+                height={150}
+                data-testid="bar-chart-equal"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PieChart Section */}
       <section style={{ marginBottom: '32px' }}>
         <div
@@ -253,6 +311,66 @@ export default function ChartsTestPage() {
             height={300}
             data-testid="pie-chart"
           />
+        </div>
+      </section>
+
+      {/* PieChart Edge Cases */}
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          PieChart · Edge Cases
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Empty Segments</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <PieChart
+                segments={[]}
+                legend={true}
+                width={200}
+                height={200}
+                data-testid="pie-chart-empty"
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>All Zero/Negative</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <PieChart
+                segments={[
+                  { name: 'Zero', value: 0 },
+                  { name: 'Negative', value: -5 },
+                ]}
+                legend={true}
+                width={200}
+                height={200}
+                data-testid="pie-chart-zero-negative"
+              />
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>String Values (Type Check)</span>
+            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+              <PieChart
+                segments={[
+                  { name: 'Value A', value: 50 as any },
+                  { name: 'Value B', value: 30 as any },
+                ]}
+                legend={true}
+                width={200}
+                height={200}
+                data-testid="pie-chart-numeric-safe"
+              />
+            </div>
+          </div>
         </div>
       </section>
 

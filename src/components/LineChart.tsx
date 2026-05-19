@@ -76,6 +76,10 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
         y: padding.top + chartHeight - (i / divisor) * chartHeight,
       }
     })
+    // Remove duplicate tick values (when yRange = 0)
+    const uniqueYTicks = Array.from(
+      new Map(yTicks.map((tick) => [tick.value, tick])).values()
+    )
 
     return (
       <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
@@ -86,7 +90,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
           style={{ overflow: 'visible' }}
         >
           {/* Y-axis grid lines and ticks */}
-          {yTicks.map((tick, idx) => (
+          {uniqueYTicks.map((tick, idx) => (
             <g key={`y-tick-${idx}`}>
               {/* Grid line */}
               <line

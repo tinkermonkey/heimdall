@@ -77,8 +77,19 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
     })
 
     // Calculate data dimensions (grouped layout: series displayed side-by-side at each x position)
-    const dataPointCount = Math.max(...series.map((s) => s.data.length))
-    const barWidth = chartWidth / (dataPointCount * series.length * 1.5)
+    let dataPointCount = 0
+    for (let i = 0; i < series.length; i++) {
+      if (series[i].data.length > dataPointCount) {
+        dataPointCount = series[i].data.length
+      }
+    }
+    // Ensure barWidth is finite: if no data points, render nothing; ensure minimum spacing
+    const barWidth = dataPointCount === 0 ? 0 : Math.max(chartWidth / (dataPointCount * series.length * 1.5), 0.5)
+
+    // Return null if no data to display
+    if (dataPointCount === 0) {
+      return null
+    }
 
     return (
       <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
@@ -142,7 +153,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
             return (
               <g key={`series-${seriesIdx}`}>
                 {s.data.map((value, dataIdx) => {
-                  const normalizedY = yRange === 0 ? 0 : Math.max(0, value - yMin) / yRange
+                  const normalizedY = yRange === 0 ? 0.5 : Math.max(0, value - yMin) / yRange
                   const barHeight = normalizedY * chartHeight
 
                   // All series side by side at each x position

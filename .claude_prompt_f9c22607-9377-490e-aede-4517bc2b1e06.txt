@@ -1,0 +1,80 @@
+You are a Senior Software Engineer.
+
+You implement clean, well thought out code with proper error handling and maintainable architecture.
+
+### Work Item
+
+These are the requirements to implement.
+
+**Title**:
+[PR Feedback] Chart Components
+
+**Description**:
+Based on consolidated PR review, address the following in **Chart Components**:
+
+- **BarChart division-by-zero and NaN propagation**: When all series have empty `data` arrays, `dataPointCount = 0` causes `barWidth = chartWidth / 0 = Infinity`. NaN/Infinity values propagate into SVG `rect` attributes, rendering an invisible chart. A single data point (line 149) produces a bar wider than the chart area. Equal-value datasets (`yRange = 0`) produce zero-height bars in BarChart and repeated y-axis labels in LineChart. `BarChart.tsx:80-81`, `BarChart.tsx:149`, `LineChart.tsx:59-61`
+- **Sparkline stack-overflow-prone Math.min/max spread**: `Math.min(...points)` / `Math.max(...points)` throws `RangeError` on ~100K+ elements. Sister components `LineChart.tsx:43-54` and `BarChart.tsx:42-53` were already refactored to use loops with an explicit comment — Sparkline was missed. `Sparkline.tsx:31-32`
+- **PieChart NaN from string coercion**: String values pass the `> 0` filter due to JS type coercion but cause string concatenation in the total calculation, producing NaN arc angles and broken rendering. `PieChart.tsx:35`
+- **BarChart and PieChart have zero test coverage**: Both are rendered in `ChartsTestPage.tsx` fixtures but `charts-showcase.spec.ts` contains no tests, assertions, or visual snapshots for either. Non-trivial SVG rendering logic (arc math, grouped bar layout, empty-data guards) goes completely unregressed.
+
+---
+_Created by PR Review Stage - Consolidation Phase_
+
+---
+
+## Concurrent Fix Issues (Same Review Cycle)
+
+The following issues are being fixed simultaneously in this review cycle. Check these issues for any files they modify before making your own changes to avoid introducing conflicts:
+
+- #43: [PR Feedback] Graph Components
+- #44: [PR Feedback] Form Components
+- #45: [PR Feedback] Chat Components
+- #46: [PR Feedback] Page Pattern Components
+- #47: [PR Feedback] Component API Consistency
+- #48: [PR Feedback] Icon System
+
+### Previous Work
+
+
+## Pipeline Context Files
+
+Prior stage outputs are available at `/pipeline_context/`:
+
+- `software_architect_output.md` — Software Architect output
+- `initial_request.md` — original issue
+
+Read the relevant files before starting your analysis.
+
+
+### Guidelines
+
+
+Implement the specified code changes to meet the requirements specified.
+
+### Project-Specific Expert Agents
+
+Check `/workspace/CLAUDE.md` for a "Specialized Sub-Agents" section. If any listed agent matches your task domain (e.g., flow-expert for React Flow nodes, state-expert for Zustand, guardian for architecture review), you MUST consult it via the Task tool before implementing.
+
+Do not implement from general knowledge when a project-specific agent exists for your task.
+
+### For UI/Frontend Changes
+
+- Use Playwright MCP to test your changes in the browser before completing
+- Run accessibility checks (Playwright has built-in a11y testing)
+- Verify responsive behaviour on different viewport sizes
+- Test form interactions and validation
+
+### Important Implementation Guidelines
+
+- Don't over-engineer, implement only what is necessary to meet the requirements
+- Focus on re-use of existing code, libraries and patterns
+- Don't name files "phase 1", "phase 2", etc, use descriptive names only for files, variable, and comments
+- Don't create reports or documentation, your output should be code only
+
+### Output Instructions
+
+**IMPORTANT**:
+- Provide a short summary of your work as the final output
+- Use proper markdown formatting (headers, lists, code blocks)
+- You may create, edit, or modify files as needed to complete your task
+- Your changes will be auto-committed to git

@@ -31,8 +31,11 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
       return null
     }
 
-    // Filter out segments with zero or negative values
-    const validSegments = segments.filter((s) => s.value > 0)
+    // Filter out segments with zero or negative values, ensuring numeric type
+    const validSegments = segments.filter((s) => {
+      const numValue = Number(s.value)
+      return isFinite(numValue) && numValue > 0
+    })
 
     if (validSegments.length === 0) {
       return null
@@ -41,7 +44,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
     // Calculate total value from valid segments
     let total = 0
     for (let i = 0; i < validSegments.length; i++) {
-      total += validSegments[i].value
+      total += Number(validSegments[i].value)
     }
 
     // SVG dimensions
@@ -63,15 +66,16 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
     }> = []
 
     validSegments.forEach((segment, idx) => {
-      const sliceAngle = (segment.value / total) * 2 * Math.PI
+      const numValue = Number(segment.value)
+      const sliceAngle = (numValue / total) * 2 * Math.PI
       const endAngle = currentAngle + sliceAngle
-      const percentage = (segment.value / total) * 100
+      const percentage = (numValue / total) * 100
 
       slices.push({
         startAngle: currentAngle,
         endAngle: endAngle,
         color: segment.color || chartColors[idx % chartColors.length],
-        value: segment.value,
+        value: numValue,
         name: segment.name,
         percentage: percentage,
       })
