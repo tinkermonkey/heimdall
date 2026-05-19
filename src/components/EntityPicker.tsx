@@ -40,10 +40,12 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
-      if (selectedIndex >= results.length && results.length > 0) {
-        setSelectedIndex(results.length - 1)
-      } else if (results.length === 0) {
+      if (results.length === 0) {
         setSelectedIndex(0)
+      } else {
+        setSelectedIndex((prev) =>
+          prev >= results.length ? results.length - 1 : prev
+        )
       }
     }, [results])
 

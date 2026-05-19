@@ -23,6 +23,7 @@ export interface KeyValueEditorProps
 export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorProps>(
   ({ rows, onChange, datatypeColumn = false, datatypes = ['string', 'number', 'boolean'], className, ...props }, ref) => {
     const rowIdPrefix = React.useId()
+    const rowIdCounter = React.useRef(0)
 
     const handleKeyChange = (id: string, newKey: string) => {
       onChange(
@@ -54,7 +55,7 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
 
     const handleAddRow = () => {
       const newRow: KeyValueRow = {
-        id: `${rowIdPrefix}-${rows.length}`,
+        id: `${rowIdPrefix}-${rowIdCounter.current++}`,
         key: '',
         value: '',
         ...(datatypeColumn && { datatype: 'string' }),
