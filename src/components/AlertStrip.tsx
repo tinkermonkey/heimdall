@@ -3,7 +3,7 @@ import { Badge } from './Badge'
 import { Icon } from './Icon'
 import './AlertStrip.css'
 
-export type AlertSeverity = 'error' | 'warn' | 'info'
+export type AlertSeverity = 'error' | 'warn' | 'info' | 'success'
 
 export interface Alert {
   id: string
@@ -17,10 +17,11 @@ export interface AlertStripProps {
   className?: string
 }
 
-const SEVERITY_COLOR_MAP: Record<AlertSeverity, 'rose' | 'amber' | 'cyan'> = {
+const SEVERITY_COLOR_MAP: Record<AlertSeverity, 'rose' | 'amber' | 'cyan' | 'emerald'> = {
   error: 'rose',
   warn: 'amber',
   info: 'cyan',
+  success: 'emerald',
 }
 
 export const AlertStrip = React.forwardRef<HTMLDivElement, AlertStripProps>(

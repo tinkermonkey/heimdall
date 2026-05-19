@@ -11,7 +11,7 @@ export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
   ({ percent, color = 'emerald', height = 6, className = '', ...rest }, ref) => {
-    const clampedPercent = Math.min(Math.max(percent, 0), 100)
+    const clampedPercent = Number.isNaN(percent) ? 0 : Math.min(Math.max(percent, 0), 100)
     const colorClass = `progress-bar--${color}`
 
     return (
@@ -19,6 +19,10 @@ export const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
         ref={ref}
         className={`progress-bar ${colorClass} ${className}`.trim()}
         style={{ height: `${height}px` }}
+        role="progressbar"
+        aria-valuenow={clampedPercent}
+        aria-valuemin={0}
+        aria-valuemax={100}
         {...rest}
       >
         <div className="progress-bar__fill" style={{ width: `${clampedPercent}%` }} />
