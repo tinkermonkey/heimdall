@@ -7,7 +7,7 @@ export interface GraphNodeMetadata {
   kind?: string
   domain?: string
   description?: string
-  [key: string]: string | number | boolean | null | undefined
+  metadata?: Record<string, string | number | boolean | null | undefined>
 }
 
 export interface RelationshipLink {
@@ -79,20 +79,16 @@ export const GraphInspector = React.forwardRef<HTMLDivElement, GraphInspectorPro
             </p>
           )}
 
-          <dl className="graph-inspector__kv" data-testid="inspector-metadata">
-            {Object.entries(node)
-              .filter(
-                ([key]) =>
-                  !['id', 'title', 'kind', 'domain', 'description'].includes(key) &&
-                  !key.startsWith('_')
-              )
-              .map(([key, value]) => (
+          {node.metadata && Object.keys(node.metadata).length > 0 && (
+            <dl className="graph-inspector__kv" data-testid="inspector-metadata">
+              {Object.entries(node.metadata).map(([key, value]) => (
                 <React.Fragment key={key}>
                   <dt>{key}</dt>
                   <dd>{String(value)}</dd>
                 </React.Fragment>
               ))}
-          </dl>
+            </dl>
+          )}
 
           {outgoing.length > 0 && (
             <>
