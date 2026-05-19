@@ -75,6 +75,10 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
         y: padding.top + chartHeight - (i / divisor) * chartHeight,
       }
     })
+    // Remove duplicate tick values (when yRange = 0)
+    const uniqueYTicks = Array.from(
+      new Map(yTicks.map((tick) => [tick.value, tick])).values()
+    )
 
     // Calculate data dimensions (grouped layout: series displayed side-by-side at each x position)
     let dataPointCount = 0
@@ -100,7 +104,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
           style={{ overflow: 'visible' }}
         >
           {/* Y-axis grid lines and ticks */}
-          {yTicks.map((tick, idx) => (
+          {uniqueYTicks.map((tick, idx) => (
             <g key={`y-tick-${idx}`}>
               {/* Grid line */}
               <line

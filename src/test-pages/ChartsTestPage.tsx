@@ -361,8 +361,8 @@ export default function ChartsTestPage() {
             <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
               <PieChart
                 segments={[
-                  { name: 'Value A', value: 50 as any },
-                  { name: 'Value B', value: 30 as any },
+                  { name: 'Value A', value: '50' as any },
+                  { name: 'Value B', value: '30' as any },
                 ]}
                 legend={true}
                 width={200}

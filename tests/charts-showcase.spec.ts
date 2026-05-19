@@ -109,14 +109,8 @@ test.describe('Chart Components', () => {
 
     test('bar chart handles empty data gracefully', async ({ page }) => {
       const emptyChart = page.locator('[data-testid="bar-chart-empty"]')
-      // Empty chart should either be null or have no visible bars
-      const visibility = await emptyChart.count()
-      // Count should be 0 or chart should have no bars
-      if (visibility > 0) {
-        const bars = emptyChart.locator('svg rect')
-        const barCount = await bars.count()
-        expect(barCount).toBe(0)
-      }
+      // Empty chart should return null (no element in DOM)
+      expect(await emptyChart.count()).toBe(0)
     })
 
     test('bar chart handles single data point', async ({ page }) => {
@@ -186,25 +180,14 @@ test.describe('Chart Components', () => {
 
     test('pie chart handles empty segments gracefully', async ({ page }) => {
       const emptyChart = page.locator('[data-testid="pie-chart-empty"]')
-      // Empty chart should either be null or have no visible paths
-      const visibility = await emptyChart.count()
-      // Count should be 0 or chart should have no paths
-      if (visibility > 0) {
-        const paths = emptyChart.locator('svg path')
-        const pathCount = await paths.count()
-        expect(pathCount).toBe(0)
-      }
+      // Empty chart should return null (no element in DOM)
+      expect(await emptyChart.count()).toBe(0)
     })
 
     test('pie chart handles zero and negative values correctly', async ({ page }) => {
       const zeroChart = page.locator('[data-testid="pie-chart-zero-negative"]')
-      // Chart with all zero/negative should render nothing or have no segments
-      const visibility = await zeroChart.count()
-      if (visibility > 0) {
-        const paths = zeroChart.locator('svg path')
-        const pathCount = await paths.count()
-        expect(pathCount).toBe(0)
-      }
+      // Chart with all zero/negative should return null (no element in DOM)
+      expect(await zeroChart.count()).toBe(0)
     })
 
     test('pie chart handles numeric values safely without NaN', async ({ page }) => {
