@@ -20,7 +20,7 @@ export default function ChatShowcase() {
 
   const bots: BotTab[] = [
     { id: 'assistant', label: 'Assistant', role: 'EXECUTOR', status: 'idle' },
-    { id: 'analyzer', label: 'Analyzer', role: 'ANALYST', status: 'idle' },
+    { id: 'analyzer', label: 'Analyzer', role: 'ANALYST', status: 'healthy' },
     { id: 'planner', label: 'Planner', role: 'ARCHITECT', status: 'busy' },
   ]
 
@@ -244,6 +244,65 @@ This will require calling analyze_distribution with the dataset parameters.`
                 }}
               />
               <ChatDivider label="Session ended" />
+            </ChatContainer>
+          </div>
+        </section>
+
+        {/* Chat Container with Composed Composer */}
+        <section style={{ marginBottom: '32px' }}>
+          <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: 'rgb(var(--canvas-fg-1))' }}>
+            Chat Container with Composed Composer
+          </h2>
+          <div style={{ color: 'rgb(var(--canvas-fg-3))', fontSize: '12px', marginBottom: '16px' }}>
+            ChatComposer can be composed inside ChatContainer via the composer prop, with the composer anchored at the bottom.
+          </div>
+          <div style={{ height: '500px' }}>
+            <ChatContainer
+              bots={bots}
+              activeBotId={activeBotId}
+              onBotChange={setActiveBotId}
+              composer={
+                <ChatComposer
+                  placeholder="Ask assistant something..."
+                  value={composerValue}
+                  onChange={setComposerValue}
+                  onSubmit={handleComposerSubmit}
+                  onContextChange={setContextItems}
+                  onAttachmentChange={setAttachments}
+                  scopeLabel="Assistant"
+                  contextItems={contextItems}
+                  attachments={attachments}
+                />
+              }
+            >
+              <ChatMessage
+                role="bot"
+                senderName="Assistant"
+                badge="EXECUTOR"
+                timestamp="10:15 AM"
+                body="Hello! How can I help you today?"
+              />
+              <ChatMessage
+                role="user"
+                senderName="You"
+                timestamp="10:16 AM"
+                body="I need to process a large dataset"
+              />
+              <ChatMessage
+                role="bot"
+                senderName="Assistant"
+                badge="EXECUTOR"
+                timestamp="10:17 AM"
+                body="I can help with that. Let me start the processing job."
+                toolBlock={{
+                  name: 'process_data',
+                  status: 'success',
+                  output: [
+                    { key: 'files', value: '145' },
+                    { key: 'total_size', value: '2.3 GB' },
+                  ],
+                }}
+              />
             </ChatContainer>
           </div>
         </section>
