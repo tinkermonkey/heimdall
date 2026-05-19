@@ -6,6 +6,7 @@ import {
   ChatSuggestions,
   ChatComposer,
   type BotTab,
+  type Attachment,
 } from '../index'
 
 export default function ChatShowcase() {
@@ -14,7 +15,7 @@ export default function ChatShowcase() {
   const [contextItems, setContextItems] = useState([
     { id: 'schema', label: 'schema.json' },
   ])
-  const [attachments, setAttachments] = useState<any[]>([])
+  const [attachments, setAttachments] = useState<Attachment[]>([])
 
   const bots: BotTab[] = [
     { id: 'assistant', label: 'Assistant', role: 'EXECUTOR', status: 'idle' },

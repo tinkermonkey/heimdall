@@ -82,8 +82,8 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       if (!e.target.files) return
 
       const files = Array.from(e.target.files)
-      const newAttachments = files.map((file, idx) => ({
-        id: `${Date.now()}-${idx}`,
+      const newAttachments = files.map((file) => ({
+        id: crypto.randomUUID(),
         name: file.name,
         size: file.size,
       }))
@@ -91,7 +91,6 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       const updated = [...attachments, ...newAttachments]
       onAttachmentChange?.(updated)
 
-      // Reset the input
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
       }
