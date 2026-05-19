@@ -1,5 +1,7 @@
-import React, { useState, useRef, useCallback, useContext, createContext, useEffect } from 'react'
+import React, { useState, useRef, useCallback, useContext, createContext, useEffect, useMemo } from 'react'
+import { bezierPath, rectEdgePoint } from '../utils/graph'
 import './GraphCanvas.css'
+import './GraphEdge.css'
 
 export interface GraphNodeData {
   id: string
@@ -53,6 +55,46 @@ export interface GraphCanvasProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
 }
 
+const DEFAULT_NODE_W = 138
+const DEFAULT_NODE_H = 30
+
+function GraphEdgeInternal({ id, sourceId, targetId, label }: { id: string; sourceId: string; targetId: string; label?: string }) {
+  const { nodes } = useGraphCanvas()
+
+  const result = useMemo(() => {
+    const src = nodes.find(n => n.id === sourceId)
+    const tgt = nodes.find(n => n.id === targetId)
+    if (!src || !tgt) return null
+    const sw = src.width ?? DEFAULT_NODE_W
+    const sh = src.height ?? DEFAULT_NODE_H
+    const tw = tgt.width ?? DEFAULT_NODE_W
+    const th = tgt.height ?? DEFAULT_NODE_H
+    const sp = rectEdgePoint(src.x, src.y, sw, sh, tgt.x, tgt.y)
+    const tp = rectEdgePoint(tgt.x, tgt.y, tw, th, src.x, src.y)
+    return bezierPath(sp, tp, 0.22)
+  }, [nodes, sourceId, targetId])
+
+  if (!result) return null
+
+  const markerId = `arrow-${id}`
+  return (
+    <g className="graph-edge" data-testid={`graph-edge-${id}`}>
+      <defs>
+        <marker id={markerId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, #94a3b8)" />
+        </marker>
+      </defs>
+      <path className="graph-edge__line" d={result.d} markerEnd={`url(#${markerId})`} />
+      {label && (
+        <g transform={`translate(${result.mid.x}, ${result.mid.y})`} className="graph-edge__label">
+          <rect x="-24" y="-8" width="48" height="14" className="graph-edge__label-bg" rx="2" />
+          <text className="graph-edge__label-text" textAnchor="middle" dominantBaseline="middle">{label}</text>
+        </g>
+      )}
+    </g>
+  )
+}
+
 export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
   (
     {
@@ -68,6 +110,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
   ) => {
     const [zoom, setZoom] = useState(1)
     const [pan, setPan] = useState({ x: 0, y: 0 })
+    const [size, setSize] = useState({ width: 0, height: 0 })
     const containerRef = useRef<HTMLDivElement>(null)
     const dragRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
     const zoomRef = useRef(1)
@@ -112,6 +155,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
       container.addEventListener('wheel', handleWheel, { passive: false })
       return () => container.removeEventListener('wheel', handleWheel)
+    }, [])
+
+    useEffect(() => {
+      const container = containerRef.current
+      if (!container) return
+      const ro = new ResizeObserver(entries => {
+        const { width, height } = entries[0].contentRect
+        setSize({ width, height })
+      })
+      ro.observe(container)
+      return () => ro.disconnect()
     }, [])
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -163,6 +217,26 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       >
         <div className="graph-grid"></div>
         <GraphCanvasContext.Provider value={contextValue}>
+          {edges && edges.length > 0 && size.width > 0 && (
+            <svg
+              className="graph-svg"
+              width={size.width}
+              height={size.height}
+              style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'visible' }}
+            >
+              <g style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0' }}>
+                {edges.map(edge => (
+                  <GraphEdgeInternal
+                    key={edge.id}
+                    id={edge.id}
+                    sourceId={edge.sourceId}
+                    targetId={edge.targetId}
+                    label={edge.label}
+                  />
+                ))}
+              </g>
+            </svg>
+          )}
           <div
             className="graph-stage"
             style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}

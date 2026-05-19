@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { GraphCanvas } from '../components/GraphCanvas'
 import GraphNode from '../components/GraphNode'
-import GraphEdge from '../components/GraphEdge'
 import GraphInspector, { type GraphNodeMetadata, type RelationshipLink } from '../components/GraphInspector'
 import { SplitPane } from '../components/SplitPane'
 import TopologyNode from '../components/TopologyNode'
@@ -125,22 +124,11 @@ export default function GraphShowcase() {
   const graphCanvas = (
     <GraphCanvas
       nodes={GRAPH_NODES}
+      edges={GRAPH_EDGES}
       selectedNodeId={selectedNodeId}
       onNodeSelect={setSelectedNodeId}
       style={{ height: '100%' }}
     >
-      <svg className="graph-svg" viewBox="0 0 1340 700" preserveAspectRatio="xMidYMid meet" style={{ pointerEvents: 'none' }}>
-        {GRAPH_EDGES.map((edge) => (
-          <GraphEdge
-            key={edge.id}
-            id={edge.id}
-            sourceId={edge.sourceId}
-            targetId={edge.targetId}
-            label={edge.label}
-          />
-        ))}
-      </svg>
-
       {GRAPH_NODES.map((node) => (
         <GraphNode
           key={node.id}

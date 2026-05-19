@@ -9,6 +9,11 @@ import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from
 import { AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
+import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarChartShowcase, PieChartShowcase, ProgressBarShowcase, MetricRowShowcase } from './showcases/ChartsShowcase'
+import { PageHeaderShowcase, FilterBarShowcase, ActivityTimelineShowcase, AlertStripShowcase, QuickAccessGridShowcase } from './showcases/PagePatternsShowcase'
+import { ChatMessageShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
+import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, RelationshipBuilderShowcase, RowMenuShowcase, PipelineCardShowcase, FormCalloutShowcase } from './showcases/FormsComplexShowcase'
+import { GraphCanvasShowcase, GraphInspectorShowcase, TopologyNodeShowcase } from './showcases/GraphShowcase'
 import PrimitivesTestPage from '@/test-pages/PrimitivesTestPage'
 import DataDisplayTestPage from '@/test-pages/DataDisplayTestPage'
 import OverlayComponentsTestPage from '@/test-pages/OverlayComponentsTestPage'
@@ -73,7 +78,37 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   drawer: DrawerShowcase,
   'split-pane': SplitPaneShowcase,
   // Charts
-  charts: ChartsTestPage,
+  charts: ChartsOverviewShowcase,
+  sparkline: SparklineShowcase,
+  'line-chart': LineChartShowcase,
+  'bar-chart': BarChartShowcase,
+  'pie-chart': PieChartShowcase,
+  'progress-bar': ProgressBarShowcase,
+  'metric-row': MetricRowShowcase,
+  // Page Patterns
+  'page-header': PageHeaderShowcase,
+  'filter-bar': FilterBarShowcase,
+  'activity-timeline': ActivityTimelineShowcase,
+  'alert-strip': AlertStripShowcase,
+  'quick-access-grid': QuickAccessGridShowcase,
+  // Chat
+  'chat-message': ChatMessageShowcase,
+  'chat-divider': ChatDividerShowcase,
+  'chat-suggestions': ChatSuggestionsShowcase,
+  'chat-composer': ChatComposerShowcase,
+  'chat-container': ChatContainerShowcase,
+  // Complex Inputs
+  'entity-picker': EntityPickerShowcase,
+  'key-value-editor': KeyValueEditorShowcase,
+  'ordered-list': OrderedListShowcase,
+  'relationship-builder': RelationshipBuilderShowcase,
+  'row-menu': RowMenuShowcase,
+  'pipeline-card': PipelineCardShowcase,
+  'form-callout': FormCalloutShowcase,
+  // Graph
+  'graph-canvas': GraphCanvasShowcase,
+  'graph-inspector': GraphInspectorShowcase,
+  'topology-node': TopologyNodeShowcase,
   // Rebuilt Examples
   rebuilt: ContextStudioRebuilt,
   homelab: HomelabDashboardRebuilt,
@@ -149,6 +184,58 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'panel', label: 'Panel', icon: 'layout' },
       { id: 'drawer', label: 'Drawer', icon: 'chevronLeft' },
       { id: 'split-pane', label: 'SplitPane', icon: 'layout' },
+    ],
+  },
+  {
+    title: 'Charts',
+    items: [
+      { id: 'charts', label: 'Overview', icon: 'dashboard' },
+      { id: 'sparkline', label: 'Sparkline', icon: 'trending-up' },
+      { id: 'line-chart', label: 'LineChart', icon: 'trending-up' },
+      { id: 'bar-chart', label: 'BarChart', icon: 'bar-chart' },
+      { id: 'pie-chart', label: 'PieChart', icon: 'component' },
+      { id: 'progress-bar', label: 'ProgressBar', icon: 'data' },
+      { id: 'metric-row', label: 'MetricRow', icon: 'data' },
+    ],
+  },
+  {
+    title: 'Page Patterns',
+    items: [
+      { id: 'page-header', label: 'PageHeader', icon: 'layout' },
+      { id: 'filter-bar', label: 'FilterBar', icon: 'filter' },
+      { id: 'activity-timeline', label: 'ActivityTimeline', icon: 'clock' },
+      { id: 'alert-strip', label: 'AlertStrip', icon: 'alert' },
+      { id: 'quick-access-grid', label: 'QuickAccessGrid', icon: 'table' },
+    ],
+  },
+  {
+    title: 'Chat',
+    items: [
+      { id: 'chat-message', label: 'ChatMessage', icon: 'bot' },
+      { id: 'chat-divider', label: 'ChatDivider', icon: 'slash' },
+      { id: 'chat-suggestions', label: 'ChatSuggestions', icon: 'star' },
+      { id: 'chat-composer', label: 'ChatComposer', icon: 'edit' },
+      { id: 'chat-container', label: 'ChatContainer', icon: 'layout' },
+    ],
+  },
+  {
+    title: 'Complex Inputs',
+    items: [
+      { id: 'entity-picker', label: 'EntityPicker', icon: 'search' },
+      { id: 'key-value-editor', label: 'KeyValueEditor', icon: 'edit' },
+      { id: 'ordered-list', label: 'OrderedList', icon: 'arrowDown' },
+      { id: 'relationship-builder', label: 'RelationshipBuilder', icon: 'schema' },
+      { id: 'row-menu', label: 'RowMenu', icon: 'menu' },
+      { id: 'pipeline-card', label: 'PipelineCard', icon: 'pipeline' },
+      { id: 'form-callout', label: 'FormCallout', icon: 'info' },
+    ],
+  },
+  {
+    title: 'Graph',
+    items: [
+      { id: 'graph-canvas', label: 'GraphCanvas', icon: 'schema' },
+      { id: 'graph-inspector', label: 'GraphInspector', icon: 'info' },
+      { id: 'topology-node', label: 'TopologyNode', icon: 'data' },
     ],
   },
 ]

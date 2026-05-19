@@ -17,7 +17,9 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["../src/*"]
+      "@/*": ["../src/*"],
+      "@tinkermonkey/heimdall-ui": ["../src/index.ts"],
+      "@tinkermonkey/heimdall-ui/css": ["../src/tokens/tokens.css"]
     }
   },
   "include": ["src"],
