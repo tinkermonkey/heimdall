@@ -1,6 +1,6 @@
 import React from 'react'
 import './Badge.css'
-import type { StatusColor } from './chartTypes'
+import type { StatusColor } from './statusColors'
 
 export type BadgeColor = StatusColor
 

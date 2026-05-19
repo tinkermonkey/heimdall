@@ -1,8 +1,8 @@
 import React from 'react'
 import './LineChart.css'
 import { chartColors } from './chartColors'
-import type { LineChartSeries } from './chartTypes'
-import { statusColorMap } from './chartTypes'
+import type { LineChartSeries } from './statusColors'
+import { statusColorMap } from './statusColors'
 
 export type { LineChartSeries }
 

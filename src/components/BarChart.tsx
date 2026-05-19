@@ -1,8 +1,8 @@
 import React from 'react'
 import './BarChart.css'
 import { chartColors } from './chartColors'
-import type { BarChartSeries } from './chartTypes'
-import { statusColorMap } from './chartTypes'
+import type { BarChartSeries } from './statusColors'
+import { statusColorMap } from './statusColors'
 
 export type { BarChartSeries }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import './TopologyNode.css'
-import type { StatusColor } from './chartTypes'
+import type { StatusColor } from './statusColors'
 
 export type TopologyNodeStatus = 'ok' | 'warning' | 'error' | 'idle'
 

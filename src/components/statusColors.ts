@@ -6,7 +6,7 @@ export const statusColorMap: Record<StatusColor, string> = {
   rose: 'rgb(244 63 94)',
   cyan: 'rgb(34 211 238)',
   violet: 'rgb(139 92 246)',
-  neutral: 'rgb(71 85 105)',
+  neutral: 'rgb(var(--canvas-fg-2))',
 }
 
 export interface ChartSeries {
