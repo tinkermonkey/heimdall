@@ -93,7 +93,6 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <EntityPicker
-              data-testid="entity-picker"
               query={entityQuery}
               onQueryChange={setEntityQuery}
               results={filteredEntities}
@@ -124,7 +123,6 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <KeyValueEditor
-              data-testid="key-value-editor"
               rows={kvRows}
               onChange={setKvRows}
               datatypeColumn={true}
@@ -142,7 +140,6 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <OrderedList
-              data-testid="ordered-list"
               items={orderedItems}
               onChange={setOrderedItems}
               primaryItemId={orderedItems[0]?.id}
@@ -159,7 +156,6 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <RelationshipBuilder
-              data-testid="relationship-builder"
               value={relationshipValue}
               onChange={setRelationshipValue}
               sourceResults={sourceResults}
@@ -192,7 +188,6 @@ export default function FormsShowcase() {
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
               <span>Record #12345</span>
               <RowMenu
-                data-testid="row-menu"
                 actions={rowMenuActions}
                 onAction={handleRowMenuAction}
               />

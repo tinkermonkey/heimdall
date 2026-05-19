@@ -392,17 +392,17 @@ test.describe('Chat Components', () => {
     })
 
     test('ToolBlock running status visual snapshot', async ({ page }) => {
-      const toolBlock = page.locator('[data-testid="tool-block"]').nth(0)
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(1)
       await expect(toolBlock).toHaveScreenshot('tool-block-running-light.png')
     })
 
     test('ToolBlock success status visual snapshot', async ({ page }) => {
-      const toolBlock = page.locator('[data-testid="tool-block"]').nth(1)
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(2)
       await expect(toolBlock).toHaveScreenshot('tool-block-success-light.png')
     })
 
     test('ToolBlock error status visual snapshot', async ({ page }) => {
-      const toolBlock = page.locator('[data-testid="tool-block"]').nth(2)
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(3)
       await expect(toolBlock).toHaveScreenshot('tool-block-error-light.png')
     })
 
@@ -443,17 +443,17 @@ test.describe('Chat Components', () => {
     })
 
     test('ToolBlock running status visual snapshot in dark mode', async ({ page }) => {
-      const toolBlock = page.locator('[data-testid="tool-block"]').nth(0)
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(1)
       await expect(toolBlock).toHaveScreenshot('tool-block-running-dark.png')
     })
 
     test('ToolBlock success status visual snapshot in dark mode', async ({ page }) => {
-      const toolBlock = page.locator('[data-testid="tool-block"]').nth(1)
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(2)
       await expect(toolBlock).toHaveScreenshot('tool-block-success-dark.png')
     })
 
     test('ToolBlock error status visual snapshot in dark mode', async ({ page }) => {
-      const toolBlock = page.locator('[data-testid="tool-block"]').nth(2)
+      const toolBlock = page.locator('[data-testid="tool-block"]').nth(3)
       await expect(toolBlock).toHaveScreenshot('tool-block-error-dark.png')
     })
 

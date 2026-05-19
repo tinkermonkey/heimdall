@@ -276,6 +276,12 @@ test.describe('Graph Canvas Components', () => {
       await expect(errorNode).toBeVisible()
       await expect(errorNode).toHaveScreenshot('topology-node-error-light.png')
     })
+
+    test('TopologyNode idle status visual snapshot', async ({ page }) => {
+      const idleNode = page.locator('[data-testid="topology-node-load-balancer"]')
+      await expect(idleNode).toBeVisible()
+      await expect(idleNode).toHaveScreenshot('topology-node-idle-light.png')
+    })
   })
 
   test.describe('Visual Regression - Light Canvas', () => {
@@ -324,6 +330,12 @@ test.describe('Graph Canvas Components', () => {
       const errorNode = page.locator('[data-testid="topology-node-message-queue"]')
       await expect(errorNode).toBeVisible()
       await expect(errorNode).toHaveScreenshot('topology-node-error-dark.png')
+    })
+
+    test('TopologyNode idle status visual snapshot in dark mode', async ({ page }) => {
+      const idleNode = page.locator('[data-testid="topology-node-load-balancer"]')
+      await expect(idleNode).toBeVisible()
+      await expect(idleNode).toHaveScreenshot('topology-node-idle-dark.png')
     })
   })
 

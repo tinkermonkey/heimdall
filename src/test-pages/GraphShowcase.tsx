@@ -80,6 +80,12 @@ const TOPOLOGY_NODES = [
       { label: 'Backlog', value: '1.2K', percent: 85, sparklineData: [20, 40, 60, 80, 85, 85], color: 'rose' as const },
     ],
   },
+  {
+    title: 'Load Balancer',
+    role: 'network',
+    status: 'idle' as const,
+    metrics: [],
+  },
 ]
 
 export default function GraphShowcase() {
