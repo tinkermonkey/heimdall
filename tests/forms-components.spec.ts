@@ -353,6 +353,42 @@ test.describe('Forms Components', () => {
       const count = await iconContainers.count()
       expect(count).toBeGreaterThan(0)
     })
+
+    test('renders success status variant correctly', async ({ page }) => {
+      const cards = page.locator('[data-testid="pipeline-card"]')
+      const successCard = cards.nth(0)
+      const stages = successCard.locator('[data-testid^="pipeline-stage-"]')
+      const count = await stages.count()
+      expect(count).toBe(4)
+      await expect(successCard).toHaveScreenshot('pipeline-card-success-variant.png')
+    })
+
+    test('renders pending status variant correctly', async ({ page }) => {
+      const cards = page.locator('[data-testid="pipeline-card"]')
+      const pendingCard = cards.nth(1)
+      const stages = pendingCard.locator('[data-testid^="pipeline-stage-"]')
+      const count = await stages.count()
+      expect(count).toBe(4)
+      await expect(pendingCard).toHaveScreenshot('pipeline-card-pending-variant.png')
+    })
+
+    test('renders running status variant correctly', async ({ page }) => {
+      const cards = page.locator('[data-testid="pipeline-card"]')
+      const runningCard = cards.nth(2)
+      const stages = runningCard.locator('[data-testid^="pipeline-stage-"]')
+      const count = await stages.count()
+      expect(count).toBe(4)
+      await expect(runningCard).toHaveScreenshot('pipeline-card-running-variant.png')
+    })
+
+    test('renders failed status variant correctly', async ({ page }) => {
+      const cards = page.locator('[data-testid="pipeline-card"]')
+      const failedCard = cards.nth(3)
+      const stages = failedCard.locator('[data-testid^="pipeline-stage-"]')
+      const count = await stages.count()
+      expect(count).toBe(4)
+      await expect(failedCard).toHaveScreenshot('pipeline-card-failed-variant.png')
+    })
   })
 
   test.describe('FormCallout', () => {

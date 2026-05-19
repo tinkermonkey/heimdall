@@ -212,7 +212,7 @@ export default function FormsShowcase() {
                 { id: '3', name: 'Resolve', label: 'match by name', icon: 'lock', status: 'success', statusColor: 'amber' },
                 { id: '4', name: 'Write', label: 'life.organism', icon: 'data', status: 'success', statusColor: 'emerald' },
               ]}
-              status="healthy"
+              statusLabel="healthy"
               stats={[
                 { label: 'Last run', value: '2m ago' },
                 { label: 'Records', value: '12,480' },
@@ -229,7 +229,7 @@ export default function FormsShowcase() {
                 { id: '3', name: 'Transform', label: 'pending', icon: 'edit', status: 'pending', statusColor: 'neutral' },
                 { id: '4', name: 'Write', label: 'pending', icon: 'data', status: 'pending', statusColor: 'neutral' },
               ]}
-              status="waiting"
+              statusLabel="waiting"
               stats={[
                 { label: 'Created', value: 'now' },
                 { label: 'Est. time', value: '2m 30s' },
@@ -246,7 +246,7 @@ export default function FormsShowcase() {
                 { id: '3', name: 'Post', label: 'pending', icon: 'send', status: 'pending', statusColor: 'neutral' },
                 { id: '4', name: 'Archive', label: 'pending', icon: 'lock', status: 'pending', statusColor: 'neutral' },
               ]}
-              status="running"
+              statusLabel="running"
               stats={[
                 { label: 'Started', value: '45s ago' },
                 { label: 'Progress', value: '45%' },
@@ -263,7 +263,7 @@ export default function FormsShowcase() {
                 { id: '3', name: 'Parse', label: 'failed', icon: 'alert', status: 'failed', statusColor: 'rose' },
                 { id: '4', name: 'Write', label: 'cancelled', icon: 'x', status: 'failed', statusColor: 'rose' },
               ]}
-              status="failed"
+              statusLabel="failed"
               stats={[
                 { label: 'Failed', value: '2m ago' },
                 { label: 'Completed', value: '2 of 4' },

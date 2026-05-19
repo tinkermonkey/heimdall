@@ -17,7 +17,7 @@ export interface PipelineCardProps
   title: string
   description?: string
   stages: PipelineStage[]
-  status?: string
+  statusLabel?: string
   stats?: Array<{
     label: string
     value: string | number
@@ -25,7 +25,7 @@ export interface PipelineCardProps
 }
 
 export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
-  ({ title, description, stages, status, stats = [], className, ...props }, ref) => {
+  ({ title, description, stages, statusLabel, stats = [], className, ...props }, ref) => {
     return (
       <div ref={ref} className={['pipeline-card', className].filter(Boolean).join(' ')} data-testid="pipeline-card" {...props}>
         <div className="pipeline-card__header">
@@ -33,8 +33,8 @@ export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
             <h3 className="pipeline-card__title">{title}</h3>
             {description && <p className="pipeline-card__description">{description}</p>}
           </div>
-          {status && (
-            <Badge className="pipeline-card__status">{status}</Badge>
+          {statusLabel && (
+            <Badge className="pipeline-card__status">{statusLabel}</Badge>
           )}
         </div>
 
