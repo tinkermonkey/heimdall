@@ -112,7 +112,6 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       <div
         ref={ref}
         className={['chat-composer', className].filter(Boolean).join(' ')}
-        data-testid="chat-composer"
         {...props}
       >
         <div className="chat-composer__tools">

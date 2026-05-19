@@ -211,6 +211,7 @@ This will require calling analyze_distribution with the dataset parameters.`
           </h2>
           <div style={{ height: '500px' }}>
             <ChatContainer
+              data-testid="chat-container"
               bots={bots}
               activeBotId={activeBotId}
               onBotChange={setActiveBotId}
@@ -313,6 +314,7 @@ This will require calling analyze_distribution with the dataset parameters.`
             ChatComposer
           </h2>
           <ChatComposer
+            data-testid="chat-composer"
             placeholder="Ask assistant something..."
             value={composerValue}
             onChange={setComposerValue}

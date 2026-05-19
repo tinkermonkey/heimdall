@@ -43,7 +43,6 @@ export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps
       <div
         ref={ref}
         className={['chat-container', className].filter(Boolean).join(' ')}
-        data-testid="chat-container"
         {...props}
       >
         {bots && bots.length > 0 && (

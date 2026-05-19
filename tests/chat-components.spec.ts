@@ -235,8 +235,9 @@ test.describe('Chat Components', () => {
   })
 
   test('ChatComposer keyboard interaction - Enter submits', async ({ page }) => {
-    // Find textarea
-    const textarea = page.locator('textarea[placeholder*="Ask assistant"]')
+    // Find textarea in the standalone ChatComposer (the one with data-testid)
+    const composer = page.locator('[data-testid="chat-composer"]')
+    const textarea = composer.locator('textarea[placeholder*="Ask assistant"]')
     await expect(textarea).toBeVisible()
 
     // Type text
@@ -251,8 +252,9 @@ test.describe('Chat Components', () => {
   })
 
   test('ChatComposer keyboard interaction - Shift+Enter inserts newline', async ({ page }) => {
-    // Find textarea
-    const textarea = page.locator('textarea[placeholder*="Ask assistant"]')
+    // Find textarea in the standalone ChatComposer (the one with data-testid)
+    const composer = page.locator('[data-testid="chat-composer"]')
+    const textarea = composer.locator('textarea[placeholder*="Ask assistant"]')
     await expect(textarea).toBeVisible()
 
     // Type text
@@ -267,12 +269,13 @@ test.describe('Chat Components', () => {
   })
 
   test('ChatComposer displays context pills', async ({ page }) => {
-    // Verify scope label is displayed
-    const scope = page.locator('text="talking to"')
+    // Verify scope label is displayed in the standalone ChatComposer
+    const composer = page.locator('[data-testid="chat-composer"]')
+    const scope = composer.locator('text="talking to"')
     await expect(scope).toBeVisible()
 
-    // Verify context pill is rendered
-    const contextPill = page.locator('text="schema.json"')
+    // Verify context pill is rendered in the same composer
+    const contextPill = composer.locator('text="schema.json"')
     await expect(contextPill).toBeVisible()
   })
 
