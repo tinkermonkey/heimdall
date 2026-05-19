@@ -2,7 +2,7 @@ import React from 'react'
 import './FormCallout.css'
 import { Icon, type IconName } from './Icon'
 
-export interface FormCalloutProps {
+export interface FormCalloutProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: IconName
   children: React.ReactNode
 }
@@ -34,12 +34,12 @@ const parseBody = (text: string): React.ReactNode[] => {
 }
 
 export const FormCallout = React.forwardRef<HTMLDivElement, FormCalloutProps>(
-  ({ icon, children }, ref) => {
+  ({ icon, children, ...props }, ref) => {
     const bodyText = typeof children === 'string' ? children : ''
     const parsedBody = typeof children === 'string' ? parseBody(bodyText) : children
 
     return (
-      <div ref={ref} className="form-callout" data-testid="form-callout">
+      <div ref={ref} className="form-callout" data-testid="form-callout" {...props}>
         {icon && (
           <div className="form-callout__icon">
             <Icon name={icon} size={16} />

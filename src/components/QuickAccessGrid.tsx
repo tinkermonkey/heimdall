@@ -10,11 +10,10 @@ export interface QuickAccessTile {
   description: string
 }
 
-export interface QuickAccessGridProps {
+export interface QuickAccessGridProps extends React.HTMLAttributes<HTMLDivElement> {
   tiles: QuickAccessTile[]
   onAction?: (tileId: string) => void
   columns?: number
-  className?: string
 }
 
 export const QuickAccessGrid = React.forwardRef<HTMLDivElement, QuickAccessGridProps>(

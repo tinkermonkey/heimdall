@@ -2,13 +2,12 @@ import React from 'react'
 import { Chip } from './Chip'
 import './PageHeader.css'
 
-export interface PageHeaderProps {
+export interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   eyebrow: string
   title: string
   idChip?: string
   subtitle?: string
   actions?: React.ReactNode
-  className?: string
 }
 
 export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(

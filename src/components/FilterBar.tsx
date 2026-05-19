@@ -8,12 +8,11 @@ export interface FilterChip {
   label: string
 }
 
-export interface FilterBarProps {
+export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
   filters?: FilterChip[]
   onSearchChange?: (query: string) => void
   onFilterRemove?: (filterId: string) => void
   searchPlaceholder?: string
-  className?: string
 }
 
 export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(

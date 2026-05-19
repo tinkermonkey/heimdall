@@ -11,10 +11,9 @@ export interface ActivityEvent {
   timestamp: Date | string
 }
 
-export interface ActivityTimelineProps {
+export interface ActivityTimelineProps extends React.HTMLAttributes<HTMLDivElement> {
   events?: ActivityEvent[]
   emptyState?: string
-  className?: string
 }
 
 const EVENT_COLOR_MAP: Record<ActivityEventType, 'emerald' | 'cyan' | 'rose' | 'amber'> = {

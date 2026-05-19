@@ -11,10 +11,9 @@ export interface Alert {
   message: string
 }
 
-export interface AlertStripProps {
+export interface AlertStripProps extends React.HTMLAttributes<HTMLDivElement> {
   alerts?: Alert[]
   onDismiss?: (alertId: string) => void
-  className?: string
 }
 
 const SEVERITY_COLOR_MAP: Record<AlertSeverity, 'rose' | 'amber' | 'cyan' | 'emerald'> = {

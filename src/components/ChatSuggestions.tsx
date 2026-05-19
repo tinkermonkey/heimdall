@@ -1,14 +1,13 @@
 import React from 'react'
 import './ChatSuggestions.css'
 
-export interface ChatSuggestionsProps {
+export interface ChatSuggestionsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, keyof React.DOMAttributes<HTMLDivElement>> {
   suggestions: string[]
   onSelect: (suggestion: string) => void
-  className?: string
 }
 
 export const ChatSuggestions = React.forwardRef<HTMLDivElement, ChatSuggestionsProps>(
-  ({ suggestions, onSelect, className = '' }, ref) => {
+  ({ suggestions, onSelect, className = '', ...props }, ref) => {
     if (!suggestions || suggestions.length === 0) {
       return null
     }
@@ -18,6 +17,7 @@ export const ChatSuggestions = React.forwardRef<HTMLDivElement, ChatSuggestionsP
         ref={ref}
         className={['chat-suggestions', className].filter(Boolean).join(' ')}
         data-testid="chat-suggestions"
+        {...props}
       >
         {suggestions.map((suggestion, idx) => (
           <button
