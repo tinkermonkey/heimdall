@@ -1,13 +1,14 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import './EntityPicker.css'
 import { Icon } from './Icon'
-import { Badge, type BadgeColor } from './Badge'
+import { Chip } from './Chip'
+import type { StatusColor } from './statusColors'
 
 export interface EntityPickerResult {
   id: string
   label: string
   domain?: string
-  domainColor?: BadgeColor
+  domainColor?: StatusColor
 }
 
 export interface EntityPickerProps
@@ -160,9 +161,9 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
                 data-testid={`entity-picker-result-${result.id}`}
               >
                 {result.domain && result.domainColor && (
-                  <Badge color={result.domainColor} className="entity-picker__badge">
+                  <Chip variant={result.domainColor} className="entity-picker__badge">
                     {result.domain}
-                  </Badge>
+                  </Chip>
                 )}
                 <span className="entity-picker__label">{result.label}</span>
               </button>

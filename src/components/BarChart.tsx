@@ -204,7 +204,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
 
         {/* Legend */}
         {legend && (
-          <div style={{ display: 'flex', gap: '12px', fontSize: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '12px', fontSize: '12px', flexWrap: 'wrap', color: 'rgb(var(--canvas-fg-2))' }}>
             {series.map((s, idx) => (
               <div key={`legend-${idx}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <div

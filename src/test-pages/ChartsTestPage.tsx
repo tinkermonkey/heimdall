@@ -117,7 +117,7 @@ export default function ChartsTestPage() {
         >
           LineChart Component
         </div>
-        <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+        <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
           <LineChart
             series={lineChartData}
             xLabels={xLabels}
@@ -149,7 +149,7 @@ export default function ChartsTestPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Empty Data Arrays</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <LineChart
                 series={[
                   { name: 'Empty A', data: [], color: 'amber' as const },
@@ -163,7 +163,7 @@ export default function ChartsTestPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Single Point</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <LineChart
                 series={[{ name: 'Single', data: [15], color: 'amber' as const }]}
                 xLabels={['Jan']}
@@ -175,7 +175,7 @@ export default function ChartsTestPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Negative Values</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <LineChart
                 series={[
                   {
@@ -208,7 +208,7 @@ export default function ChartsTestPage() {
         >
           BarChart Component
         </div>
-        <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+        <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
           <BarChart
             series={[
               { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'amber' as const },
@@ -243,7 +243,7 @@ export default function ChartsTestPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Empty Data</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <BarChart
                 series={[
                   { name: 'Empty A', data: [], color: 'amber' as const },
@@ -257,7 +257,7 @@ export default function ChartsTestPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Single Point</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <BarChart
                 series={[{ name: 'Single', data: [15], color: 'amber' as const }]}
                 xLabels={['Jan']}
@@ -269,7 +269,7 @@ export default function ChartsTestPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Equal Values</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <BarChart
                 series={[
                   { name: 'Constant', data: [10, 10, 10, 10, 10], color: 'rose' as const },
@@ -298,7 +298,7 @@ export default function ChartsTestPage() {
         >
           PieChart Component · Distribution
         </div>
-        <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px', maxWidth: '500px' }}>
+        <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px', maxWidth: '500px' }}>
           <PieChart
             segments={[
               { name: 'Component A', value: 35, color: 'rgb(245, 158, 11)' },
@@ -331,7 +331,7 @@ export default function ChartsTestPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Empty Segments</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <PieChart
                 segments={[]}
                 legend={true}
@@ -343,7 +343,7 @@ export default function ChartsTestPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>All Zero/Negative</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <PieChart
                 segments={[
                   { name: 'Zero', value: 0 },
@@ -358,7 +358,7 @@ export default function ChartsTestPage() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>String Values (Type Check)</span>
-            <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
+            <div style={{ backgroundColor: 'rgb(var(--canvas-surface-2))', padding: '16px', borderRadius: '6px' }}>
               <PieChart
                 segments={[
                   { name: 'Value A', value: '50' as any },
@@ -432,7 +432,7 @@ export default function ChartsTestPage() {
         </div>
         <div
           style={{
-            backgroundColor: 'rgb(var(--shell-surface))',
+            backgroundColor: 'rgb(var(--canvas-surface-2))',
             padding: '16px',
             borderRadius: '6px',
             maxWidth: '600px',

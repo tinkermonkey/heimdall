@@ -53,11 +53,11 @@ export function IconShowcase() {
 export function ButtonShowcase() {
   return (
     <div>
-      <PageHeader name="Button" description="Primary interactive element. Five variants, two sizes. Accepts any button HTML attributes." />
+      <PageHeader name="Button" description="Primary interactive element. Six variants, two sizes. Accepts any button HTML attributes." />
       <ShowcaseSection label="Variants">
         <DemoRow>
           <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
+          <Button variant="accent">Accent</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="danger">Danger</Button>
           <Button variant="link">Link</Button>
@@ -72,7 +72,7 @@ export function ButtonShowcase() {
       <ShowcaseSection label="With icons">
         <DemoRow>
           <Button variant="primary"><Icon name="plus" size={14} /> Create</Button>
-          <Button variant="secondary"><Icon name="download" size={14} /> Export</Button>
+          <Button variant="accent"><Icon name="upload" size={14} /> Run pipeline</Button>
           <Button variant="ghost"><Icon name="filter" size={14} /> Filter</Button>
           <Button variant="danger"><Icon name="trash" size={14} /> Delete</Button>
         </DemoRow>
@@ -80,14 +80,14 @@ export function ButtonShowcase() {
       <ShowcaseSection label="Disabled states">
         <DemoRow>
           <Button variant="primary" disabled>Primary</Button>
-          <Button variant="secondary" disabled>Secondary</Button>
+          <Button variant="accent" disabled>Accent</Button>
           <Button variant="ghost" disabled>Ghost</Button>
           <Button variant="danger" disabled>Danger</Button>
         </DemoRow>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="variant" type="'primary' | 'secondary' | 'ghost' | 'danger' | 'link'" def="'primary'" description="Visual style" />
+          <PropRow name="variant" type="'primary' | 'accent' | 'ghost' | 'danger' | 'link'" def="'primary'" description="Visual style" />
           <PropRow name="size" type="'sm' | 'md'" def="'md'" description="Height: md=34px sm=28px" />
           <PropRow name="disabled" type="boolean" description="Native disabled attribute" />
           <PropRow name="children" type="ReactNode" description="Button label and/or icon" />

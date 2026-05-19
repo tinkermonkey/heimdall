@@ -119,7 +119,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
               key={`slice-${idx}`}
               d={createArcPath(slice.startAngle, slice.endAngle, radius)}
               fill={slice.color}
-              stroke="rgb(var(--canvas-bg))"
+              stroke="rgb(var(--canvas-surface-2))"
               strokeWidth="1"
             />
           ))}
@@ -127,7 +127,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
 
         {/* Legend */}
         {legend && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>
             {slices.map((slice, idx) => (
               <div key={`legend-${idx}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <div

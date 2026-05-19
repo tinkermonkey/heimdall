@@ -1,5 +1,6 @@
 import React from 'react'
 import './TabBar.css'
+import { Chip } from './Chip'
 
 export interface Tab {
   id: string
@@ -28,7 +29,9 @@ export const TabBar = React.forwardRef<HTMLDivElement, TabBarProps>(
               onClick={() => onSelectTab(tab.id)}
             >
               <span className="tab-bar__tab-label">{tab.label}</span>
-              {tab.count !== undefined && <span className="tab-bar__tab-count">{tab.count}</span>}
+              {tab.count !== undefined && (
+                <Chip form="id-tag">{tab.count}</Chip>
+              )}
             </button>
           ))}
         </div>

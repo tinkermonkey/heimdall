@@ -1,7 +1,8 @@
 import React from 'react'
 import './PipelineCard.css'
 import { Icon, type IconName } from './Icon'
-import { Badge, type BadgeColor } from './Badge'
+import { Chip } from './Chip'
+import type { StatusColor } from './statusColors'
 
 export interface PipelineStage {
   id: string
@@ -9,7 +10,7 @@ export interface PipelineStage {
   label: string
   icon: IconName
   status?: 'pending' | 'running' | 'success' | 'failed'
-  statusColor?: BadgeColor
+  statusColor?: StatusColor
 }
 
 export interface PipelineCardProps
@@ -18,6 +19,7 @@ export interface PipelineCardProps
   description?: string
   stages: PipelineStage[]
   statusLabel?: string
+  statusColor?: StatusColor
   stats?: Array<{
     label: string
     value: string | number
@@ -25,7 +27,7 @@ export interface PipelineCardProps
 }
 
 export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
-  ({ title, description, stages, statusLabel, stats = [], className, ...props }, ref) => {
+  ({ title, description, stages, statusLabel, statusColor = 'neutral', stats = [], className, ...props }, ref) => {
     return (
       <div ref={ref} className={['pipeline-card', className].filter(Boolean).join(' ')} data-testid="pipeline-card" {...props}>
         <div className="pipeline-card__header">
@@ -34,7 +36,7 @@ export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
             {description && <p className="pipeline-card__description">{description}</p>}
           </div>
           {statusLabel && (
-            <Badge className="pipeline-card__status">{statusLabel}</Badge>
+            <Chip variant={statusColor} className="pipeline-card__status">{statusLabel}</Chip>
           )}
         </div>
 

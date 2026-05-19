@@ -230,6 +230,7 @@ export function PipelineCardShowcase() {
           title="data_migration_v2"
           stages={stages}
           statusLabel="Running"
+          statusColor="cyan"
         />
       </ShowcaseSection>
       <ShowcaseSection label="Completed pipeline">
@@ -237,6 +238,7 @@ export function PipelineCardShowcase() {
           title="data_migration_v1"
           stages={stages.map(s => ({ ...s, status: 'success' as const }))}
           statusLabel="Success"
+          statusColor="emerald"
         />
       </ShowcaseSection>
       <ShowcaseSection label="Failed pipeline">
@@ -244,6 +246,7 @@ export function PipelineCardShowcase() {
           title="data_migration_v3"
           stages={stages.map((s, i) => ({ ...s, status: (i < 2 ? 'success' : i === 2 ? 'failed' : 'pending') as PipelineStage['status'] }))}
           statusLabel="Failed"
+          statusColor="rose"
         />
       </ShowcaseSection>
       <ShowcaseSection label="Props">

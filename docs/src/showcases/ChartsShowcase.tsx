@@ -10,7 +10,7 @@ import {
 import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const fg2 = 'rgb(var(--canvas-fg-2, 55 65 81))'
-const shellSurface = 'rgb(var(--shell-surface, 27 41 73))'
+const chartBg = 'rgb(var(--canvas-surface-2, 243 244 246))'
 
 const SPARKLINE_DATA = [12, 19, 8, 5, 22, 18, 15, 25, 16, 20]
 const X_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
@@ -69,7 +69,7 @@ export function LineChartShowcase() {
       <PageHeader name="LineChart" description="Multi-series line chart with Y-axis labels, grid lines, X-axis labels, legend, and optional area fills." />
       <ShowcaseSection label="Multi-series with fill">
         <DemoCard>
-          <div style={{ background: shellSurface, padding: 16, borderRadius: 6 }}>
+          <div style={{ background: chartBg, padding: 16, borderRadius: 6 }}>
             <LineChart
               series={LINE_SERIES}
               xLabels={X_LABELS}
@@ -86,17 +86,17 @@ export function LineChartShowcase() {
       <ShowcaseSection label="Edge cases">
         <DemoGrid cols={3} gap={16}>
           <DemoCard label="Empty data">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6 }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6 }}>
               <LineChart series={[{ name: 'A', data: [], color: 'amber' as const }]} width={240} height={120} />
             </div>
           </DemoCard>
           <DemoCard label="Single point">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6 }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6 }}>
               <LineChart series={[{ name: 'A', data: [15], color: 'amber' as const }]} xLabels={['Jan']} width={240} height={120} />
             </div>
           </DemoCard>
           <DemoCard label="Negative values">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6 }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6 }}>
               <LineChart series={[{ name: 'A', data: [-10, -5, 0, 5, 10, 3, -2], color: 'rose' as const }]} xLabels={['A', 'B', 'C', 'D', 'E', 'F', 'G']} width={240} height={120} />
             </div>
           </DemoCard>
@@ -124,7 +124,7 @@ export function BarChartShowcase() {
       <PageHeader name="BarChart" description="Grouped bar chart with Y-axis labels, grid lines, X-axis labels, and legend." />
       <ShowcaseSection label="Grouped bars">
         <DemoCard>
-          <div style={{ background: shellSurface, padding: 16, borderRadius: 6 }}>
+          <div style={{ background: chartBg, padding: 16, borderRadius: 6 }}>
             <BarChart
               series={BAR_SERIES}
               xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
@@ -141,17 +141,17 @@ export function BarChartShowcase() {
       <ShowcaseSection label="Edge cases">
         <DemoGrid cols={3} gap={16}>
           <DemoCard label="Empty data">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6 }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6 }}>
               <BarChart series={[{ name: 'A', data: [], color: 'amber' as const }]} width={240} height={120} />
             </div>
           </DemoCard>
           <DemoCard label="Single bar">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6 }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6 }}>
               <BarChart series={[{ name: 'A', data: [15], color: 'amber' as const }]} xLabels={['Jan']} width={240} height={120} />
             </div>
           </DemoCard>
           <DemoCard label="Equal values">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6 }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6 }}>
               <BarChart series={[{ name: 'Flat', data: [10, 10, 10, 10, 10], color: 'rose' as const }]} xLabels={['A', 'B', 'C', 'D', 'E']} width={240} height={120} />
             </div>
           </DemoCard>
@@ -179,7 +179,7 @@ export function PieChartShowcase() {
       <PageHeader name="PieChart" description="Donut-style pie chart with legend. Each segment specifies a name, value, and optional color string." />
       <ShowcaseSection label="Distribution">
         <DemoCard>
-          <div style={{ background: shellSurface, padding: 16, borderRadius: 6, display: 'inline-block' }}>
+          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
             <PieChart
               segments={[
                 { name: 'CPU Bound', value: 35, color: 'rgb(245, 158, 11)' },
@@ -197,12 +197,12 @@ export function PieChartShowcase() {
       <ShowcaseSection label="Edge cases">
         <DemoGrid cols={2} gap={16}>
           <DemoCard label="Empty segments">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6, display: 'inline-block' }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6, display: 'inline-block' }}>
               <PieChart segments={[]} legend width={200} height={200} />
             </div>
           </DemoCard>
           <DemoCard label="Single segment">
-            <div style={{ background: shellSurface, padding: 12, borderRadius: 6, display: 'inline-block' }}>
+            <div style={{ background: chartBg, padding: 12, borderRadius: 6, display: 'inline-block' }}>
               <PieChart segments={[{ name: 'All', value: 100, color: 'rgb(245, 158, 11)' }]} legend width={200} height={200} />
             </div>
           </DemoCard>
@@ -255,7 +255,7 @@ export function MetricRowShowcase() {
     <div>
       <PageHeader name="MetricRow" description="Composite row combining label, progress bar, sparkline trend, and value in a single line. Used to display live resource metrics." />
       <ShowcaseSection label="Resource metrics">
-        <div style={{ background: shellSurface, padding: 16, borderRadius: 6, maxWidth: 560 }}>
+        <div style={{ background: chartBg, padding: 16, borderRadius: 6, maxWidth: 560 }}>
           <MetricRow
             label="CPU Usage"
             value={72}
@@ -330,17 +330,17 @@ export function ChartsOverviewShowcase() {
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Line chart">
-        <div style={{ background: shellSurface, padding: 16, borderRadius: 6, display: 'inline-block' }}>
+        <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
           <LineChart series={LINE_SERIES} xLabels={X_LABELS} yMin={5} yMax={30} yTickCount={6} legend width={560} height={220} />
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Bar chart">
-        <div style={{ background: shellSurface, padding: 16, borderRadius: 6, display: 'inline-block' }}>
+        <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
           <BarChart series={BAR_SERIES} xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']} yMin={0} yMax={220} yTickCount={6} legend width={440} height={220} />
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Pie chart">
-        <div style={{ background: shellSurface, padding: 16, borderRadius: 6, display: 'inline-block' }}>
+        <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
           <PieChart
             segments={[
               { name: 'CPU Bound', value: 35, color: 'rgb(245, 158, 11)' },
@@ -355,7 +355,7 @@ export function ChartsOverviewShowcase() {
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Metric rows">
-        <div style={{ background: shellSurface, padding: 16, borderRadius: 6, maxWidth: 560 }}>
+        <div style={{ background: chartBg, padding: 16, borderRadius: 6, maxWidth: 560 }}>
           <MetricRow label="CPU" value={72} unit="%" percent={72} sparklineData={[45, 52, 48, 65, 72]} color="amber" />
           <MetricRow label="Memory" value={62} unit="%" percent={62} sparklineData={[55, 58, 60, 62, 61]} color="emerald" />
           <MetricRow label="Network" value={85} unit="%" percent={85} sparklineData={[60, 70, 75, 80, 85]} color="cyan" />
