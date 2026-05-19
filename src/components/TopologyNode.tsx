@@ -31,7 +31,7 @@ const statusDotColorMap: Record<TopologyNodeStatus, string> = {
 
 export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
   (
-    { title, role, status = 'idle', metrics = [], x, y, onSelect, className = '', ...props },
+    { title, role, status = 'idle', metrics = [], x, y, onSelect, className = '', style: userStyle, ...props },
     ref
   ) => {
     const classNames = ['topology-node', `topology-node--${status}`, className]
@@ -46,7 +46,7 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
             top: `${y}px`,
           }
         : {}),
-      ...props.style,
+      ...userStyle,
     }
 
     const slugTitle = title.replace(/\s+/g, '-').toLowerCase()
@@ -87,7 +87,7 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
                   <div
                     className="topology-node__metric-fill"
                     style={{
-                      width: `${metric.percent}%`,
+                      width: `${Math.max(0, Math.min(100, metric.percent))}%`,
                       backgroundColor: metric.color ? `rgb(var(--status-${metric.color}))` : 'rgb(var(--accent-primary))',
                     }}
                   />

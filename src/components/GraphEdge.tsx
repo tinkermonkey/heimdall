@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { useGraphCanvas, type GraphNode } from './GraphCanvas'
+import { useGraphCanvas, type GraphNodeData } from './GraphCanvas'
 import { bezierPath, rectEdgePoint } from '../utils/graph'
 import './GraphEdge.css'
 
@@ -11,6 +11,7 @@ export interface GraphEdgeProps extends React.SVGAttributes<SVGGElement> {
   variant?: 'default' | 'hot' | 'irrelevant'
 }
 
+// Constants match GraphNode.tsx for consistency
 const NODE_WIDTH = 138
 const NODE_HEIGHT = 30
 
@@ -22,7 +23,7 @@ function getNodeWidth(label?: string): number {
   return 168
 }
 
-function getActualNodeDimensions(node: GraphNode): { width: number; height: number } {
+function getActualNodeDimensions(node: GraphNodeData): { width: number; height: number } {
   return {
     width: node.width ?? getNodeWidth(node.label),
     height: node.height ?? NODE_HEIGHT,
@@ -40,7 +41,14 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
       const sourceNode = nodes.find((n) => n.id === sourceId)
       const targetNode = nodes.find((n) => n.id === targetId)
 
-      if (!sourceNode || !targetNode) return null
+      if (!sourceNode) {
+        console.warn(`GraphEdge: source node "${sourceId}" not found`)
+        return null
+      }
+      if (!targetNode) {
+        console.warn(`GraphEdge: target node "${targetId}" not found`)
+        return null
+      }
 
       const sourceDims = getActualNodeDimensions(sourceNode)
       const targetDims = getActualNodeDimensions(targetNode)

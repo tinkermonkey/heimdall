@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useContext, createContext, useEffect } from 'react'
 import './GraphCanvas.css'
 
-export interface GraphNode {
+export interface GraphNodeData {
   id: string
   x: number
   y: number
@@ -12,6 +12,18 @@ export interface GraphNode {
   height?: number
 }
 
+// Legacy alias for backwards compatibility (will be deprecated)
+export type GraphNode = GraphNodeData
+
+export interface BaseGraphNodeComponentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
+  id: string
+  x: number
+  y: number
+  label: string
+  selected?: boolean
+  onSelect?: (id: string) => void
+}
+
 export interface GraphEdge {
   id: string
   sourceId: string
@@ -20,7 +32,7 @@ export interface GraphEdge {
 }
 
 export interface GraphCanvasContextValue {
-  nodes: GraphNode[]
+  nodes: GraphNodeData[]
   zoom: number
   pan: { x: number; y: number }
   selectedNodeId?: string
@@ -37,7 +49,7 @@ export function useGraphCanvas() {
 }
 
 export interface GraphCanvasProps extends React.HTMLAttributes<HTMLDivElement> {
-  nodes: GraphNode[]
+  nodes: GraphNodeData[]
   edges?: GraphEdge[]
   selectedNodeId?: string
   onNodeSelect?: (nodeId: string) => void
@@ -78,12 +90,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (!container) return
 
       const handleWheel = (e: WheelEvent) => {
-        if (!e.ctrlKey && !e.metaKey) return
         e.preventDefault()
 
         const rect = container.getBoundingClientRect()
         const cursorX = e.clientX - rect.left
         const cursorY = e.clientY - rect.top
+
+        if (!Number.isFinite(cursorX) || !Number.isFinite(cursorY)) return
 
         const delta = e.deltaY > 0 ? -0.1 : 0.1
         const prevZoom = zoomRef.current

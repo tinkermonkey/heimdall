@@ -57,9 +57,10 @@ export { FormCallout, type FormCalloutProps } from './components/FormCallout'
 export {
   GraphCanvas,
   useGraphCanvas,
-  type GraphNode as GraphNodeData,
+  type GraphNodeData,
   type GraphEdge as GraphEdgeData,
   type GraphCanvasProps,
+  type BaseGraphNodeComponentProps,
 } from './components/GraphCanvas'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
