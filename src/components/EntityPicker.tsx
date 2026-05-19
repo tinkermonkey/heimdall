@@ -40,6 +40,14 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     const containerRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
+      if (selectedIndex >= results.length && results.length > 0) {
+        setSelectedIndex(results.length - 1)
+      } else if (results.length === 0) {
+        setSelectedIndex(0)
+      }
+    }, [results])
+
+    useEffect(() => {
       const container = containerRef.current
       const handleClickOutside = (e: MouseEvent) => {
         if (container && !container.contains(e.target as Node)) {

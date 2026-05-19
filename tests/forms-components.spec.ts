@@ -439,6 +439,21 @@ test.describe('Forms Components', () => {
       await expect(picker).toBeVisible()
     })
 
+    test('KeyValueEditor renders in dark mode', async ({ page }) => {
+      const editor = page.locator('[data-testid="key-value-editor"]').first()
+      await expect(editor).toBeVisible()
+    })
+
+    test('OrderedList renders in dark mode', async ({ page }) => {
+      const list = page.locator('[data-testid="ordered-list"]').first()
+      await expect(list).toBeVisible()
+    })
+
+    test('RowMenu renders in dark mode', async ({ page }) => {
+      const trigger = page.locator('[data-testid="row-menu-trigger"]').first()
+      await expect(trigger).toBeVisible()
+    })
+
     test('PipelineCard renders in dark mode', async ({ page }) => {
       const card = page.locator('[data-testid="pipeline-card"]').first()
       await expect(card).toBeVisible()
@@ -447,6 +462,28 @@ test.describe('Forms Components', () => {
     test('FormCallout renders in dark mode', async ({ page }) => {
       const callout = page.locator('[data-testid="form-callout"]').first()
       await expect(callout).toBeVisible()
+    })
+
+    test('EntityPicker visual snapshot in dark mode', async ({ page }) => {
+      const picker = page.locator('[data-testid="entity-picker-input"]').first().locator('..')
+      await expect(picker).toHaveScreenshot('entity-picker-dark.png')
+    })
+
+    test('KeyValueEditor visual snapshot in dark mode', async ({ page }) => {
+      const editor = page.locator('[data-testid="key-value-editor"]').first()
+      await expect(editor).toHaveScreenshot('key-value-editor-dark.png')
+    })
+
+    test('OrderedList visual snapshot in dark mode', async ({ page }) => {
+      const list = page.locator('[data-testid="ordered-list"]').first()
+      await expect(list).toHaveScreenshot('ordered-list-dark.png')
+    })
+
+    test('RowMenu opened visual snapshot in dark mode', async ({ page }) => {
+      const trigger = page.locator('[data-testid="row-menu-trigger"]').first()
+      await trigger.click()
+      const dropdown = page.locator('[data-testid="row-menu-dropdown"]').first()
+      await expect(dropdown).toHaveScreenshot('row-menu-opened-dark.png')
     })
 
     test('PipelineCard visual snapshot in dark mode', async ({ page }) => {
