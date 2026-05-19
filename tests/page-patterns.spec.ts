@@ -87,7 +87,7 @@ test.describe('Page Pattern Components', () => {
   test.describe('ActivityTimeline', () => {
     test('renders event list with dots, subjects, and timestamps', async ({ page }) => {
       const events = page.locator('[data-testid^="activity-event-"]')
-      await expect(events).toHaveCount(4)
+      await expect(events).toHaveCount(5)
     })
 
     test('renders color-coded dots for each event type', async ({ page }) => {
@@ -117,24 +117,35 @@ test.describe('Page Pattern Components', () => {
       await expect(emptyState).toBeVisible()
       await expect(emptyState).toContainText('No activity yet')
     })
+
+    test('handles invalid timestamps gracefully without displaying "Invalid Date"', async ({ page }) => {
+      const invalidEvent = page.locator('[data-testid="activity-event-event-5"]')
+      const timestamp = invalidEvent.locator('[data-testid="activity-timestamp"]')
+      await expect(timestamp).toBeVisible()
+      // Verify it does NOT display the string "Invalid Date"
+      const text = await timestamp.textContent()
+      expect(text).not.toBe('Invalid Date')
+    })
   })
 
   test.describe('AlertStrip', () => {
     test('renders all alerts with severity badges', async ({ page }) => {
       const alertStrip = page.locator('[data-testid="alert-strip"]')
       const alerts = alertStrip.locator('[data-testid^="alert-alert-"]')
-      // We expect 3 alerts initially
-      await expect(alerts).toHaveCount(3)
+      // We expect 4 alerts (including success variant)
+      await expect(alerts).toHaveCount(4)
     })
 
     test('renders correct severity badge colors', async ({ page }) => {
       const errorBadge = page.locator('[data-testid="alert-severity-error"]')
       const warnBadge = page.locator('[data-testid="alert-severity-warn"]')
       const infoBadge = page.locator('[data-testid="alert-severity-info"]')
+      const successBadge = page.locator('[data-testid="alert-severity-success"]')
 
       await expect(errorBadge).toBeVisible()
       await expect(warnBadge).toBeVisible()
       await expect(infoBadge).toBeVisible()
+      await expect(successBadge).toBeVisible()
     })
 
     test('renders alert messages', async ({ page }) => {
@@ -202,19 +213,22 @@ test.describe('Page Pattern Components', () => {
         document.body.classList.add('dark-canvas')
       })
 
-      // Verify all three alert severity badges are visible
+      // Verify all four alert severity badges are visible
       const errorBadge = page.locator('[data-testid="alert-severity-error"]')
       const warnBadge = page.locator('[data-testid="alert-severity-warn"]')
       const infoBadge = page.locator('[data-testid="alert-severity-info"]')
+      const successBadge = page.locator('[data-testid="alert-severity-success"]')
 
       await expect(errorBadge).toBeVisible()
       await expect(warnBadge).toBeVisible()
       await expect(infoBadge).toBeVisible()
+      await expect(successBadge).toBeVisible()
 
       // Verify alert messages are visible
       await expect(page.locator('[data-testid="alert-alert-1"]')).toContainText('Database connection lost')
       await expect(page.locator('[data-testid="alert-alert-2"]')).toContainText('High memory usage detected')
       await expect(page.locator('[data-testid="alert-alert-3"]')).toContainText('New update available')
+      await expect(page.locator('[data-testid="alert-alert-4"]')).toContainText('Migration completed successfully')
     })
 
     test('filter chips and interactions work in dark canvas mode', async ({ page }) => {

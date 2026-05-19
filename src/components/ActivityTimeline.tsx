@@ -30,7 +30,7 @@ const formatTimestamp = (timestamp: Date | string): string => {
   const diffMs = now.getTime() - date.getTime()
 
   if (Number.isNaN(diffMs)) {
-    return date.toLocaleDateString()
+    return ''
   }
 
   const diffMins = Math.floor(diffMs / 60000)

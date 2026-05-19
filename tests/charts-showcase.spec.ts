@@ -285,6 +285,36 @@ test.describe('Chart Components', () => {
       const width100 = await fill100.evaluate((el: HTMLElement) => el.style.width)
       expect(parseFloat(width100)).toBe(100)
     })
+
+    test('has WAI-ARIA progressbar attributes', async ({ page }) => {
+      const progress50 = page.locator('[data-testid="progress-50"]')
+
+      // Verify role="progressbar" attribute exists
+      await expect(progress50).toHaveAttribute('role', 'progressbar')
+
+      // Verify aria-valuenow is set to percent value
+      await expect(progress50).toHaveAttribute('aria-valuenow', '50')
+
+      // Verify aria-valuemin is set to 0
+      await expect(progress50).toHaveAttribute('aria-valuemin', '0')
+
+      // Verify aria-valuemax is set to 100
+      await expect(progress50).toHaveAttribute('aria-valuemax', '100')
+    })
+
+    test('handles NaN percent value gracefully', async ({ page }) => {
+      const progressNaN = page.locator('[data-testid="progress-nan"]')
+
+      await expect(progressNaN).toBeVisible()
+
+      // Verify the fill width is 0% (NaN defaults to 0)
+      const fill = progressNaN.locator('.progress-bar__fill')
+      const width = await fill.evaluate((el: HTMLElement) => el.style.width)
+      expect(parseFloat(width)).toBe(0)
+
+      // Verify aria-valuenow is 0 when percent is NaN
+      await expect(progressNaN).toHaveAttribute('aria-valuenow', '0')
+    })
   })
 
   test.describe('MetricRow Component', () => {

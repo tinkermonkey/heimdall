@@ -20,6 +20,7 @@ export default function PagePatternsShowcase() {
     { id: 'alert-1', severity: 'error', message: 'Database connection lost' },
     { id: 'alert-2', severity: 'warn', message: 'High memory usage detected' },
     { id: 'alert-3', severity: 'info', message: 'New update available' },
+    { id: 'alert-4', severity: 'success', message: 'Migration completed successfully' },
   ])
 
   const activities: ActivityEvent[] = [
@@ -46,6 +47,12 @@ export default function PagePatternsShowcase() {
       type: 'delete',
       subject: 'Deleted temporary index',
       timestamp: new Date(Date.now() - 48 * 3600000),
+    },
+    {
+      id: 'event-5',
+      type: 'create',
+      subject: 'Event with invalid timestamp',
+      timestamp: 'not-a-date',
     },
   ]
 

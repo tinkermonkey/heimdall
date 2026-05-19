@@ -409,6 +409,10 @@ export default function ChartsTestPage() {
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>100% (Neutral)</span>
             <ProgressBar percent={100} color="neutral" data-testid="progress-100" />
           </div>
+          <div>
+            <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>NaN (Handles Gracefully)</span>
+            <ProgressBar percent={NaN} color="emerald" data-testid="progress-nan" />
+          </div>
         </div>
       </section>
 
