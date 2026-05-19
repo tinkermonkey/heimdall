@@ -176,11 +176,12 @@ export default function GraphShowcase() {
   )
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '20px' }}>
+    <div data-testid="graph-showcase" style={{ display: 'flex', flexDirection: 'column', height: '100vh', padding: '20px' }}>
       <div style={{ marginBottom: '16px' }}>
         <h1 style={{ marginBottom: '12px' }}>Graph Canvas Components</h1>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button
+            data-testid="graph-view-button"
             onClick={() => setCanvasMode('graph')}
             style={{
               padding: '8px 16px',
@@ -194,6 +195,7 @@ export default function GraphShowcase() {
             Graph View
           </button>
           <button
+            data-testid="topology-view-button"
             onClick={() => setCanvasMode('topology')}
             style={{
               padding: '8px 16px',
@@ -211,6 +213,7 @@ export default function GraphShowcase() {
 
       <div style={{ flex: 1, minHeight: 0, display: 'flex' }}>
         <SplitPane
+          data-testid="graph-inspector-split-pane"
           direction="horizontal"
           initialSplitPercent={70}
           minSize={300}
@@ -218,6 +221,7 @@ export default function GraphShowcase() {
           first={canvasMode === 'graph' ? graphCanvas : topologyCanvas}
           second={
             <GraphInspector
+              data-testid="graph-inspector-panel"
               node={inspectorNode}
               relationships={relationships}
               onNodeSelect={setSelectedNodeId}

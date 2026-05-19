@@ -252,6 +252,32 @@ test.describe('Graph Canvas Components', () => {
     expect(gridProps.height).toBeGreaterThan(0)
   })
 
+  test.describe('TopologyNode Status Variants', () => {
+    test.beforeEach(async ({ page }) => {
+      const topologyBtn = page.locator('button:has-text("Topology View")')
+      await topologyBtn.click()
+      await page.waitForTimeout(200)
+    })
+
+    test('TopologyNode ok status visual snapshot', async ({ page }) => {
+      const okNode = page.locator('[data-testid="topology-node-api-server"]')
+      await expect(okNode).toBeVisible()
+      await expect(okNode).toHaveScreenshot('topology-node-ok-light.png')
+    })
+
+    test('TopologyNode warning status visual snapshot', async ({ page }) => {
+      const warningNode = page.locator('[data-testid="topology-node-database"]')
+      await expect(warningNode).toBeVisible()
+      await expect(warningNode).toHaveScreenshot('topology-node-warning-light.png')
+    })
+
+    test('TopologyNode error status visual snapshot', async ({ page }) => {
+      const errorNode = page.locator('[data-testid="topology-node-message-queue"]')
+      await expect(errorNode).toBeVisible()
+      await expect(errorNode).toHaveScreenshot('topology-node-error-light.png')
+    })
+  })
+
   test.describe('Visual Regression - Light Canvas', () => {
     test('GraphCanvas with nodes visual snapshot', async ({ page }) => {
       const canvas = page.locator('.graph-canvas')
@@ -271,6 +297,33 @@ test.describe('Graph Canvas Components', () => {
     test('GraphEdge component visual snapshot', async ({ page }) => {
       const edge = page.locator('[data-testid^="graph-edge-"]').first()
       await expect(edge).toHaveScreenshot('graph-edge-light.png')
+    })
+  })
+
+  test.describe('TopologyNode Status Variants - Dark Canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+      const topologyBtn = page.locator('button:has-text("Topology View")')
+      await topologyBtn.click()
+      await page.waitForTimeout(200)
+    })
+
+    test('TopologyNode ok status visual snapshot in dark mode', async ({ page }) => {
+      const okNode = page.locator('[data-testid="topology-node-api-server"]')
+      await expect(okNode).toBeVisible()
+      await expect(okNode).toHaveScreenshot('topology-node-ok-dark.png')
+    })
+
+    test('TopologyNode warning status visual snapshot in dark mode', async ({ page }) => {
+      const warningNode = page.locator('[data-testid="topology-node-database"]')
+      await expect(warningNode).toBeVisible()
+      await expect(warningNode).toHaveScreenshot('topology-node-warning-dark.png')
+    })
+
+    test('TopologyNode error status visual snapshot in dark mode', async ({ page }) => {
+      const errorNode = page.locator('[data-testid="topology-node-message-queue"]')
+      await expect(errorNode).toBeVisible()
+      await expect(errorNode).toHaveScreenshot('topology-node-error-dark.png')
     })
   })
 

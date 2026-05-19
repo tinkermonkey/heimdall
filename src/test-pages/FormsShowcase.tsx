@@ -85,7 +85,7 @@ export default function FormsShowcase() {
     >
       <div style={{ maxWidth: '1200px', padding: '0 26px 32px' }}>
         {/* Entity Picker */}
-        <section className="showcase-section">
+        <section className="showcase-section" data-testid="forms-showcase-entity-picker">
           <h2 className="showcase-title">Entity Picker</h2>
           <FormCallout icon="info">
             Text input that filters a dropdown of results with domain-colored badges.
@@ -93,6 +93,7 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <EntityPicker
+              data-testid="entity-picker"
               query={entityQuery}
               onQueryChange={setEntityQuery}
               results={filteredEntities}
@@ -115,7 +116,7 @@ export default function FormsShowcase() {
         </section>
 
         {/* KeyValueEditor */}
-        <section className="showcase-section">
+        <section className="showcase-section" data-testid="forms-showcase-key-value-editor">
           <h2 className="showcase-title">Key-Value Editor</h2>
           <FormCallout icon="info">
             Editable key/value row pairs with add-row and per-row remove. The `datatypeColumn` prop adds a third selector column.
@@ -123,6 +124,7 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <KeyValueEditor
+              data-testid="key-value-editor"
               rows={kvRows}
               onChange={setKvRows}
               datatypeColumn={true}
@@ -132,7 +134,7 @@ export default function FormsShowcase() {
         </section>
 
         {/* OrderedList */}
-        <section className="showcase-section">
+        <section className="showcase-section" data-testid="forms-showcase-ordered-list">
           <h2 className="showcase-title">Ordered List</h2>
           <FormCallout icon="info">
             Ranked list with per-item move-up/move-down controls and a primary-item indicator using a star badge.
@@ -140,6 +142,7 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <OrderedList
+              data-testid="ordered-list"
               items={orderedItems}
               onChange={setOrderedItems}
               primaryItemId={orderedItems[0]?.id}
@@ -148,7 +151,7 @@ export default function FormsShowcase() {
         </section>
 
         {/* RelationshipBuilder */}
-        <section className="showcase-section">
+        <section className="showcase-section" data-testid="forms-showcase-relationship-builder">
           <h2 className="showcase-title">Relationship Builder</h2>
           <FormCallout icon="info">
             Three-column layout composing source EntityPicker + predicate selector + target EntityPicker.
@@ -156,6 +159,7 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <RelationshipBuilder
+              data-testid="relationship-builder"
               value={relationshipValue}
               onChange={setRelationshipValue}
               sourceResults={sourceResults}
@@ -178,7 +182,7 @@ export default function FormsShowcase() {
         </section>
 
         {/* RowMenu */}
-        <section className="showcase-section">
+        <section className="showcase-section" data-testid="forms-showcase-row-menu">
           <h2 className="showcase-title">Row Menu</h2>
           <FormCallout icon="info">
             Trigger element opens a positioned dropdown containing action items. Danger-styled items render in rose text. Closes on outside click, Escape, or selection.
@@ -188,6 +192,7 @@ export default function FormsShowcase() {
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
               <span>Record #12345</span>
               <RowMenu
+                data-testid="row-menu"
                 actions={rowMenuActions}
                 onAction={handleRowMenuAction}
               />
@@ -196,7 +201,7 @@ export default function FormsShowcase() {
         </section>
 
         {/* PipelineCard */}
-        <section className="showcase-section">
+        <section className="showcase-section" data-testid="forms-showcase-pipeline-card">
           <h2 className="showcase-title">Pipeline Card</h2>
           <FormCallout icon="info">
             Sequential flow of named stage nodes connected by arrow connectors, with a status badge and statistics footer row.
@@ -204,6 +209,7 @@ export default function FormsShowcase() {
 
           <div className="showcase-content">
             <PipelineCard
+              data-testid="pipeline-card-ingest"
               title="Ingest organisms · GBIF"
               description="Pull species records, normalize names, write to life.organism"
               stages={[
@@ -274,7 +280,7 @@ export default function FormsShowcase() {
         </section>
 
         {/* FormCallout */}
-        <section className="showcase-section">
+        <section className="showcase-section" data-testid="forms-showcase-form-callout">
           <h2 className="showcase-title">Form Callout</h2>
           <FormCallout icon="info">
             Icon + body text with inline code formatting (backtick-wrapped segments → monospace).
