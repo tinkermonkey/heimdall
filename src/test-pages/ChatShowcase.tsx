@@ -7,6 +7,7 @@ import {
   ChatComposer,
   type BotTab,
   type Attachment,
+  type ContextItem,
 } from '../index'
 
 export default function ChatShowcase() {
@@ -20,11 +21,11 @@ export default function ChatShowcase() {
   const bots: BotTab[] = [
     { id: 'assistant', label: 'Assistant', role: 'EXECUTOR', status: 'idle' },
     { id: 'analyzer', label: 'Analyzer', role: 'ANALYST', status: 'idle' },
-    { id: 'planner', label: 'Planner', role: 'ARCHITECT', status: 'running' },
+    { id: 'planner', label: 'Planner', role: 'ARCHITECT', status: 'busy' },
   ]
 
-  const handleComposerSubmit = (value: string) => {
-    console.log('Submit:', value)
+  const handleComposerSubmit = (value: string, items: ContextItem[]) => {
+    console.log('Submit:', value, 'Context:', items)
     setComposerValue('')
   }
 

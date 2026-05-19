@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  max-height: 100%;
   background: rgb(var(--canvas-bg, 15, 23, 41));
   border: 1px solid rgb(var(--canvas-border, 30, 42, 68));
   border-radius: 6px;
@@ -60,12 +61,12 @@
   background: rgb(var(--canvas-fg-4, 107, 114, 128));
 }
 
-.chat-container__bot-status--running {
+.chat-container__bot-status--busy {
   background: rgb(var(--status-amber, 245, 158, 11));
 }
 
-.chat-container__bot-status--busy {
-  background: rgb(var(--status-amber, 245, 158, 11));
+.chat-container__bot-status--healthy {
+  background: rgb(var(--status-emerald, 52, 211, 153));
 }
 
 .chat-container__bot-role {

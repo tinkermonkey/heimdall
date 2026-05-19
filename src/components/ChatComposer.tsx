@@ -3,6 +3,13 @@ import './ChatComposer.css'
 import { Button } from './Button'
 import { Icon } from './Icon'
 
+const generateId = (): string => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  return `id-${Math.random().toString(36).slice(2, 11)}-${Date.now()}`
+}
+
 export interface ContextItem {
   id: string
   label: string
@@ -19,7 +26,7 @@ export interface ChatComposerProps
   placeholder?: string
   value: string
   onChange: (value: string) => void
-  onSubmit: (value: string) => void
+  onSubmit: (value: string, contextItems: ContextItem[]) => void
   onContextChange?: (items: ContextItem[]) => void
   onAttachmentChange?: (attachments: Attachment[]) => void
   scopeLabel?: string
@@ -62,14 +69,14 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault()
         if (value.trim()) {
-          onSubmit(value)
+          onSubmit(value, contextItems)
         }
       }
     }
 
     const handleSubmit = () => {
       if (value.trim()) {
-        onSubmit(value)
+        onSubmit(value, contextItems)
       }
     }
 
@@ -83,7 +90,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
 
       const files = Array.from(e.target.files)
       const newAttachments = files.map((file) => ({
-        id: crypto.randomUUID(),
+        id: generateId(),
         name: file.name,
         size: file.size,
       }))

@@ -25,7 +25,3 @@
   background: rgb(var(--canvas-surface-2));
   border-color: rgb(var(--canvas-border, 30, 42, 68));
 }
-
-.chat-suggestions__pill:active {
-  transform: scale(0.98);
-}

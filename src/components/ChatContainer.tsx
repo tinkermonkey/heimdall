@@ -5,7 +5,7 @@ export interface BotTab {
   id: string
   label: string
   role: string
-  status: 'idle' | 'running' | 'busy'
+  status: 'idle' | 'busy' | 'healthy'
 }
 
 export interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,6 +14,7 @@ export interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement>
   activeBotId?: string
   onBotChange?: (botId: string) => void
   autoScroll?: boolean
+  composer?: React.ReactNode
 }
 
 export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps>(
@@ -24,6 +25,7 @@ export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps
       activeBotId,
       onBotChange,
       autoScroll = true,
+      composer,
       className = '',
       ...props
     },
@@ -83,6 +85,8 @@ export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps
             {children}
           </div>
         </div>
+
+        {composer}
       </div>
     )
   }
