@@ -14,13 +14,13 @@ export default function ChartsTestPage() {
     {
       name: 'Series A',
       data: [10, 15, 13, 17, 20, 22, 18, 25, 28, 24],
-      color: 'rgb(245, 158, 11)',
+      color: 'amber' as const,
       filled: true,
     },
     {
       name: 'Series B',
       data: [8, 12, 10, 14, 16, 18, 15, 20, 22, 19],
-      color: 'rgb(16, 185, 129)',
+      color: 'emerald' as const,
     },
   ]
 
@@ -152,8 +152,8 @@ export default function ChartsTestPage() {
             <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
               <LineChart
                 series={[
-                  { name: 'Empty A', data: [], color: 'rgb(245, 158, 11)' },
-                  { name: 'Empty B', data: [], color: 'rgb(16, 185, 129)' },
+                  { name: 'Empty A', data: [], color: 'amber' as const },
+                  { name: 'Empty B', data: [], color: 'emerald' as const },
                 ]}
                 width={300}
                 height={150}
@@ -165,7 +165,7 @@ export default function ChartsTestPage() {
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Single Point</span>
             <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
               <LineChart
-                series={[{ name: 'Single', data: [15], color: 'rgb(245, 158, 11)' }]}
+                series={[{ name: 'Single', data: [15], color: 'amber' as const }]}
                 xLabels={['Jan']}
                 width={300}
                 height={150}
@@ -181,7 +181,7 @@ export default function ChartsTestPage() {
                   {
                     name: 'Values',
                     data: [-10, -5, 0, 5, 10, 3, -2],
-                    color: 'rgb(244, 63, 94)',
+                    color: 'rose' as const,
                   },
                 ]}
                 xLabels={['A', 'B', 'C', 'D', 'E', 'F', 'G']}
@@ -211,8 +211,8 @@ export default function ChartsTestPage() {
         <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
           <BarChart
             series={[
-              { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'rgb(245, 158, 11)' },
-              { name: 'Series B', data: [8, 12, 10, 14, 16], color: 'rgb(16, 185, 129)' },
+              { name: 'Series A', data: [10, 15, 13, 17, 20], color: 'amber' as const },
+              { name: 'Series B', data: [8, 12, 10, 14, 16], color: 'emerald' as const },
             ]}
             xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
             yMin={0}
@@ -246,8 +246,8 @@ export default function ChartsTestPage() {
             <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
               <BarChart
                 series={[
-                  { name: 'Empty A', data: [], color: 'rgb(245, 158, 11)' },
-                  { name: 'Empty B', data: [], color: 'rgb(16, 185, 129)' },
+                  { name: 'Empty A', data: [], color: 'amber' as const },
+                  { name: 'Empty B', data: [], color: 'emerald' as const },
                 ]}
                 width={300}
                 height={150}
@@ -259,7 +259,7 @@ export default function ChartsTestPage() {
             <span style={{ fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>Single Point</span>
             <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
               <BarChart
-                series={[{ name: 'Single', data: [15], color: 'rgb(245, 158, 11)' }]}
+                series={[{ name: 'Single', data: [15], color: 'amber' as const }]}
                 xLabels={['Jan']}
                 width={300}
                 height={150}
@@ -272,7 +272,7 @@ export default function ChartsTestPage() {
             <div style={{ backgroundColor: 'rgb(var(--shell-surface))', padding: '16px', borderRadius: '6px' }}>
               <BarChart
                 series={[
-                  { name: 'Constant', data: [10, 10, 10, 10, 10], color: 'rgb(244, 63, 94)' },
+                  { name: 'Constant', data: [10, 10, 10, 10, 10], color: 'rose' as const },
                 ]}
                 xLabels={['A', 'B', 'C', 'D', 'E']}
                 width={300}

@@ -1,12 +1,10 @@
 import React from 'react'
 import './BarChart.css'
 import { chartColors } from './chartColors'
+import type { BarChartSeries } from './chartTypes'
+import { statusColorMap } from './chartTypes'
 
-export interface BarChartSeries {
-  name: string
-  data: number[]
-  color?: string
-}
+export type { BarChartSeries }
 
 export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   series: BarChartSeries[]
@@ -151,7 +149,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
 
           {/* Data series bars */}
           {series.map((s, seriesIdx) => {
-            const color = s.color || chartColors[seriesIdx % chartColors.length]
+            const color = s.color ? statusColorMap[s.color] : chartColors[seriesIdx % chartColors.length]
             const seriesDataLength = s.data.length
 
             return (
@@ -187,8 +185,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
           {/* X-axis labels */}
           {xLabels.length > 0 &&
             xLabels.map((label, idx) => {
-              const divisor = xLabels.length === 1 ? 1 : xLabels.length - 1
-              const x = padding.left + (idx / divisor) * chartWidth
+              const x = padding.left + (idx + 0.5) * (chartWidth / xLabels.length)
               return (
                 <text
                   key={`x-label-${idx}`}
@@ -215,7 +212,7 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
                     width: '8px',
                     height: '8px',
                     borderRadius: '1px',
-                    backgroundColor: s.color || chartColors[idx % chartColors.length],
+                    backgroundColor: s.color ? statusColorMap[s.color] : chartColors[idx % chartColors.length],
                   }}
                 />
                 <span>{s.name}</span>

@@ -1,7 +1,8 @@
 import React from 'react'
 import './Badge.css'
+import type { StatusColor } from './chartTypes'
 
-export type BadgeColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
+export type BadgeColor = StatusColor
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   color?: BadgeColor

@@ -1,7 +1,8 @@
 import React from 'react'
 import './Sparkline.css'
+import type { StatusColor } from './chartTypes'
 
-export type SparklineColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'neutral'
+export type SparklineColor = StatusColor
 
 export interface SparklineProps extends React.SVGAttributes<SVGSVGElement> {
   data: number[]
@@ -15,6 +16,7 @@ const colorMap: Record<SparklineColor, string> = {
   amber: 'rgb(245 158 11)',
   rose: 'rgb(244 63 94)',
   cyan: 'rgb(34 211 238)',
+  violet: 'rgb(139 92 246)',
   neutral: '', // handled via style prop for dark canvas support
 }
 

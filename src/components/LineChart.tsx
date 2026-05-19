@@ -1,13 +1,10 @@
 import React from 'react'
 import './LineChart.css'
 import { chartColors } from './chartColors'
+import type { LineChartSeries } from './chartTypes'
+import { statusColorMap } from './chartTypes'
 
-export interface LineChartSeries {
-  name: string
-  data: number[]
-  color?: string
-  filled?: boolean
-}
+export type { LineChartSeries }
 
 export interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
   series: LineChartSeries[]
@@ -137,7 +134,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
 
           {/* Data series */}
           {series.map((s, seriesIdx) => {
-            const color = s.color || chartColors[seriesIdx % chartColors.length]
+            const color = s.color ? statusColorMap[s.color] : chartColors[seriesIdx % chartColors.length]
             const seriesDataLength = s.data.length
             const divisor = seriesDataLength === 1 ? 1 : seriesDataLength - 1
             const points = s.data.map((value, idx) => {
@@ -218,7 +215,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                     width: '8px',
                     height: '8px',
                     borderRadius: '1px',
-                    backgroundColor: s.color || chartColors[idx % chartColors.length],
+                    backgroundColor: s.color ? statusColorMap[s.color] : chartColors[idx % chartColors.length],
                   }}
                 />
                 <span>{s.name}</span>

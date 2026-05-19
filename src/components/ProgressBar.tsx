@@ -1,7 +1,7 @@
 import React from 'react'
 import './ProgressBar.css'
 
-export type ProgressBarColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'neutral'
+export type ProgressBarColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
 
 export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
   percent: number

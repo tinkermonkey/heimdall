@@ -1,5 +1,6 @@
 import React from 'react'
 import './TopologyNode.css'
+import type { StatusColor } from './chartTypes'
 
 export type TopologyNodeStatus = 'ok' | 'warning' | 'error' | 'idle'
 
@@ -9,7 +10,7 @@ export interface TopologyNodeMetric {
   unit?: string
   percent: number
   sparklineData: number[]
-  color?: 'emerald' | 'amber' | 'rose' | 'violet'
+  color?: StatusColor
 }
 
 export interface TopologyNodeProps extends React.HTMLAttributes<HTMLDivElement> {
