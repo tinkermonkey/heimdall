@@ -355,7 +355,7 @@ test.describe('Forms Components', () => {
     })
 
     test('renders success status variant correctly', async ({ page }) => {
-      const cards = page.locator('[data-testid="pipeline-card"]')
+      const cards = page.locator('[data-testid^="pipeline-card"]')
       const successCard = cards.nth(0)
       const stages = successCard.locator('[data-testid^="pipeline-stage-"]')
       const count = await stages.count()
@@ -364,7 +364,7 @@ test.describe('Forms Components', () => {
     })
 
     test('renders pending status variant correctly', async ({ page }) => {
-      const cards = page.locator('[data-testid="pipeline-card"]')
+      const cards = page.locator('[data-testid^="pipeline-card"]')
       const pendingCard = cards.nth(1)
       const stages = pendingCard.locator('[data-testid^="pipeline-stage-"]')
       const count = await stages.count()
@@ -373,7 +373,7 @@ test.describe('Forms Components', () => {
     })
 
     test('renders running status variant correctly', async ({ page }) => {
-      const cards = page.locator('[data-testid="pipeline-card"]')
+      const cards = page.locator('[data-testid^="pipeline-card"]')
       const runningCard = cards.nth(2)
       const stages = runningCard.locator('[data-testid^="pipeline-stage-"]')
       const count = await stages.count()
@@ -382,7 +382,7 @@ test.describe('Forms Components', () => {
     })
 
     test('renders failed status variant correctly', async ({ page }) => {
-      const cards = page.locator('[data-testid="pipeline-card"]')
+      const cards = page.locator('[data-testid^="pipeline-card"]')
       const failedCard = cards.nth(3)
       const stages = failedCard.locator('[data-testid^="pipeline-stage-"]')
       const count = await stages.count()

@@ -78,8 +78,8 @@ test.describe('Shell Framework Components', () => {
     })
 
     test('TabBar displays tab counts when provided', async ({ page }) => {
-      // Find tabs with counts
-      const countEls = page.locator('[class*="tab-bar__tab-count"]')
+      // Counts are now rendered as Chip components inside tabs
+      const countEls = page.locator('.tab-bar__tab .chip')
       const countCount = await countEls.count()
       expect(countCount).toBeGreaterThan(0)
     })

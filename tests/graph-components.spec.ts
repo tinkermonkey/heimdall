@@ -149,14 +149,15 @@ test.describe('Graph Canvas Components', () => {
   })
 
   test('GraphEdge renders with correct path', async ({ page }) => {
+    // GraphCanvas renders edges via GraphEdgeInternal; the <path> lives inside the <g data-testid="graph-edge-{id}">
     const edges = page.locator('[data-testid^="graph-edge-"]')
+    await expect(edges.first()).toBeVisible({ timeout: 10000 })
     const edgeCount = await edges.count()
     expect(edgeCount).toBeGreaterThan(0)
 
-    const firstEdgeLine = page.locator('[data-testid^="graph-edge-line-"]').first()
-    await expect(firstEdgeLine).toBeVisible()
-
-    const pathData = await firstEdgeLine.getAttribute('d')
+    const firstEdgePath = edges.first().locator('path.graph-edge__line')
+    await expect(firstEdgePath).toBeAttached()
+    const pathData = await firstEdgePath.getAttribute('d')
     expect(pathData).toBeTruthy()
     expect(pathData).toContain('M ')
   })
