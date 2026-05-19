@@ -34,12 +34,12 @@ const parseBody = (text: string): React.ReactNode[] => {
 }
 
 export const FormCallout = React.forwardRef<HTMLDivElement, FormCalloutProps>(
-  ({ icon, children, ...props }, ref) => {
+  ({ icon, children, className = '', ...props }, ref) => {
     const bodyText = typeof children === 'string' ? children : ''
     const parsedBody = typeof children === 'string' ? parseBody(bodyText) : children
 
     return (
-      <div ref={ref} className="form-callout" data-testid="form-callout" {...props}>
+      <div ref={ref} className={['form-callout', className].filter(Boolean).join(' ')} data-testid="form-callout" {...props}>
         {icon && (
           <div className="form-callout__icon">
             <Icon name={icon} size={16} />

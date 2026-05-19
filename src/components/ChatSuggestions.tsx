@@ -1,7 +1,7 @@
 import React from 'react'
 import './ChatSuggestions.css'
 
-export interface ChatSuggestionsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, keyof React.DOMAttributes<HTMLDivElement>> {
+export interface ChatSuggestionsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   suggestions: string[]
   onSelect: (suggestion: string) => void
 }
