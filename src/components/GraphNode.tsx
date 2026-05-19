@@ -1,21 +1,16 @@
 import React from 'react'
+import { BaseGraphNodeComponentProps } from './GraphCanvas'
 import './GraphNode.css'
 
-export interface GraphNodeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
-  id: string
-  x: number
-  y: number
-  label: string
+export interface GraphNodeProps extends BaseGraphNodeComponentProps {
   kind?: string
   domainColor?: string
-  selected?: boolean
   width?: number
   height?: number
-  onSelect?: (id: string) => void
 }
 
-const NODE_WIDTH = 138
-const NODE_HEIGHT = 30
+export const NODE_WIDTH = 138
+export const NODE_HEIGHT = 30
 
 export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
   (

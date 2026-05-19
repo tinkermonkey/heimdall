@@ -7,7 +7,6 @@ export interface GraphNodeMetadata {
   kind?: string
   domain?: string
   description?: string
-  // Additional typed metadata fields
   [key: string]: string | number | boolean | null | undefined
 }
 

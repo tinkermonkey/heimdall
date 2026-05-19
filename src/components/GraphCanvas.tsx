@@ -12,9 +12,6 @@ export interface GraphNodeData {
   height?: number
 }
 
-// Legacy alias for backwards compatibility (will be deprecated)
-export type GraphNode = GraphNodeData
-
 export interface BaseGraphNodeComponentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   id: string
   x: number

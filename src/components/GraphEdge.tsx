@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { useGraphCanvas, type GraphNodeData } from './GraphCanvas'
+import { NODE_WIDTH, NODE_HEIGHT } from './GraphNode'
 import { bezierPath, rectEdgePoint } from '../utils/graph'
 import './GraphEdge.css'
 
@@ -10,10 +11,6 @@ export interface GraphEdgeProps extends React.SVGAttributes<SVGGElement> {
   label?: string
   variant?: 'default' | 'hot' | 'irrelevant'
 }
-
-// Constants match GraphNode.tsx for consistency
-const NODE_WIDTH = 138
-const NODE_HEIGHT = 30
 
 function getNodeWidth(label?: string): number {
   if (!label) return NODE_WIDTH
