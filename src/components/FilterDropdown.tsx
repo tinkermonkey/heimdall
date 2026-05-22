@@ -64,27 +64,21 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
 
     const handleValueChange = useCallback(
       (value: string, selected: boolean) => {
-        let nextValues: Set<string>
-
         setSelectedValues((prevValues) => {
-          const temp = new Set(prevValues)
+          const nextValues = new Set(prevValues)
 
           if (selected) {
             if (mode === 'radio') {
-              temp.clear()
+              nextValues.clear()
             }
-            temp.add(value)
+            nextValues.add(value)
           } else {
-            temp.delete(value)
+            nextValues.delete(value)
           }
 
-          nextValues = temp
-          return temp
+          onChange?.(Array.from(nextValues))
+          return nextValues
         })
-
-        if (onChange) {
-          onChange(Array.from(nextValues!))
-        }
 
         // Auto-close on selection for radio mode
         if (mode === 'radio' && selected) {
@@ -229,16 +223,15 @@ export interface FilterDropdownPanelProps extends React.HTMLAttributes<HTMLDivEl
   children: ReactNode
 }
 
-function FilterDropdownPanel({ children, className = '', ...props }: FilterDropdownPanelProps) {
+function FilterDropdownPanel({ children, className = '', style, ...restProps }: FilterDropdownPanelProps) {
   const { isOpen, mode, panelRef } = useFilterDropdown()
-  const { style, ...restProps } = props as any
 
   return (
     <div
       ref={panelRef}
       className={`filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
-      style={{ display: isOpen ? 'block' : 'none', ...(style || {}) }}
+      style={{ display: isOpen ? 'block' : 'none', ...style }}
       {...restProps}
     >
       {children}
