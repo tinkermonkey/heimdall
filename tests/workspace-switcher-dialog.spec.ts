@@ -90,11 +90,15 @@ test.describe('WorkspaceSwitcherDialog', () => {
     await page.goto('/?example=overlays')
     await page.click('button:has-text("Open Workspace Switcher")')
 
-    // Click the backdrop
-    await page.click('.modal-backdrop')
+    // Verify dialog is open
+    const modal = page.locator('[role="dialog"]').first()
+    await expect(modal).toBeVisible()
+
+    // Click the backdrop at a position that's definitely outside the modal
+    const backdrop = page.locator('.modal-backdrop').first()
+    await backdrop.click({ position: { x: 10, y: 10 } })
 
     // Dialog should be closed
-    const modal = page.locator('[role="dialog"]')
     await expect(modal).not.toBeVisible()
   })
 
