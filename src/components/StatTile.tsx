@@ -41,9 +41,6 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
       .filter(Boolean)
       .join(' ')
 
-    // Map StatusColor to SparklineColor
-    const sparklineColor = (color || 'cyan') as any
-
     return (
       <div ref={ref} className={classNames} {...props}>
         <div className="stat-tile__header">
@@ -55,8 +52,11 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
           <div className="stat-tile__footer">
             {delta && (
               <span className={`stat-tile__delta stat-tile__delta--${delta.direction || 'up'}`}>
-                {delta.direction === 'down' ? '−' : '+'}
-                {Math.abs(delta.value)}
+                <span className="stat-tile__delta-value">
+                  {delta.direction === 'down' ? '−' : '+'}
+                  {Math.abs(delta.value)}
+                </span>
+                {delta.label && <span className="stat-tile__delta-label">{delta.label}</span>}
               </span>
             )}
             {meta && (
@@ -68,8 +68,8 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
           </div>
         )}
         {sparkData && (
-          <div style={{ position: 'absolute', bottom: '12px', right: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Sparkline data={sparkData} width={60} height={16} color={sparklineColor as any} />
+          <div className="stat-tile__sparkline">
+            <Sparkline data={sparkData} width={60} height={16} color={color || 'cyan'} />
           </div>
         )}
       </div>

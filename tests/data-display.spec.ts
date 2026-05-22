@@ -168,8 +168,8 @@ test.describe('Data Display Components', () => {
   })
 
   test('StatTile component - all variants', async ({ page }) => {
-    // Verify different status variants exist
-    const tiles = page.locator('[class*="stat-tile"]')
+    // Verify different status variants exist - check only main stat-tile containers
+    const tiles = page.locator('.stat-tile')
 
     // Get all tiles
     const allTiles = await tiles.all()
