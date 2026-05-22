@@ -67,7 +67,7 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
       <div ref={ref} className={classNames} data-testid="activity-timeline" {...props}>
         <div className="activity-timeline__list">
           {events.map(event => (
-            <div key={event.id} className="activity-timeline__event" data-testid={`activity-event-${event.id}`}>
+            <div key={event.id} className="activity-timeline__event" data-testid={`activity-event-${event.id}`} {...(event.kind && { 'data-kind': event.kind })}>
               <div className="activity-timeline__dot-container">
                 {event.dotColor ? (
                   <div
