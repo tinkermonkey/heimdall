@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StatTile, StatGrid, Table, Chip, StatusBadge, type Column } from '@tinkermonkey/heimdall-ui'
+import { StatTile, StatGrid, Table, Chip, StatusBadge, Icon, type Column } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function StatTileShowcase() {
@@ -22,12 +22,55 @@ export function StatTileShowcase() {
           <StatTile label="ERROR RATE" value="0.04%" color="amber" delta={{ value: 0.01, label: 'vs last week', direction: 'up' }} />
         </DemoGrid>
       </ShowcaseSection>
+      <ShowcaseSection label="With icon">
+        <DemoGrid cols={4} gap={10}>
+          <StatTile label="CPU" value="42%" color="cyan" icon="activity" />
+          <StatTile label="MEMORY" value="12.4 GB" color="violet" icon="database" />
+          <StatTile label="THROUGHPUT" value="1.2M" color="emerald" icon="trending-up" />
+          <StatTile label="ERRORS" value="23" color="amber" icon="alert" />
+        </DemoGrid>
+      </ShowcaseSection>
+      <ShowcaseSection label="With sparkline">
+        <DemoGrid cols={2} gap={10}>
+          <StatTile
+            label="REQUESTS"
+            value="1.2M"
+            color="emerald"
+            sparkData={[10, 20, 15, 30, 25, 40, 35]}
+          />
+          <StatTile
+            label="ERRORS"
+            value="0.04%"
+            color="rose"
+            sparkData={[2, 1, 1, 3, 2, 1, 0]}
+          />
+        </DemoGrid>
+      </ShowcaseSection>
+      <ShowcaseSection label="With meta">
+        <DemoGrid cols={2} gap={10}>
+          <StatTile
+            label="UPTIME"
+            value="99.9%"
+            color="cyan"
+            meta="Last 30 days"
+          />
+          <StatTile
+            label="PERFORMANCE"
+            value="1.2s"
+            color="violet"
+            meta="Avg response time"
+          />
+        </DemoGrid>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="label" type="string" description="Eyebrow label — rendered monospace uppercase" />
           <PropRow name="value" type="string | number" description="Primary metric value" />
-          <PropRow name="color" type="'cyan' | 'violet' | 'amber' | 'emerald'" def="'cyan'" description="Left bar accent color" />
+          <PropRow name="color" type="'cyan' | 'violet' | 'amber' | 'emerald' | 'rose'" def="'cyan'" description="Left bar accent color" />
           <PropRow name="delta" type="{ value, label?, direction? }" description="Secondary trend row below the value" />
+          <PropRow name="icon" type="IconName" description="Optional icon rendered above the value" />
+          <PropRow name="sparkData" type="number[]" description="Optional data points for a sparkline chart" />
+          <PropRow name="meta" type="string" description="Optional metadata text rendered below the value" />
         </PropsTable>
       </ShowcaseSection>
     </div>

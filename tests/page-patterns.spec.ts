@@ -302,6 +302,7 @@ test.describe('Page Pattern Components', () => {
       const grid = page.locator('[data-testid="quick-access-grid"]')
       await expect(grid).toHaveScreenshot('quick-access-grid-light.png')
     })
+
   })
 
   test.describe('Visual Regression - Dark Canvas', () => {

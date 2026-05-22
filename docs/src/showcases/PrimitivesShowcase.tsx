@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Icon, Button, Chip, Badge, StatusBadge, type IconName } from '@tinkermonkey/heimdall-ui'
+import { Icon, Button, Chip, Badge, StatusBadge, VersionPill, SegmentedControl, type IconName } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const ICON_NAMES: IconName[] = [
@@ -166,6 +166,70 @@ export function BadgeShowcase() {
         <PropsTable>
           <PropRow name="color" type="'cyan' | 'emerald' | 'amber' | 'violet' | 'rose' | 'neutral'" description="Dot color" />
           <PropRow name="pulse" type="boolean" def="false" description="(StatusBadge only) Enables the glow pulse animation" />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+export function VersionPillShowcase() {
+  return (
+    <div>
+      <PageHeader name="VersionPill" description="Compact version tag. Monospace 11px, amber background, 3px radius. Used in InspectorPanel head." />
+      <ShowcaseSection label="Version examples">
+        <DemoRow>
+          <VersionPill>v1.0.0</VersionPill>
+          <VersionPill>v2.3.4</VersionPill>
+          <VersionPill>v0.1.0-beta</VersionPill>
+          <VersionPill>v9</VersionPill>
+        </DemoRow>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="children" type="string" description="Version text (e.g. 'v1.0.0')" />
+          <PropRow name="className" type="string" description="Additional CSS class names" />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+export function SegmentedControlShowcase() {
+  const [value, setValue] = useState<string | number>('all')
+
+  return (
+    <div>
+      <PageHeader name="SegmentedControl" description="Toggle between mutually exclusive options. Highlights selected option with amber background." />
+      <ShowcaseSection label="Default usage">
+        <SegmentedControl
+          value={value}
+          onChange={setValue}
+          options={[
+            { value: 'all', label: 'All' },
+            { value: 'active', label: 'Active' },
+            { value: 'archived', label: 'Archived' },
+          ]}
+        />
+        <div style={{ marginTop: 10, fontSize: 12, color: 'rgb(var(--canvas-fg-3))' }}>
+          Selected: <span style={{ fontFamily: mono, color: 'rgb(var(--canvas-fg-2))' }}>{String(value)}</span>
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Time range options">
+        <SegmentedControl
+          value={value}
+          onChange={setValue}
+          options={[
+            { value: 'today', label: 'Today' },
+            { value: 'week', label: 'This week' },
+            { value: 'month', label: 'This month' },
+          ]}
+        />
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="value" type="string | number" description="Currently selected option value" />
+          <PropRow name="onChange" type="(v: string | number) => void" description="Called when a new option is selected" />
+          <PropRow name="options" type="Array<{value, label}>" description="Available options to select from" />
         </PropsTable>
       </ShowcaseSection>
     </div>

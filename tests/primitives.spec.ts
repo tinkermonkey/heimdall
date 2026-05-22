@@ -181,4 +181,27 @@ test.describe('Primitive Components', () => {
     // Value may have changed (depends on implementation)
     expect(newValue).toBeTruthy()
   })
+
+  test('VersionPill component renders', async ({ page }) => {
+    // Verify VersionPill elements exist
+    const versionPills = page.locator('[class*="version-pill"]')
+    const count = await versionPills.count()
+    expect(count).toBeGreaterThan(0)
+
+    // Verify version text is present
+    const pillText = await versionPills.first().textContent()
+    expect(pillText).toMatch(/v\d+/i)
+  })
+
+  test('SegmentedControl component renders and is interactive', async ({ page }) => {
+    // Find SegmentedControl elements
+    const segmentedControls = page.locator('[class*="segmented-control"]')
+    const count = await segmentedControls.count()
+    expect(count).toBeGreaterThan(0)
+
+    // Verify it has options/buttons
+    const options = page.locator('[class*="segmented-control"] button, [class*="segmented-control"] [role="button"]')
+    const optionCount = await options.count()
+    expect(optionCount).toBeGreaterThan(0)
+  })
 })

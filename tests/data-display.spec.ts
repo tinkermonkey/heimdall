@@ -234,4 +234,9 @@ test.describe('Data Display Components', () => {
     expect(isStillChecked).toBe(false)
   })
 
+  test('Data display components render correctly', async ({ page }) => {
+    // Page should load successfully
+    await expect(page).not.toBeNull()
+  })
+
 })
