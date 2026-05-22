@@ -11,29 +11,31 @@ export interface FlowNode {
   icon: IconName
 }
 
-export interface PipelineCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  pipeline: {
-    id: string
-    name: string
-    description?: string
-    status: 'running' | 'success' | 'idle' | 'failed'
-    target?: string
-    flow: FlowNode[]
-    recent: {
-      ingested: number | string
-      created: number | string
-      updated: number | string
-      errors: number | string
-    }
-    tags?: string[]
-    lastRun?: string
+export interface Pipeline {
+  id: string
+  name: string
+  description?: string
+  status: 'running' | 'success' | 'idle' | 'failed'
+  target?: string
+  flow: FlowNode[]
+  recent: {
+    ingested: number | string
+    created: number | string
+    updated: number | string
+    errors: number | string
   }
+  tags?: string[]
+  lastRun?: string
+}
+
+export interface PipelineCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  pipeline: Pipeline
   onRun?: () => void
   onCancel?: () => void
   compact?: boolean
 }
 
-const statusChipColor: Record<string, StatusColor> = {
+const statusChipColor: Record<Pipeline['status'], StatusColor> = {
   running: 'cyan',
   success: 'emerald',
   idle: 'neutral',

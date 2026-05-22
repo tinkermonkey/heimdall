@@ -90,7 +90,7 @@ export { KeyValueEditor, type KeyValueEditorProps, type KeyValueRow } from './co
 export { OrderedList, type OrderedListProps, type OrderedItem } from './components/OrderedList'
 export { RelationshipBuilder, type RelationshipBuilderProps, type RelationshipBuilderValue } from './components/RelationshipBuilder'
 export { RowMenu, type RowMenuProps, type RowMenuAction } from './components/RowMenu'
-export { PipelineCard, type PipelineCardProps, type FlowNode } from './components/PipelineCard'
+export { PipelineCard, type PipelineCardProps, type Pipeline, type FlowNode } from './components/PipelineCard'
 export { FormCallout, type FormCalloutProps } from './components/FormCallout'
 export {
   GraphCanvas,
