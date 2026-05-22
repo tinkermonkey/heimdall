@@ -9,11 +9,6 @@ import React, {
 } from 'react'
 import './FilterDropdown.css'
 import { Icon } from './Icon'
-import { useFocusTrap } from '../hooks/useFocusTrap'
-
-// ============================================================================
-// Context & Types
-// ============================================================================
 
 interface FilterDropdownContextValue {
   isOpen: boolean
@@ -26,7 +21,8 @@ interface FilterDropdownContextValue {
   triggerRef: React.RefObject<HTMLButtonElement>
   panelRef: React.RefObject<HTMLDivElement>
   focusableRows: string[]
-  onFocusableRowsChange: (rows: string[]) => void
+  registerFocusableRow: (value: string) => void
+  unregisterFocusableRow: (value: string) => void
 }
 
 const FilterDropdownContext = createContext<FilterDropdownContextValue | undefined>(undefined)
@@ -38,10 +34,6 @@ function useFilterDropdown() {
   }
   return context
 }
-
-// ============================================================================
-// FilterDropdown (Root Component)
-// ============================================================================
 
 export interface FilterDropdownProps {
   mode?: 'checkbox' | 'radio'
@@ -59,9 +51,6 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
     const triggerRef = useRef<HTMLButtonElement>(null)
     const panelRef = useRef<HTMLDivElement>(null)
     const rootRef = useRef<HTMLDivElement>(null)
-
-    // Use popup mode for focus trap
-    useFocusTrap(panelRef, isOpen, { mode: 'popup' })
 
     const handleOpenChange = useCallback((open: boolean) => {
       setIsOpen(open)
@@ -103,6 +92,19 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
 
     const handleFocusedValueChange = useCallback((value: string | null) => {
       setFocusedValue(value)
+    }, [])
+
+    const registerFocusableRow = useCallback((value: string) => {
+      setFocusableRows((prev) => {
+        if (!prev.includes(value)) {
+          return [...prev, value]
+        }
+        return prev
+      })
+    }, [])
+
+    const unregisterFocusableRow = useCallback((value: string) => {
+      setFocusableRows((prev) => prev.filter((v) => v !== value))
     }, [])
 
     const handleKeyDown = useCallback(
@@ -149,12 +151,12 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       }
 
       // Add keyboard handler to panel for arrow navigation
-      panelRef.current?.addEventListener('keydown', handleKeyDown as any)
+      panelRef.current?.addEventListener('keydown', handleKeyDown as EventListener)
       document.addEventListener('keydown', handleEscape)
       document.addEventListener('mousedown', handleClickOutside)
 
       return () => {
-        panelRef.current?.removeEventListener('keydown', handleKeyDown as any)
+        panelRef.current?.removeEventListener('keydown', handleKeyDown as EventListener)
         document.removeEventListener('keydown', handleEscape)
         document.removeEventListener('mousedown', handleClickOutside)
       }
@@ -171,13 +173,16 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       triggerRef,
       panelRef,
       focusableRows,
-      onFocusableRowsChange: setFocusableRows,
+      registerFocusableRow,
+      unregisterFocusableRow,
     }
 
     return (
       <FilterDropdownContext.Provider value={contextValue}>
-        <div ref={ref || rootRef} className={`filter-dropdown ${className}`.trim()}>
-          {children}
+        <div ref={ref} className={`filter-dropdown ${className}`.trim()}>
+          <div ref={rootRef}>
+            {children}
+          </div>
         </div>
       </FilterDropdownContext.Provider>
     )
@@ -185,10 +190,6 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
 )
 
 FilterDropdownComponent.displayName = 'FilterDropdown'
-
-// ============================================================================
-// FilterDropdown.Trigger
-// ============================================================================
 
 export interface FilterDropdownTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string
@@ -218,10 +219,6 @@ function FilterDropdownTrigger({ label, summary, ...props }: FilterDropdownTrigg
   )
 }
 
-// ============================================================================
-// FilterDropdown.Panel
-// ============================================================================
-
 export interface FilterDropdownPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode
 }
@@ -243,10 +240,6 @@ function FilterDropdownPanel({ children, className = '', ...props }: FilterDropd
   )
 }
 
-// ============================================================================
-// FilterDropdown.Section
-// ============================================================================
-
 export interface FilterDropdownSectionProps {
   title?: string
   children: ReactNode
@@ -261,10 +254,6 @@ function FilterDropdownSection({ title, children }: FilterDropdownSectionProps) 
   )
 }
 
-// ============================================================================
-// FilterDropdown.Checkbox
-// ============================================================================
-
 export interface FilterDropdownCheckboxProps {
   value: string
   label: ReactNode
@@ -277,8 +266,8 @@ function FilterDropdownCheckbox({ value, label, description }: FilterDropdownChe
     selectedValues,
     onValueChange,
     focusedValue,
-    focusableRows,
-    onFocusableRowsChange,
+    registerFocusableRow,
+    unregisterFocusableRow,
     mode,
   } = useFilterDropdown()
   const rowRef = useRef<HTMLDivElement>(null)
@@ -286,19 +275,14 @@ function FilterDropdownCheckbox({ value, label, description }: FilterDropdownChe
   const isSelected = selectedValues.has(value)
   const isFocused = focusedValue === value
 
-  // Register this row as focusable
   useEffect(() => {
-    if (isOpen && !focusableRows.includes(value)) {
-      onFocusableRowsChange([...focusableRows, value])
+    if (isOpen) {
+      registerFocusableRow(value)
+      return () => {
+        unregisterFocusableRow(value)
+      }
     }
-  }, [isOpen, value, focusableRows, onFocusableRowsChange])
-
-  // Clean up when unmount
-  useEffect(() => {
-    return () => {
-      onFocusableRowsChange(focusableRows.filter((v) => v !== value))
-    }
-  }, [value, focusableRows, onFocusableRowsChange])
+  }, [isOpen, value, registerFocusableRow, unregisterFocusableRow])
 
   useEffect(() => {
     if (isFocused && rowRef.current) {
@@ -347,10 +331,6 @@ function FilterDropdownCheckbox({ value, label, description }: FilterDropdownChe
   )
 }
 
-// ============================================================================
-// FilterDropdown.Radio
-// ============================================================================
-
 export interface FilterDropdownRadioProps {
   value: string
   label: ReactNode
@@ -363,27 +343,22 @@ function FilterDropdownRadio({ value, label, description }: FilterDropdownRadioP
     selectedValues,
     onValueChange,
     focusedValue,
-    focusableRows,
-    onFocusableRowsChange,
+    registerFocusableRow,
+    unregisterFocusableRow,
   } = useFilterDropdown()
   const rowRef = useRef<HTMLDivElement>(null)
 
   const isSelected = selectedValues.has(value)
   const isFocused = focusedValue === value
 
-  // Register this row as focusable
   useEffect(() => {
-    if (isOpen && !focusableRows.includes(value)) {
-      onFocusableRowsChange([...focusableRows, value])
+    if (isOpen) {
+      registerFocusableRow(value)
+      return () => {
+        unregisterFocusableRow(value)
+      }
     }
-  }, [isOpen, value, focusableRows, onFocusableRowsChange])
-
-  // Clean up when unmount
-  useEffect(() => {
-    return () => {
-      onFocusableRowsChange(focusableRows.filter((v) => v !== value))
-    }
-  }, [value, focusableRows, onFocusableRowsChange])
+  }, [isOpen, value, registerFocusableRow, unregisterFocusableRow])
 
   useEffect(() => {
     if (isFocused && rowRef.current) {
@@ -432,10 +407,6 @@ function FilterDropdownRadio({ value, label, description }: FilterDropdownRadioP
   )
 }
 
-// ============================================================================
-// Compound Component Assembly
-// ============================================================================
-
 interface FilterDropdownComponentType extends React.ForwardRefExoticComponent<FilterDropdownProps & React.RefAttributes<HTMLDivElement>> {
   Trigger: typeof FilterDropdownTrigger
   Panel: typeof FilterDropdownPanel
@@ -444,13 +415,13 @@ interface FilterDropdownComponentType extends React.ForwardRefExoticComponent<Fi
   Radio: typeof FilterDropdownRadio
 }
 
-const FilterDropdown = FilterDropdownComponent as FilterDropdownComponentType
-
-FilterDropdown.Trigger = FilterDropdownTrigger
-FilterDropdown.Panel = FilterDropdownPanel
-FilterDropdown.Section = FilterDropdownSection
-FilterDropdown.Checkbox = FilterDropdownCheckbox
-FilterDropdown.Radio = FilterDropdownRadio
+const FilterDropdown = Object.assign(FilterDropdownComponent, {
+  Trigger: FilterDropdownTrigger,
+  Panel: FilterDropdownPanel,
+  Section: FilterDropdownSection,
+  Checkbox: FilterDropdownCheckbox,
+  Radio: FilterDropdownRadio,
+}) as FilterDropdownComponentType
 
 export { FilterDropdown }
 export default FilterDropdown
