@@ -9,8 +9,17 @@ const FOCUSABLE_SELECTORS = [
   '[tabindex]:not([tabindex="-1"])',
 ]
 
-export function useFocusTrap(ref: React.RefObject<HTMLElement>, isActive: boolean) {
+export interface UseFocusTrapOptions {
+  mode?: 'modal' | 'popup'
+}
+
+export function useFocusTrap(
+  ref: React.RefObject<HTMLElement>,
+  isActive: boolean,
+  options?: UseFocusTrapOptions
+) {
   const previousActiveElementRef = useRef<HTMLElement | null>(null)
+  const mode = options?.mode ?? 'modal'
 
   useEffect(() => {
     if (!isActive || !ref.current) return
@@ -42,10 +51,11 @@ export function useFocusTrap(ref: React.RefObject<HTMLElement>, isActive: boolea
       }
     }
 
-    if (focusableElements.length > 0) {
+    if (focusableElements.length > 0 && mode === 'modal') {
       focusableElements[0].focus()
-      ref.current.addEventListener('keydown', handleKeyDown)
     }
+
+    ref.current.addEventListener('keydown', handleKeyDown)
 
     return () => {
       ref.current?.removeEventListener('keydown', handleKeyDown)
@@ -53,5 +63,5 @@ export function useFocusTrap(ref: React.RefObject<HTMLElement>, isActive: boolea
         previousActiveElementRef.current.focus()
       }
     }
-  }, [ref, isActive])
+  }, [ref, isActive, mode])
 }

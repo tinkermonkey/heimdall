@@ -1,0 +1,456 @@
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  createContext,
+  useContext,
+  ReactNode,
+} from 'react'
+import './FilterDropdown.css'
+import { Icon } from './Icon'
+import { useFocusTrap } from '../hooks/useFocusTrap'
+
+// ============================================================================
+// Context & Types
+// ============================================================================
+
+interface FilterDropdownContextValue {
+  isOpen: boolean
+  onOpenChange: (open: boolean) => void
+  mode: 'checkbox' | 'radio'
+  selectedValues: Set<string>
+  onValueChange: (value: string, selected: boolean) => void
+  focusedValue: string | null
+  onFocusedValueChange: (value: string | null) => void
+  triggerRef: React.RefObject<HTMLButtonElement>
+  panelRef: React.RefObject<HTMLDivElement>
+  focusableRows: string[]
+  onFocusableRowsChange: (rows: string[]) => void
+}
+
+const FilterDropdownContext = createContext<FilterDropdownContextValue | undefined>(undefined)
+
+function useFilterDropdown() {
+  const context = useContext(FilterDropdownContext)
+  if (!context) {
+    throw new Error('FilterDropdown components must be used within FilterDropdown')
+  }
+  return context
+}
+
+// ============================================================================
+// FilterDropdown (Root Component)
+// ============================================================================
+
+export interface FilterDropdownProps {
+  mode?: 'checkbox' | 'radio'
+  children: ReactNode
+  onChange?: (selectedValues: string[]) => void
+  className?: string
+}
+
+const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownProps>(
+  ({ mode = 'checkbox', children, onChange, className = '' }, ref) => {
+    const [isOpen, setIsOpen] = useState(false)
+    const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set())
+    const [focusedValue, setFocusedValue] = useState<string | null>(null)
+    const [focusableRows, setFocusableRows] = useState<string[]>([])
+    const triggerRef = useRef<HTMLButtonElement>(null)
+    const panelRef = useRef<HTMLDivElement>(null)
+    const rootRef = useRef<HTMLDivElement>(null)
+
+    // Use popup mode for focus trap
+    useFocusTrap(panelRef, isOpen, { mode: 'popup' })
+
+    const handleOpenChange = useCallback((open: boolean) => {
+      setIsOpen(open)
+      if (open && focusableRows.length > 0) {
+        setFocusedValue(focusableRows[0])
+      } else if (!open) {
+        setFocusedValue(null)
+        triggerRef.current?.focus()
+      }
+    }, [focusableRows])
+
+    const handleValueChange = useCallback(
+      (value: string, selected: boolean) => {
+        const prevValues = new Set(selectedValues)
+        const nextValues = new Set(prevValues)
+
+        if (selected) {
+          if (mode === 'radio') {
+            nextValues.clear()
+          }
+          nextValues.add(value)
+        } else {
+          nextValues.delete(value)
+        }
+
+        setSelectedValues(nextValues)
+
+        if (onChange) {
+          onChange(Array.from(nextValues))
+        }
+
+        // Auto-close on selection for radio mode
+        if (mode === 'radio' && selected) {
+          handleOpenChange(false)
+        }
+      },
+      [mode, onChange, selectedValues, handleOpenChange]
+    )
+
+    const handleFocusedValueChange = useCallback((value: string | null) => {
+      setFocusedValue(value)
+    }, [])
+
+    const handleKeyDown = useCallback(
+      (e: KeyboardEvent) => {
+        if (!isOpen || focusableRows.length === 0) return
+
+        const currentIndex = focusableRows.indexOf(focusedValue || focusableRows[0])
+
+        if (e.key === 'ArrowDown') {
+          e.preventDefault()
+          const nextIndex = (currentIndex + 1) % focusableRows.length
+          setFocusedValue(focusableRows[nextIndex])
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault()
+          const nextIndex = (currentIndex - 1 + focusableRows.length) % focusableRows.length
+          setFocusedValue(focusableRows[nextIndex])
+        } else if (e.key === 'Tab') {
+          e.preventDefault()
+          const nextIndex = e.shiftKey
+            ? (currentIndex - 1 + focusableRows.length) % focusableRows.length
+            : (currentIndex + 1) % focusableRows.length
+          setFocusedValue(focusableRows[nextIndex])
+        }
+      },
+      [isOpen, focusableRows, focusedValue]
+    )
+
+    // Close on ESC or outside click
+    useEffect(() => {
+      if (!isOpen) return
+
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          e.preventDefault()
+          handleOpenChange(false)
+        }
+      }
+
+      const handleClickOutside = (e: MouseEvent) => {
+        const target = e.target as Node
+        if (rootRef.current && !rootRef.current.contains(target)) {
+          handleOpenChange(false)
+        }
+      }
+
+      // Add keyboard handler to panel for arrow navigation
+      panelRef.current?.addEventListener('keydown', handleKeyDown as any)
+      document.addEventListener('keydown', handleEscape)
+      document.addEventListener('mousedown', handleClickOutside)
+
+      return () => {
+        panelRef.current?.removeEventListener('keydown', handleKeyDown as any)
+        document.removeEventListener('keydown', handleEscape)
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }, [isOpen, handleOpenChange, handleKeyDown])
+
+    const contextValue: FilterDropdownContextValue = {
+      isOpen,
+      onOpenChange: handleOpenChange,
+      mode,
+      selectedValues,
+      onValueChange: handleValueChange,
+      focusedValue,
+      onFocusedValueChange: handleFocusedValueChange,
+      triggerRef,
+      panelRef,
+      focusableRows,
+      onFocusableRowsChange: setFocusableRows,
+    }
+
+    return (
+      <FilterDropdownContext.Provider value={contextValue}>
+        <div ref={ref || rootRef} className={`filter-dropdown ${className}`.trim()}>
+          {children}
+        </div>
+      </FilterDropdownContext.Provider>
+    )
+  }
+)
+
+FilterDropdownComponent.displayName = 'FilterDropdown'
+
+// ============================================================================
+// FilterDropdown.Trigger
+// ============================================================================
+
+export interface FilterDropdownTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  label: string
+  summary: ReactNode
+}
+
+function FilterDropdownTrigger({ label, summary, ...props }: FilterDropdownTriggerProps) {
+  const { isOpen, onOpenChange, triggerRef } = useFilterDropdown()
+
+  return (
+    <button
+      ref={triggerRef}
+      className="filter-dropdown__trigger"
+      onClick={() => onOpenChange(!isOpen)}
+      aria-haspopup="listbox"
+      aria-expanded={isOpen}
+      {...props}
+    >
+      <span className="filter-dropdown__label">{label}</span>
+      <span className="filter-dropdown__summary">{summary}</span>
+      <Icon
+        name="chevronDown"
+        size={14}
+        className={`filter-dropdown__chevron ${isOpen ? 'filter-dropdown__chevron--open' : ''}`}
+      />
+    </button>
+  )
+}
+
+// ============================================================================
+// FilterDropdown.Panel
+// ============================================================================
+
+export interface FilterDropdownPanelProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode
+}
+
+function FilterDropdownPanel({ children, className = '', ...props }: FilterDropdownPanelProps) {
+  const { isOpen, mode, panelRef } = useFilterDropdown()
+
+  if (!isOpen) return null
+
+  return (
+    <div
+      ref={panelRef}
+      className={`filter-dropdown__panel ${className}`.trim()}
+      role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
+
+// ============================================================================
+// FilterDropdown.Section
+// ============================================================================
+
+export interface FilterDropdownSectionProps {
+  title?: string
+  children: ReactNode
+}
+
+function FilterDropdownSection({ title, children }: FilterDropdownSectionProps) {
+  return (
+    <div className="filter-dropdown__section">
+      {title && <div className="filter-dropdown__section-title">{title}</div>}
+      <div className="filter-dropdown__section-content">{children}</div>
+    </div>
+  )
+}
+
+// ============================================================================
+// FilterDropdown.Checkbox
+// ============================================================================
+
+export interface FilterDropdownCheckboxProps {
+  value: string
+  label: ReactNode
+  description?: ReactNode
+}
+
+function FilterDropdownCheckbox({ value, label, description }: FilterDropdownCheckboxProps) {
+  const {
+    isOpen,
+    selectedValues,
+    onValueChange,
+    focusedValue,
+    focusableRows,
+    onFocusableRowsChange,
+    mode,
+  } = useFilterDropdown()
+  const rowRef = useRef<HTMLDivElement>(null)
+
+  const isSelected = selectedValues.has(value)
+  const isFocused = focusedValue === value
+
+  // Register this row as focusable
+  useEffect(() => {
+    if (isOpen && !focusableRows.includes(value)) {
+      onFocusableRowsChange([...focusableRows, value])
+    }
+  }, [isOpen, value, focusableRows, onFocusableRowsChange])
+
+  // Clean up when unmount
+  useEffect(() => {
+    return () => {
+      onFocusableRowsChange(focusableRows.filter((v) => v !== value))
+    }
+  }, [value, focusableRows, onFocusableRowsChange])
+
+  useEffect(() => {
+    if (isFocused && rowRef.current) {
+      rowRef.current.focus()
+    }
+  }, [isFocused])
+
+  const handleClick = () => {
+    onValueChange(value, !isSelected)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onValueChange(value, !isSelected)
+    }
+  }
+
+  return (
+    <div
+      ref={rowRef}
+      className={`filter-dropdown__row ${isFocused ? 'filter-dropdown__row--focused' : ''}`}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role={mode === 'checkbox' ? 'option' : undefined}
+      aria-selected={isSelected}
+    >
+      <div className="filter-dropdown__row-checkbox">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={(e) => onValueChange(value, e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      </div>
+      <div className="filter-dropdown__row-content">
+        <div className="filter-dropdown__row-label">{label}</div>
+        {description && (
+          <div className="filter-dropdown__row-description">{description}</div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ============================================================================
+// FilterDropdown.Radio
+// ============================================================================
+
+export interface FilterDropdownRadioProps {
+  value: string
+  label: ReactNode
+  description?: ReactNode
+}
+
+function FilterDropdownRadio({ value, label, description }: FilterDropdownRadioProps) {
+  const {
+    isOpen,
+    selectedValues,
+    onValueChange,
+    focusedValue,
+    focusableRows,
+    onFocusableRowsChange,
+  } = useFilterDropdown()
+  const rowRef = useRef<HTMLDivElement>(null)
+
+  const isSelected = selectedValues.has(value)
+  const isFocused = focusedValue === value
+
+  // Register this row as focusable
+  useEffect(() => {
+    if (isOpen && !focusableRows.includes(value)) {
+      onFocusableRowsChange([...focusableRows, value])
+    }
+  }, [isOpen, value, focusableRows, onFocusableRowsChange])
+
+  // Clean up when unmount
+  useEffect(() => {
+    return () => {
+      onFocusableRowsChange(focusableRows.filter((v) => v !== value))
+    }
+  }, [value, focusableRows, onFocusableRowsChange])
+
+  useEffect(() => {
+    if (isFocused && rowRef.current) {
+      rowRef.current.focus()
+    }
+  }, [isFocused])
+
+  const handleClick = () => {
+    onValueChange(value, true)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      onValueChange(value, true)
+    }
+  }
+
+  return (
+    <div
+      ref={rowRef}
+      className={`filter-dropdown__row ${isFocused ? 'filter-dropdown__row--focused' : ''}`}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="radio"
+      aria-checked={isSelected}
+    >
+      <div className="filter-dropdown__row-radio">
+        <input
+          type="radio"
+          checked={isSelected}
+          onChange={() => onValueChange(value, true)}
+          onClick={(e) => e.stopPropagation()}
+          aria-hidden="true"
+          tabIndex={-1}
+        />
+      </div>
+      <div className="filter-dropdown__row-content">
+        <div className="filter-dropdown__row-label">{label}</div>
+        {description && (
+          <div className="filter-dropdown__row-description">{description}</div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ============================================================================
+// Compound Component Assembly
+// ============================================================================
+
+interface FilterDropdownComponentType extends React.ForwardRefExoticComponent<FilterDropdownProps & React.RefAttributes<HTMLDivElement>> {
+  Trigger: typeof FilterDropdownTrigger
+  Panel: typeof FilterDropdownPanel
+  Section: typeof FilterDropdownSection
+  Checkbox: typeof FilterDropdownCheckbox
+  Radio: typeof FilterDropdownRadio
+}
+
+const FilterDropdown = FilterDropdownComponent as FilterDropdownComponentType
+
+FilterDropdown.Trigger = FilterDropdownTrigger
+FilterDropdown.Panel = FilterDropdownPanel
+FilterDropdown.Section = FilterDropdownSection
+FilterDropdown.Checkbox = FilterDropdownCheckbox
+FilterDropdown.Radio = FilterDropdownRadio
+
+export { FilterDropdown }
+export default FilterDropdown

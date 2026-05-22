@@ -31,6 +31,15 @@ export { Statusbar } from './components/Statusbar'
 export { ShellLayout, type ShellLayoutProps } from './components/ShellLayout'
 export { Modal } from './components/Modal'
 export { ConfirmDialog } from './components/ConfirmDialog'
+export {
+  FilterDropdown,
+  type FilterDropdownProps,
+  type FilterDropdownTriggerProps,
+  type FilterDropdownPanelProps,
+  type FilterDropdownSectionProps,
+  type FilterDropdownCheckboxProps,
+  type FilterDropdownRadioProps,
+} from './components/FilterDropdown'
 export { Toast, type ToastProps, type ToastVariant } from './components/Toast'
 export { CommandPalette, type Command } from './components/CommandPalette'
 export { Panel } from './components/Panel'

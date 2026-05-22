@@ -22,6 +22,7 @@ import FoundationTestPage from '@/test-pages/FoundationTestPage'
 import ShellFrameworkTestPage from '@/test-pages/ShellFrameworkTestPage'
 import NavigationComponentTestPage from '@/test-pages/NavigationComponentTestPage'
 import ChartsTestPage from '@/test-pages/ChartsTestPage'
+import FilterDropdownTestPage from '@/test-pages/FilterDropdownTestPage'
 
 type NavSection = {
   title: string
@@ -48,6 +49,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   select: SelectShowcase,
   'tri-state': TriStateShowcase,
   field: FieldShowcase,
+  'filter-dropdown': FilterDropdownTestPage,
   // Data Display
   'stat-tile': StatTileShowcase,
   'stat-grid': StatGridShowcase,
@@ -137,6 +139,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'select', label: 'Select', icon: 'chevronDown' },
       { id: 'tri-state', label: 'TriState', icon: 'check' },
       { id: 'field', label: 'Field', icon: 'layout' },
+      { id: 'filter-dropdown', label: 'FilterDropdown', icon: 'filter' },
     ],
   },
   {
