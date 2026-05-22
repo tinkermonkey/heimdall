@@ -103,7 +103,7 @@ export default function DataDisplayTestPage() {
           StatGrid & StatTile Components
         </div>
         <StatGrid>
-          <StatTile label="Uptime" value="99.9%" color="cyan" />
+          <StatTile label="Uptime" value="99.9%" color="cyan" sparkData={[95, 97, 99, 98, 99.5, 99.8, 99.9, 99.9, 99.9]} />
           <StatTile label="Requests/sec" value="12,453" color="cyan" />
           <StatTile label="Errors" value="23" color="amber" />
           <StatTile label="Latency" value="145ms" color="violet" />

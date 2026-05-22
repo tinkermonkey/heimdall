@@ -22,6 +22,7 @@ import { ConfigTileShowcase } from './showcases/ConfigTileShowcase'
 import { WorkspaceSwitcherDialogShowcase } from './showcases/WorkspaceSwitcherDialogShowcase'
 import PrimitivesTestPage from '@/test-pages/PrimitivesTestPage'
 import DataDisplayTestPage from '@/test-pages/DataDisplayTestPage'
+import HierarchyComponentTestPage from '@/test-pages/HierarchyComponentTestPage'
 import OverlayComponentsTestPage from '@/test-pages/OverlayComponentsTestPage'
 import AdvancedOverlayComponentsTestPage from '@/test-pages/AdvancedOverlayComponentsTestPage'
 import FoundationTestPage from '@/test-pages/FoundationTestPage'
@@ -69,7 +70,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'kv-grid': KVGridShowcase,
   'inspector-panel': InspectorPanelShowcase,
   'inspector-panel-test': InspectorPanelTestPage,
-  'hierarchy-tree': HierarchyTreeShowcase,
+  'hierarchy-tree': HierarchyComponentTestPage,
   'data-display': DataDisplayTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
@@ -287,6 +288,17 @@ function App() {
     return params.get('example') || DEFAULT_SHOWCASE
   })
   const [darkCanvas, setDarkCanvas] = useState(() => localStorage.getItem('heimdall-dark-canvas') === '1')
+
+  useEffect(() => {
+    const handlePopstate = () => {
+      const params = new URLSearchParams(window.location.search)
+      const example = params.get('example') || DEFAULT_SHOWCASE
+      setCurrentId(example)
+    }
+
+    window.addEventListener('popstate', handlePopstate)
+    return () => window.removeEventListener('popstate', handlePopstate)
+  }, [])
 
   useEffect(() => {
     document.body.classList.toggle('dark-canvas', darkCanvas)

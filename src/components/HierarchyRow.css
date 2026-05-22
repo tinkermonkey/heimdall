@@ -12,7 +12,7 @@
   background-color: rgb(var(--canvas-bg-2));
 }
 
-.hierarchy-row--selected {
+.hierarchy-row.selected {
   outline: 2px solid rgb(var(--accent-primary));
   outline-offset: -2px;
   border-radius: var(--radius-sm);

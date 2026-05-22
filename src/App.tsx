@@ -12,6 +12,7 @@ import {
 import type { Column } from './components/Table'
 import PrimitivesTestPage from './test-pages/PrimitivesTestPage'
 import DataDisplayTestPage from './test-pages/DataDisplayTestPage'
+import HierarchyComponentTestPage from './test-pages/HierarchyComponentTestPage'
 import ShellFrameworkTestPage from './test-pages/ShellFrameworkTestPage'
 import OverlayComponentsTestPage from './test-pages/OverlayComponentsTestPage'
 import AdvancedOverlayComponentsTestPage from './test-pages/AdvancedOverlayComponentsTestPage'
@@ -64,6 +65,10 @@ export default function App() {
 
   if (exampleParam === 'data-display') {
     return <DataDisplayTestPage />
+  }
+
+  if (exampleParam === 'hierarchy-tree') {
+    return <HierarchyComponentTestPage />
   }
 
   if (exampleParam === 'shell-framework') {

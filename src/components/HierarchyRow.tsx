@@ -38,7 +38,7 @@ export const HierarchyRow = React.forwardRef<HTMLDivElement, HierarchyRowProps>(
     ref
   ) => {
     const domainColor = domainColorMap[domain] || domainColorMap.default
-    const classNames = ['hierarchy-row', selected && 'hierarchy-row--selected', className]
+    const classNames = ['hierarchy-row', selected && 'selected', className]
       .filter(Boolean)
       .join(' ')
 
