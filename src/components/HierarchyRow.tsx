@@ -42,11 +42,21 @@ export const HierarchyRow = React.forwardRef<HTMLDivElement, HierarchyRowProps>(
       .filter(Boolean)
       .join(' ')
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if ((event.key === 'Enter' || event.key === ' ') && onSelect) {
+        event.preventDefault()
+        onSelect()
+      }
+    }
+
     return (
       <div
         ref={ref}
         className={classNames}
+        role="button"
+        tabIndex={onSelect ? 0 : -1}
         onClick={onSelect}
+        onKeyDown={handleKeyDown}
         style={{
           '--hierarchy-depth': depth,
           '--domain-color': domainColor,
