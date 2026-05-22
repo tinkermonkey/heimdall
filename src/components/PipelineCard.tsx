@@ -4,82 +4,149 @@ import { Icon, type IconName } from './Icon'
 import { Chip } from './Chip'
 import type { StatusColor } from './statusColors'
 
-export interface PipelineStage {
+export interface FlowNode {
   id: string
   name: string
-  label: string
+  label?: string
   icon: IconName
-  status?: 'pending' | 'running' | 'success' | 'failed'
-  statusColor?: StatusColor
 }
 
-export interface PipelineCardProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  title: string
-  description?: string
-  stages: PipelineStage[]
-  statusLabel?: string
-  statusColor?: StatusColor
-  stats?: Array<{
-    label: string
-    value: string | number
-  }>
+export interface PipelineCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  pipeline: {
+    id: string
+    name: string
+    description?: string
+    status: 'running' | 'success' | 'idle' | 'failed'
+    target?: string
+    flow: FlowNode[]
+    recent: {
+      ingested: number | string
+      created: number | string
+      updated: number | string
+      errors: number | string
+    }
+    tags?: string[]
+    lastRun?: string
+  }
+  onRun?: () => void
+  onCancel?: () => void
+  compact?: boolean
+}
+
+const statusChipColor: Record<string, StatusColor> = {
+  running: 'cyan',
+  success: 'emerald',
+  idle: 'neutral',
+  failed: 'rose',
 }
 
 export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
-  ({ title, description, stages, statusLabel, statusColor = 'neutral', stats = [], className, ...props }, ref) => {
+  ({ pipeline, onRun, onCancel, compact = false, className, ...props }, ref) => {
+    const statusColor = statusChipColor[pipeline.status]
+
     return (
-      <div ref={ref} className={['pipeline-card', className].filter(Boolean).join(' ')} data-testid="pipeline-card" {...props}>
-        <div className="pipeline-card__header">
-          <div>
-            <h3 className="pipeline-card__title">{title}</h3>
-            {description && <p className="pipeline-card__description">{description}</p>}
+      <div
+        ref={ref}
+        className={['pipeline-card', compact && 'pipeline-card--compact', className].filter(Boolean).join(' ')}
+        data-testid="pipeline-card"
+        {...props}
+      >
+        {/* Head region */}
+        <div className="pipeline-card__head">
+          <div className="pipeline-card__head-left">
+            <div className="pipeline-card__title-group">
+              <div className="pipeline-card__name-mono">{pipeline.name}</div>
+              {pipeline.id && <div className="pipeline-card__id-mono">{pipeline.id}</div>}
+            </div>
+            {pipeline.description && <p className="pipeline-card__description">{pipeline.description}</p>}
           </div>
-          {statusLabel && (
-            <Chip variant={statusColor} className="pipeline-card__status">{statusLabel}</Chip>
-          )}
+
+          <div className="pipeline-card__head-right">
+            <div className="pipeline-card__head-chips">
+              <Chip variant={statusColor}>
+                {pipeline.status}
+              </Chip>
+              {pipeline.target && (
+                <Chip variant="neutral">
+                  {pipeline.target}
+                </Chip>
+              )}
+              {pipeline.tags && pipeline.tags.length > 0 && (
+                <div className="pipeline-card__tags">
+                  {pipeline.tags.map((tag) => (
+                    <Chip key={tag} variant="neutral">
+                      {tag}
+                    </Chip>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="pipeline-card__head-actions">
+              {onRun && pipeline.status !== 'running' && (
+                <button className="pipeline-card__action-btn" onClick={onRun} data-testid="pipeline-run-btn">
+                  Run
+                </button>
+              )}
+              {onCancel && pipeline.status === 'running' && (
+                <button className="pipeline-card__action-btn pipeline-card__action-btn--cancel" onClick={onCancel} data-testid="pipeline-cancel-btn">
+                  Cancel
+                </button>
+              )}
+              <button className="pipeline-card__kebab-btn" data-testid="pipeline-kebab-btn">
+                <Icon name="moreVertical" size={16} />
+              </button>
+            </div>
+          </div>
         </div>
 
+        {/* Flow strip */}
         <div className="pipeline-card__flow">
-          {stages.map((stage, index) => (
-            <React.Fragment key={stage.id}>
-              <div
-                className="pipeline-card__stage"
-                data-testid={`pipeline-stage-${stage.id}`}
-              >
-                <div
-                  className={[
-                    'pipeline-card__icon-container',
-                    stage.status && `pipeline-card__icon-container--${stage.statusColor || 'cyan'}`,
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                >
-                  <Icon name={stage.icon} size={13} />
+          {pipeline.flow.map((node, index) => (
+            <React.Fragment key={node.id}>
+              <div className="pipeline-card__node">
+                <div className="pipeline-card__icon-tile">
+                  <Icon name={node.icon} size={16} />
                 </div>
-                <div className="pipeline-card__stage-content">
-                  <div className="pipeline-card__stage-name">{stage.name}</div>
-                  <div className="pipeline-card__stage-label">{stage.label}</div>
+                <div className="pipeline-card__node-content">
+                  <div className="pipeline-card__node-name">{node.name}</div>
+                  {node.label && <div className="pipeline-card__node-label">{node.label}</div>}
                 </div>
               </div>
 
-              {index < stages.length - 1 && (
-                <div className="pipeline-card__connector" />
-              )}
+              {index < pipeline.flow.length - 1 && <div className="pipeline-card__arrow" />}
             </React.Fragment>
           ))}
         </div>
 
-        {stats.length > 0 && (
-          <div className="pipeline-card__footer">
-            {stats.map((stat, index) => (
-              <div key={index} className="pipeline-card__stat">
-                <div className="pipeline-card__stat-label">{stat.label}</div>
-                <div className="pipeline-card__stat-value">{stat.value}</div>
-              </div>
-            ))}
+        {/* Foot region */}
+        <div className="pipeline-card__foot">
+          <div className="pipeline-card__foot-row">
+            <div className="pipeline-card__foot-col">
+              <div className="pipeline-card__foot-label">LAST RUN</div>
+              <div className="pipeline-card__foot-value">{pipeline.lastRun || '—'}</div>
+            </div>
+            <div className="pipeline-card__foot-col">
+              <div className="pipeline-card__foot-label">INGESTED</div>
+              <div className="pipeline-card__foot-value">{pipeline.recent.ingested}</div>
+            </div>
+            <div className="pipeline-card__foot-col">
+              <div className="pipeline-card__foot-label">CREATED</div>
+              <div className="pipeline-card__foot-value">{pipeline.recent.created}</div>
+            </div>
+            <div className="pipeline-card__foot-col">
+              <div className="pipeline-card__foot-label">UPDATED</div>
+              <div className="pipeline-card__foot-value">{pipeline.recent.updated}</div>
+            </div>
+            <div className={[
+              'pipeline-card__foot-col',
+              Number(pipeline.recent.errors) > 0 && 'pipeline-card__foot-col--error'
+            ].filter(Boolean).join(' ')}>
+              <div className="pipeline-card__foot-label">ERRORS</div>
+              <div className="pipeline-card__foot-value">{pipeline.recent.errors}</div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     )
   }

@@ -199,77 +199,89 @@ export default function FormsShowcase() {
         <section className="showcase-section" data-testid="forms-showcase-pipeline-card">
           <h2 className="showcase-title">Pipeline Card</h2>
           <FormCallout icon="info">
-            Sequential flow of named stage nodes connected by arrow connectors, with a status badge and statistics footer row.
+            Sequential flow of named nodes connected by arrow connectors, with status badge, target, tags, and statistics footer row.
           </FormCallout>
 
           <div className="showcase-content">
             <PipelineCard
               data-testid="pipeline-card-ingest"
-              title="Ingest organisms · GBIF"
-              description="Pull species records, normalize names, write to life.organism"
-              stages={[
-                { id: '1', name: 'GBIF API', label: 'source', icon: 'schema', status: 'success', statusColor: 'cyan' },
-                { id: '2', name: 'Extract', label: '12 fields', icon: 'download', status: 'success', statusColor: 'violet' },
-                { id: '3', name: 'Resolve', label: 'match by name', icon: 'lock', status: 'success', statusColor: 'amber' },
-                { id: '4', name: 'Write', label: 'life.organism', icon: 'data', status: 'success', statusColor: 'emerald' },
-              ]}
-              statusLabel="healthy"
-              stats={[
-                { label: 'Last run', value: '2m ago' },
-                { label: 'Records', value: '12,480' },
-                { label: 'Status', value: 'healthy' },
-              ]}
+              pipeline={{
+                id: 'ingest_gbif_v2',
+                name: 'Ingest organisms',
+                description: 'Pull species records, normalize names, write to life.organism',
+                status: 'success',
+                target: 'life.organism',
+                flow: [
+                  { id: '1', name: 'GBIF API', label: 'source', icon: 'schema' },
+                  { id: '2', name: 'Extract', label: '12 fields', icon: 'download' },
+                  { id: '3', name: 'Resolve', label: 'match by name', icon: 'lock' },
+                  { id: '4', name: 'Write', label: 'life.organism', icon: 'data' },
+                ],
+                recent: { ingested: 12480, created: 12480, updated: 0, errors: 0 },
+                tags: ['prod', 'critical'],
+                lastRun: '2m ago',
+              }}
+              onRun={() => console.log('Run clicked')}
             />
 
             <PipelineCard
-              title="Sync user profiles · OAuth"
-              description="Fetch latest profile data from OAuth provider"
-              stages={[
-                { id: '1', name: 'Auth', label: 'pending', icon: 'lock', status: 'pending', statusColor: 'neutral' },
-                { id: '2', name: 'Fetch', label: 'pending', icon: 'download', status: 'pending', statusColor: 'neutral' },
-                { id: '3', name: 'Transform', label: 'pending', icon: 'edit', status: 'pending', statusColor: 'neutral' },
-                { id: '4', name: 'Write', label: 'pending', icon: 'data', status: 'pending', statusColor: 'neutral' },
-              ]}
-              statusLabel="waiting"
-              stats={[
-                { label: 'Created', value: 'now' },
-                { label: 'Est. time', value: '2m 30s' },
-                { label: 'Status', value: 'queued' },
-              ]}
+              pipeline={{
+                id: 'oauth_sync_v1',
+                name: 'Sync user profiles',
+                description: 'Fetch latest profile data from OAuth provider',
+                status: 'idle',
+                target: 'identity.user',
+                flow: [
+                  { id: '1', name: 'Auth', label: 'pending', icon: 'lock' },
+                  { id: '2', name: 'Fetch', label: 'pending', icon: 'download' },
+                  { id: '3', name: 'Transform', label: 'pending', icon: 'edit' },
+                  { id: '4', name: 'Write', label: 'pending', icon: 'data' },
+                ],
+                recent: { ingested: 0, created: 0, updated: 0, errors: 0 },
+                tags: ['scheduled'],
+                lastRun: '1h ago',
+              }}
+              onRun={() => console.log('Run clicked')}
             />
 
             <PipelineCard
-              title="Process transactions · Stripe"
-              description="Batch process pending transaction records"
-              stages={[
-                { id: '1', name: 'Query', label: 'completed', icon: 'schema', status: 'success', statusColor: 'cyan' },
-                { id: '2', name: 'Validate', label: 'in progress', icon: 'check', status: 'running', statusColor: 'amber' },
-                { id: '3', name: 'Post', label: 'pending', icon: 'send', status: 'pending', statusColor: 'neutral' },
-                { id: '4', name: 'Archive', label: 'pending', icon: 'lock', status: 'pending', statusColor: 'neutral' },
-              ]}
-              statusLabel="running"
-              stats={[
-                { label: 'Started', value: '45s ago' },
-                { label: 'Progress', value: '45%' },
-                { label: 'Status', value: 'processing' },
-              ]}
+              pipeline={{
+                id: 'stripe_tx_v3',
+                name: 'Process transactions',
+                description: 'Batch process pending transaction records',
+                status: 'running',
+                target: 'billing.transaction',
+                flow: [
+                  { id: '1', name: 'Query', label: 'completed', icon: 'schema' },
+                  { id: '2', name: 'Validate', label: 'in progress', icon: 'check' },
+                  { id: '3', name: 'Post', label: 'pending', icon: 'send' },
+                  { id: '4', name: 'Archive', label: 'pending', icon: 'lock' },
+                ],
+                recent: { ingested: 8500, created: 8500, updated: 0, errors: 2 },
+                tags: ['stripe', 'async'],
+                lastRun: '45s ago',
+              }}
+              onCancel={() => console.log('Cancel clicked')}
             />
 
             <PipelineCard
-              title="Import compliance data"
-              description="Ingest regulatory documentation from external source"
-              stages={[
-                { id: '1', name: 'Connect', label: 'completed', icon: 'link', status: 'success', statusColor: 'cyan' },
-                { id: '2', name: 'Download', label: 'completed', icon: 'download', status: 'success', statusColor: 'violet' },
-                { id: '3', name: 'Parse', label: 'failed', icon: 'alert', status: 'failed', statusColor: 'rose' },
-                { id: '4', name: 'Write', label: 'cancelled', icon: 'x', status: 'failed', statusColor: 'rose' },
-              ]}
-              statusLabel="failed"
-              stats={[
-                { label: 'Failed', value: '2m ago' },
-                { label: 'Completed', value: '2 of 4' },
-                { label: 'Error', value: 'parsing_error' },
-              ]}
+              pipeline={{
+                id: 'compliance_import_v2',
+                name: 'Import compliance data',
+                description: 'Ingest regulatory documentation from external source',
+                status: 'failed',
+                target: 'legal.compliance',
+                flow: [
+                  { id: '1', name: 'Connect', label: 'completed', icon: 'link' },
+                  { id: '2', name: 'Download', label: 'completed', icon: 'download' },
+                  { id: '3', name: 'Parse', label: 'failed', icon: 'alert' },
+                  { id: '4', name: 'Write', label: 'cancelled', icon: 'x' },
+                ],
+                recent: { ingested: 0, created: 0, updated: 0, errors: 5 },
+                tags: ['compliance', 'critical'],
+                lastRun: '2m ago',
+              }}
+              onRun={() => console.log('Run clicked')}
             />
           </div>
         </section>

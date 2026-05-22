@@ -11,7 +11,6 @@ import {
   type KeyValueRow,
   type OrderedItem,
   type RelationshipBuilderValue,
-  type PipelineStage,
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
 
@@ -215,47 +214,74 @@ export function RowMenuShowcase() {
 }
 
 export function PipelineCardShowcase() {
-  const stages: PipelineStage[] = [
-    { id: '1', name: 'validate', label: 'Validate', icon: 'check', status: 'success' },
-    { id: '2', name: 'transform', label: 'Transform', icon: 'data', status: 'success' },
-    { id: '3', name: 'load', label: 'Load', icon: 'upload', status: 'running' },
-    { id: '4', name: 'verify', label: 'Verify', icon: 'eye', status: 'pending' },
-  ]
-
   return (
     <div>
-      <PageHeader name="PipelineCard" description="Card representing a multi-stage pipeline run with per-stage status badges and an overall run status." />
+      <PageHeader name="PipelineCard" description="Card representing a pipeline with flow nodes, status, and statistics footer." />
       <ShowcaseSection label="Running pipeline">
         <PipelineCard
-          title="data_migration_v2"
-          stages={stages}
-          statusLabel="Running"
-          statusColor="cyan"
+          pipeline={{
+            id: 'data_migration_v2',
+            name: 'data_migration_v2',
+            status: 'running',
+            target: 'analytics.events',
+            flow: [
+              { id: '1', name: 'validate', label: 'Validate', icon: 'check' },
+              { id: '2', name: 'transform', label: 'Transform', icon: 'data' },
+              { id: '3', name: 'load', label: 'Load', icon: 'upload' },
+              { id: '4', name: 'verify', label: 'Verify', icon: 'eye' },
+            ],
+            recent: { ingested: 15000, created: 15000, updated: 0, errors: 0 },
+            lastRun: '30s ago',
+          }}
         />
       </ShowcaseSection>
       <ShowcaseSection label="Completed pipeline">
         <PipelineCard
-          title="data_migration_v1"
-          stages={stages.map(s => ({ ...s, status: 'success' as const }))}
-          statusLabel="Success"
-          statusColor="emerald"
+          pipeline={{
+            id: 'data_migration_v1',
+            name: 'data_migration_v1',
+            status: 'success',
+            target: 'analytics.events',
+            flow: [
+              { id: '1', name: 'validate', label: 'Validate', icon: 'check' },
+              { id: '2', name: 'transform', label: 'Transform', icon: 'data' },
+              { id: '3', name: 'load', label: 'Load', icon: 'upload' },
+              { id: '4', name: 'verify', label: 'Verify', icon: 'eye' },
+            ],
+            recent: { ingested: 12500, created: 12500, updated: 0, errors: 0 },
+            lastRun: '2h ago',
+          }}
         />
       </ShowcaseSection>
       <ShowcaseSection label="Failed pipeline">
         <PipelineCard
-          title="data_migration_v3"
-          stages={stages.map((s, i) => ({ ...s, status: (i < 2 ? 'success' : i === 2 ? 'failed' : 'pending') as PipelineStage['status'] }))}
-          statusLabel="Failed"
-          statusColor="rose"
+          pipeline={{
+            id: 'data_migration_v3',
+            name: 'data_migration_v3',
+            status: 'failed',
+            target: 'analytics.events',
+            flow: [
+              { id: '1', name: 'validate', label: 'Validate', icon: 'check' },
+              { id: '2', name: 'transform', label: 'Transform', icon: 'data' },
+              { id: '3', name: 'load', label: 'Load', icon: 'upload' },
+              { id: '4', name: 'verify', label: 'Verify', icon: 'eye' },
+            ],
+            recent: { ingested: 0, created: 0, updated: 0, errors: 8 },
+            lastRun: '5m ago',
+          }}
         />
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="title" type="string" description="Pipeline name (rendered monospace)" />
-          <PropRow name="description" type="string" description="Optional secondary description line" />
-          <PropRow name="stages" type="PipelineStage[]" description="Ordered stage definitions — each has name, label, icon, status" />
-          <PropRow name="statusLabel" type="string" description="Human-readable overall status label" />
-          <PropRow name="stats" type="Array<{label, value}>" description="Optional stat rows below the stage track" />
+          <PropRow name="pipeline" type="object" description="Pipeline object with id, name, description, status, target, flow, recent, tags, lastRun" />
+          <PropRow name="pipeline.id" type="string" description="Unique pipeline identifier" />
+          <PropRow name="pipeline.name" type="string" description="Pipeline name (rendered monospace)" />
+          <PropRow name="pipeline.description" type="string" description="Optional secondary description line" />
+          <PropRow name="pipeline.status" type="'running' | 'success' | 'idle' | 'failed'" description="Overall pipeline status" />
+          <PropRow name="pipeline.flow" type="FlowNode[]" description="Array of flow nodes with id, name, label, icon" />
+          <PropRow name="pipeline.recent" type="object" description="Statistics object: ingested, created, updated, errors" />
+          <PropRow name="onRun" type="() => void" description="Callback fired when Run button is clicked" />
+          <PropRow name="onCancel" type="() => void" description="Callback fired when Cancel button is clicked" />
         </PropsTable>
       </ShowcaseSection>
     </div>
