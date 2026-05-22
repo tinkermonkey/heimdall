@@ -37,6 +37,12 @@ export { Panel } from './components/Panel'
 export { Drawer } from './components/Drawer'
 export { SplitPane } from './components/SplitPane'
 export { StatGrid } from './components/StatGrid'
+export {
+  InspectorPanel,
+  type InspectorPanelProps,
+  type InspectorPanelSectionProps,
+} from './components/InspectorPanel'
+export { KVGrid, type KVGridProps, type KVGridRow } from './components/KVGrid'
 export { Sparkline, type SparklineColor, type SparklineProps } from './components/Sparkline'
 export { LineChart, type LineChartSeries, type LineChartProps } from './components/LineChart'
 export { BarChart, type BarChartSeries, type BarChartProps } from './components/BarChart'

@@ -59,3 +59,11 @@ export { Drawer, type DrawerProps } from './Drawer'
 export { SplitPane, type SplitPaneProps } from './SplitPane'
 
 export { StatGrid, type StatGridProps } from './StatGrid'
+
+export {
+  InspectorPanel,
+  type InspectorPanelProps,
+  type InspectorPanelSectionProps,
+} from './InspectorPanel'
+
+export { KVGrid, type KVGridProps, type KVGridRow } from './KVGrid'
