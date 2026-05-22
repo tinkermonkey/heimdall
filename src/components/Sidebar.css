@@ -86,8 +86,8 @@
   content: '';
   position: absolute;
   left: -8px;
-  top: 6px;
-  bottom: 6px;
+  top: 5px;
+  bottom: 5px;
   width: 2px;
   background: rgb(var(--accent-primary));
   border-radius: 0 2px 2px 0;
@@ -151,8 +151,8 @@
 
 .sidebar__item--child.sidebar__item--active::before {
   left: 18px;
-  top: 8px;
-  bottom: 8px;
+  top: 5px;
+  bottom: 5px;
 }
 
 /* Expand/collapse chevron */

@@ -40,15 +40,48 @@
   display: block;
 }
 
+.activity-timeline__dot--custom {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: block;
+}
+
 .activity-timeline__content {
   flex: 1;
   min-width: 0;
+}
+
+.activity-timeline__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.activity-timeline__kind-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(var(--canvas-fg-2));
+  background: rgb(var(--canvas-bg-overlay));
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  font-weight: var(--font-weight-medium);
 }
 
 .activity-timeline__subject {
   font-size: var(--text-sm);
   color: rgb(var(--canvas-fg-1));
   word-break: break-word;
+}
+
+.activity-timeline__meta {
+  font-size: 11px;
+  color: rgb(var(--canvas-fg-2));
+  margin-top: 2px;
 }
 
 .activity-timeline__timestamp {

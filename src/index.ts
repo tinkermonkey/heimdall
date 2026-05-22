@@ -27,9 +27,17 @@ export { Topbar, type TopbarProps } from './components/Topbar'
 export { TabBar } from './components/TabBar'
 export { AppTitle, type AppTitleProps } from './components/AppTitle'
 export { Titlebar, type TitlebarProps } from './components/Titlebar'
-export { Statusbar } from './components/Statusbar'
+export {
+  Statusbar,
+  type StatusbarProps,
+  type StatusbarTone,
+  type StatusbarPulseItem,
+  type StatusbarIconItem,
+  type StatusbarDividerItem,
+  type StatusbarItem,
+} from './components/Statusbar'
 export { ShellLayout, type ShellLayoutProps } from './components/ShellLayout'
-export { Modal } from './components/Modal'
+export { Modal, type ModalProps } from './components/Modal'
 export { ConfirmDialog } from './components/ConfirmDialog'
 export { WorkspaceSwitcherDialog, type WorkspaceSwitcherDialogProps, type Workspace } from './components/WorkspaceSwitcherDialog'
 export {
@@ -62,7 +70,12 @@ export { ProgressBar, type ProgressBarColor, type ProgressBarProps } from './com
 export { MetricRow, type MetricRowProps } from './components/MetricRow'
 export { PageHeader, type PageHeaderProps } from './components/PageHeader'
 export { FilterBar, type FilterBarProps, type FilterChip } from './components/FilterBar'
-export { ActivityTimeline, type ActivityTimelineProps, type ActivityEvent, type ActivityEventType } from './components/ActivityTimeline'
+export {
+  ActivityTimeline,
+  type ActivityTimelineProps,
+  type ActivityEvent,
+  type ActivityEventType,
+} from './components/ActivityTimeline'
 export { AlertStrip, type AlertStripProps, type Alert, type AlertSeverity } from './components/AlertStrip'
 export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessGridItem } from './components/QuickAccessGrid'
 export { QuickAccessTile, type QuickAccessTileProps } from './components/QuickAccessTile'

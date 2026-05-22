@@ -11,10 +11,11 @@ export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   subtitle?: string
   children: React.ReactNode
   footer?: React.ReactNode
+  hintFooter?: string
 }
 
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
-  ({ isOpen, onClose, title, subtitle, children, footer, className = '', ...props }, ref) => {
+  ({ isOpen, onClose, title, subtitle, children, footer, hintFooter, className = '', ...props }, ref) => {
     const backdropRef = useRef<HTMLDivElement>(null)
     const modalRef = useRef<HTMLDivElement>(null)
 
@@ -76,6 +77,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           )}
           <div className="modal__body">{children}</div>
           {footer && <div className="modal__footer">{footer}</div>}
+          {hintFooter && <div className="modal__foot-hint">{hintFooter}</div>}
         </div>
       </div>
     )

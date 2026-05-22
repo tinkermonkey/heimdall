@@ -32,3 +32,82 @@
 .statusbar__slot--right {
   flex: 0 0 auto;
 }
+
+.statusbar__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statusbar__divider {
+  width: 12px;
+  height: 1px;
+  background: rgb(var(--shell-border));
+  flex-shrink: 0;
+}
+
+.statusbar__item--pulse {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statusbar__pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  animation: statusbar-pulse 2s ease-out infinite;
+}
+
+@keyframes statusbar-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.statusbar__pulse--emerald {
+  background: rgb(var(--status-ok));
+}
+
+.statusbar__pulse--cyan {
+  background: rgb(var(--status-updating));
+}
+
+.statusbar__pulse--rose {
+  background: rgb(var(--status-error));
+}
+
+.statusbar__pulse--amber {
+  background: rgb(var(--accent-primary));
+}
+
+.statusbar__pulse--violet {
+  background: rgb(var(--status-secondary));
+}
+
+.statusbar__pulse--neutral {
+  background: rgb(var(--status-idle));
+}
+
+.statusbar__label {
+  font-size: 12px;
+  color: rgb(var(--shell-fg-2));
+}
+
+.statusbar__label--mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: rgb(var(--shell-fg-2));
+}
+
+.statusbar__item--mono {
+  color: rgb(var(--shell-fg-2));
+}

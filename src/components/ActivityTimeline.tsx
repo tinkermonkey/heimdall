@@ -9,6 +9,11 @@ export interface ActivityEvent {
   type: ActivityEventType
   subject: string
   timestamp: Date | string
+  kind?: string
+  kindLabel?: string
+  dotColor?: string
+  headline?: React.ReactNode
+  meta?: string
 }
 
 export interface ActivityTimelineProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -64,12 +69,32 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
           {events.map(event => (
             <div key={event.id} className="activity-timeline__event" data-testid={`activity-event-${event.id}`}>
               <div className="activity-timeline__dot-container">
-                <Badge color={EVENT_COLOR_MAP[event.type]} className="activity-timeline__dot" data-testid={`activity-dot-${event.type}`} />
+                {event.dotColor ? (
+                  <div
+                    className="activity-timeline__dot--custom"
+                    style={{ backgroundColor: event.dotColor }}
+                    data-testid={`activity-dot-custom-${event.id}`}
+                  />
+                ) : (
+                  <Badge color={EVENT_COLOR_MAP[event.type]} className="activity-timeline__dot" data-testid={`activity-dot-${event.type}`} />
+                )}
               </div>
               <div className="activity-timeline__content">
-                <div className="activity-timeline__subject" data-testid="activity-subject">
-                  {event.subject}
+                <div className="activity-timeline__header">
+                  {event.kindLabel && (
+                    <span className="activity-timeline__kind-label" data-testid="activity-kind-label">
+                      {event.kindLabel}
+                    </span>
+                  )}
+                  <div className="activity-timeline__subject" data-testid="activity-subject">
+                    {event.headline || event.subject}
+                  </div>
                 </div>
+                {event.meta && (
+                  <div className="activity-timeline__meta" data-testid="activity-meta">
+                    {event.meta}
+                  </div>
+                )}
                 <div className="activity-timeline__timestamp" data-testid="activity-timestamp">
                   {formatTimestamp(event.timestamp)}
                 </div>
