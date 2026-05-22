@@ -82,6 +82,18 @@ test.describe('Page Pattern Components', () => {
       await searchInput.fill('test query')
       await expect(searchInput).toHaveValue('test query')
     })
+
+    test('FilterBar with children elements renders correctly', async ({ page }) => {
+      const filterBar = page.locator('[data-testid="filter-bar"]').first()
+      const chips = filterBar.locator('[data-testid*="filter-chip"]')
+      const chipCount = await chips.count()
+      expect(chipCount).toBeGreaterThan(0)
+    })
+
+    test('FilterBar children snapshot', async ({ page }) => {
+      const filterBar = page.locator('[data-testid="filter-bar"]').first()
+      await expect(filterBar).toHaveScreenshot('filter-bar-with-children.png')
+    })
   })
 
   test.describe('ActivityTimeline', () => {
@@ -127,6 +139,25 @@ test.describe('Page Pattern Components', () => {
       // Verify the text content is not the problematic "Invalid Date" string
       const text = await timestamp.textContent()
       expect(text).not.toContain('Invalid Date')
+    })
+
+    test('ActivityTimeline with kind-tag variants displays different tag types', async ({ page }) => {
+      const timelineContainer = page.locator('[data-testid="activity-timeline"]').first()
+      const kindTags = timelineContainer.locator('[data-testid*="activity-kind-tag"]')
+      const tagCount = await kindTags.count()
+      expect(tagCount).toBeGreaterThan(0)
+    })
+
+    test('ActivityTimeline with dotColor variants renders color-coded dots', async ({ page }) => {
+      const timelineContainer = page.locator('[data-testid="activity-timeline"]').first()
+      const dots = timelineContainer.locator('[data-testid*="activity-dot"]')
+      const dotCount = await dots.count()
+      expect(dotCount).toBeGreaterThan(0)
+    })
+
+    test('ActivityTimeline extended variants snapshot', async ({ page }) => {
+      const timeline = page.locator('[data-testid="activity-timeline"]').first()
+      await expect(timeline).toHaveScreenshot('activity-timeline-extended.png')
     })
   })
 
@@ -346,11 +377,11 @@ test.describe('Page Pattern Components', () => {
       await expect(firstTile).toContainText('Manage database connections')
     })
 
-    test('quick access tiles are clickable', async ({ page }) => {
+    test('quick access tiles are clickable and interactive', async ({ page }) => {
       const firstTile = page.locator('button.quick-access-tile').first()
       await firstTile.click()
-      // Verify click doesn't cause navigation errors
-      await expect(page).not.toBeNull()
+      // Verify tile has focus state or other interactive feedback
+      await expect(firstTile).toBeFocused()
     })
   })
 
@@ -371,11 +402,11 @@ test.describe('Page Pattern Components', () => {
       await expect(firstTile).toContainText('Version')
     })
 
-    test('config tiles are clickable', async ({ page }) => {
+    test('config tiles are clickable and interactive', async ({ page }) => {
       const firstTile = page.locator('button.config-tile').first()
       await firstTile.click()
-      // Verify click doesn't cause navigation errors
-      await expect(page).not.toBeNull()
+      // Verify tile has focus state or other interactive feedback
+      await expect(firstTile).toBeFocused()
     })
   })
 
@@ -406,21 +437,13 @@ test.describe('Page Pattern Components', () => {
     })
 
     test('QuickAccessTile components visual snapshot', async ({ page }) => {
-      const tiles = page.locator('button.quick-access-tile')
-      for (let i = 0; i < await tiles.count(); i++) {
-        const tile = tiles.nth(i)
-        // Just verify tiles are visible
-        await expect(tile).toBeVisible()
-      }
+      const tilesContainer = page.locator('[data-testid="quick-access-grid"]')
+      await expect(tilesContainer).toHaveScreenshot('quick-access-tiles-light.png')
     })
 
     test('ConfigTile components visual snapshot', async ({ page }) => {
-      const tiles = page.locator('button.config-tile')
-      for (let i = 0; i < await tiles.count(); i++) {
-        const tile = tiles.nth(i)
-        // Just verify tiles are visible
-        await expect(tile).toBeVisible()
-      }
+      const tilesContainer = page.locator('[data-testid="config-tiles-container"]')
+      await expect(tilesContainer).toHaveScreenshot('config-tiles-light.png')
     })
 
   })
@@ -456,21 +479,13 @@ test.describe('Page Pattern Components', () => {
     })
 
     test('QuickAccessTile components visual snapshot in dark mode', async ({ page }) => {
-      const tiles = page.locator('button.quick-access-tile')
-      for (let i = 0; i < await tiles.count(); i++) {
-        const tile = tiles.nth(i)
-        // Just verify tiles are visible
-        await expect(tile).toBeVisible()
-      }
+      const tilesContainer = page.locator('[data-testid="quick-access-grid"]')
+      await expect(tilesContainer).toHaveScreenshot('quick-access-tiles-dark.png')
     })
 
     test('ConfigTile components visual snapshot in dark mode', async ({ page }) => {
-      const tiles = page.locator('button.config-tile')
-      for (let i = 0; i < await tiles.count(); i++) {
-        const tile = tiles.nth(i)
-        // Just verify tiles are visible
-        await expect(tile).toBeVisible()
-      }
+      const tilesContainer = page.locator('[data-testid="config-tiles-container"]')
+      await expect(tilesContainer).toHaveScreenshot('config-tiles-dark.png')
     })
   })
 })

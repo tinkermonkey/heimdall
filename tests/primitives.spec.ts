@@ -193,6 +193,11 @@ test.describe('Primitive Components', () => {
     expect(pillText).toMatch(/v\d+/i)
   })
 
+  test('VersionPill component visual snapshot', async ({ page }) => {
+    const versionPill = page.locator('[class*="version-pill"]').first()
+    await expect(versionPill).toHaveScreenshot('version-pill.png')
+  })
+
   test('SegmentedControl component renders and is interactive', async ({ page }) => {
     // Find SegmentedControl elements
     const segmentedControls = page.locator('[class*="segmented-control"]')
@@ -203,5 +208,10 @@ test.describe('Primitive Components', () => {
     const options = page.locator('[class*="segmented-control"] button, [class*="segmented-control"] [role="button"]')
     const optionCount = await options.count()
     expect(optionCount).toBeGreaterThan(0)
+  })
+
+  test('SegmentedControl component visual snapshot', async ({ page }) => {
+    const segmentedControl = page.locator('[class*="segmented-control"]').first()
+    await expect(segmentedControl).toHaveScreenshot('segmented-control.png')
   })
 })

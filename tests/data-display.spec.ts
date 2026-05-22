@@ -189,6 +189,31 @@ test.describe('Data Display Components', () => {
     })
   })
 
+  test('StatTile with sparkData renders spark chart', async ({ page }) => {
+    const tilesWithSpark = page.locator('.stat-tile:has-text("Uptime")')
+    const sparkElement = tilesWithSpark.locator('svg')
+    await expect(sparkElement).toBeVisible()
+  })
+
+  test('StatTile with icon displays icon element', async ({ page }) => {
+    const tilesWithIcon = page.locator('.stat-tile')
+    const iconElements = tilesWithIcon.locator('svg').first()
+    await expect(iconElements).toBeVisible()
+  })
+
+  test('StatTile with meta information displays meta text', async ({ page }) => {
+    const tiles = page.locator('.stat-tile')
+    const tileWithMeta = tiles.first()
+    const content = await tileWithMeta.textContent()
+    expect(content).toBeTruthy()
+  })
+
+  test('StatTile extended variants snapshot', async ({ page }) => {
+    await freezeAnimations(page)
+    const statGrid = page.locator('[class*="stat-grid"]')
+    await expect(statGrid).toHaveScreenshot('stat-tiles-extended.png')
+  })
+
   test('Table with no selection', async ({ page }) => {
     // Verify initial state - no rows selected
     const selectedText = page.locator('text=/Selected rows: none/')
