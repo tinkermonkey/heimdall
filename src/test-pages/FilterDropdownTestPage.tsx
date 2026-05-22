@@ -3,7 +3,7 @@ import { FilterDropdown } from '../components/FilterDropdown'
 
 export default function FilterDropdownTestPage() {
   const [checkboxSelected, setCheckboxSelected] = useState<string[]>([])
-  const [radioSelected, setRadioSelected] = useState<string[]>([])
+  const [radioSelected, setRadioSelected] = useState<string[]>(['graph'])
 
   const checkboxSummary = checkboxSelected.length === 0
     ? 'None'
@@ -36,16 +36,13 @@ export default function FilterDropdownTestPage() {
             mode="checkbox"
             onChange={setCheckboxSelected}
           >
-            <FilterDropdown.Trigger label="Status" summary={checkboxSummary} />
+            <FilterDropdown.Trigger label="Filter" summary={checkboxSummary} />
             <FilterDropdown.Panel>
-              <FilterDropdown.Section title="Status Options">
-                <FilterDropdown.Checkbox value="running" label="Running" />
-                <FilterDropdown.Checkbox value="stopped" label="Stopped" />
-                <FilterDropdown.Checkbox value="error" label="Error" description="Something went wrong" />
-                <FilterDropdown.Checkbox value="pending" label="Pending" />
-              </FilterDropdown.Section>
-              <FilterDropdown.Section title="Other">
-                <FilterDropdown.Checkbox value="archived" label="Archived" />
+              <FilterDropdown.Section title="DOMAINS">
+                <FilterDropdown.Checkbox value="life" label="life" />
+                <FilterDropdown.Checkbox value="physics" label="physics" />
+                <FilterDropdown.Checkbox value="chemistry" label="chemistry" />
+                <FilterDropdown.Checkbox value="biology" label="biology" />
               </FilterDropdown.Section>
             </FilterDropdown.Panel>
           </FilterDropdown>
@@ -74,53 +71,19 @@ export default function FilterDropdownTestPage() {
             mode="radio"
             onChange={setRadioSelected}
           >
-            <FilterDropdown.Trigger label="Env" summary={radioSummary} />
+            <FilterDropdown.Trigger label="Node type" summary={radioSummary} />
             <FilterDropdown.Panel>
-              <FilterDropdown.Section>
-                <FilterDropdown.Radio value="development" label="Development" description="Local environment" />
-                <FilterDropdown.Radio value="staging" label="Staging" description="Pre-production" />
-                <FilterDropdown.Radio value="production" label="Production" description="Live environment" />
-              </FilterDropdown.Section>
+              <div className="filter-dropdown__section-content">
+                <FilterDropdown.Radio value="graph" label="graph" />
+                <FilterDropdown.Radio value="entity" label="entity" />
+                <FilterDropdown.Radio value="relationship" label="relationship" />
+                <FilterDropdown.Radio value="attribute" label="attribute" />
+              </div>
             </FilterDropdown.Panel>
           </FilterDropdown>
         </div>
         <div style={{ padding: '12px', backgroundColor: 'rgb(var(--canvas-bg-2))', borderRadius: '4px', fontSize: '13px' }}>
           Selected: {radioSelected.length === 0 ? 'None' : radioSelected[0]}
-        </div>
-      </section>
-
-      {/* Empty Panel */}
-      <section style={{ marginBottom: '48px' }}>
-        <div
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '10px',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: 'rgb(var(--canvas-fg-3))',
-            marginBottom: '14px',
-          }}
-        >
-          Complex Example with Multiple Sections
-        </div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-          <FilterDropdown
-            mode="checkbox"
-            onChange={(selected) => console.log('Complex filter selected:', selected)}
-          >
-            <FilterDropdown.Trigger label="Service" summary="All" />
-            <FilterDropdown.Panel>
-              <FilterDropdown.Section title="Core Services">
-                <FilterDropdown.Checkbox value="api" label="API" description="REST API service" />
-                <FilterDropdown.Checkbox value="auth" label="Authentication" description="Auth service" />
-                <FilterDropdown.Checkbox value="database" label="Database" description="Data storage" />
-              </FilterDropdown.Section>
-              <FilterDropdown.Section title="Monitoring">
-                <FilterDropdown.Checkbox value="logs" label="Logs" description="Log aggregation" />
-                <FilterDropdown.Checkbox value="metrics" label="Metrics" description="Performance metrics" />
-              </FilterDropdown.Section>
-            </FilterDropdown.Panel>
-          </FilterDropdown>
         </div>
       </section>
 

@@ -1,0 +1,44 @@
+Your goal is to fix ALL failing integration tests in this project. Every failure listed below must pass before you are done.
+
+Analysis has identified the likely root cause:
+1) HierarchyComponentTestPage is not imported or routed in App.tsx, causing all 4 HierarchyTree tests to fail when navigating to ?example=hierarchy-tree. Import HierarchyComponentTestPage and add route handler in App.tsx. 2) The StatTile with label='Uptime' in DataDisplayTestPage needs sparkData prop to match the test that expects an SVG element within a tile containing 'Uptime' text.
+
+## Current failure state
+
+Total failures: 7 across 7 files
+
+## Error types (by frequency)
+  FilterDropdown Component › renders trigger button: 1 occurrences
+    e.g. tests/filter-dropdown.spec.ts:19:3: expect(locator).toBeVisible() failed - Locator: locator('.filter-dropdown__trigger').first() - Expected: visible, Timeout: 5000ms - Error: element(...
+  FilterDropdown Component › opens panel when trigger is clicked: 1 occurrences
+    e.g. tests/filter-dropdown.spec.ts:25:3: Test timeout of 30000ms exceeded - locator.click: Test timeout - waiting for locator('.filter-dropdown__trigger').first()
+  FilterDropdown Component › displays section with title: 1 occurrences
+    e.g. tests/filter-dropdown.spec.ts:34:3: Test timeout of 30000ms exceeded - locator.click: Test timeout - waiting for locator('.filter-dropdown__trigger').first()
+  FilterDropdown Component › displays checkbox items: 1 occurrences
+    e.g. tests/filter-dropdown.spec.ts:43:3: Test timeout of 30000ms exceeded - locator.click: Test timeout - waiting for locator('.filter-dropdown__trigger').first()
+  FilterDropdown Component › closes panel when clicking outside: 1 occurrences
+    e.g. tests/filter-dropdown.spec.ts:52:3: Test timeout of 30000ms exceeded - locator.click: Test timeout - waiting for locator('.filter-dropdown__trigger').first()
+  FilterDropdown Component › visual snapshot of checkbox mode: 1 occurrences
+    e.g. tests/filter-dropdown.spec.ts:72:3: Test timeout of 30000ms exceeded - locator.click: Test timeout - waiting for locator('.filter-dropdown__trigger').first()
+  FilterDropdown Component › visual snapshot of radio mode: 1 occurrences
+    e.g. tests/filter-dropdown.spec.ts:82:3: Test timeout of 30000ms exceeded - locator.click: Test timeout - waiting for locator('.filter-dropdown__trigger').nth(1)
+
+## Most affected files (top 7 of 7)
+  tests/filter-dropdown.spec.ts:19:3: 1 failures (FilterDropdown Component › renders trigger button×1)
+  tests/filter-dropdown.spec.ts:25:3: 1 failures (FilterDropdown Component › opens panel when trigger is clicked×1)
+  tests/filter-dropdown.spec.ts:34:3: 1 failures (FilterDropdown Component › displays section with title×1)
+  tests/filter-dropdown.spec.ts:43:3: 1 failures (FilterDropdown Component › displays checkbox items×1)
+  tests/filter-dropdown.spec.ts:52:3: 1 failures (FilterDropdown Component › closes panel when clicking outside×1)
+  tests/filter-dropdown.spec.ts:72:3: 1 failures (FilterDropdown Component › visual snapshot of checkbox mode×1)
+  tests/filter-dropdown.spec.ts:82:3: 1 failures (FilterDropdown Component › visual snapshot of radio mode×1)
+
+
+
+This is attempt 2/3. Focus on the remaining failures shown above.
+
+## How to approach this
+
+1. Examine representative failing files to understand the root cause. The failure state above shows a sample — the full set of affected files may be larger.
+2. Use grep or glob to discover every file in the project that exhibits the same pattern, not just the ones listed above.
+3. Apply fixes comprehensively across all affected files. Prefer bulk approaches (scripted edits, sed, ast-based transforms) over editing files one at a time.
+4. After fixing, run the integration checks to measure progress. Repeat until all failures are resolved.

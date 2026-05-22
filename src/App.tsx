@@ -24,6 +24,7 @@ import ChatShowcase from './test-pages/ChatShowcase'
 import FormsShowcase from './test-pages/FormsShowcase'
 import GraphShowcase from './test-pages/GraphShowcase'
 import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
+import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -109,6 +110,10 @@ export default function App() {
 
   if (exampleParam === 'inspector-panel') {
     return <InspectorPanelTestPage />
+  }
+
+  if (exampleParam === 'filter-dropdown') {
+    return <FilterDropdownTestPage />
   }
 
   if (testParam === 'foundation') {

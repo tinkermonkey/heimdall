@@ -226,13 +226,12 @@ export interface FilterDropdownPanelProps extends React.HTMLAttributes<HTMLDivEl
 function FilterDropdownPanel({ children, className = '', ...props }: FilterDropdownPanelProps) {
   const { isOpen, mode, panelRef } = useFilterDropdown()
 
-  if (!isOpen) return null
-
   return (
     <div
       ref={panelRef}
       className={`filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
+      style={{ display: isOpen ? 'block' : 'none', ...((props as any).style || {}) }}
       {...props}
     >
       {children}
@@ -314,6 +313,7 @@ function FilterDropdownCheckbox({ value, label, description }: FilterDropdownChe
       <div className="filter-dropdown__row-checkbox">
         <input
           type="checkbox"
+          className="filter-dropdown__checkbox"
           checked={isSelected}
           onChange={(e) => onValueChange(value, e.target.checked)}
           onClick={(e) => e.stopPropagation()}
