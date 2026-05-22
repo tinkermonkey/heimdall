@@ -13,7 +13,13 @@ export { NumberInput } from './components/NumberInput'
 export { Select } from './components/Select'
 export { TriState } from './components/TriState'
 export { Field } from './components/Field'
-export { StatTile } from './components/StatTile'
+export { StatTile, type StatTileProps } from './components/StatTile'
+export { VersionPill, type VersionPillProps } from './components/VersionPill'
+export {
+  SegmentedControl,
+  type SegmentedControlProps,
+  type SegmentedControlOption,
+} from './components/SegmentedControl'
 export { Table, type Column } from './components/Table'
 export { NavItem } from './components/NavItem'
 export { Sidebar } from './components/Sidebar'

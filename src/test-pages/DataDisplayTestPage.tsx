@@ -127,6 +127,53 @@ export default function DataDisplayTestPage() {
           <StatTile label="Neutral" value="—" color="violet" />
         </div>
       </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          StatTile · Extended Props (Icon, Sparkline, Meta)
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px' }}>
+          <StatTile
+            label="Requests"
+            value="12,453"
+            color="cyan"
+            icon="trending-up"
+            delta={{ value: 8, label: 'vs yesterday', direction: 'up' }}
+          />
+          <StatTile
+            label="Latency"
+            value="145ms"
+            color="violet"
+            sparkData={[12, 8, 15, 10, 18, 14, 20, 11, 9]}
+            meta="Last 9 intervals"
+            metaIcon="clock"
+          />
+          <StatTile
+            label="Throughput"
+            value="98.5%"
+            color="emerald"
+            icon="check"
+            delta={{ value: 2.3, label: 'improvement', direction: 'up' }}
+            sparkData={[80, 85, 88, 92, 95, 98, 96, 99, 98.5]}
+          />
+          <StatTile
+            label="Errors"
+            value="23"
+            color="rose"
+            icon="alert"
+            delta={{ value: 5, label: 'since last hour', direction: 'down' }}
+          />
+        </div>
+      </section>
     </div>
   )
 }

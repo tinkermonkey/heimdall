@@ -18,7 +18,15 @@ export { TriState, type TriStateProps } from './TriState'
 
 export { Field, type FieldProps } from './Field'
 
-export { StatTile, type StatTileProps, type StatColor } from './StatTile'
+export { StatTile, type StatTileProps } from './StatTile'
+
+export { VersionPill, type VersionPillProps } from './VersionPill'
+
+export {
+  SegmentedControl,
+  type SegmentedControlProps,
+  type SegmentedControlOption,
+} from './SegmentedControl'
 
 export { Table, type TableProps, type Column } from './Table'
 
