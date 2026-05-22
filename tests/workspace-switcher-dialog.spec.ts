@@ -48,21 +48,12 @@ test.describe('WorkspaceSwitcherDialog', () => {
     await expect(projectAlpha).toBeVisible()
   })
 
-  test('should call onOpenFolder when Open tile is clicked', async ({ page }) => {
+  test('should close when Open tile is clicked', async ({ page }) => {
     await page.goto('/?example=overlays')
     await page.click('button:has-text("Open Workspace Switcher")')
 
-    // Set up console message listener
-    let consoleMessage = ''
-    page.on('console', msg => {
-      consoleMessage = msg.text()
-    })
-
     // Click the Open tile
     await page.click('.quick-access-tile:has-text("Open")')
-
-    // Wait a moment for the console message
-    await page.waitForTimeout(100)
 
     // Dialog should be closed
     const modal = page.locator('[role="dialog"]')
