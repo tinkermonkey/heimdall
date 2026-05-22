@@ -12,12 +12,13 @@ export interface StatusbarPulseItem {
 }
 
 export interface StatusbarIconItem {
+  kind: 'icon'
   icon: IconName
   mono?: boolean
 }
 
 export interface StatusbarDividerItem {
-  divider: true
+  kind: 'divider'
 }
 
 export type StatusbarItem = StatusbarPulseItem | StatusbarIconItem | StatusbarDividerItem
@@ -31,31 +32,27 @@ export interface StatusbarProps {
 
 const renderStatusbarItems = (items: StatusbarItem[]): React.ReactNode => {
   return items.map((item, index) => {
-    if ('divider' in item) {
-      return <div key={index} className="statusbar__divider" />
+    switch (item.kind) {
+      case 'divider':
+        return <div key={index} className="statusbar__divider" />
+      case 'pulse':
+        return (
+          <div key={index} className="statusbar__item statusbar__item--pulse">
+            <div className={`statusbar__pulse statusbar__pulse--${item.tone}`} />
+            {item.mono ? (
+              <span className="statusbar__label statusbar__label--mono">{item.label}</span>
+            ) : (
+              <span className="statusbar__label">{item.label}</span>
+            )}
+          </div>
+        )
+      case 'icon':
+        return (
+          <div key={index} className={`statusbar__item ${item.mono ? 'statusbar__item--mono' : ''}`}>
+            <Icon name={item.icon} size={14} />
+          </div>
+        )
     }
-    if ('kind' in item) {
-      const pulseItem = item as StatusbarPulseItem
-      return (
-        <div key={index} className="statusbar__item statusbar__item--pulse">
-          <div className={`statusbar__pulse statusbar__pulse--${pulseItem.tone}`} />
-          {pulseItem.mono ? (
-            <span className="statusbar__label statusbar__label--mono">{pulseItem.label}</span>
-          ) : (
-            <span className="statusbar__label">{pulseItem.label}</span>
-          )}
-        </div>
-      )
-    }
-    if ('icon' in item) {
-      const iconItem = item as StatusbarIconItem
-      return (
-        <div key={index} className={`statusbar__item ${iconItem.mono ? 'statusbar__item--mono' : ''}`}>
-          <Icon name={iconItem.icon} size={14} />
-        </div>
-      )
-    }
-    return null
   })
 }
 

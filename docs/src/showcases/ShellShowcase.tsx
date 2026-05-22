@@ -31,14 +31,14 @@ export function AppTitleShowcase() {
 export function StatusbarShowcase() {
   const leftItems: StatusbarItem[] = [
     { kind: 'pulse', tone: 'emerald', label: 'connected' },
-    { divider: true },
-    { icon: 'check' },
+    { kind: 'divider' },
+    { kind: 'icon', icon: 'check' },
   ]
 
   const rightItems: StatusbarItem[] = [
     { kind: 'pulse', tone: 'amber', label: 'Ln 42, Col 8' },
-    { divider: true },
-    { icon: 'info' },
+    { kind: 'divider' },
+    { kind: 'icon', icon: 'info' },
   ]
 
   return (
@@ -71,10 +71,9 @@ export function StatusbarShowcase() {
           <PropRow name="left" type="ReactNode | StatusbarItem[]" description="Left slot — text node or structured items array" />
           <PropRow name="center" type="ReactNode | StatusbarItem[]" description="Center slot — text node or structured items array" />
           <PropRow name="right" type="ReactNode | StatusbarItem[]" description="Right slot — text node or structured items array" />
-          <PropRow name="StatusbarItem (text)" type="{ type: 'text'; content: string }" description="Text element in the status bar" />
-          <PropRow name="StatusbarItem (icon)" type="{ type: 'icon'; icon: IconName; tone?: StatusbarTone }" description="Icon element with optional tone color" />
-          <PropRow name="StatusbarItem (divider)" type="{ type: 'divider' }" description="Vertical divider line" />
-          <PropRow name="StatusbarItem (pulse)" type="{ type: 'pulse'; label?: string; tone?: StatusbarTone }" description="Animated pulse indicator" />
+          <PropRow name="StatusbarItem (pulse)" type="{ kind: 'pulse'; tone: StatusbarTone; label: string; mono?: boolean }" description="Animated pulse indicator with tone and label" />
+          <PropRow name="StatusbarItem (icon)" type="{ kind: 'icon'; icon: IconName; mono?: boolean }" description="Icon element with optional mono styling" />
+          <PropRow name="StatusbarItem (divider)" type="{ kind: 'divider' }" description="Vertical divider line" />
         </PropsTable>
       </ShowcaseSection>
     </div>
