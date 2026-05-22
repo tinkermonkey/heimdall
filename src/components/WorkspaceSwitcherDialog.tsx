@@ -24,7 +24,7 @@ export const WorkspaceSwitcherDialog = React.forwardRef<HTMLDivElement, Workspac
   ({
     isOpen,
     onClose,
-    current: _current,
+    current,
     recent,
     onOpenFolder,
     onNewWorkspace,
@@ -69,7 +69,11 @@ export const WorkspaceSwitcherDialog = React.forwardRef<HTMLDivElement, Workspac
                 {recent.map((workspace) => (
                   <button
                     key={workspace.id}
-                    className="workspace-switcher-dialog__recent-item"
+                    className={`workspace-switcher-dialog__recent-item ${
+                      current?.id === workspace.id
+                        ? 'workspace-switcher-dialog__recent-item--current'
+                        : ''
+                    }`}
                     onClick={() => onPickRecent(workspace)}
                   >
                     <div className="workspace-switcher-dialog__recent-name">
