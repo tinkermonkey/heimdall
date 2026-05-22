@@ -52,6 +52,10 @@ const renderStatusbarItems = (items: StatusbarItem[]): React.ReactNode => {
             <Icon name={item.icon} size={14} />
           </div>
         )
+      default: {
+        const _exhaustiveCheck: never = item
+        return _exhaustiveCheck
+      }
     }
   })
 }
