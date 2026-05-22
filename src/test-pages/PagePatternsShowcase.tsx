@@ -4,12 +4,13 @@ import {
   FilterBar,
   ActivityTimeline,
   AlertStrip,
+  QuickAccessGrid,
   QuickAccessTile,
   ConfigTile,
   Button,
   ShellLayout,
 } from '../index'
-import type { FilterChip, ActivityEvent, Alert } from '../index'
+import type { FilterChip, ActivityEvent, Alert, QuickAccessGridItem } from '../index'
 
 export default function PagePatternsShowcase() {
   const [filters, setFilters] = useState<FilterChip[]>([
@@ -132,10 +133,26 @@ export default function PagePatternsShowcase() {
           <ActivityTimeline events={[]} emptyState="No activity yet" data-testid="activity-timeline-empty-state" />
         </section>
 
-        {/* QuickAccessTile */}
+        {/* QuickAccessGrid */}
         <section style={{ marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-            Quick Access Tiles
+            Quick Access Grid
+          </h2>
+          <QuickAccessGrid
+            tiles={[
+              { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity' },
+              { id: 'read', icon: 'search', title: 'Browse Entities', description: 'Search and view entities' },
+              { id: 'update', icon: 'edit', title: 'Update Schema', description: 'Modify schema definitions' },
+              { id: 'delete', icon: 'trash', title: 'Delete Entity', description: 'Remove an entity' },
+            ]}
+            onAction={(id) => console.log(`QuickAccess action: ${id}`)}
+          />
+        </section>
+
+        {/* QuickAccessTile - Individual Tiles */}
+        <section style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+            Quick Access Tiles (Individual)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
             <QuickAccessTile icon="data" title="Databases" description="Manage database connections" onClick={() => console.log('Databases clicked')} />

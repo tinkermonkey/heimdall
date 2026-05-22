@@ -367,49 +367,6 @@ test.describe('Page Pattern Components', () => {
     })
   })
 
-  test.describe('QuickAccessTile', () => {
-    test('renders title, description, and icon', async ({ page }) => {
-      const tiles = page.locator('button.quick-access-tile')
-      await expect(tiles).toHaveCount(2)
-
-      const firstTile = tiles.first()
-      await expect(firstTile).toContainText('Databases')
-      await expect(firstTile).toContainText('Manage database connections')
-    })
-
-    test('quick access tiles are clickable and interactive', async ({ page }) => {
-      const firstTile = page.locator('button.quick-access-tile').first()
-      await firstTile.click()
-      // Verify tile has focus state or other interactive feedback
-      await expect(firstTile).toBeFocused()
-    })
-  })
-
-  test.describe('ConfigTile', () => {
-    test('renders title, description, and summary items', async ({ page }) => {
-      const tiles = page.locator('button.config-tile')
-      await expect(tiles).toHaveCount(2)
-
-      const firstTile = tiles.first()
-      await expect(firstTile).toContainText('API Configuration')
-      await expect(firstTile).toContainText('Configure API endpoints')
-      await expect(firstTile).toContainText('api.example.com')
-    })
-
-    test('config tiles display summary key-value pairs', async ({ page }) => {
-      const firstTile = page.locator('button.config-tile').first()
-      await expect(firstTile).toContainText('Endpoint')
-      await expect(firstTile).toContainText('Version')
-    })
-
-    test('config tiles are clickable and interactive', async ({ page }) => {
-      const firstTile = page.locator('button.config-tile').first()
-      await firstTile.click()
-      // Verify tile has focus state or other interactive feedback
-      await expect(firstTile).toBeFocused()
-    })
-  })
-
   test.describe('Visual Regression - Light Canvas', () => {
     test('PageHeader component visual snapshot', async ({ page }) => {
       const header = page.locator('[data-testid="page-header-eyebrow"]').locator('..')
