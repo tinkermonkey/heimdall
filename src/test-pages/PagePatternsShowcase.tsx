@@ -31,14 +31,14 @@ export default function PagePatternsShowcase() {
       type: 'create',
       subject: 'Created new entity `cls_organism`',
       timestamp: new Date(Date.now() - 5 * 60000),
-      kindLabel: 'create',
+      kind: 'create',
     },
     {
       id: 'event-2',
       type: 'update',
       subject: 'Updated schema definition for `life`',
       timestamp: new Date(Date.now() - 2 * 3600000),
-      kindLabel: 'update',
+      kind: 'update',
     },
     {
       id: 'event-3',

@@ -403,7 +403,7 @@ The prototype's activity feed prefixes each row with an uppercase mono `kind-tag
 ```tsx
 <ActivityTimeline
   items={[
-    { kind: 'create', dotColor: 'emerald', kindLabel: 'CREATE',
+    { kind: 'CREATE', dotColor: 'emerald',
       headline: <>Created class — <Mono>cls_variant</Mono></>,
       meta: 'sch_genomics · life',
       when: '2m',
