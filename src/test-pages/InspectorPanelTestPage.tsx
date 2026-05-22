@@ -173,6 +173,16 @@ export default function InspectorPanelTestPage() {
                   ]}
                 />
               </InspectorPanel.Section>
+              <InspectorPanel.Section
+                title="ACTIONS"
+                count={0}
+                actions={
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <Button style={{ fontSize: '11px', padding: '2px 6px' }}>Backup</Button>
+                    <Button style={{ fontSize: '11px', padding: '2px 6px' }}>Restore</Button>
+                  </div>
+                }
+              />
             </InspectorPanel>
           </div>
         </div>

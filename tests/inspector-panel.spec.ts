@@ -162,7 +162,7 @@ test.describe('InspectorPanel & KVGrid Components', () => {
 
     // Should have at least one section with actions
     const sectionCount = await sectionWithActions.count()
-    expect(sectionCount).toBeGreaterThanOrEqual(0)
+    expect(sectionCount).toBeGreaterThan(0)
   })
 
   test('InspectorPanel head displays all required elements', async ({ page }) => {

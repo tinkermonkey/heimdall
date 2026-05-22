@@ -2,11 +2,7 @@ import React, { createContext, useContext, ReactNode } from 'react'
 import './InspectorPanel.css'
 import { VersionPill } from './VersionPill'
 
-interface InspectorPanelContextValue {
-  panelId: string
-}
-
-const InspectorPanelContext = createContext<InspectorPanelContextValue | undefined>(undefined)
+const InspectorPanelContext = createContext<true | undefined>(undefined)
 
 const useInspectorPanelContext = () => {
   const context = useContext(InspectorPanelContext)
@@ -62,11 +58,10 @@ const InspectorPanelComponent = React.forwardRef<HTMLDivElement, InspectorPanelP
     { eyebrow, title, id, version, actions, children, className = '', ...props },
     ref
   ) => {
-    const panelId = id
     const classNames = ['inspector-panel', className].filter(Boolean).join(' ')
 
     return (
-      <InspectorPanelContext.Provider value={{ panelId }}>
+      <InspectorPanelContext.Provider value={true}>
         <div ref={ref} className={classNames} {...props}>
           <div className="inspector-panel__head">
             <div className="inspector-panel__eyebrow">{eyebrow}</div>

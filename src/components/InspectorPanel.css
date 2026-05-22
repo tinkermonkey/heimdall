@@ -103,11 +103,3 @@
 .inspector-panel__section-content {
   padding: 0 16px 12px;
 }
-
-body.dark-canvas .inspector-panel {
-  background: rgb(var(--canvas-surface));
-}
-
-body.dark-canvas .inspector-panel__title {
-  color: rgb(var(--canvas-fg-1));
-}
