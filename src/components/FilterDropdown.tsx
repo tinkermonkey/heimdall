@@ -64,22 +64,26 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
 
     const handleValueChange = useCallback(
       (value: string, selected: boolean) => {
-        const prevValues = new Set(selectedValues)
-        const nextValues = new Set(prevValues)
+        let nextValues: Set<string>
 
-        if (selected) {
-          if (mode === 'radio') {
-            nextValues.clear()
+        setSelectedValues((prevValues) => {
+          const temp = new Set(prevValues)
+
+          if (selected) {
+            if (mode === 'radio') {
+              temp.clear()
+            }
+            temp.add(value)
+          } else {
+            temp.delete(value)
           }
-          nextValues.add(value)
-        } else {
-          nextValues.delete(value)
-        }
 
-        setSelectedValues(nextValues)
+          nextValues = temp
+          return temp
+        })
 
         if (onChange) {
-          onChange(Array.from(nextValues))
+          onChange(Array.from(nextValues!))
         }
 
         // Auto-close on selection for radio mode
@@ -87,7 +91,7 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
           handleOpenChange(false)
         }
       },
-      [mode, onChange, selectedValues, handleOpenChange]
+      [mode, onChange, handleOpenChange]
     )
 
     const handleFocusedValueChange = useCallback((value: string | null) => {
@@ -136,6 +140,8 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
     useEffect(() => {
       if (!isOpen) return
 
+      const panelElement = panelRef.current
+
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           e.preventDefault()
@@ -151,12 +157,12 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       }
 
       // Add keyboard handler to panel for arrow navigation
-      panelRef.current?.addEventListener('keydown', handleKeyDown as EventListener)
+      panelElement?.addEventListener('keydown', handleKeyDown as EventListener)
       document.addEventListener('keydown', handleEscape)
       document.addEventListener('mousedown', handleClickOutside)
 
       return () => {
-        panelRef.current?.removeEventListener('keydown', handleKeyDown as EventListener)
+        panelElement?.removeEventListener('keydown', handleKeyDown as EventListener)
         document.removeEventListener('keydown', handleEscape)
         document.removeEventListener('mousedown', handleClickOutside)
       }
@@ -225,14 +231,15 @@ export interface FilterDropdownPanelProps extends React.HTMLAttributes<HTMLDivEl
 
 function FilterDropdownPanel({ children, className = '', ...props }: FilterDropdownPanelProps) {
   const { isOpen, mode, panelRef } = useFilterDropdown()
+  const { style, ...restProps } = props as any
 
   return (
     <div
       ref={panelRef}
       className={`filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
-      style={{ display: isOpen ? 'block' : 'none', ...((props as any).style || {}) }}
-      {...props}
+      style={{ display: isOpen ? 'block' : 'none', ...(style || {}) }}
+      {...restProps}
     >
       {children}
     </div>
