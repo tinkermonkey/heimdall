@@ -8,8 +8,7 @@ import {
   Button,
   ShellLayout,
 } from '../index'
-import type { FilterChip, ActivityEvent, Alert } from '../index'
-import type { QuickAccessTile } from '../components/QuickAccessGrid'
+import type { FilterChip, ActivityEvent, Alert, QuickAccessGridItem } from '../index'
 
 export default function PagePatternsShowcase() {
   const [filters, setFilters] = useState<FilterChip[]>([
@@ -57,7 +56,7 @@ export default function PagePatternsShowcase() {
     },
   ]
 
-  const quickAccessTiles: QuickAccessTile[] = [
+  const quickAccessTiles: QuickAccessGridItem[] = [
     { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity' },
     { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse schema' },
     { id: 'data', icon: 'data', title: 'Data Export', description: 'Export data' },

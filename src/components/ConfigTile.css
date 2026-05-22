@@ -91,3 +91,10 @@
   color: rgb(var(--canvas-fg-1));
   word-break: break-word;
 }
+
+.config-tile__chevron {
+  flex-shrink: 0;
+  color: rgb(var(--canvas-fg-3));
+  align-self: center;
+  margin-left: auto;
+}
