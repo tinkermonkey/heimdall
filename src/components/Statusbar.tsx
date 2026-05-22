@@ -73,9 +73,9 @@ export const Statusbar = React.forwardRef<HTMLDivElement, StatusbarProps>(
 
     return (
       <div ref={ref} className={classNames} {...props}>
-        {left && <div className="statusbar__slot statusbar__slot--left">{renderSlot(left)}</div>}
+        {left && <div className="statusbar__slot statusbar__slot--left statusbar__left">{renderSlot(left)}</div>}
         {center && <div className="statusbar__slot statusbar__slot--center">{center}</div>}
-        {right && <div className="statusbar__slot statusbar__slot--right">{renderSlot(right)}</div>}
+        {right && <div className="statusbar__slot statusbar__slot--right statusbar__right">{renderSlot(right)}</div>}
       </div>
     )
   }

@@ -82,7 +82,7 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
               <div className="activity-timeline__content">
                 <div className="activity-timeline__header">
                   {event.kindLabel && (
-                    <span className="activity-timeline__kind-label" data-testid="activity-kind-label">
+                    <span className="activity-timeline__kind-label" data-testid={`activity-kind-tag-${event.id}`}>
                       {event.kindLabel}
                     </span>
                   )}

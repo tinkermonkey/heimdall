@@ -46,7 +46,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
     const hasCaption = showingCount !== undefined && totalCount !== undefined
 
     return (
-      <div ref={ref} className={classNames} {...props}>
+      <div ref={ref} className={classNames} data-testid="filter-bar" {...props}>
         <div className="filter-bar__controls">
           <div className="filter-bar__search-wrapper">
             <Icon name="search" size={16} className="filter-bar__search-icon" />

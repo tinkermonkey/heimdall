@@ -4,13 +4,12 @@ import {
   FilterBar,
   ActivityTimeline,
   AlertStrip,
-  QuickAccessGrid,
   QuickAccessTile,
   ConfigTile,
   Button,
   ShellLayout,
 } from '../index'
-import type { FilterChip, ActivityEvent, Alert, QuickAccessGridItem } from '../index'
+import type { FilterChip, ActivityEvent, Alert } from '../index'
 
 export default function PagePatternsShowcase() {
   const [filters, setFilters] = useState<FilterChip[]>([
@@ -31,12 +30,14 @@ export default function PagePatternsShowcase() {
       type: 'create',
       subject: 'Created new entity `cls_organism`',
       timestamp: new Date(Date.now() - 5 * 60000),
+      kindLabel: 'create',
     },
     {
       id: 'event-2',
       type: 'update',
       subject: 'Updated schema definition for `life`',
       timestamp: new Date(Date.now() - 2 * 3600000),
+      kindLabel: 'update',
     },
     {
       id: 'event-3',
@@ -58,13 +59,6 @@ export default function PagePatternsShowcase() {
     },
   ]
 
-  const quickAccessTiles: QuickAccessGridItem[] = [
-    { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity' },
-    { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse schema' },
-    { id: 'data', icon: 'data', title: 'Data Export', description: 'Export data' },
-    { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute tasks' },
-  ]
-
   const handleSearchChange = (query: string) => {
     console.log('Search:', query)
   }
@@ -75,10 +69,6 @@ export default function PagePatternsShowcase() {
 
   const handleDismissAlert = (alertId: string) => {
     setAlerts(alerts.filter(a => a.id !== alertId))
-  }
-
-  const handleQuickAccessClick = (tileId: string) => {
-    console.log('Quick access clicked:', tileId)
   }
 
   return (
@@ -126,14 +116,6 @@ export default function PagePatternsShowcase() {
           />
         </section>
 
-        {/* Quick Access Grid */}
-        <section style={{ marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-            Quick Actions
-          </h2>
-          <QuickAccessGrid tiles={quickAccessTiles} onAction={handleQuickAccessClick} columns={4} />
-        </section>
-
         {/* Activity Timeline */}
         <section style={{ marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
@@ -166,7 +148,7 @@ export default function PagePatternsShowcase() {
           <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
             Configuration Tiles
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }} data-testid="config-tiles-container">
             <ConfigTile
               icon="settings"
               title="API Configuration"
