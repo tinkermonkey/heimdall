@@ -87,3 +87,5 @@ export {
 } from './components/GraphInspector'
 export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type TopologyNodeProps } from './components/TopologyNode'
 export { bezierPath, rectEdgePoint, type Point, type BezierPathResult } from './utils/graph'
+export { HierarchyRow, type HierarchyRowProps, type HierarchyKind } from './components/HierarchyRow'
+export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
