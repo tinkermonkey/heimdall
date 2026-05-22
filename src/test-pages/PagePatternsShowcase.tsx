@@ -10,7 +10,7 @@ import {
   Button,
   ShellLayout,
 } from '../index'
-import type { FilterChip, ActivityEvent, Alert, QuickAccessGridItem } from '../index'
+import type { FilterChip, ActivityEvent, Alert } from '../index'
 
 export default function PagePatternsShowcase() {
   const [filters, setFilters] = useState<FilterChip[]>([
