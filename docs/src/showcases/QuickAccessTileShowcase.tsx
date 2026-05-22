@@ -9,13 +9,13 @@ import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../co
 export function QuickAccessTileShowcase() {
   const [lastClicked, setLastClicked] = useState<string | null>(null)
 
-  const tiles: QuickAccessTileProps[] = [
-    { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity to the schema' },
-    { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse the full schema graph' },
-    { id: 'export', icon: 'data', title: 'Export Data', description: 'Download a filtered data export' },
-    { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute a processing task' },
-    { id: 'settings', icon: 'settings', title: 'Settings', description: 'Configure system settings' },
-    { id: 'docs', icon: 'help', title: 'Documentation', description: 'Read the documentation' },
+  const tiles: (QuickAccessTileProps & { id: string })[] = [
+    { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity to the schema', onClick: () => setLastClicked('create') },
+    { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse the full schema graph', onClick: () => setLastClicked('schema') },
+    { id: 'export', icon: 'data', title: 'Export Data', description: 'Download a filtered data export', onClick: () => setLastClicked('export') },
+    { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute a processing task', onClick: () => setLastClicked('pipeline') },
+    { id: 'settings', icon: 'settings', title: 'Settings', description: 'Configure system settings', onClick: () => setLastClicked('settings') },
+    { id: 'docs', icon: 'help', title: 'Documentation', description: 'Read the documentation', onClick: () => setLastClicked('docs') },
   ]
 
   return (

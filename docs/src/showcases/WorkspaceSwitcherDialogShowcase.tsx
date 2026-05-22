@@ -7,11 +7,13 @@ import {
 import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const SAMPLE_WORKSPACES: Workspace[] = [
-  { id: 'ws_1', name: 'Production', lastAccessed: new Date(Date.now() - 1 * 3600000) },
-  { id: 'ws_2', name: 'Staging', lastAccessed: new Date(Date.now() - 24 * 3600000) },
-  { id: 'ws_3', name: 'Development', lastAccessed: new Date(Date.now() - 48 * 3600000) },
-  { id: 'ws_4', name: 'Testing', lastAccessed: new Date(Date.now() - 7 * 24 * 3600000) },
+  { id: 'ws_1', name: 'Production', path: '/home/user/projects/production' },
+  { id: 'ws_2', name: 'Staging', path: '/home/user/projects/staging' },
+  { id: 'ws_3', name: 'Development', path: '/home/user/projects/dev' },
+  { id: 'ws_4', name: 'Testing', path: '/home/user/projects/testing' },
 ]
+
+const CURRENT_WORKSPACE: Workspace = { id: 'ws_1', name: 'Production', path: '/home/user/projects/production' }
 
 export function WorkspaceSwitcherDialogShowcase() {
   const [open, setOpen] = useState(false)
@@ -27,13 +29,22 @@ export function WorkspaceSwitcherDialogShowcase() {
         <WorkspaceSwitcherDialog
           isOpen={open}
           onClose={() => setOpen(false)}
-          workspaces={SAMPLE_WORKSPACES}
-          onSelectWorkspace={id => {
-            setSelectedWs(id)
+          current={CURRENT_WORKSPACE}
+          recent={SAMPLE_WORKSPACES}
+          onOpenFolder={() => {
+            console.log('Open folder')
             setOpen(false)
           }}
-          onCreateWorkspace={() => {
+          onNewWorkspace={() => {
             console.log('Create new workspace')
+            setOpen(false)
+          }}
+          onCloneFromGit={() => {
+            console.log('Clone from Git')
+            setOpen(false)
+          }}
+          onPickRecent={(workspace) => {
+            setSelectedWs(workspace.id)
             setOpen(false)
           }}
         />
@@ -47,11 +58,15 @@ export function WorkspaceSwitcherDialogShowcase() {
         <PropsTable>
           <PropRow name="isOpen" type="boolean" description="Whether the dialog is visible" />
           <PropRow name="onClose" type="() => void" description="Called when user closes the dialog" />
-          <PropRow name="workspaces" type="Workspace[]" description="Array of available workspaces" />
-          <PropRow name="onSelectWorkspace" type="(id: string) => void" description="Called when user selects a workspace" />
-          <PropRow name="onCreateWorkspace" type="() => void" description="Called when user clicks 'New workspace' action" />
-          <PropRow name="onCloneWorkspace" type="(id: string) => void" description="Called when user clones an existing workspace" />
-          <PropRow name="onOpenWorkspace" type="(id: string) => void" description="Called when user clicks 'Open' action" />
+          <PropRow name="current" type="Workspace" description="Optional currently active workspace" />
+          <PropRow name="recent" type="Workspace[]" description="Array of recent workspaces" />
+          <PropRow name="onOpenFolder" type="() => void" description="Called when user clicks 'Open' action" />
+          <PropRow name="onNewWorkspace" type="() => void" description="Called when user clicks 'New' action" />
+          <PropRow name="onCloneFromGit" type="() => void" description="Called when user clicks 'Clone' action" />
+          <PropRow name="onPickRecent" type="(workspace: Workspace) => void" description="Called when user selects a recent workspace" />
+          <PropRow name="Workspace.id" type="string" description="Unique workspace identifier" />
+          <PropRow name="Workspace.name" type="string" description="Display name for the workspace" />
+          <PropRow name="Workspace.path" type="string | undefined" description="Optional filesystem path to the workspace" />
         </PropsTable>
       </ShowcaseSection>
     </div>

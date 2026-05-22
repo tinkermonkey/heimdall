@@ -234,9 +234,44 @@ test.describe('Data Display Components', () => {
     expect(isStillChecked).toBe(false)
   })
 
-  test('Data display components render correctly', async ({ page }) => {
-    // Page should load successfully
-    await expect(page).not.toBeNull()
+  test('HierarchyTree renders hierarchy rows', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.waitForLoadState('networkidle')
+
+    // Verify HierarchyTree container exists
+    const hierarchyTree = page.locator('.hierarchy-tree').first()
+    await expect(hierarchyTree).toBeVisible()
+
+    // Verify HierarchyRow elements are rendered
+    const hierarchyRows = page.locator('.hierarchy-row')
+    const rowCount = await hierarchyRows.count()
+    expect(rowCount).toBeGreaterThan(0)
+  })
+
+  test('HierarchyTree row selection', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.waitForLoadState('networkidle')
+
+    // Get first row
+    const firstRow = page.locator('.hierarchy-row').first()
+    await expect(firstRow).toBeVisible()
+
+    // Click the row
+    await firstRow.click()
+
+    // Verify row is selected (has selected class)
+    const selectedRows = page.locator('.hierarchy-row.selected')
+    const selectedCount = await selectedRows.count()
+    expect(selectedCount).toBeGreaterThan(0)
+  })
+
+  test('HierarchyTree static snapshot', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.waitForLoadState('networkidle')
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('hierarchy-tree.png', {
+      maxDiffPixelRatio: 0.01,
+    })
   })
 
 })

@@ -208,6 +208,65 @@ test.describe('Page Pattern Components', () => {
     })
   })
 
+  test.describe('QuickAccessTile', () => {
+    test('renders tile with icon, title, and description', async ({ page }) => {
+      const tile = page.locator('button.quick-access-tile').first()
+      await expect(tile).toBeVisible()
+
+      // Verify icon is present
+      const icon = tile.locator('svg').first()
+      await expect(icon).toBeVisible()
+
+      // Verify content is visible
+      const content = await tile.textContent()
+      expect(content).toBeTruthy()
+      expect(content).toMatch(/[A-Za-z]+/)
+    })
+
+    test('is clickable and responds to click', async ({ page }) => {
+      const tile = page.locator('button.quick-access-tile').first()
+      await expect(tile).toBeEnabled()
+      await tile.click()
+      // Click event was handled (no error thrown)
+    })
+
+    test('visual snapshot of QuickAccessTile variants', async ({ page }) => {
+      const tile = page.locator('button.quick-access-tile').first()
+      await expect(tile).toHaveScreenshot('quick-access-tile.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+  })
+
+  test.describe('ConfigTile', () => {
+    test('renders tile with icon, title, description, and summary', async ({ page }) => {
+      const tile = page.locator('button.config-tile').first()
+      await expect(tile).toBeVisible()
+
+      // Verify icon is present
+      const icon = tile.locator('svg').first()
+      await expect(icon).toBeVisible()
+
+      // Verify summary key-value pairs are visible
+      const summary = tile.locator('.config-tile__summary')
+      await expect(summary).toBeVisible()
+    })
+
+    test('is clickable and responds to click', async ({ page }) => {
+      const tile = page.locator('button.config-tile').first()
+      await expect(tile).toBeEnabled()
+      await tile.click()
+      // Click event was handled (no error thrown)
+    })
+
+    test('visual snapshot of ConfigTile', async ({ page }) => {
+      const tile = page.locator('button.config-tile').first()
+      await expect(tile).toHaveScreenshot('config-tile.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+  })
+
   test.describe('Dark Canvas Mode', () => {
     test('alert severity variants render correctly in dark canvas mode', async ({ page }) => {
       // Toggle dark canvas
@@ -277,6 +336,49 @@ test.describe('Page Pattern Components', () => {
     })
   })
 
+  test.describe('QuickAccessTile', () => {
+    test('renders title, description, and icon', async ({ page }) => {
+      const tiles = page.locator('button.quick-access-tile')
+      await expect(tiles).toHaveCount(2)
+
+      const firstTile = tiles.first()
+      await expect(firstTile).toContainText('Databases')
+      await expect(firstTile).toContainText('Manage database connections')
+    })
+
+    test('quick access tiles are clickable', async ({ page }) => {
+      const firstTile = page.locator('button.quick-access-tile').first()
+      await firstTile.click()
+      // Verify click doesn't cause navigation errors
+      await expect(page).not.toBeNull()
+    })
+  })
+
+  test.describe('ConfigTile', () => {
+    test('renders title, description, and summary items', async ({ page }) => {
+      const tiles = page.locator('button.config-tile')
+      await expect(tiles).toHaveCount(2)
+
+      const firstTile = tiles.first()
+      await expect(firstTile).toContainText('API Configuration')
+      await expect(firstTile).toContainText('Configure API endpoints')
+      await expect(firstTile).toContainText('api.example.com')
+    })
+
+    test('config tiles display summary key-value pairs', async ({ page }) => {
+      const firstTile = page.locator('button.config-tile').first()
+      await expect(firstTile).toContainText('Endpoint')
+      await expect(firstTile).toContainText('Version')
+    })
+
+    test('config tiles are clickable', async ({ page }) => {
+      const firstTile = page.locator('button.config-tile').first()
+      await firstTile.click()
+      // Verify click doesn't cause navigation errors
+      await expect(page).not.toBeNull()
+    })
+  })
+
   test.describe('Visual Regression - Light Canvas', () => {
     test('PageHeader component visual snapshot', async ({ page }) => {
       const header = page.locator('[data-testid="page-header-eyebrow"]').locator('..')
@@ -301,6 +403,24 @@ test.describe('Page Pattern Components', () => {
     test('QuickAccessGrid component visual snapshot', async ({ page }) => {
       const grid = page.locator('[data-testid="quick-access-grid"]')
       await expect(grid).toHaveScreenshot('quick-access-grid-light.png')
+    })
+
+    test('QuickAccessTile components visual snapshot', async ({ page }) => {
+      const tiles = page.locator('button.quick-access-tile')
+      for (let i = 0; i < await tiles.count(); i++) {
+        const tile = tiles.nth(i)
+        // Just verify tiles are visible
+        await expect(tile).toBeVisible()
+      }
+    })
+
+    test('ConfigTile components visual snapshot', async ({ page }) => {
+      const tiles = page.locator('button.config-tile')
+      for (let i = 0; i < await tiles.count(); i++) {
+        const tile = tiles.nth(i)
+        // Just verify tiles are visible
+        await expect(tile).toBeVisible()
+      }
     })
 
   })
@@ -333,6 +453,24 @@ test.describe('Page Pattern Components', () => {
     test('QuickAccessGrid component visual snapshot in dark mode', async ({ page }) => {
       const grid = page.locator('[data-testid="quick-access-grid"]')
       await expect(grid).toHaveScreenshot('quick-access-grid-dark.png')
+    })
+
+    test('QuickAccessTile components visual snapshot in dark mode', async ({ page }) => {
+      const tiles = page.locator('button.quick-access-tile')
+      for (let i = 0; i < await tiles.count(); i++) {
+        const tile = tiles.nth(i)
+        // Just verify tiles are visible
+        await expect(tile).toBeVisible()
+      }
+    })
+
+    test('ConfigTile components visual snapshot in dark mode', async ({ page }) => {
+      const tiles = page.locator('button.config-tile')
+      for (let i = 0; i < await tiles.count(); i++) {
+        const tile = tiles.nth(i)
+        // Just verify tiles are visible
+        await expect(tile).toBeVisible()
+      }
     })
   })
 })

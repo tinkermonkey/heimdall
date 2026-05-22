@@ -30,16 +30,15 @@ export function AppTitleShowcase() {
 
 export function StatusbarShowcase() {
   const leftItems: StatusbarItem[] = [
-    { type: 'text', content: 'nyx-01' },
-    { type: 'divider' },
-    { type: 'icon', icon: 'check', tone: 'emerald' },
-    { type: 'text', content: 'connected' },
+    { kind: 'pulse', tone: 'emerald', label: 'connected' },
+    { divider: true },
+    { icon: 'check' },
   ]
 
   const rightItems: StatusbarItem[] = [
-    { type: 'text', content: 'Ln 42, Col 8' },
-    { type: 'divider' },
-    { type: 'icon', icon: 'info', tone: 'amber' },
+    { kind: 'pulse', tone: 'amber', label: 'Ln 42, Col 8' },
+    { divider: true },
+    { icon: 'info' },
   ]
 
   return (

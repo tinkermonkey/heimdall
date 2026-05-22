@@ -23,19 +23,21 @@ export function InspectorPanelShowcase() {
       <ShowcaseSection label="Full inspector panel">
         <div style={{ backgroundColor: 'rgb(var(--canvas-bg))', padding: '14px', borderRadius: 8 }}>
           <InspectorPanel
-            head={{
-              title: 'Entity Details',
-              version: 'v2.1.0',
-            }}
-            actions={[
-              { icon: 'edit', label: 'Edit' },
-              { icon: 'trash', label: 'Delete' },
-            ]}
+            eyebrow="DETAILS"
+            title="Entity Details"
+            id="entity_001"
+            version={2}
+            actions={
+              <div style={{ display: 'flex', gap: 8 }}>
+                <Button variant="ghost" size="sm"><Icon name="edit" size={14} /></Button>
+                <Button variant="ghost" size="sm"><Icon name="trash" size={14} /></Button>
+              </div>
+            }
           >
-            <InspectorPanel.Section label="Properties">
+            <InspectorPanel.Section title="Properties">
               <KVGrid rows={SAMPLE_KV_ROWS} />
             </InspectorPanel.Section>
-            <InspectorPanel.Section label="Tags">
+            <InspectorPanel.Section title="Tags" count={2}>
               <div style={{ fontSize: 12, color: 'rgb(var(--canvas-fg-2))' }}>
                 <span style={{ display: 'inline-block', padding: '4px 8px', backgroundColor: 'rgb(var(--canvas-border))', borderRadius: 4, marginRight: 6, marginBottom: 6 }}>
                   production
@@ -64,10 +66,15 @@ export function InspectorPanelShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="head" type="{ title: string; version?: string }" description="Optional head section with title and optional version pill" />
-          <PropRow name="actions" type="Array<{ icon: IconName; label: string }>" description="Action icons in the head" />
+          <PropRow name="eyebrow" type="string" description="Eyebrow label above the title" />
+          <PropRow name="title" type="string" description="Primary title for the panel" />
+          <PropRow name="id" type="string" description="Unique identifier for the panel" />
+          <PropRow name="version" type="number" description="Optional version number displayed as a pill" />
+          <PropRow name="actions" type="ReactNode" description="Rendered action elements (buttons, icons, etc.)" />
           <PropRow name="children" type="ReactNode" description="Panel sections and content" />
-          <PropRow name="InspectorPanel.Section" type="component" description="Labeled section divider" />
+          <PropRow name="InspectorPanel.Section" type="component" description="Labeled section divider with optional count" />
+          <PropRow name="InspectorPanel.Section.title" type="string" description="Section label" />
+          <PropRow name="InspectorPanel.Section.count" type="number" description="Optional count badge" />
           <PropRow name="KVGrid.rows" type="KVGridRow[]" description="Array of {key, value} pairs" />
         </PropsTable>
       </ShowcaseSection>

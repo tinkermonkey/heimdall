@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { Table, Column } from '../components/Table'
 import { StatGrid } from '../components/StatGrid'
 import { StatTile } from '../components/StatTile'
+import { KVGrid } from '../components/KVGrid'
+import { HierarchyTree } from '../components/HierarchyTree'
+import { HierarchyRow } from '../components/HierarchyRow'
 
 interface TableRow {
   id: string
@@ -173,6 +176,53 @@ export default function DataDisplayTestPage() {
             delta={{ value: 5, label: 'since last hour', direction: 'down' }}
           />
         </div>
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          KVGrid Component · Key-Value Display
+        </div>
+        <KVGrid
+          rows={[
+            { key: 'id', value: 'entity_001' },
+            { key: 'status', value: 'active' },
+            { key: 'created', value: '2025-05-22' },
+            { key: 'modified', value: '2025-05-22 14:30' },
+            { key: 'owner', value: 'data-team' },
+          ]}
+        />
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          HierarchyTree Component · Taxonomy Display
+        </div>
+        <HierarchyTree>
+          <HierarchyRow depth={0} kind="taxonomy" label="life_taxonomy" domain="life" description="Taxonomy of life sciences" meta="12 schemes" />
+          <HierarchyRow depth={1} kind="scheme" label="biological_scheme" domain="life" description="Biological classification scheme" meta="8 classes" />
+          <HierarchyRow depth={2} kind="class" label="organism_class" domain="life" description="Living organisms" />
+          <HierarchyRow depth={2} kind="class" label="cell_class" domain="life" description="Cellular structures" meta="1000 items" />
+          <HierarchyRow depth={1} kind="scheme" label="chemical_scheme" domain="life" description="Chemical compound classification" meta="4 classes" />
+          <HierarchyRow depth={2} kind="class" label="protein_class" domain="life" description="Protein molecules" meta="150 items" />
+        </HierarchyTree>
       </section>
     </div>
   )

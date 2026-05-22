@@ -12,13 +12,14 @@ export function ConfigTileShowcase() {
   const tiles: ConfigTileProps[] = [
     {
       id: 'database',
-      icon: 'database',
+      icon: 'schema',
       title: 'Database Config',
       description: 'PostgreSQL connection and settings',
       summary: [
         { label: 'host', value: 'localhost' },
         { label: 'port', value: '5432' },
       ],
+      onClick: () => setLastClicked('database'),
     },
     {
       id: 'cache',
@@ -29,6 +30,7 @@ export function ConfigTileShowcase() {
         { label: 'ttl', value: '3600s' },
         { label: 'size', value: '2GB' },
       ],
+      onClick: () => setLastClicked('cache'),
     },
     {
       id: 'logging',
@@ -39,6 +41,7 @@ export function ConfigTileShowcase() {
         { label: 'level', value: 'INFO' },
         { label: 'output', value: '/var/log' },
       ],
+      onClick: () => setLastClicked('logging'),
     },
   ]
 

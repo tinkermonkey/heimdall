@@ -108,9 +108,9 @@ test.describe('Shell Framework Components', () => {
     })
 
     test('Statusbar component renders (part of ShellLayout)', async ({ page }) => {
-      // Verify statusbar is rendered as part of the shell
-      // The statusbar might be part of the ShellLayout fixture so just verify page loads
-      await expect(page).not.toBeNull()
+      // Statusbar is part of ShellLayout at the bottom of the shell
+      const statusbar = page.locator('.statusbar').first()
+      await expect(statusbar).toBeVisible()
     })
   })
 })

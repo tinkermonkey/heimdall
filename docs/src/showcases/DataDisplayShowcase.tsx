@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { StatTile, StatGrid, Table, Chip, StatusBadge, Icon, type Column } from '@tinkermonkey/heimdall-ui'
+import { StatTile, StatGrid, Table, Chip, StatusBadge, Icon, KVGrid, type Column, type KVGridRow } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function StatTileShowcase() {
@@ -24,8 +24,8 @@ export function StatTileShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="With icon">
         <DemoGrid cols={4} gap={10}>
-          <StatTile label="CPU" value="42%" color="cyan" icon="activity" />
-          <StatTile label="MEMORY" value="12.4 GB" color="violet" icon="database" />
+          <StatTile label="CPU" value="42%" color="cyan" icon="clock" />
+          <StatTile label="MEMORY" value="12.4 GB" color="violet" icon="schema" />
           <StatTile label="THROUGHPUT" value="1.2M" color="emerald" icon="trending-up" />
           <StatTile label="ERRORS" value="23" color="amber" icon="alert" />
         </DemoGrid>
@@ -172,6 +172,53 @@ export function TableShowcase() {
           <PropRow name="selectedRows" type="(string | number)[]" description="Controlled selection state" />
           <PropRow name="onSelectRows" type="(keys) => void" description="Selection change handler" />
           <PropRow name="onSort" type="(key, dir) => void" description="Sort change handler" />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+export function KVGridShowcase() {
+  const basicRows: KVGridRow[] = [
+    { key: 'hostname', value: 'nyx-01.internal' },
+    { key: 'ip_address', value: '192.168.1.100' },
+    { key: 'cpu_cores', value: '16' },
+    { key: 'memory_gb', value: '64' },
+    { key: 'uptime_days', value: '47' },
+  ]
+
+  const longValueRows: KVGridRow[] = [
+    { key: 'image', value: 'registry.io/api-server:1.2.3' },
+    { key: 'env', value: 'PROD_API_ENDPOINT=https://api.example.com:8443' },
+    { key: 'description', value: 'Main API server handling authentication and data synchronization' },
+  ]
+
+  const denseManyRows: KVGridRow[] = [
+    { key: 'id', value: 'entity_001' },
+    { key: 'status', value: 'active' },
+    { key: 'created', value: '2025-05-22' },
+    { key: 'modified', value: '2025-05-22 14:30' },
+    { key: 'owner', value: 'data-team' },
+    { key: 'region', value: 'us-east-1' },
+    { key: 'version', value: 'v2.1.0' },
+    { key: 'replicas', value: '3' },
+  ]
+
+  return (
+    <div>
+      <PageHeader name="KVGrid" description="Key-value pairs display with a fixed key column (130px) and flexible value column. Used for metadata and configuration display." />
+      <ShowcaseSection label="Basic key-value pairs">
+        <KVGrid rows={basicRows} />
+      </ShowcaseSection>
+      <ShowcaseSection label="With long values">
+        <KVGrid rows={longValueRows} />
+      </ShowcaseSection>
+      <ShowcaseSection label="Many rows">
+        <KVGrid rows={denseManyRows} />
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="rows" type="KVGridRow[]" description="Array of {key, value} pairs. Keys are rendered monospace uppercase; values preserve input formatting." />
         </PropsTable>
       </ShowcaseSection>
     </div>

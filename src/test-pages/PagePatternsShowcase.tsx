@@ -5,6 +5,8 @@ import {
   ActivityTimeline,
   AlertStrip,
   QuickAccessGrid,
+  QuickAccessTile,
+  ConfigTile,
   Button,
   ShellLayout,
 } from '../index'
@@ -141,11 +143,51 @@ export default function PagePatternsShowcase() {
         </section>
 
         {/* Activity Timeline - Empty State */}
-        <section>
+        <section style={{ marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
             Empty Activity Timeline
           </h2>
           <ActivityTimeline events={[]} emptyState="No activity yet" data-testid="activity-timeline-empty-state" />
+        </section>
+
+        {/* QuickAccessTile */}
+        <section style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+            Quick Access Tiles
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+            <QuickAccessTile icon="data" title="Databases" description="Manage database connections" onClick={() => console.log('Databases clicked')} />
+            <QuickAccessTile icon="settings" title="Settings" description="System configuration" onClick={() => console.log('Settings clicked')} />
+          </div>
+        </section>
+
+        {/* ConfigTile */}
+        <section style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+            Configuration Tiles
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+            <ConfigTile
+              icon="settings"
+              title="API Configuration"
+              description="Configure API endpoints"
+              summary={[
+                { label: 'Endpoint', value: 'api.example.com' },
+                { label: 'Version', value: 'v2' },
+              ]}
+              onClick={() => console.log('API Config clicked')}
+            />
+            <ConfigTile
+              icon="data"
+              title="Database Config"
+              description="Database connection settings"
+              summary={[
+                { label: 'Host', value: 'db.example.com' },
+                { label: 'Port', value: '5432' },
+              ]}
+              onClick={() => console.log('DB Config clicked')}
+            />
+          </div>
         </section>
       </div>
     </ShellLayout>
