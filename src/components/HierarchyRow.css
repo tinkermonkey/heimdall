@@ -4,14 +4,17 @@
   gap: 16px;
   padding: 8px 0;
   align-items: center;
-  cursor: pointer;
   transition: background-color 150ms ease;
   border-radius: var(--radius-sm);
   outline: none;
 }
 
+.hierarchy-row.interactive {
+  cursor: pointer;
+}
+
 .hierarchy-row:focus-visible {
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 .hierarchy-row:hover {
