@@ -8,7 +8,8 @@ import {
   Button,
   ShellLayout,
 } from '../index'
-import type { FilterChip, ActivityEvent, Alert, QuickAccessTile } from '../index'
+import type { FilterChip, ActivityEvent, Alert } from '../index'
+import type { QuickAccessTile } from '../components/QuickAccessGrid'
 
 export default function PagePatternsShowcase() {
   const [filters, setFilters] = useState<FilterChip[]>([

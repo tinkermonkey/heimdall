@@ -4,11 +4,18 @@
   gap: 12px;
 }
 
+.filter-bar__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .filter-bar__search-wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .filter-bar__search-icon {
@@ -73,4 +80,18 @@
 
 .filter-bar__chip-close:hover {
   color: rgb(var(--canvas-fg-1));
+}
+
+.filter-bar__children {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.filter-bar__caption {
+  font-size: var(--text-sm);
+  color: rgb(var(--canvas-fg-3));
+  white-space: nowrap;
+  flex-shrink: 0;
 }
