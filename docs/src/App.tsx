@@ -22,8 +22,6 @@ import FoundationTestPage from '@/test-pages/FoundationTestPage'
 import ShellFrameworkTestPage from '@/test-pages/ShellFrameworkTestPage'
 import NavigationComponentTestPage from '@/test-pages/NavigationComponentTestPage'
 import ChartsTestPage from '@/test-pages/ChartsTestPage'
-import ContextStudioRebuilt from '@/examples/ContextStudioRebuilt'
-import HomelabDashboardRebuilt from '@/examples/HomelabDashboardRebuilt'
 
 type NavSection = {
   title: string
@@ -109,9 +107,6 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'graph-canvas': GraphCanvasShowcase,
   'graph-inspector': GraphInspectorShowcase,
   'topology-node': TopologyNodeShowcase,
-  // Rebuilt Examples
-  rebuilt: ContextStudioRebuilt,
-  homelab: HomelabDashboardRebuilt,
 }
 
 const NAV_SECTIONS: NavSection[] = [
