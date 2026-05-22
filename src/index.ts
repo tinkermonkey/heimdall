@@ -31,6 +31,7 @@ export { Statusbar } from './components/Statusbar'
 export { ShellLayout, type ShellLayoutProps } from './components/ShellLayout'
 export { Modal } from './components/Modal'
 export { ConfirmDialog } from './components/ConfirmDialog'
+export { WorkspaceSwitcherDialog, type WorkspaceSwitcherDialogProps, type Workspace } from './components/WorkspaceSwitcherDialog'
 export {
   FilterDropdown,
   type FilterDropdownProps,

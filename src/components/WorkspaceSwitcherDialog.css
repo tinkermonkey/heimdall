@@ -1,0 +1,74 @@
+.workspace-switcher-dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.workspace-switcher-dialog__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.workspace-switcher-dialog__recent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid rgb(var(--canvas-border));
+  padding-top: 16px;
+}
+
+.workspace-switcher-dialog__recent-header {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(var(--canvas-fg-3));
+}
+
+.workspace-switcher-dialog__recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgb(var(--canvas-border));
+}
+
+.workspace-switcher-dialog__recent-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 80ms ease-out;
+  outline: none;
+}
+
+.workspace-switcher-dialog__recent-item:not(:last-child) {
+  border-bottom: 1px solid rgb(var(--canvas-border));
+}
+
+.workspace-switcher-dialog__recent-item:hover {
+  background-color: rgb(var(--canvas-bg-2));
+}
+
+.workspace-switcher-dialog__recent-item:focus-visible {
+  box-shadow: inset 0 0 0 2px rgb(var(--accent-primary));
+}
+
+.workspace-switcher-dialog__recent-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgb(var(--canvas-fg-1));
+}
+
+.workspace-switcher-dialog__recent-path {
+  font-size: 11px;
+  color: rgb(var(--canvas-fg-3));
+  font-family: var(--font-family-mono);
+}
