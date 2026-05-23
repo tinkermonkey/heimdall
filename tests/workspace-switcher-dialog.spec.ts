@@ -130,46 +130,22 @@ test.describe('WorkspaceSwitcherDialog', () => {
     const modal = page.locator('[role="dialog"]').first()
     await expect(modal).toBeVisible()
 
-    // Take snapshot of the entire dialog
-    await expect(modal).toHaveScreenshot('workspace-switcher-dialog-open.png', {
-      maxDiffPixelRatio: 0.01,
-    })
-  })
-
-  test('visual snapshot of workspace switcher dialog with action tiles', async ({ page }) => {
-    // Click the button to open the dialog
-    await page.click('button:has-text("Open Workspace Switcher")')
-
-    // Verify action tiles are visible
+    // Verify action tiles are present
     const openTile = page.locator('.quick-access-tile:has-text("Open")')
     const newTile = page.locator('.quick-access-tile:has-text("New")')
     const cloneTile = page.locator('.quick-access-tile:has-text("Clone")')
-
     await expect(openTile).toBeVisible()
     await expect(newTile).toBeVisible()
     await expect(cloneTile).toBeVisible()
 
-    // Take snapshot of dialog showing action tiles section
-    const modal = page.locator('[role="dialog"]').first()
-    await expect(modal).toHaveScreenshot('workspace-switcher-dialog-with-tiles.png', {
-      maxDiffPixelRatio: 0.01,
-    })
-  })
-
-  test('visual snapshot of workspace switcher dialog with recent workspaces', async ({ page }) => {
-    // Click the button to open the dialog
-    await page.click('button:has-text("Open Workspace Switcher")')
-
-    // Verify recent workspaces section is visible
+    // Verify recent workspaces section is present
     const recentHeader = page.locator('.workspace-switcher-dialog__recent-header:has-text("Recent Workspaces")')
     const projectAlpha = page.locator('.workspace-switcher-dialog__recent-name:has-text("Project Alpha")')
-
     await expect(recentHeader).toBeVisible()
     await expect(projectAlpha).toBeVisible()
 
-    // Take snapshot including recent workspaces
-    const modal = page.locator('[role="dialog"]').first()
-    await expect(modal).toHaveScreenshot('workspace-switcher-dialog-with-recent.png', {
+    // Take snapshot of the entire dialog with all sections visible
+    await expect(modal).toHaveScreenshot('workspace-switcher-dialog.png', {
       maxDiffPixelRatio: 0.01,
     })
   })

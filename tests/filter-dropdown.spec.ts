@@ -97,8 +97,9 @@ test.describe('FilterDropdown Component', () => {
     const trigger = page.locator('.filter-dropdown__trigger').first()
     await trigger.click()
 
-    // Get first row
-    const rows = page.locator('.filter-dropdown__row')
+    // Get panel and first row
+    const panel = page.locator('.filter-dropdown__panel').first()
+    const rows = panel.locator('.filter-dropdown__row')
     const firstRow = rows.nth(0)
     await firstRow.focus()
     await expect(firstRow).toBeFocused()
@@ -135,7 +136,8 @@ test.describe('FilterDropdown Component', () => {
     await trigger.click()
 
     // Focus on first checkbox item
-    const rows = page.locator('.filter-dropdown__row')
+    const panel = page.locator('.filter-dropdown__panel').first()
+    const rows = panel.locator('.filter-dropdown__row')
     const firstRow = rows.nth(0)
     const firstCheckbox = firstRow.locator('input[type="checkbox"]')
     await firstRow.focus()
@@ -156,7 +158,8 @@ test.describe('FilterDropdown Component', () => {
     await trigger.click()
 
     // Focus on first checkbox item
-    const rows = page.locator('.filter-dropdown__row')
+    const panel = page.locator('.filter-dropdown__panel').first()
+    const rows = panel.locator('.filter-dropdown__row')
     const firstRow = rows.nth(0)
     const firstCheckbox = firstRow.locator('input[type="checkbox"]')
     await firstRow.focus()
@@ -357,9 +360,6 @@ test.describe('FilterDropdown Component', () => {
 
     // Get the rows within this panel
     const rows = radioPanel.locator('.filter-dropdown__row')
-
-    // Get the aria-checked attribute from first row - should have default selection
-    let firstRowChecked = await rows.nth(0).getAttribute('aria-checked')
 
     // Close the panel by selecting an item (radio mode auto-closes)
     await rows.nth(0).click()
