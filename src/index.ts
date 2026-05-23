@@ -64,8 +64,20 @@ export {
 } from './components/InspectorPanel'
 export { KVGrid, type KVGridProps, type KVGridRow } from './components/KVGrid'
 export { Sparkline, type SparklineColor, type SparklineProps } from './components/Sparkline'
-export { LineChart, type LineChartSeries, type LineChartProps } from './components/LineChart'
+export { LineChart, type LineChartProps, type ThresholdLine, type EventMarker } from './components/LineChart'
 export { BarChart, type BarChartSeries, type BarChartProps } from './components/BarChart'
+export { BarV, type BarVProps } from './components/BarV'
+export { BarH, type BarHProps, type BarHItem } from './components/BarH'
+export { StackedBar, type StackedBarProps, type StackedBarStack } from './components/StackedBar'
+export { Donut, type DonutProps, type DonutSlice } from './components/Donut'
+export { Heatmap, type HeatmapProps } from './components/Heatmap'
+export {
+  StatusTimeline,
+  type StatusTimelineProps,
+  type StatusTrack,
+  type StatusSegment,
+  type SegmentKind,
+} from './components/StatusTimeline'
 export type { StatusColor } from './components/statusColors'
 export { PieChart, type PieChartSegment, type PieChartProps } from './components/PieChart'
 export { ProgressBar, type ProgressBarColor, type ProgressBarProps } from './components/ProgressBar'

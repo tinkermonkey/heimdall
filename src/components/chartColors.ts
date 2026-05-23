@@ -1,1 +1,5 @@
-export const chartColors = ['rgb(245 158 11)', 'rgb(16 185 129)', 'rgb(244 63 94)', 'rgb(34 211 238)', 'rgb(71 85 105)']
+// Canonical multi-series palette: cyan → emerald → amber → indigo → violet → rose
+export const SERIES_COLORS = ['#22D3EE', '#10B981', '#F59E0B', '#818CF8', '#8B5CF6', '#F43F5E']
+
+// Legacy alias kept for BarChart / PieChart backward compat
+export const chartColors = SERIES_COLORS

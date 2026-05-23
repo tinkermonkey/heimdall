@@ -5,92 +5,65 @@ import { statusColorMap } from './statusColors'
 
 export type SparklineColor = StatusColor
 
-export interface SparklineProps extends React.SVGAttributes<SVGSVGElement> {
+export interface SparklineProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
   data: number[]
   width?: number
   height?: number
-  color?: SparklineColor
+  /** StatusColor name or hex string */
+  color?: SparklineColor | string
+  area?: boolean
+}
+
+function resolveColor(color: string): string {
+  return color in statusColorMap ? statusColorMap[color as StatusColor] : color
+}
+
+function linePath(pts: [number, number][]): string {
+  return pts.map(([x, y], i) => (i ? 'L' : 'M') + x.toFixed(2) + ',' + y.toFixed(2)).join(' ')
 }
 
 export const Sparkline = React.forwardRef<SVGSVGElement, SparklineProps>(
-  ({ data, width = 84, height = 22, color = 'emerald', className = '', ...rest }, ref) => {
-    if (!data || data.length === 0) {
-      return null
-    }
+  ({ data, width = 88, height = 28, color = 'emerald', area = true, className = '', style, ...rest }, ref) => {
+    const gradId = React.useId()
 
-    // For single data point, create a flat line
-    const points = data.length === 1 ? [data[0], data[0]] : data
+    if (!data || data.length < 2) return null
 
-    // Find min and max for scaling using loop to avoid stack overflow with large arrays
-    let min = Infinity
-    let max = -Infinity
-    for (let i = 0; i < points.length; i++) {
-      if (points[i] < min) min = points[i]
-      if (points[i] > max) max = points[i]
-    }
-    const range = max - min
+    const c = resolveColor(String(color))
+    const min = Math.min(...data)
+    const max = Math.max(...data)
+    const pts: [number, number][] = data.map((v, i) => [
+      (i / (data.length - 1)) * width,
+      height - 2 - ((v - min) / (max - min || 1)) * (height - 4),
+    ])
 
-    // Normalize points to 0-1 range
-    const normalizedPoints = points.map((p) => (range === 0 ? 0.5 : (p - min) / range))
-
-    // Calculate path coordinates using viewBox (0, 0, 100, 100)
-    const svgWidth = 100
-    const svgHeight = 100
-    const padding = 5
-
-    // Generate line path
-    const linePoints = normalizedPoints
-      .map((p, i) => {
-        const x = padding + (i / (normalizedPoints.length - 1)) * (svgWidth - padding * 2)
-        const y = svgHeight - padding - p * (svgHeight - padding * 2)
-        return `${x},${y}`
-      })
-      .join(' ')
-
-    // Generate area path (line + bottom rectangle)
-    const areaPoints = [
-      `${padding},${svgHeight - padding}`,
-      ...normalizedPoints
-        .map((p, i) => {
-          const x = padding + (i / (normalizedPoints.length - 1)) * (svgWidth - padding * 2)
-          const y = svgHeight - padding - p * (svgHeight - padding * 2)
-          return `${x},${y}`
-        }),
-      `${padding + (normalizedPoints.length - 1) / (normalizedPoints.length - 1) * (svgWidth - padding * 2)},${svgHeight - padding}`,
-    ]
-      .join(' ')
-
-    const colorValue = statusColorMap[color]
+    const line = linePath(pts)
+    const fill = `${line} L${width},${height} L0,${height} Z`
 
     return (
       <svg
         ref={ref}
-        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
         width={width}
         height={height}
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
+        style={{ display: 'block', ...style }}
         className={className}
-        style={{ overflow: 'visible' }}
         {...rest}
       >
-        {/* Area fill */}
-        <polyline
-          points={areaPoints}
-          fill={colorValue}
-          fillOpacity="0.15"
-          stroke="none"
-        />
-        {/* Line stroke */}
-        <polyline
-          points={linePoints}
-          fill="none"
-          stroke={colorValue}
-          strokeWidth="2"
-        />
+        {area && (
+          <defs>
+            <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={c} stopOpacity="0.22" />
+              <stop offset="100%" stopColor={c} stopOpacity="0" />
+            </linearGradient>
+          </defs>
+        )}
+        {area && <path d={fill} fill={`url(#${gradId})`} />}
+        <path d={line} stroke={c} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   }
 )
 
 Sparkline.displayName = 'Sparkline'
-
 export default Sparkline

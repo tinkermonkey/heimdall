@@ -1,233 +1,256 @@
 import React from 'react'
 import './LineChart.css'
-import { chartColors } from './chartColors'
-import type { LineChartSeries } from './statusColors'
-import { statusColorMap } from './statusColors'
+import { SERIES_COLORS } from './chartColors'
+import { TONE, fmt, type ChartTone } from './chartTone'
 
-export type { LineChartSeries }
-
-export interface LineChartProps extends React.HTMLAttributes<HTMLDivElement> {
-  series: LineChartSeries[]
-  xLabels?: string[]
-  yMin?: number
-  yMax?: number
-  yTickCount?: number
-  legend?: boolean
-  width?: number
-  height?: number
+export interface ThresholdLine {
+  value: number
+  label?: string
 }
 
-export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
+export interface EventMarker {
+  /** Index into series data array */
+  x: number
+  label?: string
+}
+
+export interface LineChartProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
+  /** Each inner array is one series: [v0, v1, …] */
+  series: number[][]
+  /** Hex color per series. Defaults to canonical SERIES_COLORS. */
+  colors?: string[]
+  xLabels?: string[]
+  width?: number
+  height?: number
+  /** Gradient area fill beneath each line */
+  area?: boolean
+  /** Show y-axis and x-axis lines + tick labels */
+  axes?: boolean
+  /** Show horizontal grid lines */
+  grid?: boolean
+  /** Number of y-axis ticks (default 4) */
+  ticks?: number
+  threshold?: ThresholdLine
+  markers?: EventMarker[]
+  /** Feature-tier hover tooltip */
+  tooltip?: boolean
+  tone?: ChartTone
+  padding?: { top?: number; right?: number; bottom?: number; left?: number }
+}
+
+export const LineChart = React.forwardRef<SVGSVGElement, LineChartProps>(
   (
     {
       series,
-      xLabels = [],
-      yMin: customYMin,
-      yMax: customYMax,
-      yTickCount = 5,
-      legend = false,
-      width = 400,
+      colors,
+      xLabels,
+      width = 480,
       height = 200,
+      area = false,
+      axes = false,
+      grid = false,
+      ticks = 4,
+      threshold,
+      markers,
+      tooltip = false,
+      tone = 'light',
+      padding: paddingOverride,
       className = '',
+      style,
       ...rest
     },
     ref
   ) => {
-    if (!series || series.length === 0) {
-      return null
+    const T = TONE[tone]
+    const gradBaseId = React.useId()
+    const cs = colors ?? (series.length === 1 ? [SERIES_COLORS[0]] : SERIES_COLORS)
+
+    const pad = {
+      top: 8,
+      right: tooltip ? 12 : 8,
+      bottom: axes ? 22 : 6,
+      left: axes ? 30 : 6,
+      ...paddingOverride,
     }
 
-    // Find actual data min/max using loop to avoid stack overflow with large arrays
-    let dataMin = Infinity
-    let dataMax = -Infinity
+    const innerW = width - pad.left - pad.right
+    const innerH = height - pad.top - pad.bottom
 
-    series.forEach((s) => {
-      if (s.data && s.data.length > 0) {
-        for (let i = 0; i < s.data.length; i++) {
-          const value = s.data[i]
-          if (value < dataMin) dataMin = value
-          if (value > dataMax) dataMax = value
-        }
-      }
-    })
+    const flat = series.flat()
+    if (flat.length === 0) return null
 
-    // Provide default range if no data found
-    const hasData = isFinite(dataMin) && isFinite(dataMax)
-    const yMin = customYMin !== undefined ? customYMin : hasData ? Math.floor(dataMin * 10) / 10 : 0
-    const yMax = customYMax !== undefined ? customYMax : hasData ? Math.ceil(dataMax * 10) / 10 : 1
-    const yRange = yMax - yMin
+    let lo = Math.min(...flat)
+    let hi = Math.max(...flat)
+    const span = hi - lo || 1
+    lo -= span * 0.08
+    hi += span * 0.08
+    if (threshold) {
+      lo = Math.min(lo, threshold.value)
+      hi = Math.max(hi, threshold.value)
+    }
 
-    // SVG dimensions
-    const svgWidth = 100
-    const svgHeight = 100
-    const padding = { top: 5, right: 5, bottom: 20, left: 15 }
-    const chartWidth = svgWidth - padding.left - padding.right
-    const chartHeight = svgHeight - padding.top - padding.bottom
+    const n = Math.max(...series.map(s => s.length))
+    const xAt = (i: number) =>
+      pad.left + (n <= 1 ? innerW / 2 : (i / (n - 1)) * innerW)
+    const yAt = (v: number) =>
+      pad.top + innerH - ((v - lo) / (hi - lo)) * innerH
 
-    // Generate Y-axis ticks
-    const yTicks = Array.from({ length: yTickCount }, (_, i) => {
-      const divisor = yTickCount === 1 ? 1 : yTickCount - 1
-      const value = yMin + (yRange * i) / divisor
-      return {
-        value: value.toFixed(1),
-        y: padding.top + chartHeight - (i / divisor) * chartHeight,
-      }
-    })
-    // Remove duplicate tick values (when yRange = 0)
-    const uniqueYTicks = Array.from(
-      new Map(yTicks.map((tick) => [tick.value, tick])).values()
-    )
+    const yTickVals: number[] = []
+    for (let i = 0; i <= ticks; i++) yTickVals.push(lo + (i / ticks) * (hi - lo))
+
+    const [hover, setHover] = React.useState<number | null>(null)
+
+    function onMove(e: React.MouseEvent<SVGSVGElement>) {
+      const rect = e.currentTarget.getBoundingClientRect()
+      const px = ((e.clientX - rect.left) / rect.width) * width
+      const idx = Math.max(0, Math.min(n - 1, Math.round(((px - pad.left) / innerW) * (n - 1))))
+      setHover(idx)
+    }
+
+    function makeLine(pts: [number, number][]): string {
+      return pts.map(([x, y], i) => (i ? 'L' : 'M') + x.toFixed(2) + ',' + y.toFixed(2)).join(' ')
+    }
+
+    const seriesPts = series.map(s => s.map((v, i) => [xAt(i), yAt(v)] as [number, number]))
 
     return (
-      <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
-        <svg
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          width={width}
-          height={height}
-          style={{ overflow: 'visible' }}
-        >
-          {/* Y-axis grid lines and ticks */}
-          {uniqueYTicks.map((tick, idx) => (
-            <g key={`y-tick-${idx}`}>
-              {/* Grid line */}
-              <line
-                x1={padding.left}
-                y1={tick.y}
-                x2={svgWidth - padding.right}
-                y2={tick.y}
-                stroke="rgb(var(--canvas-border))"
-                strokeWidth="0.5"
-              />
-              {/* Tick label */}
-              <text
-                x={padding.left - 1}
-                y={tick.y + 1}
-                textAnchor="end"
-                fontSize="3"
-                fill="currentColor"
-                style={{ fill: 'rgb(var(--canvas-fg-2))' }}
-              >
-                {tick.value}
+      <svg
+        ref={ref}
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+        className={className}
+        style={{ display: 'block', cursor: tooltip ? 'crosshair' : 'default', ...style }}
+        onMouseMove={tooltip ? onMove : undefined}
+        onMouseLeave={tooltip ? () => setHover(null) : undefined}
+        {...rest}
+      >
+        {/* gridlines */}
+        {grid && yTickVals.map((v, i) => (
+          <line key={'g' + i}
+            x1={pad.left} x2={width - pad.right} y1={yAt(v)} y2={yAt(v)}
+            stroke={T.grid} strokeWidth="1" />
+        ))}
+
+        {/* axes */}
+        {axes && (
+          <>
+            <line x1={pad.left} x2={pad.left} y1={pad.top} y2={pad.top + innerH}
+              stroke={T.border} strokeWidth="1" />
+            <line x1={pad.left} x2={width - pad.right} y1={pad.top + innerH} y2={pad.top + innerH}
+              stroke={T.border} strokeWidth="1" />
+            {yTickVals.map((v, i) => (
+              <text key={'yt' + i} x={pad.left - 6} y={yAt(v) + 3}
+                textAnchor="end" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
+                {fmt(v)}
               </text>
-            </g>
-          ))}
-
-          {/* Y-axis line */}
-          <line
-            x1={padding.left}
-            y1={padding.top}
-            x2={padding.left}
-            y2={svgHeight - padding.bottom}
-            stroke="rgb(var(--canvas-border))"
-            strokeWidth="0.5"
-          />
-
-          {/* X-axis line */}
-          <line
-            x1={padding.left}
-            y1={svgHeight - padding.bottom}
-            x2={svgWidth - padding.right}
-            y2={svgHeight - padding.bottom}
-            stroke="rgb(var(--canvas-border))"
-            strokeWidth="0.5"
-          />
-
-          {/* Data series */}
-          {series.map((s, seriesIdx) => {
-            const color = s.color ? statusColorMap[s.color] : chartColors[seriesIdx % chartColors.length]
-            const seriesDataLength = s.data.length
-            const divisor = seriesDataLength === 1 ? 1 : seriesDataLength - 1
-            const points = s.data.map((value, idx) => {
-              const x = padding.left + (idx / divisor) * chartWidth
-              const normalizedY = yRange === 0 ? 0.5 : (value - yMin) / yRange
-              const y = svgHeight - padding.bottom - normalizedY * chartHeight
-              return { x, y, value }
-            })
-
-            const linePointsStr = points.map((p) => `${p.x},${p.y}`).join(' ')
-
-            return (
-              <g key={`series-${seriesIdx}`}>
-                {/* Filled area if enabled */}
-                {s.filled && (
-                  <polyline
-                    points={[
-                      `${padding.left},${svgHeight - padding.bottom}`,
-                      ...points.map((p) => `${p.x},${p.y}`),
-                      `${padding.left + chartWidth},${svgHeight - padding.bottom}`,
-                    ].join(' ')}
-                    fill={color}
-                    fillOpacity="0.1"
-                    stroke="none"
-                  />
-                )}
-
-                {/* Line */}
-                <polyline
-                  points={linePointsStr}
-                  fill="none"
-                  stroke={color}
-                  strokeWidth="1"
-                />
-
-                {/* Data points */}
-                {points.map((p, idx) => (
-                  <circle
-                    key={`point-${seriesIdx}-${idx}`}
-                    cx={p.x}
-                    cy={p.y}
-                    r="1"
-                    fill={color}
-                  />
-                ))}
-              </g>
-            )
-          })}
-
-          {/* X-axis labels */}
-          {xLabels.length > 0 &&
-            xLabels.map((label, idx) => {
-              const divisor = xLabels.length === 1 ? 1 : xLabels.length - 1
-              const x = padding.left + (idx / divisor) * chartWidth
-              return (
-                <text
-                  key={`x-label-${idx}`}
-                  x={x}
-                  y={svgHeight - padding.bottom + 4}
-                  textAnchor="middle"
-                  fontSize="3"
-                  fill="currentColor"
-                  style={{ fill: 'rgb(var(--canvas-fg-2))' }}
-                >
-                  {label}
-                </text>
-              )
-            })}
-        </svg>
-
-        {/* Legend */}
-        {legend && (
-          <div style={{ display: 'flex', gap: '12px', fontSize: '12px', flexWrap: 'wrap', color: 'rgb(var(--canvas-fg-2))' }}>
-            {series.map((s, idx) => (
-              <div key={`legend-${idx}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div
-                  style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '1px',
-                    backgroundColor: s.color ? statusColorMap[s.color] : chartColors[idx % chartColors.length],
-                  }}
-                />
-                <span>{s.name}</span>
-              </div>
             ))}
-          </div>
+            {xLabels && xLabels.map((lab, i) => (
+              <text key={'xt' + i} x={xAt(i)} y={pad.top + innerH + 14}
+                textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
+                {lab}
+              </text>
+            ))}
+          </>
         )}
-      </div>
+
+        {/* threshold */}
+        {threshold && (
+          <>
+            <line x1={pad.left} x2={width - pad.right}
+              y1={yAt(threshold.value)} y2={yAt(threshold.value)}
+              stroke={T.fg3} strokeWidth="1" strokeDasharray="3 3" />
+            {threshold.label && (
+              <text x={width - pad.right - 4} y={yAt(threshold.value) - 4}
+                textAnchor="end" fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={T.fg3}
+                style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                {threshold.label}
+              </text>
+            )}
+          </>
+        )}
+
+        {/* event markers */}
+        {markers && markers.map((m, i) => (
+          <g key={'mk' + i}>
+            <line x1={xAt(m.x)} x2={xAt(m.x)} y1={pad.top - 2} y2={pad.top + innerH}
+              stroke="#F59E0B" strokeWidth="1" strokeDasharray="2 2" />
+            <circle cx={xAt(m.x)} cy={pad.top + 4} r="3" fill="#F59E0B" />
+            {m.label && (
+              <text x={xAt(m.x) + 6} y={pad.top + 7}
+                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill="#B45309"
+                style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                {m.label}
+              </text>
+            )}
+          </g>
+        ))}
+
+        {/* area + line per series */}
+        {seriesPts.map((pts, si) => {
+          const c = cs[si % cs.length]
+          const line = makeLine(pts)
+          const fillPath = `${line} L${pts[pts.length - 1][0].toFixed(2)},${pad.top + innerH} L${pts[0][0].toFixed(2)},${pad.top + innerH} Z`
+          const gradId = `${gradBaseId}-lg${si}`
+          return (
+            <g key={'s' + si}>
+              {area && (
+                <>
+                  <defs>
+                    <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={c} stopOpacity="0.22" />
+                      <stop offset="100%" stopColor={c} stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d={fillPath} fill={`url(#${gradId})`} />
+                </>
+              )}
+              <path d={line} stroke={c} strokeWidth={tooltip ? 1.75 : 1.5}
+                fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </g>
+          )
+        })}
+
+        {/* tooltip */}
+        {tooltip && hover !== null && (() => {
+          const tw = 132
+          const th = 18 + series.length * 16
+          let tx = xAt(hover) + 10
+          if (tx + tw > width - 4) tx = xAt(hover) - tw - 10
+          const ty = pad.top + 4
+          return (
+            <g>
+              <line x1={xAt(hover)} x2={xAt(hover)} y1={pad.top} y2={pad.top + innerH}
+                stroke={T.fg3} strokeWidth="1" strokeDasharray="2 3" />
+              {series.map((s, si) => s[hover] != null && (
+                <circle key={'h' + si} cx={xAt(hover)} cy={yAt(s[hover])} r="3"
+                  fill={tone === 'dark' ? '#1B2949' : '#FFFFFF'}
+                  stroke={cs[si % cs.length]} strokeWidth="1.75" />
+              ))}
+              <rect x={tx} y={ty} width={tw} height={th} rx="6"
+                fill="#0F1729" fillOpacity="0.96" stroke="#243763" />
+              <text x={tx + 9} y={ty + 13}
+                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill="#A6B1BD"
+                style={{ textTransform: 'uppercase', letterSpacing: '0.10em' }}>
+                {xLabels ? xLabels[hover] : `t${hover}`}
+              </text>
+              {series.map((s, si) => (
+                <g key={'tt' + si}>
+                  <rect x={tx + 9} y={ty + 22 + si * 16} width="6" height="6" rx="1"
+                    fill={cs[si % cs.length]} />
+                  <text x={tx + 20} y={ty + 28 + si * 16}
+                    fontFamily="JetBrains Mono, monospace" fontSize="10.5" fill="#E6EDF3">
+                    {s[hover] != null ? fmt(s[hover]) : '—'}
+                  </text>
+                </g>
+              ))}
+            </g>
+          )
+        })()}
+      </svg>
     )
   }
 )
 
 LineChart.displayName = 'LineChart'
-
 export default LineChart

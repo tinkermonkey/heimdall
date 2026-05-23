@@ -69,7 +69,7 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
         )}
         {sparkData && (
           <div className="stat-tile__sparkline">
-            <Sparkline data={sparkData} width={60} height={16} color={color || 'cyan'} />
+            <Sparkline data={sparkData} width={88} height={28} color={color || 'cyan'} />
           </div>
         )}
       </div>

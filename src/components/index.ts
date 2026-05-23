@@ -67,3 +67,20 @@ export {
 } from './InspectorPanel'
 
 export { KVGrid, type KVGridProps, type KVGridRow } from './KVGrid'
+
+export { Sparkline, type SparklineColor, type SparklineProps } from './Sparkline'
+export { LineChart, type LineChartProps, type ThresholdLine, type EventMarker } from './LineChart'
+export { BarChart, type BarChartSeries, type BarChartProps } from './BarChart'
+export { BarV, type BarVProps } from './BarV'
+export { BarH, type BarHProps, type BarHItem } from './BarH'
+export { StackedBar, type StackedBarProps, type StackedBarStack } from './StackedBar'
+export { Donut, type DonutProps, type DonutSlice } from './Donut'
+export { Heatmap, type HeatmapProps } from './Heatmap'
+export {
+  StatusTimeline,
+  type StatusTimelineProps,
+  type StatusTrack,
+  type StatusSegment,
+  type SegmentKind,
+} from './StatusTimeline'
+export { PieChart, type PieChartSegment, type PieChartProps } from './PieChart'
