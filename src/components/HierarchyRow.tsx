@@ -53,7 +53,7 @@ export const HierarchyRow = React.forwardRef<HTMLDivElement, HierarchyRowProps>(
       <div
         ref={ref}
         className={classNames}
-        role="button"
+        role={onSelect ? 'button' : undefined}
         tabIndex={onSelect ? 0 : -1}
         onClick={onSelect}
         onKeyDown={handleKeyDown}
