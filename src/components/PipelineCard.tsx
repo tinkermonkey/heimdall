@@ -86,16 +86,16 @@ export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
 
             <div className="pipeline-card__head-actions">
               {onRun && pipeline.status !== 'running' && (
-                <button className="pipeline-card__action-btn" onClick={onRun} data-testid="pipeline-run-btn">
+                <button type="button" className="pipeline-card__action-btn" onClick={onRun} data-testid="pipeline-run-btn">
                   Run
                 </button>
               )}
               {onCancel && pipeline.status === 'running' && (
-                <button className="pipeline-card__action-btn pipeline-card__action-btn--cancel" onClick={onCancel} data-testid="pipeline-cancel-btn">
+                <button type="button" className="pipeline-card__action-btn pipeline-card__action-btn--cancel" onClick={onCancel} data-testid="pipeline-cancel-btn">
                   Cancel
                 </button>
               )}
-              <button className="pipeline-card__kebab-btn" data-testid="pipeline-kebab-btn">
+              <button type="button" aria-label="Pipeline options" className="pipeline-card__kebab-btn" data-testid="pipeline-kebab-btn">
                 <Icon name="moreVertical" size={16} />
               </button>
             </div>

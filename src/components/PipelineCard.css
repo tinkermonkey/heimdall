@@ -102,7 +102,7 @@
 }
 
 .pipeline-card__action-btn--cancel:hover {
-  background-color: rgba(var(--status-rose), 0.8);
+  background-color: rgb(var(--status-rose) / 0.8);
 }
 
 .pipeline-card__kebab-btn {
