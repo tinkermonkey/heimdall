@@ -1,7 +1,7 @@
 .hierarchy-row {
   display: grid;
   grid-template-columns: 220px 2.2fr;
-  gap: 16px;
+  gap: 18px;
   padding: 8px 0;
   align-items: center;
   transition: background-color 150ms ease;

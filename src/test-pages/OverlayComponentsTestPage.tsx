@@ -13,10 +13,11 @@ export default function OverlayComponentsTestPage() {
   const [workspaceSwitcherOpen, setWorkspaceSwitcherOpen] = useState(false)
 
   const recentWorkspaces: Workspace[] = [
-    { id: '1', name: 'Project Alpha', path: '/users/dev/projects/alpha' },
-    { id: '2', name: 'Project Beta', path: '/users/dev/projects/beta' },
-    { id: '3', name: 'Experimental Repo', path: '/users/dev/experiments/repo' },
+    { id: '1', name: 'molgraph-research', path: '/users/dev/molgraph-research', classCount: 20, individualCount: 267 },
+    { id: '2', name: 'climate-policy-graph', path: '/users/dev/climate-policy-graph', classCount: 14, individualCount: 1208 },
+    { id: '3', name: 'platform-eng-kb', path: '/users/dev/platform-eng-kb', classCount: 31, individualCount: 542 },
   ]
+  const currentWorkspace: Workspace = recentWorkspaces[0]
 
   return (
     <div style={{ padding: '22px 28px', backgroundColor: 'rgb(var(--canvas-bg))', minHeight: '100vh' }}>
@@ -182,6 +183,7 @@ export default function OverlayComponentsTestPage() {
       <WorkspaceSwitcherDialog
         isOpen={workspaceSwitcherOpen}
         onClose={() => setWorkspaceSwitcherOpen(false)}
+        current={currentWorkspace}
         recent={recentWorkspaces}
         onOpenFolder={() => {
           console.log('Open folder clicked')

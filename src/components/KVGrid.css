@@ -1,7 +1,7 @@
 .kv-grid {
   display: grid;
   grid-template-columns: 130px 1fr;
-  gap: 8px 12px;
+  gap: 8px 14px;
   font-size: 13px;
 }
 

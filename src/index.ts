@@ -59,6 +59,8 @@ export {
   InspectorPanel,
   type InspectorPanelProps,
   type InspectorPanelSectionProps,
+  type InspectorPanelPropertySectionProps,
+  type PropertyRow,
 } from './components/InspectorPanel'
 export { KVGrid, type KVGridProps, type KVGridRow } from './components/KVGrid'
 export { Sparkline, type SparklineColor, type SparklineProps } from './components/Sparkline'

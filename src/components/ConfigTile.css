@@ -79,7 +79,6 @@
   font-family: var(--font-mono, monospace);
   font-size: 11px;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: rgb(var(--canvas-fg-3));
   font-weight: 500;
   word-break: break-word;

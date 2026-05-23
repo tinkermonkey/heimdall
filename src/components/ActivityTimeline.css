@@ -18,7 +18,7 @@
 .activity-timeline__event {
   display: flex;
   gap: 12px;
-  padding: 12px 0;
+  padding: 11px 16px;
   border-bottom: 1px solid rgb(var(--canvas-border));
 }
 
@@ -64,8 +64,8 @@
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(var(--canvas-fg-2));
-  background: rgb(var(--canvas-bg-overlay));
+  color: rgb(var(--canvas-bg));
+  background: rgb(var(--canvas-fg-3));
   padding: 2px 6px;
   border-radius: var(--radius-sm);
   flex-shrink: 0;
@@ -85,7 +85,7 @@
 }
 
 .activity-timeline__timestamp {
-  font-size: 11px;
+  font-size: 10.5px;
   color: rgb(var(--canvas-fg-3));
   margin-top: 4px;
 }

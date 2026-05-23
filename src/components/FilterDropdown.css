@@ -12,7 +12,7 @@
   align-items: center;
   gap: 8px;
   height: 32px;
-  padding: 0 10px;
+  padding: 7px 12px;
   border-radius: var(--radius-sm);
   background: rgb(var(--canvas-bg-2));
   color: rgb(var(--canvas-fg-1));
@@ -97,7 +97,7 @@
   background: rgb(var(--canvas-surface));
   border: 1px solid rgb(var(--canvas-border));
   border-radius: var(--radius-sm);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   z-index: 1000;
 }
 

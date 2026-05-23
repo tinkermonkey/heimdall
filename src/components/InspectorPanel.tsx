@@ -44,6 +44,63 @@ const InspectorPanelSection = React.forwardRef<HTMLDivElement, InspectorPanelSec
 
 InspectorPanelSection.displayName = 'InspectorPanel.Section'
 
+export interface PropertyRow {
+  key: string
+  value: string
+  usageCount?: number
+}
+
+export interface InspectorPanelPropertySectionProps extends React.HTMLAttributes<HTMLDivElement> {
+  title: string
+  count?: number
+  actionIcon?: ReactNode
+  onAction?: () => void
+  rows: PropertyRow[]
+}
+
+const InspectorPanelPropertySection = React.forwardRef<HTMLDivElement, InspectorPanelPropertySectionProps>(
+  ({ title, count, actionIcon, onAction, rows, className = '', ...props }, ref) => {
+    useInspectorPanelContext()
+
+    const classNames = ['inspector-panel__property-section', className].filter(Boolean).join(' ')
+
+    return (
+      <div ref={ref} className={classNames} {...props}>
+        <div className="inspector-panel__property-section-header">
+          <span className="inspector-panel__property-section-title">{title}</span>
+          {count !== undefined && (
+            <span className="inspector-panel__property-section-count">{count}</span>
+          )}
+          {onAction && (
+            <button
+              className="inspector-panel__property-section-action"
+              onClick={onAction}
+              type="button"
+            >
+              {actionIcon}
+            </button>
+          )}
+        </div>
+        {rows.length > 0 && (
+          <div className="inspector-panel__property-rows">
+            {rows.map((row, i) => (
+              <div key={i} className="inspector-panel__property-row">
+                <span className="inspector-panel__property-key">{row.key}</span>
+                <span className="inspector-panel__property-value">{row.value}</span>
+                {row.usageCount !== undefined && (
+                  <span className="inspector-panel__property-usage">used {row.usageCount}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+)
+
+InspectorPanelPropertySection.displayName = 'InspectorPanel.PropertySection'
+
 export interface InspectorPanelProps extends React.HTMLAttributes<HTMLDivElement> {
   eyebrow: string
   title: string
@@ -85,6 +142,7 @@ InspectorPanelComponent.displayName = 'InspectorPanel'
 
 export const InspectorPanel = Object.assign(InspectorPanelComponent, {
   Section: InspectorPanelSection,
+  PropertySection: InspectorPanelPropertySection,
 })
 
 export default InspectorPanel
