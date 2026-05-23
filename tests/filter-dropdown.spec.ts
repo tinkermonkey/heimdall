@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
 test.describe('FilterDropdown Component', () => {
   test.beforeEach(async ({ page }) => {
@@ -89,6 +89,34 @@ test.describe('FilterDropdown Component', () => {
     const secondPanel = panels.nth(1)
     await expect(secondPanel).toHaveScreenshot('filter-dropdown-radio.png', {
       maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test.describe('dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('visual snapshot of checkbox mode - dark', async ({ page }) => {
+      const trigger = page.locator('.filter-dropdown__trigger').first()
+      await trigger.click()
+
+      const panel = page.locator('.filter-dropdown__panel').first()
+      await expect(panel).toHaveScreenshot('filter-dropdown-checkbox-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('visual snapshot of radio mode - dark', async ({ page }) => {
+      const triggers = page.locator('.filter-dropdown__trigger')
+      const secondTrigger = triggers.nth(1)
+      await secondTrigger.click()
+
+      const panels = page.locator('.filter-dropdown__panel')
+      const secondPanel = panels.nth(1)
+      await expect(secondPanel).toHaveScreenshot('filter-dropdown-radio-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
     })
   })
 

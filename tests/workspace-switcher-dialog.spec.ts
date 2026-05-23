@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
 test.describe('WorkspaceSwitcherDialog', () => {
   test.beforeEach(async ({ page }) => {
@@ -147,6 +147,23 @@ test.describe('WorkspaceSwitcherDialog', () => {
     // Take snapshot of the entire dialog with all sections visible
     await expect(modal).toHaveScreenshot('workspace-switcher-dialog.png', {
       maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test.describe('dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('visual snapshot of workspace switcher dialog - dark', async ({ page }) => {
+      await page.click('button:has-text("Open Workspace Switcher")')
+
+      const modal = page.locator('[role="dialog"]').first()
+      await expect(modal).toBeVisible()
+
+      await expect(modal).toHaveScreenshot('workspace-switcher-dialog-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
     })
   })
 })

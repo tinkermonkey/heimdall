@@ -48,7 +48,7 @@ for (const fixture of FIXTURES) {
 
     test(`${fixture.id} — react implementation`, async ({ page }) => {
       await page.setViewportSize(VIEWPORT)
-      await setupHarness(page, fixture.react.exampleId)
+      await setupHarness(page, fixture.react.exampleId, { darkCanvas: fixture.theme === 'dark' })
 
       if (fixture.react.setup) {
         await fixture.react.setup(page)

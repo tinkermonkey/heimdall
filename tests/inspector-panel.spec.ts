@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
 test.describe('InspectorPanel & KVGrid Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -122,6 +122,19 @@ test.describe('InspectorPanel & KVGrid Components', () => {
     // Get full page screenshot
     await expect(page).toHaveScreenshot('inspector-panel-full-page.png', {
       maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test.describe('dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('InspectorPanel full-page dark snapshot', async ({ page }) => {
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('inspector-panel-full-page-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
     })
   })
 

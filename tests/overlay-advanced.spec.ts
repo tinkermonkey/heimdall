@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
 test.describe('Advanced Overlay Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -417,6 +417,48 @@ test.describe('Advanced Overlay Components', () => {
 
       // Should be one or the other (or default to horizontal)
       expect(isHorizontal || isVertical).toBe(true)
+    })
+  })
+
+  test.describe('dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('command palette dark snapshot', async ({ page }) => {
+      const paletteTrigger = page.locator('button:has-text("Open Palette")').first()
+      if (await paletteTrigger.count() > 0) {
+        await paletteTrigger.click()
+      } else {
+        await page.keyboard.press('Control+K')
+      }
+      const palette = page.locator('.command-palette').first()
+      await expect(palette).toBeVisible()
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('command-palette-open-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('drawer dark snapshot', async ({ page }) => {
+      const drawerTrigger = page.locator('button:has-text("Open Drawer")').first()
+      await expect(drawerTrigger).toBeVisible()
+      await drawerTrigger.click()
+      const drawer = page.locator('.drawer').first()
+      await expect(drawer).toBeVisible()
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('drawer-open-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('split pane dark snapshot', async ({ page }) => {
+      const firstSection = page.locator('.split-pane__first').first()
+      await expect(firstSection).toBeVisible()
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('split-pane-default-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
     })
   })
 })

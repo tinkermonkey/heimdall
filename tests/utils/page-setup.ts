@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test'
 import path from 'path'
-import { loadSelfHostedFonts, assertFontsLoaded, freezeAnimations } from './test-helpers'
+import { loadSelfHostedFonts, assertFontsLoaded, freezeAnimations, applyDarkCanvasMode } from './test-helpers'
 
 const HARNESS_BASE = 'http://localhost:5173'
 
@@ -13,11 +13,18 @@ const DESIGN_REF_DIR = path.resolve(new URL('.', import.meta.url).pathname, '../
  * Injects self-hosted fonts, verifies they loaded, and freezes animations.
  * Used by both regression tests and design-comparison tests.
  */
-export async function setupHarness(page: Page, exampleId: string): Promise<void> {
+export async function setupHarness(
+  page: Page,
+  exampleId: string,
+  options: { darkCanvas?: boolean } = {}
+): Promise<void> {
   await page.goto(`${HARNESS_BASE}/?example=${exampleId}`)
   await page.waitForLoadState('networkidle')
   await loadSelfHostedFonts(page)
   await assertFontsLoaded(page)
+  if (options.darkCanvas) {
+    await applyDarkCanvasMode(page)
+  }
   await freezeAnimations(page)
 }
 

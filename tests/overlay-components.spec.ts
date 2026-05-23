@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
 test.describe('Overlay Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -409,6 +409,57 @@ test.describe('Overlay Components', () => {
           }
         }
       }
+    })
+  })
+
+  test.describe('Modal dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('modal dark snapshot', async ({ page }) => {
+      const modalTrigger = page.locator('button:has-text("Open Modal")').first()
+      await modalTrigger.click()
+      const modal = page.locator('[role="dialog"]').first()
+      await expect(modal).toBeVisible()
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('modal-open-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+  })
+
+  test.describe('ConfirmDialog dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('confirm dialog dark snapshot', async ({ page }) => {
+      const confirmTrigger = page.locator('button:has-text("Open Confirm")').first()
+      await confirmTrigger.click()
+      const dialog = page.locator('[role="dialog"]').first()
+      await expect(dialog).toBeVisible()
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('confirm-dialog-open-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+  })
+
+  test.describe('Toast dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('toast dark snapshot', async ({ page }) => {
+      const toastTrigger = page.locator('button:has-text("Show Toast")').first()
+      await toastTrigger.click()
+      const toast = page.locator('[role="status"]').first()
+      await expect(toast).toBeVisible()
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('toast-open-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
     })
   })
 })

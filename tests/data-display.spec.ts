@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
 test.describe('Data Display Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -296,6 +296,43 @@ test.describe('Data Display Components', () => {
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('hierarchy-tree.png', {
       maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test.describe('dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('Table dark snapshot', async ({ page }) => {
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('table-full-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('StatTile dark snapshot', async ({ page }) => {
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('stat-tiles-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('StatTile extended dark snapshot', async ({ page }) => {
+      await freezeAnimations(page)
+      const statGrid = page.locator('[class*="stat-grid"]')
+      await expect(statGrid).toHaveScreenshot('stat-tiles-extended-dark.png')
+    })
+
+    test('HierarchyTree dark snapshot', async ({ page }) => {
+      await page.goto('http://localhost:5173/?example=hierarchy-tree')
+      await page.waitForLoadState('networkidle')
+      await loadSelfHostedFonts(page)
+      await applyDarkCanvasMode(page)
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('hierarchy-tree-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
     })
   })
 

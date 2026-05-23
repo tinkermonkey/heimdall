@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnimations } from './utils/test-helpers'
 
 test.describe('Primitive Components', () => {
   test.beforeEach(async ({ page }) => {
@@ -213,6 +213,23 @@ test.describe('Primitive Components', () => {
   test('SegmentedControl component visual snapshot', async ({ page }) => {
     const segmentedControl = page.locator('[class*="segmented-control"]').first()
     await expect(segmentedControl).toHaveScreenshot('segmented-control.png')
+  })
+
+  test.describe('dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+      await freezeAnimations(page)
+    })
+
+    test('VersionPill dark snapshot', async ({ page }) => {
+      const versionPill = page.locator('[class*="version-pill"]').first()
+      await expect(versionPill).toHaveScreenshot('version-pill-dark.png')
+    })
+
+    test('SegmentedControl dark snapshot', async ({ page }) => {
+      const segmentedControl = page.locator('[class*="segmented-control"]').first()
+      await expect(segmentedControl).toHaveScreenshot('segmented-control-dark.png')
+    })
   })
 
   test('SegmentedControl component - ARIA accessibility attributes', async ({ page }) => {

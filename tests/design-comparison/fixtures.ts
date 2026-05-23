@@ -9,6 +9,8 @@ export interface ComparisonFixture {
   id: string
   /** Human-readable name used in test.describe labels */
   label: string
+  /** Canvas theme used by the design reference. React harness is configured to match. */
+  theme: 'light' | 'dark'
   design: {
     /** Filename within design-reference/preview/ */
     file: string
@@ -32,6 +34,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'quick-access-tile',
     label: 'QuickAccessTile',
+    theme: 'light',
     design: { file: 'component-quick-access-tile.html' },
     react: {
       exampleId: 'page-patterns',
@@ -41,6 +44,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'inspector-panel',
     label: 'InspectorPanel',
+    theme: 'light',
     design: { file: 'component-inspector-panel.html' },
     react: {
       exampleId: 'inspector-panel',
@@ -50,6 +54,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'kv-grid',
     label: 'KVGrid',
+    theme: 'light',
     design: { file: 'component-kv-grid.html' },
     react: {
       exampleId: 'inspector-panel',
@@ -59,6 +64,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'workspace-switcher',
     label: 'WorkspaceSwitcherDialog',
+    theme: 'dark',
     // Design reference shows the dialog on a dark shell card; clip to the
     // inner dialog box (first child of .card) to match what .modal captures.
     design: { file: 'component-workspace-switcher.html', selector: '.card > div' },
@@ -74,6 +80,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'filter-dropdown',
     label: 'FilterDropdown',
+    theme: 'light',
     design: { file: 'component-filter-dropdown.html' },
     react: {
       exampleId: 'filter-dropdown',
@@ -83,6 +90,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'version-pill',
     label: 'VersionPill',
+    theme: 'light',
     design: { file: 'component-version-pill.html' },
     react: {
       exampleId: 'primitives',
@@ -92,6 +100,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'activity-item',
     label: 'ActivityTimeline',
+    theme: 'light',
     design: { file: 'component-activity-item.html' },
     react: {
       exampleId: 'page-patterns',
@@ -101,6 +110,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'config-tile',
     label: 'ConfigTile',
+    theme: 'light',
     design: { file: 'component-config-tile.html' },
     react: {
       exampleId: 'page-patterns',
@@ -110,6 +120,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'hierarchy-row',
     label: 'HierarchyRow',
+    theme: 'light',
     design: { file: 'component-hierarchy-row.html' },
     react: {
       exampleId: 'hierarchy-tree',
@@ -119,6 +130,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'statusbar',
     label: 'Statusbar',
+    theme: 'dark',
     design: { file: 'component-statusbar.html' },
     react: {
       exampleId: 'shell-framework',
@@ -128,6 +140,7 @@ export const FIXTURES: ComparisonFixture[] = [
   {
     id: 'tabs',
     label: 'TabBar',
+    theme: 'light',
     design: { file: 'component-tabs.html' },
     react: {
       exampleId: 'shell-framework',

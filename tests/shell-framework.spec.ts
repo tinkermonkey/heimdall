@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
 test.describe('Shell Framework Components', () => {
   test.describe('Topbar and TabBar Components - Visual Regression', () => {
@@ -129,6 +129,40 @@ test.describe('Shell Framework Components', () => {
     test('Statusbar structured items snapshot', async ({ page }) => {
       const statusbar = page.locator('.statusbar').first()
       await expect(statusbar).toHaveScreenshot('statusbar-structured-items.png')
+    })
+
+    test.describe('dark canvas', () => {
+      test.beforeEach(async ({ page }) => {
+        await applyDarkCanvasMode(page)
+      })
+
+      test('Topbar and TabBar dark snapshot', async ({ page }) => {
+        await freezeAnimations(page)
+        await expect(page).toHaveScreenshot('topbar-tabbar-full-dark.png', {
+          maxDiffPixelRatio: 0.01,
+        })
+      })
+
+      test('Topbar with breadcrumbs dark snapshot', async ({ page }) => {
+        const topbar = page.locator('[class*="topbar"]').first()
+        await freezeAnimations(page)
+        await expect(topbar).toHaveScreenshot('topbar-breadcrumbs-dark.png', {
+          maxDiffPixelRatio: 0.01,
+        })
+      })
+
+      test('TabBar dark snapshot', async ({ page }) => {
+        const tabBar = page.locator('[class*="tab-bar"]').first()
+        await freezeAnimations(page)
+        await expect(tabBar).toHaveScreenshot('tabbar-variants-dark.png', {
+          maxDiffPixelRatio: 0.01,
+        })
+      })
+
+      test('Statusbar dark snapshot', async ({ page }) => {
+        const statusbar = page.locator('.statusbar').first()
+        await expect(statusbar).toHaveScreenshot('statusbar-dark.png')
+      })
     })
   })
 })
