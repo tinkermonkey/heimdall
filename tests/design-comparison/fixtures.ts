@@ -174,4 +174,86 @@ export const FIXTURES: ComparisonFixture[] = [
       selector: '[data-testid="tab-bar-card"]',
     },
   },
+
+  // ── Chart components ────────────────────────────────────────────────────────
+  {
+    id: 'chart-sparkline',
+    label: 'Chart · Sparkline',
+    theme: 'light',
+    design: { file: 'component-chart-sparkline.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="sparkline-emerald"]',
+    },
+  },
+  {
+    id: 'chart-linechart',
+    label: 'Chart · LineChart standard',
+    theme: 'light',
+    design: { file: 'component-chart-linechart.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="linechart-standard"]',
+    },
+  },
+  {
+    id: 'chart-barv',
+    label: 'Chart · BarV standard',
+    theme: 'light',
+    design: { file: 'component-chart-barv.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="barv-standard"]',
+    },
+  },
+  {
+    id: 'chart-barh',
+    label: 'Chart · BarH standard',
+    theme: 'light',
+    design: { file: 'component-chart-barh.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="barh-standard"]',
+    },
+  },
+  {
+    id: 'chart-stackedbar',
+    label: 'Chart · StackedBar standard',
+    theme: 'light',
+    design: { file: 'component-chart-stackedbar.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="stackedbar-standard"]',
+    },
+  },
+  {
+    id: 'chart-donut',
+    label: 'Chart · Donut standard',
+    theme: 'light',
+    design: { file: 'component-chart-donut.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="donut-standard"]',
+    },
+  },
+  {
+    id: 'chart-heatmap',
+    label: 'Chart · Heatmap standard',
+    theme: 'light',
+    design: { file: 'component-chart-heatmap.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="heatmap-standard"]',
+    },
+  },
+  {
+    id: 'chart-timeline',
+    label: 'Chart · StatusTimeline standard',
+    theme: 'light',
+    design: { file: 'component-chart-timeline.html', selector: '.card svg' },
+    react: {
+      exampleId: 'charts',
+      selector: 'svg[data-testid="timeline-standard"]',
+    },
+  },
 ]

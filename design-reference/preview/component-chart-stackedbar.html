@@ -1,0 +1,59 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css"></head>
+<body><div class="card" id="root"></div>
+<script>
+const SERIES = ['#22D3EE','#10B981','#F59E0B','#818CF8','#8B5CF6','#F43F5E']
+const stacks = [
+  {label:'Mon', parts:[42,28,14,8]},
+  {label:'Tue', parts:[48,31,12,11]},
+  {label:'Wed', parts:[38,26,18,9]},
+  {label:'Thu', parts:[52,34,9,14]},
+  {label:'Fri', parts:[61,30,11,7]},
+  {label:'Sat', parts:[44,24,8,5]},
+  {label:'Sun', parts:[31,22,6,4]},
+]
+const W = 320, H = 140, ticks = 3
+const pad = {top:8, right:8, bottom:22, left:30}
+const innerW = W - pad.left - pad.right
+const innerH = H - pad.top - pad.bottom
+const totals = stacks.map(s=>s.parts.reduce((a,b)=>a+b,0))
+const hi = Math.max(...totals)
+const n = stacks.length
+const gap = Math.max(2, innerW/n*0.22)
+const bw = (innerW - gap*(n-1))/n
+const yAt = v => pad.top + innerH - (v/hi)*innerH
+const tickVals = Array.from({length:ticks+1},(_,i)=>(i/ticks)*hi)
+
+function fmt(n){return Math.abs(n)>=1000?(n/1000).toFixed(1)+'k':Number.isInteger(n)?String(n):n.toFixed(1)}
+const T = {fg3:'#64748B', border:'#E5E9EE', grid:'#EEF1F4'}
+
+const gridLines = tickVals.map(v=>
+  `<line x1="${pad.left}" x2="${W-pad.right}" y1="${yAt(v).toFixed(2)}" y2="${yAt(v).toFixed(2)}" stroke="${T.grid}" stroke-width="1"/>`
+).join('')
+
+const axisLines = `
+  <line x1="${pad.left}" x2="${pad.left}" y1="${pad.top}" y2="${pad.top+innerH}" stroke="${T.border}" stroke-width="1"/>
+  <line x1="${pad.left}" x2="${W-pad.right}" y1="${pad.top+innerH}" y2="${pad.top+innerH}" stroke="${T.border}" stroke-width="1"/>
+  ${tickVals.map(v=>`<text x="${pad.left-6}" y="${(yAt(v)+3).toFixed(2)}" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="${T.fg3}">${fmt(v)}</text>`).join('')}
+`
+
+const bars = stacks.map((s,si)=>{
+  const x = pad.left + si*(bw+gap)
+  const total = totals[si] || 1
+  let acc = 0
+  const rects = s.parts.map((p,pi)=>{
+    const ph = (p/hi)*innerH
+    const y = pad.top + innerH - acc - ph
+    acc += ph
+    return `<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${bw.toFixed(2)}" height="${ph.toFixed(2)}" fill="${SERIES[pi%SERIES.length]}"/>`
+  }).join('')
+  const label = `<text x="${(x+bw/2).toFixed(2)}" y="${pad.top+innerH+14}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="${T.fg3}">${s.label}</text>`
+  return rects + label
+}).join('')
+
+document.getElementById('root').innerHTML = `
+<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block">
+  ${gridLines}${axisLines}${bars}
+</svg>`
+</script>
+</body></html>
