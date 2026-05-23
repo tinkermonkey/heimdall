@@ -1,9 +1,9 @@
 import React from 'react'
-import { Icon } from './Icon'
+import { QuickAccessTile } from './QuickAccessTile'
 import type { IconName } from './Icon'
 import './QuickAccessGrid.css'
 
-export interface QuickAccessTile {
+export interface QuickAccessGridItem {
   id: string
   icon: IconName
   title: string
@@ -11,10 +11,13 @@ export interface QuickAccessTile {
 }
 
 export interface QuickAccessGridProps extends React.HTMLAttributes<HTMLDivElement> {
-  tiles: QuickAccessTile[]
+  tiles: QuickAccessGridItem[]
   onAction?: (tileId: string) => void
   columns?: number
 }
+
+// Backward compatibility export
+export type QuickAccessTile = QuickAccessGridItem
 
 export const QuickAccessGrid = React.forwardRef<HTMLDivElement, QuickAccessGridProps>(
   ({ tiles, onAction, columns = 4, className = '', ...props }, ref) => {
@@ -29,18 +32,14 @@ export const QuickAccessGrid = React.forwardRef<HTMLDivElement, QuickAccessGridP
         {...props}
       >
         {tiles.map(tile => (
-          <button
+          <QuickAccessTile
             key={tile.id}
-            className="quick-access-tile"
+            icon={tile.icon}
+            title={tile.title}
+            description={tile.description}
             onClick={() => onAction?.(tile.id)}
             data-testid={`quick-access-tile-${tile.id}`}
-          >
-            <div className="quick-access-tile__icon">
-              <Icon name={tile.icon} size={24} />
-            </div>
-            <div className="quick-access-tile__title">{tile.title}</div>
-            <div className="quick-access-tile__description">{tile.description}</div>
-          </button>
+          />
         ))}
       </div>
     )

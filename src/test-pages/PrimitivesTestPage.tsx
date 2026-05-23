@@ -9,9 +9,12 @@ import { Select } from '../components/Select'
 import { TriState } from '../components/TriState'
 import { Field } from '../components/Field'
 import { Icon } from '../components/Icon'
+import { VersionPill } from '../components/VersionPill'
+import { SegmentedControl } from '../components/SegmentedControl'
 
 export default function PrimitivesTestPage() {
   const [selectedCheckbox, setSelectedCheckbox] = useState(false)
+  const [segmentedValue, setSegmentedValue] = useState<string | number>('all')
 
   return (
     <div style={{ padding: '22px 28px', backgroundColor: 'rgb(var(--canvas-bg))', minHeight: '100vh' }}>
@@ -240,6 +243,60 @@ export default function PrimitivesTestPage() {
           <TriState checked={true} onChange={() => {}} />
           <TriState checked={selectedCheckbox} onChange={(e) => setSelectedCheckbox(e.target.checked)} indeterminate />
           <TriState checked={false} onChange={() => {}} disabled />
+        </div>
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          VersionPill Component
+        </div>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+          <VersionPill>v1.0.0</VersionPill>
+          <VersionPill>v9</VersionPill>
+          <VersionPill>v3.2.1-beta</VersionPill>
+        </div>
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          SegmentedControl Component
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <SegmentedControl
+            value={segmentedValue}
+            onChange={setSegmentedValue}
+            options={[
+              { value: 'all', label: 'All' },
+              { value: 'active', label: 'Active' },
+              { value: 'archived', label: 'Archived' },
+            ]}
+          />
+          <SegmentedControl
+            value={segmentedValue}
+            onChange={setSegmentedValue}
+            options={[
+              { value: 'today', label: 'Today' },
+              { value: 'week', label: 'This Week' },
+            ]}
+          />
         </div>
       </section>
 

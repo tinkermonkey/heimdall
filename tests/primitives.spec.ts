@@ -181,4 +181,64 @@ test.describe('Primitive Components', () => {
     // Value may have changed (depends on implementation)
     expect(newValue).toBeTruthy()
   })
+
+  test('VersionPill component renders', async ({ page }) => {
+    // Verify VersionPill elements exist
+    const versionPills = page.locator('[class*="version-pill"]')
+    const count = await versionPills.count()
+    expect(count).toBeGreaterThan(0)
+
+    // Verify version text is present
+    const pillText = await versionPills.first().textContent()
+    expect(pillText).toMatch(/v\d+/i)
+  })
+
+  test('VersionPill component visual snapshot', async ({ page }) => {
+    const versionPill = page.locator('[class*="version-pill"]').first()
+    await expect(versionPill).toHaveScreenshot('version-pill.png')
+  })
+
+  test('SegmentedControl component renders and is interactive', async ({ page }) => {
+    // Find SegmentedControl elements
+    const segmentedControls = page.locator('[class*="segmented-control"]')
+    const count = await segmentedControls.count()
+    expect(count).toBeGreaterThan(0)
+
+    // Verify it has options/buttons
+    const options = page.locator('[class*="segmented-control"] button, [class*="segmented-control"] [role="button"]')
+    const optionCount = await options.count()
+    expect(optionCount).toBeGreaterThan(0)
+  })
+
+  test('SegmentedControl component visual snapshot', async ({ page }) => {
+    const segmentedControl = page.locator('[class*="segmented-control"]').first()
+    await expect(segmentedControl).toHaveScreenshot('segmented-control.png')
+  })
+
+  test('SegmentedControl component - ARIA accessibility attributes', async ({ page }) => {
+    const segmentedControl = page.locator('[class*="segmented-control"]').first()
+
+    // Verify the container has role="radiogroup"
+    const role = await segmentedControl.getAttribute('role')
+    expect(role).toBe('radiogroup')
+
+    // Verify each button has role="radio" and aria-checked attribute
+    const buttons = segmentedControl.locator('button')
+    const buttonCount = await buttons.count()
+    expect(buttonCount).toBeGreaterThan(0)
+
+    for (let i = 0; i < buttonCount; i++) {
+      const button = buttons.nth(i)
+      const buttonRole = await button.getAttribute('role')
+      const ariaChecked = await button.getAttribute('aria-checked')
+
+      expect(buttonRole).toBe('radio')
+      expect(ariaChecked).toMatch(/^(true|false)$/)
+    }
+
+    // Verify that exactly one button has aria-checked="true"
+    const checkedButtons = segmentedControl.locator('button[aria-checked="true"]')
+    const checkedCount = await checkedButtons.count()
+    expect(checkedCount).toBe(1)
+  })
 })

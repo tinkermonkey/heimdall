@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { ShellLayout, Icon, type IconName } from '@tinkermonkey/heimdall-ui'
 
 import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase } from './showcases/FoundationShowcase'
-import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase } from './showcases/PrimitivesShowcase'
+import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase, VersionPillShowcase, SegmentedControlShowcase } from './showcases/PrimitivesShowcase'
 import { TextInputShowcase, TextAreaShowcase, NumberInputShowcase, SelectShowcase, TriStateShowcase, FieldShowcase } from './showcases/InputsShowcase'
-import { StatTileShowcase, StatGridShowcase, TableShowcase } from './showcases/DataDisplayShowcase'
+import { StatTileShowcase, StatGridShowcase, TableShowcase, KVGridShowcase } from './showcases/DataDisplayShowcase'
 import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from './showcases/NavigationShowcase'
 import { AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
@@ -14,16 +14,26 @@ import { PageHeaderShowcase, FilterBarShowcase, ActivityTimelineShowcase, AlertS
 import { ChatMessageShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
 import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, RelationshipBuilderShowcase, RowMenuShowcase, PipelineCardShowcase, FormCalloutShowcase } from './showcases/FormsComplexShowcase'
 import { GraphCanvasShowcase, GraphInspectorShowcase, TopologyNodeShowcase } from './showcases/GraphShowcase'
+import { FilterDropdownShowcase } from './showcases/FilterDropdownShowcase'
+import { InspectorPanelShowcase } from './showcases/InspectorPanelShowcase'
+import { HierarchyTreeShowcase } from './showcases/HierarchyTreeShowcase'
+import { QuickAccessTileShowcase } from './showcases/QuickAccessTileShowcase'
+import { ConfigTileShowcase } from './showcases/ConfigTileShowcase'
+import { WorkspaceSwitcherDialogShowcase } from './showcases/WorkspaceSwitcherDialogShowcase'
 import PrimitivesTestPage from '@/test-pages/PrimitivesTestPage'
 import DataDisplayTestPage from '@/test-pages/DataDisplayTestPage'
+import HierarchyComponentTestPage from '@/test-pages/HierarchyComponentTestPage'
 import OverlayComponentsTestPage from '@/test-pages/OverlayComponentsTestPage'
 import AdvancedOverlayComponentsTestPage from '@/test-pages/AdvancedOverlayComponentsTestPage'
 import FoundationTestPage from '@/test-pages/FoundationTestPage'
 import ShellFrameworkTestPage from '@/test-pages/ShellFrameworkTestPage'
 import NavigationComponentTestPage from '@/test-pages/NavigationComponentTestPage'
 import ChartsTestPage from '@/test-pages/ChartsTestPage'
-import ContextStudioRebuilt from '@/examples/ContextStudioRebuilt'
-import HomelabDashboardRebuilt from '@/examples/HomelabDashboardRebuilt'
+import InspectorPanelTestPage from '@/test-pages/InspectorPanelTestPage'
+import PagePatternsShowcase from '@/test-pages/PagePatternsShowcase'
+import ChatShowcase from '@/test-pages/ChatShowcase'
+import FormsShowcase from '@/test-pages/FormsShowcase'
+import GraphShowcase from '@/test-pages/GraphShowcase'
 
 type NavSection = {
   title: string
@@ -42,6 +52,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   button: ButtonShowcase,
   chip: ChipShowcase,
   badge: BadgeShowcase,
+  'version-pill': VersionPillShowcase,
+  'segmented-control': SegmentedControlShowcase,
   primitives: PrimitivesTestPage,
   // Inputs
   'text-input': TextInputShowcase,
@@ -50,10 +62,15 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   select: SelectShowcase,
   'tri-state': TriStateShowcase,
   field: FieldShowcase,
+  'filter-dropdown': FilterDropdownShowcase,
   // Data Display
   'stat-tile': StatTileShowcase,
   'stat-grid': StatGridShowcase,
   table: TableShowcase,
+  'kv-grid': KVGridShowcase,
+  'inspector-panel': InspectorPanelShowcase,
+  'inspector-panel-test': InspectorPanelTestPage,
+  'hierarchy-tree': HierarchyComponentTestPage,
   'data-display': DataDisplayTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
@@ -71,6 +88,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'confirm-dialog': ConfirmDialogShowcase,
   toast: ToastShowcase,
   'command-palette': CommandPaletteShowcase,
+  'workspace-switcher-dialog': WorkspaceSwitcherDialogShowcase,
   overlays: OverlayComponentsTestPage,
   'advanced-overlays': AdvancedOverlayComponentsTestPage,
   // Layout
@@ -78,40 +96,44 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   drawer: DrawerShowcase,
   'split-pane': SplitPaneShowcase,
   // Charts
-  charts: ChartsOverviewShowcase,
+  'charts-overview': ChartsOverviewShowcase,
   sparkline: SparklineShowcase,
   'line-chart': LineChartShowcase,
   'bar-chart': BarChartShowcase,
   'pie-chart': PieChartShowcase,
   'progress-bar': ProgressBarShowcase,
   'metric-row': MetricRowShowcase,
+  charts: ChartsTestPage,
   // Page Patterns
   'page-header': PageHeaderShowcase,
   'filter-bar': FilterBarShowcase,
   'activity-timeline': ActivityTimelineShowcase,
   'alert-strip': AlertStripShowcase,
   'quick-access-grid': QuickAccessGridShowcase,
+  'quick-access-tile': QuickAccessTileShowcase,
+  'config-tile': ConfigTileShowcase,
+  'pipeline-card': PipelineCardShowcase,
+  'page-patterns': PagePatternsShowcase,
   // Chat
   'chat-message': ChatMessageShowcase,
   'chat-divider': ChatDividerShowcase,
   'chat-suggestions': ChatSuggestionsShowcase,
   'chat-composer': ChatComposerShowcase,
   'chat-container': ChatContainerShowcase,
+  'chat': ChatShowcase,
   // Complex Inputs
   'entity-picker': EntityPickerShowcase,
   'key-value-editor': KeyValueEditorShowcase,
   'ordered-list': OrderedListShowcase,
   'relationship-builder': RelationshipBuilderShowcase,
   'row-menu': RowMenuShowcase,
-  'pipeline-card': PipelineCardShowcase,
   'form-callout': FormCalloutShowcase,
+  forms: FormsShowcase,
   // Graph
   'graph-canvas': GraphCanvasShowcase,
   'graph-inspector': GraphInspectorShowcase,
   'topology-node': TopologyNodeShowcase,
-  // Rebuilt Examples
-  rebuilt: ContextStudioRebuilt,
-  homelab: HomelabDashboardRebuilt,
+  graph: GraphShowcase,
 }
 
 const NAV_SECTIONS: NavSection[] = [
@@ -131,6 +153,8 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'button', label: 'Button', icon: 'component' },
       { id: 'chip', label: 'Chip', icon: 'filter' },
       { id: 'badge', label: 'Badge', icon: 'alert' },
+      { id: 'version-pill', label: 'VersionPill', icon: 'palette' },
+      { id: 'segmented-control', label: 'SegmentedControl', icon: 'check' },
     ],
   },
   {
@@ -142,6 +166,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'select', label: 'Select', icon: 'chevronDown' },
       { id: 'tri-state', label: 'TriState', icon: 'check' },
       { id: 'field', label: 'Field', icon: 'layout' },
+      { id: 'filter-dropdown', label: 'FilterDropdown', icon: 'filter' },
     ],
   },
   {
@@ -150,6 +175,9 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'stat-tile', label: 'StatTile', icon: 'dashboard' },
       { id: 'stat-grid', label: 'StatGrid', icon: 'table' },
       { id: 'table', label: 'Table', icon: 'table' },
+      { id: 'kv-grid', label: 'KVGrid', icon: 'data' },
+      { id: 'inspector-panel', label: 'InspectorPanel', icon: 'info' },
+      { id: 'hierarchy-tree', label: 'HierarchyTree', icon: 'schema' },
     ],
   },
   {
@@ -176,6 +204,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'confirm-dialog', label: 'ConfirmDialog', icon: 'alert' },
       { id: 'toast', label: 'Toast', icon: 'bell' },
       { id: 'command-palette', label: 'CommandPalette', icon: 'search' },
+      { id: 'workspace-switcher-dialog', label: 'WorkspaceSwitcherDialog', icon: 'layout' },
     ],
   },
   {
@@ -206,6 +235,9 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'activity-timeline', label: 'ActivityTimeline', icon: 'clock' },
       { id: 'alert-strip', label: 'AlertStrip', icon: 'alert' },
       { id: 'quick-access-grid', label: 'QuickAccessGrid', icon: 'table' },
+      { id: 'quick-access-tile', label: 'QuickAccessTile', icon: 'component' },
+      { id: 'config-tile', label: 'ConfigTile', icon: 'settings' },
+      { id: 'pipeline-card', label: 'PipelineCard', icon: 'pipeline' },
     ],
   },
   {
@@ -226,7 +258,6 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'ordered-list', label: 'OrderedList', icon: 'arrowDown' },
       { id: 'relationship-builder', label: 'RelationshipBuilder', icon: 'schema' },
       { id: 'row-menu', label: 'RowMenu', icon: 'menu' },
-      { id: 'pipeline-card', label: 'PipelineCard', icon: 'pipeline' },
       { id: 'form-callout', label: 'FormCallout', icon: 'info' },
     ],
   },
@@ -257,6 +288,17 @@ function App() {
     return params.get('example') || DEFAULT_SHOWCASE
   })
   const [darkCanvas, setDarkCanvas] = useState(() => localStorage.getItem('heimdall-dark-canvas') === '1')
+
+  useEffect(() => {
+    const handlePopstate = () => {
+      const params = new URLSearchParams(window.location.search)
+      const example = params.get('example') || DEFAULT_SHOWCASE
+      setCurrentId(example)
+    }
+
+    window.addEventListener('popstate', handlePopstate)
+    return () => window.removeEventListener('popstate', handlePopstate)
+  }, [])
 
   useEffect(() => {
     document.body.classList.toggle('dark-canvas', darkCanvas)

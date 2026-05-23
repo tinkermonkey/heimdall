@@ -1,4 +1,4 @@
-import { AppTitle, Statusbar, ShellLayout } from '@tinkermonkey/heimdall-ui'
+import { AppTitle, Statusbar, ShellLayout, Icon, type StatusbarItem } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const border = 'rgb(var(--canvas-border, 229 231 235))'
@@ -29,10 +29,22 @@ export function AppTitleShowcase() {
 }
 
 export function StatusbarShowcase() {
+  const leftItems: StatusbarItem[] = [
+    { kind: 'pulse', tone: 'emerald', label: 'connected' },
+    { kind: 'divider' },
+    { kind: 'icon', icon: 'check' },
+  ]
+
+  const rightItems: StatusbarItem[] = [
+    { kind: 'pulse', tone: 'amber', label: 'Ln 42, Col 8' },
+    { kind: 'divider' },
+    { kind: 'icon', icon: 'info' },
+  ]
+
   return (
     <div>
-      <PageHeader name="Statusbar" description="Fixed footer bar at the bottom of the shell. Three slots: left, center, right. Monospace text, small." />
-      <ShowcaseSection label="With left and right">
+      <PageHeader name="Statusbar" description="Fixed footer bar at the bottom of the shell. Three slots: left, center, right. Accepts ReactNode or structured StatusbarItem[]." />
+      <ShowcaseSection label="With left and right text">
         <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden' }}>
           <Statusbar
             left={<span>context-studio · v0.4.1</span>}
@@ -49,11 +61,19 @@ export function StatusbarShowcase() {
           />
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="With structured items (left)">
+        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden' }}>
+          <Statusbar left={leftItems} right={rightItems} />
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="left" type="ReactNode" description="Left slot" />
-          <PropRow name="center" type="ReactNode" description="Center slot" />
-          <PropRow name="right" type="ReactNode" description="Right slot" />
+          <PropRow name="left" type="ReactNode | StatusbarItem[]" description="Left slot — text node or structured items array" />
+          <PropRow name="center" type="ReactNode | StatusbarItem[]" description="Center slot — text node or structured items array" />
+          <PropRow name="right" type="ReactNode | StatusbarItem[]" description="Right slot — text node or structured items array" />
+          <PropRow name="StatusbarItem (pulse)" type="{ kind: 'pulse'; tone: StatusbarTone; label: string; mono?: boolean }" description="Animated pulse indicator with tone and label" />
+          <PropRow name="StatusbarItem (icon)" type="{ kind: 'icon'; icon: IconName; mono?: boolean }" description="Icon element with optional mono styling" />
+          <PropRow name="StatusbarItem (divider)" type="{ kind: 'divider' }" description="Vertical divider line" />
         </PropsTable>
       </ShowcaseSection>
     </div>

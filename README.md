@@ -16,8 +16,7 @@ This phase establishes the token system, build infrastructure, and core componen
 - Playwright testing infrastructure with animation freezing utilities
 - Base test utilities for font loading, dark-canvas toggle, and token validation
 - 28 UI components across 7 categories (primitives, forms, data display, shell, navigation, dialogs, containers)
-- Comprehensive test suite (6 spec files covering foundations, primitives, data display, shell, integration, and reference previews)
-- Example applications (Homelab Dashboard and Context Studio rebuilt with design system)
+- Comprehensive test suite (5 spec files covering foundations, primitives, data display, shell, and overlays)
 
 ### Getting Started
 
@@ -47,9 +46,6 @@ src/
 │   ├── Button.tsx            # Button component
 │   ├── Modal.tsx             # Modal dialog
 │   └── [24 more components]
-├── examples/                  # Example applications
-│   ├── HomelabDashboardRebuilt.tsx
-│   └── ContextStudioRebuilt.tsx
 ├── test-pages/               # Test page implementations
 ├── fonts/
 │   ├── fonts.css              # @font-face declarations
@@ -67,8 +63,8 @@ tests/
 ├── primitives.spec.ts         # Primitive components tests
 ├── data-display.spec.ts       # Data display components tests
 ├── shell-framework.spec.ts    # Shell framework tests
-├── rebuilt-view-integration.spec.ts  # Integration tests
-├── reference-previews.spec.ts # Reference preview tests
+├── overlay-components.spec.ts # Overlay components tests
+├── overlay-advanced.spec.ts   # Advanced overlay tests
 └── utils/
     └── test-helpers.ts        # Test utilities
 

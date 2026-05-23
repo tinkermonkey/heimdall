@@ -1,7 +1,8 @@
 import React from 'react'
 import './StatTile.css'
-
-export type StatColor = 'cyan' | 'violet' | 'amber' | 'emerald'
+import { Icon, type IconName } from './Icon'
+import { Sparkline } from './Sparkline'
+import type { StatusColor } from './statusColors'
 
 export interface StatTileProps {
   label: string
@@ -11,12 +12,30 @@ export interface StatTileProps {
     label?: string
     direction?: 'up' | 'down'
   }
-  color?: StatColor
+  color?: StatusColor
+  icon?: IconName
+  sparkData?: number[]
+  meta?: React.ReactNode
+  metaIcon?: IconName
   className?: string
 }
 
 export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
-  ({ label, value, delta, color = 'cyan', className = '', ...props }, ref) => {
+  (
+    {
+      label,
+      value,
+      delta,
+      color = 'cyan',
+      icon,
+      sparkData,
+      meta,
+      metaIcon,
+      className = '',
+      ...props
+    },
+    ref
+  ) => {
     const colorClass = `stat-tile--${color}`
     const classNames = ['stat-tile', colorClass, className]
       .filter(Boolean)
@@ -24,15 +43,33 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
 
     return (
       <div ref={ref} className={classNames} {...props}>
-        <div className="stat-tile__label">{label}</div>
+        <div className="stat-tile__header">
+          <div className="stat-tile__label">{label}</div>
+          {icon && <Icon name={icon} size={14} />}
+        </div>
         <div className="stat-tile__value">{value}</div>
-        {delta && (
-          <div className="stat-tile__meta">
-            <span className={`stat-tile__delta stat-tile__delta--${delta.direction || 'up'}`}>
-              {delta.direction === 'down' ? '−' : '+'}
-              {Math.abs(delta.value)}
-            </span>
-            {delta.label && <span className="stat-tile__label-secondary">{delta.label}</span>}
+        {(delta || meta) && (
+          <div className="stat-tile__footer">
+            {delta && (
+              <span className={`stat-tile__delta stat-tile__delta--${delta.direction || 'up'}`}>
+                <span className="stat-tile__delta-value">
+                  {delta.direction === 'down' ? '−' : '+'}
+                  {Math.abs(delta.value)}
+                </span>
+                {delta.label && <span className="stat-tile__delta-label">{delta.label}</span>}
+              </span>
+            )}
+            {meta && (
+              <div className="stat-tile__meta">
+                {metaIcon && <Icon name={metaIcon} size={12} />}
+                <span className="stat-tile__meta-text">{meta}</span>
+              </div>
+            )}
+          </div>
+        )}
+        {sparkData && (
+          <div className="stat-tile__sparkline">
+            <Sparkline data={sparkData} width={60} height={16} color={color || 'cyan'} />
           </div>
         )}
       </div>

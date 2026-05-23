@@ -13,6 +13,9 @@ export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onSearchChange?: (query: string) => void
   onFilterRemove?: (filterId: string) => void
   searchPlaceholder?: string
+  children?: React.ReactNode
+  showingCount?: number
+  totalCount?: number
 }
 
 export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
@@ -22,6 +25,9 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       onSearchChange,
       onFilterRemove,
       searchPlaceholder = 'Search...',
+      children,
+      showingCount,
+      totalCount,
       className = '',
       ...props
     },
@@ -36,19 +42,33 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
     }
 
     const classNames = ['filter-bar', className].filter(Boolean).join(' ')
+    const hasChildren = React.Children.count(children) > 0
+    const hasCaption = showingCount !== undefined && totalCount !== undefined
 
     return (
-      <div ref={ref} className={classNames} {...props}>
-        <div className="filter-bar__search-wrapper">
-          <Icon name="search" size={16} className="filter-bar__search-icon" />
-          <input
-            type="text"
-            placeholder={searchPlaceholder}
-            value={searchValue}
-            onChange={handleSearchChange}
-            className="filter-bar__search-input"
-            data-testid="filter-bar-search"
-          />
+      <div ref={ref} className={classNames} data-testid="filter-bar" {...props}>
+        <div className="filter-bar__controls">
+          <div className="filter-bar__search-wrapper">
+            <Icon name="search" size={16} className="filter-bar__search-icon" />
+            <input
+              type="text"
+              placeholder={searchPlaceholder}
+              value={searchValue}
+              onChange={handleSearchChange}
+              className="filter-bar__search-input"
+              data-testid="filter-bar-search"
+            />
+          </div>
+          {hasChildren && (
+            <div className="filter-bar__children">
+              {children}
+            </div>
+          )}
+          {hasCaption && (
+            <div className="filter-bar__caption">
+              Showing {showingCount} of {totalCount}
+            </div>
+          )}
         </div>
         {filters.length > 0 && (
           <div className="filter-bar__chips" data-testid="filter-bar-chips">

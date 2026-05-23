@@ -82,6 +82,18 @@ test.describe('Page Pattern Components', () => {
       await searchInput.fill('test query')
       await expect(searchInput).toHaveValue('test query')
     })
+
+    test('FilterBar with children elements renders correctly', async ({ page }) => {
+      const filterBar = page.locator('[data-testid="filter-bar"]').first()
+      const chips = filterBar.locator('[data-testid*="filter-chip"]')
+      const chipCount = await chips.count()
+      expect(chipCount).toBeGreaterThan(0)
+    })
+
+    test('FilterBar children snapshot', async ({ page }) => {
+      const filterBar = page.locator('[data-testid="filter-bar"]').first()
+      await expect(filterBar).toHaveScreenshot('filter-bar-with-children.png')
+    })
   })
 
   test.describe('ActivityTimeline', () => {
@@ -127,6 +139,25 @@ test.describe('Page Pattern Components', () => {
       // Verify the text content is not the problematic "Invalid Date" string
       const text = await timestamp.textContent()
       expect(text).not.toContain('Invalid Date')
+    })
+
+    test('ActivityTimeline with kind-tag variants displays different tag types', async ({ page }) => {
+      const timelineContainer = page.locator('[data-testid="activity-timeline"]').first()
+      const kindTags = timelineContainer.locator('[data-testid*="activity-kind-tag"]')
+      const tagCount = await kindTags.count()
+      expect(tagCount).toBeGreaterThan(0)
+    })
+
+    test('ActivityTimeline with dotColor variants renders color-coded dots', async ({ page }) => {
+      const timelineContainer = page.locator('[data-testid="activity-timeline"]').first()
+      const dots = timelineContainer.locator('[data-testid*="activity-dot"]')
+      const dotCount = await dots.count()
+      expect(dotCount).toBeGreaterThan(0)
+    })
+
+    test('ActivityTimeline extended variants snapshot', async ({ page }) => {
+      const timeline = page.locator('[data-testid="activity-timeline"]').first()
+      await expect(timeline).toHaveScreenshot('activity-timeline-extended.png')
     })
   })
 
@@ -205,6 +236,65 @@ test.describe('Page Pattern Components', () => {
     test('renders 4-column grid layout', async ({ page }) => {
       const grid = page.locator('[data-testid="quick-access-grid"]')
       await expect(grid).toBeVisible()
+    })
+  })
+
+  test.describe('QuickAccessTile', () => {
+    test('renders tile with icon, title, and description', async ({ page }) => {
+      const tile = page.locator('button.quick-access-tile').first()
+      await expect(tile).toBeVisible()
+
+      // Verify icon is present
+      const icon = tile.locator('svg').first()
+      await expect(icon).toBeVisible()
+
+      // Verify content is visible
+      const content = await tile.textContent()
+      expect(content).toBeTruthy()
+      expect(content).toMatch(/[A-Za-z]+/)
+    })
+
+    test('is clickable and responds to click', async ({ page }) => {
+      const tile = page.locator('button.quick-access-tile').first()
+      await expect(tile).toBeEnabled()
+      await tile.click()
+      // Click event was handled (no error thrown)
+    })
+
+    test('visual snapshot of QuickAccessTile variants', async ({ page }) => {
+      const tile = page.locator('button.quick-access-tile').first()
+      await expect(tile).toHaveScreenshot('quick-access-tile.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+  })
+
+  test.describe('ConfigTile', () => {
+    test('renders tile with icon, title, description, and summary', async ({ page }) => {
+      const tile = page.locator('button.config-tile').first()
+      await expect(tile).toBeVisible()
+
+      // Verify icon is present
+      const icon = tile.locator('svg').first()
+      await expect(icon).toBeVisible()
+
+      // Verify summary key-value pairs are visible
+      const summary = tile.locator('.config-tile__summary')
+      await expect(summary).toBeVisible()
+    })
+
+    test('is clickable and responds to click', async ({ page }) => {
+      const tile = page.locator('button.config-tile').first()
+      await expect(tile).toBeEnabled()
+      await tile.click()
+      // Click event was handled (no error thrown)
+    })
+
+    test('visual snapshot of ConfigTile', async ({ page }) => {
+      const tile = page.locator('button.config-tile').first()
+      await expect(tile).toHaveScreenshot('config-tile.png', {
+        maxDiffPixelRatio: 0.01,
+      })
     })
   })
 
@@ -302,6 +392,17 @@ test.describe('Page Pattern Components', () => {
       const grid = page.locator('[data-testid="quick-access-grid"]')
       await expect(grid).toHaveScreenshot('quick-access-grid-light.png')
     })
+
+    test('QuickAccessTile components visual snapshot', async ({ page }) => {
+      const tilesContainer = page.locator('[data-testid="quick-access-grid"]')
+      await expect(tilesContainer).toHaveScreenshot('quick-access-tiles-light.png')
+    })
+
+    test('ConfigTile components visual snapshot', async ({ page }) => {
+      const tilesContainer = page.locator('[data-testid="config-tiles-container"]')
+      await expect(tilesContainer).toHaveScreenshot('config-tiles-light.png')
+    })
+
   })
 
   test.describe('Visual Regression - Dark Canvas', () => {
@@ -332,6 +433,16 @@ test.describe('Page Pattern Components', () => {
     test('QuickAccessGrid component visual snapshot in dark mode', async ({ page }) => {
       const grid = page.locator('[data-testid="quick-access-grid"]')
       await expect(grid).toHaveScreenshot('quick-access-grid-dark.png')
+    })
+
+    test('QuickAccessTile components visual snapshot in dark mode', async ({ page }) => {
+      const tilesContainer = page.locator('[data-testid="quick-access-grid"]')
+      await expect(tilesContainer).toHaveScreenshot('quick-access-tiles-dark.png')
+    })
+
+    test('ConfigTile components visual snapshot in dark mode', async ({ page }) => {
+      const tilesContainer = page.locator('[data-testid="config-tiles-container"]')
+      await expect(tilesContainer).toHaveScreenshot('config-tiles-dark.png')
     })
   })
 })

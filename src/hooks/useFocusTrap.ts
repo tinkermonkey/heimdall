@@ -9,21 +9,34 @@ const FOCUSABLE_SELECTORS = [
   '[tabindex]:not([tabindex="-1"])',
 ]
 
-export function useFocusTrap(ref: React.RefObject<HTMLElement>, isActive: boolean) {
+export interface UseFocusTrapOptions {
+  mode?: 'modal' | 'popup'
+}
+
+export function useFocusTrap(
+  ref: React.RefObject<HTMLElement>,
+  isActive: boolean,
+  options?: UseFocusTrapOptions
+) {
   const previousActiveElementRef = useRef<HTMLElement | null>(null)
+  const mode = options?.mode ?? 'modal'
 
   useEffect(() => {
     if (!isActive || !ref.current) return
 
     previousActiveElementRef.current = document.activeElement as HTMLElement
 
-    const focusableElements = ref.current.querySelectorAll(
-      FOCUSABLE_SELECTORS.join(',')
-    ) as NodeListOf<HTMLElement>
+    const getFocusableElements = () => {
+      if (!ref.current) return [] as HTMLElement[]
+      return Array.from(
+        ref.current.querySelectorAll(FOCUSABLE_SELECTORS.join(','))
+      ) as HTMLElement[]
+    }
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return
 
+      const focusableElements = getFocusableElements()
       if (focusableElements.length === 0) return
 
       const firstElement = focusableElements[0]
@@ -42,16 +55,19 @@ export function useFocusTrap(ref: React.RefObject<HTMLElement>, isActive: boolea
       }
     }
 
-    if (focusableElements.length > 0) {
-      focusableElements[0].focus()
-      ref.current.addEventListener('keydown', handleKeyDown)
+    const initialFocusableElements = getFocusableElements()
+    if (initialFocusableElements.length > 0 && mode === 'modal') {
+      initialFocusableElements[0].focus()
     }
+
+    ref.current.addEventListener('keydown', handleKeyDown)
 
     return () => {
       ref.current?.removeEventListener('keydown', handleKeyDown)
-      if (previousActiveElementRef.current && previousActiveElementRef.current.focus) {
-        previousActiveElementRef.current.focus()
+      const previousElement = previousActiveElementRef.current
+      if (previousElement && document.body.contains(previousElement)) {
+        previousElement.focus()
       }
     }
-  }, [ref, isActive])
+  }, [ref, isActive, mode])
 }

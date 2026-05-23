@@ -168,8 +168,8 @@ test.describe('Data Display Components', () => {
   })
 
   test('StatTile component - all variants', async ({ page }) => {
-    // Verify different status variants exist
-    const tiles = page.locator('[class*="stat-tile"]')
+    // Verify different status variants exist - check only main stat-tile containers
+    const tiles = page.locator('.stat-tile')
 
     // Get all tiles
     const allTiles = await tiles.all()
@@ -187,6 +187,31 @@ test.describe('Data Display Components', () => {
     await expect(page).toHaveScreenshot('stat-tiles.png', {
       maxDiffPixelRatio: 0.01,
     })
+  })
+
+  test('StatTile with sparkData renders spark chart', async ({ page }) => {
+    const tilesWithSpark = page.locator('.stat-tile:has-text("Uptime")')
+    const sparkElement = tilesWithSpark.locator('svg')
+    await expect(sparkElement).toBeVisible()
+  })
+
+  test('StatTile with icon displays icon element', async ({ page }) => {
+    const tilesWithIcon = page.locator('.stat-tile')
+    const iconElements = tilesWithIcon.locator('svg').first()
+    await expect(iconElements).toBeVisible()
+  })
+
+  test('StatTile with meta information displays meta text', async ({ page }) => {
+    const tiles = page.locator('.stat-tile')
+    const tileWithMeta = tiles.first()
+    const content = await tileWithMeta.textContent()
+    expect(content).toBeTruthy()
+  })
+
+  test('StatTile extended variants snapshot', async ({ page }) => {
+    await freezeAnimations(page)
+    const statGrid = page.locator('[class*="stat-grid"]')
+    await expect(statGrid).toHaveScreenshot('stat-tiles-extended.png')
   })
 
   test('Table with no selection', async ({ page }) => {
@@ -232,6 +257,46 @@ test.describe('Data Display Components', () => {
     // Should be unchecked
     const isStillChecked = await firstCheckbox.isChecked()
     expect(isStillChecked).toBe(false)
+  })
+
+  test('HierarchyTree renders hierarchy rows', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.waitForLoadState('networkidle')
+
+    // Verify HierarchyTree container exists
+    const hierarchyTree = page.locator('.hierarchy-tree').first()
+    await expect(hierarchyTree).toBeVisible()
+
+    // Verify HierarchyRow elements are rendered
+    const hierarchyRows = page.locator('.hierarchy-row')
+    const rowCount = await hierarchyRows.count()
+    expect(rowCount).toBeGreaterThan(0)
+  })
+
+  test('HierarchyTree row selection', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.waitForLoadState('networkidle')
+
+    // Get first row
+    const firstRow = page.locator('.hierarchy-row').first()
+    await expect(firstRow).toBeVisible()
+
+    // Click the row
+    await firstRow.click()
+
+    // Verify row is selected (has selected class)
+    const selectedRows = page.locator('.hierarchy-row.selected')
+    const selectedCount = await selectedRows.count()
+    expect(selectedCount).toBeGreaterThan(0)
+  })
+
+  test('HierarchyTree static snapshot', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.waitForLoadState('networkidle')
+    await freezeAnimations(page)
+    await expect(page).toHaveScreenshot('hierarchy-tree.png', {
+      maxDiffPixelRatio: 0.01,
+    })
   })
 
 })

@@ -4,15 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-A design system repository with two layers:
+A design system repository:
 
-1. **Reference prototypes** — high-fidelity static HTML examples (React 18 + Babel standalone, no build step) that serve as the visual and behavioral spec.
-2. **Production component library** — repo root (`src/`, `package.json`), published as `@tinkermonkey/heimdall-ui`, built with Vite + TypeScript + Tailwind CSS 3.
-
-**Reference examples** (in `design-reference/`):
-- `design-reference/example-context-studio/` — graph-native knowledge studio (dark IDE chrome + light canvas)
-- `design-reference/example-context-studio-design-system/` — design system variant of the studio
-- `design-reference/example-homelab-dashboard/` — homelab monitoring dashboard (same shell, dark canvas default)
+**Production component library** — repo root (`src/`, `package.json`), published as `@tinkermonkey/heimdall-ui`, built with Vite + TypeScript + Tailwind CSS 3.
 
 ## Scratch Files
 
@@ -21,10 +15,6 @@ When capturing screenshots, saving debug images, or writing any temporary workin
 ## Running Things
 
 ```bash
-# Open reference examples directly in a browser (no server needed)
-open design-reference/example-context-studio/Context\ Studio.html
-open design-reference/example-homelab-dashboard/index.html
-
 # Production package — dev server (run from repo root)
 npm run dev
 
@@ -56,16 +46,11 @@ If a server is already running, use its existing port rather than starting a new
     index.css                  # Global base styles + font imports
     index.ts                   # Public API barrel export
     hooks/                     # useBodyOverflow, useFocusTrap
-    examples/                  # ContextStudioRebuilt, HomelabDashboardRebuilt
     test-pages/                # Per-category test pages for Playwright
   tailwind.config.ts           # Tailwind theme wired to CSS custom properties
   tests/                       # Playwright visual regression tests
 
-design-reference/              # Static HTML reference prototypes (Babel standalone, no build)
-  example-context-studio/      # Graph-native knowledge studio
-  example-context-studio-design-system/  # Design system variant
-  example-homelab-dashboard/   # Homelab monitoring dashboard
-
+design-reference/              # Design reference documentation
 docs/                          # Vite + React docs app (showcase pages)
 ```
 
@@ -194,11 +179,3 @@ Test suites:
 - `shell-framework.spec.ts` — ShellLayout, Topbar, Titlebar, Statusbar, TabBar
 - `overlay-components.spec.ts` — Modal, ConfirmDialog, Toast
 - `overlay-advanced.spec.ts` — CommandPalette, Drawer, SplitPane
-- `reference-previews.spec.ts` — cross-checks static HTML preview cards
-- `rebuilt-view-integration.spec.ts` — full rebuilt ContextStudio and HomelabDashboard views
-
-## Reference Examples
-
-The `design-reference/` directories are the canonical visual spec. When a production component's appearance diverges from the reference, the reference wins.
-
-`design-reference/example-context-studio/preview/` and `design-reference/example-homelab-dashboard/preview/` contain standalone HTML cards for each component. Open these to inspect components in isolation.

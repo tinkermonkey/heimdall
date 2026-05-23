@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavItem, Sidebar, Topbar, TabBar, Icon } from '@tinkermonkey/heimdall-ui'
+import { NavItem, Sidebar, Topbar, TabBar, Icon, Chip } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const border = 'rgb(var(--canvas-border, 229 231 235))'
@@ -214,6 +214,14 @@ export function TabBarShowcase() {
           activeTabId={active2}
           onSelectTab={setActive2}
         />
+      </ShowcaseSection>
+      <ShowcaseSection label="Count chips" description="Chips render automatically for tabs with count values using the id-tag form.">
+        <DemoRow>
+          <Chip form="id-tag">248</Chip>
+          <Chip form="id-tag">12</Chip>
+          <Chip form="id-tag">3</Chip>
+          <Chip form="id-tag">1</Chip>
+        </DemoRow>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>

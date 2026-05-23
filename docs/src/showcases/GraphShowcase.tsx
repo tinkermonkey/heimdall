@@ -116,10 +116,9 @@ export function GraphCanvasShowcase() {
                     <GraphNode
                       key={n.id}
                       id={n.id}
-                      x={n.x}
-                      y={n.y}
                       label={n.label}
-                      selected={n.id === selectedId}
+                      kind={n.kind}
+                      domainColor={n.domainColor}
                       onSelect={setSelectedId}
                     />
                   ))}

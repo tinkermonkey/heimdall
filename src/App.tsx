@@ -10,10 +10,9 @@ import {
   TabBar,
 } from './index'
 import type { Column } from './components/Table'
-import ContextStudioRebuilt from './examples/ContextStudioRebuilt'
-import HomelabDashboardRebuilt from './examples/HomelabDashboardRebuilt'
 import PrimitivesTestPage from './test-pages/PrimitivesTestPage'
 import DataDisplayTestPage from './test-pages/DataDisplayTestPage'
+import HierarchyComponentTestPage from './test-pages/HierarchyComponentTestPage'
 import ShellFrameworkTestPage from './test-pages/ShellFrameworkTestPage'
 import OverlayComponentsTestPage from './test-pages/OverlayComponentsTestPage'
 import AdvancedOverlayComponentsTestPage from './test-pages/AdvancedOverlayComponentsTestPage'
@@ -24,6 +23,8 @@ import PagePatternsShowcase from './test-pages/PagePatternsShowcase'
 import ChatShowcase from './test-pages/ChatShowcase'
 import FormsShowcase from './test-pages/FormsShowcase'
 import GraphShowcase from './test-pages/GraphShowcase'
+import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
+import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -59,20 +60,16 @@ export default function App() {
     { key: 'updated', label: 'Updated', render: (value: string) => <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{value}</span> },
   ]
 
-  if (exampleParam === 'rebuilt') {
-    return <ContextStudioRebuilt />
-  }
-
-  if (exampleParam === 'homelab') {
-    return <HomelabDashboardRebuilt />
-  }
-
   if (exampleParam === 'primitives') {
     return <PrimitivesTestPage />
   }
 
   if (exampleParam === 'data-display') {
     return <DataDisplayTestPage />
+  }
+
+  if (exampleParam === 'hierarchy-tree') {
+    return <HierarchyComponentTestPage />
   }
 
   if (exampleParam === 'shell-framework') {
@@ -109,6 +106,14 @@ export default function App() {
 
   if (exampleParam === 'graph') {
     return <GraphShowcase />
+  }
+
+  if (exampleParam === 'inspector-panel') {
+    return <InspectorPanelTestPage />
+  }
+
+  if (exampleParam === 'filter-dropdown') {
+    return <FilterDropdownTestPage />
   }
 
   if (testParam === 'foundation') {

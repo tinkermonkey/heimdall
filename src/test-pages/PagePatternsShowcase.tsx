@@ -5,10 +5,12 @@ import {
   ActivityTimeline,
   AlertStrip,
   QuickAccessGrid,
+  QuickAccessTile,
+  ConfigTile,
   Button,
   ShellLayout,
 } from '../index'
-import type { FilterChip, ActivityEvent, Alert, QuickAccessTile } from '../index'
+import type { FilterChip, ActivityEvent, Alert } from '../index'
 
 export default function PagePatternsShowcase() {
   const [filters, setFilters] = useState<FilterChip[]>([
@@ -29,12 +31,16 @@ export default function PagePatternsShowcase() {
       type: 'create',
       subject: 'Created new entity `cls_organism`',
       timestamp: new Date(Date.now() - 5 * 60000),
+      kind: 'create',
+      kindLabel: 'Created',
     },
     {
       id: 'event-2',
       type: 'update',
       subject: 'Updated schema definition for `life`',
       timestamp: new Date(Date.now() - 2 * 3600000),
+      kind: 'update',
+      kindLabel: 'Updated',
     },
     {
       id: 'event-3',
@@ -56,13 +62,6 @@ export default function PagePatternsShowcase() {
     },
   ]
 
-  const quickAccessTiles: QuickAccessTile[] = [
-    { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity' },
-    { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse schema' },
-    { id: 'data', icon: 'data', title: 'Data Export', description: 'Export data' },
-    { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute tasks' },
-  ]
-
   const handleSearchChange = (query: string) => {
     console.log('Search:', query)
   }
@@ -73,10 +72,6 @@ export default function PagePatternsShowcase() {
 
   const handleDismissAlert = (alertId: string) => {
     setAlerts(alerts.filter(a => a.id !== alertId))
-  }
-
-  const handleQuickAccessClick = (tileId: string) => {
-    console.log('Quick access clicked:', tileId)
   }
 
   return (
@@ -124,14 +119,6 @@ export default function PagePatternsShowcase() {
           />
         </section>
 
-        {/* Quick Access Grid */}
-        <section style={{ marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
-            Quick Actions
-          </h2>
-          <QuickAccessGrid tiles={quickAccessTiles} onAction={handleQuickAccessClick} columns={4} />
-        </section>
-
         {/* Activity Timeline */}
         <section style={{ marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
@@ -141,11 +128,67 @@ export default function PagePatternsShowcase() {
         </section>
 
         {/* Activity Timeline - Empty State */}
-        <section>
+        <section style={{ marginBottom: '2rem' }}>
           <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
             Empty Activity Timeline
           </h2>
           <ActivityTimeline events={[]} emptyState="No activity yet" data-testid="activity-timeline-empty-state" />
+        </section>
+
+        {/* QuickAccessGrid */}
+        <section style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+            Quick Access Grid
+          </h2>
+          <QuickAccessGrid
+            tiles={[
+              { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity' },
+              { id: 'read', icon: 'search', title: 'Browse Entities', description: 'Search and view entities' },
+              { id: 'update', icon: 'edit', title: 'Update Schema', description: 'Modify schema definitions' },
+              { id: 'delete', icon: 'trash', title: 'Delete Entity', description: 'Remove an entity' },
+            ]}
+            onAction={(id) => console.log(`QuickAccess action: ${id}`)}
+          />
+        </section>
+
+        {/* QuickAccessTile - Individual Tiles */}
+        <section style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+            Quick Access Tiles (Individual)
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+            <QuickAccessTile icon="data" title="Databases" description="Manage database connections" onClick={() => console.log('Databases clicked')} />
+            <QuickAccessTile icon="settings" title="Settings" description="System configuration" onClick={() => console.log('Settings clicked')} />
+          </div>
+        </section>
+
+        {/* ConfigTile */}
+        <section style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: 'rgb(var(--canvas-fg-1))' }}>
+            Configuration Tiles
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }} data-testid="config-tiles-container">
+            <ConfigTile
+              icon="settings"
+              title="API Configuration"
+              description="Configure API endpoints"
+              summary={[
+                { label: 'Endpoint', value: 'api.example.com' },
+                { label: 'Version', value: 'v2' },
+              ]}
+              onClick={() => console.log('API Config clicked')}
+            />
+            <ConfigTile
+              icon="data"
+              title="Database Config"
+              description="Database connection settings"
+              summary={[
+                { label: 'Host', value: 'db.example.com' },
+                { label: 'Port', value: '5432' },
+              ]}
+              onClick={() => console.log('DB Config clicked')}
+            />
+          </div>
         </section>
       </div>
     </ShellLayout>

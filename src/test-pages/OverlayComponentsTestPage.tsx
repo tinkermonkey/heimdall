@@ -3,12 +3,20 @@ import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { Toast } from '../components/Toast'
+import { WorkspaceSwitcherDialog, type Workspace } from '../components/WorkspaceSwitcherDialog'
 
 export default function OverlayComponentsTestPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [toastOpen, setToastOpen] = useState(false)
   const [toastVariant, setToastVariant] = useState<'success' | 'error' | 'warning' | 'info'>('info')
+  const [workspaceSwitcherOpen, setWorkspaceSwitcherOpen] = useState(false)
+
+  const recentWorkspaces: Workspace[] = [
+    { id: '1', name: 'Project Alpha', path: '/users/dev/projects/alpha' },
+    { id: '2', name: 'Project Beta', path: '/users/dev/projects/beta' },
+    { id: '3', name: 'Experimental Repo', path: '/users/dev/experiments/repo' },
+  ]
 
   return (
     <div style={{ padding: '22px 28px', backgroundColor: 'rgb(var(--canvas-bg))', minHeight: '100vh' }}>
@@ -48,6 +56,26 @@ export default function OverlayComponentsTestPage() {
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <Button variant="danger" onClick={() => setConfirmOpen(true)}>
             Open Confirm
+          </Button>
+        </div>
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          Workspace Switcher Dialog Component
+        </div>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <Button variant="primary" onClick={() => setWorkspaceSwitcherOpen(true)}>
+            Open Workspace Switcher
           </Button>
         </div>
       </section>
@@ -149,6 +177,28 @@ export default function OverlayComponentsTestPage() {
         subtitle="Operation completed"
         variant={toastVariant}
         duration={4000}
+      />
+
+      <WorkspaceSwitcherDialog
+        isOpen={workspaceSwitcherOpen}
+        onClose={() => setWorkspaceSwitcherOpen(false)}
+        recent={recentWorkspaces}
+        onOpenFolder={() => {
+          console.log('Open folder clicked')
+          setWorkspaceSwitcherOpen(false)
+        }}
+        onNewWorkspace={() => {
+          console.log('New workspace clicked')
+          setWorkspaceSwitcherOpen(false)
+        }}
+        onCloneFromGit={() => {
+          console.log('Clone from git clicked')
+          setWorkspaceSwitcherOpen(false)
+        }}
+        onPickRecent={(workspace) => {
+          console.log('Selected workspace:', workspace)
+          setWorkspaceSwitcherOpen(false)
+        }}
       />
     </div>
   )

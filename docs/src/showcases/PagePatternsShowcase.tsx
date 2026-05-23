@@ -5,11 +5,15 @@ import {
   ActivityTimeline,
   AlertStrip,
   QuickAccessGrid,
+  QuickAccessTile,
+  ConfigTile,
+  PipelineCard,
   Button,
+  SegmentedControl,
   type FilterChip,
   type ActivityEvent,
   type Alert,
-  type QuickAccessTile,
+  type QuickAccessTileProps,
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
@@ -20,11 +24,18 @@ const ACTIVITIES: ActivityEvent[] = [
   { id: '4', type: 'delete', subject: 'Removed temporary index', timestamp: new Date(Date.now() - 48 * 3600000) },
 ]
 
-const TILES: QuickAccessTile[] = [
-  { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity to the schema' },
-  { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse the full schema graph' },
-  { id: 'export', icon: 'data', title: 'Export Data', description: 'Download a filtered data export' },
-  { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute a processing task' },
+const ACTIVITIES_EXTENDED: ActivityEvent[] = [
+  { id: '1', type: 'create', subject: 'Created entity `cls_organism`', timestamp: new Date(Date.now() - 5 * 60000), kind: 'schema', headline: 'Important change' },
+  { id: '2', type: 'update', subject: 'Updated schema for `life`', timestamp: new Date(Date.now() - 2 * 3600000), kind: 'data', dotColor: 'amber' },
+  { id: '3', type: 'run', subject: 'Executed migration pipeline', timestamp: new Date(Date.now() - 24 * 3600000), kind: 'pipeline', dotColor: 'emerald' },
+  { id: '4', type: 'delete', subject: 'Removed temporary index', timestamp: new Date(Date.now() - 48 * 3600000), kind: 'cleanup', dotColor: 'neutral' },
+]
+
+const TILES: (QuickAccessTileProps & { id: string })[] = [
+  { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity to the schema', onClick: () => console.log('Create') },
+  { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse the full schema graph', onClick: () => console.log('Schema') },
+  { id: 'export', icon: 'data', title: 'Export Data', description: 'Download a filtered data export', onClick: () => console.log('Export') },
+  { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute a processing task', onClick: () => console.log('Pipeline') },
 ]
 
 export function PageHeaderShowcase() {
@@ -62,10 +73,11 @@ export function FilterBarShowcase() {
     { id: 'syncing', label: 'Syncing' },
   ])
   const [query, setQuery] = useState('')
+  const [segmentValue, setSegmentValue] = useState<string | number>('all')
 
   return (
     <div>
-      <PageHeader name="FilterBar" description="Search input paired with removable filter chips. Supports a 'clear all' action when chips are present." />
+      <PageHeader name="FilterBar" description="Search input paired with removable filter chips. Supports a 'clear all' action when chips are present, and optional children slot." />
       <ShowcaseSection label="With active filters" description="Type in the search field and click × on chips to remove them.">
         <FilterBar
           filters={filters}
@@ -74,6 +86,24 @@ export function FilterBarShowcase() {
           searchPlaceholder="Search entities..."
         />
         {query && <div style={{ marginTop: 8, fontSize: 12, color: 'rgb(var(--canvas-fg-3))' }}>Query: {query}</div>}
+      </ShowcaseSection>
+      <ShowcaseSection label="With children (SegmentedControl)">
+        <FilterBar
+          filters={filters}
+          onSearchChange={setQuery}
+          onFilterRemove={id => setFilters(f => f.filter(c => c.id !== id))}
+          searchPlaceholder="Search..."
+        >
+          <SegmentedControl
+            value={segmentValue}
+            onChange={setSegmentValue}
+            options={[
+              { value: 'all', label: 'All' },
+              { value: 'active', label: 'Active' },
+              { value: 'archived', label: 'Archived' },
+            ]}
+          />
+        </FilterBar>
       </ShowcaseSection>
       <ShowcaseSection label="No filters">
         <FilterBar filters={[]} searchPlaceholder="Search..." onSearchChange={() => {}} />
@@ -85,6 +115,7 @@ export function FilterBarShowcase() {
           <PropRow name="onFilterRemove" type="(id: string) => void" description="Called when a chip's × is clicked" />
           <PropRow name="onClearAll" type="() => void" description="Called when 'Clear all' is clicked (visible when chips exist)" />
           <PropRow name="searchPlaceholder" type="string" def="'Search...'" description="Placeholder text for the search field" />
+          <PropRow name="children" type="ReactNode" description="Optional inline controls like SegmentedControl or FilterDropdown" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -94,9 +125,12 @@ export function FilterBarShowcase() {
 export function ActivityTimelineShowcase() {
   return (
     <div>
-      <PageHeader name="ActivityTimeline" description="Chronological event list with typed icons (create, update, delete, run, link) and relative timestamps." />
-      <ShowcaseSection label="Event types">
+      <PageHeader name="ActivityTimeline" description="Chronological event list with typed icons (create, update, delete, run, link), relative timestamps, and optional kind tags with custom dots." />
+      <ShowcaseSection label="Basic event types">
         <ActivityTimeline events={ACTIVITIES} />
+      </ShowcaseSection>
+      <ShowcaseSection label="With kind tags and custom dots">
+        <ActivityTimeline events={ACTIVITIES_EXTENDED} />
       </ShowcaseSection>
       <ShowcaseSection label="Empty state">
         <ActivityTimeline events={[]} emptyState="No activity recorded yet." />
@@ -105,6 +139,10 @@ export function ActivityTimelineShowcase() {
         <PropsTable>
           <PropRow name="events" type="ActivityEvent[]" description="Array of activity events to render" />
           <PropRow name="emptyState" type="string" def="'No activity yet.'" description="Message shown when events array is empty" />
+          <PropRow name="kind" type="string" description="Optional category tag for the event" />
+          <PropRow name="headline" type="ReactNode" description="Optional headline rendered above the subject" />
+          <PropRow name="dotColor" type="StatusColor" description="Optional custom dot color (overrides type default)" />
+          <PropRow name="meta" type="string" description="Optional metadata text rendered below the subject" />
         </PropsTable>
       </ShowcaseSection>
     </div>

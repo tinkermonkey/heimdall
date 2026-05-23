@@ -1,0 +1,15 @@
+.version-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  padding: 0 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  border-radius: 9999px;
+  color: rgb(var(--semantic-version-fg));
+  background-color: var(--semantic-version-bg-alpha);
+  border: 1px solid var(--semantic-version-border-alpha);
+  white-space: nowrap;
+}

@@ -1,5 +1,7 @@
 import React from 'react'
 import { Badge } from './Badge'
+import type { StatusColor } from './statusColors'
+import { statusColorMap } from './statusColors'
 import './ActivityTimeline.css'
 
 export type ActivityEventType = 'create' | 'update' | 'delete' | 'run'
@@ -9,6 +11,11 @@ export interface ActivityEvent {
   type: ActivityEventType
   subject: string
   timestamp: Date | string
+  kind?: string
+  kindLabel?: string
+  dotColor?: StatusColor
+  headline?: React.ReactNode
+  meta?: string
 }
 
 export interface ActivityTimelineProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -62,14 +69,34 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
       <div ref={ref} className={classNames} data-testid="activity-timeline" {...props}>
         <div className="activity-timeline__list">
           {events.map(event => (
-            <div key={event.id} className="activity-timeline__event" data-testid={`activity-event-${event.id}`}>
+            <div key={event.id} className="activity-timeline__event" data-testid={`activity-event-${event.id}`} {...(event.kind && { 'data-kind': event.kind })}>
               <div className="activity-timeline__dot-container">
-                <Badge color={EVENT_COLOR_MAP[event.type]} className="activity-timeline__dot" data-testid={`activity-dot-${event.type}`} />
+                {event.dotColor ? (
+                  <div
+                    className="activity-timeline__dot--custom"
+                    style={{ backgroundColor: statusColorMap[event.dotColor] }}
+                    data-testid={`activity-dot-custom-${event.id}`}
+                  />
+                ) : (
+                  <Badge color={EVENT_COLOR_MAP[event.type]} className="activity-timeline__dot" data-testid={`activity-dot-${event.type}`} />
+                )}
               </div>
               <div className="activity-timeline__content">
-                <div className="activity-timeline__subject" data-testid="activity-subject">
-                  {event.subject}
+                <div className="activity-timeline__header">
+                  {event.kind && (
+                    <span className="activity-timeline__kind-label" data-testid={`activity-kind-tag-${event.id}`}>
+                      {event.kindLabel || event.kind}
+                    </span>
+                  )}
+                  <div className="activity-timeline__subject" data-testid="activity-subject">
+                    {event.headline || event.subject}
+                  </div>
                 </div>
+                {event.meta && (
+                  <div className="activity-timeline__meta" data-testid="activity-meta">
+                    {event.meta}
+                  </div>
+                )}
                 <div className="activity-timeline__timestamp" data-testid="activity-timestamp">
                   {formatTimestamp(event.timestamp)}
                 </div>

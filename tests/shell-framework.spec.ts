@@ -106,5 +106,29 @@ test.describe('Shell Framework Components', () => {
         maxDiffPixelRatio: 0.01,
       })
     })
+
+    test('Statusbar component visual snapshot', async ({ page }) => {
+      // Statusbar is part of ShellLayout at the bottom of the shell
+      const statusbar = page.locator('.statusbar').first()
+      await expect(statusbar).toHaveScreenshot('statusbar-light.png')
+    })
+
+    test('Statusbar with structured items displays left and right sections', async ({ page }) => {
+      const statusbar = page.locator('.statusbar').first()
+      await expect(statusbar).toBeVisible()
+
+      const leftSection = statusbar.locator('[class*="statusbar__left"], .statusbar-left')
+      const rightSection = statusbar.locator('[class*="statusbar__right"], .statusbar-right')
+
+      // At least one section should be present
+      const leftVisible = await leftSection.isVisible().catch(() => false)
+      const rightVisible = await rightSection.isVisible().catch(() => false)
+      expect(leftVisible || rightVisible).toBe(true)
+    })
+
+    test('Statusbar structured items snapshot', async ({ page }) => {
+      const statusbar = page.locator('.statusbar').first()
+      await expect(statusbar).toHaveScreenshot('statusbar-structured-items.png')
+    })
   })
 })

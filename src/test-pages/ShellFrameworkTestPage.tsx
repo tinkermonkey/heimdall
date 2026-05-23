@@ -39,6 +39,10 @@ export default function ShellFrameworkTestPage() {
         collapsed: !sidebarOpen,
         onCollapse: setSidebarOpen,
       }}
+      statusbar={{
+        left: <span>System Monitor</span>,
+        right: <span>Status: Online</span>,
+      }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         <Topbar
