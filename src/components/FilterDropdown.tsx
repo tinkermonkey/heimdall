@@ -223,6 +223,7 @@ function FilterDropdownPanel({ children, className = '', style, ...restProps }: 
       ref={panelRef}
       className={`filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
+      aria-multiselectable={mode === 'checkbox' ? true : undefined}
       style={{ display: isOpen ? 'block' : 'none', ...style }}
       {...restProps}
     >
