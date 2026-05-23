@@ -30,6 +30,10 @@ export interface StatusbarProps {
   className?: string
 }
 
+const isStatusbarItem = (item: unknown): item is StatusbarItem => {
+  return typeof item === 'object' && item !== null && 'kind' in item
+}
+
 const renderStatusbarItems = (items: StatusbarItem[]): React.ReactNode => {
   return items.map((item, index) => {
     switch (item.kind) {
@@ -64,12 +68,12 @@ export const Statusbar = React.forwardRef<HTMLDivElement, StatusbarProps>(
   ({ left, center, right, className = '', ...props }, ref) => {
     const classNames = ['statusbar', className].filter(Boolean).join(' ')
 
-    const renderSlot = (content: React.ReactNode | StatusbarItem[] | undefined) => {
+    const renderSlot = (content: React.ReactNode | StatusbarItem[] | undefined): React.ReactNode => {
       if (!content) return null
-      if (Array.isArray(content)) {
-        return renderStatusbarItems(content)
+      if (Array.isArray(content) && content.length > 0 && isStatusbarItem(content[0])) {
+        return renderStatusbarItems(content as StatusbarItem[])
       }
-      return content
+      return content as React.ReactNode
     }
 
     return (
