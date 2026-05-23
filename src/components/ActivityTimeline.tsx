@@ -1,5 +1,7 @@
 import React from 'react'
 import { Badge } from './Badge'
+import type { StatusColor } from './statusColors'
+import { statusColorMap } from './statusColors'
 import './ActivityTimeline.css'
 
 export type ActivityEventType = 'create' | 'update' | 'delete' | 'run'
@@ -11,7 +13,7 @@ export interface ActivityEvent {
   timestamp: Date | string
   kind?: string
   kindLabel?: string
-  dotColor?: string
+  dotColor?: StatusColor
   headline?: React.ReactNode
   meta?: string
 }
@@ -72,7 +74,7 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
                 {event.dotColor ? (
                   <div
                     className="activity-timeline__dot--custom"
-                    style={{ backgroundColor: event.dotColor }}
+                    style={{ backgroundColor: statusColorMap[event.dotColor] }}
                     data-testid={`activity-dot-custom-${event.id}`}
                   />
                 ) : (
