@@ -20,9 +20,6 @@ interface FilterDropdownContextValue {
   onFocusedValueChange: (value: string | null) => void
   triggerRef: React.RefObject<HTMLButtonElement>
   panelRef: React.RefObject<HTMLDivElement>
-  focusableRows: string[]
-  registerFocusableRow: (value: string) => void
-  unregisterFocusableRow: (value: string) => void
 }
 
 const FilterDropdownContext = createContext<FilterDropdownContextValue | undefined>(undefined)
@@ -47,87 +44,85 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
     const [isOpen, setIsOpen] = useState(false)
     const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set())
     const [focusedValue, setFocusedValue] = useState<string | null>(null)
-    const [focusableRows, setFocusableRows] = useState<string[]>([])
     const triggerRef = useRef<HTMLButtonElement>(null)
     const panelRef = useRef<HTMLDivElement>(null)
     const rootRef = useRef<HTMLDivElement>(null)
 
     const handleOpenChange = useCallback((open: boolean) => {
       setIsOpen(open)
-      if (open && focusableRows.length > 0) {
-        setFocusedValue(focusableRows[0])
+      if (open && panelRef.current) {
+        const rows = Array.from(panelRef.current.querySelectorAll('[data-focusable-value]'))
+        const firstFocusableValue = rows[0]?.getAttribute('data-focusable-value')
+        if (firstFocusableValue) {
+          setFocusedValue(firstFocusableValue)
+        }
       } else if (!open) {
         setFocusedValue(null)
         triggerRef.current?.focus()
       }
-    }, [focusableRows])
+    }, [panelRef, triggerRef])
 
     const handleValueChange = useCallback(
       (value: string, selected: boolean) => {
-        setSelectedValues((prevValues) => {
-          const nextValues = new Set(prevValues)
+        const nextValues = new Set(selectedValues)
 
-          if (selected) {
-            if (mode === 'radio') {
-              nextValues.clear()
-            }
-            nextValues.add(value)
-          } else {
-            nextValues.delete(value)
+        if (selected) {
+          if (mode === 'radio') {
+            nextValues.clear()
           }
+          nextValues.add(value)
+        } else {
+          nextValues.delete(value)
+        }
 
-          onChange?.(Array.from(nextValues))
-          return nextValues
-        })
+        setSelectedValues(nextValues)
+        onChange?.(Array.from(nextValues))
 
         // Auto-close on selection for radio mode
         if (mode === 'radio' && selected) {
           handleOpenChange(false)
         }
       },
-      [mode, onChange, handleOpenChange]
+      [selectedValues, mode, onChange, handleOpenChange]
     )
 
     const handleFocusedValueChange = useCallback((value: string | null) => {
       setFocusedValue(value)
     }, [])
 
-    const registerFocusableRow = useCallback((value: string) => {
-      setFocusableRows((prev) => {
-        if (!prev.includes(value)) {
-          return [...prev, value]
-        }
-        return prev
-      })
-    }, [])
-
-    const unregisterFocusableRow = useCallback((value: string) => {
-      setFocusableRows((prev) => prev.filter((v) => v !== value))
-    }, [])
-
     const handleKeyDown = useCallback(
       (e: KeyboardEvent) => {
-        if (!isOpen || focusableRows.length === 0) return
+        if (!isOpen || !panelRef.current) return
 
-        const currentIndex = focusableRows.indexOf(focusedValue || focusableRows[0])
+        const rows = Array.from(panelRef.current.querySelectorAll('[data-focusable-value]'))
+        const focusableRowsInDomOrder = rows
+          .map((row) => row.getAttribute('data-focusable-value'))
+          .filter((v): v is string => v !== null)
+
+        if (focusableRowsInDomOrder.length === 0) return
+
+        const currentIndex = focusableRowsInDomOrder.indexOf(
+          focusedValue || focusableRowsInDomOrder[0]
+        )
 
         if (e.key === 'ArrowDown') {
           e.preventDefault()
-          const nextIndex = (currentIndex + 1) % focusableRows.length
-          setFocusedValue(focusableRows[nextIndex])
+          const nextIndex = (currentIndex + 1) % focusableRowsInDomOrder.length
+          setFocusedValue(focusableRowsInDomOrder[nextIndex])
         } else if (e.key === 'ArrowUp') {
           e.preventDefault()
-          const nextIndex = (currentIndex - 1 + focusableRows.length) % focusableRows.length
-          setFocusedValue(focusableRows[nextIndex])
+          const nextIndex =
+            (currentIndex - 1 + focusableRowsInDomOrder.length) % focusableRowsInDomOrder.length
+          setFocusedValue(focusableRowsInDomOrder[nextIndex])
         } else if (e.key === 'Tab') {
           e.preventDefault()
           const nextIndex = e.shiftKey
-            ? (currentIndex - 1 + focusableRows.length) % focusableRows.length
-            : (currentIndex + 1) % focusableRows.length
-          setFocusedValue(focusableRows[nextIndex])
+            ? (currentIndex - 1 + focusableRowsInDomOrder.length) % focusableRowsInDomOrder.length
+            : (currentIndex + 1) % focusableRowsInDomOrder.length
+          setFocusedValue(focusableRowsInDomOrder[nextIndex])
         }
       },
-      [isOpen, focusableRows, focusedValue]
+      [isOpen, focusedValue, panelRef]
     )
 
     // Close on ESC or outside click
@@ -172,9 +167,6 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       onFocusedValueChange: handleFocusedValueChange,
       triggerRef,
       panelRef,
-      focusableRows,
-      registerFocusableRow,
-      unregisterFocusableRow,
     }
 
     return (
@@ -261,27 +253,15 @@ export interface FilterDropdownCheckboxProps {
 
 function FilterDropdownCheckbox({ value, label, description }: FilterDropdownCheckboxProps) {
   const {
-    isOpen,
     selectedValues,
     onValueChange,
     focusedValue,
-    registerFocusableRow,
-    unregisterFocusableRow,
     mode,
   } = useFilterDropdown()
   const rowRef = useRef<HTMLDivElement>(null)
 
   const isSelected = selectedValues.has(value)
   const isFocused = focusedValue === value
-
-  useEffect(() => {
-    if (isOpen) {
-      registerFocusableRow(value)
-      return () => {
-        unregisterFocusableRow(value)
-      }
-    }
-  }, [isOpen, value, registerFocusableRow, unregisterFocusableRow])
 
   useEffect(() => {
     if (isFocused && rowRef.current) {
@@ -309,6 +289,7 @@ function FilterDropdownCheckbox({ value, label, description }: FilterDropdownChe
       tabIndex={0}
       role={mode === 'checkbox' ? 'option' : undefined}
       aria-selected={isSelected}
+      data-focusable-value={value}
     >
       <div className="filter-dropdown__row-checkbox">
         <input
@@ -339,26 +320,14 @@ export interface FilterDropdownRadioProps {
 
 function FilterDropdownRadio({ value, label, description }: FilterDropdownRadioProps) {
   const {
-    isOpen,
     selectedValues,
     onValueChange,
     focusedValue,
-    registerFocusableRow,
-    unregisterFocusableRow,
   } = useFilterDropdown()
   const rowRef = useRef<HTMLDivElement>(null)
 
   const isSelected = selectedValues.has(value)
   const isFocused = focusedValue === value
-
-  useEffect(() => {
-    if (isOpen) {
-      registerFocusableRow(value)
-      return () => {
-        unregisterFocusableRow(value)
-      }
-    }
-  }, [isOpen, value, registerFocusableRow, unregisterFocusableRow])
 
   useEffect(() => {
     if (isFocused && rowRef.current) {
@@ -386,6 +355,7 @@ function FilterDropdownRadio({ value, label, description }: FilterDropdownRadioP
       tabIndex={0}
       role="radio"
       aria-checked={isSelected}
+      data-focusable-value={value}
     >
       <div className="filter-dropdown__row-radio">
         <input
