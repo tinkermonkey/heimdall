@@ -19,13 +19,15 @@ export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedContro
       .join(' ')
 
     return (
-      <div ref={ref} className={classNames} {...props}>
+      <div ref={ref} className={classNames} role="radiogroup" {...props}>
         {options.map((option) => (
           <button
             key={option.value}
             className={`segmented-control__segment ${value === option.value ? 'segmented-control__segment--active' : ''}`}
             onClick={() => onChange(option.value)}
             type="button"
+            role="radio"
+            aria-checked={value === option.value}
           >
             {option.label}
           </button>

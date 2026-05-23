@@ -214,4 +214,31 @@ test.describe('Primitive Components', () => {
     const segmentedControl = page.locator('[class*="segmented-control"]').first()
     await expect(segmentedControl).toHaveScreenshot('segmented-control.png')
   })
+
+  test('SegmentedControl component - ARIA accessibility attributes', async ({ page }) => {
+    const segmentedControl = page.locator('[class*="segmented-control"]').first()
+
+    // Verify the container has role="radiogroup"
+    const role = await segmentedControl.getAttribute('role')
+    expect(role).toBe('radiogroup')
+
+    // Verify each button has role="radio" and aria-checked attribute
+    const buttons = segmentedControl.locator('button')
+    const buttonCount = await buttons.count()
+    expect(buttonCount).toBeGreaterThan(0)
+
+    for (let i = 0; i < buttonCount; i++) {
+      const button = buttons.nth(i)
+      const buttonRole = await button.getAttribute('role')
+      const ariaChecked = await button.getAttribute('aria-checked')
+
+      expect(buttonRole).toBe('radio')
+      expect(ariaChecked).toMatch(/^(true|false)$/)
+    }
+
+    // Verify that exactly one button has aria-checked="true"
+    const checkedButtons = segmentedControl.locator('button[aria-checked="true"]')
+    const checkedCount = await checkedButtons.count()
+    expect(checkedCount).toBe(1)
+  })
 })
