@@ -10,6 +10,7 @@ export interface ActivityEvent {
   subject: string
   timestamp: Date | string
   kind?: string
+  kindLabel?: string
   dotColor?: string
   headline?: React.ReactNode
   meta?: string
@@ -82,7 +83,7 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
                 <div className="activity-timeline__header">
                   {event.kind && (
                     <span className="activity-timeline__kind-label" data-testid={`activity-kind-tag-${event.id}`}>
-                      {event.kind}
+                      {event.kindLabel || event.kind}
                     </span>
                   )}
                   <div className="activity-timeline__subject" data-testid="activity-subject">

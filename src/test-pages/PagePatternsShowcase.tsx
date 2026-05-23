@@ -32,6 +32,7 @@ export default function PagePatternsShowcase() {
       subject: 'Created new entity `cls_organism`',
       timestamp: new Date(Date.now() - 5 * 60000),
       kind: 'create',
+      kindLabel: 'Created',
     },
     {
       id: 'event-2',
@@ -39,6 +40,7 @@ export default function PagePatternsShowcase() {
       subject: 'Updated schema definition for `life`',
       timestamp: new Date(Date.now() - 2 * 3600000),
       kind: 'update',
+      kindLabel: 'Updated',
     },
     {
       id: 'event-3',
