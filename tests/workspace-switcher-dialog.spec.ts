@@ -1,9 +1,22 @@
 import { test, expect } from '@playwright/test'
+import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
 test.describe('WorkspaceSwitcherDialog', () => {
-  test('should render when isOpen is true', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto('/?example=overlays')
+    await page.waitForLoadState('networkidle')
 
+    // Load self-hosted fonts
+    await loadSelfHostedFonts(page)
+
+    // Verify fonts are loaded
+    await assertFontsLoaded(page)
+
+    // Freeze animations for consistent snapshots
+    await freezeAnimations(page)
+  })
+
+  test('should render when isOpen is true', async ({ page }) => {
     // Click the button to open the dialog
     await page.click('button:has-text("Open Workspace Switcher")')
 
@@ -103,10 +116,61 @@ test.describe('WorkspaceSwitcherDialog', () => {
   })
 
   test('should not be visible when isOpen is false', async ({ page }) => {
-    await page.goto('/?example=overlays')
-
     // Dialog should not be visible initially
     const modal = page.locator('[role="dialog"]')
     await expect(modal).not.toBeVisible()
+  })
+
+  // Visual Regression Tests
+  test('visual snapshot of workspace switcher dialog', async ({ page }) => {
+    // Click the button to open the dialog
+    await page.click('button:has-text("Open Workspace Switcher")')
+
+    // Verify modal is visible
+    const modal = page.locator('[role="dialog"]').first()
+    await expect(modal).toBeVisible()
+
+    // Take snapshot of the entire dialog
+    await expect(modal).toHaveScreenshot('workspace-switcher-dialog-open.png', {
+      maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test('visual snapshot of workspace switcher dialog with action tiles', async ({ page }) => {
+    // Click the button to open the dialog
+    await page.click('button:has-text("Open Workspace Switcher")')
+
+    // Verify action tiles are visible
+    const openTile = page.locator('.quick-access-tile:has-text("Open")')
+    const newTile = page.locator('.quick-access-tile:has-text("New")')
+    const cloneTile = page.locator('.quick-access-tile:has-text("Clone")')
+
+    await expect(openTile).toBeVisible()
+    await expect(newTile).toBeVisible()
+    await expect(cloneTile).toBeVisible()
+
+    // Take snapshot of dialog showing action tiles section
+    const modal = page.locator('[role="dialog"]').first()
+    await expect(modal).toHaveScreenshot('workspace-switcher-dialog-with-tiles.png', {
+      maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test('visual snapshot of workspace switcher dialog with recent workspaces', async ({ page }) => {
+    // Click the button to open the dialog
+    await page.click('button:has-text("Open Workspace Switcher")')
+
+    // Verify recent workspaces section is visible
+    const recentHeader = page.locator('.workspace-switcher-dialog__recent-header:has-text("Recent Workspaces")')
+    const projectAlpha = page.locator('.workspace-switcher-dialog__recent-name:has-text("Project Alpha")')
+
+    await expect(recentHeader).toBeVisible()
+    await expect(projectAlpha).toBeVisible()
+
+    // Take snapshot including recent workspaces
+    const modal = page.locator('[role="dialog"]').first()
+    await expect(modal).toHaveScreenshot('workspace-switcher-dialog-with-recent.png', {
+      maxDiffPixelRatio: 0.01,
+    })
   })
 })
