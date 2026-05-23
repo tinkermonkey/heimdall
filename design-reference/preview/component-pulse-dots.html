@@ -1,0 +1,18 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css"></head>
+<body><div class="card">
+
+<style>
+.pulse{position:relative;display:inline-block;width:9px;height:9px;border-radius:50%;}
+.pulse::before{content:'';position:absolute;inset:0;border-radius:50%;background:inherit;opacity:0.5;animation:pl 1.6s ease-out infinite;}
+@keyframes pl{0%{transform:scale(.6);opacity:.5}100%{transform:scale(1.4);opacity:0}}
+</style>
+<div class="row" style="gap:24px;flex-wrap:wrap;">
+  <div class="row" style="gap:8px;"><span class="pulse" style="background:#10B981;"></span><span class="mono" style="font-size:11.5px;">graph daemon :7474</span></div>
+  <div class="row" style="gap:8px;"><span class="pulse" style="background:#F59E0B;"></span><span class="mono" style="font-size:11.5px;">pubmed_genes 38%</span></div>
+  <div class="row" style="gap:8px;"><span class="pulse" style="background:#22D3EE;"></span><span class="mono" style="font-size:11.5px;">updating · pulling</span></div>
+  <div class="row" style="gap:8px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#6B7280;"></span><span class="mono" style="font-size:11.5px;color:var(--canvas-fg-3);">idle · stopped (no pulse)</span></div>
+</div>
+<div class="muted" style="font-size:11.5px;line-height:1.5;">1.6s ease-out infinite scale 0.6→1.4 + opacity 0.5→0 on a glow circle behind a solid dot. Only used for "live" indicators.</div>
+
+</div></body></html>
