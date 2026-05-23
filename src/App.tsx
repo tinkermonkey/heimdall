@@ -25,6 +25,7 @@ import FormsShowcase from './test-pages/FormsShowcase'
 import GraphShowcase from './test-pages/GraphShowcase'
 import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
 import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
+import TabBarTestPage from './test-pages/TabBarTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -114,6 +115,10 @@ export default function App() {
 
   if (exampleParam === 'filter-dropdown') {
     return <FilterDropdownTestPage />
+  }
+
+  if (exampleParam === 'tab-bar') {
+    return <TabBarTestPage />
   }
 
   if (testParam === 'foundation') {

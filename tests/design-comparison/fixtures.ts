@@ -170,8 +170,8 @@ export const FIXTURES: ComparisonFixture[] = [
     theme: 'light',
     design: { file: 'component-tabs.html' },
     react: {
-      exampleId: 'shell-framework',
-      selector: '[class*="tab-bar"]',
+      exampleId: 'tab-bar',
+      selector: '[data-testid="tab-bar-card"]',
     },
   },
 ]
