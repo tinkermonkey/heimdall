@@ -130,7 +130,7 @@
   gap: 12px;
   align-items: center;
   padding: 16px;
-  background: linear-gradient(180deg, rgba(var(--canvas-card), 0.5) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgb(var(--canvas-card) / 0.5) 0%, transparent 100%);
   overflow-x: auto;
 }
 
@@ -149,7 +149,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background-color: rgba(var(--accent-primary), 0.15);
+  background-color: rgb(var(--accent-primary) / 0.15);
   color: rgb(var(--accent-primary));
   font-size: 0;
 }

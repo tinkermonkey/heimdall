@@ -32,6 +32,7 @@ export interface PipelineCardProps extends React.HTMLAttributes<HTMLDivElement> 
   pipeline: Pipeline
   onRun?: () => void
   onCancel?: () => void
+  onOptions?: () => void
   compact?: boolean
 }
 
@@ -43,7 +44,7 @@ const statusChipColor: Record<Pipeline['status'], StatusColor> = {
 }
 
 export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
-  ({ pipeline, onRun, onCancel, compact = false, className, ...props }, ref) => {
+  ({ pipeline, onRun, onCancel, onOptions, compact = false, className, ...props }, ref) => {
     const statusColor = statusChipColor[pipeline.status]
 
     return (
@@ -95,7 +96,7 @@ export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
                   Cancel
                 </button>
               )}
-              <button type="button" aria-label="Pipeline options" className="pipeline-card__kebab-btn" data-testid="pipeline-kebab-btn">
+              <button type="button" aria-label="Pipeline options" className="pipeline-card__kebab-btn" onClick={onOptions} disabled={!onOptions} data-testid="pipeline-kebab-btn">
                 <Icon name="moreVertical" size={16} />
               </button>
             </div>
