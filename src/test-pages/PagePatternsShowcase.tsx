@@ -76,7 +76,7 @@ export default function PagePatternsShowcase() {
 
   return (
     <ShellLayout
-      appTitle={{ title: 'Heimdall', version: 'v0.1.0' }}
+      appTitle={{ title: 'Heimdall', version: 'v0.3.0' }}
       topbar={{
         breadcrumbs: [{ label: 'Dashboard' }, { label: 'Patterns' }],
       }}

@@ -70,6 +70,7 @@ export default function FilterDropdownTestPage() {
           <FilterDropdown
             mode="radio"
             onChange={setRadioSelected}
+            defaultValue={radioSelected}
           >
             <FilterDropdown.Trigger label="Node type" summary={radioSummary} />
             <FilterDropdown.Panel>

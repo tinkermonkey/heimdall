@@ -37,12 +37,13 @@ export interface FilterDropdownProps {
   children: ReactNode
   onChange?: (selectedValues: string[]) => void
   className?: string
+  defaultValue?: string[]
 }
 
 const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownProps>(
-  ({ mode = 'checkbox', children, onChange, className = '' }, ref) => {
+  ({ mode = 'checkbox', children, onChange, className = '', defaultValue }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set())
+    const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set(defaultValue ?? []))
     const [focusedValue, setFocusedValue] = useState<string | null>(null)
     const triggerRef = useRef<HTMLButtonElement>(null)
     const panelRef = useRef<HTMLDivElement>(null)
