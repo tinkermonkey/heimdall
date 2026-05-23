@@ -40,8 +40,48 @@ export default function ShellFrameworkTestPage() {
         onCollapse: setSidebarOpen,
       }}
       statusbar={{
-        left: <span>System Monitor</span>,
-        right: <span>Status: Online</span>,
+        left: (
+          <>
+            <div className="statusbar__item statusbar__item--pulse">
+              <div className="statusbar__pulse statusbar__pulse--emerald" />
+              <span className="statusbar__label">graph daemon</span>
+              <span className="statusbar__label--mono">:7474</span>
+            </div>
+            <div className="statusbar__divider" />
+            <div className="statusbar__item">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgb(var(--shell-fg-3))" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 12 9 6 21 6"/>
+                <path d="M3 12 9 18 21 18"/>
+                <circle cx="3" cy="12" r="2"/>
+              </svg>
+              <span className="statusbar__label--mono">20 cls · 267 ind · 9 rel</span>
+            </div>
+            <div className="statusbar__divider" />
+            <div className="statusbar__item statusbar__item--pulse">
+              <div className="statusbar__pulse statusbar__pulse--amber" style={{ width: '6px', height: '6px' }} />
+              <span className="statusbar__label--mono">pubmed_genes</span>
+              <span className="statusbar__label">·</span>
+              <span className="statusbar__label--mono">38%</span>
+            </div>
+          </>
+        ),
+        right: (
+          <>
+            <div className="statusbar__item">
+              <span className="statusbar__label">cpu</span>
+              <span className="statusbar__label--mono">14%</span>
+            </div>
+            <div className="statusbar__divider" />
+            <div className="statusbar__item">
+              <span className="statusbar__label">mem</span>
+              <span className="statusbar__label--mono">423 MB</span>
+            </div>
+            <div className="statusbar__divider" />
+            <div className="statusbar__item">
+              <span className="statusbar__label">synced 2m ago</span>
+            </div>
+          </>
+        ),
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

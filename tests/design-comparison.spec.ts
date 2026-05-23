@@ -37,6 +37,10 @@ for (const fixture of FIXTURES) {
       await page.setViewportSize(VIEWPORT)
       await setupDesignRef(page, fixture.design.file)
 
+      if (fixture.design.setup) {
+        await fixture.design.setup(page)
+      }
+
       const selector = fixture.design.selector ?? '.card'
       const el = page.locator(selector).first()
       await el.waitFor({ state: 'visible' })

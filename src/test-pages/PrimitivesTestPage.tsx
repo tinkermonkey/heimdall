@@ -260,9 +260,9 @@ export default function PrimitivesTestPage() {
           VersionPill Component
         </div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <VersionPill>v1.0.0</VersionPill>
-          <VersionPill>v9</VersionPill>
-          <VersionPill>v3.2.1-beta</VersionPill>
+          <VersionPill>v1</VersionPill>
+          <VersionPill>v3</VersionPill>
+          <VersionPill>v12</VersionPill>
         </div>
       </section>
 

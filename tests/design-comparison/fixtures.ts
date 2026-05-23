@@ -16,6 +16,11 @@ export interface ComparisonFixture {
     file: string
     /** Element to clip. Defaults to '.card' (the standard preview wrapper). */
     selector?: string
+    /**
+     * Optional async actions to run after page load — e.g. injecting CSS to
+     * normalise a broken layout in the static design reference HTML.
+     */
+    setup?: (page: Page) => Promise<void>
   }
   react: {
     /** Value of the ?example= query param for the test harness */
@@ -35,7 +40,9 @@ export const FIXTURES: ComparisonFixture[] = [
     id: 'quick-access-tile',
     label: 'QuickAccessTile',
     theme: 'light',
-    design: { file: 'component-quick-access-tile.html' },
+    // Design HTML shows a 2-tile grid; clip to the first tile only so it matches
+    // the single-tile React capture.
+    design: { file: 'component-quick-access-tile.html', selector: '.card > div:first-child > div:first-child' },
     react: {
       exampleId: 'page-patterns',
       selector: '[data-testid="quick-access-tile"]',
@@ -55,7 +62,9 @@ export const FIXTURES: ComparisonFixture[] = [
     id: 'kv-grid',
     label: 'KVGrid',
     theme: 'light',
-    design: { file: 'component-kv-grid.html' },
+    // Design HTML wraps the kv-grid in a plain div (no class); clip to that div
+    // so the annotation paragraph is excluded.
+    design: { file: 'component-kv-grid.html', selector: '.card > div:first-child' },
     react: {
       exampleId: 'inspector-panel',
       selector: '[class*="kv-grid"]',
@@ -81,7 +90,11 @@ export const FIXTURES: ComparisonFixture[] = [
     id: 'filter-dropdown',
     label: 'FilterDropdown',
     theme: 'light',
-    design: { file: 'component-filter-dropdown.html' },
+    // Design HTML shows both closed and open states side-by-side in a .row.
+    // Clip to just the closed trigger (first child of .row) so both sides show
+    // the same closed state. React panel is position:absolute so the outer div
+    // matches the trigger size regardless of open/closed.
+    design: { file: 'component-filter-dropdown.html', selector: '.card .row > div:first-child' },
     react: {
       exampleId: 'filter-dropdown',
       selector: '[class*="filter-dropdown"]',
@@ -91,7 +104,9 @@ export const FIXTURES: ComparisonFixture[] = [
     id: 'version-pill',
     label: 'VersionPill',
     theme: 'light',
-    design: { file: 'component-version-pill.html' },
+    // Design HTML shows multiple pills in a .row; clip to the first pill only so
+    // it matches the single-element React capture.
+    design: { file: 'component-version-pill.html', selector: '.card > .row:first-child > span:first-child' },
     react: {
       exampleId: 'primitives',
       selector: '[class*="version-pill"]',
@@ -121,7 +136,9 @@ export const FIXTURES: ComparisonFixture[] = [
     id: 'hierarchy-row',
     label: 'HierarchyRow',
     theme: 'light',
-    design: { file: 'component-hierarchy-row.html' },
+    // Design HTML shows a multi-row tree; clip to just the first row so it matches
+    // the single HierarchyRow captured on the React side.
+    design: { file: 'component-hierarchy-row.html', selector: '.card > div:first-child > div:first-child' },
     react: {
       exampleId: 'hierarchy-tree',
       selector: '[class*="hierarchy-row"]',
@@ -131,7 +148,17 @@ export const FIXTURES: ComparisonFixture[] = [
     id: 'statusbar',
     label: 'Statusbar',
     theme: 'dark',
-    design: { file: 'component-statusbar.html' },
+    // Design HTML uses inline styles only; the bar is the first div child of .card
+    // (after the <style> block). Use :first-of-type to skip the <style> element.
+    // The inline-flex item spans lack white-space:nowrap so text wraps at the
+    // space character when rendered at 11.5px — inject it to match production intent.
+    design: {
+      file: 'component-statusbar.html',
+      selector: '.card > div:first-of-type',
+      setup: async (page) => {
+        await page.addStyleTag({ content: '* { white-space: nowrap !important; }' })
+      },
+    },
     react: {
       exampleId: 'shell-framework',
       selector: '[class*="statusbar"]',

@@ -12,6 +12,7 @@ export interface HierarchyRowProps extends React.HTMLAttributes<HTMLDivElement> 
   description: string
   selected?: boolean
   onSelect?: () => void
+  showKind?: boolean
 }
 
 const domainColorMap: Record<string, string> = {
@@ -32,6 +33,7 @@ export const HierarchyRow = React.forwardRef<HTMLDivElement, HierarchyRowProps>(
       description,
       selected = false,
       onSelect,
+      showKind = true,
       className = '',
       ...props
     },
@@ -67,7 +69,7 @@ export const HierarchyRow = React.forwardRef<HTMLDivElement, HierarchyRowProps>(
           {depth > 0 && <div className="hierarchy-row__connector" />}
           <div className="hierarchy-row__pill">
             <div className="hierarchy-row__swatch" />
-            <span className="hierarchy-row__kind">{kind}</span>
+            {showKind && <span className="hierarchy-row__kind">{kind}</span>}
             <span className="hierarchy-row__label">{label}</span>
             {meta && <span className="hierarchy-row__meta">{meta}</span>}
           </div>

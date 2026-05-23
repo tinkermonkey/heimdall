@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 220px 2.2fr;
   gap: 18px;
-  padding: 8px 0;
+  padding: 7px 0;
   align-items: center;
   transition: background-color 150ms ease;
   border-radius: var(--radius-sm);
@@ -32,14 +32,14 @@
   align-items: center;
   gap: 8px;
   position: relative;
-  padding-left: calc(var(--hierarchy-depth) * 20px);
+  padding-left: calc(14px + var(--hierarchy-depth) * 20px);
 }
 
 .hierarchy-row__connector {
   position: absolute;
-  left: calc(var(--hierarchy-depth) * 20px - 12px);
-  top: -8px;
-  bottom: -8px;
+  left: calc(14px + var(--hierarchy-depth) * 20px - 12px);
+  top: -7px;
+  bottom: -7px;
   width: 1px;
   border-left: 1px dashed rgb(var(--canvas-border));
 }
@@ -48,7 +48,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 8px;
+  padding: 4px 9px;
   background-color: rgb(var(--canvas-surface));
   border: 1px solid rgb(var(--canvas-border));
   border-radius: var(--radius-sm);
@@ -58,9 +58,11 @@
 .hierarchy-row__swatch {
   display: inline-block;
   width: 3px;
-  height: 16px;
+  height: 14px;
   background-color: rgb(var(--domain-color));
   border-radius: 1px;
+  margin-right: 2px;
+  margin-left: -4px;
 }
 
 .hierarchy-row__kind {
@@ -74,7 +76,8 @@
 
 .hierarchy-row__label {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   color: rgb(var(--canvas-fg-1));
 }
 
@@ -93,7 +96,7 @@
 .hierarchy-row__description {
   font-size: 12.5px;
   color: rgb(var(--canvas-fg-3));
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 /* Dark canvas overrides */

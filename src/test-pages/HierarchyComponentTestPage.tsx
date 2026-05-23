@@ -11,26 +11,27 @@ export default function HierarchyComponentTestPage() {
       depth: 0,
       domain: 'life',
       kind: 'taxonomy' as const,
-      label: 'organism',
-      meta: 'v1.0',
-      description: 'Living organisms and their biological classification system.',
+      label: 'Life Sciences',
+      meta: '3 cls',
+      description: 'Biological and biomedical concepts — organisms, genes, proteins, diseases.',
     },
     {
       id: 'child-1',
       depth: 1,
       domain: 'life',
       kind: 'class' as const,
-      label: 'mammal',
-      description: 'A vertebrate animal that feeds its young with milk.',
+      label: 'Cellular Biology',
+      meta: '6',
+      description: 'Cells, organelles, tissues, and intracellular structures.',
     },
     {
       id: 'child-2',
       depth: 2,
       domain: 'life',
       kind: 'scheme' as const,
-      label: 'primate',
-      meta: 'draft',
-      description: 'An order of mammals that includes humans, apes, and monkeys.',
+      label: 'Cell',
+      meta: '8 ind',
+      description: 'Basic structural and functional unit of all known living organisms.',
     },
     {
       id: 'root-2',
@@ -67,7 +68,7 @@ export default function HierarchyComponentTestPage() {
   ]
 
   return (
-    <div style={{ padding: '22px 28px', backgroundColor: 'rgb(var(--canvas-bg))', minHeight: '100vh' }}>
+    <div style={{ padding: '22px 24px', backgroundColor: 'rgb(var(--canvas-bg))', minHeight: '100vh' }}>
       <section style={{ marginBottom: '32px' }}>
         <div
           style={{
@@ -95,6 +96,7 @@ export default function HierarchyComponentTestPage() {
                 description={item.description}
                 selected={selectedId === item.id}
                 onSelect={() => setSelectedId(item.id)}
+                showKind={false}
               />
             ))}
           </HierarchyTree>

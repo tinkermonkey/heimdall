@@ -33,11 +33,18 @@ export async function setupHarness(
  *
  * Fonts are loaded via the file's own @font-face declarations in
  * design-reference/colors_and_type.css — no injection needed.
+ *
+ * Injects -webkit-font-smoothing: antialiased to match the React harness
+ * rendering, which uses the same setting globally via tokens.css.
  */
 export async function setupDesignRef(page: Page, filename: string): Promise<void> {
   const filePath = `file://${path.join(DESIGN_REF_DIR, filename)}`
   await page.goto(filePath)
   await page.waitForLoadState('networkidle')
   await page.evaluate(() => document.fonts.ready)
+  // Normalize font-smoothing to match React harness (antialiased = grayscale AA)
+  await page.addStyleTag({
+    content: 'body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }',
+  })
   await freezeAnimations(page)
 }
