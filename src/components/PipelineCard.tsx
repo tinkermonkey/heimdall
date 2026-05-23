@@ -22,7 +22,7 @@ export interface Pipeline {
     ingested: number | string
     created: number | string
     updated: number | string
-    errors: number | string
+    errors: number
   }
   tags?: string[]
   lastRun?: string
