@@ -11,6 +11,11 @@
   /* Compact variant for dense layouts */
 }
 
+.pipeline-card--selected {
+  border-color: rgb(var(--accent-primary));
+  box-shadow: 0 0 0 1px rgb(var(--accent-primary) / 0.25);
+}
+
 /* Head region */
 .pipeline-card__head {
   display: flex;

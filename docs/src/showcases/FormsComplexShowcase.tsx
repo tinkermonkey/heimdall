@@ -213,10 +213,62 @@ export function RowMenuShowcase() {
   )
 }
 
+const CONTEXT_PIPELINE = {
+  id: 'ctx_ingest_v2',
+  name: 'ctx_ingest_v2',
+  description: 'Ingests raw context files and persists structured records to the context store.',
+  status: 'running' as const,
+  target: 'context.records',
+  flow: [
+    {
+      id: '1',
+      name: 'parse',
+      label: 'FileText',
+      icon: (
+        <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2 L6 2 C4.9 2 4 2.9 4 4 L4 20 C4 21.1 4.9 22 6 22 L18 22 C19.1 22 20 21.1 20 20 L20 8 Z M14 2 L14 8 L20 8 M16 13 L8 13 M16 17 L8 17 M10 9 L8 9" />
+        </svg>
+      ),
+    },
+    {
+      id: '2',
+      name: 'enrich',
+      label: 'Zap',
+      icon: (
+        <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 Z" />
+        </svg>
+      ),
+    },
+    {
+      id: '3',
+      name: 'persist',
+      label: 'HardDrive',
+      icon: (
+        <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 12 L2 12 M2 9 C2 7.9 2.9 7 4 7 L20 7 C21.1 7 22 7.9 22 9 L22 19 C22 20.1 21.1 21 20 21 L4 21 C2.9 21 2 20.1 2 19 Z M6 17 L6.01 17" />
+        </svg>
+      ),
+    },
+    {
+      id: '4',
+      name: 'link',
+      label: 'Link',
+      icon: 'link' as const,
+    },
+  ],
+  recent: { ingested: 4821, created: 4719, updated: 102, errors: 0 },
+  lastRun: '12s ago',
+  tags: ['nightly'],
+}
+
 export function PipelineCardShowcase() {
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+
   return (
     <div>
       <PageHeader name="PipelineCard" description="Card representing a pipeline with flow nodes, status, and statistics footer." />
+
       <ShowcaseSection label="Running pipeline">
         <PipelineCard
           pipeline={{
@@ -235,6 +287,7 @@ export function PipelineCardShowcase() {
           }}
         />
       </ShowcaseSection>
+
       <ShowcaseSection label="Completed pipeline">
         <PipelineCard
           pipeline={{
@@ -253,6 +306,7 @@ export function PipelineCardShowcase() {
           }}
         />
       </ShowcaseSection>
+
       <ShowcaseSection label="Failed pipeline">
         <PipelineCard
           pipeline={{
@@ -271,6 +325,61 @@ export function PipelineCardShowcase() {
           }}
         />
       </ShowcaseSection>
+
+      <ShowcaseSection label="ReactElement stage icons">
+        <PipelineCard
+          pipeline={CONTEXT_PIPELINE}
+          headerAction={
+            <button
+              type="button"
+              style={{
+                padding: '0 10px',
+                height: 28,
+                background: 'rgb(var(--accent-primary))',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 'var(--radius-sm)',
+                fontSize: 12,
+                fontWeight: 500,
+                cursor: 'pointer',
+              }}
+            >
+              Run now
+            </button>
+          }
+        />
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Custom footer content">
+        <PipelineCard
+          pipeline={{ ...CONTEXT_PIPELINE, id: 'ctx_nightly', name: 'ctx_nightly', status: 'idle' as const, lastRun: undefined }}
+          footerContent={
+            <div style={{ padding: '10px 16px', color: 'rgb(var(--canvas-fg-3))', fontSize: 12, fontStyle: 'italic' }}>
+              No runs yet.
+            </div>
+          }
+        />
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Selected state (click to toggle)">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {(['ctx_ingest_v2', 'ctx_ingest_v1'] as const).map((id) => (
+            <PipelineCard
+              key={id}
+              pipeline={{
+                ...CONTEXT_PIPELINE,
+                id,
+                name: id,
+                status: id === 'ctx_ingest_v1' ? 'success' as const : 'running' as const,
+              }}
+              selected={selectedId === id}
+              onClick={() => setSelectedId(selectedId === id ? null : id)}
+              style={{ cursor: 'pointer' }}
+            />
+          ))}
+        </div>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="pipeline" type="object" description="Pipeline object with id, name, description, status, target, flow, recent, tags, lastRun" />
@@ -278,10 +387,14 @@ export function PipelineCardShowcase() {
           <PropRow name="pipeline.name" type="string" description="Pipeline name (rendered monospace)" />
           <PropRow name="pipeline.description" type="string" description="Optional secondary description line" />
           <PropRow name="pipeline.status" type="'running' | 'success' | 'idle' | 'failed'" description="Overall pipeline status" />
-          <PropRow name="pipeline.flow" type="FlowNode[]" description="Array of flow nodes with id, name, label, icon" />
+          <PropRow name="pipeline.flow" type="FlowNode[]" description="Ordered stage nodes. Each node: { id, name, label?, icon: IconName | ReactElement }" />
           <PropRow name="pipeline.recent" type="object" description="Statistics object: ingested, created, updated, errors" />
-          <PropRow name="onRun" type="() => void" description="Callback fired when Run button is clicked" />
-          <PropRow name="onCancel" type="() => void" description="Callback fired when Cancel button is clicked" />
+          <PropRow name="onRun" type="() => void" description="Callback fired when Run button is clicked (hidden while running)" />
+          <PropRow name="onCancel" type="() => void" description="Callback fired when Cancel button is clicked (shown while running)" />
+          <PropRow name="headerAction" type="ReactNode" description="Element injected into the header action row alongside Run/Cancel/kebab" />
+          <PropRow name="footerContent" type="ReactNode" description="Replaces the default stats grid when provided" />
+          <PropRow name="selected" type="boolean" description="Applies amber border + glow ring — use for drawer-open or active selection state" />
+          <PropRow name="compact" type="boolean" description="Compact variant for dense layouts" />
         </PropsTable>
       </ShowcaseSection>
     </div>
