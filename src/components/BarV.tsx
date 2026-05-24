@@ -3,7 +3,7 @@ import './BarV.css'
 import { SERIES_COLORS } from './chartColors'
 import { TONE, fmt, type ChartTone } from './chartTone'
 
-export interface BarVProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
+export interface BarVProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children' | 'values'> {
   values: number[]
   xLabels?: string[]
   /** Hex color. Defaults to amber (SERIES_COLORS[2]). */

@@ -9,7 +9,7 @@ import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from
 import { AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
-import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarChartShowcase, PieChartShowcase, ProgressBarShowcase, MetricRowShowcase } from './showcases/ChartsShowcase'
+import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarVShowcase, BarHShowcase, StackedBarShowcase, DonutShowcase, HeatmapShowcase, StatusTimelineShowcase, BarChartShowcase, PieChartShowcase, ProgressBarShowcase, MetricRowShowcase } from './showcases/ChartsShowcase'
 import { PageHeaderShowcase, FilterBarShowcase, ActivityTimelineShowcase, AlertStripShowcase, QuickAccessGridShowcase } from './showcases/PagePatternsShowcase'
 import { ChatMessageShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
 import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, RelationshipBuilderShowcase, RowMenuShowcase, PipelineCardShowcase, FormCalloutShowcase } from './showcases/FormsComplexShowcase'
@@ -99,6 +99,12 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'charts-overview': ChartsOverviewShowcase,
   sparkline: SparklineShowcase,
   'line-chart': LineChartShowcase,
+  'bar-v': BarVShowcase,
+  'bar-h': BarHShowcase,
+  'stacked-bar': StackedBarShowcase,
+  donut: DonutShowcase,
+  heatmap: HeatmapShowcase,
+  'status-timeline': StatusTimelineShowcase,
   'bar-chart': BarChartShowcase,
   'pie-chart': PieChartShowcase,
   'progress-bar': ProgressBarShowcase,
@@ -218,13 +224,15 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Charts',
     items: [
-      { id: 'charts', label: 'Overview', icon: 'dashboard' },
+      { id: 'charts-overview', label: 'Overview', icon: 'dashboard' },
       { id: 'sparkline', label: 'Sparkline', icon: 'trending-up' },
       { id: 'line-chart', label: 'LineChart', icon: 'trending-up' },
-      { id: 'bar-chart', label: 'BarChart', icon: 'bar-chart' },
-      { id: 'pie-chart', label: 'PieChart', icon: 'component' },
-      { id: 'progress-bar', label: 'ProgressBar', icon: 'data' },
-      { id: 'metric-row', label: 'MetricRow', icon: 'data' },
+      { id: 'bar-v', label: 'BarV', icon: 'bar-chart' },
+      { id: 'bar-h', label: 'BarH', icon: 'data' },
+      { id: 'stacked-bar', label: 'StackedBar', icon: 'bar-chart' },
+      { id: 'donut', label: 'Donut', icon: 'component' },
+      { id: 'heatmap', label: 'Heatmap', icon: 'table' },
+      { id: 'status-timeline', label: 'StatusTimeline', icon: 'clock' },
     ],
   },
   {

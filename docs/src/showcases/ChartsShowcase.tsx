@@ -14,10 +14,11 @@ import {
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
 
-const chartBg = 'rgb(var(--canvas-surface-2, 243 244 246))'
-const darkBg  = '#0B1426'
+// ── Canvas surfaces ───────────────────────────────────────────────────────────
+const darkBg = '#0B1426'
+const darkBorder = '#243763'
 
-// ── Shared data ──────────────────────────────────────────────────────────────
+// ── Shared sample data ────────────────────────────────────────────────────────
 const LINE  = [12, 14, 13, 16, 19, 17, 21, 24, 22, 27, 31, 28, 34, 38, 36, 42, 45, 48, 46, 52]
 const LINE2 = [22, 24, 25, 24, 26, 28, 27, 30, 29, 31, 30, 33, 34, 32, 35, 37, 36, 39, 41, 40]
 const BAR   = [82, 64, 91, 47, 73, 88, 56, 79, 95, 68, 72, 84]
@@ -44,9 +45,9 @@ const DONUT_SLICES = [
   { value: 16,  color: '#F59E0B' },
 ]
 const HEATMAP = (() => {
-  const rows = []
+  const rows: number[][] = []
   for (let r = 0; r < 7; r++) {
-    const row = []
+    const row: number[] = []
     for (let c = 0; c < 24; c++) {
       const m = Math.sin((c - 8) / 24 * Math.PI) * 0.5 + 0.5
       const e = Math.exp(-Math.pow(c - 20, 2) / 8) * 0.8
@@ -72,38 +73,125 @@ const TIMELINE = [
     { start: 41, end: 86, kind: 'info' as const },
     { start: 86, end: 100, kind: 'idle' as const },
   ]},
-  { label: 'nyx.lab', segments: [{ start: 0, end: 100, kind: 'ok' as const }]},
+  { label: 'nyx.lab',  segments: [{ start: 0, end: 100, kind: 'ok' as const }] },
   { label: 'vega.lab', segments: [
     { start: 0, end: 48, kind: 'ok' as const },
     { start: 48, end: 56, kind: 'error' as const },
     { start: 56, end: 100, kind: 'warn' as const },
   ]},
 ]
+const X_LABELS_20 = ['W1','W4','W8','W12','W16','W20']
+const X_HOURS = ['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']
 
+// ── Layout helpers ────────────────────────────────────────────────────────────
+
+function TierBadge({ tier }: { tier: 'sparkline' | 'micro' | 'standard' | 'feature' }) {
+  const map: Record<string, [string, string]> = {
+    sparkline: ['#22D3EE', 'rgba(34,211,238,0.12)'],
+    micro:     ['#10B981', 'rgba(16,185,129,0.12)'],
+    standard:  ['#F59E0B', 'rgba(245,158,11,0.12)'],
+    feature:   ['#818CF8', 'rgba(129,140,248,0.12)'],
+  }
+  const [color, bg] = map[tier]
+  return (
+    <span style={{
+      fontFamily: 'var(--font-mono, monospace)', fontSize: 9, fontWeight: 500,
+      letterSpacing: '0.08em', textTransform: 'uppercase',
+      padding: '2px 5px', borderRadius: 3,
+      background: bg, color,
+    }}>{tier}</span>
+  )
+}
+
+function TierLabel({ tier, caption }: { tier: 'sparkline' | 'micro' | 'standard' | 'feature'; caption?: string }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+      <TierBadge tier={tier} />
+      {caption && <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, color: 'rgb(var(--canvas-fg-3, 100 116 139))' }}>{caption}</span>}
+    </div>
+  )
+}
+
+function ChartFrame({ children, pad = 16 }: { children: React.ReactNode; pad?: number }) {
+  return (
+    <div style={{
+      background: 'rgb(var(--canvas-bg-2, 247 249 251))',
+      border: '1px solid rgb(var(--canvas-border, 229 233 238))',
+      borderRadius: 8, padding: pad, display: 'inline-block',
+    }}>
+      {children}
+    </div>
+  )
+}
+
+function DarkFrame({ children, pad = 16 }: { children: React.ReactNode; pad?: number }) {
+  return (
+    <div style={{
+      background: darkBg, border: `1px solid ${darkBorder}`,
+      borderRadius: 8, padding: pad, display: 'inline-block',
+    }}>
+      {children}
+    </div>
+  )
+}
+
+function TierRow({ items }: { items: { tier: 'sparkline' | 'micro' | 'standard' | 'feature'; caption?: string; node: React.ReactNode }[] }) {
+  return (
+    <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+      {items.map(({ tier, caption, node }) => (
+        <div key={tier}>
+          <TierLabel tier={tier} caption={caption} />
+          {node}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+const SERIES_COLORS = [
+  { hex: '#22D3EE', name: 'cyan' },
+  { hex: '#10B981', name: 'emerald' },
+  { hex: '#F59E0B', name: 'amber' },
+  { hex: '#818CF8', name: 'indigo' },
+  { hex: '#8B5CF6', name: 'violet' },
+  { hex: '#F43F5E', name: 'rose' },
+]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. Sparkline
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function SparklineShowcase() {
   return (
     <div>
-      <PageHeader name="Sparkline" description="88×28 shape-only trend line. Single series, inherits host domain color. No axes, no labels — shape only." />
+      <PageHeader
+        name="Sparkline"
+        description="88 × 28 shape-only trend indicator. Answers 'going up or down?' — nothing more. Single series, inherits the host's domain color. No axes, no labels, no tooltip."
+      />
+
       <ShowcaseSection label="Canonical series palette">
-        <DemoGrid cols={6} gap={16}>
-          {[
-            { c: '#22D3EE', n: 'cyan' },
-            { c: '#10B981', n: 'emerald' },
-            { c: '#F59E0B', n: 'amber' },
-            { c: '#818CF8', n: 'indigo' },
-            { c: '#8B5CF6', n: 'violet' },
-            { c: '#F43F5E', n: 'rose' },
-          ].map(({ c, n }) => (
-            <DemoCard key={n} label={n}>
-              <Sparkline data={LINE} color={c} />
+        <DemoGrid cols={6} gap={12}>
+          {SERIES_COLORS.map(({ hex, name }) => (
+            <DemoCard key={name} label={name}>
+              <Sparkline data={LINE} color={hex} />
             </DemoCard>
           ))}
         </DemoGrid>
       </ShowcaseSection>
-      <ShowcaseSection label="StatusColor backward compat">
-        <DemoGrid cols={5} gap={16}>
+
+      <ShowcaseSection label="Area fill vs line-only">
+        <DemoRow gap={16}>
+          <DemoCard label="area=true (default)">
+            <Sparkline data={LINE} color="#22D3EE" area />
+          </DemoCard>
+          <DemoCard label="area=false">
+            <Sparkline data={LINE} color="#22D3EE" area={false} />
+          </DemoCard>
+        </DemoRow>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="StatusColor backward compatibility">
+        <DemoGrid cols={5} gap={12}>
           {(['emerald', 'amber', 'rose', 'cyan', 'neutral'] as const).map(color => (
             <DemoCard key={color} label={color}>
               <Sparkline data={LINE} color={color} />
@@ -111,281 +199,495 @@ export function SparklineShowcase() {
           ))}
         </DemoGrid>
       </ShowcaseSection>
+
+      <ShowcaseSection label="In context — StatTile bottom-right slot" description="88 × 28 at default size; scales proportionally with width/height overrides.">
+        <DemoRow gap={16}>
+          {SERIES_COLORS.slice(0, 4).map(({ hex, name }) => (
+            <div key={name} style={{
+              background: 'rgb(var(--canvas-card, 255 255 255))',
+              border: `1px solid rgb(var(--canvas-border, 229 233 238))`,
+              borderLeft: `2px solid ${hex}`,
+              borderRadius: 8, padding: '10px 12px 10px 12px',
+              display: 'flex', flexDirection: 'column', gap: 2, position: 'relative', minWidth: 140,
+            }}>
+              <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgb(var(--canvas-fg-3, 100 116 139))' }}>INDIVIDUALS</div>
+              <div style={{ fontFamily: 'var(--font-sans, Inter)', fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em', color: 'rgb(var(--canvas-fg-1, 11 18 32))', fontVariantNumeric: 'tabular-nums' }}>267</div>
+              <div style={{ position: 'absolute', right: 10, bottom: 10 }}>
+                <Sparkline data={LINE} color={hex} />
+              </div>
+            </div>
+          ))}
+        </DemoRow>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="data" type="number[]" description="Values to plot" />
-          <PropRow name="color" type="string" def="'emerald'" description="StatusColor name or hex string" />
-          <PropRow name="area" type="boolean" def="true" description="Show gradient area fill" />
-          <PropRow name="width" type="number" def="88" description="SVG width" />
-          <PropRow name="height" type="number" def="28" description="SVG height" />
+          <PropRow name="data" type="number[]" description="Values to plot (min 2 points)" />
+          <PropRow name="color" type="string" def="'emerald'" description="StatusColor name or any hex string" />
+          <PropRow name="area" type="boolean" def="true" description="Gradient area fill beneath the line" />
+          <PropRow name="width" type="number" def="88" description="SVG width in pixels" />
+          <PropRow name="height" type="number" def="28" description="SVG height in pixels" />
         </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. LineChart
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function LineChartShowcase() {
   return (
     <div>
-      <PageHeader name="LineChart" description="Continuous change over time. Four tiers: micro (shape), standard (+axes +grid), feature (+tooltip +markers +threshold)." />
-      <ShowcaseSection label="Micro — shape only">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 12, borderRadius: 6, display: 'inline-block' }}>
-            <LineChart series={[LINE]} colors={['#10B981']} area
-              width={200} height={72} padding={{ top: 6, right: 6, bottom: 6, left: 6 }} />
-          </div>
-        </DemoCard>
+      <PageHeader
+        name="LineChart"
+        description="Continuous change over time. Supports all four tiers. Multi-series cycles the canonical palette. Tooltip, threshold, and event markers available at feature tier."
+      />
+
+      <ShowcaseSection label="Tier ladder — same data, four containers">
+        <TierRow items={[
+          {
+            tier: 'sparkline',
+            caption: '88 × 28',
+            node: <Sparkline data={LINE} color="#22D3EE" />,
+          },
+          {
+            tier: 'micro',
+            caption: '200 × 72',
+            node: (
+              <ChartFrame pad={8}>
+                <LineChart series={[LINE]} colors={['#10B981']} area
+                  width={200} height={72} padding={{ top: 6, right: 6, bottom: 6, left: 6 }} />
+              </ChartFrame>
+            ),
+          },
+          {
+            tier: 'standard',
+            caption: '480 × 220',
+            node: (
+              <ChartFrame>
+                <LineChart series={[LINE]} colors={['#F59E0B']} area
+                  width={480} height={220} axes grid ticks={4}
+                  xLabels={X_LABELS_20}
+                  threshold={{ value: 40, label: 'target' }} />
+              </ChartFrame>
+            ),
+          },
+        ]} />
       </ShowcaseSection>
-      <ShowcaseSection label="Standard — axes + grid + threshold">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <LineChart series={[LINE]} colors={['#F59E0B']} area
-              width={480} height={220} axes grid ticks={4}
-              xLabels={['W1','W4','W8','W12','W16','W20']}
-              threshold={{ value: 40, label: 'target' }} />
-          </div>
-        </DemoCard>
+
+      <ShowcaseSection label="Feature — multi-series + tooltip + threshold + markers" description="Hover to see the column tooltip. Cursor snaps to nearest data column.">
+        <ChartFrame>
+          <LineChart series={[LINE, LINE2]} colors={['#22D3EE', '#818CF8']} area
+            width={720} height={320} axes grid ticks={5}
+            xLabels={X_LABELS_20}
+            threshold={{ value: 40, label: 'target' }}
+            markers={[{ x: 8, label: 'release 1.4' }]}
+            tooltip />
+        </ChartFrame>
       </ShowcaseSection>
-      <ShowcaseSection label="Feature — multi-series + tooltip + markers">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <LineChart series={[LINE, LINE2]} colors={['#22D3EE','#818CF8']} area
-              width={720} height={320} axes grid ticks={5}
-              xLabels={['W1','W4','W8','W12','W16','W20']}
-              threshold={{ value: 40, label: 'target' }}
-              markers={[{ x: 8, label: 'release 1.4' }]}
-              tooltip />
-          </div>
-        </DemoCard>
-      </ShowcaseSection>
+
       <ShowcaseSection label="Dark canvas">
-        <DemoCard>
-          <div style={{ background: darkBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <LineChart series={[LINE, LINE2]} colors={['#22D3EE','#818CF8']} area
-              width={480} height={200} axes grid ticks={4}
-              xLabels={['W1','W6','W12','W18']}
-              threshold={{ value: 40, label: 'target' }}
-              tone="dark" />
-          </div>
-        </DemoCard>
+        <DarkFrame>
+          <LineChart series={[LINE, LINE2]} colors={['#22D3EE', '#818CF8']} area
+            width={480} height={200} axes grid ticks={4}
+            xLabels={['W1','W6','W12','W18']}
+            threshold={{ value: 40, label: 'target' }}
+            tone="dark" />
+        </DarkFrame>
       </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="series" type="number[][]" description="Each inner array is one series" />
-          <PropRow name="colors" type="string[]" description="Hex color per series (defaults to canonical palette)" />
-          <PropRow name="area" type="boolean" def="false" description="Gradient area fill" />
-          <PropRow name="axes" type="boolean" def="false" description="Show axis lines + tick labels" />
-          <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines" />
-          <PropRow name="ticks" type="number" def="4" description="Y-axis tick count" />
-          <PropRow name="threshold" type="{ value, label? }" description="Dashed threshold line" />
-          <PropRow name="markers" type="{ x, label? }[]" description="Vertical event markers" />
-          <PropRow name="tooltip" type="boolean" def="false" description="Feature-tier hover card" />
+          <PropRow name="series" type="number[][]" description="Each inner array is one series. Multi-series cycles the canonical palette." />
+          <PropRow name="colors" type="string[]" description="Hex color per series. Overrides palette." />
+          <PropRow name="area" type="boolean" def="false" description="Gradient area fill (22 % → 0 % vertical)" />
+          <PropRow name="axes" type="boolean" def="false" description="Y-axis line + x/y tick labels" />
+          <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines at each y-tick" />
+          <PropRow name="ticks" type="number" def="4" description="Number of y-axis ticks (max 6 per spec)" />
+          <PropRow name="xLabels" type="string[]" description="X-axis tick labels" />
+          <PropRow name="threshold" type="{ value, label? }" description="1 px dashed line in fg-3. Max one per chart." />
+          <PropRow name="markers" type="{ x, label? }[]" description="Amber vertical event markers. Max 4." />
+          <PropRow name="tooltip" type="boolean" def="false" description="Feature-tier hover card. Flips left if it clips right edge." />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
+          <PropRow name="padding" type="{ top?, right?, bottom?, left? }" description="Override default plot-area padding" />
         </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. BarV
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function BarVShowcase() {
   return (
     <div>
-      <PageHeader name="BarV" description="Single-series vertical bar chart. Discrete categories — always start y-axis at zero." />
-      <ShowcaseSection label="Micro">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 12, borderRadius: 6, display: 'inline-block' }}>
-            <BarV values={BAR} color="#10B981" width={180} height={64} />
-          </div>
-        </DemoCard>
+      <PageHeader
+        name="BarV"
+        description="Single-series vertical bar chart for discrete categories. Y-axis always starts at zero. Available at micro, standard, and feature tiers."
+      />
+
+      <ShowcaseSection label="Micro — shape only">
+        <ChartFrame pad={12}>
+          <BarV values={BAR} color="#10B981" width={180} height={64} />
+        </ChartFrame>
       </ShowcaseSection>
+
       <ShowcaseSection label="Standard — axes + grid + threshold">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <BarV values={BAR} xLabels={BAR_MONTHS} color="#10B981"
-              width={480} height={200} axes grid ticks={4}
-              threshold={{ value: 80, label: 'sla' }} />
-          </div>
-        </DemoCard>
+        <ChartFrame>
+          <BarV values={BAR} xLabels={BAR_MONTHS} color="#10B981"
+            width={480} height={200} axes grid ticks={4}
+            threshold={{ value: 80, label: 'sla' }} />
+        </ChartFrame>
       </ShowcaseSection>
+
+      <ShowcaseSection label="Feature — amber + threshold at 80">
+        <ChartFrame>
+          <BarV values={BAR} xLabels={BAR_MONTHS} color="#F59E0B"
+            width={640} height={240} axes grid ticks={5}
+            threshold={{ value: 80, label: 'sla target' }} />
+        </ChartFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Dark canvas">
+        <DarkFrame>
+          <BarV values={BAR} xLabels={BAR_MONTHS} color="#10B981"
+            width={480} height={200} axes grid ticks={4}
+            threshold={{ value: 80, label: 'sla' }}
+            tone="dark" />
+        </DarkFrame>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="values" type="number[]" description="Data values (y-axis always starts at 0)" />
-          <PropRow name="xLabels" type="string[]" description="X-axis tick labels" />
-          <PropRow name="color" type="string" description="Bar fill hex color (default amber)" />
-          <PropRow name="axes" type="boolean" def="false" description="Show axis lines + tick labels" />
+          <PropRow name="values" type="number[]" description="Bar heights. Y-axis always starts at 0." />
+          <PropRow name="xLabels" type="string[]" description="X-axis label per bar (requires axes=true)" />
+          <PropRow name="color" type="string" def="amber (#F59E0B)" description="Bar fill — inherit host domain color for single-series" />
+          <PropRow name="axes" type="boolean" def="false" description="Axis lines + y-tick labels" />
           <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines" />
-          <PropRow name="threshold" type="{ value, label? }" description="Dashed threshold line" />
+          <PropRow name="ticks" type="number" def="4" description="Y-axis tick count" />
+          <PropRow name="threshold" type="{ value, label? }" description="Dashed SLA / target line" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
         </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. BarH
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function BarHShowcase() {
   return (
     <div>
-      <PageHeader name="BarH" description="Horizontal bar chart for ranked categories with labels — hostnames, top-N lists." />
-      <ShowcaseSection label="Standard">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <BarH items={BAR_H_ITEMS} width={320} height={140} />
-          </div>
-        </DemoCard>
+      <PageHeader
+        name="BarH"
+        description="Horizontal bar chart for ranked categories — hostnames, file paths, top-N lists. Each item has a label, value, and optional color. Inset track shows the full range; filled bar shows actual value."
+      />
+
+      <ShowcaseSection label="Standard — 320 × 140">
+        <ChartFrame>
+          <BarH items={BAR_H_ITEMS} width={320} height={140} />
+        </ChartFrame>
       </ShowcaseSection>
-      <ShowcaseSection label="Feature">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <BarH items={BAR_H_ITEMS} width={460} height={180} />
-          </div>
-        </DemoCard>
+
+      <ShowcaseSection label="Feature — 460 × 180">
+        <ChartFrame>
+          <BarH items={BAR_H_ITEMS} width={460} height={180} />
+        </ChartFrame>
       </ShowcaseSection>
+
+      <ShowcaseSection label="Dark canvas">
+        <DarkFrame>
+          <BarH items={BAR_H_ITEMS} width={320} height={140} tone="dark" />
+        </DarkFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Without value labels">
+        <ChartFrame pad={12}>
+          <BarH items={BAR_H_ITEMS} width={240} height={110} showValues={false} />
+        </ChartFrame>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="items" type="{ label, value, color? }[]" description="Ranked items. Color defaults to canonical palette." />
-          <PropRow name="showValues" type="boolean" def="true" description="Show value label after each bar" />
+          <PropRow name="items" type="{ label, value, color? }[]" description="Ranked items. color defaults to SERIES_COLORS cycle." />
+          <PropRow name="showValues" type="boolean" def="true" description="Value label to the right of each bar" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
+          <PropRow name="width" type="number" def="320" description="SVG width" />
+          <PropRow name="height" type="number" def="200" description="SVG height" />
         </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. StackedBar
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function StackedBarShowcase() {
   return (
     <div>
-      <PageHeader name="StackedBar" description="Composition over time. Up to 4 segments. Use normalized mode when totals diverge." />
-      <ShowcaseSection label="Standard — absolute">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <StackedBar stacks={STACKS} width={320} height={140} axes grid ticks={3} />
-          </div>
-        </DemoCard>
+      <PageHeader
+        name="StackedBar"
+        description="Composition over time. Up to 4 segments per stack. Use normalized (100 %) mode when totals diverge — it reveals proportion even when volume varies."
+      />
+
+      <ShowcaseSection label="Standard — absolute values">
+        <ChartFrame>
+          <StackedBar stacks={STACKS} width={320} height={140} axes grid ticks={3} />
+        </ChartFrame>
       </ShowcaseSection>
-      <ShowcaseSection label="Feature — normalized (100 %)">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4} normalized />
-          </div>
-        </DemoCard>
+
+      <ShowcaseSection label="Feature — 100 % normalized" description="Each stack is normalized to 100 %. Y-axis shows percentage labels.">
+        <ChartFrame>
+          <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4} normalized />
+        </ChartFrame>
       </ShowcaseSection>
+
+      <ShowcaseSection label="Dark canvas">
+        <DarkFrame>
+          <StackedBar stacks={STACKS} width={320} height={140} axes grid ticks={3} tone="dark" />
+        </DarkFrame>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="stacks" type="{ label, parts: number[] }[]" description="Each stack has a label and array of part values" />
-          <PropRow name="colors" type="string[]" description="Hex colors per part (defaults to canonical palette)" />
-          <PropRow name="normalized" type="boolean" def="false" description="Percent-normalize all stacks to 100 %" />
-          <PropRow name="axes" type="boolean" def="false" description="Show axis lines + labels" />
+          <PropRow name="stacks" type="{ label, parts: number[] }[]" description="Each stack has a x-label and array of part values (≤ 4 parts)" />
+          <PropRow name="colors" type="string[]" description="Hex colors per part. Defaults to canonical SERIES_COLORS." />
+          <PropRow name="normalized" type="boolean" def="false" description="Normalize all stacks to 100 %. Shows percentage y-labels." />
+          <PropRow name="axes" type="boolean" def="false" description="Axis lines + tick labels" />
+          <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines" />
+          <PropRow name="ticks" type="number" def="4" description="Y-axis tick count" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
         </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. Donut
+// ─────────────────────────────────────────────────────────────────────────────
+
+const DONUT_LEGEND = [
+  { color: '#10B981', label: 'life',     value: 134 },
+  { color: '#818CF8', label: 'software', value: 72  },
+  { color: '#22D3EE', label: 'default',  value: 45  },
+  { color: '#F59E0B', label: 'climate',  value: 16  },
+]
 
 export function DonutShowcase() {
   return (
     <div>
-      <PageHeader name="Donut" description="Composition at a glance. Max 5 slices. Always show total in the center." />
-      <ShowcaseSection label="Micro">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 12, borderRadius: 6, display: 'inline-block' }}>
-            <Donut slices={DONUT_SLICES} width={84} height={84} thickness={9} />
-          </div>
-        </DemoCard>
+      <PageHeader
+        name="Donut"
+        description="Composition at a glance. Max 5 slices — merge the rest as 'other'. Show the total in the center. Available at micro and standard tiers; feature tier adds a legend."
+      />
+
+      <ShowcaseSection label="Tier comparison">
+        <TierRow items={[
+          {
+            tier: 'micro',
+            caption: '84 × 84 · 9 px ring',
+            node: (
+              <ChartFrame pad={12}>
+                <Donut slices={DONUT_SLICES} width={84} height={84} thickness={9} />
+              </ChartFrame>
+            ),
+          },
+          {
+            tier: 'standard',
+            caption: '140 × 140 · 14 px ring + center value',
+            node: (
+              <ChartFrame>
+                <Donut slices={DONUT_SLICES} width={140} height={140} thickness={14}
+                  centerValue="267" centerLabel="ind." />
+              </ChartFrame>
+            ),
+          },
+        ]} />
       </ShowcaseSection>
-      <ShowcaseSection label="Standard — with center value">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
+
+      <ShowcaseSection label="Feature — with legend" description="Donut does not have a built-in legend; compose it alongside with a ul.">
+        <ChartFrame>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <Donut slices={DONUT_SLICES} width={140} height={140} thickness={14}
               centerValue="267" centerLabel="ind." />
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {DONUT_LEGEND.map(({ color, label, value }) => (
+                <li key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: 999, background: color, flexShrink: 0 }} />
+                  <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 11, color: 'rgb(var(--canvas-fg-2, 71 85 105))' }}>{label}</span>
+                  <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 11, color: 'rgb(var(--canvas-fg-3, 100 116 139))', marginLeft: 'auto', paddingLeft: 16 }}>{value}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-        </DemoCard>
+        </ChartFrame>
       </ShowcaseSection>
-      <ShowcaseSection label="Feature — dark canvas">
-        <DemoCard>
-          <div style={{ background: darkBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
+
+      <ShowcaseSection label="Dark canvas">
+        <DarkFrame>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <Donut slices={DONUT_SLICES} width={140} height={140} thickness={14}
               centerValue="267" centerLabel="ind." tone="dark" />
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {DONUT_LEGEND.map(({ color, label, value }) => (
+                <li key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: 999, background: color, flexShrink: 0 }} />
+                  <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 11, color: '#94A3B8' }}>{label}</span>
+                  <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 11, color: '#64748B', marginLeft: 'auto', paddingLeft: 16 }}>{value}</span>
+                </li>
+              ))}
+            </ul>
           </div>
-        </DemoCard>
+        </DarkFrame>
       </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="slices" type="{ value, color? }[]" description="Max 5 slices (6th+ should be merged as 'other')" />
+          <PropRow name="slices" type="{ value, color? }[]" description="Up to 5 slices. Merge the 6th+ into an 'other' slice at call site." />
+          <PropRow name="colors" type="string[]" description="Hex colors per slice. Defaults to canonical SERIES_COLORS." />
           <PropRow name="thickness" type="number" def="14" description="Ring width in pixels" />
-          <PropRow name="centerValue" type="string" description="Bold number in the ring center" />
-          <PropRow name="centerLabel" type="string" description="Mono label below center value" />
+          <PropRow name="centerValue" type="string" description="Bold number in the center (Inter 700)" />
+          <PropRow name="centerLabel" type="string" description="Mono eyebrow below the center value" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
         </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. Heatmap
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function HeatmapShowcase() {
   return (
     <div>
-      <PageHeader name="Heatmap" description="Two-dimensional density — calendar/hour, host/metric. Single-hue scale of the domain color." />
-      <ShowcaseSection label="Standard — 7 × 24 (emerald)">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <Heatmap data={HEATMAP} width={320} height={110}
-              baseColor="#10B981" axes
-              yLabels={['M','T','W','T','F','S','S']}
-              xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']} />
-          </div>
-        </DemoCard>
+      <PageHeader
+        name="Heatmap"
+        description="Two-dimensional density — calendar/hour grids, host/metric matrices. Single-hue scale: low values at 12 % alpha → high at 100 %. Color inherits the domain color of the host (emerald for activity, cyan for throughput, etc.)."
+      />
+
+      <ShowcaseSection label="Standard — 7 × 24, emerald (activity)">
+        <ChartFrame>
+          <Heatmap data={HEATMAP} width={320} height={110}
+            baseColor="#10B981" axes
+            yLabels={['M','T','W','T','F','S','S']}
+            xLabels={X_HOURS} />
+        </ChartFrame>
       </ShowcaseSection>
-      <ShowcaseSection label="Feature — 7 × 24 (cyan)">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <Heatmap data={HEATMAP} width={460} height={140}
-              baseColor="#22D3EE" axes
-              yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
-              xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']} />
-          </div>
-        </DemoCard>
+
+      <ShowcaseSection label="Feature — 7 × 24, cyan (throughput)">
+        <ChartFrame>
+          <Heatmap data={HEATMAP} width={480} height={140}
+            baseColor="#22D3EE" axes
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={X_HOURS} />
+        </ChartFrame>
       </ShowcaseSection>
+
+      <ShowcaseSection label="Color variants — same data, different domain colors">
+        <DemoGrid cols={3} gap={12}>
+          {([['#10B981','emerald'],['#F59E0B','amber'],['#F43F5E','rose']] as const).map(([c, name]) => (
+            <DemoCard key={name} label={name}>
+              <Heatmap data={HEATMAP} width={220} height={80} baseColor={c} />
+            </DemoCard>
+          ))}
+        </DemoGrid>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Dark canvas">
+        <DarkFrame>
+          <Heatmap data={HEATMAP} width={320} height={110}
+            baseColor="#10B981" axes tone="dark"
+            yLabels={['M','T','W','T','F','S','S']}
+            xLabels={X_HOURS} />
+        </DarkFrame>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="data" type="number[][]" description="2-D array [rows][cols]" />
-          <PropRow name="baseColor" type="string" def="'#10B981'" description="Hex color for the hot end of the single-hue scale" />
-          <PropRow name="xLabels / yLabels" type="string[]" description="Axis tick labels (requires axes=true)" />
-          <PropRow name="axes" type="boolean" def="false" description="Show axis labels" />
+          <PropRow name="data" type="number[][]" description="2-D array [rows][cols]. null cells render as inset background." />
+          <PropRow name="baseColor" type="string" def="'#10B981'" description="Hot end of the single-hue alpha scale" />
+          <PropRow name="xLabels / yLabels" type="string[]" description="Axis tick labels. Empty strings skip that label." />
+          <PropRow name="axes" type="boolean" def="false" description="Show x/y axis labels" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
         </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. StatusTimeline
+// ─────────────────────────────────────────────────────────────────────────────
 
 export function StatusTimelineShowcase() {
   return (
     <div>
-      <PageHeader name="StatusTimeline" description="Status of N services across a time window. Color = semantic status: ok / warn / error / idle / info." />
-      <ShowcaseSection label="Standard — 4 tracks">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <StatusTimeline tracks={TIMELINE} width={480} height={150} range={[0,100]} axes
-              xLabels={['-24h','-18','-12','-6','now']} />
-          </div>
-        </DemoCard>
+      <PageHeader
+        name="StatusTimeline"
+        description="Gantt-style status history for N services across a time window. Color encodes semantic status: ok · warn · error · idle · info. Event markers are always amber."
+      />
+
+      <ShowcaseSection label="Standard — 4 tracks, 24-hour window">
+        <ChartFrame>
+          <StatusTimeline tracks={TIMELINE} width={480} height={150} range={[0,100]} axes
+            xLabels={['-24h','-18','-12','-6','now']} />
+        </ChartFrame>
       </ShowcaseSection>
-      <ShowcaseSection label="Feature — with event marker">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <StatusTimeline tracks={TIMELINE} width={720} height={180} range={[0,100]} axes
-              xLabels={['-24h','-20','-16','-12','-8','-4','now']}
-              marker={{ x: 64, label: 'incident #142' }} />
-          </div>
-        </DemoCard>
+
+      <ShowcaseSection label="Feature — with event marker" description="Amber dashed line + dot marks the incident timestamp. Label anchors top-left of the dot.">
+        <ChartFrame>
+          <StatusTimeline tracks={TIMELINE} width={720} height={180} range={[0,100]} axes
+            xLabels={['-24h','-20','-16','-12','-8','-4','now']}
+            marker={{ x: 64, label: 'incident #142' }} />
+        </ChartFrame>
       </ShowcaseSection>
+
+      <ShowcaseSection label="Dark canvas">
+        <DarkFrame>
+          <StatusTimeline tracks={TIMELINE} width={480} height={150} range={[0,100]} axes
+            xLabels={['-24h','-18','-12','-6','now']}
+            tone="dark" />
+        </DarkFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Segment kinds — color reference">
+        <DemoGrid cols={5} gap={10}>
+          {([
+            ['ok',    '#10B981', 'Healthy / running'],
+            ['warn',  '#F59E0B', 'Degraded / slow'],
+            ['error', '#F43F5E', 'Down / failed'],
+            ['idle',  '#F7F9FB', 'Stopped / not scheduled'],
+            ['info',  '#22D3EE', 'Updating / pulling'],
+          ] as const).map(([kind, color, desc]) => (
+            <DemoCard key={kind} label={kind}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                <span style={{ width: 28, height: 8, borderRadius: 2, background: color, border: kind === 'idle' ? '1px solid #E5E9EE' : 'none' }} />
+                <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, color: 'rgb(var(--canvas-fg-3))' }}>{color}</span>
+              </div>
+              <div style={{ fontSize: 11, color: 'rgb(var(--canvas-fg-2))' }}>{desc}</div>
+            </DemoCard>
+          ))}
+        </DemoGrid>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="tracks" type="{ label, segments: { start, end, kind }[] }[]" description="One track per service/host" />
-          <PropRow name="range" type="[number, number]" def="[0, 100]" description="Numeric time range" />
-          <PropRow name="xLabels" type="string[]" description="X-axis time labels (requires axes=true)" />
-          <PropRow name="marker" type="{ x, label? }" description="Amber vertical event marker" />
+          <PropRow name="tracks" type="{ label, segments: { start, end, kind }[] }[]" description="One track per service. Segments are drawn left-to-right; gaps show inset background." />
+          <PropRow name="range" type="[number, number]" def="[0, 100]" description="Numeric range of the time axis" />
+          <PropRow name="axes" type="boolean" def="false" description="Show x-axis labels" />
+          <PropRow name="xLabels" type="string[]" description="Labels evenly distributed along x-axis" />
+          <PropRow name="marker" type="{ x, label? }" description="Amber vertical marker at a position in range units" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
         </PropsTable>
       </ShowcaseSection>
@@ -393,13 +695,183 @@ export function StatusTimelineShowcase() {
   )
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Overview (landing page)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function ChartsOverviewShowcase() {
+  return (
+    <div>
+      <PageHeader
+        name="Charts"
+        description="8 chart types across 4 tiers — sparkline → micro → standard → feature. A chart earns annotations as it gets more prominent; it can never have an annotation from a higher tier. Canonical series palette: cyan → emerald → amber → indigo → violet → rose. Light + dark canvas."
+      />
+
+      {/* Tier ladder */}
+      <ShowcaseSection label="01 · Tier ladder — same data, four tiers" description="The same line series scaled across all four containers. Each tier adds one layer of information.">
+        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+          <div>
+            <TierLabel tier="sparkline" caption="88 × 28 · shape only" />
+            <Sparkline data={LINE} color="#22D3EE" />
+          </div>
+          <div>
+            <TierLabel tier="micro" caption="200 × 72 · + range" />
+            <ChartFrame pad={8}>
+              <LineChart series={[LINE]} colors={['#10B981']} area
+                width={200} height={72} padding={{ top: 6, right: 6, bottom: 6, left: 6 }} />
+            </ChartFrame>
+          </div>
+          <div>
+            <TierLabel tier="standard" caption="480 × 220 · + axes + grid" />
+            <ChartFrame>
+              <LineChart series={[LINE]} colors={['#F59E0B']} area
+                width={480} height={220} axes grid ticks={4}
+                xLabels={X_LABELS_20} threshold={{ value: 40, label: 'target' }} />
+            </ChartFrame>
+          </div>
+          <div>
+            <TierLabel tier="feature" caption="720 × 320 · + multi-series + tooltip + markers" />
+            <ChartFrame>
+              <LineChart series={[LINE, LINE2]} colors={['#22D3EE','#818CF8']} area
+                width={720} height={320} axes grid ticks={5}
+                xLabels={X_LABELS_20}
+                threshold={{ value: 40, label: 'target' }}
+                markers={[{ x: 8, label: 'release 1.4' }]}
+                tooltip />
+            </ChartFrame>
+          </div>
+        </div>
+      </ShowcaseSection>
+
+      {/* Eight chart types */}
+      <ShowcaseSection label="02 · Eight chart types" description="Standard-tier examples. Each type has its own showcase page with all tiers, dark canvas, and prop reference.">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, auto)', gap: 16 }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(var(--canvas-fg-3))', marginBottom: 8 }}>Line / Area</div>
+            <ChartFrame>
+              <LineChart series={[LINE]} colors={['#F59E0B']} area
+                width={360} height={160} axes grid ticks={3} xLabels={['W1','W8','W16']} />
+            </ChartFrame>
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(var(--canvas-fg-3))', marginBottom: 8 }}>Bar (vertical)</div>
+            <ChartFrame>
+              <BarV values={BAR} xLabels={BAR_MONTHS} color="#10B981"
+                width={360} height={160} axes grid ticks={3}
+                threshold={{ value: 80, label: 'sla' }} />
+            </ChartFrame>
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(var(--canvas-fg-3))', marginBottom: 8 }}>Bar (horizontal)</div>
+            <ChartFrame>
+              <BarH items={BAR_H_ITEMS} width={320} height={140} />
+            </ChartFrame>
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(var(--canvas-fg-3))', marginBottom: 8 }}>Stacked bar</div>
+            <ChartFrame>
+              <StackedBar stacks={STACKS} width={320} height={140} axes grid ticks={3} />
+            </ChartFrame>
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(var(--canvas-fg-3))', marginBottom: 8 }}>Donut / ring</div>
+            <ChartFrame>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+                <Donut slices={DONUT_SLICES} width={140} height={140} thickness={14}
+                  centerValue="267" centerLabel="ind." />
+                <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {DONUT_LEGEND.map(({ color, label, value }) => (
+                    <li key={label} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ width: 7, height: 7, borderRadius: 999, background: color, flexShrink: 0 }} />
+                      <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10.5, color: 'rgb(var(--canvas-fg-2))' }}>{label}</span>
+                      <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10.5, color: 'rgb(var(--canvas-fg-3))', marginLeft: 'auto', paddingLeft: 12 }}>{value}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </ChartFrame>
+          </div>
+          <div>
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(var(--canvas-fg-3))', marginBottom: 8 }}>Heatmap</div>
+            <ChartFrame>
+              <Heatmap data={HEATMAP} width={320} height={110}
+                baseColor="#10B981" axes
+                yLabels={['M','T','W','T','F','S','S']}
+                xLabels={X_HOURS} />
+            </ChartFrame>
+          </div>
+          <div style={{ gridColumn: '1 / -1' }}>
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgb(var(--canvas-fg-3))', marginBottom: 8 }}>Status timeline</div>
+            <ChartFrame>
+              <StatusTimeline tracks={TIMELINE} width={720} height={165} range={[0,100]} axes
+                xLabels={['-24h','-20','-16','-12','-8','-4','now']}
+                marker={{ x: 64, label: 'incident #142' }} />
+            </ChartFrame>
+          </div>
+        </div>
+      </ShowcaseSection>
+
+      {/* Series palette */}
+      <ShowcaseSection label="03 · Series color" description="Single-series charts inherit the domain color of their host. Multi-series cycles this palette in fixed order — never reshuffle.">
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20 }}>
+          {SERIES_COLORS.map(({ hex, name }, i) => (
+            <div key={name} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', border: '1px solid rgb(var(--canvas-border))', borderRadius: 6 }}>
+              <span style={{ width: 8, height: 8, borderRadius: 999, background: hex, flexShrink: 0 }} />
+              <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, fontWeight: 500, color: 'rgb(var(--canvas-fg-2))' }}>
+                {String(i+1).padStart(2,'0')} {name}
+              </span>
+              <span style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, color: 'rgb(var(--canvas-fg-3))' }}>{hex.toLowerCase()}</span>
+            </div>
+          ))}
+        </div>
+        <ChartFrame>
+          <StackedBar stacks={STACKS} width={460} height={160} axes grid ticks={4} />
+        </ChartFrame>
+      </ShowcaseSection>
+
+      {/* Dark canvas preview */}
+      <ShowcaseSection label="04 · Dark canvas" description="Series colors are identical between canvases. Grid lines, axis labels, and inset backgrounds remap to the dark canvas token set.">
+        <DarkFrame>
+          <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            <LineChart series={[LINE, LINE2]} colors={['#22D3EE','#818CF8']} area
+              width={440} height={180} axes grid ticks={4}
+              xLabels={['W1','W6','W12','W18']}
+              threshold={{ value: 40, label: 'target' }}
+              tone="dark" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <Donut slices={DONUT_SLICES} width={140} height={140} thickness={14}
+                centerValue="267" centerLabel="ind." tone="dark" />
+              <BarH items={BAR_H_ITEMS} width={260} height={110} tone="dark" />
+            </div>
+          </div>
+        </DarkFrame>
+      </ShowcaseSection>
+
+      {/* Sparklines row */}
+      <ShowcaseSection label="05 · Sparkline palette">
+        <DemoGrid cols={6} gap={12}>
+          {SERIES_COLORS.map(({ hex, name }) => (
+            <DemoCard key={name} label={name}>
+              <Sparkline data={LINE} color={hex} />
+            </DemoCard>
+          ))}
+        </DemoGrid>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Legacy / utility components
+// ─────────────────────────────────────────────────────────────────────────────
+
 export function BarChartShowcase() {
   return (
     <div>
-      <PageHeader name="BarChart" description="Grouped multi-series vertical bar chart (legacy). For single-series use BarV; for stacked use StackedBar." />
+      <PageHeader name="BarChart" description="Grouped multi-series vertical bar chart (legacy v1 API). For new work use BarV (single-series) or StackedBar (stacked)." />
       <ShowcaseSection label="Grouped bars">
         <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6 }}>
+          <ChartFrame>
             <BarChart
               series={[
                 { name: 'Requests', data: [120, 145, 130, 170, 200], color: 'amber' as const },
@@ -408,7 +880,7 @@ export function BarChartShowcase() {
               xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
               yMin={0} yMax={220} yTickCount={6} legend
               width={480} height={250} />
-          </div>
+          </ChartFrame>
         </DemoCard>
       </ShowcaseSection>
     </div>
@@ -418,20 +890,18 @@ export function BarChartShowcase() {
 export function PieChartShowcase() {
   return (
     <div>
-      <PageHeader name="PieChart" description="Solid-wedge pie chart (legacy). Use Donut for the ring variant specified in the v2.4 chart spec." />
+      <PageHeader name="PieChart" description="Solid-wedge pie chart (legacy v1 API). Use Donut for the ring variant specified in the v2.4 chart spec." />
       <ShowcaseSection label="Distribution">
-        <DemoCard>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <PieChart
-              segments={[
-                { name: 'CPU Bound', value: 35, color: 'rgb(245, 158, 11)' },
-                { name: 'I/O Wait',  value: 25, color: 'rgb(16, 185, 129)' },
-                { name: 'Memory',    value: 20, color: 'rgb(244, 63, 94)' },
-                { name: 'Network',   value: 20, color: 'rgb(34, 211, 238)' },
-              ]}
-              legend width={280} height={280} />
-          </div>
-        </DemoCard>
+        <ChartFrame>
+          <PieChart
+            segments={[
+              { name: 'CPU Bound', value: 35, color: 'rgb(245, 158, 11)' },
+              { name: 'I/O Wait',  value: 25, color: 'rgb(16, 185, 129)' },
+              { name: 'Memory',    value: 20, color: 'rgb(244, 63, 94)' },
+              { name: 'Network',   value: 20, color: 'rgb(34, 211, 238)' },
+            ]}
+            legend width={280} height={280} />
+        </ChartFrame>
       </ShowcaseSection>
     </div>
   )
@@ -440,19 +910,19 @@ export function PieChartShowcase() {
 export function ProgressBarShowcase() {
   return (
     <div>
-      <PageHeader name="ProgressBar" description="Horizontal fill bar with five color variants. Clamps to 0–100; handles NaN gracefully." />
-      <ShowcaseSection label="All variants">
+      <PageHeader name="ProgressBar" description="Horizontal fill bar. Clamps to 0–100; handles NaN gracefully." />
+      <ShowcaseSection label="Color variants">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 360 }}>
-          {[
-            { label: '0% — emerald',  percent: 0,   color: 'emerald'  as const },
-            { label: '25% — cyan',    percent: 25,  color: 'cyan'     as const },
-            { label: '50% — amber',   percent: 50,  color: 'amber'    as const },
-            { label: '75% — rose',    percent: 75,  color: 'rose'     as const },
-            { label: '100% — neutral',percent: 100, color: 'neutral'  as const },
-          ].map(({ label, percent, color }) => (
-            <div key={label}>
-              <div style={{ fontSize: 12, color: 'rgb(var(--canvas-fg-2))', marginBottom: 4 }}>{label}</div>
-              <ProgressBar percent={percent} color={color} />
+          {([
+            [0,   'emerald', '0 %'],
+            [25,  'cyan',    '25 %'],
+            [50,  'amber',   '50 %'],
+            [75,  'rose',    '75 %'],
+            [100, 'neutral', '100 %'],
+          ] as [number, 'emerald' | 'cyan' | 'amber' | 'rose' | 'neutral', string][]).map(([p, c, label]) => (
+            <div key={p}>
+              <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, color: 'rgb(var(--canvas-fg-3))', marginBottom: 4 }}>{label} · {c}</div>
+              <ProgressBar percent={p} color={c} />
             </div>
           ))}
         </div>
@@ -466,100 +936,14 @@ export function MetricRowShowcase() {
     <div>
       <PageHeader name="MetricRow" description="Composite row combining label, progress bar, sparkline trend, and value. Used for live resource metrics." />
       <ShowcaseSection label="Resource metrics">
-        <div style={{ background: chartBg, padding: 16, borderRadius: 6, maxWidth: 560 }}>
-          <MetricRow label="CPU Usage"   value={72}   unit="%" percent={72} sparklineData={[45,52,48,65,72,68,75,70,72,68]} color="amber" />
-          <MetricRow label="Memory"      value={1084} unit="MB" percent={45} sparklineData={[890,920,950,1000,1050,1080,1084,1075,1070,1065]} color="emerald" />
-          <MetricRow label="Network I/O" value={234}  unit="Mbps" percent={85} sparklineData={[150,180,200,220,210,230,234,225,220,215]} color="cyan" />
-          <MetricRow label="Error Rate"  value={5}    unit="%" percent={5} sparklineData={[2,3,2,4,5,4,3,5,4,2]} color="rose" />
-        </div>
-      </ShowcaseSection>
-    </div>
-  )
-}
-
-export function ChartsOverviewShowcase() {
-  return (
-    <div>
-      <PageHeader
-        name="Charts"
-        description="8 chart types across 4 tiers (sparkline → micro → standard → feature). Canonical series palette: cyan → emerald → amber → indigo → violet → rose. Light + dark canvas."
-      />
-      <ShowcaseSection label="Sparklines — canonical palette">
-        <DemoGrid cols={6} gap={16}>
-          {[
-            { c: '#22D3EE', n: 'cyan' }, { c: '#10B981', n: 'emerald' },
-            { c: '#F59E0B', n: 'amber' }, { c: '#818CF8', n: 'indigo' },
-            { c: '#8B5CF6', n: 'violet' }, { c: '#F43F5E', n: 'rose' },
-          ].map(({ c, n }) => (
-            <DemoCard key={n} label={n}>
-              <Sparkline data={LINE} color={c} />
-            </DemoCard>
-          ))}
-        </DemoGrid>
-      </ShowcaseSection>
-      <ShowcaseSection label="Line chart — feature tier">
-        <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-          <LineChart series={[LINE, LINE2]} colors={['#22D3EE','#818CF8']} area
-            width={720} height={320} axes grid ticks={5}
-            xLabels={['W1','W4','W8','W12','W16','W20']}
-            threshold={{ value: 40, label: 'target' }}
-            markers={[{ x: 8, label: 'release 1.4' }]}
-            tooltip />
-        </div>
-      </ShowcaseSection>
-      <ShowcaseSection label="Bar (vertical) + Bar (horizontal)">
-        <DemoGrid cols={2} gap={16}>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <BarV values={BAR} xLabels={BAR_MONTHS} color="#10B981"
-              width={360} height={160} axes grid ticks={3}
-              threshold={{ value: 80, label: 'sla' }} />
+        <ChartFrame>
+          <div style={{ width: 520 }}>
+            <MetricRow label="CPU Usage"   value={72}   unit="%" percent={72} sparklineData={[45,52,48,65,72,68,75,70,72,68]} color="amber" />
+            <MetricRow label="Memory"      value={1084} unit="MB" percent={45} sparklineData={[890,920,950,1000,1050,1080,1084,1075,1070,1065]} color="emerald" />
+            <MetricRow label="Network I/O" value={234}  unit="Mbps" percent={85} sparklineData={[150,180,200,220,210,230,234,225,220,215]} color="cyan" />
+            <MetricRow label="Error Rate"  value={5}    unit="%" percent={5} sparklineData={[2,3,2,4,5,4,3,5,4,2]} color="rose" />
           </div>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <BarH items={BAR_H_ITEMS} width={320} height={140} />
-          </div>
-        </DemoGrid>
-      </ShowcaseSection>
-      <ShowcaseSection label="Stacked bar + Donut">
-        <DemoGrid cols={2} gap={16}>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <StackedBar stacks={STACKS} width={320} height={160} axes grid ticks={3} />
-          </div>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <Donut slices={DONUT_SLICES} width={140} height={140} thickness={14}
-              centerValue="267" centerLabel="ind." />
-          </div>
-        </DemoGrid>
-      </ShowcaseSection>
-      <ShowcaseSection label="Heatmap + StatusTimeline">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <Heatmap data={HEATMAP} width={460} height={140}
-              baseColor="#22D3EE" axes
-              yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
-              xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']} />
-          </div>
-          <div style={{ background: chartBg, padding: 16, borderRadius: 6, display: 'inline-block' }}>
-            <StatusTimeline tracks={TIMELINE} width={720} height={180} range={[0,100]} axes
-              xLabels={['-24h','-20','-16','-12','-8','-4','now']}
-              marker={{ x: 64, label: 'incident #142' }} />
-          </div>
-        </div>
-      </ShowcaseSection>
-      <ShowcaseSection label="Progress bars">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 360 }}>
-          {([
-            [0, 'emerald'], [33, 'cyan'], [66, 'amber'], [100, 'rose'],
-          ] as [number, 'emerald' | 'cyan' | 'amber' | 'rose'][]).map(([p, c]) => (
-            <ProgressBar key={p} percent={p} color={c} />
-          ))}
-        </div>
-      </ShowcaseSection>
-      <ShowcaseSection label="Metric rows">
-        <div style={{ background: chartBg, padding: 16, borderRadius: 6, maxWidth: 560 }}>
-          <MetricRow label="CPU" value={72} unit="%" percent={72} sparklineData={[45,52,48,65,72]} color="amber" />
-          <MetricRow label="Memory" value={62} unit="%" percent={62} sparklineData={[55,58,60,62,61]} color="emerald" />
-          <MetricRow label="Network" value={85} unit="%" percent={85} sparklineData={[60,70,75,80,85]} color="cyan" />
-        </div>
+        </ChartFrame>
       </ShowcaseSection>
     </div>
   )
