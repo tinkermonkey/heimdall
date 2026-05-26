@@ -69,6 +69,10 @@
   background: rgb(var(--status-emerald, 52, 211, 153));
 }
 
+.chat-container__bot-status--error {
+  background: rgb(var(--status-rose, 251, 113, 133));
+}
+
 .chat-container__bot-role {
   font-family: var(--font-mono);
   font-size: 9px;

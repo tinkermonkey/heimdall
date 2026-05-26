@@ -28,6 +28,12 @@
   background-color: rgb(var(--canvas-bg));
 }
 
+.quick-access-tile:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .quick-access-tile__icon {
   display: flex;
   align-items: center;
@@ -36,14 +42,14 @@
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background-color: rgba(251, 191, 36, 0.10);
-  border: 1px solid rgba(251, 191, 36, 0.20);
+  background-color: rgba(var(--accent-primary), 0.10);
+  border: 1px solid rgba(var(--accent-primary), 0.20);
   color: rgb(var(--accent-primary));
   transition: background-color 80ms ease-out;
 }
 
 .quick-access-tile:hover .quick-access-tile__icon {
-  background-color: rgba(251, 191, 36, 0.16);
+  background-color: rgba(var(--accent-primary), 0.16);
 }
 
 .quick-access-tile__body {

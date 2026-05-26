@@ -4,9 +4,40 @@
   padding: 12px 14px;
   background-color: rgb(var(--canvas-bg));
   border: 1px solid rgb(var(--canvas-border));
+  border-left-width: 3px;
   border-radius: var(--radius-md);
   font-size: var(--text-sm);
   color: rgb(var(--canvas-fg-1));
+}
+
+.form-callout--info {
+  background-color: rgb(var(--semantic-neutral-bg));
+  border-color: rgb(var(--canvas-border));
+  border-left-color: rgb(var(--canvas-fg-3));
+}
+
+.form-callout--info .form-callout__icon {
+  color: rgb(var(--canvas-fg-3));
+}
+
+.form-callout--warn {
+  background-color: rgb(var(--status-warn-bg));
+  border-color: rgb(var(--semantic-amber-border));
+  border-left-color: rgb(var(--status-warn));
+}
+
+.form-callout--warn .form-callout__icon {
+  color: rgb(var(--status-warn-fg));
+}
+
+.form-callout--error {
+  background-color: rgb(var(--status-error-bg));
+  border-color: rgb(var(--semantic-rose-border));
+  border-left-color: rgb(var(--status-error));
+}
+
+.form-callout--error .form-callout__icon {
+  color: rgb(var(--status-error-fg));
 }
 
 .form-callout__icon {

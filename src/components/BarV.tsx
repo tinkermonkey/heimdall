@@ -15,6 +15,7 @@ export interface BarVProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'chi
   ticks?: number
   threshold?: { value: number; label?: string }
   tone?: ChartTone
+  label?: string
   className?: string
   style?: React.CSSProperties
 }
@@ -32,6 +33,7 @@ export const BarV = React.forwardRef<SVGSVGElement, BarVProps>(
       ticks = 4,
       threshold,
       tone = 'light',
+      label,
       className = '',
       style,
       ...rest
@@ -59,6 +61,8 @@ export const BarV = React.forwardRef<SVGSVGElement, BarVProps>(
     return (
       <svg
         ref={ref}
+        role="img"
+        aria-label={label}
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}

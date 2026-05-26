@@ -105,6 +105,25 @@
   border-radius: 2px;
 }
 
+.topology-node--interactive {
+  cursor: pointer;
+}
+
+.topology-node--interactive:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+
+.topology-node--selected {
+  border-color: rgb(var(--accent-primary));
+  box-shadow: 0 0 0 1px rgb(var(--accent-primary));
+}
+
+.topology-node--selected:hover {
+  border-color: rgb(var(--accent-primary));
+  box-shadow: 0 0 0 1px rgb(var(--accent-primary));
+}
+
 .topology-node--ok {
   border-color: rgba(16, 185, 129, 0.3);
 }

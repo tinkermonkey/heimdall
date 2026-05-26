@@ -6,14 +6,14 @@ import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase, VersionPillS
 import { TextInputShowcase, TextAreaShowcase, NumberInputShowcase, SelectShowcase, TriStateShowcase, FieldShowcase } from './showcases/InputsShowcase'
 import { StatTileShowcase, StatGridShowcase, TableShowcase, KVGridShowcase } from './showcases/DataDisplayShowcase'
 import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from './showcases/NavigationShowcase'
-import { AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
+import { TitlebarShowcase, AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
 import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarVShowcase, BarHShowcase, StackedBarShowcase, DonutShowcase, HeatmapShowcase, StatusTimelineShowcase, BarChartShowcase, PieChartShowcase, ProgressBarShowcase, MetricRowShowcase } from './showcases/ChartsShowcase'
 import { PageHeaderShowcase, FilterBarShowcase, ActivityTimelineShowcase, AlertStripShowcase, QuickAccessGridShowcase } from './showcases/PagePatternsShowcase'
-import { ChatMessageShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
+import { ChatMessageShowcase, ToolBlockShowcase, ThinkingBlockShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
 import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, RelationshipBuilderShowcase, RowMenuShowcase, PipelineCardShowcase, FormCalloutShowcase } from './showcases/FormsComplexShowcase'
-import { GraphCanvasShowcase, GraphInspectorShowcase, TopologyNodeShowcase } from './showcases/GraphShowcase'
+import { GraphNodeShowcase, GraphCanvasShowcase, GraphInspectorShowcase, TopologyNodeShowcase, GraphEdgeShowcase } from './showcases/GraphShowcase'
 import { FilterDropdownShowcase } from './showcases/FilterDropdownShowcase'
 import { InspectorPanelShowcase } from './showcases/InspectorPanelShowcase'
 import { HierarchyTreeShowcase } from './showcases/HierarchyTreeShowcase'
@@ -79,6 +79,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'tab-bar': TabBarShowcase,
   navigation: NavigationComponentTestPage,
   // Shell
+  titlebar: TitlebarShowcase,
   'app-title': AppTitleShowcase,
   statusbar: StatusbarShowcase,
   'shell-layout': ShellLayoutShowcase,
@@ -122,6 +123,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'page-patterns': PagePatternsShowcase,
   // Chat
   'chat-message': ChatMessageShowcase,
+  'tool-block': ToolBlockShowcase,
+  'thinking-block': ThinkingBlockShowcase,
   'chat-divider': ChatDividerShowcase,
   'chat-suggestions': ChatSuggestionsShowcase,
   'chat-composer': ChatComposerShowcase,
@@ -136,6 +139,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'form-callout': FormCalloutShowcase,
   forms: FormsShowcase,
   // Graph
+  'graph-edge': GraphEdgeShowcase,
+  'graph-node': GraphNodeShowcase,
   'graph-canvas': GraphCanvasShowcase,
   'graph-inspector': GraphInspectorShowcase,
   'topology-node': TopologyNodeShowcase,
@@ -198,6 +203,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Shell',
     items: [
+      { id: 'titlebar', label: 'Titlebar', icon: 'arrowUp' },
       { id: 'app-title', label: 'AppTitle', icon: 'menu' },
       { id: 'statusbar', label: 'Statusbar', icon: 'info' },
       { id: 'shell-layout', label: 'ShellLayout', icon: 'layout' },
@@ -252,6 +258,8 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Chat',
     items: [
       { id: 'chat-message', label: 'ChatMessage', icon: 'bot' },
+      { id: 'tool-block', label: 'ToolBlock', icon: 'data' },
+      { id: 'thinking-block', label: 'ThinkingBlock', icon: 'zap' },
       { id: 'chat-divider', label: 'ChatDivider', icon: 'slash' },
       { id: 'chat-suggestions', label: 'ChatSuggestions', icon: 'star' },
       { id: 'chat-composer', label: 'ChatComposer', icon: 'edit' },
@@ -272,6 +280,8 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Graph',
     items: [
+      { id: 'graph-edge', label: 'GraphEdge', icon: 'arrow-right' },
+      { id: 'graph-node', label: 'GraphNode', icon: 'component' },
       { id: 'graph-canvas', label: 'GraphCanvas', icon: 'schema' },
       { id: 'graph-inspector', label: 'GraphInspector', icon: 'info' },
       { id: 'topology-node', label: 'TopologyNode', icon: 'data' },

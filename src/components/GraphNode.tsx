@@ -2,11 +2,9 @@ import React from 'react'
 import { type BaseGraphNodeComponentProps } from './GraphCanvas'
 import './GraphNode.css'
 
-export interface GraphNodeProps extends BaseGraphNodeComponentProps {
+export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'id' | 'onSelect'> {
   kind?: string
   domainColor?: string
-  className?: string
-  style?: React.CSSProperties
 }
 
 export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
@@ -35,7 +33,10 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         data-domain={domainColor}
         data-kind={kind}
         onClick={(e) => { e.stopPropagation(); onSelect?.(id) }}
-        style={style}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onSelect?.(id) } }}
+        role={onSelect ? 'button' : undefined}
+        tabIndex={onSelect ? 0 : undefined}
+        aria-pressed={onSelect ? selected : undefined}
         {...props}
       >
         <span className="graph-node__swatch" />

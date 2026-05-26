@@ -12,8 +12,24 @@
 .panel__header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 16px;
   border-bottom: 1px solid rgb(var(--canvas-border));
+}
+
+.panel__header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.panel__header-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: 12px;
 }
 
 .panel--no-border .panel__header {
@@ -34,6 +50,10 @@
 
 .panel__body {
   padding: 16px;
+}
+
+.panel__body--no-padding {
+  padding: 0;
 }
 
 .panel__footer {

@@ -22,6 +22,7 @@ export interface RelationshipBuilderProps
   predicates?: string[]
   onSourceClear: () => void
   onTargetClear: () => void
+  disabled?: boolean
 }
 
 export const RelationshipBuilder = React.forwardRef<HTMLDivElement, RelationshipBuilderProps>(
@@ -37,34 +38,42 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
     predicates = ['contains', 'relates to', 'depends on', 'is used by'],
     onSourceClear,
     onTargetClear,
+    disabled = false,
     className,
     ...props
   }, ref) => {
-    const handleSourceSelect = (result: EntityPickerResult) => {
+    const id = React.useId()
+    const sourceId = `${id}-source`
+    const predicateId = `${id}-predicate`
+    const targetId = `${id}-target`
+
+    const handleSourceSelect = React.useCallback((result: EntityPickerResult) => {
       onChange({ ...value, source: result })
       onSourceQueryChange('')
-    }
+    }, [onChange, onSourceQueryChange, value])
 
-    const handleTargetSelect = (result: EntityPickerResult) => {
+    const handleTargetSelect = React.useCallback((result: EntityPickerResult) => {
       onChange({ ...value, target: result })
       onTargetQueryChange('')
-    }
+    }, [onChange, onTargetQueryChange, value])
 
-    const handlePredicateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handlePredicateChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
       onChange({ ...value, predicate: e.target.value })
-    }
+    }, [onChange, value])
 
     return (
       <div ref={ref} className={['relationship-builder', className].filter(Boolean).join(' ')} data-testid="relationship-builder" {...props}>
         <div className="relationship-builder__column">
-          <label className="relationship-builder__label">Source</label>
+          <label htmlFor={sourceId} className="relationship-builder__label">Source</label>
           <EntityPicker
+            inputId={sourceId}
             query={sourceQuery}
             onQueryChange={onSourceQueryChange}
             results={sourceResults}
             onSelect={handleSourceSelect}
             onClear={onSourceClear}
             placeholder="Search source entity..."
+            disabled={disabled}
           />
           {value.source && (
             <div className="relationship-builder__selected" data-testid="source-selected">
@@ -77,10 +86,12 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
         </div>
 
         <div className="relationship-builder__column">
-          <label className="relationship-builder__label">Predicate</label>
+          <label htmlFor={predicateId} className="relationship-builder__label">Predicate</label>
           <Select
+            id={predicateId}
             value={value.predicate}
             onChange={handlePredicateChange}
+            disabled={disabled}
             data-testid="predicate-select"
           >
             <option value="">Select relation type...</option>
@@ -93,14 +104,16 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
         </div>
 
         <div className="relationship-builder__column">
-          <label className="relationship-builder__label">Target</label>
+          <label htmlFor={targetId} className="relationship-builder__label">Target</label>
           <EntityPicker
+            inputId={targetId}
             query={targetQuery}
             onQueryChange={onTargetQueryChange}
             results={targetResults}
             onSelect={handleTargetSelect}
             onClear={onTargetClear}
             placeholder="Search target entity..."
+            disabled={disabled}
           />
           {value.target && (
             <div className="relationship-builder__selected" data-testid="target-selected">

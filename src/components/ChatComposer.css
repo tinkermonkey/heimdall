@@ -199,3 +199,23 @@
 .chat-composer__attach-button:active {
   background: rgb(var(--canvas-surface, 36, 55, 99));
 }
+
+.chat-composer__attach-button:focus-visible {
+  outline: none;
+  border-color: rgb(var(--accent-primary, 245, 158, 11));
+  box-shadow: var(--focus-ring);
+}
+
+.chat-composer__attach-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.chat-composer--disabled .chat-composer__input {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chat-composer--disabled .chat-composer__hint {
+  opacity: 0.5;
+}

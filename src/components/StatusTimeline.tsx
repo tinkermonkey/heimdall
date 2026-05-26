@@ -24,6 +24,7 @@ export interface StatusTimelineProps extends Omit<React.SVGAttributes<SVGSVGElem
   xLabels?: string[]
   marker?: { x: number; label?: string }
   tone?: ChartTone
+  'aria-label'?: string
   className?: string
   style?: React.CSSProperties
 }
@@ -47,6 +48,7 @@ export const StatusTimeline = React.forwardRef<SVGSVGElement, StatusTimelineProp
       xLabels,
       marker,
       tone = 'light',
+      'aria-label': ariaLabel,
       className = '',
       style,
       ...rest
@@ -74,6 +76,8 @@ export const StatusTimeline = React.forwardRef<SVGSVGElement, StatusTimelineProp
     return (
       <svg
         ref={ref}
+        role="img"
+        aria-label={ariaLabel}
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
@@ -116,11 +120,11 @@ export const StatusTimeline = React.forwardRef<SVGSVGElement, StatusTimelineProp
           <>
             <line x1={xAt(marker.x)} x2={xAt(marker.x)}
               y1={pad.top - 2} y2={pad.top + innerH + 2}
-              stroke="#F59E0B" strokeWidth="1" strokeDasharray="2 2" />
-            <circle cx={xAt(marker.x)} cy={pad.top - 2} r="3" fill="#F59E0B" />
+              stroke={KIND_COLORS.warn} strokeWidth="1" strokeDasharray="2 2" />
+            <circle cx={xAt(marker.x)} cy={pad.top - 2} r="3" fill={KIND_COLORS.warn} />
             {marker.label && (
               <text x={xAt(marker.x) + 6} y={pad.top + 2}
-                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill="#B45309"
+                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={T.fg2}
                 style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 {marker.label}
               </text>

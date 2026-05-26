@@ -6,19 +6,18 @@ import './QuickAccessTile.css'
 export interface QuickAccessTileProps extends React.HTMLAttributes<HTMLButtonElement> {
   icon: IconName
   title: string
-  description: string
-  onClick: () => void
+  description?: string
 }
 
 export const QuickAccessTile = React.forwardRef<HTMLButtonElement, QuickAccessTileProps>(
-  ({ icon, title, description, onClick, className = '', ...props }, ref) => {
+  ({ icon, title, description, className = '', ...props }, ref) => {
     const classNames = ['quick-access-tile', className].filter(Boolean).join(' ')
 
     return (
       <button
         ref={ref}
+        type="button"
         className={classNames}
-        onClick={onClick}
         data-testid="quick-access-tile"
         {...props}
       >
@@ -27,7 +26,7 @@ export const QuickAccessTile = React.forwardRef<HTMLButtonElement, QuickAccessTi
         </div>
         <div className="quick-access-tile__body">
           <div className="quick-access-tile__title">{title}</div>
-          <div className="quick-access-tile__description">{description}</div>
+          {description && <div className="quick-access-tile__description">{description}</div>}
         </div>
         <Icon name="chevronRight" size={13} className="quick-access-tile__chev" />
       </button>

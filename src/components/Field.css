@@ -39,3 +39,10 @@
   color: rgb(var(--status-rose));
   margin-top: 2px;
 }
+
+.field--disabled .field__label,
+.field--disabled .field__hint,
+.field--disabled .field__error {
+  opacity: 0.45;
+  pointer-events: none;
+}

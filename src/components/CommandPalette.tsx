@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useImperativeHandle } from 'react'
+import React, { useEffect, useRef, useState, useImperativeHandle, useMemo } from 'react'
 import './CommandPalette.css'
 import { Icon, type IconName } from './Icon'
 import { useFocusTrap } from '../hooks/useFocusTrap'
@@ -17,24 +17,30 @@ export interface CommandPaletteProps {
   onClose: () => void
   commands: Command[]
   placeholder?: string
+  emptyMessage?: string
 }
 
 export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPaletteProps>(
-  ({ isOpen, onClose, commands, placeholder = 'Search commands...' }, ref) => {
+  ({ isOpen, onClose, commands, placeholder = 'Search commands…', emptyMessage = 'No commands found' }, ref) => {
     const [search, setSearch] = useState('')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
     const paletteRef = useRef<HTMLDivElement>(null)
+    const listboxId = React.useId()
+    const titleId = React.useId()
 
     useImperativeHandle(ref, () => paletteRef.current as HTMLDivElement)
 
     useFocusTrap(paletteRef, isOpen)
     useBodyOverflow(isOpen)
 
-    const filtered = commands.filter((cmd) =>
-      cmd.label.toLowerCase().includes(search.toLowerCase()) ||
-      (cmd.description?.toLowerCase().includes(search.toLowerCase()) ?? false)
-    )
+    const filtered = useMemo(() => {
+      const q = search.toLowerCase()
+      return commands.filter((cmd) =>
+        cmd.label.toLowerCase().includes(q) ||
+        (cmd.description?.toLowerCase().includes(q) ?? false)
+      )
+    }, [commands, search])
 
     useEffect(() => {
       if (isOpen) {
@@ -89,12 +95,24 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
         className="command-palette-backdrop"
         onClick={handleBackdropClick}
       >
-        <div className="command-palette">
+        <div
+          className="command-palette"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+        >
+          <span id={titleId} className="command-palette__sr-title">Command palette</span>
           <div className="command-palette__header">
             <Icon name="search" size={16} />
             <input
               ref={inputRef}
               type="text"
+              role="combobox"
+              aria-autocomplete="list"
+              aria-expanded={true}
+              aria-controls={listboxId}
+              aria-activedescendant={filtered[selectedIndex] ? `${listboxId}-${filtered[selectedIndex].id}` : undefined}
+              aria-label={placeholder}
               className="command-palette__input"
               placeholder={placeholder}
               value={search}
@@ -105,13 +123,16 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
             />
           </div>
 
-          <div className="command-palette__list">
+          <div id={listboxId} role="listbox" className="command-palette__list">
             {filtered.length === 0 ? (
-              <div className="command-palette__empty">No commands found</div>
+              <div className="command-palette__empty">{emptyMessage}</div>
             ) : (
               filtered.map((cmd, index) => (
                 <button
                   key={cmd.id}
+                  id={`${listboxId}-${cmd.id}`}
+                  role="option"
+                  aria-selected={index === selectedIndex}
                   className={['command-palette__item', index === selectedIndex && 'command-palette__item--selected']
                     .filter(Boolean)
                     .join(' ')}

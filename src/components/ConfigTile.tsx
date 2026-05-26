@@ -8,23 +8,24 @@ export interface ConfigTileSummaryItem {
   value: string
 }
 
-export interface ConfigTileProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface ConfigTileProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: IconName
   title: string
-  description: string
-  summary: ConfigTileSummaryItem[]
-  onClick: () => void
+  description?: string
+  summary?: ConfigTileSummaryItem[]
+  onClick?: () => void
 }
 
 export const ConfigTile = React.forwardRef<HTMLButtonElement, ConfigTileProps>(
-  ({ icon, title, description, summary, onClick, className = '', ...props }, ref) => {
-    const classNames = ['config-tile', className].filter(Boolean).join(' ')
+  ({ icon, title, description, summary = [], onClick, className = '', disabled, ...props }, ref) => {
+    const classNames = ['config-tile', disabled && 'config-tile--disabled', className].filter(Boolean).join(' ')
 
     return (
       <button
         ref={ref}
         className={classNames}
         onClick={onClick}
+        disabled={disabled}
         data-testid="config-tile"
         {...props}
       >
@@ -33,7 +34,7 @@ export const ConfigTile = React.forwardRef<HTMLButtonElement, ConfigTileProps>(
         </div>
         <div className="config-tile__content">
           <div className="config-tile__title">{title}</div>
-          <div className="config-tile__description">{description}</div>
+          {description && <div className="config-tile__description">{description}</div>}
           {summary.length > 0 && (
             <div className="config-tile__summary">
               {summary.map((item, index) => (

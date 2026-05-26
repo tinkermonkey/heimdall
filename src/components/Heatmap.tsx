@@ -3,8 +3,8 @@ import './Heatmap.css'
 import { TONE, type ChartTone } from './chartTone'
 
 export interface HeatmapProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
-  /** 2-D array of [rows][cols] values */
-  data: number[][]
+  /** 2-D array of [rows][cols] values. null cells render as inset background. */
+  data: (number | null)[][]
   /** Hex color for the hot end of the single-hue scale (default emerald) */
   baseColor?: string
   xLabels?: string[]
@@ -13,6 +13,8 @@ export interface HeatmapProps extends Omit<React.SVGAttributes<SVGSVGElement>, '
   height?: number
   axes?: boolean
   tone?: ChartTone
+  /** Accessible label for the SVG */
+  ariaLabel?: string
   className?: string
   style?: React.CSSProperties
 }
@@ -28,6 +30,7 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
       height = 120,
       axes = false,
       tone = 'light',
+      ariaLabel,
       className = '',
       style,
       ...rest
@@ -44,9 +47,9 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
     const cw = (width - pad.left - pad.right) / cols
     const ch = (height - pad.top - pad.bottom) / rows
 
-    const flat = data.flat()
-    const lo = Math.min(...flat)
-    const hi = Math.max(...flat)
+    const flat = data.flat().filter((v): v is number => v != null)
+    const lo = flat.length ? Math.min(...flat) : 0
+    const hi = flat.length ? Math.max(...flat) : 1
 
     // Strip leading '#' so we can append hex alpha
     const base = baseColor.replace('#', '')
@@ -61,6 +64,8 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
     return (
       <svg
         ref={ref}
+        role="img"
+        aria-label={ariaLabel ?? 'Heatmap'}
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
@@ -68,6 +73,7 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
         style={{ display: 'block', ...style }}
         {...rest}
       >
+        {ariaLabel && <title>{ariaLabel}</title>}
         {data.map((row, r) =>
           row.map((v, c) => (
             <rect

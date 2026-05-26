@@ -16,6 +16,7 @@ export interface ActivityEvent {
   dotColor?: StatusColor
   headline?: React.ReactNode
   meta?: string
+  onClick?: (event: ActivityEvent) => void
 }
 
 export interface ActivityTimelineProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -69,7 +70,18 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
       <div ref={ref} className={classNames} data-testid="activity-timeline" {...props}>
         <div className="activity-timeline__list">
           {events.map(event => (
-            <div key={event.id} className="activity-timeline__event" data-testid={`activity-event-${event.id}`} {...(event.kind && { 'data-kind': event.kind })}>
+            <div
+              key={event.id}
+              className={['activity-timeline__event', event.onClick ? 'activity-timeline__event--clickable' : ''].filter(Boolean).join(' ')}
+              data-testid={`activity-event-${event.id}`}
+              {...(event.kind && { 'data-kind': event.kind })}
+              {...(event.onClick && {
+                role: 'button',
+                tabIndex: 0,
+                onClick: () => event.onClick!(event),
+                onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); event.onClick!(event) } },
+              })}
+            >
               <div className="activity-timeline__dot-container">
                 {event.dotColor ? (
                   <div

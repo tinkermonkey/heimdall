@@ -52,6 +52,19 @@ export function EntityPickerShowcase() {
           </div>
         )}
       </ShowcaseSection>
+      <ShowcaseSection label="Disabled">
+        <div style={{ maxWidth: 360 }}>
+          <EntityPicker
+            query="users"
+            onQueryChange={() => {}}
+            results={[]}
+            onSelect={() => {}}
+            onClear={() => {}}
+            placeholder="Search entities..."
+            disabled
+          />
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="query" type="string" description="Controlled search input value" />
@@ -60,6 +73,7 @@ export function EntityPickerShowcase() {
           <PropRow name="onSelect" type="(entity) => void" description="Called when user picks a result" />
           <PropRow name="onClear" type="() => void" description="Called when the × clear button is clicked" />
           <PropRow name="placeholder" type="string" description="Input placeholder text" />
+          <PropRow name="disabled" type="boolean" def="false" description="Prevents all interaction and dims the control" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -70,6 +84,9 @@ export function KeyValueEditorShowcase() {
   const [rows, setRows] = useState<KeyValueRow[]>([
     { id: '1', key: 'environment', value: 'production', datatype: 'string' },
     { id: '2', key: 'max_retries', value: '3', datatype: 'number' },
+  ])
+  const [simpleRows, setSimpleRows] = useState<KeyValueRow[]>([
+    { id: 'a', key: 'host', value: 'localhost' },
   ])
 
   return (
@@ -85,8 +102,18 @@ export function KeyValueEditorShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Without datatype column">
         <KeyValueEditor
-          rows={[{ id: 'a', key: 'host', value: 'localhost' }]}
+          rows={simpleRows}
+          onChange={setSimpleRows}
+        />
+      </ShowcaseSection>
+      <ShowcaseSection label="Disabled">
+        <KeyValueEditor
+          rows={[
+            { id: 'd1', key: 'api_key', value: 'sk-••••••••' },
+            { id: 'd2', key: 'region', value: 'us-east-1' },
+          ]}
           onChange={() => {}}
+          disabled
         />
       </ShowcaseSection>
       <ShowcaseSection label="Props">
@@ -94,7 +121,11 @@ export function KeyValueEditorShowcase() {
           <PropRow name="rows" type="KeyValueRow[]" description="Array of {id, key, value, datatype?} rows" />
           <PropRow name="onChange" type="(rows: KeyValueRow[]) => void" description="Called whenever rows are added, removed, or edited" />
           <PropRow name="datatypeColumn" type="boolean" def="false" description="Show a datatype selector as a third column" />
-          <PropRow name="datatypes" type="string[]" description="Options for the datatype selector" />
+          <PropRow name="datatypes" type="string[]" def="['string','number','boolean']" description="Options for the datatype selector" />
+          <PropRow name="disabled" type="boolean" def="false" description="Prevents all edits and dims the control" />
+          <PropRow name="keyPlaceholder" type="string" def="'Key'" description="Placeholder text for the key input" />
+          <PropRow name="valuePlaceholder" type="string" def="'Value'" description="Placeholder text for the value input" />
+          <PropRow name="addLabel" type="string" def="'Add row'" description="Label for the add-row button" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -109,12 +140,28 @@ export function OrderedListShowcase() {
     { id: '4', label: 'Run smoke tests' },
   ])
 
+  const disabledItems: OrderedItem[] = [
+    { id: 'a', label: 'Initialize schema' },
+    { id: 'b', label: 'Migrate data' },
+    { id: 'c', label: 'Validate indexes' },
+  ]
+
   return (
     <div>
       <PageHeader name="OrderedList" description="Ranked list with per-item move-up/move-down controls. The first item can be designated as 'primary' with a star badge." />
-      <ShowcaseSection label="Reorderable list" description="Use the arrow buttons to reorder items.">
+      <ShowcaseSection label="Reorderable list" description="Use the arrow buttons to reorder items. The first item is marked primary.">
         <div style={{ maxWidth: 420 }}>
           <OrderedList items={items} onChange={setItems} primaryItemId={items[0]?.id} />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Without primary item" description="primaryItemId omitted — no star badge shown.">
+        <div style={{ maxWidth: 420 }}>
+          <OrderedList items={items} onChange={setItems} />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Disabled" description="disabled prop prevents all reordering interaction.">
+        <div style={{ maxWidth: 420 }}>
+          <OrderedList items={disabledItems} onChange={() => {}} primaryItemId="a" disabled />
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
@@ -122,6 +169,7 @@ export function OrderedListShowcase() {
           <PropRow name="items" type="OrderedItem[]" description="Array of {id, label} items in display order" />
           <PropRow name="onChange" type="(items: OrderedItem[]) => void" description="Called whenever item order changes" />
           <PropRow name="primaryItemId" type="string" description="ID of the item to mark as primary with a star badge" />
+          <PropRow name="disabled" type="boolean" def="false" description="Disables all reordering controls" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -169,13 +217,35 @@ export function RelationshipBuilderShowcase() {
           </div>
         )}
       </ShowcaseSection>
+      <ShowcaseSection label="Disabled state">
+        <RelationshipBuilder
+          value={{ source: ALL_ENTITIES[0], predicate: 'contains', target: ALL_ENTITIES[2] }}
+          onChange={() => {}}
+          sourceResults={[]}
+          targetResults={[]}
+          sourceQuery=""
+          onSourceQueryChange={() => {}}
+          targetQuery=""
+          onTargetQueryChange={() => {}}
+          onSourceClear={() => {}}
+          onTargetClear={() => {}}
+          disabled
+        />
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="value" type="RelationshipBuilderValue" description="{source, predicate, target} — controlled state" />
-          <PropRow name="onChange" type="(v) => void" description="Called whenever any field changes" />
-          <PropRow name="sourceResults / targetResults" type="EntityPickerResult[]" description="Filtered results for the source / target pickers" />
-          <PropRow name="sourceQuery / targetQuery" type="string" description="Controlled query for the source / target pickers" />
-          <PropRow name="predicates" type="string[]" description="List of available predicate options" />
+          <PropRow name="value" type="RelationshipBuilderValue" description="{source?, predicate, target?} — controlled state" />
+          <PropRow name="onChange" type="(v: RelationshipBuilderValue) => void" description="Called whenever any field changes" />
+          <PropRow name="sourceQuery" type="string" description="Controlled search query for the source picker" />
+          <PropRow name="onSourceQueryChange" type="(q: string) => void" description="Called on every keystroke in the source picker" />
+          <PropRow name="targetQuery" type="string" description="Controlled search query for the target picker" />
+          <PropRow name="onTargetQueryChange" type="(q: string) => void" description="Called on every keystroke in the target picker" />
+          <PropRow name="sourceResults" type="EntityPickerResult[]" def="[]" description="Filtered results for the source picker dropdown" />
+          <PropRow name="targetResults" type="EntityPickerResult[]" def="[]" description="Filtered results for the target picker dropdown" />
+          <PropRow name="predicates" type="string[]" def="['contains', 'relates to', 'depends on', 'is used by']" description="List of available predicate options" />
+          <PropRow name="onSourceClear" type="() => void" description="Called when the source picker clear button is clicked" />
+          <PropRow name="onTargetClear" type="() => void" description="Called when the target picker clear button is clicked" />
+          <PropRow name="disabled" type="boolean" def="false" description="Disables all three controls" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -188,13 +258,15 @@ export function RowMenuShowcase() {
   const actions = [
     { id: 'edit', label: 'Edit', icon: 'edit' as const },
     { id: 'duplicate', label: 'Duplicate', icon: 'copy' as const },
+    { type: 'separator' as const },
+    { id: 'archive', label: 'Archive', icon: 'download' as const, disabled: true },
     { id: 'delete', label: 'Delete', icon: 'trash' as const, danger: true },
   ]
 
   return (
     <div>
-      <PageHeader name="RowMenu" description="Three-dot trigger that opens a positioned action dropdown. Danger-styled items render in rose text. Closes on outside click, Escape, or selection." />
-      <ShowcaseSection label="In a table row context" description="Click the ⋯ button to open the menu.">
+      <PageHeader name="RowMenu" description="Three-dot trigger that opens a positioned action dropdown. Danger-styled items render in rose text. Disabled items render faded and are excluded from keyboard navigation. Closes on outside click, Escape, or selection." />
+      <ShowcaseSection label="In a table row context" description="Click the ⋯ button to open the menu. Arrow keys navigate between items.">
         <div style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '8px 12px', border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 6, maxWidth: 360 }}>
           <span style={{ fontSize: 13, color: fg2, flex: 1, fontFamily: 'var(--font-mono)' }}>record_12345</span>
           <RowMenu actions={actions} onAction={setLastAction} />
@@ -203,10 +275,23 @@ export function RowMenuShowcase() {
           <div style={{ marginTop: 8, fontSize: 12, color: fg2 }}>Last action: <em>{lastAction}</em></div>
         )}
       </ShowcaseSection>
+      <ShowcaseSection label="Custom trigger label" description="triggerLabel is announced to screen readers and sets the menu's accessible name.">
+        <RowMenu
+          actions={[
+            { id: 'view', label: 'View details', icon: 'eye' as const },
+            { id: 'export', label: 'Export', icon: 'download' as const },
+          ]}
+          onAction={setLastAction}
+          triggerLabel="Row actions"
+        />
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="actions" type="RowMenuAction[]" description="Array of {id, label, icon, danger?} action items" />
-          <PropRow name="onAction" type="(id: string) => void" description="Called with the action ID when an item is selected" />
+          <PropRow name="actions" type="RowMenuAction[]" description="Array of action items. Each item is {id, label, icon?, danger?, disabled?} or {type: 'separator'}." />
+          <PropRow name="onAction" type="(id: string) => void" description="Called with the action ID when an enabled item is selected." />
+          <PropRow name="trigger" type="ReactNode" description="Custom trigger element. Replaces the default icon." />
+          <PropRow name="triggerIcon" type="IconName" default="moreVertical" description="Icon used for the default trigger button." />
+          <PropRow name="triggerLabel" type="string" default='"Menu"' description="Accessible label for the trigger button and menu. Announced by screen readers." />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -380,6 +465,24 @@ export function PipelineCardShowcase() {
         </div>
       </ShowcaseSection>
 
+      <ShowcaseSection label="Compact variant">
+        <PipelineCard
+          compact
+          pipeline={{
+            id: 'compact_pipeline',
+            name: 'compact_pipeline',
+            status: 'success',
+            flow: [
+              { id: '1', name: 'validate', icon: 'check' },
+              { id: '2', name: 'transform', icon: 'data' },
+              { id: '3', name: 'load', icon: 'upload' },
+            ],
+            recent: { ingested: 8200, created: 8200, updated: 0, errors: 0 },
+            lastRun: '1h ago',
+          }}
+        />
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="pipeline" type="object" description="Pipeline object with id, name, description, status, target, flow, recent, tags, lastRun" />
@@ -391,10 +494,11 @@ export function PipelineCardShowcase() {
           <PropRow name="pipeline.recent" type="object" description="Statistics object: ingested, created, updated, errors" />
           <PropRow name="onRun" type="() => void" description="Callback fired when Run button is clicked (hidden while running)" />
           <PropRow name="onCancel" type="() => void" description="Callback fired when Cancel button is clicked (shown while running)" />
+          <PropRow name="onOptions" type="() => void" description="When provided, renders a kebab button that triggers this callback" />
           <PropRow name="headerAction" type="ReactNode" description="Element injected into the header action row alongside Run/Cancel/kebab" />
           <PropRow name="footerContent" type="ReactNode" description="Replaces the default stats grid when provided" />
           <PropRow name="selected" type="boolean" description="Applies amber border + glow ring — use for drawer-open or active selection state" />
-          <PropRow name="compact" type="boolean" description="Compact variant for dense layouts" />
+          <PropRow name="compact" type="boolean" description="Reduces head, flow, and footer padding for dense layouts" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -405,23 +509,39 @@ export function FormCalloutShowcase() {
   return (
     <div>
       <PageHeader name="FormCallout" description="Inline callout banner for contextual guidance within forms. Supports info, warn, and error variants." />
-      <ShowcaseSection label="Variants">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 520 }}>
-          <FormCallout icon="info">
+      <ShowcaseSection label="Info (default)">
+        <div style={{ maxWidth: 520 }}>
+          <FormCallout variant="info" icon="info">
             This field is required before the pipeline can be submitted.
           </FormCallout>
-          <FormCallout icon="alert">
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Warn">
+        <div style={{ maxWidth: 520 }}>
+          <FormCallout variant="warn" icon="alert">
             Changing this value will reset all downstream configurations.
           </FormCallout>
-          <FormCallout icon="trash">
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Error">
+        <div style={{ maxWidth: 520 }}>
+          <FormCallout variant="error" icon="trash">
             Deleting this entity is permanent and cannot be undone.
           </FormCallout>
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="Without icon">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: 520 }}>
+          <FormCallout variant="info">Schema changes take effect on the next pipeline run.</FormCallout>
+          <FormCallout variant="warn">This action will affect all linked records.</FormCallout>
+          <FormCallout variant="error">Validation failed: `target` must be a fully-qualified table name.</FormCallout>
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="icon" type="IconName" description="Icon shown at the left edge of the callout" />
-          <PropRow name="children" type="ReactNode" description="Callout body content" />
+          <PropRow name="variant" type="'info' | 'warn' | 'error'" def="'info'" description="Controls border accent color, background tint, icon color, and ARIA role" />
+          <PropRow name="icon" type="IconName" description="Optional icon shown at the left edge of the callout" />
+          <PropRow name="children" type="ReactNode" description="Callout body content. Backtick-wrapped tokens in plain strings are rendered as inline code." />
         </PropsTable>
       </ShowcaseSection>
     </div>

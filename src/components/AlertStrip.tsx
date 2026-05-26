@@ -39,14 +39,17 @@ export const AlertStrip = React.forwardRef<HTMLDivElement, AlertStripProps>(
             <div className="alert-strip__message" data-testid="alert-message">
               {alert.message}
             </div>
-            <button
-              className="alert-strip__dismiss"
-              onClick={() => onDismiss?.(alert.id)}
-              aria-label={`Dismiss alert: ${alert.message}`}
-              data-testid={`alert-dismiss-${alert.id}`}
-            >
-              <Icon name="x" size={16} />
-            </button>
+            {onDismiss && (
+              <button
+                type="button"
+                className="alert-strip__dismiss"
+                onClick={() => onDismiss(alert.id)}
+                aria-label={`Dismiss alert: ${alert.message}`}
+                data-testid={`alert-dismiss-${alert.id}`}
+              >
+                <Icon name="x" size={16} />
+              </button>
+            )}
           </div>
         ))}
       </div>

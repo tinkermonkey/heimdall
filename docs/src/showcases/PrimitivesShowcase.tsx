@@ -1,14 +1,8 @@
 import { useState } from 'react'
-import { Icon, Button, Chip, Badge, StatusBadge, VersionPill, SegmentedControl, type IconName } from '@tinkermonkey/heimdall-ui'
+import { ICONS, Icon, Button, Chip, Badge, StatusBadge, VersionPill, SegmentedControl, type IconName } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
-const ICON_NAMES: IconName[] = [
-  'dashboard', 'schema', 'data', 'pipeline', 'graph', 'search', 'bell', 'plus', 'check', 'x',
-  'chevronDown', 'chevronUp', 'chevronLeft', 'chevronRight', 'menu', 'settings', 'alert', 'trash',
-  'edit', 'download', 'upload', 'eye', 'eyeOff', 'clock', 'calendar', 'filter', 'link', 'lock',
-  'unlock', 'user', 'copy', 'info', 'help', 'moreVertical', 'moreHorizontal', 'reload',
-  'arrowRight', 'arrowLeft', 'arrowUp', 'arrowDown', 'star', 'heart', 'palette', 'component', 'table', 'layout',
-]
+const ICON_NAMES = Object.keys(ICONS) as IconName[]
 
 const mono = 'var(--font-mono, monospace)'
 const fg3 = 'rgb(var(--canvas-fg-3, 107 114 128))'
@@ -43,6 +37,7 @@ export function IconShowcase() {
         <PropsTable>
           <PropRow name="name" type="IconName" description="Key from the ICONS map" />
           <PropRow name="size" type="number" def="24" description="Width and height in px" />
+          <PropRow name="aria-label" type="string" description="Accessible label; omit when icon is decorative (aria-hidden applied automatically)" />
           <PropRow name="className" type="string" description="Additional CSS class names" />
         </PropsTable>
       </ShowcaseSection>
@@ -58,6 +53,7 @@ export function ButtonShowcase() {
         <DemoRow>
           <Button variant="primary">Primary</Button>
           <Button variant="accent">Accent</Button>
+          <Button variant="secondary">Secondary</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="danger">Danger</Button>
           <Button variant="link">Link</Button>
@@ -77,6 +73,14 @@ export function ButtonShowcase() {
           <Button variant="danger"><Icon name="trash" size={14} /> Delete</Button>
         </DemoRow>
       </ShowcaseSection>
+      <ShowcaseSection label="Icon-only buttons" description="Pass icon to constrain the button to a square, sized to match the height.">
+        <DemoRow>
+          <Button variant="ghost" icon size="md"><Icon name="plus" size={14} /></Button>
+          <Button variant="ghost" icon size="sm"><Icon name="plus" size={12} /></Button>
+          <Button variant="primary" icon size="md"><Icon name="settings" size={14} /></Button>
+          <Button variant="danger" icon size="md"><Icon name="trash" size={14} /></Button>
+        </DemoRow>
+      </ShowcaseSection>
       <ShowcaseSection label="Disabled states">
         <DemoRow>
           <Button variant="primary" disabled>Primary</Button>
@@ -87,10 +91,12 @@ export function ButtonShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="variant" type="'primary' | 'accent' | 'ghost' | 'danger' | 'link'" def="'primary'" description="Visual style" />
+          <PropRow name="variant" type="'primary' | 'accent' | 'secondary' | 'ghost' | 'danger' | 'link'" def="'primary'" description="Visual style" />
           <PropRow name="size" type="'sm' | 'md'" def="'md'" description="Height: md=34px sm=28px" />
+          <PropRow name="icon" type="boolean" description="Constrains button to a square (equal width/height) for icon-only use" />
           <PropRow name="disabled" type="boolean" description="Native disabled attribute" />
           <PropRow name="children" type="ReactNode" description="Button label and/or icon" />
+          <PropRow name="className" type="string" description="Additional CSS class names" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -107,20 +113,42 @@ export function ChipShowcase() {
           <Chip variant="emerald">emerald</Chip>
           <Chip variant="amber">amber</Chip>
           <Chip variant="violet">violet</Chip>
+          <Chip variant="rose">rose</Chip>
           <Chip variant="neutral">neutral</Chip>
         </DemoRow>
       </ShowcaseSection>
-      <ShowcaseSection label="Status with dot" description="Pass a dot element before the label to show a status indicator.">
+      <ShowcaseSection label="Status with dot" description="The default form renders a colored dot automatically — no extra markup needed.">
         <DemoRow>
-          <Chip variant="emerald"><span style={{ width: 5, height: 5, borderRadius: '50%', background: 'currentColor', display: 'inline-block', marginRight: 5 }} />running</Chip>
-          <Chip variant="amber"><span style={{ width: 5, height: 5, borderRadius: '50%', background: 'currentColor', display: 'inline-block', marginRight: 5 }} />degraded</Chip>
-          <Chip variant="rose"><span style={{ width: 5, height: 5, borderRadius: '50%', background: 'currentColor', display: 'inline-block', marginRight: 5 }} />error</Chip>
-          <Chip variant="neutral"><span style={{ width: 5, height: 5, borderRadius: '50%', background: 'currentColor', display: 'inline-block', marginRight: 5 }} />stopped</Chip>
+          <Chip variant="emerald">running</Chip>
+          <Chip variant="amber">degraded</Chip>
+          <Chip variant="rose">error</Chip>
+          <Chip variant="neutral">stopped</Chip>
+        </DemoRow>
+      </ShowcaseSection>
+      <ShowcaseSection label="Form: id-tag" description="Muted monospace label for identifiers and foreign keys.">
+        <DemoRow>
+          <Chip form="id-tag">cls_4f3a</Chip>
+          <Chip form="id-tag">life.organism</Chip>
+          <Chip form="id-tag">usr_99b2</Chip>
+        </DemoRow>
+      </ShowcaseSection>
+      <ShowcaseSection label="Form: version" description="Pill-style tag for version strings.">
+        <DemoRow>
+          <Chip form="version">v2.4.0</Chip>
+          <Chip form="version">v1.0.0-rc.3</Chip>
+        </DemoRow>
+      </ShowcaseSection>
+      <ShowcaseSection label="Form: env" description="Environment badge with a colored dot indicator.">
+        <DemoRow>
+          <Chip form="env">production</Chip>
+          <Chip form="env">staging</Chip>
+          <Chip form="env">development</Chip>
         </DemoRow>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="variant" type="'cyan' | 'emerald' | 'amber' | 'violet' | 'rose' | 'neutral'" def="'neutral'" description="Color scheme" />
+          <PropRow name="variant" type="'cyan' | 'emerald' | 'amber' | 'violet' | 'rose' | 'neutral'" def="'neutral'" description="Color scheme; only applies to form='default'" />
+          <PropRow name="form" type="'default' | 'id-tag' | 'version' | 'env'" def="'default'" description="Visual style. 'default' shows a status dot + semantic color; 'id-tag' is a muted identifier label; 'version' is a pill; 'env' is an environment badge with a dot" />
           <PropRow name="children" type="ReactNode" description="Label content" />
         </PropsTable>
       </ShowcaseSection>
@@ -144,28 +172,38 @@ export function BadgeShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="StatusBadge — with pulse">
         <DemoRow gap={20}>
-          {(['cyan', 'emerald', 'amber', 'rose'] as const).map(c => (
+          {(['cyan', 'emerald', 'amber', 'violet', 'rose'] as const).map(c => (
             <div key={c} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <StatusBadge color={c} pulse />
-              <span style={{ fontSize: 12, color: fg2 }}>{c === 'cyan' ? 'updating' : c === 'emerald' ? 'running' : c === 'amber' ? 'degraded' : 'error'}</span>
+              <StatusBadge color={c} pulse aria-label={c === 'cyan' ? 'updating' : c === 'emerald' ? 'running' : c === 'amber' ? 'degraded' : c === 'violet' ? 'pending' : 'error'} />
+              <span style={{ fontSize: 12, color: fg2 }}>{c === 'cyan' ? 'updating' : c === 'emerald' ? 'running' : c === 'amber' ? 'degraded' : c === 'violet' ? 'pending' : 'error'}</span>
             </div>
           ))}
         </DemoRow>
       </ShowcaseSection>
       <ShowcaseSection label="StatusBadge — static">
         <DemoRow gap={20}>
-          {(['cyan', 'emerald', 'amber', 'rose', 'neutral'] as const).map(c => (
+          {(['cyan', 'emerald', 'amber', 'violet', 'rose', 'neutral'] as const).map(c => (
             <div key={c} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <StatusBadge color={c} />
+              <StatusBadge color={c} aria-label={c} />
               <span style={{ fontSize: 12, color: fg2 }}>{c}</span>
             </div>
           ))}
         </DemoRow>
       </ShowcaseSection>
-      <ShowcaseSection label="Props">
+      <ShowcaseSection label="Badge props">
         <PropsTable>
-          <PropRow name="color" type="'cyan' | 'emerald' | 'amber' | 'violet' | 'rose' | 'neutral'" description="Dot color" />
-          <PropRow name="pulse" type="boolean" def="false" description="(StatusBadge only) Enables the glow pulse animation" />
+          <PropRow name="color" type="'cyan' | 'emerald' | 'amber' | 'violet' | 'rose' | 'neutral'" def="'cyan'" description="Dot color" />
+          <PropRow name="pulse" type="boolean" def="false" description="Enables the badge pulse animation" />
+          <PropRow name="className" type="string" description="Additional CSS class names" />
+        </PropsTable>
+      </ShowcaseSection>
+      <ShowcaseSection label="StatusBadge props">
+        <PropsTable>
+          <PropRow name="color" type="'cyan' | 'emerald' | 'amber' | 'violet' | 'rose' | 'neutral'" def="'cyan'" description="Dot color" />
+          <PropRow name="pulse" type="boolean" def="false" description="Enables the glow pulse animation on the halo layer" />
+          <PropRow name="role" type="string" def="'img'" description="ARIA role; override to 'presentation' for purely decorative usage" />
+          <PropRow name="aria-label" type="string" description="Accessible label describing the status (e.g. 'running', 'error')" />
+          <PropRow name="className" type="string" description="Additional CSS class names" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -199,7 +237,7 @@ export function SegmentedControlShowcase() {
 
   return (
     <div>
-      <PageHeader name="SegmentedControl" description="Toggle between mutually exclusive options. Highlights selected option with amber background." />
+      <PageHeader name="SegmentedControl" description="Toggle between mutually exclusive options. Arrow keys navigate within the group; Tab moves focus between groups." />
       <ShowcaseSection label="Default usage">
         <SegmentedControl
           value={value}
@@ -214,14 +252,26 @@ export function SegmentedControlShowcase() {
           Selected: <span style={{ fontFamily: mono, color: 'rgb(var(--canvas-fg-2))' }}>{String(value)}</span>
         </div>
       </ShowcaseSection>
-      <ShowcaseSection label="Time range options">
+      <ShowcaseSection label="Per-option disabled">
         <SegmentedControl
           value={value}
           onChange={setValue}
           options={[
             { value: 'today', label: 'Today' },
             { value: 'week', label: 'This week' },
-            { value: 'month', label: 'This month' },
+            { value: 'month', label: 'This month', disabled: true },
+          ]}
+        />
+      </ShowcaseSection>
+      <ShowcaseSection label="Entire control disabled">
+        <SegmentedControl
+          value="active"
+          onChange={() => {}}
+          disabled
+          options={[
+            { value: 'all', label: 'All' },
+            { value: 'active', label: 'Active' },
+            { value: 'archived', label: 'Archived' },
           ]}
         />
       </ShowcaseSection>
@@ -229,7 +279,9 @@ export function SegmentedControlShowcase() {
         <PropsTable>
           <PropRow name="value" type="string | number" description="Currently selected option value" />
           <PropRow name="onChange" type="(v: string | number) => void" description="Called when a new option is selected" />
-          <PropRow name="options" type="Array<{value, label}>" description="Available options to select from" />
+          <PropRow name="options" type="Array<{value, label, disabled?}>" description="Available options; each may be individually disabled" />
+          <PropRow name="disabled" type="boolean" def="false" description="Disables the entire control" />
+          <PropRow name="className" type="string" description="Additional CSS class names applied to the container" />
         </PropsTable>
       </ShowcaseSection>
     </div>

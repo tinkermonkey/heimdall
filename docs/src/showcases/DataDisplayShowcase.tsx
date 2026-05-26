@@ -66,11 +66,12 @@ export function StatTileShowcase() {
         <PropsTable>
           <PropRow name="label" type="string" description="Eyebrow label — rendered monospace uppercase" />
           <PropRow name="value" type="string | number" description="Primary metric value" />
-          <PropRow name="color" type="'cyan' | 'violet' | 'amber' | 'emerald' | 'rose'" def="'cyan'" description="Left bar accent color" />
+          <PropRow name="color" type="'cyan' | 'violet' | 'amber' | 'emerald' | 'rose' | 'neutral'" def="'cyan'" description="Left bar accent color" />
           <PropRow name="delta" type="{ value, label?, direction? }" description="Secondary trend row below the value" />
-          <PropRow name="icon" type="IconName" description="Optional icon rendered above the value" />
+          <PropRow name="icon" type="IconName" description="Optional icon rendered in the header" />
           <PropRow name="sparkData" type="number[]" description="Optional data points for a sparkline chart" />
-          <PropRow name="meta" type="string" description="Optional metadata text rendered below the value" />
+          <PropRow name="meta" type="ReactNode" description="Optional content rendered below the value" />
+          <PropRow name="metaIcon" type="IconName" description="Optional icon rendered alongside meta content" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -123,6 +124,7 @@ const STATUS_MAP: Record<string, 'emerald' | 'amber' | 'neutral'> = {
 
 export function TableShowcase() {
   const [selected, setSelected] = useState<(string | number)[]>([])
+  const [lastClicked, setLastClicked] = useState<string | null>(null)
 
   const columns: Column<Host>[] = [
     {
@@ -163,15 +165,37 @@ export function TableShowcase() {
           {selected.length === 0 ? 'No rows selected' : `${selected.length} row${selected.length > 1 ? 's' : ''} selected: ${selected.join(', ')}`}
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="With row click">
+        <Table
+          columns={columns}
+          data={HOSTS}
+          rowKey="id"
+          onRowClick={(row) => setLastClicked(row.name)}
+        />
+        <div style={{ marginTop: 8, fontSize: 12, color: 'rgb(var(--canvas-fg-3, 107 114 128))' }}>
+          {lastClicked ? `Last clicked: ${lastClicked}` : 'Click a row'}
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Empty state">
+        <Table
+          columns={columns}
+          data={[]}
+          rowKey="id"
+          emptyState="No hosts match these filters."
+        />
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="columns" type="Column<T>[]" description="Column definitions — key, label, sortable?, width?, render?" />
           <PropRow name="data" type="T[]" description="Array of data objects" />
           <PropRow name="rowKey" type="keyof T | function" description="Unique key per row" />
-          <PropRow name="selectable" type="boolean" def="true" description="Show checkbox column" />
+          <PropRow name="selectable" type="boolean" def="false" description="Show checkbox column for row selection" />
           <PropRow name="selectedRows" type="(string | number)[]" description="Controlled selection state" />
           <PropRow name="onSelectRows" type="(keys) => void" description="Selection change handler" />
+          <PropRow name="onRowClick" type="(row, key) => void" description="Row click handler — makes rows keyboard-focusable and shows pointer cursor" />
           <PropRow name="onSort" type="(key, dir) => void" description="Sort change handler" />
+          <PropRow name="emptyState" type="ReactNode" description="Content shown when data is empty" />
+          <PropRow name="className" type="string" description="Additional CSS class on the table element" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -216,9 +240,13 @@ export function KVGridShowcase() {
       <ShowcaseSection label="Many rows">
         <KVGrid rows={denseManyRows} />
       </ShowcaseSection>
+      <ShowcaseSection label="Custom key column width">
+        <KVGrid rows={basicRows} keyWidth={180} />
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="rows" type="KVGridRow[]" description="Array of {key, value} pairs. Keys are rendered monospace uppercase; values preserve input formatting." />
+          <PropRow name="keyWidth" type="number | string" defaultValue="130" description="Width of the key column. Accepts a pixel number or any CSS length string (e.g. '25%')." />
         </PropsTable>
       </ShowcaseSection>
     </div>

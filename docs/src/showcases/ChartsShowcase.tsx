@@ -222,11 +222,12 @@ export function SparklineShowcase() {
 
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="data" type="number[]" description="Values to plot (min 2 points)" />
-          <PropRow name="color" type="string" def="'emerald'" description="StatusColor name or any hex string" />
+          <PropRow name="data" type="number[]" required description="Values to plot (min 2 points)" />
+          <PropRow name="color" type="SparklineColor | string" def="'emerald'" description="StatusColor name or any hex string" />
           <PropRow name="area" type="boolean" def="true" description="Gradient area fill beneath the line" />
           <PropRow name="width" type="number" def="88" description="SVG width in pixels" />
           <PropRow name="height" type="number" def="28" description="SVG height in pixels" />
+          <PropRow name="label" type="string" def="'trend sparkline'" description="aria-label for screen readers" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -302,6 +303,8 @@ export function LineChartShowcase() {
         <PropsTable>
           <PropRow name="series" type="number[][]" description="Each inner array is one series. Multi-series cycles the canonical palette." />
           <PropRow name="colors" type="string[]" description="Hex color per series. Overrides palette." />
+          <PropRow name="width" type="number" def="480" description="SVG width in px" />
+          <PropRow name="height" type="number" def="200" description="SVG height in px" />
           <PropRow name="area" type="boolean" def="false" description="Gradient area fill (22 % → 0 % vertical)" />
           <PropRow name="axes" type="boolean" def="false" description="Y-axis line + x/y tick labels" />
           <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines at each y-tick" />
@@ -366,11 +369,14 @@ export function BarVShowcase() {
           <PropRow name="values" type="number[]" description="Bar heights. Y-axis always starts at 0." />
           <PropRow name="xLabels" type="string[]" description="X-axis label per bar (requires axes=true)" />
           <PropRow name="color" type="string" def="amber (#F59E0B)" description="Bar fill — inherit host domain color for single-series" />
+          <PropRow name="width" type="number" def="480" description="SVG width in pixels" />
+          <PropRow name="height" type="number" def="200" description="SVG height in pixels" />
           <PropRow name="axes" type="boolean" def="false" description="Axis lines + y-tick labels" />
           <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines" />
           <PropRow name="ticks" type="number" def="4" description="Y-axis tick count" />
           <PropRow name="threshold" type="{ value, label? }" description="Dashed SLA / target line" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
+          <PropRow name="label" type="string" description="Accessible label for the chart (aria-label on the SVG)" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -413,13 +419,56 @@ export function BarHShowcase() {
         </ChartFrame>
       </ShowcaseSection>
 
+      <ShowcaseSection label="Custom value format — latency (ms)">
+        <ChartFrame>
+          <BarH
+            items={[
+              { label: 'nyx',    value: 4.2 },
+              { label: 'aether', value: 12.7 },
+              { label: 'vega',   value: 8.1 },
+              { label: 'helios', value: 31.4 },
+            ]}
+            width={320}
+            height={140}
+            valueFormat={v => `${v.toFixed(1)} ms`}
+          />
+        </ChartFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Fixed maxValue — normalised scale">
+        <ChartFrame>
+          <BarH items={BAR_H_ITEMS} width={320} height={140} maxValue={100} />
+        </ChartFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Per-item color override">
+        <ChartFrame>
+          <BarH
+            items={[
+              { label: 'ok',      value: 84, color: '#10B981' },
+              { label: 'warn',    value: 12, color: '#F59E0B' },
+              { label: 'error',   value: 4,  color: '#F43F5E' },
+            ]}
+            width={320}
+            height={120}
+            maxValue={100}
+            label="Status breakdown"
+          />
+        </ChartFrame>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="items" type="{ label, value, color? }[]" description="Ranked items. color defaults to SERIES_COLORS cycle." />
           <PropRow name="showValues" type="boolean" def="true" description="Value label to the right of each bar" />
+          <PropRow name="valueFormat" type="(value: number) => string" description="Custom number formatter. Defaults to the built-in fmt helper (k-suffix)." />
+          <PropRow name="maxValue" type="number" description="Fixed scale maximum. Defaults to the largest item value." />
+          <PropRow name="label" type="string" description="aria-label for the SVG element. Defaults to 'Horizontal bar chart'." />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
           <PropRow name="width" type="number" def="320" description="SVG width" />
           <PropRow name="height" type="number" def="200" description="SVG height" />
+          <PropRow name="className" type="string" description="Extra class names applied to the SVG element" />
+          <PropRow name="style" type="React.CSSProperties" description="Inline styles applied to the SVG element" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -465,6 +514,11 @@ export function StackedBarShowcase() {
           <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines" />
           <PropRow name="ticks" type="number" def="4" description="Y-axis tick count" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
+          <PropRow name="label" type="string" def="'Stacked bar chart'" description="aria-label for the SVG element." />
+          <PropRow name="width" type="number" def="480" description="SVG width in pixels" />
+          <PropRow name="height" type="number" def="200" description="SVG height in pixels" />
+          <PropRow name="className" type="string" description="Extra class names applied to the SVG element" />
+          <PropRow name="style" type="React.CSSProperties" description="Inline styles applied to the SVG element" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -554,9 +608,13 @@ export function DonutShowcase() {
         <PropsTable>
           <PropRow name="slices" type="{ value, color? }[]" description="Up to 5 slices. Merge the 6th+ into an 'other' slice at call site." />
           <PropRow name="colors" type="string[]" description="Hex colors per slice. Defaults to canonical SERIES_COLORS." />
+          <PropRow name="width" type="number" def="160" description="SVG width in pixels" />
+          <PropRow name="height" type="number" def="160" description="SVG height in pixels" />
           <PropRow name="thickness" type="number" def="14" description="Ring width in pixels" />
+          <PropRow name="gap" type="number" def="0.03" description="Gap in radians between slices. Pass 0 to disable." />
           <PropRow name="centerValue" type="string" description="Bold number in the center (Inter 700)" />
           <PropRow name="centerLabel" type="string" description="Mono eyebrow below the center value" />
+          <PropRow name="aria-label" type="string" def="'Donut chart'" description="Accessible label for screen readers" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
         </PropsTable>
       </ShowcaseSection>
@@ -615,11 +673,15 @@ export function HeatmapShowcase() {
 
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="data" type="number[][]" description="2-D array [rows][cols]. null cells render as inset background." />
+          <PropRow name="data" type="(number | null)[][]" description="2-D array [rows][cols]. null cells render as inset background." />
           <PropRow name="baseColor" type="string" def="'#10B981'" description="Hot end of the single-hue alpha scale" />
-          <PropRow name="xLabels / yLabels" type="string[]" description="Axis tick labels. Empty strings skip that label." />
+          <PropRow name="xLabels" type="string[]" description="Axis tick labels along the x axis. Empty strings skip that label." />
+          <PropRow name="yLabels" type="string[]" description="Axis tick labels along the y axis. Empty strings skip that label." />
           <PropRow name="axes" type="boolean" def="false" description="Show x/y axis labels" />
+          <PropRow name="width" type="number" def="480" description="SVG width in pixels" />
+          <PropRow name="height" type="number" def="120" description="SVG height in pixels" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
+          <PropRow name="ariaLabel" type="string" description="Accessible label for the SVG element" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -685,9 +747,12 @@ export function StatusTimelineShowcase() {
         <PropsTable>
           <PropRow name="tracks" type="{ label, segments: { start, end, kind }[] }[]" description="One track per service. Segments are drawn left-to-right; gaps show inset background." />
           <PropRow name="range" type="[number, number]" def="[0, 100]" description="Numeric range of the time axis" />
+          <PropRow name="width" type="number" def="480" description="SVG width in pixels" />
+          <PropRow name="height" type="number" def="160" description="SVG height in pixels" />
           <PropRow name="axes" type="boolean" def="false" description="Show x-axis labels" />
           <PropRow name="xLabels" type="string[]" description="Labels evenly distributed along x-axis" />
           <PropRow name="marker" type="{ x, label? }" description="Amber vertical marker at a position in range units" />
+          <PropRow name="aria-label" type="string" description="Accessible label for the SVG chart" />
           <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone" />
         </PropsTable>
       </ShowcaseSection>
@@ -869,7 +934,7 @@ export function BarChartShowcase() {
   return (
     <div>
       <PageHeader name="BarChart" description="Grouped multi-series vertical bar chart (legacy v1 API). For new work use BarV (single-series) or StackedBar (stacked)." />
-      <ShowcaseSection label="Grouped bars">
+      <ShowcaseSection label="Multi-series with legend">
         <DemoCard>
           <ChartFrame>
             <BarChart
@@ -879,29 +944,95 @@ export function BarChartShowcase() {
               ]}
               xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May']}
               yMin={0} yMax={220} yTickCount={6} legend
-              width={480} height={250} />
+              width={480} height={250}
+              ariaLabel="Requests and errors per month" />
           </ChartFrame>
         </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="Single series, no legend">
+        <DemoCard>
+          <ChartFrame>
+            <BarChart
+              series={[{ name: 'Deployments', data: [4, 7, 3, 9, 5, 6], color: 'cyan' as const }]}
+              xLabels={['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']}
+              yMin={0} yTickCount={4}
+              width={360} height={180}
+              ariaLabel="Deployments per month" />
+          </ChartFrame>
+        </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="Three series, custom y-range">
+        <DemoCard>
+          <ChartFrame>
+            <BarChart
+              series={[
+                { name: 'CPU',    data: [65, 72, 80, 68, 75], color: 'amber' as const },
+                { name: 'Memory', data: [45, 50, 55, 48, 52], color: 'emerald' as const },
+                { name: 'Disk',   data: [20, 22, 21, 25, 23], color: 'violet' as const },
+              ]}
+              xLabels={['Mon', 'Tue', 'Wed', 'Thu', 'Fri']}
+              yMin={0} yMax={100} yTickCount={5} legend
+              width={480} height={220}
+              ariaLabel="CPU, memory, and disk usage by day" />
+          </ChartFrame>
+        </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="series" type="BarChartSeries[]" required description="Array of data series. Each series has name, data (number[]), and optional color (StatusColor)." />
+          <PropRow name="xLabels" type="string[]" def="[]" description="Labels rendered along the x-axis beneath each group." />
+          <PropRow name="yMin" type="number" def="auto" description="Minimum y-axis value. Defaults to the floor of the data minimum." />
+          <PropRow name="yMax" type="number" def="auto" description="Maximum y-axis value. Defaults to the ceil of the data maximum." />
+          <PropRow name="yTickCount" type="number" def="5" description="Number of y-axis tick marks and grid lines." />
+          <PropRow name="legend" type="boolean" def="false" description="Render a color-keyed legend below the chart." />
+          <PropRow name="width" type="number" def="400" description="Width of the SVG in pixels." />
+          <PropRow name="height" type="number" def="200" description="Height of the SVG in pixels." />
+          <PropRow name="ariaLabel" type="string" def="series names" description="Accessible label for the chart SVG. Defaults to a comma-joined list of series names." />
+        </PropsTable>
       </ShowcaseSection>
     </div>
   )
 }
 
+const PIE_SEGMENTS = [
+  { name: 'CPU Bound', value: 35 },
+  { name: 'I/O Wait',  value: 25 },
+  { name: 'Memory',    value: 20 },
+  { name: 'Network',   value: 20 },
+]
+
 export function PieChartShowcase() {
   return (
     <div>
-      <PageHeader name="PieChart" description="Solid-wedge pie chart (legacy v1 API). Use Donut for the ring variant specified in the v2.4 chart spec." />
-      <ShowcaseSection label="Distribution">
+      <PageHeader name="PieChart" description="Solid-wedge pie chart. Segments auto-color from the canonical palette; pass color per-segment to override. Use Donut for the ring variant." />
+
+      <ShowcaseSection label="Distribution — legend">
         <ChartFrame>
-          <PieChart
-            segments={[
-              { name: 'CPU Bound', value: 35, color: 'rgb(245, 158, 11)' },
-              { name: 'I/O Wait',  value: 25, color: 'rgb(16, 185, 129)' },
-              { name: 'Memory',    value: 20, color: 'rgb(244, 63, 94)' },
-              { name: 'Network',   value: 20, color: 'rgb(34, 211, 238)' },
-            ]}
-            legend width={280} height={280} />
+          <PieChart segments={PIE_SEGMENTS} legend width={240} height={240} />
         </ChartFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="No legend">
+        <ChartFrame>
+          <PieChart segments={PIE_SEGMENTS} width={200} height={200} />
+        </ChartFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Dark canvas">
+        <DarkFrame>
+          <PieChart segments={PIE_SEGMENTS} legend width={240} height={240} tone="dark" />
+        </DarkFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="segments" type="PieChartSegment[]" required description="Array of { name, value, color? } objects. Zero/negative values are ignored." />
+          <PropRow name="legend" type="boolean" def="false" description="Show segment name + percentage legend below the chart." />
+          <PropRow name="width" type="number" def="200" description="SVG width in pixels." />
+          <PropRow name="height" type="number" def="200" description="SVG height in pixels." />
+          <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone — controls stroke and legend text color." />
+          <PropRow name="aria-label" type="string" def="'Pie chart'" description="Accessible label for the SVG." />
+        </PropsTable>
       </ShowcaseSection>
     </div>
   )
@@ -918,14 +1049,34 @@ export function ProgressBarShowcase() {
             [25,  'cyan',    '25 %'],
             [50,  'amber',   '50 %'],
             [75,  'rose',    '75 %'],
+            [88,  'violet',  '88 %'],
             [100, 'neutral', '100 %'],
-          ] as [number, 'emerald' | 'cyan' | 'amber' | 'rose' | 'neutral', string][]).map(([p, c, label]) => (
-            <div key={p}>
+          ] as [number, 'emerald' | 'cyan' | 'amber' | 'rose' | 'violet' | 'neutral', string][]).map(([p, c, label]) => (
+            <div key={c}>
               <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, color: 'rgb(var(--canvas-fg-3))', marginBottom: 4 }}>{label} · {c}</div>
-              <ProgressBar percent={p} color={c} />
+              <ProgressBar percent={p} color={c} label={`${c} progress`} />
             </div>
           ))}
         </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Height variants">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 360 }}>
+          {([2, 4, 6, 10, 16] as number[]).map((h) => (
+            <div key={h}>
+              <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 10, color: 'rgb(var(--canvas-fg-3))', marginBottom: 4 }}>height={h}</div>
+              <ProgressBar percent={60} color="emerald" height={h} label={`height ${h} progress`} />
+            </div>
+          ))}
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="percent" type="number" required description="Fill level from 0 to 100. NaN is treated as 0." />
+          <PropRow name="color" type="ProgressBarColor" def="'emerald'" description="StatusColor name: emerald, amber, rose, cyan, violet, or neutral." />
+          <PropRow name="height" type="number" def="6" description="Track height in pixels." />
+          <PropRow name="label" type="string" description="aria-label text for screen readers." />
+          <PropRow name="className" type="string" description="Additional CSS class names appended to the track element." />
+        </PropsTable>
       </ShowcaseSection>
     </div>
   )
@@ -944,6 +1095,19 @@ export function MetricRowShowcase() {
             <MetricRow label="Error Rate"  value={5}    unit="%" percent={5} sparklineData={[2,3,2,4,5,4,3,5,4,2]} color="rose" />
           </div>
         </ChartFrame>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="label" type="string" required description="Row label rendered in the first column." />
+          <PropRow name="value" type="number | string" required description="Primary metric value displayed on the right." />
+          <PropRow name="percent" type="number" required description="Progress bar fill level from 0 to 100." />
+          <PropRow name="unit" type="string" description="Unit suffix shown after the value (e.g. %, MB, Mbps)." />
+          <PropRow name="sparklineData" type="number[]" def="[]" description="Data points for the sparkline trend line." />
+          <PropRow name="color" type="SparklineColor" def="'emerald'" description="Color applied to both the progress bar and sparkline. One of: emerald, amber, rose, cyan, violet, neutral." />
+          <PropRow name="progressLabel" type="string" description="Accessible label for the progress bar. Defaults to the row label." />
+          <PropRow name="aria-label" type="string" description="Accessible label for the row element. Defaults to the row label." />
+          <PropRow name="className" type="string" description="Additional CSS class names appended to the root element." />
+        </PropsTable>
       </ShowcaseSection>
     </div>
   )

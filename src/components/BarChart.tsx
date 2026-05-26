@@ -15,6 +15,7 @@ export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   legend?: boolean
   width?: number
   height?: number
+  ariaLabel?: string
 }
 
 export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
@@ -28,13 +29,18 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
       legend = false,
       width = 400,
       height = 200,
+      ariaLabel,
       className = '',
       ...rest
     },
     ref
   ) => {
     if (!series || series.length === 0) {
-      return null
+      return (
+        <div ref={ref} className={className} style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgb(var(--canvas-fg-3))', fontSize: '12px' }} {...rest}>
+          No data
+        </div>
+      )
     }
 
     // Find actual data min/max using loop to avoid stack overflow with large arrays
@@ -88,9 +94,12 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
     // Ensure barWidth is finite: if no data points, render nothing; ensure minimum spacing
     const barWidth = dataPointCount === 0 ? 0 : Math.max(chartWidth / (dataPointCount * series.length * 1.5), 0.5)
 
-    // Return null if no data to display
     if (dataPointCount === 0) {
-      return null
+      return (
+        <div ref={ref} className={className} style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgb(var(--canvas-fg-3))', fontSize: '12px' }} {...rest}>
+          No data
+        </div>
+      )
     }
 
     return (
@@ -100,7 +109,10 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
           width={width}
           height={height}
           style={{ overflow: 'visible' }}
+          role="img"
+          aria-label={ariaLabel ?? series.map((s) => s.name).join(', ')}
         >
+          {ariaLabel && <title>{ariaLabel}</title>}
           {/* Y-axis grid lines and ticks */}
           {uniqueYTicks.map((tick, idx) => (
             <g key={`y-tick-${idx}`}>

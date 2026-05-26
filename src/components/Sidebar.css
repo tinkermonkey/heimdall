@@ -16,7 +16,30 @@
 }
 
 .sidebar__toggle {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  color: rgb(var(--shell-fg-3));
+  cursor: pointer;
+  flex-shrink: 0;
+  align-self: flex-end;
+  margin-bottom: 4px;
+  transition: background 80ms ease-out, color 80ms ease-out;
+}
+
+.sidebar__toggle:hover {
+  background: rgb(var(--shell-surface));
+  color: rgb(var(--shell-fg-1));
+}
+
+.sidebar__toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
 }
 
 .sidebar__nav {

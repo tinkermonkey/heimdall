@@ -3,28 +3,29 @@
 
 import './tokens/tokens.css'
 
-export { Icon, type IconName } from './components/Icon'
-export { Button } from './components/Button'
-export { Chip } from './components/Chip'
-export { Badge, StatusBadge } from './components/Badge'
-export { TextInput } from './components/TextInput'
-export { TextArea } from './components/TextArea'
-export { NumberInput } from './components/NumberInput'
-export { Select } from './components/Select'
-export { TriState } from './components/TriState'
-export { Field } from './components/Field'
+export { ICONS, Icon, type IconName, type IconProps } from './components/Icon'
+export { Button, type ButtonProps, type Variant as ButtonVariant, type Size as ButtonSize } from './components/Button'
+export { Chip, type ChipProps, type ChipVariant, type ChipForm } from './components/Chip'
+export { Badge, StatusBadge, type BadgeProps, type BadgeColor, type StatusBadgeProps } from './components/Badge'
+export { TextInput, type TextInputProps } from './components/TextInput'
+export { TextArea, type TextAreaProps } from './components/TextArea'
+export { NumberInput, type NumberInputProps } from './components/NumberInput'
+export { Select, type SelectProps } from './components/Select'
+export { TriState, type TriStateProps } from './components/TriState'
+export { Field, type FieldProps } from './components/Field'
 export { StatTile, type StatTileProps } from './components/StatTile'
+export { StatGrid, type StatGridProps } from './components/StatGrid'
 export { VersionPill, type VersionPillProps } from './components/VersionPill'
 export {
   SegmentedControl,
   type SegmentedControlProps,
   type SegmentedControlOption,
 } from './components/SegmentedControl'
-export { Table, type Column } from './components/Table'
-export { NavItem } from './components/NavItem'
-export { Sidebar } from './components/Sidebar'
-export { Topbar, type TopbarProps } from './components/Topbar'
-export { TabBar } from './components/TabBar'
+export { Table, type Column, type TableProps } from './components/Table'
+export { NavItem, type NavItemProps } from './components/NavItem'
+export { Sidebar, type SidebarProps, type SidebarItem, type SidebarSection } from './components/Sidebar'
+export { Topbar, type TopbarProps, type BreadcrumbItem } from './components/Topbar'
+export { TabBar, type TabBarProps, type Tab } from './components/TabBar'
 export { AppTitle, type AppTitleProps } from './components/AppTitle'
 export { Titlebar, type TitlebarProps } from './components/Titlebar'
 export {
@@ -37,8 +38,8 @@ export {
   type StatusbarItem,
 } from './components/Statusbar'
 export { ShellLayout, type ShellLayoutProps } from './components/ShellLayout'
-export { Modal, type ModalProps } from './components/Modal'
-export { ConfirmDialog } from './components/ConfirmDialog'
+export { Modal, type ModalProps, type ModalSize } from './components/Modal'
+export { ConfirmDialog, type ConfirmDialogProps, type ConfirmDialogVariant } from './components/ConfirmDialog'
 export { WorkspaceSwitcherDialog, type WorkspaceSwitcherDialogProps, type Workspace } from './components/WorkspaceSwitcherDialog'
 export {
   FilterDropdown,
@@ -50,11 +51,10 @@ export {
   type FilterDropdownRadioProps,
 } from './components/FilterDropdown'
 export { Toast, type ToastProps, type ToastVariant } from './components/Toast'
-export { CommandPalette, type Command } from './components/CommandPalette'
-export { Panel } from './components/Panel'
-export { Drawer } from './components/Drawer'
-export { SplitPane } from './components/SplitPane'
-export { StatGrid } from './components/StatGrid'
+export { CommandPalette, type Command, type CommandPaletteProps } from './components/CommandPalette'
+export { Panel, type PanelProps } from './components/Panel'
+export { Drawer, type DrawerProps } from './components/Drawer'
+export { SplitPane, type SplitPaneProps } from './components/SplitPane'
 export {
   InspectorPanel,
   type InspectorPanelProps,
@@ -105,7 +105,7 @@ export { OrderedList, type OrderedListProps, type OrderedItem } from './componen
 export { RelationshipBuilder, type RelationshipBuilderProps, type RelationshipBuilderValue } from './components/RelationshipBuilder'
 export { RowMenu, type RowMenuProps, type RowMenuAction } from './components/RowMenu'
 export { PipelineCard, type PipelineCardProps, type Pipeline, type FlowNode } from './components/PipelineCard'
-export { FormCallout, type FormCalloutProps } from './components/FormCallout'
+export { FormCallout, type FormCalloutProps, type FormCalloutVariant } from './components/FormCallout'
 export {
   GraphCanvas,
   useGraphCanvas,
@@ -114,7 +114,7 @@ export {
   type GraphCanvasProps,
   type BaseGraphNodeComponentProps,
 } from './components/GraphCanvas'
-export { type GraphCanvasContextValue } from './components/GraphCanvasContext'
+export { type GraphCanvasContextValue, type GraphNodeRect } from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
 export { forceLayout, type LayoutNode, type LayoutEdge, type ForceLayoutOptions } from './utils/graphLayout'
@@ -126,5 +126,5 @@ export {
 } from './components/GraphInspector'
 export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type TopologyNodeProps } from './components/TopologyNode'
 export { bezierPath, rectEdgePoint, type Point, type BezierPathResult } from './utils/graph'
-export { HierarchyRow, type HierarchyRowProps, type HierarchyKind } from './components/HierarchyRow'
+export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type HierarchyDomain } from './components/HierarchyRow'
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'

@@ -19,8 +19,8 @@ export const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 
     return (
       <input
-        ref={ref}
         type="text"
+        ref={ref}
         className={classNames}
         {...props}
       />

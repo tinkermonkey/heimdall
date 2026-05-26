@@ -50,6 +50,35 @@ export function InspectorPanelShowcase() {
           </InspectorPanel>
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="PropertySection — tabular key/value rows">
+        <div style={{ backgroundColor: 'rgb(var(--canvas-bg))', borderRadius: 8, overflow: 'hidden' }}>
+          <InspectorPanel
+            eyebrow="SCHEMA"
+            title="cls_organism"
+            id="cls_4f3a"
+          >
+            <InspectorPanel.PropertySection
+              title="Fields"
+              count={3}
+              actionIcon={<Icon name="plus" size={12} />}
+              actionLabel="Add field"
+              onAction={() => {}}
+              rows={[
+                { key: 'name', value: 'string', usageCount: 47 },
+                { key: 'status', value: 'enum', usageCount: 47 },
+                { key: 'created_at', value: 'datetime', usageCount: 12 },
+              ]}
+            />
+            <InspectorPanel.PropertySection
+              title="Relations"
+              count={1}
+              rows={[
+                { key: 'parent_class', value: 'cls_entity' },
+              ]}
+            />
+          </InspectorPanel>
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="KVGrid component">
         <div style={{ fontSize: 12, color: 'rgb(var(--canvas-fg-3))', marginBottom: 8, fontFamily: 'var(--font-mono)' }}>
           Key-value display with fixed 130px key column
@@ -64,18 +93,32 @@ export function InspectorPanelShowcase() {
           ]}
         />
       </ShowcaseSection>
-      <ShowcaseSection label="Props">
+      <ShowcaseSection label="InspectorPanel props">
         <PropsTable>
-          <PropRow name="eyebrow" type="string" description="Eyebrow label above the title" />
-          <PropRow name="title" type="string" description="Primary title for the panel" />
-          <PropRow name="id" type="string" description="Unique identifier for the panel" />
-          <PropRow name="version" type="number" description="Optional version number displayed as a pill" />
-          <PropRow name="actions" type="ReactNode" description="Rendered action elements (buttons, icons, etc.)" />
-          <PropRow name="children" type="ReactNode" description="Panel sections and content" />
-          <PropRow name="InspectorPanel.Section" type="component" description="Labeled section divider with optional count" />
-          <PropRow name="InspectorPanel.Section.title" type="string" description="Section label" />
-          <PropRow name="InspectorPanel.Section.count" type="number" description="Optional count badge" />
-          <PropRow name="KVGrid.rows" type="KVGridRow[]" description="Array of {key, value} pairs" />
+          <PropRow name="eyebrow" type="string" required description="Monospace eyebrow label above the title" />
+          <PropRow name="title" type="string" required description="Primary title displayed in the panel head" />
+          <PropRow name="id" type="string" required description="Identifier displayed below the title in monospace" />
+          <PropRow name="version" type="number" defaultValue="—" description="Optional version number rendered as an amber pill" />
+          <PropRow name="actions" type="ReactNode" defaultValue="—" description="Action elements (buttons, icons) rendered in the panel head" />
+          <PropRow name="children" type="ReactNode" defaultValue="—" description="Panel body content — typically Section or PropertySection children" />
+        </PropsTable>
+      </ShowcaseSection>
+      <ShowcaseSection label="InspectorPanel.Section props">
+        <PropsTable>
+          <PropRow name="title" type="string" required description="Section label rendered as a monospace eyebrow" />
+          <PropRow name="count" type="number" defaultValue="—" description="Optional count shown after the title" />
+          <PropRow name="actions" type="ReactNode" defaultValue="—" description="Action elements rendered on the right side of the section header" />
+          <PropRow name="children" type="ReactNode" defaultValue="—" description="Section body content" />
+        </PropsTable>
+      </ShowcaseSection>
+      <ShowcaseSection label="InspectorPanel.PropertySection props">
+        <PropsTable>
+          <PropRow name="title" type="string" required description="Section label rendered as a monospace eyebrow" />
+          <PropRow name="rows" type="PropertyRow[]" required description="Array of {key, value, usageCount?} rows" />
+          <PropRow name="count" type="number" defaultValue="—" description="Optional count badge shown next to the title" />
+          <PropRow name="actionIcon" type="ReactNode" defaultValue="—" description="Icon rendered inside the action button (requires onAction)" />
+          <PropRow name="actionLabel" type="string" defaultValue="—" description="aria-label for the action button" />
+          <PropRow name="onAction" type="() => void" defaultValue="—" description="Click handler for the action button; button only renders when provided" />
         </PropsTable>
       </ShowcaseSection>
     </div>

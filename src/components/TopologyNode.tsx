@@ -13,11 +13,12 @@ export interface TopologyNodeMetric {
   color?: StatusColor
 }
 
-export interface TopologyNodeProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface TopologyNodeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'role'> {
   title: string
-  role: string
+  nodeRole: string
   status?: TopologyNodeStatus
   metrics?: TopologyNodeMetric[]
+  selected?: boolean
   x?: number
   y?: number
   onSelect?: () => void
@@ -32,10 +33,16 @@ const statusDotColorMap: Record<TopologyNodeStatus, string> = {
 
 export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
   (
-    { title, role, status = 'idle', metrics = [], x, y, onSelect, className = '', style: userStyle, ...props },
+    { title, nodeRole, status = 'idle', metrics = [], selected = false, x, y, onSelect, className = '', style: userStyle, ...props },
     ref
   ) => {
-    const classNames = ['topology-node', `topology-node--${status}`, className]
+    const classNames = [
+      'topology-node',
+      `topology-node--${status}`,
+      selected ? 'topology-node--selected' : '',
+      onSelect ? 'topology-node--interactive' : '',
+      className,
+    ]
       .filter(Boolean)
       .join(' ')
 
@@ -52,6 +59,13 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
 
     const slugTitle = title.replace(/\s+/g, '-').toLowerCase()
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (onSelect && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault()
+        onSelect()
+      }
+    }
+
     return (
       <div
         ref={ref}
@@ -59,6 +73,10 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
         style={style}
         data-testid={`topology-node-${slugTitle}`}
         onClick={onSelect}
+        onKeyDown={handleKeyDown}
+        tabIndex={onSelect ? 0 : undefined}
+        aria-selected={selected}
+        role={onSelect ? 'button' : undefined}
         {...props}
       >
         <div className="topology-node__head">
@@ -72,7 +90,7 @@ export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
         </div>
 
         <div className="topology-node__role" data-testid={`topology-role-${slugTitle}`}>
-          {role}
+          {nodeRole}
         </div>
 
         {metrics.length > 0 && (

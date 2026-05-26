@@ -41,3 +41,9 @@
 .alert-strip__dismiss:hover {
   color: rgb(var(--canvas-fg-1));
 }
+
+.alert-strip__dismiss:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  border-radius: var(--radius-sm);
+}

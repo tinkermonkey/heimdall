@@ -15,6 +15,7 @@
 
 .hierarchy-row:focus-visible {
   box-shadow: var(--focus-ring);
+  outline: none;
 }
 
 .hierarchy-row:hover {
@@ -25,6 +26,10 @@
   outline: 2px solid rgb(var(--accent-primary));
   outline-offset: -2px;
   border-radius: var(--radius-sm);
+}
+
+.hierarchy-row.selected:focus-visible {
+  box-shadow: var(--focus-ring);
 }
 
 .hierarchy-row__left {

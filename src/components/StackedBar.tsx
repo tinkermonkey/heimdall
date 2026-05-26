@@ -10,16 +10,15 @@ export interface StackedBarStack {
 
 export interface StackedBarProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
   stacks: StackedBarStack[]
-  /** Hex colors per part. Defaults to SERIES_COLORS. */
   colors?: string[]
   width?: number
   height?: number
   axes?: boolean
   grid?: boolean
   ticks?: number
-  /** Percent-normalize all stacks to 100 % */
   normalized?: boolean
   tone?: ChartTone
+  label?: string
   className?: string
   style?: React.CSSProperties
 }
@@ -36,6 +35,7 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
       ticks = 4,
       normalized = false,
       tone = 'light',
+      label = 'Stacked bar chart',
       className = '',
       style,
       ...rest
@@ -64,6 +64,8 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
     return (
       <svg
         ref={ref}
+        role="img"
+        aria-label={label}
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}

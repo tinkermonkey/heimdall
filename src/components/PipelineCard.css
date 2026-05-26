@@ -7,8 +7,17 @@
   flex-direction: column;
 }
 
-.pipeline-card--compact {
-  /* Compact variant for dense layouts */
+.pipeline-card--compact .pipeline-card__head {
+  padding: 10px 12px;
+}
+
+.pipeline-card--compact .pipeline-card__flow {
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.pipeline-card--compact .pipeline-card__foot-col {
+  padding: 8px 12px;
 }
 
 .pipeline-card--selected {
@@ -86,7 +95,7 @@
 }
 
 .pipeline-card__action-btn {
-  padding: 6px 12px;
+  padding: 0 12px;
   height: 28px;
   background-color: rgb(var(--accent-primary));
   color: #fff;
@@ -95,7 +104,14 @@
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
+  display: flex;
+  align-items: center;
   transition: background-color 80ms ease;
+}
+
+.pipeline-card__action-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
 }
 
 .pipeline-card__action-btn:hover {
@@ -127,6 +143,11 @@
 
 .pipeline-card__kebab-btn:hover {
   background-color: rgb(var(--canvas-bg));
+}
+
+.pipeline-card__kebab-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
 }
 
 /* Flow strip */

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import './OrderedList.css'
 import { Button } from './Button'
 import { Icon } from './Icon'
@@ -13,28 +13,36 @@ export interface OrderedListProps
   items: OrderedItem[]
   onChange: (items: OrderedItem[]) => void
   primaryItemId?: string
+  disabled?: boolean
 }
 
 export const OrderedList = React.forwardRef<HTMLDivElement, OrderedListProps>(
-  ({ items, onChange, primaryItemId, className, ...props }, ref) => {
-    const handleMoveUp = (index: number) => {
+  ({ items, onChange, primaryItemId, disabled = false, className, ...props }, ref) => {
+    const handleMoveUp = useCallback((index: number) => {
       if (index > 0) {
         const newItems = [...items]
         ;[newItems[index - 1], newItems[index]] = [newItems[index], newItems[index - 1]]
         onChange(newItems)
       }
-    }
+    }, [items, onChange])
 
-    const handleMoveDown = (index: number) => {
+    const handleMoveDown = useCallback((index: number) => {
       if (index < items.length - 1) {
         const newItems = [...items]
         ;[newItems[index], newItems[index + 1]] = [newItems[index + 1], newItems[index]]
         onChange(newItems)
       }
-    }
+    }, [items, onChange])
 
     return (
-      <div ref={ref} className={['ordered-list', className].filter(Boolean).join(' ')} data-testid="ordered-list" {...props}>
+      <div
+        ref={ref}
+        className={['ordered-list', disabled && 'ordered-list--disabled', className].filter(Boolean).join(' ')}
+        role="list"
+        aria-disabled={disabled || undefined}
+        data-testid="ordered-list"
+        {...props}
+      >
         {items.map((item, index) => (
           <div
             key={item.id}
@@ -44,12 +52,13 @@ export const OrderedList = React.forwardRef<HTMLDivElement, OrderedListProps>(
             ]
               .filter(Boolean)
               .join(' ')}
+            role="listitem"
             data-testid={`ordered-item-${item.id}`}
           >
             <div className="ordered-list__rank">
               {primaryItemId === item.id && (
                 <div className="ordered-list__primary-badge" title="Primary item">
-                  ★
+                  <Icon name="star" size={10} />
                 </div>
               )}
               <div className="ordered-list__index">{index + 1}</div>
@@ -61,7 +70,7 @@ export const OrderedList = React.forwardRef<HTMLDivElement, OrderedListProps>(
               <Button
                 variant="ghost"
                 size="sm"
-                disabled={index === 0}
+                disabled={disabled || index === 0}
                 onClick={() => handleMoveUp(index)}
                 aria-label="Move up"
                 data-testid={`move-up-${item.id}`}
@@ -71,7 +80,7 @@ export const OrderedList = React.forwardRef<HTMLDivElement, OrderedListProps>(
               <Button
                 variant="ghost"
                 size="sm"
-                disabled={index === items.length - 1}
+                disabled={disabled || index === items.length - 1}
                 onClick={() => handleMoveDown(index)}
                 aria-label="Move down"
                 data-testid={`move-down-${item.id}`}

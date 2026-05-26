@@ -1,15 +1,14 @@
 import React from 'react'
 import './AppTitle.css'
 
-export interface AppTitleProps {
+export interface AppTitleProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   version?: string
   collapsed?: boolean
-  className?: string
 }
 
 export const AppTitle = React.forwardRef<HTMLDivElement, AppTitleProps>(
-  ({ title, version, collapsed = false, className = '', ...props }, ref) => {
+  ({ title, version, collapsed = false, className = '', 'aria-label': ariaLabel, ...props }, ref) => {
     const classNames = [
       'app-title',
       collapsed && 'app-title--collapsed',
@@ -18,9 +17,11 @@ export const AppTitle = React.forwardRef<HTMLDivElement, AppTitleProps>(
       .filter(Boolean)
       .join(' ')
 
+    const computedLabel = ariaLabel ?? (version ? `${title} ${version}` : title)
+
     return (
-      <div ref={ref} className={classNames} {...props}>
-        <div className="app-title__mark" />
+      <div ref={ref} className={classNames} aria-label={computedLabel} role="banner" {...props}>
+        <div className="app-title__mark" aria-hidden="true" />
         {!collapsed && (
           <div className="app-title__text">
             <div className="app-title__name">{title}</div>

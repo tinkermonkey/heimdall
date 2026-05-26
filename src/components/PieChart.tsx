@@ -1,6 +1,7 @@
 import React from 'react'
 import './PieChart.css'
-import { chartColors } from './chartColors'
+import { SERIES_COLORS } from './chartColors'
+import { TONE, type ChartTone } from './chartTone'
 
 export interface PieChartSegment {
   name: string
@@ -13,6 +14,8 @@ export interface PieChartProps extends React.HTMLAttributes<HTMLDivElement> {
   legend?: boolean
   width?: number
   height?: number
+  tone?: ChartTone
+  'aria-label'?: string
 }
 
 export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
@@ -22,121 +25,98 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
       legend = false,
       width = 200,
       height = 200,
+      tone = 'light',
+      'aria-label': ariaLabel,
       className = '',
       ...rest
     },
     ref
   ) => {
-    if (!segments || segments.length === 0) {
-      return null
-    }
+    const T = TONE[tone]
 
-    // Filter out segments with zero or negative values, ensuring numeric type
-    const validSegments = segments.filter((s) => {
-      const numValue = Number(s.value)
-      return isFinite(numValue) && numValue > 0
-    })
+    const slices = React.useMemo(() => {
+      if (!segments || segments.length === 0) return null
 
-    if (validSegments.length === 0) {
-      return null
-    }
-
-    // Calculate total value from valid segments
-    let total = 0
-    for (let i = 0; i < validSegments.length; i++) {
-      total += Number(validSegments[i].value)
-    }
-
-    // SVG dimensions
-    const svgWidth = 100
-    const svgHeight = 100
-    const centerX = svgWidth / 2
-    const centerY = svgHeight / 2
-    const radius = Math.min(svgWidth, svgHeight) / 2 - 5
-
-    // Generate pie segments
-    let currentAngle = -Math.PI / 2
-    const slices: Array<{
-      startAngle: number
-      endAngle: number
-      color: string
-      value: number
-      name: string
-      percentage: number
-    }> = []
-
-    validSegments.forEach((segment, idx) => {
-      const numValue = Number(segment.value)
-      const sliceAngle = (numValue / total) * 2 * Math.PI
-      const endAngle = currentAngle + sliceAngle
-      const percentage = (numValue / total) * 100
-
-      slices.push({
-        startAngle: currentAngle,
-        endAngle: endAngle,
-        color: segment.color || chartColors[idx % chartColors.length],
-        value: numValue,
-        name: segment.name,
-        percentage: percentage,
+      const valid = segments.filter((s) => {
+        const n = Number(s.value)
+        return isFinite(n) && n > 0
       })
 
-      currentAngle = endAngle
-    })
+      if (valid.length === 0) return null
 
-    // Helper function to convert angle and radius to x, y coordinates
-    const polarToCartesian = (angle: number, r: number) => {
-      return {
-        x: centerX + r * Math.cos(angle),
-        y: centerY + r * Math.sin(angle),
+      let total = 0
+      for (const s of valid) total += Number(s.value)
+
+      const svgSize = 100
+      const cx = svgSize / 2
+      const cy = svgSize / 2
+      const r = svgSize / 2 - 5
+
+      const polarToCartesian = (angle: number) => ({
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle),
+      })
+
+      const createArcPath = (startAngle: number, endAngle: number) => {
+        const start = polarToCartesian(startAngle)
+        const end = polarToCartesian(endAngle)
+        const largeArc = endAngle - startAngle > Math.PI ? 1 : 0
+        return [
+          `M ${cx} ${cy}`,
+          `L ${start.x} ${start.y}`,
+          `A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`,
+          'Z',
+        ].join(' ')
       }
-    }
 
-    // Helper function to create arc path
-    const createArcPath = (startAngle: number, endAngle: number, r: number) => {
-      const start = polarToCartesian(startAngle, r)
-      const end = polarToCartesian(endAngle, r)
-      const largeArc = endAngle - startAngle > Math.PI ? 1 : 0
+      let currentAngle = -Math.PI / 2
+      return valid.map((segment, idx) => {
+        const numValue = Number(segment.value)
+        const sliceAngle = (numValue / total) * 2 * Math.PI
+        const endAngle = currentAngle + sliceAngle
+        const percentage = (numValue / total) * 100
+        const d = createArcPath(currentAngle, endAngle)
+        currentAngle = endAngle
+        return {
+          d,
+          color: segment.color ?? SERIES_COLORS[idx % SERIES_COLORS.length],
+          value: numValue,
+          name: segment.name,
+          percentage,
+        }
+      })
+    }, [segments])
 
-      return [
-        `M ${centerX} ${centerY}`,
-        `L ${start.x} ${start.y}`,
-        `A ${r} ${r} 0 ${largeArc} 1 ${end.x} ${end.y}`,
-        'Z',
-      ].join(' ')
-    }
+    if (!slices) return null
 
     return (
-      <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
+      <div ref={ref} className={`pie-chart${className ? ` ${className}` : ''}`} {...rest}>
         <svg
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          role="img"
+          aria-label={ariaLabel ?? 'Pie chart'}
+          viewBox="0 0 100 100"
           width={width}
           height={height}
-          style={{ overflow: 'visible' }}
+          style={{ overflow: 'visible', display: 'block' }}
         >
-          {/* Pie slices */}
           {slices.map((slice, idx) => (
             <path
               key={`slice-${idx}`}
-              d={createArcPath(slice.startAngle, slice.endAngle, radius)}
+              d={slice.d}
               fill={slice.color}
-              stroke="rgb(var(--canvas-surface-2))"
+              stroke={T.inset}
               strokeWidth="1"
             />
           ))}
         </svg>
 
-        {/* Legend */}
         {legend && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>
+          <div className="pie-chart__legend" style={{ color: T.fg2 }}>
             {slices.map((slice, idx) => (
-              <div key={`legend-${idx}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div key={`legend-${idx}`} className="pie-chart__legend-item">
                 <div
-                  style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '1px',
-                    backgroundColor: slice.color,
-                  }}
+                  className="pie-chart__legend-swatch"
+                  style={{ backgroundColor: slice.color }}
                 />
                 <span>
                   {slice.name} ({slice.percentage.toFixed(1)}%)

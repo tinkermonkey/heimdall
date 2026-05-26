@@ -43,7 +43,14 @@
 
 .config-tile:hover .config-tile__icon {
   background-color: rgb(var(--accent-primary-hover));
-  color: rgb(var(--canvas-card));
+  color: #ffffff;
+}
+
+.config-tile--disabled,
+.config-tile:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .config-tile__content {

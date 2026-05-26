@@ -6,7 +6,6 @@ import { TONE, fmt, type ChartTone } from './chartTone'
 export interface BarHItem {
   label: string
   value: number
-  /** Hex color. Falls back to SERIES_COLORS cycle. */
   color?: string
 }
 
@@ -16,6 +15,9 @@ export interface BarHProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'chi
   height?: number
   tone?: ChartTone
   showValues?: boolean
+  valueFormat?: (value: number) => string
+  maxValue?: number
+  label?: string
   className?: string
   style?: React.CSSProperties
 }
@@ -28,6 +30,9 @@ export const BarH = React.forwardRef<SVGSVGElement, BarHProps>(
       height = 200,
       tone = 'light',
       showValues = true,
+      valueFormat,
+      maxValue,
+      label,
       className = '',
       style,
       ...rest
@@ -42,13 +47,16 @@ export const BarH = React.forwardRef<SVGSVGElement, BarHProps>(
 
     if (!items || items.length === 0) return null
 
-    const hi = Math.max(...items.map(it => it.value))
+    const hi = maxValue ?? Math.max(...items.map(it => it.value))
     const rowH = innerH / items.length
     const barH = Math.min(rowH * 0.62, 14)
+    const formatValue = valueFormat ?? fmt
 
     return (
       <svg
         ref={ref}
+        role="img"
+        aria-label={label ?? 'Horizontal bar chart'}
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}
@@ -61,19 +69,17 @@ export const BarH = React.forwardRef<SVGSVGElement, BarHProps>(
           const w = (it.value / (hi || 1)) * innerW
           const c = it.color ?? SERIES_COLORS[i % SERIES_COLORS.length]
           return (
-            <g key={i}>
+            <g key={it.label}>
               <text x={pad.left - 10} y={y + barH * 0.78}
                 textAnchor="end" fontFamily="JetBrains Mono, monospace" fontSize="11" fill={T.fg2}>
                 {it.label}
               </text>
-              {/* inset track */}
               <rect x={pad.left} y={y} width={innerW} height={barH} fill={T.inset} rx="2" />
-              {/* filled bar */}
               <rect x={pad.left} y={y} width={w} height={barH} fill={c} rx="2" />
               {showValues && (
                 <text x={pad.left + w + 6} y={y + barH * 0.78}
                   fontFamily="JetBrains Mono, monospace" fontSize="11" fill={T.fg2} fontWeight="500">
-                  {fmt(it.value)}
+                  {formatValue(it.value)}
                 </text>
               )}
             </g>

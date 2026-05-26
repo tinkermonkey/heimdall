@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import {
   GraphCanvas,
   GraphNode,
@@ -63,8 +63,122 @@ const TOPOLOGY_NODES = [
   },
 ]
 
+const EDGE_VARIANT_NODES: GraphNodeData[] = [
+  { id: 'ev_a', x: 60, y: 80, label: 'Source A', kind: 'C', domainColor: 'life' },
+  { id: 'ev_b', x: 300, y: 80, label: 'Target B', kind: 'C', domainColor: 'life' },
+  { id: 'ev_c', x: 60, y: 200, label: 'Source C', kind: 'C', domainColor: 'software' },
+  { id: 'ev_d', x: 300, y: 200, label: 'Target D', kind: 'C', domainColor: 'software' },
+  { id: 'ev_e', x: 60, y: 320, label: 'Source E', kind: 'C', domainColor: 'climate' },
+  { id: 'ev_f', x: 300, y: 320, label: 'Target F', kind: 'C', domainColor: 'climate' },
+]
+
+const EDGE_VARIANT_EDGES: GraphEdgeData[] = [
+  { id: 'ee1', sourceId: 'ev_a', targetId: 'ev_b', label: 'contains' },
+  { id: 'ee2', sourceId: 'ev_c', targetId: 'ev_d', label: 'encodes', variant: 'hot' },
+  { id: 'ee3', sourceId: 'ev_e', targetId: 'ev_f', label: 'deprecated', variant: 'irrelevant' },
+]
+
+export function GraphEdgeShowcase() {
+  const renderNode = useCallback((node: GraphNodeData) => (
+    <GraphNode id={node.id} label={node.label} kind={node.kind} domainColor={node.domainColor} />
+  ), [])
+
+  return (
+    <div>
+      <PageHeader name="GraphEdge" description="SVG bezier edge drawn between two nodes inside a GraphCanvas. Supports variant styling for active and deprecated relationships." />
+      <ShowcaseSection label="Variant comparison" description="Default (neutral), hot (active/highlighted), and irrelevant (deprecated/dashed) variants shown side-by-side.">
+        <DemoCard>
+          <div style={{ height: 400 }}>
+            <GraphCanvas
+              nodes={EDGE_VARIANT_NODES}
+              edges={EDGE_VARIANT_EDGES}
+              renderNode={renderNode}
+              style={{ width: '100%', height: '100%' }}
+            />
+          </div>
+        </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="id" type="string" description="Unique edge identifier" />
+          <PropRow name="sourceId" type="string" description="ID of the source node" />
+          <PropRow name="targetId" type="string" description="ID of the target node" />
+          <PropRow name="label" type="string" description="Optional text label rendered at the midpoint of the edge" />
+          <PropRow name="variant" type="'default' | 'hot' | 'irrelevant'" def="'default'" description="Visual style: default is neutral, hot highlights an active relationship in amber, irrelevant renders a dashed rose line for deprecated links" />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+export function GraphNodeShowcase() {
+  const [selectedId, setSelectedId] = useState<string | undefined>()
+
+  return (
+    <div>
+      <PageHeader name="GraphNode" description="Inline node chip used within GraphCanvas. Displays a colored domain swatch, a label, and an optional kind badge." />
+      <ShowcaseSection label="Domain color variants">
+        <DemoCard>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            <GraphNode id="n1" label="Default" onSelect={setSelectedId} selected={selectedId === 'n1'} />
+            <GraphNode id="n2" label="Life" domainColor="life" onSelect={setSelectedId} selected={selectedId === 'n2'} />
+            <GraphNode id="n3" label="Climate" domainColor="climate" onSelect={setSelectedId} selected={selectedId === 'n3'} />
+            <GraphNode id="n4" label="Software" domainColor="software" onSelect={setSelectedId} selected={selectedId === 'n4'} />
+          </div>
+        </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="With kind badge">
+        <DemoCard>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            <GraphNode id="n5" label="Organism" kind="C" domainColor="life" onSelect={setSelectedId} selected={selectedId === 'n5'} />
+            <GraphNode id="n6" label="individual" kind="individual" domainColor="life" onSelect={setSelectedId} selected={selectedId === 'n6'} />
+            <GraphNode id="n7" label="API Server" kind="svc" domainColor="software" onSelect={setSelectedId} selected={selectedId === 'n7'} />
+          </div>
+        </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="Selected state">
+        <DemoCard>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            <GraphNode id="s1" label="Not selected" domainColor="life" onSelect={setSelectedId} selected={false} />
+            <GraphNode id="s2" label="Selected" domainColor="life" kind="C" onSelect={setSelectedId} selected />
+          </div>
+        </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="Non-interactive (read-only)">
+        <DemoCard>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            <GraphNode id="r1" label="Read-only" domainColor="climate" />
+            <GraphNode id="r2" label="Read-only with kind" domainColor="software" kind="svc" />
+          </div>
+        </DemoCard>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="id" type="string" description="Unique node identifier passed back to onSelect" />
+          <PropRow name="label" type="string" description="Primary text displayed in the node" />
+          <PropRow name="kind" type="string" description="Optional type badge rendered in monospace beside the label" />
+          <PropRow name="domainColor" type="string" def="'default'" description="Named domain key used to color the left swatch (e.g. 'life', 'climate', 'software')" />
+          <PropRow name="selected" type="boolean" def="false" description="Renders the node in the selected/highlighted state" />
+          <PropRow name="onSelect" type="(id: string) => void" description="Called when the node is clicked or activated via keyboard. When provided the node is keyboard-focusable." />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
 export function GraphCanvasShowcase() {
   const [selectedId, setSelectedId] = useState<string | undefined>()
+
+  const renderNode = useCallback((node: GraphNodeData, selected: boolean) => (
+    <GraphNode
+      id={node.id}
+      label={node.label}
+      kind={node.kind}
+      domainColor={node.domainColor}
+      selected={selected}
+      onSelect={setSelectedId}
+    />
+  ), [])
 
   const selectedNode = NODES.find(n => n.id === selectedId)
   const inspectorData: GraphNodeMetadata | undefined = selectedNode
@@ -110,19 +224,9 @@ export function GraphCanvasShowcase() {
                   edges={EDGES}
                   selectedNodeId={selectedId}
                   onNodeSelect={setSelectedId}
+                  renderNode={renderNode}
                   style={{ width: '100%', height: '100%' }}
-                >
-                  {NODES.map(n => (
-                    <GraphNode
-                      key={n.id}
-                      id={n.id}
-                      label={n.label}
-                      kind={n.kind}
-                      domainColor={n.domainColor}
-                      onSelect={setSelectedId}
-                    />
-                  ))}
-                </GraphCanvas>
+                />
               }
               second={
                 <div style={{ padding: 16, overflowY: 'auto', height: '100%' }}>
@@ -139,11 +243,22 @@ export function GraphCanvasShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props (GraphCanvas)">
         <PropsTable>
-          <PropRow name="nodes" type="GraphNodeData[]" description="Node positions and metadata used to drive edge rendering" />
-          <PropRow name="edges" type="GraphEdge[]" description="Edge definitions linking node IDs" />
+          <PropRow name="nodes" type="GraphNodeData[]" description="Node positions and metadata used to place and render nodes" />
+          <PropRow name="edges" type="GraphEdgeData[]" def="[]" description="Edge definitions linking node IDs with optional labels" />
           <PropRow name="selectedNodeId" type="string" description="Currently selected node ID (controlled)" />
           <PropRow name="onNodeSelect" type="(id: string) => void" description="Called when a node is clicked" />
-          <PropRow name="children" type="ReactNode" description="GraphNode and GraphEdge components to render" />
+          <PropRow name="renderNode" type="(node: GraphNodeData, selected: boolean) => ReactNode" description="Custom node renderer. Omit to use the default GraphNode." />
+          <PropRow name="layout" type="'manual' | 'force'" def="'manual'" description="'manual' uses explicit x/y per node; 'force' runs a spring layout for nodes without coordinates" />
+        </PropsTable>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props (GraphNode)">
+        <PropsTable>
+          <PropRow name="id" type="string" description="Unique node identifier passed back to onSelect" />
+          <PropRow name="label" type="string" description="Primary text displayed in the node" />
+          <PropRow name="kind" type="string" description="Optional type badge rendered in monospace beside the label" />
+          <PropRow name="domainColor" type="string" def="'default'" description="Named domain key used to color the left swatch (e.g. 'life', 'climate', 'software')" />
+          <PropRow name="selected" type="boolean" def="false" description="Renders the node in the selected/highlighted state" />
+          <PropRow name="onSelect" type="(id: string) => void" description="Called when the node is clicked or activated via keyboard. When provided the node is keyboard-focusable." />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -177,10 +292,27 @@ export function GraphInspectorShowcase() {
           <GraphInspector node={node} relationships={relationships} />
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="Empty state (no node selected)">
+        <div style={{ maxWidth: 320, height: 120, border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 8, overflow: 'hidden' }}>
+          <GraphInspector node={null} />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Custom empty state text">
+        <div style={{ maxWidth: 320, height: 120, border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 8, overflow: 'hidden' }}>
+          <GraphInspector node={null} emptyStateText="Click a node on the canvas to inspect it." />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="No relationships">
+        <div style={{ maxWidth: 320, border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 8, overflow: 'hidden' }}>
+          <GraphInspector node={node} relationships={[]} />
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="node" type="GraphNodeMetadata" description="Node to inspect — id, title, kind, domain, description, properties[]" />
-          <PropRow name="relationships" type="RelationshipLink[]" description="Edges connected to the selected node with direction labels" />
+          <PropRow name="node" type="GraphNodeMetadata | null" description="Node to inspect. When null or undefined, the empty state is shown." />
+          <PropRow name="relationships" type="RelationshipLink[]" def="[]" description="Edges connected to the selected node, split into incoming and outgoing sections." />
+          <PropRow name="onNodeSelect" type="(nodeId: string) => void" description="Called when a relationship target button is clicked, enabling navigation to that node." />
+          <PropRow name="emptyStateText" type="string" def="'Select a node to inspect.'" description="Text shown when no node is selected." />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -197,7 +329,7 @@ export function TopologyNodeShowcase() {
             <TopologyNode
               key={n.title}
               title={n.title}
-              role={n.role}
+              nodeRole={n.role}
               status={n.status}
               metrics={n.metrics}
             />
@@ -205,16 +337,24 @@ export function TopologyNodeShowcase() {
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Idle / no metrics">
-        <TopologyNode title="Load Balancer" role="network" status="idle" metrics={[]} />
+        <TopologyNode title="Load Balancer" nodeRole="network" status="idle" metrics={[]} />
+      </ShowcaseSection>
+      <ShowcaseSection label="Selected state">
+        <div style={{ display: 'flex', gap: 16 }}>
+          <TopologyNode title="API Server" nodeRole="backend" status="ok" metrics={[{ label: 'CPU', value: '45%', percent: 45, sparklineData: [], color: 'emerald' }]} selected={false} />
+          <TopologyNode title="Database" nodeRole="storage" status="warning" metrics={[{ label: 'Connections', value: '342/500', percent: 68, sparklineData: [], color: 'amber' }]} selected />
+        </div>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="title" type="string" description="Service name displayed as the card header" />
-          <PropRow name="role" type="string" description="Role label (backend, storage, cache, etc.)" />
+          <PropRow name="nodeRole" type="string" description="Role label (backend, storage, cache, etc.)" />
           <PropRow name="status" type="'ok' | 'warning' | 'error' | 'idle'" def="'idle'" description="Overall status — drives the colored indicator dot" />
-          <PropRow name="metrics" type="TopologyNodeMetric[]" description="Array of metric rows shown inside the card" />
-          <PropRow name="x / y" type="number" description="Absolute position when used inside a canvas layout" />
-          <PropRow name="onSelect" type="() => void" description="Called when the node is clicked" />
+          <PropRow name="metrics" type="TopologyNodeMetric[]" def="[]" description="Array of metric rows shown inside the card" />
+          <PropRow name="selected" type="boolean" def="false" description="Renders the card in a visually selected state with an amber border ring" />
+          <PropRow name="x" type="number" description="Absolute left position when used inside a canvas layout" />
+          <PropRow name="y" type="number" description="Absolute top position when used inside a canvas layout" />
+          <PropRow name="onSelect" type="() => void" description="Called when the node is clicked or activated via keyboard; also makes the node focusable" />
         </PropsTable>
       </ShowcaseSection>
     </div>

@@ -3,6 +3,9 @@ import './LineChart.css'
 import { SERIES_COLORS } from './chartColors'
 import { TONE, fmt, type ChartTone } from './chartTone'
 
+const ACCENT_PRIMARY = '#F59E0B'
+const ACCENT_PRIMARY_DEEP = '#B45309'
+
 export interface ThresholdLine {
   value: number
   label?: string
@@ -120,6 +123,8 @@ export const LineChart = React.forwardRef<SVGSVGElement, LineChartProps>(
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         className={className}
+        role="img"
+        aria-label={rest['aria-label'] ?? 'Line chart'}
         style={{ display: 'block', cursor: tooltip ? 'crosshair' : 'default', ...style }}
         onMouseMove={tooltip ? onMove : undefined}
         onMouseLeave={tooltip ? () => setHover(null) : undefined}
@@ -174,11 +179,11 @@ export const LineChart = React.forwardRef<SVGSVGElement, LineChartProps>(
         {markers && markers.map((m, i) => (
           <g key={'mk' + i}>
             <line x1={xAt(m.x)} x2={xAt(m.x)} y1={pad.top - 2} y2={pad.top + innerH}
-              stroke="#F59E0B" strokeWidth="1" strokeDasharray="2 2" />
-            <circle cx={xAt(m.x)} cy={pad.top + 4} r="3" fill="#F59E0B" />
+              stroke={ACCENT_PRIMARY} strokeWidth="1" strokeDasharray="2 2" />
+            <circle cx={xAt(m.x)} cy={pad.top + 4} r="3" fill={ACCENT_PRIMARY} />
             {m.label && (
               <text x={xAt(m.x) + 6} y={pad.top + 7}
-                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill="#B45309"
+                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={ACCENT_PRIMARY_DEEP}
                 style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 {m.label}
               </text>
@@ -224,13 +229,13 @@ export const LineChart = React.forwardRef<SVGSVGElement, LineChartProps>(
                 stroke={T.fg3} strokeWidth="1" strokeDasharray="2 3" />
               {series.map((s, si) => s[hover] != null && (
                 <circle key={'h' + si} cx={xAt(hover)} cy={yAt(s[hover])} r="3"
-                  fill={tone === 'dark' ? '#1B2949' : '#FFFFFF'}
+                  fill={T.card}
                   stroke={cs[si % cs.length]} strokeWidth="1.75" />
               ))}
               <rect x={tx} y={ty} width={tw} height={th} rx="6"
-                fill="#0F1729" fillOpacity="0.96" stroke="#243763" />
+                fill={T.card} fillOpacity="0.96" stroke={T.border} />
               <text x={tx + 9} y={ty + 13}
-                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill="#A6B1BD"
+                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={T.fg3}
                 style={{ textTransform: 'uppercase', letterSpacing: '0.10em' }}>
                 {xLabels ? xLabels[hover] : `t${hover}`}
               </text>
@@ -239,7 +244,7 @@ export const LineChart = React.forwardRef<SVGSVGElement, LineChartProps>(
                   <rect x={tx + 9} y={ty + 22 + si * 16} width="6" height="6" rx="1"
                     fill={cs[si % cs.length]} />
                   <text x={tx + 20} y={ty + 28 + si * 16}
-                    fontFamily="JetBrains Mono, monospace" fontSize="10.5" fill="#E6EDF3">
+                    fontFamily="JetBrains Mono, monospace" fontSize="10.5" fill={T.fg1}>
                     {s[hover] != null ? fmt(s[hover]) : '—'}
                   </text>
                 </g>

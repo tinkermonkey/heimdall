@@ -29,13 +29,24 @@
 .breadcrumbs__link {
   color: rgb(var(--shell-fg-2));
   text-decoration: none;
-  cursor: pointer;
   transition: color 80ms ease-out;
   padding: 4px 2px;
   border-radius: 2px;
 }
 
-.breadcrumbs__link:hover {
+.breadcrumbs__link--button {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.breadcrumbs__link--static {
+  cursor: default;
+}
+
+.breadcrumbs__link:hover:not(.breadcrumbs__link--static) {
   color: rgb(var(--shell-fg-1));
 }
 

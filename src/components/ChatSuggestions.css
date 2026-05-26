@@ -20,8 +20,25 @@
   transition: all 0.15s ease;
 }
 
-.chat-suggestions__pill:hover {
+.chat-suggestions__pill:hover:not(:disabled) {
   color: rgb(var(--canvas-fg-1));
   background: rgb(var(--canvas-surface-2));
   border-color: rgb(var(--canvas-border, 30, 42, 68));
+}
+
+.chat-suggestions__pill:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  border-color: rgb(var(--accent-primary, 245, 158, 11));
+}
+
+.chat-suggestions__pill--selected {
+  color: rgb(var(--accent-primary, 245, 158, 11));
+  border-color: rgb(var(--accent-primary, 245, 158, 11));
+  background: rgb(var(--canvas-surface, 36, 55, 99));
+}
+
+.chat-suggestions__pill--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

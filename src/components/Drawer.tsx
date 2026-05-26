@@ -15,6 +15,7 @@ export interface DrawerProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
   ({ isOpen, onClose, title, position = 'right', width = '320px', children, className = '', ...props }, ref) => {
+    const titleId = React.useId()
     const drawerRef = useRef<HTMLDivElement>(null)
 
     useImperativeHandle(ref, () => drawerRef.current as HTMLDivElement)
@@ -56,20 +57,19 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
           style={{ width }}
           role="dialog"
           aria-modal="true"
+          aria-labelledby={title ? titleId : undefined}
           {...props}
         >
-          {title && (
-            <div className="drawer__header">
-              <h2 className="drawer__title">{title}</h2>
-              <button
-                className="drawer__close"
-                onClick={onClose}
-                aria-label="Close drawer"
-              >
-                <Icon name="x" size={14} />
-              </button>
-            </div>
-          )}
+          <div className={['drawer__header', !title ? 'drawer__header--no-title' : ''].filter(Boolean).join(' ')}>
+            {title && <h2 id={titleId} className="drawer__title">{title}</h2>}
+            <button
+              className="drawer__close"
+              onClick={onClose}
+              aria-label="Close drawer"
+            >
+              <Icon name="x" size={14} />
+            </button>
+          </div>
           <div className="drawer__body">{children}</div>
         </div>
       </div>

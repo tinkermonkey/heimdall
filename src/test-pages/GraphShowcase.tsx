@@ -152,7 +152,7 @@ export default function GraphShowcase() {
         <TopologyNode
           key={idx}
           title={node.title}
-          role={node.role}
+          nodeRole={node.role}
           status={node.status}
           metrics={node.metrics}
           onSelect={() => setSelectedNodeId(node.title)}

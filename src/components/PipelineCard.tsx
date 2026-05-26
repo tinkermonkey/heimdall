@@ -100,9 +100,11 @@ export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
                   Cancel
                 </button>
               )}
-              <button type="button" aria-label="Pipeline options" className="pipeline-card__kebab-btn" onClick={onOptions} disabled={!onOptions} data-testid="pipeline-kebab-btn">
-                <Icon name="moreVertical" size={16} />
-              </button>
+              {onOptions && (
+                <button type="button" aria-label="Pipeline options" className="pipeline-card__kebab-btn" onClick={onOptions} data-testid="pipeline-kebab-btn">
+                  <Icon name="moreVertical" size={16} />
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -26,6 +26,19 @@
   border-bottom: none;
 }
 
+.activity-timeline__event--clickable {
+  cursor: pointer;
+}
+
+.activity-timeline__event--clickable:hover {
+  background: rgb(var(--canvas-bg-2));
+}
+
+.activity-timeline__event--clickable:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+
 .activity-timeline__dot-container {
   flex-shrink: 0;
   display: flex;

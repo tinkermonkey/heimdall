@@ -95,3 +95,24 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+.filter-bar__clear-all {
+  background: none;
+  border: none;
+  padding: 0 4px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  color: rgb(var(--canvas-fg-3));
+  transition: color 80ms ease-out;
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+.filter-bar__clear-all:hover {
+  color: rgb(var(--canvas-fg-1));
+}
+
+.filter-bar__clear-all:focus-visible {
+  box-shadow: var(--focus-ring);
+}

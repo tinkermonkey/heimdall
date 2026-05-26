@@ -5,7 +5,7 @@ export interface BotTab {
   id: string
   label: string
   role: string
-  status: 'idle' | 'busy' | 'healthy'
+  status: 'idle' | 'busy' | 'healthy' | 'error'
 }
 
 export interface ChatContainerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -46,7 +46,7 @@ export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps
         {...props}
       >
         {bots && bots.length > 0 && (
-          <div className="chat-container__bot-tabs">
+          <div className="chat-container__bot-tabs" role="group" aria-label="Bot tabs">
             {bots.map((bot) => (
               <button
                 key={bot.id}
@@ -58,6 +58,7 @@ export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps
                   .join(' ')}
                 onClick={() => onBotChange?.(bot.id)}
                 aria-pressed={activeBotId === bot.id}
+                aria-label={`${bot.label} — ${bot.role}`}
               >
                 <span className="chat-container__bot-label">
                   <span
@@ -79,6 +80,9 @@ export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps
         <div
           ref={threadRef}
           className="chat-container__thread"
+          role="log"
+          aria-live="polite"
+          aria-atomic="false"
         >
           <div className="chat-container__messages">
             {children}

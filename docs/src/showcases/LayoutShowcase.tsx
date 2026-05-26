@@ -38,12 +38,32 @@ export function PanelShowcase() {
           <p style={{ margin: 0, fontSize: 13, color: fg2 }}>Pass bordered=false to remove the border — useful when the parent already provides a container.</p>
         </Panel>
       </ShowcaseSection>
+      <ShowcaseSection label="With header action">
+        <Panel
+          title="Schema classes"
+          subtitle="life.organism"
+          headerAction={<Button variant="ghost" size="sm"><Icon name="settings" size={14} /></Button>}
+        >
+          <p style={{ margin: 0, fontSize: 13, color: fg2 }}>headerAction renders a flex container at the trailing edge of the header row.</p>
+        </Panel>
+      </ShowcaseSection>
+      <ShowcaseSection label="No body padding">
+        <Panel title="Compact list" noPadding>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {['life.organism', 'cls_4f3a', 'sys.pipeline'].map((id, i) => (
+              <div key={id} style={{ padding: '10px 16px', borderTop: i === 0 ? 'none' : `1px solid ${border}`, fontSize: 13, color: fg2, fontFamily: 'var(--font-mono, monospace)' }}>{id}</div>
+            ))}
+          </div>
+        </Panel>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="title" type="string" description="Panel header title" />
           <PropRow name="subtitle" type="string" description="Secondary line in the header" />
+          <PropRow name="headerAction" type="ReactNode" description="Trailing action slot in the header row" />
           <PropRow name="footer" type="ReactNode" description="Footer slot with top border" />
           <PropRow name="bordered" type="boolean" def="true" description="Show/hide the outer border" />
+          <PropRow name="noPadding" type="boolean" def="false" description="Remove body padding for edge-to-edge content" />
           <PropRow name="children" type="ReactNode" description="Panel body" />
         </PropsTable>
       </ShowcaseSection>
@@ -55,6 +75,7 @@ export function DrawerShowcase() {
   const [rightOpen, setRightOpen] = useState(false)
   const [leftOpen, setLeftOpen] = useState(false)
   const [wideOpen, setWideOpen] = useState(false)
+  const [noTitleOpen, setNoTitleOpen] = useState(false)
 
   return (
     <div>
@@ -84,14 +105,23 @@ export function DrawerShowcase() {
           <div style={{ color: fg2, fontSize: 13 }}>Wide drawer — pass a custom width prop for form-heavy or multi-column content.</div>
         </Drawer>
       </ShowcaseSection>
+      <ShowcaseSection label="No title">
+        <DemoRow>
+          <Button variant="secondary" onClick={() => setNoTitleOpen(true)}>Drawer without title</Button>
+        </DemoRow>
+        <Drawer isOpen={noTitleOpen} onClose={() => setNoTitleOpen(false)}>
+          <div style={{ color: fg2, fontSize: 13 }}>Omit the title prop for a header-free drawer. The close button is always present.</div>
+        </Drawer>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="isOpen" type="boolean" description="Controls visibility" />
           <PropRow name="onClose" type="() => void" description="Called on Escape or backdrop click" />
-          <PropRow name="title" type="string" description="Header title — omit to render without a header" />
+          <PropRow name="title" type="string" description="Header title — omit to render without a header title" />
           <PropRow name="position" type="'left' | 'right'" def="'right'" description="Edge the drawer slides in from" />
           <PropRow name="width" type="string" def="'320px'" description="Drawer width (any CSS length)" />
           <PropRow name="children" type="ReactNode" description="Drawer body" />
+          <PropRow name="className" type="string" description="Additional class names applied to the drawer panel" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -99,9 +129,11 @@ export function DrawerShowcase() {
 }
 
 export function SplitPaneShowcase() {
+  const [controlled, setControlled] = useState(35)
+
   return (
     <div>
-      <PageHeader name="SplitPane" description="Resizable two-pane layout. Drag the divider to redistribute space between panes." />
+      <PageHeader name="SplitPane" description="Resizable two-pane layout. Drag the divider or use arrow keys to redistribute space between panes." />
       <ShowcaseSection label="Horizontal split (default)">
         <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', height: 200 }}>
           <SplitPane
@@ -138,14 +170,46 @@ export function SplitPaneShowcase() {
           />
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="Controlled split position">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span style={{ fontSize: 12, color: fg3, fontFamily: 'var(--font-mono)', minWidth: 80 }}>split: {Math.round(controlled)}%</span>
+            <Button size="sm" variant="ghost" onClick={() => setControlled(25)}>25%</Button>
+            <Button size="sm" variant="ghost" onClick={() => setControlled(50)}>50%</Button>
+            <Button size="sm" variant="ghost" onClick={() => setControlled(75)}>75%</Button>
+          </div>
+          <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', height: 160 }}>
+            <SplitPane
+              direction="horizontal"
+              splitPercent={controlled}
+              onSplitChange={setControlled}
+              minSize={100}
+              maxSize={600}
+              first={
+                <div style={{ padding: 16, fontSize: 13, color: fg2, height: '100%', boxSizing: 'border-box' }}>
+                  Left pane
+                </div>
+              }
+              second={
+                <div style={{ padding: 16, fontSize: 13, color: fg2, height: '100%', boxSizing: 'border-box' }}>
+                  Right pane
+                </div>
+              }
+            />
+          </div>
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="direction" type="'horizontal' | 'vertical'" def="'horizontal'" description="Split orientation" />
-          <PropRow name="initialSplitPercent" type="number" def="50" description="Starting split position as a percentage" />
-          <PropRow name="minSize" type="number" def="200" description="Minimum pane size in px" />
+          <PropRow name="initialSplitPercent" type="number" def="50" description="Starting split position as a percentage (uncontrolled)" />
+          <PropRow name="splitPercent" type="number" description="Controlled split position as a percentage" />
+          <PropRow name="onSplitChange" type="(percent: number) => void" description="Called when the split position changes" />
+          <PropRow name="minSize" type="number" def="200" description="Minimum first-pane size in px" />
           <PropRow name="maxSize" type="number" def="800" description="Maximum first-pane size in px" />
           <PropRow name="first" type="ReactNode" description="Content for the first (left or top) pane" />
           <PropRow name="second" type="ReactNode" description="Content for the second (right or bottom) pane" />
+          <PropRow name="dividerLabel" type="string" description="Accessible label for the divider element" />
         </PropsTable>
       </ShowcaseSection>
     </div>

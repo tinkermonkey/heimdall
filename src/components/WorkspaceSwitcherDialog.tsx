@@ -15,11 +15,12 @@ export interface Workspace {
 export interface WorkspaceSwitcherDialogProps {
   isOpen: boolean
   onClose: () => void
+  title?: string
   current?: Workspace
-  recent: Workspace[]
-  onOpenFolder: () => void
-  onNewWorkspace: () => void
-  onCloneFromGit: () => void
+  recent?: Workspace[]
+  onOpenFolder?: () => void
+  onNewWorkspace?: () => void
+  onCloneFromGit?: () => void
   onPickRecent: (workspace: Workspace) => void
 }
 
@@ -32,7 +33,7 @@ interface ActionTileProps {
 
 function ActionTile({ icon, title, description, onClick }: ActionTileProps) {
   return (
-    <button className="workspace-switcher-dialog__action-tile" onClick={onClick}>
+    <button type="button" className="workspace-switcher-dialog__action-tile" onClick={onClick}>
       <div className="workspace-switcher-dialog__action-icon">
         <Icon name={icon} size={20} />
       </div>
@@ -46,41 +47,51 @@ export const WorkspaceSwitcherDialog = React.forwardRef<HTMLDivElement, Workspac
   ({
     isOpen,
     onClose,
+    title = 'Switch Workspace',
     current,
-    recent,
+    recent = [],
     onOpenFolder,
     onNewWorkspace,
     onCloneFromGit,
     onPickRecent,
   }, ref) => {
+    const hasAnyTile = onOpenFolder || onNewWorkspace || onCloneFromGit
     return (
       <Modal
         ref={ref}
         isOpen={isOpen}
         onClose={onClose}
-        title="Switch Workspace"
+        title={title}
       >
         <div className="workspace-switcher-dialog__content">
-          <div className="workspace-switcher-dialog__tiles">
-            <ActionTile
-              icon="download"
-              title="Open folder…"
-              description="Point to an existing workspace directory"
-              onClick={onOpenFolder}
-            />
-            <ActionTile
-              icon="plus"
-              title="New workspace…"
-              description="Initialize a fresh local workspace"
-              onClick={onNewWorkspace}
-            />
-            <ActionTile
-              icon="copy"
-              title="Clone from git…"
-              description="Pull a workspace from a remote repository"
-              onClick={onCloneFromGit}
-            />
-          </div>
+          {hasAnyTile && (
+            <div className="workspace-switcher-dialog__tiles">
+              {onOpenFolder && (
+                <ActionTile
+                  icon="download"
+                  title="Open folder…"
+                  description="Point to an existing workspace directory"
+                  onClick={onOpenFolder}
+                />
+              )}
+              {onNewWorkspace && (
+                <ActionTile
+                  icon="plus"
+                  title="New workspace…"
+                  description="Initialize a fresh local workspace"
+                  onClick={onNewWorkspace}
+                />
+              )}
+              {onCloneFromGit && (
+                <ActionTile
+                  icon="copy"
+                  title="Clone from git…"
+                  description="Pull a workspace from a remote repository"
+                  onClick={onCloneFromGit}
+                />
+              )}
+            </div>
+          )}
 
           {recent.length > 0 && (
             <div className="workspace-switcher-dialog__recent">
@@ -92,8 +103,10 @@ export const WorkspaceSwitcherDialog = React.forwardRef<HTMLDivElement, Workspac
                   const isCurrent = current?.id === workspace.id
                   return (
                     <button
+                      type="button"
                       key={workspace.id}
                       className={`workspace-switcher-dialog__recent-item ${isCurrent ? 'workspace-switcher-dialog__recent-item--current' : ''}`}
+                      aria-current={isCurrent ? true : undefined}
                       onClick={() => onPickRecent(workspace)}
                     >
                       <div className="workspace-switcher-dialog__recent-main">

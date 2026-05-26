@@ -4,7 +4,7 @@ import { Icon, type IconName } from './Icon'
 import { Sparkline } from './Sparkline'
 import type { StatusColor } from './statusColors'
 
-export interface StatTileProps {
+export interface StatTileProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string
   value: string | number
   delta?: {
@@ -17,7 +17,6 @@ export interface StatTileProps {
   sparkData?: number[]
   meta?: React.ReactNode
   metaIcon?: IconName
-  className?: string
 }
 
 export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
@@ -32,6 +31,7 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
       meta,
       metaIcon,
       className = '',
+      'aria-label': ariaLabel,
       ...props
     },
     ref
@@ -42,10 +42,10 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
       .join(' ')
 
     return (
-      <div ref={ref} className={classNames} {...props}>
+      <div ref={ref} className={classNames} aria-label={ariaLabel ?? `${label}: ${value}`} {...props}>
         <div className="stat-tile__header">
           <div className="stat-tile__label">{label}</div>
-          {icon && <Icon name={icon} size={14} />}
+          {icon && <Icon name={icon} size={14} aria-hidden="true" />}
         </div>
         <div className="stat-tile__value">{value}</div>
         {(delta || meta) && (
@@ -61,7 +61,7 @@ export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
             )}
             {meta && (
               <div className="stat-tile__meta">
-                {metaIcon && <Icon name={metaIcon} size={12} />}
+                {metaIcon && <Icon name={metaIcon} size={12} aria-hidden="true" />}
                 <span className="stat-tile__meta-text">{meta}</span>
               </div>
             )}

@@ -22,6 +22,8 @@ export interface EntityPickerProps
   onSelect: (result: EntityPickerResult) => void
   onClear: () => void
   placeholder?: string
+  disabled?: boolean
+  inputId?: string
 }
 
 export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
@@ -32,6 +34,8 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     onSelect,
     onClear,
     placeholder = 'Search entities...',
+    disabled = false,
+    inputId,
     className,
     ...props
   }, ref) => {
@@ -39,6 +43,8 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     const [selectedIndex, setSelectedIndex] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
+    const listboxId = React.useId()
+    const getOptionId = (id: string) => `${listboxId}-option-${id}`
 
     useEffect(() => {
       if (results.length === 0) {
@@ -96,12 +102,14 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (disabled) return
       onQueryChange(e.target.value)
       setIsOpen(true)
       setSelectedIndex(0)
     }
 
     const handleInputFocus = () => {
+      if (disabled) return
       if (query.length > 0 && results.length > 0) {
         setIsOpen(true)
       }
@@ -119,20 +127,28 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     }
 
     return (
-      <div ref={containerRef} className={['entity-picker', className].filter(Boolean).join(' ')} {...props}>
+      <div ref={containerRef} className={['entity-picker', disabled && 'entity-picker--disabled', className].filter(Boolean).join(' ')} {...props}>
         <div className="entity-picker__input-wrapper">
           <input
             ref={inputRef}
+            id={inputId}
             type="text"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={isOpen && results.length > 0}
+            aria-controls={listboxId}
+            aria-activedescendant={isOpen && results[selectedIndex] ? getOptionId(results[selectedIndex].id) : undefined}
             className="entity-picker__input"
             placeholder={placeholder}
             value={query}
+            disabled={disabled}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             data-testid="entity-picker-input"
           />
-          {query && (
+          {query && !disabled && (
             <button
+              type="button"
               className="entity-picker__clear"
               onClick={handleClear}
               aria-label="Clear search"
@@ -145,19 +161,24 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
 
         {isOpen && results.length > 0 && (
           <div
+            id={listboxId}
+            role="listbox"
             className="entity-picker__dropdown"
             data-testid="entity-picker-dropdown"
           >
             {results.map((result, index) => (
-              <button
+              <div
                 key={result.id}
+                id={getOptionId(result.id)}
+                role="option"
+                aria-selected={index === selectedIndex}
                 className={[
                   'entity-picker__result',
                   index === selectedIndex && 'entity-picker__result--selected',
                 ]
                   .filter(Boolean)
                   .join(' ')}
-                onClick={() => handleResultClick(result)}
+                onMouseDown={(e) => { e.preventDefault(); handleResultClick(result) }}
                 data-testid={`entity-picker-result-${result.id}`}
               >
                 {result.domain && result.domainColor && (
@@ -166,7 +187,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
                   </Chip>
                 )}
                 <span className="entity-picker__label">{result.label}</span>
-              </button>
+              </div>
             ))}
           </div>
         )}

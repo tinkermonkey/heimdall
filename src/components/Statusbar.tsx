@@ -14,6 +14,7 @@ export interface StatusbarPulseItem {
 export interface StatusbarIconItem {
   kind: 'icon'
   icon: IconName
+  label?: string
   mono?: boolean
 }
 
@@ -23,11 +24,10 @@ export interface StatusbarDividerItem {
 
 export type StatusbarItem = StatusbarPulseItem | StatusbarIconItem | StatusbarDividerItem
 
-export interface StatusbarProps {
+export interface StatusbarProps extends React.HTMLAttributes<HTMLDivElement> {
   left?: React.ReactNode | StatusbarItem[]
-  center?: React.ReactNode
+  center?: React.ReactNode | StatusbarItem[]
   right?: React.ReactNode | StatusbarItem[]
-  className?: string
 }
 
 const isStatusbarItem = (item: unknown): item is StatusbarItem => {
@@ -52,8 +52,9 @@ const renderStatusbarItems = (items: StatusbarItem[]): React.ReactNode => {
         )
       case 'icon':
         return (
-          <div key={index} className={`statusbar__item ${item.mono ? 'statusbar__item--mono' : ''}`}>
+          <div key={index} className={`statusbar__item ${item.mono ? 'statusbar__item--mono' : ''}`} aria-label={item.label}>
             <Icon name={item.icon} size={14} />
+            {item.label && <span className="statusbar__label">{item.label}</span>}
           </div>
         )
       default: {
@@ -77,9 +78,9 @@ export const Statusbar = React.forwardRef<HTMLDivElement, StatusbarProps>(
     }
 
     return (
-      <div ref={ref} className={classNames} {...props}>
+      <div ref={ref} role="status" className={classNames} {...props}>
         {left && <div className="statusbar__slot statusbar__slot--left statusbar__left">{renderSlot(left)}</div>}
-        {center && <div className="statusbar__slot statusbar__slot--center">{center}</div>}
+        {center && <div className="statusbar__slot statusbar__slot--center">{renderSlot(center)}</div>}
         {right && <div className="statusbar__slot statusbar__slot--right statusbar__right">{renderSlot(right)}</div>}
       </div>
     )

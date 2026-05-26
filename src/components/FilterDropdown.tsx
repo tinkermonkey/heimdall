@@ -38,12 +38,15 @@ export interface FilterDropdownProps {
   onChange?: (selectedValues: string[]) => void
   className?: string
   defaultValue?: string[]
+  value?: string[]
 }
 
 const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownProps>(
-  ({ mode = 'checkbox', children, onChange, className = '', defaultValue }, ref) => {
+  ({ mode = 'checkbox', children, onChange, className = '', defaultValue, value }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [selectedValues, setSelectedValues] = useState<Set<string>>(new Set(defaultValue ?? []))
+    const isControlled = value !== undefined
+    const [internalValues, setInternalValues] = useState<Set<string>>(new Set(defaultValue ?? []))
+    const selectedValues = isControlled ? new Set(value) : internalValues
     const [focusedValue, setFocusedValue] = useState<string | null>(null)
     const triggerRef = useRef<HTMLButtonElement>(null)
     const panelRef = useRef<HTMLDivElement>(null)
@@ -64,27 +67,28 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
     }, [panelRef, triggerRef])
 
     const handleValueChange = useCallback(
-      (value: string, selected: boolean) => {
+      (itemValue: string, selected: boolean) => {
         const nextValues = new Set(selectedValues)
 
         if (selected) {
           if (mode === 'radio') {
             nextValues.clear()
           }
-          nextValues.add(value)
+          nextValues.add(itemValue)
         } else {
-          nextValues.delete(value)
+          nextValues.delete(itemValue)
         }
 
-        setSelectedValues(nextValues)
+        if (!isControlled) {
+          setInternalValues(nextValues)
+        }
         onChange?.(Array.from(nextValues))
 
-        // Auto-close on selection for radio mode
         if (mode === 'radio' && selected) {
           handleOpenChange(false)
         }
       },
-      [selectedValues, mode, onChange, handleOpenChange]
+      [selectedValues, mode, onChange, handleOpenChange, isControlled]
     )
 
     const handleFocusedValueChange = useCallback((value: string | null) => {
@@ -172,10 +176,12 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
 
     return (
       <FilterDropdownContext.Provider value={contextValue}>
-        <div ref={ref} className={`filter-dropdown ${className}`.trim()}>
-          <div ref={rootRef}>
-            {children}
-          </div>
+        <div ref={(node) => {
+          (rootRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+          if (typeof ref === 'function') ref(node)
+          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+        }} className={`filter-dropdown ${className}`.trim()}>
+          {children}
         </div>
       </FilterDropdownContext.Provider>
     )
@@ -190,16 +196,16 @@ export interface FilterDropdownTriggerProps extends React.ButtonHTMLAttributes<H
 }
 
 function FilterDropdownTrigger({ label, summary, ...props }: FilterDropdownTriggerProps) {
-  const { isOpen, onOpenChange, triggerRef } = useFilterDropdown()
+  const { isOpen, onOpenChange, triggerRef, mode } = useFilterDropdown()
 
   return (
     <button
       ref={triggerRef}
+      {...props}
       className="filter-dropdown__trigger"
       onClick={() => onOpenChange(!isOpen)}
-      aria-haspopup="listbox"
+      aria-haspopup={mode === 'radio' ? 'dialog' : 'listbox'}
       aria-expanded={isOpen}
-      {...props}
     >
       <span className="filter-dropdown__label">{label}</span>
       <span className="filter-dropdown__summary">{summary}</span>
@@ -225,7 +231,8 @@ function FilterDropdownPanel({ children, className = '', style, ...restProps }: 
       className={`filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
       aria-multiselectable={mode === 'checkbox' ? true : undefined}
-      style={{ display: isOpen ? 'block' : 'none', ...style }}
+      hidden={!isOpen}
+      style={isOpen ? style : undefined}
       {...restProps}
     >
       {children}
@@ -288,7 +295,7 @@ function FilterDropdownCheckbox({ value, label, description }: FilterDropdownChe
       className={`filter-dropdown__row ${isFocused ? 'filter-dropdown__row--focused' : ''}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      tabIndex={0}
+      tabIndex={isFocused ? 0 : -1}
       role={mode === 'checkbox' ? 'option' : undefined}
       aria-selected={isSelected}
       data-focusable-value={value}
@@ -354,7 +361,7 @@ function FilterDropdownRadio({ value, label, description }: FilterDropdownRadioP
       className={`filter-dropdown__row ${isFocused ? 'filter-dropdown__row--focused' : ''}`}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      tabIndex={0}
+      tabIndex={isFocused ? 0 : -1}
       role="radio"
       aria-checked={isSelected}
       data-focusable-value={value}

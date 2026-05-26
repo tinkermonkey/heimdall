@@ -23,6 +23,8 @@ export interface ChatMessageProps extends React.HTMLAttributes<HTMLDivElement> {
   thinkingBlock?: ThinkingBlockData
 }
 
+const isUrl = (s: string) => /^https?:\/\//.test(s) || s.startsWith('/')
+
 export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
   (
     {
@@ -39,7 +41,12 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
     },
     ref
   ) => {
-    const avatarDisplay = avatar || senderName.slice(0, 2).toUpperCase()
+    const avatarContent =
+      avatar && isUrl(avatar) ? (
+        <img src={avatar} alt={senderName} className="chat-message__avatar-img" />
+      ) : (
+        (avatar || senderName.slice(0, 2).toUpperCase())
+      )
 
     return (
       <div
@@ -50,7 +57,7 @@ export const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
         data-testid={`chat-message-${role}`}
         {...props}
       >
-        <div className="chat-message__avatar">{avatarDisplay}</div>
+        <div className="chat-message__avatar">{avatarContent}</div>
         <div className="chat-message__content">
           <div className="chat-message__meta">
             <span className="chat-message__sender">{senderName}</span>
@@ -78,6 +85,7 @@ export interface ToolBlockProps extends React.HTMLAttributes<HTMLDivElement> {
   name: string
   status: 'running' | 'success' | 'error'
   output?: Array<{ key?: string; value: string }>
+  defaultCollapsed?: boolean
   onToggleCollapsed?: (collapsed: boolean) => void
 }
 
@@ -87,19 +95,21 @@ export const ToolBlock = React.forwardRef<HTMLDivElement, ToolBlockProps>(
       name,
       status,
       output = [],
+      defaultCollapsed = false,
       onToggleCollapsed,
       className = '',
       ...props
     },
     ref
   ) => {
-    const [isCollapsed, setIsCollapsed] = React.useState(false)
+    const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
+    const outputId = React.useId()
 
-    const handleToggle = () => {
+    const handleToggle = React.useCallback(() => {
       const newCollapsed = !isCollapsed
       setIsCollapsed(newCollapsed)
       onToggleCollapsed?.(newCollapsed)
-    }
+    }, [isCollapsed, onToggleCollapsed])
 
     const statusColor =
       status === 'running' ? 'amber' : status === 'success' ? 'emerald' : 'rose'
@@ -115,6 +125,7 @@ export const ToolBlock = React.forwardRef<HTMLDivElement, ToolBlockProps>(
           className="tool-block__header"
           onClick={handleToggle}
           aria-expanded={!isCollapsed}
+          aria-controls={output.length > 0 ? outputId : undefined}
         >
           <Icon
             name={isCollapsed ? 'chevronRight' : 'chevronDown'}
@@ -127,7 +138,7 @@ export const ToolBlock = React.forwardRef<HTMLDivElement, ToolBlockProps>(
           </span>
         </button>
         {!isCollapsed && output.length > 0 && (
-          <div className="tool-block__output">
+          <div id={outputId} className="tool-block__output">
             {output.map((item, idx) => (
               <div key={idx} className="tool-block__output-row">
                 {item.key && <span className="tool-block__key">{item.key}</span>}
@@ -145,6 +156,8 @@ ToolBlock.displayName = 'ToolBlock'
 
 export interface ThinkingBlockProps extends React.HTMLAttributes<HTMLDivElement> {
   content: string
+  label?: string
+  defaultCollapsed?: boolean
   onToggleCollapsed?: (collapsed: boolean) => void
 }
 
@@ -152,19 +165,22 @@ export const ThinkingBlock = React.forwardRef<HTMLDivElement, ThinkingBlockProps
   (
     {
       content,
+      label = 'thinking',
+      defaultCollapsed = false,
       onToggleCollapsed,
       className = '',
       ...props
     },
     ref
   ) => {
-    const [isCollapsed, setIsCollapsed] = React.useState(false)
+    const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
+    const contentId = React.useId()
 
-    const handleToggle = () => {
+    const handleToggle = React.useCallback(() => {
       const newCollapsed = !isCollapsed
       setIsCollapsed(newCollapsed)
       onToggleCollapsed?.(newCollapsed)
-    }
+    }, [isCollapsed, onToggleCollapsed])
 
     return (
       <div
@@ -177,16 +193,17 @@ export const ThinkingBlock = React.forwardRef<HTMLDivElement, ThinkingBlockProps
           className="thinking-block__header"
           onClick={handleToggle}
           aria-expanded={!isCollapsed}
+          aria-controls={!isCollapsed ? contentId : undefined}
         >
           <Icon
             name={isCollapsed ? 'chevronRight' : 'chevronDown'}
             size={12}
             className="thinking-block__toggle-icon"
           />
-          <span className="thinking-block__label">thinking</span>
+          <span className="thinking-block__label">{label}</span>
         </button>
         {!isCollapsed && (
-          <div className="thinking-block__content">
+          <div id={contentId} className="thinking-block__content">
             {content}
           </div>
         )}

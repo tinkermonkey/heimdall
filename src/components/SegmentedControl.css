@@ -20,9 +20,14 @@
   cursor: pointer;
   transition: background 0.08s, border-color 0.08s, color 0.08s;
   white-space: nowrap;
+  outline: none;
 }
 
-.segmented-control__segment:hover:not(.segmented-control__segment--active) {
+.segmented-control__segment:focus-visible {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+
+.segmented-control__segment:hover:not(.segmented-control__segment--active):not(:disabled) {
   background: rgb(var(--canvas-bg-2));
   color: rgb(var(--canvas-fg-1));
 }
@@ -31,4 +36,15 @@
   background: rgb(var(--canvas-surface-2));
   border-color: rgb(var(--canvas-border-strong));
   color: rgb(var(--canvas-fg-1));
+}
+
+.segmented-control__segment:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.segmented-control--disabled .segmented-control__segment {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }

@@ -54,12 +54,13 @@ export interface InspectorPanelPropertySectionProps extends React.HTMLAttributes
   title: string
   count?: number
   actionIcon?: ReactNode
+  actionLabel?: string
   onAction?: () => void
   rows: PropertyRow[]
 }
 
 const InspectorPanelPropertySection = React.forwardRef<HTMLDivElement, InspectorPanelPropertySectionProps>(
-  ({ title, count, actionIcon, onAction, rows, className = '', ...props }, ref) => {
+  ({ title, count, actionIcon, actionLabel, onAction, rows, className = '', ...props }, ref) => {
     useInspectorPanelContext()
 
     const classNames = ['inspector-panel__property-section', className].filter(Boolean).join(' ')
@@ -76,6 +77,7 @@ const InspectorPanelPropertySection = React.forwardRef<HTMLDivElement, Inspector
               className="inspector-panel__property-section-action"
               onClick={onAction}
               type="button"
+              aria-label={actionLabel}
             >
               {actionIcon}
             </button>
@@ -83,8 +85,8 @@ const InspectorPanelPropertySection = React.forwardRef<HTMLDivElement, Inspector
         </div>
         {rows.length > 0 && (
           <div className="inspector-panel__property-rows">
-            {rows.map((row, i) => (
-              <div key={i} className="inspector-panel__property-row">
+            {rows.map((row) => (
+              <div key={row.key} className="inspector-panel__property-row">
                 <span className="inspector-panel__property-key">{row.key}</span>
                 <span className="inspector-panel__property-value">{row.value}</span>
                 {row.usageCount !== undefined && (

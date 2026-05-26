@@ -6,14 +6,12 @@ import { Sidebar, SidebarProps } from './Sidebar'
 import { Topbar, TopbarProps } from './Topbar'
 import './ShellLayout.css'
 
-export interface ShellLayoutProps {
+export interface ShellLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   titlebar?: TitlebarProps & { hide?: boolean }
   appTitle?: AppTitleProps & { hide?: boolean }
   topbar?: TopbarProps & { hide?: boolean }
   sidebar?: SidebarProps & { hide?: boolean }
   statusbar?: StatusbarProps & { hide?: boolean }
-  children: React.ReactNode
-  className?: string
 }
 
 export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
@@ -65,7 +63,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
           ) : null}
           <div className="shell-layout__content">
             {renderTopbar && <Topbar {...topbarProps} />}
-            <div className="shell-layout__canvas">{children}</div>
+            <main className="shell-layout__canvas">{children}</main>
           </div>
         </div>
         {renderStatusbar && <Statusbar {...statusbarProps} />}

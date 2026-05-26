@@ -33,7 +33,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 Badge.displayName = 'Badge'
 
 export const StatusBadge = React.forwardRef<HTMLDivElement, StatusBadgeProps>(
-  ({ color = 'cyan', pulse = false, className = '', ...props }, ref) => {
+  ({ color = 'cyan', pulse = false, className = '', role = 'img', ...props }, ref) => {
     const classNames = ['status-badge', `status-badge--${color}`, pulse && 'status-badge--pulse', className]
       .filter(Boolean)
       .join(' ')
@@ -41,6 +41,7 @@ export const StatusBadge = React.forwardRef<HTMLDivElement, StatusBadgeProps>(
     return (
       <div
         ref={ref}
+        role={role}
         className={classNames}
         {...props}
       />

@@ -100,7 +100,6 @@
   color: rgb(var(--semantic-id-tag-fg));
   background-color: rgb(var(--semantic-id-tag-bg));
   border-color: rgb(var(--semantic-id-tag-border));
-  border: 1px solid rgb(var(--semantic-id-tag-border));
 }
 
 /* Version badge form */

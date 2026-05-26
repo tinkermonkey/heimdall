@@ -62,6 +62,12 @@
   border-bottom: 1px solid rgb(var(--canvas-border));
 }
 
+.drawer__header--no-title {
+  justify-content: flex-end;
+  padding: 8px 12px;
+  border-bottom: none;
+}
+
 .drawer__title {
   font-size: 15.5px;
   font-weight: var(--font-weight-semibold);
@@ -84,7 +90,7 @@
 }
 
 .drawer__close:hover {
-  background: rgb(var(--canvas-card));
+  background: rgb(var(--canvas-surface));
   color: rgb(var(--canvas-fg-1));
 }
 

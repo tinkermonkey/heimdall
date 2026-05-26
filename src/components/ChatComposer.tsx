@@ -32,6 +32,9 @@ export interface ChatComposerProps
   scopeLabel?: string
   contextItems?: ContextItem[]
   attachments?: Attachment[]
+  disabled?: boolean
+  loading?: boolean
+  label?: string
 }
 
 export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
@@ -46,6 +49,9 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       scopeLabel,
       contextItems = [],
       attachments = [],
+      disabled = false,
+      loading = false,
+      label = 'Message',
       className,
       ...props
     },
@@ -68,14 +74,14 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault()
-        if (value.trim()) {
+        if (value.trim() && !disabled && !loading) {
           onSubmit(value, contextItems)
         }
       }
     }
 
     const handleSubmit = () => {
-      if (value.trim()) {
+      if (value.trim() && !disabled && !loading) {
         onSubmit(value, contextItems)
       }
     }
@@ -111,7 +117,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
     return (
       <div
         ref={ref}
-        className={['chat-composer', className].filter(Boolean).join(' ')}
+        className={['chat-composer', disabled && 'chat-composer--disabled', className].filter(Boolean).join(' ')}
         {...props}
       >
         <div className="chat-composer__tools">
@@ -158,6 +164,8 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={handleKeyDown}
             rows={2}
+            disabled={disabled}
+            aria-label={label}
           />
 
           <div className="chat-composer__footer">
@@ -180,6 +188,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
                 onClick={() => fileInputRef.current?.click()}
                 type="button"
                 aria-label="Attach files"
+                disabled={disabled}
               >
                 <Icon name="paperclip" size={12} />
               </button>
@@ -187,7 +196,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
                 variant="primary"
                 size="sm"
                 onClick={handleSubmit}
-                disabled={!value.trim()}
+                disabled={!value.trim() || disabled || loading}
               >
                 <Icon name="send" size={12} />
                 send

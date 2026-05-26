@@ -64,35 +64,42 @@ export const ICONS = {
 
 export type IconName = keyof typeof ICONS
 
-export interface IconProps {
+export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'name'> {
   name: IconName
   size?: number
-  className?: string
 }
 
-export const Icon = ({ name, size = 24, className = '' }: IconProps) => {
-  const pathData = ICONS[name]
+export const Icon = React.forwardRef<SVGSVGElement, IconProps>(
+  ({ name, size = 24, className = '', 'aria-label': ariaLabel, ...props }, ref) => {
+    const pathData = ICONS[name]
 
-  if (!pathData) {
-    console.warn(`Icon "${name}" does not exist in ICONS map`)
-    return null
+    if (!pathData) {
+      console.warn(`Icon "${name}" does not exist in ICONS map`)
+      return null
+    }
+
+    return (
+      <svg
+        ref={ref}
+        viewBox="0 0 24 24"
+        width={size}
+        height={size}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden={ariaLabel ? undefined : true}
+        aria-label={ariaLabel}
+        className={className}
+        {...props}
+      >
+        <path d={pathData} />
+      </svg>
+    )
   }
+)
 
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width={size}
-      height={size}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d={pathData} />
-    </svg>
-  )
-}
+Icon.displayName = 'Icon'
 
 export default Icon

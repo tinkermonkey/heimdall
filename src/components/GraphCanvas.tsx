@@ -26,6 +26,7 @@ export interface GraphEdge {
   sourceId: string
   targetId: string
   label?: string
+  variant?: 'default' | 'hot' | 'irrelevant'
 }
 
 /** Props that a custom node component receives from renderNode. */
@@ -46,9 +47,10 @@ interface InternalEdgeProps {
   sourceId: string
   targetId: string
   label?: string
+  variant?: 'default' | 'hot' | 'irrelevant'
 }
 
-function GraphEdgeInternal({ id, sourceId, targetId, label }: InternalEdgeProps) {
+function GraphEdgeInternal({ id, sourceId, targetId, label, variant = 'default' }: InternalEdgeProps) {
   const { getNodeRect } = useGraphCanvas()
 
   const result = useMemo(() => {
@@ -63,23 +65,30 @@ function GraphEdgeInternal({ id, sourceId, targetId, label }: InternalEdgeProps)
   if (!result) return null
 
   const markerId = `arrow-${id}`
+  const markerRoseId = `arrow-rose-${id}`
+  const markerCyanId = `arrow-cyan-${id}`
+  const markerUrl =
+    variant === 'hot'
+      ? `url(#${markerCyanId})`
+      : variant === 'irrelevant'
+        ? `url(#${markerRoseId})`
+        : `url(#${markerId})`
+  const classNames = ['graph-edge', variant !== 'default' && `graph-edge--${variant}`].filter(Boolean).join(' ')
   return (
-    <g className="graph-edge" data-testid={`graph-edge-${id}`}>
+    <g className={classNames} role="presentation" aria-hidden="true" data-testid={`graph-edge-${id}`}>
       <defs>
-        <marker
-          id={markerId}
-          viewBox="0 0 10 10"
-          refX="9"
-          refY="5"
-          markerWidth="7"
-          markerHeight="7"
-          orient="auto-start-reverse"
-        >
+        <marker id={markerId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, #94a3b8)" />
+        </marker>
+        <marker id={markerRoseId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--status-rose))" />
+        </marker>
+        <marker id={markerCyanId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--accent-primary))" />
         </marker>
       </defs>
       <path className="graph-edge__hit" d={result.d} />
-      <path className="graph-edge__line" d={result.d} markerEnd={`url(#${markerId})`} />
+      <path className="graph-edge__line" d={result.d} markerEnd={markerUrl} />
       {label && (
         <g
           transform={`translate(${result.mid.x - (label.length * 3.3 + 7)}, ${result.mid.y - 9})`}
@@ -306,6 +315,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     return (
       <div
         ref={handleRef}
+        role="region"
+        aria-label="Graph canvas"
         className={['graph-canvas', className].filter(Boolean).join(' ')}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -368,6 +379,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     sourceId={edge.sourceId}
                     targetId={edge.targetId}
                     label={edge.label}
+                    variant={edge.variant}
                   />
                 ))}
               </g>

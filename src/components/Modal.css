@@ -23,11 +23,17 @@
   border: 1px solid rgb(var(--canvas-border));
   border-radius: var(--radius-lg);
   box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.55);
+  width: 480px;
   max-width: 90%;
   max-height: 90vh;
   overflow: auto;
   animation: slideUp 120ms ease-out;
 }
+
+.modal--sm { width: 360px; }
+.modal--md { width: 480px; }
+.modal--lg { width: 640px; }
+.modal--xl { width: 820px; }
 
 @keyframes slideUp {
   from {
@@ -85,7 +91,7 @@
 }
 
 .modal__close:hover {
-  background: rgb(var(--canvas-card));
+  background: rgb(var(--canvas-border));
   color: rgb(var(--canvas-fg-1));
 }
 

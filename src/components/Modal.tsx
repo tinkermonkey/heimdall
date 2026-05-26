@@ -4,6 +4,8 @@ import { useFocusTrap } from '../hooks/useFocusTrap'
 import { useBodyOverflow } from '../hooks/useBodyOverflow'
 import './Modal.css'
 
+export type ModalSize = 'sm' | 'md' | 'lg' | 'xl'
+
 export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean
   onClose: () => void
@@ -12,10 +14,12 @@ export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   footer?: React.ReactNode
   hintFooter?: string
+  size?: ModalSize
 }
 
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
-  ({ isOpen, onClose, title, subtitle, children, footer, hintFooter, className = '', ...props }, ref) => {
+  ({ isOpen, onClose, title, subtitle, children, footer, hintFooter, size = 'md', className = '', ...props }, ref) => {
+    const titleId = React.useId()
     const backdropRef = useRef<HTMLDivElement>(null)
     const modalRef = useRef<HTMLDivElement>(null)
 
@@ -55,15 +59,16 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       >
         <div
           ref={modalRef}
-          className={['modal', className].filter(Boolean).join(' ')}
+          className={['modal', `modal--${size}`, className].filter(Boolean).join(' ')}
           role="dialog"
           aria-modal="true"
+          aria-labelledby={title ? titleId : undefined}
           {...props}
         >
           {title && (
             <div className="modal__header">
               <div className="modal__header-text">
-                <div className="modal__title">{title}</div>
+                <div id={titleId} className="modal__title">{title}</div>
                 {subtitle && <div className="modal__subtitle">{subtitle}</div>}
               </div>
               <button

@@ -101,9 +101,11 @@ export const GraphInspector = React.forwardRef<HTMLDivElement, GraphInspectorPro
                     </span>
                     <span className="graph-inspector__rel-pred">{rel.predicate}</span>
                     <button
+                      type="button"
                       className="graph-inspector__rel-target"
                       data-domain={rel.targetDomain}
                       onClick={() => onNodeSelect?.(rel.target)}
+                      aria-label={`Navigate to ${rel.targetTitle}`}
                       data-testid={`inspector-rel-${rel.id}`}
                     >
                       <span className="graph-inspector__rel-swatch"></span>
@@ -126,9 +128,11 @@ export const GraphInspector = React.forwardRef<HTMLDivElement, GraphInspectorPro
                     </span>
                     <span className="graph-inspector__rel-pred">{rel.predicate}</span>
                     <button
+                      type="button"
                       className="graph-inspector__rel-target"
                       data-domain={rel.targetDomain}
                       onClick={() => onNodeSelect?.(rel.target)}
+                      aria-label={`Navigate to ${rel.targetTitle}`}
                       data-testid={`inspector-rel-${rel.id}`}
                     >
                       <span className="graph-inspector__rel-swatch"></span>

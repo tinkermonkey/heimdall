@@ -18,10 +18,14 @@ export interface KeyValueEditorProps
   onChange: (rows: KeyValueRow[]) => void
   datatypeColumn?: boolean
   datatypes?: string[]
+  disabled?: boolean
+  keyPlaceholder?: string
+  valuePlaceholder?: string
+  addLabel?: string
 }
 
 export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorProps>(
-  ({ rows, onChange, datatypeColumn = false, datatypes = ['string', 'number', 'boolean'], className, ...props }, ref) => {
+  ({ rows, onChange, datatypeColumn = false, datatypes = ['string', 'number', 'boolean'], disabled = false, keyPlaceholder = 'Key', valuePlaceholder = 'Value', addLabel = 'Add row', className, ...props }, ref) => {
     const rowIdPrefix = React.useId()
     const rowIdCounter = React.useRef(0)
 
@@ -64,7 +68,7 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
     }
 
     return (
-      <div ref={ref} className={['key-value-editor', className].filter(Boolean).join(' ')} data-testid="key-value-editor" {...props}>
+      <div ref={ref} className={['key-value-editor', datatypeColumn && 'key-value-editor--has-datatype', disabled && 'key-value-editor--disabled', className].filter(Boolean).join(' ')} data-testid="key-value-editor" {...props}>
         <div className="key-value-editor__table">
           <div className="key-value-editor__header">
             <div className="key-value-editor__col key-value-editor__col--key">Key</div>
@@ -83,16 +87,18 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
             >
               <TextInput
                 className="key-value-editor__input"
-                placeholder="Key"
+                placeholder={keyPlaceholder}
                 value={row.key}
                 onChange={(e) => handleKeyChange(row.id, e.target.value)}
+                disabled={disabled}
                 data-testid={`key-input-${row.id}`}
               />
               <TextInput
                 className="key-value-editor__input"
-                placeholder="Value"
+                placeholder={valuePlaceholder}
                 value={row.value}
                 onChange={(e) => handleValueChange(row.id, e.target.value)}
+                disabled={disabled}
                 data-testid={`value-input-${row.id}`}
               />
               {datatypeColumn && (
@@ -100,6 +106,7 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
                   className="key-value-editor__input key-value-editor__select"
                   value={row.datatype || 'string'}
                   onChange={(e) => handleDatatypeChange(row.id, e.target.value)}
+                  disabled={disabled}
                   data-testid={`datatype-select-${row.id}`}
                 >
                   {datatypes.map((dt) => (
@@ -110,9 +117,11 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
                 </Select>
               )}
               <button
+                type="button"
                 className="key-value-editor__remove-btn"
                 onClick={() => handleRemoveRow(row.id)}
                 aria-label="Remove row"
+                disabled={disabled}
                 data-testid={`remove-row-${row.id}`}
               >
                 <Icon name="trash" size={16} />
@@ -126,10 +135,11 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
           size="sm"
           className="key-value-editor__add-btn"
           onClick={handleAddRow}
+          disabled={disabled}
           data-testid="add-row-btn"
         >
           <Icon name="plus" size={16} />
-          Add row
+          {addLabel}
         </Button>
       </div>
     )

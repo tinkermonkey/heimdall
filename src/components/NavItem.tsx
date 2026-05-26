@@ -2,14 +2,12 @@ import React from 'react'
 import { Icon, type IconName } from './Icon'
 import './NavItem.css'
 
-export interface NavItemProps {
+export interface NavItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: IconName
   label: string
   count?: number
   active?: boolean
-  depth?: number
-  onClick?: () => void
-  className?: string
+  depth?: 0 | 1
 }
 
 export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(

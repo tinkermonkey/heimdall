@@ -68,10 +68,12 @@ export function DemoCard({ children, label }: { children: React.ReactNode; label
   )
 }
 
-export function PropRow({ name, type, def, description }: { name: string; type: string; def?: string; description: string }) {
+export function PropRow({ name, type, def, description, required }: { name: string; type: string; def?: string; description: string; required?: boolean }) {
   return (
     <tr>
-      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))' }}>{name}</td>
+      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))' }}>
+        {name}{required && <span style={{ color: 'rgb(var(--accent-rose, 244 63 94))', marginLeft: 2 }}>*</span>}
+      </td>
       <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3 }}>{type}</td>
       <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3 }}>{def ?? '—'}</td>
       <td style={{ padding: '7px 12px', fontSize: 12, color: fg2 }}>{description}</td>

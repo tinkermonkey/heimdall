@@ -3,7 +3,7 @@ import { Chip } from './Chip'
 import './PageHeader.css'
 
 export interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  eyebrow: string
+  eyebrow?: string
   title: string
   idChip?: string
   subtitle?: string
@@ -15,10 +15,12 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
     const classNames = ['page-header', className].filter(Boolean).join(' ')
 
     return (
-      <div ref={ref} className={classNames} {...props}>
-        <div className="page-header__eyebrow" data-testid="page-header-eyebrow">
-          {eyebrow}
-        </div>
+      <div ref={ref} className={classNames} role="banner" {...props}>
+        {eyebrow && (
+          <div className="page-header__eyebrow" data-testid="page-header-eyebrow">
+            {eyebrow}
+          </div>
+        )}
         <div className="page-header__title-row">
           <h1 className="page-header__title" data-testid="page-header-title">
             {title}

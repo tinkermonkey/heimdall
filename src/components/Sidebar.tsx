@@ -19,13 +19,12 @@ export interface SidebarSection {
   items: SidebarItem[]
 }
 
-export interface SidebarProps {
+export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   sections: SidebarSection[]
   activeItemId?: string
   collapsed?: boolean
   onCollapse?: (collapsed: boolean) => void
   onSelectItem?: (itemId: string) => void
-  className?: string
 }
 
 export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
@@ -70,10 +69,10 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
           onClick={() => onCollapse?.(!collapsed)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          <Icon name="menu" size={20} />
+          <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} size={16} />
         </button>
 
-        <nav className="sidebar__nav">
+        <nav className="sidebar__nav" aria-label="Sidebar navigation">
           {sections.map(section => (
             <div key={section.title} className="sidebar__section">
               {!collapsed && <div className="sidebar__section-title">{section.title}</div>}
@@ -95,6 +94,8 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                           }
                         }}
                         title={collapsed ? item.label : undefined}
+                        aria-current={isActive ? 'page' : undefined}
+                        aria-expanded={hasChildren ? isExpanded : undefined}
                       >
                         {item.icon && (
                           <Icon name={item.icon} size={18} className="sidebar__item-icon" />
@@ -119,6 +120,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                           key={child.id}
                           className={`sidebar__item sidebar__item--child ${activeItemId === child.id ? 'sidebar__item--active' : ''}`}
                           onClick={() => onSelectItem?.(child.id)}
+                          aria-current={activeItemId === child.id ? 'page' : undefined}
                         >
                           <span className="sidebar__item-label">{child.label}</span>
                           {child.count !== undefined && (

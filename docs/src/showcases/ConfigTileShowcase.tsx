@@ -78,18 +78,37 @@ export function ConfigTileShowcase() {
               { label: 'version', value: 'v2' },
             ]}
             onClick={() => setLastClicked('api')}
-            style={{ cursor: 'pointer' }}
+          />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Without description or summary">
+        <div style={{ maxWidth: 300 }}>
+          <ConfigTile
+            icon="settings"
+            title="Minimal Tile"
+            onClick={() => setLastClicked('minimal')}
+          />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Disabled state">
+        <div style={{ maxWidth: 300 }}>
+          <ConfigTile
+            icon="schema"
+            title="Read-only Config"
+            description="Cannot be modified in this environment"
+            summary={[{ label: 'env', value: 'production' }]}
+            disabled
           />
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="id" type="string" description="Unique identifier for the tile" />
-          <PropRow name="icon" type="IconName" description="Icon name from the Icon system" />
-          <PropRow name="title" type="string" description="Primary label for the configuration" />
+          <PropRow name="icon" type="IconName" required description="Icon name from the Icon system" />
+          <PropRow name="title" type="string" required description="Primary label for the configuration" />
           <PropRow name="description" type="string" description="Secondary description text" />
-          <PropRow name="summary" type="ConfigTileSummaryItem[]" description="Array of {label, value} configuration pairs" />
+          <PropRow name="summary" type="ConfigTileSummaryItem[]" defaultValue="[]" description="Array of {label, value} configuration pairs shown below the description" />
           <PropRow name="onClick" type="() => void" description="Handler called when tile is clicked" />
+          <PropRow name="disabled" type="boolean" description="Disables interaction and reduces opacity" />
         </PropsTable>
       </ShowcaseSection>
     </div>

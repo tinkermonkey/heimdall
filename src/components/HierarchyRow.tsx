@@ -2,14 +2,15 @@ import React from 'react'
 import './HierarchyRow.css'
 
 export type HierarchyKind = 'taxonomy' | 'scheme' | 'class'
+export type HierarchyDomain = 'life' | 'climate' | 'software' | 'default' | (string & {})
 
 export interface HierarchyRowProps extends React.HTMLAttributes<HTMLDivElement> {
-  depth: number
-  domain: string
+  depth?: number
+  domain: HierarchyDomain
   kind: HierarchyKind
   label: string
   meta?: string
-  description: string
+  description?: string
   selected?: boolean
   onSelect?: () => void
   showKind?: boolean
@@ -44,21 +45,25 @@ export const HierarchyRow = React.forwardRef<HTMLDivElement, HierarchyRowProps>(
       .filter(Boolean)
       .join(' ')
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if ((event.key === 'Enter' || event.key === ' ') && onSelect) {
-        event.preventDefault()
-        onSelect()
-      }
-    }
+    const handleKeyDown = React.useCallback(
+      (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if ((event.key === 'Enter' || event.key === ' ') && onSelect) {
+          event.preventDefault()
+          onSelect()
+        }
+      },
+      [onSelect]
+    )
 
     return (
       <div
         ref={ref}
         className={classNames}
         role={onSelect ? 'button' : undefined}
-        tabIndex={onSelect ? 0 : -1}
+        tabIndex={onSelect ? 0 : undefined}
+        aria-pressed={onSelect ? selected : undefined}
         onClick={onSelect}
-        onKeyDown={handleKeyDown}
+        onKeyDown={onSelect ? handleKeyDown : undefined}
         style={{
           '--hierarchy-depth': depth,
           '--domain-color': domainColor,
@@ -74,9 +79,11 @@ export const HierarchyRow = React.forwardRef<HTMLDivElement, HierarchyRowProps>(
             {meta && <span className="hierarchy-row__meta">{meta}</span>}
           </div>
         </div>
-        <div className="hierarchy-row__right">
-          <span className="hierarchy-row__description">{description}</span>
-        </div>
+        {description && (
+          <div className="hierarchy-row__right">
+            <span className="hierarchy-row__description">{description}</span>
+          </div>
+        )}
       </div>
     )
   }

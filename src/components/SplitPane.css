@@ -19,9 +19,18 @@
 }
 
 .split-pane__divider {
+  position: relative;
   background: rgb(var(--canvas-border));
   user-select: none;
   transition: background 80ms ease-out;
+  flex-shrink: 0;
+  outline: none;
+}
+
+.split-pane__divider::after {
+  content: '';
+  position: absolute;
+  inset: 0;
 }
 
 .split-pane__divider--horizontal {
@@ -29,7 +38,13 @@
   cursor: col-resize;
 }
 
-.split-pane__divider--horizontal:hover {
+.split-pane__divider--horizontal::after {
+  left: -4px;
+  right: -4px;
+}
+
+.split-pane__divider--horizontal:hover,
+.split-pane__divider--horizontal:focus-visible {
   background: rgb(var(--accent-primary));
 }
 
@@ -38,6 +53,16 @@
   cursor: row-resize;
 }
 
-.split-pane__divider--vertical:hover {
+.split-pane__divider--vertical::after {
+  top: -4px;
+  bottom: -4px;
+}
+
+.split-pane__divider--vertical:hover,
+.split-pane__divider--vertical:focus-visible {
   background: rgb(var(--accent-primary));
+}
+
+.split-pane__divider:focus-visible {
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
 }

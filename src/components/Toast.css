@@ -92,3 +92,8 @@
 .toast__close:active {
   background-color: rgba(255, 255, 255, 0.12);
 }
+
+.toast__close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}

@@ -5,6 +5,8 @@ import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, P
 export function ModalShowcase() {
   const [open, setOpen] = useState(false)
   const [formOpen, setFormOpen] = useState(false)
+  const [sizeOpen, setSizeOpen] = useState(false)
+  const [hintOpen, setHintOpen] = useState(false)
 
   return (
     <div>
@@ -58,13 +60,55 @@ export function ModalShowcase() {
           </div>
         </Modal>
       </ShowcaseSection>
+      <ShowcaseSection label="Size variants">
+        <DemoRow>
+          <Button variant="ghost" size="sm" onClick={() => setSizeOpen(true)}>Open lg modal</Button>
+        </DemoRow>
+        <Modal
+          isOpen={sizeOpen}
+          onClose={() => setSizeOpen(false)}
+          title="Large modal"
+          subtitle="size='lg' — 640px wide"
+          size="lg"
+          footer={
+            <DemoRow>
+              <Button variant="ghost" size="sm" onClick={() => setSizeOpen(false)}>Cancel</Button>
+              <Button variant="primary" size="sm" onClick={() => setSizeOpen(false)}>Done</Button>
+            </DemoRow>
+          }
+        >
+          <p style={{ margin: 0, fontSize: 13, color: 'rgb(var(--canvas-fg-2, 55 65 81))', lineHeight: 1.65 }}>
+            Use <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>size="lg"</code> for wider content like tables or multi-column forms. Available sizes: sm (360px), md (480px, default), lg (640px), xl (820px).
+          </p>
+        </Modal>
+      </ShowcaseSection>
+      <ShowcaseSection label="Hint footer">
+        <Button variant="ghost" size="sm" onClick={() => setHintOpen(true)}>Open modal with hint</Button>
+        <Modal
+          isOpen={hintOpen}
+          onClose={() => setHintOpen(false)}
+          title="Keyboard shortcut"
+          hintFooter="Press Escape to dismiss"
+          footer={
+            <DemoRow>
+              <Button variant="primary" size="sm" onClick={() => setHintOpen(false)}>Got it</Button>
+            </DemoRow>
+          }
+        >
+          <p style={{ margin: 0, fontSize: 13, color: 'rgb(var(--canvas-fg-2, 55 65 81))', lineHeight: 1.65 }}>
+            The <code style={{ fontFamily: 'var(--font-mono)', fontSize: 12 }}>hintFooter</code> prop renders a monospace hint strip below the footer — useful for keyboard shortcuts or contextual guidance.
+          </p>
+        </Modal>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="isOpen" type="boolean" description="Controls visibility" />
           <PropRow name="onClose" type="() => void" description="Called on Escape, backdrop click, or close button" />
           <PropRow name="title" type="string" description="Header title text" />
           <PropRow name="subtitle" type="string" description="Secondary line below the title" />
+          <PropRow name="size" type="'sm' | 'md' | 'lg' | 'xl'" def="'md'" description="Width preset: sm 360px, md 480px, lg 640px, xl 820px" />
           <PropRow name="footer" type="ReactNode" description="Footer slot — typically action buttons" />
+          <PropRow name="hintFooter" type="string" description="Monospace hint strip rendered below the footer" />
           <PropRow name="children" type="ReactNode" description="Modal body content" />
         </PropsTable>
       </ShowcaseSection>
@@ -93,8 +137,9 @@ export function ConfirmDialogShowcase() {
         <ConfirmDialog
           isOpen={dangerOpen}
           onClose={() => setDangerOpen(false)}
-          onConfirm={() => { setDangerOpen(false); setLastAction('Deleted cls_organism') }}
+          onConfirm={() => { setLastAction('Deleted cls_organism'); setDangerOpen(false) }}
           title="Delete class"
+          subtitle="This cannot be undone"
           message={<>Delete <code style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 12 }}>cls_organism</code>? 47 individuals will be unlinked.</>}
           confirmLabel="Delete"
           variant="danger"
@@ -102,7 +147,7 @@ export function ConfirmDialogShowcase() {
         <ConfirmDialog
           isOpen={primaryOpen}
           onClose={() => setPrimaryOpen(false)}
-          onConfirm={() => { setPrimaryOpen(false); setLastAction('Deployment confirmed') }}
+          onConfirm={() => { setLastAction('Deployment confirmed'); setPrimaryOpen(false) }}
           title="Deploy to production"
           message="This will push to the production cluster. Active connections will experience a brief restart."
           confirmLabel="Deploy"
@@ -112,9 +157,10 @@ export function ConfirmDialogShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="isOpen" type="boolean" description="Controls visibility" />
-          <PropRow name="onClose" type="() => void" description="Cancel handler" />
-          <PropRow name="onConfirm" type="() => void" description="Confirm handler — called before onClose" />
+          <PropRow name="onClose" type="() => void" description="Cancel handler — called on Escape, backdrop click, or Cancel button" />
+          <PropRow name="onConfirm" type="() => void" description="Confirm handler — caller is responsible for closing the dialog" />
           <PropRow name="title" type="string" description="Dialog title" />
+          <PropRow name="subtitle" type="string" description="Secondary line below the title" />
           <PropRow name="message" type="ReactNode" description="Body text — state the consequence clearly" />
           <PropRow name="confirmLabel" type="string" def="'Confirm'" description="Confirm button label" />
           <PropRow name="cancelLabel" type="string" def="'Cancel'" description="Cancel button label" />
@@ -213,7 +259,8 @@ export function CommandPaletteShowcase() {
           <PropRow name="isOpen" type="boolean" description="Controls visibility" />
           <PropRow name="onClose" type="() => void" description="Called on Escape or backdrop click" />
           <PropRow name="commands" type="Command[]" description="Array of { id, label, description?, icon?, onSelect }" />
-          <PropRow name="placeholder" type="string" def="'Search commands...'" description="Search input placeholder" />
+          <PropRow name="placeholder" type="string" def="'Search commands…'" description="Search input placeholder" />
+          <PropRow name="emptyMessage" type="string" def="'No commands found'" description="Message shown when no commands match the search query" />
         </PropsTable>
       </ShowcaseSection>
     </div>

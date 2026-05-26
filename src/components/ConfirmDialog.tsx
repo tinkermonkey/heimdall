@@ -10,6 +10,7 @@ export interface ConfirmDialogProps {
   onClose: () => void
   onConfirm: () => void
   title: string
+  subtitle?: string
   message: React.ReactNode
   confirmLabel?: string
   cancelLabel?: string
@@ -23,6 +24,7 @@ export const ConfirmDialog = React.forwardRef<HTMLDivElement, ConfirmDialogProps
       onClose,
       onConfirm,
       title,
+      subtitle,
       message,
       confirmLabel = 'Confirm',
       cancelLabel = 'Cancel',
@@ -30,17 +32,13 @@ export const ConfirmDialog = React.forwardRef<HTMLDivElement, ConfirmDialogProps
     },
     ref
   ) => {
-    const handleConfirm = () => {
-      onConfirm()
-      onClose()
-    }
-
     return (
       <Modal
         ref={ref}
         isOpen={isOpen}
         onClose={onClose}
         title={title}
+        subtitle={subtitle}
       >
         <div className="confirm-dialog__message">{message}</div>
         <div className="confirm-dialog__footer">
@@ -54,7 +52,7 @@ export const ConfirmDialog = React.forwardRef<HTMLDivElement, ConfirmDialogProps
           <Button
             variant={variant}
             size="sm"
-            onClick={handleConfirm}
+            onClick={onConfirm}
           >
             {confirmLabel}
           </Button>

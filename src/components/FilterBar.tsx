@@ -10,8 +10,11 @@ export interface FilterChip {
 
 export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
   filters?: FilterChip[]
+  value?: string
+  defaultValue?: string
   onSearchChange?: (query: string) => void
   onFilterRemove?: (filterId: string) => void
+  onClearAll?: () => void
   searchPlaceholder?: string
   children?: React.ReactNode
   showingCount?: number
@@ -22,8 +25,11 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
   (
     {
       filters = [],
+      value,
+      defaultValue = '',
       onSearchChange,
       onFilterRemove,
+      onClearAll,
       searchPlaceholder = 'Search...',
       children,
       showingCount,
@@ -33,12 +39,19 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
     },
     ref
   ) => {
-    const [searchValue, setSearchValue] = useState('')
+    const isControlled = value !== undefined
+    const [internalValue, setInternalValue] = useState(defaultValue)
+    const searchValue = isControlled ? value : internalValue
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value
-      setSearchValue(value)
-      onSearchChange?.(value)
+      const next = e.target.value
+      if (!isControlled) setInternalValue(next)
+      onSearchChange?.(next)
+    }
+
+    const handleClearAll = () => {
+      if (!isControlled) setInternalValue('')
+      onClearAll?.()
     }
 
     const classNames = ['filter-bar', className].filter(Boolean).join(' ')
@@ -48,10 +61,11 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
     return (
       <div ref={ref} className={classNames} data-testid="filter-bar" {...props}>
         <div className="filter-bar__controls">
-          <div className="filter-bar__search-wrapper">
+          <div className="filter-bar__search-wrapper" role="search">
             <Icon name="search" size={16} className="filter-bar__search-icon" />
             <input
               type="text"
+              aria-label="Search"
               placeholder={searchPlaceholder}
               value={searchValue}
               onChange={handleSearchChange}
@@ -72,6 +86,16 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
         </div>
         {filters.length > 0 && (
           <div className="filter-bar__chips" data-testid="filter-bar-chips">
+            {onClearAll && (
+              <button
+                type="button"
+                className="filter-bar__clear-all"
+                onClick={handleClearAll}
+                data-testid="filter-bar-clear-all"
+              >
+                Clear all
+              </button>
+            )}
             {filters.map(filter => (
               <Chip
                 key={filter.id}
@@ -81,6 +105,7 @@ export const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
               >
                 <span className="filter-bar__chip-label">{filter.label}</span>
                 <button
+                  type="button"
                   className="filter-bar__chip-close"
                   onClick={() => onFilterRemove?.(filter.id)}
                   aria-label={`Remove ${filter.label} filter`}

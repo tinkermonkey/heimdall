@@ -3,7 +3,6 @@ import './Select.css'
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   error?: boolean
-  children: React.ReactNode
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
@@ -20,6 +19,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       <select
         ref={ref}
         className={classNames}
+        aria-invalid={error || undefined}
         {...props}
       />
     )

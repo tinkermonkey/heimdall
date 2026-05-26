@@ -18,7 +18,7 @@
 
 .ordered-list__item--primary {
   border-color: rgb(var(--accent-primary));
-  background-color: rgba(245, 158, 11, 0.05);
+  background-color: rgba(var(--accent-primary), 0.05);
 }
 
 .ordered-list__rank {
@@ -36,14 +36,17 @@
   width: 20px;
   height: 20px;
   background-color: rgb(var(--accent-primary));
-  color: white;
+  color: rgb(var(--shell-bg));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  font-weight: bold;
   line-height: 1;
+}
+
+.ordered-list--disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .ordered-list__index {

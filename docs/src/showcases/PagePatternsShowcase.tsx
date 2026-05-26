@@ -54,9 +54,12 @@ export function PageHeaderShowcase() {
       <ShowcaseSection label="Minimal (eyebrow + title)">
         <HPageHeader eyebrow="CONFIG" title="Settings" />
       </ShowcaseSection>
+      <ShowcaseSection label="No eyebrow">
+        <HPageHeader title="Settings" />
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="eyebrow" type="string" description="Monospace uppercase label above the title" />
+          <PropRow name="eyebrow" type="string" required={false} description="Monospace uppercase label above the title. Omit to hide the eyebrow row entirely." />
           <PropRow name="title" type="string" description="Primary page title" />
           <PropRow name="idChip" type="string" description="Identifier rendered as a monospace chip beside the title" />
           <PropRow name="subtitle" type="string" description="Secondary description line below title" />
@@ -83,6 +86,7 @@ export function FilterBarShowcase() {
           filters={filters}
           onSearchChange={setQuery}
           onFilterRemove={id => setFilters(f => f.filter(c => c.id !== id))}
+          onClearAll={() => setFilters([])}
           searchPlaceholder="Search entities..."
         />
         {query && <div style={{ marginTop: 8, fontSize: 12, color: 'rgb(var(--canvas-fg-3))' }}>Query: {query}</div>}
@@ -105,16 +109,29 @@ export function FilterBarShowcase() {
           />
         </FilterBar>
       </ShowcaseSection>
+      <ShowcaseSection label="With result count">
+        <FilterBar
+          filters={[]}
+          searchPlaceholder="Search..."
+          onSearchChange={() => {}}
+          showingCount={12}
+          totalCount={340}
+        />
+      </ShowcaseSection>
       <ShowcaseSection label="No filters">
         <FilterBar filters={[]} searchPlaceholder="Search..." onSearchChange={() => {}} />
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="filters" type="FilterChip[]" description="Active filter chips — each has id and label" />
+          <PropRow name="filters" type="FilterChip[]" def="[]" description="Active filter chips — each has id and label" />
+          <PropRow name="value" type="string" description="Controlled search value" />
+          <PropRow name="defaultValue" type="string" def="''" description="Initial uncontrolled search value" />
           <PropRow name="onSearchChange" type="(q: string) => void" description="Called on every keystroke in the search field" />
           <PropRow name="onFilterRemove" type="(id: string) => void" description="Called when a chip's × is clicked" />
-          <PropRow name="onClearAll" type="() => void" description="Called when 'Clear all' is clicked (visible when chips exist)" />
+          <PropRow name="onClearAll" type="() => void" description="Called when 'Clear all' is clicked (visible when chips exist); also resets the search input when uncontrolled" />
           <PropRow name="searchPlaceholder" type="string" def="'Search...'" description="Placeholder text for the search field" />
+          <PropRow name="showingCount" type="number" description="Shown-item count for the 'Showing X of Y' caption (requires totalCount)" />
+          <PropRow name="totalCount" type="number" description="Total-item count for the caption (requires showingCount)" />
           <PropRow name="children" type="ReactNode" description="Optional inline controls like SegmentedControl or FilterDropdown" />
         </PropsTable>
       </ShowcaseSection>
@@ -125,7 +142,7 @@ export function FilterBarShowcase() {
 export function ActivityTimelineShowcase() {
   return (
     <div>
-      <PageHeader name="ActivityTimeline" description="Chronological event list with typed icons (create, update, delete, run, link), relative timestamps, and optional kind tags with custom dots." />
+      <PageHeader name="ActivityTimeline" description="Chronological event list with typed icons (create, update, delete, run), relative timestamps, and optional kind tags with custom dots." />
       <ShowcaseSection label="Basic event types">
         <ActivityTimeline events={ACTIVITIES} />
       </ShowcaseSection>
@@ -135,14 +152,40 @@ export function ActivityTimelineShowcase() {
       <ShowcaseSection label="Empty state">
         <ActivityTimeline events={[]} emptyState="No activity recorded yet." />
       </ShowcaseSection>
-      <ShowcaseSection label="Props">
+      <ShowcaseSection label="With meta text" description="Pass meta on individual events to show a secondary detail line.">
+        <ActivityTimeline
+          events={ACTIVITIES.map((e, i) => ({
+            ...e,
+            meta: i % 2 === 0 ? 'user: admin · source: api' : undefined,
+          }))}
+        />
+      </ShowcaseSection>
+      <ShowcaseSection label="Clickable events" description="Pass onClick on individual events to make rows interactive.">
+        <ActivityTimeline
+          events={ACTIVITIES.map(e => ({
+            ...e,
+            onClick: (ev) => alert(`Clicked: ${ev.subject}`),
+          }))}
+        />
+      </ShowcaseSection>
+      <ShowcaseSection label="ActivityTimeline props">
         <PropsTable>
-          <PropRow name="events" type="ActivityEvent[]" description="Array of activity events to render" />
-          <PropRow name="emptyState" type="string" def="'No activity yet.'" description="Message shown when events array is empty" />
-          <PropRow name="kind" type="string" description="Optional category tag for the event" />
-          <PropRow name="headline" type="ReactNode" description="Optional headline rendered above the subject" />
-          <PropRow name="dotColor" type="StatusColor" description="Optional custom dot color (overrides type default)" />
+          <PropRow name="events" type="ActivityEvent[]" def="[]" description="Array of activity events to render" />
+          <PropRow name="emptyState" type="string" def="'No activity recorded'" description="Message shown when events array is empty" />
+        </PropsTable>
+      </ShowcaseSection>
+      <ShowcaseSection label="ActivityEvent fields">
+        <PropsTable>
+          <PropRow name="id" type="string" required description="Unique identifier for the event" />
+          <PropRow name="type" type="'create' | 'update' | 'delete' | 'run'" required description="Event type — controls the default dot color" />
+          <PropRow name="subject" type="string" required description="Primary text for the event row" />
+          <PropRow name="timestamp" type="Date | string" required description="Event time — rendered as a relative label (e.g. '5m ago')" />
+          <PropRow name="kind" type="string" description="Optional category tag rendered as a monospace pill" />
+          <PropRow name="kindLabel" type="string" description="Display label for the kind tag (defaults to kind value)" />
+          <PropRow name="headline" type="ReactNode" description="Optional headline rendered instead of subject" />
+          <PropRow name="dotColor" type="StatusColor" description="Custom dot color — overrides the type default" />
           <PropRow name="meta" type="string" description="Optional metadata text rendered below the subject" />
+          <PropRow name="onClick" type="(event: ActivityEvent) => void" description="Click handler — makes the row interactive with keyboard support" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -173,8 +216,9 @@ export function AlertStripShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="alerts" type="Alert[]" description="Array of {id, severity, message} alert objects" />
-          <PropRow name="onDismiss" type="(id: string) => void" description="Called when user dismisses an alert by ID" />
+          <PropRow name="alerts" type="Alert[]" def="[]" description="Array of {id, severity, message} alert objects. Renders nothing when empty." />
+          <PropRow name="onDismiss" type="(id: string) => void" description="Called when user dismisses an alert by ID. Dismiss buttons are hidden when not provided." />
+          <PropRow name="className" type="string" description="Additional class names merged onto the root element." />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -200,7 +244,7 @@ export function QuickAccessGridShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="tiles" type="QuickAccessTile[]" description="Array of {id, icon, title, description} tile definitions" />
+          <PropRow name="tiles" type="QuickAccessGridItem[]" description="Array of {id, icon, title, description} tile definitions" />
           <PropRow name="onAction" type="(id: string) => void" description="Called when a tile is clicked, with the tile's id" />
           <PropRow name="columns" type="number" def="4" description="Number of columns in the grid" />
         </PropsTable>

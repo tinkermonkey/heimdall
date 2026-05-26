@@ -50,13 +50,33 @@ export function QuickAccessTileShowcase() {
           />
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="Without description">
+        <div style={{ maxWidth: 250 }}>
+          <QuickAccessTile
+            id="nodesc"
+            icon="settings"
+            title="Settings"
+          />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Disabled">
+        <div style={{ maxWidth: 250 }}>
+          <QuickAccessTile
+            id="disabled"
+            icon="pipeline"
+            title="Run Pipeline"
+            description="No permission to execute"
+            disabled
+          />
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="id" type="string" description="Unique identifier for the tile" />
-          <PropRow name="icon" type="IconName" description="Icon name from the Icon system" />
-          <PropRow name="title" type="string" description="Primary label for the action" />
-          <PropRow name="description" type="string" description="Secondary description text" />
-          <PropRow name="onClick" type="() => void" description="Handler called when tile is clicked" />
+          <PropRow name="icon" type="IconName" description="Icon name from the Icon system" required />
+          <PropRow name="title" type="string" description="Primary label for the action" required />
+          <PropRow name="description" type="string" default="—" description="Optional secondary description text" />
+          <PropRow name="disabled" type="boolean" default="false" description="Disables interaction and reduces opacity" />
+          <PropRow name="onClick" type="React.MouseEventHandler<HTMLButtonElement>" description="Handler called when tile is clicked (native button onClick)" />
         </PropsTable>
       </ShowcaseSection>
     </div>

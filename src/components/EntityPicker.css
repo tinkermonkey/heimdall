@@ -85,6 +85,7 @@
   transition: background-color 80ms ease-out;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
+  user-select: none;
 }
 
 .entity-picker__result:hover,
@@ -102,4 +103,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.entity-picker--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.entity-picker--disabled .entity-picker__input {
+  cursor: not-allowed;
+  pointer-events: auto;
 }

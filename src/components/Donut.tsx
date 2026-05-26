@@ -16,10 +16,14 @@ export interface DonutProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'ch
   height?: number
   /** Ring width in pixels (default 14) */
   thickness?: number
+  /** Gap in radians between slices (default 0.03) */
+  gap?: number
   /** Bold number in the ring center */
   centerValue?: string
   /** Mono label below center value */
   centerLabel?: string
+  /** Accessible label for the chart. Defaults to "Donut chart". */
+  'aria-label'?: string
   tone?: ChartTone
   className?: string
   style?: React.CSSProperties
@@ -33,8 +37,10 @@ export const Donut = React.forwardRef<SVGSVGElement, DonutProps>(
       width = 160,
       height = 160,
       thickness = 14,
+      gap = 0.03,
       centerValue,
       centerLabel,
+      'aria-label': ariaLabel,
       tone = 'light',
       className = '',
       style,
@@ -66,15 +72,15 @@ export const Donut = React.forwardRef<SVGSVGElement, DonutProps>(
       ].join(' ')
     }
 
+    const effectiveGap = slices.length > 1 ? gap : 0
     let acc = -Math.PI / 2
     const arcs = slices.map((s, i) => {
-      const a0 = acc
-      let a1 = acc + (s.value / total) * Math.PI * 2
-      // SVG arcs with identical start/end points render nothing — split into two semicircles
-      if (Math.abs(a1 - a0) >= Math.PI * 2 - 1e-6) {
-        a1 = a0 + Math.PI * 2 - 1e-6
-      }
-      acc = a0 + (s.value / total) * Math.PI * 2
+      const span = (s.value / total) * Math.PI * 2
+      const a0 = acc + effectiveGap / 2
+      let a1 = acc + span - effectiveGap / 2
+      if (a1 - a0 >= Math.PI * 2 - 1e-6) a1 = a0 + Math.PI * 2 - 1e-6
+      if (a1 <= a0) a1 = a0 + 1e-4
+      acc += span
       return { d: arc(a0, a1), color: s.color ?? cs[i % cs.length] }
     })
 
@@ -84,6 +90,8 @@ export const Donut = React.forwardRef<SVGSVGElement, DonutProps>(
     return (
       <svg
         ref={ref}
+        role="img"
+        aria-label={ariaLabel ?? 'Donut chart'}
         width={width}
         height={height}
         viewBox={`0 0 ${width} ${height}`}

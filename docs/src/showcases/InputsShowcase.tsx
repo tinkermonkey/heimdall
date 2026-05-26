@@ -58,11 +58,18 @@ export function TextAreaShowcase() {
           <DemoCard label="Disabled">
             <TextArea placeholder="Not editable" disabled rows={3} />
           </DemoCard>
+          <DemoCard label="Mono font">
+            <TextArea placeholder="SELECT * FROM entities&#10;WHERE active = true" mono rows={3} />
+          </DemoCard>
+          <DemoCard label="Mono + value">
+            <TextArea defaultValue="life.organism&#10;cls_4f3a" mono rows={3} />
+          </DemoCard>
         </DemoGrid>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="error" type="boolean" def="false" description="Error state — rose border" />
+          <PropRow name="mono" type="boolean" def="false" description="Renders with JetBrains Mono font — for code and identifiers" />
+          <PropRow name="error" type="boolean" def="false" description="Error state — rose border + focus ring" />
           <PropRow name="...TextareaHTMLAttributes" type="" description="All native textarea attributes (rows, cols, value, onChange, etc.)" />
         </PropsTable>
       </ShowcaseSection>
@@ -73,7 +80,7 @@ export function TextAreaShowcase() {
 export function NumberInputShowcase() {
   return (
     <div>
-      <PageHeader name="NumberInput" description="Numeric input. Extends TextInput with type=number and step/min/max support." />
+      <PageHeader name="NumberInput" description="Numeric input with design system styling. Extends the native <input type=number> element with step/min/max support." />
       <ShowcaseSection label="States">
         <DemoGrid cols={2} gap={12}>
           <DemoCard label="Default">
@@ -91,13 +98,18 @@ export function NumberInputShowcase() {
           <DemoCard label="Disabled">
             <NumberInput defaultValue={0} disabled />
           </DemoCard>
+          <DemoCard label="Mono font">
+            <NumberInput defaultValue={1024} mono />
+          </DemoCard>
         </DemoGrid>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="error" type="boolean" def="false" description="Error state" />
+          <PropRow name="mono" type="boolean" def="false" description="Renders with JetBrains Mono font — for numeric identifiers and code" />
+          <PropRow name="error" type="boolean" def="false" description="Error state — rose border + focus ring" />
           <PropRow name="step" type="number" description="Step increment for up/down controls" />
           <PropRow name="min / max" type="number" description="Clamp the valid range" />
+          <PropRow name="...InputHTMLAttributes" type="" description="All native input attributes (value, onChange, placeholder, disabled, etc.)" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -139,7 +151,7 @@ export function SelectShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="error" type="boolean" def="false" description="Error state — rose border" />
+          <PropRow name="error" type="boolean" def="false" description="Error state — rose border + aria-invalid" />
           <PropRow name="...SelectHTMLAttributes" type="" description="All native select attributes" />
         </PropsTable>
       </ShowcaseSection>
@@ -168,6 +180,22 @@ export function TriStateShowcase() {
           </label>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
             <TriState defaultChecked readOnly />
+            <span style={{ fontSize: 13, color: fg2 }}>Checked</span>
+          </label>
+        </DemoRow>
+      </ShowcaseSection>
+      <ShowcaseSection label="Disabled">
+        <DemoRow gap={24}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <TriState defaultChecked={false} disabled />
+            <span style={{ fontSize: 13, color: fg2 }}>Unchecked</span>
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <TriState indeterminate disabled />
+            <span style={{ fontSize: 13, color: fg2 }}>Indeterminate</span>
+          </label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <TriState defaultChecked disabled />
             <span style={{ fontSize: 13, color: fg2 }}>Checked</span>
           </label>
         </DemoRow>
@@ -229,14 +257,22 @@ export function FieldShowcase() {
               <TextArea placeholder="Add a description…" rows={3} />
             </Field>
           </DemoCard>
+          <DemoCard label="Disabled">
+            <Field label="Identifier" hint="Cannot be changed after creation" disabled>
+              <TextInput placeholder="my_identifier" mono disabled />
+            </Field>
+          </DemoCard>
         </DemoGrid>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="label" type="ReactNode" description="Label text rendered above the input" />
+          <PropRow name="htmlFor" type="string" description="Associates the label with an input by id" />
           <PropRow name="required" type="boolean" def="false" description="Shows a red asterisk after the label" />
+          <PropRow name="disabled" type="boolean" def="false" description="Dims label, hint, and error text at 45% opacity" />
           <PropRow name="hint" type="ReactNode" description="Secondary text shown inline after the label" />
           <PropRow name="error" type="ReactNode" description="Error message shown below the input in rose color" />
+          <PropRow name="errorId" type="string" description="id applied to the error element for aria-describedby wiring" />
           <PropRow name="children" type="ReactNode" description="The input element" />
         </PropsTable>
       </ShowcaseSection>

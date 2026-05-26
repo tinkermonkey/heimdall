@@ -6,7 +6,7 @@ export interface TriStateProps extends Omit<React.InputHTMLAttributes<HTMLInputE
 }
 
 export const TriState = React.forwardRef<HTMLInputElement, TriStateProps>(
-  ({ indeterminate = false, className = '', ...props }, ref) => {
+  ({ indeterminate = false, className = '', 'aria-checked': ariaChecked, ...props }, ref) => {
     const internalRef: React.MutableRefObject<HTMLInputElement | null> =
       React.useRef<HTMLInputElement>(null)
 
@@ -42,6 +42,7 @@ export const TriState = React.forwardRef<HTMLInputElement, TriStateProps>(
         type="checkbox"
         className={classNames}
         {...props}
+        aria-checked={ariaChecked ?? (indeterminate ? 'mixed' : props.checked !== undefined ? Boolean(props.checked) : undefined)}
       />
     )
   }

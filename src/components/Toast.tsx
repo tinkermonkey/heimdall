@@ -56,8 +56,9 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       <div
         ref={ref}
         className={['toast', `toast--${variant}`, className].filter(Boolean).join(' ')}
-        role="status"
-        aria-live="polite"
+        role={variant === 'error' || variant === 'warning' ? 'alert' : 'status'}
+        aria-live={variant === 'error' || variant === 'warning' ? 'assertive' : 'polite'}
+        aria-atomic="true"
         {...props}
       >
         <div className={`toast__icon toast__icon--${color}`}>
