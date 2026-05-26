@@ -14,7 +14,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
-  color: #fff;
+  color: white;
   flex: none;
   overflow: hidden;
 }
@@ -28,7 +28,7 @@
 
 .chat-message--bot .chat-message__avatar {
   background: linear-gradient(135deg, rgb(var(--status-cyan)), rgb(var(--status-cyan-deep, 34, 211, 238)));
-  color: #0b0f14;
+  color: rgb(var(--canvas-bg));
 }
 
 .chat-message--user .chat-message__avatar {

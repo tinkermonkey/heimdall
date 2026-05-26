@@ -141,13 +141,13 @@ body.dark-canvas .chip--rose {
 }
 body.dark-canvas .chip--neutral {
   color: rgb(var(--canvas-fg-3));
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--white-overlay-sm);
+  border-color: var(--white-overlay-lg);
 }
 body.dark-canvas .chip--id-tag {
   color: rgb(var(--canvas-fg-3));
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--white-overlay-sm);
+  border-color: var(--white-overlay-lg);
 }
 
 /* Environment pill form */

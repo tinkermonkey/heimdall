@@ -39,8 +39,8 @@
 
 /* Focus ring when panel is open */
 .filter-dropdown__trigger[aria-expanded="true"] {
-  outline: 3px solid rgba(245, 158, 11, 0.18);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
 }
 
 /* ============================================================================

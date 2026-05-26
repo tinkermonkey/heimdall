@@ -107,6 +107,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
       <div ref={containerRef} className={['row-menu', className].filter(Boolean).join(' ')} data-testid="row-menu" {...props}>
         <button
           ref={triggerRef}
+          type="button"
           className="row-menu__trigger"
           onClick={handleTriggerClick}
           aria-label={triggerLabel}
@@ -136,6 +137,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
               ) : (
                 <button
                   key={action.id}
+                  type="button"
                   role="menuitem"
                   tabIndex={-1}
                   disabled={action.disabled}

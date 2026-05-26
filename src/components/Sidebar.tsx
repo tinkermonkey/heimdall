@@ -65,6 +65,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
     return (
       <div ref={ref} className={classNames} {...props}>
         <button
+          type="button"
           className="sidebar__toggle"
           onClick={() => onCollapse?.(!collapsed)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -85,6 +86,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                   return (
                     <React.Fragment key={item.id}>
                       <button
+                        type="button"
                         className={`sidebar__item ${isActive ? 'sidebar__item--active' : ''}`}
                         onClick={() => {
                           if (hasChildren) {
@@ -118,6 +120,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                       {!collapsed && hasChildren && isExpanded && item.children!.map(child => (
                         <button
                           key={child.id}
+                          type="button"
                           className={`sidebar__item sidebar__item--child ${activeItemId === child.id ? 'sidebar__item--active' : ''}`}
                           onClick={() => onSelectItem?.(child.id)}
                           aria-current={activeItemId === child.id ? 'page' : undefined}

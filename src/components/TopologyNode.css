@@ -125,19 +125,19 @@
 }
 
 .topology-node--ok {
-  border-color: rgba(16, 185, 129, 0.3);
+  border-color: var(--status-emerald-border-alpha-md);
 }
 
 .topology-node--warning {
-  border-color: rgba(245, 158, 11, 0.3);
+  border-color: var(--status-amber-border-alpha-md);
 }
 
 .topology-node--error {
-  border-color: rgba(239, 68, 68, 0.3);
+  border-color: var(--status-rose-border-alpha-md);
 }
 
 .topology-node--idle {
-  border-color: rgba(107, 114, 128, 0.2);
+  border-color: var(--status-neutral-border-alpha);
 }
 
 body.dark-canvas .topology-node {

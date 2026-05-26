@@ -104,7 +104,7 @@ const InspectorPanelPropertySection = React.forwardRef<HTMLDivElement, Inspector
 InspectorPanelPropertySection.displayName = 'InspectorPanel.PropertySection'
 
 export interface InspectorPanelProps extends React.HTMLAttributes<HTMLDivElement> {
-  eyebrow: string
+  eyebrow?: string
   title: string
   id: string
   version?: number
@@ -114,7 +114,7 @@ export interface InspectorPanelProps extends React.HTMLAttributes<HTMLDivElement
 
 const InspectorPanelComponent = React.forwardRef<HTMLDivElement, InspectorPanelProps>(
   (
-    { eyebrow, title, id, version, actions, children, className = '', ...props },
+    { eyebrow = '', title, id, version, actions, children, className = '', ...props },
     ref
   ) => {
     const classNames = ['inspector-panel', className].filter(Boolean).join(' ')
@@ -123,7 +123,7 @@ const InspectorPanelComponent = React.forwardRef<HTMLDivElement, InspectorPanelP
       <InspectorPanelContext.Provider value={true}>
         <div ref={ref} className={classNames} {...props}>
           <div className="inspector-panel__head">
-            <div className="inspector-panel__eyebrow">{eyebrow}</div>
+            {eyebrow && <div className="inspector-panel__eyebrow">{eyebrow}</div>}
             <div className="inspector-panel__title">{title}</div>
             <div className="inspector-panel__id-version">
               <span className="inspector-panel__id">{id}</span>

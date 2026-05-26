@@ -43,7 +43,7 @@
 
 .config-tile:hover .config-tile__icon {
   background-color: rgb(var(--accent-primary-hover));
-  color: #ffffff;
+  color: white;
 }
 
 .config-tile--disabled,

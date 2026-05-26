@@ -48,7 +48,7 @@
 }
 
 .text-input--error:focus-visible {
-  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.13);
+  box-shadow: 0 0 0 3px var(--status-rose-border-alpha);
 }
 
 /* Number input specific */
@@ -62,7 +62,7 @@
 }
 
 .number-input--error:focus-visible {
-  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.13);
+  box-shadow: 0 0 0 3px var(--status-rose-border-alpha);
 }
 
 /* Text area specific */
@@ -82,5 +82,5 @@
 }
 
 .text-area--error:focus-visible {
-  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.13);
+  box-shadow: 0 0 0 3px var(--status-rose-border-alpha);
 }

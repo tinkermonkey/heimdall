@@ -12,7 +12,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', size = 'md', icon, className = '', disabled, ...props }, ref) => {
+  ({ variant = 'primary', size = 'md', icon, className = '', disabled, type = 'button', ...props }, ref) => {
     const classNames = [
       'btn',
       `btn--${variant}`,
@@ -26,6 +26,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
+        type={type} // eslint-disable-line react/button-has-type
         disabled={disabled}
         className={classNames}
         {...props}

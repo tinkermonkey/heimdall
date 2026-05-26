@@ -78,5 +78,5 @@
 .topbar__search:focus {
   outline: none;
   border-color: rgb(var(--accent-primary));
-  box-shadow: 0 0 0 3px rgb(var(--accent-primary) / 0.1);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
 }

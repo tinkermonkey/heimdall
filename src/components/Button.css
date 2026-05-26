@@ -63,36 +63,36 @@
 /* Primary — near-black slate in light; bright accent in dark */
 .btn--primary {
   background: rgb(var(--canvas-fg-1));
-  color: #fff;
+  color: white;
 }
 
 .btn--primary:not(:disabled):hover {
-  background: #1E293B;
+  background: rgb(var(--canvas-fg-2));
 }
 
 body.dark-canvas .btn--primary {
   background: rgb(var(--accent-primary));
-  color: #0B0F14;
+  color: rgb(var(--canvas-bg));
 }
 
 body.dark-canvas .btn--primary svg {
-  color: #0B0F14;
+  color: rgb(var(--canvas-bg));
 }
 
 body.dark-canvas .btn--primary:not(:disabled):hover {
   background: rgb(var(--accent-primary-hover));
-  color: #0B0F14;
+  color: rgb(var(--canvas-bg));
 }
 
 /* Accent — amber-700 brand CTA; use sparingly */
 .btn--accent {
   background: rgb(var(--accent-primary-deep));
-  color: #fff;
+  color: white;
 }
 
 .btn--accent:not(:disabled):hover {
   background: rgb(var(--accent-primary-hover));
-  color: #fff;
+  color: white;
 }
 
 /* Ghost — toolbar/row actions; transparent at rest */
@@ -124,13 +124,13 @@ body.dark-canvas .btn--primary:not(:disabled):hover {
 /* Danger — destructive actions */
 .btn--danger {
   background: rgb(var(--status-error-fg));
-  color: #fff;
+  color: white;
   border-color: transparent;
 }
 
 .btn--danger:not(:disabled):hover {
-  background: rgb(153 27 27);
-  color: #fff;
+  background: rgb(var(--status-rose-deep));
+  color: white;
 }
 
 /* Link */

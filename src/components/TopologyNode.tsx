@@ -15,7 +15,7 @@ export interface TopologyNodeMetric {
 
 export interface TopologyNodeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'role'> {
   title: string
-  nodeRole: string
+  nodeRole?: string
   status?: TopologyNodeStatus
   metrics?: TopologyNodeMetric[]
   selected?: boolean
@@ -33,7 +33,7 @@ const statusDotColorMap: Record<TopologyNodeStatus, string> = {
 
 export const TopologyNode = React.forwardRef<HTMLDivElement, TopologyNodeProps>(
   (
-    { title, nodeRole, status = 'idle', metrics = [], selected = false, x, y, onSelect, className = '', style: userStyle, ...props },
+    { title, nodeRole = '', status = 'idle', metrics = [], selected = false, x, y, onSelect, className = '', style: userStyle, ...props },
     ref
   ) => {
     const classNames = [

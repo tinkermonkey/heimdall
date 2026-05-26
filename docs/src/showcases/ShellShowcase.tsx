@@ -12,7 +12,7 @@ export function TitlebarShowcase() {
           <Titlebar
             left={<span style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>heimdall</span>}
             right={
-              <button style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: 'rgb(var(--shell-fg-2))', fontSize: 13, padding: '0 4px' }}>
+              <button type="button" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: 'rgb(var(--shell-fg-2))', fontSize: 13, padding: '0 4px' }}>
                 <Icon name="settings" size={14} />
                 Settings
               </button>

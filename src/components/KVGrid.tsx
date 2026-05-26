@@ -7,12 +7,12 @@ export interface KVGridRow {
 }
 
 export interface KVGridProps extends React.HTMLAttributes<HTMLDListElement> {
-  rows: KVGridRow[]
+  rows?: KVGridRow[]
   keyWidth?: number | string
 }
 
 export const KVGrid = React.forwardRef<HTMLDListElement, KVGridProps>(
-  ({ rows, keyWidth, className = '', style, ...props }, ref) => {
+  ({ rows = [], keyWidth, className = '', style, ...props }, ref) => {
     const classNames = ['kv-grid', className].filter(Boolean).join(' ')
     const gridStyle: React.CSSProperties | undefined = keyWidth
       ? { ...style, gridTemplateColumns: `${typeof keyWidth === 'number' ? `${keyWidth}px` : keyWidth} 1fr` }

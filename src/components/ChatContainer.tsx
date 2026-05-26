@@ -50,6 +50,7 @@ export const ChatContainer = React.forwardRef<HTMLDivElement, ChatContainerProps
             {bots.map((bot) => (
               <button
                 key={bot.id}
+                type="button"
                 className={[
                   'chat-container__bot-tab',
                   activeBotId === bot.id && 'chat-container__bot-tab--active',

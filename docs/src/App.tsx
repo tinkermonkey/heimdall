@@ -9,7 +9,7 @@ import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from
 import { TitlebarShowcase, AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
-import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarVShowcase, BarHShowcase, StackedBarShowcase, DonutShowcase, HeatmapShowcase, StatusTimelineShowcase, BarChartShowcase, PieChartShowcase, ProgressBarShowcase, MetricRowShowcase } from './showcases/ChartsShowcase'
+import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarVShowcase, BarHShowcase, StackedBarShowcase, DonutShowcase, HeatmapShowcase, StatusTimelineShowcase, BarChartShowcase, PieChartShowcase, ProgressBarShowcase, MetricRowShowcase, ChartWrapperShowcase } from './showcases/ChartsShowcase'
 import { PageHeaderShowcase, FilterBarShowcase, ActivityTimelineShowcase, AlertStripShowcase, QuickAccessGridShowcase } from './showcases/PagePatternsShowcase'
 import { ChatMessageShowcase, ToolBlockShowcase, ThinkingBlockShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
 import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, RelationshipBuilderShowcase, RowMenuShowcase, PipelineCardShowcase, FormCalloutShowcase } from './showcases/FormsComplexShowcase'
@@ -110,6 +110,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'pie-chart': PieChartShowcase,
   'progress-bar': ProgressBarShowcase,
   'metric-row': MetricRowShowcase,
+  'chart-wrapper': ChartWrapperShowcase,
   charts: ChartsTestPage,
   // Page Patterns
   'page-header': PageHeaderShowcase,
@@ -239,6 +240,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'donut', label: 'Donut', icon: 'component' },
       { id: 'heatmap', label: 'Heatmap', icon: 'table' },
       { id: 'status-timeline', label: 'StatusTimeline', icon: 'clock' },
+      { id: 'chart-wrapper', label: 'ChartWrapper', icon: 'component' },
     ],
   },
   {
@@ -336,6 +338,7 @@ function App() {
         ],
         children: (
           <button
+            type="button"
             onClick={() => setDarkCanvas(v => !v)}
             title={darkCanvas ? 'Switch to light canvas' : 'Switch to dark canvas'}
             style={{

@@ -337,6 +337,7 @@ This will require calling analyze_distribution with the dataset parameters.`
             both modes.
           </p>
           <button
+            type="button"
             onClick={() => {
               document.body.classList.toggle('dark-canvas')
             }}

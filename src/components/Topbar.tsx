@@ -46,6 +46,7 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
                     </a>
                   ) : crumb.onClick ? (
                     <button
+                      type="button"
                       className="breadcrumbs__link breadcrumbs__link--button"
                       onClick={crumb.onClick}
                       aria-current={index === lastIndex ? 'page' : undefined}

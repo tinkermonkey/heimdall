@@ -46,8 +46,8 @@
   width: 32px;
   height: 32px;
   border-radius: var(--radius-sm);
-  background-color: rgba(251, 191, 36, 0.10);
-  border: 1px solid rgba(251, 191, 36, 0.20);
+  background-color: var(--accent-primary-bg-alpha-sm);
+  border: 1px solid var(--accent-primary-border-alpha-sm);
   color: rgb(var(--accent-primary));
 }
 
@@ -108,11 +108,12 @@
 }
 
 .workspace-switcher-dialog__recent-item:focus-visible {
-  box-shadow: inset 0 0 0 2px rgb(var(--accent-primary));
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
 }
 
 .workspace-switcher-dialog__recent-item--current {
-  background-color: rgba(251, 191, 36, 0.05);
+  background-color: var(--accent-primary-bg-alpha-xs);
 }
 
 .workspace-switcher-dialog__recent-main {
@@ -133,8 +134,8 @@
   font-weight: 500;
   letter-spacing: 0.04em;
   color: rgb(var(--accent-primary));
-  background-color: rgba(251, 191, 36, 0.12);
-  border: 1px solid rgba(251, 191, 36, 0.28);
+  background-color: var(--accent-primary-bg-alpha-md);
+  border: 1px solid var(--accent-primary-border-alpha-lg);
   border-radius: 3px;
   padding: 1px 5px;
   line-height: 1.4;

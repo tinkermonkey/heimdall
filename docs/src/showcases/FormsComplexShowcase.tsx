@@ -490,8 +490,11 @@ export function PipelineCardShowcase() {
           <PropRow name="pipeline.name" type="string" description="Pipeline name (rendered monospace)" />
           <PropRow name="pipeline.description" type="string" description="Optional secondary description line" />
           <PropRow name="pipeline.status" type="'running' | 'success' | 'idle' | 'failed'" description="Overall pipeline status" />
+          <PropRow name="pipeline.target" type="string" description="Optional target identifier (e.g. table name) shown in the card header" />
           <PropRow name="pipeline.flow" type="FlowNode[]" description="Ordered stage nodes. Each node: { id, name, label?, icon: IconName | ReactElement }" />
           <PropRow name="pipeline.recent" type="object" description="Statistics object: ingested, created, updated, errors" />
+          <PropRow name="pipeline.tags" type="string[]" description="Optional tag labels rendered as chips in the card header" />
+          <PropRow name="pipeline.lastRun" type="string" description="Optional human-readable time string for the last run (e.g. '12s ago')" />
           <PropRow name="onRun" type="() => void" description="Callback fired when Run button is clicked (hidden while running)" />
           <PropRow name="onCancel" type="() => void" description="Callback fired when Cancel button is clicked (shown while running)" />
           <PropRow name="onOptions" type="() => void" description="When provided, renders a kebab button that triggers this callback" />

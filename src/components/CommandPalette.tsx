@@ -15,13 +15,13 @@ export interface Command {
 export interface CommandPaletteProps {
   isOpen: boolean
   onClose: () => void
-  commands: Command[]
+  commands?: Command[]
   placeholder?: string
   emptyMessage?: string
 }
 
 export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPaletteProps>(
-  ({ isOpen, onClose, commands, placeholder = 'Search commands…', emptyMessage = 'No commands found' }, ref) => {
+  ({ isOpen, onClose, commands = [], placeholder = 'Search commands…', emptyMessage = 'No commands found' }, ref) => {
     const [search, setSearch] = useState('')
     const [selectedIndex, setSelectedIndex] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -130,6 +130,7 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
               filtered.map((cmd, index) => (
                 <button
                   key={cmd.id}
+                  type="button"
                   id={`${listboxId}-${cmd.id}`}
                   role="option"
                   aria-selected={index === selectedIndex}

@@ -36,6 +36,6 @@
 }
 
 body.dark-canvas {
-  --graph-edge: #3a4452;
-  --graph-edge-strong: #5a6573;
+  --graph-edge: rgb(var(--canvas-border-2));
+  --graph-edge-strong: rgb(var(--canvas-border-strong));
 }

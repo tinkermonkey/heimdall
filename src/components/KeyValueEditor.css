@@ -82,7 +82,7 @@
 
 .key-value-editor__remove-btn:hover {
   color: rgb(var(--status-rose));
-  background-color: rgba(244, 63, 94, 0.08);
+  background-color: var(--status-rose-bg-alpha);
 }
 
 .key-value-editor__remove-btn:disabled {

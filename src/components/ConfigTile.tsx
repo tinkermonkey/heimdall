@@ -17,12 +17,13 @@ export interface ConfigTileProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 }
 
 export const ConfigTile = React.forwardRef<HTMLButtonElement, ConfigTileProps>(
-  ({ icon, title, description, summary = [], onClick, className = '', disabled, ...props }, ref) => {
+  ({ icon, title, description, summary = [], onClick, className = '', disabled, type = 'button', ...props }, ref) => {
     const classNames = ['config-tile', disabled && 'config-tile--disabled', className].filter(Boolean).join(' ')
 
     return (
       <button
         ref={ref}
+        type={type} // eslint-disable-line react/button-has-type
         className={classNames}
         onClick={onClick}
         disabled={disabled}

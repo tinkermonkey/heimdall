@@ -63,6 +63,7 @@ export {
   type PropertyRow,
 } from './components/InspectorPanel'
 export { KVGrid, type KVGridProps, type KVGridRow } from './components/KVGrid'
+export { ChartWrapper, type ChartWrapperProps } from './components/ChartWrapper'
 export { Sparkline, type SparklineColor, type SparklineProps } from './components/Sparkline'
 export { LineChart, type LineChartProps, type ThresholdLine, type EventMarker } from './components/LineChart'
 export { BarChart, type BarChartSeries, type BarChartProps } from './components/BarChart'

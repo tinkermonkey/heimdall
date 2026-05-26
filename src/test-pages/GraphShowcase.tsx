@@ -167,6 +167,7 @@ export default function GraphShowcase() {
         <h1 style={{ marginBottom: '12px' }}>Graph Canvas Components</h1>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button
+            type="button"
             data-testid="graph-view-button"
             onClick={() => setCanvasMode('graph')}
             style={{
@@ -181,6 +182,7 @@ export default function GraphShowcase() {
             Graph View
           </button>
           <button
+            type="button"
             data-testid="topology-view-button"
             onClick={() => setCanvasMode('topology')}
             style={{

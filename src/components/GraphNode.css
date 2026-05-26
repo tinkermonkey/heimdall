@@ -91,8 +91,8 @@ body.dark-canvas .graph-node.selected {
 
 .graph-node[data-kind='individual'] .graph-node__kind {
   color: rgb(var(--accent-primary-deep));
-  background: rgba(245, 158, 11, 0.08);
-  border-color: rgba(245, 158, 11, 0.25);
+  background: var(--status-amber-bg-alpha);
+  border-color: var(--status-amber-border-alpha);
 }
 
 body.dark-canvas .graph-node {

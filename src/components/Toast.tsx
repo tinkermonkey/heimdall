@@ -7,7 +7,7 @@ export type ToastVariant = 'success' | 'error' | 'warning' | 'info'
 export interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
   isOpen: boolean
   onClose: () => void
-  title: string
+  title?: string
   subtitle?: string
   variant?: ToastVariant
   icon?: IconName
@@ -65,10 +65,11 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
           <Icon name={iconName} size={12} />
         </div>
         <div className="toast__content">
-          <div className="toast__title">{title}</div>
+          {title && <div className="toast__title">{title}</div>}
           {subtitle && <div className="toast__subtitle">{subtitle}</div>}
         </div>
         <button
+          type="button"
           className="toast__close"
           onClick={onClose}
           aria-label="Dismiss notification"

@@ -39,7 +39,7 @@
 }
 
 .select--error:focus-visible {
-  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.13);
+  box-shadow: 0 0 0 3px var(--status-rose-border-alpha);
 }
 
 .select option {

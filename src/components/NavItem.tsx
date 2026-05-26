@@ -11,7 +11,7 @@ export interface NavItemProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
 }
 
 export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(
-  ({ icon, label, count, active = false, depth = 0, onClick, className = '', ...props }, ref) => {
+  ({ icon, label, count, active = false, depth = 0, onClick, className = '', type = 'button', ...props }, ref) => {
     const classNames = [
       'nav-item',
       active && 'nav-item--active',
@@ -24,6 +24,7 @@ export const NavItem = React.forwardRef<HTMLButtonElement, NavItemProps>(
     return (
       <button
         ref={ref}
+        type={type} // eslint-disable-line react/button-has-type
         className={classNames}
         onClick={onClick}
         aria-current={active ? 'page' : undefined}

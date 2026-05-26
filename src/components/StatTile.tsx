@@ -5,8 +5,8 @@ import { Sparkline } from './Sparkline'
 import type { StatusColor } from './statusColors'
 
 export interface StatTileProps extends React.HTMLAttributes<HTMLDivElement> {
-  label: string
-  value: string | number
+  label?: string
+  value?: string | number
   delta?: {
     value: number
     label?: string
@@ -22,8 +22,8 @@ export interface StatTileProps extends React.HTMLAttributes<HTMLDivElement> {
 export const StatTile = React.forwardRef<HTMLDivElement, StatTileProps>(
   (
     {
-      label,
-      value,
+      label = '',
+      value = '',
       delta,
       color = 'cyan',
       icon,

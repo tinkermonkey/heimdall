@@ -1,4 +1,5 @@
 import {
+  ChartWrapper,
   Sparkline,
   LineChart,
   BarChart,
@@ -1107,6 +1108,81 @@ export function MetricRowShowcase() {
           <PropRow name="progressLabel" type="string" description="Accessible label for the progress bar. Defaults to the row label." />
           <PropRow name="aria-label" type="string" description="Accessible label for the row element. Defaults to the row label." />
           <PropRow name="className" type="string" description="Additional CSS class names appended to the root element." />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ChartWrapper — accessibility infrastructure
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function ChartWrapperShowcase() {
+  return (
+    <div>
+      <PageHeader
+        name="ChartWrapper"
+        description="Accessible SVG container for chart components. Renders an &lt;svg&gt; with role=&quot;img&quot; and aria-label already set, so new chart components never need to remember to add these attributes manually."
+      />
+
+      <ShowcaseSection
+        label="Basic usage"
+        description="Wrap SVG content in ChartWrapper and supply a label. The role and aria-label are handled automatically."
+      >
+        <ChartFrame>
+          <ChartWrapper label="Monthly active users" width={320} height={120} viewBox="0 0 320 120">
+            {/* A simple custom SVG chart drawn inside the accessible container */}
+            <line x1="0" y1="115" x2="320" y2="115" stroke="rgb(var(--canvas-border, 229 233 238))" strokeWidth="1" />
+            {[12, 34, 28, 55, 44, 68, 61, 82, 75, 90, 85, 100].map((v, i, arr) => {
+              const x = (i / (arr.length - 1)) * 310 + 5
+              const y = 110 - (v / 100) * 100
+              return <circle key={i} cx={x} cy={y} r={3.5} fill="#F59E0B" />
+            })}
+          </ChartWrapper>
+        </ChartFrame>
+      </ShowcaseSection>
+
+      <ShowcaseSection
+        label="Before / after comparison"
+        description="Without ChartWrapper, each chart component must manually set role and aria-label on its &lt;svg&gt; root. With ChartWrapper, this is done once in the wrapper."
+      >
+        <DemoGrid cols={2} gap={16}>
+          <DemoCard label="Without ChartWrapper — manual attrs required">
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 11, lineHeight: 1.7, color: 'rgb(var(--canvas-fg-2, 71 85 105))', background: 'rgb(var(--canvas-bg-2, 247 249 251))', padding: '10px 14px', borderRadius: 6, border: '1px solid rgb(var(--canvas-border, 229 233 238))' }}>
+              <span style={{ color: 'rgb(var(--canvas-fg-3))' }}>{'// must remember every time'}</span><br />
+              {'<svg'}<br />
+              {'  '}<span style={{ color: '#F59E0B' }}>role</span>{'="img"'}<br />
+              {'  '}<span style={{ color: '#F59E0B' }}>aria-label</span>{'="Revenue trend"'}<br />
+              {'  width={480} height={200}'}<br />
+              {'>'}<br />
+              {'  {/* chart content */}'}<br />
+              {'</svg>'}
+            </div>
+          </DemoCard>
+          <DemoCard label="With ChartWrapper — attrs enforced by the component">
+            <div style={{ fontFamily: 'var(--font-mono, monospace)', fontSize: 11, lineHeight: 1.7, color: 'rgb(var(--canvas-fg-2, 71 85 105))', background: 'rgb(var(--canvas-bg-2, 247 249 251))', padding: '10px 14px', borderRadius: 6, border: '1px solid rgb(var(--canvas-border, 229 233 238))' }}>
+              <span style={{ color: 'rgb(var(--canvas-fg-3))' }}>{'// label is the only ARIA concern'}</span><br />
+              {'<ChartWrapper'}<br />
+              {'  '}<span style={{ color: '#F59E0B' }}>label</span>{'="Revenue trend"'}<br />
+              {'  width={480} height={200}'}<br />
+              {'  viewBox="0 0 480 200"'}<br />
+              {'>'}<br />
+              {'  {/* chart content */}'}<br />
+              {'</ChartWrapper>'}
+            </div>
+          </DemoCard>
+        </DemoGrid>
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="label" type="string" required description="Accessible label — maps directly to aria-label on the rendered SVG. Required; no default." />
+          <PropRow name="width" type="number | string" description="SVG width attribute. Accepts pixel numbers or CSS strings (e.g. '100%')." />
+          <PropRow name="height" type="number | string" description="SVG height attribute." />
+          <PropRow name="viewBox" type="string" description="SVG viewBox attribute (e.g. '0 0 480 200'). Needed when width/height differ from the internal coordinate system." />
+          <PropRow name="className" type="string" description="Additional CSS class names applied to the SVG element." />
+          <PropRow name="children" type="React.ReactNode" required description="SVG content — paths, groups, text, defs, etc." />
         </PropsTable>
       </ShowcaseSection>
     </div>

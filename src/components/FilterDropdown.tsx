@@ -201,6 +201,7 @@ function FilterDropdownTrigger({ label, summary, ...props }: FilterDropdownTrigg
   return (
     <button
       ref={triggerRef}
+      type="button"
       {...props}
       className="filter-dropdown__trigger"
       onClick={() => onOpenChange(!isOpen)}

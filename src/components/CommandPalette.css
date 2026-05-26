@@ -116,7 +116,7 @@
 
 body.dark-canvas .command-palette__item:hover,
 body.dark-canvas .command-palette__item--selected {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--white-overlay-sm);
 }
 
 .command-palette__item-content {

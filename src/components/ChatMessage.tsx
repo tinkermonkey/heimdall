@@ -122,6 +122,7 @@ export const ToolBlock = React.forwardRef<HTMLDivElement, ToolBlockProps>(
         {...props}
       >
         <button
+          type="button"
           className="tool-block__header"
           onClick={handleToggle}
           aria-expanded={!isCollapsed}
@@ -190,6 +191,7 @@ export const ThinkingBlock = React.forwardRef<HTMLDivElement, ThinkingBlockProps
         {...props}
       >
         <button
+          type="button"
           className="thinking-block__header"
           onClick={handleToggle}
           aria-expanded={!isCollapsed}

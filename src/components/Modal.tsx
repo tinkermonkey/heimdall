@@ -72,6 +72,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
                 {subtitle && <div className="modal__subtitle">{subtitle}</div>}
               </div>
               <button
+                type="button"
                 className="modal__close"
                 onClick={onClose}
                 aria-label="Close dialog"

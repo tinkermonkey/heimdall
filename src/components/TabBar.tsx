@@ -10,13 +10,13 @@ export interface Tab {
 }
 
 export interface TabBarProps extends React.HTMLAttributes<HTMLDivElement> {
-  tabs: Tab[]
-  activeTabId: string
-  onSelectTab: (tabId: string) => void
+  tabs?: Tab[]
+  activeTabId?: string
+  onSelectTab?: (tabId: string) => void
 }
 
 export const TabBar = React.forwardRef<HTMLDivElement, TabBarProps>(
-  ({ tabs, activeTabId, onSelectTab, className = '', ...props }, ref) => {
+  ({ tabs = [], activeTabId = '', onSelectTab, className = '', ...props }, ref) => {
     const classNames = ['tab-bar', className].filter(Boolean).join(' ')
     const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
 
@@ -44,7 +44,7 @@ export const TabBar = React.forwardRef<HTMLDivElement, TabBarProps>(
         if (nextPos !== undefined) {
           e.preventDefault()
           tabRefs.current[nextPos]?.focus()
-          onSelectTab(tabs[nextPos].id)
+          onSelectTab?.(tabs[nextPos].id)
         }
       },
       [tabs, onSelectTab]
@@ -56,6 +56,7 @@ export const TabBar = React.forwardRef<HTMLDivElement, TabBarProps>(
           {tabs.map((tab, index) => (
             <button
               key={tab.id}
+              type="button"
               ref={el => { tabRefs.current[index] = el }}
               role="tab"
               aria-selected={activeTabId === tab.id}
@@ -68,7 +69,7 @@ export const TabBar = React.forwardRef<HTMLDivElement, TabBarProps>(
               ]
                 .filter(Boolean)
                 .join(' ')}
-              onClick={() => !tab.disabled && onSelectTab(tab.id)}
+              onClick={() => !tab.disabled && onSelectTab?.(tab.id)}
               onKeyDown={e => handleKeyDown(e, index)}
             >
               <span className="tab-bar__tab-label">{tab.label}</span>

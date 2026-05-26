@@ -9,7 +9,7 @@ export interface ConfirmDialogProps {
   isOpen: boolean
   onClose: () => void
   onConfirm: () => void
-  title: string
+  title?: string
   subtitle?: string
   message: React.ReactNode
   confirmLabel?: string

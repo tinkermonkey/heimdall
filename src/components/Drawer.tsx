@@ -63,6 +63,7 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
           <div className={['drawer__header', !title ? 'drawer__header--no-title' : ''].filter(Boolean).join(' ')}>
             {title && <h2 id={titleId} className="drawer__title">{title}</h2>}
             <button
+              type="button"
               className="drawer__close"
               onClick={onClose}
               aria-label="Close drawer"
