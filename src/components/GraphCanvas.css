@@ -6,6 +6,9 @@
   overflow: hidden;
   cursor: grab;
   user-select: none;
+  /* SVG fills 100% of this box; without an intrinsic floor the canvas
+     collapses to 0 height. Consumers can still override via height/style. */
+  min-height: 360px;
 }
 
 .graph-canvas:active {
