@@ -32,3 +32,4 @@ playwright/.auth
 
 # Scratch / debug screenshots (Claude Code working files)
 .scratch/
+.claude/worktrees
