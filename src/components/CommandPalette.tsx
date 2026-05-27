@@ -9,6 +9,9 @@ export interface Command {
   label: string
   description?: string
   icon?: IconName
+  /** Optional section the command belongs to (e.g. 'Recent', 'Navigate', 'Actions').
+   *  Commands sharing a group render under one header, in first-appearance order. */
+  group?: string
   onSelect: () => void
 }
 
@@ -41,6 +44,21 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
         (cmd.description?.toLowerCase().includes(q) ?? false)
       )
     }, [commands, search])
+
+    // Group the flat filtered list for rendering while preserving each command's
+    // flat index, so keyboard navigation (selectedIndex) stays correct across groups.
+    const groups = useMemo(() => {
+      const order: (string | undefined)[] = []
+      const byGroup = new Map<string | undefined, { cmd: Command; index: number }[]>()
+      filtered.forEach((cmd, index) => {
+        if (!byGroup.has(cmd.group)) {
+          byGroup.set(cmd.group, [])
+          order.push(cmd.group)
+        }
+        byGroup.get(cmd.group)!.push({ cmd, index })
+      })
+      return order.map((name) => ({ name, items: byGroup.get(name)! }))
+    }, [filtered])
 
     useEffect(() => {
       if (isOpen) {
@@ -127,30 +145,37 @@ export const CommandPalette = React.forwardRef<HTMLDivElement, CommandPalettePro
             {filtered.length === 0 ? (
               <div className="command-palette__empty">{emptyMessage}</div>
             ) : (
-              filtered.map((cmd, index) => (
-                <button
-                  key={cmd.id}
-                  type="button"
-                  id={`${listboxId}-${cmd.id}`}
-                  role="option"
-                  aria-selected={index === selectedIndex}
-                  className={['command-palette__item', index === selectedIndex && 'command-palette__item--selected']
-                    .filter(Boolean)
-                    .join(' ')}
-                  onClick={() => {
-                    cmd.onSelect()
-                    onClose()
-                    setSearch('')
-                  }}
-                >
-                  {cmd.icon && <Icon name={cmd.icon} size={16} />}
-                  <div className="command-palette__item-content">
-                    <div className="command-palette__item-label">{cmd.label}</div>
-                    {cmd.description && (
-                      <div className="command-palette__item-description">{cmd.description}</div>
-                    )}
-                  </div>
-                </button>
+              groups.map((group) => (
+                <div key={group.name ?? '__ungrouped'} className="command-palette__group" role="group">
+                  {group.name && (
+                    <div className="command-palette__group-header" aria-hidden="true">{group.name}</div>
+                  )}
+                  {group.items.map(({ cmd, index }) => (
+                    <button
+                      key={cmd.id}
+                      type="button"
+                      id={`${listboxId}-${cmd.id}`}
+                      role="option"
+                      aria-selected={index === selectedIndex}
+                      className={['command-palette__item', index === selectedIndex && 'command-palette__item--selected']
+                        .filter(Boolean)
+                        .join(' ')}
+                      onClick={() => {
+                        cmd.onSelect()
+                        onClose()
+                        setSearch('')
+                      }}
+                    >
+                      {cmd.icon && <Icon name={cmd.icon} size={16} />}
+                      <div className="command-palette__item-content">
+                        <div className="command-palette__item-label">{cmd.label}</div>
+                        {cmd.description && (
+                          <div className="command-palette__item-description">{cmd.description}</div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               ))
             )}
           </div>

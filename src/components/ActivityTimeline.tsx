@@ -109,9 +109,9 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
                     {event.meta}
                   </div>
                 )}
-                <div className="activity-timeline__timestamp" data-testid="activity-timestamp">
-                  {formatTimestamp(event.timestamp)}
-                </div>
+              </div>
+              <div className="activity-timeline__timestamp" data-testid="activity-timestamp">
+                {formatTimestamp(event.timestamp)}
               </div>
             </div>
           ))}

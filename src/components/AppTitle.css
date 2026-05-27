@@ -62,6 +62,13 @@
   font-family: var(--font-mono);
 }
 
+.app-title__action {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .app-title--collapsed .app-title__text {
   display: none;
 }
@@ -69,4 +76,8 @@
 .app-title--collapsed {
   justify-content: center;
   padding: 14px 0;
+}
+
+.app-title--collapsed .app-title__action {
+  margin-left: 0;
 }

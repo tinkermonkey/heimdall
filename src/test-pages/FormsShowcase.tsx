@@ -212,10 +212,10 @@ export default function FormsShowcase() {
                 status: 'success',
                 target: 'life.organism',
                 flow: [
-                  { id: '1', name: 'GBIF API', label: 'source', icon: 'schema' },
-                  { id: '2', name: 'Extract', label: '12 fields', icon: 'download' },
-                  { id: '3', name: 'Resolve', label: 'match by name', icon: 'lock' },
-                  { id: '4', name: 'Write', label: 'life.organism', icon: 'data' },
+                  { id: '1', name: 'GBIF API', label: 'source', icon: 'schema', color: 'cyan' },
+                  { id: '2', name: 'Extract', label: '12 fields', icon: 'download', color: 'violet' },
+                  { id: '3', name: 'Resolve', label: 'match by name', icon: 'lock', color: 'amber' },
+                  { id: '4', name: 'Write', label: 'life.organism', icon: 'data', color: 'emerald' },
                 ],
                 recent: { ingested: 12480, created: 12480, updated: 0, errors: 0 },
                 tags: ['prod', 'critical'],
@@ -225,6 +225,7 @@ export default function FormsShowcase() {
             />
 
             <PipelineCard
+              flowLayout="auto"
               pipeline={{
                 id: 'oauth_sync_v1',
                 name: 'Sync user profiles',

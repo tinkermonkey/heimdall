@@ -36,6 +36,8 @@ export default function PrimitivesTestPage() {
           <Icon name="plus" size={24} />
           <Icon name="chevronUp" size={24} />
           <Icon name="chevronDown" size={24} />
+          <Icon name="folder" size={24} />
+          <Icon name="tag" size={24} />
         </div>
       </section>
 

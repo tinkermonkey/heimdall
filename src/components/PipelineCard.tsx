@@ -9,6 +9,8 @@ export interface FlowNode {
   name: string
   label?: string
   icon: IconName | React.ReactElement
+  /** Stage tone — drives the icon-tile tint and node border color. Falls back to the amber accent. */
+  color?: StatusColor
 }
 
 export interface Pipeline {
@@ -37,6 +39,10 @@ export interface PipelineCardProps extends React.HTMLAttributes<HTMLDivElement> 
   selected?: boolean
   headerAction?: React.ReactNode
   footerContent?: React.ReactNode
+  /** How nodes distribute across the flow strip.
+   *  'fill' (default) gives each node equal width so the strip reads as a balanced pipeline.
+   *  'auto' sizes nodes to content and clumps them left, for free-form workflows. */
+  flowLayout?: 'fill' | 'auto'
 }
 
 const statusChipColor: Record<Pipeline['status'], StatusColor> = {
@@ -47,7 +53,7 @@ const statusChipColor: Record<Pipeline['status'], StatusColor> = {
 }
 
 export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
-  ({ pipeline, onRun, onCancel, onOptions, compact = false, selected = false, headerAction, footerContent, className, ...props }, ref) => {
+  ({ pipeline, onRun, onCancel, onOptions, compact = false, selected = false, headerAction, footerContent, flowLayout = 'fill', className, ...props }, ref) => {
     const statusColor = statusChipColor[pipeline.status]
 
     return (
@@ -110,10 +116,10 @@ export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
         </div>
 
         {/* Flow strip */}
-        <div className="pipeline-card__flow">
+        <div className="pipeline-card__flow" data-layout={flowLayout}>
           {pipeline.flow.map((node, index) => (
             <React.Fragment key={node.id}>
-              <div className="pipeline-card__node">
+              <div className="pipeline-card__node" data-color={node.color}>
                 <div className="pipeline-card__icon-tile">
                   {typeof node.icon === 'string'
                     ? <Icon name={node.icon as IconName} size={16} />

@@ -39,9 +39,9 @@ test.describe('WorkspaceSwitcherDialog', () => {
     await page.click('button:has-text("Open Workspace Switcher")')
 
     // Check for the three action tiles
-    const openTile = page.locator('.quick-access-tile:has-text("Open")')
-    const newTile = page.locator('.quick-access-tile:has-text("New")')
-    const cloneTile = page.locator('.quick-access-tile:has-text("Clone")')
+    const openTile = page.locator('.workspace-switcher-dialog__action-tile:has-text("Open")')
+    const newTile = page.locator('.workspace-switcher-dialog__action-tile:has-text("New")')
+    const cloneTile = page.locator('.workspace-switcher-dialog__action-tile:has-text("Clone")')
 
     await expect(openTile).toBeVisible()
     await expect(newTile).toBeVisible()
@@ -53,12 +53,12 @@ test.describe('WorkspaceSwitcherDialog', () => {
     await page.click('button:has-text("Open Workspace Switcher")')
 
     // Check for recent workspaces section
-    const recentHeader = page.locator('.workspace-switcher-dialog__recent-header:has-text("Recent Workspaces")')
+    const recentHeader = page.locator('.workspace-switcher-dialog__recent-header:has-text("Recent")')
     await expect(recentHeader).toBeVisible()
 
     // Check for recent workspace items
-    const projectAlpha = page.locator('.workspace-switcher-dialog__recent-name:has-text("Project Alpha")')
-    await expect(projectAlpha).toBeVisible()
+    const recentItem = page.locator('.workspace-switcher-dialog__recent-name:has-text("molgraph-research")')
+    await expect(recentItem).toBeVisible()
   })
 
   test('should close when Open tile is clicked', async ({ page }) => {
@@ -66,7 +66,7 @@ test.describe('WorkspaceSwitcherDialog', () => {
     await page.click('button:has-text("Open Workspace Switcher")')
 
     // Click the Open tile
-    await page.click('.quick-access-tile:has-text("Open")')
+    await page.click('.workspace-switcher-dialog__action-tile:has-text("Open")')
 
     // Dialog should be closed
     const modal = page.locator('[role="dialog"]')
@@ -131,18 +131,18 @@ test.describe('WorkspaceSwitcherDialog', () => {
     await expect(modal).toBeVisible()
 
     // Verify action tiles are present
-    const openTile = page.locator('.quick-access-tile:has-text("Open")')
-    const newTile = page.locator('.quick-access-tile:has-text("New")')
-    const cloneTile = page.locator('.quick-access-tile:has-text("Clone")')
+    const openTile = page.locator('.workspace-switcher-dialog__action-tile:has-text("Open")')
+    const newTile = page.locator('.workspace-switcher-dialog__action-tile:has-text("New")')
+    const cloneTile = page.locator('.workspace-switcher-dialog__action-tile:has-text("Clone")')
     await expect(openTile).toBeVisible()
     await expect(newTile).toBeVisible()
     await expect(cloneTile).toBeVisible()
 
     // Verify recent workspaces section is present
-    const recentHeader = page.locator('.workspace-switcher-dialog__recent-header:has-text("Recent Workspaces")')
-    const projectAlpha = page.locator('.workspace-switcher-dialog__recent-name:has-text("Project Alpha")')
+    const recentHeader = page.locator('.workspace-switcher-dialog__recent-header:has-text("Recent")')
+    const recentItem = page.locator('.workspace-switcher-dialog__recent-name:has-text("molgraph-research")')
     await expect(recentHeader).toBeVisible()
-    await expect(projectAlpha).toBeVisible()
+    await expect(recentItem).toBeVisible()
 
     // Take snapshot of the entire dialog with all sections visible
     await expect(modal).toHaveScreenshot('workspace-switcher-dialog.png', {

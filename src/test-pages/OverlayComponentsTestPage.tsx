@@ -160,6 +160,7 @@ export default function OverlayComponentsTestPage() {
         onClose={() => setConfirmOpen(false)}
         onConfirm={() => {
           console.log('Confirmed delete')
+          setConfirmOpen(false)
         }}
         title="Delete class"
         message={

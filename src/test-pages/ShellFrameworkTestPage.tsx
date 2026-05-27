@@ -8,8 +8,8 @@ export default function ShellFrameworkTestPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   const breadcrumbs = [
-    { label: 'Dashboard' },
-    { label: 'Systems' },
+    { label: 'Dashboard', onClick: () => {} },
+    { label: 'Systems', onClick: () => {} },
     { label: 'Compute Cluster' },
   ]
 

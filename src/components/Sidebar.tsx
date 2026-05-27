@@ -25,6 +25,14 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   collapsed?: boolean
   onCollapse?: (collapsed: boolean) => void
   onSelectItem?: (itemId: string) => void
+  /** Ids of parent items expanded on first render (uncontrolled). */
+  defaultExpandedIds?: string[]
+  /** Controlled expansion. When provided, the component reflects this set and
+   *  reports changes via onExpandedChange instead of managing its own state. */
+  expandedIds?: string[]
+  onExpandedChange?: (ids: string[]) => void
+  /** Show the built-in collapse toggle. Set false to host it elsewhere (e.g. AppTitle.action). */
+  showCollapseToggle?: boolean
 }
 
 export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
@@ -35,23 +43,32 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       collapsed = false,
       onCollapse,
       onSelectItem,
+      defaultExpandedIds,
+      expandedIds,
+      onExpandedChange,
+      showCollapseToggle = true,
       className = '',
       ...props
     },
     ref
   ) => {
-    const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set())
+    const isControlled = expandedIds !== undefined
+    const [internalExpanded, setInternalExpanded] = useState<Set<string>>(
+      () => new Set(defaultExpandedIds)
+    )
+    const expandedItems = isControlled ? new Set(expandedIds) : internalExpanded
 
     const toggleExpanded = (id: string) => {
-      setExpandedItems(prev => {
-        const next = new Set(prev)
-        if (next.has(id)) {
-          next.delete(id)
-        } else {
-          next.add(id)
-        }
-        return next
-      })
+      const next = new Set(expandedItems)
+      if (next.has(id)) {
+        next.delete(id)
+      } else {
+        next.add(id)
+      }
+      if (!isControlled) {
+        setInternalExpanded(next)
+      }
+      onExpandedChange?.(Array.from(next))
     }
 
     const classNames = [
@@ -64,14 +81,16 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
 
     return (
       <div ref={ref} className={classNames} {...props}>
-        <button
-          type="button"
-          className="sidebar__toggle"
-          onClick={() => onCollapse?.(!collapsed)}
-          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} size={16} />
-        </button>
+        {showCollapseToggle && (
+          <button
+            type="button"
+            className="sidebar__toggle"
+            onClick={() => onCollapse?.(!collapsed)}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} size={16} />
+          </button>
+        )}
 
         <nav className="sidebar__nav" aria-label="Sidebar navigation">
           {sections.map(section => (

@@ -9,6 +9,7 @@ import {
   ConfigTile,
   PipelineCard,
   Button,
+  Chip,
   SegmentedControl,
   type FilterChip,
   type ActivityEvent,
@@ -51,6 +52,21 @@ export function PageHeaderShowcase() {
           actions={<Button variant="primary" size="sm">Create Entity</Button>}
         />
       </ShowcaseSection>
+      <ShowcaseSection label="Rich eyebrow (ReactNode) + bottom-aligned actions" description="The eyebrow accepts arbitrary content — chips, mono spans, health dots. Actions baseline-align to the bottom of the text block.">
+        <HPageHeader
+          eyebrow={
+            <>
+              <Chip variant="amber">workspace · default</Chip>
+              <span>last sync 8m ago</span>
+              <span>graph daemon healthy</span>
+            </>
+          }
+          title="Entity Browser"
+          idChip="db_main"
+          subtitle="Browse and manage your data entities"
+          actions={<Button variant="primary" size="sm">Create Entity</Button>}
+        />
+      </ShowcaseSection>
       <ShowcaseSection label="Minimal (eyebrow + title)">
         <HPageHeader eyebrow="CONFIG" title="Settings" />
       </ShowcaseSection>
@@ -59,11 +75,11 @@ export function PageHeaderShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
-          <PropRow name="eyebrow" type="string" required={false} description="Monospace uppercase label above the title. Omit to hide the eyebrow row entirely." />
+          <PropRow name="eyebrow" type="ReactNode" required={false} description="Status context above the title. A plain string renders as the uppercase mono label; pass chips/spans for a richer meta row." />
           <PropRow name="title" type="string" description="Primary page title" />
           <PropRow name="idChip" type="string" description="Identifier rendered as a monospace chip beside the title" />
           <PropRow name="subtitle" type="string" description="Secondary description line below title" />
-          <PropRow name="actions" type="ReactNode" description="Action slot — renders right-aligned beside the title" />
+          <PropRow name="actions" type="ReactNode" description="Action slot — right-aligned, baseline-aligned to the bottom of the text block" />
         </PropsTable>
       </ShowcaseSection>
     </div>

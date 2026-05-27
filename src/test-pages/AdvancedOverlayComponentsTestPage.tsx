@@ -23,19 +23,11 @@ export default function AdvancedOverlayComponentsTestPage() {
 
   const commands: Command[] = [
     {
-      id: 'create-class',
-      label: 'Create class',
-      description: 'Add a new class to the schema',
-      icon: 'plus',
-      onSelect: () => {
-        console.log('Create class selected')
-      },
-    },
-    {
       id: 'search-individuals',
       label: 'Search individuals',
       description: 'Find individuals by name or ID',
       icon: 'search',
+      group: 'Navigate',
       onSelect: () => {
         console.log('Search individuals selected')
       },
@@ -45,8 +37,19 @@ export default function AdvancedOverlayComponentsTestPage() {
       label: 'View pipeline',
       description: 'Check pipeline status and runs',
       icon: 'pipeline',
+      group: 'Navigate',
       onSelect: () => {
         console.log('View pipeline selected')
+      },
+    },
+    {
+      id: 'create-class',
+      label: 'Create class',
+      description: 'Add a new class to the schema',
+      icon: 'plus',
+      group: 'Actions',
+      onSelect: () => {
+        console.log('Create class selected')
       },
     },
     {
@@ -54,6 +57,7 @@ export default function AdvancedOverlayComponentsTestPage() {
       label: 'Export data',
       description: 'Export schema or individuals',
       icon: 'download',
+      group: 'Actions',
       onSelect: () => {
         console.log('Export data selected')
       },

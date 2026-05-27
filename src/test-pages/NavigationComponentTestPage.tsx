@@ -21,13 +21,23 @@ export default function NavigationComponentTestPage() {
             title: 'Workspace',
             items: [
               { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-              { id: 'schema', label: 'Schema', icon: 'schema', count: 128 },
+              {
+                id: 'schema',
+                label: 'Schema',
+                icon: 'schema',
+                count: 128,
+                children: [
+                  { id: 'schema-classes', label: 'Classes', count: 20 },
+                  { id: 'schema-properties', label: 'Properties', count: 108 },
+                ],
+              },
               { id: 'individuals', label: 'Individuals', icon: 'data', count: 12480 },
               { id: 'pipelines', label: 'Pipelines', icon: 'pipeline', count: 17 },
             ],
           },
         ]}
-        activeItemId="schema"
+        activeItemId="schema-classes"
+        defaultExpandedIds={['schema']}
       />
     </div>
   )

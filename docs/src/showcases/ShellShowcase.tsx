@@ -72,11 +72,40 @@ export function AppTitleShowcase() {
           <AppTitle title="Heimdall" version="v0.1.0" collapsed />
         </div>
       </ShowcaseSection>
+      <ShowcaseSection label="With trailing action (e.g. collapse toggle)" description="The action slot hosts a control in the brand row — pair with Sidebar showCollapseToggle={false}.">
+        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', width: 256 }}>
+          <AppTitle
+            title="Heimdall"
+            version="v0.1.0"
+            action={
+              <button
+                type="button"
+                aria-label="Collapse sidebar"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 28,
+                  height: 28,
+                  background: 'transparent',
+                  border: 'none',
+                  borderRadius: 'var(--radius-sm)',
+                  color: 'rgb(var(--shell-fg-3))',
+                  cursor: 'pointer',
+                }}
+              >
+                <Icon name="chevronLeft" size={16} />
+              </button>
+            }
+          />
+        </div>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="title" type="string" description="Application name displayed next to the mark" />
           <PropRow name="version" type="string" description="Version string rendered in mono below the title" />
           <PropRow name="collapsed" type="boolean" def="false" description="Collapsed state — hides the text, shows mark only" />
+          <PropRow name="action" type="ReactNode" description="Trailing slot in the brand row — e.g. a sidebar collapse toggle" />
           <PropRow name="aria-label" type="string" description="Accessible label for the banner region. Defaults to title + version." />
         </PropsTable>
       </ShowcaseSection>

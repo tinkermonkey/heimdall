@@ -62,13 +62,14 @@ export const WorkspaceSwitcherDialog = React.forwardRef<HTMLDivElement, Workspac
         isOpen={isOpen}
         onClose={onClose}
         title={title}
+        size="lg"
       >
         <div className="workspace-switcher-dialog__content">
           {hasAnyTile && (
             <div className="workspace-switcher-dialog__tiles">
               {onOpenFolder && (
                 <ActionTile
-                  icon="download"
+                  icon="folder"
                   title="Open folder…"
                   description="Point to an existing workspace directory"
                   onClick={onOpenFolder}
@@ -84,7 +85,7 @@ export const WorkspaceSwitcherDialog = React.forwardRef<HTMLDivElement, Workspac
               )}
               {onCloneFromGit && (
                 <ActionTile
-                  icon="copy"
+                  icon="gitBranch"
                   title="Clone from git…"
                   description="Pull a workspace from a remote repository"
                   onClick={onCloneFromGit}

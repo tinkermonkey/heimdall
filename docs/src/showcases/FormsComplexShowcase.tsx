@@ -354,8 +354,29 @@ export function PipelineCardShowcase() {
     <div>
       <PageHeader name="PipelineCard" description="Card representing a pipeline with flow nodes, status, and statistics footer." />
 
-      <ShowcaseSection label="Running pipeline">
+      <ShowcaseSection label="Per-stage tone (fill layout, default)">
         <PipelineCard
+          pipeline={{
+            id: 'graph_rag_ingest',
+            name: 'graph_rag_ingest',
+            description: 'Each stage carries a tone so the pipeline reads at a glance.',
+            status: 'running',
+            target: 'graph.entities',
+            flow: [
+              { id: '1', name: 'Source', label: 'GBIF API', icon: 'schema', color: 'cyan' },
+              { id: '2', name: 'Extract', label: '12 fields', icon: 'download', color: 'violet' },
+              { id: '3', name: 'Resolve', label: 'match by name', icon: 'lock', color: 'amber' },
+              { id: '4', name: 'Write', label: 'graph.entities', icon: 'data', color: 'emerald' },
+            ],
+            recent: { ingested: 12480, created: 12480, updated: 0, errors: 0 },
+            lastRun: '30s ago',
+          }}
+        />
+      </ShowcaseSection>
+
+      <ShowcaseSection label="Auto layout (content-width nodes, clumps left)">
+        <PipelineCard
+          flowLayout="auto"
           pipeline={{
             id: 'data_migration_v2',
             name: 'data_migration_v2',
@@ -491,7 +512,8 @@ export function PipelineCardShowcase() {
           <PropRow name="pipeline.description" type="string" description="Optional secondary description line" />
           <PropRow name="pipeline.status" type="'running' | 'success' | 'idle' | 'failed'" description="Overall pipeline status" />
           <PropRow name="pipeline.target" type="string" description="Optional target identifier (e.g. table name) shown in the card header" />
-          <PropRow name="pipeline.flow" type="FlowNode[]" description="Ordered stage nodes. Each node: { id, name, label?, icon: IconName | ReactElement }" />
+          <PropRow name="pipeline.flow" type="FlowNode[]" description="Ordered stage nodes. Each node: { id, name, label?, icon: IconName | ReactElement, color?: StatusColor }" />
+          <PropRow name="FlowNode.color" type="StatusColor" description="Per-stage tone (cyan/violet/amber/emerald/rose/neutral) tinting the icon tile + node border. Falls back to amber." />
           <PropRow name="pipeline.recent" type="object" description="Statistics object: ingested, created, updated, errors" />
           <PropRow name="pipeline.tags" type="string[]" description="Optional tag labels rendered as chips in the card header" />
           <PropRow name="pipeline.lastRun" type="string" description="Optional human-readable time string for the last run (e.g. '12s ago')" />
@@ -502,6 +524,7 @@ export function PipelineCardShowcase() {
           <PropRow name="footerContent" type="ReactNode" description="Replaces the default stats grid when provided" />
           <PropRow name="selected" type="boolean" description="Applies amber border + glow ring — use for drawer-open or active selection state" />
           <PropRow name="compact" type="boolean" description="Reduces head, flow, and footer padding for dense layouts" />
+          <PropRow name="flowLayout" type="'fill' | 'auto'" def="'fill'" description="'fill' distributes nodes evenly across the strip; 'auto' sizes nodes to content and clumps left." />
         </PropsTable>
       </ShowcaseSection>
     </div>

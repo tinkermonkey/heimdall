@@ -8,6 +8,7 @@ import {
   QuickAccessTile,
   ConfigTile,
   Button,
+  Chip,
   ShellLayout,
 } from '../index'
 import type { FilterChip, ActivityEvent, Alert } from '../index'
@@ -98,7 +99,13 @@ export default function PagePatternsShowcase() {
 
         {/* Page Header */}
         <PageHeader
-          eyebrow="DATABASE"
+          eyebrow={
+            <>
+              <Chip variant="amber">workspace · default</Chip>
+              <span>DATABASE</span>
+              <span style={{ fontFamily: 'var(--font-mono)' }}>last sync 8m ago</span>
+            </>
+          }
           title="Entity Browser"
           idChip="db_main"
           subtitle="Browse and manage your data entities"

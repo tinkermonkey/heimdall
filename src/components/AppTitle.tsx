@@ -5,10 +5,12 @@ export interface AppTitleProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   version?: string
   collapsed?: boolean
+  /** Trailing slot in the brand row — e.g. a sidebar collapse toggle. */
+  action?: React.ReactNode
 }
 
 export const AppTitle = React.forwardRef<HTMLDivElement, AppTitleProps>(
-  ({ title, version, collapsed = false, className = '', 'aria-label': ariaLabel, ...props }, ref) => {
+  ({ title, version, collapsed = false, action, className = '', 'aria-label': ariaLabel, ...props }, ref) => {
     const classNames = [
       'app-title',
       collapsed && 'app-title--collapsed',
@@ -28,6 +30,7 @@ export const AppTitle = React.forwardRef<HTMLDivElement, AppTitleProps>(
             {version && <span className="app-title__version">{version}</span>}
           </div>
         )}
+        {action && <div className="app-title__action">{action}</div>}
       </div>
     )
   }

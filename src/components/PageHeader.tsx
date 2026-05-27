@@ -3,7 +3,9 @@ import { Chip } from './Chip'
 import './PageHeader.css'
 
 export interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  eyebrow?: string
+  /** Status context above the title. Accepts arbitrary content (chips, mono spans, health dots),
+   *  not just a label string. A plain string renders as the uppercase mono eyebrow. */
+  eyebrow?: React.ReactNode
   title: string
   idChip?: string
   subtitle?: string
@@ -16,12 +18,12 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
 
     return (
       <div ref={ref} className={classNames} role="banner" {...props}>
-        {eyebrow && (
-          <div className="page-header__eyebrow" data-testid="page-header-eyebrow">
-            {eyebrow}
-          </div>
-        )}
-        <div className="page-header__title-row">
+        <div className="page-header__text">
+          {eyebrow && (
+            <div className="page-header__eyebrow" data-testid="page-header-eyebrow">
+              {eyebrow}
+            </div>
+          )}
           <h1 className="page-header__title" data-testid="page-header-title">
             {title}
             {idChip && (
@@ -30,13 +32,13 @@ export const PageHeader = React.forwardRef<HTMLDivElement, PageHeaderProps>(
               </Chip>
             )}
           </h1>
-          {actions && <div className="page-header__actions" data-testid="page-header-actions">{actions}</div>}
+          {subtitle && (
+            <div className="page-header__subtitle" data-testid="page-header-subtitle">
+              {subtitle}
+            </div>
+          )}
         </div>
-        {subtitle && (
-          <div className="page-header__subtitle" data-testid="page-header-subtitle">
-            {subtitle}
-          </div>
-        )}
+        {actions && <div className="page-header__actions" data-testid="page-header-actions">{actions}</div>}
       </div>
     )
   }

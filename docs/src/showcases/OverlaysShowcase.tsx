@@ -224,12 +224,12 @@ export function CommandPaletteShowcase() {
   const [lastCommand, setLastCommand] = useState<string | null>(null)
 
   const commands = [
-    { id: 'new-class', label: 'Create class', description: 'Add a new schema class', icon: 'plus' as const, onSelect: () => setLastCommand('Create class') },
-    { id: 'run-pipeline', label: 'Run pipeline', description: 'Execute a data pipeline', icon: 'pipeline' as const, onSelect: () => setLastCommand('Run pipeline') },
-    { id: 'open-graph', label: 'Graph view', description: 'Switch to graph visualization', icon: 'graph' as const, onSelect: () => setLastCommand('Graph view') },
-    { id: 'search-individuals', label: 'Search individuals', description: 'Full-text search across all records', icon: 'search' as const, onSelect: () => setLastCommand('Search individuals') },
-    { id: 'settings', label: 'Open settings', description: 'Workspace preferences', icon: 'settings' as const, onSelect: () => setLastCommand('Open settings') },
-    { id: 'export', label: 'Export data', description: 'Download current view as CSV or JSON', icon: 'download' as const, onSelect: () => setLastCommand('Export data') },
+    { id: 'open-graph', label: 'Graph view', description: 'Switch to graph visualization', icon: 'graph' as const, group: 'Navigate', onSelect: () => setLastCommand('Graph view') },
+    { id: 'search-individuals', label: 'Search individuals', description: 'Full-text search across all records', icon: 'search' as const, group: 'Navigate', onSelect: () => setLastCommand('Search individuals') },
+    { id: 'settings', label: 'Open settings', description: 'Workspace preferences', icon: 'settings' as const, group: 'Navigate', onSelect: () => setLastCommand('Open settings') },
+    { id: 'new-class', label: 'Create class', description: 'Add a new schema class', icon: 'plus' as const, group: 'Actions', onSelect: () => setLastCommand('Create class') },
+    { id: 'run-pipeline', label: 'Run pipeline', description: 'Execute a data pipeline', icon: 'pipeline' as const, group: 'Actions', onSelect: () => setLastCommand('Run pipeline') },
+    { id: 'export', label: 'Export data', description: 'Download current view as CSV or JSON', icon: 'download' as const, group: 'Actions', onSelect: () => setLastCommand('Export data') },
   ]
 
   return (
@@ -258,7 +258,8 @@ export function CommandPaletteShowcase() {
         <PropsTable>
           <PropRow name="isOpen" type="boolean" description="Controls visibility" />
           <PropRow name="onClose" type="() => void" description="Called on Escape or backdrop click" />
-          <PropRow name="commands" type="Command[]" description="Array of { id, label, description?, icon?, onSelect }" />
+          <PropRow name="commands" type="Command[]" description="Array of { id, label, description?, icon?, group?, onSelect }" />
+          <PropRow name="Command.group" type="string" description="Optional section. Commands sharing a group render under one header, in first-appearance order." />
           <PropRow name="placeholder" type="string" def="'Search commands…'" description="Search input placeholder" />
           <PropRow name="emptyMessage" type="string" def="'No commands found'" description="Message shown when no commands match the search query" />
         </PropsTable>

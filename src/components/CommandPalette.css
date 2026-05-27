@@ -94,6 +94,20 @@
   color: rgb(var(--canvas-fg-3));
 }
 
+.command-palette__group + .command-palette__group {
+  border-top: 1px solid rgb(var(--canvas-border));
+}
+
+.command-palette__group-header {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--canvas-fg-3));
+  padding: 10px 16px 4px;
+}
+
 .command-palette__item {
   display: flex;
   align-items: center;
