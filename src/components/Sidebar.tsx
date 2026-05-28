@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Icon, type IconName } from './Icon'
+import { AppTitle, type AppTitleProps } from './AppTitle'
 import './Sidebar.css'
 
 export interface SidebarItem {
@@ -31,8 +32,12 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
    *  reports changes via onExpandedChange instead of managing its own state. */
   expandedIds?: string[]
   onExpandedChange?: (ids: string[]) => void
-  /** Show the built-in collapse toggle. Set false to host it elsewhere (e.g. AppTitle.action). */
+  /** Show the built-in collapse toggle. Ignored when `appTitle` is provided —
+   *  in that case the toggle is rendered inside the AppTitle action slot. */
   showCollapseToggle?: boolean
+  /** Render an AppTitle as the sidebar header. The collapse toggle is wired
+   *  into its `action` slot so the caret sits to the right of the title. */
+  appTitle?: AppTitleProps
 }
 
 export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
@@ -47,6 +52,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       expandedIds,
       onExpandedChange,
       showCollapseToggle = true,
+      appTitle,
       className = '',
       ...props
     },
@@ -79,17 +85,30 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       .filter(Boolean)
       .join(' ')
 
+    const collapseButton = (
+      <button
+        type="button"
+        className="sidebar__toggle"
+        onClick={() => onCollapse?.(!collapsed)}
+        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} size={16} />
+      </button>
+    )
+
     return (
       <div ref={ref} className={classNames} {...props}>
-        {showCollapseToggle && (
-          <button
-            type="button"
-            className="sidebar__toggle"
-            onClick={() => onCollapse?.(!collapsed)}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} size={16} />
-          </button>
+        {appTitle ? (
+          <>
+            <AppTitle
+              {...appTitle}
+              collapsed={collapsed}
+              action={collapsed ? appTitle.action : (appTitle.action ?? collapseButton)}
+            />
+            {collapsed && collapseButton}
+          </>
+        ) : (
+          showCollapseToggle && collapseButton
         )}
 
         <nav className="sidebar__nav" aria-label="Sidebar navigation">

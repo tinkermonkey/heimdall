@@ -45,18 +45,16 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     const { hide: _statusbarHide, ...statusbarProps } = statusbar ?? {} as StatusbarProps & { hide?: boolean }
     const renderStatusbar = statusbar && !statusbar.hide
 
-    const sidebarCollapsed = sidebarProps.collapsed ?? false
-
     return (
       <div ref={ref} className={classNames} {...props}>
         {renderTitlebar && <Titlebar {...titlebarProps} />}
         <div className="shell-layout__main">
           {renderSidebar ? (
             <div className="shell-layout__sidebar-col">
-              {renderAppTitle && (
-                <AppTitle {...appTitleProps} collapsed={sidebarCollapsed} />
-              )}
-              <Sidebar {...sidebarProps} />
+              <Sidebar
+                {...sidebarProps}
+                appTitle={renderAppTitle ? appTitleProps : sidebarProps.appTitle}
+              />
             </div>
           ) : renderAppTitle ? (
             <AppTitle {...appTitleProps} />
