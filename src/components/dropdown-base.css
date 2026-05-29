@@ -6,6 +6,7 @@
 
 .dropdown-panel {
   position: absolute;
+  /* Default placement = bottom-start; modifier classes override below. */
   top: 100%;
   left: 0;
   margin-top: 4px;
@@ -20,6 +21,48 @@
   padding: 4px 0;
 }
 
+/* ── Placement modifiers ──
+   Components opt in via dropdownPlacementClass(placement). Each modifier sets
+   the full top/left/right/bottom box so it cleanly overrides whichever default
+   was set above (and unwinds any earlier modifier on re-renders). */
+
+.dropdown-panel--placement-bottom-start {
+  top: 100%;
+  left: 0;
+  right: auto;
+  bottom: auto;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.dropdown-panel--placement-bottom-end {
+  top: 100%;
+  left: auto;
+  right: 0;
+  bottom: auto;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.dropdown-panel--placement-top-start {
+  top: auto;
+  bottom: 100%;
+  left: 0;
+  right: auto;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+.dropdown-panel--placement-top-end {
+  top: auto;
+  bottom: 100%;
+  left: auto;
+  right: 0;
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+
+/* Deprecated alias — prefer .dropdown-panel--placement-bottom-end */
 .dropdown-panel--anchor-right {
   left: auto;
   right: 0;

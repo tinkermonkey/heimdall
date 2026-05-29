@@ -104,7 +104,7 @@
 }
 
 .workspace-switcher-dialog__recent-item:hover {
-  background-color: rgb(var(--canvas-bg-2));
+  background-color: rgb(var(--canvas-card));
 }
 
 .workspace-switcher-dialog__recent-item:focus-visible {

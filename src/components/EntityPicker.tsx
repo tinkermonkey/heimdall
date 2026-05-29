@@ -4,6 +4,7 @@ import { Icon } from './Icon'
 import { Chip } from './Chip'
 import type { StatusColor } from './statusColors'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
+import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
 
 export interface EntityPickerResult {
   id: string
@@ -25,6 +26,8 @@ export interface EntityPickerProps
   placeholder?: string
   disabled?: boolean
   inputId?: string
+  /** Where the results panel opens relative to the input. */
+  placement?: DropdownPlacement
 }
 
 export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
@@ -38,6 +41,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
       placeholder = 'Search entities...',
       disabled = false,
       inputId,
+      placement = 'bottom-start',
       className,
       ...props
     },
@@ -158,7 +162,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
             ref={panelRef}
             id={listboxId}
             role="listbox"
-            className="dropdown-panel entity-picker__dropdown"
+            className={`dropdown-panel ${dropdownPlacementClass(placement)} entity-picker__dropdown`}
             data-testid="entity-picker-dropdown"
           >
             {results.map((result) => {

@@ -59,6 +59,7 @@ const SEED_ITEMS: OrderedItem[] = [
 
 export function BareOrderedList() {
   const [items, setItems] = useState<OrderedItem[]>(SEED_ITEMS)
+  const [primaryItems, setPrimaryItems] = useState<OrderedItem[]>(SEED_ITEMS)
   return (
     <BareSection name="OrderedList">
       <AxisRow label="default" align="stretch">
@@ -68,7 +69,7 @@ export function BareOrderedList() {
       </AxisRow>
       <AxisRow label="with primary" align="stretch">
         <div style={{ width: 420 }}>
-          <OrderedList items={SEED_ITEMS} onChange={() => {}} primaryItemId="1" />
+          <OrderedList items={primaryItems} onChange={setPrimaryItems} primaryItemId="1" />
         </div>
       </AxisRow>
       <AxisRow label="disabled" align="stretch">
@@ -184,6 +185,21 @@ export function BareRowMenu() {
             onAction={() => {}}
           />
         </Caption>
+      </AxisRow>
+      <AxisRow label="placement">
+        {(['bottom-start', 'bottom-end', 'top-start', 'top-end'] as const).map((placement) => (
+          <Caption key={placement} label={placement}>
+            <RowMenu
+              placement={placement}
+              actions={[
+                { id: 'edit', label: 'Edit', icon: 'edit' },
+                { id: 'copy', label: 'Duplicate', icon: 'copy' },
+                { id: 'delete', label: 'Delete', icon: 'trash', danger: true },
+              ]}
+              onAction={() => {}}
+            />
+          </Caption>
+        ))}
       </AxisRow>
     </BareSection>
   )

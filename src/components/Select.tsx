@@ -11,6 +11,7 @@ import React, {
 import './Select.css'
 import { Icon, type IconName } from './Icon'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
+import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
 
 type Mode = 'single' | 'multi'
 
@@ -66,6 +67,8 @@ type SelectBaseProps = {
   ariaLabel?: string
   children: ReactNode
   'data-testid'?: string
+  /** Where the dropdown panel opens relative to the trigger. */
+  placement?: DropdownPlacement
 }
 
 export type SelectProps = (SelectSingleProps | SelectMultiProps) & SelectBaseProps
@@ -81,6 +84,7 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectProps>(
       className = '',
       ariaLabel,
       children,
+      placement = 'bottom-start',
     } = props
     const dataTestId = props['data-testid']
 
@@ -257,7 +261,7 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectProps>(
             ref={panelRef}
             role="listbox"
             aria-multiselectable={mode === 'multi' ? true : undefined}
-            className="dropdown-panel select__panel"
+            className={`dropdown-panel ${dropdownPlacementClass(placement)} select__panel`}
             hidden={!isOpen}
           >
             {children}

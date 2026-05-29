@@ -10,6 +10,7 @@ import React, {
 import './FilterDropdown.css'
 import { Icon } from './Icon'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
+import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
 
 interface FilterDropdownContextValue {
   isOpen: boolean
@@ -21,6 +22,7 @@ interface FilterDropdownContextValue {
   setFocusedValue: (value: string | null) => void
   triggerRef: React.RefObject<HTMLButtonElement>
   panelRef: React.RefObject<HTMLDivElement>
+  placement: DropdownPlacement
 }
 
 const FilterDropdownContext = createContext<FilterDropdownContextValue | undefined>(undefined)
@@ -40,10 +42,12 @@ export interface FilterDropdownProps {
   className?: string
   defaultValue?: string[]
   value?: string[]
+  /** Where the dropdown panel opens relative to the trigger. */
+  placement?: DropdownPlacement
 }
 
 const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownProps>(
-  ({ mode = 'checkbox', children, onChange, className = '', defaultValue, value }, ref) => {
+  ({ mode = 'checkbox', children, onChange, className = '', defaultValue, value, placement = 'bottom-start' }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const isControlled = value !== undefined
     const [internalValues, setInternalValues] = useState<Set<string>>(new Set(defaultValue ?? []))
@@ -94,6 +98,7 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       setFocusedValue,
       triggerRef,
       panelRef,
+      placement,
     }
 
     return (
@@ -149,12 +154,12 @@ export interface FilterDropdownPanelProps extends React.HTMLAttributes<HTMLDivEl
 }
 
 function FilterDropdownPanel({ children, className = '', style, ...restProps }: FilterDropdownPanelProps) {
-  const { isOpen, mode, panelRef } = useFilterDropdown()
+  const { isOpen, mode, panelRef, placement } = useFilterDropdown()
 
   return (
     <div
       ref={panelRef}
-      className={`dropdown-panel filter-dropdown__panel ${className}`.trim()}
+      className={`dropdown-panel ${dropdownPlacementClass(placement)} filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
       aria-multiselectable={mode === 'checkbox' ? true : undefined}
       hidden={!isOpen}

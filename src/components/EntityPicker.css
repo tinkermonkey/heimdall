@@ -58,10 +58,8 @@
   color: rgb(var(--canvas-fg-1));
 }
 
-/* Panel chrome inherited from .dropdown-panel */
-.entity-picker__dropdown {
-  right: 0;
-}
+/* Panel chrome inherited from .dropdown-panel; positioning comes from the
+   placement modifier class (defaults to bottom-start). */
 
 .entity-picker__badge {
   flex-shrink: 0;

@@ -65,54 +65,55 @@ export const PipelineCard = React.forwardRef<HTMLDivElement, PipelineCardProps>(
       >
         {/* Head region */}
         <div className="pipeline-card__head">
-          <div className="pipeline-card__head-left">
+          <div className="pipeline-card__head-top">
             <div className="pipeline-card__title-group">
               <div className="pipeline-card__name-mono">{pipeline.name}</div>
               {pipeline.id && <div className="pipeline-card__id-mono">{pipeline.id}</div>}
             </div>
-            {pipeline.description && <p className="pipeline-card__description">{pipeline.description}</p>}
-          </div>
 
-          <div className="pipeline-card__head-right">
-            <div className="pipeline-card__head-chips">
-              <Chip variant={statusColor}>
-                {pipeline.status}
-              </Chip>
-              {pipeline.target && (
-                <Chip variant="neutral">
-                  {pipeline.target}
+            <div className="pipeline-card__head-right">
+              <div className="pipeline-card__head-chips">
+                <Chip variant={statusColor}>
+                  {pipeline.status}
                 </Chip>
-              )}
-              {pipeline.tags && pipeline.tags.length > 0 && (
-                <div className="pipeline-card__tags">
-                  {pipeline.tags.map((tag) => (
-                    <Chip key={tag} variant="neutral">
-                      {tag}
-                    </Chip>
-                  ))}
-                </div>
-              )}
-            </div>
+                {pipeline.target && (
+                  <Chip variant="neutral">
+                    {pipeline.target}
+                  </Chip>
+                )}
+                {pipeline.tags && pipeline.tags.length > 0 && (
+                  <div className="pipeline-card__tags">
+                    {pipeline.tags.map((tag) => (
+                      <Chip key={tag} variant="neutral">
+                        {tag}
+                      </Chip>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            <div className="pipeline-card__head-actions">
-              {headerAction}
-              {onRun && pipeline.status !== 'running' && (
-                <button type="button" className="pipeline-card__action-btn" onClick={onRun} data-testid="pipeline-run-btn">
-                  Run
-                </button>
-              )}
-              {onCancel && pipeline.status === 'running' && (
-                <button type="button" className="pipeline-card__action-btn pipeline-card__action-btn--cancel" onClick={onCancel} data-testid="pipeline-cancel-btn">
-                  Cancel
-                </button>
-              )}
-              {onOptions && (
-                <button type="button" aria-label="Pipeline options" className="pipeline-card__kebab-btn" onClick={onOptions} data-testid="pipeline-kebab-btn">
-                  <Icon name="moreVertical" size={16} />
-                </button>
-              )}
+              <div className="pipeline-card__head-actions">
+                {headerAction}
+                {onRun && pipeline.status !== 'running' && (
+                  <button type="button" className="pipeline-card__action-btn" onClick={onRun} data-testid="pipeline-run-btn">
+                    Run
+                  </button>
+                )}
+                {onCancel && pipeline.status === 'running' && (
+                  <button type="button" className="pipeline-card__action-btn pipeline-card__action-btn--cancel" onClick={onCancel} data-testid="pipeline-cancel-btn">
+                    Cancel
+                  </button>
+                )}
+                {onOptions && (
+                  <button type="button" aria-label="Pipeline options" className="pipeline-card__kebab-btn" onClick={onOptions} data-testid="pipeline-kebab-btn">
+                    <Icon name="moreVertical" size={16} />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
+
+          {pipeline.description && <p className="pipeline-card__description">{pipeline.description}</p>}
         </div>
 
         {/* Flow strip */}

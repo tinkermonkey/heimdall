@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } 
 import './RowMenu.css'
 import { Icon, type IconName } from './Icon'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
+import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
 
 export type RowMenuAction =
   | {
@@ -22,6 +23,10 @@ export interface RowMenuProps
   trigger?: React.ReactNode
   triggerIcon?: IconName
   triggerLabel?: string
+  /** Where the dropdown panel opens relative to the trigger. Defaults to
+   *  `bottom-start` (panel hangs below, left-aligned with trigger). Use
+   *  `bottom-end` for the classic kebab-at-row-right pattern. */
+  placement?: DropdownPlacement
 }
 
 const isSeparator = (action: RowMenuAction): action is { type: 'separator' } =>
@@ -35,6 +40,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
       trigger,
       triggerIcon = 'moreVertical',
       triggerLabel = 'Menu',
+      placement = 'bottom-start',
       className,
       ...props
     },
@@ -89,7 +95,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
             ref={panelRef}
             role="menu"
             aria-label={triggerLabel}
-            className="dropdown-panel dropdown-panel--anchor-right row-menu__dropdown"
+            className={`dropdown-panel ${dropdownPlacementClass(placement)} row-menu__dropdown`}
             data-testid="row-menu-dropdown"
           >
             {actions.map((action, index) =>
