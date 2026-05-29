@@ -117,42 +117,92 @@ export function NumberInputShowcase() {
 }
 
 export function SelectShowcase() {
+  const [multi, setMulti] = useState<string[]>(['a'])
   return (
     <div>
-      <PageHeader name="Select" description="Native <select> element with design system styling. Inherits all select HTML attributes." />
+      <PageHeader name="Select" description="Custom dropdown styled to match the design system. Supports single and multi modes, item icons, descriptions, separators, section titles, disabled and danger states." />
       <ShowcaseSection label="States">
         <DemoGrid cols={2} gap={12}>
           <DemoCard label="Default">
-            <Select>
-              <option value="">Choose…</option>
-              <option value="a">Option A</option>
-              <option value="b">Option B</option>
-              <option value="c">Option C</option>
+            <Select placeholder="Choose…">
+              <Select.Item value="a">Option A</Select.Item>
+              <Select.Item value="b">Option B</Select.Item>
+              <Select.Item value="c">Option C</Select.Item>
             </Select>
           </DemoCard>
           <DemoCard label="With selected value">
             <Select defaultValue="b">
-              <option value="a">Option A</option>
-              <option value="b">Option B</option>
-              <option value="c">Option C</option>
+              <Select.Item value="a">Option A</Select.Item>
+              <Select.Item value="b">Option B</Select.Item>
+              <Select.Item value="c">Option C</Select.Item>
             </Select>
           </DemoCard>
           <DemoCard label="Error">
-            <Select error>
-              <option value="">Required</option>
+            <Select error placeholder="Required">
+              <Select.Item value="a">Option A</Select.Item>
             </Select>
           </DemoCard>
           <DemoCard label="Disabled">
-            <Select disabled>
-              <option value="a">Locked value</option>
+            <Select disabled defaultValue="a">
+              <Select.Item value="a">Locked value</Select.Item>
+            </Select>
+          </DemoCard>
+        </DemoGrid>
+      </ShowcaseSection>
+      <ShowcaseSection label="Item variants">
+        <DemoGrid cols={2} gap={12}>
+          <DemoCard label="With icons">
+            <Select placeholder="Pick a status" defaultValue="ok">
+              <Select.Item value="ok" icon="check">Healthy</Select.Item>
+              <Select.Item value="warn" icon="alert">Warning</Select.Item>
+              <Select.Item value="err" icon="x">Failed</Select.Item>
+            </Select>
+          </DemoCard>
+          <DemoCard label="With descriptions">
+            <Select placeholder="Choose a tier">
+              <Select.Item value="free" description="No cost. Public projects only.">Free</Select.Item>
+              <Select.Item value="pro" description="$10/mo. Private projects.">Pro</Select.Item>
+              <Select.Item value="team" description="$25/mo. Includes seats.">Team</Select.Item>
+            </Select>
+          </DemoCard>
+          <DemoCard label="With separator + section titles">
+            <Select placeholder="Choose action">
+              <Select.SectionTitle>Recent</Select.SectionTitle>
+              <Select.Item value="open" icon="folder">Open project…</Select.Item>
+              <Select.Item value="recent" icon="clock">Recent</Select.Item>
+              <Select.Separator />
+              <Select.SectionTitle>Other</Select.SectionTitle>
+              <Select.Item value="settings" icon="settings">Settings</Select.Item>
+              <Select.Item value="archive" icon="hardDrive" disabled>Archive (disabled)</Select.Item>
+            </Select>
+          </DemoCard>
+          <DemoCard label="Multi-select (checkbox items)">
+            <Select
+              multiple
+              values={multi}
+              onValuesChange={setMulti}
+              placeholder="None selected"
+            >
+              <Select.CheckboxItem value="a">Option A</Select.CheckboxItem>
+              <Select.CheckboxItem value="b">Option B</Select.CheckboxItem>
+              <Select.CheckboxItem value="c">Option C</Select.CheckboxItem>
+              <Select.CheckboxItem value="d" description="With a description">Option D</Select.CheckboxItem>
             </Select>
           </DemoCard>
         </DemoGrid>
       </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
+          <PropRow name="value" type="string" description="Controlled single value" />
+          <PropRow name="defaultValue" type="string" description="Uncontrolled single value" />
+          <PropRow name="onChange" type="(value: string) => void" description="Single-mode value change" />
+          <PropRow name="multiple" type="boolean" def="false" description="Enable multi-select" />
+          <PropRow name="values" type="string[]" description="Controlled multi values" />
+          <PropRow name="defaultValues" type="string[]" description="Uncontrolled multi values" />
+          <PropRow name="onValuesChange" type="(values: string[]) => void" description="Multi-mode values change" />
+          <PropRow name="placeholder" type="string" def='"Select…"' description="Trigger text when no value" />
           <PropRow name="error" type="boolean" def="false" description="Error state — rose border + aria-invalid" />
-          <PropRow name="...SelectHTMLAttributes" type="" description="All native select attributes" />
+          <PropRow name="disabled" type="boolean" def="false" description="Disable the trigger" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -246,9 +296,9 @@ export function FieldShowcase() {
           </DemoCard>
           <DemoCard label="With Select">
             <Field label="Status">
-              <Select>
-                <option value="active">Active</option>
-                <option value="paused">Paused</option>
+              <Select placeholder="Choose…">
+                <Select.Item value="active">Active</Select.Item>
+                <Select.Item value="paused">Paused</Select.Item>
               </Select>
             </Field>
           </DemoCard>

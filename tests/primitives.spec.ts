@@ -120,19 +120,15 @@ test.describe('Primitive Components', () => {
   })
 
   test('Select component - default, focus, error states', async ({ page }) => {
-    // Verify select elements exist
-    const selects = page.locator('select')
-    const count = await selects.count()
+    // Custom Select renders its trigger as a button inside .select wrappers.
+    const triggers = page.locator('.select .select__trigger')
+    const count = await triggers.count()
     expect(count).toBeGreaterThan(0)
 
-    // Verify selected option exists by checking selected index
-    const firstSelect = selects.first()
-    const hasSelectedOption = await firstSelect.evaluate((el) => {
-      const selectEl = el as HTMLSelectElement
-      // Check if any option is selected (selectedIndex >= 0) or if the value indicates selection
-      return selectEl.selectedIndex >= 0 && selectEl.options.length > 0
-    })
-    expect(hasSelectedOption).toBe(true)
+    // First demo Select has defaultValue="2" and should show "Option 2" in trigger.
+    const firstTrigger = triggers.first()
+    const triggerText = await firstTrigger.textContent()
+    expect(triggerText).toContain('Option 2')
   })
 
   test('TriState checkbox component - checked, unchecked, indeterminate states', async ({ page }) => {
@@ -172,14 +168,16 @@ test.describe('Primitive Components', () => {
   })
 
   test('Select component - option selection', async ({ page }) => {
-    const firstSelect = page.locator('select').first()
+    const firstSelect = page.locator('.select').first()
+    const trigger = firstSelect.locator('.select__trigger')
 
-    // Select a different option
-    await firstSelect.selectOption('Option 3')
+    await trigger.click()
+    // Panel should open and expose options.
+    const option3 = firstSelect.locator('[role="option"]', { hasText: 'Option 3' })
+    await option3.click()
 
-    const newValue = await firstSelect.inputValue()
-    // Value may have changed (depends on implementation)
-    expect(newValue).toBeTruthy()
+    // Trigger label should now reflect the new selection.
+    await expect(trigger).toContainText('Option 3')
   })
 
   test('VersionPill component renders', async ({ page }) => {

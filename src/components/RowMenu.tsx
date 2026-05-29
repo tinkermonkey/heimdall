@@ -1,16 +1,19 @@
 import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import './RowMenu.css'
 import { Icon, type IconName } from './Icon'
+import { useDropdownMenu } from '../hooks/useDropdownMenu'
 
-export type RowMenuAction = {
-  id: string
-  label: string
-  icon?: IconName
-  danger?: boolean
-  disabled?: boolean
-} | {
-  type: 'separator'
-}
+export type RowMenuAction =
+  | {
+      id: string
+      label: string
+      icon?: IconName
+      danger?: boolean
+      disabled?: boolean
+    }
+  | {
+      type: 'separator'
+    }
 
 export interface RowMenuProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
@@ -21,95 +24,58 @@ export interface RowMenuProps
   triggerLabel?: string
 }
 
-const isSeparator = (action: RowMenuAction): action is { type: 'separator' } => {
-  return 'type' in action && action.type === 'separator'
-}
+const isSeparator = (action: RowMenuAction): action is { type: 'separator' } =>
+  'type' in action && action.type === 'separator'
 
 export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
-  ({ actions, onAction, trigger, triggerIcon = 'moreVertical', triggerLabel = 'Menu', className, ...props }, ref) => {
+  (
+    {
+      actions,
+      onAction,
+      trigger,
+      triggerIcon = 'moreVertical',
+      triggerLabel = 'Menu',
+      className,
+      ...props
+    },
+    ref
+  ) => {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
-    const dropdownRef = useRef<HTMLDivElement>(null)
+    const panelRef = useRef<HTMLDivElement>(null)
     const triggerRef = useRef<HTMLButtonElement>(null)
 
-    const focusItem = useCallback((index: number) => {
-      const items = dropdownRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not([disabled])')
-      items?.[index]?.focus()
-    }, [])
+    const handleClose = useCallback(() => setIsOpen(false), [])
 
-    useEffect(() => {
-      const container = containerRef.current
-
-      const handleClickOutside = (e: MouseEvent) => {
-        if (container && !container.contains(e.target as Node)) {
-          setIsOpen(false)
-        }
-      }
-
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          setIsOpen(false)
-          triggerRef.current?.focus()
-          return
-        }
-        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-          e.preventDefault()
-          const items = dropdownRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not([disabled])')
-          if (!items || items.length === 0) return
-          const focused = dropdownRef.current?.querySelector<HTMLButtonElement>('[role="menuitem"]:focus')
-          const idx = focused ? Array.from(items).indexOf(focused) : -1
-          if (e.key === 'ArrowDown') {
-            focusItem(idx < items.length - 1 ? idx + 1 : 0)
-          } else {
-            focusItem(idx > 0 ? idx - 1 : items.length - 1)
-          }
-        }
-        if (e.key === 'Home') {
-          e.preventDefault()
-          focusItem(0)
-        }
-        if (e.key === 'End') {
-          e.preventDefault()
-          const items = dropdownRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not([disabled])')
-          if (items) focusItem(items.length - 1)
-        }
-      }
-
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside)
-        document.addEventListener('keydown', handleKeyDown)
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside)
-          document.removeEventListener('keydown', handleKeyDown)
-        }
-      }
-    }, [isOpen, focusItem])
-
-    useEffect(() => {
-      if (isOpen) {
-        const items = dropdownRef.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not([disabled])')
-        items?.[0]?.focus()
-      }
-    }, [isOpen])
+    const { focusedValue, setFocusedValue } = useDropdownMenu({
+      triggerRef,
+      panelRef,
+      isOpen,
+      onClose: handleClose,
+    })
 
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
-    const handleActionClick = useCallback((actionId: string) => {
-      onAction(actionId)
-      setIsOpen(false)
-    }, [onAction])
-
-    const handleTriggerClick = () => {
-      setIsOpen(!isOpen)
-    }
+    const handleActionClick = useCallback(
+      (actionId: string) => {
+        onAction(actionId)
+        setIsOpen(false)
+      },
+      [onAction]
+    )
 
     return (
-      <div ref={containerRef} className={['row-menu', className].filter(Boolean).join(' ')} data-testid="row-menu" {...props}>
+      <div
+        ref={containerRef}
+        className={['row-menu', className].filter(Boolean).join(' ')}
+        data-testid="row-menu"
+        {...props}
+      >
         <button
           ref={triggerRef}
           type="button"
           className="row-menu__trigger"
-          onClick={handleTriggerClick}
+          onClick={() => setIsOpen((o) => !o)}
           aria-label={triggerLabel}
           aria-haspopup="menu"
           aria-expanded={isOpen}
@@ -120,10 +86,10 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
 
         {isOpen && (
           <div
-            ref={dropdownRef}
+            ref={panelRef}
             role="menu"
             aria-label={triggerLabel}
-            className="row-menu__dropdown"
+            className="dropdown-panel dropdown-panel--anchor-right row-menu__dropdown"
             data-testid="row-menu-dropdown"
           >
             {actions.map((action, index) =>
@@ -131,29 +97,17 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
                 <div
                   key={`separator-${index}`}
                   role="separator"
-                  className="row-menu__separator"
+                  className="dropdown-separator"
                   data-testid={`row-menu-separator-${index}`}
                 />
               ) : (
-                <button
+                <RowMenuAction
                   key={action.id}
-                  type="button"
-                  role="menuitem"
-                  tabIndex={-1}
-                  disabled={action.disabled}
-                  className={[
-                    'row-menu__action',
-                    action.danger && 'row-menu__action--danger',
-                    action.disabled && 'row-menu__action--disabled',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  onClick={() => !action.disabled && handleActionClick(action.id)}
-                  data-testid={`row-menu-action-${action.id}`}
-                >
-                  {action.icon && <Icon name={action.icon} size={16} />}
-                  <span className="row-menu__label">{action.label}</span>
-                </button>
+                  action={action}
+                  isFocused={focusedValue === action.id}
+                  onFocus={() => setFocusedValue(action.id)}
+                  onClick={() => handleActionClick(action.id)}
+                />
               )
             )}
           </div>
@@ -164,5 +118,50 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
 )
 
 RowMenu.displayName = 'RowMenu'
+
+interface RowMenuActionProps {
+  action: Extract<RowMenuAction, { id: string }>
+  isFocused: boolean
+  onFocus: () => void
+  onClick: () => void
+}
+
+function RowMenuAction({ action, isFocused, onFocus, onClick }: RowMenuActionProps) {
+  const ref = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (isFocused) ref.current?.focus()
+  }, [isFocused])
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      role="menuitem"
+      tabIndex={isFocused ? 0 : -1}
+      disabled={action.disabled}
+      data-dropdown-item={action.id}
+      data-disabled={action.disabled || undefined}
+      onClick={onClick}
+      onMouseEnter={() => !action.disabled && onFocus()}
+      className={[
+        'dropdown-item',
+        action.danger && 'dropdown-item--danger',
+        isFocused && 'dropdown-item--focused',
+        action.disabled && 'dropdown-item--disabled',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      data-testid={`row-menu-action-${action.id}`}
+    >
+      {action.icon && (
+        <span className="dropdown-item__leading">
+          <Icon name={action.icon} size={16} />
+        </span>
+      )}
+      <span className="dropdown-item__label">{action.label}</span>
+    </button>
+  )
+}
 
 export default RowMenu

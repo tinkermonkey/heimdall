@@ -53,7 +53,7 @@ test.describe('Forms Components', () => {
       await input.fill('user')
       await page.waitForSelector('[data-testid="entity-picker-dropdown"]')
       await input.press('ArrowDown')
-      const selectedResult = page.locator('.entity-picker__result--selected')
+      const selectedResult = page.locator('.dropdown-item--focused')
       await expect(selectedResult).toBeVisible()
     })
 
@@ -64,7 +64,7 @@ test.describe('Forms Components', () => {
       await input.press('ArrowDown')
       await input.press('ArrowDown')
       await input.press('ArrowUp')
-      const selected = page.locator('.entity-picker__result--selected')
+      const selected = page.locator('.dropdown-item--focused')
       await expect(selected).toBeVisible()
     })
 
@@ -300,7 +300,7 @@ test.describe('Forms Components', () => {
     test('renders danger items in rose text', async ({ page }) => {
       const trigger = page.locator('[data-testid="row-menu-trigger"]').first()
       await trigger.click()
-      const dangerAction = page.locator('.row-menu__action--danger').first()
+      const dangerAction = page.locator('.dropdown-item--danger').first()
       await expect(dangerAction).toBeVisible()
     })
   })

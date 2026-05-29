@@ -1,8 +1,9 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import './EntityPicker.css'
 import { Icon } from './Icon'
 import { Chip } from './Chip'
 import type { StatusColor } from './statusColors'
+import { useDropdownMenu } from '../hooks/useDropdownMenu'
 
 export interface EntityPickerResult {
   id: string
@@ -27,77 +28,63 @@ export interface EntityPickerProps
 }
 
 export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
-  ({
-    query,
-    onQueryChange,
-    results = [],
-    onSelect,
-    onClear,
-    placeholder = 'Search entities...',
-    disabled = false,
-    inputId,
-    className,
-    ...props
-  }, ref) => {
+  (
+    {
+      query,
+      onQueryChange,
+      results = [],
+      onSelect,
+      onClear,
+      placeholder = 'Search entities...',
+      disabled = false,
+      inputId,
+      className,
+      ...props
+    },
+    ref
+  ) => {
     const [isOpen, setIsOpen] = useState(false)
-    const [selectedIndex, setSelectedIndex] = useState(0)
     const inputRef = useRef<HTMLInputElement>(null)
     const containerRef = useRef<HTMLDivElement>(null)
+    const panelRef = useRef<HTMLDivElement>(null)
     const listboxId = React.useId()
     const getOptionId = (id: string) => `${listboxId}-option-${id}`
 
+    const handleClose = useCallback(() => setIsOpen(false), [])
+
+    const { focusedValue, setFocusedValue } = useDropdownMenu({
+      triggerRef: inputRef,
+      panelRef,
+      isOpen,
+      onClose: handleClose,
+      restoreFocus: false,
+    })
+
+    // Seed focus to first result when results change.
     useEffect(() => {
       if (results.length === 0) {
-        setSelectedIndex(0)
-      } else {
-        setSelectedIndex((prev) =>
-          prev >= results.length ? results.length - 1 : prev
-        )
+        setFocusedValue(null)
+      } else if (!results.some((r) => r.id === focusedValue)) {
+        setFocusedValue(results[0].id)
       }
-    }, [results])
+    }, [results, focusedValue, setFocusedValue])
 
+    // Combobox-specific Enter handling — pick the active result.
     useEffect(() => {
-      const container = containerRef.current
-      const handleClickOutside = (e: MouseEvent) => {
-        if (container && !container.contains(e.target as Node)) {
+      if (!isOpen) return
+      const handleEnter = (e: KeyboardEvent) => {
+        if (e.key !== 'Enter') return
+        if (!inputRef.current?.contains(e.target as Node)) return
+        const result = results.find((r) => r.id === focusedValue)
+        if (result) {
+          e.preventDefault()
+          onSelect(result)
           setIsOpen(false)
         }
       }
-
-      document.addEventListener('mousedown', handleClickOutside)
-      return () => document.removeEventListener('mousedown', handleClickOutside)
-    }, [])
-
-    useEffect(() => {
-      const container = containerRef.current
-      if (!container || !isOpen) return
-
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          e.preventDefault()
-          setIsOpen(false)
-        } else if (e.key === 'ArrowDown') {
-          e.preventDefault()
-          if (results.length > 0) {
-            setSelectedIndex((i) => (i + 1) % results.length)
-          }
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault()
-          if (results.length > 0) {
-            setSelectedIndex((i) => (i - 1 + results.length) % results.length)
-          }
-        } else if (e.key === 'Enter') {
-          e.preventDefault()
-          if (results[selectedIndex]) {
-            onSelect(results[selectedIndex])
-            setIsOpen(false)
-          }
-        }
-      }
-
-      container.addEventListener('keydown', handleKeyDown)
-      return () => container.removeEventListener('keydown', handleKeyDown)
-    }, [isOpen, results, selectedIndex, onSelect])
+      document.addEventListener('keydown', handleEnter)
+      return () => document.removeEventListener('keydown', handleEnter)
+    }, [isOpen, results, focusedValue, onSelect])
 
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
 
@@ -105,7 +92,6 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
       if (disabled) return
       onQueryChange(e.target.value)
       setIsOpen(true)
-      setSelectedIndex(0)
     }
 
     const handleInputFocus = () => {
@@ -126,8 +112,16 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
       setIsOpen(false)
     }
 
+    const panelOpen = isOpen && results.length > 0
+    const activeId =
+      panelOpen && focusedValue ? getOptionId(focusedValue) : undefined
+
     return (
-      <div ref={containerRef} className={['entity-picker', disabled && 'entity-picker--disabled', className].filter(Boolean).join(' ')} {...props}>
+      <div
+        ref={containerRef}
+        className={['entity-picker', disabled && 'entity-picker--disabled', className].filter(Boolean).join(' ')}
+        {...props}
+      >
         <div className="entity-picker__input-wrapper">
           <input
             ref={inputRef}
@@ -135,9 +129,9 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
             type="text"
             role="combobox"
             aria-autocomplete="list"
-            aria-expanded={isOpen && results.length > 0}
+            aria-expanded={panelOpen}
             aria-controls={listboxId}
-            aria-activedescendant={isOpen && results[selectedIndex] ? getOptionId(results[selectedIndex].id) : undefined}
+            aria-activedescendant={activeId}
             className="entity-picker__input"
             placeholder={placeholder}
             value={query}
@@ -159,36 +153,46 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
           )}
         </div>
 
-        {isOpen && results.length > 0 && (
+        {panelOpen && (
           <div
+            ref={panelRef}
             id={listboxId}
             role="listbox"
-            className="entity-picker__dropdown"
+            className="dropdown-panel entity-picker__dropdown"
             data-testid="entity-picker-dropdown"
           >
-            {results.map((result, index) => (
-              <div
-                key={result.id}
-                id={getOptionId(result.id)}
-                role="option"
-                aria-selected={index === selectedIndex}
-                className={[
-                  'entity-picker__result',
-                  index === selectedIndex && 'entity-picker__result--selected',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                onMouseDown={(e) => { e.preventDefault(); handleResultClick(result) }}
-                data-testid={`entity-picker-result-${result.id}`}
-              >
-                {result.domain && result.domainColor && (
-                  <Chip variant={result.domainColor} className="entity-picker__badge">
-                    {result.domain}
-                  </Chip>
-                )}
-                <span className="entity-picker__label">{result.label}</span>
-              </div>
-            ))}
+            {results.map((result) => {
+              const isFocused = result.id === focusedValue
+              return (
+                <div
+                  key={result.id}
+                  id={getOptionId(result.id)}
+                  role="option"
+                  aria-selected={isFocused}
+                  data-dropdown-item={result.id}
+                  className={[
+                    'dropdown-item',
+                    'entity-picker__result',
+                    isFocused && 'dropdown-item--focused',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  onMouseEnter={() => setFocusedValue(result.id)}
+                  onMouseDown={(e) => {
+                    e.preventDefault()
+                    handleResultClick(result)
+                  }}
+                  data-testid={`entity-picker-result-${result.id}`}
+                >
+                  {result.domain && result.domainColor && (
+                    <Chip variant={result.domainColor} className="entity-picker__badge">
+                      {result.domain}
+                    </Chip>
+                  )}
+                  <span className="dropdown-item__label entity-picker__label">{result.label}</span>
+                </div>
+              )
+            })}
           </div>
         )}
       </div>

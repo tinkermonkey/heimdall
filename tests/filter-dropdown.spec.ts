@@ -35,7 +35,7 @@ test.describe('FilterDropdown Component', () => {
     const trigger = page.locator('.filter-dropdown__trigger').first()
     await trigger.click()
 
-    const sectionTitle = page.locator('.filter-dropdown__section-title')
+    const sectionTitle = page.locator('.dropdown-section-title')
     await expect(sectionTitle).toBeVisible()
     await expect(sectionTitle).toContainText(/DOMAINS|NODE TYPE/)
   })
@@ -44,7 +44,7 @@ test.describe('FilterDropdown Component', () => {
     const trigger = page.locator('.filter-dropdown__trigger').first()
     await trigger.click()
 
-    const checkboxes = page.locator('.filter-dropdown__checkbox')
+    const checkboxes = page.locator('.dropdown-item__checkbox')
     const count = await checkboxes.count()
     expect(count).toBeGreaterThan(0)
   })
@@ -127,7 +127,7 @@ test.describe('FilterDropdown Component', () => {
 
     // Get panel and first row
     const panel = page.locator('.filter-dropdown__panel').first()
-    const rows = panel.locator('.filter-dropdown__row')
+    const rows = panel.locator('.dropdown-item')
     const firstRow = rows.nth(0)
     await firstRow.focus()
     await expect(firstRow).toBeFocused()
@@ -146,7 +146,7 @@ test.describe('FilterDropdown Component', () => {
 
     // Get panel and first row
     const panel = page.locator('.filter-dropdown__panel').first()
-    const rows = panel.locator('.filter-dropdown__row')
+    const rows = panel.locator('.dropdown-item')
     const firstRow = rows.nth(0)
     await firstRow.focus()
     await expect(firstRow).toBeFocused()
@@ -165,7 +165,7 @@ test.describe('FilterDropdown Component', () => {
 
     // Focus on first checkbox item
     const panel = page.locator('.filter-dropdown__panel').first()
-    const rows = panel.locator('.filter-dropdown__row')
+    const rows = panel.locator('.dropdown-item')
     const firstRow = rows.nth(0)
     const firstCheckbox = firstRow.locator('input[type="checkbox"]')
     await firstRow.focus()
@@ -187,7 +187,7 @@ test.describe('FilterDropdown Component', () => {
 
     // Focus on first checkbox item
     const panel = page.locator('.filter-dropdown__panel').first()
-    const rows = panel.locator('.filter-dropdown__row')
+    const rows = panel.locator('.dropdown-item')
     const firstRow = rows.nth(0)
     const firstCheckbox = firstRow.locator('input[type="checkbox"]')
     await firstRow.focus()
@@ -228,8 +228,8 @@ test.describe('FilterDropdown Component', () => {
     await trigger.click()
 
     // Get first two checkboxes
-    const checkbox1 = page.locator('.filter-dropdown__checkbox').first()
-    const checkbox2 = page.locator('.filter-dropdown__checkbox').nth(1)
+    const checkbox1 = page.locator('.dropdown-item__checkbox').first()
+    const checkbox2 = page.locator('.dropdown-item__checkbox').nth(1)
 
     // Click first checkbox
     await checkbox1.click()
@@ -249,7 +249,7 @@ test.describe('FilterDropdown Component', () => {
     await trigger.click()
 
     // Get first checkbox
-    const checkbox1 = page.locator('.filter-dropdown__checkbox').first()
+    const checkbox1 = page.locator('.dropdown-item__checkbox').first()
 
     // Click to select
     await checkbox1.click()
@@ -272,7 +272,7 @@ test.describe('FilterDropdown Component', () => {
     await trigger.click()
 
     // Select first checkbox
-    const checkbox1 = page.locator('.filter-dropdown__checkbox').first()
+    const checkbox1 = page.locator('.dropdown-item__checkbox').first()
     await checkbox1.click()
 
     // Click trigger to close
@@ -295,7 +295,7 @@ test.describe('FilterDropdown Component', () => {
     const radioPanel = panels.nth(1)
 
     // Get first row within radio panel
-    const firstRow = radioPanel.locator('.filter-dropdown__row').nth(0)
+    const firstRow = radioPanel.locator('.dropdown-item').nth(0)
     await firstRow.focus()
     await expect(firstRow).toBeFocused()
 
@@ -303,7 +303,7 @@ test.describe('FilterDropdown Component', () => {
     await page.keyboard.press('ArrowDown')
 
     // Get second row and verify it's focused
-    const secondRow = radioPanel.locator('.filter-dropdown__row').nth(1)
+    const secondRow = radioPanel.locator('.dropdown-item').nth(1)
     await expect(secondRow).toBeFocused()
   })
 
@@ -318,7 +318,7 @@ test.describe('FilterDropdown Component', () => {
     const radioPanel = panels.nth(1)
 
     // Get first row and focus it
-    const firstRow = radioPanel.locator('.filter-dropdown__row').nth(0)
+    const firstRow = radioPanel.locator('.dropdown-item').nth(0)
     await firstRow.focus()
     await expect(firstRow).toBeFocused()
 
@@ -326,7 +326,7 @@ test.describe('FilterDropdown Component', () => {
     await page.keyboard.press('Tab')
 
     // Verify second row is focused
-    const secondRow = radioPanel.locator('.filter-dropdown__row').nth(1)
+    const secondRow = radioPanel.locator('.dropdown-item').nth(1)
     await expect(secondRow).toBeFocused()
   })
 
@@ -342,7 +342,7 @@ test.describe('FilterDropdown Component', () => {
     await expect(radioPanel).toBeVisible()
 
     // Get second row and focus it
-    const secondRow = radioPanel.locator('.filter-dropdown__row').nth(1)
+    const secondRow = radioPanel.locator('.dropdown-item').nth(1)
     await secondRow.focus()
 
     // Press Enter
@@ -364,7 +364,7 @@ test.describe('FilterDropdown Component', () => {
     await expect(radioPanel).toBeVisible()
 
     // Get second row and focus it
-    const secondRow = radioPanel.locator('.filter-dropdown__row').nth(1)
+    const secondRow = radioPanel.locator('.dropdown-item').nth(1)
     await secondRow.focus()
 
     // Press Space
@@ -387,7 +387,7 @@ test.describe('FilterDropdown Component', () => {
     await expect(radioPanel).toBeVisible()
 
     // Get the rows within this panel
-    const rows = radioPanel.locator('.filter-dropdown__row')
+    const rows = radioPanel.locator('.dropdown-item')
 
     // Close the panel by selecting an item (radio mode auto-closes)
     await rows.nth(0).click()
@@ -398,7 +398,7 @@ test.describe('FilterDropdown Component', () => {
     // Re-open and select a different option
     await secondTrigger.click()
     const updatedPanel = page.locator('.filter-dropdown__panel').nth(1)
-    const updatedRows = updatedPanel.locator('.filter-dropdown__row')
+    const updatedRows = updatedPanel.locator('.dropdown-item')
 
     // Click on second option to select it
     await updatedRows.nth(1).click()
@@ -406,7 +406,7 @@ test.describe('FilterDropdown Component', () => {
     // Re-open to verify only second is selected
     await secondTrigger.click()
     const finalPanel = page.locator('.filter-dropdown__panel').nth(1)
-    const finalRows = finalPanel.locator('.filter-dropdown__row')
+    const finalRows = finalPanel.locator('.dropdown-item')
 
     // Get aria-checked values
     const newFirstRowChecked = await finalRows.nth(0).getAttribute('aria-checked')
@@ -433,7 +433,7 @@ test.describe('FilterDropdown Component', () => {
     // Get the radio panel and click on second radio option (entity)
     const panels = page.locator('.filter-dropdown__panel')
     const radioPanel = panels.nth(1)
-    const secondRow = radioPanel.locator('.filter-dropdown__row').nth(1)
+    const secondRow = radioPanel.locator('.dropdown-item').nth(1)
     await secondRow.click()
 
     // Panel auto-closes in radio mode, so we reopen to verify

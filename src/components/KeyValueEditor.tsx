@@ -105,14 +105,14 @@ export const KeyValueEditor = React.forwardRef<HTMLDivElement, KeyValueEditorPro
                 <Select
                   className="key-value-editor__input key-value-editor__select"
                   value={row.datatype || 'string'}
-                  onChange={(e) => handleDatatypeChange(row.id, e.target.value)}
+                  onChange={(value) => handleDatatypeChange(row.id, value)}
                   disabled={disabled}
                   data-testid={`datatype-select-${row.id}`}
                 >
                   {datatypes.map((dt) => (
-                    <option key={dt} value={dt}>
+                    <Select.Item key={dt} value={dt}>
                       {dt}
-                    </option>
+                    </Select.Item>
                   ))}
                 </Select>
               )}

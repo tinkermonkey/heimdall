@@ -12,7 +12,13 @@ export { TextArea, type TextAreaProps } from './TextArea'
 
 export { NumberInput, type NumberInputProps } from './NumberInput'
 
-export { Select, type SelectProps } from './Select'
+export {
+  Select,
+  type SelectProps,
+  type SelectItemProps,
+  type SelectCheckboxItemProps,
+  type SelectSectionTitleProps,
+} from './Select'
 
 export { TriState, type TriStateProps } from './TriState'
 

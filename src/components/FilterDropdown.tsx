@@ -1,14 +1,15 @@
 import React, {
-  useState,
-  useRef,
-  useCallback,
-  useEffect,
   createContext,
-  useContext,
   ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
 } from 'react'
 import './FilterDropdown.css'
 import { Icon } from './Icon'
+import { useDropdownMenu } from '../hooks/useDropdownMenu'
 
 interface FilterDropdownContextValue {
   isOpen: boolean
@@ -17,7 +18,7 @@ interface FilterDropdownContextValue {
   selectedValues: Set<string>
   onValueChange: (value: string, selected: boolean) => void
   focusedValue: string | null
-  onFocusedValueChange: (value: string | null) => void
+  setFocusedValue: (value: string | null) => void
   triggerRef: React.RefObject<HTMLButtonElement>
   panelRef: React.RefObject<HTMLDivElement>
 }
@@ -47,120 +48,41 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
     const isControlled = value !== undefined
     const [internalValues, setInternalValues] = useState<Set<string>>(new Set(defaultValue ?? []))
     const selectedValues = isControlled ? new Set(value) : internalValues
-    const [focusedValue, setFocusedValue] = useState<string | null>(null)
     const triggerRef = useRef<HTMLButtonElement>(null)
     const panelRef = useRef<HTMLDivElement>(null)
     const rootRef = useRef<HTMLDivElement>(null)
 
+    const handleClose = useCallback(() => setIsOpen(false), [])
+
+    const { focusedValue, setFocusedValue } = useDropdownMenu({
+      triggerRef,
+      panelRef,
+      isOpen,
+      onClose: handleClose,
+    })
+
     const handleOpenChange = useCallback((open: boolean) => {
       setIsOpen(open)
-      if (open && panelRef.current) {
-        const rows = Array.from(panelRef.current.querySelectorAll('[data-focusable-value]'))
-        const firstFocusableValue = rows[0]?.getAttribute('data-focusable-value')
-        if (firstFocusableValue) {
-          setFocusedValue(firstFocusableValue)
-        }
-      } else if (!open) {
-        setFocusedValue(null)
-        triggerRef.current?.focus()
-      }
-    }, [panelRef, triggerRef])
+    }, [])
 
     const handleValueChange = useCallback(
       (itemValue: string, selected: boolean) => {
         const nextValues = new Set(selectedValues)
 
         if (selected) {
-          if (mode === 'radio') {
-            nextValues.clear()
-          }
+          if (mode === 'radio') nextValues.clear()
           nextValues.add(itemValue)
         } else {
           nextValues.delete(itemValue)
         }
 
-        if (!isControlled) {
-          setInternalValues(nextValues)
-        }
+        if (!isControlled) setInternalValues(nextValues)
         onChange?.(Array.from(nextValues))
 
-        if (mode === 'radio' && selected) {
-          handleOpenChange(false)
-        }
+        if (mode === 'radio' && selected) setIsOpen(false)
       },
-      [selectedValues, mode, onChange, handleOpenChange, isControlled]
+      [selectedValues, mode, onChange, isControlled]
     )
-
-    const handleFocusedValueChange = useCallback((value: string | null) => {
-      setFocusedValue(value)
-    }, [])
-
-    const handleKeyDown = useCallback(
-      (e: KeyboardEvent) => {
-        if (!isOpen || !panelRef.current) return
-
-        const rows = Array.from(panelRef.current.querySelectorAll('[data-focusable-value]'))
-        const focusableRowsInDomOrder = rows
-          .map((row) => row.getAttribute('data-focusable-value'))
-          .filter((v): v is string => v !== null)
-
-        if (focusableRowsInDomOrder.length === 0) return
-
-        const currentIndex = focusableRowsInDomOrder.indexOf(
-          focusedValue || focusableRowsInDomOrder[0]
-        )
-
-        if (e.key === 'ArrowDown') {
-          e.preventDefault()
-          const nextIndex = (currentIndex + 1) % focusableRowsInDomOrder.length
-          setFocusedValue(focusableRowsInDomOrder[nextIndex])
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault()
-          const nextIndex =
-            (currentIndex - 1 + focusableRowsInDomOrder.length) % focusableRowsInDomOrder.length
-          setFocusedValue(focusableRowsInDomOrder[nextIndex])
-        } else if (e.key === 'Tab') {
-          e.preventDefault()
-          const nextIndex = e.shiftKey
-            ? (currentIndex - 1 + focusableRowsInDomOrder.length) % focusableRowsInDomOrder.length
-            : (currentIndex + 1) % focusableRowsInDomOrder.length
-          setFocusedValue(focusableRowsInDomOrder[nextIndex])
-        }
-      },
-      [isOpen, focusedValue, panelRef]
-    )
-
-    // Close on ESC or outside click
-    useEffect(() => {
-      if (!isOpen) return
-
-      const panelElement = panelRef.current
-
-      const handleEscape = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-          e.preventDefault()
-          handleOpenChange(false)
-        }
-      }
-
-      const handleClickOutside = (e: MouseEvent) => {
-        const target = e.target as Node
-        if (rootRef.current && !rootRef.current.contains(target)) {
-          handleOpenChange(false)
-        }
-      }
-
-      // Add keyboard handler to panel for arrow navigation
-      panelElement?.addEventListener('keydown', handleKeyDown as EventListener)
-      document.addEventListener('keydown', handleEscape)
-      document.addEventListener('mousedown', handleClickOutside)
-
-      return () => {
-        panelElement?.removeEventListener('keydown', handleKeyDown as EventListener)
-        document.removeEventListener('keydown', handleEscape)
-        document.removeEventListener('mousedown', handleClickOutside)
-      }
-    }, [isOpen, handleOpenChange, handleKeyDown])
 
     const contextValue: FilterDropdownContextValue = {
       isOpen,
@@ -169,18 +91,21 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       selectedValues,
       onValueChange: handleValueChange,
       focusedValue,
-      onFocusedValueChange: handleFocusedValueChange,
+      setFocusedValue,
       triggerRef,
       panelRef,
     }
 
     return (
       <FilterDropdownContext.Provider value={contextValue}>
-        <div ref={(node) => {
-          (rootRef as React.MutableRefObject<HTMLDivElement | null>).current = node
-          if (typeof ref === 'function') ref(node)
-          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
-        }} className={`filter-dropdown ${className}`.trim()}>
+        <div
+          ref={(node) => {
+            ;(rootRef as React.MutableRefObject<HTMLDivElement | null>).current = node
+            if (typeof ref === 'function') ref(node)
+            else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+          }}
+          className={`filter-dropdown ${className}`.trim()}
+        >
           {children}
         </div>
       </FilterDropdownContext.Provider>
@@ -229,7 +154,7 @@ function FilterDropdownPanel({ children, className = '', style, ...restProps }: 
   return (
     <div
       ref={panelRef}
-      className={`filter-dropdown__panel ${className}`.trim()}
+      className={`dropdown-panel filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
       aria-multiselectable={mode === 'checkbox' ? true : undefined}
       hidden={!isOpen}
@@ -248,8 +173,8 @@ export interface FilterDropdownSectionProps {
 
 function FilterDropdownSection({ title, children }: FilterDropdownSectionProps) {
   return (
-    <div className="filter-dropdown__section">
-      {title && <div className="filter-dropdown__section-title">{title}</div>}
+    <div className="dropdown-section">
+      {title && <div className="dropdown-section-title">{title}</div>}
       <div className="filter-dropdown__section-content">{children}</div>
     </div>
   )
@@ -262,63 +187,48 @@ export interface FilterDropdownCheckboxProps {
 }
 
 function FilterDropdownCheckbox({ value, label, description }: FilterDropdownCheckboxProps) {
-  const {
-    selectedValues,
-    onValueChange,
-    focusedValue,
-    mode,
-  } = useFilterDropdown()
-  const rowRef = useRef<HTMLDivElement>(null)
+  const { selectedValues, onValueChange, focusedValue, setFocusedValue, mode } = useFilterDropdown()
+  const rowRef = useRef<HTMLButtonElement>(null)
 
   const isSelected = selectedValues.has(value)
   const isFocused = focusedValue === value
 
   useEffect(() => {
-    if (isFocused && rowRef.current) {
-      rowRef.current.focus()
-    }
+    if (isFocused) rowRef.current?.focus()
   }, [isFocused])
 
-  const handleClick = () => {
-    onValueChange(value, !isSelected)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      onValueChange(value, !isSelected)
-    }
-  }
-
   return (
-    <div
+    <button
       ref={rowRef}
-      className={`filter-dropdown__row ${isFocused ? 'filter-dropdown__row--focused' : ''}`}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      tabIndex={isFocused ? 0 : -1}
+      type="button"
       role={mode === 'checkbox' ? 'option' : undefined}
       aria-selected={isSelected}
-      data-focusable-value={value}
+      tabIndex={isFocused ? 0 : -1}
+      data-dropdown-item={value}
+      onClick={() => onValueChange(value, !isSelected)}
+      onMouseEnter={() => setFocusedValue(value)}
+      className={[
+        'dropdown-item',
+        isFocused && 'dropdown-item--focused',
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
-      <div className="filter-dropdown__row-checkbox">
+      <span className="dropdown-item__leading">
         <input
           type="checkbox"
-          className="filter-dropdown__checkbox"
+          className="dropdown-item__checkbox"
           checked={isSelected}
-          onChange={(e) => onValueChange(value, e.target.checked)}
-          onClick={(e) => e.stopPropagation()}
-          aria-hidden="true"
+          readOnly
           tabIndex={-1}
+          aria-hidden="true"
         />
-      </div>
-      <div className="filter-dropdown__row-content">
-        <div className="filter-dropdown__row-label">{label}</div>
-        {description && (
-          <div className="filter-dropdown__row-description">{description}</div>
-        )}
-      </div>
-    </div>
+      </span>
+      <span className="dropdown-item__body">
+        <span className="dropdown-item__label">{label}</span>
+        {description && <span className="dropdown-item__description">{description}</span>}
+      </span>
+    </button>
   )
 }
 
@@ -329,65 +239,53 @@ export interface FilterDropdownRadioProps {
 }
 
 function FilterDropdownRadio({ value, label, description }: FilterDropdownRadioProps) {
-  const {
-    selectedValues,
-    onValueChange,
-    focusedValue,
-  } = useFilterDropdown()
-  const rowRef = useRef<HTMLDivElement>(null)
+  const { selectedValues, onValueChange, focusedValue, setFocusedValue } = useFilterDropdown()
+  const rowRef = useRef<HTMLButtonElement>(null)
 
   const isSelected = selectedValues.has(value)
   const isFocused = focusedValue === value
 
   useEffect(() => {
-    if (isFocused && rowRef.current) {
-      rowRef.current.focus()
-    }
+    if (isFocused) rowRef.current?.focus()
   }, [isFocused])
 
-  const handleClick = () => {
-    onValueChange(value, true)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      onValueChange(value, true)
-    }
-  }
-
   return (
-    <div
+    <button
       ref={rowRef}
-      className={`filter-dropdown__row ${isFocused ? 'filter-dropdown__row--focused' : ''}`}
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      tabIndex={isFocused ? 0 : -1}
+      type="button"
       role="radio"
       aria-checked={isSelected}
-      data-focusable-value={value}
+      tabIndex={isFocused ? 0 : -1}
+      data-dropdown-item={value}
+      onClick={() => onValueChange(value, true)}
+      onMouseEnter={() => setFocusedValue(value)}
+      className={[
+        'dropdown-item',
+        isFocused && 'dropdown-item--focused',
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
-      <div className="filter-dropdown__row-radio">
+      <span className="dropdown-item__leading">
         <input
           type="radio"
+          className="dropdown-item__radio"
           checked={isSelected}
-          onChange={() => onValueChange(value, true)}
-          onClick={(e) => e.stopPropagation()}
-          aria-hidden="true"
+          readOnly
           tabIndex={-1}
+          aria-hidden="true"
         />
-      </div>
-      <div className="filter-dropdown__row-content">
-        <div className="filter-dropdown__row-label">{label}</div>
-        {description && (
-          <div className="filter-dropdown__row-description">{description}</div>
-        )}
-      </div>
-    </div>
+      </span>
+      <span className="dropdown-item__body">
+        <span className="dropdown-item__label">{label}</span>
+        {description && <span className="dropdown-item__description">{description}</span>}
+      </span>
+    </button>
   )
 }
 
-interface FilterDropdownComponentType extends React.ForwardRefExoticComponent<FilterDropdownProps & React.RefAttributes<HTMLDivElement>> {
+interface FilterDropdownComponentType
+  extends React.ForwardRefExoticComponent<FilterDropdownProps & React.RefAttributes<HTMLDivElement>> {
   Trigger: typeof FilterDropdownTrigger
   Panel: typeof FilterDropdownPanel
   Section: typeof FilterDropdownSection

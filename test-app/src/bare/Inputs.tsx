@@ -77,21 +77,21 @@ export function BareSelect() {
     <BareSection name="Select">
       <AxisRow label="default">
         <Select defaultValue="b">
-          <option value="a">Alpha</option>
-          <option value="b">Bravo</option>
-          <option value="c">Charlie</option>
+          <Select.Item value="a">Alpha</Select.Item>
+          <Select.Item value="b">Bravo</Select.Item>
+          <Select.Item value="c">Charlie</Select.Item>
         </Select>
       </AxisRow>
       <AxisRow label="state">
         <Caption label="error">
           <Select error defaultValue="a">
-            <option value="a">Invalid</option>
-            <option value="b">Other</option>
+            <Select.Item value="a">Invalid</Select.Item>
+            <Select.Item value="b">Other</Select.Item>
           </Select>
         </Caption>
         <Caption label="disabled">
           <Select disabled defaultValue="a">
-            <option value="a">Disabled</option>
+            <Select.Item value="a">Disabled</Select.Item>
           </Select>
         </Caption>
       </AxisRow>

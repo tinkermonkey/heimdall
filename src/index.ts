@@ -10,7 +10,13 @@ export { Badge, StatusBadge, type BadgeProps, type BadgeColor, type StatusBadgeP
 export { TextInput, type TextInputProps } from './components/TextInput'
 export { TextArea, type TextAreaProps } from './components/TextArea'
 export { NumberInput, type NumberInputProps } from './components/NumberInput'
-export { Select, type SelectProps } from './components/Select'
+export {
+  Select,
+  type SelectProps,
+  type SelectItemProps,
+  type SelectCheckboxItemProps,
+  type SelectSectionTitleProps,
+} from './components/Select'
 export { TriState, type TriStateProps } from './components/TriState'
 export { Field, type FieldProps } from './components/Field'
 export { StatTile, type StatTileProps } from './components/StatTile'

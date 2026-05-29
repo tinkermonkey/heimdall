@@ -57,8 +57,8 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
       onTargetQueryChange('')
     }, [onChange, onTargetQueryChange, value])
 
-    const handlePredicateChange = React.useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-      onChange({ ...value, predicate: e.target.value })
+    const handlePredicateChange = React.useCallback((predicate: string) => {
+      onChange({ ...value, predicate })
     }, [onChange, value])
 
     return (
@@ -90,15 +90,15 @@ export const RelationshipBuilder = React.forwardRef<HTMLDivElement, Relationship
           <Select
             id={predicateId}
             value={value.predicate}
+            placeholder="Select relation type..."
             onChange={handlePredicateChange}
             disabled={disabled}
             data-testid="predicate-select"
           >
-            <option value="">Select relation type...</option>
             {predicates.map((pred) => (
-              <option key={pred} value={pred}>
+              <Select.Item key={pred} value={pred}>
                 {pred}
-              </option>
+              </Select.Item>
             ))}
           </Select>
         </div>

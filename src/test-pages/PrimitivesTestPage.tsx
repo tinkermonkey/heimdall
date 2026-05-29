@@ -211,18 +211,18 @@ export default function PrimitivesTestPage() {
           Select Component
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '300px' }}>
-          <Select>
-            <option>Option 1</option>
-            <option selected={true}>Option 2</option>
-            <option>Option 3</option>
+          <Select defaultValue="2">
+            <Select.Item value="1">Option 1</Select.Item>
+            <Select.Item value="2">Option 2</Select.Item>
+            <Select.Item value="3">Option 3</Select.Item>
           </Select>
-          <Select className="error">
-            <option>Option A</option>
-            <option selected={true}>Option B</option>
+          <Select error defaultValue="b">
+            <Select.Item value="a">Option A</Select.Item>
+            <Select.Item value="b">Option B</Select.Item>
           </Select>
-          <Select disabled>
-            <option>Option X</option>
-            <option selected={true}>Option Y</option>
+          <Select disabled defaultValue="y">
+            <Select.Item value="x">Option X</Select.Item>
+            <Select.Item value="y">Option Y</Select.Item>
           </Select>
         </div>
       </section>

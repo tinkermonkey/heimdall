@@ -51,10 +51,10 @@ export function ModalShowcase() {
               <TextInput placeholder="life.organism" mono />
             </Field>
             <Field label="Domain">
-              <Select>
-                <option value="life">life</option>
-                <option value="climate">climate</option>
-                <option value="software">software</option>
+              <Select placeholder="Choose…">
+                <Select.Item value="life">life</Select.Item>
+                <Select.Item value="climate">climate</Select.Item>
+                <Select.Item value="software">software</Select.Item>
               </Select>
             </Field>
           </div>
