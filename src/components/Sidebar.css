@@ -196,6 +196,18 @@
   bottom: 5px;
 }
 
+/* Footer slot — pinned to bottom, edge-to-edge with subtle separator */
+.sidebar__footer {
+  margin: 8px -8px -12px;
+  padding: 10px 12px;
+  border-top: 1px solid rgb(var(--shell-border));
+  flex-shrink: 0;
+}
+
+.sidebar--collapsed .sidebar__footer {
+  padding: 10px 8px;
+}
+
 /* Expand/collapse chevron */
 .sidebar__item-chevron {
   flex-shrink: 0;

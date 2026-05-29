@@ -38,6 +38,8 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Render an AppTitle as the sidebar header. The collapse toggle is wired
    *  into its `action` slot so the caret sits to the right of the title. */
   appTitle?: AppTitleProps
+  /** Optional content rendered at the bottom of the sidebar (e.g. user identity). */
+  footer?: React.ReactNode
 }
 
 export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
@@ -53,6 +55,7 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
       onExpandedChange,
       showCollapseToggle = true,
       appTitle,
+      footer,
       className = '',
       ...props
     },
@@ -176,6 +179,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
             </div>
           ))}
         </nav>
+        {footer && (
+          <div className="sidebar__footer">{footer}</div>
+        )}
       </div>
     )
   }

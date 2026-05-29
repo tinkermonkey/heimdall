@@ -11,6 +11,10 @@ export interface TopbarProps extends React.HTMLAttributes<HTMLDivElement> {
   breadcrumbs?: BreadcrumbItem[]
   searchPlaceholder?: string
   onSearch?: (query: string) => void
+  /** Content rendered before the breadcrumbs (e.g. workspace switcher pill). */
+  leadingContent?: React.ReactNode
+  /** Optional keyboard-shortcut glyph rendered inside the search box on the right. */
+  searchHint?: React.ReactNode
 }
 
 export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
@@ -19,6 +23,8 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
       breadcrumbs,
       searchPlaceholder = 'Search…',
       onSearch,
+      leadingContent,
+      searchHint,
       children,
       className = '',
       ...props
@@ -30,6 +36,7 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
 
     return (
       <div ref={ref} className={classNames} {...props}>
+        {leadingContent && <div className="topbar__leading">{leadingContent}</div>}
         <div className="topbar__breadcrumbs">
           {breadcrumbs && breadcrumbs.length > 0 && (
             <nav className="breadcrumbs" aria-label="Breadcrumb">
@@ -69,13 +76,16 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
 
         <div className="topbar__actions">
           {onSearch && (
-            <input
-              type="search"
-              placeholder={searchPlaceholder}
-              aria-label={searchPlaceholder}
-              className="topbar__search"
-              onChange={e => onSearch(e.target.value)}
-            />
+            <div className="topbar__search-wrap">
+              <input
+                type="search"
+                placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
+                className="topbar__search"
+                onChange={e => onSearch(e.target.value)}
+              />
+              {searchHint && <span className="topbar__search-hint">{searchHint}</span>}
+            </div>
           )}
           {children}
         </div>

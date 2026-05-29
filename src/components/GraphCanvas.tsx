@@ -161,6 +161,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const panRef = useRef({ x: 0, y: 0 })
     // Tracks whether we've applied the initial canvas-center offset
     const didCenterRef = useRef(false)
+    const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
 
     const rawId = useId()
     const gridPatternId = `grid${rawId.replace(/:/g, '')}`
@@ -230,22 +231,50 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return () => container.removeEventListener('wheel', handleWheel)
     }, [])
 
-    // Center the coordinate origin on first paint, matching the old graph-stage behavior
+    // Track the rendered container size so the auto-center effect can react to it.
     useEffect(() => {
       const container = containerRef.current
       if (!container) return
       const ro = new ResizeObserver(entries => {
         const { width, height } = entries[0].contentRect
-        if (!didCenterRef.current && width > 0 && height > 0) {
-          didCenterRef.current = true
-          const center = { x: width / 2, y: height / 2 }
-          setPan(center)
-          panRef.current = center
-        }
+        if (width > 0 && height > 0) setContainerSize({ width, height })
       })
       ro.observe(container)
       return () => ro.disconnect()
     }, [])
+
+    // Auto-center the node bounding box once positions and dims are ready.
+    // Runs once — re-centering on later prop changes would fight user pan/zoom.
+    useEffect(() => {
+      if (didCenterRef.current) return
+      if (!containerSize || dims.size === 0 || nodes.length === 0) return
+      if (layout === 'force' && computedPositions.size === 0) return
+
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+      for (const node of nodes) {
+        const pos = node.x !== undefined && node.y !== undefined
+          ? { x: node.x, y: node.y }
+          : computedPositions.get(node.id)
+        if (!pos) continue
+        const d = dims.get(node.id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
+        minX = Math.min(minX, pos.x - d.width / 2)
+        maxX = Math.max(maxX, pos.x + d.width / 2)
+        minY = Math.min(minY, pos.y - d.height / 2)
+        maxY = Math.max(maxY, pos.y + d.height / 2)
+      }
+      if (!Number.isFinite(minX)) return
+
+      const centroidX = (minX + maxX) / 2
+      const centroidY = (minY + maxY) / 2
+      const z = zoomRef.current
+      const next = {
+        x: containerSize.width / 2 - centroidX * z,
+        y: containerSize.height / 2 - centroidY * z,
+      }
+      didCenterRef.current = true
+      setPan(next)
+      panRef.current = next
+    }, [containerSize, dims, computedPositions, nodes, layout])
 
     const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target instanceof Element && e.target.closest('.graph-node, [data-no-drag]')) return
