@@ -1,8 +1,8 @@
 import React from 'react'
 import './BarChart.css'
 import { chartColors } from './chartColors'
-import type { BarChartSeries } from './statusColors'
-import { statusColorMap } from './statusColors'
+import { TONE, fmt, type ChartTone } from './chartTone'
+import { statusColorMap, type BarChartSeries } from './statusColors'
 
 export type { BarChartSeries }
 
@@ -15,6 +15,7 @@ export interface BarChartProps extends React.HTMLAttributes<HTMLDivElement> {
   legend?: boolean
   width?: number
   height?: number
+  tone?: ChartTone
   ariaLabel?: string
 }
 
@@ -29,164 +30,132 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
       legend = false,
       width = 400,
       height = 200,
+      tone = 'light',
       ariaLabel,
       className = '',
       ...rest
     },
     ref
   ) => {
-    if (!series || series.length === 0) {
-      return (
-        <div ref={ref} className={className} style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgb(var(--canvas-fg-3))', fontSize: '12px' }} {...rest}>
-          No data
-        </div>
-      )
-    }
+    const T = TONE[tone]
 
-    // Find actual data min/max using loop to avoid stack overflow with large arrays
+    const emptyState = (message: string) => (
+      <div
+        ref={ref}
+        className={className}
+        style={{
+          width,
+          height,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: T.fg3,
+          fontSize: '12px',
+        }}
+        {...rest}
+      >
+        {message}
+      </div>
+    )
+
+    if (!series || series.length === 0) return emptyState('No data')
+
+    // Data extents (loop to avoid call-stack limits on large arrays)
     let dataMin = Infinity
     let dataMax = -Infinity
-
+    let dataPointCount = 0
     series.forEach((s) => {
       if (s.data && s.data.length > 0) {
+        if (s.data.length > dataPointCount) dataPointCount = s.data.length
         for (let i = 0; i < s.data.length; i++) {
-          const value = s.data[i]
-          if (value < dataMin) dataMin = value
-          if (value > dataMax) dataMax = value
+          const v = s.data[i]
+          if (v < dataMin) dataMin = v
+          if (v > dataMax) dataMax = v
         }
       }
     })
 
-    // Provide default range if no data found
+    if (dataPointCount === 0) return emptyState('No data')
+
     const hasData = isFinite(dataMin) && isFinite(dataMax)
-    const yMin = customYMin !== undefined ? customYMin : hasData ? Math.floor(dataMin * 10) / 10 : 0
-    const yMax = customYMax !== undefined ? customYMax : hasData ? Math.ceil(dataMax * 10) / 10 : 1
-    const yRange = yMax - yMin
+    // Bars read from a baseline, so default the floor to 0 unless data goes negative.
+    const yMin = customYMin !== undefined ? customYMin : hasData ? Math.min(0, dataMin) : 0
+    const yMax = customYMax !== undefined ? customYMax : hasData ? dataMax : 1
+    const yRange = yMax - yMin || 1
 
-    // SVG dimensions
-    const svgWidth = 100
-    const svgHeight = 100
-    const padding = { top: 5, right: 5, bottom: 20, left: 15 }
-    const chartWidth = svgWidth - padding.left - padding.right
-    const chartHeight = svgHeight - padding.top - padding.bottom
+    // Pixel-space layout (matches BarV / BarH convention)
+    const pad = { top: 8, right: 10, bottom: 22, left: 36 }
+    const innerW = width - pad.left - pad.right
+    const innerH = height - pad.top - pad.bottom
 
-    // Generate Y-axis ticks
+    const yAt = (v: number) => pad.top + innerH - ((v - yMin) / yRange) * innerH
+    const baselineY = yAt(Math.max(yMin, 0))
+
     const yTicks = Array.from({ length: yTickCount }, (_, i) => {
       const divisor = yTickCount === 1 ? 1 : yTickCount - 1
       const value = yMin + (yRange * i) / divisor
-      return {
-        value: value.toFixed(1),
-        y: padding.top + chartHeight - (i / divisor) * chartHeight,
-      }
+      return { value, y: yAt(value) }
     })
-    // Remove duplicate tick values (when yRange = 0)
-    const uniqueYTicks = Array.from(
-      new Map(yTicks.map((tick) => [tick.value, tick])).values()
-    )
 
-    // Calculate data dimensions (grouped layout: series displayed side-by-side at each x position)
-    let dataPointCount = 0
-    for (let i = 0; i < series.length; i++) {
-      if (series[i].data.length > dataPointCount) {
-        dataPointCount = series[i].data.length
-      }
-    }
-    // Ensure barWidth is finite: if no data points, render nothing; ensure minimum spacing
-    const barWidth = dataPointCount === 0 ? 0 : Math.max(chartWidth / (dataPointCount * series.length * 1.5), 0.5)
+    const groupW = innerW / dataPointCount
+    const groupPad = groupW * 0.18
+    const barW = Math.max(1, (groupW - groupPad * 2) / series.length)
 
-    if (dataPointCount === 0) {
-      return (
-        <div ref={ref} className={className} style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgb(var(--canvas-fg-3))', fontSize: '12px' }} {...rest}>
-          No data
-        </div>
-      )
-    }
+    const colorFor = (s: BarChartSeries, i: number) =>
+      s.color ? statusColorMap[s.color] : chartColors[i % chartColors.length]
 
     return (
       <div ref={ref} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }} className={className} {...rest}>
         <svg
-          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-          width={width}
-          height={height}
-          style={{ overflow: 'visible' }}
           role="img"
           aria-label={ariaLabel ?? series.map((s) => s.name).join(', ')}
+          width={width}
+          height={height}
+          viewBox={`0 0 ${width} ${height}`}
+          style={{ display: 'block' }}
         >
           {ariaLabel && <title>{ariaLabel}</title>}
-          {/* Y-axis grid lines and ticks */}
-          {uniqueYTicks.map((tick, idx) => (
-            <g key={`y-tick-${idx}`}>
-              {/* Grid line */}
-              <line
-                x1={padding.left}
-                y1={tick.y}
-                x2={svgWidth - padding.right}
-                y2={tick.y}
-                stroke="rgb(var(--canvas-border))"
-                strokeWidth="0.5"
-              />
-              {/* Tick label */}
+
+          {/* Grid lines + y-axis tick labels */}
+          {yTicks.map((tick, i) => (
+            <g key={`y-${i}`}>
+              <line x1={pad.left} x2={width - pad.right} y1={tick.y} y2={tick.y} stroke={T.grid} strokeWidth="1" />
               <text
-                x={padding.left - 1}
-                y={tick.y + 1}
+                x={pad.left - 6}
+                y={tick.y + 3}
                 textAnchor="end"
-                fontSize="3"
-                fill="currentColor"
-                style={{ fill: 'rgb(var(--canvas-fg-2))' }}
+                fontFamily="JetBrains Mono, monospace"
+                fontSize="10"
+                fill={T.fg3}
               >
-                {tick.value}
+                {fmt(tick.value)}
               </text>
             </g>
           ))}
 
-          {/* Y-axis line */}
-          <line
-            x1={padding.left}
-            y1={padding.top}
-            x2={padding.left}
-            y2={svgHeight - padding.bottom}
-            stroke="rgb(var(--canvas-border))"
-            strokeWidth="0.5"
-          />
+          {/* Axes */}
+          <line x1={pad.left} x2={pad.left} y1={pad.top} y2={pad.top + innerH} stroke={T.border} strokeWidth="1" />
+          <line x1={pad.left} x2={width - pad.right} y1={pad.top + innerH} y2={pad.top + innerH} stroke={T.border} strokeWidth="1" />
 
-          {/* X-axis line */}
-          <line
-            x1={padding.left}
-            y1={svgHeight - padding.bottom}
-            x2={svgWidth - padding.right}
-            y2={svgHeight - padding.bottom}
-            stroke="rgb(var(--canvas-border))"
-            strokeWidth="0.5"
-          />
-
-          {/* Data series bars */}
-          {series.map((s, seriesIdx) => {
-            const color = s.color ? statusColorMap[s.color] : chartColors[seriesIdx % chartColors.length]
-            const seriesDataLength = s.data.length
-
+          {/* Grouped bars: series side-by-side at each x position */}
+          {series.map((s, si) => {
+            const color = colorFor(s, si)
             return (
-              <g key={`series-${seriesIdx}`}>
-                {s.data.map((value, dataIdx) => {
-                  const normalizedY = yRange === 0 ? 0.5 : Math.max(0, value - yMin) / yRange
-                  const barHeight = normalizedY * chartHeight
-
-                  // All series side by side at each x position
-                  const xCenter = padding.left + (dataIdx + 0.5) * (chartWidth / seriesDataLength)
-                  const seriesOffset = (seriesIdx - series.length / 2 + 0.5) * barWidth
-                  const xPos = xCenter + seriesOffset - barWidth / 2
-
-                  const yPos = svgHeight - padding.bottom - barHeight
-
+              <g key={`series-${si}`}>
+                {s.data.map((value, di) => {
+                  const x = pad.left + di * groupW + groupPad + si * barW
+                  const y = yAt(value)
+                  const top = Math.min(y, baselineY)
+                  const h = Math.abs(baselineY - y)
                   return (
                     <rect
-                      key={`bar-${seriesIdx}-${dataIdx}`}
-                      x={xPos}
-                      y={yPos}
-                      width={barWidth}
-                      height={barHeight}
+                      key={`bar-${si}-${di}`}
+                      x={x}
+                      y={top}
+                      width={Math.max(1, barW - 1)}
+                      height={Math.max(0, h)}
                       fill={color}
-                      stroke={color}
-                      strokeWidth="0.5"
+                      rx="1"
                     />
                   )
                 })}
@@ -195,38 +164,26 @@ export const BarChart = React.forwardRef<HTMLDivElement, BarChartProps>(
           })}
 
           {/* X-axis labels */}
-          {xLabels.length > 0 &&
-            xLabels.map((label, idx) => {
-              const x = padding.left + (idx + 0.5) * (chartWidth / xLabels.length)
-              return (
-                <text
-                  key={`x-label-${idx}`}
-                  x={x}
-                  y={svgHeight - padding.bottom + 4}
-                  textAnchor="middle"
-                  fontSize="3"
-                  fill="currentColor"
-                  style={{ fill: 'rgb(var(--canvas-fg-2))' }}
-                >
-                  {label}
-                </text>
-              )
-            })}
+          {xLabels.map((label, i) => (
+            <text
+              key={`x-${i}`}
+              x={pad.left + (i + 0.5) * groupW}
+              y={pad.top + innerH + 14}
+              textAnchor="middle"
+              fontFamily="JetBrains Mono, monospace"
+              fontSize="10"
+              fill={T.fg3}
+            >
+              {label}
+            </text>
+          ))}
         </svg>
 
-        {/* Legend */}
         {legend && (
-          <div style={{ display: 'flex', gap: '12px', fontSize: '12px', flexWrap: 'wrap', color: 'rgb(var(--canvas-fg-2))' }}>
+          <div style={{ display: 'flex', gap: '12px', fontSize: '12px', flexWrap: 'wrap', color: T.fg2 }}>
             {series.map((s, idx) => (
               <div key={`legend-${idx}`} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <div
-                  style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '1px',
-                    backgroundColor: s.color ? statusColorMap[s.color] : chartColors[idx % chartColors.length],
-                  }}
-                />
+                <div style={{ width: '8px', height: '8px', borderRadius: '1px', backgroundColor: colorFor(s, idx) }} />
                 <span>{s.name}</span>
               </div>
             ))}

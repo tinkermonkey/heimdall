@@ -9,7 +9,6 @@ import {
   Donut,
   Heatmap,
   StatusTimeline,
-  PieChart,
   ProgressBar,
   MetricRow,
 } from '@tinkermonkey/heimdall-ui'
@@ -989,50 +988,6 @@ export function BarChartShowcase() {
           <PropRow name="width" type="number" def="400" description="Width of the SVG in pixels." />
           <PropRow name="height" type="number" def="200" description="Height of the SVG in pixels." />
           <PropRow name="ariaLabel" type="string" def="series names" description="Accessible label for the chart SVG. Defaults to a comma-joined list of series names." />
-        </PropsTable>
-      </ShowcaseSection>
-    </div>
-  )
-}
-
-const PIE_SEGMENTS = [
-  { name: 'CPU Bound', value: 35 },
-  { name: 'I/O Wait',  value: 25 },
-  { name: 'Memory',    value: 20 },
-  { name: 'Network',   value: 20 },
-]
-
-export function PieChartShowcase() {
-  return (
-    <div>
-      <PageHeader name="PieChart" description="Solid-wedge pie chart. Segments auto-color from the canonical palette; pass color per-segment to override. Use Donut for the ring variant." />
-
-      <ShowcaseSection label="Distribution — legend">
-        <ChartFrame>
-          <PieChart segments={PIE_SEGMENTS} legend width={240} height={240} />
-        </ChartFrame>
-      </ShowcaseSection>
-
-      <ShowcaseSection label="No legend">
-        <ChartFrame>
-          <PieChart segments={PIE_SEGMENTS} width={200} height={200} />
-        </ChartFrame>
-      </ShowcaseSection>
-
-      <ShowcaseSection label="Dark canvas">
-        <DarkFrame>
-          <PieChart segments={PIE_SEGMENTS} legend width={240} height={240} tone="dark" />
-        </DarkFrame>
-      </ShowcaseSection>
-
-      <ShowcaseSection label="Props">
-        <PropsTable>
-          <PropRow name="segments" type="PieChartSegment[]" required description="Array of { name, value, color? } objects. Zero/negative values are ignored." />
-          <PropRow name="legend" type="boolean" def="false" description="Show segment name + percentage legend below the chart." />
-          <PropRow name="width" type="number" def="200" description="SVG width in pixels." />
-          <PropRow name="height" type="number" def="200" description="SVG height in pixels." />
-          <PropRow name="tone" type="'light' | 'dark'" def="'light'" description="Canvas tone — controls stroke and legend text color." />
-          <PropRow name="aria-label" type="string" def="'Pie chart'" description="Accessible label for the SVG." />
         </PropsTable>
       </ShowcaseSection>
     </div>

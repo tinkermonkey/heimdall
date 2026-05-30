@@ -118,7 +118,7 @@
 
 .tool-block__header:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 .tool-block__toggle-icon {
@@ -212,7 +212,7 @@
 
 .thinking-block__header:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 .thinking-block__toggle-icon {

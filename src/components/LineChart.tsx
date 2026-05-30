@@ -6,6 +6,12 @@ import { TONE, fmt, type ChartTone } from './chartTone'
 const ACCENT_PRIMARY = '#F59E0B'
 const ACCENT_PRIMARY_DEEP = '#B45309'
 
+// Tooltip is a deliberate dark "shell popover" floating over the canvas in both tones
+const POPOVER_BG = '#1B2949'       // shell-surface
+const POPOVER_BORDER = '#2A3A5C'   // shell-border-2
+const POPOVER_FG = '#E6EDF3'       // shell-fg-1
+const POPOVER_FG_MUTED = '#A6B1BD' // shell-fg-2
+
 export interface ThresholdLine {
   value: number
   label?: string
@@ -233,9 +239,9 @@ export const LineChart = React.forwardRef<SVGSVGElement, LineChartProps>(
                   stroke={cs[si % cs.length]} strokeWidth="1.75" />
               ))}
               <rect x={tx} y={ty} width={tw} height={th} rx="6"
-                fill={T.card} fillOpacity="0.96" stroke={T.border} />
+                fill={POPOVER_BG} stroke={POPOVER_BORDER} />
               <text x={tx + 9} y={ty + 13}
-                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={T.fg3}
+                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={POPOVER_FG_MUTED}
                 style={{ textTransform: 'uppercase', letterSpacing: '0.10em' }}>
                 {xLabels ? xLabels[hover] : `t${hover}`}
               </text>
@@ -244,7 +250,7 @@ export const LineChart = React.forwardRef<SVGSVGElement, LineChartProps>(
                   <rect x={tx + 9} y={ty + 22 + si * 16} width="6" height="6" rx="1"
                     fill={cs[si % cs.length]} />
                   <text x={tx + 20} y={ty + 28 + si * 16}
-                    fontFamily="JetBrains Mono, monospace" fontSize="10.5" fill={T.fg1}>
+                    fontFamily="JetBrains Mono, monospace" fontSize="10.5" fill={POPOVER_FG}>
                     {s[hover] != null ? fmt(s[hover]) : '—'}
                   </text>
                 </g>

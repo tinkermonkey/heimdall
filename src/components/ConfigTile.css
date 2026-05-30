@@ -35,9 +35,10 @@
   width: 40px;
   height: 40px;
   border-radius: var(--radius-md);
-  background-color: rgb(var(--canvas-bg-2));
-  color: rgb(var(--canvas-fg-1));
-  transition: background-color 80ms ease-out;
+  background-color: var(--accent-primary-bg-alpha-sm);
+  border: 1px solid var(--accent-primary-border-alpha-sm);
+  color: rgb(var(--accent-primary));
+  transition: background-color 80ms ease-out, border-color 80ms ease-out;
   margin-top: 2px;
 }
 

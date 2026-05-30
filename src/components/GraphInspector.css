@@ -182,7 +182,7 @@
 
 .graph-inspector__rel-target:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
   border-color: rgb(var(--accent-primary-deep));
 }
 

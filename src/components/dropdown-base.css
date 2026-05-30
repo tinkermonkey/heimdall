@@ -86,9 +86,9 @@
 .dropdown-section-title {
   padding: 6px 10px 4px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  letter-spacing: var(--type-eyebrow-tracking);
   text-transform: uppercase;
   color: rgb(var(--canvas-fg-3));
 }

@@ -89,7 +89,7 @@
 }
 
 .statusbar__pulse--cyan {
-  background: rgb(var(--status-updating));
+  background: rgb(var(--status-cyan));
 }
 
 .statusbar__pulse--rose {
@@ -101,11 +101,11 @@
 }
 
 .statusbar__pulse--violet {
-  background: rgb(var(--status-secondary));
+  background: rgb(var(--status-violet));
 }
 
 .statusbar__pulse--neutral {
-  background: rgb(var(--status-idle));
+  background: rgb(var(--status-neutral));
 }
 
 .statusbar__label {

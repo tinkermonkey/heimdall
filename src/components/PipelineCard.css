@@ -114,7 +114,7 @@
 
 .pipeline-card__action-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 .pipeline-card__action-btn:hover {
@@ -150,7 +150,7 @@
 
 .pipeline-card__kebab-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 /* Flow strip */
