@@ -18,7 +18,7 @@
 
 .ordered-list__item--primary {
   border-color: rgb(var(--accent-primary));
-  background-color: rgba(var(--accent-primary), 0.05);
+  background-color: var(--accent-primary-bg-alpha-xs);
 }
 
 .ordered-list__rank {

@@ -109,7 +109,7 @@
 
 .workspace-switcher-dialog__recent-item:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 .workspace-switcher-dialog__recent-item--current {

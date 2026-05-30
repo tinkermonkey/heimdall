@@ -41,14 +41,14 @@
 
 .filter-dropdown__trigger[aria-expanded='true'] {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 .filter-dropdown__label {
   font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  letter-spacing: var(--type-eyebrow-tracking);
   text-transform: uppercase;
   color: rgb(var(--canvas-fg-3));
 }

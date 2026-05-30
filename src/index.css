@@ -25,6 +25,6 @@
   /* Apply .focus-ring to any interactive element to get the amber focus ring on :focus-visible. */
   .focus-ring:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+    box-shadow: var(--focus-ring);
   }
 }

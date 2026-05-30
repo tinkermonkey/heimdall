@@ -9,7 +9,7 @@ import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from
 import { TitlebarShowcase, AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
 import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
-import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarVShowcase, BarHShowcase, StackedBarShowcase, DonutShowcase, HeatmapShowcase, StatusTimelineShowcase, BarChartShowcase, PieChartShowcase, ProgressBarShowcase, MetricRowShowcase, ChartWrapperShowcase } from './showcases/ChartsShowcase'
+import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarVShowcase, BarHShowcase, StackedBarShowcase, DonutShowcase, HeatmapShowcase, StatusTimelineShowcase, BarChartShowcase, ProgressBarShowcase, MetricRowShowcase, ChartWrapperShowcase } from './showcases/ChartsShowcase'
 import { PageHeaderShowcase, FilterBarShowcase, ActivityTimelineShowcase, AlertStripShowcase, QuickAccessGridShowcase } from './showcases/PagePatternsShowcase'
 import { ChatMessageShowcase, ToolBlockShowcase, ThinkingBlockShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
 import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, RelationshipBuilderShowcase, RowMenuShowcase, PipelineCardShowcase, FormCalloutShowcase } from './showcases/FormsComplexShowcase'
@@ -107,7 +107,6 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   heatmap: HeatmapShowcase,
   'status-timeline': StatusTimelineShowcase,
   'bar-chart': BarChartShowcase,
-  'pie-chart': PieChartShowcase,
   'progress-bar': ProgressBarShowcase,
   'metric-row': MetricRowShowcase,
   'chart-wrapper': ChartWrapperShowcase,

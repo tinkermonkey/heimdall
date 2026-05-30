@@ -162,6 +162,7 @@
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
     --shadow-modal: 0 24px 64px -16px rgba(0, 0, 0, 0.55);
+    --shadow-toast: 0 14px 40px -16px rgba(0, 0, 0, 0.5);
 
     /* ---- Type Families (self-hosted fonts loaded separately) ---- */
     --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -185,6 +186,16 @@
     --font-weight-bold: 700;
     --font-weight-extrabold: 800;
 
+    /* ---- Semantic Type Tokens (single source — components reference these) ---- */
+    --type-h1-size: 24px;                       /* page title */
+    --type-h1-weight: var(--font-weight-bold);  /* 700 — 800 reserved for landing hero */
+    --type-stat-size: 28px;                     /* StatTile value */
+    --type-stat-weight: var(--font-weight-bold);
+    --type-stat-tracking: -0.02em;
+    --type-eyebrow-size: 10px;                  /* mono uppercase eyebrow / section labels */
+    --type-eyebrow-weight: var(--font-weight-semibold);
+    --type-eyebrow-tracking: 0.08em;
+
     /* ---- Spacing Scale (4px base) ---- */
     --space-0_5: 0.125rem;
     --space-1: 0.25rem;
@@ -206,8 +217,8 @@
     --dom-climate: 245 158 11;          /* #f59e0b — amber */
     --dom-software: 129 140 248;        /* #818cf8 — indigo */
 
-    /* ---- Focus Ring (amber accent) ---- */
-    --focus-ring: 0 0 0 3px rgba(245, 158, 11, 0.18);
+    /* ---- Focus Ring (amber accent — amber-400 to match --accent-primary) ---- */
+    --focus-ring: 0 0 0 3px rgba(251, 191, 36, 0.18);
   }
 
   /* ---- Dark Canvas Mode (slate-toned navy) ---- */
@@ -237,7 +248,8 @@
     margin: 0;
     padding: 0;
     font-family: var(--font-sans);
-    font-size: var(--text-base);
+    /* IDE-density default: 14px body, not the 16px web default */
+    font-size: var(--text-sm);
     line-height: 1.5;
     color: rgb(var(--canvas-fg-1));
     background-color: rgb(var(--canvas-bg));
@@ -252,34 +264,38 @@
   h6 {
     margin: 0;
     font-weight: var(--font-weight-bold);
-    line-height: 1.2;
+    line-height: 1.25;
     color: rgb(var(--canvas-fg-1));
   }
 
+  /* IDE-density heading scale — page H1 is 24px.
+     extrabold (800) is reserved for the landing hero, not base headings. */
   h1 {
-    font-size: var(--text-5xl);
-    font-weight: var(--font-weight-extrabold);
+    font-size: var(--text-2xl); /* 24px */
   }
 
   h2 {
-    font-size: var(--text-4xl);
-    font-weight: var(--font-weight-extrabold);
+    font-size: var(--text-xl); /* 20px */
   }
 
   h3 {
-    font-size: var(--text-3xl);
+    font-size: var(--text-lg); /* 18px */
+    font-weight: var(--font-weight-semibold);
   }
 
   h4 {
-    font-size: var(--text-2xl);
+    font-size: var(--text-base); /* 16px */
+    font-weight: var(--font-weight-semibold);
   }
 
   h5 {
-    font-size: var(--text-xl);
+    font-size: var(--text-sm); /* 14px */
+    font-weight: var(--font-weight-semibold);
   }
 
   h6 {
-    font-size: var(--text-lg);
+    font-size: var(--text-xs); /* 12px */
+    font-weight: var(--font-weight-semibold);
   }
 
   p {
@@ -289,11 +305,21 @@
   }
 
   a {
-    color: rgb(var(--accent-primary));
+    /* amber-400 fails WCAG on white (~1.6:1); deep amber-700 passes on light canvas */
+    color: rgb(var(--accent-primary-deep));
     text-decoration: none;
   }
 
   a:hover {
+    color: rgb(var(--accent-primary-hover));
+  }
+
+  /* On dark canvas the navy surface gives amber-400 ample contrast */
+  body.dark-canvas a {
+    color: rgb(var(--accent-primary));
+  }
+
+  body.dark-canvas a:hover {
     color: rgb(var(--accent-primary-hover));
   }
 

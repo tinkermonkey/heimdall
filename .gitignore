@@ -13,6 +13,13 @@ dist-ssr
 coverage
 *.local
 
+# Session scratch / temp working files (never committed)
+.scratch/
+
+# Playwright
+test-results/
+playwright-report/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -33,3 +40,4 @@ playwright/.auth
 # Scratch / debug screenshots (Claude Code working files)
 .scratch/
 .claude/worktrees
+.claude/scheduled_tasks.lock

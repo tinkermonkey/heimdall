@@ -66,3 +66,39 @@
   padding: 2px 4px;
   color: rgb(var(--canvas-fg-1));
 }
+
+/* ---- Dark canvas overrides — translucent tints ---- */
+body.dark-canvas .form-callout--info {
+  background-color: var(--white-overlay-sm);
+  border-color: var(--white-overlay-lg);
+  border-left-color: rgb(var(--canvas-fg-3));
+}
+
+body.dark-canvas .form-callout--info .form-callout__icon {
+  color: rgb(var(--canvas-fg-3));
+}
+
+body.dark-canvas .form-callout--warn {
+  background-color: rgb(var(--status-warn) / 0.12);
+  border-color: rgb(var(--status-warn) / 0.25);
+  border-left-color: rgb(var(--status-warn));
+}
+
+body.dark-canvas .form-callout--warn .form-callout__icon {
+  color: rgb(var(--status-warn));
+}
+
+body.dark-canvas .form-callout--error {
+  background-color: rgb(var(--status-error) / 0.12);
+  border-color: rgb(var(--status-error) / 0.25);
+  border-left-color: rgb(var(--status-error));
+}
+
+body.dark-canvas .form-callout--error .form-callout__icon {
+  color: rgb(var(--status-error));
+}
+
+body.dark-canvas .form-callout__code {
+  background-color: var(--white-overlay-sm);
+  border-color: var(--white-overlay-md);
+}

@@ -4,9 +4,9 @@
   gap: 10px;
   padding: 11px 12px;
   border: 1px solid rgb(var(--canvas-border));
-  border-radius: 7px;
+  border-radius: var(--radius-md);
   background: rgb(var(--canvas-card));
-  box-shadow: 0 14px 40px -16px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-toast);
   animation: slideIn 220ms ease-out;
   max-width: 400px;
   position: relative;
@@ -95,5 +95,5 @@
 
 .toast__close:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }

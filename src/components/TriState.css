@@ -1,15 +1,43 @@
+/* TriState — 14×14 custom-drawn checkbox, converged with the filter-checkbox spec.
+   Renders on the native <input> via appearance:none so the public API is unchanged. */
 .tri-state {
-  width: 18px;
-  height: 18px;
-  accent-color: rgb(var(--accent-primary));
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: inline-grid;
+  place-content: center;
+  border: 1px solid rgb(var(--canvas-border-strong));
+  border-radius: var(--radius-sm);
+  background-color: rgb(var(--canvas-card));
+  background-repeat: no-repeat;
+  background-position: center;
   cursor: pointer;
-  transition: all 80ms ease-out;
+  transition: background-color 80ms ease-out, border-color 80ms ease-out;
   outline: none;
+}
+
+.tri-state:hover:not(:disabled) {
+  border-color: rgb(var(--accent-primary));
+}
+
+.tri-state:checked {
+  background-color: rgb(var(--accent-primary));
+  border-color: rgb(var(--accent-primary));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.3l2.3 2.3 4.7-5.2'/%3E%3C/svg%3E");
+}
+
+.tri-state:indeterminate {
+  background-color: rgb(var(--accent-primary));
+  border-color: rgb(var(--accent-primary));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cline x1='3' y1='6' x2='9' y2='6'/%3E%3C/svg%3E");
 }
 
 .tri-state:focus-visible {
   box-shadow: var(--focus-ring);
-  border-radius: var(--radius-md);
 }
 
 .tri-state:disabled {

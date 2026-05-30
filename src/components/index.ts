@@ -89,4 +89,3 @@ export {
   type StatusSegment,
   type SegmentKind,
 } from './StatusTimeline'
-export { PieChart, type PieChartSegment, type PieChartProps } from './PieChart'

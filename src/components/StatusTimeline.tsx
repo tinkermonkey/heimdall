@@ -2,6 +2,8 @@ import React from 'react'
 import './StatusTimeline.css'
 import { TONE, type ChartTone } from './chartTone'
 
+const ACCENT_PRIMARY_DEEP = '#B45309'
+
 export type SegmentKind = 'ok' | 'warn' | 'error' | 'idle' | 'info'
 
 export interface StatusSegment {
@@ -69,7 +71,7 @@ export const StatusTimeline = React.forwardRef<SVGSVGElement, StatusTimelineProp
       pad.left + ((v - range[0]) / (range[1] - range[0] || 1)) * innerW
 
     function kindColor(kind: string): string {
-      if (kind === 'idle') return T.inset
+      if (kind === 'idle') return T.border
       return KIND_COLORS[kind as SegmentKind] ?? kind
     }
 
@@ -124,7 +126,7 @@ export const StatusTimeline = React.forwardRef<SVGSVGElement, StatusTimelineProp
             <circle cx={xAt(marker.x)} cy={pad.top - 2} r="3" fill={KIND_COLORS.warn} />
             {marker.label && (
               <text x={xAt(marker.x) + 6} y={pad.top + 2}
-                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={T.fg2}
+                fontFamily="JetBrains Mono, monospace" fontSize="9.5" fill={ACCENT_PRIMARY_DEEP}
                 style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 {marker.label}
               </text>

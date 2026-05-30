@@ -1,7 +1,9 @@
 import React from 'react'
 import './BarH.css'
-import { SERIES_COLORS } from './chartColors'
 import { TONE, fmt, type ChartTone } from './chartTone'
+
+// Design paints all bars a single hue; callers override per-item via `color`.
+const DEFAULT_BAR_COLOR = '#22D3EE' // status-cyan
 
 export interface BarHItem {
   label: string
@@ -67,7 +69,7 @@ export const BarH = React.forwardRef<SVGSVGElement, BarHProps>(
         {items.map((it, i) => {
           const y = pad.top + i * rowH + (rowH - barH) / 2
           const w = (it.value / (hi || 1)) * innerW
-          const c = it.color ?? SERIES_COLORS[i % SERIES_COLORS.length]
+          const c = it.color ?? DEFAULT_BAR_COLOR
           return (
             <g key={it.label}>
               <text x={pad.left - 10} y={y + barH * 0.78}

@@ -58,9 +58,9 @@
 }
 
 .stat-tile__value {
-  font-size: 28px;
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.02em;
+  font-size: var(--type-stat-size);
+  font-weight: var(--type-stat-weight);
+  letter-spacing: var(--type-stat-tracking);
   color: rgb(var(--canvas-fg-1));
   line-height: 1.1;
   margin-top: 6px;

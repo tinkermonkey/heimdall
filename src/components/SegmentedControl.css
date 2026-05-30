@@ -27,7 +27,7 @@
 }
 
 .segmented-control__segment:focus-visible {
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+  box-shadow: var(--focus-ring);
 }
 
 .segmented-control__segment:hover:not(.segmented-control__segment--active):not(:disabled) {

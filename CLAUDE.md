@@ -104,7 +104,7 @@ Every screen is built from exactly two surfaces — shell and canvas:
 | Surface | Light canvas | Dark canvas |
 |---|---|---|
 | Shell bg | `#0F1729` | `#0F1729` (always dark — slate navy) |
-| Canvas bg | `#FFFFFF` | `#14203A` |
+| Canvas bg | `#FFFFFF` | `#0B1426` |
 
 Dark canvas mode: add `dark-canvas` to `<body>`. Every color has an explicit override — no `filter()`/`invert()`.
 
@@ -128,9 +128,9 @@ Icon spec: Lucide-style outline, 24×24 viewBox, `strokeWidth={1.75}`, `currentC
 
 **Accent — amber is the primary brand/highlight color:**
 ```css
---accent-primary:       #f59e0b   /* amber-500, active states */
---accent-primary-hover: #d97706   /* amber-600, hover */
---accent-primary-deep:  #b45309   /* amber-700, CTA in light canvas */
+--accent-primary:       #fbbf24   /* amber-400, active states */
+--accent-primary-hover: #f59e0b   /* amber-500, hover */
+--accent-primary-deep:  #b45309   /* amber-700, CTA / links in light canvas */
 ```
 
 **Semantic status colors:** emerald=ok/running, rose=error/failed, cyan=updating/pulling, violet=secondary, neutral=stopped/idle.
@@ -156,7 +156,7 @@ Icon spec: Lucide-style outline, 24×24 viewBox, `strokeWidth={1.75}`, `currentC
 ## Component Conventions
 
 - **Active nav:** 2px amber left border + `shell-surface` background (never a tint fill)
-- **Focus ring:** `0 0 0 3px rgba(245, 158, 11, 0.18)` on inputs and buttons
+- **Focus ring:** `var(--focus-ring)` (`0 0 0 3px rgba(251, 191, 36, 0.18)`, amber-400) on inputs and buttons
 - **Hover:** background lifts one neutral step, never a color tint
 - **Status pulse (live indicator):** `1.6s ease-out infinite` scale 0.6→1.4 + opacity 0.5→0 on an absolutely-positioned glow circle behind a solid colored dot
 - **Animations:** 80–180ms ease for hovers and modals. No bouncy easing, no transforms on press, no ripples.
