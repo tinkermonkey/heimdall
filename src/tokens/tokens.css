@@ -195,7 +195,6 @@
     --type-eyebrow-size: 10px;                  /* mono uppercase eyebrow / section labels */
     --type-eyebrow-weight: var(--font-weight-semibold);
     --type-eyebrow-tracking: 0.08em;
-    --type-mono-id-size: 12px;                  /* identifier chips / inline ids */
 
     /* ---- Spacing Scale (4px base) ---- */
     --space-0_5: 0.125rem;
