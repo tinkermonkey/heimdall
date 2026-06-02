@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1280, initial-scale=1" />
+  <title>Promotion specs · Proposed heimdall components</title>
+  <link rel="stylesheet" href="heimdall/heimdall.css" />
+  <style>
+    html, body { background: rgb(var(--canvas-bg-2)); }
+    .specs { max-width: 1180px; margin: 0 auto; padding: 40px 32px 90px; }
+    .sec-title {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase; color: rgb(var(--canvas-fg-3));
+      margin: 40px 0 14px; display: flex; align-items: center; gap: 10px;
+    }
+    .sec-title::after { content: ''; flex: 1; height: 1px; background: rgb(var(--canvas-border)); }
+    .spec { margin-bottom: 16px; }
+    .spec-head { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; padding: 16px 18px; border-bottom: 1px solid rgb(var(--canvas-border)); }
+    .spec-head .nm { font-family: var(--font-mono); font-size: 17px; font-weight: 600; color: rgb(var(--canvas-fg-1)); letter-spacing: -0.01em; }
+    .spec-head .anatomy { font-family: var(--font-mono); font-size: 11.5px; color: rgb(var(--canvas-fg-3)); margin-top: 4px; line-height: 1.6; }
+    .spec-head .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-left: auto; align-items: center; }
+    .builds { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 8px; }
+    .builds .lbl { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(var(--canvas-fg-4)); margin-right: 4px; }
+    .basechip { font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border-radius: var(--radius-sm); background: rgb(var(--canvas-bg-2)); border: 1px solid rgb(var(--canvas-border)); color: rgb(var(--canvas-fg-2)); }
+    /* dark code block — uses the shell surface (the kit's two-surface system) */
+    pre.code {
+      margin: 14px 18px; padding: 14px 16px; border-radius: var(--radius-lg);
+      background: rgb(var(--shell-bg-2)); border: 1px solid rgb(var(--shell-border-2));
+      color: rgb(var(--shell-fg-1)); font-family: var(--font-mono); font-size: 12px; line-height: 1.7;
+      overflow-x: auto; white-space: pre;
+    }
+    pre.code c { color: rgb(var(--shell-fg-3)); }      /* comment */
+    pre.code k { color: #FBBF24; }                      /* keyword: interface/type */
+    pre.code t { color: #22D3EE; }                      /* type name */
+    .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .twocol > div { padding: 14px 18px; }
+    .twocol > div + div { border-left: 1px solid rgb(var(--canvas-border)); }
+    .blk-h { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase; color: rgb(var(--canvas-fg-3)); margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+    .blk-h .ic { color: rgb(var(--accent-primary-deep)); }
+    ul.pts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    ul.pts li { font-size: 12.5px; line-height: 1.5; color: rgb(var(--canvas-fg-2)); padding-left: 16px; position: relative; }
+    ul.pts li::before { content: ''; position: absolute; left: 0; top: 7px; width: 5px; height: 5px; border-radius: 1px; background: rgb(var(--accent-primary)); }
+    ul.pts li b { color: rgb(var(--canvas-fg-1)); font-weight: 600; }
+    code.inl { font-family: var(--font-mono); font-size: 0.92em; background: rgb(var(--canvas-bg-2)); border: 1px solid rgb(var(--canvas-border)); border-radius: 3px; padding: 0 4px; color: rgb(var(--canvas-fg-1)); }
+    /* enriched detail blocks */
+    .subblk { padding: 14px 18px; border-top: 1px solid rgb(var(--canvas-border)); }
+    .deftable { display: flex; flex-direction: column; border: 1px solid rgb(var(--canvas-border)); border-radius: var(--radius-md); overflow: hidden; }
+    .deftable .r { display: grid; }
+    .deftable .r + .r { border-top: 1px solid rgb(var(--canvas-border)); }
+    .deftable .r > div { padding: 6px 11px; font-size: 11.5px; line-height: 1.5; min-width: 0; }
+    .deftable.states .r { grid-template-columns: 168px 1fr; }
+    .deftable.tokens .r { grid-template-columns: 140px 270px 1fr; }
+    .deftable.keys .r   { grid-template-columns: 118px 1fr; }
+    .deftable .c0 { color: rgb(var(--canvas-fg-1)); font-weight: 500; }
+    .deftable.states .c0 { font-family: var(--font-mono); font-weight: 400; }
+    .deftable .c1 { font-family: var(--font-mono); color: rgb(var(--accent-primary-deep)); word-break: break-word; }
+    .deftable .cn { color: rgb(var(--canvas-fg-2)); }
+    .deftable .r > div + div { border-left: 1px solid rgb(var(--canvas-border)); }
+    .kbd2 { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; padding: 1px 6px; border: 1px solid rgb(var(--canvas-border-strong)); border-bottom-width: 2px; border-radius: 4px; background: rgb(var(--canvas-bg-2)); color: rgb(var(--canvas-fg-1)); white-space: nowrap; }
+    ul.chk { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+    ul.chk li { font-size: 12px; color: rgb(var(--canvas-fg-2)); line-height: 1.45; padding-left: 22px; position: relative; }
+    ul.chk li::before { content: ''; position: absolute; left: 0; top: 1px; width: 13px; height: 13px; border: 1.5px solid rgb(var(--canvas-border-strong)); border-radius: 3px; }
+    .panzoom-note { font-size: 12.5px; color: rgb(var(--canvas-fg-2)); line-height: 1.6; padding: 0 18px 4px; }
+  </style>
+</head>
+<body>
+  <div id="app" class="specs"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="heimdall/primitives.jsx"></script>
+  <script type="text/babel" src="heimdall/shell.jsx"></script>
+  <script type="text/babel" src="heimdall/data.jsx"></script>
+
+  <script type="text/babel">
+    const EFFORT = { S: ['emerald', 'effort · S'], M: ['amber', 'effort · M'], L: ['rose', 'effort · L'] };
+
+    const GROUPS = [
+      { id: 'prim', title: 'Foundational primitive · do first', items: ['Avatar'] },
+      { id: 'ver',  title: 'Versioning suite · highest leverage (3 screens each)', items: ['LineageRail', 'VersionTimeline', 'DiffViewer'] },
+      { id: 'card', title: 'Cards & lists · mid effort, broadly reusable', items: ['ResultCard', 'AssetCard', 'LogStream'] },
+      { id: 'canvas', title: 'Layout canvases · large net-new builds', items: ['Calendar', 'KanbanBoard', 'MapCanvas'] },
+    ];
+
+    const SPECS = {
+      Avatar: {
+        states: [
+          {s:'default (initials)', t:'gradient accent fill, mono initials, no image'},
+          {s:'image loaded', t:'object-fit cover at the same radius and size'},
+          {s:'image error', t:'auto-reverts to initials via onError'},
+          {s:'with status', t:'presence dot bottom-right on a surface-colored ring'},
+          {s:'sizes', t:'xs 20 · sm 28 · md 36 · lg 64 px'},
+          {s:'shape', t:'circle (default) or rounded (--radius-md)'},
+        ],
+        tokens: [
+          {p:'initials fill', k:'--accent-primary → --accent-primary-deep', n:'135° gradient (brand-mark treatment)'},
+          {p:'initials text', k:'#fff', n:'mono, weight 700'},
+          {p:'status dot', k:'--status-{emerald|amber|rose|…}', n:'presence color'},
+          {p:'dot ring', k:'--canvas-card', n:'surface-colored ring so the dot reads on any bg'},
+          {p:'rounded radius', k:'--radius-md', n:'when shape is rounded'},
+          {p:'font', k:'--font-mono', n:'initials'},
+        ],
+        keys: [
+          {k:'—', a:'non-interactive by default; gains focus only when wrapped in a button or link'},
+        ],
+        a11y: [
+          'role="img" with <code class="inl">aria-label={name}</code> when standalone.',
+          'aria-hidden when decorative inside an already-labelled row (e.g. a message header).',
+          'Status dot carries its own <code class="inl">aria-label</code> (e.g. "online").',
+          'Color is never the only signal — initials or image are always present.',
+        ],
+        accept: [
+          'Initials derive correctly from 1-word and 2-word names (first letters, uppercased).',
+          'Broken or blank <code class="inl">src</code> falls back to initials with no layout shift.',
+          'Same name → same color on every render and every screen.',
+          'Status dot stays legible on both shell and canvas surfaces.',
+          'The four sizes match the 20 / 28 / 36 / 64 call-sites in the prototype.',
+        ],
+        screens: 'Rail user · Messages · People · Now playing',
+        effort: 'S',
+        builds: ['(new primitive)'],
+        anatomy: '<Avatar/>  →  <img> | initials <span>  ( + optional presence dot )',
+        code:
+`<k>type</k> <t>AvatarSize</t>  = 'xs' | 'sm' | 'md' | 'lg'   <c>// 20 / 28 / 36 / 64px</c>
+<k>type</k> <t>AvatarShape</t> = 'circle' | 'rounded'
+
+<k>interface</k> <t>AvatarProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  name: string                  <c>// drives initials + deterministic color</c>
+  src?: string                  <c>// image; falls back to initials on error</c>
+  size?: <t>AvatarSize</t>             <c>// default 'md'</c>
+  shape?: <t>AvatarShape</t>           <c>// default 'circle'</c>
+  color?: <t>StatusColor</t> | string  <c>// override the name-hashed color</c>
+  status?: <t>StatusColor</t>          <c>// optional presence dot, bottom-right</c>
+}`,
+        design: [
+          '<b>Deterministic color</b> from a hash of <code class="inl">name</code> — same person is always the same color across the app, no random flicker on re-render.',
+          'Initials = first letter of up to two words, uppercased, in JetBrains Mono; gradient fill matching the brand-mark treatment (accent-primary → accent-primary-deep).',
+          'Sizes map to the four diameters already in use today (20/28/36/64) so existing call-sites map 1:1.',
+          'Presence dot uses status tokens and sits on a canvas-colored ring so it reads on any surface.',
+        ],
+        behaviours: [
+          '<b>Image fallback:</b> <code class="inl">onError</code> swaps to initials automatically — never a broken-image box.',
+          '<code class="inl">aria-label</code> defaults to <code class="inl">name</code>; decorative when inside a labelled row.',
+          'Surface-aware border (adapts on shell vs. canvas) — no per-call overrides.',
+          'Pure presentational; no internal state.',
+        ],
+      },
+
+      LineageRail: {
+        states: [
+          {s:'node default', t:'surface pill, mono label, optional leading icon'},
+          {s:'head node', t:'amber tint bg + amber border (current stage)'},
+          {s:'node hover', t:'border-strong — only when onClick is set'},
+          {s:'node focus', t:'--focus-ring; clickable nodes only'},
+          {s:'overflow', t:'wrap=false → horizontal scroll; wrap=true → wraps with inline arrows'},
+          {s:'single / empty', t:'single node renders no arrows; empty renders nothing'},
+        ],
+        tokens: [
+          {p:'node bg', k:'--canvas-bg-2', n:'reuses the .kg-node-pill surface'},
+          {p:'node border', k:'--canvas-border', n:''},
+          {p:'node text', k:'--canvas-fg-1', n:'mono'},
+          {p:'head bg', k:'--accent-primary-bg-alpha-sm', n:'rgba amber 0.10'},
+          {p:'head border', k:'--accent-primary-border-alpha-sm', n:'rgba amber 0.20'},
+          {p:'arrow', k:'--canvas-fg-4', n:'never competes with content'},
+          {p:'radius', k:'--radius-md', n:''},
+        ],
+        keys: [
+          {k:'Tab', a:'moves through clickable nodes, strictly left → right'},
+          {k:'Enter / Space', a:'activates a node when onClick is provided'},
+        ],
+        a11y: [
+          'role="list" of nodes; arrows are aria-hidden separators.',
+          'aria-label summarizes the chain ("provenance: obsidian → normalize → … → chromadb").',
+          'Head node marked <code class="inl">aria-current</code>.',
+          'Non-clickable nodes are plain text, not focusable.',
+        ],
+        accept: [
+          '2-node and 10+-node chains both render with no truncation.',
+          'Head node is visually distinct from the rest.',
+          'Nodes are buttons only when <code class="inl">onClick</code> is supplied; otherwise inert.',
+          'Stage vocabulary matches PipelineCard nodes.',
+          'Wraps or scrolls — never clips a provenance step.',
+        ],
+        screens: 'Chunk inspector · Messages · Events',
+        effort: 'M',
+        builds: ['Chip / kg-node-pill', 'Icon'],
+        anatomy: '<LineageRail nodes>  →  <LineageRail.Node/> · <sep> · <LineageRail.Node head/> …',
+        code:
+`<k>interface</k> <t>LineageNode</t> {
+  id: string
+  label: string
+  icon?: <t>IconName</t>
+  kind?: 'source' | 'transform' | 'artifact' | 'store'  <c>// node tint</c>
+  head?: boolean                <c>// amber "current" emphasis</c>
+  onClick?: () =&gt; void          <c>// navigate to that stage</c>
+}
+
+<k>interface</k> <t>LineageRailProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  nodes: <t>LineageNode</t>[]
+  separator?: <t>React.ReactNode</t>   <c>// default: → arrow glyph in fg-4</c>
+  wrap?: boolean                <c>// wrap vs. horizontal-scroll (default scroll)</c>
+  size?: 'sm' | 'md'
+}`,
+        design: [
+          'Each node is the existing <code class="inl">.kg-node-pill</code> — reuse it verbatim so lineage nodes match the graph/hierarchy vocabulary.',
+          '<b>Head node</b> gets the amber-deep treatment used for the current version everywhere else; arrows are fg-4 and never compete with content.',
+          'Degrades predictably: long chains either wrap (when <code class="inl">wrap</code>) or horizontal-scroll — it must never silently truncate a provenance chain.',
+          'Uniform node height and baseline; optional leading icon per node.',
+        ],
+        behaviours: [
+          '<b>Read-only by default</b>; nodes become buttons only when <code class="inl">onClick</code> is supplied.',
+          'Keyboard focus order is strictly left→right along the chain.',
+          'Shares its stage vocabulary with <code class="inl">PipelineCard</code> — a run and its provenance read identically.',
+          'No data fetching; caller supplies the resolved node list.',
+        ],
+      },
+
+      VersionTimeline: {
+        states: [
+          {s:'entry default', t:'hollow dot on connector rail, VersionPill + headline'},
+          {s:'head', t:'filled amber dot + "head" chip'},
+          {s:'active / selected', t:'amber tint bg + 2px amber left bar'},
+          {s:'hover', t:'bg-2 wash'},
+          {s:'with stats', t:'+added emerald · −removed rose · ∩kept neutral, mono'},
+          {s:'transition', t:'from → to state labels (Tasks lifecycle)'},
+          {s:'order', t:'newest-first (default) or oldest-first'},
+          {s:'single / empty', t:'single hides connector; empty shows placeholder'},
+        ],
+        tokens: [
+          {p:'dot', k:'--canvas-card + --canvas-border', n:'hollow marker'},
+          {p:'head dot', k:'--accent-primary', n:'filled'},
+          {p:'connector', k:'--canvas-border-strong', n:'1px rail'},
+          {p:'active bg', k:'--accent-primary-bg-alpha-xs', n:'rgba amber 0.05'},
+          {p:'active bar', k:'--accent-primary', n:'2px left'},
+          {p:'+added', k:'--status-emerald', n:''},
+          {p:'−removed', k:'--status-rose', n:''},
+          {p:'∩kept', k:'--canvas-fg-3', n:''},
+        ],
+        keys: [
+          {k:'↑ / ↓', a:'move selection between entries'},
+          {k:'Enter / Space', a:'select entry (feeds the DiffViewer pair)'},
+        ],
+        a11y: [
+          'role="list"; selected entry carries <code class="inl">aria-selected</code>.',
+          'Relative timestamp exposes a title with the absolute datetime.',
+          'Diff stats include visually-hidden text ("6 added") — not color-only.',
+        ],
+        accept: [
+          'Renders both the version (stats) and transition (from→to) shapes.',
+          'Selection is controlled (<code class="inl">selectedId</code> + <code class="inl">onSelect</code>).',
+          'Order prop flips display without mutating caller data.',
+          'Reuses ActivityTimeline rail geometry and time formatter.',
+          'Head dot filled; empty and single-entry states handled.',
+        ],
+        screens: 'Source detail · Chunk inspector · Tasks',
+        effort: 'M',
+        builds: ['ActivityTimeline (rail)', 'VersionPill', 'Chip'],
+        anatomy: '<VersionTimeline entries>  →  <VersionTimeline.Entry/>  { marker · VersionPill · headline · summary · diff-stats · ts }',
+        code:
+`<k>interface</k> <t>VersionEntry</t> {
+  id: string
+  version: string | number      <c>// → VersionPill</c>
+  headline: string
+  summary?: string
+  timestamp: <t>Date</t> | string
+  head?: boolean                <c>// filled marker + "head" chip</c>
+  active?: boolean              <c>// selected-row highlight</c>
+  stats?: { added?: number; removed?: number; kept?: number }
+  transition?: { from: string; to: string }  <c>// state machines (Tasks)</c>
+}
+
+<k>interface</k> <t>VersionTimelineProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  entries: <t>VersionEntry</t>[]
+  order?: 'newest-first' | 'oldest-first'
+  selectedId?: string
+  onSelect?: (id: string) =&gt; void
+  footer?: <t>React.ReactNode</t>      <c>// e.g. "4 re-ingests · no change"</c>
+}`,
+        design: [
+          '<b>Reuse ActivityTimeline’s dot + connector rail exactly</b> — do not reinvent the marker geometry; this is a specialization, not a sibling.',
+          'Head entry = filled amber dot; <code class="inl">+added / −removed / ∩kept</code> render in emerald / rose / neutral mono.',
+          'Active row = amber tint + 2px left bar — the same active treatment as nav, for muscle-memory consistency.',
+          'One entry type covers two shapes: <b>version</b> (stats) and <b>state transition</b> (from→to) — Tasks and Source detail share the component.',
+        ],
+        behaviours: [
+          '<b>Controlled selection</b> via <code class="inl">selectedId</code> + <code class="inl">onSelect</code>; pairs with DiffViewer (pick two → diff).',
+          'Order toggle without re-sorting caller data.',
+          'Timestamps use ActivityTimeline’s existing relative-time formatter (shared, not duplicated).',
+          'Empty + single-entry states handled.',
+        ],
+      },
+
+      DiffViewer: {
+        states: [
+          {s:'added column', t:'emerald header + 3px left accent, count'},
+          {s:'removed column', t:'rose header + 3px left accent, count'},
+          {s:'kept column', t:'neutral header; scrolls; "… N more" past maxVisible'},
+          {s:'line · added', t:'emerald tint, + glyph via ::before'},
+          {s:'line · removed', t:'rose tint, − glyph via ::before'},
+          {s:'line · context', t:'muted, no glyph'},
+          {s:'hunk header', t:'mono @@ label row'},
+          {s:'empty', t:'"no changes between these versions"'},
+        ],
+        tokens: [
+          {p:'added bg', k:'--status-emerald-bg-alpha', n:'rgba 0.10'},
+          {p:'removed bg', k:'--status-rose-bg-alpha', n:'rgba 0.08'},
+          {p:'added accent', k:'--status-emerald', n:'left border + glyph'},
+          {p:'removed accent', k:'--status-rose', n:'left border + glyph'},
+          {p:'kept accent', k:'--canvas-border-strong', n:''},
+          {p:'line number', k:'--canvas-fg-4', n:'gutter, mono'},
+          {p:'hunk label', k:'--canvas-fg-3', n:'mono'},
+        ],
+        keys: [
+          {k:'scroll', a:'kept-set and line bodies scroll independently'},
+          {k:'select', a:'text selection copies clean source (glyphs + line-numbers excluded)'},
+        ],
+        a11y: [
+          'Columns labelled "added / removed / unchanged" with counts.',
+          '+ / − conveyed by glyph plus visually-hidden text, not color alone.',
+          'Diff body uses table/grid semantics with row scope.',
+        ],
+        accept: [
+          '+ / − are CSS <code class="inl">::before</code> so copy-paste yields clean source.',
+          'Color is never the sole signal (symbol + label present).',
+          'Hash lists keyed by hash; lists virtualize past ~200 rows.',
+          'Version labels reuse the tinted VersionPill (green / rose).',
+          'left / right are fed by VersionTimeline selection.',
+        ],
+        screens: 'Source detail',
+        effort: 'M',
+        builds: ['Panel', 'VersionPill (green/rose)', 'Chip'],
+        anatomy: '<HashSetDiff added removed kept/>   +   <SideBySideDiff left right/>  ( two components, one family )',
+        code:
+`<k>interface</k> <t>HashItem</t> { hash: string; position?: string }
+<k>interface</k> <t>HashSetDiffProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  added: <t>HashItem</t>[]; removed: <t>HashItem</t>[]; kept: <t>HashItem</t>[]
+  maxVisible?: number           <c>// collapse "… N more carried forward"</c>
+}
+
+<k>type</k> <t>DiffLineKind</t> = 'added' | 'removed' | 'context' | 'unchanged'
+<k>interface</k> <t>DiffLine</t> { kind: <t>DiffLineKind</t>; n?: number; text: string }
+<k>interface</k> <t>DiffHunk</t> { label: string; lines: <t>DiffLine</t>[] }
+<k>interface</k> <t>DiffColumn</t> { version: string; hash?: string; tone: 'rose' | 'emerald'; hunks: <t>DiffHunk</t>[] }
+
+<k>interface</k> <t>SideBySideDiffProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  left: <t>DiffColumn</t>; right: <t>DiffColumn</t>
+  summary?: string              <c>// "2 hunks · +24 −9 lines"</c>
+}`,
+        design: [
+          'Hash-set columns are color-coded — <b>emerald add / rose remove / neutral kept</b> — each with a count and a 3px left-accent border.',
+          'The kept column scrolls and collapses with a “… N more” affordance; added/removed rarely need it.',
+          '<b>+/− glyphs are CSS <code class="inl">::before</code>, not text</b>, so a copy-paste of the diff yields clean source. Line numbers live in the gutter.',
+          'Version labels reuse the tinted VersionPill variants (green / rose) already in the kit; added lines emerald-tint, removed lines rose-tint.',
+        ],
+        behaviours: [
+          '<b>Content-addressed</b> — list keys are hashes, so re-orders never thrash the DOM.',
+          'Virtualizable: both the hash lists and the line lists must handle thousands of rows.',
+          'Copy yields clean text (no gutter glyphs, no line numbers).',
+          'Driven by VersionTimeline selection — the two-version pick feeds <code class="inl">left</code>/<code class="inl">right</code>.',
+        ],
+      },
+
+      ResultCard: {
+        states: [
+          {s:'default', t:'domain accent-bar, header, snippet, provenance row'},
+          {s:'hover', t:'border → border-strong (kit hover rule)'},
+          {s:'focus', t:'--focus-ring on the card'},
+          {s:'selected', t:'amber border ring (optional)'},
+          {s:'highlight', t:'<mark> spans amber-tinted'},
+          {s:'partial provenance', t:'optional fields omit cleanly'},
+          {s:'no score', t:'similarity bar + label hidden'},
+        ],
+        tokens: [
+          {p:'card', k:'--canvas-card / --canvas-border', n:''},
+          {p:'hover border', k:'--canvas-border-strong', n:''},
+          {p:'accent bar', k:'--dom-* / domain color', n:'3px left'},
+          {p:'sim track', k:'--canvas-bg-2', n:''},
+          {p:'sim fill', k:'--accent-primary', n:'width = score'},
+          {p:'mark', k:'--accent-primary-bg-alpha-md', n:'rgba amber 0.12'},
+          {p:'meta key', k:'--canvas-fg-2', n:'mono'},
+        ],
+        keys: [
+          {k:'Enter / Space', a:'fires onOpen on the card'},
+          {k:'Tab', a:'reaches the inline action buttons (view chunk / open source)'},
+        ],
+        a11y: [
+          'role="article"; card aria-label = source + version.',
+          'Score exposed as aria-label "similarity 0.89" on the bar.',
+          'Actions are real button / anchor elements with discrete labels.',
+        ],
+        accept: [
+          'Score 0..1 drives both the bar fill and the numeric label.',
+          'Snippet accepts an arbitrary node, including <mark>.',
+          'Each provenance field is optional and renders only when present.',
+          'Keyboard-openable; hover lift matches the kit.',
+          'Domain-agnostic — no Context-Library copy baked in.',
+        ],
+        screens: 'Search',
+        effort: 'M',
+        builds: ['ProgressBar (similarity)', 'VersionPill', 'Chip', 'Button'],
+        anatomy: '<ResultCard>  →  accent-bar · header(dot · source · VersionPill · score) · snippet · provenance-row · actions',
+        code:
+`<k>interface</k> <t>ResultProvenance</t> {
+  source: string; section?: string; chunkHash?: string
+  adapter?: string; parent?: string | null; normalizer?: string; state?: string
+}
+
+<k>interface</k> <t>ResultCardProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  domain?: string               <c>// left accent-bar color</c>
+  title: string
+  version?: string | number
+  score?: number                <c>// 0..1 → similarity bar + label</c>
+  snippet: <t>React.ReactNode</t>      <c>// supports &lt;mark&gt; highlights</c>
+  provenance?: <t>ResultProvenance</t>
+  actions?: <t>React.ReactNode</t>     <c>// "view chunk →", "open source →"</c>
+  onOpen?: () =&gt; void
+}`,
+        design: [
+          'Domain left-accent bar + domain dot in the header; source is mono, with the VersionPill inline.',
+          '<b>Similarity</b> is a right-aligned horizontal ProgressBar + a <code class="inl">0.00</code> mono label — reuse ProgressBar, don’t draw a new bar.',
+          'Snippet supports <code class="inl">&lt;mark&gt;</code> (amber highlight) and clamps; provenance meta sits below a hairline divider as mono key/value pairs.',
+          'Hover lifts the border one neutral step (kit hover rule); actions are ghost buttons.',
+        ],
+        behaviours: [
+          '<b>Score normalized 0..1</b>; the component renders both bar fill and label from it.',
+          'Snippet is an arbitrary node — highlighting is the caller’s (or a helper’s) concern, keeping the card domain-agnostic.',
+          'Provenance fields are all optional and render only when present.',
+          'Keyboard-activatable: <code class="inl">onOpen</code> fires on Enter/Space; generic enough for any retrieval product.',
+        ],
+      },
+
+      AssetCard: {
+        states: [
+          {s:'doc thumb', t:'CSS page-fold + ext tab (no asset needed)'},
+          {s:'cover thumb', t:'gradient + glyph (album)'},
+          {s:'image thumb', t:'real image, object-fit cover'},
+          {s:'image error', t:'falls back to cover / glyph'},
+          {s:'selected', t:'amber border ring'},
+          {s:'badge', t:'corner pill ("cited", "new")'},
+          {s:'hover', t:'border-strong + subtle lift'},
+          {s:'long title', t:'clamps to 2 lines'},
+        ],
+        tokens: [
+          {p:'card', k:'--canvas-card / --canvas-border', n:''},
+          {p:'selected border', k:'--accent-primary', n:''},
+          {p:'selected ring', k:'--accent-primary-border-alpha-lg', n:'rgba amber 0.28'},
+          {p:'badge bg', k:'--accent-primary-bg-alpha-md', n:''},
+          {p:'badge text', k:'--accent-primary-deep', n:''},
+          {p:'title', k:'--canvas-fg-1', n:'2-line clamp'},
+          {p:'subtitle / meta', k:'--canvas-fg-3', n:'mono'},
+          {p:'grid', k:'--asset-columns / --asset-gap', n:'CSS vars (StatGrid pattern)'},
+        ],
+        keys: [
+          {k:'Enter / Space', a:'open the asset (onOpen)'},
+          {k:'← → ↑ ↓', a:'roving-tabindex navigation across the grid (optional)'},
+        ],
+        a11y: [
+          'role="button" (or option inside a selectable grid); aria-label = title.',
+          '<code class="inl">aria-selected</code> on the selected card.',
+          'Thumbnail is decorative (aria-hidden).',
+        ],
+        accept: [
+          'All three thumb modes render from the discriminated union.',
+          'Image mode degrades to glyph on error.',
+          'Selected ring matches Table-row and Kanban-card selection.',
+          'Cards in a row share a consistent aspect ratio.',
+          'Grid driven by column / gap CSS vars.',
+        ],
+        screens: 'Documents · Music',
+        effort: 'M',
+        builds: ['Chip', 'Icon'],
+        anatomy: '<AssetGrid columns>  →  <AssetCard thumb title subtitle meta badge/> …',
+        code:
+`<k>type</k> <t>AssetThumb</t> =
+  | { kind: 'doc';   ext: string }                       <c>// page-fold + ext tab</c>
+  | { kind: 'cover'; gradient?: [string,string]; glyph?: string; src?: string }
+  | { kind: 'image'; src: string }
+
+<k>interface</k> <t>AssetCardProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  thumb: <t>AssetThumb</t>
+  title: string
+  subtitle?: string             <c>// authors / artist</c>
+  meta?: <t>React.ReactNode</t>        <c>// pages · chunks · when</c>
+  badge?: string                <c>// "cited", "new"</c>
+  selected?: boolean
+  onOpen?: () =&gt; void
+}
+
+<k>interface</k> <t>AssetGridProps</t> { columns?: number; children: <t>React.ReactNode</t> }`,
+        design: [
+          'One card, <b>three thumbnail modes</b> via a discriminated union: document page-fold + ext tab, album cover (gradient + glyph), and raw image. Documents’ doc-tile and Music’s album-tile collapse into this.',
+          'Title clamps to 2 lines; subtitle + meta are mono/secondary; corner badge for highlight states ("cited").',
+          'Selected = amber border ring (matches Table row + Kanban card selection).',
+          'Consistent aspect ratio across a grid row so rows align.',
+        ],
+        behaviours: [
+          '<b>Image with graceful fallback</b> (cover/image modes); doc mode is pure CSS, no asset needed.',
+          'Selectable + openable (click + keyboard).',
+          'Grid sets column count + gap through a CSS var — same mechanism as StatGrid / QuickAccessGrid.',
+          'Thumb rendering is isolated so new media kinds can be added without touching the card body.',
+        ],
+      },
+
+      LogStream: {
+        states: [
+          {s:'info row', t:'fg-2 level tag'},
+          {s:'warn row', t:'amber level tag'},
+          {s:'error row', t:'rose level tag'},
+          {s:'showOps on', t:'op + target columns (sync log)'},
+          {s:'showOps off', t:'message-only line (event log)'},
+          {s:'follow', t:'auto-scrolls to newest; pauses on manual scroll-up'},
+          {s:'windowed', t:'maxRows caps the DOM; older rows dropped'},
+          {s:'empty', t:'"no log entries"'},
+        ],
+        tokens: [
+          {p:'timestamp', k:'--canvas-fg-4', n:'mono HH:MM:SS'},
+          {p:'level info', k:'--canvas-fg-2', n:''},
+          {p:'level warn', k:'--status-amber', n:''},
+          {p:'level error', k:'--status-rose', n:''},
+          {p:'op / target', k:'--canvas-fg-1 / --canvas-fg-3', n:'mono'},
+          {p:'font', k:'--font-mono', n:'whole component'},
+        ],
+        keys: [
+          {k:'scroll', a:'manual scroll-up pauses follow; scrolling to bottom resumes'},
+        ],
+        a11y: [
+          'role="log"; <code class="inl">aria-live="polite"</code> while follow is on, off otherwise.',
+          'Level is a text token (INFO / WARN / ERROR), not color alone.',
+          'Fixed-width level column keeps rows aligned for scanning.',
+        ],
+        accept: [
+          'Level tags are fixed-width and color-coded; columns align.',
+          'showOps toggles the two layouts from one component.',
+          'Follow auto-scrolls and pauses on manual scroll.',
+          'maxRows windows long streams; append never reflows the whole list.',
+          'Shares the time formatter with ActivityTimeline / VersionTimeline.',
+        ],
+        screens: 'Chunk inspector (sync log) · Adapters (events)',
+        effort: 'S',
+        builds: ['ActivityTimeline (dense)', 'Chip (level)'],
+        anatomy: '<LogStream entries showOps?>  →  <row>  ts · LEVEL · [op · target] · message',
+        code:
+`<k>type</k> <t>LogLevel</t> = 'info' | 'warn' | 'error' | 'debug'
+<k>interface</k> <t>LogEntry</t> {
+  id: string
+  timestamp: <t>Date</t> | string     <c>// rendered HH:MM:SS, mono</c>
+  level: <t>LogLevel</t>
+  message: <t>React.ReactNode</t>
+  op?: string                   <c>// "INSERT" · "WRITE" (sync log)</c>
+  target?: string               <c>// "chromadb" · "sqlite"</c>
+}
+
+<k>interface</k> <t>LogStreamProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  entries: <t>LogEntry</t>[]
+  showOps?: boolean             <c>// op/target columns vs. message-only</c>
+  follow?: boolean              <c>// auto-scroll to newest</c>
+  maxRows?: number              <c>// window long streams</c>
+}`,
+        design: [
+          'Monospace throughout; <b>level tag is fixed-width caps</b>, colored info=fg-2 / warn=amber / error=rose so columns stay aligned.',
+          'Timestamp in fg-4; tabular alignment across rows; separation by subtle row rhythm, not heavy borders.',
+          'Two layouts from one component: <code class="inl">showOps</code> gives the op/target columns (sync log); off gives a freeform message line (event log).',
+        ],
+        behaviours: [
+          '<b>Follow mode</b> auto-scrolls to newest but pauses when the user scrolls up.',
+          '<code class="inl">maxRows</code> windows long streams; append must not reflow the whole list.',
+          'Shares the time formatter with ActivityTimeline / VersionTimeline.',
+          'Filter-friendly: callers filter by level today; a <code class="inl">levels</code> prop is a clean later addition.',
+        ],
+      },
+
+      Calendar: {
+        states: [
+          {s:'in-month cell', t:'normal'},
+          {s:'outside month', t:'muted fg-4'},
+          {s:'today', t:'amber chip on the date number'},
+          {s:'event bar', t:'left-accent colored by calendarId'},
+          {s:'overflow', t:'"+N more" when events exceed cell height'},
+          {s:'selected event', t:'amber ring / tint'},
+          {s:'views', t:'month / week / day / agenda'},
+          {s:'mini-cal', t:'marker dots, today, selected day'},
+        ],
+        tokens: [
+          {p:'cell border', k:'--canvas-border', n:''},
+          {p:'outside text', k:'--canvas-fg-4', n:''},
+          {p:'today chip', k:'--accent-primary', n:'on the date number'},
+          {p:'event bar', k:'calendar color', n:'left accent per calendarId'},
+          {p:'weekday header', k:'--canvas-fg-3', n:'mono caps'},
+          {p:'selected', k:'--accent-primary-bg-alpha-sm', n:''},
+        ],
+        keys: [
+          {k:'← → ↑ ↓', a:'move day focus across the grid'},
+          {k:'Enter / Space', a:'select the focused date or event'},
+          {k:'PgUp / PgDn', a:'previous / next month'},
+          {k:'Home / End', a:'first / last day of the week'},
+        ],
+        a11y: [
+          'role="grid" with row / gridcell; weekday names as columnheader.',
+          'Today is <code class="inl">aria-current="date"</code>; selected cell aria-selected.',
+          'Events labelled with time + title.',
+        ],
+        accept: [
+          'weekStartsOn respected (0 = Sun / 1 = Mon).',
+          'Today chip and "+N more" overflow render.',
+          'calendarId → color via a calendar registry.',
+          'All date math lives in one shared util.',
+          'renderEvent escape hatch; arrow-key grid navigation.',
+        ],
+        screens: 'Events',
+        effort: 'L',
+        builds: ['Heatmap (cell scale)', 'Chip', 'Button', 'SegmentedControl'],
+        anatomy: '<Calendar month events>  →  header(nav · view-switch) · weekday-row · <Calendar.Cell>  →  <Calendar.Event/>    +    <MiniCalendar/>',
+        code:
+`<k>type</k> <t>CalView</t> = 'month' | 'week' | 'day' | 'agenda'
+<k>interface</k> <t>CalEvent</t> {
+  id: string; start: <t>Date</t>; end?: <t>Date</t>; title: string
+  calendarId?: string           <c>// → color from registry</c>
+  allDay?: boolean
+}
+<k>interface</k> <t>CalendarProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  month: <t>Date</t>                   <c>// anchor</c>
+  events: <t>CalEvent</t>[]
+  view?: <t>CalView</t>; selectedId?: string; weekStartsOn?: 0 | 1
+  calendars?: { id: string; label: string; color: string }[]
+  onSelectEvent?: (id: string) =&gt; void
+  onSelectDate?: (d: <t>Date</t>) =&gt; void
+  onChangeView?: (v: <t>CalView</t>) =&gt; void
+  onNavigate?: (dir: -1 | 1 | 'today') =&gt; void
+  renderEvent?: (e: <t>CalEvent</t>) =&gt; <t>React.ReactNode</t>   <c>// escape hatch</c>
+}
+<k>interface</k> <t>MiniCalendarProps</t> { month: <t>Date</t>; selected?: <t>Date</t>; markers?: <t>Date</t>[]; onSelect?: (d: <t>Date</t>) =&gt; void }`,
+        design: [
+          '7-column grid, outside-month cells muted; <b>today = amber chip on the date number</b>; min cell height with "+N more" overflow.',
+          'Events are left-accent bars colored by their calendar; weekday header is mono caps; respects <code class="inl">weekStartsOn</code>.',
+          'View switch reuses SegmentedControl; prev/next/today reuse Button — the chrome is all existing parts.',
+          'A "year" / density view can borrow Heatmap’s color scale rather than inventing one.',
+        ],
+        behaviours: [
+          '<b>Controlled view + navigation</b> (<code class="inl">onChangeView</code>, <code class="inl">onNavigate</code>); a calendar color registry maps <code class="inl">calendarId</code> → color.',
+          'All date math behind one shared util — never scattered across cells.',
+          '<code class="inl">renderEvent</code> escape hatch for custom event chips.',
+          'Keyboard arrow navigation across cells; events are display/select only in v1 (drag-create is a later phase).',
+        ],
+      },
+
+      KanbanBoard: {
+        states: [
+          {s:'column', t:'header dot + title + count chip; body scrolls'},
+          {s:'over limit', t:'WIP warning when cards > limit (advisory)'},
+          {s:'empty column', t:'drop-zone placeholder'},
+          {s:'card', t:'context eyebrow, title, meta, optional VersionPill'},
+          {s:'selected card', t:'amber border ring'},
+          {s:'blocked', t:'amber banner row'},
+          {s:'done', t:'dimmed + strikethrough title'},
+          {s:'dragging', t:'insertion line at the drop index'},
+        ],
+        tokens: [
+          {p:'column dot', k:'--status-*', n:'per column'},
+          {p:'count chip', k:'neutral Chip', n:''},
+          {p:'card', k:'--canvas-card / --canvas-border', n:''},
+          {p:'selected border', k:'--accent-primary', n:''},
+          {p:'blocked', k:'--status-amber', n:'banner'},
+          {p:'done', k:'opacity .65 + line-through', n:''},
+          {p:'insertion line', k:'--accent-primary', n:'2px drop indicator'},
+        ],
+        keys: [
+          {k:'Space', a:'pick up / drop the focused card'},
+          {k:'← → ↑ ↓', a:'move card between columns / positions while held'},
+          {k:'Esc', a:'cancel the move'},
+          {k:'Enter', a:'select card (open detail)'},
+        ],
+        a11y: [
+          'Columns are role="list", cards role="listitem".',
+          'Keyboard moves announce via a live region ("moved to In Progress, position 2").',
+          'WIP-limit breach is announced; it never hard-blocks.',
+        ],
+        accept: [
+          '<code class="inl">onMoveCard(cardId, toColumnId, index)</code> fires from drag AND keyboard.',
+          'Controlled selection; renderCard escape hatch.',
+          'Cards are flat data keyed by columnId (pure-data reorder).',
+          'Over-limit advisory and empty-column states are first-class.',
+          'Insertion line shows the exact drop index.',
+        ],
+        screens: 'Tasks',
+        effort: 'L',
+        builds: ['Panel (column)', 'Chip', 'VersionPill', 'Badge'],
+        anatomy: '<KanbanBoard columns cards>  →  <KanbanColumn>  →  <KanbanCard/> …',
+        code:
+`<k>interface</k> <t>KanbanColumnDef</t> { id: string; title: string; color?: <t>StatusColor</t>; limit?: number }
+<k>interface</k> <t>KanbanCardData</t> {
+  id: string; columnId: string
+  title: string; context?: string
+  version?: string | number; due?: { label: string; overdue?: boolean }
+  badges?: <t>React.ReactNode</t>; blocked?: string; done?: boolean
+}
+<k>interface</k> <t>KanbanBoardProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  columns: <t>KanbanColumnDef</t>[]
+  cards: <t>KanbanCardData</t>[]
+  selectedId?: string
+  onSelectCard?: (id: string) =&gt; void
+  onMoveCard?: (cardId: string, toColumnId: string, index: number) =&gt; void
+  renderCard?: (c: <t>KanbanCardData</t>) =&gt; <t>React.ReactNode</t>
+}`,
+        design: [
+          'Equal-flex columns; header = colored dot + title + count chip, with a <b>WIP-limit warning</b> when <code class="inl">cards &gt; limit</code> (advisory, never blocking).',
+          'Each column body scrolls independently; the board itself does not.',
+          'Card = context eyebrow + title + meta (due, source) + optional VersionPill + amber "blocked" banner + done (dimmed / strikethrough).',
+          'Selected card = amber border ring; drag shows an insertion line at the drop index.',
+        ],
+        behaviours: [
+          '<b><code class="inl">onMoveCard(cardId, toColumnId, index)</code></b> is the core contract — satisfied by pointer drag AND keyboard move (accessibility-first).',
+          'Controlled selection; <code class="inl">renderCard</code> escape hatch for domain-specific cards.',
+          'Cards are flat data keyed by <code class="inl">columnId</code> — the board groups them, so reordering is a pure data update.',
+          'Empty-column and over-limit states are first-class.',
+        ],
+      },
+
+      MapCanvas: {
+        states: [
+          {s:'tiles', t:'raster tiles when tileUrl is set'},
+          {s:'grid fallback', t:'abstract grid when no tiles (offline / privacy)'},
+          {s:'pins', t:'data-driven markers with mono label chips'},
+          {s:'active pin', t:'DS pulse + popover (detail)'},
+          {s:'track', t:'dashed teal polyline'},
+          {s:'heatmap', t:'density via the Heatmap color scale'},
+          {s:'pan / zoom', t:'usePanZoom transform; clamps to bounds'},
+        ],
+        tokens: [
+          {p:'active pin', k:'--status-* + pulse', n:'DS pulse animation'},
+          {p:'pin label', k:'--canvas-fg-1', n:'mono chip on surface'},
+          {p:'track', k:'--status-cyan', n:'dashed stroke'},
+          {p:'overlay chrome', k:'shell-surface + blur', n:'reuse GraphCanvas chrome'},
+          {p:'scale bar', k:'--canvas-fg-2', n:''},
+          {p:'heat scale', k:'Heatmap tokens', n:'shared color ramp'},
+        ],
+        keys: [
+          {k:'← → ↑ ↓', a:'pan the viewport'},
+          {k:'+ / −', a:'zoom in / out (clamped)'},
+          {k:'Enter', a:'select the focused pin'},
+          {k:'Esc', a:'close the pin popover'},
+        ],
+        a11y: [
+          'Pins are button elements with aria-label (place + time).',
+          'Always pair with a text alternative (the visit list).',
+          'Canvas role="application"; respects prefers-reduced-motion for the pulse.',
+        ],
+        accept: [
+          'tileUrl pluggable (template or render fn); never a hardcoded vendor.',
+          'Renders fully with zero network (grid fallback).',
+          'Pins data-driven + selectable; heatmap reuses the Heatmap scale.',
+          'bounds fit-to-content; viewport controlled + reports changes.',
+          'Pan / zoom via the shared usePanZoom (same as GraphCanvas), GPU transforms.',
+        ],
+        screens: 'Location',
+        effort: 'L',
+        builds: ['GraphCanvas (shared pan/zoom)', 'Badge / Chip (labels)', 'Heatmap (heat mode)', 'Icon'],
+        anatomy: '<MapCanvas center zoom>  →  tiles | abstract-grid · <MapTrack/> · <MapPin/> · overlay( legend · scale · mode-switch )',
+        code:
+`<k>interface</k> <t>LatLng</t> { lat: number; lng: number }
+<k>type</k> <t>MapMode</t> = 'pins' | 'track' | 'heatmap'
+<k>interface</k> <t>MapPinData</t> {
+  id: string; at: <t>LatLng</t>; label?: string
+  color?: <t>StatusColor</t>; active?: boolean
+  detail?: <t>React.ReactNode</t>      <c>// popover content</c>
+}
+<k>interface</k> <t>MapTrackData</t> { id: string; points: <t>LatLng</t>[]; color?: string; dashed?: boolean }
+
+<k>interface</k> <t>MapCanvasProps</t> <k>extends</k> <t>React.HTMLAttributes</t>&lt;<t>HTMLDivElement</t>&gt; {
+  center: <t>LatLng</t>; zoom?: number
+  bounds?: [<t>LatLng</t>, <t>LatLng</t>]    <c>// fit-to instead of center/zoom</c>
+  pins?: <t>MapPinData</t>[]; tracks?: <t>MapTrackData</t>[]
+  mode?: <t>MapMode</t>
+  tileUrl?: string | ((x:number,y:number,z:number)=&gt;string)  <c>// PLUGGABLE; omit = grid</c>
+  selectedPinId?: string
+  onSelectPin?: (id: string) =&gt; void
+  onViewportChange?: (center: <t>LatLng</t>, zoom: number) =&gt; void
+  legend?: <t>React.ReactNode</t>; scaleBar?: boolean
+}`,
+        design: [
+          'This is a <b>canvas, not a card</b> — it owns pan/zoom. Factor a shared <code class="inl">usePanZoom</code> hook out of GraphCanvas so Map and Graph stay in lockstep (the biggest reuse win in the whole set).',
+          'Active pins use the design-system pulse; pin labels are small mono chips; tracks are dashed teal polylines.',
+          'Floating overlay chrome (legend, scale bar, mode switch) reuses GraphCanvas’s blurred translucent shell-surface treatment.',
+          '<b>Abstract-grid fallback when no tiles</b> — important for privacy and offline/homelab use; transforms must stay GPU-friendly.',
+        ],
+        behaviours: [
+          '<b>Tile provider is pluggable</b> — accept a <code class="inl">tileUrl</code> template or a tile-render fn; never hardcode a map vendor.',
+          'A coordinate↔pixel projection util + <code class="inl">bounds</code> fit-to-content; viewport is controllable and reports changes.',
+          'Pins are data-driven and selectable; <code class="inl">heatmap</code> mode reuses Heatmap’s color scale.',
+          'Works with zero network access (grid fallback) — the canvas, pins and tracks never depend on tiles loading.',
+        ],
+      },
+    };
+
+    function BaseChips({ items }) {
+      return <span className="builds"><span className="lbl">builds on</span>{items.map((b,i)=><span key={i} className="basechip">{b}</span>)}</span>;
+    }
+    function Pts({ items }) {
+      return <ul className="pts">{items.map((t,i)=><li key={i} dangerouslySetInnerHTML={{__html:t}} />)}</ul>;
+    }
+    function DefTable({ kind, rows }) {
+      return (
+        <div className={'deftable ' + kind}>
+          {rows.map((r,i)=>(
+            <div className="r" key={i}>
+              {kind==='tokens'
+                ? <React.Fragment><div className="c0">{r.p}</div><div className="c1">{r.k}</div><div className="cn">{r.n}</div></React.Fragment>
+                : kind==='keys'
+                ? <React.Fragment><div className="c0"><span className="kbd2">{r.k}</span></div><div className="cn">{r.a}</div></React.Fragment>
+                : <React.Fragment><div className="c0">{r.s}</div><div className="cn">{r.t}</div></React.Fragment>}
+            </div>
+          ))}
+        </div>
+      );
+    }
+    function Chk({ items }) {
+      return <ul className="chk">{items.map((t,i)=><li key={i} dangerouslySetInnerHTML={{__html:t}} />)}</ul>;
+    }
+    function Spec({ name }) {
+      const s = SPECS[name];
+      const [ev, el] = EFFORT[s.effort];
+      return (
+        <Panel noPadding className="spec">
+          <div className="spec-head">
+            <div style={{minWidth:0}}>
+              <div className="nm">{name}</div>
+              <div className="anatomy">{s.anatomy}</div>
+              <BaseChips items={s.builds} />
+            </div>
+            <div className="chips">
+              <Chip variant="neutral">{s.screens}</Chip>
+              <Chip variant={ev}>{el}</Chip>
+            </div>
+          </div>
+          <pre className="code" dangerouslySetInnerHTML={{__html: s.code}} />
+          <div className="twocol">
+            <div><div className="blk-h"><span className="ic"><Icon name="palette" size={13}/></span>Design — get this right</div><Pts items={s.design} /></div>
+            <div><div className="blk-h"><span className="ic"><Icon name="component" size={13}/></span>Interfaces &amp; behaviour to support</div><Pts items={s.behaviours} /></div>
+          </div>
+          <div className="subblk">
+            <div className="blk-h"><span className="ic"><Icon name="layout" size={13}/></span>States &amp; variants</div>
+            <DefTable kind="states" rows={s.states} />
+          </div>
+          <div className="subblk">
+            <div className="blk-h"><span className="ic"><Icon name="tag" size={13}/></span>Production token mapping</div>
+            <DefTable kind="tokens" rows={s.tokens} />
+            <div style={{fontSize:'11px',color:'rgb(var(--canvas-fg-3))',marginTop:8,lineHeight:1.5}}>Real heimdall tokens (RGB triplets via <code className="inl">rgb(var(…))</code>) — the prototype’s <code className="inl">--cl-*</code> hex aliases were a shortcut; production uses these.</div>
+          </div>
+          <div className="twocol">
+            <div>
+              <div className="blk-h"><span className="ic"><Icon name="component" size={13}/></span>Keyboard</div>
+              <DefTable kind="keys" rows={s.keys} />
+            </div>
+            <div>
+              <div className="blk-h"><span className="ic"><Icon name="eye" size={13}/></span>Accessibility</div>
+              <Pts items={s.a11y} />
+            </div>
+          </div>
+          <div className="subblk">
+            <div className="blk-h"><span className="ic"><Icon name="check" size={13}/></span>Acceptance checklist</div>
+            <Chk items={s.accept} />
+          </div>
+        </Panel>
+      );
+    }
+
+    function App() {
+      const total = Object.keys(SPECS).length;
+      return (
+        <React.Fragment>
+          <PageHeader
+            eyebrow="HEIMDALL · PROPOSED COMPONENTS · BUILD SPEC"
+            title="Promotion specs"
+            subtitle="Build briefs for the ten patterns flagged for promotion. Each gives the proposed component + sub-component structure, a TypeScript surface in the kit’s conventions (forwardRef, className passthrough, StatusColor / IconName), the design details to get right, the interfaces to support, plus a states matrix, production token mapping, keyboard + a11y, and an acceptance checklist. See the sister doc ‘Reference Implementations’ for the prototype code each spec is drawn from."
+          />
+          <StatGrid columns={4} style={{ marginBottom: 4 }}>
+            <StatTile label="COMPONENTS" value={total} color="emerald" meta="proposed for the kit" />
+            <StatTile label="PER SPEC" value="6 blocks" color="cyan" meta="API · states · tokens · keys · a11y · accept" />
+            <StatTile label="SHARED HOOK" value="usePanZoom" color="violet" meta="Map + GraphCanvas" />
+            <StatTile label="CONVENTIONS" value="forwardRef" color="amber" meta="className · StatusColor · IconName" />
+          </StatGrid>
+
+          {GROUPS.map(g => (
+            <React.Fragment key={g.id}>
+              <div className="sec-title">{g.title}</div>
+              {g.items.map(n => <Spec key={n} name={n} />)}
+            </React.Fragment>
+          ))}
+
+          <div className="sec-title">Shared hook · extract once, use twice</div>
+          <Panel noPadding className="spec">
+            <div className="spec-head">
+              <div style={{minWidth:0}}>
+                <div className="nm">usePanZoom</div>
+                <div className="anatomy">hook · powers MapCanvas pan/zoom AND the existing GraphCanvas — one implementation, not two</div>
+                <BaseChips items={['refactor of GraphCanvas internals']} />
+              </div>
+              <div className="chips"><Chip variant="neutral">Map · Graph</Chip><Chip variant="rose">effort · M</Chip></div>
+            </div>
+            <pre className="code" dangerouslySetInnerHTML={{__html:
+`<k>interface</k> <t>PanZoomViewport</t> { x: number; y: number; zoom: number }
+<k>interface</k> <t>UsePanZoomOptions</t> {
+  minZoom?: number; maxZoom?: number       <c>// clamp range (default 0.25 .. 4)</c>
+  bounds?: { w: number; h: number }        <c>// clamp pan extent to content</c>
+  initial?: <t>Partial</t>&lt;<t>PanZoomViewport</t>&gt;
+  onViewportChange?: (v: <t>PanZoomViewport</t>) =&gt; void
+}
+<k>function</k> <t>usePanZoom</t>(opts?: <t>UsePanZoomOptions</t>): {
+  transform: string            <c>// CSS matrix for the single transformed layer</c>
+  viewport: <t>PanZoomViewport</t>
+  bind: <t>React.HTMLAttributes</t>&lt;<t>HTMLElement</t>&gt; & { tabIndex: number; role: string }
+  zoomTo: (zoom: number, center?: { x; y }) =&gt; void
+  panTo: (x: number, y: number) =&gt; void
+  reset: () =&gt; void
+}` }} />
+            <div className="twocol">
+              <div><div className="blk-h"><span className="ic"><Icon name="palette" size={13}/></span>Why it matters</div><Pts items={[
+                '<b>The single biggest reuse win in the set.</b> Map and Graph must pan, zoom-about-cursor, and clamp identically — two implementations would drift.',
+                'Applies <b>one transform on one layer</b>; children never re-layout (GPU-friendly at thousands of pins/nodes).',
+                'Respects <code class="inl">prefers-reduced-motion</code> — skips inertial easing.',
+              ]} /></div>
+              <div><div className="blk-h"><span className="ic"><Icon name="component" size={13}/></span>Contract</div><Pts items={[
+                '<b>Pointer</b> drag to pan, <b>wheel / trackpad-pinch</b> to zoom about the cursor, <b>arrows + / −</b> for keyboard.',
+                'Clamps zoom to [min,max] and pan to <code class="inl">bounds</code>; emits <code class="inl">onViewportChange</code> for controlled use.',
+                '<code class="inl">bind</code> spreads onto the viewport element (handlers + tabIndex + role); imperative <code class="inl">zoomTo / panTo / reset</code>.',
+                'Extracted from today’s GraphCanvas — a <b>refactor, not a rewrite</b>; GraphCanvas adopts the hook so behaviour stays identical.',
+              ]} /></div>
+            </div>
+          </Panel>
+
+          <div className="sec-title">Conventions every proposal inherits</div>
+          <Panel>
+            <Pts items={[
+              'All components are <b>forwardRef</b> functional components that spread <code class="inl">className</code> and DOM props onto the root, exactly like the current kit.',
+              'Color inputs are the shared <b><code class="inl">StatusColor</code></b> union (emerald · amber · rose · cyan · violet · neutral); icons are referenced by <b><code class="inl">IconName</code></b>, never inline SVG.',
+              'Each ships a sibling <b><code class="inl">.css</code></b> using token variables only — no hardcoded hex — so dark-canvas works for free.',
+              'Compound components (Calendar.Cell, KanbanColumn, LineageRail.Node) follow the <code class="inl">InspectorPanel.Section</code> / <code class="inl">FilterDropdown.Trigger</code> precedent.',
+              'Selection and view state are <b>controlled</b> (value + on-change) so screens own the state; escape-hatch <code class="inl">render*</code> props keep them flexible without forking.',
+              'Voice: mono lowercase identifiers, sentence-case headings, no emoji — matching the existing component set.',
+            ]} />
+          </Panel>
+        </React.Fragment>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+  </script>
+</body>
+</html>
