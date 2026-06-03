@@ -21,7 +21,7 @@ export { TriState, type TriStateProps } from './components/TriState'
 export { Field, type FieldProps } from './components/Field'
 export { StatTile, type StatTileProps } from './components/StatTile'
 export { StatGrid, type StatGridProps } from './components/StatGrid'
-export { VersionPill, type VersionPillProps } from './components/VersionPill'
+export { VersionPill, type VersionPillProps, type VersionPillTone } from './components/VersionPill'
 export {
   SegmentedControl,
   type SegmentedControlProps,

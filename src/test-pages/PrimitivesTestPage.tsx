@@ -259,12 +259,28 @@ export default function PrimitivesTestPage() {
             marginBottom: '14px',
           }}
         >
-          VersionPill Component
+          VersionPill Component · Tone Variants
         </div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <VersionPill>v1</VersionPill>
-          <VersionPill>v3</VersionPill>
-          <VersionPill>v12</VersionPill>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={{ marginRight: '8px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgb(var(--canvas-fg-3))' }}>Amber (default):</span>
+            <VersionPill tone="amber">v1</VersionPill>
+            <VersionPill tone="amber">v3</VersionPill>
+            <VersionPill tone="amber">v12</VersionPill>
+            <VersionPill>v5</VersionPill>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={{ marginRight: '8px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgb(var(--canvas-fg-3))' }}>Emerald:</span>
+            <VersionPill tone="emerald">v2</VersionPill>
+            <VersionPill tone="emerald">v4</VersionPill>
+            <VersionPill tone="emerald">v8</VersionPill>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={{ marginRight: '8px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgb(var(--canvas-fg-3))' }}>Rose:</span>
+            <VersionPill tone="rose">v1</VersionPill>
+            <VersionPill tone="rose">v2</VersionPill>
+            <VersionPill tone="rose">v3</VersionPill>
+          </div>
         </div>
       </section>
 
