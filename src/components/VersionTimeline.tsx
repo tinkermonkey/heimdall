@@ -18,6 +18,7 @@ export interface StateTransition {
 export interface VersionEntry {
   id: string
   label: string
+  headline?: string
   timestamp: Date | string
   head?: boolean
   stats?: DiffStats
@@ -83,9 +84,9 @@ export const VersionTimeline = React.forwardRef<HTMLDivElement, VersionTimelineP
 
     // Scroll selected entry into view
     useEffect(() => {
-      if (selectedIndex >= 0 && listRef.current) {
+      if (selectedIndex >= 0 && listRef.current && selectedId) {
         const entryElement = listRef.current.querySelector(
-          `[data-version-id="${selectedId}"]`
+          `[data-version-id="${CSS.escape(selectedId)}"]`
         ) as HTMLElement
         if (entryElement) {
           entryElement.scrollIntoView({ block: 'nearest' })
@@ -154,7 +155,7 @@ export const VersionTimeline = React.forwardRef<HTMLDivElement, VersionTimelineP
 
               <div className="version-timeline__content">
                 <div className="version-timeline__header">
-                  <VersionPill tone={entry.head ? 'amber' : 'amber'} className="version-timeline__pill">
+                  <VersionPill tone="amber" className="version-timeline__pill">
                     {entry.label}
                   </VersionPill>
                   {entry.head && (
@@ -163,6 +164,12 @@ export const VersionTimeline = React.forwardRef<HTMLDivElement, VersionTimelineP
                     </Chip>
                   )}
                 </div>
+
+                {entry.headline && (
+                  <div className="version-timeline__headline" data-testid={`version-headline-${entry.id}`}>
+                    {entry.headline}
+                  </div>
+                )}
 
                 {entry.transition ? (
                   <div className="version-timeline__transition" data-testid={`version-transition-${entry.id}`}>

@@ -40,7 +40,7 @@
 }
 
 .version-timeline__entry--selected {
-  background-color: rgb(var(--accent-primary-bg-alpha-xs));
+  background-color: var(--accent-primary-bg-alpha-xs);
   border-left-color: rgb(var(--accent-primary));
 }
 
@@ -103,6 +103,12 @@
 
 .version-timeline__head-chip {
   flex-shrink: 0;
+}
+
+.version-timeline__headline {
+  font-size: var(--text-sm);
+  color: rgb(var(--canvas-fg-1));
+  margin-top: 4px;
 }
 
 .version-timeline__transition {
