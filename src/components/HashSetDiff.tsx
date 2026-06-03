@@ -101,6 +101,7 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
                   <div className="hash-set-diff__cell hash-set-diff__cell--kept" role="cell">
                     {isCollapseRow ? (
                       <button
+                        type="button"
                         className="hash-set-diff__expand-button"
                         onClick={() => setExpandedKept(true)}
                         aria-label={`Show ${keptHidden} more kept items`}
