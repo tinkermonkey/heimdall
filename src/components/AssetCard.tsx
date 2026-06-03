@@ -24,6 +24,11 @@ export const AssetCard = React.forwardRef<HTMLDivElement, AssetCardProps>(
     const [imageLoadError, setImageLoadError] = React.useState(false)
     const [imageLoaded, setImageLoaded] = React.useState(false)
 
+    React.useEffect(() => {
+      setImageLoadError(false)
+      setImageLoaded(false)
+    }, [thumb.kind === 'image' ? thumb.src : null])
+
     const classNames = ['asset-card', selected && 'asset-card--selected', className]
       .filter(Boolean)
       .join(' ')
@@ -72,9 +77,6 @@ export const AssetCard = React.forwardRef<HTMLDivElement, AssetCardProps>(
               onError={() => setImageLoadError(true)}
               aria-hidden="true"
             />
-            {imageLoadError && thumb.fallbackGlyph && (
-              <Icon name={thumb.fallbackGlyph} size={32} className="asset-card__image-glyph" />
-            )}
           </div>
         )
       }

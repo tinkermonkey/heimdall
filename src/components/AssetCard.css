@@ -41,14 +41,14 @@
 
 /* Doc thumbnail — pure CSS page with fold and extension tab */
 .asset-card__thumb--doc {
-  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+  background: linear-gradient(135deg, rgb(var(--doc-page-bg-surface-light)) 0%, rgb(var(--doc-page-fold-surface-light)) 100%);
   position: relative;
 }
 
 .asset-card__doc-page {
   width: 100%;
   height: 100%;
-  background-color: white;
+  background-color: rgb(var(--doc-page-bg-light));
   position: relative;
 }
 
@@ -62,7 +62,7 @@
   height: 0;
   border-style: solid;
   border-width: 0 20px 20px 0;
-  border-color: transparent #f5f5f5 transparent transparent;
+  border-color: transparent rgb(var(--doc-page-bg-surface-light)) transparent transparent;
 }
 
 /* Extension tab */
@@ -88,36 +88,35 @@
 
 /* Color-code by extension type */
 .asset-card__doc-tab--pdf {
-  background-color: #dc2626;
+  background-color: rgb(var(--doc-tab-pdf));
 }
 
 .asset-card__doc-tab--docx,
 .asset-card__doc-tab--doc {
-  background-color: #2563eb;
+  background-color: rgb(var(--doc-tab-docx));
 }
 
 .asset-card__doc-tab--xlsx,
 .asset-card__doc-tab--xls {
-  background-color: #16a34a;
+  background-color: rgb(var(--doc-tab-xlsx));
 }
 
 .asset-card__doc-tab--pptx,
 .asset-card__doc-tab--ppt {
-  background-color: #ea580c;
+  background-color: rgb(var(--doc-tab-pptx));
 }
 
 .asset-card__doc-tab--txt {
-  background-color: #6b7280;
+  background-color: rgb(var(--doc-tab-txt));
 }
 
 /* Cover thumbnail — gradient + icon */
 .asset-card__thumb--cover {
   background: var(--cover-gradient);
-  color: rgb(var(--canvas-fg-1));
 }
 
 .asset-card__cover-glyph {
-  color: inherit;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Image thumbnail — real image with cover fit */
@@ -210,13 +209,13 @@
 
 /* Dark canvas overrides */
 .dark-canvas .asset-card__doc-page {
-  background-color: #1a1a1a;
+  background-color: rgb(var(--doc-page-bg-dark));
 }
 
 .dark-canvas .asset-card__doc-page::after {
-  border-right-color: #333;
+  border-right-color: rgb(var(--doc-page-fold-dark));
 }
 
 .dark-canvas .asset-card__thumb--doc {
-  background: linear-gradient(135deg, #333 0%, #2a2a2a 100%);
+  background: linear-gradient(135deg, rgb(var(--doc-page-fold-dark)) 0%, rgb(var(--doc-page-bg-dark-gradient)) 100%);
 }

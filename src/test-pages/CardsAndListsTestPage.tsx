@@ -523,7 +523,7 @@ export default function CardsAndListsTestPage() {
             thumb={{
               kind: 'cover',
               gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              glyph: 'music'
+              glyph: 'star'
             }}
             title="Indie Rock Collection"
             subtitle="playlist_indie"
