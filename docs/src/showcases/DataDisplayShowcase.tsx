@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { StatTile, StatGrid, Table, Chip, StatusBadge, Icon, KVGrid, type Column, type KVGridRow } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { StatTile, StatGrid, Table, Chip, KVGrid, type Column, type KVGridRow } from '@tinkermonkey/heimdall-ui'
+import { PageHeader, ShowcaseSection, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function StatTileShowcase() {
   return (

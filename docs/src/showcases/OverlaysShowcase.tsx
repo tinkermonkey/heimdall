@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Modal, ConfirmDialog, Toast, CommandPalette, Button, Field, TextInput, Select } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function ModalShowcase() {
   const [open, setOpen] = useState(false)

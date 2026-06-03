@@ -1,4 +1,4 @@
-import { PageHeader, ShowcaseSection, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, DemoGrid } from '../components/ShowcaseSection'
 
 const mono = 'var(--font-mono, monospace)'
 const fg1 = 'rgb(var(--canvas-fg-1, 17 24 39))'
@@ -8,7 +8,7 @@ const border = 'rgb(var(--canvas-border, 229 231 235))'
 
 type SwatchProps = { name: string; value: string; token?: string; textDark?: boolean }
 
-function Swatch({ name, value, token, textDark }: SwatchProps) {
+function Swatch({ name, value, token }: SwatchProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       <div style={{ width: '100%', height: 48, background: value, borderRadius: 6, border: `1px solid ${border}` }} />

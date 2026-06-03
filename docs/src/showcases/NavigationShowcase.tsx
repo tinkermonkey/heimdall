@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavItem, Sidebar, Topbar, TabBar, Icon, Chip } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoRow, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const border = 'rgb(var(--canvas-border, 229 231 235))'
 const shellBg = '#0b0f14'

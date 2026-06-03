@@ -3,7 +3,6 @@ import { TextInput, TextArea, NumberInput, Select, TriState, Field } from '@tink
 import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function TextInputShowcase() {
-  const [val, setVal] = useState('')
   return (
     <div>
       <PageHeader name="TextInput" description="Single-line text input. Extends the native <input> element with design system styling." />
@@ -211,7 +210,7 @@ export function SelectShowcase() {
 
 export function TriStateShowcase() {
   const [checked, setChecked] = useState(false)
-  const [indeterminate, setIndeterminate] = useState(false)
+  const [indeterminate] = useState(false)
   const mono = 'var(--font-mono, monospace)'
   const fg2 = 'rgb(var(--canvas-fg-2, 55 65 81))'
 

@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import {
   QuickAccessTile,
-  Button,
   type QuickAccessTileProps,
 } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function QuickAccessTileShowcase() {
   const [lastClicked, setLastClicked] = useState<string | null>(null)

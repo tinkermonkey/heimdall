@@ -16,7 +16,6 @@ import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, Rela
 import { GraphNodeShowcase, GraphCanvasShowcase, GraphInspectorShowcase, TopologyNodeShowcase, GraphEdgeShowcase } from './showcases/GraphShowcase'
 import { FilterDropdownShowcase } from './showcases/FilterDropdownShowcase'
 import { InspectorPanelShowcase } from './showcases/InspectorPanelShowcase'
-import { HierarchyTreeShowcase } from './showcases/HierarchyTreeShowcase'
 import { QuickAccessTileShowcase } from './showcases/QuickAccessTileShowcase'
 import { ConfigTileShowcase } from './showcases/ConfigTileShowcase'
 import { WorkspaceSwitcherDialogShowcase } from './showcases/WorkspaceSwitcherDialogShowcase'
