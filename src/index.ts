@@ -151,3 +151,10 @@ export { ResultCard, type ResultCardProps, type ResultCardProvenance } from './c
 export { AssetCard, type AssetCardProps, type AssetThumb } from './components/AssetCard'
 export { AssetGrid, type AssetGridProps } from './components/AssetGrid'
 export { LogStream, type LogStreamProps, type LogEntry } from './components/LogStream'
+export {
+  Calendar,
+  type CalendarView,
+  type CalendarEvent,
+  type CalendarProps,
+} from './components/Calendar'
+export { MiniCalendar, type MiniCalendarProps } from './components/MiniCalendar'

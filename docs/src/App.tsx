@@ -38,6 +38,7 @@ import GraphShowcase from '@/test-pages/GraphShowcase'
 import VersionTimelineTestPage from '@/test-pages/VersionTimelineTestPage'
 import DiffViewerTestPage from '@/test-pages/DiffViewerTestPage'
 import CardsAndListsTestPage from '@/test-pages/CardsAndListsTestPage'
+import CalendarTestPage from '@/test-pages/CalendarTestPage'
 
 type NavSection = {
   title: string
@@ -79,6 +80,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'hierarchy-tree': HierarchyComponentTestPage,
   'data-display': DataDisplayTestPage,
   'cards-and-lists': CardsAndListsTestPage,
+  'calendar-test': CalendarTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
   sidebar: SidebarShowcase,
