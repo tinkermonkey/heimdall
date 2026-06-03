@@ -17,7 +17,7 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       selected = false,
       onSelect,
       className = '',
-      style,
+      style: _style,
       ...props
     },
     ref

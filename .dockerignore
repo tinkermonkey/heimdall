@@ -16,3 +16,8 @@ tests/
 src/
 design-reference/
 .repair_cycle.log
+.scratch/
+test-app/
+agent-skills/
+scripts/
+.claude/
