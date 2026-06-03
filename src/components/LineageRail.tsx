@@ -61,7 +61,7 @@ const LineageNodeElement: React.FC<LineageNodeElementProps> = ({ node, isHead })
 
   if (!node.onClick) {
     return (
-      <span className={baseClass} role="listitem">
+      <span className={baseClass} role="listitem" aria-current={isHead ? 'step' : undefined}>
         {node.icon && <Icon name={node.icon} size={14} />}
         <span className="lineage-rail__label">{node.label}</span>
       </span>

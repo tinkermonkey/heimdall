@@ -67,16 +67,3 @@
 .lineage-rail__label {
   display: inline;
 }
-
-/* Dark canvas overrides */
-body.dark-canvas .lineage-rail__node {
-  background-color: rgb(var(--canvas-surface));
-  color: rgb(var(--canvas-fg-2));
-  border-color: rgb(var(--canvas-border));
-}
-
-body.dark-canvas .lineage-rail__node--head {
-  background-color: var(--accent-primary-bg-alpha-sm);
-  border-color: var(--accent-primary-border-alpha-sm);
-  color: rgb(var(--canvas-fg-1));
-}
