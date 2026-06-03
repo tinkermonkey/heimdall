@@ -288,3 +288,190 @@ test.describe('ResultCard Component', () => {
     expect(cardOpened).toBe(false)
   })
 })
+
+test.describe('AssetCard Component', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=cards-and-lists')
+    await page.waitForLoadState('networkidle')
+    await loadSelfHostedFonts(page)
+    await assertFontsLoaded(page)
+    await freezeAnimations(page)
+  })
+
+  test('AssetCard doc thumbnail snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    // Find the "AssetCard · Doc Thumbnail" section
+    const docSection = sections.filter({ has: page.locator('text=AssetCard · Doc Thumbnail') })
+    await docSection.scrollIntoViewIfNeeded()
+    const assetCard = docSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-doc-light.png')
+  })
+
+  test('AssetCard doc thumbnail snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const docSection = sections.filter({ has: page.locator('text=AssetCard · Doc Thumbnail') })
+    await docSection.scrollIntoViewIfNeeded()
+    const assetCard = docSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-doc-dark.png')
+  })
+
+  test('AssetCard cover thumbnail snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const coverSection = sections.filter({ has: page.locator('text=AssetCard · Cover Thumbnail') })
+    await coverSection.scrollIntoViewIfNeeded()
+    const assetCard = coverSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-cover-light.png')
+  })
+
+  test('AssetCard cover thumbnail snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const coverSection = sections.filter({ has: page.locator('text=AssetCard · Cover Thumbnail') })
+    await coverSection.scrollIntoViewIfNeeded()
+    const assetCard = coverSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-cover-dark.png')
+  })
+
+  test('AssetCard image thumbnail snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const imageSection = sections.filter({ has: page.locator('text=AssetCard · Image Thumbnail') })
+    await imageSection.scrollIntoViewIfNeeded()
+    const assetCard = imageSection.locator('[class="asset-card"]').first()
+    // Wait for image to load
+    await page.waitForLoadState('networkidle')
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-image-light.png')
+  })
+
+  test('AssetCard image thumbnail snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const imageSection = sections.filter({ has: page.locator('text=AssetCard · Image Thumbnail') })
+    await imageSection.scrollIntoViewIfNeeded()
+    const assetCard = imageSection.locator('[class="asset-card"]').first()
+    await page.waitForLoadState('networkidle')
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-image-dark.png')
+  })
+
+  test('AssetCard with badge snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const badgeSection = sections.filter({ has: page.locator('text=AssetCard · With Badge') })
+    await badgeSection.scrollIntoViewIfNeeded()
+    const assetCard = badgeSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-badge-light.png')
+  })
+
+  test('AssetCard with badge snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const badgeSection = sections.filter({ has: page.locator('text=AssetCard · With Badge') })
+    await badgeSection.scrollIntoViewIfNeeded()
+    const assetCard = badgeSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-badge-dark.png')
+  })
+
+  test('AssetCard selected state snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const selectedSection = sections.filter({ has: page.locator('text=AssetCard · Selected State') })
+    await selectedSection.scrollIntoViewIfNeeded()
+    const assetCard = selectedSection.locator('[class*="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-selected-light.png')
+  })
+
+  test('AssetCard selected state snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const selectedSection = sections.filter({ has: page.locator('text=AssetCard · Selected State') })
+    await selectedSection.scrollIntoViewIfNeeded()
+    const assetCard = selectedSection.locator('[class*="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-selected-dark.png')
+  })
+
+  test('AssetCard selected state has aria-selected attribute', async ({ page }) => {
+    const sections = page.locator('section')
+    const selectedSection = sections.filter({ has: page.locator('text=AssetCard · Selected State') })
+    const assetCard = selectedSection.locator('[class*="asset-card"]').first()
+    await expect(assetCard).toHaveAttribute('aria-selected', 'true')
+  })
+
+  test('AssetCard image fallback snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const fallbackSection = sections.filter({ has: page.locator('text=AssetCard · Image Fallback') })
+    await fallbackSection.scrollIntoViewIfNeeded()
+    const assetCard = fallbackSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-image-fallback-light.png')
+  })
+
+  test('AssetCard image fallback snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const fallbackSection = sections.filter({ has: page.locator('text=AssetCard · Image Fallback') })
+    await fallbackSection.scrollIntoViewIfNeeded()
+    const assetCard = fallbackSection.locator('[class="asset-card"]').first()
+    await expect(assetCard).toBeVisible()
+    await expect(assetCard).toHaveScreenshot('asset-card-image-fallback-dark.png')
+  })
+
+  test('AssetGrid layout snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const gridSection = sections.filter({ has: page.locator('text=AssetGrid · 3 Column Layout') })
+    await gridSection.scrollIntoViewIfNeeded()
+    const assetGrid = gridSection.locator('[class="asset-grid"]').first()
+    await page.waitForLoadState('networkidle')
+    await expect(assetGrid).toBeVisible()
+    await expect(assetGrid).toHaveScreenshot('asset-grid-3col-light.png')
+  })
+
+  test('AssetGrid layout snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const gridSection = sections.filter({ has: page.locator('text=AssetGrid · 3 Column Layout') })
+    await gridSection.scrollIntoViewIfNeeded()
+    const assetGrid = gridSection.locator('[class="asset-grid"]').first()
+    await page.waitForLoadState('networkidle')
+    await expect(assetGrid).toBeVisible()
+    await expect(assetGrid).toHaveScreenshot('asset-grid-3col-dark.png')
+  })
+
+  test('AssetCard renders title correctly', async ({ page }) => {
+    const sections = page.locator('section')
+    const docSection = sections.filter({ has: page.locator('text=AssetCard · Doc Thumbnail') })
+    const title = docSection.locator('text=Quarterly Report Q2 2025')
+    await expect(title).toBeVisible()
+  })
+
+  test('AssetCard renders subtitle correctly', async ({ page }) => {
+    const sections = page.locator('section')
+    const docSection = sections.filter({ has: page.locator('text=AssetCard · Doc Thumbnail') })
+    const subtitle = docSection.locator('text=report_q2_2025.pdf')
+    await expect(subtitle).toBeVisible()
+  })
+
+  test('AssetCard renders badge correctly', async ({ page }) => {
+    const sections = page.locator('section')
+    const badgeSection = sections.filter({ has: page.locator('text=AssetCard · With Badge') })
+    const badge = badgeSection.locator('text=CITED')
+    await expect(badge).toBeVisible()
+  })
+
+  test('AssetCard image loads successfully', async ({ page }) => {
+    const sections = page.locator('section')
+    const imageSection = sections.filter({ has: page.locator('text=AssetCard · Image Thumbnail') })
+    await imageSection.scrollIntoViewIfNeeded()
+    const image = imageSection.locator('img[alt=""]').first()
+    await page.waitForLoadState('networkidle')
+    // Check that image is loaded
+    await expect(image).toBeVisible()
+  })
+})

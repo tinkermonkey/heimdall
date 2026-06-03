@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { ResultCard } from "../components/ResultCard";
+import { AssetCard } from "../components/AssetCard";
+import { AssetGrid } from "../components/AssetGrid";
 
 export default function CardsAndListsTestPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -339,6 +341,225 @@ export default function CardsAndListsTestPage() {
             snippet="A simple result with just domain, source, and snippet content. No additional metadata or actions."
           />
         </div>
+      </section>
+
+      {/* AssetCard · Doc Thumbnail */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          AssetCard · Doc Thumbnail
+        </div>
+        <div style={{ maxWidth: "240px" }}>
+          <AssetCard
+            thumb={{ kind: 'doc', ext: 'pdf' }}
+            title="Quarterly Report Q2 2025"
+            subtitle="report_q2_2025.pdf"
+          />
+        </div>
+      </section>
+
+      {/* AssetCard · Cover Thumbnail */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          AssetCard · Cover Thumbnail
+        </div>
+        <div style={{ maxWidth: "240px" }}>
+          <AssetCard
+            thumb={{
+              kind: 'cover',
+              gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              glyph: 'palette'
+            }}
+            title="Summer Vibes Playlist"
+            subtitle="playlist_2025"
+          />
+        </div>
+      </section>
+
+      {/* AssetCard · Image Thumbnail */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          AssetCard · Image Thumbnail
+        </div>
+        <div style={{ maxWidth: "240px" }}>
+          <AssetCard
+            thumb={{
+              kind: 'image',
+              src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop',
+              fallbackGlyph: 'file'
+            }}
+            title="Portrait Photography Session"
+            subtitle="photo_session_001"
+          />
+        </div>
+      </section>
+
+      {/* AssetCard · With Badge */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          AssetCard · With Badge
+        </div>
+        <div style={{ maxWidth: "240px" }}>
+          <AssetCard
+            thumb={{ kind: 'doc', ext: 'docx' }}
+            title="Important Document with Badge"
+            subtitle="document.docx"
+            badge="cited"
+          />
+        </div>
+      </section>
+
+      {/* AssetCard · Selected State */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          AssetCard · Selected State
+        </div>
+        <div style={{ maxWidth: "240px" }}>
+          <AssetCard
+            thumb={{
+              kind: 'cover',
+              gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              glyph: 'component'
+            }}
+            title="Conference Recording 2025"
+            subtitle="video_conference_001"
+            selected={true}
+          />
+        </div>
+      </section>
+
+      {/* AssetCard · Image Fallback */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          AssetCard · Image Fallback (broken src)
+        </div>
+        <div style={{ maxWidth: "240px" }}>
+          <AssetCard
+            thumb={{
+              kind: 'image',
+              src: 'https://invalid-url-that-will-fail.com/image.jpg',
+              fallbackGlyph: 'file'
+            }}
+            title="Broken Image Asset"
+            subtitle="broken_image.jpg"
+          />
+        </div>
+      </section>
+
+      {/* AssetGrid · 3 Column Layout */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          AssetGrid · 3 Column Layout
+        </div>
+        <AssetGrid columns={3}>
+          <AssetCard
+            thumb={{ kind: 'doc', ext: 'pdf' }}
+            title="Annual Report 2024"
+            subtitle="annual_report_2024.pdf"
+          />
+          <AssetCard
+            thumb={{
+              kind: 'cover',
+              gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              glyph: 'music'
+            }}
+            title="Indie Rock Collection"
+            subtitle="playlist_indie"
+            badge="new"
+          />
+          <AssetCard
+            thumb={{
+              kind: 'image',
+              src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=400&fit=crop',
+              fallbackGlyph: 'file'
+            }}
+            title="Product Photography"
+            subtitle="product_shoot_001"
+          />
+          <AssetCard
+            thumb={{ kind: 'doc', ext: 'xlsx' }}
+            title="Financial Spreadsheet"
+            subtitle="financials_2025.xlsx"
+            badge="cited"
+          />
+          <AssetCard
+            thumb={{
+              kind: 'cover',
+              gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+              glyph: 'component'
+            }}
+            title="Training Video Series"
+            subtitle="training_videos"
+          />
+          <AssetCard
+            thumb={{ kind: 'doc', ext: 'pptx' }}
+            title="Q3 Presentation"
+            subtitle="q3_presentation.pptx"
+            selected={true}
+          />
+        </AssetGrid>
       </section>
     </div>
   );

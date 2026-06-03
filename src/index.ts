@@ -148,3 +148,5 @@ export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTr
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'
 export { usePanZoom, type UsePanZoomOptions, type UsePanZoomReturn } from './hooks/usePanZoom'
 export { ResultCard, type ResultCardProps, type ResultCardProvenance } from './components/ResultCard'
+export { AssetCard, type AssetCardProps, type AssetThumb } from './components/AssetCard'
+export { AssetGrid, type AssetGridProps } from './components/AssetGrid'
