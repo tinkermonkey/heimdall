@@ -68,7 +68,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         className={classNames}
         style={style}
         role={decorative ? undefined : 'img'}
-        aria-label={decorative ? undefined : name}
+        aria-label={decorative ? undefined : (status ? `${name} (${status})` : name)}
         aria-hidden={decorative ? 'true' : undefined}
         {...props}
       >
@@ -89,7 +89,6 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         {status && (
           <div
             className={`avatar__status avatar__status--${status}`}
-            aria-label={`${status} status`}
           />
         )}
       </div>
