@@ -130,6 +130,7 @@ export const ResultCard = React.forwardRef<HTMLDivElement, ResultCardProps>(
             {actions.map((action, index) => (
               <button
                 key={index}
+                type="button"
                 className="result-card__action-button"
                 title={action.label}
                 onClick={(e) => {

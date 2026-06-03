@@ -234,8 +234,6 @@ test.describe('ResultCard Component', () => {
     const count = await resultCards.count()
     expect(count).toBe(3)
 
-    // Verify domains
-    const domains = ['life', 'climate', 'software']
     for (let i = 0; i < 3; i++) {
       const card = resultCards.nth(i)
       const source = card.locator('[class*="source"]')
