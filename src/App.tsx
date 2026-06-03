@@ -27,6 +27,7 @@ import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
 import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
 import TabBarTestPage from './test-pages/TabBarTestPage'
 import AvatarTestPage from './test-pages/AvatarTestPage'
+import CardsAndListsTestPage from './test-pages/CardsAndListsTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -124,6 +125,10 @@ export default function App() {
 
   if (exampleParam === 'avatar-test') {
     return <AvatarTestPage />
+  }
+
+  if (exampleParam === 'cards-and-lists') {
+    return <CardsAndListsTestPage />
   }
 
   if (testParam === 'foundation') {

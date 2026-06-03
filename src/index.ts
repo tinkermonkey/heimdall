@@ -147,3 +147,4 @@ export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type Hierarch
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'
 export { usePanZoom, type UsePanZoomOptions, type UsePanZoomReturn } from './hooks/usePanZoom'
+export { ResultCard, type ResultCardProps, type ResultCardProvenance } from './components/ResultCard'
