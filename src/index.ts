@@ -98,6 +98,13 @@ export {
   type ActivityEvent,
   type ActivityEventType,
 } from './components/ActivityTimeline'
+export {
+  VersionTimeline,
+  type VersionTimelineProps,
+  type VersionEntry,
+  type DiffStats,
+  type StateTransition,
+} from './components/VersionTimeline'
 export { AlertStrip, type AlertStripProps, type Alert, type AlertSeverity } from './components/AlertStrip'
 export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessGridItem } from './components/QuickAccessGrid'
 export { QuickAccessTile, type QuickAccessTileProps } from './components/QuickAccessTile'

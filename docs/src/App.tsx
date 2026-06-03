@@ -35,6 +35,7 @@ import PagePatternsShowcase from '@/test-pages/PagePatternsShowcase'
 import ChatShowcase from '@/test-pages/ChatShowcase'
 import FormsShowcase from '@/test-pages/FormsShowcase'
 import GraphShowcase from '@/test-pages/GraphShowcase'
+import VersionTimelineTestPage from '@/test-pages/VersionTimelineTestPage'
 
 type NavSection = {
   title: string
@@ -118,6 +119,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'page-header': PageHeaderShowcase,
   'filter-bar': FilterBarShowcase,
   'activity-timeline': ActivityTimelineShowcase,
+  'version-timeline': VersionTimelineTestPage,
   'alert-strip': AlertStripShowcase,
   'quick-access-grid': QuickAccessGridShowcase,
   'quick-access-tile': QuickAccessTileShowcase,
@@ -252,6 +254,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'page-header', label: 'PageHeader', icon: 'layout' },
       { id: 'filter-bar', label: 'FilterBar', icon: 'filter' },
       { id: 'activity-timeline', label: 'ActivityTimeline', icon: 'clock' },
+      { id: 'version-timeline', label: 'VersionTimeline', icon: 'clock' },
       { id: 'alert-strip', label: 'AlertStrip', icon: 'alert' },
       { id: 'quick-access-grid', label: 'QuickAccessGrid', icon: 'table' },
       { id: 'quick-access-tile', label: 'QuickAccessTile', icon: 'component' },
