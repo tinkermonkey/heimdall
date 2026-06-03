@@ -52,8 +52,8 @@ export const LogStream = React.forwardRef<HTMLDivElement, LogStreamProps>(
       }
 
       const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
+        (observerEntries) => {
+          observerEntries.forEach((entry) => {
             if (entry.isIntersecting) {
               setIsFollowing(true)
             }
@@ -126,8 +126,12 @@ export const LogStream = React.forwardRef<HTMLDivElement, LogStreamProps>(
               const time = formatTime(timestamp)
               const levelClass = `log-stream__level log-stream__level--${entry.level.toLowerCase()}`
 
+              const rowClass = showOps
+                ? 'log-stream__row log-stream__row--with-ops'
+                : 'log-stream__row'
+
               return (
-                <div key={idx} className="log-stream__row">
+                <div key={idx} className={rowClass}>
                   <span className="log-stream__time">{time}</span>
                   <span className={levelClass}>{entry.level}</span>
                   {showOps && (
