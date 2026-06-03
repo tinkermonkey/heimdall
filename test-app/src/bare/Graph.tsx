@@ -194,3 +194,14 @@ export function BareGraphInspector() {
     </BareSection>
   )
 }
+
+export function BareGraph() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareGraphNode />
+      <BareGraphCanvas />
+      <BareGraphEdge />
+      <BareGraphInspector />
+    </div>
+  )
+}

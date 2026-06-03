@@ -244,3 +244,18 @@ export function BareFormCallout() {
     </BareSection>
   )
 }
+
+export function BarePagePatterns() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BarePageHeader />
+      <BareFilterBar />
+      <BareAlertStrip />
+      <BareActivityTimeline />
+      <BareQuickAccessTile />
+      <BareQuickAccessGrid />
+      <BareConfigTile />
+      <BareFormCallout />
+    </div>
+  )
+}

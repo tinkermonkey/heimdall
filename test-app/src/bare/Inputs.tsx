@@ -244,3 +244,18 @@ export function BareFilterDropdown() {
     </BareSection>
   )
 }
+
+export function BareForms() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareTextInput />
+      <BareTextArea />
+      <BareNumberInput />
+      <BareSelect />
+      <BareTriState />
+      <BareField />
+      <BareSegmentedControl />
+      <BareFilterDropdown />
+    </div>
+  )
+}

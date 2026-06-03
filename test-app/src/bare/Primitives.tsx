@@ -155,3 +155,16 @@ export function BareVersionPill() {
     </BareSection>
   )
 }
+
+export function BarePrimitives() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareIcon />
+      <BareButton />
+      <BareChip />
+      <BareBadge />
+      <BareStatusBadge />
+      <BareVersionPill />
+    </div>
+  )
+}

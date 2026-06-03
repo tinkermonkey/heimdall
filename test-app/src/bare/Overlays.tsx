@@ -181,3 +181,26 @@ export function BareWorkspaceSwitcherDialog() {
     </BareSection>
   )
 }
+
+export function BareOverlays() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareModal />
+      <BareConfirmDialog />
+      <BareToast />
+      <BareCommandPalette />
+      <BareDrawer />
+      <BareWorkspaceSwitcherDialog />
+    </div>
+  )
+}
+
+export function BareAdvancedOverlays() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareCommandPalette />
+      <BareDrawer />
+      <BareSplitPane />
+    </div>
+  )
+}

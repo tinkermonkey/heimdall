@@ -1,5 +1,6 @@
 import type { IconName, SidebarSection } from '@tinkermonkey/heimdall-ui'
 import {
+  BarePrimitives,
   BareIcon,
   BareButton,
   BareChip,
@@ -8,6 +9,7 @@ import {
   BareVersionPill,
 } from './bare/Primitives'
 import {
+  BareForms,
   BareTextInput,
   BareTextArea,
   BareNumberInput,
@@ -18,6 +20,7 @@ import {
   BareFilterDropdown,
 } from './bare/Inputs'
 import {
+  BareDataDisplay,
   BareStatTile,
   BareStatGrid,
   BareTable,
@@ -26,12 +29,14 @@ import {
   BareProgressBar,
 } from './bare/DataDisplay'
 import {
+  BareShellFramework,
   BareNavItem,
   BareSidebar,
   BareTopbar,
   BareTabBar,
 } from './bare/Navigation'
 import {
+  BareShell,
   BareAppTitle,
   BareTitlebar,
   BareStatusbar,
@@ -40,6 +45,8 @@ import {
   BareSplitPane,
 } from './bare/Shell'
 import {
+  BareOverlays,
+  BareAdvancedOverlays,
   BareModal,
   BareConfirmDialog,
   BareToast,
@@ -48,6 +55,7 @@ import {
   BareWorkspaceSwitcherDialog,
 } from './bare/Overlays'
 import {
+  BareCharts,
   BareChartWrapper,
   BareSparkline,
   BareLineChart,
@@ -61,6 +69,7 @@ import {
   BareStatusTimeline,
 } from './bare/Charts'
 import {
+  BarePagePatterns,
   BarePageHeader,
   BareFilterBar,
   BareAlertStrip,
@@ -71,6 +80,7 @@ import {
   BareFormCallout,
 } from './bare/Content'
 import {
+  BareChat,
   BareChatMessage,
   BareToolBlock,
   BareThinkingBlock,
@@ -88,12 +98,14 @@ import {
 } from './bare/DataEditing'
 import { BarePipelineCard } from './bare/Pipeline'
 import {
+  BareGraph,
   BareGraphNode,
   BareGraphCanvas,
   BareGraphEdge,
   BareGraphInspector,
 } from './bare/Graph'
 import {
+  BareHierarchySection,
   BareHierarchyRow,
   BareHierarchyTree,
   BareTopologyNode,
@@ -107,6 +119,15 @@ export type NavItemEntry = {
 }
 
 export const BARE_MAP: Record<string, React.ComponentType> = {
+  // Group examples
+  primitives: BarePrimitives,
+  forms: BareForms,
+  'data-display': BareDataDisplay,
+  'shell-framework': BareShellFramework,
+  'page-patterns': BarePagePatterns,
+  overlays: BareOverlays,
+  'advanced-overlays': BareAdvancedOverlays,
+  'hierarchy-tree': BareHierarchySection,
   // Primitives
   icon: BareIcon,
   button: BareButton,
@@ -150,6 +171,7 @@ export const BARE_MAP: Record<string, React.ComponentType> = {
   drawer: BareDrawer,
   'workspace-switcher-dialog': BareWorkspaceSwitcherDialog,
   // Charts
+  charts: BareCharts,
   'chart-wrapper': BareChartWrapper,
   sparkline: BareSparkline,
   'line-chart': BareLineChart,
@@ -171,6 +193,7 @@ export const BARE_MAP: Record<string, React.ComponentType> = {
   'config-tile': BareConfigTile,
   'form-callout': BareFormCallout,
   // Chat
+  chat: BareChat,
   'chat-message': BareChatMessage,
   'tool-block': BareToolBlock,
   'thinking-block': BareThinkingBlock,
@@ -187,13 +210,13 @@ export const BARE_MAP: Record<string, React.ComponentType> = {
   // Pipeline
   'pipeline-card': BarePipelineCard,
   // Graph
+  graph: BareGraph,
   'graph-node': BareGraphNode,
   'graph-canvas': BareGraphCanvas,
   'graph-edge': BareGraphEdge,
   'graph-inspector': BareGraphInspector,
-  // Hierarchy
+  // Hierarchy (individual components)
   'hierarchy-row': BareHierarchyRow,
-  'hierarchy-tree': BareHierarchyTree,
   'topology-node': BareTopologyNode,
   // Inspector
   'inspector-panel': BareInspectorPanel,

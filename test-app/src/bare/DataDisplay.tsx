@@ -233,3 +233,16 @@ export function BareProgressBar() {
     </BareSection>
   )
 }
+
+export function BareDataDisplay() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareStatTile />
+      <BareStatGrid />
+      <BareTable />
+      <BareMetricRow />
+      <BareKVGrid />
+      <BareProgressBar />
+    </div>
+  )
+}

@@ -122,3 +122,13 @@ export function BareTopologyNode() {
     </BareSection>
   )
 }
+
+export function BareHierarchySection() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareHierarchyRow />
+      <BareHierarchyTree />
+      <BareTopologyNode />
+    </div>
+  )
+}
