@@ -51,20 +51,16 @@ export const isToday = (d: Date | string): boolean => {
 export const getWeekDays = (date: Date | string, weekStartsOn: 0 | 1 = 0): Date[] => {
   const d = typeof date === 'string' ? new Date(date) : new Date(date)
 
-  // Get the current day of week (0 = Sunday, 1 = Monday, etc.)
-  let dayOfWeek = d.getDay()
+  const dayOfWeek = d.getDay()
 
-  // Calculate offset to the start of the week
   let offset = dayOfWeek - weekStartsOn
   if (offset < 0) {
     offset += 7
   }
 
-  // Get the first day of the week
   const firstDayOfWeek = new Date(d)
   firstDayOfWeek.setDate(d.getDate() - offset)
 
-  // Generate 7 days starting from the first day of the week
   const days: Date[] = []
   for (let i = 0; i < 7; i++) {
     const day = new Date(firstDayOfWeek)
@@ -78,21 +74,17 @@ export const getWeekDays = (date: Date | string, weekStartsOn: 0 | 1 = 0): Date[
 export const getMonthGrid = (month: Date | string, weekStartsOn: 0 | 1 = 0): Date[][] => {
   const date = typeof month === 'string' ? new Date(month) : new Date(month)
 
-  // Set to the first day of the month
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
 
-  // Get the week that contains the first day of the month
   const firstWeekDays = getWeekDays(firstDayOfMonth, weekStartsOn)
 
   const grid: Date[][] = []
   let currentDate = new Date(firstWeekDays[0])
 
-  // Continue building weeks until we've covered the entire month
   while (true) {
     const week = getWeekDays(currentDate, weekStartsOn)
     grid.push(week)
 
-    // Check if this week contains any days from the next month
     const lastDayOfWeek = week[week.length - 1]
     if (lastDayOfWeek.getMonth() > date.getMonth() || lastDayOfWeek.getFullYear() > date.getFullYear()) {
       break

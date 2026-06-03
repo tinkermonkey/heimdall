@@ -8,9 +8,7 @@
   font-size: 10.5px;
   font-weight: 600;
   border-radius: 3px;
-  color: rgb(var(--semantic-version-fg));
-  background-color: var(--accent-primary-bg-alpha-sm);
-  border: 1px solid var(--accent-primary-border-alpha-md);
+  border: 1px solid transparent;
   white-space: nowrap;
 }
 
@@ -30,10 +28,6 @@
   background-color: var(--status-rose-bg-alpha);
   border-color: var(--status-rose-border-alpha);
   color: rgb(var(--status-rose));
-}
-
-body.dark-canvas .version-pill {
-  color: rgb(var(--accent-primary));
 }
 
 body.dark-canvas .version-pill--amber {
