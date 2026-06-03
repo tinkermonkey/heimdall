@@ -95,27 +95,27 @@
 
 /* Status color variants */
 .avatar__status--emerald {
-  background-color: rgb(16 185 129);
+  background-color: rgb(var(--status-emerald));
 }
 
 .avatar__status--amber {
-  background-color: rgb(245 158 11);
+  background-color: rgb(var(--status-amber));
 }
 
 .avatar__status--rose {
-  background-color: rgb(244 63 94);
+  background-color: rgb(var(--status-rose));
 }
 
 .avatar__status--cyan {
-  background-color: rgb(34 211 238);
+  background-color: rgb(var(--status-cyan));
 }
 
 .avatar__status--violet {
-  background-color: rgb(139 92 246);
+  background-color: rgb(var(--status-violet));
 }
 
 .avatar__status--neutral {
-  background-color: rgb(var(--canvas-fg-2));
+  background-color: rgb(var(--status-neutral));
 }
 
 /* Dark canvas overrides */
