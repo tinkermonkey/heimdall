@@ -60,6 +60,7 @@ const MonthView: React.FC<{
   grid: Date[][]
   events?: CalendarEvent[]
   calendarColors?: Record<string, string>
+  weekStartsOn: 0 | 1
   onSelectDate?: (date: Date) => void
   onSelectEvent?: (eventId: string) => void
   renderEvent?: (event: CalendarEvent, calendarColor?: string) => React.ReactNode
@@ -70,6 +71,7 @@ const MonthView: React.FC<{
   grid,
   events,
   calendarColors,
+  weekStartsOn,
   onSelectDate,
   onSelectEvent,
   renderEvent,
@@ -78,7 +80,10 @@ const MonthView: React.FC<{
   const focusedD = typeof focusedDate === 'string' ? new Date(focusedDate) : focusedDate
   const selectedD = selectedDate ? (typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate) : null
 
-  const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  let weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+  if (weekStartsOn === 1) {
+    weekDays = weekDays.slice(1).concat(weekDays.slice(0, 1))
+  }
 
   return (
     <div
@@ -120,13 +125,13 @@ const MonthView: React.FC<{
                   }
                 }}
               >
-                <div className="calendar-month__date-number">
+                <div className="calendar-month__date-number" aria-current={isCurrentDay ? 'date' : undefined}>
                   {isCurrentDay ? (
                     <Chip variant="amber" form="default">
                       {date.getDate()}
                     </Chip>
                   ) : (
-                    <span aria-current={isCurrentDay ? 'date' : undefined}>{date.getDate()}</span>
+                    <span>{date.getDate()}</span>
                   )}
                 </div>
                 <div className="calendar-month__events">
@@ -351,7 +356,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
     ref
   ) => {
     const focusedD = typeof focusedDate === 'string' ? new Date(focusedDate) : new Date(focusedDate)
-    const grid = useMemo(() => getMonthGrid(focusedD, weekStartsOn), [focusedD, weekStartsOn])
+    const grid = useMemo(() => getMonthGrid(focusedD, weekStartsOn), [focusedD.getTime(), weekStartsOn])
 
     const viewOptions: SegmentedControlOption[] = [
       { value: 'month', label: 'Month' },
@@ -407,6 +412,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
         d.setDate(d.getDate() - 7)
       } else if (view === 'day') {
         d.setDate(d.getDate() - 1)
+      } else if (view === 'agenda') {
+        d.setDate(d.getDate() - 1)
       }
       onNavigate?.(d)
     }, [focusedD, onNavigate, view])
@@ -418,6 +425,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
       } else if (view === 'week') {
         d.setDate(d.getDate() + 7)
       } else if (view === 'day') {
+        d.setDate(d.getDate() + 1)
+      } else if (view === 'agenda') {
         d.setDate(d.getDate() + 1)
       }
       onNavigate?.(d)
@@ -466,6 +475,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
               grid={grid}
               events={events}
               calendarColors={calendarColors}
+              weekStartsOn={weekStartsOn}
               onSelectDate={onSelectDate}
               onSelectEvent={onSelectEvent}
               renderEvent={renderEvent}

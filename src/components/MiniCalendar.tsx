@@ -32,11 +32,11 @@ export const MiniCalendar = React.forwardRef<HTMLDivElement, MiniCalendarProps>(
     const focusedD = typeof focusedDate === 'string' ? new Date(focusedDate) : new Date(focusedDate)
     const selectedD = selectedDate ? (typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate) : null
 
-    const grid = useMemo(() => getMonthGrid(focusedD, weekStartsOn), [focusedD, weekStartsOn])
+    const grid = useMemo(() => getMonthGrid(focusedD, weekStartsOn), [focusedD.getTime(), weekStartsOn])
 
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     if (weekStartsOn === 1) {
-      weekDays.unshift(weekDays.pop()!)
+      weekDays.push(weekDays.shift()!)
     }
 
     const hasMarker = (date: Date): boolean => {

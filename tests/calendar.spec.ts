@@ -3,6 +3,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 test.describe('Calendar Components', () => {
   test.beforeEach(async ({ page }) => {
+    await page.clock.install({ time: new Date(2026, 5, 3, 12, 0, 0) })
     await page.goto('http://localhost:5173/?example=calendar-test')
     await page.waitForLoadState('networkidle')
 

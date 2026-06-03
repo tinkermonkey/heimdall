@@ -3,28 +3,106 @@ import { Calendar, type CalendarEvent, type CalendarView } from '../components/C
 import { MiniCalendar } from '../components/MiniCalendar'
 
 const generateSampleEvents = (): CalendarEvent[] => {
-  const today = new Date()
-  const events: CalendarEvent[] = []
-
-  for (let i = 0; i < 15; i++) {
-    const eventDate = new Date(today)
-    eventDate.setDate(today.getDate() + Math.floor(Math.random() * 30))
-
-    events.push({
-      id: `event-${i}`,
-      title: `Event ${i + 1}`,
-      calendarId: ['calendar-1', 'calendar-2', 'calendar-3'][Math.floor(Math.random() * 3)],
-      startDate: eventDate,
-    })
-  }
+  const events: CalendarEvent[] = [
+    {
+      id: 'event-0',
+      title: 'Event 1',
+      calendarId: 'calendar-1',
+      startDate: new Date(2026, 5, 5),
+    },
+    {
+      id: 'event-1',
+      title: 'Event 2',
+      calendarId: 'calendar-2',
+      startDate: new Date(2026, 5, 8),
+    },
+    {
+      id: 'event-2',
+      title: 'Event 3',
+      calendarId: 'calendar-3',
+      startDate: new Date(2026, 5, 10),
+    },
+    {
+      id: 'event-3',
+      title: 'Event 4',
+      calendarId: 'calendar-1',
+      startDate: new Date(2026, 5, 12),
+    },
+    {
+      id: 'event-4',
+      title: 'Event 5',
+      calendarId: 'calendar-2',
+      startDate: new Date(2026, 5, 15),
+    },
+    {
+      id: 'event-5',
+      title: 'Event 6',
+      calendarId: 'calendar-3',
+      startDate: new Date(2026, 5, 18),
+    },
+    {
+      id: 'event-6',
+      title: 'Event 7',
+      calendarId: 'calendar-1',
+      startDate: new Date(2026, 5, 20),
+    },
+    {
+      id: 'event-7',
+      title: 'Event 8',
+      calendarId: 'calendar-2',
+      startDate: new Date(2026, 5, 22),
+    },
+    {
+      id: 'event-8',
+      title: 'Event 9',
+      calendarId: 'calendar-3',
+      startDate: new Date(2026, 5, 25),
+    },
+    {
+      id: 'event-9',
+      title: 'Event 10',
+      calendarId: 'calendar-1',
+      startDate: new Date(2026, 5, 28),
+    },
+    {
+      id: 'event-10',
+      title: 'Event 11',
+      calendarId: 'calendar-2',
+      startDate: new Date(2026, 5, 3),
+    },
+    {
+      id: 'event-11',
+      title: 'Event 12',
+      calendarId: 'calendar-3',
+      startDate: new Date(2026, 5, 4),
+    },
+    {
+      id: 'event-12',
+      title: 'Event 13',
+      calendarId: 'calendar-1',
+      startDate: new Date(2026, 5, 6),
+    },
+    {
+      id: 'event-13',
+      title: 'Event 14',
+      calendarId: 'calendar-2',
+      startDate: new Date(2026, 5, 9),
+    },
+    {
+      id: 'event-14',
+      title: 'Event 15',
+      calendarId: 'calendar-3',
+      startDate: new Date(2026, 5, 11),
+    },
+  ]
 
   return events
 }
 
 export default function CalendarTestPage() {
   const [currentView, setCurrentView] = useState<CalendarView>('month')
-  const [focusedDate, setFocusedDate] = useState(new Date())
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const [focusedDate, setFocusedDate] = useState(new Date(2026, 5, 3))
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(2026, 5, 3))
   const [events] = useState<CalendarEvent[]>(generateSampleEvents())
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null)
   const [weekStartsOn, setWeekStartsOn] = useState<0 | 1>(0)
