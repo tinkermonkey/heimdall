@@ -3,6 +3,7 @@ import { ShellLayout, Icon, type IconName } from '@tinkermonkey/heimdall-ui'
 
 import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase } from './showcases/FoundationShowcase'
 import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase, VersionPillShowcase, SegmentedControlShowcase } from './showcases/PrimitivesShowcase'
+import { AvatarShowcase } from './showcases/AvatarShowcase'
 import { TextInputShowcase, TextAreaShowcase, NumberInputShowcase, SelectShowcase, TriStateShowcase, FieldShowcase } from './showcases/InputsShowcase'
 import { StatTileShowcase, StatGridShowcase, TableShowcase, KVGridShowcase } from './showcases/DataDisplayShowcase'
 import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from './showcases/NavigationShowcase'
@@ -20,6 +21,7 @@ import { QuickAccessTileShowcase } from './showcases/QuickAccessTileShowcase'
 import { ConfigTileShowcase } from './showcases/ConfigTileShowcase'
 import { WorkspaceSwitcherDialogShowcase } from './showcases/WorkspaceSwitcherDialogShowcase'
 import PrimitivesTestPage from '@/test-pages/PrimitivesTestPage'
+import AvatarTestPage from '@/test-pages/AvatarTestPage'
 import DataDisplayTestPage from '@/test-pages/DataDisplayTestPage'
 import HierarchyComponentTestPage from '@/test-pages/HierarchyComponentTestPage'
 import OverlayComponentsTestPage from '@/test-pages/OverlayComponentsTestPage'
@@ -48,6 +50,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   foundation: FoundationTestPage,
   // Primitives
   icon: IconShowcase,
+  avatar: AvatarShowcase,
+  'avatar-test': AvatarTestPage,
   button: ButtonShowcase,
   chip: ChipShowcase,
   badge: BadgeShowcase,
@@ -160,6 +164,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Primitives',
     items: [
       { id: 'icon', label: 'Icon', icon: 'star' },
+      { id: 'avatar', label: 'Avatar', icon: 'user' },
       { id: 'button', label: 'Button', icon: 'component' },
       { id: 'chip', label: 'Chip', icon: 'filter' },
       { id: 'badge', label: 'Badge', icon: 'alert' },

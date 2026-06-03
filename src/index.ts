@@ -4,6 +4,7 @@
 import './tokens/tokens.css'
 
 export { ICONS, Icon, type IconName, type IconProps } from './components/Icon'
+export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './components/Avatar'
 export { Button, type ButtonProps, type Variant as ButtonVariant, type Size as ButtonSize } from './components/Button'
 export { Chip, type ChipProps, type ChipVariant, type ChipForm } from './components/Chip'
 export { Badge, StatusBadge, type BadgeProps, type BadgeColor, type StatusBadgeProps } from './components/Badge'
