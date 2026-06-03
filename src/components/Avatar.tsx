@@ -51,7 +51,6 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
       'avatar',
       `avatar--${size}`,
       `avatar--${shape}`,
-      status ? 'avatar--with-status' : '',
       className,
     ]
       .filter(Boolean)
@@ -61,7 +60,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
       background: `linear-gradient(135deg, hsl(${hue}, 85%, 55%), hsl(${hue}, 75%, 40%))`,
     }
 
-    const imageStyle = !showInitials || imageError ? { display: 'none' } : {}
+    const imageStyle = showInitials ? { display: 'none' } : {}
 
     return (
       <div
@@ -73,12 +72,10 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
         aria-hidden={decorative ? 'true' : undefined}
         {...props}
       >
-        {/* Initials fallback */}
         <div className="avatar__initials" style={initialsStyle}>
           {initials}
         </div>
 
-        {/* Image */}
         {src && (
           <img
             className="avatar__image"
@@ -89,7 +86,6 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
           />
         )}
 
-        {/* Status dot */}
         {status && (
           <div
             className={`avatar__status avatar__status--${status}`}

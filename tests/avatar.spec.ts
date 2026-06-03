@@ -3,7 +3,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 test.describe('Avatar Component', () => {
   test('light canvas snapshot', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=avatar')
+    await page.goto('http://localhost:5173/?example=avatar-test')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)
@@ -14,7 +14,7 @@ test.describe('Avatar Component', () => {
   })
 
   test('dark canvas snapshot', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=avatar')
+    await page.goto('http://localhost:5173/?example=avatar-test')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)
