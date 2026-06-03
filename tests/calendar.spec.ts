@@ -3,7 +3,6 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 test.describe('Calendar Components', () => {
   test.beforeEach(async ({ page }) => {
-    await page.clock.install({ time: new Date(2026, 5, 3, 12, 0, 0) })
     await page.goto('http://localhost:5173/?example=calendar-test')
     await page.waitForLoadState('networkidle')
 
@@ -97,7 +96,7 @@ test.describe('Calendar Components', () => {
 
     // Arrow right should move focus
     await page.keyboard.press('ArrowRight')
-    const cellsAfterArrowRight = page.locator('[role="gridcell"]--focused')
+    const cellsAfterArrowRight = page.locator('.calendar-month__cell--focused')
     await expect(cellsAfterArrowRight.first()).toBeVisible()
   })
 
@@ -146,7 +145,7 @@ test.describe('Calendar Components', () => {
     await page.waitForTimeout(100)
 
     // Click a date in the mini calendar
-    const miniCalendarDates = page.locator('.mini-calendar__date').not(page.locator('.mini-calendar__date--out-of-month'))
+    const miniCalendarDates = page.locator('.mini-calendar__date:not(.mini-calendar__date--out-of-month)')
     const dateToClick = miniCalendarDates.nth(5)
     const dateText = await dateToClick.textContent()
 

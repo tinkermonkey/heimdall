@@ -28,6 +28,7 @@ import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
 import TabBarTestPage from './test-pages/TabBarTestPage'
 import AvatarTestPage from './test-pages/AvatarTestPage'
 import CardsAndListsTestPage from './test-pages/CardsAndListsTestPage'
+import CalendarTestPage from './test-pages/CalendarTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -129,6 +130,10 @@ export default function App() {
 
   if (exampleParam === 'cards-and-lists') {
     return <CardsAndListsTestPage />
+  }
+
+  if (exampleParam === 'calendar-test') {
+    return <CalendarTestPage />
   }
 
   if (testParam === 'foundation') {
