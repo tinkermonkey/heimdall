@@ -29,6 +29,7 @@ import TabBarTestPage from './test-pages/TabBarTestPage'
 import AvatarTestPage from './test-pages/AvatarTestPage'
 import CardsAndListsTestPage from './test-pages/CardsAndListsTestPage'
 import CalendarTestPage from './test-pages/CalendarTestPage'
+import KanbanBoardTestPage from './test-pages/KanbanBoardTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -134,6 +135,10 @@ export default function App() {
 
   if (exampleParam === 'calendar-test') {
     return <CalendarTestPage />
+  }
+
+  if (exampleParam === 'kanban-board') {
+    return <KanbanBoardTestPage />
   }
 
   if (testParam === 'foundation') {

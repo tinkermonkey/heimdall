@@ -158,3 +158,9 @@ export {
   type CalendarProps,
 } from './components/Calendar'
 export { MiniCalendar, type MiniCalendarProps } from './components/MiniCalendar'
+export {
+  KanbanBoard,
+  type KanbanBoardProps,
+  type KanbanCard,
+  type KanbanColumn,
+} from './components/KanbanBoard'
