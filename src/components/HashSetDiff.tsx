@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useVirtualList } from '../hooks/useVirtualList'
 import { VersionPill } from './VersionPill'
 import './HashSetDiff.css'
@@ -25,7 +25,7 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
 
     const maxRows = Math.max(added.length, removed.length, showKeptCollapse ? maxVisible + 1 : kept.length)
 
-    const { visibleRange, offsetY, containerRef } = useVirtualList({
+    const { visibleRange, containerRef } = useVirtualList({
       itemCount: maxRows,
       itemHeight: ITEM_HEIGHT,
       containerHeight: CONTAINER_HEIGHT,
@@ -44,21 +44,21 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
     }
 
     return (
-      <div ref={ref} className={classNames} {...props}>
-        <div className="hash-set-diff__header">
-          <div className="hash-set-diff__column hash-set-diff__column--added">
+      <div ref={ref} className={classNames} role="table" {...props}>
+        <div className="hash-set-diff__header" role="row">
+          <div className="hash-set-diff__column hash-set-diff__column--added" role="cell">
             <VersionPill tone="emerald" className="hash-set-diff__pill">
               Added
             </VersionPill>
             <span className="hash-set-diff__count">{added.length}</span>
           </div>
-          <div className="hash-set-diff__column hash-set-diff__column--removed">
+          <div className="hash-set-diff__column hash-set-diff__column--removed" role="cell">
             <VersionPill tone="rose" className="hash-set-diff__pill">
               Removed
             </VersionPill>
             <span className="hash-set-diff__count">{removed.length}</span>
           </div>
-          <div className="hash-set-diff__column hash-set-diff__column--kept">
+          <div className="hash-set-diff__column hash-set-diff__column--kept" role="cell">
             <VersionPill className="hash-set-diff__pill">
               Kept
             </VersionPill>
@@ -71,14 +71,12 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
             className="hash-set-diff__content"
             style={{
               height: maxRows * ITEM_HEIGHT,
+              position: 'relative',
             }}
           >
-            {Array.from({ length: maxRows }).map((_, index) => {
-              if (index < startIdx || index >= endIdx) {
-                return (
-                  <div key={index} className="hash-set-diff__row" style={{ height: ITEM_HEIGHT }} />
-                )
-              }
+            <div style={{ height: startIdx * ITEM_HEIGHT }} />
+            {Array.from({ length: Math.min(endIdx - startIdx, maxRows - startIdx) }).map((_, relativeIdx) => {
+              const index = startIdx + relativeIdx
 
               const addedItem = index < added.length ? added[index] : null
               const removedItem = index < removed.length ? removed[index] : null
@@ -93,14 +91,14 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
               }
 
               return (
-                <div key={index} className="hash-set-diff__row" style={{ height: ITEM_HEIGHT }}>
-                  <div className="hash-set-diff__cell hash-set-diff__cell--added">
+                <div key={index} className="hash-set-diff__row" style={{ height: ITEM_HEIGHT }} role="row">
+                  <div className="hash-set-diff__cell hash-set-diff__cell--added" role="cell">
                     {addedItem && <div className="hash-set-diff__item">{addedItem}</div>}
                   </div>
-                  <div className="hash-set-diff__cell hash-set-diff__cell--removed">
+                  <div className="hash-set-diff__cell hash-set-diff__cell--removed" role="cell">
                     {removedItem && <div className="hash-set-diff__item">{removedItem}</div>}
                   </div>
-                  <div className="hash-set-diff__cell hash-set-diff__cell--kept">
+                  <div className="hash-set-diff__cell hash-set-diff__cell--kept" role="cell">
                     {isCollapseRow ? (
                       <button
                         className="hash-set-diff__expand-button"
@@ -116,6 +114,7 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
                 </div>
               )
             })}
+            <div style={{ height: Math.max(0, (maxRows - endIdx) * ITEM_HEIGHT) }} />
           </div>
         </div>
       </div>

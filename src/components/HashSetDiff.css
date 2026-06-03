@@ -77,12 +77,12 @@
 
 .hash-set-diff__cell--added {
   border-left-color: rgb(var(--status-emerald));
-  background-color: rgba(16, 185, 129, 0.02);
+  background-color: var(--status-emerald-bg-alpha);
 }
 
 .hash-set-diff__cell--removed {
   border-left-color: rgb(var(--status-rose));
-  background-color: rgba(244, 63, 94, 0.02);
+  background-color: var(--status-rose-bg-alpha);
 }
 
 .hash-set-diff__cell--kept {
@@ -91,11 +91,8 @@
 
 .hash-set-diff__item {
   color: rgb(var(--canvas-fg-1));
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-all;
   white-space: normal;
+  overflow: hidden;
 }
 
 .hash-set-diff__expand-button {

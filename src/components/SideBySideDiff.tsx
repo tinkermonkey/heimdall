@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useVirtualList } from '../hooks/useVirtualList'
 import { VersionPill } from './VersionPill'
 import './SideBySideDiff.css'
@@ -20,7 +20,7 @@ const CONTAINER_HEIGHT = 500
 
 export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffProps>(
   ({ lines = [], className = '', ...props }, ref) => {
-    const { visibleRange, offsetY, containerRef } = useVirtualList({
+    const { visibleRange, containerRef } = useVirtualList({
       itemCount: lines.length,
       itemHeight: ITEM_HEIGHT,
       containerHeight: CONTAINER_HEIGHT,
@@ -41,12 +41,19 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
     }
 
     return (
-      <div ref={ref} className={classNames} {...props}>
-        <div className="side-by-side-diff__header">
-          <div className="side-by-side-diff__gutter" />
-          <VersionPill tone="emerald" className="side-by-side-diff__pill side-by-side-diff__pill--added">
-            Version 2 (Added)
-          </VersionPill>
+      <div ref={ref} className={classNames} role="table" {...props}>
+        <div className="side-by-side-diff__header" role="row">
+          <div className="side-by-side-diff__gutter" role="cell" />
+          <div role="cell" className="side-by-side-diff__header-cell">
+            <VersionPill tone="emerald" className="side-by-side-diff__pill side-by-side-diff__pill--added">
+              Version 2 (Added)
+            </VersionPill>
+          </div>
+          <div role="cell" className="side-by-side-diff__header-cell">
+            <VersionPill tone="rose" className="side-by-side-diff__pill side-by-side-diff__pill--removed">
+              Version 1 (Removed)
+            </VersionPill>
+          </div>
         </div>
 
         <div className="side-by-side-diff__viewport" ref={containerRef}>
@@ -54,16 +61,12 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
             className="side-by-side-diff__content"
             style={{
               height: lines.length * ITEM_HEIGHT,
+              position: 'relative',
             }}
           >
-            {Array.from({ length: lines.length }).map((_, index) => {
-              if (index < startIdx || index >= endIdx) {
-                return (
-                  <div key={index} className="side-by-side-diff__row" style={{ height: ITEM_HEIGHT }} />
-                )
-              }
-
-              const line = lines[index]
+            <div style={{ height: startIdx * ITEM_HEIGHT }} />
+            {lines.slice(startIdx, endIdx).map((line, relativeIdx) => {
+              const index = startIdx + relativeIdx
               const isHunk = line.type === 'hunk'
               const isAdded = line.type === 'added'
               const isRemoved = line.type === 'removed'
@@ -78,24 +81,23 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
                     .filter(Boolean)
                     .join(' ')}
                   style={{ height: ITEM_HEIGHT }}
+                  role="row"
                 >
                   {isHunk ? (
-                    <div className="side-by-side-diff__hunk">{line.content}</div>
+                    <div className="side-by-side-diff__hunk" role="cell">{line.content}</div>
                   ) : (
                     <>
-                      <div className="side-by-side-diff__gutter" data-line-number={line.lineNumber}>
-                        <span
-                          className={[
-                            'side-by-side-diff__glyph',
-                            isAdded && 'side-by-side-diff__glyph--added',
-                            isRemoved && 'side-by-side-diff__glyph--removed',
-                          ]
-                            .filter(Boolean)
-                            .join(' ')}
-                          aria-hidden="true"
-                        >
-                          {isAdded ? '+' : isRemoved ? '−' : ''}
-                        </span>
+                      <div
+                        className={[
+                          'side-by-side-diff__gutter',
+                          isAdded && 'side-by-side-diff__gutter--added',
+                          isRemoved && 'side-by-side-diff__gutter--removed',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        role="cell"
+                      >
+                        <span className="sr-only">{isAdded ? 'added' : isRemoved ? 'removed' : ''}</span>
                       </div>
                       <div
                         className={[
@@ -105,6 +107,7 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
                         ]
                           .filter(Boolean)
                           .join(' ')}
+                        role="cell"
                       >
                         <span className="side-by-side-diff__content">{line.content}</span>
                       </div>
@@ -113,6 +116,7 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
                 </div>
               )
             })}
+            <div style={{ height: (lines.length - endIdx) * ITEM_HEIGHT }} />
           </div>
         </div>
       </div>
