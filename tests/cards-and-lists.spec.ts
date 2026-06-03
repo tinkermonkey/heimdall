@@ -41,6 +41,23 @@ test.describe('ResultCard Component', () => {
     await expect(resultCard).toHaveScreenshot('result-card-with-score-dark.png')
   })
 
+  test('ResultCard no-score state snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    await sections.nth(3).scrollIntoViewIfNeeded()
+    const resultCard = sections.nth(3).locator('[role="article"]')
+    await expect(resultCard).toBeVisible()
+    await expect(resultCard).toHaveScreenshot('result-card-no-score-light.png')
+  })
+
+  test('ResultCard no-score state snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    await sections.nth(3).scrollIntoViewIfNeeded()
+    const resultCard = sections.nth(3).locator('[role="article"]')
+    await expect(resultCard).toBeVisible()
+    await expect(resultCard).toHaveScreenshot('result-card-no-score-dark.png')
+  })
+
   test('ResultCard with mark elements snapshot - light canvas', async ({ page }) => {
     const sections = page.locator('section')
     await sections.nth(2).scrollIntoViewIfNeeded()
@@ -99,14 +116,21 @@ test.describe('ResultCard Component', () => {
     await resultCard.press('Enter')
     // Wait a bit for the event
     await page.waitForTimeout(100)
-    // Note: In actual test we'd check through a spy, but logging shows this works
+    expect(clicked).toBe(true)
     expect(resultCard).toBeFocused()
   })
 
   test('ResultCard keyboard navigation - Space key fires onOpen', async ({ page }) => {
     const resultCard = page.locator('[role="article"]').first()
+    let clicked = false
+    page.on('console', (msg) => {
+      if (msg.text().includes('Opened result')) clicked = true
+    })
+
     await resultCard.focus()
     await resultCard.press('Space')
+    await page.waitForTimeout(100)
+    expect(clicked).toBe(true)
     expect(resultCard).toBeFocused()
   })
 
@@ -137,8 +161,14 @@ test.describe('ResultCard Component', () => {
     const actionButtons = resultCard.locator('[class*="action-button"]')
 
     // Click action button
+    let actionClicked = false
+    page.on('console', (msg) => {
+      if (msg.text().includes('Action clicked')) actionClicked = true
+    })
+
     await actionButtons.first().click()
-    // Event fires (verified through console logging in actual app)
+    await page.waitForTimeout(100)
+    expect(actionClicked).toBe(true)
   })
 
   test('ResultCard score is formatted to 2 decimal places', async ({ page }) => {
@@ -185,8 +215,9 @@ test.describe('ResultCard Component', () => {
     const backgroundColor = await mark.evaluate((el) => {
       return window.getComputedStyle(el).backgroundColor
     })
-    // Should have amber tint (rgba with amber color)
-    expect(backgroundColor).toBeTruthy()
+    // Should have amber tint — expect rgb values around amber (251, 191, 36)
+    expect(backgroundColor).toMatch(/rgba?\(/)
+    expect(backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
   })
 
   test('ResultCard selection state applies styling', async ({ page }) => {
@@ -226,8 +257,7 @@ test.describe('ResultCard Component', () => {
     })
 
     // Border should change on hover
-    expect(initialBorderColor).toBeTruthy()
-    expect(hoverBorderColor).toBeTruthy()
+    expect(initialBorderColor).not.toBe(hoverBorderColor)
   })
 
   test('ResultCard focus ring appears on tab', async ({ page }) => {
@@ -246,8 +276,17 @@ test.describe('ResultCard Component', () => {
     const resultCard = sections.nth(2).locator('[role="article"]')
     const actionButton = resultCard.locator('[class*="action-button"]').first()
 
+    let cardOpened = false
+    let actionClicked = false
+    page.on('console', (msg) => {
+      if (msg.text().includes('Opened result')) cardOpened = true
+      if (msg.text().includes('Action clicked')) actionClicked = true
+    })
+
     // Click action button (should not trigger card's onOpen)
     await actionButton.click()
-    // If event propagation wasn't prevented, this would trigger onOpen
+    await page.waitForTimeout(100)
+    expect(actionClicked).toBe(true)
+    expect(cardOpened).toBe(false)
   })
 })

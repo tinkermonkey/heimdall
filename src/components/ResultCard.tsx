@@ -27,11 +27,11 @@ export interface ResultCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const domainColorMap: Record<string, string> = {
-  life: 'var(--dom-life-accent)',
-  climate: 'var(--dom-climate-accent)',
-  software: 'var(--dom-software-accent)',
-  data: 'var(--dom-data-accent)',
-  infrastructure: 'var(--dom-infrastructure-accent)',
+  life: 'var(--dom-life)',
+  climate: 'var(--dom-climate)',
+  software: 'var(--dom-software)',
+  data: 'var(--dom-default)',
+  infrastructure: 'var(--dom-default)',
 }
 
 const getDomainColor = (domain: string): string => {
@@ -82,7 +82,6 @@ export const ResultCard = React.forwardRef<HTMLDivElement, ResultCardProps>(
         } as React.CSSProperties & { '--domain-color': string }}
         {...props}
       >
-        {/* Header row */}
         <div className="result-card__header">
           <div className="result-card__header-left">
             <div className={`result-card__domain-dot result-card__domain-dot--${domainDotColor}`} />
@@ -92,17 +91,14 @@ export const ResultCard = React.forwardRef<HTMLDivElement, ResultCardProps>(
           {score !== undefined && <span className="result-card__score-label">{score.toFixed(2)}</span>}
         </div>
 
-        {/* Score bar */}
         {score !== undefined && (
           <div className="result-card__score-bar">
             <ProgressBar percent={score * 100} color="amber" height={4} />
           </div>
         )}
 
-        {/* Snippet area */}
         <div className="result-card__snippet">{snippet}</div>
 
-        {/* Provenance row */}
         {provenance && Object.values(provenance).some(v => v !== undefined) && (
           <>
             <div className="result-card__divider" />
@@ -129,7 +125,6 @@ export const ResultCard = React.forwardRef<HTMLDivElement, ResultCardProps>(
           </>
         )}
 
-        {/* Actions area */}
         {actions && actions.length > 0 && (
           <div className="result-card__actions">
             {actions.map((action, index) => (
