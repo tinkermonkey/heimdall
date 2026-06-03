@@ -136,4 +136,5 @@ export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type To
 export { bezierPath, rectEdgePoint, type Point, type BezierPathResult } from './utils/graph'
 export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type HierarchyDomain } from './components/HierarchyRow'
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
+export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'
 export { usePanZoom, type UsePanZoomOptions, type UsePanZoomReturn } from './hooks/usePanZoom'

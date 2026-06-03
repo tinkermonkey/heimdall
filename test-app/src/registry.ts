@@ -27,6 +27,7 @@ import {
   BareMetricRow,
   BareKVGrid,
   BareProgressBar,
+  BareLineageRail,
 } from './bare/DataDisplay'
 import {
   BareShellFramework,
@@ -151,6 +152,7 @@ export const BARE_MAP: Record<string, React.ComponentType> = {
   'metric-row': BareMetricRow,
   'kv-grid': BareKVGrid,
   'progress-bar': BareProgressBar,
+  'lineage-rail': BareLineageRail,
   // Navigation
   'nav-item': BareNavItem,
   sidebar: BareSidebar,
@@ -256,6 +258,7 @@ export const NAV_SECTIONS: SidebarSection[] = [
       { id: 'metric-row', label: 'MetricRow', icon: 'bar-chart' },
       { id: 'kv-grid', label: 'KVGrid', icon: 'data' },
       { id: 'progress-bar', label: 'ProgressBar', icon: 'trending-up' },
+      { id: 'lineage-rail', label: 'LineageRail', icon: 'arrowRight' },
     ],
   },
   {
