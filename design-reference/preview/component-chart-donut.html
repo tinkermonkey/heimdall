@@ -1,0 +1,47 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css"></head>
+<body><div class="card" id="root"></div>
+<script>
+const slices = [
+  {value:134, color:'#10B981'},
+  {value:72,  color:'#818CF8'},
+  {value:45,  color:'#22D3EE'},
+  {value:16,  color:'#F59E0B'},
+]
+const W = 140, H = 140, thickness = 14
+const cx = W/2, cy = H/2
+const r = Math.min(W,H)/2 - 4
+const ri = r - thickness
+const total = slices.reduce((a,s)=>a+s.value,0) || 1
+const centerValue = '267', centerLabel = 'ind.'
+const T = {fg1:'#0B1220', fg3:'#64748B'}
+
+function arc(a0, a1) {
+  const x0=cx+r*Math.cos(a0), y0=cy+r*Math.sin(a0)
+  const x1=cx+r*Math.cos(a1), y1=cy+r*Math.sin(a1)
+  const xi0=cx+ri*Math.cos(a0), yi0=cy+ri*Math.sin(a0)
+  const xi1=cx+ri*Math.cos(a1), yi1=cy+ri*Math.sin(a1)
+  const large = a1-a0 > Math.PI ? 1 : 0
+  return `M ${x0.toFixed(3)} ${y0.toFixed(3)} A ${r} ${r} 0 ${large} 1 ${x1.toFixed(3)} ${y1.toFixed(3)} L ${xi1.toFixed(3)} ${yi1.toFixed(3)} A ${ri} ${ri} 0 ${large} 0 ${xi0.toFixed(3)} ${yi0.toFixed(3)} Z`
+}
+
+let acc = -Math.PI/2
+const paths = slices.map(s=>{
+  const a0 = acc
+  let a1 = acc + (s.value/total)*Math.PI*2
+  if (Math.abs(a1-a0) >= Math.PI*2-1e-6) a1 = a0+Math.PI*2-1e-6
+  acc = a0 + (s.value/total)*Math.PI*2
+  return `<path d="${arc(a0,a1)}" fill="${s.color}"/>`
+}).join('')
+
+const valFontSize = Math.min(W,H)*0.22
+const labelY = cy + Math.min(W,H)*0.18
+
+document.getElementById('root').innerHTML = `
+<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block">
+  ${paths}
+  <text x="${cx}" y="${cy+1}" text-anchor="middle" font-family="Inter" font-size="${valFontSize.toFixed(2)}" font-weight="700" fill="${T.fg1}" style="letter-spacing:-0.02em;font-variant-numeric:tabular-nums">${centerValue}</text>
+  <text x="${cx}" y="${labelY.toFixed(2)}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="${T.fg3}" style="text-transform:uppercase;letter-spacing:0.08em">${centerLabel}</text>
+</svg>`
+</script>
+</body></html>
