@@ -10,7 +10,7 @@ test.describe('Avatar Component', () => {
     await assertFontsLoaded(page)
     await freezeAnimations(page)
 
-    await expect(page).toHaveScreenshot('avatar-light-canvas.png')
+    await expect(page).toHaveScreenshot('avatar-light-canvas.png', { fullPage: true })
   })
 
   test('dark canvas snapshot', async ({ page }) => {
@@ -22,6 +22,6 @@ test.describe('Avatar Component', () => {
     await applyDarkCanvasMode(page)
     await freezeAnimations(page)
 
-    await expect(page).toHaveScreenshot('avatar-dark-canvas.png')
+    await expect(page).toHaveScreenshot('avatar-dark-canvas.png', { fullPage: true })
   })
 })

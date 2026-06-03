@@ -118,7 +118,3 @@
   background-color: rgb(var(--status-neutral));
 }
 
-/* Dark canvas overrides */
-.dark-canvas .avatar__status {
-  border-color: rgb(var(--canvas-card));
-}
