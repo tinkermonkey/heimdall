@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ResultCard } from "../components/ResultCard";
 import { AssetCard } from "../components/AssetCard";
 import { AssetGrid } from "../components/AssetGrid";
+import { LogStream } from "../components/LogStream";
 
 export default function CardsAndListsTestPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -560,6 +561,176 @@ export default function CardsAndListsTestPage() {
             selected={true}
           />
         </AssetGrid>
+      </section>
+
+      {/* LogStream · Default State (Info/Warn/Error) */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          LogStream · Default State (Info/Warn/Error/Debug)
+        </div>
+        <div style={{ height: "300px", maxWidth: "800px" }}>
+          <LogStream
+            entries={[
+              {
+                timestamp: new Date(Date.now() - 10000),
+                level: 'INFO',
+                message: 'Application started successfully',
+              },
+              {
+                timestamp: new Date(Date.now() - 8000),
+                level: 'DEBUG',
+                message: 'Loading configuration from environment variables',
+              },
+              {
+                timestamp: new Date(Date.now() - 6000),
+                level: 'INFO',
+                message: 'Database connection established',
+              },
+              {
+                timestamp: new Date(Date.now() - 4000),
+                level: 'WARN',
+                message: 'Slow query detected: SELECT * FROM users took 2500ms',
+              },
+              {
+                timestamp: new Date(Date.now() - 2000),
+                level: 'ERROR',
+                message: 'Failed to connect to cache server: ECONNREFUSED',
+              },
+              {
+                timestamp: new Date(),
+                level: 'INFO',
+                message: 'Retrying cache connection',
+              },
+            ]}
+            follow={true}
+          />
+        </div>
+      </section>
+
+      {/* LogStream · With Op/Target Columns */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          LogStream · With Op/Target Columns
+        </div>
+        <div style={{ height: "300px", maxWidth: "1000px" }}>
+          <LogStream
+            entries={[
+              {
+                timestamp: new Date(Date.now() - 12000),
+                level: 'INFO',
+                op: 'SELECT',
+                target: 'users',
+                message: 'Query started for users table',
+              },
+              {
+                timestamp: new Date(Date.now() - 10000),
+                level: 'DEBUG',
+                op: 'SELECT',
+                target: 'users',
+                message: 'Executing: SELECT * FROM users WHERE id = ?',
+              },
+              {
+                timestamp: new Date(Date.now() - 8000),
+                level: 'INFO',
+                op: 'INSERT',
+                target: 'logs',
+                message: 'Log entry created',
+              },
+              {
+                timestamp: new Date(Date.now() - 6000),
+                level: 'WARN',
+                op: 'UPDATE',
+                target: 'sessions',
+                message: 'Session timeout approaching for user_123',
+              },
+              {
+                timestamp: new Date(Date.now() - 4000),
+                level: 'ERROR',
+                op: 'DELETE',
+                target: 'cache',
+                message: 'Failed to delete expired cache entries',
+              },
+              {
+                timestamp: new Date(Date.now() - 2000),
+                level: 'INFO',
+                message: 'Cache cleanup scheduled for next cycle',
+              },
+              {
+                timestamp: new Date(),
+                level: 'DEBUG',
+                op: 'SELECT',
+                target: 'metrics',
+                message: 'Retrieving system metrics',
+              },
+            ]}
+            showOps={true}
+            follow={true}
+          />
+        </div>
+      </section>
+
+      {/* LogStream · Empty State */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          LogStream · Empty State
+        </div>
+        <div style={{ height: "200px", maxWidth: "800px" }}>
+          <LogStream entries={[]} follow={true} />
+        </div>
+      </section>
+
+      {/* LogStream · Without Follow (Fixed Scroll) */}
+      <section style={{ marginBottom: "32px" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "rgb(var(--canvas-fg-3))",
+            marginBottom: "14px",
+          }}
+        >
+          LogStream · Without Follow (Fixed Scroll)
+        </div>
+        <div style={{ height: "250px", maxWidth: "800px" }}>
+          <LogStream
+            entries={Array.from({ length: 30 }, (_, i) => ({
+              timestamp: new Date(Date.now() - (30 - i) * 1000),
+              level: ['INFO', 'WARN', 'ERROR', 'DEBUG'][i % 4] as any,
+              message: `Log entry number ${i + 1}`,
+            }))}
+            follow={false}
+            maxRows={500}
+          />
+        </div>
       </section>
     </div>
   );

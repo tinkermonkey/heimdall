@@ -37,6 +37,7 @@ import FormsShowcase from '@/test-pages/FormsShowcase'
 import GraphShowcase from '@/test-pages/GraphShowcase'
 import VersionTimelineTestPage from '@/test-pages/VersionTimelineTestPage'
 import DiffViewerTestPage from '@/test-pages/DiffViewerTestPage'
+import CardsAndListsTestPage from '@/test-pages/CardsAndListsTestPage'
 
 type NavSection = {
   title: string
@@ -77,6 +78,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'inspector-panel-test': InspectorPanelTestPage,
   'hierarchy-tree': HierarchyComponentTestPage,
   'data-display': DataDisplayTestPage,
+  'cards-and-lists': CardsAndListsTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
   sidebar: SidebarShowcase,
@@ -197,6 +199,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'kv-grid', label: 'KVGrid', icon: 'data' },
       { id: 'inspector-panel', label: 'InspectorPanel', icon: 'info' },
       { id: 'hierarchy-tree', label: 'HierarchyTree', icon: 'schema' },
+      { id: 'cards-and-lists', label: 'Cards & Lists', icon: 'layout' },
     ],
   },
   {

@@ -475,3 +475,169 @@ test.describe('AssetCard Component', () => {
     await expect(image).toBeVisible()
   })
 })
+
+test.describe('LogStream Component', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=cards-and-lists')
+    await page.waitForLoadState('networkidle')
+    await loadSelfHostedFonts(page)
+    await assertFontsLoaded(page)
+    await freezeAnimations(page)
+  })
+
+  test('LogStream default state snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toBeVisible()
+    await expect(logStream).toHaveScreenshot('logstream-default-light.png')
+  })
+
+  test('LogStream default state snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toBeVisible()
+    await expect(logStream).toHaveScreenshot('logstream-default-dark.png')
+  })
+
+  test('LogStream with op/target columns snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · With Op/Target') })
+    await logSection.scrollIntoViewIfNeeded()
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toBeVisible()
+    await expect(logStream).toHaveScreenshot('logstream-with-ops-light.png')
+  })
+
+  test('LogStream with op/target columns snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · With Op/Target') })
+    await logSection.scrollIntoViewIfNeeded()
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toBeVisible()
+    await expect(logStream).toHaveScreenshot('logstream-with-ops-dark.png')
+  })
+
+  test('LogStream empty state snapshot - light canvas', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Empty State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toBeVisible()
+    await expect(logStream).toHaveScreenshot('logstream-empty-light.png')
+  })
+
+  test('LogStream empty state snapshot - dark canvas', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Empty State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toBeVisible()
+    await expect(logStream).toHaveScreenshot('logstream-empty-dark.png')
+  })
+
+  test('LogStream has correct role attribute', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toHaveAttribute('role', 'log')
+  })
+
+  test('LogStream has aria-live when follow is active', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    const logStream = logSection.locator('[role="log"]').first()
+    await expect(logStream).toHaveAttribute('aria-live', 'polite')
+  })
+
+  test('LogStream does not have aria-live when follow is inactive', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Without Follow') })
+    const logStream = logSection.locator('[role="log"]').first()
+    // Check that aria-live is not present
+    const ariaLive = await logStream.getAttribute('aria-live')
+    expect(ariaLive).toBeNull()
+  })
+
+  test('LogStream displays INFO level with correct color', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const infoLevel = logSection.locator('.log-stream__level--info').first()
+    await expect(infoLevel).toBeVisible()
+    await expect(infoLevel).toContainText('INFO')
+  })
+
+  test('LogStream displays WARN level with amber color', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const warnLevel = logSection.locator('.log-stream__level--warn').first()
+    await expect(warnLevel).toBeVisible()
+    await expect(warnLevel).toContainText('WARN')
+  })
+
+  test('LogStream displays ERROR level with rose color', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const errorLevel = logSection.locator('.log-stream__level--error').first()
+    await expect(errorLevel).toBeVisible()
+    await expect(errorLevel).toContainText('ERROR')
+  })
+
+  test('LogStream displays DEBUG level with fg-3 color', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const debugLevel = logSection.locator('.log-stream__level--debug').first()
+    await expect(debugLevel).toBeVisible()
+    await expect(debugLevel).toContainText('DEBUG')
+  })
+
+  test('LogStream shows op and target columns when showOps is true', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · With Op/Target') })
+    await logSection.scrollIntoViewIfNeeded()
+    const opElements = logSection.locator('.log-stream__op')
+    const targetElements = logSection.locator('.log-stream__target')
+    const count = await opElements.count()
+    expect(count).toBeGreaterThan(0)
+    const targetCount = await targetElements.count()
+    expect(targetCount).toBeGreaterThan(0)
+  })
+
+  test('LogStream empty state shows correct message', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Empty State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const emptyText = logSection.locator('.log-stream__empty-text')
+    await expect(emptyText).toContainText('No log entries')
+  })
+
+  test('LogStream displays timestamp in HH:MM:SS format', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    await logSection.scrollIntoViewIfNeeded()
+    const timeElements = logSection.locator('.log-stream__time')
+    const firstTime = await timeElements.first().textContent()
+    // Should match HH:MM:SS format
+    expect(firstTime).toMatch(/^\d{2}:\d{2}:\d{2}$/)
+  })
+
+  test('LogStream applies overflow-anchor auto', async ({ page }) => {
+    const sections = page.locator('section')
+    const logSection = sections.filter({ has: page.locator('text=LogStream · Default State') })
+    const logStream = logSection.locator('[role="log"]').first()
+    const overflowAnchor = await logStream.evaluate((el) => {
+      return window.getComputedStyle(el).overflowAnchor
+    })
+    expect(overflowAnchor).toBe('auto')
+  })
+})
