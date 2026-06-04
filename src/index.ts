@@ -164,3 +164,10 @@ export {
   type KanbanCard,
   type KanbanColumn,
 } from './components/KanbanBoard'
+export {
+  MapCanvas,
+  type MapCanvasProps,
+  type MapPin,
+  type MapTrackPoint,
+  type HeatmapDataPoint,
+} from './components/MapCanvas'

@@ -30,6 +30,7 @@ import AvatarTestPage from './test-pages/AvatarTestPage'
 import CardsAndListsTestPage from './test-pages/CardsAndListsTestPage'
 import CalendarTestPage from './test-pages/CalendarTestPage'
 import KanbanBoardTestPage from './test-pages/KanbanBoardTestPage'
+import MapCanvasTestPage from './test-pages/MapCanvasTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -139,6 +140,10 @@ export default function App() {
 
   if (exampleParam === 'kanban-board') {
     return <KanbanBoardTestPage />
+  }
+
+  if (exampleParam === 'map-canvas') {
+    return <MapCanvasTestPage />
   }
 
   if (testParam === 'foundation') {
