@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Calendar, MiniCalendar, type CalendarEvent, type CalendarView } from '@tinkermonkey/heimdall-ui'
+import { Calendar, MiniCalendar, type CalendarEvent } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const generateSampleEvents = (): CalendarEvent[] => [
