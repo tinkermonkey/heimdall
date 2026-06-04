@@ -338,7 +338,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
     },
     ref
   ) => {
-    const focusedD = typeof focusedDate === 'string' ? new Date(focusedDate) : new Date(focusedDate)
+    const focusedD = typeof focusedDate === 'string' ? new Date(focusedDate) : focusedDate
     const grid = useMemo(() => getMonthGrid(focusedD, weekStartsOn), [focusedD.getTime(), weekStartsOn])
 
     const viewOptions: SegmentedControlOption[] = [
@@ -384,7 +384,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
           onNavigate?.(week[6])
         }
       },
-      [focusedD, onNavigate, view, weekStartsOn]
+      [focusedD.getTime(), onNavigate, view, weekStartsOn]
     )
 
     const handleNavigatePrev = useCallback(() => {
@@ -399,7 +399,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
         d.setDate(d.getDate() - 1)
       }
       onNavigate?.(d)
-    }, [focusedD, onNavigate, view])
+    }, [focusedD.getTime(), onNavigate, view])
 
     const handleNavigateNext = useCallback(() => {
       const d = new Date(focusedD)
@@ -413,7 +413,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
         d.setDate(d.getDate() + 1)
       }
       onNavigate?.(d)
-    }, [focusedD, onNavigate, view])
+    }, [focusedD.getTime(), onNavigate, view])
 
     const handleNavigateToday = useCallback(() => {
       onNavigate?.(new Date())

@@ -72,7 +72,11 @@ export const getWeekDays = (date: Date | string, weekStartsOn: 0 | 1 = 0): Date[
 }
 
 export const getMonthGrid = (month: Date | string, weekStartsOn: 0 | 1 = 0): Date[][] => {
-  const date = typeof month === 'string' ? new Date(month) : new Date(month)
+  const date = typeof month === 'string' ? new Date(month) : month
+
+  if (Number.isNaN(date.getTime())) {
+    return []
+  }
 
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1)
 
