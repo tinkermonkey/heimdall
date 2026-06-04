@@ -53,22 +53,6 @@ export default function KanbanBoardTestPage() {
       title: 'Improve search performance',
     },
     {
-      id: 'card-7',
-      columnId: 'ready',
-      context: 'FEATURE',
-      title: 'API rate limiting',
-      version: 'v1.1.0',
-      badges: ['backend', 'security'],
-    },
-    {
-      id: 'card-8',
-      columnId: 'ready',
-      context: 'BUG',
-      title: 'Handle empty states',
-      dueDate: '2026-06-05',
-      badges: ['ux'],
-    },
-    {
       id: 'card-9',
       columnId: 'in-progress',
       context: 'FEATURE',
@@ -150,6 +134,7 @@ export default function KanbanBoardTestPage() {
         </div>
         <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
           <button
+            type="button"
             onClick={() => setSelectedId(undefined)}
             style={{
               padding: '6px 12px',
