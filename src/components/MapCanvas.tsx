@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useId } from 'react'
 import { usePanZoom } from '../hooks/usePanZoom'
+import { useFocusTrap } from '../hooks/useFocusTrap'
 import { getHeatmapColor } from '../utils/heatmapUtils'
 import './MapCanvas.css'
 
@@ -8,7 +9,8 @@ import './MapCanvas.css'
 function latLngToPixels(lat: number, lng: number, zoom: number): { x: number; y: number } {
   const n = Math.pow(2, zoom)
   const x = ((lng + 180) / 360) * n * 256
-  const y = ((1 - Math.log(Math.tan((lat * Math.PI) / 180) + 1 / Math.cos((lat * Math.PI) / 180)) / Math.PI) / 2) * n * 256
+  const clampedLat = Math.max(-85.05112878, Math.min(85.05112878, lat))
+  const y = ((1 - Math.log(Math.tan((clampedLat * Math.PI) / 180) + 1 / Math.cos((clampedLat * Math.PI) / 180)) / Math.PI) / 2) * n * 256
   return { x, y }
 }
 
@@ -98,6 +100,7 @@ interface PinPopoverProps {
 
 function PinPopover({ pin, x, y, onClose }: PinPopoverProps) {
   const popoverRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(popoverRef, true, { mode: 'popup' })
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -121,7 +124,6 @@ function PinPopover({ pin, x, y, onClose }: PinPopoverProps) {
         top: `${y}px`,
       }}
       role="dialog"
-      aria-modal="true"
     >
       {pin.label && <div className="map-popover__label">{pin.label}</div>}
       {pin.timestamp && <div className="map-popover__timestamp">{pin.timestamp}</div>}
@@ -158,16 +160,18 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
     const [selectedPopover, setSelectedPopover] = useState<{ x: number; y: number } | null>(null)
     const didInitRef = useRef(false)
 
+    const handleViewportChange = useCallback((vp: { x: number; y: number; zoom: number }) => {
+      const center = pixelsToLatLng(vp.x / vp.zoom, vp.y / vp.zoom, Math.round(vp.zoom * 4))
+      onViewportChange?.({
+        center: { lat: center.lat, lng: center.lng },
+        zoom: vp.zoom,
+      })
+    }, [onViewportChange])
+
     const { transform, viewport, bind, panTo } = usePanZoom({
       minZoom,
       maxZoom,
-      onViewportChange: (vp) => {
-        const center = pixelsToLatLng(vp.x / vp.zoom, vp.y / vp.zoom, Math.round(vp.zoom * 4))
-        onViewportChange?.({
-          center: { lat: center.lat, lng: center.lng },
-          zoom: vp.zoom,
-        })
-      },
+      onViewportChange: handleViewportChange,
     })
 
     const rawId = useId()
