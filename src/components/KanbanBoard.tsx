@@ -368,7 +368,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
 
           const currentColumnIndex = columns.findIndex((c) => c.id === state.sourceColumnId)
           const currentColumnCards = cardsByColumn[state.sourceColumnId]
-          const currentIndex = currentColumnCards.findIndex((c) => c.id === cardId)
+          const currentIndex = state.sourceIndex
 
           let newColumnId = state.sourceColumnId
           let newIndex = currentIndex
@@ -391,6 +391,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
             sourceIndex: newIndex,
           }
           setHoveredColumnId(newColumnId)
+          setInsertionIndex(newIndex)
           announceMove(card.title, columns.find((c) => c.id === newColumnId)?.title || '', newIndex)
         } else if (e.key === 'Escape') {
           const state = dragStateRef.current
