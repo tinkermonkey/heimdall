@@ -27,8 +27,8 @@ export interface UsePanZoomReturn {
   reset: () => void
 }
 
-const DEFAULT_MIN_ZOOM = 0.4
-const DEFAULT_MAX_ZOOM = 2.5
+const DEFAULT_MIN_ZOOM = 0.25
+const DEFAULT_MAX_ZOOM = 4
 const ZOOM_STEP = 0.1
 const PAN_STEP = 20
 
@@ -44,6 +44,9 @@ export function usePanZoom({
   const zoomRef = useRef(1)
   const panRef = useRef({ x: 0, y: 0 })
   const dragRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
+  const listenersAttachedRef = useRef(false)
+  const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
+  const handlePointerUpRef = useRef<() => void>()
 
   // Keep refs current for event handlers
   useEffect(() => {
@@ -76,14 +79,27 @@ export function usePanZoom({
     [bounds]
   )
 
-  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
-    dragRef.current = {
-      x: e.clientX,
-      y: e.clientY,
-      panX: panRef.current.x,
-      panY: panRef.current.y,
-    }
+  const stableHandlePointerMove = useCallback((e: PointerEvent) => {
+    handlePointerMoveRef.current?.(e)
   }, [])
+
+  const stableHandlePointerUp = useCallback(() => {
+    handlePointerUpRef.current?.()
+  }, [])
+
+  const attachListeners = useCallback(() => {
+    if (listenersAttachedRef.current) return
+    document.addEventListener('pointermove', stableHandlePointerMove)
+    document.addEventListener('pointerup', stableHandlePointerUp)
+    listenersAttachedRef.current = true
+  }, [stableHandlePointerMove, stableHandlePointerUp])
+
+  const detachListeners = useCallback(() => {
+    if (!listenersAttachedRef.current) return
+    document.removeEventListener('pointermove', stableHandlePointerMove)
+    document.removeEventListener('pointerup', stableHandlePointerUp)
+    listenersAttachedRef.current = false
+  }, [stableHandlePointerMove, stableHandlePointerUp])
 
   const handlePointerMove = useCallback((e: PointerEvent) => {
     if (!dragRef.current) return
@@ -98,18 +114,34 @@ export function usePanZoom({
 
   const handlePointerUp = useCallback(() => {
     dragRef.current = null
-  }, [])
+    detachListeners()
+  }, [detachListeners])
 
-  // Pointer event listeners
-  useEffect(() => {
-    document.addEventListener('pointermove', handlePointerMove)
-    document.addEventListener('pointerup', handlePointerUp)
-
-    return () => {
-      document.removeEventListener('pointermove', handlePointerMove)
-      document.removeEventListener('pointerup', handlePointerUp)
+  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
+    dragRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      panX: panRef.current.x,
+      panY: panRef.current.y,
     }
-  }, [handlePointerMove, handlePointerUp])
+    attachListeners()
+  }, [attachListeners])
+
+  // Keep refs in sync with the current implementations
+  useEffect(() => {
+    handlePointerMoveRef.current = handlePointerMove
+  }, [handlePointerMove])
+
+  useEffect(() => {
+    handlePointerUpRef.current = handlePointerUp
+  }, [handlePointerUp])
+
+  // Cleanup listeners on unmount if they were attached
+  useEffect(() => {
+    return () => {
+      detachListeners()
+    }
+  }, [detachListeners])
 
   const handleWheel = useCallback((e: React.WheelEvent<HTMLElement>) => {
     e.preventDefault()
