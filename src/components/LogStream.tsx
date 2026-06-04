@@ -108,7 +108,7 @@ export const LogStream = React.forwardRef<HTMLDivElement, LogStreamProps>(
         typeof entry.timestamp === 'string'
           ? entry.timestamp
           : entry.timestamp.getTime()
-      return `log-${ts}-${entry.level}-${entry.message.length}-${entry.op || ''}-${entry.target || ''}`
+      return `log-${ts}-${entry.level}-${entry.message}-${entry.op || ''}-${entry.target || ''}`
     }
 
     const classNames = ['log-stream', className]
