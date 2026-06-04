@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect, useId } from 'react'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { useFocusTrap } from '../hooks/useFocusTrap'
-import { getHeatmapColor } from '../utils/heatmapUtils'
+import { getHeatmapColor, normalizeColorToHex } from '../utils/heatmapUtils'
 import './MapCanvas.css'
 
 // ─── Mercator Projection ──────────────────────────────────────────────────────
@@ -430,7 +430,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
                 <div
                   className="map-legend__gradient"
                   style={{
-                    backgroundImage: `linear-gradient(to right, ${heatmapColor}20, ${heatmapColor}cc)`,
+                    backgroundImage: `linear-gradient(to right, ${normalizeColorToHex(heatmapColor)}20, ${normalizeColorToHex(heatmapColor)}cc)`,
                   }}
                 />
                 Density

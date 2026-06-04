@@ -1,4 +1,4 @@
-function normalizeColorToHex(color: string): string {
+export function normalizeColorToHex(color: string): string {
   const trimmed = color.trim()
 
   // Already hex format
@@ -15,9 +15,9 @@ function normalizeColorToHex(color: string): string {
   // rgb(r, g, b) or rgba(r, g, b, a)
   const rgbMatch = trimmed.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/)
   if (rgbMatch) {
-    const r = parseInt(rgbMatch[1], 10)
-    const g = parseInt(rgbMatch[2], 10)
-    const b = parseInt(rgbMatch[3], 10)
+    const r = Math.max(0, Math.min(255, parseInt(rgbMatch[1], 10)))
+    const g = Math.max(0, Math.min(255, parseInt(rgbMatch[2], 10)))
+    const b = Math.max(0, Math.min(255, parseInt(rgbMatch[3], 10)))
     return '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')
   }
 
