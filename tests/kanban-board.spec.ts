@@ -73,11 +73,11 @@ test.describe('KanbanBoard Component', () => {
     })
 
     test('should show empty column placeholder', async ({ page }) => {
-      // Create an empty column by clearing all cards from it
-      // For now, just verify the placeholder text exists in the test page
+      // Verify the test page has an empty column with the placeholder visible
       const emptyPlaceholder = page.locator('.kanban-column__empty')
-      // The placeholder exists in the test page structure
-      expect(await emptyPlaceholder.count()).toBeGreaterThanOrEqual(0)
+      const placeholderCount = await emptyPlaceholder.count()
+      expect(placeholderCount).toBeGreaterThanOrEqual(1)
+      await expect(emptyPlaceholder.first()).toHaveText('Drop cards here')
     })
 
     test('should render independent scrollable columns', async ({ page }) => {
@@ -128,12 +128,22 @@ test.describe('KanbanBoard Component', () => {
 
       // Focus the card
       await firstCard.focus()
-      // Press Space to select (in our implementation Space is for drag grab, not selection)
-      // Let me just click to select
-      await firstCard.click()
-
       await expect(firstCard).toBeFocused()
-      await expect(firstCard).toHaveClass(/kanban-card--selected/)
+
+      // Press Space to grab (initiates keyboard drag mode)
+      await page.keyboard.press('Space')
+
+      // Verify the card enters drag state by checking for visual indicator
+      // The card should have the dragged state (insertion line visible)
+      const insertionLine = page.locator('.kanban-column__insertion-line')
+      await expect(insertionLine).toBeVisible()
+
+      // Press Escape to cancel the grab
+      await page.keyboard.press('Escape')
+
+      // After cancel, the card should still be focused and visible
+      await expect(firstCard).toBeFocused()
+      await expect(firstCard).toBeVisible()
     })
   })
 
@@ -179,6 +189,14 @@ test.describe('KanbanBoard Component', () => {
         maxDiffPixelRatio: 0.01,
       })
     })
+
+    test('should match empty column state', async ({ page }) => {
+      const emptyPlaceholder = page.locator('.kanban-column__empty').first()
+      await freezeAnimations(page)
+      await expect(emptyPlaceholder).toHaveScreenshot('kanban-board-empty-column-light.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
   })
 
   test.describe('Visual Regression - Dark Canvas', () => {
@@ -218,6 +236,14 @@ test.describe('KanbanBoard Component', () => {
         maxDiffPixelRatio: 0.01,
       })
     })
+
+    test('should match empty column state in dark canvas', async ({ page }) => {
+      const emptyPlaceholder = page.locator('.kanban-column__empty').first()
+      await freezeAnimations(page)
+      await expect(emptyPlaceholder).toHaveScreenshot('kanban-board-empty-column-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
   })
 
   test.describe('Accessibility', () => {
@@ -237,14 +263,20 @@ test.describe('KanbanBoard Component', () => {
       const firstCard = page.locator('.kanban-card').first()
       const liveRegion = page.locator('.kanban-board__live-region')
 
-      // Click to select
-      await firstCard.click()
+      // Focus the card
+      await firstCard.focus()
 
-      // Initially the live region should be empty
-      const initialText = await liveRegion.textContent()
-      // After an action, announcements should be made (in real implementation with keyboard moves)
-      // For now just verify the live region exists and is accessible
-      await expect(liveRegion).toBeVisible()
+      // Press Space to grab
+      await page.keyboard.press('Space')
+
+      // Press ArrowDown to move down within the column
+      await page.keyboard.press('ArrowDown')
+
+      // Wait for the announcement to appear in the live region
+      await page.waitForTimeout(100)
+      const announcementText = await liveRegion.textContent()
+      expect(announcementText).toBeTruthy()
+      expect(announcementText).toContain('moved to')
     })
   })
 

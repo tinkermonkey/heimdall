@@ -3,6 +3,7 @@ import './KanbanBoard.css'
 import { Chip } from './Chip'
 import { Icon } from './Icon'
 import { VersionPill } from './VersionPill'
+import { StatusColor, statusColorMap } from './statusColors'
 
 export interface KanbanCard {
   id: string
@@ -19,7 +20,7 @@ export interface KanbanCard {
 export interface KanbanColumn {
   id: string
   title: string
-  statusColor?: 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
+  statusColor?: StatusColor
   wipLimit?: number
 }
 
@@ -32,39 +33,25 @@ export interface KanbanBoardProps extends React.HTMLAttributes<HTMLDivElement> {
   renderCard?: (card: KanbanCard, isSelected: boolean) => React.ReactNode
 }
 
-const KanbanCardComponent = React.forwardRef<
-  HTMLDivElement,
-  {
-    card: KanbanCard
-    isSelected: boolean
-    renderCard?: (card: KanbanCard, isSelected: boolean) => React.ReactNode
-    onSelect: (cardId: string) => void
-    onCardPointerDown: (e: React.PointerEvent<HTMLDivElement>, cardId: string) => void
-    onCardKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, cardId: string) => void
-  }
->(
-  ({ card, isSelected, renderCard, onSelect, onCardPointerDown, onCardKeyDown }, ref) => {
-    if (renderCard) {
-      return (
-        <div
-          ref={ref}
-          className={`kanban-card ${isSelected ? 'kanban-card--selected' : ''}`}
-          onPointerDown={(e) => onCardPointerDown(e, card.id)}
-          onKeyDown={(e) => onCardKeyDown(e, card.id)}
-          onClick={() => onSelect(card.id)}
-          tabIndex={0}
-          role="button"
-          aria-pressed={isSelected}
-        >
-          {renderCard(card, isSelected)}
-        </div>
-      )
-    }
-
+const KanbanCardComponent = ({
+  card,
+  isSelected,
+  renderCard,
+  onSelect,
+  onCardPointerDown,
+  onCardKeyDown,
+}: {
+  card: KanbanCard
+  isSelected: boolean
+  renderCard?: (card: KanbanCard, isSelected: boolean) => React.ReactNode
+  onSelect: (cardId: string) => void
+  onCardPointerDown: (e: React.PointerEvent<HTMLDivElement>, cardId: string) => void
+  onCardKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, cardId: string) => void
+}) => {
+  if (renderCard) {
     return (
       <div
-        ref={ref}
-        className={`kanban-card ${isSelected ? 'kanban-card--selected' : ''} ${card.done ? 'kanban-card--done' : ''}`}
+        className={`kanban-card ${isSelected ? 'kanban-card--selected' : ''}`}
         onPointerDown={(e) => onCardPointerDown(e, card.id)}
         onKeyDown={(e) => onCardKeyDown(e, card.id)}
         onClick={() => onSelect(card.id)}
@@ -72,114 +59,106 @@ const KanbanCardComponent = React.forwardRef<
         role="button"
         aria-pressed={isSelected}
       >
-        {card.context && <div className="kanban-card__context">{card.context}</div>}
-        <div className="kanban-card__title">{card.title}</div>
-
-        {card.version && (
-          <div className="kanban-card__version">
-            <VersionPill>{card.version}</VersionPill>
-          </div>
-        )}
-
-        {(card.dueDate || card.badges) && (
-          <div className="kanban-card__meta">
-            {card.dueDate && <div className="kanban-card__due-date">{card.dueDate}</div>}
-            {card.badges && card.badges.length > 0 && (
-              <div className="kanban-card__badges">
-                {card.badges.map((badge) => (
-                  <span key={badge} className="kanban-card__badge">
-                    {badge}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {card.blocked && (
-          <div className="kanban-card__blocked">
-            <span className="kanban-card__blocked-icon">⚠</span>
-            {card.blocked}
-          </div>
-        )}
+        {renderCard(card, isSelected)}
       </div>
     )
   }
-)
-KanbanCardComponent.displayName = 'KanbanCard'
 
-const KanbanColumnComponent = React.forwardRef<
-  HTMLDivElement,
-  {
-    column: KanbanColumn
-    cards: KanbanCard[]
-    selectedId?: string
-    onSelectCard?: (cardId: string) => void
-    renderCard?: (card: KanbanCard, isSelected: boolean) => React.ReactNode
-    draggedCardId?: string
-    insertionIndex?: number
-    onColumnDragOver: (e: React.DragEvent) => void
-    onColumnDragLeave: (e: React.DragEvent) => void
-    onColumnDrop: (e: React.DragEvent) => void
-    onCardPointerDown: (e: React.PointerEvent<HTMLDivElement>, cardId: string) => void
-    onCardKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, cardId: string) => void
-  }
->(
-  ({
-    column,
-    cards,
-    selectedId,
-    onSelectCard,
-    renderCard,
-    draggedCardId,
-    insertionIndex,
-    onColumnDragOver,
-    onColumnDragLeave,
-    onColumnDrop,
-    onCardPointerDown,
-    onCardKeyDown,
-  }, ref) => {
-    const scrollContainerRef = useRef<HTMLDivElement>(null)
-    const statusColorMap: Record<string, string> = {
-      emerald: 'rgb(var(--status-emerald))',
-      amber: 'rgb(var(--status-amber))',
-      rose: 'rgb(var(--status-rose))',
-      cyan: 'rgb(var(--status-cyan))',
-      violet: 'rgb(var(--status-violet))',
-      neutral: 'rgb(var(--canvas-fg-2))',
-    }
+  return (
+    <div
+      className={`kanban-card ${isSelected ? 'kanban-card--selected' : ''} ${card.done ? 'kanban-card--done' : ''}`}
+      onPointerDown={(e) => onCardPointerDown(e, card.id)}
+      onKeyDown={(e) => onCardKeyDown(e, card.id)}
+      onClick={() => onSelect(card.id)}
+      tabIndex={0}
+      role="button"
+      aria-pressed={isSelected}
+    >
+      {card.context && <div className="kanban-card__context">{card.context}</div>}
+      <div className="kanban-card__title">{card.title}</div>
 
-    const isOverWipLimit = column.wipLimit && cards.length > column.wipLimit
-
-    return (
-      <div ref={ref} className="kanban-column">
-        <div className="kanban-column__header">
-          <div className="kanban-column__header-left">
-            {column.statusColor && (
-              <div
-                className="kanban-column__status-dot"
-                style={{ backgroundColor: statusColorMap[column.statusColor] }}
-              />
-            )}
-            <div className="kanban-column__title">{column.title}</div>
-          </div>
-          <div className="kanban-column__header-right">
-            <Chip variant="neutral">{cards.length}</Chip>
-            {isOverWipLimit && (
-              <div className="kanban-column__wip-warning" title={`Over WIP limit of ${column.wipLimit}`}>
-                <Icon name="alert" size={14} />
-              </div>
-            )}
-          </div>
+      {card.version && (
+        <div className="kanban-card__version">
+          <VersionPill>{card.version}</VersionPill>
         </div>
+      )}
 
-        <div
-          ref={scrollContainerRef}
-          className="kanban-column__body"
-          onDragOver={onColumnDragOver}
-          onDragLeave={onColumnDragLeave}
-          onDrop={onColumnDrop}
-        >
+      {(card.dueDate || card.badges) && (
+        <div className="kanban-card__meta">
+          {card.dueDate && <div className="kanban-card__due-date">{card.dueDate}</div>}
+          {card.badges && card.badges.length > 0 && (
+            <div className="kanban-card__badges">
+              {card.badges.map((badge) => (
+                <span key={badge} className="kanban-card__badge">
+                  {badge}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {card.blocked && (
+        <div className="kanban-card__blocked">
+          <span className="kanban-card__blocked-icon">⚠</span>
+          {card.blocked}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const KanbanColumnComponent = ({
+  column,
+  cards,
+  selectedId,
+  onSelectCard,
+  renderCard,
+  draggedCardId,
+  insertionIndex,
+  onCardPointerDown,
+  onCardKeyDown,
+}: {
+  column: KanbanColumn
+  cards: KanbanCard[]
+  selectedId?: string
+  onSelectCard?: (cardId: string) => void
+  renderCard?: (card: KanbanCard, isSelected: boolean) => React.ReactNode
+  draggedCardId?: string
+  insertionIndex?: number
+  onCardPointerDown: (e: React.PointerEvent<HTMLDivElement>, cardId: string) => void
+  onCardKeyDown: (e: React.KeyboardEvent<HTMLDivElement>, cardId: string) => void
+}) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const isOverWipLimit = column.wipLimit && cards.length > column.wipLimit
+
+  return (
+    <div className="kanban-column">
+      <div className="kanban-column__header">
+        <div className="kanban-column__header-left">
+          {column.statusColor && (
+            <div
+              className="kanban-column__status-dot"
+              style={{ backgroundColor: statusColorMap[column.statusColor] }}
+            />
+          )}
+          <div className="kanban-column__title">{column.title}</div>
+        </div>
+        <div className="kanban-column__header-right">
+          <Chip variant="neutral">{cards.length}</Chip>
+          {isOverWipLimit && (
+            <div className="kanban-column__wip-warning" title={`Over WIP limit of ${column.wipLimit}`}>
+              <Icon name="alert" size={14} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div
+        ref={scrollContainerRef}
+        className="kanban-column__body"
+      >
           {cards.length === 0 ? (
             <div className="kanban-column__empty">Drop cards here</div>
           ) : (
@@ -199,21 +178,22 @@ const KanbanColumnComponent = React.forwardRef<
               </React.Fragment>
             ))
           )}
-          {draggedCardId && insertionIndex === cards.length && (
-            <div className="kanban-column__insertion-line" />
-          )}
-        </div>
+        {draggedCardId && insertionIndex === cards.length && (
+          <div className="kanban-column__insertion-line" />
+        )}
       </div>
-    )
-  }
-)
-KanbanColumnComponent.displayName = 'KanbanColumn'
+    </div>
+  )
+}
 
 interface DragState {
   cardId: string
   sourceColumnId: string
   sourceIndex: number
   offsetY: number
+  isKeyboardGrab?: boolean
+  originalColumnId?: string
+  originalIndex?: number
 }
 
 export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
@@ -263,7 +243,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
         setDraggedCardId(cardId)
         setHoveredColumnId(card.columnId)
         const target = e.currentTarget as HTMLElement
-        target.setPointerCapture((e as any).pointerId)
+        target.setPointerCapture(e.pointerId)
       },
       [cards, cardsByColumn]
     )
@@ -344,7 +324,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
         setHoveredColumnId(null)
 
         const target = e.currentTarget as HTMLElement
-        target.releasePointerCapture((e as any).pointerId)
+        target.releasePointerCapture(e.pointerId)
       },
       [columns, cards, hoveredColumnId, insertionIndex, onMoveCard, announceMove]
     )
@@ -356,51 +336,68 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
 
         if (e.key === ' ') {
           e.preventDefault()
+          const state = dragStateRef.current
+          if (state?.isKeyboardGrab) {
+            // Space while grabbed commits the move
+            onMoveCard(state.cardId, state.sourceColumnId, state.sourceIndex)
+            const targetColumn = columns.find((c) => c.id === state.sourceColumnId)
+            announceMove(card.title, targetColumn?.title || '', state.sourceIndex)
+            dragStateRef.current = null
+            setDraggedCardId(null)
+            setInsertionIndex(null)
+            setHoveredColumnId(null)
+          } else {
+            // Space initiates grab
+            const sourceIndex = cardsByColumn[card.columnId].findIndex((c) => c.id === cardId)
+            dragStateRef.current = {
+              cardId,
+              sourceColumnId: card.columnId,
+              sourceIndex,
+              offsetY: 0,
+              isKeyboardGrab: true,
+              originalColumnId: card.columnId,
+              originalIndex: sourceIndex,
+            }
+            setDraggedCardId(cardId)
+            setHoveredColumnId(card.columnId)
+          }
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          e.preventDefault()
+          const state = dragStateRef.current
+          if (!state || !state.isKeyboardGrab) return
+
+          const currentColumnIndex = columns.findIndex((c) => c.id === state.sourceColumnId)
+          const currentColumnCards = cardsByColumn[state.sourceColumnId]
+          const currentIndex = currentColumnCards.findIndex((c) => c.id === cardId)
+
+          let newColumnId = state.sourceColumnId
+          let newIndex = currentIndex
+
+          if (e.key === 'ArrowUp' && currentIndex > 0) {
+            newIndex = currentIndex - 1
+          } else if (e.key === 'ArrowDown' && currentIndex < currentColumnCards.length - 1) {
+            newIndex = currentIndex + 1
+          } else if (e.key === 'ArrowLeft' && currentColumnIndex > 0) {
+            newColumnId = columns[currentColumnIndex - 1].id
+            newIndex = 0
+          } else if (e.key === 'ArrowRight' && currentColumnIndex < columns.length - 1) {
+            newColumnId = columns[currentColumnIndex + 1].id
+            newIndex = 0
+          }
+
           dragStateRef.current = {
-            cardId,
-            sourceColumnId: card.columnId,
-            sourceIndex: cardsByColumn[card.columnId].findIndex((c) => c.id === cardId),
-            offsetY: 0,
+            ...state,
+            sourceColumnId: newColumnId,
+            sourceIndex: newIndex,
           }
-          setDraggedCardId(cardId)
-          setHoveredColumnId(card.columnId)
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault()
-          const currentColumnCards = cardsByColumn[card.columnId]
-          const currentIndex = currentColumnCards.findIndex((c) => c.id === cardId)
-
-          if (currentIndex > 0) {
-            onMoveCard(cardId, card.columnId, currentIndex - 1)
-            announceMove(card.title, columns.find((c) => c.id === card.columnId)?.title || '', currentIndex - 1)
-          }
-        } else if (e.key === 'ArrowDown') {
-          e.preventDefault()
-          const currentColumnCards = cardsByColumn[card.columnId]
-          const currentIndex = currentColumnCards.findIndex((c) => c.id === cardId)
-
-          if (currentIndex < currentColumnCards.length - 1) {
-            onMoveCard(cardId, card.columnId, currentIndex + 1)
-            announceMove(card.title, columns.find((c) => c.id === card.columnId)?.title || '', currentIndex + 1)
-          }
-        } else if (e.key === 'ArrowLeft') {
-          e.preventDefault()
-          const currentColumnIndex = columns.findIndex((c) => c.id === card.columnId)
-
-          if (currentColumnIndex > 0) {
-            const targetColumn = columns[currentColumnIndex - 1]
-            onMoveCard(cardId, targetColumn.id, 0)
-            announceMove(card.title, targetColumn.title, 0)
-          }
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault()
-          const currentColumnIndex = columns.findIndex((c) => c.id === card.columnId)
-
-          if (currentColumnIndex < columns.length - 1) {
-            const targetColumn = columns[currentColumnIndex + 1]
-            onMoveCard(cardId, targetColumn.id, 0)
-            announceMove(card.title, targetColumn.title, 0)
-          }
+          setHoveredColumnId(newColumnId)
+          announceMove(card.title, columns.find((c) => c.id === newColumnId)?.title || '', newIndex)
         } else if (e.key === 'Escape') {
+          const state = dragStateRef.current
+          if (state?.isKeyboardGrab && state.originalColumnId !== undefined && state.originalIndex !== undefined) {
+            onMoveCard(state.cardId, state.originalColumnId, state.originalIndex)
+            announceMove(card.title, columns.find((c) => c.id === state.originalColumnId)?.title || '', state.originalIndex)
+          }
           dragStateRef.current = null
           setDraggedCardId(null)
           setInsertionIndex(null)
@@ -428,17 +425,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
                 onSelectCard={(cardId) => onSelectCard?.(cardId)}
                 renderCard={renderCard}
                 draggedCardId={draggedCardId || undefined}
-                insertionIndex={hoveredColumnId === column.id ? (insertionIndex || 0) : undefined}
-                onColumnDragOver={(e) => {
-                  e.preventDefault()
-                  setHoveredColumnId(column.id)
-                }}
-                onColumnDragLeave={() => {
-                  // Keep the hovered column
-                }}
-                onColumnDrop={() => {
-                  // Handled by pointerup
-                }}
+                insertionIndex={hoveredColumnId === column.id ? (insertionIndex ?? 0) : undefined}
                 onCardPointerDown={handleCardPointerDown}
                 onCardKeyDown={handleCardKeyDown}
               />

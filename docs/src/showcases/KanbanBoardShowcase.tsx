@@ -59,7 +59,7 @@ export function KanbanBoardShowcase() {
   ]
 
   const [cards, setCards] = useState<KanbanCard[]>(initialCards)
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined)
 
   const handleMoveCard = (cardId: string, toColumnId: string, index: number) => {
     setCards((prevCards) => {
