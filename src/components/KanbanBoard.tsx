@@ -100,7 +100,7 @@ const KanbanCardComponent = ({
 
       {card.blocked && (
         <div className="kanban-card__blocked">
-          <span className="kanban-card__blocked-icon">⚠</span>
+          <Icon name="alert" size={16} />
           {card.blocked}
         </div>
       )}
@@ -194,6 +194,8 @@ interface DragState {
   isKeyboardGrab?: boolean
   originalColumnId?: string
   originalIndex?: number
+  pointerId?: number
+  capturingElement?: HTMLElement
 }
 
 export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
@@ -233,17 +235,20 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
         const card = cards.find((c) => c.id === cardId)
         if (!card) return
 
+        const target = e.currentTarget as HTMLElement
+        target.setPointerCapture(e.pointerId)
+
         dragStateRef.current = {
           cardId,
           sourceColumnId: card.columnId,
           sourceIndex: cardsByColumn[card.columnId].findIndex((c) => c.id === cardId),
           offsetY: e.clientY,
+          pointerId: e.pointerId,
+          capturingElement: target,
         }
 
         setDraggedCardId(cardId)
         setHoveredColumnId(card.columnId)
-        const target = e.currentTarget as HTMLElement
-        target.setPointerCapture(e.pointerId)
       },
       [cards, cardsByColumn]
     )
@@ -300,7 +305,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
     )
 
     const handlePointerUp = useCallback(
-      (e: React.PointerEvent) => {
+      (_e: React.PointerEvent) => {
         if (!dragStateRef.current) return
 
         const state = dragStateRef.current
@@ -323,8 +328,13 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
         setInsertionIndex(null)
         setHoveredColumnId(null)
 
-        const target = e.currentTarget as HTMLElement
-        target.releasePointerCapture(e.pointerId)
+        if (state.capturingElement && state.pointerId !== undefined) {
+          try {
+            state.capturingElement.releasePointerCapture(state.pointerId)
+          } catch {
+            // Element may have been unmounted, ignore the error
+          }
+        }
       },
       [columns, cards, hoveredColumnId, insertionIndex, onMoveCard, announceMove]
     )
