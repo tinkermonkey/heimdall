@@ -147,23 +147,21 @@ export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type Hierarch
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'
 export { usePanZoom, type UsePanZoomOptions, type UsePanZoomReturn } from './hooks/usePanZoom'
-export { ResultCard, type ResultCardProps, type ResultCardProvenance } from './components/ResultCard'
 export { AssetCard, type AssetCardProps, type AssetThumb } from './components/AssetCard'
 export { AssetGrid, type AssetGridProps } from './components/AssetGrid'
-export { LogStream, type LogStreamProps, type LogEntry } from './components/LogStream'
 export {
   Calendar,
   type CalendarView,
   type CalendarEvent,
   type CalendarProps,
 } from './components/Calendar'
-export { MiniCalendar, type MiniCalendarProps } from './components/MiniCalendar'
 export {
   KanbanBoard,
   type KanbanBoardProps,
   type KanbanCard,
   type KanbanColumn,
 } from './components/KanbanBoard'
+export { LogStream, type LogStreamProps, type LogEntry } from './components/LogStream'
 export {
   MapCanvas,
   type MapCanvasProps,
@@ -171,3 +169,5 @@ export {
   type MapTrackPoint,
   type HeatmapDataPoint,
 } from './components/MapCanvas'
+export { MiniCalendar, type MiniCalendarProps } from './components/MiniCalendar'
+export { ResultCard, type ResultCardProps, type ResultCardProvenance } from './components/ResultCard'

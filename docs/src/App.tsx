@@ -39,6 +39,11 @@ import VersionTimelineTestPage from '@/test-pages/VersionTimelineTestPage'
 import DiffViewerTestPage from '@/test-pages/DiffViewerTestPage'
 import CardsAndListsTestPage from '@/test-pages/CardsAndListsTestPage'
 import CalendarTestPage from '@/test-pages/CalendarTestPage'
+import KanbanBoardTestPage from '@/test-pages/KanbanBoardTestPage'
+import MapCanvasTestPage from '@/test-pages/MapCanvasTestPage'
+import { CalendarShowcase } from './showcases/CalendarShowcase'
+import { MapCanvasShowcase } from './showcases/MapCanvasShowcase'
+import { LineageRailShowcase } from './showcases/LineageRailShowcase'
 
 type NavSection = {
   title: string
@@ -80,7 +85,12 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'hierarchy-tree': HierarchyComponentTestPage,
   'data-display': DataDisplayTestPage,
   'cards-and-lists': CardsAndListsTestPage,
+  calendar: CalendarShowcase,
   'calendar-test': CalendarTestPage,
+  'map-canvas': MapCanvasShowcase,
+  'map-canvas-test': MapCanvasTestPage,
+  'lineage-rail': LineageRailShowcase,
+  'kanban-board': KanbanBoardTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
   sidebar: SidebarShowcase,
@@ -202,6 +212,10 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'inspector-panel', label: 'InspectorPanel', icon: 'info' },
       { id: 'hierarchy-tree', label: 'HierarchyTree', icon: 'schema' },
       { id: 'cards-and-lists', label: 'Cards & Lists', icon: 'layout' },
+      { id: 'calendar', label: 'Calendar', icon: 'calendar' },
+      { id: 'map-canvas', label: 'MapCanvas', icon: 'map' },
+      { id: 'lineage-rail', label: 'LineageRail', icon: 'arrow-right' },
+      { id: 'kanban-board', label: 'KanbanBoard', icon: 'layout' },
     ],
   },
   {
