@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { KanbanBoard, type KanbanCard, type KanbanColumn } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function KanbanBoardShowcase() {
   const columns: KanbanColumn[] = [

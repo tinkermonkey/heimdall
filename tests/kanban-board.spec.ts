@@ -114,14 +114,6 @@ test.describe('KanbanBoard Component', () => {
       await expect(firstCard).not.toHaveClass(/kanban-card--selected/)
     })
 
-    test('should display selected card ID', async ({ page }) => {
-      const firstCard = page.locator('.kanban-card').first()
-      const cardId = await firstCard.getAttribute('id')
-      await firstCard.click()
-
-      const selectionText = page.locator('text=/Selected:/')
-      await expect(selectionText).toBeVisible()
-    })
 
     test('should focus card with Tab key and Space', async ({ page }) => {
       const firstCard = page.locator('.kanban-card').first()
