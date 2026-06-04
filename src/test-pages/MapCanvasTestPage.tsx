@@ -35,6 +35,7 @@ export default function MapCanvasTestPage() {
       <div style={{ padding: '16px 20px', borderBottom: '1px solid rgb(var(--canvas-border))', background: 'rgb(var(--canvas-surface))' }}>
         <div style={{ marginBottom: '12px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button
+            type="button"
             onClick={() => setMode('pins')}
             style={{
               padding: '8px 12px',
@@ -48,6 +49,7 @@ export default function MapCanvasTestPage() {
             Pins Mode
           </button>
           <button
+            type="button"
             onClick={() => setMode('track')}
             style={{
               padding: '8px 12px',
@@ -61,6 +63,7 @@ export default function MapCanvasTestPage() {
             Track Mode
           </button>
           <button
+            type="button"
             onClick={() => setMode('heatmap')}
             style={{
               padding: '8px 12px',

@@ -259,6 +259,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
 
             return (
               <button
+                type="button"
                 key={pin.id}
                 className={['map-pin', selectedPinId === pin.id && 'map-pin--selected'].filter(Boolean).join(' ')}
                 onClick={(e) => {
