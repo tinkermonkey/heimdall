@@ -222,7 +222,7 @@ test.describe('MapCanvas Component', () => {
 
   test.describe('Scale Bar', () => {
     test('should show scale bar when enabled', async ({ page }) => {
-      await page.locator('input[type="checkbox"]').nth(1).check()
+      await page.locator('input[type="checkbox"]').nth(0).check()
       await page.waitForLoadState('networkidle')
 
       const scaleBar = page.locator('.map-scale-bar')
@@ -231,7 +231,7 @@ test.describe('MapCanvas Component', () => {
 
     test('scale bar label should display current zoom level', async ({ page }) => {
       // Enable scale bar
-      const scaleBarCheckbox = page.locator('input[type="checkbox"]').nth(1)
+      const scaleBarCheckbox = page.locator('input[type="checkbox"]').nth(0)
       const isChecked = await scaleBarCheckbox.isChecked()
       if (!isChecked) {
         await scaleBarCheckbox.check()

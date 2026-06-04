@@ -78,18 +78,7 @@
 
 .map-pin--selected .map-pin__dot {
   background: rgb(var(--canvas-bg));
-  animation: pinPulse 1.6s ease-out infinite;
-}
-
-@keyframes pinPulse {
-  0% {
-    transform: scale(0.6);
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1.4);
-    opacity: 0;
-  }
+  animation: pulse-glow 1.6s ease-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -126,7 +115,7 @@
 }
 
 .map-legend {
-  background: rgba(11, 20, 38, 0.85);
+  background: rgba(var(--shell-surface), 0.85);
   backdrop-filter: blur(8px);
   border: 1px solid rgb(var(--canvas-border));
   border-radius: 6px;
@@ -158,7 +147,7 @@
 }
 
 .map-scale-bar {
-  background: rgba(11, 20, 38, 0.85);
+  background: rgba(var(--shell-surface), 0.85);
   backdrop-filter: blur(8px);
   border: 1px solid rgb(var(--canvas-border));
   border-radius: 6px;

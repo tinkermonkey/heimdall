@@ -29,7 +29,6 @@ export default function MapCanvasTestPage() {
   const [selectedPinId, setSelectedPinId] = useState<string | null>('1')
   const [viewport, setViewport] = useState({ lat: 0, lng: 0, zoom: 1 })
   const [showScaleBar, setShowScaleBar] = useState(true)
-  const [showGrid, setShowGrid] = useState(true)
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: 'rgb(var(--canvas-bg))' }}>
@@ -77,15 +76,6 @@ export default function MapCanvasTestPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center', fontSize: '12px', color: 'rgb(var(--canvas-fg-2))' }}>
-          <label>
-            <input
-              type="checkbox"
-              checked={showGrid}
-              onChange={(e) => setShowGrid(e.target.checked)}
-              style={{ marginRight: '4px' }}
-            />
-            Show Grid
-          </label>
           <label>
             <input
               type="checkbox"

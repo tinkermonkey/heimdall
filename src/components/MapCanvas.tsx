@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useId } from 'react'
 import { usePanZoom } from '../hooks/usePanZoom'
+import { getHeatmapColor } from '../utils/heatmapUtils'
 import './MapCanvas.css'
 
 // ─── Mercator Projection ──────────────────────────────────────────────────────
@@ -312,11 +313,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
           {heatmapData.map((point, i) => {
             const pixel = latLngToPixels(point.lat, point.lng, Math.round(viewport.zoom * 4))
             const t = (point.value - minValue) / (maxValue - minValue || 1)
-            const alpha = Math.round((0.12 + t * 0.88) * 255)
-              .toString(16)
-              .padStart(2, '0')
-            const color = heatmapColor.replace('#', '')
-            const fill = `#${color}${alpha}`
+            const fill = getHeatmapColor(point.value, minValue, maxValue, heatmapColor)
 
             return (
               <circle
@@ -353,7 +350,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
           tiles.push(
             <image
               key={`${zoom}-${x}-${y}`}
-              xlinkHref={url}
+              href={url}
               x={x * 256}
               y={y * 256}
               width={256}
@@ -444,17 +441,20 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
         </div>
 
         {/* Pin popover */}
-        {selectedPinId && selectedPopover && (
-          <PinPopover
-            pin={pins.find((p) => p.id === selectedPinId)!}
-            x={selectedPopover.x}
-            y={selectedPopover.y}
-            onClose={() => {
-              onSelectPin?.(null)
-              setSelectedPopover(null)
-            }}
-          />
-        )}
+        {selectedPinId && selectedPopover && (() => {
+          const selectedPin = pins.find((p) => p.id === selectedPinId)
+          return selectedPin ? (
+            <PinPopover
+              pin={selectedPin}
+              x={selectedPopover.x}
+              y={selectedPopover.y}
+              onClose={() => {
+                onSelectPin?.(null)
+                setSelectedPopover(null)
+              }}
+            />
+          ) : null
+        })()}
       </div>
     )
   }
