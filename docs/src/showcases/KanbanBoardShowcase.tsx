@@ -23,7 +23,6 @@ export function KanbanBoardShowcase() {
       columnId: 'backlog',
       context: 'BUG',
       title: 'Fix responsive layout on mobile',
-      blocked: 'Needs design review',
     },
     {
       id: 'task-3',
@@ -33,6 +32,7 @@ export function KanbanBoardShowcase() {
       version: 'v1.1.0',
       dueDate: '2026-06-05',
       badges: ['ui', 'frontend'],
+      blocked: 'Waiting on design approval',
     },
     {
       id: 'task-4',

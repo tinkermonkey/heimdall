@@ -1,0 +1,19 @@
+Fix these test failures in tests/kanban-board.spec.ts:
+
+- KanbanBoard Component › Visual Regression - Light Canvas › should match blocked card state: Visual regression test failed: 404 pixels (0.02 of all image pixels) are different from snapshot kanban-board-blocked-light.png
+- KanbanBoard Component › Visual Regression - Dark Canvas › should match blocked card in dark canvas: Visual regression test failed: 404 pixels are different from snapshot kanban-board-blocked-dark.png
+
+**IMPORTANT**: For each failure:
+- Identify the root cause in the source code, explore similar functionality elsewhere in the code to see how this is handled
+- Evaluate if the test is still relevant and necessary, if it's not, remove it completely
+- If the test is meant for functionality which is not implemented, remove the test entirely
+
+**For formatter/linter failures** (e.g. "would reformat", "reformatted", style violation):
+- Always run the project's formatter on the file — do NOT manually reformat lines or adjust indentation by hand; formatters apply rules that hand-edits rarely satisfy exactly.
+- Discover the project's formatter from its config files (pyproject.toml, package.json, .prettierrc, .eslintrc, etc.).
+- Run the formatter from the **project root directory** so it picks up the project's own config (line length, rules, etc.).
+  - Python: `black <file>` (reads pyproject.toml/setup.cfg), `ruff check --fix <file>` then `ruff check <file>`
+  - JavaScript/TypeScript: `npx prettier --write <file>`, `npx eslint --fix <file>`
+  - Go: `gofmt -w <file>`
+  - Rust: `cargo fmt`
+- After running the formatter, confirm the check passes (e.g. `black --check <file>`, `npx prettier --check <file>`) before committing.
