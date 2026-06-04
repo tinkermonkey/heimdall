@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import './Calendar.css'
-import { getMonthGrid, getWeekDays, isSameDay, isToday } from '../utils/dateUtils'
+import { getMonthGrid, getWeekDays, isSameDay, isToday, formatMonthYear, formatDateOnly, formatWeekRange } from '../utils/dateUtils'
 import { SegmentedControl, type SegmentedControlOption } from './SegmentedControl'
 import { Button } from './Button'
 import { Icon } from './Icon'
@@ -28,23 +28,6 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   onSelectDate?: (date: Date) => void
   onSelectEvent?: (eventId: string) => void
   renderEvent?: (event: CalendarEvent, calendarColor?: string) => React.ReactNode
-}
-
-const formatMonthYear = (date: Date | string): string => {
-  const d = typeof date === 'string' ? new Date(date) : new Date(date)
-  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-}
-
-const formatDateOnly = (date: Date | string): string => {
-  const d = typeof date === 'string' ? new Date(date) : new Date(date)
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
-
-const formatWeekRange = (date: Date | string, weekStartsOn: 0 | 1): string => {
-  const days = getWeekDays(date, weekStartsOn)
-  const start = formatDateOnly(days[0])
-  const end = formatDateOnly(days[6])
-  return `${start} – ${end}`
 }
 
 const getEventsForDate = (date: Date | string, events: CalendarEvent[] = []): CalendarEvent[] => {

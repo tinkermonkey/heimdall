@@ -20,6 +20,7 @@ import { InspectorPanelShowcase } from './showcases/InspectorPanelShowcase'
 import { QuickAccessTileShowcase } from './showcases/QuickAccessTileShowcase'
 import { ConfigTileShowcase } from './showcases/ConfigTileShowcase'
 import { WorkspaceSwitcherDialogShowcase } from './showcases/WorkspaceSwitcherDialogShowcase'
+import { KanbanBoardShowcase } from './showcases/KanbanBoardShowcase'
 import PrimitivesTestPage from '@/test-pages/PrimitivesTestPage'
 import AvatarTestPage from '@/test-pages/AvatarTestPage'
 import DataDisplayTestPage from '@/test-pages/DataDisplayTestPage'
@@ -90,7 +91,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'map-canvas': MapCanvasShowcase,
   'map-canvas-test': MapCanvasTestPage,
   'lineage-rail': LineageRailShowcase,
-  'kanban-board': KanbanBoardTestPage,
+  'kanban-board': KanbanBoardShowcase,
+  'kanban-board-test': KanbanBoardTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
   sidebar: SidebarShowcase,

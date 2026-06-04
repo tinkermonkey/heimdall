@@ -31,6 +31,7 @@ import CardsAndListsTestPage from './test-pages/CardsAndListsTestPage'
 import CalendarTestPage from './test-pages/CalendarTestPage'
 import KanbanBoardTestPage from './test-pages/KanbanBoardTestPage'
 import MapCanvasTestPage from './test-pages/MapCanvasTestPage'
+import LineageRailTestPage from './test-pages/LineageRailTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -144,6 +145,10 @@ export default function App() {
 
   if (exampleParam === 'map-canvas') {
     return <MapCanvasTestPage />
+  }
+
+  if (exampleParam === 'lineage-rail') {
+    return <LineageRailTestPage />
   }
 
   if (testParam === 'foundation') {

@@ -14,11 +14,9 @@ const generateSampleEvents = (): CalendarEvent[] => [
 ]
 
 export function CalendarShowcase() {
-  const [currentView, setCurrentView] = useState<CalendarView>('month')
   const [focusedDate, setFocusedDate] = useState(new Date(2026, 5, 4))
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date(2026, 5, 4))
   const [events] = useState<CalendarEvent[]>(generateSampleEvents())
-  const [selectedEvent, setSelectedEvent] = useState<string | null>(null)
 
   const calendarColors: Record<string, string> = {
     'cal-1': 'rgb(var(--status-cyan))',
@@ -41,10 +39,8 @@ export function CalendarShowcase() {
             selectedDate={selectedDate}
             events={events}
             calendarColors={calendarColors}
-            onChangeView={setCurrentView}
             onNavigate={setFocusedDate}
             onSelectDate={setSelectedDate}
-            onSelectEvent={setSelectedEvent}
           />
         </div>
       </ShowcaseSection>
@@ -59,7 +55,6 @@ export function CalendarShowcase() {
             calendarColors={calendarColors}
             onNavigate={setFocusedDate}
             onSelectDate={setSelectedDate}
-            onSelectEvent={setSelectedEvent}
           />
         </div>
       </ShowcaseSection>
@@ -74,7 +69,6 @@ export function CalendarShowcase() {
             calendarColors={calendarColors}
             onNavigate={setFocusedDate}
             onSelectDate={setSelectedDate}
-            onSelectEvent={setSelectedEvent}
           />
         </div>
       </ShowcaseSection>
@@ -89,7 +83,6 @@ export function CalendarShowcase() {
             calendarColors={calendarColors}
             onNavigate={setFocusedDate}
             onSelectDate={setSelectedDate}
-            onSelectEvent={setSelectedEvent}
           />
         </div>
       </ShowcaseSection>
