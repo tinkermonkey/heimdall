@@ -3,6 +3,7 @@ import './LogStream.css'
 import { formatTime } from '../utils/dateUtils'
 
 export interface LogEntry {
+  id?: string
   timestamp: Date | string
   level: 'INFO' | 'WARN' | 'ERROR' | 'DEBUG'
   message: string
@@ -100,6 +101,16 @@ export const LogStream = React.forwardRef<HTMLDivElement, LogStreamProps>(
     // Slice entries to maxRows
     const visibleEntries = entries.slice(-maxRows)
 
+    const getLogEntryKey = (entry: LogEntry): string => {
+      if (entry.id) return entry.id
+
+      const ts =
+        typeof entry.timestamp === 'string'
+          ? entry.timestamp
+          : entry.timestamp.getTime()
+      return `log-${ts}-${entry.level}-${entry.message.length}-${entry.op || ''}-${entry.target || ''}`
+    }
+
     const classNames = ['log-stream', className]
       .filter(Boolean)
       .join(' ')
@@ -119,7 +130,7 @@ export const LogStream = React.forwardRef<HTMLDivElement, LogStreamProps>(
               <span className="log-stream__empty-text">No log entries</span>
             </div>
           ) : (
-            visibleEntries.map((entry, idx) => {
+            visibleEntries.map((entry) => {
               const timestamp = typeof entry.timestamp === 'string'
                 ? new Date(entry.timestamp)
                 : entry.timestamp
@@ -131,7 +142,7 @@ export const LogStream = React.forwardRef<HTMLDivElement, LogStreamProps>(
                 : 'log-stream__row'
 
               return (
-                <div key={idx} className={rowClass}>
+                <div key={getLogEntryKey(entry)} className={rowClass}>
                   <span className="log-stream__time">{time}</span>
                   <span className={levelClass}>{entry.level}</span>
                   {showOps && (
