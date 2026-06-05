@@ -56,14 +56,6 @@
   min-height: 0;
 }
 
-.diff-viewer__panel--hash-set {
-  /* HashSet panel */
-}
-
-.diff-viewer__panel--side-by-side {
-  /* SideBySide panel */
-}
-
 .diff-viewer-hash-set {
   display: flex;
   flex-direction: column;
@@ -78,9 +70,6 @@
   border-bottom: 1px solid rgb(var(--canvas-border));
 }
 
-.diff-viewer-hash-set__label {
-  /* VersionPill styling */
-}
 
 .diff-viewer-side-by-side {
   display: flex;
@@ -102,6 +91,3 @@
   align-items: center;
 }
 
-.diff-viewer-side-by-side__label {
-  /* VersionPill styling */
-}

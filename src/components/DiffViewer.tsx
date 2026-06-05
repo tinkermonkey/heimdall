@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react'
+import React, { useState, useEffect, ReactNode, createContext, useContext } from 'react'
 import { HashSetDiff, type HashSetDiffProps } from './HashSetDiff'
 import { SideBySideDiff, type SideBySideDiffProps } from './SideBySideDiff'
 import { VersionPill, type VersionPillTone } from './VersionPill'
@@ -26,82 +26,115 @@ export interface DiffViewerSideBySideProps extends Omit<SideBySideDiffProps, 'cl
   className?: string
 }
 
+const DiffViewerModeContext = createContext<DiffViewerMode | null>(null)
+
 const DiffViewerComponent = React.forwardRef<HTMLDivElement, DiffViewerProps>(
   ({ mode = 'hash-set', onModeChange, children, className = '', ...props }, ref) => {
     const [currentMode, setCurrentMode] = useState<DiffViewerMode>(mode)
+
+    useEffect(() => {
+      setCurrentMode(mode)
+    }, [mode])
 
     const handleModeChange = (newMode: DiffViewerMode) => {
       setCurrentMode(newMode)
       onModeChange?.(newMode)
     }
 
+    const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+      const tabs = Array.from(
+        (e.currentTarget as HTMLButtonElement).closest('[role="tablist"]')?.querySelectorAll('[role="tab"]') || []
+      )
+      const currentIndex = tabs.indexOf(e.currentTarget)
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1
+        ;(tabs[prevIndex] as HTMLButtonElement)?.focus()
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        const nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0
+        ;(tabs[nextIndex] as HTMLButtonElement)?.focus()
+      } else if (e.key === 'Home') {
+        e.preventDefault()
+        ;(tabs[0] as HTMLButtonElement)?.focus()
+      } else if (e.key === 'End') {
+        e.preventDefault()
+        ;(tabs[tabs.length - 1] as HTMLButtonElement)?.focus()
+      }
+    }
+
     const classNames = ['diff-viewer', className].filter(Boolean).join(' ')
 
     return (
-      <div
-        ref={ref}
-        className={classNames}
-        role="region"
-        aria-label="Diff Viewer"
-        data-testid="diff-viewer"
-        {...props}
-      >
-        <div className="diff-viewer__header" role="tablist">
-          <button
-            id="diff-viewer-hash-set-tab"
-            role="tab"
-            aria-selected={currentMode === 'hash-set'}
-            aria-controls="diff-viewer-hash-set-panel"
-            className={[
-              'diff-viewer__tab',
-              currentMode === 'hash-set' && 'diff-viewer__tab--active',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-            onClick={() => handleModeChange('hash-set')}
-          >
-            Hash Set
-          </button>
-          <button
-            id="diff-viewer-side-by-side-tab"
-            role="tab"
-            aria-selected={currentMode === 'side-by-side'}
-            aria-controls="diff-viewer-side-by-side-panel"
-            className={[
-              'diff-viewer__tab',
-              currentMode === 'side-by-side' && 'diff-viewer__tab--active',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-            onClick={() => handleModeChange('side-by-side')}
-          >
-            Side by Side
-          </button>
-        </div>
+      <DiffViewerModeContext.Provider value={currentMode}>
+        <div
+          ref={ref}
+          className={classNames}
+          role="region"
+          aria-label="Diff Viewer"
+          data-testid="diff-viewer"
+          {...props}
+        >
+          <div className="diff-viewer__header" role="tablist">
+            <button
+              id="diff-viewer-hash-set-tab"
+              role="tab"
+              aria-selected={currentMode === 'hash-set'}
+              aria-controls="diff-viewer-hash-set-panel"
+              className={[
+                'diff-viewer__tab',
+                currentMode === 'hash-set' && 'diff-viewer__tab--active',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              onClick={() => handleModeChange('hash-set')}
+              onKeyDown={handleTabKeyDown}
+            >
+              Hash Set
+            </button>
+            <button
+              id="diff-viewer-side-by-side-tab"
+              role="tab"
+              aria-selected={currentMode === 'side-by-side'}
+              aria-controls="diff-viewer-side-by-side-panel"
+              className={[
+                'diff-viewer__tab',
+                currentMode === 'side-by-side' && 'diff-viewer__tab--active',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              onClick={() => handleModeChange('side-by-side')}
+              onKeyDown={handleTabKeyDown}
+            >
+              Side by Side
+            </button>
+          </div>
 
-        <div className="diff-viewer__content" data-testid="diff-viewer-content">
-          {currentMode === 'hash-set' && (
-            <div
-              id="diff-viewer-hash-set-panel"
-              role="tabpanel"
-              aria-labelledby="diff-viewer-hash-set-tab"
-              className="diff-viewer__panel diff-viewer__panel--hash-set"
-            >
-              {children}
-            </div>
-          )}
-          {currentMode === 'side-by-side' && (
-            <div
-              id="diff-viewer-side-by-side-panel"
-              role="tabpanel"
-              aria-labelledby="diff-viewer-side-by-side-tab"
-              className="diff-viewer__panel diff-viewer__panel--side-by-side"
-            >
-              {children}
-            </div>
-          )}
+          <div className="diff-viewer__content" data-testid="diff-viewer-content">
+            {currentMode === 'hash-set' && (
+              <div
+                id="diff-viewer-hash-set-panel"
+                role="tabpanel"
+                aria-labelledby="diff-viewer-hash-set-tab"
+                className="diff-viewer__panel diff-viewer__panel--hash-set"
+              >
+                {children}
+              </div>
+            )}
+            {currentMode === 'side-by-side' && (
+              <div
+                id="diff-viewer-side-by-side-panel"
+                role="tabpanel"
+                aria-labelledby="diff-viewer-side-by-side-tab"
+                className="diff-viewer__panel diff-viewer__panel--side-by-side"
+              >
+                {children}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </DiffViewerModeContext.Provider>
     )
   }
 )
@@ -118,6 +151,12 @@ function DiffViewerHashSet({
   className = '',
   ...props
 }: DiffViewerHashSetProps) {
+  const currentMode = useContext(DiffViewerModeContext)
+
+  if (currentMode !== 'hash-set') {
+    return null
+  }
+
   return (
     <div className={['diff-viewer-hash-set', className].filter(Boolean).join(' ')} {...props}>
       {label && (
@@ -143,6 +182,12 @@ function DiffViewerSideBySide({
   className = '',
   ...props
 }: DiffViewerSideBySideProps) {
+  const currentMode = useContext(DiffViewerModeContext)
+
+  if (currentMode !== 'side-by-side') {
+    return null
+  }
+
   return (
     <div className={['diff-viewer-side-by-side', className].filter(Boolean).join(' ')} {...props}>
       {(addedLabel || removedLabel) && (
