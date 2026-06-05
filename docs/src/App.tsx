@@ -45,6 +45,11 @@ import MapCanvasTestPage from '@/test-pages/MapCanvasTestPage'
 import { CalendarShowcase } from './showcases/CalendarShowcase'
 import { MapCanvasShowcase } from './showcases/MapCanvasShowcase'
 import { LineageRailShowcase } from './showcases/LineageRailShowcase'
+import { VersionTimelineShowcase } from './showcases/VersionTimelineShowcase'
+import { DiffViewerShowcase } from './showcases/DiffViewerShowcase'
+import { ResultCardShowcase } from './showcases/ResultCardShowcase'
+import { AssetCardShowcase } from './showcases/AssetCardShowcase'
+import { LogStreamShowcase } from './showcases/LogStreamShowcase'
 
 type NavSection = {
   title: string
@@ -86,6 +91,9 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'hierarchy-tree': HierarchyComponentTestPage,
   'data-display': DataDisplayTestPage,
   'cards-and-lists': CardsAndListsTestPage,
+  'result-card': ResultCardShowcase,
+  'asset-card': AssetCardShowcase,
+  'log-stream': LogStreamShowcase,
   calendar: CalendarShowcase,
   'calendar-test': CalendarTestPage,
   'map-canvas': MapCanvasShowcase,
@@ -136,8 +144,10 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'page-header': PageHeaderShowcase,
   'filter-bar': FilterBarShowcase,
   'activity-timeline': ActivityTimelineShowcase,
-  'version-timeline': VersionTimelineTestPage,
-  'diff-viewer': DiffViewerTestPage,
+  'version-timeline': VersionTimelineShowcase,
+  'version-timeline-test': VersionTimelineTestPage,
+  'diff-viewer': DiffViewerShowcase,
+  'diff-viewer-test': DiffViewerTestPage,
   'alert-strip': AlertStripShowcase,
   'quick-access-grid': QuickAccessGridShowcase,
   'quick-access-tile': QuickAccessTileShowcase,
@@ -214,6 +224,9 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'inspector-panel', label: 'InspectorPanel', icon: 'info' },
       { id: 'hierarchy-tree', label: 'HierarchyTree', icon: 'schema' },
       { id: 'cards-and-lists', label: 'Cards & Lists', icon: 'layout' },
+      { id: 'result-card', label: 'ResultCard', icon: 'layout' },
+      { id: 'asset-card', label: 'AssetCard', icon: 'image' },
+      { id: 'log-stream', label: 'LogStream', icon: 'code' },
       { id: 'calendar', label: 'Calendar', icon: 'calendar' },
       { id: 'map-canvas', label: 'MapCanvas', icon: 'map' },
       { id: 'lineage-rail', label: 'LineageRail', icon: 'arrow-right' },
@@ -278,12 +291,12 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'filter-bar', label: 'FilterBar', icon: 'filter' },
       { id: 'activity-timeline', label: 'ActivityTimeline', icon: 'clock' },
       { id: 'version-timeline', label: 'VersionTimeline', icon: 'clock' },
+      { id: 'diff-viewer', label: 'DiffViewer', icon: 'file' },
       { id: 'alert-strip', label: 'AlertStrip', icon: 'alert' },
       { id: 'quick-access-grid', label: 'QuickAccessGrid', icon: 'table' },
       { id: 'quick-access-tile', label: 'QuickAccessTile', icon: 'component' },
       { id: 'config-tile', label: 'ConfigTile', icon: 'settings' },
       { id: 'pipeline-card', label: 'PipelineCard', icon: 'pipeline' },
-      { id: 'diff-viewer', label: 'DiffViewer', icon: 'file' },
     ],
   },
   {
