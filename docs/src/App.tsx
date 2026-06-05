@@ -278,12 +278,12 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'filter-bar', label: 'FilterBar', icon: 'filter' },
       { id: 'activity-timeline', label: 'ActivityTimeline', icon: 'clock' },
       { id: 'version-timeline', label: 'VersionTimeline', icon: 'clock' },
-      { id: 'diff-viewer', label: 'DiffViewer', icon: 'file' },
       { id: 'alert-strip', label: 'AlertStrip', icon: 'alert' },
       { id: 'quick-access-grid', label: 'QuickAccessGrid', icon: 'table' },
       { id: 'quick-access-tile', label: 'QuickAccessTile', icon: 'component' },
       { id: 'config-tile', label: 'ConfigTile', icon: 'settings' },
       { id: 'pipeline-card', label: 'PipelineCard', icon: 'pipeline' },
+      { id: 'diff-viewer', label: 'DiffViewer', icon: 'file' },
     ],
   },
   {

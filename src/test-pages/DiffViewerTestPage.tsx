@@ -1,4 +1,5 @@
-import { HashSetDiff, SideBySideDiff, type DiffLine } from '../components'
+import { useState } from 'react'
+import { DiffViewer, VersionTimeline, type VersionEntry, type DiffLine } from '../components'
 
 export default function DiffViewerTestPage() {
   const smallAdded = ['user_id_1', 'user_id_2']
@@ -39,6 +40,37 @@ export default function DiffViewerTestPage() {
 
   const emptyDiffLines: DiffLine[] = []
 
+  const versionEntries: VersionEntry[] = [
+    {
+      id: 'v3',
+      label: 'v3.2.1',
+      headline: 'Latest changes',
+      timestamp: new Date(Date.now()),
+      head: true,
+      stats: { added: 12, removed: 5, kept: 156 },
+    },
+    {
+      id: 'v2',
+      label: 'v3.2.0',
+      headline: 'Previous release',
+      timestamp: new Date(Date.now() - 86400000),
+      stats: { added: 35, removed: 28, kept: 150 },
+    },
+    {
+      id: 'v1',
+      label: 'v3.1.9',
+      headline: 'Earlier version',
+      timestamp: new Date(Date.now() - 172800000),
+      stats: { added: 8, removed: 3, kept: 160 },
+    },
+  ]
+
+  const [selectedVersionId, setSelectedVersionId] = useState('v3')
+  const [diffMode, setDiffMode] = useState<'hash-set' | 'side-by-side'>('hash-set')
+
+  const selectedVersion = versionEntries.find(v => v.id === selectedVersionId)
+  const isLatest = selectedVersion?.id === 'v3'
+
   return (
     <div style={{ padding: '22px 26px', backgroundColor: 'rgb(var(--canvas-bg))', minHeight: '100vh' }}>
       <section style={{ marginBottom: '48px' }}>
@@ -52,9 +84,67 @@ export default function DiffViewerTestPage() {
             marginBottom: '14px',
           }}
         >
-          HashSetDiff · Small Dataset
+          DiffViewer · With VersionTimeline
         </div>
-        <HashSetDiff added={smallAdded} removed={smallRemoved} kept={smallKept} maxVisible={10} />
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '48px' }}>
+          <div>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'rgb(var(--canvas-fg-3))',
+                marginBottom: '14px',
+              }}
+            >
+              Version Timeline
+            </div>
+            <VersionTimeline
+              entries={versionEntries}
+              selectedId={selectedVersionId}
+              onSelect={setSelectedVersionId}
+              order="newest-first"
+            />
+          </div>
+
+          <div>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'rgb(var(--canvas-fg-3))',
+                marginBottom: '14px',
+              }}
+            >
+              {isLatest ? 'Hash Set View (Latest)' : 'Side by Side View'}
+            </div>
+            <DiffViewer mode={diffMode} onModeChange={setDiffMode}>
+              {diffMode === 'hash-set' && (
+                <DiffViewer.HashSet
+                  added={smallAdded}
+                  removed={smallRemoved}
+                  kept={smallKept}
+                  maxVisible={10}
+                  label={selectedVersion?.label}
+                  labelTone="amber"
+                />
+              )}
+              {diffMode === 'side-by-side' && (
+                <DiffViewer.SideBySide
+                  lines={diffLines}
+                  addedLabel={`Added in ${selectedVersion?.label}`}
+                  removedLabel={`Removed in ${selectedVersion?.label}`}
+                  addedLabelTone="emerald"
+                  removedLabelTone="rose"
+                />
+              )}
+            </DiffViewer>
+          </div>
+        </div>
       </section>
 
       <section style={{ marginBottom: '48px' }}>
@@ -68,9 +158,17 @@ export default function DiffViewerTestPage() {
             marginBottom: '14px',
           }}
         >
-          HashSetDiff · Large Dataset with Collapse
+          DiffViewer · Hash Set View
         </div>
-        <HashSetDiff added={largeAdded} removed={largeRemoved} kept={largeKept} maxVisible={8} />
+        <DiffViewer mode="hash-set">
+          <DiffViewer.HashSet
+            added={smallAdded}
+            removed={smallRemoved}
+            kept={smallKept}
+            maxVisible={10}
+            label="Small Dataset"
+          />
+        </DiffViewer>
       </section>
 
       <section style={{ marginBottom: '48px' }}>
@@ -84,9 +182,17 @@ export default function DiffViewerTestPage() {
             marginBottom: '14px',
           }}
         >
-          HashSetDiff · Empty State
+          DiffViewer · Hash Set View (Large Dataset)
         </div>
-        <HashSetDiff added={[]} removed={[]} kept={[]} />
+        <DiffViewer mode="hash-set">
+          <DiffViewer.HashSet
+            added={largeAdded}
+            removed={largeRemoved}
+            kept={largeKept}
+            maxVisible={8}
+            label="Large Dataset"
+          />
+        </DiffViewer>
       </section>
 
       <section style={{ marginBottom: '48px' }}>
@@ -100,9 +206,11 @@ export default function DiffViewerTestPage() {
             marginBottom: '14px',
           }}
         >
-          SideBySideDiff · Small Diff with Hunks
+          DiffViewer · Hash Set View (Empty State)
         </div>
-        <SideBySideDiff lines={diffLines} />
+        <DiffViewer mode="hash-set">
+          <DiffViewer.HashSet added={[]} removed={[]} kept={[]} label="Empty" />
+        </DiffViewer>
       </section>
 
       <section style={{ marginBottom: '48px' }}>
@@ -116,9 +224,15 @@ export default function DiffViewerTestPage() {
             marginBottom: '14px',
           }}
         >
-          SideBySideDiff · Large Diff (Virtualized)
+          DiffViewer · Side by Side View (Small Diff)
         </div>
-        <SideBySideDiff lines={largeDiffLines} />
+        <DiffViewer mode="side-by-side">
+          <DiffViewer.SideBySide
+            lines={diffLines}
+            addedLabel="Current Version"
+            removedLabel="Previous Version"
+          />
+        </DiffViewer>
       </section>
 
       <section style={{ marginBottom: '48px' }}>
@@ -132,9 +246,33 @@ export default function DiffViewerTestPage() {
             marginBottom: '14px',
           }}
         >
-          SideBySideDiff · Empty State
+          DiffViewer · Side by Side View (Large Diff)
         </div>
-        <SideBySideDiff lines={emptyDiffLines} />
+        <DiffViewer mode="side-by-side">
+          <DiffViewer.SideBySide
+            lines={largeDiffLines}
+            addedLabel="Current Version"
+            removedLabel="Previous Version"
+          />
+        </DiffViewer>
+      </section>
+
+      <section style={{ marginBottom: '48px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          DiffViewer · Side by Side View (Empty State)
+        </div>
+        <DiffViewer mode="side-by-side">
+          <DiffViewer.SideBySide lines={emptyDiffLines} />
+        </DiffViewer>
       </section>
     </div>
   )

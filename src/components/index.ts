@@ -95,3 +95,5 @@ export { VersionTimeline, type VersionTimelineProps, type VersionEntry } from '.
 export { HashSetDiff, type HashSetDiffProps } from './HashSetDiff'
 
 export { SideBySideDiff, type SideBySideDiffProps, type DiffLine, type DiffLineType } from './SideBySideDiff'
+
+export { DiffViewer, type DiffViewerProps, type DiffViewerHashSetProps, type DiffViewerSideBySideProps, type DiffViewerMode } from './DiffViewer'

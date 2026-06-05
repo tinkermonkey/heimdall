@@ -107,6 +107,7 @@ export {
 } from './components/VersionTimeline'
 export { HashSetDiff, type HashSetDiffProps } from './components/HashSetDiff'
 export { SideBySideDiff, type SideBySideDiffProps, type DiffLine, type DiffLineType } from './components/SideBySideDiff'
+export { DiffViewer, type DiffViewerProps, type DiffViewerHashSetProps, type DiffViewerSideBySideProps, type DiffViewerMode } from './components/DiffViewer'
 export { AlertStrip, type AlertStripProps, type Alert, type AlertSeverity } from './components/AlertStrip'
 export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessGridItem } from './components/QuickAccessGrid'
 export { QuickAccessTile, type QuickAccessTileProps } from './components/QuickAccessTile'
