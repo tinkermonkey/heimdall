@@ -24,25 +24,25 @@ function getInitials(name: string): string {
     .toUpperCase()
 }
 
-function getGradientBackground(color?: StatusColor | string): string {
-  const colorGradients: Record<StatusColor, string> = {
-    amber: 'linear-gradient(135deg, rgb(var(--accent-primary)), rgb(var(--accent-primary-deep)))',
-    emerald: 'linear-gradient(135deg, rgb(var(--status-emerald)), rgb(6 95 70))',
-    rose: 'linear-gradient(135deg, rgb(var(--status-rose)), rgb(var(--status-rose-deep)))',
-    cyan: 'linear-gradient(135deg, rgb(var(--status-cyan)), rgb(14 180 160))',
-    violet: 'linear-gradient(135deg, rgb(var(--status-violet)), rgb(91 33 182))',
-    neutral: 'linear-gradient(135deg, rgb(var(--status-neutral)), rgb(71 85 105))',
-  }
+const COLOR_GRADIENTS: Record<StatusColor, string> = {
+  amber: 'linear-gradient(135deg, rgb(var(--accent-primary)), rgb(var(--accent-primary-deep)))',
+  emerald: 'linear-gradient(135deg, rgb(var(--status-emerald)), rgb(var(--semantic-emerald-fg)))',
+  rose: 'linear-gradient(135deg, rgb(var(--status-rose)), rgb(var(--status-rose-deep)))',
+  cyan: 'linear-gradient(135deg, rgb(var(--status-cyan)), rgb(var(--status-cyan-deep)))',
+  violet: 'linear-gradient(135deg, rgb(var(--status-violet)), rgb(var(--semantic-violet-fg)))',
+  neutral: 'linear-gradient(135deg, rgb(var(--status-neutral)), rgb(var(--semantic-neutral-fg)))',
+}
 
-  if (color && color in colorGradients) {
-    return colorGradients[color as StatusColor]
+function getGradientBackground(color?: StatusColor | string): string {
+  if (color && color in COLOR_GRADIENTS) {
+    return COLOR_GRADIENTS[color as StatusColor]
   }
 
   if (color) {
     return color
   }
 
-  return colorGradients.amber
+  return COLOR_GRADIENTS.amber
 }
 
 export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
