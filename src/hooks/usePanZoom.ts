@@ -49,7 +49,7 @@ export function usePanZoom({
 
   const zoomRef = useRef(1)
   const panRef = useRef({ x: 0, y: 0 })
-  const dragRef = useRef<{ x: number; y: number; panX: number; panY: number; vx: number; vy: number; time: number } | null>(null)
+  const dragRef = useRef<{ x: number; y: number; lastX: number; lastY: number; panX: number; panY: number; vx: number; vy: number; time: number } | null>(null)
   const listenersAttachedRef = useRef(false)
   const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
   const handlePointerUpRef = useRef<() => void>()
@@ -112,14 +112,16 @@ export function usePanZoom({
   const handlePointerMove = useCallback((e: PointerEvent) => {
     if (!dragRef.current) return
 
-    const dx = e.clientX - dragRef.current.x
-    const dy = e.clientY - dragRef.current.y
+    const dx = e.clientX - dragRef.current.lastX
+    const dy = e.clientY - dragRef.current.lastY
     const now = performance.now()
     const dt = Math.max(1, now - dragRef.current.time) / 1000
 
     dragRef.current.vx = dx / dt
     dragRef.current.vy = dy / dt
     dragRef.current.time = now
+    dragRef.current.lastX = e.clientX
+    dragRef.current.lastY = e.clientY
 
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current)
@@ -159,10 +161,15 @@ export function usePanZoom({
     let currentVx = vx
     let currentVy = vy
     let currentPan = panRef.current
+    let lastFrameTime = performance.now()
 
     const animate = () => {
-      currentVx *= INERTIA_DECAY
-      currentVy *= INERTIA_DECAY
+      const now = performance.now()
+      const dt = (now - lastFrameTime) / 1000
+      lastFrameTime = now
+
+      currentVx *= Math.pow(INERTIA_DECAY, dt * 60)
+      currentVy *= Math.pow(INERTIA_DECAY, dt * 60)
 
       const velocity = Math.sqrt(currentVx * currentVx + currentVy * currentVy)
       if (velocity < MIN_VELOCITY) {
@@ -170,7 +177,7 @@ export function usePanZoom({
         return
       }
 
-      currentPan = clampPan(currentPan.x + currentVx / 60, currentPan.y + currentVy / 60)
+      currentPan = clampPan(currentPan.x + currentVx * dt, currentPan.y + currentVy * dt)
       setPan(currentPan)
 
       inertiaRafRef.current = requestAnimationFrame(animate)
@@ -188,6 +195,8 @@ export function usePanZoom({
     dragRef.current = {
       x: e.clientX,
       y: e.clientY,
+      lastX: e.clientX,
+      lastY: e.clientY,
       panX: panRef.current.x,
       panY: panRef.current.y,
       vx: 0,
@@ -301,25 +310,15 @@ export function usePanZoom({
       const prev = zoomRef.current
       const change = clamped - prev
 
-      let newPan: { x: number; y: number } | null = null
+      setZoom(clamped)
+
       if (cx !== undefined && cy !== undefined) {
-        newPan = clampPan(
+        const newPan = clampPan(
           panRef.current.x - (cx / prev) * change,
           panRef.current.y - (cy / prev) * change
         )
+        setPan(newPan)
       }
-
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current)
-      }
-
-      rafRef.current = requestAnimationFrame(() => {
-        setZoom(clamped)
-        if (newPan) {
-          setPan(newPan)
-        }
-        rafRef.current = null
-      })
     },
     [clampPan, minZoom, maxZoom]
   )
@@ -327,29 +326,14 @@ export function usePanZoom({
   const panTo = useCallback(
     (x: number, y: number) => {
       const newPan = clampPan(x, y)
-
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current)
-      }
-
-      rafRef.current = requestAnimationFrame(() => {
-        setPan(newPan)
-        rafRef.current = null
-      })
+      setPan(newPan)
     },
     [clampPan]
   )
 
   const reset = useCallback(() => {
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current)
-    }
-
-    rafRef.current = requestAnimationFrame(() => {
-      setZoom(1)
-      setPan({ x: 0, y: 0 })
-      rafRef.current = null
-    })
+    setZoom(1)
+    setPan({ x: 0, y: 0 })
   }, [])
 
   // matrix(a, b, c, d, e, f) represents:
