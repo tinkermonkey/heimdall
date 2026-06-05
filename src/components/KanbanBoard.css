@@ -121,9 +121,9 @@
   border-color: rgb(var(--canvas-border-strong));
 }
 
-.kanban-card:focus {
+.kanban-card:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.18);
+  box-shadow: var(--focus-ring);
   border-color: rgb(var(--accent-primary));
 }
 

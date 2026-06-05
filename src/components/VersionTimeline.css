@@ -1,5 +1,8 @@
 .version-timeline {
   width: 100%;
+}
+
+.version-timeline:focus-visible {
   outline: none;
 }
 
@@ -24,7 +27,11 @@
   padding: 11px 16px;
   border-bottom: 1px solid rgb(var(--canvas-border));
   border-left: 2px solid transparent;
+}
+
+.version-timeline__entry:focus-visible {
   outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 .version-timeline__entry:last-child {

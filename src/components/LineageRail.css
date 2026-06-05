@@ -58,7 +58,7 @@
   border-color: rgb(var(--canvas-border-strong));
 }
 
-.lineage-rail__node--interactive:focus {
+.lineage-rail__node--interactive:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }
