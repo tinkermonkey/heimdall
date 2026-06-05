@@ -265,7 +265,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
         let currentColumn: KanbanColumn | null = null
 
         for (const column of columns) {
-          const colElement = document.querySelector(`[data-column-id="${column.id}"]`)
+          const colElement = document.querySelector(`[data-column-id="${CSS.escape(column.id)}"]`)
           if (colElement) {
             const colRect = colElement.getBoundingClientRect()
             if (e.clientX >= colRect.left && e.clientX < colRect.right) {
@@ -279,7 +279,7 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
         if (!currentColumn) return
 
         // Find insertion index based on Y position
-        const columnBody = document.querySelector(`[data-column-id="${currentColumn.id}"] .kanban-column__body`)
+        const columnBody = document.querySelector(`[data-column-id="${CSS.escape(currentColumn.id)}"] .kanban-column__body`)
         if (!columnBody) return
 
         const bodyRect = columnBody.getBoundingClientRect()
@@ -379,6 +379,16 @@ export const KanbanBoard = React.forwardRef<HTMLDivElement, KanbanBoardProps>(
 
           const currentColumnIndex = columns.findIndex((c) => c.id === state.sourceColumnId)
           const currentColumnCards = cardsByColumn[state.sourceColumnId]
+
+          if (!currentColumnCards) {
+            // Source column no longer exists, cancel grab
+            dragStateRef.current = null
+            setDraggedCardId(null)
+            setInsertionIndex(null)
+            setHoveredColumnId(null)
+            return
+          }
+
           const currentIndex = state.sourceIndex
 
           let newColumnId = state.sourceColumnId
