@@ -34,11 +34,10 @@ test.describe('DiffViewer Components', () => {
     await freezeAnimations(page)
 
     const expandButton = page.locator('.hash-set-diff__expand-button').first()
-    if (await expandButton.isVisible()) {
-      await expandButton.click()
-      await page.waitForTimeout(200)
-      const rowsAfterExpand = await page.locator('.hash-set-diff__row').count()
-      expect(rowsAfterExpand).toBeGreaterThan(10)
-    }
+    await expect(expandButton).toBeVisible()
+    await expandButton.click()
+    await page.waitForTimeout(200)
+    const rowsAfterExpand = await page.locator('.hash-set-diff__row').count()
+    expect(rowsAfterExpand).toBeGreaterThan(10)
   })
 })

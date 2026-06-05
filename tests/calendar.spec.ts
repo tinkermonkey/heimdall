@@ -108,14 +108,13 @@ test.describe('Calendar Components', () => {
 
     // Find and click an event bar
     const eventBar = page.locator('.calendar-month__event-bar').first()
-    if (await eventBar.isVisible()) {
-      await eventBar.click()
+    await expect(eventBar).toBeVisible()
+    await eventBar.click()
 
-      // Verify event is selected by checking the status in the page
-      const selectedEvent = page.locator('p:has-text("Selected Event")')
-      const text = await selectedEvent.textContent()
-      expect(text).toContain('event-')
-    }
+    // Verify event is selected by checking the status in the page
+    const selectedEvent = page.locator('p:has-text("Selected Event")')
+    const text = await selectedEvent.textContent()
+    expect(text).toContain('event-')
   })
 
   test('date selection changes focused date', async ({ page }) => {
@@ -225,8 +224,6 @@ test.describe('Calendar Components', () => {
 
     // Verify today has aria-current='date'
     const todayCell = page.locator('[aria-current="date"]')
-    if (await todayCell.first().isVisible()) {
-      await expect(todayCell.first()).toBeVisible()
-    }
+    await expect(todayCell.first()).toBeVisible()
   })
 })
