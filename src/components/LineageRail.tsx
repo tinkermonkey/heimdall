@@ -1,6 +1,7 @@
 import React from 'react'
 import './LineageRail.css'
 import { Icon, type IconName } from './Icon'
+import { Chip } from './Chip'
 
 export interface LineageNode {
   icon?: IconName
@@ -57,28 +58,25 @@ interface LineageNodeElementProps {
 }
 
 const LineageNodeElement: React.FC<LineageNodeElementProps> = ({ node, isHead }) => {
-  const baseClass = isHead ? 'lineage-rail__node lineage-rail__node--head' : 'lineage-rail__node'
-
-  if (!node.onClick) {
-    return (
-      <span className={baseClass} role="listitem" aria-current={isHead ? 'step' : undefined}>
-        {node.icon && <Icon name={node.icon} size={14} />}
-        <span className="lineage-rail__label">{node.label}</span>
-      </span>
-    )
-  }
+  const chipClasses = [
+    'lineage-rail__node',
+    node.onClick && 'lineage-rail__node--interactive',
+    isHead && 'lineage-rail__node--head',
+  ]
+    .filter(Boolean)
+    .join(' ')
 
   return (
-    <button
-      type="button"
-      className={`${baseClass} lineage-rail__node--interactive`}
-      onClick={node.onClick}
+    <Chip
+      className={chipClasses}
       role="listitem"
       aria-current={isHead ? 'step' : undefined}
+      onClick={node.onClick}
+      tabIndex={node.onClick ? 0 : undefined}
     >
       {node.icon && <Icon name={node.icon} size={14} />}
       <span className="lineage-rail__label">{node.label}</span>
-    </button>
+    </Chip>
   )
 }
 

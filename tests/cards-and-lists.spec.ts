@@ -138,7 +138,7 @@ test.describe('ResultCard Component', () => {
     const sections = page.locator('section')
     await sections.nth(2).scrollIntoViewIfNeeded()
     const resultCard = sections.nth(2).locator('[role="article"]')
-    const actionButtons = resultCard.locator('[class*="action-button"]')
+    const actionButtons = resultCard.locator('.result-card__actions button')
 
     // Tab to first action button
     await resultCard.focus()
@@ -158,7 +158,7 @@ test.describe('ResultCard Component', () => {
     const sections = page.locator('section')
     await sections.nth(2).scrollIntoViewIfNeeded()
     const resultCard = sections.nth(2).locator('[role="article"]')
-    const actionButtons = resultCard.locator('[class*="action-button"]')
+    const actionButtons = resultCard.locator('.result-card__actions button')
 
     // Click action button
     let actionClicked = false

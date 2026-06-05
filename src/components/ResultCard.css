@@ -176,35 +176,22 @@
   margin-left: 3px;
 }
 
-.result-card__action-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: 1px solid rgb(var(--canvas-border));
-  border-radius: var(--radius-sm);
+.result-card__actions .btn {
   background-color: rgb(var(--canvas-surface));
-  color: rgb(var(--canvas-fg-2));
-  cursor: pointer;
-  transition: background-color 100ms ease, border-color 100ms ease, color 100ms ease;
-  outline: none;
-  font-size: 12px;
-  font-family: var(--font-mono);
+  border-color: rgb(var(--canvas-border));
 }
 
-.result-card__action-button:hover {
+.result-card__actions .btn:hover {
   background-color: rgb(var(--canvas-surface-2));
   border-color: rgb(var(--canvas-border-strong));
   color: rgb(var(--canvas-fg-1));
 }
 
-.result-card__action-button:focus-visible {
+.result-card__actions .btn:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }
 
-.result-card__action-button:active {
+.result-card__actions .btn:active {
   background-color: rgb(var(--canvas-bg-2));
 }

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react'
 import './KanbanBoard.css'
+import { Panel } from './Panel'
 import { Chip } from './Chip'
 import { Icon } from './Icon'
 import { VersionPill } from './VersionPill'
@@ -134,7 +135,7 @@ const KanbanColumnComponent = ({
   const isOverWipLimit = column.wipLimit && cards.length > column.wipLimit
 
   return (
-    <div className="kanban-column">
+    <Panel className="kanban-column" noPadding>
       <div className="kanban-column__header">
         <div className="kanban-column__header-left">
           {column.statusColor && (
@@ -182,7 +183,7 @@ const KanbanColumnComponent = ({
           <div className="kanban-column__insertion-line" />
         )}
       </div>
-    </div>
+    </Panel>
   )
 }
 

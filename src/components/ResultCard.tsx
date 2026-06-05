@@ -1,5 +1,6 @@
 import React from 'react'
 import './ResultCard.css'
+import { Button } from './Button'
 import { ProgressBar } from './ProgressBar'
 import { VersionPill } from './VersionPill'
 import { Icon, type IconName } from './Icon'
@@ -128,10 +129,11 @@ export const ResultCard = React.forwardRef<HTMLDivElement, ResultCardProps>(
         {actions && actions.length > 0 && (
           <div className="result-card__actions">
             {actions.map((action, index) => (
-              <button
+              <Button
                 key={index}
-                type="button"
-                className="result-card__action-button"
+                variant="ghost"
+                size="sm"
+                icon={!!action.icon}
                 title={action.label}
                 onClick={(e) => {
                   e.stopPropagation()
@@ -143,7 +145,7 @@ export const ResultCard = React.forwardRef<HTMLDivElement, ResultCardProps>(
                 ) : (
                   action.label
                 )}
-              </button>
+              </Button>
             ))}
           </div>
         )}

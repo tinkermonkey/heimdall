@@ -24,11 +24,12 @@
 .kanban-column {
   display: flex;
   flex-direction: column;
-  background: rgb(var(--canvas-card));
-  border: 1px solid rgb(var(--canvas-border));
-  border-radius: var(--radius-lg);
-  overflow: hidden;
   height: 100%;
+}
+
+.kanban-column .panel__body {
+  display: flex;
+  flex-direction: column;
 }
 
 .kanban-column__header {
