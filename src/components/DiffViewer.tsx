@@ -78,6 +78,7 @@ const DiffViewerComponent = React.forwardRef<HTMLDivElement, DiffViewerProps>(
         >
           <div className="diff-viewer__header" role="tablist">
             <button
+              type="button"
               id="diff-viewer-hash-set-tab"
               role="tab"
               aria-selected={currentMode === 'hash-set'}
@@ -94,6 +95,7 @@ const DiffViewerComponent = React.forwardRef<HTMLDivElement, DiffViewerProps>(
               Hash Set
             </button>
             <button
+              type="button"
               id="diff-viewer-side-by-side-tab"
               role="tab"
               aria-selected={currentMode === 'side-by-side'}
