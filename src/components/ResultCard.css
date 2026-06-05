@@ -201,8 +201,8 @@
 }
 
 .result-card__action-button:focus-visible {
-  outline: 2px solid rgb(var(--accent-primary));
-  outline-offset: -2px;
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 .result-card__action-button:active {
