@@ -20,7 +20,7 @@ const CONTAINER_HEIGHT = 500
 
 export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffProps>(
   ({ lines = [], className = '', ...props }, ref) => {
-    const { visibleRange, containerRef } = useVirtualList({
+    const { visibleRange, containerRef, sentinelRef } = useVirtualList({
       itemCount: lines.length,
       itemHeight: ITEM_HEIGHT,
       containerHeight: CONTAINER_HEIGHT,
@@ -64,6 +64,18 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
               position: 'relative',
             }}
           >
+            <div
+              ref={sentinelRef}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '1px',
+                height: `${lines.length * ITEM_HEIGHT}px`,
+                visibility: 'hidden',
+                pointerEvents: 'none',
+              }}
+            />
             <div style={{ height: startIdx * ITEM_HEIGHT }} />
             {lines.slice(startIdx, endIdx).map((line, relativeIdx) => {
               const index = startIdx + relativeIdx

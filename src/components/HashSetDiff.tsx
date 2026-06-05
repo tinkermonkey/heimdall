@@ -25,7 +25,7 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
 
     const maxRows = Math.max(added.length, removed.length, showKeptCollapse ? maxVisible + 1 : kept.length)
 
-    const { visibleRange, containerRef } = useVirtualList({
+    const { visibleRange, containerRef, sentinelRef } = useVirtualList({
       itemCount: maxRows,
       itemHeight: ITEM_HEIGHT,
       containerHeight: CONTAINER_HEIGHT,
@@ -74,6 +74,18 @@ export const HashSetDiff = React.forwardRef<HTMLDivElement, HashSetDiffProps>(
               position: 'relative',
             }}
           >
+            <div
+              ref={sentinelRef}
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '1px',
+                height: `${maxRows * ITEM_HEIGHT}px`,
+                visibility: 'hidden',
+                pointerEvents: 'none',
+              }}
+            />
             <div style={{ height: startIdx * ITEM_HEIGHT }} />
             {Array.from({ length: Math.min(endIdx - startIdx, maxRows - startIdx) }).map((_, relativeIdx) => {
               const index = startIdx + relativeIdx
