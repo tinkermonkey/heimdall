@@ -32,6 +32,7 @@ import CalendarTestPage from './test-pages/CalendarTestPage'
 import KanbanBoardTestPage from './test-pages/KanbanBoardTestPage'
 import MapCanvasTestPage from './test-pages/MapCanvasTestPage'
 import LineageRailTestPage from './test-pages/LineageRailTestPage'
+import DiffViewerTestPage from './test-pages/DiffViewerTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -149,6 +150,10 @@ export default function App() {
 
   if (exampleParam === 'lineage-rail') {
     return <LineageRailTestPage />
+  }
+
+  if (exampleParam === 'diff-viewer') {
+    return <DiffViewerTestPage />
   }
 
   if (testParam === 'foundation') {
