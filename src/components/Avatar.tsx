@@ -33,13 +33,36 @@ const COLOR_GRADIENTS: Record<StatusColor, string> = {
   neutral: 'linear-gradient(135deg, rgb(var(--status-neutral)), rgb(var(--semantic-neutral-fg)))',
 }
 
-function getGradientBackground(color?: StatusColor | string): string {
+const COLOR_KEYS = Object.keys(COLOR_GRADIENTS) as StatusColor[]
+
+function hashString(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
+  }
+  return Math.abs(hash)
+}
+
+function getColorFromName(name: string): StatusColor {
+  const hash = hashString(name)
+  const colorIndex = hash % COLOR_KEYS.length
+  return COLOR_KEYS[colorIndex]
+}
+
+function getGradientBackground(color?: StatusColor | string, name?: string): string {
   if (color && color in COLOR_GRADIENTS) {
     return COLOR_GRADIENTS[color as StatusColor]
   }
 
   if (color) {
     return color
+  }
+
+  if (name) {
+    const derivedColor = getColorFromName(name)
+    return COLOR_GRADIENTS[derivedColor]
   }
 
   return COLOR_GRADIENTS.amber
@@ -63,7 +86,7 @@ export const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
       .join(' ')
 
     const initialsStyle = !showInitials ? { display: 'none' } : {
-      background: getGradientBackground(color),
+      background: getGradientBackground(color, name),
     }
 
     const imageStyle = showInitials ? { display: 'none' } : {}
