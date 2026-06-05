@@ -65,7 +65,7 @@ export function LogStreamShowcase() {
             {liveEntries.length} / {staticEntries.length} entries loaded
           </span>
           <span style={{ marginLeft: '16px' }}>
-            {followMode ? '📌 Following' : '📍 Paused (scroll to resume)'}
+            {followMode ? 'Following' : 'Paused (scroll to resume)'}
           </span>
         </div>
         <div style={{ height: '400px', border: '1px solid rgb(var(--canvas-border))', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
@@ -99,20 +99,20 @@ export function LogStreamShowcase() {
             fontSize: '12px',
           }}
         >
-          <div style={{ padding: '12px', background: 'rgb(var(--log-info-bg))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
-            <strong style={{ color: 'rgb(var(--log-info))' }}>INFO</strong>
+          <div style={{ padding: '12px', background: 'rgb(var(--shell-surface))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
+            <strong style={{ color: 'rgb(var(--canvas-fg-2))' }}>INFO</strong>
             <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Informational messages</div>
           </div>
-          <div style={{ padding: '12px', background: 'rgb(var(--log-warn-bg))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
-            <strong style={{ color: 'rgb(var(--log-warn))' }}>WARN</strong>
+          <div style={{ padding: '12px', background: 'rgb(var(--shell-surface))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
+            <strong style={{ color: 'rgb(var(--status-amber))' }}>WARN</strong>
             <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Warning messages</div>
           </div>
-          <div style={{ padding: '12px', background: 'rgb(var(--log-error-bg))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
-            <strong style={{ color: 'rgb(var(--log-error))' }}>ERROR</strong>
+          <div style={{ padding: '12px', background: 'rgb(var(--shell-surface))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
+            <strong style={{ color: 'rgb(var(--status-rose))' }}>ERROR</strong>
             <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Error messages</div>
           </div>
-          <div style={{ padding: '12px', background: 'rgb(var(--log-debug-bg))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
-            <strong style={{ color: 'rgb(var(--log-debug))' }}>DEBUG</strong>
+          <div style={{ padding: '12px', background: 'rgb(var(--shell-surface))', borderRadius: 'var(--radius-sm)', color: 'rgb(var(--canvas-fg-1))' }}>
+            <strong style={{ color: 'rgb(var(--canvas-fg-3))' }}>DEBUG</strong>
             <div style={{ fontSize: '11px', marginTop: '4px', opacity: 0.7 }}>Debug messages</div>
           </div>
         </div>

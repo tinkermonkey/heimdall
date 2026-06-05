@@ -94,16 +94,19 @@ export function ResultCardShowcase() {
 
       <ShowcaseSection label="All Domains">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {['software', 'life', 'climate', 'data', 'infrastructure'].map((domain) => (
-            <div key={domain} style={{ maxWidth: '600px' }}>
-              <ResultCard
-                domain={domain}
-                source={`source/${domain}/example-123`}
-                snippet={`Sample content from the ${domain} domain with relevant information...`}
-                score={Math.random() * 0.4 + 0.6}
-              />
-            </div>
-          ))}
+          {['software', 'life', 'climate', 'data', 'infrastructure'].map((domain, index) => {
+            const scores = [0.92, 0.84, 0.76, 0.68, 0.61]
+            return (
+              <div key={domain} style={{ maxWidth: '600px' }}>
+                <ResultCard
+                  domain={domain}
+                  source={`source/${domain}/example-123`}
+                  snippet={`Sample content from the ${domain} domain with relevant information...`}
+                  score={scores[index]}
+                />
+              </div>
+            )
+          })}
         </div>
       </ShowcaseSection>
 
@@ -118,7 +121,7 @@ export function ResultCardShowcase() {
               snippet={result.snippet}
               score={result.score}
               selected={selectedId === result.id}
-              onClick={() => setSelectedId(result.id)}
+              onOpen={() => setSelectedId(result.id)}
               provenance={result.provenance}
             />
           ))}
