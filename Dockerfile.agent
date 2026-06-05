@@ -45,11 +45,12 @@ RUN apt-get update -qq && \
     && rm -rf /var/lib/apt/lists/*
 
 # ============================================================================
-# Fontconfig: deterministic rendering (no hinting, grayscale AA)
-# Prevents pixel diffs from font rendering variations across environments
+# Fontconfig: deterministic rendering (no hinting, grayscale AA, sRGB)
+# Prevents pixel diffs from font rendering variations across environments.
+# Also rejects unknown fallback fonts to avoid system-dependent substitution.
 # ============================================================================
 RUN mkdir -p /etc/fonts && \
-    cat > /etc/fonts/local.conf << 'EOF'
+    cat > /etc/fonts/local.conf << 'FONTEOF'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
@@ -60,9 +61,14 @@ RUN mkdir -p /etc/fonts && \
     <edit name="antialias" mode="assign"><bool>true</bool></edit>
     <edit name="rgba" mode="assign"><const>none</const></edit>
     <edit name="lcdfilter" mode="assign"><const>lcdnone</const></edit>
+    <edit name="embeddedbitmap" mode="assign"><bool>false</bool></edit>
+  </match>
+  <!-- Pin DPI to 96 for consistent glyph sizing -->
+  <match target="pattern">
+    <edit name="dpi" mode="assign"><double>96</double></edit>
   </match>
 </fontconfig>
-EOF
+FONTEOF
 
 # ============================================================================
 # Install project fonts system-wide for consistent file:// rendering
@@ -78,13 +84,14 @@ WORKDIR /workspace/heimdall
 COPY package.json package-lock.json ./
 
 RUN --mount=type=cache,target=/root/.npm \
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
     npm ci --ignore-scripts
 
 # ============================================================================
 # Install Playwright Chromium browser
 # ============================================================================
-ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers
-RUN npx playwright install chromium
+RUN PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers \
+    npx playwright install chromium
 
 # ============================================================================
 # Fix ownership of pre-installed node_modules and browser cache
@@ -96,6 +103,7 @@ RUN chown -R orchestrator:orchestrator /workspace/heimdall/node_modules && \
 # Runtime environment
 # ============================================================================
 ENV CI=true
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers
 
 # ============================================================================
 # Switch to runtime user
