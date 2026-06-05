@@ -41,6 +41,10 @@
   flex-shrink: 0;
 }
 
+.lineage-rail__node .chip__dot {
+  display: none;
+}
+
 /* Head node styling */
 .lineage-rail__node--head {
   background-color: var(--accent-primary-bg-alpha-sm);

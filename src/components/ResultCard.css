@@ -187,11 +187,6 @@
   color: rgb(var(--canvas-fg-1));
 }
 
-.result-card__actions .btn:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
 .result-card__actions .btn:active {
   background-color: rgb(var(--canvas-bg-2));
 }

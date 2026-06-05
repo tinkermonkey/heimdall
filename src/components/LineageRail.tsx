@@ -66,12 +66,20 @@ const LineageNodeElement: React.FC<LineageNodeElementProps> = ({ node, isHead })
     .filter(Boolean)
     .join(' ')
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.key === 'Enter' || e.key === ' ') && node.onClick) {
+      e.preventDefault()
+      node.onClick()
+    }
+  }
+
   return (
     <Chip
       className={chipClasses}
       role="listitem"
       aria-current={isHead ? 'step' : undefined}
       onClick={node.onClick}
+      onKeyDown={node.onClick ? handleKeyDown : undefined}
       tabIndex={node.onClick ? 0 : undefined}
     >
       {node.icon && <Icon name={node.icon} size={14} />}
