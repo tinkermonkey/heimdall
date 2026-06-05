@@ -34,23 +34,21 @@ test.describe('Avatar Component', () => {
     // Get all avatar initials elements
     const allInitials = page.locator('[class*="avatar__initials"]')
 
-    // Should have many avatars
+    // Should have many avatars (deterministic test page has many)
     const count = await allInitials.count()
-    expect(count).toBeGreaterThan(0)
+    expect(count).toBeGreaterThanOrEqual(2)
 
     // In the "Deterministic Gradients" section, same names should have same backgrounds
-    if (count >= 2) {
-      const firstBackground = await allInitials.nth(0).evaluate((el) => {
-        return window.getComputedStyle(el).backgroundImage
-      })
+    const firstBackground = await allInitials.nth(0).evaluate((el) => {
+      return window.getComputedStyle(el).backgroundImage
+    })
 
-      const secondBackground = await allInitials.nth(1).evaluate((el) => {
-        return window.getComputedStyle(el).backgroundImage
-      })
+    const secondBackground = await allInitials.nth(1).evaluate((el) => {
+      return window.getComputedStyle(el).backgroundImage
+    })
 
-      // First two avatars are both Ada Lovelace, should have same gradient
-      expect(firstBackground).toBe(secondBackground)
-    }
+    // First two avatars are both Ada Lovelace, should have same gradient
+    expect(firstBackground).toBe(secondBackground)
   })
 
   test('Avatar produces different colors for different names', async ({ page }) => {
@@ -79,31 +77,65 @@ test.describe('Avatar Component', () => {
     const images = page.locator('img[class*="avatar__image"]')
     const imageCount = await images.count()
 
-    // Should have at least one image
-    expect(imageCount).toBeGreaterThanOrEqual(0)
+    // Should have at least one image (the test page has one valid image)
+    expect(imageCount).toBeGreaterThan(0)
   })
 
   test('Avatar falls back to initials when image fails', async ({ page }) => {
-    // All avatars without valid images should show initials
-    const initialsContainers = page.locator('[class*="avatar__initials"]')
-    const count = await initialsContainers.count()
+    // Find the avatar with the broken image URL and verify it shows initials
+    const section = page.locator('text=Image with Fallback to Initials').locator('..').locator('..')
+    const images = section.locator('img[class*="avatar__image"]')
+    const broken = section.locator('img[alt*="Grace Hopper"]')
 
-    expect(count).toBeGreaterThan(0)
+    // Wait for the broken image to fail loading
+    await page.waitForLoadState('networkidle')
+
+    // The broken image should have an error state (hidden)
+    const brokenVisible = await broken.isVisible()
+    expect(brokenVisible).toBe(false)
+
+    // But initials should be visible as fallback
+    const initials = section.locator('[class*="avatar__initials"]').nth(1)
+    await expect(initials).toBeVisible()
   })
 
   test('Avatar displays status indicator when provided', async ({ page }) => {
     const statusIndicators = page.locator('[class*="avatar__status"]')
     const statusCount = await statusIndicators.count()
 
-    // Status indicators should exist
-    expect(statusCount).toBeGreaterThanOrEqual(0)
+    // Test page has 6 in "With Status Indicators" + 4 in "Status with All Sizes" = at least 10
+    expect(statusCount).toBeGreaterThanOrEqual(10)
   })
 
   test('Avatar respects color override prop', async ({ page }) => {
-    // Color override section should render
+    // Find the "Color Override" section and its avatars
     const allInitials = page.locator('[class*="avatar__initials"]')
-    const count = await allInitials.count()
-    expect(count).toBeGreaterThan(0)
+
+    // Get the first avatar from the Color Override section which should have color="emerald"
+    // The Color Override section is the last major section in the test page
+    // It has 5 avatars with explicit colors (emerald, rose, cyan, violet, neutral)
+
+    // Get an avatar from an earlier section with the same name (Ada Lovelace)
+    // to compare its derived color vs its explicit color override
+
+    // First, get Ada from the "All Sizes" section (should be at index 0)
+    const firstAdaBackground = await allInitials.nth(0).evaluate((el) => {
+      return window.getComputedStyle(el).backgroundImage
+    })
+
+    // Then get all avatars to find Ada with color override
+    const allInitialsCount = await allInitials.count()
+
+    // The Color Override section is near the end, so we look at avatars in that range
+    // Index should be near the end of the list
+    const colorOverrideFirstBackground = await allInitials.nth(allInitialsCount - 5).evaluate((el) => {
+      return window.getComputedStyle(el).backgroundImage
+    })
+
+    // First Ada (from All Sizes) should not have color="emerald" explicitly
+    // Ada Lovelace with color="emerald" override should have a different gradient
+    // (specifically, emerald, not its name-derived color)
+    expect(firstAdaBackground).not.toBe(colorOverrideFirstBackground)
   })
 
   test('Avatar renders with accessibility attributes', async ({ page }) => {
@@ -115,18 +147,12 @@ test.describe('Avatar Component', () => {
   })
 
   test('Avatar sets aria-hidden for decorative mode', async ({ page }) => {
-    const decorativeAvatars = page.locator('div[aria-hidden="true"]')
+    // Find the decorative avatars section specifically
+    const section = page.locator('text=Decorative').locator('..').locator('..')
+    const decorativeAvatars = section.locator('div[aria-hidden="true"]')
     const count = await decorativeAvatars.count()
 
-    // Should have at least some decorative avatars
-    expect(count).toBeGreaterThanOrEqual(0)
-  })
-
-  test('Avatar status indicators display correctly', async ({ page }) => {
-    const statusIndicators = page.locator('[class*="avatar__status"]')
-    const count = await statusIndicators.count()
-
-    // Status indicators should be present
-    expect(count).toBeGreaterThanOrEqual(0)
+    // Test page has 2 decorative avatars in the section
+    expect(count).toBeGreaterThanOrEqual(1)
   })
 })
