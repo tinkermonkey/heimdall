@@ -31,6 +31,12 @@ const DEFAULT_MIN_ZOOM = 0.25
 const DEFAULT_MAX_ZOOM = 4
 const ZOOM_STEP = 0.1
 const PAN_STEP = 20
+const INERTIA_DECAY = 0.95
+const MIN_VELOCITY = 0.1
+
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
 
 export function usePanZoom({
   minZoom = DEFAULT_MIN_ZOOM,
@@ -43,10 +49,12 @@ export function usePanZoom({
 
   const zoomRef = useRef(1)
   const panRef = useRef({ x: 0, y: 0 })
-  const dragRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
+  const dragRef = useRef<{ x: number; y: number; panX: number; panY: number; vx: number; vy: number; time: number } | null>(null)
   const listenersAttachedRef = useRef(false)
   const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
   const handlePointerUpRef = useRef<() => void>()
+  const rafRef = useRef<number | null>(null)
+  const inertiaRafRef = useRef<number | null>(null)
 
   // Keep refs current for event handlers
   useEffect(() => {
@@ -104,25 +112,87 @@ export function usePanZoom({
   const handlePointerMove = useCallback((e: PointerEvent) => {
     if (!dragRef.current) return
 
-    const newPan = clampPan(
-      dragRef.current.panX + (e.clientX - dragRef.current.x),
-      dragRef.current.panY + (e.clientY - dragRef.current.y)
-    )
+    const dx = e.clientX - dragRef.current.x
+    const dy = e.clientY - dragRef.current.y
+    const now = performance.now()
+    const dt = Math.max(1, now - dragRef.current.time) / 1000
 
-    setPan(newPan)
+    dragRef.current.vx = dx / dt
+    dragRef.current.vy = dy / dt
+    dragRef.current.time = now
+
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current)
+    }
+
+    rafRef.current = requestAnimationFrame(() => {
+      if (!dragRef.current) return
+
+      const newPan = clampPan(
+        dragRef.current.panX + (e.clientX - dragRef.current.x),
+        dragRef.current.panY + (e.clientY - dragRef.current.y)
+      )
+
+      setPan(newPan)
+      rafRef.current = null
+    })
   }, [clampPan])
 
   const handlePointerUp = useCallback(() => {
+    if (!dragRef.current) {
+      detachListeners()
+      return
+    }
+
+    const shouldReduceMotion = prefersReducedMotion()
+    const vx = dragRef.current.vx
+    const vy = dragRef.current.vy
+    const velocity = Math.sqrt(vx * vx + vy * vy)
+
     dragRef.current = null
     detachListeners()
-  }, [detachListeners])
+
+    if (shouldReduceMotion || velocity < MIN_VELOCITY) {
+      return
+    }
+
+    let currentVx = vx
+    let currentVy = vy
+    let currentPan = panRef.current
+
+    const animate = () => {
+      currentVx *= INERTIA_DECAY
+      currentVy *= INERTIA_DECAY
+
+      const velocity = Math.sqrt(currentVx * currentVx + currentVy * currentVy)
+      if (velocity < MIN_VELOCITY) {
+        inertiaRafRef.current = null
+        return
+      }
+
+      currentPan = clampPan(currentPan.x + currentVx / 60, currentPan.y + currentVy / 60)
+      setPan(currentPan)
+
+      inertiaRafRef.current = requestAnimationFrame(animate)
+    }
+
+    inertiaRafRef.current = requestAnimationFrame(animate)
+  }, [detachListeners, clampPan])
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
+    if (inertiaRafRef.current !== null) {
+      cancelAnimationFrame(inertiaRafRef.current)
+      inertiaRafRef.current = null
+    }
+
     dragRef.current = {
       x: e.clientX,
       y: e.clientY,
       panX: panRef.current.x,
       panY: panRef.current.y,
+      vx: 0,
+      vy: 0,
+      time: performance.now(),
     }
     attachListeners()
   }, [attachListeners])
@@ -136,10 +206,16 @@ export function usePanZoom({
     handlePointerUpRef.current = handlePointerUp
   }, [handlePointerUp])
 
-  // Cleanup listeners on unmount if they were attached
+  // Cleanup listeners and animations on unmount
   useEffect(() => {
     return () => {
       detachListeners()
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+      }
+      if (inertiaRafRef.current !== null) {
+        cancelAnimationFrame(inertiaRafRef.current)
+      }
     }
   }, [detachListeners])
 
@@ -163,38 +239,57 @@ export function usePanZoom({
       panRef.current.y - (cy / prev) * change
     )
 
-    setZoom(next)
-    setPan(newPan)
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current)
+    }
+
+    rafRef.current = requestAnimationFrame(() => {
+      setZoom(next)
+      setPan(newPan)
+      rafRef.current = null
+    })
   }, [clampPan, minZoom, maxZoom])
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
       const key = e.key
+      let updateZoom: number | null = null
+      let updatePan: { x: number; y: number } | null = null
 
       if (key === '+' || key === '=') {
         e.preventDefault()
-        const next = Math.min(maxZoom, zoomRef.current + ZOOM_STEP)
-        setZoom(next)
+        updateZoom = Math.min(maxZoom, zoomRef.current + ZOOM_STEP)
       } else if (key === '-' || key === '_') {
         e.preventDefault()
-        const next = Math.max(minZoom, zoomRef.current - ZOOM_STEP)
-        setZoom(next)
+        updateZoom = Math.max(minZoom, zoomRef.current - ZOOM_STEP)
       } else if (key === 'ArrowUp') {
         e.preventDefault()
-        const newPan = clampPan(panRef.current.x, panRef.current.y + PAN_STEP)
-        setPan(newPan)
+        updatePan = clampPan(panRef.current.x, panRef.current.y + PAN_STEP)
       } else if (key === 'ArrowDown') {
         e.preventDefault()
-        const newPan = clampPan(panRef.current.x, panRef.current.y - PAN_STEP)
-        setPan(newPan)
+        updatePan = clampPan(panRef.current.x, panRef.current.y - PAN_STEP)
       } else if (key === 'ArrowLeft') {
         e.preventDefault()
-        const newPan = clampPan(panRef.current.x + PAN_STEP, panRef.current.y)
-        setPan(newPan)
+        updatePan = clampPan(panRef.current.x + PAN_STEP, panRef.current.y)
       } else if (key === 'ArrowRight') {
         e.preventDefault()
-        const newPan = clampPan(panRef.current.x - PAN_STEP, panRef.current.y)
-        setPan(newPan)
+        updatePan = clampPan(panRef.current.x - PAN_STEP, panRef.current.y)
+      }
+
+      if (updateZoom !== null || updatePan !== null) {
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current)
+        }
+
+        rafRef.current = requestAnimationFrame(() => {
+          if (updateZoom !== null) {
+            setZoom(updateZoom)
+          }
+          if (updatePan !== null) {
+            setPan(updatePan)
+          }
+          rafRef.current = null
+        })
       }
     },
     [clampPan, minZoom, maxZoom]
@@ -206,15 +301,25 @@ export function usePanZoom({
       const prev = zoomRef.current
       const change = clamped - prev
 
+      let newPan: { x: number; y: number } | null = null
       if (cx !== undefined && cy !== undefined) {
-        const newPan = clampPan(
+        newPan = clampPan(
           panRef.current.x - (cx / prev) * change,
           panRef.current.y - (cy / prev) * change
         )
-        setPan(newPan)
       }
 
-      setZoom(clamped)
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+      }
+
+      rafRef.current = requestAnimationFrame(() => {
+        setZoom(clamped)
+        if (newPan) {
+          setPan(newPan)
+        }
+        rafRef.current = null
+      })
     },
     [clampPan, minZoom, maxZoom]
   )
@@ -222,14 +327,29 @@ export function usePanZoom({
   const panTo = useCallback(
     (x: number, y: number) => {
       const newPan = clampPan(x, y)
-      setPan(newPan)
+
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+      }
+
+      rafRef.current = requestAnimationFrame(() => {
+        setPan(newPan)
+        rafRef.current = null
+      })
     },
     [clampPan]
   )
 
   const reset = useCallback(() => {
-    setZoom(1)
-    setPan({ x: 0, y: 0 })
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current)
+    }
+
+    rafRef.current = requestAnimationFrame(() => {
+      setZoom(1)
+      setPan({ x: 0, y: 0 })
+      rafRef.current = null
+    })
   }, [])
 
   // matrix(a, b, c, d, e, f) represents:
