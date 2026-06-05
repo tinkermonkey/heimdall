@@ -40,17 +40,11 @@ export const useVirtualList = ({
       setVisibleRange([startIndex, endIndex])
     }
 
-    const observer = new IntersectionObserver(calculateVisibleRange, {
-      root: container,
-      threshold: [0, 0.25, 0.5, 0.75, 1],
-    })
-
-    observer.observe(sentinel)
-
+    container.addEventListener('scroll', calculateVisibleRange)
     calculateVisibleRange()
 
     return () => {
-      observer.disconnect()
+      container.removeEventListener('scroll', calculateVisibleRange)
     }
   }, [itemCount, itemHeight, containerHeight, overscan])
 
