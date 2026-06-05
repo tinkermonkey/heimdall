@@ -57,33 +57,36 @@ type MapCanvasCommonProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect
   maxZoom?: number
   heatmapColor?: string
   onViewportChange?: (viewport: { center: { lat: number; lng: number }; zoom: number }) => void
+  pins?: MapPin[]
+  selectedPinId?: string
+  onSelectPin?: (pinId: string | null) => void
+  trackPoints?: MapTrackPoint[]
+  heatmapData?: HeatmapDataPoint[]
 }
 
 type MapCanvasPinsProps = MapCanvasCommonProps & {
   mode: 'pins'
   pins: MapPin[]
-  selectedPinId?: string
-  onSelectPin?: (pinId: string | null) => void
-  trackPoints?: MapTrackPoint[]
-  heatmapData?: HeatmapDataPoint[]
+  trackPoints?: never
+  heatmapData?: never
 }
 
 type MapCanvasTrackProps = MapCanvasCommonProps & {
   mode: 'track'
-  pins?: MapPin[]
-  selectedPinId?: string
-  onSelectPin?: (pinId: string | null) => void
   trackPoints: MapTrackPoint[]
-  heatmapData?: HeatmapDataPoint[]
+  pins?: never
+  selectedPinId?: never
+  onSelectPin?: never
+  heatmapData?: never
 }
 
 type MapCanvasHeatmapProps = MapCanvasCommonProps & {
   mode: 'heatmap'
-  pins?: MapPin[]
-  selectedPinId?: string
-  onSelectPin?: (pinId: string | null) => void
-  trackPoints?: MapTrackPoint[]
   heatmapData: HeatmapDataPoint[]
+  pins?: never
+  selectedPinId?: never
+  onSelectPin?: never
+  trackPoints?: never
 }
 
 export type MapCanvasProps = MapCanvasPinsProps | MapCanvasTrackProps | MapCanvasHeatmapProps
@@ -226,8 +229,8 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
       let boundsToUse: { north: number; south: number; east: number; west: number } | null = null
       if (bounds) {
         boundsToUse = {
-          north: bounds[0].lat,
-          south: bounds[1].lat,
+          north: Math.max(bounds[0].lat, bounds[1].lat),
+          south: Math.min(bounds[0].lat, bounds[1].lat),
           east: Math.max(bounds[0].lng, bounds[1].lng),
           west: Math.min(bounds[0].lng, bounds[1].lng),
         }
@@ -513,7 +516,8 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
         })()}
       </div>
     )
-})
+  }
+)
 
 MapCanvas.displayName = 'MapCanvas'
 
