@@ -84,15 +84,16 @@ test.describe('Avatar Component', () => {
   test('Avatar falls back to initials when image fails', async ({ page }) => {
     // Find the avatar with the broken image URL and verify it shows initials
     const section = page.locator('text=Image with Fallback to Initials').locator('..').locator('..')
-    const images = section.locator('img[class*="avatar__image"]')
-    const broken = section.locator('img[alt*="Grace Hopper"]')
 
     // Wait for the broken image to fail loading
     await page.waitForLoadState('networkidle')
 
-    // The broken image should have an error state (hidden)
-    const brokenVisible = await broken.isVisible()
-    expect(brokenVisible).toBe(false)
+    // The broken image should have an error state (hidden via display: none)
+    const brokenImage = section.locator('img[src*="invalid-url"]')
+    const brokenImageStyle = await brokenImage.evaluate((el) => {
+      return window.getComputedStyle(el).display
+    })
+    expect(brokenImageStyle).toBe('none')
 
     // But initials should be visible as fallback
     const initials = section.locator('[class*="avatar__initials"]').nth(1)
@@ -112,9 +113,6 @@ test.describe('Avatar Component', () => {
     const allInitials = page.locator('[class*="avatar__initials"]')
 
     // Get the first avatar from the Color Override section which should have color="emerald"
-    // The Color Override section is the last major section in the test page
-    // It has 5 avatars with explicit colors (emerald, rose, cyan, violet, neutral)
-
     // Get an avatar from an earlier section with the same name (Ada Lovelace)
     // to compare its derived color vs its explicit color override
 
@@ -126,9 +124,9 @@ test.describe('Avatar Component', () => {
     // Then get all avatars to find Ada with color override
     const allInitialsCount = await allInitials.count()
 
-    // The Color Override section is near the end, so we look at avatars in that range
-    // Index should be near the end of the list
-    const colorOverrideFirstBackground = await allInitials.nth(allInitialsCount - 5).evaluate((el) => {
+    // The Color Override section has 5 avatars, Decorative section has 2 avatars after it
+    // So the first Color Override avatar (Ada Lovelace with color="emerald") is at index: allInitialsCount - 7
+    const colorOverrideFirstBackground = await allInitials.nth(allInitialsCount - 7).evaluate((el) => {
       return window.getComputedStyle(el).backgroundImage
     })
 
