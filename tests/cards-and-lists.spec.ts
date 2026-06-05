@@ -272,7 +272,7 @@ test.describe('ResultCard Component', () => {
     const sections = page.locator('section')
     await sections.nth(2).scrollIntoViewIfNeeded()
     const resultCard = sections.nth(2).locator('[role="article"]')
-    const actionButton = resultCard.locator('[class*="action-button"]').first()
+    const actionButton = resultCard.locator('.result-card__actions button').first()
 
     let cardOpened = false
     let actionClicked = false
