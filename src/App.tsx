@@ -33,6 +33,7 @@ import KanbanBoardTestPage from './test-pages/KanbanBoardTestPage'
 import MapCanvasTestPage from './test-pages/MapCanvasTestPage'
 import LineageRailTestPage from './test-pages/LineageRailTestPage'
 import DiffViewerTestPage from './test-pages/DiffViewerTestPage'
+import VersionTimelineTestPage from './test-pages/VersionTimelineTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -154,6 +155,10 @@ export default function App() {
 
   if (exampleParam === 'diff-viewer') {
     return <DiffViewerTestPage />
+  }
+
+  if (exampleParam === 'version-timeline') {
+    return <VersionTimelineTestPage />
   }
 
   if (testParam === 'foundation') {
