@@ -71,6 +71,8 @@ export const getWeekDays = (date: Date | string, weekStartsOn: 0 | 1 = 0): Date[
   return days
 }
 
+const MAX_WEEKS = 8
+
 export const getMonthGrid = (month: Date | string, weekStartsOn: 0 | 1 = 0): Date[][] => {
   const date = typeof month === 'string' ? new Date(month) : month
 
@@ -85,7 +87,7 @@ export const getMonthGrid = (month: Date | string, weekStartsOn: 0 | 1 = 0): Dat
   const grid: Date[][] = []
   let currentDate = new Date(firstWeekDays[0])
 
-  while (true) {
+  while (grid.length < MAX_WEEKS) {
     const week = getWeekDays(currentDate, weekStartsOn)
     grid.push(week)
 
