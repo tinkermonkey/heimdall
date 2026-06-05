@@ -170,6 +170,29 @@ export default function AvatarTestPage() {
         </div>
       </section>
 
+      {/* Section: Color Override */}
+      <section style={{ marginBottom: '40px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          Avatar · Color Override (with Status Indicator)
+        </div>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <Avatar name="Ada Lovelace" size="md" color="emerald" status="emerald" />
+          <Avatar name="Grace Hopper" size="md" color="rose" status="rose" />
+          <Avatar name="Alan Turing" size="md" color="cyan" status="cyan" />
+          <Avatar name="Katherine Johnson" size="md" color="violet" status="violet" />
+          <Avatar name="Another User" size="md" color="neutral" status="neutral" />
+        </div>
+      </section>
+
       {/* Section: Decorative Avatar */}
       <section style={{ marginBottom: '40px' }}>
         <div
