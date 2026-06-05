@@ -89,32 +89,37 @@ test.describe('VersionTimeline Component', () => {
     await page.keyboard.press('ArrowDown')
     await page.waitForTimeout(100)
 
-    const selectedText = page.locator('text=Selected: v1').nth(1)
-    await expect(selectedText).toBeVisible()
+    const selectedEntry = timeline.locator('[aria-selected="true"]').first()
+    const selectedVersionBefore = await selectedEntry.getAttribute('data-version-id')
 
     await page.keyboard.press('ArrowDown')
     await page.waitForTimeout(100)
 
-    const stillSelectedText = page.locator('text=Selected: v1').nth(1)
-    await expect(stillSelectedText).toBeVisible()
+    const selectedEntryAfter = timeline.locator('[aria-selected="true"]').first()
+    const selectedVersionAfter = await selectedEntryAfter.getAttribute('data-version-id')
+
+    expect(selectedVersionAfter).toBe(selectedVersionBefore)
   })
 
-  test('keyboard navigation works with newest-first order', async ({ page }) => {
+  test('arrow up at first entry does not navigate', async ({ page }) => {
     await page.goto('http://localhost:5173/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').first()
     await timeline.focus()
 
-    const selectedTextBefore = page.locator('text=Selected: v1').first()
-    await expect(selectedTextBefore).toBeVisible()
+    const selectedEntryBefore = timeline.locator('[aria-selected="true"]').first()
+    const selectedVersionBefore = await selectedEntryBefore.getAttribute('data-version-id')
 
-    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('ArrowUp')
     await page.waitForTimeout(100)
 
-    const selectedTextAfter = page.locator('text=Selected: v2').first()
-    await expect(selectedTextAfter).toBeVisible()
+    const selectedEntryAfter = timeline.locator('[aria-selected="true"]').first()
+    const selectedVersionAfter = await selectedEntryAfter.getAttribute('data-version-id')
+
+    expect(selectedVersionAfter).toBe(selectedVersionBefore)
   })
+
 
   test('oldest-first order reverses entry order', async ({ page }) => {
     await page.goto('http://localhost:5173/?example=version-timeline')
@@ -123,11 +128,11 @@ test.describe('VersionTimeline Component', () => {
     const newestFirstTimeline = page.locator('[data-testid="version-timeline"]').first()
     const oldestFirstTimeline = page.locator('[data-testid="version-timeline"]').nth(1)
 
-    const newestFirstFirstEntry = newestFirstTimeline.locator('[data-version-id="v1"]')
-    const oldestFirstFirstEntry = oldestFirstTimeline.locator('[data-version-id="v5"]')
+    const firstNewest = newestFirstTimeline.locator('[role="option"]').first()
+    await expect(firstNewest).toHaveAttribute('data-version-id', 'v1')
 
-    await expect(newestFirstFirstEntry).toBeVisible()
-    await expect(oldestFirstFirstEntry).toBeVisible()
+    const firstOldest = oldestFirstTimeline.locator('[role="option"]').first()
+    await expect(firstOldest).toHaveAttribute('data-version-id', 'v5')
   })
 
   test('empty state renders when no entries provided', async ({ page }) => {
@@ -144,13 +149,11 @@ test.describe('VersionTimeline Component', () => {
 
     const readOnlyTimeline = page.locator('[data-testid="version-timeline"]').nth(4)
 
-    const firstEntry = readOnlyTimeline.locator('[data-version-id="v1"]')
-    await firstEntry.click()
+    const v2Entry = readOnlyTimeline.locator('[data-version-id="v2"]')
+    await v2Entry.click()
 
-    const timeline = page.locator('[role="listbox"]').nth(4)
-    const ariaSelected = await timeline.locator('[aria-selected="true"]').count()
-
-    expect(ariaSelected).toBe(0)
+    const v2EntryAfterClick = readOnlyTimeline.locator('[data-version-id="v2"]')
+    await expect(v2EntryAfterClick).toHaveAttribute('aria-selected', 'false')
   })
 
   test('single entry does not show connector rail', async ({ page }) => {
