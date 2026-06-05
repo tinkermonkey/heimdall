@@ -180,7 +180,15 @@ const WeekView: React.FC<{
             <div
               key={date.toISOString()}
               className="calendar-week__day"
+              role="button"
+              tabIndex={0}
               onClick={() => onSelectDate?.(date)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  onSelectDate?.(date)
+                }
+              }}
             >
               <div className="calendar-week__header">
                 {date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
@@ -193,9 +201,18 @@ const WeekView: React.FC<{
                       key={event.id}
                       className="calendar-week__event"
                       style={{ borderLeftColor: color }}
+                      role="button"
+                      tabIndex={0}
                       onClick={(e) => {
                         e.stopPropagation()
                         onSelectEvent?.(event.id)
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          onSelectEvent?.(event.id)
+                        }
                       }}
                     >
                       {renderEvent ? renderEvent(event, color) : <span>{event.title || 'Event'}</span>}
@@ -246,7 +263,15 @@ const DayView: React.FC<{
                 key={event.id}
                 className="calendar-day__event"
                 style={{ borderLeftColor: color }}
+                role="button"
+                tabIndex={0}
                 onClick={() => onSelectEvent?.(event.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onSelectEvent?.(event.id)
+                  }
+                }}
               >
                 {renderEvent ? renderEvent(event, color) : <span>{event.title || 'Event'}</span>}
               </div>
@@ -289,7 +314,15 @@ const AgendaView: React.FC<{
               <div
                 key={event.id}
                 className="calendar-agenda__item"
+                role="button"
+                tabIndex={0}
                 onClick={() => onSelectEvent?.(event.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    onSelectEvent?.(event.id)
+                  }
+                }}
               >
                 <div
                   className="calendar-agenda__date"
