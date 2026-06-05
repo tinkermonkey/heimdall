@@ -128,7 +128,7 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
                 </div>
               )
             })}
-            <div style={{ height: (lines.length - endIdx) * ITEM_HEIGHT }} />
+            <div style={{ height: Math.max(0, (lines.length - endIdx) * ITEM_HEIGHT) }} />
           </div>
         </div>
       </div>
