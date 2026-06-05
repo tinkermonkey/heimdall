@@ -37,10 +37,13 @@ export const useVirtualList = ({
       const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan)
       const endIndex = Math.min(itemCount, Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan)
 
-      setVisibleRange([startIndex, endIndex])
+      setVisibleRange(prev => {
+        if (prev[0] === startIndex && prev[1] === endIndex) return prev
+        return [startIndex, endIndex]
+      })
     }
 
-    container.addEventListener('scroll', calculateVisibleRange)
+    container.addEventListener('scroll', calculateVisibleRange, { passive: true })
     calculateVisibleRange()
 
     return () => {
