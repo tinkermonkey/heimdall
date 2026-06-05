@@ -23,6 +23,11 @@ function pixelsToLatLng(x: number, y: number, zoom: number): { lat: number; lng:
 
 // ─── Public Types ─────────────────────────────────────────────────────────────
 
+export interface LatLng {
+  lat: number
+  lng: number
+}
+
 export interface MapPin {
   id: string
   lat: number
@@ -44,26 +49,44 @@ export interface HeatmapDataPoint {
   value: number
 }
 
-export interface MapCanvasProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
-  mode: 'pins' | 'track' | 'heatmap'
-  pins?: MapPin[]
+type MapCanvasCommonProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> & {
+  bounds?: [LatLng, LatLng]
+  tileUrl?: string | ((x: number, y: number, z: number) => string)
+  scaleBar?: boolean
+  minZoom?: number
+  maxZoom?: number
+  heatmapColor?: string
+  onViewportChange?: (viewport: { center: { lat: number; lng: number }; zoom: number }) => void
+}
+
+type MapCanvasPinsProps = MapCanvasCommonProps & {
+  mode: 'pins'
+  pins: MapPin[]
   selectedPinId?: string
   onSelectPin?: (pinId: string | null) => void
   trackPoints?: MapTrackPoint[]
   heatmapData?: HeatmapDataPoint[]
-  heatmapColor?: string
-  tileUrl?: string
-  bounds?: {
-    north: number
-    south: number
-    east: number
-    west: number
-  }
-  scaleBar?: boolean
-  minZoom?: number
-  maxZoom?: number
-  onViewportChange?: (viewport: { center: { lat: number; lng: number }; zoom: number }) => void
 }
+
+type MapCanvasTrackProps = MapCanvasCommonProps & {
+  mode: 'track'
+  pins?: MapPin[]
+  selectedPinId?: string
+  onSelectPin?: (pinId: string | null) => void
+  trackPoints: MapTrackPoint[]
+  heatmapData?: HeatmapDataPoint[]
+}
+
+type MapCanvasHeatmapProps = MapCanvasCommonProps & {
+  mode: 'heatmap'
+  pins?: MapPin[]
+  selectedPinId?: string
+  onSelectPin?: (pinId: string | null) => void
+  trackPoints?: MapTrackPoint[]
+  heatmapData: HeatmapDataPoint[]
+}
+
+export type MapCanvasProps = MapCanvasPinsProps | MapCanvasTrackProps | MapCanvasHeatmapProps
 
 // ─── Grid Pattern ─────────────────────────────────────────────────────────────
 
@@ -137,7 +160,7 @@ function PinPopover({ pin, x, y, onClose }: PinPopoverProps) {
 export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
   (
     {
-      mode = 'pins',
+      mode,
       pins = [],
       selectedPinId,
       onSelectPin,
@@ -151,7 +174,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
       maxZoom = 18,
       onViewportChange,
       className = '',
-      ...props
+      ...htmlProps
     },
     ref
   ) => {
@@ -199,8 +222,16 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
         ...heatmapData.map((h) => ({ lat: h.lat, lng: h.lng })),
       ]
 
-      let boundsToUse = bounds
-      if (!boundsToUse && items.length > 0) {
+      // Convert bounds tuple to object format, or derive from items
+      let boundsToUse: { north: number; south: number; east: number; west: number } | null = null
+      if (bounds) {
+        boundsToUse = {
+          north: bounds[0].lat,
+          south: bounds[1].lat,
+          east: Math.max(bounds[0].lng, bounds[1].lng),
+          west: Math.min(bounds[0].lng, bounds[1].lng),
+        }
+      } else if (items.length > 0) {
         const lats = items.map((i) => i.lat)
         const lngs = items.map((i) => i.lng)
         boundsToUse = {
@@ -223,8 +254,24 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
       const height = Math.abs(southPixel - northPixel)
       const width = Math.abs(eastPixel - westPixel)
 
+      // Handle edge cases: zero dimensions or container too small
+      if (height === 0 || width === 0 || containerSize.height <= padding * 2 || containerSize.width <= padding * 2) {
+        // Fall back to a default zoom level
+        panTo(containerSize.width / 2, containerSize.height / 2)
+        didInitRef.current = true
+        return
+      }
+
       const zoomH = Math.log2((containerSize.height - padding * 2) / height)
       const zoomW = Math.log2((containerSize.width - padding * 2) / width)
+
+      // Ensure zoom is valid (not NaN, not Infinity)
+      if (!Number.isFinite(zoomH) || !Number.isFinite(zoomW)) {
+        panTo(containerSize.width / 2, containerSize.height / 2)
+        didInitRef.current = true
+        return
+      }
+
       const calculatedZoom = Math.max(minZoom, Math.min(maxZoom, Math.floor(Math.min(zoomH, zoomW))))
 
       const centerLat = (boundsToUse.north + boundsToUse.south) / 2
@@ -348,10 +395,14 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
       const xEnd = Math.min(n, Math.ceil((containerSize.width - viewport.x) / (256 * viewport.zoom)))
       const yEnd = Math.min(n, Math.ceil((containerSize.height - viewport.y) / (256 * viewport.zoom)))
 
+      const getTileUrl = typeof tileUrl === 'function' ? tileUrl : (x: number, y: number, z: number) => {
+        return (tileUrl as string).replace('{x}', String(x)).replace('{y}', String(y)).replace('{z}', String(z))
+      }
+
       const tiles = []
       for (let x = xStart; x < xEnd; x++) {
         for (let y = yStart; y < yEnd; y++) {
-          const url = tileUrl.replace('{x}', String(x)).replace('{y}', String(y)).replace('{z}', String(zoom))
+          const url = getTileUrl(x, y, zoom)
           tiles.push(
             <image
               key={`${zoom}-${x}-${y}`}
@@ -382,7 +433,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
         onPointerDown={handlePointerDown}
         role="application"
         aria-label="Map canvas"
-        {...props}
+        {...htmlProps}
       >
         <svg
           className="map-svg"
@@ -462,8 +513,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
         })()}
       </div>
     )
-  }
-)
+})
 
 MapCanvas.displayName = 'MapCanvas'
 

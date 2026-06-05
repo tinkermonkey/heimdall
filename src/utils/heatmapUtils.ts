@@ -21,7 +21,47 @@ export function normalizeColorToHex(color: string): string {
     return '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')
   }
 
-  // Named colors — map common ones
+  // hsl(h, s%, l%) or hsla(h, s%, l%, a)
+  const hslMatch = trimmed.match(/hsla?\s*\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)%\s*,\s*(\d+(?:\.\d+)?)%/)
+  if (hslMatch) {
+    const h = parseFloat(hslMatch[1]) / 360
+    const s = parseFloat(hslMatch[2]) / 100
+    const l = parseFloat(hslMatch[3]) / 100
+
+    const c = (1 - Math.abs(2 * l - 1)) * s
+    const x = c * (1 - Math.abs(((h * 6) % 2) - 1))
+    const m = l - c / 2
+
+    let r = 0,
+      g = 0,
+      b = 0
+    if (h < 1 / 6) {
+      r = c
+      g = x
+    } else if (h < 2 / 6) {
+      r = x
+      g = c
+    } else if (h < 3 / 6) {
+      g = c
+      b = x
+    } else if (h < 4 / 6) {
+      g = x
+      b = c
+    } else if (h < 5 / 6) {
+      r = x
+      b = c
+    } else {
+      r = c
+      b = x
+    }
+
+    const toHex = (v: number) => Math.round((v + m) * 255)
+      .toString(16)
+      .padStart(2, '0')
+    return '#' + toHex(r) + toHex(g) + toHex(b)
+  }
+
+  // Named colors — map common ones and CSS standard colors
   const namedColors: Record<string, string> = {
     black: '#000000',
     white: '#ffffff',
@@ -32,7 +72,16 @@ export function normalizeColorToHex(color: string): string {
     cyan: '#00ffff',
     magenta: '#ff00ff',
     gray: '#808080',
+    grey: '#808080',
     silver: '#c0c0c0',
+    maroon: '#800000',
+    olive: '#808000',
+    lime: '#00ff00',
+    aqua: '#00ffff',
+    teal: '#008080',
+    navy: '#000080',
+    purple: '#800080',
+    fuchsia: '#ff00ff',
   }
 
   const lowerColor = trimmed.toLowerCase()
@@ -40,8 +89,15 @@ export function normalizeColorToHex(color: string): string {
     return namedColors[lowerColor]
   }
 
-  // Default to black if unrecognized
-  return '#000000'
+  // Unrecognized color — provide diagnostic feedback
+  if (process.env.NODE_ENV === 'development') {
+    console.warn(
+      `MapCanvas heatmapColor: Unrecognized color format "${color}". Supported formats: hex (#rrggbb), rgb(r, g, b), hsl(h, s%, l%), or CSS named colors. Falling back to emerald (#10b981).`
+    )
+  }
+
+  // Default to emerald (standard Tailwind color) instead of black
+  return '#10b981'
 }
 
 export function getHeatmapColor(value: number, minValue: number, maxValue: number, baseColor: string): string {

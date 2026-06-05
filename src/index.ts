@@ -166,6 +166,7 @@ export { LogStream, type LogStreamProps, type LogEntry } from './components/LogS
 export {
   MapCanvas,
   type MapCanvasProps,
+  type LatLng,
   type MapPin,
   type MapTrackPoint,
   type HeatmapDataPoint,
