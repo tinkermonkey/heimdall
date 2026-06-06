@@ -12,7 +12,7 @@ import {
   type OrderedItem,
   type RelationshipBuilderValue,
 } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const fg2 = 'rgb(var(--canvas-fg-2, 55 65 81))'
 

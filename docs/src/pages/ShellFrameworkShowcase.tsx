@@ -1,4 +1,4 @@
-import { ShellLayout, Icon } from '@tinkermonkey/heimdall-ui'
+import { Icon } from '@tinkermonkey/heimdall-ui'
 
 export default function ShellFrameworkShowcase() {
   return (

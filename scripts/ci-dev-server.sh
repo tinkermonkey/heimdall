@@ -12,4 +12,5 @@ cp "$PROJECT_DIR/vite.config.mjs" "$TEMP_DIR/vite.config.mjs"
 # Symlink node_modules so imports resolve correctly
 ln -sfn "$PROJECT_DIR/node_modules" "$TEMP_DIR/node_modules"
 
+export VITE_PROJECT_DIR="$PROJECT_DIR"
 exec npx vite "$PROJECT_DIR" --config "$TEMP_DIR/vite.config.mjs"

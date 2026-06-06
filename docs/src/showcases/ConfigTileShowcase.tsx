@@ -2,9 +2,8 @@ import { useState } from 'react'
 import {
   ConfigTile,
   type ConfigTileProps,
-  type ConfigTileSummaryItem,
 } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 export function ConfigTileShowcase() {
   const [lastClicked, setLastClicked] = useState<string | null>(null)

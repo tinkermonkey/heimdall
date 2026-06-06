@@ -224,3 +224,16 @@ export function BareSplitPane() {
     </BareSection>
   )
 }
+
+export function BareShell() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareAppTitle />
+      <BareTitlebar />
+      <BareStatusbar />
+      <BareShellLayout />
+      <BarePanel />
+      <BareSplitPane />
+    </div>
+  )
+}

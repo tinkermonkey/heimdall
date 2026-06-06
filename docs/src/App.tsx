@@ -3,6 +3,7 @@ import { ShellLayout, Icon, type IconName } from '@tinkermonkey/heimdall-ui'
 
 import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase } from './showcases/FoundationShowcase'
 import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase, VersionPillShowcase, SegmentedControlShowcase } from './showcases/PrimitivesShowcase'
+import { AvatarShowcase } from './showcases/AvatarShowcase'
 import { TextInputShowcase, TextAreaShowcase, NumberInputShowcase, SelectShowcase, TriStateShowcase, FieldShowcase } from './showcases/InputsShowcase'
 import { StatTileShowcase, StatGridShowcase, TableShowcase, KVGridShowcase } from './showcases/DataDisplayShowcase'
 import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from './showcases/NavigationShowcase'
@@ -16,11 +17,12 @@ import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, Rela
 import { GraphNodeShowcase, GraphCanvasShowcase, GraphInspectorShowcase, TopologyNodeShowcase, GraphEdgeShowcase } from './showcases/GraphShowcase'
 import { FilterDropdownShowcase } from './showcases/FilterDropdownShowcase'
 import { InspectorPanelShowcase } from './showcases/InspectorPanelShowcase'
-import { HierarchyTreeShowcase } from './showcases/HierarchyTreeShowcase'
 import { QuickAccessTileShowcase } from './showcases/QuickAccessTileShowcase'
 import { ConfigTileShowcase } from './showcases/ConfigTileShowcase'
 import { WorkspaceSwitcherDialogShowcase } from './showcases/WorkspaceSwitcherDialogShowcase'
+import { KanbanBoardShowcase } from './showcases/KanbanBoardShowcase'
 import PrimitivesTestPage from '@/test-pages/PrimitivesTestPage'
+import AvatarTestPage from '@/test-pages/AvatarTestPage'
 import DataDisplayTestPage from '@/test-pages/DataDisplayTestPage'
 import HierarchyComponentTestPage from '@/test-pages/HierarchyComponentTestPage'
 import OverlayComponentsTestPage from '@/test-pages/OverlayComponentsTestPage'
@@ -34,6 +36,20 @@ import PagePatternsShowcase from '@/test-pages/PagePatternsShowcase'
 import ChatShowcase from '@/test-pages/ChatShowcase'
 import FormsShowcase from '@/test-pages/FormsShowcase'
 import GraphShowcase from '@/test-pages/GraphShowcase'
+import VersionTimelineTestPage from '@/test-pages/VersionTimelineTestPage'
+import DiffViewerTestPage from '@/test-pages/DiffViewerTestPage'
+import CardsAndListsTestPage from '@/test-pages/CardsAndListsTestPage'
+import CalendarTestPage from '@/test-pages/CalendarTestPage'
+import KanbanBoardTestPage from '@/test-pages/KanbanBoardTestPage'
+import MapCanvasTestPage from '@/test-pages/MapCanvasTestPage'
+import { CalendarShowcase } from './showcases/CalendarShowcase'
+import { MapCanvasShowcase } from './showcases/MapCanvasShowcase'
+import { LineageRailShowcase } from './showcases/LineageRailShowcase'
+import { VersionTimelineShowcase } from './showcases/VersionTimelineShowcase'
+import { DiffViewerShowcase } from './showcases/DiffViewerShowcase'
+import { ResultCardShowcase } from './showcases/ResultCardShowcase'
+import { AssetCardShowcase } from './showcases/AssetCardShowcase'
+import { LogStreamShowcase } from './showcases/LogStreamShowcase'
 
 type NavSection = {
   title: string
@@ -49,6 +65,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   foundation: FoundationTestPage,
   // Primitives
   icon: IconShowcase,
+  avatar: AvatarShowcase,
+  'avatar-test': AvatarTestPage,
   button: ButtonShowcase,
   chip: ChipShowcase,
   badge: BadgeShowcase,
@@ -72,6 +90,17 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'inspector-panel-test': InspectorPanelTestPage,
   'hierarchy-tree': HierarchyComponentTestPage,
   'data-display': DataDisplayTestPage,
+  'cards-and-lists': CardsAndListsTestPage,
+  'result-card': ResultCardShowcase,
+  'asset-card': AssetCardShowcase,
+  'log-stream': LogStreamShowcase,
+  calendar: CalendarShowcase,
+  'calendar-test': CalendarTestPage,
+  'map-canvas': MapCanvasShowcase,
+  'map-canvas-test': MapCanvasTestPage,
+  'lineage-rail': LineageRailShowcase,
+  'kanban-board': KanbanBoardShowcase,
+  'kanban-board-test': KanbanBoardTestPage,
   // Navigation
   'nav-item': NavItemShowcase,
   sidebar: SidebarShowcase,
@@ -115,6 +144,10 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'page-header': PageHeaderShowcase,
   'filter-bar': FilterBarShowcase,
   'activity-timeline': ActivityTimelineShowcase,
+  'version-timeline': VersionTimelineShowcase,
+  'version-timeline-test': VersionTimelineTestPage,
+  'diff-viewer': DiffViewerShowcase,
+  'diff-viewer-test': DiffViewerTestPage,
   'alert-strip': AlertStripShowcase,
   'quick-access-grid': QuickAccessGridShowcase,
   'quick-access-tile': QuickAccessTileShowcase,
@@ -161,6 +194,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Primitives',
     items: [
       { id: 'icon', label: 'Icon', icon: 'star' },
+      { id: 'avatar', label: 'Avatar', icon: 'user' },
       { id: 'button', label: 'Button', icon: 'component' },
       { id: 'chip', label: 'Chip', icon: 'filter' },
       { id: 'badge', label: 'Badge', icon: 'alert' },
@@ -189,6 +223,14 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'kv-grid', label: 'KVGrid', icon: 'data' },
       { id: 'inspector-panel', label: 'InspectorPanel', icon: 'info' },
       { id: 'hierarchy-tree', label: 'HierarchyTree', icon: 'schema' },
+      { id: 'cards-and-lists', label: 'Cards & Lists', icon: 'layout' },
+      { id: 'result-card', label: 'ResultCard', icon: 'layout' },
+      { id: 'asset-card', label: 'AssetCard', icon: 'image' },
+      { id: 'log-stream', label: 'LogStream', icon: 'code' },
+      { id: 'calendar', label: 'Calendar', icon: 'calendar' },
+      { id: 'map-canvas', label: 'MapCanvas', icon: 'map' },
+      { id: 'lineage-rail', label: 'LineageRail', icon: 'arrow-right' },
+      { id: 'kanban-board', label: 'KanbanBoard', icon: 'layout' },
     ],
   },
   {
@@ -248,6 +290,8 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'page-header', label: 'PageHeader', icon: 'layout' },
       { id: 'filter-bar', label: 'FilterBar', icon: 'filter' },
       { id: 'activity-timeline', label: 'ActivityTimeline', icon: 'clock' },
+      { id: 'version-timeline', label: 'VersionTimeline', icon: 'clock' },
+      { id: 'diff-viewer', label: 'DiffViewer', icon: 'file' },
       { id: 'alert-strip', label: 'AlertStrip', icon: 'alert' },
       { id: 'quick-access-grid', label: 'QuickAccessGrid', icon: 'table' },
       { id: 'quick-access-tile', label: 'QuickAccessTile', icon: 'component' },

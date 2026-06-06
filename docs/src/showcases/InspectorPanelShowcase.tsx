@@ -1,7 +1,6 @@
 import {
   InspectorPanel,
   KVGrid,
-  VersionPill,
   Icon,
   Button,
   type KVGridRow,

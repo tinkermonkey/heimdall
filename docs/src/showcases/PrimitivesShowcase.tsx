@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ICONS, Icon, Button, Chip, Badge, StatusBadge, VersionPill, SegmentedControl, type IconName } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoRow, DemoCard, DemoGrid, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const ICON_NAMES = Object.keys(ICONS) as IconName[]
 

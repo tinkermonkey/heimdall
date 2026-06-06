@@ -1,6 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
 import { bezierPath, rectEdgePoint } from '../utils/graph'
 import { forceLayout } from '../utils/graphLayout'
+import { usePanZoom } from '../hooks/usePanZoom'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
 import GraphNode from './GraphNode'
 import './GraphCanvas.css'
@@ -149,26 +150,27 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     },
     ref
   ) => {
-    const [zoom, setZoom] = useState(1)
-    const [pan, setPan] = useState({ x: 0, y: 0 })
     const [dims, setDims] = useState<NodeDims>(new Map())
     const [computedPositions, setComputedPositions] = useState<NodePositions>(new Map())
 
     const containerRef = useRef<HTMLDivElement>(null)
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({})
-    const dragRef = useRef<{ x: number; y: number; panX: number; panY: number } | null>(null)
-    const zoomRef = useRef(1)
-    const panRef = useRef({ x: 0, y: 0 })
     // Tracks whether we've applied the initial canvas-center offset
     const didCenterRef = useRef(false)
     const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
 
+    const { transform, viewport, bind, panTo } = usePanZoom({
+      minZoom: 0.4,
+      maxZoom: 2.5,
+    })
+
+    const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+      if (e.target instanceof Element && e.target.closest('.graph-node, [data-no-drag]')) return
+      bind.onPointerDown(e)
+    }, [bind])
+
     const rawId = useId()
     const gridPatternId = `grid${rawId.replace(/:/g, '')}`
-
-    // Keep refs current so wheel/drag handlers don't capture stale state
-    useEffect(() => { zoomRef.current = zoom }, [zoom])
-    useEffect(() => { panRef.current = pan }, [pan])
 
     // Measure each node's natural HTML dimensions from the hidden off-screen div.
     // Re-runs whenever the node list changes. renderNode is intentionally excluded:
@@ -202,34 +204,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setComputedPositions(forceLayout(layoutNodes, layoutEdges))
     }, [nodes, edges, dims, layout])
 
-    // Wheel zoom anchored to cursor position
-    useEffect(() => {
-      const container = containerRef.current
-      if (!container) return
-
-      const handleWheel = (e: WheelEvent) => {
-        e.preventDefault()
-        const rect = container.getBoundingClientRect()
-        const cx = e.clientX - rect.left
-        const cy = e.clientY - rect.top
-        if (!Number.isFinite(cx) || !Number.isFinite(cy)) return
-        const delta = e.deltaY > 0 ? -0.1 : 0.1
-        const prev = zoomRef.current
-        const next = Math.min(2.5, Math.max(0.4, prev + delta))
-        const change = next - prev
-        const newPan = {
-          x: panRef.current.x - (cx / prev) * change,
-          y: panRef.current.y - (cy / prev) * change,
-        }
-        zoomRef.current = next
-        panRef.current = newPan
-        setZoom(next)
-        setPan(newPan)
-      }
-
-      container.addEventListener('wheel', handleWheel, { passive: false })
-      return () => container.removeEventListener('wheel', handleWheel)
-    }, [])
 
     // Track the rendered container size so the auto-center effect can react to it.
     useEffect(() => {
@@ -266,35 +240,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
       const centroidX = (minX + maxX) / 2
       const centroidY = (minY + maxY) / 2
-      const z = zoomRef.current
       const next = {
-        x: containerSize.width / 2 - centroidX * z,
-        y: containerSize.height / 2 - centroidY * z,
+        x: containerSize.width / 2 - centroidX * viewport.zoom,
+        y: containerSize.height / 2 - centroidY * viewport.zoom,
       }
       didCenterRef.current = true
-      setPan(next)
-      panRef.current = next
-    }, [containerSize, dims, computedPositions, nodes, layout])
+      panTo(next.x, next.y)
+    }, [containerSize, dims, computedPositions, nodes, layout, viewport.zoom, panTo])
 
-    const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target instanceof Element && e.target.closest('.graph-node, [data-no-drag]')) return
-      dragRef.current = {
-        x: e.clientX,
-        y: e.clientY,
-        panX: panRef.current.x,
-        panY: panRef.current.y,
-      }
-    }, [])
-
-    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-      if (!dragRef.current) return
-      setPan({
-        x: dragRef.current.panX + (e.clientX - dragRef.current.x),
-        y: dragRef.current.panY + (e.clientY - dragRef.current.y),
-      })
-    }, [])
-
-    const handleMouseUp = useCallback(() => { dragRef.current = null }, [])
 
     const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
       if (node.x !== undefined && node.y !== undefined) return { x: node.x, y: node.y }
@@ -325,10 +278,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
     const contextValue = useMemo(() => ({
       getNodeRect,
-      zoom,
-      pan,
+      zoom: viewport.zoom,
+      pan: { x: viewport.x, y: viewport.y },
       selectedNodeId,
-    }), [getNodeRect, zoom, pan, selectedNodeId])
+    }), [getNodeRect, viewport, selectedNodeId])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)
@@ -337,20 +290,20 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     }
 
     // Grid dots track pan/zoom via the SVG pattern transform
-    const tileSize = 18 * zoom
-    const patternX = ((pan.x % tileSize) + tileSize) % tileSize
-    const patternY = ((pan.y % tileSize) + tileSize) % tileSize
+    const tileSize = 18 * viewport.zoom
+    const patternX = ((viewport.x % tileSize) + tileSize) % tileSize
+    const patternY = ((viewport.y % tileSize) + tileSize) % tileSize
 
     return (
       <div
         ref={handleRef}
-        role="region"
         aria-label="Graph canvas"
         className={['graph-canvas', className].filter(Boolean).join(' ')}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onPointerDown={handlePointerDown}
+        onWheel={bind.onWheel}
+        onKeyDown={bind.onKeyDown}
+        tabIndex={bind.tabIndex}
+        role={bind.role}
         {...props}
       >
         {/* Hidden off-screen div — renders node HTML at natural size for measurement */}
@@ -384,7 +337,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               <circle
                 cx="0"
                 cy="0"
-                r={Math.min(1, 0.5 * zoom)}
+                r={Math.min(1, 0.5 * viewport.zoom)}
                 className="graph-grid-dot"
               />
             </pattern>
@@ -398,7 +351,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             <g
               className="graph-viewport"
               data-testid="graph-viewport"
-              transform={`translate(${pan.x} ${pan.y}) scale(${zoom})`}
+              transform={transform}
             >
               <g className="graph-edges">
                 {edges?.map(edge => (

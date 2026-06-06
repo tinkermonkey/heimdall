@@ -1,0 +1,63 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_shared.css"></head>
+<body><div class="card" id="root"></div>
+<script>
+const LINE = [12,14,13,16,19,17,21,24,22,27,31,28,34,38,36,42,45,48,46,52]
+const xLabels = ['W1','W4','W8','W12','W16','W20']
+const color = '#F59E0B'
+const W = 480, H = 220
+const pad = {top:8, right:8, bottom:22, left:30}
+const innerW = W - pad.left - pad.right
+const innerH = H - pad.top - pad.bottom
+
+let lo = Math.min(...LINE), hi = Math.max(...LINE)
+const span = hi - lo || 1; lo -= span*0.08; hi += span*0.08
+const threshold = {value:40, label:'target'}
+lo = Math.min(lo, threshold.value); hi = Math.max(hi, threshold.value)
+
+const n = LINE.length
+const xAt = i => pad.left + (n<=1 ? innerW/2 : (i/(n-1))*innerW)
+const yAt = v => pad.top + innerH - ((v-lo)/(hi-lo))*innerH
+
+const ticks = 4
+const tickVals = Array.from({length:ticks+1},(_,i)=>lo+(i/ticks)*(hi-lo))
+
+function fmt(n){return Math.abs(n)>=1000?(n/1000).toFixed(1)+'k':Number.isInteger(n)?String(n):n.toFixed(1)}
+function linePath(pts){return pts.map(([x,y],i)=>(i?'L':'M')+x.toFixed(2)+','+y.toFixed(2)).join(' ')}
+
+const pts = LINE.map((v,i)=>[xAt(i),yAt(v)])
+const line = linePath(pts)
+const fillPath = `${line} L${pts[pts.length-1][0].toFixed(2)},${pad.top+innerH} L${pts[0][0].toFixed(2)},${pad.top+innerH} Z`
+const T = {fg3:'#64748B', border:'#E5E9EE', grid:'#EEF1F4'}
+
+const gridLines = tickVals.map((v,i)=>
+  `<line key="${i}" x1="${pad.left}" x2="${W-pad.right}" y1="${yAt(v).toFixed(2)}" y2="${yAt(v).toFixed(2)}" stroke="${T.grid}" stroke-width="1"/>`
+).join('')
+
+const axisLines = `
+  <line x1="${pad.left}" x2="${pad.left}" y1="${pad.top}" y2="${pad.top+innerH}" stroke="${T.border}" stroke-width="1"/>
+  <line x1="${pad.left}" x2="${W-pad.right}" y1="${pad.top+innerH}" y2="${pad.top+innerH}" stroke="${T.border}" stroke-width="1"/>
+  ${tickVals.map((v,i)=>`<text x="${pad.left-6}" y="${(yAt(v)+3).toFixed(2)}" text-anchor="end" font-family="JetBrains Mono" font-size="10" fill="${T.fg3}">${fmt(v)}</text>`).join('')}
+  ${xLabels.map((lab,i)=>`<text x="${xAt(i).toFixed(2)}" y="${pad.top+innerH+14}" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="${T.fg3}">${lab}</text>`).join('')}
+`
+
+const thresholdY = yAt(threshold.value).toFixed(2)
+const thresholdEl = `
+  <line x1="${pad.left}" x2="${W-pad.right}" y1="${thresholdY}" y2="${thresholdY}" stroke="${T.fg3}" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="${W-pad.right-4}" y="${(yAt(threshold.value)-4).toFixed(2)}" text-anchor="end" font-family="JetBrains Mono" font-size="9.5" fill="${T.fg3}" style="text-transform:uppercase;letter-spacing:0.08em">${threshold.label}</text>
+`
+
+document.getElementById('root').innerHTML = `
+<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="display:block">
+  ${gridLines}
+  ${axisLines}
+  ${thresholdEl}
+  <defs><linearGradient id="lg0" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="${color}" stop-opacity="0.22"/>
+    <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+  </linearGradient></defs>
+  <path d="${fillPath}" fill="url(#lg0)"/>
+  <path d="${line}" stroke="${color}" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`
+</script>
+</body></html>

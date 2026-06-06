@@ -26,6 +26,14 @@ import GraphShowcase from './test-pages/GraphShowcase'
 import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
 import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
 import TabBarTestPage from './test-pages/TabBarTestPage'
+import AvatarTestPage from './test-pages/AvatarTestPage'
+import CardsAndListsTestPage from './test-pages/CardsAndListsTestPage'
+import CalendarTestPage from './test-pages/CalendarTestPage'
+import KanbanBoardTestPage from './test-pages/KanbanBoardTestPage'
+import MapCanvasTestPage from './test-pages/MapCanvasTestPage'
+import LineageRailTestPage from './test-pages/LineageRailTestPage'
+import DiffViewerTestPage from './test-pages/DiffViewerTestPage'
+import VersionTimelineTestPage from './test-pages/VersionTimelineTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -119,6 +127,38 @@ export default function App() {
 
   if (exampleParam === 'tab-bar') {
     return <TabBarTestPage />
+  }
+
+  if (exampleParam === 'avatar-test') {
+    return <AvatarTestPage />
+  }
+
+  if (exampleParam === 'cards-and-lists') {
+    return <CardsAndListsTestPage />
+  }
+
+  if (exampleParam === 'calendar-test') {
+    return <CalendarTestPage />
+  }
+
+  if (exampleParam === 'kanban-board') {
+    return <KanbanBoardTestPage />
+  }
+
+  if (exampleParam === 'map-canvas') {
+    return <MapCanvasTestPage />
+  }
+
+  if (exampleParam === 'lineage-rail') {
+    return <LineageRailTestPage />
+  }
+
+  if (exampleParam === 'diff-viewer') {
+    return <DiffViewerTestPage />
+  }
+
+  if (exampleParam === 'version-timeline') {
+    return <VersionTimelineTestPage />
   }
 
   if (testParam === 'foundation') {

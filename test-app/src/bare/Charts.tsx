@@ -7,7 +7,6 @@ import {
   BarH,
   StackedBar,
   Donut,
-  PieChart,
   Heatmap,
   StatusTimeline,
   type SparklineColor,
@@ -226,19 +225,19 @@ export function BareDonut() {
 }
 
 export function BarePieChart() {
-  const segments = [
-    { name: 'a', value: 40 },
-    { name: 'b', value: 30 },
-    { name: 'c', value: 20 },
-    { name: 'd', value: 10 },
+  const slices = [
+    { value: 40 },
+    { value: 30 },
+    { value: 20 },
+    { value: 10 },
   ]
   return (
-    <BareSection name="PieChart">
+    <BareSection name="Donut">
       <AxisRow label="default" align="stretch">
-        <PieChart segments={segments} />
+        <Donut slices={slices} />
       </AxisRow>
-      <AxisRow label="with legend" align="stretch">
-        <PieChart segments={segments} legend />
+      <AxisRow label="with center value" align="stretch">
+        <Donut slices={slices} centerValue="100" centerLabel="items" />
       </AxisRow>
     </BareSection>
   )
@@ -308,5 +307,23 @@ export function BareStatusTimeline() {
         />
       </AxisRow>
     </BareSection>
+  )
+}
+
+export function BareCharts() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareChartWrapper />
+      <BareSparkline />
+      <BareLineChart />
+      <BareBarChart />
+      <BareBarV />
+      <BareBarH />
+      <BareStackedBar />
+      <BareDonut />
+      <BarePieChart />
+      <BareHeatmap />
+      <BareStatusTimeline />
+    </div>
   )
 }

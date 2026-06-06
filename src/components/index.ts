@@ -89,3 +89,11 @@ export {
   type StatusSegment,
   type SegmentKind,
 } from './StatusTimeline'
+
+export { VersionTimeline, type VersionTimelineProps, type VersionEntry } from './VersionTimeline'
+
+export { HashSetDiff, type HashSetDiffProps } from './HashSetDiff'
+
+export { SideBySideDiff, type SideBySideDiffProps, type DiffLine, type DiffLineType } from './SideBySideDiff'
+
+export { DiffViewer, type DiffViewerProps, type DiffViewerHashSetProps, type DiffViewerSideBySideProps, type DiffViewerMode } from './DiffViewer'

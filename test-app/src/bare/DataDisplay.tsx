@@ -5,8 +5,10 @@ import {
   MetricRow,
   KVGrid,
   ProgressBar,
+  LineageRail,
   type ProgressBarColor,
   type Column,
+  type LineageNode,
 } from '@tinkermonkey/heimdall-ui'
 import { BareSection, AxisRow, Caption } from '../components/BareSection'
 
@@ -231,5 +233,70 @@ export function BareProgressBar() {
         <Caption label="12px"><div style={{ width: 240 }}><ProgressBar percent={50} height={12} /></div></Caption>
       </AxisRow>
     </BareSection>
+  )
+}
+
+export function BareLineageRail() {
+  const simpleNodes: LineageNode[] = [
+    { label: 'source_table' },
+    { label: 'transform' },
+    { label: 'aggregate' },
+  ]
+
+  const manyNodes: LineageNode[] = [
+    { label: 'raw_data' },
+    { label: 'clean' },
+    { label: 'validate' },
+    { label: 'enrich' },
+    { label: 'deduplicate' },
+    { label: 'filter' },
+    { label: 'group' },
+    { label: 'summarize' },
+  ]
+
+  const withIconsNodes: LineageNode[] = [
+    { icon: 'data', label: 'raw_data' },
+    { icon: 'pipeline', label: 'transform' },
+    { icon: 'schema', label: 'output' },
+  ]
+
+  const interactiveNodes: LineageNode[] = [
+    { label: 'source', onClick: () => console.log('source clicked') },
+    { label: 'process', onClick: () => console.log('process clicked') },
+    { label: 'result', onClick: () => console.log('result clicked') },
+  ]
+
+  return (
+    <BareSection name="LineageRail">
+      <AxisRow label="simple (3 nodes)" align="stretch">
+        <LineageRail nodes={simpleNodes} aria-label="Simple lineage: source_table → transform → aggregate" />
+      </AxisRow>
+      <AxisRow label="many nodes (scroll)" align="stretch">
+        <LineageRail nodes={manyNodes} aria-label="Many nodes lineage" />
+      </AxisRow>
+      <AxisRow label="many nodes (wrap)" align="stretch">
+        <LineageRail nodes={manyNodes} wrap aria-label="Wrapped lineage" />
+      </AxisRow>
+      <AxisRow label="with icons" align="stretch">
+        <LineageRail nodes={withIconsNodes} aria-label="Lineage with icons" />
+      </AxisRow>
+      <AxisRow label="interactive" align="stretch">
+        <LineageRail nodes={interactiveNodes} aria-label="Interactive lineage" />
+      </AxisRow>
+    </BareSection>
+  )
+}
+
+export function BareDataDisplay() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareStatTile />
+      <BareStatGrid />
+      <BareTable />
+      <BareMetricRow />
+      <BareKVGrid />
+      <BareProgressBar />
+      <BareLineageRail />
+    </div>
   )
 }

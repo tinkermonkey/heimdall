@@ -4,7 +4,7 @@ import dts from 'vite-plugin-dts'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const __dirname = process.env.VITE_PROJECT_DIR || path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   plugins: [react(), dts({ include: 'src' })],

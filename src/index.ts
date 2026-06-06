@@ -4,6 +4,7 @@
 import './tokens/tokens.css'
 
 export { ICONS, Icon, type IconName, type IconProps } from './components/Icon'
+export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './components/Avatar'
 export { Button, type ButtonProps, type Variant as ButtonVariant, type Size as ButtonSize } from './components/Button'
 export { Chip, type ChipProps, type ChipVariant, type ChipForm } from './components/Chip'
 export { Badge, StatusBadge, type BadgeProps, type BadgeColor, type StatusBadgeProps } from './components/Badge'
@@ -21,7 +22,7 @@ export { TriState, type TriStateProps } from './components/TriState'
 export { Field, type FieldProps } from './components/Field'
 export { StatTile, type StatTileProps } from './components/StatTile'
 export { StatGrid, type StatGridProps } from './components/StatGrid'
-export { VersionPill, type VersionPillProps } from './components/VersionPill'
+export { VersionPill, type VersionPillProps, type VersionPillTone } from './components/VersionPill'
 export {
   SegmentedControl,
   type SegmentedControlProps,
@@ -97,6 +98,16 @@ export {
   type ActivityEvent,
   type ActivityEventType,
 } from './components/ActivityTimeline'
+export {
+  VersionTimeline,
+  type VersionTimelineProps,
+  type VersionEntry,
+  type DiffStats,
+  type StateTransition,
+} from './components/VersionTimeline'
+export { HashSetDiff, type HashSetDiffProps } from './components/HashSetDiff'
+export { SideBySideDiff, type SideBySideDiffProps, type DiffLine, type DiffLineType } from './components/SideBySideDiff'
+export { DiffViewer, type DiffViewerProps, type DiffViewerHashSetProps, type DiffViewerSideBySideProps, type DiffViewerMode } from './components/DiffViewer'
 export { AlertStrip, type AlertStripProps, type Alert, type AlertSeverity } from './components/AlertStrip'
 export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessGridItem } from './components/QuickAccessGrid'
 export { QuickAccessTile, type QuickAccessTileProps } from './components/QuickAccessTile'
@@ -135,3 +146,30 @@ export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type To
 export { bezierPath, rectEdgePoint, type Point, type BezierPathResult } from './utils/graph'
 export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type HierarchyDomain } from './components/HierarchyRow'
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
+export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'
+export { usePanZoom, type UsePanZoomOptions, type UsePanZoomReturn } from './hooks/usePanZoom'
+export { AssetCard, type AssetCardProps, type AssetThumb } from './components/AssetCard'
+export { AssetGrid, type AssetGridProps } from './components/AssetGrid'
+export {
+  Calendar,
+  type CalendarView,
+  type CalendarEvent,
+  type CalendarProps,
+} from './components/Calendar'
+export {
+  KanbanBoard,
+  type KanbanBoardProps,
+  type KanbanCard,
+  type KanbanColumn,
+} from './components/KanbanBoard'
+export { LogStream, type LogStreamProps, type LogEntry } from './components/LogStream'
+export {
+  MapCanvas,
+  type MapCanvasProps,
+  type LatLng,
+  type MapPin,
+  type MapTrackPoint,
+  type HeatmapDataPoint,
+} from './components/MapCanvas'
+export { MiniCalendar, type MiniCalendarProps } from './components/MiniCalendar'
+export { ResultCard, type ResultCardProps, type ResultCardProvenance } from './components/ResultCard'

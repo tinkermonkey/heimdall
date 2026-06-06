@@ -173,3 +173,14 @@ export function BareTabBar() {
     </BareSection>
   )
 }
+
+export function BareShellFramework() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareNavItem />
+      <BareSidebar />
+      <BareTopbar />
+      <BareTabBar />
+    </div>
+  )
+}

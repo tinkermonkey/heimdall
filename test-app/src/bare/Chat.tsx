@@ -221,3 +221,17 @@ export function BareChatContainer() {
     </BareSection>
   )
 }
+
+export function BareChat() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <BareChatMessage />
+      <BareToolBlock />
+      <BareThinkingBlock />
+      <BareChatDivider />
+      <BareChatSuggestions />
+      <BareChatComposer />
+      <BareChatContainer />
+    </div>
+  )
+}
