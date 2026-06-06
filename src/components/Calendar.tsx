@@ -463,13 +463,13 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
           </div>
 
           <div className="calendar__controls">
-            <Button variant="secondary" size="sm" onClick={handleNavigatePrev}>
+            <Button variant="secondary" size="sm" onClick={handleNavigatePrev} aria-label="Previous">
               <Icon name="chevronLeft" size={16} />
             </Button>
             <Button variant="secondary" size="sm" onClick={handleNavigateToday}>
               Today
             </Button>
-            <Button variant="secondary" size="sm" onClick={handleNavigateNext}>
+            <Button variant="secondary" size="sm" onClick={handleNavigateNext} aria-label="Next">
               <Icon name="chevronRight" size={16} />
             </Button>
           </div>

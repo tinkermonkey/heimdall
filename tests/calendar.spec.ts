@@ -226,4 +226,23 @@ test.describe('Calendar Components', () => {
     const todayCell = page.locator('[aria-current="date"]')
     await expect(todayCell.first()).toBeVisible()
   })
+
+  test('navigation buttons have accessible labels', async ({ page }) => {
+    // Ensure we're on month view
+    const monthButton = page.locator('button:has-text("Month")').first()
+    await monthButton.click()
+    await page.waitForTimeout(100)
+
+    // Verify Previous button has aria-label
+    const previousButton = page.locator('.calendar__controls button').first()
+    await expect(previousButton).toHaveAttribute('aria-label', 'Previous')
+
+    // Verify Next button has aria-label
+    const nextButton = page.locator('.calendar__controls button').last()
+    await expect(nextButton).toHaveAttribute('aria-label', 'Next')
+
+    // Verify Today button has text content (no aria-label needed)
+    const todayButton = page.locator('.calendar__controls button').nth(1)
+    await expect(todayButton).toContainText('Today')
+  })
 })
