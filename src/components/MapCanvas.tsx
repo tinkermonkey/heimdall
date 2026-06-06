@@ -57,6 +57,7 @@ type MapCanvasCommonProps = Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect
   maxZoom?: number
   heatmapColor?: string
   onViewportChange?: (viewport: { center: { lat: number; lng: number }; zoom: number }) => void
+  onModeChange?: (mode: 'pins' | 'track' | 'heatmap') => void
   pins?: MapPin[]
   selectedPinId?: string
   onSelectPin?: (pinId: string | null) => void
@@ -176,6 +177,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
       minZoom = 0,
       maxZoom = 18,
       onViewportChange,
+      onModeChange,
       className = '',
       ...htmlProps
     },
@@ -489,6 +491,38 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
                 />
                 Density
               </div>
+            </div>
+          )}
+
+          {onModeChange && (
+            <div className="map-mode-switch">
+              <button
+                type="button"
+                className={['map-mode-switch__button', mode === 'pins' && 'map-mode-switch__button--active'].filter(Boolean).join(' ')}
+                onClick={() => onModeChange('pins')}
+                aria-label="Switch to pins mode"
+                title="Pins"
+              >
+                Pins
+              </button>
+              <button
+                type="button"
+                className={['map-mode-switch__button', mode === 'track' && 'map-mode-switch__button--active'].filter(Boolean).join(' ')}
+                onClick={() => onModeChange('track')}
+                aria-label="Switch to track mode"
+                title="Track"
+              >
+                Track
+              </button>
+              <button
+                type="button"
+                className={['map-mode-switch__button', mode === 'heatmap' && 'map-mode-switch__button--active'].filter(Boolean).join(' ')}
+                onClick={() => onModeChange('heatmap')}
+                aria-label="Switch to heatmap mode"
+                title="Heatmap"
+              >
+                Heatmap
+              </button>
             </div>
           )}
 

@@ -92,7 +92,7 @@ export function normalizeColorToHex(color: string): string {
   // Unrecognized color — provide diagnostic feedback
   if (process.env.NODE_ENV === 'development') {
     console.warn(
-      `MapCanvas heatmapColor: Unrecognized color format "${color}". Supported formats: hex (#rrggbb), rgb(r, g, b), hsl(h, s%, l%), or CSS named colors. Falling back to emerald (#10b981).`
+      `normalizeColorToHex: Unrecognized color format "${color}". Supported formats: hex (#rrggbb), rgb(r, g, b), hsl(h, s%, l%), or CSS named colors. Falling back to emerald (#10b981).`
     )
   }
 

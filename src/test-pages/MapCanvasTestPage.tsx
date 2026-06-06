@@ -101,6 +101,7 @@ export default function MapCanvasTestPage() {
           pins={SAMPLE_PINS}
           selectedPinId={selectedPinId ?? undefined}
           onSelectPin={(id) => setSelectedPinId(id)}
+          onModeChange={setMode}
           scaleBar={showScaleBar}
           onViewportChange={(vp) => {
             setViewport({ lat: vp.center.lat, lng: vp.center.lng, zoom: vp.zoom })
@@ -112,6 +113,7 @@ export default function MapCanvasTestPage() {
         <MapCanvas
           mode="track"
           trackPoints={SAMPLE_TRACK}
+          onModeChange={setMode}
           scaleBar={showScaleBar}
           onViewportChange={(vp) => {
             setViewport({ lat: vp.center.lat, lng: vp.center.lng, zoom: vp.zoom })
@@ -123,6 +125,7 @@ export default function MapCanvasTestPage() {
         <MapCanvas
           mode="heatmap"
           heatmapData={SAMPLE_HEATMAP}
+          onModeChange={setMode}
           scaleBar={showScaleBar}
           onViewportChange={(vp) => {
             setViewport({ lat: vp.center.lat, lng: vp.center.lng, zoom: vp.zoom })
