@@ -210,6 +210,14 @@
   background: rgb(var(--accent-primary-hover));
 }
 
+body.dark-canvas .map-mode-switch__button--active {
+  color: rgb(var(--canvas-bg));
+}
+
+body.dark-canvas .map-mode-switch__button--active:hover {
+  color: rgb(var(--canvas-bg));
+}
+
 /* Popover */
 .map-popover {
   position: fixed;
