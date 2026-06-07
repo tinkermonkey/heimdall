@@ -15,7 +15,12 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./css": "./dist/style.css"
+    "./css": "./dist/style.css",
+    "./fonts": {
+      "style": "./dist/fonts/fonts.css",
+      "import": "./dist/fonts/fonts.css",
+      "default": "./dist/fonts/fonts.css"
+    }
   },
   "scripts": {
     "prepare": "vite build",
