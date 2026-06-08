@@ -1,0 +1,263 @@
+/* =========================================================================
+   ChatMarkdownContent — renders markdown strings inside chat messages.
+   All tokens via CSS custom properties from tokens.css.
+   BEM prefix: chat-markdown
+   ========================================================================= */
+
+.chat-markdown {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgb(var(--canvas-fg-1));
+}
+
+/* ---- Paragraphs ---- */
+
+.chat-markdown__p {
+  margin: 0 0 10px;
+  color: rgb(var(--canvas-fg-1));
+  line-height: 1.6;
+}
+
+.chat-markdown__p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Headings ---- */
+/* Downscaled from global defaults — chat messages use IDE density. */
+
+.chat-markdown__h1 {
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  color: rgb(var(--canvas-fg-1));
+  margin: 16px 0 8px;
+  line-height: 1.25;
+}
+
+.chat-markdown__h2 {
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  color: rgb(var(--canvas-fg-1));
+  margin: 14px 0 6px;
+  line-height: 1.25;
+}
+
+.chat-markdown__h3 {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-semibold);
+  color: rgb(var(--canvas-fg-3));
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 12px 0 6px;
+  line-height: 1.25;
+}
+
+/* No top margin when a heading is the very first element. */
+.chat-markdown > *:first-child {
+  margin-top: 0;
+}
+
+/* ---- Lists ---- */
+
+.chat-markdown__ul,
+.chat-markdown__ol {
+  margin: 6px 0 10px;
+  padding-left: 20px;
+}
+
+.chat-markdown__ul:last-child,
+.chat-markdown__ol:last-child {
+  margin-bottom: 0;
+}
+
+/* Nested lists: tighten vertical rhythm */
+.chat-markdown__ul .chat-markdown__ul,
+.chat-markdown__ul .chat-markdown__ol,
+.chat-markdown__ol .chat-markdown__ul,
+.chat-markdown__ol .chat-markdown__ol {
+  margin: 4px 0 0;
+}
+
+.chat-markdown__ul {
+  list-style-type: disc;
+}
+
+.chat-markdown__ol {
+  list-style-type: decimal;
+}
+
+.chat-markdown__li {
+  color: rgb(var(--canvas-fg-1));
+  margin-bottom: 4px;
+  line-height: 1.55;
+}
+
+.chat-markdown__li:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Inline code ---- */
+/* Builds on the global `code` element styles (font-family, size, padding,
+   background, border-radius) from tokens.css; we only add a border. */
+
+.chat-markdown__code-inline {
+  border: 1px solid rgb(var(--canvas-border));
+}
+
+/* ---- Code blocks ---- */
+
+.chat-markdown__pre {
+  margin: 10px 0;
+  border-radius: var(--radius-md);
+  background: rgb(var(--canvas-bg-2));
+  border: 1px solid rgb(var(--canvas-border));
+  overflow-x: auto;
+}
+
+.chat-markdown__pre:last-child {
+  margin-bottom: 0;
+}
+
+/* Reset the global `code` element styles that apply via tag selector so
+   the block code sits cleanly inside the <pre> wrapper. */
+.chat-markdown__code-block {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.65;
+  color: rgb(var(--canvas-fg-1));
+  padding: 12px 14px;
+  /* reset globals */
+  background: none;
+  border-radius: 0;
+  white-space: pre;
+}
+
+/* ---- Blockquote ---- */
+
+.chat-markdown__blockquote {
+  margin: 10px 0;
+  padding: 8px 12px;
+  border-left: 3px solid rgb(var(--accent-primary));
+  background: rgb(var(--canvas-bg-2));
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: rgb(var(--canvas-fg-2));
+  font-style: italic;
+}
+
+.chat-markdown__blockquote:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Table ---- */
+
+.chat-markdown__table-wrapper {
+  overflow-x: auto;
+  margin: 10px 0;
+  border-radius: var(--radius-md);
+  border: 1px solid rgb(var(--canvas-border));
+}
+
+.chat-markdown__table-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+.chat-markdown__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.chat-markdown__thead {
+  background: rgb(var(--canvas-bg-2));
+}
+
+.chat-markdown__th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: var(--font-weight-medium);
+  color: rgb(var(--canvas-fg-3));
+  padding: 8px 12px;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid rgb(var(--canvas-border));
+}
+
+.chat-markdown__td {
+  color: rgb(var(--canvas-fg-1));
+  padding: 8px 12px;
+  border-bottom: 1px solid rgb(var(--canvas-border));
+  vertical-align: top;
+}
+
+.chat-markdown__tbody .chat-markdown__tr:last-child .chat-markdown__td {
+  border-bottom: none;
+}
+
+.chat-markdown__tbody .chat-markdown__tr:hover {
+  background: rgb(var(--canvas-bg-2));
+}
+
+body.dark-canvas .chat-markdown__tbody .chat-markdown__tr:hover {
+  background: var(--white-overlay-xs);
+}
+
+/* ---- Horizontal rule ---- */
+
+.chat-markdown__hr {
+  margin: 14px 0;
+  border: none;
+  border-top: 1px solid rgb(var(--canvas-border));
+}
+
+/* ---- Inline emphasis ---- */
+
+.chat-markdown__strong {
+  font-weight: var(--font-weight-semibold);
+  color: rgb(var(--canvas-fg-1));
+}
+
+.chat-markdown__em {
+  font-style: italic;
+  color: rgb(var(--canvas-fg-2));
+}
+
+/* ---- Links ---- */
+/* amber-700 on light canvas (passes WCAG); amber-400 on dark canvas */
+
+.chat-markdown__link {
+  color: rgb(var(--accent-primary-deep));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.chat-markdown__link:hover {
+  color: rgb(var(--accent-primary-hover));
+}
+
+body.dark-canvas .chat-markdown__link {
+  color: rgb(var(--accent-primary));
+}
+
+/* ---- Streaming cursor ---- */
+/* Rendered via ::after on the last direct child so it stays inline with text
+   and does not break the :last-child margin rules for paragraphs/blocks. */
+
+.chat-markdown--streaming > *:last-child::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: rgb(var(--canvas-fg-3));
+  border-radius: 1px;
+  animation: chat-markdown-cursor-blink 1s ease-in-out infinite;
+}
+
+@keyframes chat-markdown-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
