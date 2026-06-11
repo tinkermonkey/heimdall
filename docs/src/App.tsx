@@ -50,6 +50,7 @@ import { DiffViewerShowcase } from './showcases/DiffViewerShowcase'
 import { ResultCardShowcase } from './showcases/ResultCardShowcase'
 import { AssetCardShowcase } from './showcases/AssetCardShowcase'
 import { LogStreamShowcase } from './showcases/LogStreamShowcase'
+import { TraceViewerShowcase } from './showcases/TraceViewerShowcase'
 
 type NavSection = {
   title: string
@@ -178,6 +179,8 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'graph-inspector': GraphInspectorShowcase,
   'topology-node': TopologyNodeShowcase,
   graph: GraphShowcase,
+  // Observability
+  'trace-viewer': TraceViewerShowcase,
 }
 
 const NAV_SECTIONS: NavSection[] = [
@@ -330,6 +333,12 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'graph-canvas', label: 'GraphCanvas', icon: 'schema' },
       { id: 'graph-inspector', label: 'GraphInspector', icon: 'info' },
       { id: 'topology-node', label: 'TopologyNode', icon: 'data' },
+    ],
+  },
+  {
+    title: 'Observability',
+    items: [
+      { id: 'trace-viewer', label: 'TraceViewer', icon: 'gitBranch' },
     ],
   },
 ]

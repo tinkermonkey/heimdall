@@ -174,3 +174,37 @@ export {
 } from './components/MapCanvas'
 export { MiniCalendar, type MiniCalendarProps } from './components/MiniCalendar'
 export { ResultCard, type ResultCardProps, type ResultCardProvenance } from './components/ResultCard'
+
+// Observability — OTel trace viewer + adapters
+export { TraceViewer, type TraceViewerProps } from './components/TraceViewer'
+export {
+  buildTraceModel,
+  selfTime,
+  visibleRows,
+  createTimeScale,
+  niceTicks,
+  fmtMs as fmtTraceMs,
+  resolveServiceColor,
+  resolveServiceLabel,
+  paletteColor,
+  DEFAULT_SERVICE_PALETTE,
+  type Trace,
+  type TraceSpan,
+  type TraceMeta,
+  type ServiceInfo,
+  type SpanStatus,
+  type SpanKind,
+  type SpanEvent,
+  type TraceModel,
+  type TraceModelNode,
+  type TimeScale,
+} from './components/traceViewerModel'
+export { fromOTLP, type OtlpTracesData, type OtlpSpan, type OtlpKeyValue, type OtlpAnyValue, type FromOtlpOptions } from './utils/otlpTrace'
+export {
+  fromXRay,
+  type XRaySegment,
+  type XRaySubsegment,
+  type XRayException,
+  type XRayCause,
+  type FromXRayOptions,
+} from './utils/xrayTrace'
