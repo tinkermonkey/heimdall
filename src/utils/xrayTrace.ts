@@ -119,8 +119,9 @@ function flattenInto(target: Record<string, Primitive>, prefix: string, obj: any
     return
   }
   Object.entries(obj).forEach(([k, v]) => {
+    if (v == null) return // drop null/undefined leaves (attributes are non-null primitives)
     const key = prefix ? `${prefix}.${k}` : k
-    if (v != null && typeof v === 'object' && !Array.isArray(v)) {
+    if (typeof v === 'object' && !Array.isArray(v)) {
       flattenInto(target, key, v)
     } else {
       target[key] = Array.isArray(v) ? JSON.stringify(v) : (v as Primitive)
@@ -168,6 +169,9 @@ function exceptionOf(node: XRaySubsegment): { exception?: TraceSpan['exception']
         ex.stack.map((f) => `    at ${f.label ?? '<anonymous>'} (${f.path ?? '?'}:${f.line ?? 0})`).join('\n')
       : undefined
     exception = { type: ex.type, message: ex.message, stacktrace }
+  } else if (typeof node.cause === 'string') {
+    // cause as a bare exception id — surface that an error occurred
+    exception = { type: 'Error', message: `exception ${node.cause}` }
   }
   return { exception, statusCode: node.http?.response?.status }
 }
@@ -180,8 +184,16 @@ function normalizeInput(input: any): XRaySegment[] {
   if (Array.isArray(input)) return input.flatMap(normalizeInput)
   // BatchGetTraces response: { Traces: [{ Segments: [{ Document }] }] }
   if (input.Traces || input.traces) {
-    const traces = input.Traces ?? input.traces
-    return (traces as { Segments?: { Document?: string | object }[] }[]).flatMap((t) =>
+    const traces = (input.Traces ?? input.traces) as { Segments?: { Document?: string | object }[] }[]
+    // fromXRay returns a single Trace; if the response carries multiple distinct
+    // traces, use only the first rather than silently merging their timelines.
+    let chosen = traces
+    if (traces.length > 1) {
+      // eslint-disable-next-line no-console
+      console.warn(`fromXRay: response has ${traces.length} traces; using the first. Pass one trace at a time for the rest.`)
+      chosen = traces.slice(0, 1)
+    }
+    return chosen.flatMap((t) =>
       (t.Segments ?? []).map((seg) =>
         typeof seg.Document === 'string' ? JSON.parse(seg.Document) : (seg.Document as XRaySegment)
       )
@@ -221,7 +233,9 @@ export function fromXRay(input: XRaySegment | XRaySegment[] | unknown, opts: Fro
     const isSubsegment = seg.type === 'subsegment'
     const service = seg.name
     if (!services[service]) {
-      services[service] = { label: service, host: seg.origin ? String(seg.origin) : undefined }
+      // X-Ray segments carry no hostname; `origin` is a resource type and is
+      // surfaced as the cloud.platform attribute instead (see buildAttributes).
+      services[service] = { label: service }
     }
     walk(seg, seg.parent_id ?? null, service, !isSubsegment)
   })
@@ -260,9 +274,10 @@ export function fromXRay(input: XRaySegment | XRaySegment[] | unknown, opts: Fro
       : undefined
 
     const built: TraceSpan = {
-      id: node.id.toLowerCase(),
-      parentId: parentId ? parentId.toLowerCase() : null,
-      name: node.name,
+      // coerce defensively: ids/name may be numeric or missing in malformed docs
+      id: String(node.id ?? '').toLowerCase(),
+      parentId: parentId != null ? String(parentId).toLowerCase() : null,
+      name: String(node.name ?? '(unnamed)'),
       service,
       kind: kindOf(node, isRoot),
       start,

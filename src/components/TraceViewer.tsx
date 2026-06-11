@@ -15,6 +15,7 @@ import {
   resolveServiceLabel,
   selfTime,
   visibleRows,
+  WF_PAD,
   type ServiceInfo,
   type SpanStatus,
   type Trace,
@@ -187,7 +188,7 @@ function WaterfallRow({
       onMouseLeave={() => onHover(null)}
     >
       <div
-        className={'trace-viewer__bar' + (isErr ? ' is-error' : '') + (isWarn ? ' is-warn' : '') + (selected ? ' is-selected' : '')}
+        className={'trace-viewer__bar' + (isErr ? ' is-error' : '') + (selected ? ' is-selected' : '')}
         style={{ left: `${left}%`, width: `${w}%`, background: color }}
       >
         {isWarn && <span className="trace-viewer__bar-warn" />}
@@ -198,7 +199,7 @@ function WaterfallRow({
         </span>
       )}
       <span
-        className={'trace-viewer__bar-label' + (labelAfter ? ' is-after' : ' is-before')}
+        className="trace-viewer__bar-label"
         style={labelAfter ? { left: `calc(${left + w}% + 7px)` } : { right: `calc(${100 - left}% + 7px)` }}
       >
         <span className={'trace-viewer__bar-dur' + (isErr ? ' is-error' : isWarn ? ' is-warn' : '')}>{fmtMs(node.duration)}</span>
@@ -210,7 +211,7 @@ function WaterfallRow({
 
 /* --------------------------------------------------------------- summary -- */
 
-function TraceSummary({
+const TraceSummary = React.memo(function TraceSummary({
   model,
   resolveColor,
   resolveLabel,
@@ -264,7 +265,7 @@ function TraceSummary({
       </div>
     </div>
   )
-}
+})
 
 /* ---------------------------------------------------------------- viewer -- */
 
@@ -438,16 +439,25 @@ export const TraceViewer = React.forwardRef<HTMLDivElement, TraceViewerProps>(fu
     [rowIndexById, rowHeight, containerRef]
   )
 
+  // Focus a row once it mounts — retries across frames because a far jump may
+  // scroll the target into a window that hasn't been virtualized in yet.
+  const focusWhenReady = useCallback((id: string, tries = 6) => {
+    const el = rowRefs.current.get(id)
+    if (el) {
+      el.focus()
+      return
+    }
+    if (tries > 0) requestAnimationFrame(() => focusWhenReady(id, tries - 1))
+  }, [])
+
   useEffect(() => {
     if (!selected) return
     revealRow(selected)
     if (pendingFocus.current === selected) {
-      requestAnimationFrame(() => {
-        rowRefs.current.get(selected)?.focus()
-        pendingFocus.current = null
-      })
+      focusWhenReady(selected)
+      pendingFocus.current = null
     }
-  }, [selected, revealRow])
+  }, [selected, revealRow, focusWhenReady])
 
   const selectAndReveal = useCallback(
     (id: string, focus = true) => {
@@ -552,9 +562,10 @@ export const TraceViewer = React.forwardRef<HTMLDivElement, TraceViewerProps>(fu
     return Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100))
   }, [])
   const timeFromPct = useCallback(
+    // exact inverse of createTimeScale.x — keep tied to WF_PAD
     (p: number) => {
-      const usable = 100 - 2 * 2 // WF_PAD = 2
-      const frac = (p - 2) / usable
+      const usable = 100 - 2 * WF_PAD
+      const frac = (p - WF_PAD) / usable
       return domain[0] + frac * (domain[1] - domain[0])
     },
     [domain]
@@ -589,6 +600,11 @@ export const TraceViewer = React.forwardRef<HTMLDivElement, TraceViewerProps>(fu
     const hi = Math.min(total, Math.max(t0, t1))
     if (hi - lo > total * 0.005) setZoom([lo, hi])
   }, [brush, timeFromPct, total])
+  // clear brush if the gesture is cancelled or capture is lost without pointerup
+  const onAxisPointerCancel = useCallback(() => {
+    brushStart.current = null
+    setBrush(null)
+  }, [])
 
   const isZoomed = zoom != null
 
@@ -605,8 +621,8 @@ export const TraceViewer = React.forwardRef<HTMLDivElement, TraceViewerProps>(fu
   const closePanel = useCallback(() => {
     const prev = selected
     selectSpan(null)
-    if (prev) requestAnimationFrame(() => rowRefs.current.get(prev)?.focus())
-  }, [selected, selectSpan])
+    if (prev) focusWhenReady(prev)
+  }, [selected, selectSpan, focusWhenReady])
   const errors = errorIds.length
 
   const rootClass = ['trace-viewer', className].filter(Boolean).join(' ')
@@ -671,6 +687,8 @@ export const TraceViewer = React.forwardRef<HTMLDivElement, TraceViewerProps>(fu
               onPointerDown={onAxisPointerDown}
               onPointerMove={onAxisPointerMove}
               onPointerUp={onAxisPointerUp}
+              onPointerCancel={onAxisPointerCancel}
+              onLostPointerCapture={onAxisPointerCancel}
               onDoubleClick={() => setZoom(null)}
             >
               {ticks.map((t, i) => (

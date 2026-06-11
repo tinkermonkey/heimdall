@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react'
-import { TraceViewer, fromOTLP, fromXRay, SegmentedControl, type SpanStatus, type TraceSpan } from '@tinkermonkey/heimdall-ui'
+import { TraceViewer, fromOTLP, fromXRay, SegmentedControl, type Trace, type SpanStatus, type TraceSpan } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 import { sampleOtlpTrace, sampleOtlpJson, deriveSeverity } from '@/test-pages/fixtures/sampleOtlpTrace'
 import { sampleXRaySegment, sampleXRayJson, deriveXRaySeverity } from '@/test-pages/fixtures/sampleXRayTrace'
@@ -34,16 +34,22 @@ function Code({ children }: { children: string }) {
   )
 }
 
-type Parsed =
-  | { trace: ReturnType<typeof fromOTLP>; derive: (s: TraceSpan) => SpanStatus; kind: string; error?: undefined }
-  | { error: string; trace?: undefined }
+// Nullable-field shape (not a discriminated union) so narrowing relies only on a
+// plain `parsed.trace` non-null check — robust regardless of tsc config.
+interface Parsed {
+  trace: Trace | null
+  derive: (s: TraceSpan) => SpanStatus
+  kind: string
+  error: string | null
+}
+const fail = (error: string): Parsed => ({ trace: null, derive: deriveSeverity, kind: '', error })
 
 function parseInput(text: string): Parsed {
   let json: unknown
   try {
     json = JSON.parse(text)
   } catch (e) {
-    return { error: 'Invalid JSON — ' + (e as Error).message }
+    return fail('Invalid JSON — ' + (e as Error).message)
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const j = json as any
@@ -59,12 +65,12 @@ function parseInput(text: string): Parsed {
       j.subsegments ||
       j.start_time)
   try {
-    if (looksOtlp) return { trace: fromOTLP(j), derive: deriveSeverity, kind: 'OTLP' }
-    if (looksXray) return { trace: fromXRay(j), derive: deriveXRaySeverity, kind: 'AWS X-Ray' }
+    if (looksOtlp) return { trace: fromOTLP(j), derive: deriveSeverity, kind: 'OTLP', error: null }
+    if (looksXray) return { trace: fromXRay(j), derive: deriveXRaySeverity, kind: 'AWS X-Ray', error: null }
   } catch (e) {
-    return { error: 'Adapter error — ' + (e as Error).message }
+    return fail('Adapter error — ' + (e as Error).message)
   }
-  return { error: 'Unrecognized format. Expected OTLP (a `resourceSpans` array) or AWS X-Ray (a `trace_id` segment document).' }
+  return fail('Unrecognized format. Expected OTLP (a `resourceSpans` array) or AWS X-Ray (a `trace_id` segment document).')
 }
 
 function LiveLoader() {
@@ -92,6 +98,21 @@ function LiveLoader() {
   }
 
   const parsed = useMemo(() => parseInput(text), [text])
+
+  // Narrow once via if/else (reliable) into the status line + rendered viewer.
+  let statusEl: React.ReactNode
+  let viewerEl: React.ReactNode
+  if (parsed.trace) {
+    statusEl = (
+      <span style={{ fontFamily: mono, fontSize: 11, color: 'rgb(var(--status-ok-fg))' }}>
+        ✓ {parsed.kind} · {parsed.trace.spans.length} spans
+      </span>
+    )
+    viewerEl = <TraceViewer trace={parsed.trace} deriveStatus={parsed.derive} />
+  } else {
+    statusEl = <span style={{ fontFamily: mono, fontSize: 11, color: 'rgb(var(--status-error-fg))' }}>{parsed.error}</span>
+    viewerEl = <div style={{ padding: 40, fontFamily: mono, fontSize: 12, color: 'rgb(var(--canvas-fg-3))' }}>{parsed.error}</div>
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -131,13 +152,7 @@ function LiveLoader() {
             if (f) readFile(f)
           }}
         />
-        {parsed.trace ? (
-          <span style={{ fontFamily: mono, fontSize: 11, color: 'rgb(var(--status-ok-fg))' }}>
-            ✓ {parsed.kind} · {parsed.trace.spans.length} spans
-          </span>
-        ) : (
-          <span style={{ fontFamily: mono, fontSize: 11, color: 'rgb(var(--status-error-fg))' }}>{parsed.error}</span>
-        )}
+        {statusEl}
       </div>
 
       <textarea
@@ -173,13 +188,7 @@ function LiveLoader() {
         }}
       />
 
-      <Frame height={520}>
-        {parsed.trace ? (
-          <TraceViewer trace={parsed.trace} deriveStatus={parsed.derive} />
-        ) : (
-          <div style={{ padding: 40, fontFamily: mono, fontSize: 12, color: 'rgb(var(--canvas-fg-3))' }}>{parsed.error}</div>
-        )}
-      </Frame>
+      <Frame height={520}>{viewerEl}</Frame>
     </div>
   )
 }

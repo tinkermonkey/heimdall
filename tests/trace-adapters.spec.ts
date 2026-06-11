@@ -153,6 +153,49 @@ test.describe('fromOTLP', () => {
     })
     expect(t.spans[0].status).toBe('error')
   })
+
+  test('maps a numeric-string SpanKind ("3") to CLIENT', () => {
+    const t = fromOTLP({
+      resourceSpans: [
+        {
+          resource: { attributes: [{ key: 'service.name', value: { stringValue: 'svc' } }] },
+          scopeSpans: [
+            {
+              spans: [
+                { traceId: 'bb'.repeat(16), spanId: 'cc'.repeat(8), name: 'numeric-kind', kind: '3' as unknown as number, startTimeUnixNano: '1000000000', endTimeUnixNano: '1002000000' },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+    expect(t.spans[0].kind).toBe('CLIENT')
+  })
+
+  test('tolerates a malformed *UnixNano without throwing or corrupting traceStart', () => {
+    const payload = {
+      resourceSpans: [
+        {
+          resource: { attributes: [{ key: 'service.name', value: { stringValue: 'svc' } }] },
+          scopeSpans: [
+            {
+              spans: [
+                { traceId: 'aa'.repeat(16), spanId: '01'.repeat(8), name: 'good', kind: 2, startTimeUnixNano: '1000000000', endTimeUnixNano: '1000600000' },
+                { traceId: 'aa'.repeat(16), spanId: '02'.repeat(8), name: 'bad', kind: 1, startTimeUnixNano: 'not-a-number', endTimeUnixNano: '' },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+    const t = fromOTLP(payload)
+    expect(t.spans.length).toBe(2)
+    const good = t.spans.find((s) => s.name === 'good')!
+    const bad = t.spans.find((s) => s.name === 'bad')!
+    expect(good.start).toBe(0) // bad span's garbage start did not become traceStart
+    expect(Number.isFinite(bad.start)).toBe(true)
+    expect(Number.isFinite(bad.duration)).toBe(true)
+  })
 })
 
 test.describe('fromXRay', () => {
@@ -247,6 +290,44 @@ test.describe('fromXRay', () => {
     // root timing remains intact
     const root = t.spans.find((s) => s.parentId === null)!
     expect(Math.round(root.duration)).toBe(1000)
+  })
+
+  test('coerces numeric id/parent_id and tolerates a missing id', () => {
+    const seg = {
+      id: 12345,
+      name: 'svc',
+      trace_id: '1-581cf771-a006649127e371903a2de979',
+      start_time: 100,
+      end_time: 101,
+      subsegments: [
+        { id: 999, name: 'child', start_time: 100.1, end_time: 100.5 },
+        { name: 'idless', start_time: 100.2, end_time: 100.3 },
+      ],
+    } as unknown as XRaySegment
+    expect(() => fromXRay(seg)).not.toThrow()
+    const t = fromXRay(seg)
+    expect(t.spans.find((s) => s.name === 'svc')!.id).toBe('12345')
+    const child = t.spans.find((s) => s.name === 'child')!
+    expect(child.id).toBe('999')
+    expect(child.parentId).toBe('12345')
+    expect(t.spans.find((s) => s.name === 'idless')).toBeTruthy()
+  })
+
+  test('surfaces a string cause (bare exception id) as an exception', () => {
+    const seg = {
+      id: 'aaaaaaaaaaaaaaaa',
+      name: 'svc',
+      trace_id: '1-581cf771-a006649127e371903a2de979',
+      start_time: 100,
+      end_time: 101,
+      fault: true,
+      cause: '1a2b3c4d5e6f7081',
+    } as XRaySegment
+    const t = fromXRay(seg)
+    const root = t.spans[0]
+    expect(root.status).toBe('error')
+    expect(root.exception).toBeTruthy()
+    expect(String(root.exception?.message)).toContain('1a2b3c4d5e6f7081')
   })
 })
 

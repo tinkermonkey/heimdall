@@ -9,13 +9,16 @@ import {
   type TraceSpan,
 } from './traceViewerModel'
 
-const KIND_COLOR: Record<string, string> = {
-  SERVER: '#22D3EE',
-  CLIENT: '#8B5CF6',
-  INTERNAL: '#64748B',
-  PRODUCER: '#F59E0B',
-  CONSUMER: '#10B981',
-  UNSPECIFIED: '#64748B',
+// span.kind -> BEM modifier; colors come from contrast-tuned semantic tokens
+// (see .trace-detail__kind--* in TraceViewer.css), not raw hex, so the badge
+// stays AA-legible on both canvases.
+const KIND_MOD: Record<string, string> = {
+  SERVER: 'server',
+  CLIENT: 'client',
+  INTERNAL: 'internal',
+  PRODUCER: 'producer',
+  CONSUMER: 'consumer',
+  UNSPECIFIED: 'internal',
 }
 
 const STATUS_LABEL: Record<string, string> = { ok: 'OK', warn: 'WARN', error: 'ERROR' }
@@ -45,7 +48,6 @@ function MiniMap({
   selectedId: string
 }) {
   const { ordered, total } = model
-  const scale = createTimeScale(0, total)
   const W = 100
   const lh = 2
   const gap = 1
@@ -54,27 +56,30 @@ function MiniMap({
   const H = top * 2 + n * (lh + gap)
   const selIndex = ordered.findIndex((s) => s.id === selectedId)
 
+  // The per-span rects don't depend on selection (the highlight band conveys it),
+  // so memoize them to avoid rebuilding one <rect> per span on every selection.
+  const rects = React.useMemo(() => {
+    const scale = createTimeScale(0, total)
+    return ordered.map((s, i) => (
+      <rect
+        key={s.id}
+        x={scale.x(s.start)}
+        y={top + i * (lh + gap)}
+        width={scale.w(s.duration)}
+        height={lh}
+        rx="0.6"
+        fill={s.status === 'error' ? 'rgb(var(--status-error))' : resolveColor(s.service)}
+        fillOpacity={0.5}
+      />
+    ))
+  }, [ordered, total, resolveColor])
+
   return (
     <svg className="trace-detail__minimap" width="100%" height={H} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
       {selIndex >= 0 && (
         <rect x="0" y={top + selIndex * (lh + gap) - 1} width={W} height={lh + 2} className="trace-detail__minimap-band" />
       )}
-      {ordered.map((s, i) => {
-        const sel = s.id === selectedId
-        const color = s.status === 'error' ? 'rgb(var(--status-error))' : resolveColor(s.service)
-        return (
-          <rect
-            key={s.id}
-            x={scale.x(s.start)}
-            y={top + i * (lh + gap)}
-            width={scale.w(s.duration)}
-            height={lh}
-            rx="0.6"
-            fill={color}
-            fillOpacity={sel ? 1 : 0.5}
-          />
-        )
-      })}
+      {rects}
     </svg>
   )
 }
@@ -114,7 +119,7 @@ export const TraceDetailPanel = React.forwardRef<HTMLDivElement, TraceDetailPane
   const pct = total > 0 ? (span.duration / total) * 100 : 0
   const selfPct = span.duration > 0 ? (self / span.duration) * 100 : 0
   const parent = span.parentId ? model.byId[span.parentId] : null
-  const kindColor = KIND_COLOR[span.kind] ?? KIND_COLOR.UNSPECIFIED
+  const kindMod = KIND_MOD[span.kind] ?? 'internal'
   const rowIndex = model.ordered.findIndex((s) => s.id === span.id) + 1
 
   const attrEntries = span.attributes ? Object.entries(span.attributes) : []
@@ -210,7 +215,7 @@ export const TraceDetailPanel = React.forwardRef<HTMLDivElement, TraceDetailPane
                 </span>,
               ],
               ...(serviceHost ? ([['host', <span className="trace-detail__mono">{serviceHost}</span>]] as [string, React.ReactNode][]) : []),
-              ['kind', <span className="trace-detail__kind" style={{ color: kindColor, borderColor: `${kindColor}55`, background: `${kindColor}18` }}>{span.kind}</span>],
+              ['kind', <span className={`trace-detail__kind trace-detail__kind--${kindMod}`}>{span.kind}</span>],
               ...(traceId ? ([['trace_id', <span className="trace-detail__mono">{traceId}</span>]] as [string, React.ReactNode][]) : []),
             ]}
           />

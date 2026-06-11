@@ -199,7 +199,16 @@ export {
   type TraceModelNode,
   type TimeScale,
 } from './components/traceViewerModel'
-export { fromOTLP, type OtlpTracesData, type OtlpSpan, type OtlpKeyValue, type OtlpAnyValue, type FromOtlpOptions } from './utils/otlpTrace'
+export {
+  fromOTLP,
+  type OtlpTracesData,
+  type OtlpResourceSpans,
+  type OtlpSpan,
+  type OtlpEvent,
+  type OtlpKeyValue,
+  type OtlpAnyValue,
+  type FromOtlpOptions,
+} from './utils/otlpTrace'
 export {
   fromXRay,
   type XRaySegment,

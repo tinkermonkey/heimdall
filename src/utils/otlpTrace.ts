@@ -111,6 +111,7 @@ const KIND_NAMES: SpanKind[] = ['UNSPECIFIED', 'INTERNAL', 'SERVER', 'CLIENT', '
 function mapKind(k: number | string | undefined): SpanKind {
   if (typeof k === 'number') return KIND_NAMES[k] ?? 'UNSPECIFIED'
   if (typeof k === 'string') {
+    if (/^\d+$/.test(k)) return KIND_NAMES[Number(k)] ?? 'UNSPECIFIED' // numeric-string enum
     const up = k.replace(/^SPAN_KIND_/, '').toUpperCase()
     return (KIND_NAMES as string[]).includes(up) ? (up as SpanKind) : 'UNSPECIFIED'
   }
@@ -124,6 +125,21 @@ function mapStatus(code: number | string | undefined): SpanStatus {
   return 'ok'
 }
 
+/**
+ * Parse a *UnixNano value to BigInt, tolerating missing/empty/non-numeric input
+ * (returns null) so one malformed span can't abort the whole adapter. Truncates
+ * any fractional/exponent part defensively.
+ */
+function toNano(v: string | number | undefined): bigint | null {
+  if (v == null || v === '') return null
+  try {
+    if (typeof v === 'number') return Number.isFinite(v) ? BigInt(Math.trunc(v)) : null
+    return BigInt(/[.eE]/.test(v) ? v.split(/[.eE]/)[0] : v)
+  } catch {
+    return null
+  }
+}
+
 type Primitive = string | number | boolean
 
 function anyValueToJs(v: OtlpAnyValue | undefined): Primitive {
@@ -135,7 +151,13 @@ function anyValueToJs(v: OtlpAnyValue | undefined): Primitive {
     return Number.isSafeInteger(n) ? n : String(v.intValue)
   }
   if (v.doubleValue !== undefined) return v.doubleValue
-  if (v.bytesValue !== undefined) return v.bytesValue
+  if (v.bytesValue !== undefined) {
+    try {
+      return b64ToHex(v.bytesValue)
+    } catch {
+      return v.bytesValue
+    }
+  }
   if (v.arrayValue) return JSON.stringify((v.arrayValue.values ?? []).map(anyValueToJs))
   if (v.kvlistValue) return JSON.stringify(flattenAttributes(v.kvlistValue.values))
   return ''
@@ -184,16 +206,14 @@ export function fromOTLP(payload: OtlpTracesData | OtlpResourceSpans[], opts: Fr
   // traceStart across the whole trace (BigInt — nano values exceed 2^53).
   let traceStart: bigint | null = null
   collected.forEach(({ span }) => {
-    if (span.startTimeUnixNano != null) {
-      const s = BigInt(span.startTimeUnixNano)
-      if (traceStart === null || s < traceStart) traceStart = s
-    }
+    const s = toNano(span.startTimeUnixNano)
+    if (s !== null && (traceStart === null || s < traceStart)) traceStart = s
   })
   const base = traceStart ?? 0n
 
   const spans: TraceSpan[] = collected.map(({ span, service }) => {
-    const startNano = span.startTimeUnixNano != null ? BigInt(span.startTimeUnixNano) : base
-    const endNano = span.endTimeUnixNano != null ? BigInt(span.endTimeUnixNano) : startNano
+    const startNano = toNano(span.startTimeUnixNano) ?? base
+    const endNano = toNano(span.endTimeUnixNano) ?? startNano
     const start = Number(startNano - base) / 1e6
     const duration = Number(endNano - startNano) / 1e6
 
@@ -202,7 +222,8 @@ export function fromOTLP(payload: OtlpTracesData | OtlpResourceSpans[], opts: Fr
     let exception: TraceSpan['exception']
     const events: SpanEvent[] = (span.events ?? []).map((ev) => {
       const evAttrs = flattenAttributes(ev.attributes)
-      const evStart = ev.timeUnixNano != null ? Number(BigInt(ev.timeUnixNano) - base) / 1e6 : start
+      const evNano = toNano(ev.timeUnixNano)
+      const evStart = evNano !== null ? Number(evNano - base) / 1e6 : start
       if (ev.name === 'exception' && !exception) {
         exception = {
           type: evAttrs['exception.type'] != null ? String(evAttrs['exception.type']) : undefined,
