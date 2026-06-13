@@ -89,8 +89,12 @@ function KV({ rows }: { rows: [string, React.ReactNode][] }) {
     <div className="trace-detail__kv">
       {rows.map(([k, v], i) => (
         <React.Fragment key={k + i}>
-          <div className="trace-detail__kv-key">{k}</div>
-          <div className="trace-detail__kv-val">{v}</div>
+          <div className="trace-detail__kv-key" title={k}>
+            {k}
+          </div>
+          <div className="trace-detail__kv-val" title={typeof v === 'string' ? v : undefined}>
+            {v}
+          </div>
         </React.Fragment>
       ))}
     </div>
@@ -196,11 +200,11 @@ export const TraceDetailPanel = React.forwardRef<HTMLDivElement, TraceDetailPane
         <Section title="IDENTITY">
           <KV
             rows={[
-              ['span_id', <span className="trace-detail__mono">{span.id}</span>],
+              ['span_id', span.id],
               [
                 'parent',
                 parent ? (
-                  <button type="button" className="trace-detail__link" onClick={() => onSelect(parent.id)}>
+                  <button type="button" className="trace-detail__link" onClick={() => onSelect(parent.id)} title={parent.name}>
                     {parent.name}
                   </button>
                 ) : (
@@ -209,14 +213,14 @@ export const TraceDetailPanel = React.forwardRef<HTMLDivElement, TraceDetailPane
               ],
               [
                 'service',
-                <span className="trace-detail__svc">
+                <span className="trace-detail__svc" title={serviceLabel}>
                   <span className="trace-detail__svc-dot" style={{ background: color }} />
                   {serviceLabel}
                 </span>,
               ],
-              ...(serviceHost ? ([['host', <span className="trace-detail__mono">{serviceHost}</span>]] as [string, React.ReactNode][]) : []),
+              ...(serviceHost ? ([['host', serviceHost]] as [string, React.ReactNode][]) : []),
               ['kind', <span className={`trace-detail__kind trace-detail__kind--${kindMod}`}>{span.kind}</span>],
-              ...(traceId ? ([['trace_id', <span className="trace-detail__mono">{traceId}</span>]] as [string, React.ReactNode][]) : []),
+              ...(traceId ? ([['trace_id', traceId]] as [string, React.ReactNode][]) : []),
             ]}
           />
         </Section>
@@ -225,7 +229,7 @@ export const TraceDetailPanel = React.forwardRef<HTMLDivElement, TraceDetailPane
           <Section title="ATTRIBUTES">{renderAttributes(span)}</Section>
         ) : attrEntries.length > 0 ? (
           <Section title="ATTRIBUTES" right={<span className="trace-detail__count">{attrEntries.length}</span>}>
-            <KV rows={attrEntries.map(([k, v]) => [k, <span className="trace-detail__mono">{String(v)}</span>])} />
+            <KV rows={attrEntries.map(([k, v]) => [k, String(v)] as [string, React.ReactNode])} />
           </Section>
         ) : null}
 
