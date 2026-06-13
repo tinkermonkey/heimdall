@@ -4,6 +4,15 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1]
+
+### Fixed
+
+- **`TraceViewer`** detail panel: long attribute names and values no longer
+  overlap. Key and value cells now truncate to a single line with an ellipsis
+  and reveal the full text on hover (native `title`); the parent link, service,
+  and host values truncate the same way.
+
 ## [0.5.0]
 
 ### Added

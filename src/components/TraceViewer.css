@@ -503,15 +503,41 @@
   text-transform: uppercase;
   color: rgb(var(--canvas-fg-3));
   padding-top: 2px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+/* Keys and values are long identifiers; truncate to one line and reveal the
+   full text on hover via the `title` attribute (set in TraceDetailPanel's KV). */
 .trace-detail__kv-val {
   font-family: var(--font-mono);
   font-size: 11.5px;
   color: rgb(var(--canvas-fg-1));
-  word-break: break-word;
   min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.trace-detail__mono { font-family: var(--font-mono); }
+/* Interactive/compound values (parent link, service, kind badge) keep their own
+   layout but must not overflow the truncating cell. */
+.trace-detail__kv-val > * {
+  max-width: 100%;
+}
+.trace-detail__link {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+.trace-detail__svc {
+  overflow: hidden;
+}
+.trace-detail__svc-dot {
+  flex: 0 0 auto;
+}
 .trace-detail__muted { color: rgb(var(--canvas-fg-3)); font-style: italic; }
 .trace-detail__link {
   border: none;

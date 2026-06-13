@@ -89,5 +89,30 @@ test.describe('TraceViewer', () => {
       // selection is no longer the root
       await expect(viewer.locator('.trace-detail__title')).not.toHaveText('POST /api/feedback/submit')
     })
+
+    test('long attribute keys/values truncate (no overlap) with a hover title', async ({ page }) => {
+      const viewer = page.locator('[data-testid="trace-otlp"]')
+      // span with a long SQL value + long attribute keys
+      await viewer.locator('.trace-viewer__tree-row', { hasText: 'db.insert feedback' }).click()
+
+      const valCell = viewer.locator('.trace-detail__kv-val', { hasText: 'INSERT INTO feedback' }).first()
+      await expect(valCell).toBeVisible()
+      // full value preserved for hover even though it is visually truncated
+      await expect(valCell).toHaveAttribute('title', /INSERT INTO feedback/)
+      await expect(valCell).toHaveCSS('white-space', 'nowrap')
+      await expect(valCell).toHaveCSS('text-overflow', 'ellipsis')
+
+      // no key cell may overlap its value cell in the ATTRIBUTES grid
+      const overlaps = await viewer.evaluate((root) => {
+        const sec = [...root.querySelectorAll('.trace-detail__section')].find(
+          (s) => s.querySelector('.trace-detail__eyebrow')?.textContent === 'ATTRIBUTES'
+        )
+        if (!sec) return true
+        const keys = [...sec.querySelectorAll('.trace-detail__kv-key')]
+        const vals = [...sec.querySelectorAll('.trace-detail__kv-val')]
+        return keys.some((k, i) => vals[i] && k.getBoundingClientRect().right > vals[i].getBoundingClientRect().left + 0.5)
+      })
+      expect(overlaps).toBe(false)
+    })
   })
 })
