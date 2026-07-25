@@ -41,6 +41,12 @@ test.describe('Graph Edge Style Utilities', () => {
       expect(weightToStrokeWidth(-20)).toBe(1)
       expect(weightToStrokeWidth(150)).toBe(8)
     })
+
+    test('falls back to the 1px minimum instead of NaN for non-finite input', () => {
+      expect(weightToStrokeWidth(NaN)).toBe(1)
+      expect(weightToStrokeWidth(Infinity)).toBe(1)
+      expect(weightToStrokeWidth(-Infinity)).toBe(1)
+    })
   })
 
   test.describe('markerSizeForStrokeWidth', () => {

@@ -21,9 +21,13 @@ export const DEFAULT_EDGE_MARKER_SIZE: Record<GraphEdgeVariant, number> = {
 /**
  * Maps a 0-100 weight to a 1-8px stroke width via a square-root curve, so
  * differences at the low end stay visually distinguishable.
+ *
+ * Non-finite input (e.g. NaN) falls back to 0 rather than propagating NaN
+ * into the stroke width, which would otherwise render invisible edges/markers.
  */
 export function weightToStrokeWidth(weight: number): number {
-  const clamped = Math.min(100, Math.max(0, weight))
+  const safeWeight = Number.isFinite(weight) ? weight : 0
+  const clamped = Math.min(100, Math.max(0, safeWeight))
   const range = MAX_EDGE_STROKE_WIDTH - MIN_EDGE_STROKE_WIDTH
   return MIN_EDGE_STROKE_WIDTH + range * Math.sqrt(clamped / 100)
 }
