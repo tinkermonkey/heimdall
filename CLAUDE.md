@@ -167,7 +167,7 @@ Icon spec: Lucide-style outline, 24×24 viewBox, `strokeWidth={1.75}`, `currentC
 - **`Sidebar`:** 256px expanded, 64px collapsed (icons only)
 - **`StatGrid`:** 4-column grid, 14px gap; each `StatTile` has a 2px colored left bar
 - **`ShellLayout`:** composes `Sidebar` + `Topbar` + `Statusbar` into the full IDE chrome
-- Canvas inner padding: `22px 26px 32px`, `min-width: 1100px` (horizontally scrolls below that)
+- Canvas inner padding: `22px 26px 32px`, reduced at `1024px` and `640px` breakpoints (no min-width — canvas reflows instead of scrolling horizontally)
 
 ## Visual Regression Tests
 
