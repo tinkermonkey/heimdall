@@ -1,5 +1,6 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { GraphCanvas } from '../components/GraphCanvas'
+import { GraphCanvasContext } from '../components/GraphCanvasContext'
 import GraphNode from '../components/GraphNode'
 import GraphInspector, { type GraphNodeMetadata, type RelationshipLink } from '../components/GraphInspector'
 import { SplitPane } from '../components/SplitPane'
@@ -39,6 +40,43 @@ const GRAPH_EDGES: EdgeData[] = [
   { id: 'edge_5', sourceId: 'ind_brca1',   targetId: 'cls_protein', label: 'encodes'     },
   { id: 'edge_6', sourceId: 'ind_co2_atm', targetId: 'cls_co2',     label: 'instanceOf'  },
 ]
+
+// Spans well beyond the 470x320 bounded panel below, so fitView must zoom out to frame it.
+const FIT_VIEW_NODES: GraphNodeData[] = [
+  { id: 'fv_a', x: 0,   y: 0,   label: 'Node A' },
+  { id: 'fv_b', x: 900, y: 0,   label: 'Node B' },
+  { id: 'fv_c', x: 0,   y: 500, label: 'Node C' },
+  { id: 'fv_d', x: 900, y: 500, label: 'Node D' },
+  // Positioned at the centroid so it stays within the other nodes' bounding box.
+  { id: 'fv_controls', x: 450, y: 250, label: '' },
+]
+
+const FIT_VIEW_EDGES = [
+  { id: 'fv_edge_1', sourceId: 'fv_a', targetId: 'fv_b' },
+  { id: 'fv_edge_2', sourceId: 'fv_a', targetId: 'fv_c' },
+  { id: 'fv_edge_3', sourceId: 'fv_b', targetId: 'fv_d' },
+]
+
+function FitViewControls() {
+  // GraphCanvas also renders node content off-screen (outside the context provider) to
+  // measure natural size, so this must tolerate a missing context rather than throw.
+  const ctx = useContext(GraphCanvasContext)
+  if (!ctx) return null
+  const { zoomToFit, setZoom, setPan } = ctx
+  return (
+    <div style={{ display: 'flex', gap: '6px' }} data-no-drag>
+      <button type="button" data-testid="fitview-zoom-to-fit" onClick={() => zoomToFit()}>
+        Fit
+      </button>
+      <button type="button" data-testid="fitview-set-zoom" onClick={() => setZoom(1.5)}>
+        Zoom 1.5
+      </button>
+      <button type="button" data-testid="fitview-set-pan" onClick={() => setPan(0, 0)}>
+        Pan 0,0
+      </button>
+    </div>
+  )
+}
 
 const TOPOLOGY_NODES = [
   {
@@ -84,7 +122,7 @@ const TOPOLOGY_NODES = [
 
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
-  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology'>('graph')
+  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview'>('graph')
 
   const selectedNode = GRAPH_NODES.find(n => n.id === selectedNodeId)
   const inspectorNode: GraphNodeMetadata | undefined = selectedNode
@@ -126,6 +164,11 @@ export default function GraphShowcase() {
     />
   ), [])
 
+  const renderFitViewNode = useCallback((node: GraphNodeData, selected: boolean) => {
+    if (node.id === 'fv_controls') return <FitViewControls />
+    return <GraphNode id={node.id} label={node.label} selected={selected} onSelect={setSelectedNodeId} />
+  }, [])
+
   const graphCanvas = (
     <GraphCanvas
       nodes={GRAPH_NODES}
@@ -135,6 +178,27 @@ export default function GraphShowcase() {
       renderNode={renderGraphNode}
       style={{ height: '100%' }}
     />
+  )
+
+  const fitViewCanvas = (
+    <div style={{ padding: '20px', height: '100%', overflow: 'auto' }}>
+      <div
+        data-testid="fitview-panel"
+        style={{ width: '470px', height: '320px', border: '1px solid var(--shell-border, #1e2a44)' }}
+      >
+        <GraphCanvas
+          data-testid="fitview-canvas"
+          nodes={FIT_VIEW_NODES}
+          edges={FIT_VIEW_EDGES}
+          fitView
+          fitPadding={20}
+          selectedNodeId={selectedNodeId}
+          onNodeSelect={setSelectedNodeId}
+          renderNode={renderFitViewNode}
+          style={{ height: '100%' }}
+        />
+      </div>
+    </div>
   )
 
   const topologyCanvas = (
@@ -196,6 +260,21 @@ export default function GraphShowcase() {
           >
             Topology View
           </button>
+          <button
+            type="button"
+            data-testid="fitview-view-button"
+            onClick={() => setCanvasMode('fitview')}
+            style={{
+              padding: '8px 16px',
+              background: canvasMode === 'fitview' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: canvasMode === 'fitview' ? 600 : 400,
+            }}
+          >
+            Fit View Demo
+          </button>
         </div>
       </div>
 
@@ -206,7 +285,7 @@ export default function GraphShowcase() {
           initialSplitPercent={70}
           minSize={300}
           maxSize={900}
-          first={canvasMode === 'graph' ? graphCanvas : topologyCanvas}
+          first={canvasMode === 'graph' ? graphCanvas : canvasMode === 'topology' ? topologyCanvas : fitViewCanvas}
           second={
             <GraphInspector
               data-testid="graph-inspector-panel"

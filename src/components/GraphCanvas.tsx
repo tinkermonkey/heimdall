@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
-import { bezierPath, rectEdgePoint } from '../utils/graph'
+import { bezierPath, computeFitViewport, rectEdgePoint, type BoundingBox } from '../utils/graph'
 import { forceLayout } from '../utils/graphLayout'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
@@ -42,6 +42,8 @@ export interface BaseGraphNodeComponentProps {
 
 const DEFAULT_NODE_W = 138
 const DEFAULT_NODE_H = 30
+const MIN_ZOOM = 0.4
+const MAX_ZOOM = 2.5
 
 interface InternalEdgeProps {
   id: string
@@ -131,6 +133,10 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes
    *  without explicit coordinates; nodes with x and y are pinned. */
   layout?: 'manual' | 'force'
+  /** Zoom out/in on first layout so the full node bounding box fits within the container. Default false. */
+  fitView?: boolean
+  /** Padding in px around the fitted bounding box when fitView is enabled. Default 40. */
+  fitPadding?: number
 }
 
 type NodeDims = Map<string, { width: number; height: number }>
@@ -145,6 +151,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onNodeSelect,
       renderNode,
       layout = 'manual',
+      fitView = false,
+      fitPadding = 40,
       className = '',
       ...props
     },
@@ -159,9 +167,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const didCenterRef = useRef(false)
     const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
 
-    const { transform, viewport, bind, panTo } = usePanZoom({
-      minZoom: 0.4,
-      maxZoom: 2.5,
+    const { transform, viewport, bind, panTo, zoomTo } = usePanZoom({
+      minZoom: MIN_ZOOM,
+      maxZoom: MAX_ZOOM,
     })
 
     const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -217,13 +225,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return () => ro.disconnect()
     }, [])
 
-    // Auto-center the node bounding box once positions and dims are ready.
-    // Runs once — re-centering on later prop changes would fight user pan/zoom.
-    useEffect(() => {
-      if (didCenterRef.current) return
-      if (!containerSize || dims.size === 0 || nodes.length === 0) return
-      if (layout === 'force' && computedPositions.size === 0) return
-
+    // Computes the current node bounding box in graph space (world coordinates).
+    // Shared by the initial fit/center effect and the imperative zoomToFit().
+    const computeBoundingBox = useCallback((): BoundingBox | null => {
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
       for (const node of nodes) {
         const pos = node.x !== undefined && node.y !== undefined
@@ -236,17 +240,44 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         minY = Math.min(minY, pos.y - d.height / 2)
         maxY = Math.max(maxY, pos.y + d.height / 2)
       }
-      if (!Number.isFinite(minX)) return
+      if (!Number.isFinite(minX)) return null
+      return { minX, maxX, minY, maxY }
+    }, [nodes, dims, computedPositions])
 
-      const centroidX = (minX + maxX) / 2
-      const centroidY = (minY + maxY) / 2
-      const next = {
-        x: containerSize.width / 2 - centroidX * viewport.zoom,
-        y: containerSize.height / 2 - centroidY * viewport.zoom,
-      }
+    // Auto-center (or fit) the node bounding box once positions and dims are ready.
+    // Runs once — re-centering on later prop changes would fight user pan/zoom.
+    useEffect(() => {
+      if (didCenterRef.current) return
+      if (!containerSize || dims.size === 0 || nodes.length === 0) return
+      if (layout === 'force' && computedPositions.size === 0) return
+
+      const bbox = computeBoundingBox()
+      if (!bbox) return
+
       didCenterRef.current = true
-      panTo(next.x, next.y)
-    }, [containerSize, dims, computedPositions, nodes, layout, viewport.zoom, panTo])
+
+      if (fitView) {
+        const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, MIN_ZOOM, MAX_ZOOM)
+        zoomTo(fit.zoom)
+        panTo(fit.panX, fit.panY)
+      } else {
+        const centroidX = (bbox.minX + bbox.maxX) / 2
+        const centroidY = (bbox.minY + bbox.maxY) / 2
+        panTo(
+          containerSize.width / 2 - centroidX * viewport.zoom,
+          containerSize.height / 2 - centroidY * viewport.zoom
+        )
+      }
+    }, [containerSize, dims, computedPositions, nodes, layout, viewport.zoom, panTo, zoomTo, fitView, fitPadding, computeBoundingBox])
+
+    // Imperative viewport controls, exposed via useGraphCanvas().
+    const zoomToFit = useCallback((padding?: number) => {
+      const bbox = computeBoundingBox()
+      if (!bbox || !containerSize) return
+      const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, padding ?? fitPadding, MIN_ZOOM, MAX_ZOOM)
+      zoomTo(fit.zoom)
+      panTo(fit.panX, fit.panY)
+    }, [computeBoundingBox, containerSize, fitPadding, zoomTo, panTo])
 
 
     const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
@@ -281,7 +312,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       zoom: viewport.zoom,
       pan: { x: viewport.x, y: viewport.y },
       selectedNodeId,
-    }), [getNodeRect, viewport, selectedNodeId])
+      zoomToFit,
+      setZoom: zoomTo,
+      setPan: panTo,
+    }), [getNodeRect, viewport, selectedNodeId, zoomToFit, zoomTo, panTo])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)

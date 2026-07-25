@@ -12,6 +12,12 @@ export interface GraphCanvasContextValue {
   zoom: number
   pan: { x: number; y: number }
   selectedNodeId?: string
+  /** Recomputes the current node bounding box and fits it within the container, optionally overriding fitPadding. */
+  zoomToFit: (padding?: number) => void
+  /** Sets zoom without altering pan. */
+  setZoom: (zoom: number) => void
+  /** Sets pan without altering zoom. */
+  setPan: (x: number, y: number) => void
 }
 
 export const GraphCanvasContext = createContext<GraphCanvasContextValue | null>(null)

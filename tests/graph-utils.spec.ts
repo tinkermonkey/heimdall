@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { rectEdgePoint, bezierPath, type Point } from '../src/utils/graph'
+import { rectEdgePoint, bezierPath, computeFitViewport, type Point } from '../src/utils/graph'
 
 test.describe('Graph Utilities', () => {
   test.describe('rectEdgePoint', () => {
@@ -170,6 +170,66 @@ test.describe('Graph Utilities', () => {
       const parts = result.d.split(' ')
       expect(parts[0]).toBe('M')
       expect(parts[3]).toBe('Q')
+    })
+  })
+
+  test.describe('computeFitViewport', () => {
+    test('fits a bounding box narrower than the container by centering at zoom 1 bound', () => {
+      const bbox = { minX: 0, maxX: 100, minY: 0, maxY: 50 }
+      const result = computeFitViewport(bbox, 1000, 800, 40, 0.4, 2.5)
+
+      // width-constrained: (1000 - 80) / 100 = 9.2, height-constrained: (800 - 80) / 50 = 14.4
+      // smaller of the two wins, then clamped to maxZoom
+      expect(result.zoom).toBe(2.5)
+    })
+
+    test('zooms out so a bounding box larger than the container fits with padding', () => {
+      const bbox = { minX: 0, maxX: 2000, minY: 0, maxY: 1000 }
+      const result = computeFitViewport(bbox, 800, 600, 40, 0.1, 2.5)
+
+      // width-constrained: (800 - 80) / 2000 = 0.36, height-constrained: (600 - 80) / 1000 = 0.52
+      expect(result.zoom).toBeCloseTo(0.36, 5)
+    })
+
+    test('centers pan on the bounding box centroid at the computed zoom', () => {
+      const bbox = { minX: 0, maxX: 200, minY: 0, maxY: 100 }
+      const result = computeFitViewport(bbox, 800, 600, 0, 0.1, 2.5)
+
+      const centroidX = 100
+      const centroidY = 50
+      expect(result.panX).toBeCloseTo(800 / 2 - centroidX * result.zoom, 5)
+      expect(result.panY).toBeCloseTo(600 / 2 - centroidY * result.zoom, 5)
+    })
+
+    test('clamps the computed zoom to minZoom when the bounding box is much larger than the container', () => {
+      const bbox = { minX: 0, maxX: 20000, minY: 0, maxY: 20000 }
+      const result = computeFitViewport(bbox, 800, 600, 40, 0.4, 2.5)
+
+      expect(result.zoom).toBe(0.4)
+    })
+
+    test('clamps the computed zoom to maxZoom when the bounding box is much smaller than the container', () => {
+      const bbox = { minX: 0, maxX: 10, minY: 0, maxY: 10 }
+      const result = computeFitViewport(bbox, 800, 600, 40, 0.4, 2.5)
+
+      expect(result.zoom).toBe(2.5)
+    })
+
+    test('respects a larger padding by leaving more room around the bounding box', () => {
+      const bbox = { minX: 0, maxX: 2000, minY: 0, maxY: 1000 }
+      const smallPadding = computeFitViewport(bbox, 800, 600, 20, 0.1, 2.5)
+      const largePadding = computeFitViewport(bbox, 800, 600, 100, 0.1, 2.5)
+
+      expect(largePadding.zoom).toBeLessThan(smallPadding.zoom)
+    })
+
+    test('handles a zero-area bounding box without producing NaN or Infinity', () => {
+      const bbox = { minX: 100, maxX: 100, minY: 50, maxY: 50 }
+      const result = computeFitViewport(bbox, 800, 600, 40, 0.4, 2.5)
+
+      expect(Number.isFinite(result.zoom)).toBe(true)
+      expect(Number.isFinite(result.panX)).toBe(true)
+      expect(Number.isFinite(result.panY)).toBe(true)
     })
   })
 

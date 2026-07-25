@@ -239,6 +239,111 @@ test.describe('Graph Canvas Components', () => {
     expect(gridProps.height).toBeGreaterThan(0)
   })
 
+  test.describe('Fit View and Viewport Controls', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.locator('[data-testid="fitview-view-button"]').click()
+      await page.waitForTimeout(200)
+    })
+
+    function parseMatrix(transform: string | null) {
+      if (!transform) throw new Error('transform attribute missing')
+      const inner = transform.match(/matrix\(([^)]+)\)/)
+      if (!inner) throw new Error(`unexpected transform: ${transform}`)
+      const [zoom, , , , panX, panY] = inner[1].split(',').map((s) => parseFloat(s.trim()))
+      return { zoom, panX, panY }
+    }
+
+    test('fits the full node bounding box within the bounded panel with padding', async ({ page }) => {
+      const canvas = page.locator('[data-testid="fitview-canvas"]')
+      await expect(canvas).toBeVisible()
+      const canvasBox = await canvas.boundingBox()
+      if (!canvasBox) throw new Error('Canvas not visible')
+
+      const nodes = page.locator('[data-testid^="graph-node-fv_"]')
+      const count = await nodes.count()
+      expect(count).toBeGreaterThan(0)
+
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+      for (let i = 0; i < count; i++) {
+        const box = await nodes.nth(i).boundingBox()
+        if (!box) continue
+        minX = Math.min(minX, box.x)
+        minY = Math.min(minY, box.y)
+        maxX = Math.max(maxX, box.x + box.width)
+        maxY = Math.max(maxY, box.y + box.height)
+      }
+
+      // fitPadding is 20px — allow a couple px of slack for subpixel rendering
+      expect(minX - canvasBox.x).toBeGreaterThanOrEqual(18)
+      expect(minY - canvasBox.y).toBeGreaterThanOrEqual(18)
+      expect(canvasBox.x + canvasBox.width - maxX).toBeGreaterThanOrEqual(18)
+      expect(canvasBox.y + canvasBox.height - maxY).toBeGreaterThanOrEqual(18)
+    })
+
+    test('fit zoom is clamped within min/max zoom bounds', async ({ page }) => {
+      const viewport = page.locator('[data-testid="graph-viewport"]')
+      const { zoom } = parseMatrix(await viewport.getAttribute('transform'))
+
+      expect(zoom).toBeGreaterThanOrEqual(0.4)
+      expect(zoom).toBeLessThanOrEqual(2.5)
+      // The graph is wider/taller than the 470x320 panel, so it must zoom out
+      expect(zoom).toBeLessThan(1)
+    })
+
+    test('zoomToFit recomputes and reapplies the fit viewport', async ({ page }) => {
+      const viewport = page.locator('[data-testid="graph-viewport"]')
+      const canvas = page.locator('[data-testid="fitview-canvas"]')
+
+      const fitted = parseMatrix(await viewport.getAttribute('transform'))
+
+      await canvas.evaluate((el) => {
+        el.dispatchEvent(new WheelEvent('wheel', { bubbles: true, deltaY: -300 }))
+      })
+      await page.waitForTimeout(150)
+      const zoomedIn = parseMatrix(await viewport.getAttribute('transform'))
+      expect(zoomedIn.zoom).not.toBeCloseTo(fitted.zoom, 3)
+
+      await page.locator('[data-testid="fitview-zoom-to-fit"]').click()
+      await page.waitForTimeout(150)
+      const refitted = parseMatrix(await viewport.getAttribute('transform'))
+
+      expect(refitted.zoom).toBeCloseTo(fitted.zoom, 1)
+      expect(refitted.panX).toBeCloseTo(fitted.panX, 0)
+      expect(refitted.panY).toBeCloseTo(fitted.panY, 0)
+    })
+
+    test('setZoom changes only zoom, leaving pan unchanged', async ({ page }) => {
+      const viewport = page.locator('[data-testid="graph-viewport"]')
+      const before = parseMatrix(await viewport.getAttribute('transform'))
+
+      await page.locator('[data-testid="fitview-set-zoom"]').click()
+      await page.waitForTimeout(100)
+
+      const after = parseMatrix(await viewport.getAttribute('transform'))
+      expect(after.zoom).toBeCloseTo(1.5, 5)
+      expect(after.panX).toBeCloseTo(before.panX, 1)
+      expect(after.panY).toBeCloseTo(before.panY, 1)
+    })
+
+    test('setPan changes only pan, leaving zoom unchanged', async ({ page }) => {
+      const viewport = page.locator('[data-testid="graph-viewport"]')
+      const before = parseMatrix(await viewport.getAttribute('transform'))
+
+      await page.locator('[data-testid="fitview-set-pan"]').click()
+      await page.waitForTimeout(100)
+
+      const after = parseMatrix(await viewport.getAttribute('transform'))
+      expect(after.panX).toBeCloseTo(0, 5)
+      expect(after.panY).toBeCloseTo(0, 5)
+      expect(after.zoom).toBeCloseTo(before.zoom, 5)
+    })
+
+    test('Fit View Demo visual snapshot', async ({ page }) => {
+      const panel = page.locator('[data-testid="fitview-panel"]')
+      await expect(panel).toHaveScreenshot('graph-canvas-fitview-light.png')
+    })
+  })
+
   test.describe('TopologyNode Status Variants', () => {
     test.beforeEach(async ({ page }) => {
       const topologyBtn = page.locator('button:has-text("Topology View")')

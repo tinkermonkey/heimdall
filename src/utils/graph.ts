@@ -28,6 +28,46 @@ export function rectEdgePoint(cx: number, cy: number, w: number, h: number, tx: 
   }
 }
 
+export interface BoundingBox {
+  minX: number
+  maxX: number
+  minY: number
+  maxY: number
+}
+
+export interface FitViewportResult {
+  zoom: number
+  panX: number
+  panY: number
+}
+
+/** Computes the zoom/pan needed to fit `bbox` within a container, centered, clamped to [minZoom, maxZoom]. */
+export function computeFitViewport(
+  bbox: BoundingBox,
+  containerWidth: number,
+  containerHeight: number,
+  padding: number,
+  minZoom: number,
+  maxZoom: number
+): FitViewportResult {
+  const bbW = bbox.maxX - bbox.minX
+  const bbH = bbox.maxY - bbox.minY
+  const zoom = Math.min(
+    maxZoom,
+    Math.max(
+      minZoom,
+      Math.min((containerWidth - 2 * padding) / (bbW || 1), (containerHeight - 2 * padding) / (bbH || 1))
+    )
+  )
+  const centroidX = (bbox.minX + bbox.maxX) / 2
+  const centroidY = (bbox.minY + bbox.maxY) / 2
+  return {
+    zoom,
+    panX: containerWidth / 2 - centroidX * zoom,
+    panY: containerHeight / 2 - centroidY * zoom,
+  }
+}
+
 export function bezierPath(p1: Point, p2: Point, curvature: number = 0.28): BezierPathResult {
   const dx = p2.x - p1.x
   const dy = p2.y - p1.y
