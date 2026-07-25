@@ -18,6 +18,9 @@ interface EdgeData {
   sourceId: string
   targetId: string
   label?: string
+  weight?: number
+  opacity?: number
+  strokeDash?: number | [number, number]
 }
 
 const GRAPH_NODES: NodeData[] = [
@@ -39,6 +42,12 @@ const GRAPH_EDGES: EdgeData[] = [
   { id: 'edge_4', sourceId: 'cls_co2',     targetId: 'cls_warming', label: 'causes'      },
   { id: 'edge_5', sourceId: 'ind_brca1',   targetId: 'cls_protein', label: 'encodes'     },
   { id: 'edge_6', sourceId: 'ind_co2_atm', targetId: 'cls_co2',     label: 'instanceOf'  },
+  // Weighted-edge demo — covers Phase 2's weight/opacity/strokeDash encoding for visual regression.
+  { id: 'edge_weight_low',  sourceId: 'cls_cell',    targetId: 'cls_protein', weight: 10 },
+  { id: 'edge_weight_mid',  sourceId: 'cls_nucleus', targetId: 'cls_mito',    weight: 50 },
+  { id: 'edge_weight_high', sourceId: 'ind_brca1',   targetId: 'cls_warming', weight: 90 },
+  { id: 'edge_opacity',     sourceId: 'ind_tp53',    targetId: 'cls_protein', opacity: 0.3 },
+  { id: 'edge_dash',        sourceId: 'ind_co2_atm', targetId: 'cls_warming', strokeDash: [6, 2] },
 ]
 
 // Spans well beyond the 470x320 bounded panel below, so fitView must zoom out to frame it.

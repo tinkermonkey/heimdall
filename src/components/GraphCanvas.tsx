@@ -4,6 +4,7 @@ import { forceLayout } from '../utils/graphLayout'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
 import GraphNode from './GraphNode'
+import { GraphEdgeShape } from './GraphEdgeShape'
 import './GraphCanvas.css'
 import './GraphEdge.css'
 
@@ -28,6 +29,12 @@ export interface GraphEdge {
   targetId: string
   label?: string
   variant?: 'default' | 'hot' | 'irrelevant'
+  /** 0-100. Maps to a 1-8px stroke width via a square-root curve. Unset renders the current variant default. */
+  weight?: number
+  /** 0-1. Applied to the line and arrow marker independently of the label background. Default 1. */
+  opacity?: number
+  /** A single number (equal dash/gap) or a [dash, gap] tuple. Overrides variant-based dashing. */
+  strokeDash?: number | [number, number]
 }
 
 /** Props that a custom node component receives from renderNode. */
@@ -51,9 +58,12 @@ interface InternalEdgeProps {
   targetId: string
   label?: string
   variant?: 'default' | 'hot' | 'irrelevant'
+  weight?: number
+  opacity?: number
+  strokeDash?: number | [number, number]
 }
 
-function GraphEdgeInternal({ id, sourceId, targetId, label, variant = 'default' }: InternalEdgeProps) {
+function GraphEdgeInternal({ id, sourceId, targetId, label, variant = 'default', weight, opacity, strokeDash }: InternalEdgeProps) {
   const { getNodeRect } = useGraphCanvas()
 
   const result = useMemo(() => {
@@ -67,51 +77,19 @@ function GraphEdgeInternal({ id, sourceId, targetId, label, variant = 'default' 
 
   if (!result) return null
 
-  const markerId = `arrow-${id}`
-  const markerRoseId = `arrow-rose-${id}`
-  const markerCyanId = `arrow-cyan-${id}`
-  const markerUrl =
-    variant === 'hot'
-      ? `url(#${markerCyanId})`
-      : variant === 'irrelevant'
-        ? `url(#${markerRoseId})`
-        : `url(#${markerId})`
   const classNames = ['graph-edge', variant !== 'default' && `graph-edge--${variant}`].filter(Boolean).join(' ')
   return (
     <g className={classNames} role="presentation" aria-hidden="true" data-testid={`graph-edge-${id}`}>
-      <defs>
-        <marker id={markerId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, #94a3b8)" />
-        </marker>
-        <marker id={markerRoseId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--status-rose))" />
-        </marker>
-        <marker id={markerCyanId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--accent-primary))" />
-        </marker>
-      </defs>
-      <path className="graph-edge__hit" d={result.d} />
-      <path className="graph-edge__line" d={result.d} markerEnd={markerUrl} />
-      {label && (
-        <g
-          transform={`translate(${result.mid.x - (label.length * 3.3 + 7)}, ${result.mid.y - 9})`}
-          className="graph-edge__label"
-        >
-          <rect
-            width={label.length * 6.6 + 14}
-            height="18"
-            rx="3"
-            className="graph-edge__label-bg"
-          />
-          <text
-            x={label.length * 3.3 + 7}
-            y="12"
-            className="graph-edge__label-text"
-          >
-            {label}
-          </text>
-        </g>
-      )}
+      <GraphEdgeShape
+        id={id}
+        d={result.d}
+        mid={result.mid}
+        label={label}
+        variant={variant}
+        weight={weight}
+        opacity={opacity}
+        strokeDash={strokeDash}
+      />
     </g>
   )
 }
@@ -396,6 +374,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     targetId={edge.targetId}
                     label={edge.label}
                     variant={edge.variant}
+                    weight={edge.weight}
+                    opacity={edge.opacity}
+                    strokeDash={edge.strokeDash}
                   />
                 ))}
               </g>

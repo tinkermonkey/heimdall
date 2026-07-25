@@ -144,6 +144,52 @@ test.describe('Graph Canvas Components', () => {
     expect(pathData).toContain('M ')
   })
 
+  test('GraphEdge weight maps to stroke width via the sqrt curve', async ({ page }) => {
+    const low = page.locator('[data-testid="graph-edge-edge_weight_low"] path.graph-edge__line')
+    const mid = page.locator('[data-testid="graph-edge-edge_weight_mid"] path.graph-edge__line')
+    const high = page.locator('[data-testid="graph-edge-edge_weight_high"] path.graph-edge__line')
+    const baseline = page.locator('[data-testid="graph-edge-edge_1"] path.graph-edge__line')
+
+    const [lowWidth, midWidth, highWidth, baselineWidth] = await Promise.all([
+      low.evaluate(el => parseFloat(getComputedStyle(el).strokeWidth)),
+      mid.evaluate(el => parseFloat(getComputedStyle(el).strokeWidth)),
+      high.evaluate(el => parseFloat(getComputedStyle(el).strokeWidth)),
+      baseline.evaluate(el => parseFloat(getComputedStyle(el).strokeWidth)),
+    ])
+
+    // weight: 10 -> ~3.2px, weight: 50 -> ~5.95px, weight: 90 -> ~7.64px
+    expect(lowWidth).toBeCloseTo(1 + 7 * Math.sqrt(0.1), 1)
+    expect(midWidth).toBeCloseTo(1 + 7 * Math.sqrt(0.5), 1)
+    expect(highWidth).toBeCloseTo(1 + 7 * Math.sqrt(0.9), 1)
+    expect(lowWidth).toBeLessThan(midWidth)
+    expect(midWidth).toBeLessThan(highWidth)
+
+    // An edge with no weight matches the current default stroke width for its variant.
+    expect(baselineWidth).toBeCloseTo(1.25, 1)
+  })
+
+  test('GraphEdge opacity applies to the line and marker, not the label background', async ({ page }) => {
+    const edge = page.locator('[data-testid="graph-edge-edge_opacity"]')
+    const line = edge.locator('path.graph-edge__line')
+    const marker = edge.locator('marker path')
+
+    const lineOpacity = await line.evaluate(el => getComputedStyle(el).opacity)
+    expect(parseFloat(lineOpacity)).toBeCloseTo(0.3, 2)
+
+    const markerOpacities = await marker.evaluateAll(els => els.map(el => getComputedStyle(el).opacity))
+    for (const opacity of markerOpacities) {
+      expect(parseFloat(opacity)).toBeCloseTo(0.3, 2)
+    }
+  })
+
+  test('GraphEdge strokeDash overrides variant-based dashing', async ({ page }) => {
+    const line = page.locator('[data-testid="graph-edge-edge_dash"] path.graph-edge__line')
+    const dasharray = await line.evaluate(el => getComputedStyle(el).strokeDasharray)
+    // getComputedStyle normalizes the dasharray to `"6px, 2px"`.
+    const parts = dasharray.split(',').map(v => parseFloat(v))
+    expect(parts).toEqual([6, 2])
+  })
+
   test('GraphNode domainColor is applied correctly', async ({ page }) => {
     // data-domain is hoisted to the SVG <g> wrapper
     const lifeNode = page.locator('[data-testid="graph-node-cls_cell"]')
@@ -396,6 +442,19 @@ test.describe('Graph Canvas Components', () => {
       const edge = page.locator('[data-testid^="graph-edge-"]').first()
       await expect(edge).toHaveScreenshot('graph-edge-light.png')
     })
+
+    test('Weighted GraphEdge visual snapshot', async ({ page }) => {
+      // Individual edge <g> locators can report a negative-origin bounding box (the bezier
+      // control point overshoots left of the node), which breaks toHaveScreenshot's clip
+      // region — so the full canvas is captured instead, same as the baseline canvas snapshot.
+      const ids = ['edge_weight_low', 'edge_weight_mid', 'edge_weight_high', 'edge_opacity', 'edge_dash']
+      for (const id of ids) {
+        await expect(page.locator(`[data-testid="graph-edge-${id}"]`)).toBeAttached()
+      }
+
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-weighted-edges-light.png')
+    })
   })
 
   test.describe('TopologyNode Status Variants - Dark Canvas', () => {
@@ -454,6 +513,16 @@ test.describe('Graph Canvas Components', () => {
     test('GraphEdge component visual snapshot in dark mode', async ({ page }) => {
       const edge = page.locator('[data-testid^="graph-edge-"]').first()
       await expect(edge).toHaveScreenshot('graph-edge-dark.png')
+    })
+
+    test('Weighted GraphEdge visual snapshot in dark mode', async ({ page }) => {
+      const ids = ['edge_weight_low', 'edge_weight_mid', 'edge_weight_high', 'edge_opacity', 'edge_dash']
+      for (const id of ids) {
+        await expect(page.locator(`[data-testid="graph-edge-${id}"]`)).toBeAttached()
+      }
+
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-weighted-edges-dark.png')
     })
   })
 })
