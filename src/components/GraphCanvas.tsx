@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
-import { bezierPath, computeFitViewport, rectEdgePoint, type BoundingBox } from '../utils/graph'
+import { computeEdgePath, computeFitViewport, type BoundingBox, type EdgeAnchor } from '../utils/graph'
 import { forceLayout } from '../utils/graphLayout'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
@@ -35,6 +35,12 @@ export interface GraphEdge {
   opacity?: number
   /** A single number (equal dash/gap) or a [dash, gap] tuple. Overrides variant-based dashing. */
   strokeDash?: number | [number, number]
+  /** Pins the source endpoint to a side of the node instead of facing the target's center. Default 'auto'. */
+  sourceAnchor?: EdgeAnchor
+  /** Pins the target endpoint to a side of the node instead of facing the source's center. Default 'auto'. */
+  targetAnchor?: EdgeAnchor
+  /** Overrides the default curve strength (0.22 for auto/auto, 0.4 when either endpoint is anchored). */
+  curvature?: number
 }
 
 /** Props that a custom node component receives from renderNode. */
@@ -61,19 +67,32 @@ interface InternalEdgeProps {
   weight?: number
   opacity?: number
   strokeDash?: number | [number, number]
+  sourceAnchor?: EdgeAnchor
+  targetAnchor?: EdgeAnchor
+  curvature?: number
 }
 
-function GraphEdgeInternal({ id, sourceId, targetId, label, variant = 'default', weight, opacity, strokeDash }: InternalEdgeProps) {
+function GraphEdgeInternal({
+  id,
+  sourceId,
+  targetId,
+  label,
+  variant = 'default',
+  weight,
+  opacity,
+  strokeDash,
+  sourceAnchor,
+  targetAnchor,
+  curvature,
+}: InternalEdgeProps) {
   const { getNodeRect } = useGraphCanvas()
 
   const result = useMemo(() => {
     const src = getNodeRect(sourceId)
     const tgt = getNodeRect(targetId)
     if (!src || !tgt) return null
-    const sp = rectEdgePoint(src.x, src.y, src.width, src.height, tgt.x, tgt.y)
-    const tp = rectEdgePoint(tgt.x, tgt.y, tgt.width, tgt.height, src.x, src.y)
-    return bezierPath(sp, tp, 0.22)
-  }, [getNodeRect, sourceId, targetId])
+    return computeEdgePath(src, tgt, { sourceAnchor, targetAnchor, curvature })
+  }, [getNodeRect, sourceId, targetId, sourceAnchor, targetAnchor, curvature])
 
   if (!result) return null
 
@@ -377,6 +396,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     weight={edge.weight}
                     opacity={edge.opacity}
                     strokeDash={edge.strokeDash}
+                    sourceAnchor={edge.sourceAnchor}
+                    targetAnchor={edge.targetAnchor}
+                    curvature={edge.curvature}
                   />
                 ))}
               </g>

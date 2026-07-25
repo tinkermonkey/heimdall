@@ -525,4 +525,127 @@ test.describe('Graph Canvas Components', () => {
       await expect(canvas).toHaveScreenshot('graph-canvas-weighted-edges-dark.png')
     })
   })
+
+  test.describe('Bus View - Edge Anchors & Curvature', () => {
+    // Reads a path's endpoint in screen coordinates so it can be compared directly against a
+    // node's rendered bounding box, independent of the current pan/zoom transform.
+    async function edgePoint(page: import('@playwright/test').Page, edgeTestId: string, end: 'start' | 'end') {
+      return page.locator(`[data-testid="${edgeTestId}"] path.graph-edge__line`).evaluate((el, end) => {
+        const path = el as SVGPathElement
+        const len = path.getTotalLength()
+        const local = end === 'start' ? path.getPointAtLength(0) : path.getPointAtLength(len)
+        const ctm = path.getScreenCTM()!
+        const screen = new DOMPoint(local.x, local.y).matrixTransform(ctm)
+        return { x: screen.x, y: screen.y }
+      }, end)
+    }
+
+    test.beforeEach(async ({ page }) => {
+      await page.locator('[data-testid="bus-view-button"]').click()
+      await page.waitForTimeout(200)
+    })
+
+    test('anchored edges exit the source node on its right side regardless of vertical offset', async ({ page }) => {
+      const gatewayBox = await page.locator('[data-testid="graph-node-bus_gateway"]').boundingBox()
+      if (!gatewayBox) throw new Error('gateway node not visible')
+
+      const toAgentA = await edgePoint(page, 'graph-edge-bus_edge_gateway_a', 'start')
+      const toAgentB = await edgePoint(page, 'graph-edge-bus_edge_gateway_b', 'start')
+
+      const expectedX = gatewayBox.x + gatewayBox.width
+      const expectedY = gatewayBox.y + gatewayBox.height / 2
+
+      // Both edges leave from the same point on the gateway's right edge even though
+      // agent_a and agent_b sit at very different vertical offsets.
+      expect(toAgentA.x).toBeCloseTo(expectedX, 0)
+      expect(toAgentA.y).toBeCloseTo(expectedY, 0)
+      expect(toAgentB.x).toBeCloseTo(expectedX, 0)
+      expect(toAgentB.y).toBeCloseTo(expectedY, 0)
+    })
+
+    test('anchored edges enter the target node on its left side regardless of vertical offset', async ({ page }) => {
+      const agentBBox = await page.locator('[data-testid="graph-node-bus_agent_b"]').boundingBox()
+      if (!agentBBox) throw new Error('agent_b node not visible')
+
+      const fromDep3 = await edgePoint(page, 'graph-edge-bus_edge_b_dep3', 'start')
+      const fromDep4 = await edgePoint(page, 'graph-edge-bus_edge_b_dep4', 'start')
+
+      const dep3Box = await page.locator('[data-testid="graph-node-bus_dep_3"]').boundingBox()
+      const dep4Box = await page.locator('[data-testid="graph-node-bus_dep_4"]').boundingBox()
+      if (!dep3Box || !dep4Box) throw new Error('dependency node not visible')
+
+      const dep3End = await edgePoint(page, 'graph-edge-bus_edge_b_dep3', 'end')
+      const dep4End = await edgePoint(page, 'graph-edge-bus_edge_b_dep4', 'end')
+
+      expect(dep3End.x).toBeCloseTo(dep3Box.x, 0)
+      expect(dep3End.y).toBeCloseTo(dep3Box.y + dep3Box.height / 2, 0)
+      expect(dep4End.x).toBeCloseTo(dep4Box.x, 0)
+      expect(dep4End.y).toBeCloseTo(dep4Box.y + dep4Box.height / 2, 0)
+
+      // Both edges also leave agent_b from the same right-side point.
+      expect(fromDep3.x).toBeCloseTo(agentBBox.x + agentBBox.width, 0)
+      expect(fromDep4.x).toBeCloseTo(agentBBox.x + agentBBox.width, 0)
+    })
+
+    test('mixed anchors pin only the specified endpoint', async ({ page }) => {
+      const gatewayBox = await page.locator('[data-testid="graph-node-bus_gateway"]').boundingBox()
+      if (!gatewayBox) throw new Error('gateway node not visible')
+
+      // sourceAnchor: 'right', targetAnchor omitted (auto) -> the path is still cubic (either
+      // anchor non-auto), but only the source endpoint is pinned to the node's right side.
+      const start = await edgePoint(page, 'graph-edge-bus_edge_gateway_b', 'start')
+      expect(start.x).toBeCloseTo(gatewayBox.x + gatewayBox.width, 0)
+      expect(start.y).toBeCloseTo(gatewayBox.y + gatewayBox.height / 2, 0)
+
+      const pathData = await page
+        .locator('[data-testid="graph-edge-bus_edge_gateway_b"] path.graph-edge__line')
+        .getAttribute('d')
+      expect(pathData).toContain(' C ')
+    })
+
+    test('two edges between the same node pair with different curvature render distinct, non-overlapping paths', async ({ page }) => {
+      const lowPath = await page
+        .locator('[data-testid="graph-edge-bus_edge_a_dep2_low"] path.graph-edge__line')
+        .getAttribute('d')
+      const highPath = await page
+        .locator('[data-testid="graph-edge-bus_edge_a_dep2_high"] path.graph-edge__line')
+        .getAttribute('d')
+
+      expect(lowPath).toBeTruthy()
+      expect(highPath).toBeTruthy()
+      expect(lowPath).not.toBe(highPath)
+    })
+
+    test('labeled anchored edge places its label at the path midpoint', async ({ page }) => {
+      const label = page.locator('[data-testid="graph-edge-bus_edge_b_dep4"] .graph-edge__label')
+      await expect(label).toBeAttached()
+
+      const pathBox = await page
+        .locator('[data-testid="graph-edge-bus_edge_b_dep4"] path.graph-edge__line')
+        .boundingBox()
+      const labelBox = await page
+        .locator('[data-testid="graph-edge-bus_edge_b_dep4"] .graph-edge__label')
+        .boundingBox()
+      if (!pathBox || !labelBox) throw new Error('edge or label not visible')
+
+      const labelCenterX = labelBox.x + labelBox.width / 2
+      const labelCenterY = labelBox.y + labelBox.height / 2
+
+      expect(labelCenterX).toBeGreaterThanOrEqual(pathBox.x)
+      expect(labelCenterX).toBeLessThanOrEqual(pathBox.x + pathBox.width)
+      expect(labelCenterY).toBeGreaterThanOrEqual(pathBox.y - labelBox.height)
+      expect(labelCenterY).toBeLessThanOrEqual(pathBox.y + pathBox.height + labelBox.height)
+    })
+
+    test('Bus View visual snapshot', async ({ page }) => {
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-bus-view-light.png')
+    })
+
+    test('Bus View visual snapshot in dark mode', async ({ page }) => {
+      await applyDarkCanvasMode(page)
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-bus-view-dark.png')
+    })
+  })
 })

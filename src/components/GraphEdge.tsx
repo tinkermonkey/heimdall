@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useGraphCanvas } from './GraphCanvasContext'
-import { bezierPath, rectEdgePoint } from '../utils/graph'
+import { computeEdgePath, type EdgeAnchor } from '../utils/graph'
 import { GraphEdgeShape } from './GraphEdgeShape'
 import './GraphEdge.css'
 
@@ -16,10 +16,33 @@ export interface GraphEdgeProps extends React.SVGAttributes<SVGGElement> {
   opacity?: number
   /** A single number (equal dash/gap) or a [dash, gap] tuple. Overrides variant-based dashing. */
   strokeDash?: number | [number, number]
+  /** Pins the source endpoint to a side of the node instead of facing the target's center. Default 'auto'. */
+  sourceAnchor?: EdgeAnchor
+  /** Pins the target endpoint to a side of the node instead of facing the source's center. Default 'auto'. */
+  targetAnchor?: EdgeAnchor
+  /** Overrides the default curve strength (0.22 for auto/auto, 0.4 when either endpoint is anchored). */
+  curvature?: number
 }
 
 export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
-  ({ id, sourceId, targetId, label, variant = 'default', weight, opacity, strokeDash, className = '', ...props }, ref) => {
+  (
+    {
+      id,
+      sourceId,
+      targetId,
+      label,
+      variant = 'default',
+      weight,
+      opacity,
+      strokeDash,
+      sourceAnchor,
+      targetAnchor,
+      curvature,
+      className = '',
+      ...props
+    },
+    ref
+  ) => {
     const { getNodeRect } = useGraphCanvas()
 
     const path = useMemo(() => {
@@ -27,10 +50,8 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
       const tgt = getNodeRect(targetId)
       if (!src) { console.warn(`GraphEdge: source node "${sourceId}" not found`); return null }
       if (!tgt) { console.warn(`GraphEdge: target node "${targetId}" not found`); return null }
-      const sp = rectEdgePoint(src.x, src.y, src.width, src.height, tgt.x, tgt.y)
-      const tp = rectEdgePoint(tgt.x, tgt.y, tgt.width, tgt.height, src.x, src.y)
-      return bezierPath(sp, tp, 0.22)
-    }, [getNodeRect, sourceId, targetId])
+      return computeEdgePath(src, tgt, { sourceAnchor, targetAnchor, curvature })
+    }, [getNodeRect, sourceId, targetId, sourceAnchor, targetAnchor, curvature])
 
     if (!path) return null
 

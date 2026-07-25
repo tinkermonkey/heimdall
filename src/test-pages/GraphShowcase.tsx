@@ -5,6 +5,7 @@ import GraphNode from '../components/GraphNode'
 import GraphInspector, { type GraphNodeMetadata, type RelationshipLink } from '../components/GraphInspector'
 import { SplitPane } from '../components/SplitPane'
 import TopologyNode from '../components/TopologyNode'
+import type { EdgeAnchor } from '../utils/graph'
 import type { GraphNodeData } from '../components/GraphCanvas'
 
 interface NodeData extends GraphNodeData {
@@ -21,6 +22,9 @@ interface EdgeData {
   weight?: number
   opacity?: number
   strokeDash?: number | [number, number]
+  sourceAnchor?: EdgeAnchor
+  targetAnchor?: EdgeAnchor
+  curvature?: number
 }
 
 const GRAPH_NODES: NodeData[] = [
@@ -64,6 +68,29 @@ const FIT_VIEW_EDGES = [
   { id: 'fv_edge_1', sourceId: 'fv_a', targetId: 'fv_b' },
   { id: 'fv_edge_2', sourceId: 'fv_a', targetId: 'fv_c' },
   { id: 'fv_edge_3', sourceId: 'fv_b', targetId: 'fv_d' },
+]
+
+// Bus-style directed flow: gateway -> agent -> dependencies, all edges anchored right-to-left.
+const BUS_NODES: GraphNodeData[] = [
+  { id: 'bus_gateway', x: 40, y: 170, label: 'Gateway' },
+  { id: 'bus_agent_a', x: 320, y: 60, label: 'Agent A' },
+  { id: 'bus_agent_b', x: 320, y: 280, label: 'Agent B' },
+  { id: 'bus_dep_1', x: 600, y: 20, label: 'Dep 1' },
+  { id: 'bus_dep_2', x: 600, y: 110, label: 'Dep 2' },
+  { id: 'bus_dep_3', x: 600, y: 230, label: 'Dep 3' },
+  { id: 'bus_dep_4', x: 600, y: 320, label: 'Dep 4' },
+]
+
+const BUS_EDGES: EdgeData[] = [
+  { id: 'bus_edge_gateway_a', sourceId: 'bus_gateway', targetId: 'bus_agent_a', sourceAnchor: 'right', targetAnchor: 'left' },
+  // Mixed anchor: only the source side is pinned, the target retains center-facing 'auto' behavior.
+  { id: 'bus_edge_gateway_b', sourceId: 'bus_gateway', targetId: 'bus_agent_b', sourceAnchor: 'right' },
+  { id: 'bus_edge_a_dep1', sourceId: 'bus_agent_a', targetId: 'bus_dep_1', sourceAnchor: 'right', targetAnchor: 'left' },
+  // Two edges between the same node pair, separated visually via distinct curvature values.
+  { id: 'bus_edge_a_dep2_low', sourceId: 'bus_agent_a', targetId: 'bus_dep_2', sourceAnchor: 'right', targetAnchor: 'left', curvature: 0.15 },
+  { id: 'bus_edge_a_dep2_high', sourceId: 'bus_agent_a', targetId: 'bus_dep_2', sourceAnchor: 'right', targetAnchor: 'left', curvature: 0.6 },
+  { id: 'bus_edge_b_dep3', sourceId: 'bus_agent_b', targetId: 'bus_dep_3', sourceAnchor: 'right', targetAnchor: 'left' },
+  { id: 'bus_edge_b_dep4', sourceId: 'bus_agent_b', targetId: 'bus_dep_4', sourceAnchor: 'right', targetAnchor: 'left', label: 'depends on' },
 ]
 
 function FitViewControls() {
@@ -131,7 +158,7 @@ const TOPOLOGY_NODES = [
 
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
-  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview'>('graph')
+  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus'>('graph')
 
   const selectedNode = GRAPH_NODES.find(n => n.id === selectedNodeId)
   const inspectorNode: GraphNodeMetadata | undefined = selectedNode
@@ -180,11 +207,27 @@ export default function GraphShowcase() {
 
   const graphCanvas = (
     <GraphCanvas
+      key="graph-canvas"
       nodes={GRAPH_NODES}
       edges={GRAPH_EDGES}
       selectedNodeId={selectedNodeId}
       onNodeSelect={setSelectedNodeId}
       renderNode={renderGraphNode}
+      style={{ height: '100%' }}
+    />
+  )
+
+  const busCanvas = (
+    <GraphCanvas
+      key="bus-canvas"
+      data-testid="bus-canvas"
+      nodes={BUS_NODES}
+      edges={BUS_EDGES}
+      fitView
+      fitPadding={40}
+      selectedNodeId={selectedNodeId}
+      onNodeSelect={setSelectedNodeId}
+      renderNode={renderFitViewNode}
       style={{ height: '100%' }}
     />
   )
@@ -284,6 +327,21 @@ export default function GraphShowcase() {
           >
             Fit View Demo
           </button>
+          <button
+            type="button"
+            data-testid="bus-view-button"
+            onClick={() => setCanvasMode('bus')}
+            style={{
+              padding: '8px 16px',
+              background: canvasMode === 'bus' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: canvasMode === 'bus' ? 600 : 400,
+            }}
+          >
+            Bus View
+          </button>
         </div>
       </div>
 
@@ -294,7 +352,15 @@ export default function GraphShowcase() {
           initialSplitPercent={70}
           minSize={300}
           maxSize={900}
-          first={canvasMode === 'graph' ? graphCanvas : canvasMode === 'topology' ? topologyCanvas : fitViewCanvas}
+          first={
+            canvasMode === 'graph'
+              ? graphCanvas
+              : canvasMode === 'topology'
+                ? topologyCanvas
+                : canvasMode === 'bus'
+                  ? busCanvas
+                  : fitViewCanvas
+          }
           second={
             <GraphInspector
               data-testid="graph-inspector-panel"
