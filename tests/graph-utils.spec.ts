@@ -143,7 +143,7 @@ test.describe('Graph Utilities', () => {
       const p2: Point = { x: 100, y: 100 }
 
       const withDefault = bezierPath(p1, p2)
-      const withExplicit = bezierPath(p1, p2, 0.28)
+      const withExplicit = bezierPath(p1, p2, 0.22)
 
       expect(withDefault.d).toBe(withExplicit.d)
     })

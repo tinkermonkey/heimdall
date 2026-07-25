@@ -68,7 +68,9 @@ export function computeFitViewport(
   }
 }
 
-export function bezierPath(p1: Point, p2: Point, curvature: number = 0.28): BezierPathResult {
+export const DEFAULT_QUADRATIC_CURVATURE = 0.22
+
+export function bezierPath(p1: Point, p2: Point, curvature: number = DEFAULT_QUADRATIC_CURVATURE): BezierPathResult {
   const dx = p2.x - p1.x
   const dy = p2.y - p1.y
   const dist = Math.hypot(dx, dy)
@@ -183,7 +185,7 @@ export function computeEdgePath(source: EdgeEndpointRect, target: EdgeEndpointRe
   const tp = anchoredEdgePoint(target.x, target.y, target.width, target.height, targetAnchor, source.x, source.y)
 
   if (sourceAnchor === 'auto' && targetAnchor === 'auto') {
-    return bezierPath(sp, tp, options.curvature ?? 0.22)
+    return bezierPath(sp, tp, options.curvature ?? DEFAULT_QUADRATIC_CURVATURE)
   }
   return cubicBezierPath(sp, tp, sourceAnchor, targetAnchor, options.curvature ?? DEFAULT_CUBIC_CURVATURE)
 }
