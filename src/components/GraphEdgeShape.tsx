@@ -24,10 +24,7 @@ export interface GraphEdgeShapeProps {
   detailedTestIds?: boolean
 }
 
-/**
- * Renders the marker defs + line/hit paths + label for a graph edge. Shared by GraphEdgeInternal
- * (used inside GraphCanvas) and the standalone GraphEdge so the two cannot drift apart.
- */
+// Shared by GraphEdgeInternal and standalone GraphEdge to prevent drift.
 export function GraphEdgeShape({
   id,
   d,
