@@ -278,7 +278,7 @@ test.describe('Graph Utilities', () => {
       expect(result.mid.y).toBeCloseTo(expectedMid.y, 5)
     })
 
-    test('mixed anchor: the auto endpoint points straight at the other endpoint', () => {
+    test('mixed anchor: the auto endpoint uses the perpendicular offset, not line-of-sight', () => {
       const p1: Point = { x: 0, y: 0 }
       const p2: Point = { x: 200, y: 0 }
       const result = cubicBezierPath(p1, p2, 'right', 'auto', 0.5)
@@ -286,9 +286,9 @@ test.describe('Graph Utilities', () => {
       const match = result.d.match(/^M ([\d.-]+) ([\d.-]+) C ([\d.-]+) ([\d.-]+) ([\d.-]+) ([\d.-]+) ([\d.-]+) ([\d.-]+)$/)
       const [, , , , , c2x, c2y] = match!.map(Number)
 
-      // p2's auto direction points back toward p1 (i.e. -x), same axis as the fixed 'right' side.
-      expect(c2x).toBeLessThan(p2.x)
-      expect(c2y).toBeCloseTo(p2.y, 5)
+      // p2's auto direction is perpendicular to p1->p2 (i.e. +y), same as bezierPath's normal offset.
+      expect(c2x).toBeCloseTo(p2.x, 5)
+      expect(c2y).toBeGreaterThan(p2.y)
     })
 
     test('two edges between the same points with different curvature render distinct paths', () => {
@@ -304,7 +304,7 @@ test.describe('Graph Utilities', () => {
       const p1: Point = { x: 0, y: 0 }
       const p2: Point = { x: 200, y: 0 }
       const withDefaults = cubicBezierPath(p1, p2)
-      const explicit = cubicBezierPath(p1, p2, 'auto', 'auto', 0.4)
+      const explicit = cubicBezierPath(p1, p2, 'auto', 'auto', 0.22)
 
       expect(withDefaults.d).toBe(explicit.d)
     })

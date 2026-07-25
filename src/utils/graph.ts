@@ -115,12 +115,12 @@ export function anchoredEdgePoint(cx: number, cy: number, w: number, h: number, 
   }
 }
 
-export const DEFAULT_CUBIC_CURVATURE = 0.4
+export const DEFAULT_CUBIC_CURVATURE = 0.22
 
 /**
  * Cubic bezier whose control points project outward from each endpoint's anchor direction
- * (or, for 'auto', straight toward the other endpoint). Midpoint and tangent angle are
- * found via De Casteljau subdivision at t=0.5 rather than approximated from the control points.
+ * (or, for 'auto', the perpendicular offset used by bezierPath). Midpoint and tangent angle
+ * are found via De Casteljau subdivision at t=0.5 rather than approximated from the control points.
  */
 export function cubicBezierPath(
   p1: Point,
@@ -134,8 +134,11 @@ export function cubicBezierPath(
   const dist = Math.hypot(dx, dy) || 1
   const offset = Math.min(120, dist * curvature)
 
-  const dir1 = sourceAnchor === 'auto' ? { x: dx / dist, y: dy / dist } : ANCHOR_DIRECTION[sourceAnchor]
-  const dir2 = targetAnchor === 'auto' ? { x: -dx / dist, y: -dy / dist } : ANCHOR_DIRECTION[targetAnchor]
+  const nx = -dy / dist
+  const ny = dx / dist
+
+  const dir1 = sourceAnchor === 'auto' ? { x: nx, y: ny } : ANCHOR_DIRECTION[sourceAnchor]
+  const dir2 = targetAnchor === 'auto' ? { x: nx, y: ny } : ANCHOR_DIRECTION[targetAnchor]
 
   const c1 = { x: p1.x + dir1.x * offset, y: p1.y + dir1.y * offset }
   const c2 = { x: p2.x + dir2.x * offset, y: p2.y + dir2.y * offset }
