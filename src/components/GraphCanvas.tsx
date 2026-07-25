@@ -39,7 +39,7 @@ export interface GraphEdge {
   sourceAnchor?: EdgeAnchor
   /** Pins the target endpoint to a side of the node instead of facing the source's center. Default 'auto'. */
   targetAnchor?: EdgeAnchor
-  /** Overrides the default curve strength (0.22 for auto/auto, 0.4 when either endpoint is anchored). */
+  /** Overrides the default curve strength (0.22, used for both auto/auto and anchored endpoints). */
   curvature?: number
 }
 
