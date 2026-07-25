@@ -176,9 +176,13 @@ test.describe('Graph Canvas Components', () => {
     const lineOpacity = await line.evaluate(el => getComputedStyle(el).opacity)
     expect(parseFloat(lineOpacity)).toBeCloseTo(0.3, 2)
 
+    // Marker paths must not carry their own explicit opacity — the line's CSS opacity
+    // already propagates to markers via SVG compositing, so an inline opacity here would
+    // double-apply (e.g. 0.3 * 0.3 = 0.09 effective). getComputedStyle can't measure that
+    // compositing effect directly, so this only confirms no explicit override is present.
     const markerOpacities = await marker.evaluateAll(els => els.map(el => getComputedStyle(el).opacity))
     for (const opacity of markerOpacities) {
-      expect(parseFloat(opacity)).toBeCloseTo(0.3, 2)
+      expect(parseFloat(opacity)).toBeCloseTo(1, 2)
     }
   })
 
