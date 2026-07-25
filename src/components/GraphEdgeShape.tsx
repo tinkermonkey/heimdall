@@ -53,6 +53,10 @@ export function GraphEdgeShape({
   if (opacity !== undefined) lineStyle.opacity = opacity
   if (strokeDash !== undefined) lineStyle.strokeDasharray = strokeDashToDasharray(strokeDash)
 
+  // SVG markers render in their own compositing context and do not inherit the
+  // referencing element's opacity, so it must be applied to the marker path directly.
+  const markerStyle: React.CSSProperties | undefined = opacity !== undefined ? { opacity } : undefined
+
   const defaultMarkerSize = markerSize(DEFAULT_EDGE_MARKER_SIZE.default)
   const roseMarkerSize = markerSize(DEFAULT_EDGE_MARKER_SIZE.irrelevant)
   const cyanMarkerSize = markerSize(DEFAULT_EDGE_MARKER_SIZE.hot)
@@ -70,7 +74,7 @@ export function GraphEdgeShape({
           markerUnits={markerUnits}
           orient="auto-start-reverse"
         >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, #94a3b8)" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, #94a3b8)" style={markerStyle} />
         </marker>
         <marker
           id={markerRoseId}
@@ -82,7 +86,7 @@ export function GraphEdgeShape({
           markerUnits={markerUnits}
           orient="auto-start-reverse"
         >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--status-rose))" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--status-rose))" style={markerStyle} />
         </marker>
         <marker
           id={markerCyanId}
@@ -94,7 +98,7 @@ export function GraphEdgeShape({
           markerUnits={markerUnits}
           orient="auto-start-reverse"
         >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--accent-primary))" />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--accent-primary))" style={markerStyle} />
         </marker>
       </defs>
 
