@@ -58,19 +58,7 @@ const DEFAULT_NODE_H = 30
 const MIN_ZOOM = 0.4
 const MAX_ZOOM = 2.5
 
-interface InternalEdgeProps {
-  id: string
-  sourceId: string
-  targetId: string
-  label?: string
-  variant?: 'default' | 'hot' | 'irrelevant'
-  weight?: number
-  opacity?: number
-  strokeDash?: number | [number, number]
-  sourceAnchor?: EdgeAnchor
-  targetAnchor?: EdgeAnchor
-  curvature?: number
-}
+type InternalEdgeProps = GraphEdge
 
 function GraphEdgeInternal({
   id,
