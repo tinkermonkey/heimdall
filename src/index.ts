@@ -144,7 +144,7 @@ export {
   type GraphInspectorProps,
 } from './components/GraphInspector'
 export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type TopologyNodeProps } from './components/TopologyNode'
-export { bezierPath, rectEdgePoint, type Point, type BezierPathResult } from './utils/graph'
+export { bezierPath, rectEdgePoint, type Point, type BezierPathResult, type EdgeAnchor } from './utils/graph'
 export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type HierarchyDomain } from './components/HierarchyRow'
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'

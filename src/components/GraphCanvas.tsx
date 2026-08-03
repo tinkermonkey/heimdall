@@ -1,9 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
-import { bezierPath, rectEdgePoint } from '../utils/graph'
+import { computeEdgePath, computeFitViewport, type BoundingBox, type EdgeAnchor } from '../utils/graph'
 import { forceLayout } from '../utils/graphLayout'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
 import GraphNode from './GraphNode'
+import { GraphEdgeShape } from './GraphEdgeShape'
 import './GraphCanvas.css'
 import './GraphEdge.css'
 
@@ -28,6 +29,18 @@ export interface GraphEdge {
   targetId: string
   label?: string
   variant?: 'default' | 'hot' | 'irrelevant'
+  /** 0-100. Maps to a 1-8px stroke width via a square-root curve. Unset renders the current variant default. */
+  weight?: number
+  /** 0-1. Applied to the line and arrow marker independently of the label background. Default 1. */
+  opacity?: number
+  /** A single number (equal dash/gap) or a [dash, gap] tuple. Overrides variant-based dashing. */
+  strokeDash?: number | [number, number]
+  /** Pins the source endpoint to a side of the node instead of facing the target's center. Default 'auto'. */
+  sourceAnchor?: EdgeAnchor
+  /** Pins the target endpoint to a side of the node instead of facing the source's center. Default 'auto'. */
+  targetAnchor?: EdgeAnchor
+  /** Overrides the default curve strength (0.22, used for both auto/auto and anchored endpoints). */
+  curvature?: number
 }
 
 /** Props that a custom node component receives from renderNode. */
@@ -42,74 +55,48 @@ export interface BaseGraphNodeComponentProps {
 
 const DEFAULT_NODE_W = 138
 const DEFAULT_NODE_H = 30
+const MIN_ZOOM = 0.4
+const MAX_ZOOM = 2.5
 
-interface InternalEdgeProps {
-  id: string
-  sourceId: string
-  targetId: string
-  label?: string
-  variant?: 'default' | 'hot' | 'irrelevant'
-}
+type InternalEdgeProps = GraphEdge
 
-function GraphEdgeInternal({ id, sourceId, targetId, label, variant = 'default' }: InternalEdgeProps) {
+function GraphEdgeInternal({
+  id,
+  sourceId,
+  targetId,
+  label,
+  variant = 'default',
+  weight,
+  opacity,
+  strokeDash,
+  sourceAnchor,
+  targetAnchor,
+  curvature,
+}: InternalEdgeProps) {
   const { getNodeRect } = useGraphCanvas()
 
   const result = useMemo(() => {
     const src = getNodeRect(sourceId)
     const tgt = getNodeRect(targetId)
     if (!src || !tgt) return null
-    const sp = rectEdgePoint(src.x, src.y, src.width, src.height, tgt.x, tgt.y)
-    const tp = rectEdgePoint(tgt.x, tgt.y, tgt.width, tgt.height, src.x, src.y)
-    return bezierPath(sp, tp, 0.22)
-  }, [getNodeRect, sourceId, targetId])
+    return computeEdgePath(src, tgt, { sourceAnchor, targetAnchor, curvature })
+  }, [getNodeRect, sourceId, targetId, sourceAnchor, targetAnchor, curvature])
 
   if (!result) return null
 
-  const markerId = `arrow-${id}`
-  const markerRoseId = `arrow-rose-${id}`
-  const markerCyanId = `arrow-cyan-${id}`
-  const markerUrl =
-    variant === 'hot'
-      ? `url(#${markerCyanId})`
-      : variant === 'irrelevant'
-        ? `url(#${markerRoseId})`
-        : `url(#${markerId})`
   const classNames = ['graph-edge', variant !== 'default' && `graph-edge--${variant}`].filter(Boolean).join(' ')
   return (
     <g className={classNames} role="presentation" aria-hidden="true" data-testid={`graph-edge-${id}`}>
-      <defs>
-        <marker id={markerId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, #94a3b8)" />
-        </marker>
-        <marker id={markerRoseId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--status-rose))" />
-        </marker>
-        <marker id={markerCyanId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgb(var(--accent-primary))" />
-        </marker>
-      </defs>
-      <path className="graph-edge__hit" d={result.d} />
-      <path className="graph-edge__line" d={result.d} markerEnd={markerUrl} />
-      {label && (
-        <g
-          transform={`translate(${result.mid.x - (label.length * 3.3 + 7)}, ${result.mid.y - 9})`}
-          className="graph-edge__label"
-        >
-          <rect
-            width={label.length * 6.6 + 14}
-            height="18"
-            rx="3"
-            className="graph-edge__label-bg"
-          />
-          <text
-            x={label.length * 3.3 + 7}
-            y="12"
-            className="graph-edge__label-text"
-          >
-            {label}
-          </text>
-        </g>
-      )}
+      <GraphEdgeShape
+        id={id}
+        d={result.d}
+        mid={result.mid}
+        label={label}
+        variant={variant}
+        weight={weight}
+        opacity={opacity}
+        strokeDash={strokeDash}
+      />
     </g>
   )
 }
@@ -131,6 +118,10 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes
    *  without explicit coordinates; nodes with x and y are pinned. */
   layout?: 'manual' | 'force'
+  /** Zoom out/in on first layout so the full node bounding box fits within the container. Default false. */
+  fitView?: boolean
+  /** Padding in px around the fitted bounding box when fitView is enabled. Default 40. */
+  fitPadding?: number
 }
 
 type NodeDims = Map<string, { width: number; height: number }>
@@ -145,6 +136,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onNodeSelect,
       renderNode,
       layout = 'manual',
+      fitView = false,
+      fitPadding = 40,
       className = '',
       ...props
     },
@@ -159,9 +152,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const didCenterRef = useRef(false)
     const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
 
-    const { transform, viewport, bind, panTo } = usePanZoom({
-      minZoom: 0.4,
-      maxZoom: 2.5,
+    const { transform, viewport, bind, panTo, zoomTo } = usePanZoom({
+      minZoom: MIN_ZOOM,
+      maxZoom: MAX_ZOOM,
     })
 
     const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -217,13 +210,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return () => ro.disconnect()
     }, [])
 
-    // Auto-center the node bounding box once positions and dims are ready.
-    // Runs once — re-centering on later prop changes would fight user pan/zoom.
-    useEffect(() => {
-      if (didCenterRef.current) return
-      if (!containerSize || dims.size === 0 || nodes.length === 0) return
-      if (layout === 'force' && computedPositions.size === 0) return
-
+    // Computes the current node bounding box in graph space (world coordinates).
+    // Shared by the initial fit/center effect and the imperative zoomToFit().
+    const computeBoundingBox = useCallback((): BoundingBox | null => {
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
       for (const node of nodes) {
         const pos = node.x !== undefined && node.y !== undefined
@@ -236,17 +225,44 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         minY = Math.min(minY, pos.y - d.height / 2)
         maxY = Math.max(maxY, pos.y + d.height / 2)
       }
-      if (!Number.isFinite(minX)) return
+      if (!Number.isFinite(minX)) return null
+      return { minX, maxX, minY, maxY }
+    }, [nodes, dims, computedPositions])
 
-      const centroidX = (minX + maxX) / 2
-      const centroidY = (minY + maxY) / 2
-      const next = {
-        x: containerSize.width / 2 - centroidX * viewport.zoom,
-        y: containerSize.height / 2 - centroidY * viewport.zoom,
-      }
+    // Auto-center (or fit) the node bounding box once positions and dims are ready.
+    // Runs once — re-centering on later prop changes would fight user pan/zoom.
+    useEffect(() => {
+      if (didCenterRef.current) return
+      if (!containerSize || dims.size === 0 || nodes.length === 0) return
+      if (layout === 'force' && computedPositions.size === 0) return
+
+      const bbox = computeBoundingBox()
+      if (!bbox) return
+
       didCenterRef.current = true
-      panTo(next.x, next.y)
-    }, [containerSize, dims, computedPositions, nodes, layout, viewport.zoom, panTo])
+
+      if (fitView) {
+        const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, MIN_ZOOM, MAX_ZOOM)
+        zoomTo(fit.zoom)
+        panTo(fit.panX, fit.panY)
+      } else {
+        const centroidX = (bbox.minX + bbox.maxX) / 2
+        const centroidY = (bbox.minY + bbox.maxY) / 2
+        panTo(
+          containerSize.width / 2 - centroidX * viewport.zoom,
+          containerSize.height / 2 - centroidY * viewport.zoom
+        )
+      }
+    }, [containerSize, dims, computedPositions, nodes, layout, viewport.zoom, panTo, zoomTo, fitView, fitPadding, computeBoundingBox])
+
+    // Imperative viewport controls, exposed via useGraphCanvas().
+    const zoomToFit = useCallback((padding?: number) => {
+      const bbox = computeBoundingBox()
+      if (!bbox || !containerSize) return
+      const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, padding ?? fitPadding, MIN_ZOOM, MAX_ZOOM)
+      zoomTo(fit.zoom)
+      panTo(fit.panX, fit.panY)
+    }, [computeBoundingBox, containerSize, fitPadding, zoomTo, panTo])
 
 
     const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
@@ -281,7 +297,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       zoom: viewport.zoom,
       pan: { x: viewport.x, y: viewport.y },
       selectedNodeId,
-    }), [getNodeRect, viewport, selectedNodeId])
+      zoomToFit,
+      setZoom: zoomTo,
+      setPan: panTo,
+    }), [getNodeRect, viewport, selectedNodeId, zoomToFit, zoomTo, panTo])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)
@@ -362,6 +381,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     targetId={edge.targetId}
                     label={edge.label}
                     variant={edge.variant}
+                    weight={edge.weight}
+                    opacity={edge.opacity}
+                    strokeDash={edge.strokeDash}
+                    sourceAnchor={edge.sourceAnchor}
+                    targetAnchor={edge.targetAnchor}
+                    curvature={edge.curvature}
                   />
                 ))}
               </g>
