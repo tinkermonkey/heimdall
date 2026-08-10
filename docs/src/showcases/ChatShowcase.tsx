@@ -135,7 +135,7 @@ export function ToolBlockShowcase() {
           <PropRow name="name" type="string" description="Tool call name displayed in the header" />
           <PropRow name="status" type="'running' | 'success' | 'error'" description="Drives the status color and label" />
           <PropRow name="output" type="Array<{ key?: string; value: string }>" description="Key/value rows shown in the expanded output panel" />
-          <PropRow name="defaultCollapsed" type="boolean" default="false" description="Initial collapsed state; useful for pre-run tool calls in loaded history" />
+          <PropRow name="defaultCollapsed" type="boolean" def="false" description="Initial collapsed state; useful for pre-run tool calls in loaded history" />
           <PropRow name="onToggleCollapsed" type="(collapsed: boolean) => void" description="Called when the user toggles the block open or closed" />
         </PropsTable>
       </ShowcaseSection>
@@ -167,8 +167,8 @@ export function ThinkingBlockShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="content" type="string" description="Reasoning text rendered in monospace with pre-wrap whitespace" />
-          <PropRow name="label" type="string" default="thinking" description="Header label shown in uppercase monospace" />
-          <PropRow name="defaultCollapsed" type="boolean" default="false" description="Initial collapsed state; useful when rendering historical messages" />
+          <PropRow name="label" type="string" def="thinking" description="Header label shown in uppercase monospace" />
+          <PropRow name="defaultCollapsed" type="boolean" def="false" description="Initial collapsed state; useful when rendering historical messages" />
           <PropRow name="onToggleCollapsed" type="(collapsed: boolean) => void" description="Called when the user toggles the block open or closed" />
         </PropsTable>
       </ShowcaseSection>
@@ -222,7 +222,7 @@ export function ChatSuggestionsShowcase() {
           <PropRow name="suggestions" type="string[]" description="List of suggestion chip labels" />
           <PropRow name="onSelect" type="(suggestion: string) => void" description="Called when the user clicks a chip" />
           <PropRow name="selected" type="string" description="Currently selected suggestion; when set, unselected chips are disabled" />
-          <PropRow name="aria-label" type="string" default="Suggestions" description="Accessible group label for the chip set" />
+          <PropRow name="aria-label" type="string" def="Suggestions" description="Accessible group label for the chip set" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -280,15 +280,15 @@ export function ChatComposerShowcase() {
           <PropRow name="value" type="string" description="Controlled textarea value" />
           <PropRow name="onChange" type="(v: string) => void" description="Called on every keystroke" />
           <PropRow name="onSubmit" type="(v: string, ctx: ContextItem[]) => void" description="Called on Enter or send button click; receives current value and context items" />
-          <PropRow name="contextItems" type="ContextItem[]" default="[]" description="Context chips displayed above the input" />
+          <PropRow name="contextItems" type="ContextItem[]" def="[]" description="Context chips displayed above the input" />
           <PropRow name="onContextChange" type="(items: ContextItem[]) => void" description="Called with updated list when a context chip is removed" />
-          <PropRow name="attachments" type="Attachment[]" default="[]" description="File attachment previews" />
+          <PropRow name="attachments" type="Attachment[]" def="[]" description="File attachment previews" />
           <PropRow name="onAttachmentChange" type="(attachments: Attachment[]) => void" description="Called with updated list when an attachment is added or removed" />
-          <PropRow name="placeholder" type="string" default="'Type a message...'" description="Textarea placeholder text" />
+          <PropRow name="placeholder" type="string" def="'Type a message...'" description="Textarea placeholder text" />
           <PropRow name="scopeLabel" type="string" description="Monospace label shown at the leading edge of the tools bar (e.g. the active bot name)" />
-          <PropRow name="label" type="string" default="'Message'" description="Accessible aria-label for the textarea" />
-          <PropRow name="disabled" type="boolean" default="false" description="Disables the textarea, attach button, and send button" />
-          <PropRow name="loading" type="boolean" default="false" description="Disables the send button while a response is in progress" />
+          <PropRow name="label" type="string" def="'Message'" description="Accessible aria-label for the textarea" />
+          <PropRow name="disabled" type="boolean" def="false" description="Disables the textarea, attach button, and send button" />
+          <PropRow name="loading" type="boolean" def="false" description="Disables the send button while a response is in progress" />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -329,7 +329,7 @@ export function ChatContainerShowcase() {
           <PropRow name="bots" type="BotTab[]" description="Bot tab definitions — id, label, role, status" />
           <PropRow name="activeBotId" type="string" description="Currently selected bot tab ID" />
           <PropRow name="onBotChange" type="(id: string) => void" description="Called when user switches bot tabs" />
-          <PropRow name="autoScroll" type="boolean" default="true" description="When true, scrolls the thread to the bottom whenever children change" />
+          <PropRow name="autoScroll" type="boolean" def="true" description="When true, scrolls the thread to the bottom whenever children change" />
           <PropRow name="composer" type="ReactNode" description="Composer slot — typically a ChatComposer" />
         </PropsTable>
       </ShowcaseSection>

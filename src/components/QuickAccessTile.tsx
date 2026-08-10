@@ -3,7 +3,7 @@ import { Icon } from './Icon'
 import type { IconName } from './Icon'
 import './QuickAccessTile.css'
 
-export interface QuickAccessTileProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface QuickAccessTileProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: IconName
   title: string
   description?: string

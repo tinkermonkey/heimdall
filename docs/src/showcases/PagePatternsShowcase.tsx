@@ -11,6 +11,7 @@ import {
   type FilterChip,
   type ActivityEvent,
   type Alert,
+  type QuickAccessGridItem,
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/ShowcaseSection'
 
@@ -28,11 +29,11 @@ const ACTIVITIES_EXTENDED: ActivityEvent[] = [
   { id: '4', type: 'delete', subject: 'Removed temporary index', timestamp: new Date(Date.now() - 48 * 3600000), kind: 'cleanup', dotColor: 'neutral' },
 ]
 
-const TILES: (QuickAccessTileProps & { id: string })[] = [
-  { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity to the schema', onClick: () => console.log('Create') },
-  { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse the full schema graph', onClick: () => console.log('Schema') },
-  { id: 'export', icon: 'data', title: 'Export Data', description: 'Download a filtered data export', onClick: () => console.log('Export') },
-  { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute a processing task', onClick: () => console.log('Pipeline') },
+const TILES: QuickAccessGridItem[] = [
+  { id: 'create', icon: 'plus', title: 'Create Entity', description: 'Add a new entity to the schema' },
+  { id: 'schema', icon: 'schema', title: 'View Schema', description: 'Browse the full schema graph' },
+  { id: 'export', icon: 'data', title: 'Export Data', description: 'Download a filtered data export' },
+  { id: 'pipeline', icon: 'pipeline', title: 'Run Pipeline', description: 'Execute a processing task' },
 ]
 
 export function PageHeaderShowcase() {

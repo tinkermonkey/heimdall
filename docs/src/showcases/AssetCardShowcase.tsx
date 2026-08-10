@@ -16,14 +16,14 @@ export function AssetCardShowcase() {
     },
     {
       id: 'img-1',
-      thumb: { kind: 'image' as const, src: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200&h=200&fit=crop', fallbackGlyph: 'image' },
+      thumb: { kind: 'image' as const, src: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200&h=200&fit=crop', fallbackGlyph: 'image' as const },
       title: 'Team Photo',
       subtitle: 'Engineering team gathering',
       meta: '3.2 MB',
     },
     {
       id: 'cover-1',
-      thumb: { kind: 'cover' as const, gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', glyph: 'sparkles' },
+      thumb: { kind: 'cover' as const, gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', glyph: 'sparkles' as const },
       title: 'Design Tokens',
       subtitle: 'Color & typography specs',
       meta: 'Shared by @designer',
@@ -38,14 +38,14 @@ export function AssetCardShowcase() {
     },
     {
       id: 'img-2',
-      thumb: { kind: 'image' as const, src: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=200&fit=crop', fallbackGlyph: 'code' },
+      thumb: { kind: 'image' as const, src: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=200&fit=crop', fallbackGlyph: 'code' as const },
       title: 'Codebase Snapshot',
       subtitle: 'Repository visualization',
       meta: '5.1 MB',
     },
     {
       id: 'cover-2',
-      thumb: { kind: 'cover' as const, gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', glyph: 'palette' },
+      thumb: { kind: 'cover' as const, gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', glyph: 'palette' as const },
       title: 'Brand Guidelines',
       subtitle: 'Logo and usage rules',
       meta: 'by @brand-team',
@@ -163,9 +163,9 @@ export function AssetCardShowcase() {
             </h4>
             <AssetGrid columns={3} gap={12}>
               {[
-                { gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', glyph: 'sparkles' },
-                { gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', glyph: 'palette' },
-                { gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', glyph: 'zap' },
+                { gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', glyph: 'sparkles' as const },
+                { gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', glyph: 'palette' as const },
+                { gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', glyph: 'zap' as const },
               ].map((cover, idx) => (
                 <AssetCard
                   key={idx}
@@ -183,9 +183,9 @@ export function AssetCardShowcase() {
             </h4>
             <AssetGrid columns={3} gap={12}>
               {[
-                { src: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200&h=200&fit=crop', fallbackGlyph: 'image' },
-                { src: 'https://invalid-url-for-testing.com/image.jpg', fallbackGlyph: 'image' },
-                { src: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=200&fit=crop', fallbackGlyph: 'code' },
+                { src: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=200&h=200&fit=crop', fallbackGlyph: 'image' as const },
+                { src: 'https://invalid-url-for-testing.com/image.jpg', fallbackGlyph: 'image' as const },
+                { src: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=200&fit=crop', fallbackGlyph: 'code' as const },
               ].map((thumb, idx) => (
                 <AssetCard
                   key={idx}

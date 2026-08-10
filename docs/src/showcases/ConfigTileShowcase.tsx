@@ -105,7 +105,7 @@ export function ConfigTileShowcase() {
           <PropRow name="icon" type="IconName" required description="Icon name from the Icon system" />
           <PropRow name="title" type="string" required description="Primary label for the configuration" />
           <PropRow name="description" type="string" description="Secondary description text" />
-          <PropRow name="summary" type="ConfigTileSummaryItem[]" defaultValue="[]" description="Array of {label, value} configuration pairs shown below the description" />
+          <PropRow name="summary" type="ConfigTileSummaryItem[]" def="[]" description="Array of {label, value} configuration pairs shown below the description" />
           <PropRow name="onClick" type="() => void" description="Handler called when tile is clicked" />
           <PropRow name="disabled" type="boolean" description="Disables interaction and reduces opacity" />
         </PropsTable>
