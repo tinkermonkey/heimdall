@@ -3,6 +3,14 @@
   "version": "0.5.1",
   "description": "Heimdall design system component library",
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinkermonkey/heimdall.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
