@@ -18,10 +18,12 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    env:
-      CI: true
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -39,6 +41,8 @@ jobs:
       - name: Build docs
         run: npm run build
         working-directory: docs
+        env:
+          VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

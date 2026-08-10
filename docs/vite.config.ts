@@ -3,7 +3,9 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  base: process.env.CI ? '/heimdall/' : '/',
+  // Set by the deploy-docs workflow from actions/configure-pages' `base_path` output,
+  // so this never has to hardcode (or guess) the repo name.
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [react()],
   server: {
     port: 5174,
