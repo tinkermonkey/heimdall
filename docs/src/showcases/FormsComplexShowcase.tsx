@@ -290,8 +290,8 @@ export function RowMenuShowcase() {
           <PropRow name="actions" type="RowMenuAction[]" description="Array of action items. Each item is {id, label, icon?, danger?, disabled?} or {type: 'separator'}." />
           <PropRow name="onAction" type="(id: string) => void" description="Called with the action ID when an enabled item is selected." />
           <PropRow name="trigger" type="ReactNode" description="Custom trigger element. Replaces the default icon." />
-          <PropRow name="triggerIcon" type="IconName" default="moreVertical" description="Icon used for the default trigger button." />
-          <PropRow name="triggerLabel" type="string" default='"Menu"' description="Accessible label for the trigger button and menu. Announced by screen readers." />
+          <PropRow name="triggerIcon" type="IconName" def="moreVertical" description="Icon used for the default trigger button." />
+          <PropRow name="triggerLabel" type="string" def='"Menu"' description="Accessible label for the trigger button and menu. Announced by screen readers." />
         </PropsTable>
       </ShowcaseSection>
     </div>

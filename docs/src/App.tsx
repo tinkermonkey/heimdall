@@ -232,7 +232,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'log-stream', label: 'LogStream', icon: 'code' },
       { id: 'calendar', label: 'Calendar', icon: 'calendar' },
       { id: 'map-canvas', label: 'MapCanvas', icon: 'map' },
-      { id: 'lineage-rail', label: 'LineageRail', icon: 'arrow-right' },
+      { id: 'lineage-rail', label: 'LineageRail', icon: 'arrowRight' },
       { id: 'kanban-board', label: 'KanbanBoard', icon: 'layout' },
     ],
   },
@@ -328,7 +328,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Graph',
     items: [
-      { id: 'graph-edge', label: 'GraphEdge', icon: 'arrow-right' },
+      { id: 'graph-edge', label: 'GraphEdge', icon: 'arrowRight' },
       { id: 'graph-node', label: 'GraphNode', icon: 'component' },
       { id: 'graph-canvas', label: 'GraphCanvas', icon: 'schema' },
       { id: 'graph-inspector', label: 'GraphInspector', icon: 'info' },

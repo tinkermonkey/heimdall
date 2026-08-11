@@ -65,15 +65,15 @@ export function HierarchyTreeShowcase() {
         <PropsTable>
           <PropRow name="HierarchyTree" type="component" description="Container for HierarchyRow children" />
           <PropRow name="HierarchyRow" type="component" description="Individual row with depth, kind, label, domain, and description" />
-          <PropRow name="HierarchyRow.depth" type="number" default="0" description="Nesting depth for indentation (0-based); controls connector line and left padding" />
+          <PropRow name="HierarchyRow.depth" type="number" def="0" description="Nesting depth for indentation (0-based); controls connector line and left padding" />
           <PropRow name="HierarchyRow.kind" type="'taxonomy' | 'scheme' | 'class'" description="Entity type classification" />
           <PropRow name="HierarchyRow.label" type="string" description="Display label for the row" />
           <PropRow name="HierarchyRow.domain" type="HierarchyDomain" description="Domain for color-coding: 'life' (emerald), 'climate' (amber), 'software' (indigo), 'default' (gray), or any custom string (falls back to gray)" />
           <PropRow name="HierarchyRow.description" type="string | undefined" description="Description text shown to the right of the pill" />
           <PropRow name="HierarchyRow.meta" type="string | undefined" description="Optional metadata (count, item count, etc.) shown inside the pill" />
-          <PropRow name="HierarchyRow.selected" type="boolean" default="false" description="Whether the row shows the selected state (amber ring)" />
+          <PropRow name="HierarchyRow.selected" type="boolean" def="false" description="Whether the row shows the selected state (amber ring)" />
           <PropRow name="HierarchyRow.onSelect" type="() => void | undefined" description="Selection handler; when provided the row is keyboard-operable" />
-          <PropRow name="HierarchyRow.showKind" type="boolean" default="true" description="Whether to display the kind label (taxonomy/scheme/class) inside the pill" />
+          <PropRow name="HierarchyRow.showKind" type="boolean" def="true" description="Whether to display the kind label (taxonomy/scheme/class) inside the pill" />
         </PropsTable>
       </ShowcaseSection>
     </div>

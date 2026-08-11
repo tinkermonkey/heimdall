@@ -97,27 +97,27 @@ export function InspectorPanelShowcase() {
           <PropRow name="eyebrow" type="string" required description="Monospace eyebrow label above the title" />
           <PropRow name="title" type="string" required description="Primary title displayed in the panel head" />
           <PropRow name="id" type="string" required description="Identifier displayed below the title in monospace" />
-          <PropRow name="version" type="number" defaultValue="—" description="Optional version number rendered as an amber pill" />
-          <PropRow name="actions" type="ReactNode" defaultValue="—" description="Action elements (buttons, icons) rendered in the panel head" />
-          <PropRow name="children" type="ReactNode" defaultValue="—" description="Panel body content — typically Section or PropertySection children" />
+          <PropRow name="version" type="number" def="—" description="Optional version number rendered as an amber pill" />
+          <PropRow name="actions" type="ReactNode" def="—" description="Action elements (buttons, icons) rendered in the panel head" />
+          <PropRow name="children" type="ReactNode" def="—" description="Panel body content — typically Section or PropertySection children" />
         </PropsTable>
       </ShowcaseSection>
       <ShowcaseSection label="InspectorPanel.Section props">
         <PropsTable>
           <PropRow name="title" type="string" required description="Section label rendered as a monospace eyebrow" />
-          <PropRow name="count" type="number" defaultValue="—" description="Optional count shown after the title" />
-          <PropRow name="actions" type="ReactNode" defaultValue="—" description="Action elements rendered on the right side of the section header" />
-          <PropRow name="children" type="ReactNode" defaultValue="—" description="Section body content" />
+          <PropRow name="count" type="number" def="—" description="Optional count shown after the title" />
+          <PropRow name="actions" type="ReactNode" def="—" description="Action elements rendered on the right side of the section header" />
+          <PropRow name="children" type="ReactNode" def="—" description="Section body content" />
         </PropsTable>
       </ShowcaseSection>
       <ShowcaseSection label="InspectorPanel.PropertySection props">
         <PropsTable>
           <PropRow name="title" type="string" required description="Section label rendered as a monospace eyebrow" />
           <PropRow name="rows" type="PropertyRow[]" required description="Array of {key, value, usageCount?} rows" />
-          <PropRow name="count" type="number" defaultValue="—" description="Optional count badge shown next to the title" />
-          <PropRow name="actionIcon" type="ReactNode" defaultValue="—" description="Icon rendered inside the action button (requires onAction)" />
-          <PropRow name="actionLabel" type="string" defaultValue="—" description="aria-label for the action button" />
-          <PropRow name="onAction" type="() => void" defaultValue="—" description="Click handler for the action button; button only renders when provided" />
+          <PropRow name="count" type="number" def="—" description="Optional count badge shown next to the title" />
+          <PropRow name="actionIcon" type="ReactNode" def="—" description="Icon rendered inside the action button (requires onAction)" />
+          <PropRow name="actionLabel" type="string" def="—" description="aria-label for the action button" />
+          <PropRow name="onAction" type="() => void" def="—" description="Click handler for the action button; button only renders when provided" />
         </PropsTable>
       </ShowcaseSection>
     </div>

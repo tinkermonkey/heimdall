@@ -73,9 +73,9 @@ export function WorkspaceSwitcherDialogShowcase() {
         <PropsTable>
           <PropRow name="isOpen" type="boolean" description="Whether the dialog is visible" />
           <PropRow name="onClose" type="() => void" description="Called when user closes the dialog" />
-          <PropRow name="title" type="string" defaultValue='"Switch Workspace"' description="Dialog heading text" />
+          <PropRow name="title" type="string" def='"Switch Workspace"' description="Dialog heading text" />
           <PropRow name="current" type="Workspace" description="Optional currently active workspace — highlighted with open badge" />
-          <PropRow name="recent" type="Workspace[]" defaultValue="[]" description="Array of recent workspaces shown in the list" />
+          <PropRow name="recent" type="Workspace[]" def="[]" description="Array of recent workspaces shown in the list" />
           <PropRow name="onOpenFolder" type="() => void" description="When provided, renders the Open folder action tile" />
           <PropRow name="onNewWorkspace" type="() => void" description="When provided, renders the New workspace action tile" />
           <PropRow name="onCloneFromGit" type="() => void" description="When provided, renders the Clone from git action tile" />

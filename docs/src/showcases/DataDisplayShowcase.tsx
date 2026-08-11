@@ -246,7 +246,7 @@ export function KVGridShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="rows" type="KVGridRow[]" description="Array of {key, value} pairs. Keys are rendered monospace uppercase; values preserve input formatting." />
-          <PropRow name="keyWidth" type="number | string" defaultValue="130" description="Width of the key column. Accepts a pixel number or any CSS length string (e.g. '25%')." />
+          <PropRow name="keyWidth" type="number | string" def="130" description="Width of the key column. Accepts a pixel number or any CSS length string (e.g. '25%')." />
         </PropsTable>
       </ShowcaseSection>
     </div>

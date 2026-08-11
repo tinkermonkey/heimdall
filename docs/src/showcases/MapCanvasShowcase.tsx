@@ -128,15 +128,17 @@ export function MapCanvasShowcase() {
         </div>
 
         <div style={{ height: '500px', border: '1px solid rgb(var(--canvas-border))', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
-          <MapCanvas
-            mode={mode}
-            pins={mode === 'pins' ? SAMPLE_PINS : []}
-            trackPoints={mode === 'track' ? SAMPLE_TRACK : []}
-            heatmapData={mode === 'heatmap' ? SAMPLE_HEATMAP : []}
-            selectedPinId={mode === 'pins' ? selectedPinId ?? undefined : undefined}
-            onSelectPin={(id) => setSelectedPinId(id)}
-            scaleBar={showScaleBar}
-          />
+          {mode === 'pins' && (
+            <MapCanvas
+              mode="pins"
+              pins={SAMPLE_PINS}
+              selectedPinId={selectedPinId ?? undefined}
+              onSelectPin={(id) => setSelectedPinId(id)}
+              scaleBar={showScaleBar}
+            />
+          )}
+          {mode === 'track' && <MapCanvas mode="track" trackPoints={SAMPLE_TRACK} scaleBar={showScaleBar} />}
+          {mode === 'heatmap' && <MapCanvas mode="heatmap" heatmapData={SAMPLE_HEATMAP} scaleBar={showScaleBar} />}
         </div>
       </ShowcaseSection>
 
