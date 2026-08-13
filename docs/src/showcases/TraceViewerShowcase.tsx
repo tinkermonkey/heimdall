@@ -51,7 +51,6 @@ function parseInput(text: string): Parsed {
   } catch (e) {
     return fail('Invalid JSON — ' + (e as Error).message)
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const j = json as any
   const looksOtlp = j && typeof j === 'object' && Array.isArray(j.resourceSpans)
   const looksXray =

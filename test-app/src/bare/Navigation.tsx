@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavItem, Sidebar, Topbar, TabBar, Button, Icon } from '@tinkermonkey/heimdall-ui'
-import { BareSection, AxisRow, Caption } from '../components/BareSection'
+import { BareSection, AxisRow } from '../components/BareSection'
 
 export function BareNavItem() {
   return (

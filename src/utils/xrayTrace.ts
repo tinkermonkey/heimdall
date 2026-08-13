@@ -69,11 +69,9 @@ export interface XRaySubsegment {
   error?: boolean
   throttle?: boolean
   http?: XRayHttp
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   aws?: Record<string, any>
   sql?: XRaySql
   annotations?: Record<string, Primitive>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   metadata?: Record<string, any>
   cause?: string | XRayCause
   inferred?: boolean
@@ -111,7 +109,6 @@ function statusOf(node: XRaySubsegment): SpanStatus {
   return 'ok'
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function flattenInto(target: Record<string, Primitive>, prefix: string, obj: any): void {
   if (obj == null) return
   if (typeof obj !== 'object' || Array.isArray(obj)) {
@@ -178,7 +175,6 @@ function exceptionOf(node: XRaySubsegment): { exception?: TraceSpan['exception']
 
 /* ------------------------------------------------------------- input prep -- */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function normalizeInput(input: any): XRaySegment[] {
   if (input == null) return []
   if (Array.isArray(input)) return input.flatMap(normalizeInput)
@@ -189,7 +185,6 @@ function normalizeInput(input: any): XRaySegment[] {
     // traces, use only the first rather than silently merging their timelines.
     let chosen = traces
     if (traces.length > 1) {
-      // eslint-disable-next-line no-console
       console.warn(`fromXRay: response has ${traces.length} traces; using the first. Pass one trace at a time for the rest.`)
       chosen = traces.slice(0, 1)
     }
