@@ -262,6 +262,67 @@ export default function ChartsTestPage() {
         </div>
       </section>
 
+      <section style={section}>
+        {monoLabel('Heatmap · showValues')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#10B981" axes showValues
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-showvalues" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · valueFormat custom')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#22D3EE" axes showValues
+            valueFormat={(v) => Math.round(v).toString()}
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-valueformat" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · cellMark with markers')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#10B981" axes
+            cellMark={(_r, _c, v) => {
+              if (v != null && v > 0.7) {
+                return (
+                  <circle cx="0" cy="0" r="3" fill="#F43F5E" opacity="0.7" />
+                )
+              }
+              return null
+            }}
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-cellmark" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · showValues + cellMark combined')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#22D3EE" axes showValues
+            cellMark={(_r, _c, v) => {
+              if (v != null && v > 0.7) {
+                return (
+                  <circle cx="0" cy="0" r="2" fill="#F43F5E" opacity="0.8" />
+                )
+              }
+              return null
+            }}
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-combined" />
+        </div>
+      </section>
+
       {/* ── 8. StatusTimeline ───────────────────────────────────────────── */}
       <section style={section}>
         {monoLabel('StatusTimeline · Standard 4 tracks')}
