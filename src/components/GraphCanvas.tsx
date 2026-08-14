@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
 import { computeEdgePath, computeFitViewport, type BoundingBox, type EdgeAnchor } from '../utils/graph'
-import { forceLayout } from '../utils/graphLayout'
+import { forceLayout, clusteredForceLayout } from '../utils/graphLayout'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
 import GraphNode from './GraphNode'
@@ -116,8 +116,11 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    */
   renderNode?: (node: GraphNodeData, selected: boolean) => React.ReactNode
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes
-   *  without explicit coordinates; nodes with x and y are pinned. */
-  layout?: 'manual' | 'force'
+   *  without explicit coordinates; nodes with x and y are pinned. 'force-clustered'
+   *  additionally groups nodes into nested bubbles by graph structure (see
+   *  clusteredForceLayout in utils/graphLayout) before running the same spring
+   *  simulation within each bubble — larger canvas, less-even distribution, by design. */
+  layout?: 'manual' | 'force' | 'force-clustered'
   /** Zoom out/in on first layout so the full node bounding box fits within the container. Default false. */
   fitView?: boolean
   /** Padding in px around the fitted bounding box when fitView is enabled. Default 40. */
@@ -145,6 +148,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
   ) => {
     const [dims, setDims] = useState<NodeDims>(new Map())
     const [computedPositions, setComputedPositions] = useState<NodePositions>(new Map())
+    // Only populated when layout='force-clustered' — top-level cluster
+    // bounding circles, for the optional bubble-boundary render layer.
+    const [clusterBoundaries, setClusterBoundaries] = useState<Map<string, { x: number; y: number; r: number }>>(
+      new Map()
+    )
 
     const containerRef = useRef<HTMLDivElement>(null)
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -180,9 +188,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDims(next)
     }, [nodes])
 
-    // Run force layout when dims are ready (only when layout='force')
+    // Run force layout when dims are ready (layout='force' or 'force-clustered')
     useEffect(() => {
-      if (layout !== 'force' || dims.size === 0) return
+      if ((layout !== 'force' && layout !== 'force-clustered') || dims.size === 0) return
 
       const layoutNodes = nodes.map((n, i) => ({
         id: n.id,
@@ -194,7 +202,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         pinned: n.x !== undefined && n.y !== undefined,
       }))
       const layoutEdges = (edges ?? []).map(e => ({ source: e.sourceId, target: e.targetId }))
-      setComputedPositions(forceLayout(layoutNodes, layoutEdges))
+
+      if (layout === 'force-clustered') {
+        const { positions, clusterBoundaries: boundaries } = clusteredForceLayout(layoutNodes, layoutEdges)
+        setComputedPositions(positions)
+        setClusterBoundaries(boundaries)
+      } else {
+        setComputedPositions(forceLayout(layoutNodes, layoutEdges))
+        setClusterBoundaries(new Map())
+      }
     }, [nodes, edges, dims, layout])
 
 
@@ -234,7 +250,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     useEffect(() => {
       if (didCenterRef.current) return
       if (!containerSize || dims.size === 0 || nodes.length === 0) return
-      if (layout === 'force' && computedPositions.size === 0) return
+      if ((layout === 'force' || layout === 'force-clustered') && computedPositions.size === 0) return
 
       const bbox = computeBoundingBox()
       if (!bbox) return
@@ -372,6 +388,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               data-testid="graph-viewport"
               transform={transform}
             >
+              {clusterBoundaries.size > 0 && (
+                <g className="graph-clusters" aria-hidden="true">
+                  {[...clusterBoundaries.entries()].map(([id, c]) => (
+                    <circle key={id} className="graph-cluster-boundary" cx={c.x} cy={c.y} r={c.r} />
+                  ))}
+                </g>
+              )}
+
               <g className="graph-edges">
                 {edges?.map(edge => (
                   <GraphEdgeInternal

@@ -16,6 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `EdgeAnchor` type from `utils/graph`.
 - **`Icon`** — six new icons: `image`, `code`, `map`, `sparkles`, `share`,
   `ellipsis`.
+- **`GraphCanvas`** — opt-in nested bubble-packing layout: `layout="force-clustered"`
+  groups nodes into clusters (and clusters of clusters) derived purely from
+  edge structure via deterministic Louvain modularity clustering, packs
+  them with `d3-hierarchy`, then runs the existing spring simulation within
+  each bubble. Trades a larger canvas for a less even, more legible node
+  distribution. Renders an additional `.graph-cluster-boundary` circle per
+  top-level cluster. New exports: `clusteredForceLayout`,
+  `ClusteredLayoutOptions`, `ClusteredLayoutResult`, `louvainCluster`,
+  `ClusterEdge`, `ClusterTreeNode`, `LouvainOptions`, `packClusters`,
+  `PackedCircle`, `PackOptions`. New dependency: `d3-hierarchy`.
 
 ### Changed
 
