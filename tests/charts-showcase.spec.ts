@@ -171,6 +171,49 @@ test.describe('Chart Components', () => {
       }
       expect(hasPercent).toBe(true)
     })
+
+    test('stackLabel="total" renders stack totals above columns', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-total"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Should have labels for each stack (7 stacks)
+      expect(await texts.count()).toBeGreaterThan(7)
+      let hasTotal = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        // Should include totals like 92, 102, 91 etc
+        if (t && /^\d+$/.test(t)) { hasTotal = true; break }
+      }
+      expect(hasTotal).toBe(true)
+    })
+
+    test('stackLabel with custom function renders formatted labels', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-custom"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      let hasUppercase = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t === 'MON' || t === 'TUE' || t === 'WED') { hasUppercase = true; break }
+      }
+      expect(hasUppercase).toBe(true)
+    })
+
+    test('stackLabel="total" with normalized shows raw counts not percentages', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Y-axis should have percentages, but stack labels should be raw counts
+      let hasYPercent = false
+      let hasStackTotal = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t?.includes('%')) { hasYPercent = true }
+        if (t && /^\d{2,3}$/.test(t) && !t.includes('%')) { hasStackTotal = true }
+      }
+      expect(hasYPercent).toBe(true)
+      expect(hasStackTotal).toBe(true)
+    })
   })
 
   // ── Donut ──────────────────────────────────────────────────────────────────
@@ -351,6 +394,18 @@ test.describe('Chart Components', () => {
       await expect(page.locator('svg[data-testid="stackedbar-standard"]')).toHaveScreenshot('stackedbar-standard-light.png')
     })
 
+    test('StackedBar stackLabel="total" snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-total"]')).toHaveScreenshot('stackedbar-stacklabel-total-light.png')
+    })
+
+    test('StackedBar stackLabel custom function snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-custom"]')).toHaveScreenshot('stackedbar-stacklabel-custom-light.png')
+    })
+
+    test('StackedBar stackLabel="total" normalized snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')).toHaveScreenshot('stackedbar-stacklabel-normalized-light.png')
+    })
+
     test('Donut standard snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="donut-standard"]')).toHaveScreenshot('donut-standard-light.png')
     })
@@ -404,6 +459,18 @@ test.describe('Chart Components', () => {
 
     test('StackedBar dark snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="stackedbar-standard"]')).toHaveScreenshot('stackedbar-standard-dark.png')
+    })
+
+    test('StackedBar stackLabel="total" dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-total"]')).toHaveScreenshot('stackedbar-stacklabel-total-dark.png')
+    })
+
+    test('StackedBar stackLabel custom function dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-custom"]')).toHaveScreenshot('stackedbar-stacklabel-custom-dark.png')
+    })
+
+    test('StackedBar stackLabel="total" normalized dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')).toHaveScreenshot('stackedbar-stacklabel-normalized-dark.png')
     })
 
     test('Donut dark snapshot', async ({ page }) => {

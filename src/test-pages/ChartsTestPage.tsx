@@ -219,6 +219,31 @@ export default function ChartsTestPage() {
         </div>
       </section>
 
+      <section style={section}>
+        {monoLabel('StackedBar · stackLabel="total"')}
+        <div style={card}>
+          <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4} stackLabel="total"
+            data-testid="stackedbar-stacklabel-total" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('StackedBar · stackLabel with custom function')}
+        <div style={card}>
+          <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4}
+            stackLabel={(stack) => stack.label.toUpperCase()}
+            data-testid="stackedbar-stacklabel-custom" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('StackedBar · stackLabel="total" with normalized')}
+        <div style={card}>
+          <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4} normalized stackLabel="total"
+            data-testid="stackedbar-stacklabel-normalized" />
+        </div>
+      </section>
+
       {/* ── 6. Donut ────────────────────────────────────────────────────── */}
       <section style={section}>
         {monoLabel('Donut · Micro')}

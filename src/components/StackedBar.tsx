@@ -19,6 +19,7 @@ export interface StackedBarProps extends Omit<React.SVGAttributes<SVGSVGElement>
   normalized?: boolean
   tone?: ChartTone
   label?: string
+  stackLabel?: 'total' | ((stack: StackedBarStack) => string)
   className?: string
   style?: React.CSSProperties
 }
@@ -36,6 +37,7 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
       normalized = false,
       tone = 'light',
       label = 'Stacked bar chart',
+      stackLabel,
       className = '',
       style,
       ...rest
@@ -45,7 +47,7 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
     const T = TONE[tone]
     const cs = colors ?? SERIES_COLORS
 
-    const pad = { top: 8, right: 8, bottom: axes ? 22 : 6, left: axes ? 30 : 6 }
+    const pad = { top: stackLabel ? 24 : 8, right: 8, bottom: axes ? 22 : 6, left: axes ? 30 : 6 }
     const innerW = width - pad.left - pad.right
     const innerH = height - pad.top - pad.bottom
 
@@ -107,6 +109,12 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
                 acc += ph
                 return <rect key={pi} x={x} y={y} width={bw} height={ph} fill={cs[pi % cs.length]} />
               })}
+              {stackLabel && (
+                <text x={x + bw / 2} y={pad.top - 6}
+                  textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
+                  {stackLabel === 'total' ? fmt(total) : stackLabel(s)}
+                </text>
+              )}
               {axes && (
                 <text x={x + bw / 2} y={pad.top + innerH + 14}
                   textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
