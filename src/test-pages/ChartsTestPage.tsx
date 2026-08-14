@@ -44,10 +44,15 @@ const HEATMAP = (() => {
   for (let r = 0; r < 7; r++) {
     const row = []
     for (let c = 0; c < 24; c++) {
-      const m = Math.sin((c - 8) / 24 * Math.PI) * 0.5 + 0.5
-      const e = Math.exp(-Math.pow(c - 20, 2) / 8) * 0.8
-      const wknd = (r === 5 || r === 6) ? 0.7 : 1
-      row.push(Math.max(0, (m * 0.4 + e * 0.6) * wknd * 0.9))
+      // Sprinkle null cells (gaps) throughout to test null-cell rendering
+      if ((r === 1 && c === 5) || (r === 3 && c === 12) || (r === 5 && c === 20)) {
+        row.push(null)
+      } else {
+        const m = Math.sin((c - 8) / 24 * Math.PI) * 0.5 + 0.5
+        const e = Math.exp(-Math.pow(c - 20, 2) / 8) * 0.8
+        const wknd = (r === 5 || r === 6) ? 0.7 : 1
+        row.push(Math.max(0, (m * 0.4 + e * 0.6) * wknd * 0.9))
+      }
     }
     rows.push(row)
   }

@@ -71,10 +71,9 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
       return `#${base}${alpha}`
     }
 
-    function getTextColor(v: number | null): string {
-      if (v == null) return T.fg3
+    function getTextColor(v: number): string {
       const t = (v - lo) / (hi - lo || 1)
-      // At high intensity (t > 0.55), use light text; at low intensity, use dark text
+      // Light text (white/fg1) when intensity > 0.55 ensures contrast against hot end of ramp
       return t > 0.55 ? (tone === 'dark' ? T.fg1 : '#FFFFFF') : T.fg1
     }
 

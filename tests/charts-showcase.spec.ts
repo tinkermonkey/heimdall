@@ -359,6 +359,18 @@ test.describe('Chart Components', () => {
       await expect(page.locator('svg[data-testid="heatmap-standard"]')).toHaveScreenshot('heatmap-standard-light.png')
     })
 
+    test('Heatmap showValues snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-showvalues"]')).toHaveScreenshot('heatmap-showvalues-light.png')
+    })
+
+    test('Heatmap cellMark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-cellmark"]')).toHaveScreenshot('heatmap-cellmark-light.png')
+    })
+
+    test('Heatmap combined snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-combined"]')).toHaveScreenshot('heatmap-combined-light.png')
+    })
+
     test('StatusTimeline standard snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="timeline-standard"]')).toHaveScreenshot('timeline-standard-light.png')
     })
@@ -400,6 +412,18 @@ test.describe('Chart Components', () => {
 
     test('Heatmap dark snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="heatmap-standard"]')).toHaveScreenshot('heatmap-standard-dark.png')
+    })
+
+    test('Heatmap showValues dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-showvalues"]')).toHaveScreenshot('heatmap-showvalues-dark.png')
+    })
+
+    test('Heatmap cellMark dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-cellmark"]')).toHaveScreenshot('heatmap-cellmark-dark.png')
+    })
+
+    test('Heatmap combined dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-combined"]')).toHaveScreenshot('heatmap-combined-dark.png')
     })
 
     test('StatusTimeline dark snapshot', async ({ page }) => {
