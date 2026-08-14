@@ -4,6 +4,41 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0]
+
+### Added
+
+- **`GraphCanvas`/`GraphEdge`** — weighted, styled edges: a new `weight`
+  prop (0-100) maps to a 1-8px stroke width via a square-root curve so
+  low-end differences stay visually distinguishable, plus independent
+  `opacity` and `strokeDash` (single value or `[dash, gap]` tuple) controls.
+  Arrow markers scale proportionally with stroke width. New export
+  `EdgeAnchor` type from `utils/graph`.
+- **`Icon`** — six new icons: `image`, `code`, `map`, `sparkles`, `share`,
+  `ellipsis`.
+
+### Changed
+
+- **`ShellLayout`** canvas panel is now responsive instead of a fixed
+  `min-width: 1100px` — padding steps down at the `1024px` and `640px`
+  breakpoints and the canvas reflows instead of forcing horizontal scroll
+  on narrower viewports.
+
+### Fixed
+
+- **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
+  settle at force equilibrium with their rendered bounding boxes still
+  overlapping, since the simulation treated nodes as dimensionless points.
+  Adds a post-process `resolveOverlaps()` pass — capped-displacement
+  separation interleaved with spring-only relaxation, then a bounded
+  early-exit cleanup — that resolves overlaps without perturbing edge
+  crossings. Verified against a real 31-node/33-edge reference layer via the
+  project's own layout-quality test loop: node overlaps 7 → 1, zero
+  edge-crossing regression (exact parity with the unmodified baseline),
+  edge-length-deviation and neighborhood-preservation both improved. The
+  first of 8 proposed changes to that loop's regression-gated test to
+  actually pass it.
+
 ## [0.5.1]
 
 ### Fixed
