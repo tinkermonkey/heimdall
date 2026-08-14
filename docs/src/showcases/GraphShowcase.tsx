@@ -251,6 +251,8 @@ export function GraphCanvasShowcase() {
           <PropRow name="layout" type="'manual' | 'force' | 'galaxy'" def="'manual'" description="'manual' uses explicit x/y per node; 'force' runs a spring layout; 'galaxy' arranges nodes as a radial hierarchy of orbits built from structural edges" />
           <PropRow name="isStructuralEdge" type="(edge: GraphEdgeData) => boolean" description="Classifies an edge as structural (shapes the 'galaxy' hierarchy, source = parent) vs. relational (rendered but layout-irrelevant, dimmed unless hovered/selected or showAllRelations is set). Omit to treat every edge as structural." />
           <PropRow name="showAllRelations" type="boolean" def="false" description="With isStructuralEdge set, renders every non-structural edge at full opacity instead of dimming it" />
+          <PropRow name="collapsedNodeIds" type="ReadonlySet<string>" description="IDs of nodes whose structural descendants (per isStructuralEdge) should be hidden — the collapsed node itself stays visible. Controlled: pair with onToggleCollapse or nothing changes when a node's toggle is clicked." />
+          <PropRow name="onToggleCollapse" type="(nodeId: string) => void" description="Called when a node's collapse/expand affordance is activated. Wiring this is also what makes the default GraphNode render its collapse toggle at all." />
         </PropsTable>
       </ShowcaseSection>
       <ShowcaseSection label="Props (GraphNode)">
@@ -261,6 +263,10 @@ export function GraphCanvasShowcase() {
           <PropRow name="domainColor" type="string" def="'default'" description="Named domain key used to color the left swatch (e.g. 'life', 'climate', 'software')" />
           <PropRow name="selected" type="boolean" def="false" description="Renders the node in the selected/highlighted state" />
           <PropRow name="onSelect" type="(id: string) => void" description="Called when the node is clicked or activated via keyboard. When provided the node is keyboard-focusable." />
+          <PropRow name="hasChildren" type="boolean" def="false" description="Whether this node has structural children. Draws the collapse/expand toggle when true and onToggleCollapse is also provided." />
+          <PropRow name="collapsed" type="boolean" def="false" description="Whether the node's subtree is currently hidden. Flips the toggle's chevron direction." />
+          <PropRow name="hiddenDescendantCount" type="number" def="0" description="Shown as a '+N' badge next to the toggle while collapsed." />
+          <PropRow name="onToggleCollapse" type="() => void" description="Activates the collapse/expand toggle. Omit to render hasChildren without an interactive toggle." />
         </PropsTable>
       </ShowcaseSection>
     </div>
