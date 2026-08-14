@@ -66,12 +66,15 @@ jobs:
         run: npm run build
 
       - name: Publish to npm
-        env:
-          # NPM_TOKEN is required until a Trusted Publisher is configured for this
-          # package on npmjs.com (package settings -> Trusted Publisher). After that,
-          # OIDC (id-token: write, above) is preferred and this secret becomes a fallback.
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --provenance --access public
+        # Trusted Publishing (OIDC) is configured for this package on npmjs.com,
+        # keyed to this exact repo + workflow file. Auth happens via the
+        # `id-token: write` permission above — npm exchanges the GitHub Actions
+        # OIDC token for a short-lived npm token, no NPM_TOKEN secret needed.
+        # (npm classic "Automation" tokens, the prior way to bypass 2FA in CI,
+        # have been retired in favor of this.) Requires npm CLI >= 11.5.1.
+        run: |
+          npm install -g npm@latest
+          npm publish --provenance --access public
 
       - name: Extract release notes from CHANGELOG
         id: changelog
