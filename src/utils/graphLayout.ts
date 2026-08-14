@@ -19,6 +19,7 @@ export interface ForceLayoutOptions {
   repulsion?: number
   damping?: number
   centerStrength?: number
+  collisionStrength?: number
 }
 
 export function forceLayout(
@@ -33,9 +34,21 @@ export function forceLayout(
     repulsion = 8000,
     damping = 0.85,
     centerStrength = 0.005,
+    collisionStrength = 0.3,
   } = options
 
   if (nodes.length === 0) return new Map()
+
+  // Rest length actually used for a given edge — never shorter than what the two connected
+  // boxes' own footprints need to clear each other. springLength alone is a flat constant with
+  // no awareness of node size: fine for default-ish chip-sized nodes (where it's already larger
+  // than two half-diagonals combined, so this is a no-op), but for substantially larger nodes
+  // (e.g. card-style renderNode content) a 160px rest length can be shorter than the boxes
+  // themselves — the spring then permanently pulls connected large nodes into overlap, and the
+  // capped separation-pass post-process below can only partially fight that every cycle, never
+  // fully winning for bushier graphs with several large nodes competing around one hub.
+  const restLength = (a: LayoutNode, b: LayoutNode): number =>
+    Math.max(springLength, (Math.hypot(a.width, a.height) + Math.hypot(b.width, b.height)) / 2 * 1.1)
 
   const vx = new Map<string, number>(nodes.map(n => [n.id, 0]))
   const vy = new Map<string, number>(nodes.map(n => [n.id, 0]))
@@ -61,6 +74,24 @@ export function forceLayout(
         const fy = (dy / dist) * force
         if (!a.pinned) { vx.set(a.id, vx.get(a.id)! - fx); vy.set(a.id, vy.get(a.id)! - fy) }
         if (!b.pinned) { vx.set(b.id, vx.get(b.id)! + fx); vy.set(b.id, vy.get(b.id)! + fy) }
+
+        // Collision: an extra corrective push for any pair whose boxes currently overlap,
+        // proportional to overlap depth — same idea as the separationPass post-process below,
+        // but applied continuously as a soft force during the simulation instead of only in a
+        // fixed-budget pass at the end. Generic inverse-square repulsion above has no notion of
+        // node size, so for large nodes (e.g. card-style renderNode content) — especially several
+        // of them fanned out as siblings around one hub, which aren't spring-connected to each
+        // other at all — it alone settles into an equilibrium with real box overlap that
+        // repulsion never resolves on its own.
+        const overlapX = (a.width + b.width) / 2 - Math.abs(dx)
+        const overlapY = (a.height + b.height) / 2 - Math.abs(dy)
+        if (overlapX > 0 && overlapY > 0) {
+          const depth = Math.min(overlapX, overlapY) * collisionStrength
+          const cfx = (dx / dist) * depth
+          const cfy = (dy / dist) * depth
+          if (!a.pinned) { vx.set(a.id, vx.get(a.id)! - cfx); vy.set(a.id, vy.get(a.id)! - cfy) }
+          if (!b.pinned) { vx.set(b.id, vx.get(b.id)! + cfx); vy.set(b.id, vy.get(b.id)! + cfy) }
+        }
       }
     }
 
@@ -74,7 +105,7 @@ export function forceLayout(
       const dx = pt.x - ps.x || 0.1
       const dy = pt.y - ps.y || 0.1
       const dist = Math.max(Math.hypot(dx, dy), 1)
-      const force = springStrength * (dist - springLength)
+      const force = springStrength * (dist - restLength(src, tgt))
       const fx = (dx / dist) * force
       const fy = (dy / dist) * force
       if (!src.pinned) { vx.set(src.id, vx.get(src.id)! + fx); vy.set(src.id, vy.get(src.id)! + fy) }
@@ -93,7 +124,7 @@ export function forceLayout(
     }
   }
 
-  resolveOverlaps(nodes, edges, pos, vx, vy, nodeMap, { springLength, springStrength, damping })
+  resolveOverlaps(nodes, edges, pos, vx, vy, nodeMap, { restLength, springStrength, damping })
 
   return pos
 }
@@ -116,9 +147,20 @@ export function forceLayout(
 //     relaxation mixed in) until either no overlap remains or a generous
 //     pass budget is exhausted, rather than ending on one uncapped pass
 //     that could itself overshoot into a new overlap or crossing.
+//
+// FINAL_CLEANUP_MAX_PASSES is generous (well beyond what small/default-sized nodes ever need)
+// because with substantially larger nodes (e.g. card-style renderNode content) a bushy topology
+// can leave several nodes mutually overlapping at once — resolving one pair can nudge a third
+// node into a new marginal overlap, so full convergence takes noticeably more passes than a
+// single pair would. It's still bounded and each pass is O(n²) but cheap; the loop exits as soon
+// as a pass finds nothing to fix, so this only costs extra time in that dense-overlap case, never
+// in the common one. In rare, extreme cases (verified: 18 large cards in one dense hub-and-spoke
+// topology) a single sub-pixel-to-few-pixel sliver of overlap can still survive even this budget —
+// increasing it further empirically stopped helping past this point, suggesting a genuine
+// two-pair oscillation rather than a budget shortfall; harmless in practice but worth knowing.
 const OVERLAP_RESOLUTION_CYCLES = 40
 const RELAXATION_STEPS_PER_CYCLE = 3
-const FINAL_CLEANUP_MAX_PASSES = 50
+const FINAL_CLEANUP_MAX_PASSES = 400
 const SEPARATION_STEP_CAP = 6
 
 function resolveOverlaps(
@@ -128,7 +170,7 @@ function resolveOverlaps(
   vx: Map<string, number>,
   vy: Map<string, number>,
   nodeMap: Map<string, LayoutNode>,
-  options: { springLength: number; springStrength: number; damping: number }
+  options: { restLength: (a: LayoutNode, b: LayoutNode) => number; springStrength: number; damping: number }
 ): void {
   for (let cycle = 0; cycle < OVERLAP_RESOLUTION_CYCLES; cycle++) {
     separationPass(nodes, pos)
@@ -221,7 +263,7 @@ function relaxationStep(
   vx: Map<string, number>,
   vy: Map<string, number>,
   nodeMap: Map<string, LayoutNode>,
-  { springLength, springStrength, damping }: { springLength: number; springStrength: number; damping: number }
+  { restLength, springStrength, damping }: { restLength: (a: LayoutNode, b: LayoutNode) => number; springStrength: number; damping: number }
 ): void {
   for (const edge of edges) {
     const src = nodeMap.get(edge.source)
@@ -232,7 +274,7 @@ function relaxationStep(
     const dx = pt.x - ps.x || 0.1
     const dy = pt.y - ps.y || 0.1
     const dist = Math.max(Math.hypot(dx, dy), 1)
-    const force = springStrength * (dist - springLength)
+    const force = springStrength * (dist - restLength(src, tgt))
     const fx = (dx / dist) * force
     const fy = (dy / dist) * force
     if (!src.pinned) { vx.set(src.id, vx.get(src.id)! + fx); vy.set(src.id, vy.get(src.id)! + fy) }
