@@ -27,6 +27,14 @@ workflow (`.github/workflows/release.yml`).
 7. Watch it in the Actions tab or `gh run watch`. If the tag's version
    doesn't match `package.json`, the release job fails fast before publishing.
 
+If the `test` job fails on `-linux.png` screenshot mismatches rather than a
+real regression, that's baseline drift between your local machine and the
+`ubuntu-latest` runner — see [Playwright snapshot baselines are per-OS in
+CLAUDE.md](CLAUDE.md#playwright-snapshot-baselines-are-per-os) for how to
+regenerate them correctly using the `Update Visual Snapshots` workflow, then
+commit the fix and retag (delete + recreate the tag, or bump to the next
+version and re-tag).
+
 ## npm auth
 
 2FA stays **enabled** on the npm account (no "bypass 2FA" token). CI instead
