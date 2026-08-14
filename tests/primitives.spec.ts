@@ -73,6 +73,18 @@ test.describe('Primitive Components', () => {
     expect(count).toBeGreaterThanOrEqual(6)
   })
 
+  test('Chip component - forms', async ({ page }) => {
+    // Verify all chip forms are rendered
+    const chipForms = page.locator('[class*="chip--"]')
+    const count = await chipForms.count()
+    expect(count).toBeGreaterThan(0)
+
+    // Verify inferred form exists
+    const inferredChips = chipForms.filter({ hasText: 'inferred' })
+    const inferredCount = await inferredChips.count()
+    expect(inferredCount).toBeGreaterThan(0)
+  })
+
   test('Badge component - status dots', async ({ page }) => {
     // Verify badges are rendered
     const badges = page.locator('[class*="badge"]')
@@ -196,6 +208,12 @@ test.describe('Primitive Components', () => {
     await expect(versionPill).toHaveScreenshot('version-pill.png')
   })
 
+  test('Chip component - forms visual snapshot', async ({ page }) => {
+    // Find the "Chip Component · Forms" section and take a snapshot
+    const formSection = page.locator('section:has-text("Chip Component · Forms") div').last()
+    await expect(formSection).toHaveScreenshot('chip-forms.png')
+  })
+
   test('SegmentedControl component renders and is interactive', async ({ page }) => {
     // Find SegmentedControl elements
     const segmentedControls = page.locator('[class*="segmented-control"]')
@@ -222,6 +240,11 @@ test.describe('Primitive Components', () => {
     test('VersionPill dark snapshot', async ({ page }) => {
       const versionPill = page.locator('[class*="version-pill"]').first()
       await expect(versionPill).toHaveScreenshot('version-pill-dark.png')
+    })
+
+    test('Chip forms dark snapshot', async ({ page }) => {
+      const formSection = page.locator('section:has-text("Chip Component · Forms") div').last()
+      await expect(formSection).toHaveScreenshot('chip-forms-dark.png')
     })
 
     test('SegmentedControl dark snapshot', async ({ page }) => {

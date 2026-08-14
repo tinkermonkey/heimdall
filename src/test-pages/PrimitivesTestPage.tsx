@@ -120,6 +120,31 @@ export default function PrimitivesTestPage() {
             marginBottom: '14px',
           }}
         >
+          Chip Component · Forms
+        </div>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <Chip form="default">default form</Chip>
+          <Chip form="id-tag">id-tag form</Chip>
+          <Chip form="version">v1.2.3</Chip>
+          <Chip form="env">production</Chip>
+          <Chip form="inferred">inferred</Chip>
+          <Chip form="inferred" variant="amber">
+            inferred (with variant)
+          </Chip>
+        </div>
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
           Badge Component · Status Indicators
         </div>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
