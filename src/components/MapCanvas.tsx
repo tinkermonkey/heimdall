@@ -200,6 +200,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
       minZoom,
       maxZoom,
       onViewportChange: handleViewportChange,
+      containerRef,
     })
 
     const rawId = useId()

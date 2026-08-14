@@ -99,6 +99,37 @@ const ANCHOR_DIRECTION: Record<Exclude<EdgeAnchor, 'auto'>, Point> = {
 }
 
 /**
+ * The outward-facing direction of whichever side of the rectangle rectEdgePoint would put the
+ * point on for the same (cx, cy, w, h, tx, ty) — i.e. the tangent a bezier control point should
+ * project along so it approaches from the side the point is actually on, rather than a generic
+ * line-of-sight offset that can disagree with it.
+ *
+ * This matters specifically for a mixed anchor pair (one fixed, one 'auto'): cubicBezierPath,
+ * given only the resolved points, has no way to know which rectangle side an 'auto' point landed
+ * on and falls back to offsetting perpendicular to the straight line between the two points. When
+ * that guessed direction doesn't match the side rectEdgePoint actually chose, the curve's tangent
+ * at that endpoint fights its way onto the correct side, producing a visible curl right at the
+ * node instead of a clean approach. computeEdgePath uses this to give the 'auto' side its real
+ * direction instead of relying on that fallback.
+ */
+export function rectEdgeDirection(cx: number, cy: number, w: number, h: number, tx: number, ty: number): Point {
+  const dx = tx - cx
+  const dy = ty - cy
+  if (dx === 0 && dy === 0) return { x: 0, y: 0 }
+
+  const adx = Math.abs(dx)
+  const ady = Math.abs(dy)
+  const hw = w / 2
+  const hh = h / 2
+
+  if (adx * hh > ady * hw) {
+    return { x: dx > 0 ? 1 : -1, y: 0 }
+  } else {
+    return { x: 0, y: dy > 0 ? 1 : -1 }
+  }
+}
+
+/**
  * Endpoint on a node's rectangle. For a fixed anchor, the midpoint of that side regardless
  * of (tx, ty). For 'auto', the perimeter point facing (tx, ty), i.e. rectEdgePoint.
  */
@@ -123,13 +154,21 @@ export const DEFAULT_CUBIC_CURVATURE = 0.22
  * Cubic bezier whose control points project outward from each endpoint's anchor direction
  * (or, for 'auto', the perpendicular offset used by bezierPath). Midpoint and tangent angle
  * are found via De Casteljau subdivision at t=0.5 rather than approximated from the control points.
+ *
+ * sourceDirection/targetDirection override the anchor-derived direction for that endpoint —
+ * computeEdgePath passes rectEdgeDirection's result here for an 'auto' side paired with a fixed
+ * one, so its tangent matches the rectangle side the point is actually on. Called without them
+ * (e.g. directly, with only points and no rectangle to derive a better direction from), 'auto'
+ * still falls back to the perpendicular-of-line-of-sight offset, same as always.
  */
 export function cubicBezierPath(
   p1: Point,
   p2: Point,
   sourceAnchor: EdgeAnchor = 'auto',
   targetAnchor: EdgeAnchor = 'auto',
-  curvature: number = DEFAULT_CUBIC_CURVATURE
+  curvature: number = DEFAULT_CUBIC_CURVATURE,
+  sourceDirection?: Point,
+  targetDirection?: Point
 ): BezierPathResult {
   const dx = p2.x - p1.x
   const dy = p2.y - p1.y
@@ -139,8 +178,8 @@ export function cubicBezierPath(
   const nx = -dy / dist
   const ny = dx / dist
 
-  const dir1 = sourceAnchor === 'auto' ? { x: nx, y: ny } : ANCHOR_DIRECTION[sourceAnchor]
-  const dir2 = targetAnchor === 'auto' ? { x: nx, y: ny } : ANCHOR_DIRECTION[targetAnchor]
+  const dir1 = sourceDirection ?? (sourceAnchor === 'auto' ? { x: nx, y: ny } : ANCHOR_DIRECTION[sourceAnchor])
+  const dir2 = targetDirection ?? (targetAnchor === 'auto' ? { x: nx, y: ny } : ANCHOR_DIRECTION[targetAnchor])
 
   const c1 = { x: p1.x + dir1.x * offset, y: p1.y + dir1.y * offset }
   const c2 = { x: p2.x + dir2.x * offset, y: p2.y + dir2.y * offset }
@@ -187,5 +226,15 @@ export function computeEdgePath(source: EdgeEndpointRect, target: EdgeEndpointRe
   if (sourceAnchor === 'auto' && targetAnchor === 'auto') {
     return bezierPath(sp, tp, options.curvature ?? DEFAULT_QUADRATIC_CURVATURE)
   }
-  return cubicBezierPath(sp, tp, sourceAnchor, targetAnchor, options.curvature ?? DEFAULT_CUBIC_CURVATURE)
+
+  // Give an 'auto' side its real rectangle-side direction rather than letting cubicBezierPath
+  // fall back to guessing from the straight line between the two points — see rectEdgeDirection.
+  const sourceDirection = sourceAnchor === 'auto'
+    ? rectEdgeDirection(source.x, source.y, source.width, source.height, target.x, target.y)
+    : undefined
+  const targetDirection = targetAnchor === 'auto'
+    ? rectEdgeDirection(target.x, target.y, target.width, target.height, source.x, source.y)
+    : undefined
+
+  return cubicBezierPath(sp, tp, sourceAnchor, targetAnchor, options.curvature ?? DEFAULT_CUBIC_CURVATURE, sourceDirection, targetDirection)
 }
