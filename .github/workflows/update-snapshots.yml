@@ -1,0 +1,68 @@
+name: Update Visual Snapshots
+
+# Manually triggered. Regenerates Playwright's Linux screenshot baselines
+# inside an actual GitHub Actions runner (rather than a local approximation)
+# and uploads the changed PNGs as a downloadable artifact — nothing is
+# committed automatically. Use this whenever local Docker-based regeneration
+# doesn't byte-match the hosted runner's font/rendering stack closely enough
+# to clear the 1% pixel-diff threshold in release.yml's Test job.
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        description: "Optional: specific spec file(s)/pattern to limit the run (e.g. tests/calendar.spec.ts). Leave blank to update the full suite."
+        required: false
+        default: ""
+
+jobs:
+  update-snapshots:
+    name: Regenerate Linux snapshots
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Update snapshots
+        run: npx playwright test ${{ github.event.inputs.spec }} --update-snapshots --reporter=line
+
+      - name: Collect changed snapshots
+        id: collect
+        run: |
+          mkdir -p /tmp/changed-snapshots
+          git status --porcelain -- 'tests/**/*-linux.png' | awk '{print $2}' > /tmp/changed-list.txt
+          COUNT=$(wc -l < /tmp/changed-list.txt | tr -d ' ')
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+          if [ "$COUNT" -gt 0 ]; then
+            while IFS= read -r f; do
+              mkdir -p "/tmp/changed-snapshots/$(dirname "$f")"
+              cp "$f" "/tmp/changed-snapshots/$f"
+            done < /tmp/changed-list.txt
+          fi
+
+      - name: Upload changed snapshots
+        if: steps.collect.outputs.count != '0'
+        uses: actions/upload-artifact@v4
+        with:
+          name: updated-linux-snapshots
+          path: /tmp/changed-snapshots
+          retention-days: 7
+
+      - name: Upload full failure report (for review even if nothing changed)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: /tmp/playwright-report
+          retention-days: 7
+          if-no-files-found: ignore
