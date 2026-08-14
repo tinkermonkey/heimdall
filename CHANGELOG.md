@@ -4,7 +4,7 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.0]
+## [0.5.2]
 
 ### Added
 
@@ -38,6 +38,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   edge-length-deviation and neighborhood-preservation both improved. The
   first of 8 proposed changes to that loop's regression-gated test to
   actually pass it.
+- **Playwright visual regression suite**: `loadSelfHostedFonts()` computed
+  the fonts directory via a hardcoded relative `file://` path that broke
+  when the package moved to the repo root, silently falling back to a
+  system font in every test run and blocked outright by Chromium's
+  local-resource policy. Fonts are now loaded through the dev server's
+  same-origin `/fonts/` URL instead. `assertFontsLoaded()` previously only
+  checked that `@font-face` rules were declared, not that they actually
+  loaded — it now checks `document.fonts` status directly. Also fixes
+  `calendar.spec.ts`'s "accessibility attributes in month view" test, which
+  depended on the real wall-clock date falling inside the fixture's
+  hardcoded June 2026 month; the clock is now frozen to that month.
+  Linux screenshot baselines regenerated against the corrected renderer.
 
 ## [0.5.1]
 
