@@ -148,7 +148,10 @@ function resolveOverlaps(
 // early exit). All pairs are evaluated against the pass's STARTING
 // positions and moves are applied afterward, so resolving one pair in a
 // pass never skews another pair's overlap check within that same pass.
-function separationPass(nodes: readonly LayoutNode[], pos: Map<string, { x: number; y: number }>): boolean {
+//
+// Exported so other layout engines (e.g. galaxyLayout) can reuse the same
+// box-overlap resolution instead of duplicating it.
+export function separationPass(nodes: readonly LayoutNode[], pos: Map<string, { x: number; y: number }>): boolean {
   let anyOverlap = false
   const moves = new Map<string, { x: number; y: number }>(nodes.map(n => [n.id, { x: 0, y: 0 }]))
 

@@ -4,9 +4,10 @@ import { GraphCanvasContext } from '../components/GraphCanvasContext'
 import GraphNode from '../components/GraphNode'
 import GraphInspector, { type GraphNodeMetadata, type RelationshipLink } from '../components/GraphInspector'
 import { SplitPane } from '../components/SplitPane'
-import TopologyNode from '../components/TopologyNode'
+import TopologyNode, { type TopologyNodeStatus } from '../components/TopologyNode'
 import type { EdgeAnchor } from '../utils/graph'
-import type { GraphNodeData } from '../components/GraphCanvas'
+import type { GraphNodeData, GraphNodeHierarchyMeta } from '../components/GraphCanvas'
+import { GALAXY_DEMO_NODES, GALAXY_DEMO_EDGES, isGalaxyDemoEdgeStructural } from './galaxyDemoData'
 
 interface NodeData extends GraphNodeData {
   title?: string
@@ -93,6 +94,21 @@ const BUS_EDGES: EdgeData[] = [
   { id: 'bus_edge_b_dep4', sourceId: 'bus_agent_b', targetId: 'bus_dep_4', sourceAnchor: 'right', targetAnchor: 'left', label: 'depends on' },
 ]
 
+// Status coloring for the "Cards" galaxy demo — purely decorative, one status per domain.
+const GALAXY_CARD_STATUS: Record<string, TopologyNodeStatus> = {
+  life: 'ok',
+  climate: 'warning',
+  software: 'idle',
+}
+
+// Deterministic 0-100 value derived from the node id, used only to give the "Cards" demo's
+// metric bar some visual variety — not a real measurement, and stable across renders/snapshots.
+function pseudoMetricPercent(id: string): number {
+  let hash = 0
+  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) % 100
+  return Math.abs(hash)
+}
+
 function FitViewControls() {
   // GraphCanvas also renders node content off-screen (outside the context provider) to
   // measure natural size, so this must tolerate a missing context rather than throw.
@@ -158,7 +174,19 @@ const TOPOLOGY_NODES = [
 
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
-  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus'>('graph')
+  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy'>('graph')
+  const [showAllRelations, setShowAllRelations] = useState(false)
+  const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
+  const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
+
+  const handleToggleCollapse = useCallback((id: string) => {
+    setCollapsedNodeIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }, [])
 
   const selectedNode = GRAPH_NODES.find(n => n.id === selectedNodeId)
   const inspectorNode: GraphNodeMetadata | undefined = selectedNode
@@ -205,6 +233,53 @@ export default function GraphShowcase() {
     return <GraphNode id={node.id} label={node.label} selected={selected} onSelect={setSelectedNodeId} />
   }, [])
 
+  // Proves galaxy layout works for substantial-size cards, not just compact GraphNode chips —
+  // TopologyNode is ~180px+ wide and grows with each metric row, versus GraphNode's ~30px tall
+  // default. Also demonstrates reading GraphNodeHierarchyMeta in a fully custom renderNode: the
+  // collapse/expand affordance here is hand-built, not GraphNode's built-in one.
+  const renderGalaxyCardNode = useCallback((node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta) => {
+    const percent = pseudoMetricPercent(node.id)
+    return (
+      <div style={{ position: 'relative' }}>
+        <TopologyNode
+          title={node.label}
+          nodeRole={node.kind === 'I' ? 'individual' : 'class'}
+          status={GALAXY_CARD_STATUS[node.domainColor ?? ''] ?? 'idle'}
+          metrics={[{ label: 'Weight', value: `${percent}%`, percent, sparklineData: [], color: 'amber' }]}
+          selected={selected}
+          onSelect={() => setSelectedNodeId(node.id)}
+        />
+        {hierarchy?.hasChildren && hierarchy.onToggleCollapse && (
+          // No data-testid: GraphCanvas renders this content twice (once off-screen for
+          // measurement, once in the real SVG) — see GraphNode's collapse toggle for the same
+          // reasoning. Locate via .galaxy-card-collapse-toggle scoped under the node's own
+          // unique [data-testid="graph-node-{id}"].
+          <button
+            type="button"
+            className="galaxy-card-collapse-toggle"
+            onClick={(e) => { e.stopPropagation(); hierarchy.onToggleCollapse!() }}
+            aria-label={hierarchy.collapsed ? 'Expand' : 'Collapse'}
+            style={{
+              position: 'absolute',
+              top: 6,
+              right: 6,
+              width: 20,
+              height: 20,
+              borderRadius: 4,
+              border: '1px solid var(--canvas-border, #d8dde5)',
+              background: 'var(--canvas-bg-2, #f4f5f7)',
+              cursor: 'pointer',
+              fontSize: 11,
+              lineHeight: 1,
+            }}
+          >
+            {hierarchy.collapsed ? `+${hierarchy.hiddenDescendantCount}` : '−'}
+          </button>
+        )}
+      </div>
+    )
+  }, [])
+
   const graphCanvas = (
     <GraphCanvas
       key="graph-canvas"
@@ -228,6 +303,28 @@ export default function GraphShowcase() {
       selectedNodeId={selectedNodeId}
       onNodeSelect={setSelectedNodeId}
       renderNode={renderFitViewNode}
+      style={{ height: '100%' }}
+    />
+  )
+
+  const galaxyCanvas = (
+    <GraphCanvas
+      key="galaxy-canvas"
+      data-testid="galaxy-canvas"
+      nodes={GALAXY_DEMO_NODES}
+      edges={GALAXY_DEMO_EDGES}
+      layout="galaxy"
+      isStructuralEdge={isGalaxyDemoEdgeStructural}
+      showAllRelations={showAllRelations}
+      collapsedNodeIds={collapsedNodeIds}
+      onToggleCollapse={handleToggleCollapse}
+      fitView
+      fitPadding={40}
+      selectedNodeId={selectedNodeId}
+      onNodeSelect={setSelectedNodeId}
+      // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
+      // up domainColor/kind styling and the collapse toggle from hierarchy meta.
+      renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
       style={{ height: '100%' }}
     />
   )
@@ -342,6 +439,55 @@ export default function GraphShowcase() {
           >
             Bus View
           </button>
+          <button
+            type="button"
+            data-testid="galaxy-view-button"
+            onClick={() => setCanvasMode('galaxy')}
+            style={{
+              padding: '8px 16px',
+              background: canvasMode === 'galaxy' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: canvasMode === 'galaxy' ? 600 : 400,
+            }}
+          >
+            Galaxy View
+          </button>
+          {canvasMode === 'galaxy' && (
+            <button
+              type="button"
+              data-testid="galaxy-show-all-relations-button"
+              onClick={() => setShowAllRelations(v => !v)}
+              style={{
+                padding: '8px 16px',
+                background: showAllRelations ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: showAllRelations ? 600 : 400,
+              }}
+            >
+              Show all relations
+            </button>
+          )}
+          {canvasMode === 'galaxy' && (
+            <button
+              type="button"
+              data-testid="galaxy-card-size-button"
+              onClick={() => setGalaxyCardSize(v => (v === 'compact' ? 'cards' : 'compact'))}
+              style={{
+                padding: '8px 16px',
+                background: galaxyCardSize === 'cards' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: galaxyCardSize === 'cards' ? 600 : 400,
+              }}
+            >
+              {galaxyCardSize === 'cards' ? 'Cards' : 'Compact'}
+            </button>
+          )}
         </div>
       </div>
 
@@ -359,7 +505,9 @@ export default function GraphShowcase() {
                 ? topologyCanvas
                 : canvasMode === 'bus'
                   ? busCanvas
-                  : fitViewCanvas
+                  : canvasMode === 'galaxy'
+                    ? galaxyCanvas
+                    : fitViewCanvas
           }
           second={
             <GraphInspector

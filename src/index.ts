@@ -132,11 +132,14 @@ export {
   type GraphEdge as GraphEdgeData,
   type GraphCanvasProps,
   type BaseGraphNodeComponentProps,
+  type GraphNodeHierarchyMeta,
 } from './components/GraphCanvas'
 export { type GraphCanvasContextValue, type GraphNodeRect } from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
 export { forceLayout, type LayoutNode, type LayoutEdge, type ForceLayoutOptions } from './utils/graphLayout'
+export { galaxyLayout, type GalaxyLayoutNode, type GalaxyLayoutEdge, type GalaxyLayoutOptions } from './utils/galaxyLayout'
+export { buildStructuralForest, structuralDescendants, type HierarchyEdge, type StructuralForest } from './utils/graphHierarchy'
 export {
   GraphInspector,
   type GraphNodeMetadata,
@@ -144,7 +147,7 @@ export {
   type GraphInspectorProps,
 } from './components/GraphInspector'
 export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type TopologyNodeProps } from './components/TopologyNode'
-export { bezierPath, rectEdgePoint, type Point, type BezierPathResult, type EdgeAnchor } from './utils/graph'
+export { bezierPath, rectEdgePoint, rectEdgeDirection, type Point, type BezierPathResult, type EdgeAnchor } from './utils/graph'
 export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type HierarchyDomain } from './components/HierarchyRow'
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'

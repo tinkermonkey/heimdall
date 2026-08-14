@@ -650,4 +650,173 @@ test.describe('Graph Canvas Components', () => {
       await expect(canvas).toHaveScreenshot('graph-canvas-bus-view-dark.png')
     })
   })
+
+  test.describe('Galaxy View - Layout & Relations', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.locator('[data-testid="galaxy-view-button"]').click()
+      await page.waitForTimeout(200)
+    })
+
+    async function nodeOverlaps(page: import('@playwright/test').Page) {
+      const nodes = page.locator('[data-testid^="graph-node-"]')
+      const count = await nodes.count()
+      const boxes = []
+      for (let i = 0; i < count; i++) {
+        const box = await nodes.nth(i).boundingBox()
+        if (box) boxes.push(box)
+      }
+      let overlaps = 0
+      for (let i = 0; i < boxes.length; i++) {
+        for (let j = i + 1; j < boxes.length; j++) {
+          const a = boxes[i], b = boxes[j]
+          const overlapX = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x)
+          const overlapY = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y)
+          if (overlapX > 0 && overlapY > 0) overlaps++
+        }
+      }
+      return { count, overlaps }
+    }
+
+    test('renders every node with no overlapping bounding boxes', async ({ page }) => {
+      const { count, overlaps } = await nodeOverlaps(page)
+      expect(count).toBe(28) // GALAXY_DEMO_NODES length, including the two orphans
+      expect(overlaps).toBe(0)
+    })
+
+    test('an orphan node renders on its own, with no attached edge', async ({ page }) => {
+      const orphan = page.locator('[data-testid="graph-node-note_deprecated"]')
+      await expect(orphan).toBeVisible()
+
+      const orphanEdges = page.locator('[data-testid^="graph-edge-"][data-testid*="note_deprecated"]')
+      expect(await orphanEdges.count()).toBe(0)
+    })
+
+    test('structural edges render at full opacity by default', async ({ page }) => {
+      // organism --contains--> eukaryote, a structural predicate
+      const line = page.locator('[data-testid="graph-edge-e_organism_eukaryote"] path.graph-edge__line')
+      const opacity = await line.evaluate(el => getComputedStyle(el).opacity)
+      expect(parseFloat(opacity)).toBeCloseTo(1, 2)
+    })
+
+    test('non-structural edges render dimmed by default', async ({ page }) => {
+      // brca1 --encodes--> protein, co2 --causes--> ocean_acidification, both relational
+      const encodes = page.locator('[data-testid="graph-edge-r_brca1_protein"] path.graph-edge__line')
+      const causes = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"] path.graph-edge__line')
+
+      expect(parseFloat(await encodes.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
+      expect(parseFloat(await causes.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
+    })
+
+    test('hovering a node reveals its dimmed non-structural edges', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-r_brca1_protein"] path.graph-edge__line')
+      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
+
+      // brca1 sits 5 hierarchy levels deep; fitView zooms out enough to fit the whole graph that
+      // its rendered box can end up sub-pixel at this viewport size (a real user would zoom in
+      // first), which makes geometric hover (and even .hover({force: true}), which still routes
+      // through real screen coordinates) unreliable here. React translates native 'pointerover'
+      // into its synthetic onPointerEnter — dispatch that directly on the element, bypassing
+      // screen-coordinate hit-testing entirely.
+      await page.locator('[data-testid="graph-node-brca1"]').dispatchEvent('pointerover')
+      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(1, 2)
+    })
+
+    test('"Show all relations" renders every non-structural edge at full opacity', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"] path.graph-edge__line')
+      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
+
+      await page.locator('[data-testid="galaxy-show-all-relations-button"]').click()
+      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(1, 2)
+    })
+
+    test('collapsing a node hides its structural descendants and shows a hidden-count badge', async ({ page }) => {
+      // organism -> eukaryote, prokaryote -> ... -> 10 structural descendants total
+      const { count: before } = await nodeOverlaps(page)
+
+      const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+      await expect(toggle).toBeVisible()
+      await toggle.click()
+
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+      await expect(page.locator('[data-testid="graph-node-chromosome"]')).not.toBeAttached()
+      // organism itself stays visible, collapsed — only its subtree disappears
+      await expect(page.locator('[data-testid="graph-node-organism"]')).toBeVisible()
+
+      const { count: after } = await nodeOverlaps(page)
+      expect(before - after).toBe(10)
+
+      const badge = toggle.locator('.graph-node__hidden-badge')
+      await expect(badge).toHaveText('10')
+
+      // Edges into the hidden subtree disappear too (no dangling endpoints)
+      await expect(page.locator('[data-testid="graph-edge-e_organism_eukaryote"]')).not.toBeAttached()
+    })
+
+    test('expanding a collapsed node restores its structural descendants', async ({ page }) => {
+      const { count: before } = await nodeOverlaps(page)
+
+      const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+      await toggle.click()
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+
+      await toggle.click()
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).toBeVisible()
+
+      const { count: after, overlaps } = await nodeOverlaps(page)
+      expect(after).toBe(before)
+      expect(overlaps).toBe(0)
+    })
+
+    test('nodes without structural children render no collapse toggle', async ({ page }) => {
+      // brca1 is a leaf — reachable only via instanceOf from chromosome, no children of its own
+      await expect(page.locator('[data-testid="graph-node-brca1"] .graph-node__collapse-toggle')).not.toBeAttached()
+    })
+
+    test('"Cards" mode renders substantial-size TopologyNode cards without overlap', async ({ page }) => {
+      await page.locator('[data-testid="galaxy-card-size-button"]').click()
+
+      // Scoped under the node's own unique outer testid — TopologyNode's inner testid, like
+      // any content resolveNodeContent returns, is duplicated into the off-screen measurement copy.
+      const card = page.locator('[data-testid="graph-node-organism"] [data-testid="topology-node-organism"]')
+      await expect(card).toBeVisible()
+      const box = await card.boundingBox()
+      expect(box).toBeTruthy()
+
+      // fitView zooms the whole graph to fit the panel, so the on-screen box is scaled down from
+      // its true CSS size — divide out the current zoom to compare against TopologyNode's actual
+      // min-width (much larger than GraphNode's ~138px default).
+      const transform = await page.locator('[data-testid="graph-viewport"]').getAttribute('transform')
+      const zoom = parseFloat(transform!.match(/matrix\(([^,]+)/)![1])
+      expect(box!.width / zoom).toBeGreaterThanOrEqual(180)
+
+      const { overlaps } = await nodeOverlaps(page)
+      expect(overlaps).toBe(0)
+    })
+
+    test('"Cards" mode supports collapse/expand via a fully custom renderNode', async ({ page }) => {
+      await page.locator('[data-testid="galaxy-card-size-button"]').click()
+
+      const toggle = page.locator('[data-testid="graph-node-organism"] .galaxy-card-collapse-toggle')
+      await expect(toggle).toBeVisible()
+      await toggle.click()
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+    })
+
+    test('Galaxy View visual snapshot', async ({ page }) => {
+      const canvas = page.locator('[data-testid="galaxy-canvas"]')
+      await expect(canvas).toHaveScreenshot('graph-canvas-galaxy-view-light.png')
+    })
+
+    test('Galaxy View visual snapshot in dark mode', async ({ page }) => {
+      await applyDarkCanvasMode(page)
+      const canvas = page.locator('[data-testid="galaxy-canvas"]')
+      await expect(canvas).toHaveScreenshot('graph-canvas-galaxy-view-dark.png')
+    })
+
+    test('Galaxy View Cards mode visual snapshot', async ({ page }) => {
+      await page.locator('[data-testid="galaxy-card-size-button"]').click()
+      const canvas = page.locator('[data-testid="galaxy-canvas"]')
+      await expect(canvas).toHaveScreenshot('graph-canvas-galaxy-view-cards-light.png')
+    })
+  })
 })

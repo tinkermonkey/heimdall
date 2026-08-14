@@ -248,7 +248,9 @@ export function GraphCanvasShowcase() {
           <PropRow name="selectedNodeId" type="string" description="Currently selected node ID (controlled)" />
           <PropRow name="onNodeSelect" type="(id: string) => void" description="Called when a node is clicked" />
           <PropRow name="renderNode" type="(node: GraphNodeData, selected: boolean) => ReactNode" description="Custom node renderer. Omit to use the default GraphNode." />
-          <PropRow name="layout" type="'manual' | 'force'" def="'manual'" description="'manual' uses explicit x/y per node; 'force' runs a spring layout for nodes without coordinates" />
+          <PropRow name="layout" type="'manual' | 'force' | 'galaxy'" def="'manual'" description="'manual' uses explicit x/y per node; 'force' runs a spring layout; 'galaxy' arranges nodes as a radial hierarchy of orbits built from structural edges" />
+          <PropRow name="isStructuralEdge" type="(edge: GraphEdgeData) => boolean" description="Classifies an edge as structural (shapes the 'galaxy' hierarchy, source = parent) vs. relational (rendered but layout-irrelevant, dimmed unless hovered/selected or showAllRelations is set). Omit to treat every edge as structural." />
+          <PropRow name="showAllRelations" type="boolean" def="false" description="With isStructuralEdge set, renders every non-structural edge at full opacity instead of dimming it" />
         </PropsTable>
       </ShowcaseSection>
       <ShowcaseSection label="Props (GraphNode)">
