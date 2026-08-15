@@ -180,6 +180,7 @@ export default function GraphShowcase() {
   const [showAllRelations, setShowAllRelations] = useState(false)
   const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
+  const [draggable, setDraggable] = useState(true)
 
   const handleNodeSelect = useCallback((id: string) => {
     setSelectedNodeId(id)
@@ -318,6 +319,7 @@ export default function GraphShowcase() {
       onNodeSelect={handleNodeSelect}
       selectedEdgeId={selectedEdgeId}
       onEdgeSelect={handleEdgeSelect}
+      draggable={draggable}
       renderNode={renderGraphNode}
       style={{ height: '100%' }}
     />
@@ -485,6 +487,23 @@ export default function GraphShowcase() {
           >
             Galaxy View
           </button>
+          {canvasMode === 'graph' && (
+            <button
+              type="button"
+              data-testid="graph-draggable-toggle"
+              onClick={() => setDraggable(v => !v)}
+              style={{
+                padding: '8px 16px',
+                background: draggable ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: draggable ? 600 : 400,
+              }}
+            >
+              Draggable: {draggable ? 'On' : 'Off'}
+            </button>
+          )}
           {canvasMode === 'galaxy' && (
             <button
               type="button"

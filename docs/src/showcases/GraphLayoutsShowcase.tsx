@@ -166,6 +166,12 @@ export function GraphLayoutsShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
+  const [draggable, setDraggable] = useState(true)
+  // undefined = GraphCanvas's own default (each node's own rendered width). 'tight' goes to 0 —
+  // the minimum legal packing, no breathing room for edges. Only meaningful for layout="force";
+  // galaxy's radial hierarchy doesn't use nodeMargin at all.
+  const [nodeMarginPreset, setNodeMarginPreset] = useState<'tight' | 'default' | 'wide'>('default')
+  const nodeMargin = nodeMarginPreset === 'tight' ? 0 : nodeMarginPreset === 'wide' ? 280 : undefined
 
   const dataset = DATASETS[datasetKey]
 
@@ -306,7 +312,7 @@ export function GraphLayoutsShowcase() {
       />
       <ShowcaseSection
         label="Interactive comparison"
-        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Dimmed edges are relational (not part of the hierarchy); hover a node or turn on 'All relations' to see them at full opacity."
+        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Dimmed edges are relational (not part of the hierarchy); hover a node or turn on 'All relations' to see them at full opacity. Drag a node to reposition it, or turn dragging off. Node margin (force layout only) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -346,6 +352,26 @@ export function GraphLayoutsShowcase() {
                   options={[{ value: 'dim', label: 'Dim' }, { value: 'all', label: 'All' }]}
                 />
               </Control>
+              <Control label="Drag">
+                <SegmentedControl
+                  value={draggable ? 'on' : 'off'}
+                  onChange={(v) => setDraggable(v === 'on')}
+                  options={[{ value: 'on', label: 'On' }, { value: 'off', label: 'Off' }]}
+                />
+              </Control>
+              {layout === 'force' && (
+                <Control label="Node margin">
+                  <SegmentedControl
+                    value={nodeMarginPreset}
+                    onChange={(v) => setNodeMarginPreset(v as 'tight' | 'default' | 'wide')}
+                    options={[
+                      { value: 'tight', label: 'Tight' },
+                      { value: 'default', label: 'Default' },
+                      { value: 'wide', label: 'Wide' },
+                    ]}
+                  />
+                </Control>
+              )}
             </div>
             <p style={{ margin: 0, fontSize: 12, color: fg3, fontStyle: 'italic' }}>{dataset.description}</p>
             <div style={{ height: 520 }}>
@@ -354,18 +380,21 @@ export function GraphLayoutsShowcase() {
                   <GraphCanvas
                     // GraphCanvas only auto-fits the viewport once per mount, so anything that
                     // changes the overall footprint (a different dataset, a different layout
-                    // engine, or cards vs. compact nodes) needs a fresh mount to re-fit —
-                    // otherwise the camera stays wherever it was framed for the previous shape.
-                    // Dimming/edge-curvature/collapse state don't affect the footprint enough to
-                    // warrant it, so they're deliberately left out of this key.
-                    key={`${datasetKey}-${layout}-${nodeStyle}`}
+                    // engine, cards vs. compact nodes, or the force layout's node margin) needs a
+                    // fresh mount to re-fit — otherwise the camera stays wherever it was framed
+                    // for the previous shape. Dimming/edge-curvature/collapse/drag state don't
+                    // affect the footprint enough to warrant it, so they're deliberately left out
+                    // of this key.
+                    key={`${datasetKey}-${layout}-${nodeStyle}-${nodeMarginPreset}`}
                     nodes={dataset.nodes}
                     edges={edges}
                     layout={layout}
+                    nodeMargin={nodeMargin}
                     isStructuralEdge={isStructuralEdge}
                     showAllRelations={showAllRelations}
                     collapsedNodeIds={collapsedNodeIds}
                     onToggleCollapse={handleToggleCollapse}
+                    draggable={draggable}
                     fitView
                     fitPadding={40}
                     selectedNodeId={selectedNodeId}
