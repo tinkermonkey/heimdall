@@ -152,6 +152,55 @@ test.describe('Graph Canvas Components', () => {
     await expect(node).toHaveClass(/selected/)
   })
 
+  // Regression: a drag interrupted by pointercancel (e.g. a touch/gesture takeover) — rather than
+  // a normal pointerup — used to leak a one-time click-suppressor listener that never got a click
+  // to consume it, silently swallowing the node's next real click. Low-level pointer events
+  // (rather than page.mouse) so pointerId is under test control and matches what the component's
+  // own pointerId-matching logic expects.
+  test('a drag interrupted by pointercancel does not swallow the next click', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const cx = box.x + box.width / 2
+    const cy = box.y + box.height / 2
+
+    await node.evaluate((el, { cx, cy }) => {
+      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 77, clientX: cx, clientY: cy }))
+      el.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, pointerId: 77, clientX: cx + 50, clientY: cy + 40 }))
+      el.dispatchEvent(new PointerEvent('pointercancel', { bubbles: true, pointerId: 77 }))
+    }, { cx, cy })
+
+    // If the suppressor leaked, this first real click is the one that would get silently eaten.
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+  })
+
+  // Regression: draggable flipping to false mid-drag (this file's own toggle button makes this
+  // reachable) used to strand pointer capture and drag state, since onPointerMove/Up/Cancel are
+  // only bound while draggable is true and so never fire again to clean up after themselves.
+  test('toggling draggable off mid-drag leaves the node in a normal, clickable state', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const cx = box.x + box.width / 2
+    const cy = box.y + box.height / 2
+
+    await node.evaluate((el, { cx, cy }) => {
+      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 88, clientX: cx, clientY: cy }))
+      el.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, pointerId: 88, clientX: cx + 50, clientY: cy + 40 }))
+    }, { cx, cy })
+
+    // Flip draggable off without ever sending a pointerup/pointercancel for pointerId 88 —
+    // the gesture is abandoned mid-drag, same as the real toggle-while-dragging scenario.
+    await page.locator('[data-testid="graph-draggable-toggle"]').click()
+    await page.locator('[data-testid="graph-draggable-toggle"]').click()
+
+    // Not stuck: an ordinary click still selects normally, with no leaked suppressor from the
+    // abandoned gesture and no pointer capture still pinned to the old pointerId.
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+  })
+
   test('GraphCanvas panning works on mouse drag', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
     const viewport = page.locator('[data-testid="graph-viewport"]')
@@ -642,6 +691,16 @@ test.describe('Graph Canvas Components', () => {
       const resting = await node.evaluate(el => getComputedStyle(el).borderColor)
 
       await node.hover()
+      await expect.poll(() => node.evaluate(el => getComputedStyle(el).borderColor)).not.toBe(resting)
+    })
+
+    // Same bug, same fix, one state over: .selected had the identical dark-canvas specificity
+    // problem for border-color (box-shadow was already being reasserted here, border-color wasn't).
+    test('node selected border color still applies in dark canvas', async ({ page }) => {
+      const node = page.locator('[data-testid="graph-node-cls_cell"] .graph-node')
+      const resting = await node.evaluate(el => getComputedStyle(el).borderColor)
+
+      await node.click()
       await expect.poll(() => node.evaluate(el => getComputedStyle(el).borderColor)).not.toBe(resting)
     })
   })

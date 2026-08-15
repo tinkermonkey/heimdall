@@ -280,7 +280,22 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       startX: number
       startY: number
       dragging: boolean
+      // The <g> pointer capture was (or would be) taken on — kept so a drag can be finalized
+      // from outside its own pointer handlers (see the draggable-toggled-off effect below),
+      // not just from the pointerup/pointercancel that started it.
+      target: SVGGElement
     } | null>(null)
+
+    // draggable's own JSDoc promises a drag override persists "until the node list changes" —
+    // without this, a stale override for a since-removed (or filtered-out-and-back) node id would
+    // silently keep applying forever, since dragPositions is otherwise never cleared on its own.
+    const nodeIdsKey = useMemo(() => nodes.map(n => n.id).sort().join(' '), [nodes])
+    const didMountDragClearRef = useRef(false)
+    useEffect(() => {
+      if (!didMountDragClearRef.current) { didMountDragClearRef.current = true; return }
+      setDragPositions(new Map())
+      dragStateRef.current = null
+    }, [nodeIdsKey])
 
     // Structural hierarchy over the FULL node/edge list — independent of what's currently
     // hidden, so a collapsed node's affordance (hasChildren, hiddenDescendantCount) stays
@@ -419,7 +434,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     useEffect(() => {
       if (didCenterRef.current) return
       if (!containerSize || dims.size === 0 || visibleNodes.length === 0) return
-      if (layout === 'force' && computedPositions.size === 0) return
+      // 'manual' has no engine layout to wait on. 'force'/'galaxy' both compute positions
+      // asynchronously (see the engine-layout effect above) — without waiting for galaxy here
+      // too, this could run with computedPositions still empty, every node falling back to
+      // {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
+      if ((layout === 'force' || layout === 'galaxy') && computedPositions.size === 0) return
 
       const bbox = computeBoundingBox()
       if (!bbox) return
@@ -447,7 +466,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, padding ?? fitPadding, minZoom, maxZoom)
       zoomTo(fit.zoom)
       panTo(fit.panX, fit.panY)
-    }, [computeBoundingBox, containerSize, fitPadding, zoomTo, panTo])
+    }, [computeBoundingBox, containerSize, fitPadding, minZoom, maxZoom, zoomTo, panTo])
 
 
     const getNodeRect = useCallback((id: string) => {
@@ -483,6 +502,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         startX: pos.x,
         startY: pos.y,
         dragging: false,
+        target: e.currentTarget,
       }
     }, [draggable, getNodePosition])
 
@@ -502,22 +522,50 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       })
     }, [viewport.zoom])
 
-    const handleNodePointerUp = useCallback((e: React.PointerEvent<SVGGElement>) => {
+    // Shared by a real pointerup/pointercancel and by the draggable-toggled-off effect below —
+    // either way, a drag that was actually in progress needs the same finalization: fire
+    // onNodeDragEnd once with wherever it ended up, then clear drag state so nothing's left
+    // stranded. suppressUpcomingClick is only true for a genuine pointerup: that's the only case
+    // the browser follows with a synthetic click (pointercancel — e.g. a touch/gesture takeover —
+    // never gets one), so registering the one-time suppressor for pointercancel would just leak an
+    // event listener that never fires, silently swallowing that node's next real click forever.
+    const finalizeDrag = useCallback((suppressUpcomingClick: boolean) => {
       const state = dragStateRef.current
-      if (!state || state.pointerId !== e.pointerId) return
+      if (!state) return
       if (state.dragging) {
-        // A real drag happened — swallow the click the browser fires right after this pointerup
-        // (once, capture phase) so it doesn't also invoke the node's onSelect, same as a plain
-        // click would. Read the final position from state rather than the closure's `next` above
-        // since this handler doesn't have it in scope.
-        const target = e.currentTarget
-        const suppressClick = (ev: MouseEvent) => { ev.stopPropagation(); ev.preventDefault() }
-        target.addEventListener('click', suppressClick, { capture: true, once: true })
+        if (suppressUpcomingClick) {
+          const target = state.target
+          const suppressClick = (ev: MouseEvent) => { ev.stopPropagation(); ev.preventDefault() }
+          target.addEventListener('click', suppressClick, { capture: true, once: true })
+        }
         const finalPos = dragPositions.get(state.id) ?? { x: state.startX, y: state.startY }
         onNodeDragEnd?.(state.id, finalPos)
       }
       dragStateRef.current = null
     }, [dragPositions, onNodeDragEnd])
+
+    const handleNodePointerUp = useCallback((e: React.PointerEvent<SVGGElement>) => {
+      const state = dragStateRef.current
+      if (!state || state.pointerId !== e.pointerId) return
+      finalizeDrag(e.type === 'pointerup')
+    }, [finalizeDrag])
+
+    // draggable can flip to false mid-gesture (this library's own docs demo exposes exactly this
+    // toggle) — onPointerMove/Up/Cancel below are only bound while draggable is true, so React
+    // unbinds them immediately and the trailing pointerup/cancel that would otherwise finalize the
+    // drag never reaches this component. Without this, that leaves pointer capture unreleased and
+    // dragStateRef permanently set — the node reads as stuck mid-drag and onNodeDragEnd never
+    // fires despite a real drag having happened. Finalizes exactly like a normal pointerup would,
+    // just triggered by the prop change instead of the pointer event.
+    useEffect(() => {
+      if (draggable) return
+      const state = dragStateRef.current
+      if (!state) return
+      if (state.dragging) {
+        try { state.target.releasePointerCapture(state.pointerId) } catch { /* already released */ }
+      }
+      finalizeDrag(false)
+    }, [draggable, finalizeDrag])
 
     // Every visible node's rect, for edges to steer their label clear of (see
     // findClearLabelPosition). Recomputes on the same cadence as getNodeRect itself — layout and
