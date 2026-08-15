@@ -53,8 +53,9 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
 
     if (!stacks || stacks.length === 0) return null
 
-    const totals = stacks.map(s => s.parts.reduce((a, b) => a + b, 0))
-    const hi = normalized ? 1 : Math.max(...totals)
+    const totals = stacks.map(s => s.parts.reduce((a, b) => (isNaN(a) || isNaN(b)) ? NaN : a + b, 0))
+    const validTotals = totals.filter(t => !isNaN(t))
+    const hi = normalized ? 1 : (validTotals.length > 0 ? Math.max(...validTotals) : 1)
     const n = stacks.length
     const gap = Math.max(2, (innerW / n) * 0.22)
     const bw = (innerW - gap * (n - 1)) / n
@@ -103,14 +104,15 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
           return (
             <g key={si}>
               {s.parts.map((p, pi) => {
+                if (isNaN(p)) return null
                 const v = normalized ? p / total : p
                 const ph = (v / (hi || 1)) * innerH
                 const y = pad.top + innerH - acc - ph
                 acc += ph
                 return <rect key={pi} x={x} y={y} width={bw} height={ph} fill={cs[pi % cs.length]} />
               })}
-              {stackLabel && (
-                <text x={x + bw / 2} y={pad.top - 6}
+              {stackLabel && !isNaN(totals[si]) && (
+                <text x={x + bw / 2} y={yAt(totals[si]) - 6}
                   textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
                   {stackLabel === 'total' ? fmt(totals[si]) : stackLabel(s)}
                 </text>

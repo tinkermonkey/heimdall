@@ -214,6 +214,53 @@ test.describe('Chart Components', () => {
       expect(hasYPercent).toBe(true)
       expect(hasStackTotal).toBe(true)
     })
+
+    test('does not render NaN labels for stacks with NaN parts', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-with-nan-and-zero"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Check that no text element contains "NaN"
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        expect(t).not.toBe('NaN')
+      }
+    })
+
+    test('renders "0" label for zero-sum stacks', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-with-nan-and-zero"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Should contain a "0" label for the zero-sum stack
+      let hasZeroLabel = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t === '0') { hasZeroLabel = true; break }
+      }
+      expect(hasZeroLabel).toBe(true)
+    })
+
+    test('stackLabel positions above each bar proportionally', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-total"]')
+      await expect(el).toBeVisible()
+      // Get all text elements that represent stack labels (numeric totals)
+      const texts = el.locator('text')
+      const labels = []
+      for (let i = 0; i < await texts.count(); i++) {
+        const textEl = texts.nth(i)
+        const content = await textEl.textContent()
+        // Stack labels are numeric and positioned at top (low y values)
+        if (content && /^\d+$/.test(content)) {
+          const y = await textEl.evaluate((e: SVGTextElement) => parseFloat(e.getAttribute('y') ?? '0'))
+          labels.push({ content, y })
+        }
+      }
+      // Should have multiple labels with varying y positions (different heights)
+      expect(labels.length).toBeGreaterThan(1)
+      const yValues = labels.map(l => l.y)
+      // Y values should not all be the same (labels at different heights)
+      const uniqueYs = new Set(yValues)
+      expect(uniqueYs.size).toBeGreaterThan(1)
+    })
   })
 
   // ── Donut ──────────────────────────────────────────────────────────────────

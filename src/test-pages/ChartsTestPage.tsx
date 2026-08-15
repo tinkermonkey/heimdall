@@ -32,6 +32,16 @@ const STACKS = [
   { label: 'Sun', parts: [31, 22, 6, 4] },
 ]
 
+const STACKS_WITH_NAN = [
+  { label: 'Mon', parts: [42, 28, 14, 8] },
+  { label: 'Tue', parts: [48, 31, 12, 11] },
+  { label: 'Wed', parts: [0, 0, 0, 0] },
+  { label: 'Thu', parts: [52, 34, 9, 14] },
+  { label: 'Fri', parts: [NaN, 30, 11, 7] },
+  { label: 'Sat', parts: [44, 24, 8, 5] },
+  { label: 'Sun', parts: [31, 22, 6, 4] },
+]
+
 const DONUT_SLICES = [
   { value: 134, color: '#10B981' },
   { value: 72,  color: '#818CF8' },
@@ -264,6 +274,14 @@ export default function ChartsTestPage() {
         <div style={card}>
           <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4} normalized stackLabel="total"
             data-testid="stackedbar-stacklabel-normalized" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('StackedBar · with zero-sum and NaN stacks')}
+        <div style={card}>
+          <StackedBar stacks={STACKS_WITH_NAN} width={480} height={180} axes grid ticks={4} stackLabel="total"
+            data-testid="stackedbar-with-nan-and-zero" />
         </div>
       </section>
 
