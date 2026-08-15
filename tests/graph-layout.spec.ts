@@ -101,4 +101,53 @@ test.describe('forceLayout', () => {
 
     expect(maxOverlap(nodes, positions)).toBeLessThanOrEqual(OVERLAP_TOLERANCE)
   })
+
+  // Box-edge-to-box-edge gap between two connected nodes along a single axis — negative means
+  // overlap, 0 means flush, positive means genuine breathing room.
+  function gapBetween(a: LayoutNode, b: LayoutNode, positions: Map<string, { x: number; y: number }>): number {
+    const pa = positions.get(a.id)!
+    const pb = positions.get(b.id)!
+    const centerDistance = Math.hypot(pb.x - pa.x, pb.y - pa.y)
+    return centerDistance - (Math.hypot(a.width, a.height) + Math.hypot(b.width, b.height)) / 2
+  }
+
+  test('nodeMargin defaults to each node\'s own width, leaving a visible gap for the edge between two connected cards', () => {
+    const a: LayoutNode = { id: 'a', x: -60, y: 0, width: 200, height: 110 }
+    const b: LayoutNode = { id: 'b', x: 60, y: 0, width: 200, height: 110 }
+    const edges: LayoutEdge[] = [{ source: 'a', target: 'b' }]
+
+    const positions = forceLayout([a, b], edges)
+
+    // Default margin (200, each node's own width) is on the same order as the nodes themselves —
+    // the settled gap should clearly read as "a visible edge", not "boxes touching".
+    expect(gapBetween(a, b, positions)).toBeGreaterThan(100)
+  })
+
+  test('nodeMargin: 0 packs connected nodes tighter than the default per-node-width margin', () => {
+    const seed = (): [LayoutNode, LayoutNode] => [
+      { id: 'a', x: -60, y: 0, width: 200, height: 110 },
+      { id: 'b', x: 60, y: 0, width: 200, height: 110 },
+    ]
+    const edges: LayoutEdge[] = [{ source: 'a', target: 'b' }]
+
+    const [aDefault, bDefault] = seed()
+    const defaultPositions = forceLayout([aDefault, bDefault], edges)
+    const [aTight, bTight] = seed()
+    const tightPositions = forceLayout([aTight, bTight], edges, { nodeMargin: 0 })
+
+    expect(gapBetween(aTight, bTight, tightPositions)).toBeLessThan(gapBetween(aDefault, bDefault, defaultPositions))
+  })
+
+  test('nodeMargin: a fixed number overrides the per-node-width default for every node', () => {
+    const a: LayoutNode = { id: 'a', x: -60, y: 0, width: 200, height: 110 }
+    const b: LayoutNode = { id: 'b', x: 60, y: 0, width: 40, height: 20 }
+    const edges: LayoutEdge[] = [{ source: 'a', target: 'b' }]
+
+    // A small fixed margin should pack this mismatched pair tighter than the default, where a's
+    // own 200px margin alone would otherwise dominate the rest length.
+    const positions = forceLayout([a, b], edges, { nodeMargin: 10 })
+
+    expect(gapBetween(a, b, positions)).toBeLessThan(60)
+    expect(maxOverlap([a, b], positions)).toBeLessThanOrEqual(OVERLAP_TOLERANCE)
+  })
 })

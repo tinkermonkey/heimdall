@@ -20,6 +20,19 @@ export interface ForceLayoutOptions {
   damping?: number
   centerStrength?: number
   collisionStrength?: number
+  /**
+   * Extra breathing room kept clear around each node's own footprint, on top of what's needed to
+   * just avoid overlap. This is what actually leaves room for an edge to be visible between two
+   * connected nodes instead of their boxes settling nearly flush — with substantial cards
+   * (renderNode content), the tightest-legal-packing default previously used left edges with
+   * almost no visible line, reading as if edges were missing entirely.
+   *
+   * Defaults to each node's own width, which reads well for both compact chips and substantial
+   * cards without extra configuration — a wider card asks for more clearance around itself.
+   * Pass a fixed number to use the same margin for every node regardless of size, or 0 to go back
+   * to the tightest legal packing.
+   */
+  nodeMargin?: number
 }
 
 export function forceLayout(
@@ -35,20 +48,29 @@ export function forceLayout(
     damping = 0.85,
     centerStrength = 0.005,
     collisionStrength = 0.3,
+    nodeMargin,
   } = options
 
   if (nodes.length === 0) return new Map()
 
+  // See ForceLayoutOptions.nodeMargin. undefined -> each node's own width; a number -> that
+  // fixed margin for every node.
+  const marginFor = (n: LayoutNode): number => nodeMargin ?? n.width
+
   // Rest length actually used for a given edge — never shorter than what the two connected
-  // boxes' own footprints need to clear each other. springLength alone is a flat constant with
-  // no awareness of node size: fine for default-ish chip-sized nodes (where it's already larger
-  // than two half-diagonals combined, so this is a no-op), but for substantially larger nodes
-  // (e.g. card-style renderNode content) a 160px rest length can be shorter than the boxes
-  // themselves — the spring then permanently pulls connected large nodes into overlap, and the
-  // capped separation-pass post-process below can only partially fight that every cycle, never
-  // fully winning for bushier graphs with several large nodes competing around one hub.
+  // boxes' own footprints need to clear each other, plus their averaged margin. springLength
+  // alone is a flat constant with no awareness of node size: fine for default-ish chip-sized
+  // nodes (where it's already larger than two half-diagonals combined, so this is a no-op), but
+  // for substantially larger nodes (e.g. card-style renderNode content) a 160px rest length can
+  // be shorter than the boxes themselves — the spring then permanently pulls connected large
+  // nodes into overlap, and the capped separation-pass post-process below can only partially
+  // fight that every cycle, never fully winning for bushier graphs with several large nodes
+  // competing around one hub.
   const restLength = (a: LayoutNode, b: LayoutNode): number =>
-    Math.max(springLength, (Math.hypot(a.width, a.height) + Math.hypot(b.width, b.height)) / 2 * 1.1)
+    Math.max(
+      springLength,
+      (Math.hypot(a.width, a.height) + Math.hypot(b.width, b.height)) / 2 * 1.1 + (marginFor(a) + marginFor(b)) / 2
+    )
 
   const vx = new Map<string, number>(nodes.map(n => [n.id, 0]))
   const vy = new Map<string, number>(nodes.map(n => [n.id, 0]))
@@ -75,16 +97,22 @@ export function forceLayout(
         if (!a.pinned) { vx.set(a.id, vx.get(a.id)! - fx); vy.set(a.id, vy.get(a.id)! - fy) }
         if (!b.pinned) { vx.set(b.id, vx.get(b.id)! + fx); vy.set(b.id, vy.get(b.id)! + fy) }
 
-        // Collision: an extra corrective push for any pair whose boxes currently overlap,
-        // proportional to overlap depth — same idea as the separationPass post-process below,
-        // but applied continuously as a soft force during the simulation instead of only in a
-        // fixed-budget pass at the end. Generic inverse-square repulsion above has no notion of
-        // node size, so for large nodes (e.g. card-style renderNode content) — especially several
-        // of them fanned out as siblings around one hub, which aren't spring-connected to each
-        // other at all — it alone settles into an equilibrium with real box overlap that
-        // repulsion never resolves on its own.
-        const overlapX = (a.width + b.width) / 2 - Math.abs(dx)
-        const overlapY = (a.height + b.height) / 2 - Math.abs(dy)
+        // Collision: an extra corrective push for any pair currently closer than their combined
+        // margin-padded footprints, proportional to the overlap depth — same idea as the
+        // separationPass post-process below (which stays literal/unpadded — see resolveOverlaps),
+        // but applied continuously as a soft force during the simulation, against padded
+        // footprints so it also contributes to the "spread out" effect nodeMargin asks for,
+        // instead of only in a fixed-budget pass at the end. Generic inverse-square repulsion
+        // above has no notion of node size, so for large nodes (e.g. card-style renderNode
+        // content) — especially several of them fanned out as siblings around one hub, which
+        // aren't spring-connected to each other at all — it alone settles into an equilibrium
+        // with real box overlap that repulsion never resolves on its own.
+        const paddedWidthA = a.width + marginFor(a)
+        const paddedWidthB = b.width + marginFor(b)
+        const paddedHeightA = a.height + marginFor(a)
+        const paddedHeightB = b.height + marginFor(b)
+        const overlapX = (paddedWidthA + paddedWidthB) / 2 - Math.abs(dx)
+        const overlapY = (paddedHeightA + paddedHeightB) / 2 - Math.abs(dy)
         if (overlapX > 0 && overlapY > 0) {
           const depth = Math.min(overlapX, overlapY) * collisionStrength
           const cfx = (dx / dist) * depth
