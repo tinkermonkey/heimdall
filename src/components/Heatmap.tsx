@@ -56,7 +56,7 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
     const cw = (width - pad.left - pad.right) / cols
     const ch = (height - pad.top - pad.bottom) / rows
 
-    const flat = data.flat().filter((v): v is number => v != null)
+    const flat = data.flat().filter((v): v is number => v != null && !isNaN(v))
     const lo = flat.length ? Math.min(...flat) : 0
     const hi = flat.length ? Math.max(...flat) : 1
 
@@ -65,7 +65,7 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
     const formatValue = valueFormat ?? fmt
 
     function shade(v: number | null): string {
-      if (v == null) return T.inset
+      if (v == null || isNaN(v)) return T.inset
       const t = (v - lo) / (hi - lo || 1)
       const alpha = Math.round((0.12 + t * 0.88) * 255).toString(16).padStart(2, '0')
       return `#${base}${alpha}`

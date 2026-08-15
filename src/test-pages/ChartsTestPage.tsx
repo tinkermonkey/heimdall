@@ -59,6 +59,29 @@ const HEATMAP = (() => {
   return rows
 })()
 
+const HEATMAP_WITH_NAN = (() => {
+  const rows = []
+  for (let r = 0; r < 7; r++) {
+    const row = []
+    for (let c = 0; c < 24; c++) {
+      if ((r === 1 && c === 5) || (r === 3 && c === 12)) {
+        row.push(null)
+      } else if (r === 2 && c === 8) {
+        row.push(NaN)
+      } else if (r === 4 && c === 15) {
+        row.push(NaN)
+      } else {
+        const m = Math.sin((c - 8) / 24 * Math.PI) * 0.5 + 0.5
+        const e = Math.exp(-Math.pow(c - 20, 2) / 8) * 0.8
+        const wknd = (r === 5 || r === 6) ? 0.7 : 1
+        row.push(Math.max(0, (m * 0.4 + e * 0.6) * wknd * 0.9))
+      }
+    }
+    rows.push(row)
+  }
+  return rows
+})()
+
 const TIMELINE = [
   { label: 'graph daemon', segments: [
     { start: 0,  end: 22, kind: 'ok' as const },
@@ -312,6 +335,17 @@ export default function ChartsTestPage() {
             yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
             xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
             data-testid="heatmap-valueformat" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · NaN handling with showValues')}
+        <div style={card}>
+          <Heatmap data={HEATMAP_WITH_NAN} width={460} height={140}
+            baseColor="#10B981" axes showValues
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-nan" />
         </div>
       </section>
 

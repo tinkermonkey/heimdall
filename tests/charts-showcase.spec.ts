@@ -281,30 +281,50 @@ test.describe('Chart Components', () => {
     test('showValues renders numeric values in cells', async ({ page }) => {
       const el = page.locator('svg[data-testid="heatmap-showvalues"]')
       await expect(el).toBeVisible()
+      // Get all text elements; cell values have y-coordinates around cell centers,
+      // axis labels are positioned at the edges. Filter by position to exclude axis labels.
+      const svgBox = await el.boundingBox()
+      if (!svgBox) throw new Error('SVG not found')
       const texts = el.locator('text')
-      let hasNumericValue = false
+      let hasNumericCellValue = false
       for (let i = 0; i < await texts.count(); i++) {
-        const t = await texts.nth(i).textContent()
-        if (t && /^\d/.test(t)) { hasNumericValue = true; break }
+        const textEl = texts.nth(i)
+        const box = await textEl.boundingBox()
+        const t = await textEl.textContent()
+        // Cell values are interior; skip text at SVG edges (axis labels)
+        if (box && t && /^0\.\d+$/.test(t) && box.y > svgBox.y + 10 && box.y < svgBox.y + svgBox.height - 20) {
+          hasNumericCellValue = true
+          break
+        }
       }
-      expect(hasNumericValue).toBe(true)
+      expect(hasNumericCellValue).toBe(true)
     })
 
     test('valueFormat custom function is applied to cell values', async ({ page }) => {
       const el = page.locator('svg[data-testid="heatmap-valueformat"]')
       await expect(el).toBeVisible()
+      // Cell values formatted by valueFormat function (rounded integers like 0, 1, etc)
+      // Exclude axis labels '0', '6', '12', etc by checking y-position
+      const svgBox = await el.boundingBox()
+      if (!svgBox) throw new Error('SVG not found')
       const texts = el.locator('text')
-      // Should have values formatted by the custom function (rounded integers)
-      let hasFormattedValue = false
+      let hasFormattedCellValue = false
       for (let i = 0; i < await texts.count(); i++) {
-        const t = await texts.nth(i).textContent()
-        if (t && /^\d+$/.test(t)) { hasFormattedValue = true; break }
+        const textEl = texts.nth(i)
+        const box = await textEl.boundingBox()
+        const t = await textEl.textContent()
+        // Cell values are in the interior; axis labels are at bottom (y near svgBox.height)
+        if (box && t && /^\d$/.test(t) && box.y < svgBox.y + svgBox.height - 25) {
+          hasFormattedCellValue = true
+          break
+        }
       }
-      expect(hasFormattedValue).toBe(true)
+      expect(hasFormattedCellValue).toBe(true)
     })
 
     test('showValues does not render NaN values', async ({ page }) => {
-      const el = page.locator('svg[data-testid="heatmap-standard"]')
+      const el = page.locator('svg[data-testid="heatmap-nan"]')
+      await expect(el).toBeVisible()
       const texts = el.locator('text')
       for (let i = 0; i < await texts.count(); i++) {
         const t = await texts.nth(i).textContent()
