@@ -3,11 +3,13 @@ import {
   GraphCanvas,
   GraphNode,
   GraphInspector,
+  GraphEdgeInspector,
   TopologyNode,
   SplitPane,
   type GraphNodeData,
   type GraphEdgeData,
   type GraphNodeMetadata,
+  type GraphEdgeMetadata,
   type RelationshipLink,
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
@@ -79,20 +81,24 @@ const EDGE_VARIANT_EDGES: GraphEdgeData[] = [
 ]
 
 export function GraphEdgeShowcase() {
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
+
   const renderNode = useCallback((node: GraphNodeData) => (
     <GraphNode id={node.id} label={node.label} kind={node.kind} domainColor={node.domainColor} />
   ), [])
 
   return (
     <div>
-      <PageHeader name="GraphEdge" description="SVG bezier edge drawn between two nodes inside a GraphCanvas. Supports variant styling for active and deprecated relationships." />
-      <ShowcaseSection label="Variant comparison" description="Default (neutral), hot (active/highlighted), and irrelevant (deprecated/dashed) variants shown side-by-side.">
+      <PageHeader name="GraphEdge" description="SVG bezier edge drawn between two nodes inside a GraphCanvas. Supports variant styling for active and deprecated relationships, and click-to-select on either the line or its label." />
+      <ShowcaseSection label="Variant comparison" description="Default (neutral), hot (active/highlighted), and irrelevant (deprecated/dashed) variants shown side-by-side. Hover a line or its label; click one to select it.">
         <DemoCard>
           <div style={{ height: 400 }}>
             <GraphCanvas
               nodes={EDGE_VARIANT_NODES}
               edges={EDGE_VARIANT_EDGES}
               renderNode={renderNode}
+              selectedEdgeId={selectedEdgeId}
+              onEdgeSelect={setSelectedEdgeId}
               style={{ width: '100%', height: '100%' }}
             />
           </div>
@@ -103,8 +109,10 @@ export function GraphEdgeShowcase() {
           <PropRow name="id" type="string" description="Unique edge identifier" />
           <PropRow name="sourceId" type="string" description="ID of the source node" />
           <PropRow name="targetId" type="string" description="ID of the target node" />
-          <PropRow name="label" type="string" description="Optional text label rendered at the midpoint of the edge" />
+          <PropRow name="label" type="string" description="Optional text label rendered along the edge. Automatically nudged off its default midpoint to clear nearby nodes (see findClearLabelPosition), never repositioned onto another edge or node's path." />
           <PropRow name="variant" type="'default' | 'hot' | 'irrelevant'" def="'default'" description="Visual style: default is neutral, hot highlights an active relationship in amber, irrelevant renders a dashed rose line for deprecated links" />
+          <PropRow name="selected" type="boolean" def="false" description="Renders the line and label in the accent color" />
+          <PropRow name="onSelect" type="(id: string) => void" description="Called when the line or label is clicked, or activated via Enter/Space while focused. Without it the edge renders but isn't interactive." />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -168,6 +176,17 @@ export function GraphNodeShowcase() {
 
 export function GraphCanvasShowcase() {
   const [selectedId, setSelectedId] = useState<string | undefined>()
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
+
+  const handleNodeSelect = useCallback((id: string) => {
+    setSelectedId(id)
+    setSelectedEdgeId(undefined)
+  }, [])
+
+  const handleEdgeSelect = useCallback((id: string) => {
+    setSelectedEdgeId(id)
+    setSelectedId(undefined)
+  }, [])
 
   const renderNode = useCallback((node: GraphNodeData, selected: boolean) => (
     <GraphNode
@@ -176,9 +195,9 @@ export function GraphCanvasShowcase() {
       kind={node.kind}
       domainColor={node.domainColor}
       selected={selected}
-      onSelect={setSelectedId}
+      onSelect={handleNodeSelect}
     />
-  ), [])
+  ), [handleNodeSelect])
 
   const selectedNode = NODES.find(n => n.id === selectedId)
   const inspectorData: GraphNodeMetadata | undefined = selectedNode
@@ -211,10 +230,27 @@ export function GraphCanvasShowcase() {
       }
     })
 
+  const selectedEdge = EDGES.find(e => e.id === selectedEdgeId)
+  const edgeSource = selectedEdge && NODES.find(n => n.id === selectedEdge.sourceId)
+  const edgeTarget = selectedEdge && NODES.find(n => n.id === selectedEdge.targetId)
+  const edgeInspectorData: GraphEdgeMetadata | undefined = selectedEdge && edgeSource && edgeTarget
+    ? {
+        id: selectedEdge.id,
+        predicate: selectedEdge.label ?? 'related',
+        sourceId: edgeSource.id,
+        sourceTitle: edgeSource.title ?? edgeSource.label,
+        sourceDomain: edgeSource.domain,
+        targetId: edgeTarget.id,
+        targetTitle: edgeTarget.title ?? edgeTarget.label,
+        targetDomain: edgeTarget.domain,
+        variant: selectedEdge.variant,
+      }
+    : undefined
+
   return (
     <div>
       <PageHeader name="GraphCanvas" description="Pan-and-zoom SVG/HTML graph canvas. Renders GraphNode children positioned at (x, y) and GraphEdge children as bezier curves between nodes." />
-      <ShowcaseSection label="Interactive canvas" description="Pan by dragging the canvas. Click a node to select it and inspect it in the panel.">
+      <ShowcaseSection label="Interactive canvas" description="Pan by dragging the canvas; scroll to zoom, anchored under the cursor. Click a node or an edge (line or label) to select and inspect it in the panel.">
         <DemoCard>
           <div style={{ height: 360, position: 'relative' }}>
             <SplitPane
@@ -223,16 +259,25 @@ export function GraphCanvasShowcase() {
                   nodes={NODES}
                   edges={EDGES}
                   selectedNodeId={selectedId}
-                  onNodeSelect={setSelectedId}
+                  onNodeSelect={handleNodeSelect}
+                  selectedEdgeId={selectedEdgeId}
+                  onEdgeSelect={handleEdgeSelect}
                   renderNode={renderNode}
                   style={{ width: '100%', height: '100%' }}
                 />
               }
               second={
-                <div style={{ padding: 16, overflowY: 'auto', height: '100%' }}>
-                  {inspectorData
-                    ? <GraphInspector node={inspectorData} relationships={relationships} />
-                    : <p style={{ fontSize: 13, color: fg2 }}>Select a node to inspect it.</p>
+                // box-sizing: border-box so the padding doesn't push this column past 100% of
+                // .split-pane__second's height and force a scrollbar with nothing selected.
+                // minHeight (not height): a fixed height would let the default flex-shrink
+                // compress GraphEdgeInspector's stacked panels instead of letting the ancestor
+                // pane scroll them.
+                <div style={{ padding: 16, boxSizing: 'border-box', minHeight: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {edgeInspectorData
+                    ? <GraphEdgeInspector edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
+                    : inspectorData
+                      ? <GraphInspector node={inspectorData} relationships={relationships} />
+                      : <p style={{ fontSize: 13, color: fg2, margin: 0 }}>Select a node or edge to inspect it.</p>
                   }
                 </div>
               }
@@ -247,12 +292,16 @@ export function GraphCanvasShowcase() {
           <PropRow name="edges" type="GraphEdgeData[]" def="[]" description="Edge definitions linking node IDs with optional labels" />
           <PropRow name="selectedNodeId" type="string" description="Currently selected node ID (controlled)" />
           <PropRow name="onNodeSelect" type="(id: string) => void" description="Called when a node is clicked" />
+          <PropRow name="selectedEdgeId" type="string" description="Currently selected edge ID (controlled)" />
+          <PropRow name="onEdgeSelect" type="(id: string) => void" description="Called when an edge's line or label is clicked. Without it, edges render but aren't interactive." />
           <PropRow name="renderNode" type="(node: GraphNodeData, selected: boolean) => ReactNode" description="Custom node renderer. Omit to use the default GraphNode." />
           <PropRow name="layout" type="'manual' | 'force' | 'galaxy'" def="'manual'" description="'manual' uses explicit x/y per node; 'force' runs a spring layout; 'galaxy' arranges nodes as a radial hierarchy of orbits built from structural edges" />
           <PropRow name="isStructuralEdge" type="(edge: GraphEdgeData) => boolean" description="Classifies an edge as structural (shapes the 'galaxy' hierarchy, source = parent) vs. relational (rendered but layout-irrelevant, dimmed unless hovered/selected or showAllRelations is set). Omit to treat every edge as structural." />
           <PropRow name="showAllRelations" type="boolean" def="false" description="With isStructuralEdge set, renders every non-structural edge at full opacity instead of dimming it" />
           <PropRow name="collapsedNodeIds" type="ReadonlySet<string>" description="IDs of nodes whose structural descendants (per isStructuralEdge) should be hidden — the collapsed node itself stays visible. Controlled: pair with onToggleCollapse or nothing changes when a node's toggle is clicked." />
           <PropRow name="onToggleCollapse" type="(nodeId: string) => void" description="Called when a node's collapse/expand affordance is activated. Wiring this is also what makes the default GraphNode render its collapse toggle at all." />
+          <PropRow name="minZoom" type="number" def="0.05" description="Lower zoom bound. Permissive by default so a large graph can always be zoomed out far enough to fit in frame." />
+          <PropRow name="maxZoom" type="number" def="8" description="Upper zoom bound." />
         </PropsTable>
       </ShowcaseSection>
       <ShowcaseSection label="Props (GraphNode)">
@@ -321,6 +370,65 @@ export function GraphInspectorShowcase() {
           <PropRow name="relationships" type="RelationshipLink[]" def="[]" description="Edges connected to the selected node, split into incoming and outgoing sections." />
           <PropRow name="onNodeSelect" type="(nodeId: string) => void" description="Called when a relationship target button is clicked, enabling navigation to that node." />
           <PropRow name="emptyStateText" type="string" def="'Select a node to inspect.'" description="Text shown when no node is selected." />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+export function GraphEdgeInspectorShowcase() {
+  const edge: GraphEdgeMetadata = {
+    id: 'o_brca1_protein',
+    predicate: 'encodes',
+    sourceId: 'cls_brca1',
+    sourceTitle: 'BRCA1',
+    sourceDomain: 'life',
+    targetId: 'cls_protein',
+    targetTitle: 'Protein',
+    targetDomain: 'life',
+    weight: 62,
+  }
+
+  const hotEdge: GraphEdgeMetadata = {
+    ...edge,
+    id: 'ee2',
+    predicate: 'callsInto',
+    sourceId: 'svc_gateway',
+    sourceTitle: 'API Gateway',
+    sourceDomain: 'software',
+    targetId: 'svc_auth',
+    targetTitle: 'Auth Service',
+    targetDomain: 'software',
+    variant: 'hot',
+    weight: 88,
+  }
+
+  return (
+    <div>
+      <PageHeader
+        name="GraphEdgeInspector"
+        description="Detail panel for a selected edge — same head/body visual language as GraphInspector, so the two read as one family when stacked: source node panel, this, target node panel below it."
+      />
+      <ShowcaseSection label="Edge detail panel" description="Typical usage: pair with GraphInspector for the edge's source and target, stacked source → edge → target when an edge is selected.">
+        <div style={{ maxWidth: 320, border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 8, overflow: 'hidden' }}>
+          <GraphEdgeInspector edge={edge} onNodeSelect={() => {}} />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Hot variant, no endpoint navigation" description="Without onNodeSelect the endpoints render as plain text instead of buttons.">
+        <div style={{ maxWidth: 320, border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 8, overflow: 'hidden' }}>
+          <GraphEdgeInspector edge={hotEdge} />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Empty state (no edge selected)">
+        <div style={{ maxWidth: 320, height: 100, border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 8, overflow: 'hidden' }}>
+          <GraphEdgeInspector edge={null} />
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="edge" type="GraphEdgeMetadata | null" description="Edge to inspect. When null or undefined, the empty state is shown." />
+          <PropRow name="onNodeSelect" type="(nodeId: string) => void" description="Called when the source or target endpoint is clicked. Omit to render both as plain text." />
+          <PropRow name="emptyStateText" type="string" def="'Select an edge to inspect.'" description="Text shown when no edge is selected." />
         </PropsTable>
       </ShowcaseSection>
     </div>

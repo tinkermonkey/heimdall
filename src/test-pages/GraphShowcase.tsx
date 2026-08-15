@@ -3,6 +3,7 @@ import { GraphCanvas } from '../components/GraphCanvas'
 import { GraphCanvasContext } from '../components/GraphCanvasContext'
 import GraphNode from '../components/GraphNode'
 import GraphInspector, { type GraphNodeMetadata, type RelationshipLink } from '../components/GraphInspector'
+import GraphEdgeInspector, { type GraphEdgeMetadata } from '../components/GraphEdgeInspector'
 import { SplitPane } from '../components/SplitPane'
 import TopologyNode, { type TopologyNodeStatus } from '../components/TopologyNode'
 import type { EdgeAnchor } from '../utils/graph'
@@ -174,10 +175,21 @@ const TOPOLOGY_NODES = [
 
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
   const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy'>('graph')
   const [showAllRelations, setShowAllRelations] = useState(false)
   const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
+
+  const handleNodeSelect = useCallback((id: string) => {
+    setSelectedNodeId(id)
+    setSelectedEdgeId(undefined)
+  }, [])
+
+  const handleEdgeSelect = useCallback((id: string) => {
+    setSelectedEdgeId(id)
+    setSelectedNodeId(undefined)
+  }, [])
 
   const handleToggleCollapse = useCallback((id: string) => {
     setCollapsedNodeIds(prev => {
@@ -217,6 +229,23 @@ export default function GraphShowcase() {
         })
     : []
 
+  const selectedEdge = selectedEdgeId ? GRAPH_EDGES.find(e => e.id === selectedEdgeId) : undefined
+  const edgeSourceNode = selectedEdge ? GRAPH_NODES.find(n => n.id === selectedEdge.sourceId) : undefined
+  const edgeTargetNode = selectedEdge ? GRAPH_NODES.find(n => n.id === selectedEdge.targetId) : undefined
+  const edgeInspectorData: GraphEdgeMetadata | undefined = selectedEdge && edgeSourceNode && edgeTargetNode
+    ? {
+        id: selectedEdge.id,
+        predicate: selectedEdge.label ?? 'related',
+        sourceId: edgeSourceNode.id,
+        sourceTitle: edgeSourceNode.title || edgeSourceNode.label,
+        sourceDomain: edgeSourceNode.domain,
+        targetId: edgeTargetNode.id,
+        targetTitle: edgeTargetNode.title || edgeTargetNode.label,
+        targetDomain: edgeTargetNode.domain,
+        weight: selectedEdge.weight,
+      }
+    : undefined
+
   const renderGraphNode = useCallback((node: GraphNodeData, selected: boolean) => (
     <GraphNode
       id={node.id}
@@ -224,14 +253,14 @@ export default function GraphShowcase() {
       kind={node.kind}
       domainColor={node.domainColor}
       selected={selected}
-      onSelect={setSelectedNodeId}
+      onSelect={handleNodeSelect}
     />
-  ), [])
+  ), [handleNodeSelect])
 
   const renderFitViewNode = useCallback((node: GraphNodeData, selected: boolean) => {
     if (node.id === 'fv_controls') return <FitViewControls />
-    return <GraphNode id={node.id} label={node.label} selected={selected} onSelect={setSelectedNodeId} />
-  }, [])
+    return <GraphNode id={node.id} label={node.label} selected={selected} onSelect={handleNodeSelect} />
+  }, [handleNodeSelect])
 
   // Proves galaxy layout works for substantial-size cards, not just compact GraphNode chips —
   // TopologyNode is ~180px+ wide and grows with each metric row, versus GraphNode's ~30px tall
@@ -247,7 +276,7 @@ export default function GraphShowcase() {
           status={GALAXY_CARD_STATUS[node.domainColor ?? ''] ?? 'idle'}
           metrics={[{ label: 'Weight', value: `${percent}%`, percent, sparklineData: [], color: 'amber' }]}
           selected={selected}
-          onSelect={() => setSelectedNodeId(node.id)}
+          onSelect={() => handleNodeSelect(node.id)}
         />
         {hierarchy?.hasChildren && hierarchy.onToggleCollapse && (
           // No data-testid: GraphCanvas renders this content twice (once off-screen for
@@ -278,7 +307,7 @@ export default function GraphShowcase() {
         )}
       </div>
     )
-  }, [])
+  }, [handleNodeSelect])
 
   const graphCanvas = (
     <GraphCanvas
@@ -286,7 +315,9 @@ export default function GraphShowcase() {
       nodes={GRAPH_NODES}
       edges={GRAPH_EDGES}
       selectedNodeId={selectedNodeId}
-      onNodeSelect={setSelectedNodeId}
+      onNodeSelect={handleNodeSelect}
+      selectedEdgeId={selectedEdgeId}
+      onEdgeSelect={handleEdgeSelect}
       renderNode={renderGraphNode}
       style={{ height: '100%' }}
     />
@@ -301,7 +332,7 @@ export default function GraphShowcase() {
       fitView
       fitPadding={40}
       selectedNodeId={selectedNodeId}
-      onNodeSelect={setSelectedNodeId}
+      onNodeSelect={handleNodeSelect}
       renderNode={renderFitViewNode}
       style={{ height: '100%' }}
     />
@@ -321,7 +352,7 @@ export default function GraphShowcase() {
       fitView
       fitPadding={40}
       selectedNodeId={selectedNodeId}
-      onNodeSelect={setSelectedNodeId}
+      onNodeSelect={handleNodeSelect}
       // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
       // up domainColor/kind styling and the collapse toggle from hierarchy meta.
       renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
@@ -342,7 +373,7 @@ export default function GraphShowcase() {
           fitView
           fitPadding={20}
           selectedNodeId={selectedNodeId}
-          onNodeSelect={setSelectedNodeId}
+          onNodeSelect={handleNodeSelect}
           renderNode={renderFitViewNode}
           style={{ height: '100%' }}
         />
@@ -510,13 +541,33 @@ export default function GraphShowcase() {
                     : fitViewCanvas
           }
           second={
-            <GraphInspector
-              data-testid="graph-inspector-panel"
-              node={inspectorNode}
-              relationships={relationships}
-              onNodeSelect={setSelectedNodeId}
-              emptyStateText={canvasMode === 'graph' ? 'Select a node to inspect.' : 'Select a service to view details.'}
-            />
+            edgeInspectorData ? (
+              <div data-testid="graph-edge-inspector-stack" style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 12 }}>
+                {edgeSourceNode && (
+                  <GraphInspector
+                    data-testid="graph-inspector-panel-source"
+                    node={{ id: edgeSourceNode.id, title: edgeSourceNode.title || edgeSourceNode.label, kind: edgeSourceNode.kind, domain: edgeSourceNode.domain }}
+                    onNodeSelect={handleNodeSelect}
+                  />
+                )}
+                <GraphEdgeInspector data-testid="graph-edge-inspector-panel" edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
+                {edgeTargetNode && (
+                  <GraphInspector
+                    data-testid="graph-inspector-panel-target"
+                    node={{ id: edgeTargetNode.id, title: edgeTargetNode.title || edgeTargetNode.label, kind: edgeTargetNode.kind, domain: edgeTargetNode.domain }}
+                    onNodeSelect={handleNodeSelect}
+                  />
+                )}
+              </div>
+            ) : (
+              <GraphInspector
+                data-testid="graph-inspector-panel"
+                node={inspectorNode}
+                relationships={relationships}
+                onNodeSelect={handleNodeSelect}
+                emptyStateText={canvasMode === 'graph' ? 'Select a node to inspect.' : 'Select a service to view details.'}
+              />
+            )
           }
           style={{ height: '100%', flex: 1 }}
         />

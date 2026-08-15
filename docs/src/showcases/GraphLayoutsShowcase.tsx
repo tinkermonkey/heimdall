@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from 'react'
 import {
   GraphCanvas,
   GraphInspector,
+  GraphEdgeInspector,
   GraphNode,
   TopologyNode,
   SegmentedControl,
@@ -10,6 +11,7 @@ import {
   type GraphEdgeData,
   type GraphNodeHierarchyMeta,
   type GraphNodeMetadata,
+  type GraphEdgeMetadata,
   type RelationshipLink,
   type TopologyNodeStatus,
 } from '@tinkermonkey/heimdall-ui'
@@ -162,6 +164,7 @@ export function GraphLayoutsShowcase() {
   const [nodeStyle, setNodeStyle] = useState<'compact' | 'cards'>('compact')
   const [showAllRelations, setShowAllRelations] = useState(false)
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
 
   const dataset = DATASETS[datasetKey]
@@ -169,7 +172,22 @@ export function GraphLayoutsShowcase() {
   const selectDataset = useCallback((key: DatasetKey) => {
     setDatasetKey(key)
     setSelectedNodeId(undefined)
+    setSelectedEdgeId(undefined)
     setCollapsedNodeIds(new Set())
+  }, [])
+
+  // Node and edge selection are mutually exclusive in this demo's inspector column — picking
+  // one clears the other, same as clicking a different tab. GraphCanvas itself doesn't enforce
+  // this (selectedNodeId/selectedEdgeId are independent controlled props); it's just how this
+  // particular detail panel chooses to present them.
+  const handleNodeSelect = useCallback((id: string) => {
+    setSelectedNodeId(id)
+    setSelectedEdgeId(undefined)
+  }, [])
+
+  const handleEdgeSelect = useCallback((id: string) => {
+    setSelectedEdgeId(id)
+    setSelectedNodeId(undefined)
   }, [])
 
   const handleToggleCollapse = useCallback((id: string) => {
@@ -199,7 +217,7 @@ export function GraphLayoutsShowcase() {
           status={CARD_STATUS[node.domainColor ?? ''] ?? 'idle'}
           metrics={[{ label: 'Weight', value: `${percent}%`, percent, sparklineData: [], color: 'amber' }]}
           selected={selected}
-          onSelect={() => setSelectedNodeId(node.id)}
+          onSelect={() => handleNodeSelect(node.id)}
         />
         {hierarchy?.hasChildren && hierarchy.onToggleCollapse && (
           <button
@@ -218,7 +236,7 @@ export function GraphLayoutsShowcase() {
         )}
       </div>
     )
-  }, [])
+  }, [handleNodeSelect])
 
   const renderCompactNode = useCallback((node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta) => (
     <GraphNode
@@ -227,36 +245,58 @@ export function GraphLayoutsShowcase() {
       kind={node.kind}
       domainColor={node.domainColor}
       selected={selected}
-      onSelect={setSelectedNodeId}
+      onSelect={handleNodeSelect}
       hasChildren={hierarchy?.hasChildren}
       collapsed={hierarchy?.collapsed}
       hiddenDescendantCount={hierarchy?.hiddenDescendantCount}
       onToggleCollapse={hierarchy?.onToggleCollapse}
     />
+  ), [handleNodeSelect])
+
+  const toNodeMetadata = useCallback((n: DemoNode): GraphNodeMetadata => (
+    { id: n.id, title: n.title ?? n.label, kind: n.kind, domain: n.domain }
   ), [])
 
-  const selectedNode = dataset.nodes.find(n => n.id === selectedNodeId)
-  const inspectorNode: GraphNodeMetadata | undefined = selectedNode
-    ? { id: selectedNode.id, title: selectedNode.title ?? selectedNode.label, kind: selectedNode.kind, domain: selectedNode.domain }
-    : undefined
+  // Shared by the single-node panel and, when an edge is selected, its source/target panels —
+  // every relationship touching `nodeId`, same shape GraphInspector expects.
+  const relationshipsFor = useCallback((nodeId: string): RelationshipLink[] =>
+    dataset.edges
+      .filter(e => e.sourceId === nodeId || e.targetId === nodeId)
+      .map(e => {
+        const isOutgoing = e.sourceId === nodeId
+        const otherId = isOutgoing ? e.targetId : e.sourceId
+        const other = dataset.nodes.find(n => n.id === otherId) as DemoNode | undefined
+        return {
+          id: e.id,
+          target: otherId,
+          targetTitle: other?.title ?? other?.label ?? otherId,
+          targetDomain: other?.domain,
+          predicate: e.label ?? 'related',
+          direction: isOutgoing ? 'out' as const : 'in' as const,
+        }
+      }), [dataset])
 
-  const relationships: RelationshipLink[] = selectedNodeId
-    ? dataset.edges
-        .filter(e => e.sourceId === selectedNodeId || e.targetId === selectedNodeId)
-        .map(e => {
-          const isOutgoing = e.sourceId === selectedNodeId
-          const otherId = isOutgoing ? e.targetId : e.sourceId
-          const other = dataset.nodes.find(n => n.id === otherId) as DemoNode | undefined
-          return {
-            id: e.id,
-            target: otherId,
-            targetTitle: other?.title ?? other?.label ?? otherId,
-            targetDomain: other?.domain,
-            predicate: e.label ?? 'related',
-            direction: isOutgoing ? 'out' as const : 'in' as const,
-          }
-        })
-    : []
+  const selectedNode = dataset.nodes.find(n => n.id === selectedNodeId)
+  const inspectorNode: GraphNodeMetadata | undefined = selectedNode ? toNodeMetadata(selectedNode) : undefined
+  const relationships: RelationshipLink[] = selectedNodeId ? relationshipsFor(selectedNodeId) : []
+
+  const selectedEdge = selectedEdgeId ? dataset.edges.find(e => e.id === selectedEdgeId) : undefined
+  const edgeSourceNode = selectedEdge ? dataset.nodes.find(n => n.id === selectedEdge.sourceId) as DemoNode | undefined : undefined
+  const edgeTargetNode = selectedEdge ? dataset.nodes.find(n => n.id === selectedEdge.targetId) as DemoNode | undefined : undefined
+  const edgeInspectorData: GraphEdgeMetadata | undefined = selectedEdge && edgeSourceNode && edgeTargetNode
+    ? {
+        id: selectedEdge.id,
+        predicate: selectedEdge.label ?? 'related',
+        sourceId: edgeSourceNode.id,
+        sourceTitle: edgeSourceNode.title ?? edgeSourceNode.label,
+        sourceDomain: edgeSourceNode.domain,
+        targetId: edgeTargetNode.id,
+        targetTitle: edgeTargetNode.title ?? edgeTargetNode.label,
+        targetDomain: edgeTargetNode.domain,
+        variant: selectedEdge.variant,
+        weight: selectedEdge.weight,
+      }
+    : undefined
 
   return (
     <div>
@@ -329,16 +369,32 @@ export function GraphLayoutsShowcase() {
                     fitView
                     fitPadding={40}
                     selectedNodeId={selectedNodeId}
-                    onNodeSelect={setSelectedNodeId}
+                    onNodeSelect={handleNodeSelect}
+                    selectedEdgeId={selectedEdgeId}
+                    onEdgeSelect={handleEdgeSelect}
                     renderNode={nodeStyle === 'cards' ? renderCardNode : renderCompactNode}
                     style={{ width: '100%', height: '100%' }}
                   />
                 }
                 second={
-                  <div style={{ padding: 16, overflowY: 'auto', height: '100%' }}>
-                    {inspectorNode
-                      ? <GraphInspector node={inspectorNode} relationships={relationships} onNodeSelect={setSelectedNodeId} />
-                      : <p style={{ fontSize: 13, color: fg2 }}>Select a node to inspect it.</p>
+                  // box-sizing: border-box keeps this padded column from overflowing its own
+                  // box by the padding amount alone — that was forcing a vertical scrollbar in
+                  // .split-pane__second even with nothing selected. minHeight (not height): a
+                  // fixed height here would let the default flex-shrink compress the stacked
+                  // source/edge/target panels to fit instead of letting them take their natural
+                  // size and scrolling the ancestor pane, which is the single scroll owner.
+                  <div style={{ padding: 16, boxSizing: 'border-box', minHeight: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {edgeInspectorData
+                      ? (
+                        <>
+                          {edgeSourceNode && <GraphInspector node={toNodeMetadata(edgeSourceNode)} relationships={relationshipsFor(edgeSourceNode.id)} onNodeSelect={handleNodeSelect} />}
+                          <GraphEdgeInspector edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
+                          {edgeTargetNode && <GraphInspector node={toNodeMetadata(edgeTargetNode)} relationships={relationshipsFor(edgeTargetNode.id)} onNodeSelect={handleNodeSelect} />}
+                        </>
+                      )
+                      : inspectorNode
+                        ? <GraphInspector node={inspectorNode} relationships={relationships} onNodeSelect={handleNodeSelect} />
+                        : <p style={{ fontSize: 13, color: fg2, margin: 0 }}>Select a node or edge to inspect it.</p>
                     }
                   </div>
                 }
