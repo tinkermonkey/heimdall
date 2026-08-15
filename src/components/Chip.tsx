@@ -16,7 +16,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
     const classNames = [
       'chip',
       `chip--${form}`,
-      `chip--${variant}`,
+      (form === 'default' || form === 'inferred') && `chip--${variant}`,
       className,
     ]
       .filter(Boolean)
