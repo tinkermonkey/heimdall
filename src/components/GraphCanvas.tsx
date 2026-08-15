@@ -7,6 +7,7 @@ import { usePanZoom } from '../hooks/usePanZoom'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
 import GraphNode from './GraphNode'
 import { GraphEdgeShape } from './GraphEdgeShape'
+import { GraphToolbar, type GraphToolbarPosition } from './GraphToolbar'
 import './GraphCanvas.css'
 import './GraphEdge.css'
 
@@ -233,6 +234,13 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** Called once a drag ends, with the node's new position — only fires for an actual drag (past
    *  a small movement threshold), not a plain click. No effect without draggable. */
   onNodeDragEnd?: (nodeId: string, position: { x: number; y: number }) => void
+  /** Shows the built-in zoom in/out/fit and pan-and-zoom-lock toolbar. Default true. Set false
+   *  to omit it entirely — e.g. to build a custom control set with the separately-exported
+   *  GraphToolbar (or your own), or a read-only view with no viewport controls at all. */
+  showToolbar?: boolean
+  /** Where the built-in toolbar sits — any of the 4 corners or 4 edge-centers. Default
+   *  'bottom-right'. No effect when showToolbar is false. */
+  toolbarPosition?: GraphToolbarPosition
 }
 
 type NodeDims = Map<string, { width: number; height: number }>
@@ -260,6 +268,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onEdgeSelect,
       draggable = true,
       onNodeDragEnd,
+      showToolbar = true,
+      toolbarPosition = 'bottom-right',
       className = '',
       ...props
     },
@@ -289,13 +299,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // draggable's own JSDoc promises a drag override persists "until the node list changes" —
     // without this, a stale override for a since-removed (or filtered-out-and-back) node id would
     // silently keep applying forever, since dragPositions is otherwise never cleared on its own.
-    const nodeIdsKey = useMemo(() => nodes.map(n => n.id).sort().join(' '), [nodes])
+    const nodeIdsKey = useMemo(() => nodes.map(n => n.id).sort().join(' '), [nodes])
     const didMountDragClearRef = useRef(false)
     useEffect(() => {
       if (!didMountDragClearRef.current) { didMountDragClearRef.current = true; return }
       setDragPositions(new Map())
       dragStateRef.current = null
     }, [nodeIdsKey])
+
+    // Freezes wheel-zoom, drag-to-pan, and keyboard zoom/pan (see usePanZoom's locked option) —
+    // toggled by GraphToolbar's lock button. Internal/uncontrolled, like hoveredNodeId/dragPositions.
+    const [locked, setLocked] = useState(false)
 
     // Structural hierarchy over the FULL node/edge list — independent of what's currently
     // hidden, so a collapsed node's affordance (hasChildren, hiddenDescendantCount) stays
@@ -337,6 +351,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       minZoom,
       maxZoom,
       containerRef,
+      locked,
     })
 
     const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -615,7 +630,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       zoomToFit,
       setZoom: zoomTo,
       setPan: panTo,
-    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo])
+      locked,
+      setLocked,
+    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo, locked])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)
@@ -639,7 +656,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         role={bind.role}
         {...props}
       >
-        {/* Hidden off-screen div — renders node HTML at natural size for measurement */}
+        {/* Hidden off-screen div — renders node HTML at natural size for measurement. Deliberately
+            OUTSIDE the context provider below: useGraphCanvas() being unavailable here is how a
+            custom renderNode (e.g. one embedding viewport controls) can tell this measurement
+            pass apart from the real one and opt out of rendering anything for it. */}
         <div className="graph-measure" aria-hidden="true">
           {visibleNodes.map(node => (
             <div
@@ -652,34 +672,34 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           ))}
         </div>
 
-        <svg
-          className="graph-svg"
-          width="100%"
-          height="100%"
-          style={{ position: 'absolute', inset: 0, overflow: 'visible' }}
-        >
-          <defs>
-            <pattern
-              id={gridPatternId}
-              x={patternX}
-              y={patternY}
-              width={tileSize}
-              height={tileSize}
-              patternUnits="userSpaceOnUse"
-            >
-              <circle
-                cx="0"
-                cy="0"
-                r={Math.min(1, 0.5 * viewport.zoom)}
-                className="graph-grid-dot"
-              />
-            </pattern>
-          </defs>
+        <GraphCanvasContext.Provider value={contextValue}>
+          <svg
+            className="graph-svg"
+            width="100%"
+            height="100%"
+            style={{ position: 'absolute', inset: 0, overflow: 'visible' }}
+          >
+            <defs>
+              <pattern
+                id={gridPatternId}
+                x={patternX}
+                y={patternY}
+                width={tileSize}
+                height={tileSize}
+                patternUnits="userSpaceOnUse"
+              >
+                <circle
+                  cx="0"
+                  cy="0"
+                  r={Math.min(1, 0.5 * viewport.zoom)}
+                  className="graph-grid-dot"
+                />
+              </pattern>
+            </defs>
 
-          {/* Grid fills the full SVG surface */}
-          <rect width="100%" height="100%" fill={`url(#${gridPatternId})`} className="graph-grid" />
+            {/* Grid fills the full SVG surface */}
+            <rect width="100%" height="100%" fill={`url(#${gridPatternId})`} className="graph-grid" />
 
-          <GraphCanvasContext.Provider value={contextValue}>
             {/* Single viewport transform — edges and nodes share this coordinate space */}
             <g
               className="graph-viewport"
@@ -752,8 +772,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                 })}
               </g>
             </g>
-          </GraphCanvasContext.Provider>
-        </svg>
+          </svg>
+
+          {showToolbar && <GraphToolbar position={toolbarPosition} />}
+        </GraphCanvasContext.Provider>
       </div>
     )
   }

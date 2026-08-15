@@ -20,6 +20,10 @@ export interface UsePanZoomOptions {
    * listener, which can genuinely suppress the browser default.
    */
   containerRef: React.RefObject<HTMLElement>
+  /** Freezes wheel-zoom, drag-to-pan, and the keyboard zoom/pan shortcuts. Doesn't affect
+   *  imperative calls (zoomTo/panTo/reset) — those are deliberate actions, not the accidental
+   *  scroll/drag input this is meant to guard against. Default false. */
+  locked?: boolean
 }
 
 export interface UsePanZoomReturn {
@@ -91,12 +95,20 @@ export function usePanZoom({
   bounds,
   onViewportChange,
   containerRef,
+  locked = false,
 }: UsePanZoomOptions): UsePanZoomReturn {
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
 
   const zoomRef = useRef(1)
   const panRef = useRef({ x: 0, y: 0 })
+  // Read from input handlers instead of taking `locked` as a dependency — those handlers
+  // (attached as a native listener, or otherwise expensive to reattach) shouldn't need to be
+  // torn down and recreated just because lock was toggled.
+  const lockedRef = useRef(locked)
+  useEffect(() => {
+    lockedRef.current = locked
+  }, [locked])
   const dragRef = useRef<{ x: number; y: number; lastX: number; lastY: number; panX: number; panY: number; vx: number; vy: number; time: number } | null>(null)
   const listenersAttachedRef = useRef(false)
   const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
@@ -235,6 +247,7 @@ export function usePanZoom({
   }, [detachListeners, clampPan])
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
+    if (lockedRef.current) return
     if (inertiaRafRef.current !== null) {
       cancelAnimationFrame(inertiaRafRef.current)
       inertiaRafRef.current = null
@@ -280,6 +293,7 @@ export function usePanZoom({
   // below (with { passive: false }) rather than as a React onWheel prop, specifically so
   // preventDefault() actually works. See UsePanZoomOptions.containerRef for why.
   const handleWheel = useCallback((e: WheelEvent) => {
+    if (lockedRef.current) return
     e.preventDefault()
 
     const container = e.currentTarget as HTMLElement
@@ -315,6 +329,7 @@ export function usePanZoom({
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
+      if (lockedRef.current) return
       const key = e.key
       let updateZoom: number | null = null
       let updatePan: { x: number; y: number } | null = null

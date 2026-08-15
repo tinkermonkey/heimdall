@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, type Dispatch, type SetStateAction } from 'react'
 
 export interface GraphNodeRect {
   x: number
@@ -21,6 +21,11 @@ export interface GraphCanvasContextValue {
   setZoom: (zoom: number) => void
   /** Sets pan without altering zoom. */
   setPan: (x: number, y: number) => void
+  /** Whether wheel-zoom, drag-to-pan, and the keyboard zoom/pan shortcuts are frozen. Doesn't
+   *  affect setZoom/setPan/zoomToFit — those are deliberate calls, not the accidental scroll/drag
+   *  input locking is meant to guard against. Read/set by GraphToolbar's lock button. */
+  locked: boolean
+  setLocked: Dispatch<SetStateAction<boolean>>
 }
 
 export const GraphCanvasContext = createContext<GraphCanvasContextValue | null>(null)
