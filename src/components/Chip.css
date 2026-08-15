@@ -168,7 +168,7 @@ body.dark-canvas .chip--id-tag {
   background-color: rgb(var(--semantic-env-fg));
 }
 
-/* Inferred form — dashed border, no fill, muted foreground */
+/* Inferred form — dashed border, no fill, muted foreground; variant is ignored */
 .chip--inferred {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -182,66 +182,5 @@ body.dark-canvas .chip--id-tag {
 body.dark-canvas .chip--inferred {
   border-color: var(--white-overlay-lg);
   background-color: transparent;
-  color: rgb(var(--canvas-fg-3));
-}
-
-/* Inferred + variant combinations — dashed border with variant color */
-.chip--inferred.chip--cyan {
-  border-color: rgb(var(--status-cyan));
-  color: rgb(var(--status-cyan));
-}
-
-.chip--inferred.chip--amber {
-  border-color: rgb(var(--status-amber));
-  color: rgb(var(--status-amber));
-}
-
-.chip--inferred.chip--violet {
-  border-color: rgb(var(--status-violet));
-  color: rgb(var(--status-violet));
-}
-
-.chip--inferred.chip--emerald {
-  border-color: rgb(var(--status-emerald));
-  color: rgb(var(--status-emerald));
-}
-
-.chip--inferred.chip--rose {
-  border-color: rgb(var(--status-rose));
-  color: rgb(var(--status-rose));
-}
-
-.chip--inferred.chip--neutral {
-  border-color: rgb(var(--canvas-border-strong));
-  color: rgb(var(--canvas-fg-3));
-}
-
-body.dark-canvas .chip--inferred.chip--cyan {
-  border-color: rgb(var(--status-cyan));
-  color: rgb(var(--status-cyan));
-}
-
-body.dark-canvas .chip--inferred.chip--amber {
-  border-color: rgb(var(--status-amber));
-  color: rgb(var(--status-amber));
-}
-
-body.dark-canvas .chip--inferred.chip--violet {
-  border-color: rgb(var(--status-violet));
-  color: rgb(var(--status-violet));
-}
-
-body.dark-canvas .chip--inferred.chip--emerald {
-  border-color: rgb(var(--status-emerald));
-  color: rgb(var(--status-emerald));
-}
-
-body.dark-canvas .chip--inferred.chip--rose {
-  border-color: rgb(var(--status-rose));
-  color: rgb(var(--status-rose));
-}
-
-body.dark-canvas .chip--inferred.chip--neutral {
-  border-color: var(--white-overlay-lg);
   color: rgb(var(--canvas-fg-3));
 }

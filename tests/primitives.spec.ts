@@ -214,6 +214,33 @@ test.describe('Primitive Components', () => {
     await expect(formSection).toHaveScreenshot('chip-forms.png')
   })
 
+  test('Chip component - inferred form ignores variant', async ({ page }) => {
+    // Verify that inferred form renders with fixed styling regardless of variant
+    const inferredChips = page.locator('.chip--inferred')
+    const count = await inferredChips.count()
+    expect(count).toBeGreaterThanOrEqual(2)
+
+    // Get computed color for both inferred chips (one without variant, one with variant)
+    const chip1Color = await inferredChips.nth(0).evaluate(el => window.getComputedStyle(el).color)
+    const chip1Border = await inferredChips.nth(0).evaluate(
+      el => window.getComputedStyle(el).borderColor
+    )
+
+    const chip2Color = await inferredChips.nth(1).evaluate(el => window.getComputedStyle(el).color)
+    const chip2Border = await inferredChips.nth(1).evaluate(
+      el => window.getComputedStyle(el).borderColor
+    )
+
+    // Both should have identical styling (variant ignored)
+    expect(chip1Color).toBe(chip2Color)
+    expect(chip1Border).toBe(chip2Border)
+
+    // Verify no variant-specific classes are applied to inferred chips
+    const inferredChipsWithVariant = page.locator('.chip--inferred.chip--cyan, .chip--inferred.chip--amber, .chip--inferred.chip--violet, .chip--inferred.chip--emerald, .chip--inferred.chip--rose, .chip--inferred.chip--neutral')
+    const variantCount = await inferredChipsWithVariant.count()
+    expect(variantCount).toBe(0)
+  })
+
   test('SegmentedControl component renders and is interactive', async ({ page }) => {
     // Find SegmentedControl elements
     const segmentedControls = page.locator('[class*="segmented-control"]')
