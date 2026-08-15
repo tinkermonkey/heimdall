@@ -7,6 +7,10 @@ export interface BezierPathResult {
   d: string
   mid: Point
   angle: number
+  /** Control polygon behind `d` — [p1, c, p2] for a quadratic curve, [p1, c1, c2, p2] for a
+   *  cubic one. Lets a caller sample the curve at points other than t=0.5 (see
+   *  findClearLabelPosition) without reparsing the path string. */
+  points: Point[]
 }
 
 export function rectEdgePoint(cx: number, cy: number, w: number, h: number, tx: number, ty: number): Point {
@@ -86,6 +90,7 @@ export function bezierPath(p1: Point, p2: Point, curvature: number = DEFAULT_QUA
     d: `M ${p1.x} ${p1.y} Q ${mx} ${my} ${p2.x} ${p2.y}`,
     mid: { x: (p1.x + 2 * mx + p2.x) / 4, y: (p1.y + 2 * my + p2.y) / 4 },
     angle: Math.atan2(p2.y - my, p2.x - mx),
+    points: [p1, { x: mx, y: my }, p2],
   }
 }
 
@@ -196,6 +201,7 @@ export function cubicBezierPath(
     d: `M ${p1.x} ${p1.y} C ${c1.x} ${c1.y} ${c2.x} ${c2.y} ${p2.x} ${p2.y}`,
     mid,
     angle: Math.atan2(r1.y - r0.y, r1.x - r0.x),
+    points: [p1, c1, c2, p2],
   }
 }
 
@@ -237,4 +243,70 @@ export function computeEdgePath(source: EdgeEndpointRect, target: EdgeEndpointRe
     : undefined
 
   return cubicBezierPath(sp, tp, sourceAnchor, targetAnchor, options.curvature ?? DEFAULT_CUBIC_CURVATURE, sourceDirection, targetDirection)
+}
+
+// ─── Edge label placement ──────────────────────────────────────────────────
+
+const LABEL_CHAR_WIDTH = 6.6
+const LABEL_PADDING_X = 14
+const LABEL_HEIGHT = 18
+
+/** The rendered footprint of an edge label pill — same sizing GraphEdgeShape draws, reused here
+ *  so collision-avoidance checks against the exact box that will actually be on screen. */
+export function edgeLabelSize(label: string): { width: number; height: number } {
+  return { width: label.length * LABEL_CHAR_WIDTH + LABEL_PADDING_X, height: LABEL_HEIGHT }
+}
+
+function quadraticPointAt(p1: Point, c: Point, p2: Point, t: number): Point {
+  const mt = 1 - t
+  return {
+    x: mt * mt * p1.x + 2 * mt * t * c.x + t * t * p2.x,
+    y: mt * mt * p1.y + 2 * mt * t * c.y + t * t * p2.y,
+  }
+}
+
+function cubicPointAt(p1: Point, c1: Point, c2: Point, p2: Point, t: number): Point {
+  const mt = 1 - t
+  return {
+    x: mt * mt * mt * p1.x + 3 * mt * mt * t * c1.x + 3 * mt * t * t * c2.x + t * t * t * p2.x,
+    y: mt * mt * mt * p1.y + 3 * mt * mt * t * c1.y + 3 * mt * t * t * c2.y + t * t * t * p2.y,
+  }
+}
+
+// Tried in order, starting at the curve's true midpoint and stepping outward toward each
+// endpoint — the first candidate whose label footprint clears every obstacle wins, so the label
+// stays as close to the visual middle of the edge as the nearby nodes allow.
+const LABEL_CANDIDATE_TS = [0.5, 0.38, 0.62, 0.26, 0.74, 0.15, 0.85]
+
+/**
+ * Where to center an edge label so it clears every node in `obstacles` by `margin` px, without
+ * moving the edge or any node — just samples a handful of points along the curve `points` already
+ * describes (see BezierPathResult.points) and picks the first that's clear. Falls back to the
+ * curve's exact midpoint (t=0.5) if every candidate collides; occasionally sitting a label over a
+ * node beats a more complex routing/repositioning scheme for what's meant to stay "just that".
+ */
+export function findClearLabelPosition(
+  points: readonly Point[],
+  size: { width: number; height: number },
+  obstacles: readonly EdgeEndpointRect[],
+  margin: number = 6
+): Point {
+  const sampleAt =
+    points.length >= 4
+      ? (t: number) => cubicPointAt(points[0], points[1], points[2], points[3], t)
+      : (t: number) => quadraticPointAt(points[0], points[1], points[2], t)
+
+  const halfW = size.width / 2 + margin
+  const halfH = size.height / 2 + margin
+
+  for (const t of LABEL_CANDIDATE_TS) {
+    const p = sampleAt(t)
+    const clear = obstacles.every(o => {
+      const oHalfW = o.width / 2
+      const oHalfH = o.height / 2
+      return Math.abs(p.x - o.x) >= halfW + oHalfW || Math.abs(p.y - o.y) >= halfH + oHalfH
+    })
+    if (clear) return p
+  }
+  return sampleAt(0.5)
 }
