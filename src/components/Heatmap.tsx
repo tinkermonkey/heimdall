@@ -96,7 +96,7 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
             const cellY = pad.top + r * ch + 1
             const cellCenterX = cellX + (cw - 2) / 2
             const cellCenterY = cellY + (ch - 2) / 2
-            const mark = cellMark?.(r, c, v)
+            const mark = cellMark?.(r, c, (v != null && !isNaN(v)) ? v : null)
             return (
               <g key={`${r}-${c}`}>
                 <rect
