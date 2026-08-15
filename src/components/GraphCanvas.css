@@ -15,6 +15,16 @@
   cursor: grabbing;
 }
 
+/* A draggable node's own cursor overrides the canvas's grab/grabbing pan cursor while hovering
+   or dragging the node itself, rather than reading as "drag the canvas". */
+.graph-canvas-node.draggable {
+  cursor: grab;
+}
+
+.graph-canvas-node.draggable:active {
+  cursor: grabbing;
+}
+
 /* Off-screen div used to measure natural node dimensions before rendering */
 .graph-measure {
   position: fixed;

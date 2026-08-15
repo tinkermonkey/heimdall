@@ -83,6 +83,9 @@ const DEFAULT_MAX_ZOOM = 8
 // and the caller hasn't opted into showAllRelations. Only takes effect when isStructuralEdge is
 // supplied — without it every edge is treated as structural and this constant is unused.
 const NON_STRUCTURAL_DIM_OPACITY = 0.15
+// Screen-space pixels of pointer movement before a node pointerdown is treated as a drag rather
+// than a click — below this, it's just an imprecise click and should still fire onSelect.
+const DRAG_THRESHOLD = 3
 
 type InternalEdgeProps = GraphEdge & {
   selected?: boolean
@@ -172,6 +175,16 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    *  structural edges (see isStructuralEdge). Nodes with x and y are pinned under either layout. */
   layout?: 'manual' | 'force' | 'galaxy'
   /**
+   * layout="force" only. Extra breathing room kept clear around each node's own footprint, on
+   * top of what's needed to just avoid overlap — this is what leaves room for an edge to be
+   * visible between two connected nodes instead of their boxes settling nearly flush, which with
+   * substantial cards (renderNode content) could otherwise read as if edges were missing
+   * entirely. Defaults to each node's own rendered width, which scales sensibly for both compact
+   * chips and larger cards with no configuration; pass a fixed number to use the same margin for
+   * every node, or 0 for the tightest legal packing. See ForceLayoutOptions.nodeMargin.
+   */
+  nodeMargin?: number
+  /**
    * Classifies an edge as structural (defines the galaxy layout's parent/child hierarchy,
    * source = parent) vs. relational (rendered but layout-irrelevant). Only meaningful with
    * layout="galaxy". When omitted, every edge is treated as structural — the same as before
@@ -211,6 +224,15 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** Called with an edge's ID when its line or label is clicked. Wires up hit targets on both;
    *  without it, edges render but aren't interactive. */
   onEdgeSelect?: (edgeId: string) => void
+  /** Lets a node be repositioned by dragging it. Default true. The dropped position persists
+   *  locally (overriding explicit x/y or the computed layout position) until the node list
+   *  changes; it isn't written back to the nodes prop. Pair with onNodeDragEnd to persist it
+   *  yourself. Set false to disable — e.g. a read-only view, or a layout='force'/'galaxy' canvas
+   *  where manual repositioning would just be undone the next time the layout recomputes. */
+  draggable?: boolean
+  /** Called once a drag ends, with the node's new position — only fires for an actual drag (past
+   *  a small movement threshold), not a plain click. No effect without draggable. */
+  onNodeDragEnd?: (nodeId: string, position: { x: number; y: number }) => void
 }
 
 type NodeDims = Map<string, { width: number; height: number }>
@@ -225,6 +247,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onNodeSelect,
       renderNode,
       layout = 'manual',
+      nodeMargin,
       isStructuralEdge,
       showAllRelations = false,
       collapsedNodeIds,
@@ -235,6 +258,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       maxZoom = DEFAULT_MAX_ZOOM,
       selectedEdgeId,
       onEdgeSelect,
+      draggable = true,
+      onNodeDragEnd,
       className = '',
       ...props
     },
@@ -243,6 +268,19 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const [dims, setDims] = useState<NodeDims>(new Map())
     const [computedPositions, setComputedPositions] = useState<NodePositions>(new Map())
     const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>()
+    // Manual drag overrides, keyed by node id — takes precedence over explicit x/y or the
+    // computed layout position (see getNodePosition). Local/uncontrolled: not written back to
+    // the nodes prop, so a caller that wants to persist a dropped position needs onNodeDragEnd.
+    const [dragPositions, setDragPositions] = useState<NodePositions>(new Map())
+    const dragStateRef = useRef<{
+      id: string
+      pointerId: number
+      startClientX: number
+      startClientY: number
+      startX: number
+      startY: number
+      dragging: boolean
+    } | null>(null)
 
     // Structural hierarchy over the FULL node/edge list — independent of what's currently
     // hidden, so a collapsed node's affordance (hasChildren, hiddenDescendantCount) stays
@@ -327,7 +365,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }))
       if (layout === 'force') {
         const layoutEdges = (edges ?? []).map(e => ({ source: e.sourceId, target: e.targetId }))
-        setComputedPositions(forceLayout(layoutNodes, layoutEdges))
+        setComputedPositions(forceLayout(layoutNodes, layoutEdges, { nodeMargin }))
       } else {
         const layoutEdges = (edges ?? []).map(e => ({
           source: e.sourceId,
@@ -336,7 +374,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         }))
         setComputedPositions(galaxyLayout(layoutNodes, layoutEdges))
       }
-    }, [visibleNodes, edges, dims, layout, isStructuralEdge])
+    }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge])
 
 
     // Track the rendered container size so the auto-center effect can react to it.
@@ -351,15 +389,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return () => ro.disconnect()
     }, [])
 
+    const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
+      const dragged = dragPositions.get(node.id)
+      if (dragged) return dragged
+      if (node.x !== undefined && node.y !== undefined) return { x: node.x, y: node.y }
+      return computedPositions.get(node.id) ?? { x: 0, y: 0 }
+    }, [dragPositions, computedPositions])
+
     // Computes the current node bounding box in graph space (world coordinates).
     // Shared by the initial fit/center effect and the imperative zoomToFit().
     const computeBoundingBox = useCallback((): BoundingBox | null => {
       let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
       for (const node of visibleNodes) {
-        const pos = node.x !== undefined && node.y !== undefined
-          ? { x: node.x, y: node.y }
-          : computedPositions.get(node.id)
-        if (!pos) continue
+        // Includes any drag override (see getNodePosition) so zoomToFit() after manually
+        // repositioning a node reframes to where it actually is, not where the layout put it.
+        const pos = getNodePosition(node)
         const d = dims.get(node.id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
         minX = Math.min(minX, pos.x - d.width / 2)
         maxX = Math.max(maxX, pos.x + d.width / 2)
@@ -368,7 +412,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
       if (!Number.isFinite(minX)) return null
       return { minX, maxX, minY, maxY }
-    }, [visibleNodes, dims, computedPositions])
+    }, [visibleNodes, dims, getNodePosition])
 
     // Auto-center (or fit) the node bounding box once positions and dims are ready.
     // Runs once — re-centering on later prop changes would fight user pan/zoom.
@@ -406,11 +450,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     }, [computeBoundingBox, containerSize, fitPadding, zoomTo, panTo])
 
 
-    const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
-      if (node.x !== undefined && node.y !== undefined) return { x: node.x, y: node.y }
-      return computedPositions.get(node.id) ?? { x: 0, y: 0 }
-    }, [computedPositions])
-
     const getNodeRect = useCallback((id: string) => {
       // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
       // won't find one here and renders nothing (see GraphEdgeInternal's null guard).
@@ -420,6 +459,65 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
       return { x: pos.x, y: pos.y, width: d.width, height: d.height }
     }, [visibleNodes, dims, getNodePosition])
+
+    // Node dragging. Pointer capture is deliberately NOT taken on pointerdown — capturing
+    // retargets every subsequent event for that pointer to the capturing element, including the
+    // click the browser synthesizes right after pointerup, which would then never reach (and so
+    // never bubble past) the node content's own onClick a few levels down, breaking plain
+    // click-to-select for every node. Capture is instead taken only once a move has actually
+    // crossed DRAG_THRESHOLD — a plain click never captures at all, so it's unaffected — which
+    // also keeps later move/up events targeted at this <g> even once the cursor leaves it.
+    const handleNodePointerDown = useCallback((e: React.PointerEvent<SVGGElement>, node: GraphNodeData) => {
+      if (!draggable) return
+      // Stop this from also being treated as the start of a canvas pan — same guard GraphCanvas's
+      // own pointerdown handler already applies for HTML .graph-node content, needed again here
+      // because dragging starts from the SVG <g> wrapping it, which that closest() check doesn't
+      // otherwise see (the event both starts and is handled here, so it never bubbles that far).
+      e.stopPropagation()
+      const pos = getNodePosition(node)
+      dragStateRef.current = {
+        id: node.id,
+        pointerId: e.pointerId,
+        startClientX: e.clientX,
+        startClientY: e.clientY,
+        startX: pos.x,
+        startY: pos.y,
+        dragging: false,
+      }
+    }, [draggable, getNodePosition])
+
+    const handleNodePointerMove = useCallback((e: React.PointerEvent<SVGGElement>) => {
+      const state = dragStateRef.current
+      if (!state || state.pointerId !== e.pointerId) return
+      const dx = (e.clientX - state.startClientX) / viewport.zoom
+      const dy = (e.clientY - state.startClientY) / viewport.zoom
+      if (!state.dragging && Math.hypot(dx, dy) < DRAG_THRESHOLD) return
+      if (!state.dragging) e.currentTarget.setPointerCapture(e.pointerId)
+      state.dragging = true
+      const next = { x: state.startX + dx, y: state.startY + dy }
+      setDragPositions(prev => {
+        const updated = new Map(prev)
+        updated.set(state.id, next)
+        return updated
+      })
+    }, [viewport.zoom])
+
+    const handleNodePointerUp = useCallback((e: React.PointerEvent<SVGGElement>) => {
+      const state = dragStateRef.current
+      if (!state || state.pointerId !== e.pointerId) return
+      if (state.dragging) {
+        // A real drag happened — swallow the click the browser fires right after this pointerup
+        // (once, capture phase) so it doesn't also invoke the node's onSelect, same as a plain
+        // click would. Read the final position from state rather than the closure's `next` above
+        // since this handler doesn't have it in scope.
+        const target = e.currentTarget
+        const suppressClick = (ev: MouseEvent) => { ev.stopPropagation(); ev.preventDefault() }
+        target.addEventListener('click', suppressClick, { capture: true, once: true })
+        const finalPos = dragPositions.get(state.id) ?? { x: state.startX, y: state.startY }
+        onNodeDragEnd?.(state.id, finalPos)
+      }
+      dragStateRef.current = null
+    }, [dragPositions, onNodeDragEnd])
 
     // Every visible node's rect, for edges to steer their label clear of (see
     // findClearLabelPosition). Recomputes on the same cadence as getNodeRect itself — layout and
@@ -584,9 +682,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       data-node-id={node.id}
                       data-testid={`graph-node-${node.id}`}
                       data-domain={node.domainColor}
-                      className={selected ? 'selected' : undefined}
+                      className={['graph-canvas-node', draggable && 'draggable', selected && 'selected'].filter(Boolean).join(' ')}
                       onPointerEnter={() => setHoveredNodeId(node.id)}
                       onPointerLeave={() => setHoveredNodeId(current => (current === node.id ? undefined : current))}
+                      onPointerDown={draggable ? (e) => handleNodePointerDown(e, node) : undefined}
+                      onPointerMove={draggable ? handleNodePointerMove : undefined}
+                      onPointerUp={draggable ? handleNodePointerUp : undefined}
+                      onPointerCancel={draggable ? handleNodePointerUp : undefined}
                     >
                       <foreignObject
                         x={-d.width / 2}

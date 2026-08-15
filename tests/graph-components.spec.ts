@@ -94,6 +94,64 @@ test.describe('Graph Canvas Components', () => {
     await expect(page.locator('[data-testid="inspector-title"]')).toContainText('Mitochondrion')
   })
 
+  test('dragging a node repositions it', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    await expect(node).toBeVisible()
+    const before = await node.getAttribute('transform')
+
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const startX = box.x + box.width / 2
+    const startY = box.y + box.height / 2
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    // Past DRAG_THRESHOLD and with enough steps for pointermove to fire more than once.
+    await page.mouse.move(startX + 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    const after = await node.getAttribute('transform')
+    expect(after).not.toBe(before)
+  })
+
+  test('a real drag does not also fire node selection', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const startX = box.x + box.width / 2
+    const startY = box.y + box.height / 2
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    await page.mouse.move(startX + 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    await expect(node).not.toHaveClass(/selected/)
+  })
+
+  test('draggable=false disables node dragging without affecting click-to-select', async ({ page }) => {
+    await page.locator('[data-testid="graph-draggable-toggle"]').click()
+
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const before = await node.getAttribute('transform')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const startX = box.x + box.width / 2
+    const startY = box.y + box.height / 2
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    await page.mouse.move(startX + 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    const after = await node.getAttribute('transform')
+    expect(after).toBe(before)
+
+    // Dragging being off shouldn't break the ordinary click path.
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+  })
+
   test('GraphCanvas panning works on mouse drag', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
     const viewport = page.locator('[data-testid="graph-viewport"]')
