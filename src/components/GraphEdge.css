@@ -34,6 +34,7 @@
 
 .graph-edge:hover .graph-edge__label-bg {
   stroke: rgb(var(--canvas-fg-2));
+  stroke-width: 2.5;
 }
 
 .graph-edge.selected .graph-edge__line {

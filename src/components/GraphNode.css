@@ -101,6 +101,14 @@ body.dark-canvas .graph-node {
   color: rgb(var(--canvas-fg-1));
 }
 
+/* Reasserts the hover border color under dark canvas — body.dark-canvas .graph-node above is
+   more specific than .graph-node:hover alone (extra `body` type selector), so without this the
+   hover state was silently cancelled back to the resting border color in dark canvas; light
+   canvas was never affected since it has no such override to begin with. */
+body.dark-canvas .graph-node:hover {
+  border-color: rgb(var(--accent-primary-deep));
+}
+
 body.dark-canvas .graph-node__kind {
   background: rgb(var(--canvas-bg-2));
   border-color: rgb(var(--canvas-border));
@@ -146,6 +154,12 @@ body.dark-canvas .graph-node__collapse-toggle {
   background: rgb(var(--canvas-bg-2));
   border-color: rgb(var(--canvas-border));
   color: rgb(var(--canvas-fg-2));
+}
+
+/* Same specificity issue as the node's own hover above. */
+body.dark-canvas .graph-node__collapse-toggle:hover {
+  background: rgb(var(--canvas-border));
+  border-color: rgb(var(--canvas-border-strong));
 }
 
 body.dark-canvas .graph-node__hidden-badge {

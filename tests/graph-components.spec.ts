@@ -631,6 +631,19 @@ test.describe('Graph Canvas Components', () => {
       const canvas = page.locator('.graph-canvas')
       await expect(canvas).toHaveScreenshot('graph-canvas-weighted-edges-dark.png')
     })
+
+    // Regression: body.dark-canvas .graph-node { border-color: ... } is more specific than
+    // .graph-node:hover alone (extra `body` type selector), so the hover border color was
+    // silently cancelled back to the resting one in dark canvas — light canvas was unaffected,
+    // which is why this went unnoticed for a while. GraphNode.css now reasserts it explicitly
+    // under body.dark-canvas.
+    test('node hover border color still applies in dark canvas', async ({ page }) => {
+      const node = page.locator('[data-testid="graph-node-cls_cell"] .graph-node')
+      const resting = await node.evaluate(el => getComputedStyle(el).borderColor)
+
+      await node.hover()
+      await expect.poll(() => node.evaluate(el => getComputedStyle(el).borderColor)).not.toBe(resting)
+    })
   })
 
   test.describe('Bus View - Edge Anchors & Curvature', () => {
