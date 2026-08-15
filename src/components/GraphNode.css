@@ -41,6 +41,10 @@
 }
 
 body.dark-canvas .graph-node.selected {
+  /* border-color reasserted for the same reason as :hover above — body.dark-canvas .graph-node
+     is specific enough to beat .graph-node.selected's border-color on its own; box-shadow was
+     already being overridden here for dark-mode contrast, so only border-color was missing. */
+  border-color: rgb(var(--accent-primary-deep));
   box-shadow:
     0 0 0 2px rgb(var(--accent-primary)),
     0 4px 10px rgba(0, 0, 0, 0.5);
