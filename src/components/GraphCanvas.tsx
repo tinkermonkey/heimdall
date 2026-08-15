@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
-import { computeEdgePath, computeFitViewport, type BoundingBox, type EdgeAnchor } from '../utils/graph'
+import { computeEdgePath, computeFitViewport, edgeLabelSize, findClearLabelPosition, type BoundingBox, type EdgeAnchor } from '../utils/graph'
 import { forceLayout } from '../utils/graphLayout'
 import { galaxyLayout } from '../utils/galaxyLayout'
 import { buildStructuralForest, structuralDescendants } from '../utils/graphHierarchy'
@@ -74,14 +74,23 @@ export interface GraphNodeHierarchyMeta {
 
 const DEFAULT_NODE_W = 138
 const DEFAULT_NODE_H = 30
-const MIN_ZOOM = 0.4
-const MAX_ZOOM = 2.5
+// Wide by default — a caller with a graph that spans thousands of px should be able to zoom out
+// far enough to see it all in frame. Narrower limits are still useful (e.g. a small fixed-size
+// diagram where zooming out past the content is pointless), so both are also exposed as props.
+const DEFAULT_MIN_ZOOM = 0.05
+const DEFAULT_MAX_ZOOM = 8
 // Opacity applied to a non-structural edge when it isn't touching the hovered or selected node
 // and the caller hasn't opted into showAllRelations. Only takes effect when isStructuralEdge is
 // supplied — without it every edge is treated as structural and this constant is unused.
 const NON_STRUCTURAL_DIM_OPACITY = 0.15
 
-type InternalEdgeProps = GraphEdge
+type InternalEdgeProps = GraphEdge & {
+  selected?: boolean
+  onSelect?: (id: string) => void
+}
+
+// Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
+const EDGE_LABEL_MARGIN = 6
 
 function GraphEdgeInternal({
   id,
@@ -95,30 +104,48 @@ function GraphEdgeInternal({
   sourceAnchor,
   targetAnchor,
   curvature,
+  selected,
+  onSelect,
 }: InternalEdgeProps) {
-  const { getNodeRect } = useGraphCanvas()
+  const { getNodeRect, nodeRects } = useGraphCanvas()
 
   const result = useMemo(() => {
     const src = getNodeRect(sourceId)
     const tgt = getNodeRect(targetId)
     if (!src || !tgt) return null
-    return computeEdgePath(src, tgt, { sourceAnchor, targetAnchor, curvature })
-  }, [getNodeRect, sourceId, targetId, sourceAnchor, targetAnchor, curvature])
+    const path = computeEdgePath(src, tgt, { sourceAnchor, targetAnchor, curvature })
+    const labelPos = label
+      ? findClearLabelPosition(path.points, edgeLabelSize(label), nodeRects, EDGE_LABEL_MARGIN)
+      : path.mid
+    return { ...path, labelPos }
+  }, [getNodeRect, sourceId, targetId, sourceAnchor, targetAnchor, curvature, label, nodeRects])
 
   if (!result) return null
 
-  const classNames = ['graph-edge', variant !== 'default' && `graph-edge--${variant}`].filter(Boolean).join(' ')
+  const classNames = ['graph-edge', variant !== 'default' && `graph-edge--${variant}`, selected && 'selected']
+    .filter(Boolean)
+    .join(' ')
+  const interactive = !!onSelect
   return (
-    <g className={classNames} role="presentation" aria-hidden="true" data-testid={`graph-edge-${id}`}>
+    <g
+      className={classNames}
+      role={interactive ? 'button' : 'presentation'}
+      aria-hidden={interactive ? undefined : true}
+      aria-pressed={interactive ? !!selected : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(id) } } : undefined}
+      data-testid={`graph-edge-${id}`}
+    >
       <GraphEdgeShape
         id={id}
         d={result.d}
-        mid={result.mid}
+        mid={result.labelPos}
         label={label}
         variant={variant}
         weight={weight}
         opacity={opacity}
         strokeDash={strokeDash}
+        onSelect={onSelect}
       />
     </g>
   )
@@ -174,6 +201,16 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   fitView?: boolean
   /** Padding in px around the fitted bounding box when fitView is enabled. Default 40. */
   fitPadding?: number
+  /** Lower zoom bound. Default 0.05 — deliberately permissive so a large graph can always be
+   *  zoomed out far enough to fit in frame. Narrow it for a small fixed-size diagram instead. */
+  minZoom?: number
+  /** Upper zoom bound. Default 8. */
+  maxZoom?: number
+  /** IDs of selected edges — draws each in the accent color. Pair with onEdgeSelect. */
+  selectedEdgeId?: string
+  /** Called with an edge's ID when its line or label is clicked. Wires up hit targets on both;
+   *  without it, edges render but aren't interactive. */
+  onEdgeSelect?: (edgeId: string) => void
 }
 
 type NodeDims = Map<string, { width: number; height: number }>
@@ -194,6 +231,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onToggleCollapse,
       fitView = false,
       fitPadding = 40,
+      minZoom = DEFAULT_MIN_ZOOM,
+      maxZoom = DEFAULT_MAX_ZOOM,
+      selectedEdgeId,
+      onEdgeSelect,
       className = '',
       ...props
     },
@@ -240,8 +281,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
 
     const { transform, viewport, bind, panTo, zoomTo } = usePanZoom({
-      minZoom: MIN_ZOOM,
-      maxZoom: MAX_ZOOM,
+      minZoom,
+      maxZoom,
       containerRef,
     })
 
@@ -342,7 +383,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       didCenterRef.current = true
 
       if (fitView) {
-        const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, MIN_ZOOM, MAX_ZOOM)
+        const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, minZoom, maxZoom)
         zoomTo(fit.zoom)
         panTo(fit.panX, fit.panY)
       } else {
@@ -359,7 +400,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const zoomToFit = useCallback((padding?: number) => {
       const bbox = computeBoundingBox()
       if (!bbox || !containerSize) return
-      const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, padding ?? fitPadding, MIN_ZOOM, MAX_ZOOM)
+      const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, padding ?? fitPadding, minZoom, maxZoom)
       zoomTo(fit.zoom)
       panTo(fit.panX, fit.panY)
     }, [computeBoundingBox, containerSize, fitPadding, zoomTo, panTo])
@@ -379,6 +420,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
       return { x: pos.x, y: pos.y, width: d.width, height: d.height }
     }, [visibleNodes, dims, getNodePosition])
+
+    // Every visible node's rect, for edges to steer their label clear of (see
+    // findClearLabelPosition). Recomputes on the same cadence as getNodeRect itself — layout and
+    // measurement changes, not pan/zoom/hover — so this doesn't add extra churn beyond that.
+    const nodeRects = useMemo(
+      () => visibleNodes.map(n => getNodeRect(n.id)).filter((r): r is NonNullable<typeof r> => r !== null),
+      [visibleNodes, getNodeRect]
+    )
 
     const hierarchyMetaFor = useCallback((id: string): GraphNodeHierarchyMeta => {
       const hasChildren = (forest.childrenOf.get(id)?.length ?? 0) > 0
@@ -413,13 +462,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
     const contextValue = useMemo(() => ({
       getNodeRect,
+      nodeRects,
       zoom: viewport.zoom,
       pan: { x: viewport.x, y: viewport.y },
       selectedNodeId,
       zoomToFit,
       setZoom: zoomTo,
       setPan: panTo,
-    }), [getNodeRect, viewport, selectedNodeId, zoomToFit, zoomTo, panTo])
+    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)
@@ -497,7 +547,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   const structural = isStructuralEdge ? isStructuralEdge(edge) : true
                   const touchesFocus =
                     edge.sourceId === hoveredNodeId || edge.targetId === hoveredNodeId ||
-                    edge.sourceId === selectedNodeId || edge.targetId === selectedNodeId
+                    edge.sourceId === selectedNodeId || edge.targetId === selectedNodeId ||
+                    edge.id === selectedEdgeId
                   const dimmed = !structural && !showAllRelations && !touchesFocus
                   const opacity = edge.opacity !== undefined ? edge.opacity : dimmed ? NON_STRUCTURAL_DIM_OPACITY : undefined
                   return (
@@ -514,6 +565,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       sourceAnchor={edge.sourceAnchor}
                       targetAnchor={edge.targetAnchor}
                       curvature={edge.curvature}
+                      selected={edge.id === selectedEdgeId}
+                      onSelect={onEdgeSelect}
                     />
                   )
                 })}

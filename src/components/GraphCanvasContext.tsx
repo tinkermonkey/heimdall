@@ -9,6 +9,9 @@ export interface GraphNodeRect {
 
 export interface GraphCanvasContextValue {
   getNodeRect: (id: string) => GraphNodeRect | null
+  /** Every currently-visible node's rect — used by edges to keep their label clear of nodes
+   *  (see findClearLabelPosition in utils/graph). Not for hit-testing; use getNodeRect for that. */
+  nodeRects: GraphNodeRect[]
   zoom: number
   pan: { x: number; y: number }
   selectedNodeId?: string

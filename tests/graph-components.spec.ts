@@ -47,6 +47,53 @@ test.describe('Graph Canvas Components', () => {
     await expect(inspectorTitle).toContainText('Cell')
   })
 
+  test('clicking an edge line selects it and shows the source/edge/target panel stack', async ({ page }) => {
+    const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+    await expect(edge).toBeVisible()
+
+    // .graph-edge__hit is the fat invisible stroke — the actual click target, not the thin
+    // visible line — same as a real user's imprecise click on a 1.25px-wide path.
+    await edge.locator('.graph-edge__hit').dispatchEvent('click')
+
+    await expect(edge).toHaveClass(/selected/)
+    await expect(page.locator('[data-testid="graph-edge-inspector-stack"]')).toBeVisible()
+    await expect(page.locator('[data-testid="graph-edge-inspector-panel"]')).toBeVisible()
+    await expect(page.locator('[data-testid="graph-inspector-panel-source"]')).toContainText('Cell')
+    await expect(page.locator('[data-testid="graph-inspector-panel-target"]')).toContainText('Nucleus')
+  })
+
+  test('clicking an edge label selects the same edge as clicking its line', async ({ page }) => {
+    const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+    await edge.locator('.graph-edge__label').dispatchEvent('click')
+
+    await expect(edge).toHaveClass(/selected/)
+    await expect(page.locator('[data-testid="edge-inspector-title"]')).toContainText('contains')
+  })
+
+  test('selecting a different edge deselects the previous one', async ({ page }) => {
+    const edge1 = page.locator('[data-testid="graph-edge-edge_1"]')
+    const edge2 = page.locator('[data-testid="graph-edge-edge_2"]')
+
+    await edge1.locator('.graph-edge__hit').dispatchEvent('click')
+    await expect(edge1).toHaveClass(/selected/)
+
+    await edge2.locator('.graph-edge__hit').dispatchEvent('click')
+    await expect(edge2).toHaveClass(/selected/)
+    await expect(edge1).not.toHaveClass(/selected/)
+  })
+
+  test('selecting a node clears any selected edge', async ({ page }) => {
+    const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+    await edge.locator('.graph-edge__hit').dispatchEvent('click')
+    await expect(edge).toHaveClass(/selected/)
+
+    await page.locator('[data-testid="graph-node-cls_mito"]').click()
+
+    await expect(edge).not.toHaveClass(/selected/)
+    await expect(page.locator('[data-testid="graph-edge-inspector-stack"]')).not.toBeVisible()
+    await expect(page.locator('[data-testid="inspector-title"]')).toContainText('Mitochondrion')
+  })
+
   test('GraphCanvas panning works on mouse drag', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
     const viewport = page.locator('[data-testid="graph-viewport"]')
