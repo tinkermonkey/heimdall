@@ -146,8 +146,22 @@ export {
   type RelationshipLink,
   type GraphInspectorProps,
 } from './components/GraphInspector'
+export {
+  GraphEdgeInspector,
+  type GraphEdgeMetadata,
+  type GraphEdgeInspectorProps,
+} from './components/GraphEdgeInspector'
 export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type TopologyNodeProps } from './components/TopologyNode'
-export { bezierPath, rectEdgePoint, rectEdgeDirection, type Point, type BezierPathResult, type EdgeAnchor } from './utils/graph'
+export {
+  bezierPath,
+  rectEdgePoint,
+  rectEdgeDirection,
+  edgeLabelSize,
+  findClearLabelPosition,
+  type Point,
+  type BezierPathResult,
+  type EdgeAnchor,
+} from './utils/graph'
 export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type HierarchyDomain } from './components/HierarchyRow'
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'

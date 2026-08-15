@@ -1,0 +1,209 @@
+.graph-edge-inspector {
+  background: rgb(var(--canvas-card));
+  border: 1px solid rgb(var(--canvas-border));
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.graph-edge-inspector__empty {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  color: rgb(var(--canvas-fg-3));
+  font-size: 12.5px;
+  padding: 14px 16px;
+}
+
+.graph-edge-inspector__head {
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid rgb(var(--canvas-border));
+}
+
+.graph-edge-inspector__head-eyebrow {
+  display: flex;
+  gap: 6px;
+  min-height: 8px;
+  margin-bottom: 8px;
+}
+
+.graph-edge-inspector__head-eyebrow:empty {
+  margin-bottom: 0;
+  min-height: 0;
+}
+
+.graph-edge-inspector__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: rgb(var(--canvas-bg-2));
+  color: rgb(var(--canvas-fg-2));
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+}
+
+.graph-edge-inspector__badge--hot {
+  background: var(--status-amber-bg-alpha);
+  color: rgb(var(--accent-primary-deep));
+  border: 1px solid var(--status-amber-border-alpha);
+}
+
+.graph-edge-inspector__badge--irrelevant {
+  background: var(--status-rose-bg-alpha);
+  color: rgb(var(--status-rose));
+  border: 1px solid var(--status-rose-border-alpha);
+}
+
+.graph-edge-inspector__title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgb(var(--canvas-fg-1));
+  line-height: 1.2;
+  font-family: var(--font-mono, monospace);
+}
+
+.graph-edge-inspector__id {
+  font-size: 11px;
+  color: rgb(var(--canvas-fg-3));
+  margin-top: 4px;
+  font-family: var(--font-mono, monospace);
+}
+
+.graph-edge-inspector__body {
+  padding: 14px 16px;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 13px;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--canvas-border-strong)) transparent;
+}
+
+.graph-edge-inspector__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.graph-edge-inspector__body::-webkit-scrollbar-thumb {
+  background: rgb(var(--canvas-border-strong));
+  border-radius: 4px;
+}
+
+.graph-edge-inspector__endpoints {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.graph-edge-inspector__arrow {
+  flex: none;
+  color: rgb(var(--canvas-fg-3));
+}
+
+.graph-edge-inspector__endpoint {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 8px 0 6px;
+  border: 1px solid rgb(var(--canvas-border));
+  border-radius: 4px;
+  background: rgb(var(--canvas-bg-2));
+  color: rgb(var(--canvas-fg-1));
+  font-family: var(--font-sans, sans-serif);
+  font-size: 12px;
+  min-width: 0;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.graph-edge-inspector__endpoint--button {
+  cursor: pointer;
+  background: rgb(var(--canvas-card));
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.graph-edge-inspector__endpoint--button:hover {
+  border-color: rgb(var(--accent-primary-deep));
+  background: rgb(var(--canvas-bg-2));
+}
+
+.graph-edge-inspector__endpoint--button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-color: rgb(var(--accent-primary-deep));
+}
+
+.graph-edge-inspector__endpoint-swatch {
+  width: 3px;
+  height: 12px;
+  border-radius: 1px;
+  background: rgb(var(--dom-default));
+  margin-right: 6px;
+  flex: none;
+}
+
+.graph-edge-inspector__endpoint[data-domain='life'] .graph-edge-inspector__endpoint-swatch {
+  background: rgb(var(--dom-life));
+}
+
+.graph-edge-inspector__endpoint[data-domain='climate'] .graph-edge-inspector__endpoint-swatch {
+  background: rgb(var(--dom-climate));
+}
+
+.graph-edge-inspector__endpoint[data-domain='software'] .graph-edge-inspector__endpoint-swatch {
+  background: rgb(var(--dom-software));
+}
+
+.graph-edge-inspector__kv {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 6px 12px;
+  font-size: 12.5px;
+  margin: 0;
+}
+
+.graph-edge-inspector__kv dt {
+  color: rgb(var(--canvas-fg-3));
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  align-self: center;
+}
+
+.graph-edge-inspector__kv dd {
+  margin: 0;
+  color: rgb(var(--canvas-fg-1));
+  font-family: var(--font-mono, monospace);
+}
+
+body.dark-canvas .graph-edge-inspector {
+  background: rgb(var(--canvas-card));
+  border-color: rgb(var(--canvas-border));
+  color: rgb(var(--canvas-fg-1));
+}
+
+body.dark-canvas .graph-edge-inspector__title {
+  color: rgb(var(--canvas-fg-1));
+}
+
+body.dark-canvas .graph-edge-inspector__kv dd {
+  color: rgb(var(--canvas-fg-1));
+}
+
+body.dark-canvas .graph-edge-inspector__endpoint--button {
+  background: rgb(var(--canvas-card));
+  border-color: rgb(var(--canvas-border));
+  color: rgb(var(--canvas-fg-1));
+}
+
+body.dark-canvas .graph-edge-inspector__endpoint--button:hover {
+  border-color: rgb(var(--accent-primary-deep));
+  background: rgb(var(--canvas-bg-2));
+}
