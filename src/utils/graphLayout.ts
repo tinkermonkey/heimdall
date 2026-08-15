@@ -188,7 +188,10 @@ export function forceLayout(
 // two-pair oscillation rather than a budget shortfall; harmless in practice but worth knowing.
 const OVERLAP_RESOLUTION_CYCLES = 40
 const RELAXATION_STEPS_PER_CYCLE = 3
-const FINAL_CLEANUP_MAX_PASSES = 400
+// Exported so other layout engines sharing separationPass (see below) use the same budget
+// instead of an independent, easy-to-miss-when-tuning magic number of their own — galaxyLayout's
+// own final cleanup loop hit the identical large-node non-convergence case this was raised for.
+export const FINAL_CLEANUP_MAX_PASSES = 400
 const SEPARATION_STEP_CAP = 6
 
 function resolveOverlaps(

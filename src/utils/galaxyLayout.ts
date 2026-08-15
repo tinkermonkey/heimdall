@@ -1,4 +1,4 @@
-import { separationPass, type LayoutNode } from './graphLayout'
+import { separationPass, FINAL_CLEANUP_MAX_PASSES, type LayoutNode } from './graphLayout'
 import { buildStructuralForest } from './graphHierarchy'
 
 export interface GalaxyLayoutNode {
@@ -121,7 +121,10 @@ export function galaxyLayout(
       pos.set(node.id, { x: p.x + (h.x - p.x) * homeStrength, y: p.y + (h.y - p.y) * homeStrength })
     }
   }
-  for (let pass = 0; pass < 50; pass++) {
+  // Shares forceLayout's cleanup-pass budget (see FINAL_CLEANUP_MAX_PASSES) rather than its own
+  // independent constant — a dense orbit of large/card-sized nodes can hit the same non-convergence
+  // case forceLayout needed a larger budget for.
+  for (let pass = 0; pass < FINAL_CLEANUP_MAX_PASSES; pass++) {
     if (!separationPass(separationNodes, pos)) break
   }
 
