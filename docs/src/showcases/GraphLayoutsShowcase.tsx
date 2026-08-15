@@ -6,7 +6,7 @@ import {
   GraphNode,
   TopologyNode,
   SegmentedControl,
-  SplitPane,
+  DetailDrawer,
   type GraphNodeData,
   type GraphEdgeData,
   type GraphNodeHierarchyMeta,
@@ -16,8 +16,6 @@ import {
   type TopologyNodeStatus,
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoCard } from '../components/ShowcaseSection'
-
-const fg2 = 'rgb(var(--canvas-fg-2, 55 65 81))'
 const fg3 = 'rgb(var(--canvas-fg-3, 107 114 128))'
 const mono = 'var(--font-mono, "JetBrains Mono", monospace)'
 
@@ -167,6 +165,7 @@ export function GraphLayoutsShowcase() {
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
   const [draggable, setDraggable] = useState(true)
+  const [drawerWidth, setDrawerWidth] = useState(360)
   // undefined = GraphCanvas's own default (each node's own rendered width). 'tight' goes to 0 —
   // the minimum legal packing, no breathing room for edges. Only meaningful for layout="force";
   // galaxy's radial hierarchy doesn't use nodeMargin at all.
@@ -312,7 +311,7 @@ export function GraphLayoutsShowcase() {
       />
       <ShowcaseSection
         label="Interactive comparison"
-        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Dimmed edges are relational (not part of the hierarchy); hover a node or turn on 'All relations' to see them at full opacity. Drag a node to reposition it, or turn dragging off. Node margin (force layout only) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them."
+        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Dimmed edges are relational (not part of the hierarchy); hover a node or turn on 'All relations' to see them at full opacity. Drag a node to reposition it, or turn dragging off. Node margin (force layout only) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them. Selecting a node or edge opens a detail panel over the canvas — drag its left edge to resize. The corner toolbar zooms and can lock pan/zoom against accidental scroll or drag."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -374,61 +373,49 @@ export function GraphLayoutsShowcase() {
               )}
             </div>
             <p style={{ margin: 0, fontSize: 12, color: fg3, fontStyle: 'italic' }}>{dataset.description}</p>
-            <div style={{ height: 520 }}>
-              <SplitPane
-                first={
-                  <GraphCanvas
-                    // GraphCanvas only auto-fits the viewport once per mount, so anything that
-                    // changes the overall footprint (a different dataset, a different layout
-                    // engine, cards vs. compact nodes, or the force layout's node margin) needs a
-                    // fresh mount to re-fit — otherwise the camera stays wherever it was framed
-                    // for the previous shape. Dimming/edge-curvature/collapse/drag state don't
-                    // affect the footprint enough to warrant it, so they're deliberately left out
-                    // of this key.
-                    key={`${datasetKey}-${layout}-${nodeStyle}-${nodeMarginPreset}`}
-                    nodes={dataset.nodes}
-                    edges={edges}
-                    layout={layout}
-                    nodeMargin={nodeMargin}
-                    isStructuralEdge={isStructuralEdge}
-                    showAllRelations={showAllRelations}
-                    collapsedNodeIds={collapsedNodeIds}
-                    onToggleCollapse={handleToggleCollapse}
-                    draggable={draggable}
-                    fitView
-                    fitPadding={40}
-                    selectedNodeId={selectedNodeId}
-                    onNodeSelect={handleNodeSelect}
-                    selectedEdgeId={selectedEdgeId}
-                    onEdgeSelect={handleEdgeSelect}
-                    renderNode={nodeStyle === 'cards' ? renderCardNode : renderCompactNode}
-                    style={{ width: '100%', height: '100%' }}
-                  />
-                }
-                second={
-                  // box-sizing: border-box keeps this padded column from overflowing its own
-                  // box by the padding amount alone — that was forcing a vertical scrollbar in
-                  // .split-pane__second even with nothing selected. minHeight (not height): a
-                  // fixed height here would let the default flex-shrink compress the stacked
-                  // source/edge/target panels to fit instead of letting them take their natural
-                  // size and scrolling the ancestor pane, which is the single scroll owner.
-                  <div style={{ padding: 16, boxSizing: 'border-box', minHeight: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                    {edgeInspectorData
-                      ? (
-                        <>
-                          {edgeSourceNode && <GraphInspector node={toNodeMetadata(edgeSourceNode)} relationships={relationshipsFor(edgeSourceNode.id)} onNodeSelect={handleNodeSelect} />}
-                          <GraphEdgeInspector edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
-                          {edgeTargetNode && <GraphInspector node={toNodeMetadata(edgeTargetNode)} relationships={relationshipsFor(edgeTargetNode.id)} onNodeSelect={handleNodeSelect} />}
-                        </>
-                      )
-                      : inspectorNode
-                        ? <GraphInspector node={inspectorNode} relationships={relationships} onNodeSelect={handleNodeSelect} />
-                        : <p style={{ fontSize: 13, color: fg2, margin: 0 }}>Select a node or edge to inspect it.</p>
-                    }
-                  </div>
-                }
-                initialSplitPercent={70}
+            <div style={{ height: 520, position: 'relative' }}>
+              <GraphCanvas
+                // GraphCanvas only auto-fits the viewport once per mount, so anything that
+                // changes the overall footprint (a different dataset, a different layout
+                // engine, cards vs. compact nodes, or the force layout's node margin) needs a
+                // fresh mount to re-fit — otherwise the camera stays wherever it was framed
+                // for the previous shape. Dimming/edge-curvature/collapse/drag state don't
+                // affect the footprint enough to warrant it, so they're deliberately left out
+                // of this key.
+                key={`${datasetKey}-${layout}-${nodeStyle}-${nodeMarginPreset}`}
+                nodes={dataset.nodes}
+                edges={edges}
+                layout={layout}
+                nodeMargin={nodeMargin}
+                isStructuralEdge={isStructuralEdge}
+                showAllRelations={showAllRelations}
+                collapsedNodeIds={collapsedNodeIds}
+                onToggleCollapse={handleToggleCollapse}
+                draggable={draggable}
+                fitView
+                fitPadding={40}
+                selectedNodeId={selectedNodeId}
+                onNodeSelect={handleNodeSelect}
+                selectedEdgeId={selectedEdgeId}
+                onEdgeSelect={handleEdgeSelect}
+                renderNode={nodeStyle === 'cards' ? renderCardNode : renderCompactNode}
+                style={{ width: '100%', height: '100%' }}
               />
+
+              {/* Floats over the canvas — auto-expands once something's selected, auto-hides
+                  otherwise, rather than reserving dedicated layout space at all times. */}
+              <DetailDrawer open={!!(inspectorNode || edgeInspectorData)} width={drawerWidth} onWidthChange={setDrawerWidth}>
+                {edgeInspectorData
+                  ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {edgeSourceNode && <GraphInspector node={toNodeMetadata(edgeSourceNode)} relationships={relationshipsFor(edgeSourceNode.id)} onNodeSelect={handleNodeSelect} />}
+                      <GraphEdgeInspector edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
+                      {edgeTargetNode && <GraphInspector node={toNodeMetadata(edgeTargetNode)} relationships={relationshipsFor(edgeTargetNode.id)} onNodeSelect={handleNodeSelect} />}
+                    </div>
+                  )
+                  : inspectorNode && <GraphInspector node={inspectorNode} relationships={relationships} onNodeSelect={handleNodeSelect} />
+                }
+              </DetailDrawer>
             </div>
           </div>
         </DemoCard>

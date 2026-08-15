@@ -4,7 +4,7 @@ import { GraphCanvasContext } from '../components/GraphCanvasContext'
 import GraphNode from '../components/GraphNode'
 import GraphInspector, { type GraphNodeMetadata, type RelationshipLink } from '../components/GraphInspector'
 import GraphEdgeInspector, { type GraphEdgeMetadata } from '../components/GraphEdgeInspector'
-import { SplitPane } from '../components/SplitPane'
+import { DetailDrawer } from '../components/DetailDrawer'
 import TopologyNode, { type TopologyNodeStatus } from '../components/TopologyNode'
 import type { EdgeAnchor } from '../utils/graph'
 import type { GraphNodeData, GraphNodeHierarchyMeta } from '../components/GraphCanvas'
@@ -181,6 +181,7 @@ export default function GraphShowcase() {
   const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
   const [draggable, setDraggable] = useState(true)
+  const [drawerWidth, setDrawerWidth] = useState(360)
 
   const handleNodeSelect = useCallback((id: string) => {
     setSelectedNodeId(id)
@@ -377,6 +378,10 @@ export default function GraphShowcase() {
           selectedNodeId={selectedNodeId}
           onNodeSelect={handleNodeSelect}
           renderNode={renderFitViewNode}
+          // This demo already embeds its own Fit/Zoom/Pan buttons as a graph node
+          // (FitViewControls, via useGraphCanvas()) specifically to demonstrate that API — the
+          // built-in toolbar would be redundant on top of it, and in this small a panel, overlaps it.
+          showToolbar={false}
           style={{ height: '100%' }}
         />
       </div>
@@ -541,55 +546,53 @@ export default function GraphShowcase() {
         </div>
       </div>
 
-      <div style={{ flex: 1, minHeight: 0, display: 'flex' }}>
-        <SplitPane
-          data-testid="graph-inspector-split-pane"
-          direction="horizontal"
-          initialSplitPercent={70}
-          minSize={300}
-          maxSize={900}
-          first={
-            canvasMode === 'graph'
-              ? graphCanvas
-              : canvasMode === 'topology'
-                ? topologyCanvas
-                : canvasMode === 'bus'
-                  ? busCanvas
-                  : canvasMode === 'galaxy'
-                    ? galaxyCanvas
-                    : fitViewCanvas
-          }
-          second={
-            edgeInspectorData ? (
-              <div data-testid="graph-edge-inspector-stack" style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: 12 }}>
-                {edgeSourceNode && (
-                  <GraphInspector
-                    data-testid="graph-inspector-panel-source"
-                    node={{ id: edgeSourceNode.id, title: edgeSourceNode.title || edgeSourceNode.label, kind: edgeSourceNode.kind, domain: edgeSourceNode.domain }}
-                    onNodeSelect={handleNodeSelect}
-                  />
-                )}
-                <GraphEdgeInspector data-testid="graph-edge-inspector-panel" edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
-                {edgeTargetNode && (
-                  <GraphInspector
-                    data-testid="graph-inspector-panel-target"
-                    node={{ id: edgeTargetNode.id, title: edgeTargetNode.title || edgeTargetNode.label, kind: edgeTargetNode.kind, domain: edgeTargetNode.domain }}
-                    onNodeSelect={handleNodeSelect}
-                  />
-                )}
-              </div>
-            ) : (
-              <GraphInspector
-                data-testid="graph-inspector-panel"
-                node={inspectorNode}
-                relationships={relationships}
-                onNodeSelect={handleNodeSelect}
-                emptyStateText={canvasMode === 'graph' ? 'Select a node to inspect.' : 'Select a service to view details.'}
-              />
-            )
-          }
-          style={{ height: '100%', flex: 1 }}
-        />
+      <div style={{ flex: 1, minHeight: 0, position: 'relative' }} data-testid="graph-content-area">
+        {canvasMode === 'graph'
+          ? graphCanvas
+          : canvasMode === 'topology'
+            ? topologyCanvas
+            : canvasMode === 'bus'
+              ? busCanvas
+              : canvasMode === 'galaxy'
+                ? galaxyCanvas
+                : fitViewCanvas}
+
+        <DetailDrawer
+          data-testid="graph-detail-drawer"
+          open={!!(selectedNodeId || selectedEdgeId)}
+          width={drawerWidth}
+          onWidthChange={setDrawerWidth}
+        >
+          {edgeInspectorData ? (
+            <div data-testid="graph-edge-inspector-stack" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {edgeSourceNode && (
+                <GraphInspector
+                  data-testid="graph-inspector-panel-source"
+                  node={{ id: edgeSourceNode.id, title: edgeSourceNode.title || edgeSourceNode.label, kind: edgeSourceNode.kind, domain: edgeSourceNode.domain }}
+                  onNodeSelect={handleNodeSelect}
+                />
+              )}
+              <GraphEdgeInspector data-testid="graph-edge-inspector-panel" edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
+              {edgeTargetNode && (
+                <GraphInspector
+                  data-testid="graph-inspector-panel-target"
+                  node={{ id: edgeTargetNode.id, title: edgeTargetNode.title || edgeTargetNode.label, kind: edgeTargetNode.kind, domain: edgeTargetNode.domain }}
+                  onNodeSelect={handleNodeSelect}
+                />
+              )}
+            </div>
+          ) : inspectorNode ? (
+            // No empty-state render here — the drawer being closed (open=false above) already
+            // is the empty state; rendering GraphInspector's own "nothing selected" text inside
+            // a drawer that exists specifically because something's selected would be redundant.
+            <GraphInspector
+              data-testid="graph-inspector-panel"
+              node={inspectorNode}
+              relationships={relationships}
+              onNodeSelect={handleNodeSelect}
+            />
+          ) : null}
+        </DetailDrawer>
       </div>
     </div>
   )

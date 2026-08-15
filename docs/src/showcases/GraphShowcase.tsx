@@ -5,7 +5,7 @@ import {
   GraphInspector,
   GraphEdgeInspector,
   TopologyNode,
-  SplitPane,
+  DetailDrawer,
   type GraphNodeData,
   type GraphEdgeData,
   type GraphNodeMetadata,
@@ -13,8 +13,6 @@ import {
   type RelationshipLink,
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
-
-const fg2 = 'rgb(var(--canvas-fg-2, 55 65 81))'
 
 const NODES: (GraphNodeData & { title?: string; domain?: string; description?: string })[] = [
   { id: 'cls_cell', x: 200, y: 160, label: 'Cell', kind: 'C', domainColor: 'life', title: 'Cell', domain: 'life', description: 'Basic unit of life' },
@@ -177,6 +175,7 @@ export function GraphNodeShowcase() {
 export function GraphCanvasShowcase() {
   const [selectedId, setSelectedId] = useState<string | undefined>()
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
+  const [drawerWidth, setDrawerWidth] = useState(320)
 
   const handleNodeSelect = useCallback((id: string) => {
     setSelectedId(id)
@@ -250,39 +249,28 @@ export function GraphCanvasShowcase() {
   return (
     <div>
       <PageHeader name="GraphCanvas" description="Pan-and-zoom SVG/HTML graph canvas. Renders GraphNode children positioned at (x, y) and GraphEdge children as bezier curves between nodes." />
-      <ShowcaseSection label="Interactive canvas" description="Pan by dragging the canvas; scroll to zoom, anchored under the cursor. Click a node or an edge (line or label) to select and inspect it in the panel.">
+      <ShowcaseSection label="Interactive canvas" description="Pan by dragging the canvas; scroll to zoom, anchored under the cursor — or use the corner toolbar, which can also lock pan/zoom. Click a node or an edge (line or label) to open a detail panel over the canvas.">
         <DemoCard>
           <div style={{ height: 360, position: 'relative' }}>
-            <SplitPane
-              first={
-                <GraphCanvas
-                  nodes={NODES}
-                  edges={EDGES}
-                  selectedNodeId={selectedId}
-                  onNodeSelect={handleNodeSelect}
-                  selectedEdgeId={selectedEdgeId}
-                  onEdgeSelect={handleEdgeSelect}
-                  renderNode={renderNode}
-                  style={{ width: '100%', height: '100%' }}
-                />
-              }
-              second={
-                // box-sizing: border-box so the padding doesn't push this column past 100% of
-                // .split-pane__second's height and force a scrollbar with nothing selected.
-                // minHeight (not height): a fixed height would let the default flex-shrink
-                // compress GraphEdgeInspector's stacked panels instead of letting the ancestor
-                // pane scroll them.
-                <div style={{ padding: 16, boxSizing: 'border-box', minHeight: '100%', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {edgeInspectorData
-                    ? <GraphEdgeInspector edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
-                    : inspectorData
-                      ? <GraphInspector node={inspectorData} relationships={relationships} />
-                      : <p style={{ fontSize: 13, color: fg2, margin: 0 }}>Select a node or edge to inspect it.</p>
-                  }
-                </div>
-              }
-              initialSplitPercent={65}
+            <GraphCanvas
+              nodes={NODES}
+              edges={EDGES}
+              selectedNodeId={selectedId}
+              onNodeSelect={handleNodeSelect}
+              selectedEdgeId={selectedEdgeId}
+              onEdgeSelect={handleEdgeSelect}
+              renderNode={renderNode}
+              style={{ width: '100%', height: '100%' }}
             />
+
+            {/* Floats over the canvas — auto-expands once something's selected, auto-hides
+                otherwise, rather than reserving dedicated layout space at all times. */}
+            <DetailDrawer open={!!(inspectorData || edgeInspectorData)} width={drawerWidth} onWidthChange={setDrawerWidth}>
+              {edgeInspectorData
+                ? <GraphEdgeInspector edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
+                : inspectorData && <GraphInspector node={inspectorData} relationships={relationships} />
+              }
+            </DetailDrawer>
           </div>
         </DemoCard>
       </ShowcaseSection>
@@ -305,6 +293,8 @@ export function GraphCanvasShowcase() {
           <PropRow name="onNodeDragEnd" type="(nodeId: string, position: { x: number; y: number }) => void" description="Called once a drag ends, with the node's new position. Only fires for an actual drag past a small movement threshold, not a plain click." />
           <PropRow name="minZoom" type="number" def="0.05" description="Lower zoom bound. Permissive by default so a large graph can always be zoomed out far enough to fit in frame." />
           <PropRow name="maxZoom" type="number" def="8" description="Upper zoom bound." />
+          <PropRow name="showToolbar" type="boolean" def="true" description="Shows the built-in zoom in/out/fit and pan-and-zoom-lock toolbar. Set false to omit it entirely." />
+          <PropRow name="toolbarPosition" type="GraphToolbarPosition" def="'bottom-right'" description="Any of the 4 corners or 4 edge-centers. No effect when showToolbar is false." />
         </PropsTable>
       </ShowcaseSection>
       <ShowcaseSection label="Props (GraphNode)">
@@ -319,6 +309,20 @@ export function GraphCanvasShowcase() {
           <PropRow name="collapsed" type="boolean" def="false" description="Whether the node's subtree is currently hidden. Flips the toggle's chevron direction." />
           <PropRow name="hiddenDescendantCount" type="number" def="0" description="Shown as a '+N' badge next to the toggle while collapsed." />
           <PropRow name="onToggleCollapse" type="() => void" description="Activates the collapse/expand toggle. Omit to render hasChildren without an interactive toggle." />
+        </PropsTable>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props (DetailDrawer)" description="Floats over the nearest position: relative ancestor — used above for the node/edge inspector, but works for any selection-driven detail panel. No backdrop, no focus trap: unlike Drawer, the content behind it stays interactive.">
+        <PropsTable>
+          <PropRow name="open" type="boolean" description="Whether there's content to show. Drives auto-expand/auto-hide — animates its own width to/from 0." />
+          <PropRow name="width" type="number" def="360" description="Width in px while open. When resizable, only the initial value — width is tracked internally from then on." />
+          <PropRow name="onWidthChange" type="(width: number) => void" description="Called as the user drags the left-edge resize handle. Omit to disable resizing — the handle (and its hover highlight) isn't rendered at all without it." />
+          <PropRow name="minWidth" type="number" def="260" description="Lower resize bound." />
+          <PropRow name="maxWidth" type="number" def="640" description="Upper resize bound." />
+        </PropsTable>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props (GraphToolbar)" description="Floating zoom in / zoom out / zoom to fit / lock controls, rendered by GraphCanvas itself by default (see its showToolbar/toolbarPosition props) — exported separately for a custom placement or control set.">
+        <PropsTable>
+          <PropRow name="position" type="GraphToolbarPosition" def="'bottom-right'" description="Any of the 4 corners or 4 edge-centers. left-center/right-center stack the buttons vertically instead of in a row." />
         </PropsTable>
       </ShowcaseSection>
     </div>

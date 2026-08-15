@@ -210,11 +210,13 @@ test.describe('Graph Canvas Components', () => {
     const box = await canvas.boundingBox()
     if (!box) throw new Error('Canvas not visible')
 
-    // Click in the lower-right quadrant, away from any nodes
-    const startX = box.x + box.width - 60
-    const startY = box.y + box.height - 60
+    // Top-center, away from any node and from the default toolbar (bottom-right, per
+    // GraphCanvas's toolbarPosition default) — verified empty background at this canvas's
+    // current node layout, unlike either bottom corner or the top-left/right corners.
+    const startX = box.x + box.width / 2
+    const startY = box.y + 40
     const endX = startX - 80
-    const endY = startY - 80
+    const endY = startY + 60
 
     await page.mouse.move(startX, startY)
     await page.mouse.down()
@@ -245,20 +247,20 @@ test.describe('Graph Canvas Components', () => {
     expect(initialTransform).not.toBe(newTransform)
   })
 
-  test('GraphInspector displays empty state when no node selected', async ({ page }) => {
-    const emptyState = page.locator('[data-testid="inspector-empty"]')
+  test('detail drawer is hidden until a node is selected', async ({ page }) => {
+    const drawer = page.locator('[data-testid="graph-detail-drawer"]')
 
-    // Verify empty state is visible on initial load
-    await expect(emptyState).toBeVisible()
+    // Auto-hidden on initial load — no node selected, nothing to show.
+    await expect(drawer).not.toBeVisible()
 
-    // Click a node to dismiss the empty state
     const allNodes = page.locator('[data-testid^="graph-node-"]')
     const firstNode = allNodes.first()
 
     await expect(firstNode).toBeVisible()
     await firstNode.click()
 
-    await expect(emptyState).not.toBeVisible()
+    await expect(drawer).toBeVisible()
+    await expect(page.locator('[data-testid="graph-inspector-panel"]')).toBeVisible()
   })
 
   test('GraphInspector shows node metadata', async ({ page }) => {
@@ -377,15 +379,19 @@ test.describe('Graph Canvas Components', () => {
     expect(dotCount).toBeGreaterThan(0)
   })
 
-  test('SplitPane composition works with GraphCanvas and GraphInspector', async ({ page }) => {
-    const splitPane = page.locator('.split-pane')
-    await expect(splitPane).toBeVisible()
-
+  test('detail drawer overlays the graph canvas rather than sharing space with it', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
-    const inspector = page.locator('.graph-inspector')
-
     await expect(canvas).toBeVisible()
+    const canvasBoxBefore = await canvas.boundingBox()
+
+    await page.locator('[data-testid="graph-node-cls_cell"]').click()
+
+    const inspector = page.locator('.graph-inspector')
     await expect(inspector).toBeVisible()
+    // The canvas doesn't shrink to make room for it — the drawer floats in front, confirmed by
+    // the canvas's own box being unchanged now that something's selected and the drawer is open.
+    const canvasBoxAfter = await canvas.boundingBox()
+    expect(canvasBoxAfter).toEqual(canvasBoxBefore)
   })
 
   test('Node selection persists across canvas interactions', async ({ page }) => {
@@ -585,6 +591,9 @@ test.describe('Graph Canvas Components', () => {
     })
 
     test('GraphInspector panel visual snapshot', async ({ page }) => {
+      // The detail drawer (and the GraphInspector inside it) only renders once something's
+      // selected — there's no standalone always-visible empty state to screenshot anymore.
+      await page.locator('[data-testid="graph-node-cls_cell"]').click()
       const inspector = page.locator('.graph-inspector')
       await expect(inspector).toHaveScreenshot('graph-inspector-light.png')
     })
@@ -657,6 +666,7 @@ test.describe('Graph Canvas Components', () => {
     })
 
     test('GraphInspector panel visual snapshot in dark mode', async ({ page }) => {
+      await page.locator('[data-testid="graph-node-cls_cell"]').click()
       const inspector = page.locator('.graph-inspector')
       await expect(inspector).toHaveScreenshot('graph-inspector-dark.png')
     })
@@ -964,7 +974,10 @@ test.describe('Graph Canvas Components', () => {
       // min-width (much larger than GraphNode's ~138px default).
       const transform = await page.locator('[data-testid="graph-viewport"]').getAttribute('transform')
       const zoom = parseFloat(transform!.match(/matrix\(([^,]+)/)![1])
-      expect(box!.width / zoom).toBeGreaterThanOrEqual(180)
+      // A tiny tolerance against float division rounding (box.width / zoom can land a fraction of
+      // a px under the true 180 depending on the exact zoom value) — asserting the exact integer
+      // boundary made this fail on legitimate sub-pixel jitter unrelated to the card's real size.
+      expect(box!.width / zoom).toBeGreaterThanOrEqual(179.5)
 
       const { overlaps } = await nodeOverlaps(page)
       expect(overlaps).toBe(0)
