@@ -99,7 +99,8 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
 
         {stacks.map((s, si) => {
           const x = pad.left + si * (bw + gap)
-          const total = totals[si] || 1
+          const validSum = s.parts.filter(p => !isNaN(p)).reduce((a, b) => a + b, 0)
+          const total = isNaN(totals[si]) ? (validSum || 1) : (totals[si] || 1)
           let acc = 0
           return (
             <g key={si}>
@@ -112,7 +113,7 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
                 return <rect key={pi} x={x} y={y} width={bw} height={ph} fill={cs[pi % cs.length]} />
               })}
               {stackLabel && !isNaN(totals[si]) && (
-                <text x={x + bw / 2} y={yAt(totals[si]) - 6}
+                <text x={x + bw / 2} y={pad.top + innerH - acc - 6}
                   textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
                   {stackLabel === 'total' ? fmt(totals[si]) : stackLabel(s)}
                 </text>
