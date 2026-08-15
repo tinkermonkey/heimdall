@@ -99,7 +99,6 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
 
         {stacks.map((s, si) => {
           const x = pad.left + si * (bw + gap)
-          const validSum = s.parts.filter(p => !isNaN(p)).reduce((a, b) => a + b, 0)
           const isComplete = !isNaN(totals[si]) && totals[si] > 0
           const denominator = isComplete ? totals[si] : Math.max(...validTotals, 1)
           let acc = 0
