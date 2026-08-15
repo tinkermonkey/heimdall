@@ -277,6 +277,40 @@ test.describe('Chart Components', () => {
       const fill = await cells.first().getAttribute('fill') ?? ''
       expect(fill).toMatch(/^#[0-9a-fA-F]{8}$/)
     })
+
+    test('showValues renders numeric values in cells', async ({ page }) => {
+      const el = page.locator('svg[data-testid="heatmap-showvalues"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      let hasNumericValue = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t && /^\d/.test(t)) { hasNumericValue = true; break }
+      }
+      expect(hasNumericValue).toBe(true)
+    })
+
+    test('valueFormat custom function is applied to cell values', async ({ page }) => {
+      const el = page.locator('svg[data-testid="heatmap-valueformat"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Should have values formatted by the custom function (rounded integers)
+      let hasFormattedValue = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t && /^\d+$/.test(t)) { hasFormattedValue = true; break }
+      }
+      expect(hasFormattedValue).toBe(true)
+    })
+
+    test('showValues does not render NaN values', async ({ page }) => {
+      const el = page.locator('svg[data-testid="heatmap-standard"]')
+      const texts = el.locator('text')
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        expect(t).not.toBe('NaN')
+      }
+    })
   })
 
   // ── StatusTimeline ─────────────────────────────────────────────────────────
