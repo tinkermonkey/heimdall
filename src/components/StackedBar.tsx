@@ -112,7 +112,7 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
               {stackLabel && (
                 <text x={x + bw / 2} y={pad.top - 6}
                   textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
-                  {stackLabel === 'total' ? fmt(total) : stackLabel(s)}
+                  {stackLabel === 'total' ? fmt(totals[si]) : stackLabel(s)}
                 </text>
               )}
               {axes && (
