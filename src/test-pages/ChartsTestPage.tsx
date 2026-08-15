@@ -285,6 +285,14 @@ export default function ChartsTestPage() {
         </div>
       </section>
 
+      <section style={section}>
+        {monoLabel('StackedBar · with NaN stacks normalized')}
+        <div style={card}>
+          <StackedBar stacks={STACKS_WITH_NAN} width={480} height={180} axes grid ticks={4} normalized stackLabel="total"
+            data-testid="stackedbar-nan-normalized" />
+        </div>
+      </section>
+
       {/* ── 6. Donut ────────────────────────────────────────────────────── */}
       <section style={section}>
         {monoLabel('Donut · Micro')}

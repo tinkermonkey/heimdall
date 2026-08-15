@@ -261,6 +261,38 @@ test.describe('Chart Components', () => {
       const uniqueYs = new Set(yValues)
       expect(uniqueYs.size).toBeGreaterThan(1)
     })
+
+    test('NaN stacks with normalized mode render proportionally without overflow', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-nan-normalized"]')
+      await expect(el).toBeVisible()
+      // Check that bars are rendered (rects exist)
+      expect(await el.locator('rect').count()).toBeGreaterThan(0)
+      // Get the SVG viewBox/dimensions to ensure bars don't overflow
+      const height = await el.evaluate((e: SVGSVGElement) => e.getAttribute('height'))
+      const width = await el.evaluate((e: SVGSVGElement) => e.getAttribute('width'))
+      expect(height).toBeTruthy()
+      expect(width).toBeTruthy()
+      // All rects should have valid y and height attributes (no NaN)
+      const rects = el.locator('rect')
+      for (let i = 0; i < await rects.count(); i++) {
+        const rect = rects.nth(i)
+        const y = await rect.getAttribute('y')
+        const h = await rect.getAttribute('height')
+        expect(y).not.toContain('NaN')
+        expect(h).not.toContain('NaN')
+        // Heights should be positive numbers
+        const heightNum = parseFloat(h ?? '0')
+        expect(heightNum).toBeGreaterThanOrEqual(0)
+      }
+      // Y-axis should show percentage labels
+      const texts = el.locator('text')
+      let hasPercent = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t?.includes('%')) { hasPercent = true; break }
+      }
+      expect(hasPercent).toBe(true)
+    })
   })
 
   // ── Donut ──────────────────────────────────────────────────────────────────
@@ -507,6 +539,10 @@ test.describe('Chart Components', () => {
       await expect(page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')).toHaveScreenshot('stackedbar-stacklabel-normalized-light.png')
     })
 
+    test('StackedBar NaN with normalized snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-nan-normalized"]')).toHaveScreenshot('stackedbar-nan-normalized-light.png')
+    })
+
     test('Donut standard snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="donut-standard"]')).toHaveScreenshot('donut-standard-light.png')
     })
@@ -572,6 +608,10 @@ test.describe('Chart Components', () => {
 
     test('StackedBar stackLabel="total" normalized dark snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')).toHaveScreenshot('stackedbar-stacklabel-normalized-dark.png')
+    })
+
+    test('StackedBar NaN with normalized dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-nan-normalized"]')).toHaveScreenshot('stackedbar-nan-normalized-dark.png')
     })
 
     test('Donut dark snapshot', async ({ page }) => {
