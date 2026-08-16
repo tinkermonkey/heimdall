@@ -31,6 +31,22 @@ export interface GalaxyLayoutOptions {
   settleCycles?: number
   /** 0-1. Fraction of the remaining distance to home closed per settle cycle. Default 0.18. */
   homeStrength?: number
+  /**
+   * Extra breathing room kept clear around each node during the settle cycles, on top of what's
+   * needed to just avoid overlap — same idea as forceLayout's nodeMargin, and for the same
+   * reason: settleCycles' separation passes (see separationPass) only resolve literal overlap, so
+   * without this, a handful of sibling/cross-orbit pairs can converge to touching or a few px of
+   * gap even though most of the layout is well spread — verified on a 56-node/4-level hierarchy
+   * with real-world size variance (galaxyBudgetData in the repo's test pages), where the tightest
+   * pairs landed under 1px apart. Defaults to 0 (unpadded, today's existing behavior) rather than
+   * forceLayout's own width default — galaxyLayout's nodeSpread-based initial placement already
+   * gives most of the layout generous spacing, so defaulting this on would shift node positions
+   * (and every committed galaxy-layout snapshot) for a cosmetic fix to a narrow edge case; opt in
+   * with a modest value instead. The final cleanup pass (FINAL_CLEANUP_MAX_PASSES) always runs
+   * unpadded regardless of this value — it exists purely to guarantee zero literal overlap, and
+   * padding it too would fight homeStrength forever on a dense orbit instead of converging.
+   */
+  nodeMargin?: number
 }
 
 /**
@@ -59,6 +75,7 @@ export function galaxyLayout(
     startAngle = -Math.PI / 2,
     settleCycles = 24,
     homeStrength = 0.18,
+    nodeMargin,
   } = options
 
   if (nodes.length === 0) return new Map()
@@ -111,9 +128,15 @@ export function galaxyLayout(
   )
   // separationPass only reads id/width/height/pinned off each node — x/y live in `pos`.
   const separationNodes: LayoutNode[] = nodes.map(n => ({ id: n.id, width: n.width, height: n.height, pinned: n.pinned, x: 0, y: 0 }))
+  // See GalaxyLayoutOptions.nodeMargin — unlike forceLayout's marginFor, undefined means 0
+  // (unpadded) here, not each node's own width.
+  const margin = nodeMargin ?? 0
+  const paddedSeparationNodes: LayoutNode[] = margin === 0
+    ? separationNodes
+    : nodes.map(n => ({ id: n.id, width: n.width + margin, height: n.height + margin, pinned: n.pinned, x: 0, y: 0 }))
 
   for (let cycle = 0; cycle < settleCycles; cycle++) {
-    separationPass(separationNodes, pos)
+    separationPass(paddedSeparationNodes, pos)
     for (const node of nodes) {
       if (node.pinned) continue
       const p = pos.get(node.id)!

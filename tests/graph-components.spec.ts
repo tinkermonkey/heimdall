@@ -1055,3 +1055,39 @@ test.describe('Graph Canvas Components', () => {
     })
   })
 })
+
+// A standalone tuning/regression aid for galaxyLayout itself, not a component showcase (see
+// GalaxyLayoutLab.tsx) — real hierarchy, 56 nodes/4 levels/~4 orders of magnitude of size
+// variance, much denser than GALAXY_DEMO_NODES above. No visual snapshots here deliberately:
+// this page exists to be eyeballed and iterated on directly, not pinned to a baseline.
+test.describe('Galaxy Layout Lab (POC dataset stress test)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=galaxy-layout-lab')
+    await page.waitForLoadState('networkidle')
+    await loadSelfHostedFonts(page)
+    await assertFontsLoaded(page)
+    await freezeAnimations(page)
+  })
+
+  test('renders every node with no overlapping bounding boxes', async ({ page }) => {
+    const nodes = page.locator('[data-testid^="graph-node-"]')
+    const count = await nodes.count()
+    expect(count).toBe(57) // 56 budget rows + the synthetic root
+
+    const boxes = []
+    for (let i = 0; i < count; i++) {
+      const box = await nodes.nth(i).boundingBox()
+      if (box) boxes.push(box)
+    }
+    let overlaps = 0
+    for (let i = 0; i < boxes.length; i++) {
+      for (let j = i + 1; j < boxes.length; j++) {
+        const a = boxes[i], b = boxes[j]
+        const overlapX = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x)
+        const overlapY = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y)
+        if (overlapX > 0 && overlapY > 0) overlaps++
+      }
+    }
+    expect(overlaps).toBe(0)
+  })
+})

@@ -176,13 +176,17 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    *  structural edges (see isStructuralEdge). Nodes with x and y are pinned under either layout. */
   layout?: 'manual' | 'force' | 'galaxy'
   /**
-   * layout="force" only. Extra breathing room kept clear around each node's own footprint, on
-   * top of what's needed to just avoid overlap — this is what leaves room for an edge to be
+   * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
+   * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
    * visible between two connected nodes instead of their boxes settling nearly flush, which with
    * substantial cards (renderNode content) could otherwise read as if edges were missing
-   * entirely. Defaults to each node's own rendered width, which scales sensibly for both compact
-   * chips and larger cards with no configuration; pass a fixed number to use the same margin for
-   * every node, or 0 for the tightest legal packing. See ForceLayoutOptions.nodeMargin.
+   * entirely. Defaults differ by engine: "force" defaults to each node's own rendered width
+   * (scales sensibly for both compact chips and larger cards with no configuration — see
+   * ForceLayoutOptions.nodeMargin); "galaxy" defaults to 0 (unpadded) since its nodeSpread-based
+   * placement already spaces most of the layout generously, and defaulting this on would shift
+   * every existing galaxy layout's node positions for a fix to a narrow edge case — see
+   * GalaxyLayoutOptions.nodeMargin. Pass a fixed number for either engine to use the same margin
+   * for every node.
    */
   nodeMargin?: number
   /**
@@ -432,7 +436,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           target: e.targetId,
           structural: isStructuralEdge ? isStructuralEdge(e) : true,
         }))
-        setComputedPositions(galaxyLayout(layoutNodes, layoutEdges))
+        setComputedPositions(galaxyLayout(layoutNodes, layoutEdges, { nodeMargin }))
       }
     }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge])
 
