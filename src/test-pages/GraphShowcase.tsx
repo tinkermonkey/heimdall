@@ -193,6 +193,11 @@ export default function GraphShowcase() {
     setSelectedNodeId(undefined)
   }, [])
 
+  const handleBackgroundClick = useCallback(() => {
+    setSelectedNodeId(undefined)
+    setSelectedEdgeId(undefined)
+  }, [])
+
   const handleToggleCollapse = useCallback((id: string) => {
     setCollapsedNodeIds(prev => {
       const next = new Set(prev)
@@ -320,6 +325,7 @@ export default function GraphShowcase() {
       onNodeSelect={handleNodeSelect}
       selectedEdgeId={selectedEdgeId}
       onEdgeSelect={handleEdgeSelect}
+      onBackgroundClick={handleBackgroundClick}
       draggable={draggable}
       renderNode={renderGraphNode}
       style={{ height: '100%' }}
@@ -336,6 +342,7 @@ export default function GraphShowcase() {
       fitPadding={40}
       selectedNodeId={selectedNodeId}
       onNodeSelect={handleNodeSelect}
+      onBackgroundClick={handleBackgroundClick}
       renderNode={renderFitViewNode}
       style={{ height: '100%' }}
     />
@@ -356,6 +363,7 @@ export default function GraphShowcase() {
       fitPadding={40}
       selectedNodeId={selectedNodeId}
       onNodeSelect={handleNodeSelect}
+      onBackgroundClick={handleBackgroundClick}
       // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
       // up domainColor/kind styling and the collapse toggle from hierarchy meta.
       renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
@@ -377,6 +385,7 @@ export default function GraphShowcase() {
           fitPadding={20}
           selectedNodeId={selectedNodeId}
           onNodeSelect={handleNodeSelect}
+          onBackgroundClick={handleBackgroundClick}
           renderNode={renderFitViewNode}
           // This demo already embeds its own Fit/Zoom/Pan buttons as a graph node
           // (FitViewControls, via useGraphCanvas()) specifically to demonstrate that API — the

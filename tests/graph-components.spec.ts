@@ -263,6 +263,51 @@ test.describe('Graph Canvas Components', () => {
     await expect(page.locator('[data-testid="graph-inspector-panel"]')).toBeVisible()
   })
 
+  test('clicking the canvas background deselects the node and closes the drawer', async ({ page }) => {
+    const canvas = page.locator('.graph-canvas')
+    const drawer = page.locator('[data-testid="graph-detail-drawer"]')
+    const node = page.locator('[data-testid="graph-node-cls_cell"]')
+
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+    await expect(drawer).toBeVisible()
+
+    const box = await canvas.boundingBox()
+    if (!box) throw new Error('Canvas not visible')
+
+    // Top-center, away from any node and from the default toolbar (bottom-right) — same
+    // verified-empty background spot the panning test below uses.
+    await canvas.click({ position: { x: box.width / 2, y: 40 } })
+
+    await expect(node).not.toHaveClass(/selected/)
+    await expect(drawer).not.toBeVisible()
+  })
+
+  test('a background pan drag does not deselect the node or close the drawer', async ({ page }) => {
+    const canvas = page.locator('.graph-canvas')
+    const drawer = page.locator('[data-testid="graph-detail-drawer"]')
+    const node = page.locator('[data-testid="graph-node-cls_cell"]')
+
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+    await expect(drawer).toBeVisible()
+
+    const box = await canvas.boundingBox()
+    if (!box) throw new Error('Canvas not visible')
+
+    const startX = box.x + box.width / 2
+    const startY = box.y + 40
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    // Past DRAG_THRESHOLD and with enough steps for pointermove to fire more than once.
+    await page.mouse.move(startX - 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    await expect(node).toHaveClass(/selected/)
+    await expect(drawer).toBeVisible()
+  })
+
   test('GraphInspector shows node metadata', async ({ page }) => {
     const cellNode = page.locator('[data-testid="graph-node-cls_cell"]')
     await cellNode.click()

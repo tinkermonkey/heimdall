@@ -225,6 +225,12 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** Called with an edge's ID when its line or label is clicked. Wires up hit targets on both;
    *  without it, edges render but aren't interactive. */
   onEdgeSelect?: (edgeId: string) => void
+  /** Called when the canvas background — not a node, not an edge — is clicked: the typical
+   *  "click empty space to deselect" gesture. Pair with clearing selectedNodeId/selectedEdgeId
+   *  (and closing a detail panel driven by them) yourself; GraphCanvas doesn't do either on its
+   *  own since both are controlled props. A genuine pan drag never fires this — only a press and
+   *  release within a few px of each other counts as a click. */
+  onBackgroundClick?: () => void
   /** Lets a node be repositioned by dragging it. Default true. The dropped position persists
    *  locally (overriding explicit x/y or the computed layout position) until the node list
    *  changes; it isn't written back to the nodes prop. Pair with onNodeDragEnd to persist it
@@ -266,6 +272,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       maxZoom = DEFAULT_MAX_ZOOM,
       selectedEdgeId,
       onEdgeSelect,
+      onBackgroundClick,
       draggable = true,
       onNodeDragEnd,
       showToolbar = true,
@@ -354,10 +361,33 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       locked,
     })
 
+    // Start of a potential background click — recorded whenever the gesture begins on genuine
+    // background (not a node, not an edge, not something opting out via data-no-drag, e.g. the
+    // toolbar), regardless of whether pan/zoom is locked: clicking to deselect is unrelated to
+    // the viewport lock, so it shouldn't be gated by it the way the pan drag itself is.
+    const backgroundClickStartRef = useRef<{ x: number; y: number } | null>(null)
+
     const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-      if (e.target instanceof Element && e.target.closest('.graph-node, [data-no-drag]')) return
+      if (e.target instanceof Element && e.target.closest('.graph-node, .graph-edge, [data-no-drag]')) {
+        backgroundClickStartRef.current = null
+        return
+      }
+      backgroundClickStartRef.current = { x: e.clientX, y: e.clientY }
       bind.onPointerDown(e)
     }, [bind])
+
+    // A genuine pan drag never fires onBackgroundClick — only a press and release within
+    // DRAG_THRESHOLD px of each other does, the same "was this actually a drag" bar node
+    // dragging uses. Independent of usePanZoom's own drag machinery (which document-level
+    // pointermove/up listeners only run while a pan is in progress, and not at all while
+    // locked) so this keeps working even when pan/zoom is locked.
+    const handleCanvasPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+      const start = backgroundClickStartRef.current
+      backgroundClickStartRef.current = null
+      if (!start || !onBackgroundClick) return
+      const distance = Math.hypot(e.clientX - start.x, e.clientY - start.y)
+      if (distance < DRAG_THRESHOLD) onBackgroundClick()
+    }, [onBackgroundClick])
 
     const rawId = useId()
     const gridPatternId = `grid${rawId.replace(/:/g, '')}`
@@ -651,6 +681,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         aria-label="Graph canvas"
         className={['graph-canvas', className].filter(Boolean).join(' ')}
         onPointerDown={handlePointerDown}
+        onPointerUp={handleCanvasPointerUp}
         onKeyDown={bind.onKeyDown}
         tabIndex={bind.tabIndex}
         role={bind.role}

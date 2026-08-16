@@ -195,6 +195,11 @@ export function GraphLayoutsShowcase() {
     setSelectedNodeId(undefined)
   }, [])
 
+  const handleBackgroundClick = useCallback(() => {
+    setSelectedNodeId(undefined)
+    setSelectedEdgeId(undefined)
+  }, [])
+
   const handleToggleCollapse = useCallback((id: string) => {
     setCollapsedNodeIds(prev => {
       const next = new Set(prev)
@@ -398,6 +403,7 @@ export function GraphLayoutsShowcase() {
                 onNodeSelect={handleNodeSelect}
                 selectedEdgeId={selectedEdgeId}
                 onEdgeSelect={handleEdgeSelect}
+                onBackgroundClick={handleBackgroundClick}
                 renderNode={nodeStyle === 'cards' ? renderCardNode : renderCompactNode}
                 style={{ width: '100%', height: '100%' }}
               />

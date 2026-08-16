@@ -187,6 +187,11 @@ export function GraphCanvasShowcase() {
     setSelectedId(undefined)
   }, [])
 
+  const handleBackgroundClick = useCallback(() => {
+    setSelectedId(undefined)
+    setSelectedEdgeId(undefined)
+  }, [])
+
   const renderNode = useCallback((node: GraphNodeData, selected: boolean) => (
     <GraphNode
       id={node.id}
@@ -259,6 +264,7 @@ export function GraphCanvasShowcase() {
               onNodeSelect={handleNodeSelect}
               selectedEdgeId={selectedEdgeId}
               onEdgeSelect={handleEdgeSelect}
+              onBackgroundClick={handleBackgroundClick}
               renderNode={renderNode}
               style={{ width: '100%', height: '100%' }}
             />
@@ -282,6 +288,7 @@ export function GraphCanvasShowcase() {
           <PropRow name="onNodeSelect" type="(id: string) => void" description="Called when a node is clicked" />
           <PropRow name="selectedEdgeId" type="string" description="Currently selected edge ID (controlled)" />
           <PropRow name="onEdgeSelect" type="(id: string) => void" description="Called when an edge's line or label is clicked. Without it, edges render but aren't interactive." />
+          <PropRow name="onBackgroundClick" type="() => void" description="Called when empty canvas background is clicked — the 'click away to deselect' gesture. A genuine pan drag never fires it. Pair with clearing selectedNodeId/selectedEdgeId yourself." />
           <PropRow name="renderNode" type="(node: GraphNodeData, selected: boolean) => ReactNode" description="Custom node renderer. Omit to use the default GraphNode." />
           <PropRow name="layout" type="'manual' | 'force' | 'galaxy'" def="'manual'" description="'manual' uses explicit x/y per node; 'force' runs a spring layout; 'galaxy' arranges nodes as a radial hierarchy of orbits built from structural edges" />
           <PropRow name="nodeMargin" type="number" description="layout='force' only. Breathing room kept clear around each node's own footprint, on top of what's needed to avoid overlap — without it, connected nodes in a force layout can settle boxes-nearly-flush, leaving little to no visible edge between them. Defaults to each node's own rendered width; pass a fixed number to use the same margin everywhere, or 0 for the tightest legal packing." />
