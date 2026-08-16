@@ -80,7 +80,7 @@ test.describe('Graph Utilities', () => {
       const p2: Point = { x: 100, y: 100 }
       const result = bezierPath(p1, p2)
 
-      expect(result.d).toMatch(/^M \d+\.?\d* \d+\.?\d* Q [\d\-]+\.?\d* [\d\-]+\.?\d* \d+\.?\d* \d+\.?\d*$/)
+      expect(result.d).toMatch(/^M \d+\.?\d* \d+\.?\d* Q [\d-]+\.?\d* [\d-]+\.?\d* \d+\.?\d* \d+\.?\d*$/)
       expect(result.d).toContain('M 0 0')
       expect(result.d).toContain('100 100')
     })

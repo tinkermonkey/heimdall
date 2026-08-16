@@ -11,7 +11,7 @@ import {
   type FormCalloutVariant,
   type AlertSeverity,
 } from '@tinkermonkey/heimdall-ui'
-import { BareSection, AxisRow, Caption } from '../components/BareSection'
+import { BareSection, AxisRow } from '../components/BareSection'
 
 const FORM_CALLOUT_VARIANTS: FormCalloutVariant[] = ['info', 'warn', 'error']
 const ALERT_SEVERITIES: AlertSeverity[] = ['error', 'warn', 'info', 'success']

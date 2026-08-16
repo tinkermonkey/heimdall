@@ -90,7 +90,6 @@ export interface FromXRayOptions {
 
 /* ------------------------------------------------------------- primitives -- */
 
-// @ts-ignore flattenInto may receive any type due to X-Ray metadata structure
 /** X-Ray `1-{8hex}-{24hex}` -> 32-hex; passthrough for already-hex ids. */
 function xrayTraceIdToHex(tid: string | undefined): string {
   if (!tid) return ''
