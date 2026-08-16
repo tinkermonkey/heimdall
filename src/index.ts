@@ -136,7 +136,17 @@ export {
 export { type GraphCanvasContextValue, type GraphNodeRect } from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
-export { forceLayout, type LayoutNode, type LayoutEdge, type ForceLayoutOptions } from './utils/graphLayout'
+export {
+  forceLayout,
+  clusteredForceLayout,
+  type LayoutNode,
+  type LayoutEdge,
+  type ForceLayoutOptions,
+  type ClusteredLayoutOptions,
+  type ClusteredLayoutResult,
+} from './utils/graphLayout'
+export { louvainCluster, type ClusterEdge, type ClusterTreeNode, type LouvainOptions } from './utils/graphClustering'
+export { packClusters, type PackedCircle, type PackOptions } from './utils/graphPacking'
 export {
   GraphInspector,
   type GraphNodeMetadata,

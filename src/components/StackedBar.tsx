@@ -19,6 +19,7 @@ export interface StackedBarProps extends Omit<React.SVGAttributes<SVGSVGElement>
   normalized?: boolean
   tone?: ChartTone
   label?: string
+  stackLabel?: 'total' | ((stack: StackedBarStack) => string)
   className?: string
   style?: React.CSSProperties
 }
@@ -36,6 +37,7 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
       normalized = false,
       tone = 'light',
       label = 'Stacked bar chart',
+      stackLabel,
       className = '',
       style,
       ...rest
@@ -45,14 +47,15 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
     const T = TONE[tone]
     const cs = colors ?? SERIES_COLORS
 
-    const pad = { top: 8, right: 8, bottom: axes ? 22 : 6, left: axes ? 30 : 6 }
+    const pad = { top: stackLabel ? 24 : 8, right: 8, bottom: axes ? 22 : 6, left: axes ? 30 : 6 }
     const innerW = width - pad.left - pad.right
     const innerH = height - pad.top - pad.bottom
 
     if (!stacks || stacks.length === 0) return null
 
-    const totals = stacks.map(s => s.parts.reduce((a, b) => a + b, 0))
-    const hi = normalized ? 1 : Math.max(...totals)
+    const totals = stacks.map(s => s.parts.reduce((a, b) => (isNaN(a) || isNaN(b)) ? NaN : a + b, 0))
+    const validTotals = totals.filter(t => !isNaN(t))
+    const hi = normalized ? 1 : (validTotals.length > 0 ? Math.max(...validTotals) : 1)
     const n = stacks.length
     const gap = Math.max(2, (innerW / n) * 0.22)
     const bw = (innerW - gap * (n - 1)) / n
@@ -96,17 +99,25 @@ export const StackedBar = React.forwardRef<SVGSVGElement, StackedBarProps>(
 
         {stacks.map((s, si) => {
           const x = pad.left + si * (bw + gap)
-          const total = totals[si] || 1
+          const isComplete = !isNaN(totals[si]) && totals[si] > 0
+          const denominator = isComplete ? totals[si] : Math.max(...validTotals, 1)
           let acc = 0
           return (
             <g key={si}>
               {s.parts.map((p, pi) => {
-                const v = normalized ? p / total : p
+                if (isNaN(p)) return null
+                const v = normalized ? p / denominator : p
                 const ph = (v / (hi || 1)) * innerH
                 const y = pad.top + innerH - acc - ph
                 acc += ph
                 return <rect key={pi} x={x} y={y} width={bw} height={ph} fill={cs[pi % cs.length]} />
               })}
+              {stackLabel && !isNaN(totals[si]) && (
+                <text x={x + bw / 2} y={pad.top + innerH - acc - 6}
+                  textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>
+                  {stackLabel === 'total' ? fmt(totals[si]) : stackLabel(s)}
+                </text>
+              )}
               {axes && (
                 <text x={x + bw / 2} y={pad.top + innerH + 14}
                   textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={T.fg3}>

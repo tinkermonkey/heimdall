@@ -171,6 +171,128 @@ test.describe('Chart Components', () => {
       }
       expect(hasPercent).toBe(true)
     })
+
+    test('stackLabel="total" renders stack totals above columns', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-total"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Should have labels for each stack (7 stacks)
+      expect(await texts.count()).toBeGreaterThan(7)
+      let hasTotal = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        // Should include totals like 92, 102, 91 etc
+        if (t && /^\d+$/.test(t)) { hasTotal = true; break }
+      }
+      expect(hasTotal).toBe(true)
+    })
+
+    test('stackLabel with custom function renders formatted labels', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-custom"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      let hasUppercase = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t === 'MON' || t === 'TUE' || t === 'WED') { hasUppercase = true; break }
+      }
+      expect(hasUppercase).toBe(true)
+    })
+
+    test('stackLabel="total" with normalized shows raw counts not percentages', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Y-axis should have percentages, but stack labels should be raw counts
+      let hasYPercent = false
+      let hasStackTotal = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t?.includes('%')) { hasYPercent = true }
+        if (t && /^\d{2,3}$/.test(t) && !t.includes('%')) { hasStackTotal = true }
+      }
+      expect(hasYPercent).toBe(true)
+      expect(hasStackTotal).toBe(true)
+    })
+
+    test('does not render NaN labels for stacks with NaN parts', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-with-nan-and-zero"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Check that no text element contains "NaN"
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        expect(t).not.toBe('NaN')
+      }
+    })
+
+    test('renders "0" label for zero-sum stacks', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-with-nan-and-zero"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      // Should contain a "0" label for the zero-sum stack
+      let hasZeroLabel = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t === '0') { hasZeroLabel = true; break }
+      }
+      expect(hasZeroLabel).toBe(true)
+    })
+
+    test('stackLabel positions above each bar proportionally', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-stacklabel-total"]')
+      await expect(el).toBeVisible()
+      // Get all text elements that represent stack labels (numeric totals)
+      const texts = el.locator('text')
+      const labels = []
+      for (let i = 0; i < await texts.count(); i++) {
+        const textEl = texts.nth(i)
+        const content = await textEl.textContent()
+        // Stack labels are numeric and positioned at top (low y values)
+        if (content && /^\d+$/.test(content)) {
+          const y = await textEl.evaluate((e: SVGTextElement) => parseFloat(e.getAttribute('y') ?? '0'))
+          labels.push({ content, y })
+        }
+      }
+      // Should have multiple labels with varying y positions (different heights)
+      expect(labels.length).toBeGreaterThan(1)
+      const yValues = labels.map(l => l.y)
+      // Y values should not all be the same (labels at different heights)
+      const uniqueYs = new Set(yValues)
+      expect(uniqueYs.size).toBeGreaterThan(1)
+    })
+
+    test('NaN stacks with normalized mode render proportionally without overflow', async ({ page }) => {
+      const el = page.locator('svg[data-testid="stackedbar-nan-normalized"]')
+      await expect(el).toBeVisible()
+      // Check that bars are rendered (rects exist)
+      expect(await el.locator('rect').count()).toBeGreaterThan(0)
+      // Get the SVG viewBox/dimensions to ensure bars don't overflow
+      const height = await el.evaluate((e: SVGSVGElement) => e.getAttribute('height'))
+      const width = await el.evaluate((e: SVGSVGElement) => e.getAttribute('width'))
+      expect(height).toBeTruthy()
+      expect(width).toBeTruthy()
+      // All rects should have valid y and height attributes (no NaN)
+      const rects = el.locator('rect')
+      for (let i = 0; i < await rects.count(); i++) {
+        const rect = rects.nth(i)
+        const y = await rect.getAttribute('y')
+        const h = await rect.getAttribute('height')
+        expect(y).not.toContain('NaN')
+        expect(h).not.toContain('NaN')
+        // Heights should be positive numbers
+        const heightNum = parseFloat(h ?? '0')
+        expect(heightNum).toBeGreaterThanOrEqual(0)
+      }
+      // Y-axis should show percentage labels
+      const texts = el.locator('text')
+      let hasPercent = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        if (t?.includes('%')) { hasPercent = true; break }
+      }
+      expect(hasPercent).toBe(true)
+    })
   })
 
   // ── Donut ──────────────────────────────────────────────────────────────────
@@ -233,6 +355,60 @@ test.describe('Chart Components', () => {
       const cells = el.locator('rect')
       const fill = await cells.first().getAttribute('fill') ?? ''
       expect(fill).toMatch(/^#[0-9a-fA-F]{8}$/)
+    })
+
+    test('showValues renders numeric values in cells', async ({ page }) => {
+      const el = page.locator('svg[data-testid="heatmap-showvalues"]')
+      await expect(el).toBeVisible()
+      // Get all text elements; cell values have y-coordinates around cell centers,
+      // axis labels are positioned at the edges. Filter by position to exclude axis labels.
+      const svgBox = await el.boundingBox()
+      if (!svgBox) throw new Error('SVG not found')
+      const texts = el.locator('text')
+      let hasNumericCellValue = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const textEl = texts.nth(i)
+        const box = await textEl.boundingBox()
+        const t = await textEl.textContent()
+        // Cell values are interior; skip text at SVG edges (axis labels)
+        if (box && t && /^0\.\d+$/.test(t) && box.y > svgBox.y + 10 && box.y < svgBox.y + svgBox.height - 20) {
+          hasNumericCellValue = true
+          break
+        }
+      }
+      expect(hasNumericCellValue).toBe(true)
+    })
+
+    test('valueFormat custom function is applied to cell values', async ({ page }) => {
+      const el = page.locator('svg[data-testid="heatmap-valueformat"]')
+      await expect(el).toBeVisible()
+      // Cell values formatted by valueFormat function (rounded integers like 0, 1, etc)
+      // Exclude axis labels '0', '6', '12', etc by checking y-position
+      const svgBox = await el.boundingBox()
+      if (!svgBox) throw new Error('SVG not found')
+      const texts = el.locator('text')
+      let hasFormattedCellValue = false
+      for (let i = 0; i < await texts.count(); i++) {
+        const textEl = texts.nth(i)
+        const box = await textEl.boundingBox()
+        const t = await textEl.textContent()
+        // Cell values are in the interior; axis labels are at bottom (y near svgBox.height)
+        if (box && t && /^\d$/.test(t) && box.y < svgBox.y + svgBox.height - 25) {
+          hasFormattedCellValue = true
+          break
+        }
+      }
+      expect(hasFormattedCellValue).toBe(true)
+    })
+
+    test('showValues does not render NaN values', async ({ page }) => {
+      const el = page.locator('svg[data-testid="heatmap-nan"]')
+      await expect(el).toBeVisible()
+      const texts = el.locator('text')
+      for (let i = 0; i < await texts.count(); i++) {
+        const t = await texts.nth(i).textContent()
+        expect(t).not.toBe('NaN')
+      }
     })
   })
 
@@ -351,12 +527,40 @@ test.describe('Chart Components', () => {
       await expect(page.locator('svg[data-testid="stackedbar-standard"]')).toHaveScreenshot('stackedbar-standard-light.png')
     })
 
+    test('StackedBar stackLabel="total" snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-total"]')).toHaveScreenshot('stackedbar-stacklabel-total-light.png')
+    })
+
+    test('StackedBar stackLabel custom function snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-custom"]')).toHaveScreenshot('stackedbar-stacklabel-custom-light.png')
+    })
+
+    test('StackedBar stackLabel="total" normalized snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')).toHaveScreenshot('stackedbar-stacklabel-normalized-light.png')
+    })
+
+    test('StackedBar NaN with normalized snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-nan-normalized"]')).toHaveScreenshot('stackedbar-nan-normalized-light.png')
+    })
+
     test('Donut standard snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="donut-standard"]')).toHaveScreenshot('donut-standard-light.png')
     })
 
     test('Heatmap standard snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="heatmap-standard"]')).toHaveScreenshot('heatmap-standard-light.png')
+    })
+
+    test('Heatmap showValues snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-showvalues"]')).toHaveScreenshot('heatmap-showvalues-light.png')
+    })
+
+    test('Heatmap cellMark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-cellmark"]')).toHaveScreenshot('heatmap-cellmark-light.png')
+    })
+
+    test('Heatmap combined snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-combined"]')).toHaveScreenshot('heatmap-combined-light.png')
     })
 
     test('StatusTimeline standard snapshot', async ({ page }) => {
@@ -394,12 +598,40 @@ test.describe('Chart Components', () => {
       await expect(page.locator('svg[data-testid="stackedbar-standard"]')).toHaveScreenshot('stackedbar-standard-dark.png')
     })
 
+    test('StackedBar stackLabel="total" dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-total"]')).toHaveScreenshot('stackedbar-stacklabel-total-dark.png')
+    })
+
+    test('StackedBar stackLabel custom function dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-custom"]')).toHaveScreenshot('stackedbar-stacklabel-custom-dark.png')
+    })
+
+    test('StackedBar stackLabel="total" normalized dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-stacklabel-normalized"]')).toHaveScreenshot('stackedbar-stacklabel-normalized-dark.png')
+    })
+
+    test('StackedBar NaN with normalized dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="stackedbar-nan-normalized"]')).toHaveScreenshot('stackedbar-nan-normalized-dark.png')
+    })
+
     test('Donut dark snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="donut-standard"]')).toHaveScreenshot('donut-standard-dark.png')
     })
 
     test('Heatmap dark snapshot', async ({ page }) => {
       await expect(page.locator('svg[data-testid="heatmap-standard"]')).toHaveScreenshot('heatmap-standard-dark.png')
+    })
+
+    test('Heatmap showValues dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-showvalues"]')).toHaveScreenshot('heatmap-showvalues-dark.png')
+    })
+
+    test('Heatmap cellMark dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-cellmark"]')).toHaveScreenshot('heatmap-cellmark-dark.png')
+    })
+
+    test('Heatmap combined dark snapshot', async ({ page }) => {
+      await expect(page.locator('svg[data-testid="heatmap-combined"]')).toHaveScreenshot('heatmap-combined-dark.png')
     })
 
     test('StatusTimeline dark snapshot', async ({ page }) => {

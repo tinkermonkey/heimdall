@@ -1,11 +1,14 @@
 import { Page, expect } from '@playwright/test'
 
 export async function loadSelfHostedFonts(page: Page): Promise<void> {
-  const fontsBaseDir = new URL('../../../../public/fonts', import.meta.url).pathname
+  // Reference fonts through the dev server's same-origin /fonts/ URL (Vite serves
+  // public/ at the site root) rather than an absolute file:// path. file:// URLs are
+  // both fragile to compute (see git history of this line) and blocked outright by
+  // Chromium when referenced from an http(s) page ("Not allowed to load local resource").
   const fontsCss = `
     @font-face {
       font-family: 'Inter';
-      src: url('file://${fontsBaseDir}/inter/Inter-Light.woff2') format('woff2');
+      src: url('/fonts/inter/Inter-Light.woff2') format('woff2');
       font-weight: 300;
       font-style: normal;
       font-display: block;
@@ -13,7 +16,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'Inter';
-      src: url('file://${fontsBaseDir}/inter/Inter-Regular.woff2') format('woff2');
+      src: url('/fonts/inter/Inter-Regular.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: block;
@@ -21,7 +24,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'Inter';
-      src: url('file://${fontsBaseDir}/inter/Inter-Medium.woff2') format('woff2');
+      src: url('/fonts/inter/Inter-Medium.woff2') format('woff2');
       font-weight: 500;
       font-style: normal;
       font-display: block;
@@ -29,7 +32,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'Inter';
-      src: url('file://${fontsBaseDir}/inter/Inter-SemiBold.woff2') format('woff2');
+      src: url('/fonts/inter/Inter-SemiBold.woff2') format('woff2');
       font-weight: 600;
       font-style: normal;
       font-display: block;
@@ -37,7 +40,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'Inter';
-      src: url('file://${fontsBaseDir}/inter/Inter-Bold.woff2') format('woff2');
+      src: url('/fonts/inter/Inter-Bold.woff2') format('woff2');
       font-weight: 700;
       font-style: normal;
       font-display: block;
@@ -45,7 +48,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'Inter';
-      src: url('file://${fontsBaseDir}/inter/Inter-ExtraBold.woff2') format('woff2');
+      src: url('/fonts/inter/Inter-ExtraBold.woff2') format('woff2');
       font-weight: 800;
       font-style: normal;
       font-display: block;
@@ -53,7 +56,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'Inter';
-      src: url('file://${fontsBaseDir}/inter/Inter-Black.woff2') format('woff2');
+      src: url('/fonts/inter/Inter-Black.woff2') format('woff2');
       font-weight: 900;
       font-style: normal;
       font-display: block;
@@ -61,7 +64,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'JetBrains Mono';
-      src: url('file://${fontsBaseDir}/jetbrains-mono/JetBrainsMono-Regular.woff2') format('woff2');
+      src: url('/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2') format('woff2');
       font-weight: 400;
       font-style: normal;
       font-display: block;
@@ -69,7 +72,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'JetBrains Mono';
-      src: url('file://${fontsBaseDir}/jetbrains-mono/JetBrainsMono-Medium.woff2') format('woff2');
+      src: url('/fonts/jetbrains-mono/JetBrainsMono-Medium.woff2') format('woff2');
       font-weight: 500;
       font-style: normal;
       font-display: block;
@@ -77,7 +80,7 @@ export async function loadSelfHostedFonts(page: Page): Promise<void> {
 
     @font-face {
       font-family: 'JetBrains Mono';
-      src: url('file://${fontsBaseDir}/jetbrains-mono/JetBrainsMono-SemiBold.woff2') format('woff2');
+      src: url('/fonts/jetbrains-mono/JetBrainsMono-SemiBold.woff2') format('woff2');
       font-weight: 600;
       font-style: normal;
       font-display: block;
@@ -104,31 +107,24 @@ export async function freezeAnimations(page: Page): Promise<void> {
 }
 
 export async function assertFontsLoaded(page: Page): Promise<void> {
-  const fontFaces = await page.evaluate(() => {
-    const sheets = Array.from(document.styleSheets)
-    const fontFaceRules: string[] = []
-
-    for (const sheet of sheets) {
-      try {
-        const rules = Array.from(sheet.cssRules || [])
-        for (const rule of rules) {
-          if (rule instanceof CSSFontFaceRule) {
-            const fontFamily = rule.style.fontFamily
-            if (fontFamily) {
-              fontFaceRules.push(fontFamily.replace(/['"]/g, ''))
-            }
-          }
-        }
-      } catch {
-        // Cross-origin stylesheets may throw on access
+  // Checking for @font-face *rule declarations* only proves loadSelfHostedFonts()
+  // injected CSS text - it says nothing about whether the browser actually
+  // fetched and decoded the font files. Check document.fonts entries directly
+  // so a broken font URL (e.g. a bad path) fails loudly instead of silently
+  // falling back to a system font.
+  const loadedFamilies = await page.evaluate(async () => {
+    await document.fonts.ready
+    const loaded = new Set<string>()
+    for (const face of document.fonts) {
+      if (face.status === 'loaded') {
+        loaded.add(face.family.replace(/['"]/g, ''))
       }
     }
-
-    return fontFaceRules
+    return Array.from(loaded)
   })
 
-  expect(fontFaces.join(',')).toContain('Inter')
-  expect(fontFaces.join(',')).toContain('JetBrains Mono')
+  expect(loadedFamilies).toContain('Inter')
+  expect(loadedFamilies).toContain('JetBrains Mono')
 }
 
 export async function applyDarkCanvasMode(page: Page): Promise<void> {

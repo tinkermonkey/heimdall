@@ -171,7 +171,7 @@ Icon spec: Lucide-style outline, 24×24 viewBox, `strokeWidth={1.75}`, `currentC
 
 ## Visual Regression Tests
 
-Tests live in `tests/`. Each spec captures screenshots of test pages and compares against snapshots in `tests/*.spec.ts-snapshots/`. Run `npm test` to check; run the update script to regenerate baselines after intentional changes.
+Tests live in `tests/`. Each spec captures screenshots of test pages and compares against snapshots in `tests/*.spec.ts-snapshots/`. Run `npm test` to check; after an intentional visual change, run `npm test -- --update-snapshots` locally to regenerate baselines for both platforms (see [Playwright snapshot baselines are per-OS](#playwright-snapshot-baselines-are-per-os) below).
 
 Test suites:
 - `primitives.spec.ts` — Button, Chip, Badge, inputs, Icon, Field
@@ -179,3 +179,17 @@ Test suites:
 - `shell-framework.spec.ts` — ShellLayout, Topbar, Titlebar, Statusbar, TabBar
 - `overlay-components.spec.ts` — Modal, ConfirmDialog, Toast
 - `overlay-advanced.spec.ts` — CommandPalette, Drawer, SplitPane
+
+### Playwright snapshot baselines are per-OS
+
+Snapshot filenames are suffixed by platform (`-darwin.png`, `-linux.png`). You only ever generate `-darwin.png` locally; `release.yml`'s `Test` job runs on `ubuntu-latest` and checks the `-linux.png` baselines. **A change that passes `npm test` on your Mac can still fail the linux comparison in CI** — most often because your machine's Chromium build, installed font packages, or subpixel/hinting behavior isn't byte-identical to GitHub's hosted runner image, so the two environments rasterize the same DOM to slightly different pixels. Playwright's `toHaveScreenshot` tolerates up to 1% pixel difference (`maxDiffPixelRatio` in `playwright.config.ts`) before failing.
+
+**If a Docker-based local regen doesn't clear that threshold either** — worth trying first, but Docker Desktop's Linux VM still isn't guaranteed to byte-match GitHub's hosted `ubuntu-latest` image — use the `Update Visual Snapshots` workflow (`.github/workflows/update-snapshots.yml`) to regenerate baselines *inside* an actual GitHub Actions runner:
+
+1. From the Actions tab, run **Update Visual Snapshots** (or `gh workflow run update-snapshots.yml -f spec="tests/foo.spec.ts tests/bar.spec.ts"`). Leave `spec` blank to update the whole suite; passing specific spec file(s) is faster and keeps the diff reviewable.
+2. It runs `npx playwright test --update-snapshots` on `ubuntu-latest`, then uploads only the changed `-linux.png` files as a build artifact named `updated-linux-snapshots` (nothing is committed automatically).
+3. Download and apply: `gh run download <run-id> -n updated-linux-snapshots -D /tmp/updated-snapshots`, then copy the files into their matching `tests/*.spec.ts-snapshots/` paths.
+4. **Visually review every changed PNG before committing** — this workflow updates on any mismatch, including ones that would be catching a real bug. Diff against `git show HEAD:<path>` for the pre-change version if you're not sure whether a difference is legitimate.
+5. Commit the corrected baselines alongside your change.
+
+This is also the tool to reach for if a release's `Test` job fails on baseline drift alone (see `RELEASE.md`) — regenerate against the exact failing spec files, verify, commit, and retag.

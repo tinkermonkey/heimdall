@@ -3,7 +3,7 @@ import './Chip.css'
 import type { StatusColor } from './statusColors'
 
 export type ChipVariant = StatusColor
-export type ChipForm = 'default' | 'id-tag' | 'version' | 'env'
+export type ChipForm = 'default' | 'id-tag' | 'version' | 'env' | 'inferred'
 
 export interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: ChipVariant

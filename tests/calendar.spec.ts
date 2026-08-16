@@ -203,6 +203,19 @@ test.describe('Calendar Components', () => {
   })
 
   test('accessibility attributes in month view', async ({ page }) => {
+    // The test fixture pins its focused/displayed month to June 2026
+    // (CalendarTestPage.tsx) regardless of the real date, but the component's
+    // aria-current="date" marker is computed from the real system clock. Freeze
+    // the clock to a date inside that fixture month so "today" reliably falls
+    // within the displayed grid instead of depending on when this test happens
+    // to run.
+    await page.clock.install({ time: new Date(2026, 5, 15) })
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+    await loadSelfHostedFonts(page)
+    await assertFontsLoaded(page)
+    await freezeAnimations(page)
+
     // Ensure we're on month view
     const monthButton = page.locator('button:has-text("Month")').first()
     await monthButton.click()

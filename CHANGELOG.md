@@ -4,6 +4,63 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2]
+
+### Added
+
+- **`GraphCanvas`/`GraphEdge`** — weighted, styled edges: a new `weight`
+  prop (0-100) maps to a 1-8px stroke width via a square-root curve so
+  low-end differences stay visually distinguishable, plus independent
+  `opacity` and `strokeDash` (single value or `[dash, gap]` tuple) controls.
+  Arrow markers scale proportionally with stroke width. New export
+  `EdgeAnchor` type from `utils/graph`.
+- **`Icon`** — six new icons: `image`, `code`, `map`, `sparkles`, `share`,
+  `ellipsis`.
+- **`GraphCanvas`** — opt-in nested bubble-packing layout: `layout="force-clustered"`
+  groups nodes into clusters (and clusters of clusters) derived purely from
+  edge structure via deterministic Louvain modularity clustering, packs
+  them with `d3-hierarchy`, then runs the existing spring simulation within
+  each bubble. Trades a larger canvas for a less even, more legible node
+  distribution. Renders an additional `.graph-cluster-boundary` circle per
+  top-level cluster. New exports: `clusteredForceLayout`,
+  `ClusteredLayoutOptions`, `ClusteredLayoutResult`, `louvainCluster`,
+  `ClusterEdge`, `ClusterTreeNode`, `LouvainOptions`, `packClusters`,
+  `PackedCircle`, `PackOptions`. New dependency: `d3-hierarchy`.
+
+### Changed
+
+- **`ShellLayout`** canvas panel is now responsive instead of a fixed
+  `min-width: 1100px` — padding steps down at the `1024px` and `640px`
+  breakpoints and the canvas reflows instead of forcing horizontal scroll
+  on narrower viewports.
+
+### Fixed
+
+- **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
+  settle at force equilibrium with their rendered bounding boxes still
+  overlapping, since the simulation treated nodes as dimensionless points.
+  Adds a post-process `resolveOverlaps()` pass — capped-displacement
+  separation interleaved with spring-only relaxation, then a bounded
+  early-exit cleanup — that resolves overlaps without perturbing edge
+  crossings. Verified against a real 31-node/33-edge reference layer via the
+  project's own layout-quality test loop: node overlaps 7 → 1, zero
+  edge-crossing regression (exact parity with the unmodified baseline),
+  edge-length-deviation and neighborhood-preservation both improved. The
+  first of 8 proposed changes to that loop's regression-gated test to
+  actually pass it.
+- **Playwright visual regression suite**: `loadSelfHostedFonts()` computed
+  the fonts directory via a hardcoded relative `file://` path that broke
+  when the package moved to the repo root, silently falling back to a
+  system font in every test run and blocked outright by Chromium's
+  local-resource policy. Fonts are now loaded through the dev server's
+  same-origin `/fonts/` URL instead. `assertFontsLoaded()` previously only
+  checked that `@font-face` rules were declared, not that they actually
+  loaded — it now checks `document.fonts` status directly. Also fixes
+  `calendar.spec.ts`'s "accessibility attributes in month view" test, which
+  depended on the real wall-clock date falling inside the fixture's
+  hardcoded June 2026 month; the clock is now frozen to that month.
+  Linux screenshot baselines regenerated against the corrected renderer.
+
 ## [0.5.1]
 
 ### Fixed

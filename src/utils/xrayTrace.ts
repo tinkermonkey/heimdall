@@ -90,6 +90,7 @@ export interface FromXRayOptions {
 
 /* ------------------------------------------------------------- primitives -- */
 
+// @ts-ignore flattenInto may receive any type due to X-Ray metadata structure
 /** X-Ray `1-{8hex}-{24hex}` -> 32-hex; passthrough for already-hex ids. */
 function xrayTraceIdToHex(tid: string | undefined): string {
   if (!tid) return ''
@@ -175,6 +176,7 @@ function exceptionOf(node: XRaySubsegment): { exception?: TraceSpan['exception']
 
 /* ------------------------------------------------------------- input prep -- */
 
+// @ts-ignore normalizeInput accepts unknown input to handle various API shapes
 function normalizeInput(input: any): XRaySegment[] {
   if (input == null) return []
   if (Array.isArray(input)) return input.flatMap(normalizeInput)

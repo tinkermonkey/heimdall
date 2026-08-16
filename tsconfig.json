@@ -13,6 +13,14 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "bundler",
+    // Lets graphLayout.ts/graphPacking.ts import their sibling modules with
+    // an explicit .ts extension — needed so scripts/render-and-score.mjs
+    // can load graphLayout.ts directly via Node's --experimental-strip-types
+    // (plain ESM resolution, no bundler, requires explicit extensions on
+    // relative specifiers) without a separate build step. Only valid
+    // alongside noEmit (already set above) since it doesn't rewrite
+    // specifiers for emitted output.
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
