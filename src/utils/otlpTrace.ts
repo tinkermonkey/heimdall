@@ -78,7 +78,7 @@ function b64ToHex(b64: string): string {
   if (typeof atob === 'function') {
     binary = atob(b64)
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // @ts-ignore globalThis.Buffer is available in Node but not in browser types
     binary = (globalThis as any).Buffer.from(b64, 'base64').toString('binary')
   }
   let hex = ''

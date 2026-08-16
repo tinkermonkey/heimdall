@@ -167,3 +167,20 @@ body.dark-canvas .chip--id-tag {
   height: 6px;
   background-color: rgb(var(--semantic-env-fg));
 }
+
+/* Inferred form — dashed border, no fill, muted foreground; variant is ignored */
+.chip--inferred {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed rgb(var(--canvas-border-strong));
+  background-color: transparent;
+  color: rgb(var(--canvas-fg-3));
+}
+
+body.dark-canvas .chip--inferred {
+  border-color: var(--white-overlay-lg);
+  background-color: transparent;
+  color: rgb(var(--canvas-fg-3));
+}

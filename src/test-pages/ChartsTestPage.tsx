@@ -32,6 +32,16 @@ const STACKS = [
   { label: 'Sun', parts: [31, 22, 6, 4] },
 ]
 
+const STACKS_WITH_NAN = [
+  { label: 'Mon', parts: [42, 28, 14, 8] },
+  { label: 'Tue', parts: [48, 31, 12, 11] },
+  { label: 'Wed', parts: [0, 0, 0, 0] },
+  { label: 'Thu', parts: [52, 34, 9, 14] },
+  { label: 'Fri', parts: [NaN, 30, 11, 7] },
+  { label: 'Sat', parts: [44, 24, 8, 5] },
+  { label: 'Sun', parts: [31, 22, 6, 4] },
+]
+
 const DONUT_SLICES = [
   { value: 134, color: '#10B981' },
   { value: 72,  color: '#818CF8' },
@@ -44,10 +54,38 @@ const HEATMAP = (() => {
   for (let r = 0; r < 7; r++) {
     const row = []
     for (let c = 0; c < 24; c++) {
-      const m = Math.sin((c - 8) / 24 * Math.PI) * 0.5 + 0.5
-      const e = Math.exp(-Math.pow(c - 20, 2) / 8) * 0.8
-      const wknd = (r === 5 || r === 6) ? 0.7 : 1
-      row.push(Math.max(0, (m * 0.4 + e * 0.6) * wknd * 0.9))
+      // Sprinkle null cells (gaps) throughout to test null-cell rendering
+      if ((r === 1 && c === 5) || (r === 3 && c === 12) || (r === 5 && c === 20)) {
+        row.push(null)
+      } else {
+        const m = Math.sin((c - 8) / 24 * Math.PI) * 0.5 + 0.5
+        const e = Math.exp(-Math.pow(c - 20, 2) / 8) * 0.8
+        const wknd = (r === 5 || r === 6) ? 0.7 : 1
+        row.push(Math.max(0, (m * 0.4 + e * 0.6) * wknd * 0.9))
+      }
+    }
+    rows.push(row)
+  }
+  return rows
+})()
+
+const HEATMAP_WITH_NAN = (() => {
+  const rows = []
+  for (let r = 0; r < 7; r++) {
+    const row = []
+    for (let c = 0; c < 24; c++) {
+      if ((r === 1 && c === 5) || (r === 3 && c === 12)) {
+        row.push(null)
+      } else if (r === 2 && c === 8) {
+        row.push(NaN)
+      } else if (r === 4 && c === 15) {
+        row.push(NaN)
+      } else {
+        const m = Math.sin((c - 8) / 24 * Math.PI) * 0.5 + 0.5
+        const e = Math.exp(-Math.pow(c - 20, 2) / 8) * 0.8
+        const wknd = (r === 5 || r === 6) ? 0.7 : 1
+        row.push(Math.max(0, (m * 0.4 + e * 0.6) * wknd * 0.9))
+      }
     }
     rows.push(row)
   }
@@ -214,6 +252,47 @@ export default function ChartsTestPage() {
         </div>
       </section>
 
+      <section style={section}>
+        {monoLabel('StackedBar · stackLabel="total"')}
+        <div style={card}>
+          <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4} stackLabel="total"
+            data-testid="stackedbar-stacklabel-total" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('StackedBar · stackLabel with custom function')}
+        <div style={card}>
+          <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4}
+            stackLabel={(stack) => stack.label.toUpperCase()}
+            data-testid="stackedbar-stacklabel-custom" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('StackedBar · stackLabel="total" with normalized')}
+        <div style={card}>
+          <StackedBar stacks={STACKS} width={480} height={180} axes grid ticks={4} normalized stackLabel="total"
+            data-testid="stackedbar-stacklabel-normalized" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('StackedBar · with zero-sum and NaN stacks')}
+        <div style={card}>
+          <StackedBar stacks={STACKS_WITH_NAN} width={480} height={180} axes grid ticks={4} stackLabel="total"
+            data-testid="stackedbar-with-nan-and-zero" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('StackedBar · with NaN stacks normalized')}
+        <div style={card}>
+          <StackedBar stacks={STACKS_WITH_NAN} width={480} height={180} axes grid ticks={4} normalized stackLabel="total"
+            data-testid="stackedbar-nan-normalized" />
+        </div>
+      </section>
+
       {/* ── 6. Donut ────────────────────────────────────────────────────── */}
       <section style={section}>
         {monoLabel('Donut · Micro')}
@@ -259,6 +338,78 @@ export default function ChartsTestPage() {
             yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
             xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
             data-testid="heatmap-feature" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · showValues')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#10B981" axes showValues
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-showvalues" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · valueFormat custom')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#22D3EE" axes showValues
+            valueFormat={(v) => Math.round(v).toString()}
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-valueformat" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · NaN handling with showValues')}
+        <div style={card}>
+          <Heatmap data={HEATMAP_WITH_NAN} width={460} height={140}
+            baseColor="#10B981" axes showValues
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-nan" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · cellMark with markers')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#10B981" axes
+            cellMark={(_r, _c, v) => {
+              if (v != null && v > 0.7) {
+                return (
+                  <circle cx="0" cy="0" r="3" fill="#F43F5E" opacity="0.7" />
+                )
+              }
+              return null
+            }}
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-cellmark" />
+        </div>
+      </section>
+
+      <section style={section}>
+        {monoLabel('Heatmap · showValues + cellMark combined')}
+        <div style={card}>
+          <Heatmap data={HEATMAP} width={460} height={140}
+            baseColor="#22D3EE" axes showValues
+            cellMark={(_r, _c, v) => {
+              if (v != null && v > 0.7) {
+                return (
+                  <circle cx="0" cy="0" r="2" fill="#F43F5E" opacity="0.8" />
+                )
+              }
+              return null
+            }}
+            yLabels={['Mon','Tue','Wed','Thu','Fri','Sat','Sun']}
+            xLabels={['0','','','','','','6','','','','','','12','','','','','','18','','','','','23']}
+            data-testid="heatmap-combined" />
         </div>
       </section>
 
