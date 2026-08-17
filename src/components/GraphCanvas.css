@@ -6,6 +6,15 @@
   overflow: hidden;
   cursor: grab;
   user-select: none;
+  /* usePanZoom's own wheel listener calls preventDefault() to fully own zoom/pan, but that alone
+     only stops the browser's native handling if JS wins the race for that event — under any
+     main-thread load, the browser can occasionally act on a wheel/gesture event before JS gets to
+     call preventDefault(), triggering its own native page zoom or scroll for that one event and
+     reading as a sudden, unrelated jump mid-gesture. touch-action: none opts this element out of
+     the browser's native gesture handling entirely, closing the race instead of just trying to
+     win it — the standard fix for a custom-zoom surface (same guidance d3-zoom, Mapbox GL, and
+     other pan/zoom implementations give for their own interactive canvas element). */
+  touch-action: none;
   /* Floor for when the parent has no explicit height — without it the
      absolutely-positioned SVG would collapse the box to 0. */
   min-height: 360px;

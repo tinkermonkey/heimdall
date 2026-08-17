@@ -171,6 +171,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   silently dropping that gesture's change for the frame. Each now gets its
   own rAF ref so one input source can no longer clobber another's pending
   update.
+- **`GraphCanvas`**: mouse-wheel zoom could occasionally jump to an unrelated
+  pan/zoom mid-gesture — `usePanZoom`'s wheel listener calls
+  `preventDefault()` to fully own zoom/pan, but that only stops the
+  browser's own native handling if JS wins the race for that event; under
+  any main-thread load the browser can occasionally act on a wheel event
+  first, firing its own native page zoom/scroll for that one event. Adds
+  `touch-action: none` to `.graph-canvas`, opting it out of the browser's
+  native gesture handling entirely instead of just trying to out-race it —
+  the standard fix for a custom-zoom surface (same guidance d3-zoom and
+  Mapbox GL give for their own interactive elements).
 
 - **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
   settle at force equilibrium with their rendered bounding boxes still
