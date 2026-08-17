@@ -181,6 +181,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   native gesture handling entirely instead of just trying to out-race it —
   the standard fix for a custom-zoom surface (same guidance d3-zoom and
   Mapbox GL give for their own interactive elements).
+- **`galaxyLayout`**: root-ring placement sized a root's distance from the
+  shared hub off only its own (tiny) radius, with no regard for how far its
+  own subtree would go on to spread — a lone orphan and the root of a deep,
+  many-node chain started at essentially the same tiny distance. In
+  practice this read as a large subtree's own root landing in the shared
+  hub's crowded middle, visually disconnected from (and often overlapping)
+  its own far-flung descendants, and sitting inside whatever unrelated
+  neighboring group happened to also be near that hub — the `GALAXY_DEMO_NODES`
+  dataset's "organism" (parent of an entire 9-node biology tree) was the
+  case that surfaced it. Root-ring seeding now adds each root's own
+  subtree reach (the same recursive orbital-distance math `place()` already
+  uses, run once bottom-up first) on top of its existing own-radius term —
+  a childless root's placement is unchanged; a root with descendants now
+  seeds proportionally farther out, landing on the same radial line as the
+  rest of its subtree instead of near the hub.
 
 - **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
   settle at force equilibrium with their rendered bounding boxes still

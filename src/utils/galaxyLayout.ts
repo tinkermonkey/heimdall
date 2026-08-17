@@ -133,6 +133,26 @@ export function galaxySimulationStep(
     })
   }
 
+  // How far a node's own subtree extends beyond the node's own position — 0 for a leaf (nothing
+  // to account for), otherwise the largest child orbital distance plus that child's own reach.
+  // Root-ring seeding (below) uses this so a root with a large subtree gets pushed proportionally
+  // further from the shared hub, instead of every root — a lone orphan and the root of a 9-node,
+  // 4-level chain alike — starting at essentially the same tiny distance (just its own radius).
+  // Left unmemoized: called once per root from the loop below, each call's recursion touches only
+  // that root's own (disjoint) subtree, so there's no repeated work across different roots.
+  const subtreeReach = (id: string): number => {
+    const kids = childrenOf.get(id) ?? []
+    if (kids.length === 0) return 0
+    const r = radiusOf(nodeMap.get(id)!)
+    let maxReach = 0
+    for (const childId of kids) {
+      const childR = radiusOf(nodeMap.get(childId)!)
+      const distance = r + childR * nodeSpread
+      maxReach = Math.max(maxReach, distance + subtreeReach(childId))
+    }
+    return maxReach
+  }
+
   // A virtual radius-0 hub at the origin seeds the root ring: every real root — including
   // orphans, which are just one-node trees — becomes one of its "children", so independent
   // trees spread around a shared center instead of all stacking at (0, 0).
@@ -140,7 +160,11 @@ export function galaxySimulationStep(
     const n = roots.length
     roots.forEach((rootId, i) => {
       const rootR = radiusOf(nodeMap.get(rootId)!)
-      const distance = rootR * nodeSpread
+      // Own-radius term unchanged from before (so a childless root — an orphan, or any leaf-only
+      // tree — seeds at exactly the same distance it always has); the added subtreeReach term is
+      // what actually fixes a root WITH descendants landing right next to (or visually inside)
+      // an unrelated neighbor's territory — see this function's own docs above.
+      const distance = rootR * nodeSpread + subtreeReach(rootId)
       const angle = startAngle + (2 * Math.PI * i) / n
       place(rootId, distance * Math.cos(angle), distance * Math.sin(angle), angle, 0)
     })

@@ -45,15 +45,16 @@ function worstGroupOverlap(boundaries: Map<string, { x: number; y: number; r: nu
   return worst
 }
 
-// Four independent roots, each fanning out into 6 children — root placement spaces the ROOTS
-// themselves apart based only on their own (tiny) radius, with no awareness of how far each
-// root's own children will fan out, so adjacent roots' subtrees reliably crowd into each other
-// without Part 1's group-separation pass. This is the exact shape of bug the multi-root demo
-// dataset (GALAXY_DEMO_NODES) hit in practice.
+// Eight independent roots, each fanning out into 6 children, sharing one ring — root-ring
+// seeding accounts for each root's own subtree reach (see galaxyLayout.ts's subtreeReach), but
+// only radially: it doesn't widen a root's own angular slice to match how far its subtree fans
+// out sideways, so packing enough same-shaped roots onto one ring still reliably crowds adjacent
+// roots' subtrees into each other without Part 1's group-separation pass. This is the exact shape
+// of bug the multi-root demo dataset (GALAXY_DEMO_NODES) hit in practice.
 function busyMultiRootNodes(): { nodes: GalaxyLayoutNode[]; edges: GalaxyLayoutEdge[] } {
   const nodes: GalaxyLayoutNode[] = []
   const edges: GalaxyLayoutEdge[] = []
-  for (let r = 0; r < 4; r++) {
+  for (let r = 0; r < 8; r++) {
     const rootId = `root${r}`
     nodes.push(node(rootId))
     for (let c = 0; c < 6; c++) {
@@ -111,6 +112,29 @@ test.describe('galaxyLayout', () => {
     const distFromOrigin = Math.hypot(posB.x, posB.y)
     expect(distFromA).toBeLessThan(400)
     expect(distFromOrigin).toBeGreaterThan(600)
+  })
+
+  // Regression: root-ring seeding sized a root's distance from the shared hub off only its own
+  // (tiny) radius — a lone orphan and the root of a deep, many-node chain started at essentially
+  // the same distance, since nothing about the ring seed accounted for how far the root's own
+  // subtree would go on to spread. In practice this read as the root of a large subtree (e.g. the
+  // GALAXY_DEMO_NODES dataset's "organism", parent of an entire 9-node biology tree) landing
+  // right in the shared hub's crowded middle — visually disconnected from its own descendants,
+  // which fan out far beyond it, and prone to sitting inside an unrelated neighboring root's
+  // territory since nothing pushed it clear of that shared center to begin with.
+  test('a root with a deep subtree seeds much farther from the shared hub than a childless root', () => {
+    const nodes: GalaxyLayoutNode[] = [node('lonelyRoot')]
+    const edges: GalaxyLayoutEdge[] = []
+    // A 4-level chain under its own root — same shape as organism -> eukaryote -> cell -> nucleus.
+    const chain = ['deepRoot', 'a', 'b', 'c', 'd']
+    for (const id of chain) nodes.push(node(id))
+    for (let i = 0; i < chain.length - 1; i++) edges.push(structuralEdge(chain[i], chain[i + 1]))
+
+    const positions = galaxyLayout(nodes, edges)
+    const lonelyDist = Math.hypot(positions.get('lonelyRoot')!.x, positions.get('lonelyRoot')!.y)
+    const deepDist = Math.hypot(positions.get('deepRoot')!.x, positions.get('deepRoot')!.y)
+
+    expect(deepDist).toBeGreaterThan(lonelyDist * 3)
   })
 
   test('separateGroups (default true) keeps top-level group boundary circles from overlapping each other', () => {
