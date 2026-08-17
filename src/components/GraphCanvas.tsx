@@ -391,6 +391,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Tracks whether we've applied the initial canvas-center offset
     const didCenterRef = useRef(false)
     const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
+    // Previous containerSize, so the resize re-anchor effect below can tell a genuine size change
+    // (e.g. entering/exiting fullscreen) apart from a same-size re-render.
+    const prevContainerSizeRef = useRef<{ width: number; height: number } | null>(null)
 
     const { transform, viewport, bind, panTo, zoomTo } = usePanZoom({
       minZoom,
@@ -502,7 +505,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           const d = dims.get(id)
           return d ? Math.hypot(d.width, d.height) / 2 : 20
         }
-        setClusterBoundaries(boundingCirclesByGroup(layoutNodes, positions, leafToGroup, radiusOf))
+        setClusterBoundaries(boundingCirclesByGroup(layoutNodes, positions, leafToGroup, radiusOf, true))
       }
     }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge, forest])
 
@@ -538,12 +541,49 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }))
     }, [liveActive, edges, isStructuralEdge])
 
+    // Topology-only half of the boundary-circle grouping (see the static engine-layout effect's
+    // own galaxy branch above, which this mirrors) — depends on `forest`, not on positions, so it
+    // stays cheap to recompute every live-simulation tick below rather than needing its own
+    // separate effect/state.
+    const galaxyLeafToGroup = useMemo(() => {
+      if (!liveActive) return null
+      const groupHeads = galaxyGroupHeads(forest.roots, forest.childrenOf)
+      const map = new Map<string, string>()
+      for (const headId of groupHeads) {
+        map.set(headId, headId)
+        for (const descendantId of structuralDescendants(headId, forest.childrenOf)) map.set(descendantId, headId)
+      }
+      return map
+    }, [liveActive, forest])
+
+    // While live simulation owns computedPositions, it must also own clusterBoundaries — the
+    // static effect above no-ops for galaxy whenever live is active (see liveActiveRef), so
+    // nothing else keeps the rendered boundary circles in sync with nodes moving in real time.
+    // Skipped entirely when boundaries aren't shown at all, since recomputing them is otherwise
+    // pure waste on every single animation frame.
+    const handleLiveTick = useCallback((positions: Map<string, { x: number; y: number }>) => {
+      setComputedPositions(positions)
+      if (!showClusterBoundaries || !galaxyLeafToGroup) return
+      const boundaryNodes = visibleNodes.map(n => ({
+        id: n.id,
+        width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+        height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+        x: 0,
+        y: 0,
+      }))
+      const radiusOf = (id: string): number => {
+        const d = dims.get(id)
+        return d ? Math.hypot(d.width, d.height) / 2 : 20
+      }
+      setClusterBoundaries(boundingCirclesByGroup(boundaryNodes, positions, galaxyLeafToGroup, radiusOf, true))
+    }, [showClusterBoundaries, galaxyLeafToGroup, visibleNodes, dims])
+
     const { wake: wakeGalaxySimulation } = useGalaxySimulation({
       active: liveActive,
       nodes: liveLayoutNodes,
       edges: liveLayoutEdges,
       options: { nodeMargin },
-      onTick: setComputedPositions,
+      onTick: handleLiveTick,
       initialPositions: computedPositions,
     })
 
@@ -630,6 +670,27 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         )
       }
     }, [containerSize, dims, computedPositions, visibleNodes, layout, viewport.zoom, panTo, zoomTo, fitView, fitPadding, computeBoundingBox])
+
+    // Re-anchors pan whenever the container's own rendered size changes after that initial
+    // auto-center/fit — entering/exiting the Fullscreen API is the main trigger (the container
+    // jumps from its normal in-page size to the full screen, or back), but a window resize or a
+    // host layout change (a collapsing sidebar, say) hits this too. Without this, pan is a raw
+    // top-left-anchored offset that goes stale the instant the container's size changes: the same
+    // pan/zoom values suddenly describe a completely different visible region once the container
+    // itself is a different size, snapping whatever was centered on screen off to one side (or
+    // out of view entirely) instead of keeping it in view.
+    useEffect(() => {
+      const prev = prevContainerSizeRef.current
+      prevContainerSizeRef.current = containerSize
+      if (!didCenterRef.current || !prev || !containerSize) return
+      if (prev.width === containerSize.width && prev.height === containerSize.height) return
+      const centerWorldX = (prev.width / 2 - viewport.x) / viewport.zoom
+      const centerWorldY = (prev.height / 2 - viewport.y) / viewport.zoom
+      panTo(
+        containerSize.width / 2 - centerWorldX * viewport.zoom,
+        containerSize.height / 2 - centerWorldY * viewport.zoom
+      )
+    }, [containerSize, viewport.x, viewport.y, viewport.zoom, panTo])
 
     // Imperative viewport controls, exposed via useGraphCanvas().
     const zoomToFit = useCallback((padding?: number) => {

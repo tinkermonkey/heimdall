@@ -254,7 +254,10 @@ function applyGroupSeparation(
     return n ? Math.hypot(n.width, n.height) / 2 : 20
   }
   const layoutNodes: LayoutNode[] = nodes.map(n => ({ id: n.id, width: n.width, height: n.height, x: 0, y: 0 }))
-  const boundaries = boundingCirclesByGroup(layoutNodes, pos, leafToGroup, radiusOf)
+  // anchorToHead: true — must match GraphCanvas's own boundingCirclesByGroup call for rendering
+  // (see its comment); otherwise this pass would separate the centroid-based circles while the
+  // rendered head-anchored ones stayed exactly where they were, reintroducing visible overlap.
+  const boundaries = boundingCirclesByGroup(layoutNodes, pos, leafToGroup, radiusOf, true)
 
   // macroNodes' own x/y are ignored by separationPass (it only reads pos, which macroPos below
   // seeds with the real circle centers) — set to 0 for clarity, same convention every other

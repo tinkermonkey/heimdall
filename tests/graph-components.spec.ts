@@ -1103,8 +1103,22 @@ test.describe('Graph Canvas Components', () => {
       // this doesn't skew the eventual drop point.
       async function dragNode(page: import('@playwright/test').Page, testId: string, dx: number, dy: number) {
         const node = page.locator(`[data-testid="${testId}"]`)
-        const box = await node.boundingBox()
+        // Live mode nudges every still-unpinned node a little every tick (homeStrength pulling it
+        // toward its computed home) — wait for THIS node to actually stop moving before grabbing
+        // it, so the real mouse.move()/mouse.down() round-trip below (each its own async gap the
+        // simulation keeps ticking through) doesn't race a target that's still drifting out from
+        // under a coordinate read a tick or two earlier, which — given how small this node's hit
+        // area renders at this dataset's fit zoom — is enough to miss it outright.
+        let box = await node.boundingBox()
         if (!box) throw new Error(`${testId} not visible`)
+        for (let i = 0; i < 30; i++) {
+          await page.waitForTimeout(20)
+          const next = await node.boundingBox()
+          if (!next) throw new Error(`${testId} not visible`)
+          const stable = Math.abs(next.x - box.x) < 0.25 && Math.abs(next.y - box.y) < 0.25
+          box = next
+          if (stable) break
+        }
         const startX = box.x + box.width / 2
         const startY = box.y + box.height / 2
 
@@ -1113,7 +1127,12 @@ test.describe('Graph Canvas Components', () => {
         await page.mouse.move(startX + 2, startY)
         await page.mouse.move(startX + 4, startY)
         await page.mouse.move(startX + dx, startY + dy, { steps: 10 })
-        return { startX, startY }
+        // Returns the box this measured — while live mode is on, an as-yet-unpinned/undragged
+        // node keeps drifting a little every tick (homeStrength nudging it toward its computed
+        // home), so a caller that wants an exact before/after delta must diff against THIS box,
+        // not a separate boundingBox() read of its own: two reads a few ticks apart can each see
+        // a slightly different position, and that gap alone can exceed a tight pixel tolerance.
+        return { startX, startY, box }
       }
 
       test('dragging a "sun" node cascades to its children in real time', async ({ page }) => {
@@ -1138,12 +1157,10 @@ test.describe('Graph Canvas Components', () => {
 
       test('a dropped "sun" node stays exactly at its drop point', async ({ page }) => {
         const parent = page.locator('[data-testid="graph-node-cell"]')
-        const before = await parent.boundingBox()
-        if (!before) throw new Error('Node not visible')
 
         const dx = 150
         const dy = -100
-        await dragNode(page, 'graph-node-cell', dx, dy)
+        const { box: before } = await dragNode(page, 'graph-node-cell', dx, dy)
         await page.mouse.up()
 
         // Deterministic, no wait needed — a pinned node's position is fixed the instant the pin

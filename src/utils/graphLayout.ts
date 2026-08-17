@@ -559,23 +559,35 @@ export function clusteredForceLayout(
   return { positions, clusterBoundaries }
 }
 
-// Simple (non-minimal) enclosing circle per top-level group: centroid of its
-// members' final positions, radius = furthest member's own bounding radius
-// plus its distance from that centroid. Cheap and deterministic; not as
-// tight as a true minimal-enclosing-circle algorithm, which isn't needed
-// just to draw a boundary outline.
+// Simple (non-minimal) enclosing circle per top-level group: center is either the centroid of
+// its members' final positions, or (see anchorToHead below) the group's own head node's
+// position; radius = furthest member's own bounding radius plus its distance from that center.
+// Cheap and deterministic; not as tight as a true minimal-enclosing-circle algorithm, which
+// isn't needed just to draw a boundary outline.
 //
-// Exported so any layout engine that produces a "member -> top-level group"
-// mapping can draw the same boundary-circle visual — clusteredForceLayout
-// uses it for Louvain's top-level clusters (see above); GraphCanvas reuses
-// it directly for galaxyLayout's root subtrees (each root's id -> itself,
-// each descendant's id -> its root), since galaxyLayout itself has no
-// "cluster" concept of its own to return one from.
+// Exported so any layout engine that produces a "member -> top-level group" mapping can draw the
+// same boundary-circle visual — clusteredForceLayout uses it for Louvain's top-level clusters
+// (see above); GraphCanvas reuses it directly for galaxyLayout's root subtrees (each root's id ->
+// itself, each descendant's id -> its root), since galaxyLayout itself has no "cluster" concept
+// of its own to return one from.
 export function boundingCirclesByGroup(
   nodes: readonly LayoutNode[],
   positions: Map<string, { x: number; y: number }>,
   leafToGroup: Map<string, string>,
-  radiusOf: (id: string) => number
+  radiusOf: (id: string) => number,
+  /**
+   * When true, centers each circle on the group head's own position (`positions.get(topId)`) —
+   * valid whenever `topId` is itself a real, positioned member of its own group, which galaxy's
+   * leafToGroup always arranges (see galaxyGroupHeads). Falls back to the centroid if the head
+   * has no position. Galaxy passes true: its groups radiate outward from one "sun" node rather
+   * than spreading symmetrically, so a deep, lopsided subtree (a long one-directional chain, say)
+   * can drift its members' average position well away from the sun itself — centering on the
+   * centroid there would draw a circle over empty space nowhere near the node it's meant to
+   * encircle. Louvain clusters (force-clustered) have no such single natural anchor, so that
+   * caller leaves this false and keeps the centroid, which is the more space-efficient choice
+   * when there's no specific node the circle needs to stay anchored to.
+   */
+  anchorToHead = false
 ): Map<string, { x: number; y: number; r: number }> {
   const membersByTop = new Map<string, LayoutNode[]>()
   for (const n of nodes) {
@@ -587,16 +599,24 @@ export function boundingCirclesByGroup(
 
   const boundaries = new Map<string, { x: number; y: number; r: number }>()
   for (const [topId, members] of membersByTop) {
-    let cx = 0
-    let cy = 0
-    for (const m of members) {
-      const p = positions.get(m.id)
-      if (!p) continue
-      cx += p.x
-      cy += p.y
+    let cx: number
+    let cy: number
+    const headPos = anchorToHead ? positions.get(topId) : undefined
+    if (headPos) {
+      cx = headPos.x
+      cy = headPos.y
+    } else {
+      cx = 0
+      cy = 0
+      for (const m of members) {
+        const p = positions.get(m.id)
+        if (!p) continue
+        cx += p.x
+        cy += p.y
+      }
+      cx /= members.length
+      cy /= members.length
     }
-    cx /= members.length
-    cy /= members.length
 
     let r = 0
     for (const m of members) {

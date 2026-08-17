@@ -117,6 +117,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **`GraphCanvas`**: the viewport's visual center didn't survive a container
+  resize — most noticeably, toggling Fullscreen would leave pan/zoom at the
+  same raw values even though the container had just jumped to a completely
+  different size, snapping whatever was centered on screen off to one side.
+  A resize (Fullscreen, window resize, a host layout change) now re-anchors
+  pan so the same point stays centered.
+- **`galaxyLayout`/`boundingCirclesByGroup`**: a group's boundary circle
+  (`showClusterBoundaries`) was centered on the plain centroid of its
+  members' positions, not on the group's own "sun" node — fine for a
+  symmetric subtree, but a deep, lopsided one (a long one-directional chain)
+  could drift the centroid well away from the sun itself, drawing the circle
+  over empty space and letting members spill past its edge. New
+  `boundingCirclesByGroup(..., anchorToHead)` parameter (`GraphCanvas`'s
+  galaxy branch passes `true`) centers each circle on the group head's own
+  position instead; force-clustered's Louvain clusters, which have no single
+  natural anchor, keep the centroid.
+- **`GraphCanvas`** live-simulation mode: `showClusterBoundaries`'s rendered
+  circles were computed once by the static one-shot layout effect and then
+  frozen — while live mode ran, dragging a "sun" moved its own boundary
+  circle not at all, even though its descendants correctly followed in real
+  time. The live tick now recomputes cluster boundaries too (skipped
+  entirely when boundaries aren't shown, to avoid the extra per-frame work).
+
 - **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
   settle at force equilibrium with their rendered bounding boxes still
   overlapping, since the simulation treated nodes as dimensionless points.
