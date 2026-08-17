@@ -142,6 +142,7 @@ export { DetailDrawer, type DetailDrawerProps } from './components/DetailDrawer'
 export {
   forceLayout,
   clusteredForceLayout,
+  boundingCirclesByGroup,
   type LayoutNode,
   type LayoutEdge,
   type ForceLayoutOptions,

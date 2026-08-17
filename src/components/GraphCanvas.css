@@ -48,8 +48,9 @@
   pointer-events: none;
 }
 
-/* Cluster bubble boundary — layout="force-clustered" only. Border only, no
-   fill/shadow, per the design system's restrained-surface convention. */
+/* Top-level group boundary — layout="galaxy" | "force-clustered" only, gated by
+   showClusterBoundaries. Border only, no fill/shadow, per the design system's
+   restrained-surface convention. */
 .graph-cluster-boundary {
   fill: rgb(var(--canvas-fg-3) / 0.04);
   stroke: rgb(var(--canvas-border-2));

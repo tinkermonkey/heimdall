@@ -930,18 +930,20 @@ test.describe('Graph Canvas Components', () => {
       expect(parseFloat(opacity)).toBeCloseTo(1, 2)
     })
 
-    test('non-structural edges render dimmed by default', async ({ page }) => {
+    test('non-structural edges are hidden by default', async ({ page }) => {
       // brca1 --encodes--> protein, co2 --causes--> ocean_acidification, both relational
-      const encodes = page.locator('[data-testid="graph-edge-r_brca1_protein"] path.graph-edge__line')
-      const causes = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"] path.graph-edge__line')
+      const encodes = page.locator('[data-testid="graph-edge-r_brca1_protein"]')
+      const causes = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"]')
 
-      expect(parseFloat(await encodes.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
-      expect(parseFloat(await causes.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
+      // Not just invisible — not rendered at all (line, marker, and label alike), so it's also
+      // not clickable while hidden.
+      await expect(encodes).not.toBeAttached()
+      await expect(causes).not.toBeAttached()
     })
 
-    test('hovering a node reveals its dimmed non-structural edges', async ({ page }) => {
-      const edge = page.locator('[data-testid="graph-edge-r_brca1_protein"] path.graph-edge__line')
-      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
+    test('hovering a node reveals its hidden non-structural edges', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-r_brca1_protein"]')
+      await expect(edge).not.toBeAttached()
 
       // brca1 sits 5 hierarchy levels deep; fitView zooms out enough to fit the whole graph that
       // its rendered box can end up sub-pixel at this viewport size (a real user would zoom in
@@ -950,15 +952,19 @@ test.describe('Graph Canvas Components', () => {
       // into its synthetic onPointerEnter — dispatch that directly on the element, bypassing
       // screen-coordinate hit-testing entirely.
       await page.locator('[data-testid="graph-node-brca1"]').dispatchEvent('pointerover')
-      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(1, 2)
+      await expect(edge).toBeAttached()
+      const opacity = await edge.locator('path.graph-edge__line').evaluate(el => getComputedStyle(el).opacity)
+      expect(parseFloat(opacity)).toBeCloseTo(1, 2)
     })
 
-    test('"Show all relations" renders every non-structural edge at full opacity', async ({ page }) => {
-      const edge = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"] path.graph-edge__line')
-      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(0.15, 2)
+    test('"Show all relations" renders every non-structural edge', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"]')
+      await expect(edge).not.toBeAttached()
 
       await page.locator('[data-testid="galaxy-show-all-relations-button"]').click()
-      expect(parseFloat(await edge.evaluate(el => getComputedStyle(el).opacity))).toBeCloseTo(1, 2)
+      await expect(edge).toBeAttached()
+      const opacity = await edge.locator('path.graph-edge__line').evaluate(el => getComputedStyle(el).opacity)
+      expect(parseFloat(opacity)).toBeCloseTo(1, 2)
     })
 
     test('collapsing a node hides its structural descendants and shows a hidden-count badge', async ({ page }) => {

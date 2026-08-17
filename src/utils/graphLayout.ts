@@ -555,24 +555,31 @@ export function clusteredForceLayout(
   })
 
   const positions = forceLayout(microNodes, edges, options)
-  const clusterBoundaries = boundingCirclesByTopCluster(nodes, positions, leafToTop, radiusOf)
+  const clusterBoundaries = boundingCirclesByGroup(nodes, positions, leafToTop, radiusOf)
   return { positions, clusterBoundaries }
 }
 
-// Simple (non-minimal) enclosing circle per top-level cluster: centroid of
-// its members' final positions, radius = furthest member's own bounding
-// radius plus its distance from that centroid. Cheap and deterministic;
-// not as tight as a true minimal-enclosing-circle algorithm, which isn't
-// needed just to draw a boundary outline.
-function boundingCirclesByTopCluster(
+// Simple (non-minimal) enclosing circle per top-level group: centroid of its
+// members' final positions, radius = furthest member's own bounding radius
+// plus its distance from that centroid. Cheap and deterministic; not as
+// tight as a true minimal-enclosing-circle algorithm, which isn't needed
+// just to draw a boundary outline.
+//
+// Exported so any layout engine that produces a "member -> top-level group"
+// mapping can draw the same boundary-circle visual — clusteredForceLayout
+// uses it for Louvain's top-level clusters (see above); GraphCanvas reuses
+// it directly for galaxyLayout's root subtrees (each root's id -> itself,
+// each descendant's id -> its root), since galaxyLayout itself has no
+// "cluster" concept of its own to return one from.
+export function boundingCirclesByGroup(
   nodes: readonly LayoutNode[],
   positions: Map<string, { x: number; y: number }>,
-  leafToTop: Map<string, string>,
+  leafToGroup: Map<string, string>,
   radiusOf: (id: string) => number
 ): Map<string, { x: number; y: number; r: number }> {
   const membersByTop = new Map<string, LayoutNode[]>()
   for (const n of nodes) {
-    const topId = leafToTop.get(n.id)
+    const topId = leafToGroup.get(n.id)
     if (!topId) continue
     if (!membersByTop.has(topId)) membersByTop.set(topId, [])
     membersByTop.get(topId)!.push(n)

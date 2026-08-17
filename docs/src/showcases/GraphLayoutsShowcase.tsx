@@ -161,6 +161,7 @@ export function GraphLayoutsShowcase() {
   const [edgeStyle, setEdgeStyle] = useState<'curved' | 'straight'>('curved')
   const [nodeStyle, setNodeStyle] = useState<'compact' | 'cards'>('compact')
   const [showAllRelations, setShowAllRelations] = useState(false)
+  const [showClusterBoundaries, setShowClusterBoundaries] = useState(true)
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
@@ -318,7 +319,7 @@ export function GraphLayoutsShowcase() {
       />
       <ShowcaseSection
         label="Interactive comparison"
-        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Dimmed edges are relational (not part of the hierarchy); hover a node or turn on 'All relations' to see them at full opacity. Drag a node to reposition it, or turn dragging off. Node margin (force and force-clustered only — galaxy's radial placement already defaults to the same tight packing) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them. Selecting a node or edge opens a detail panel over the canvas — drag its left edge to resize. The corner toolbar zooms and can lock pan/zoom against accidental scroll or drag."
+        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Relational edges (not part of the hierarchy) are hidden entirely by default, line and label alike — hover a node or turn on 'All relations' to reveal the ones touching it. Drag a node to reposition it, or turn dragging off. Node margin (force and force-clustered only — galaxy's radial placement already defaults to the same tight packing) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them. Boundaries (galaxy and force-clustered only) toggles the top-level group circle behind each layout's own notion of a group — a root subtree for galaxy, a Louvain cluster for force-clustered. Selecting a node or edge opens a detail panel over the canvas — drag its left edge to resize. The corner toolbar zooms and can lock pan/zoom against accidental scroll or drag."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -357,9 +358,9 @@ export function GraphLayoutsShowcase() {
               </Control>
               <Control label="Relations">
                 <SegmentedControl
-                  value={showAllRelations ? 'all' : 'dim'}
+                  value={showAllRelations ? 'all' : 'structural'}
                   onChange={(v) => setShowAllRelations(v === 'all')}
-                  options={[{ value: 'dim', label: 'Dim' }, { value: 'all', label: 'All' }]}
+                  options={[{ value: 'structural', label: 'Structural' }, { value: 'all', label: 'All' }]}
                 />
               </Control>
               <Control label="Drag">
@@ -382,6 +383,15 @@ export function GraphLayoutsShowcase() {
                   />
                 </Control>
               )}
+              {layout !== 'force' && (
+                <Control label="Boundaries">
+                  <SegmentedControl
+                    value={showClusterBoundaries ? 'on' : 'off'}
+                    onChange={(v) => setShowClusterBoundaries(v === 'on')}
+                    options={[{ value: 'on', label: 'On' }, { value: 'off', label: 'Off' }]}
+                  />
+                </Control>
+              )}
             </div>
             <p style={{ margin: 0, fontSize: 12, color: fg3, fontStyle: 'italic' }}>{dataset.description}</p>
             <div style={{ height: 520, position: 'relative' }}>
@@ -390,13 +400,14 @@ export function GraphLayoutsShowcase() {
                 // changes the overall footprint (a different dataset, a different layout
                 // engine, cards vs. compact nodes, or node margin) needs a fresh mount to
                 // re-fit — otherwise the camera stays wherever it was framed for the previous
-                // shape. Dimming/edge-curvature/collapse/drag state don't affect the footprint
-                // enough to warrant it, so they're deliberately left out of this key.
+                // shape. Relations/boundaries/edge-curvature/collapse/drag state don't affect
+                // the footprint enough to warrant it, so they're deliberately left out of this key.
                 key={`${datasetKey}-${layout}-${nodeStyle}-${nodeMarginPreset}`}
                 nodes={dataset.nodes}
                 edges={edges}
                 layout={layout}
                 nodeMargin={nodeMargin}
+                showClusterBoundaries={showClusterBoundaries}
                 isStructuralEdge={isStructuralEdge}
                 showAllRelations={showAllRelations}
                 collapsedNodeIds={collapsedNodeIds}

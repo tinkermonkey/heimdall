@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   them with `d3-hierarchy`, then runs the existing spring simulation within
   each bubble. Trades a larger canvas for a less even, more legible node
   distribution. Renders an additional `.graph-cluster-boundary` circle per
-  top-level cluster. New exports: `clusteredForceLayout`,
+  top-level cluster (see the new `showClusterBoundaries` prop below). New exports: `clusteredForceLayout`,
   `ClusteredLayoutOptions`, `ClusteredLayoutResult`, `louvainCluster`,
   `ClusterEdge`, `ClusterTreeNode`, `LouvainOptions`, `packClusters`,
   `PackedCircle`, `PackOptions`. New dependency: `d3-hierarchy`.
@@ -58,6 +58,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   edge case (verified on a real 56-node/4-level hierarchy with heavy size
   variance: the tightest sibling pairs went from under 1px apart to 8px+
   with `nodeMargin={12}`, zero overlaps either way).
+- **`GraphCanvas`** — `showClusterBoundaries` prop (default `true`) and
+  boundary circles now also render under `layout="galaxy"`, not just
+  `"force-clustered"` — one per independent root subtree. A root with
+  children delegates its group-headship down to each of its own children
+  rather than drawing one circle around its entire subtree, so a single deep
+  hierarchy (e.g. one root with a dozen direct branches) still reads as
+  several legible groups instead of one all-encompassing circle; a childless
+  root (an orphan, or a node reachable only via a relational edge) keeps its
+  own single-node boundary. Both engines share the same underlying helper,
+  newly exported as `boundingCirclesByGroup`.
+- **`GraphCanvas`** — non-structural edges (per `isStructuralEdge`) are now
+  hidden entirely by default instead of dimmed to a low opacity — line,
+  arrow marker, and label all disappear, and the edge isn't clickable while
+  hidden. Hovering/selecting a touching node, or `showAllRelations`, still
+  reveals them at full opacity, same as before. Removes the internal
+  `NON_STRUCTURAL_DIM_OPACITY` constant this replaces.
 
 ### Changed
 

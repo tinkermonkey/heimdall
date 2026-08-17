@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
 import { computeEdgePath, computeFitViewport, edgeLabelSize, findClearLabelPosition, type BoundingBox, type EdgeAnchor } from '../utils/graph'
-import { forceLayout, clusteredForceLayout } from '../utils/graphLayout'
+import { forceLayout, clusteredForceLayout, boundingCirclesByGroup } from '../utils/graphLayout'
 import { galaxyLayout } from '../utils/galaxyLayout'
 import { buildStructuralForest, structuralDescendants } from '../utils/graphHierarchy'
 import { usePanZoom } from '../hooks/usePanZoom'
@@ -80,10 +80,6 @@ const DEFAULT_NODE_H = 30
 // diagram where zooming out past the content is pointless), so both are also exposed as props.
 const DEFAULT_MIN_ZOOM = 0.05
 const DEFAULT_MAX_ZOOM = 8
-// Opacity applied to a non-structural edge when it isn't touching the hovered or selected node
-// and the caller hasn't opted into showAllRelations. Only takes effect when isStructuralEdge is
-// supplied — without it every edge is treated as structural and this constant is unused.
-const NON_STRUCTURAL_DIM_OPACITY = 0.15
 // Screen-space pixels of pointer movement before a node pointerdown is treated as a drag rather
 // than a click — below this, it's just an imprecise click and should still fire onSelect.
 const DRAG_THRESHOLD = 3
@@ -176,7 +172,10 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    *  structural edges (see isStructuralEdge). 'force-clustered' additionally groups nodes into
    *  nested bubbles by graph structure (see clusteredForceLayout in utils/graphLayout) before
    *  running the same spring simulation within each bubble — larger canvas, less-even
-   *  distribution, by design. Nodes with x and y are pinned under any of these layouts. */
+   *  distribution, by design. Nodes with x and y are pinned under any of these layouts.
+   *  'galaxy' and 'force-clustered' both draw a boundary circle per top-level group (see
+   *  showClusterBoundaries) — one per root subtree for 'galaxy', one per top-level Louvain
+   *  cluster for 'force-clustered'. */
   layout?: 'manual' | 'force' | 'galaxy' | 'force-clustered'
   /**
    * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
@@ -193,18 +192,27 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    */
   nodeMargin?: number
   /**
+   * layout="galaxy" | "force-clustered" only, no effect otherwise. Shows a `.graph-cluster-boundary`
+   * circle around each top-level group the engine produced — galaxy's independent root subtrees,
+   * or force-clustered's top-level Louvain clusters — same visual language either way, so a
+   * caller can switch between the two engines without the "what groups with what" affordance
+   * disappearing. Default true (matches force-clustered's behavior before this prop existed).
+   */
+  showClusterBoundaries?: boolean
+  /**
    * Classifies an edge as structural (defines the galaxy layout's parent/child hierarchy,
    * source = parent) vs. relational (rendered but layout-irrelevant). Only meaningful with
    * layout="galaxy". When omitted, every edge is treated as structural — the same as before
    * this prop existed.
    *
-   * Also controls edge dimming: with this prop set, non-structural edges render at reduced
-   * opacity (see NON_STRUCTURAL_DIM_OPACITY) unless they touch the hovered or selected node, or
-   * showAllRelations is set. This works under any layout, not just "galaxy".
+   * Also controls edge visibility: with this prop set, a non-structural edge (line, marker, and
+   * label alike) doesn't render at all unless it touches the hovered or selected node, or
+   * showAllRelations is set — it's not just dimmed, so it also isn't clickable while hidden. This
+   * works under any layout, not just "galaxy".
    */
   isStructuralEdge?: (edge: GraphEdge) => boolean
-  /** When isStructuralEdge is set, disables dimming so all non-structural edges render at full
-   *  opacity regardless of hover/selection. Default false. No effect without isStructuralEdge. */
+  /** When isStructuralEdge is set, renders every non-structural edge instead of hiding it (see
+   *  isStructuralEdge). Default false. No effect without isStructuralEdge. */
   showAllRelations?: boolean
   /**
    * IDs of nodes whose structural descendants (per isStructuralEdge; every edge counts as
@@ -269,6 +277,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       renderNode,
       layout = 'manual',
       nodeMargin,
+      showClusterBoundaries = true,
       isStructuralEdge,
       showAllRelations = false,
       collapsedNodeIds,
@@ -451,10 +460,29 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           target: e.targetId,
           structural: isStructuralEdge ? isStructuralEdge(e) : true,
         }))
-        setComputedPositions(galaxyLayout(layoutNodes, layoutEdges, { nodeMargin }))
-        setClusterBoundaries(new Map())
+        const positions = galaxyLayout(layoutNodes, layoutEdges, { nodeMargin })
+        setComputedPositions(positions)
+        // galaxyLayout has no "cluster" concept of its own to return boundaries from (unlike
+        // clusteredForceLayout), so build one here from `forest`. One boundary per root would be
+        // correct but not very useful on a single-root tree (e.g. one org chart under one CEO) —
+        // it'd just be one circle around everything. Instead, a root with children delegates its
+        // group-headship down to each of ITS OWN children (a multi-root forest's roots still get
+        // one boundary each, same as before, since a childless root has nothing to delegate to);
+        // each group head's full recursive subtree is then one boundary, same as a Louvain
+        // cluster's members are for force-clustered.
+        const groupHeads = forest.roots.flatMap(rootId => forest.childrenOf.get(rootId) ?? [rootId])
+        const leafToGroup = new Map<string, string>()
+        for (const headId of groupHeads) {
+          leafToGroup.set(headId, headId)
+          for (const descendantId of structuralDescendants(headId, forest.childrenOf)) leafToGroup.set(descendantId, headId)
+        }
+        const radiusOf = (id: string): number => {
+          const d = dims.get(id)
+          return d ? Math.hypot(d.width, d.height) / 2 : 20
+        }
+        setClusterBoundaries(boundingCirclesByGroup(layoutNodes, positions, leafToGroup, radiusOf))
       }
-    }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge])
+    }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge, forest])
 
 
     // Track the rendered container size so the auto-center effect can react to it.
@@ -757,7 +785,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               data-testid="graph-viewport"
               transform={transform}
             >
-              {clusterBoundaries.size > 0 && (
+              {showClusterBoundaries && clusterBoundaries.size > 0 && (
                 <g className="graph-clusters" aria-hidden="true">
                   {[...clusterBoundaries.entries()].map(([id, c]) => (
                     <circle key={id} className="graph-cluster-boundary" cx={c.x} cy={c.y} r={c.r} />
@@ -767,15 +795,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
               <g className="graph-edges">
                 {edges?.map(edge => {
-                  // Only isStructuralEdge callers opt into dimming — without it every edge
+                  // Only isStructuralEdge callers opt into hiding — without it every edge
                   // is treated as structural, so this never changes existing behavior.
                   const structural = isStructuralEdge ? isStructuralEdge(edge) : true
                   const touchesFocus =
                     edge.sourceId === hoveredNodeId || edge.targetId === hoveredNodeId ||
                     edge.sourceId === selectedNodeId || edge.targetId === selectedNodeId ||
                     edge.id === selectedEdgeId
-                  const dimmed = !structural && !showAllRelations && !touchesFocus
-                  const opacity = edge.opacity !== undefined ? edge.opacity : dimmed ? NON_STRUCTURAL_DIM_OPACITY : undefined
+                  const hidden = !structural && !showAllRelations && !touchesFocus
+                  // Not rendered at all rather than dimmed to a low opacity — line, marker, and
+                  // label alike disappear, and it isn't clickable while hidden either.
+                  if (hidden) return null
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -785,7 +815,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       label={edge.label}
                       variant={edge.variant}
                       weight={edge.weight}
-                      opacity={opacity}
+                      opacity={edge.opacity}
                       strokeDash={edge.strokeDash}
                       sourceAnchor={edge.sourceAnchor}
                       targetAnchor={edge.targetAnchor}
