@@ -66,6 +66,33 @@ export interface GalaxyLayoutOptions {
    * accomplished in the one-shot layout that seeded it.
    */
   separateGroups?: boolean
+  /**
+   * Container width/height (px), i.e. containerWidth / containerHeight. When provided, warps every
+   * orbital ring from a circle into an ellipse so the layout's overall shape leans toward the
+   * container's own proportions, instead of always producing a circular footprint that a wide-short
+   * or tall-narrow container then has to letterbox. Omitted (or exactly 1) reproduces today's exact
+   * circular placement bit-for-bit — every `distance` still comes from the same nodeSpread-based
+   * radius math; only the polar-to-cartesian conversion changes, so nodeMargin, separationPass, and
+   * shiftGroupsApart all keep working unmodified against the resulting elliptically-placed
+   * positions (they only ever read real x/y + width/height, with no notion of how a position was
+   * derived).
+   *
+   * The raw ratio is clamped to [1/8, 8] (guards a transient 0-height container measurement from
+   * producing Infinity/NaN) and damped via a fourth root (`clamped ** 0.25`) rather than the
+   * textbook sqrt(ratio) ellipse formula — unlike a generic scatter plot, this layout fans every
+   * node's children a full 360° around it at *every* level of the tree, so a straight sqrt scale
+   * visibly over-elongates it well before a 4:1 container: it squeezes adjacent orbital slices on
+   * the compressed axis close enough that separationPass has to fight the ellipse just to keep them
+   * apart, eroding the effect. The fourth root keeps the response smooth and monotonic while
+   * roughly halving the distortion at extreme ratios (4:1 yields ~1.41x/0.71x axis scaling, not
+   * sqrt's raw 2x/0.5x). scaleX * scaleY === 1 always (area-preserving), so the layout doesn't get
+   * uniformly bigger or smaller as a side effect of reshaping. Not applied to shiftGroupsApart's own
+   * group-vs-group macro pass — that still treats group boundary circles as literally circular when
+   * pushing them apart from each other, a known, deliberately out-of-scope limitation (multi-group
+   * top-level arrangement won't lean into the aspect ratio quite as strongly as a single tree's
+   * internal orbits do).
+   */
+  aspectRatio?: number
 }
 
 /**
@@ -100,12 +127,25 @@ export function galaxySimulationStep(
     homeStrength = 0.18,
     nodeMargin,
     separateGroups = true,
+    aspectRatio,
   } = options
 
   if (nodes.length === 0) return new Map()
 
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
   const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
+
+  // See GalaxyLayoutOptions.aspectRatio for the reasoning behind the clamp and the fourth-root
+  // damping. aspectRatio omitted (or exactly 1) collapses to ellipseX = ellipseY = 1 — multiplying
+  // by exactly 1 is bit-identical to the un-warped math this replaces.
+  const clampedAspectRatio = Math.min(8, Math.max(1 / 8, aspectRatio ?? 1))
+  const dampedAspectRatio = Math.pow(clampedAspectRatio, 0.25)
+  const ellipseX = dampedAspectRatio
+  const ellipseY = 1 / dampedAspectRatio
+  const ellipticalOffset = (distance: number, angle: number): { x: number; y: number } => ({
+    x: distance * ellipseX * Math.cos(angle),
+    y: distance * ellipseY * Math.sin(angle),
+  })
 
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
 
@@ -129,7 +169,8 @@ export function galaxySimulationStep(
       // directly opposite its own parent-facing edge into the grandparent.
       const parity = n % 2 === 0 && depth > 0 ? Math.PI / n : 0
       const childAngle = angle + (2 * Math.PI * i) / n + parity
-      place(childId, ax + distance * Math.cos(childAngle), ay + distance * Math.sin(childAngle), childAngle, depth + 1)
+      const off = ellipticalOffset(distance, childAngle)
+      place(childId, ax + off.x, ay + off.y, childAngle, depth + 1)
     })
   }
 
@@ -166,7 +207,8 @@ export function galaxySimulationStep(
       // an unrelated neighbor's territory — see this function's own docs above.
       const distance = rootR * nodeSpread + subtreeReach(rootId)
       const angle = startAngle + (2 * Math.PI * i) / n
-      place(rootId, distance * Math.cos(angle), distance * Math.sin(angle), angle, 0)
+      const off = ellipticalOffset(distance, angle)
+      place(rootId, off.x, off.y, angle, 0)
     })
   }
 

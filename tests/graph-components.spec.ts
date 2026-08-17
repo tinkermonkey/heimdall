@@ -1085,6 +1085,68 @@ test.describe('Graph Canvas Components', () => {
       await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
     })
 
+    test.describe('Aspect-ratio-aware layout', () => {
+      // Width/height of the smallest box enclosing every rendered node, in screen space — zoom is
+      // always uniform (never non-uniform stretching), so this box's own width/height RATIO is a
+      // valid proxy for the underlying layout's shape regardless of whatever zoom level fitView
+      // landed on.
+      async function clusterBoundingBox(page: import('@playwright/test').Page) {
+        const nodes = page.locator('[data-testid^="graph-node-"]')
+        const count = await nodes.count()
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+        for (let i = 0; i < count; i++) {
+          const box = await nodes.nth(i).boundingBox()
+          if (!box) continue
+          minX = Math.min(minX, box.x); maxX = Math.max(maxX, box.x + box.width)
+          minY = Math.min(minY, box.y); maxY = Math.max(maxY, box.y + box.height)
+        }
+        return { width: maxX - minX, height: maxY - minY }
+      }
+
+      test('the layout reshapes to lean into the container when its aspect ratio changes', async ({ page }) => {
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+        const tall = await clusterBoundingBox(page)
+
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await page.waitForTimeout(200)
+        const wide = await clusterBoundingBox(page)
+
+        // Directional, not exact-pixel: the wide viewport's own width/height ratio should end up
+        // measurably larger than the tall viewport's, proving the layout actually reshaped rather
+        // than just being re-fit (uniform scaling) into differently shaped boxes.
+        expect(wide.width / wide.height).toBeGreaterThan((tall.width / tall.height) * 1.3)
+      })
+
+      test('locking pan/zoom prevents the redraw on resize', async ({ page }) => {
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+        const before = await clusterBoundingBox(page)
+
+        await page.locator('[aria-label="Lock pan and zoom"]').click()
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await page.waitForTimeout(200)
+        const after = await clusterBoundingBox(page)
+
+        expect(after.width / after.height).toBeCloseTo(before.width / before.height, 1)
+      })
+
+      test('live simulation eases toward the new shape on resize instead of snapping', async ({ page }) => {
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+
+        await page.locator('[aria-label="Enable live simulation"]').click()
+        await page.waitForTimeout(200)
+        const before = await clusterBoundingBox(page)
+
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await expect.poll(async () => {
+          const box = await clusterBoundingBox(page)
+          return box.width / box.height
+        }, { timeout: 2000 }).toBeGreaterThan((before.width / before.height) * 1.2)
+      })
+    })
+
     test.describe('Live simulation', () => {
       test.beforeEach(async ({ page }) => {
         await page.locator('[aria-label="Enable live simulation"]').click()

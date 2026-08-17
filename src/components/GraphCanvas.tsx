@@ -395,6 +395,26 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // (e.g. entering/exiting fullscreen) apart from a same-size re-render.
     const prevContainerSizeRef = useRef<{ width: number; height: number } | null>(null)
 
+    // Only galaxy reads this (see galaxyLayout's own aspectRatio option) — force/force-clustered
+    // ignore it, so this is a stable `undefined` for those layouts and a resize never retriggers
+    // their engine-layout recompute. Rounded to the nearest 0.05 (~5%) so sub-pixel ResizeObserver
+    // noise (a scrollbar toggling, a font-metrics reflow) never crosses a bucket boundary and
+    // triggers a redraw, while an actual ~5%+ resize/reflow reliably does.
+    const galaxyAspectRatio = useMemo(() => {
+      if (layout !== 'galaxy' || !containerSize || containerSize.height === 0) return undefined
+      return Math.round((containerSize.width / containerSize.height) * 20) / 20
+    }, [layout, containerSize])
+
+    // Read via a ref (not a dependency) inside the engine-layout effect below, same idiom
+    // liveActiveRef above already uses — the effect should pick up whatever the aspect ratio
+    // currently is whenever it runs for any other reason, but a resize alone shouldn't retrigger
+    // the whole settle-cycle computation (that's the dedicated resize-triggered relayout effect's
+    // job, further down).
+    const galaxyAspectRatioRef = useRef(galaxyAspectRatio)
+    useEffect(() => {
+      galaxyAspectRatioRef.current = galaxyAspectRatio
+    })
+
     const { transform, viewport, bind, panTo, zoomTo } = usePanZoom({
       minZoom,
       maxZoom,
@@ -485,7 +505,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           target: e.targetId,
           structural: isStructuralEdge ? isStructuralEdge(e) : true,
         }))
-        const positions = galaxyLayout(layoutNodes, layoutEdges, { nodeMargin })
+        const positions = galaxyLayout(layoutNodes, layoutEdges, { nodeMargin, aspectRatio: galaxyAspectRatioRef.current })
         setComputedPositions(positions)
         // galaxyLayout has no "cluster" concept of its own to return boundaries from (unlike
         // clusteredForceLayout), so build one here from `forest`. One boundary per root would be
@@ -509,15 +529,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
     }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge, forest])
 
-    // Live-simulation mode's own continuous layout (see useGalaxySimulation) — a "sun" node's
-    // dragPositions override doubles as its pin here, same priority getNodePosition already
-    // gives dragPositions over any prop-level x/y, so a dropped node stays exactly where it was
-    // dropped and its descendants keep orbiting live from that position. These build unconditionally
-    // (empty when not live-active) so the hook's own call below has stable inputs across renders
-    // regardless of whether live mode is currently on.
-    const liveLayoutNodes = useMemo<GalaxyLayoutNode[]>(() => {
-      if (!liveActive) return []
-      return visibleNodes.map(n => {
+    // A node's dragPositions override doubles as its pin here, same priority getNodePosition
+    // already gives dragPositions over any prop-level x/y, so a dropped node stays exactly where
+    // it was dropped and its descendants keep orbiting live from that position. Shared by live
+    // simulation (below) and the resize-triggered relayout effect (further down) — deliberately
+    // NOT used by the static engine-layout effect above, whose own dependency array intentionally
+    // excludes dragPositions so a plain (non-live) drag moves only the dragged node instead of
+    // retriggering a full relayout of everything else on every pointermove.
+    const buildGalaxyLayoutNodes = useCallback((): GalaxyLayoutNode[] =>
+      visibleNodes.map(n => {
         const drag = dragPositions.get(n.id)
         const x = drag?.x ?? n.x
         const y = drag?.y ?? n.y
@@ -529,8 +549,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           y,
           pinned: x !== undefined && y !== undefined,
         }
-      })
-    }, [liveActive, visibleNodes, dims, dragPositions])
+      }), [visibleNodes, dims, dragPositions])
+
+    // Live-simulation mode's own continuous layout (see useGalaxySimulation). Builds
+    // unconditionally (empty when not live-active) so the hook's own call below has stable inputs
+    // across renders regardless of whether live mode is currently on.
+    const liveLayoutNodes = useMemo<GalaxyLayoutNode[]>(() => {
+      if (!liveActive) return []
+      return buildGalaxyLayoutNodes()
+    }, [liveActive, buildGalaxyLayoutNodes])
 
     const liveLayoutEdges = useMemo(() => {
       if (!liveActive) return []
@@ -582,7 +609,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       active: liveActive,
       nodes: liveLayoutNodes,
       edges: liveLayoutEdges,
-      options: { nodeMargin },
+      options: { nodeMargin, aspectRatio: galaxyAspectRatio },
       onTick: handleLiveTick,
       initialPositions: computedPositions,
     })
@@ -691,6 +718,87 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         containerSize.height / 2 - centerWorldY * viewport.zoom
       )
     }, [containerSize, viewport.x, viewport.y, viewport.zoom, panTo])
+
+    // Redraws the galaxy layout when the container's aspect ratio actually changes (see
+    // galaxyAspectRatio's own docs for the rounding/threshold) and pan/zoom isn't locked — the
+    // "redraw to fit the new boundaries" half of aspect-ratio awareness; the static engine-layout
+    // effect above only ever *reads* the current ratio when it happens to run for some other
+    // reason, it never reruns just because the ratio changed. Declared after the resize re-anchor
+    // effect above on purpose: both can fire in the same commit (a resize that both changes size
+    // and crosses an aspect-ratio bucket), and this effect's fresh relayout-driven pan/zoom must
+    // win over that one's "just preserve the old center" pan — React runs same-commit effects in
+    // declaration order, last state write wins, and both firing is harmless either way (React
+    // batches the state updates, so there's no visible intermediate frame).
+    const prevGalaxyAspectRatioRef = useRef<number | undefined>(undefined)
+    useEffect(() => {
+      const prev = prevGalaxyAspectRatioRef.current
+      prevGalaxyAspectRatioRef.current = galaxyAspectRatio
+      if (layout !== 'galaxy' || galaxyAspectRatio === undefined) return
+      if (prev === galaxyAspectRatio) return
+      if (locked) return
+      if (dims.size === 0) return
+
+      // Live mode already reads aspectRatio from its own options every tick and eases toward the
+      // new shape smoothly via the existing homeStrength mechanism — waking it (in case the loop
+      // had gone idle) is enough; a competing one-shot relayout+hard-reframe here would either
+      // freeze that transition mid-flight or fight it every subsequent frame.
+      if (liveActiveRef.current) {
+        wakeGalaxySimulation()
+        return
+      }
+
+      const layoutNodes = buildGalaxyLayoutNodes()
+      const layoutEdges = (edges ?? []).map(e => ({
+        source: e.sourceId,
+        target: e.targetId,
+        structural: isStructuralEdge ? isStructuralEdge(e) : true,
+      }))
+      const positions = galaxyLayout(layoutNodes, layoutEdges, { nodeMargin, aspectRatio: galaxyAspectRatio })
+      setComputedPositions(positions)
+
+      // Boundary circles must track the reshaped positions too — same computation the static
+      // engine-layout effect's own galaxy branch already does.
+      const groupHeads = galaxyGroupHeads(forest.roots, forest.childrenOf)
+      const leafToGroup = new Map<string, string>()
+      for (const headId of groupHeads) {
+        leafToGroup.set(headId, headId)
+        for (const descendantId of structuralDescendants(headId, forest.childrenOf)) leafToGroup.set(descendantId, headId)
+      }
+      const radiusOf = (id: string): number => {
+        const d = dims.get(id)
+        return d ? Math.hypot(d.width, d.height) / 2 : 20
+      }
+      // boundingCirclesByGroup only reads id/width/height off each node (positions come from the
+      // separate `positions` map) — x/y here are dummy placeholders, same convention used
+      // elsewhere in this file (see handleLiveTick's own boundaryNodes).
+      const boundaryNodes = layoutNodes.map(n => ({ id: n.id, width: n.width, height: n.height, x: 0, y: 0 }))
+      setClusterBoundaries(boundingCirclesByGroup(boundaryNodes, positions, leafToGroup, radiusOf, true))
+
+      // Re-frame using the just-computed `positions` directly, not stale `computedPositions` state
+      // (the setComputedPositions call above won't be reflected until next render) — mirrors the
+      // mount-time auto-center effect's own fitView/else branching exactly.
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+      for (const n of visibleNodes) {
+        const p = dragPositions.get(n.id) ?? positions.get(n.id) ?? { x: 0, y: 0 }
+        const d = dims.get(n.id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
+        minX = Math.min(minX, p.x - d.width / 2)
+        maxX = Math.max(maxX, p.x + d.width / 2)
+        minY = Math.min(minY, p.y - d.height / 2)
+        maxY = Math.max(maxY, p.y + d.height / 2)
+      }
+      if (Number.isFinite(minX) && containerSize) {
+        const bbox = { minX, maxX, minY, maxY }
+        if (fitView) {
+          const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, minZoom, maxZoom)
+          zoomTo(fit.zoom)
+          panTo(fit.panX, fit.panY)
+        } else {
+          const cx = (bbox.minX + bbox.maxX) / 2
+          const cy = (bbox.minY + bbox.maxY) / 2
+          panTo(containerSize.width / 2 - cx * viewport.zoom, containerSize.height / 2 - cy * viewport.zoom)
+        }
+      }
+    }, [galaxyAspectRatio, layout, locked])
 
     // Imperative viewport controls, exposed via useGraphCanvas().
     const zoomToFit = useCallback((padding?: number) => {

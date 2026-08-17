@@ -292,3 +292,134 @@ test.describe('galaxySimulationStep', () => {
     }
   })
 })
+
+// width/height of the smallest axis-aligned box enclosing every position — used to check the
+// elliptical warp actually reshapes the aggregate layout, not just individual offsets.
+function boundingBoxSize(positions: Map<string, { x: number; y: number }>): { width: number; height: number } {
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+  for (const p of positions.values()) {
+    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x)
+    minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y)
+  }
+  return { width: maxX - minX, height: maxY - minY }
+}
+
+test.describe('aspectRatio (elliptical warp)', () => {
+  // A moderately branchy tree so the aggregate bounding box is meaningfully sized in both
+  // dimensions — a single straight chain would make a width/height ratio comparison degenerate.
+  function branchyTree(): { nodes: GalaxyLayoutNode[]; edges: GalaxyLayoutEdge[] } {
+    const nodes: GalaxyLayoutNode[] = [node('root')]
+    const edges: GalaxyLayoutEdge[] = []
+    for (let b = 0; b < 5; b++) {
+      const branchId = `branch${b}`
+      nodes.push(node(branchId))
+      edges.push(structuralEdge('root', branchId))
+      for (let c = 0; c < 4; c++) {
+        const childId = `branch${b}_child${c}`
+        nodes.push(node(childId))
+        edges.push(structuralEdge(branchId, childId))
+      }
+    }
+    return { nodes, edges }
+  }
+
+  test('omitted and 1 produce identical positions — backward compatible with the un-warped layout', () => {
+    const { nodes, edges } = branchyTree()
+
+    const omitted = galaxyLayout(nodes, edges)
+    const explicitOne = galaxyLayout(nodes, edges, { aspectRatio: 1 })
+
+    for (const n of nodes) {
+      expect(explicitOne.get(n.id)).toEqual(omitted.get(n.id))
+    }
+  })
+
+  test('a wide aspectRatio produces a measurably wider-than-tall bounding box', () => {
+    const { nodes, edges } = branchyTree()
+
+    const circular = boundingBoxSize(galaxyLayout(nodes, edges))
+    const wide = boundingBoxSize(galaxyLayout(nodes, edges, { aspectRatio: 4 }))
+
+    // Circular layout's own width/height ratio (whatever it naturally is) should shift measurably
+    // toward wide once aspectRatio biases it, not just wobble from unrelated settle-cycle noise —
+    // separationPass mildly counteracts the ellipse (see GalaxyLayoutOptions.aspectRatio's own
+    // docs), so this doesn't assert the full theoretical scaleX/scaleY shift, just a clear one.
+    expect(wide.width / wide.height).toBeGreaterThan((circular.width / circular.height) * 1.15)
+  })
+
+  test('the ratio is clamped to [1/8, 8] — extreme values beyond the clamp are indistinguishable from the boundary', () => {
+    const { nodes, edges } = branchyTree()
+
+    const atCeiling = galaxyLayout(nodes, edges, { aspectRatio: 8 })
+    const wayAboveCeiling = galaxyLayout(nodes, edges, { aspectRatio: 100 })
+    for (const n of nodes) {
+      expect(wayAboveCeiling.get(n.id)).toEqual(atCeiling.get(n.id))
+    }
+
+    const atFloor = galaxyLayout(nodes, edges, { aspectRatio: 1 / 8 })
+    const wayBelowFloor = galaxyLayout(nodes, edges, { aspectRatio: 0.001 })
+    for (const n of nodes) {
+      expect(wayBelowFloor.get(n.id)).toEqual(atFloor.get(n.id))
+    }
+  })
+
+  test('formula: a child at angle 0 lands at distance * ratio**0.25 along x, ~0 along y', () => {
+    // startAngle: 0 isolates cos(0)=1, sin(0)=0 for the root-ring seed itself (a single root, so
+    // its own placement IS the root-ring seed with i=0, n=1 -> angle = startAngle exactly).
+    const nodes = [node('root'), node('child')]
+    const edges = [structuralEdge('root', 'child')]
+
+    const ratio = 4
+    const positions = galaxyLayout(nodes, edges, { aspectRatio: ratio, startAngle: 0, settleCycles: 0 })
+    const root = positions.get('root')!
+    const child = positions.get('child')!
+
+    // root itself: distance = rootR * nodeSpread + subtreeReach(root); reproduce it independently
+    // via the same radiusOf/nodeSpread math the implementation uses, rather than hardcoding a
+    // number that would silently stop meaning anything if an unrelated default ever changes.
+    const rootR = Math.hypot(nodes[0].width, nodes[0].height) / 2
+    const childR = Math.hypot(nodes[1].width, nodes[1].height) / 2
+    const nodeSpread = 3.2 // matches GalaxyLayoutOptions.nodeSpread's own default
+    const childDistance = rootR + childR * nodeSpread
+    const expectedScale = Math.pow(ratio, 0.25)
+
+    expect(root.y).toBeCloseTo(0, 5)
+    expect(child.x - root.x).toBeCloseTo(childDistance * expectedScale, 5)
+    expect(child.y - root.y).toBeCloseTo(0, 5)
+  })
+
+  test('pinned coordinates are unaffected by aspectRatio', () => {
+    const nodes: GalaxyLayoutNode[] = [
+      node('pinned', { x: 500, y: 500, pinned: true }),
+      node('free'),
+    ]
+    const edges = [structuralEdge('pinned', 'free')]
+
+    const positions = galaxyLayout(nodes, edges, { aspectRatio: 3 })
+    expect(positions.get('pinned')).toEqual({ x: 500, y: 500 })
+  })
+
+  test('composes with subtreeReach — a deep subtree still seeds farther from the hub than a childless root', () => {
+    const nodes: GalaxyLayoutNode[] = [node('lonelyRoot')]
+    const edges: GalaxyLayoutEdge[] = []
+    const chain = ['deepRoot', 'a', 'b', 'c', 'd']
+    for (const id of chain) nodes.push(node(id))
+    for (let i = 0; i < chain.length - 1; i++) edges.push(structuralEdge(chain[i], chain[i + 1]))
+
+    const positions = galaxyLayout(nodes, edges, { aspectRatio: 3 })
+    const lonelyDist = Math.hypot(positions.get('lonelyRoot')!.x, positions.get('lonelyRoot')!.y)
+    const deepDist = Math.hypot(positions.get('deepRoot')!.x, positions.get('deepRoot')!.y)
+
+    expect(deepDist).toBeGreaterThan(lonelyDist * 3)
+  })
+
+  test('composes with separateGroups — group boundaries stay non-overlapping under an elliptical warp', () => {
+    const { nodes, edges } = busyMultiRootNodes()
+
+    const positions = galaxyLayout(nodes, edges, { aspectRatio: 3 })
+
+    // toBeLessThan, not <=0 exactly — the elliptical transform's cos/sin math introduces
+    // floating-point noise on the order of 1e-14 even where the true geometric overlap is zero.
+    expect(worstGroupOverlap(groupBoundaries(nodes, edges, positions))).toBeLessThan(1e-6)
+  })
+})

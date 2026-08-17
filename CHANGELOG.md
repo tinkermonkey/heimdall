@@ -107,6 +107,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `liveSimulation`, and `setLiveSimulation`.
   New exports on `GraphCanvasContextValue`: `isFullscreen`,
   `toggleFullscreen`. New icons: `fullscreen`, `fullscreenExit`.
+- **`galaxyLayout`** — aspect-ratio-aware placement: a new
+  `GalaxyLayoutOptions.aspectRatio` option (container width/height) warps
+  every orbital ring from a circle into an ellipse so the layout's overall
+  shape leans toward the container's own proportions, instead of always
+  producing a circular footprint that a wide-short or tall-narrow container
+  then has to letterbox — the established technique radial tree layouts
+  (e.g. Perforce's `IlvTree`, the `d3-radial` library) use for the same
+  problem. The raw ratio is clamped to `[1/8, 8]` and damped via a fourth
+  root rather than the textbook square root, since this layout fans every
+  node's children a full 360° at *every* level, so a straight sqrt scale
+  over-elongates well before a 4:1 container. Omitted (or exactly `1`)
+  reproduces prior circular placement bit-for-bit. `GraphCanvas` feeds its
+  own real container aspect ratio in automatically for `layout="galaxy"`
+  (rounded to the nearest 5% so sub-pixel resize noise doesn't churn it),
+  and redraws the layout — respecting a currently-pinned/dropped node's
+  position exactly — whenever that ratio changes meaningfully and pan/zoom
+  isn't locked; live-simulation mode eases toward a new shape smoothly via
+  its existing spring mechanism instead of snapping. No new `GraphCanvas`
+  prop — the existing lock toggle is the complete opt-out.
 
 ### Changed
 
