@@ -254,7 +254,7 @@ export function GraphCanvasShowcase() {
   return (
     <div>
       <PageHeader name="GraphCanvas" description="Pan-and-zoom SVG/HTML graph canvas. Renders GraphNode children positioned at (x, y) and GraphEdge children as bezier curves between nodes." />
-      <ShowcaseSection label="Interactive canvas" description="Pan by dragging the canvas; scroll to zoom, anchored under the cursor — or use the corner toolbar, which can also lock pan/zoom. Click a node or an edge (line or label) to open a detail panel over the canvas.">
+      <ShowcaseSection label="Interactive canvas" description="Pan by dragging the canvas; scroll to zoom, anchored under the cursor — or use the corner toolbar, which can also lock pan/zoom and go fullscreen. Click a node or an edge (line or label) to open a detail panel over the canvas.">
         <DemoCard>
           <div style={{ height: 360, position: 'relative' }}>
             <GraphCanvas
@@ -301,7 +301,7 @@ export function GraphCanvasShowcase() {
           <PropRow name="onNodeDragEnd" type="(nodeId: string, position: { x: number; y: number }) => void" description="Called once a drag ends, with the node's new position. Only fires for an actual drag past a small movement threshold, not a plain click." />
           <PropRow name="minZoom" type="number" def="0.05" description="Lower zoom bound. Permissive by default so a large graph can always be zoomed out far enough to fit in frame." />
           <PropRow name="maxZoom" type="number" def="8" description="Upper zoom bound." />
-          <PropRow name="showToolbar" type="boolean" def="true" description="Shows the built-in zoom in/out/fit and pan-and-zoom-lock toolbar. Set false to omit it entirely." />
+          <PropRow name="showToolbar" type="boolean" def="true" description="Shows the built-in zoom in/out/fit, pan-and-zoom-lock, and fullscreen toolbar. Set false to omit it entirely." />
           <PropRow name="toolbarPosition" type="GraphToolbarPosition" def="'bottom-right'" description="Any of the 4 corners or 4 edge-centers. No effect when showToolbar is false." />
         </PropsTable>
       </ShowcaseSection>
@@ -328,7 +328,7 @@ export function GraphCanvasShowcase() {
           <PropRow name="maxWidth" type="number" def="640" description="Upper resize bound." />
         </PropsTable>
       </ShowcaseSection>
-      <ShowcaseSection label="Props (GraphToolbar)" description="Floating zoom in / zoom out / zoom to fit / lock controls, rendered by GraphCanvas itself by default (see its showToolbar/toolbarPosition props) — exported separately for a custom placement or control set.">
+      <ShowcaseSection label="Props (GraphToolbar)" description="Floating zoom in / zoom out / zoom to fit / lock / fullscreen controls, rendered by GraphCanvas itself by default (see its showToolbar/toolbarPosition props) — exported separately for a custom placement or control set.">
         <PropsTable>
           <PropRow name="position" type="GraphToolbarPosition" def="'bottom-right'" description="Any of the 4 corners or 4 edge-centers. left-center/right-center stack the buttons vertically instead of in a row." />
         </PropsTable>

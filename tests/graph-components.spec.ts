@@ -247,6 +247,26 @@ test.describe('Graph Canvas Components', () => {
     expect(initialTransform).not.toBe(newTransform)
   })
 
+  test('the toolbar fullscreen button toggles the canvas into and out of the Fullscreen API', async ({ page }) => {
+    const canvas = page.locator('.graph-canvas')
+    const enterBtn = page.locator('[aria-label="Fullscreen"]')
+    const exitBtn = page.locator('[aria-label="Exit fullscreen"]')
+
+    await expect(enterBtn).toBeVisible()
+    expect(await canvas.evaluate((el) => el === document.fullscreenElement)).toBe(false)
+
+    await enterBtn.click()
+    await expect(exitBtn).toBeVisible()
+    expect(await canvas.evaluate((el) => el === document.fullscreenElement)).toBe(true)
+
+    // Exiting via document.exitFullscreen() (what pressing Esc does under the hood) rather than
+    // clicking our own button — confirms the button's pressed state tracks the platform's actual
+    // fullscreen state via the fullscreenchange listener, not just its own click handler.
+    await page.evaluate(() => document.exitFullscreen())
+    await expect(enterBtn).toBeVisible()
+    expect(await canvas.evaluate(() => document.fullscreenElement)).toBeNull()
+  })
+
   test('detail drawer is hidden until a node is selected', async ({ page }) => {
     const drawer = page.locator('[data-testid="graph-detail-drawer"]')
 

@@ -75,6 +75,11 @@ export const ICONS = {
   zoomOut: 'M11 3 C15.42 3 19 6.58 19 11 C19 15.42 15.42 19 11 19 C6.58 19 3 15.42 3 11 C3 6.58 6.58 3 11 3 M21 21 L16.65 16.65 M8 11 L14 11',
   // Four outward-facing corner brackets — "fit to view" / "zoom to extents".
   maximize: 'M3 8 L3 3 L8 3 M16 3 L21 3 L21 8 M21 16 L21 21 L16 21 M8 21 L3 21 L3 16',
+  // Two-corner brackets (top-right + bottom-left) with diagonal arrows pointing outward toward
+  // them — deliberately distinct from `maximize`'s four-corner-bracket "fit to view" glyph so a
+  // fullscreen toggle sitting next to it doesn't read as a duplicate button.
+  fullscreen: 'M15 3 L21 3 L21 9 M9 21 L3 21 L3 15 M21 3 L14 10 M3 21 L10 14',
+  fullscreenExit: 'M20 10 L14 10 L14 4 M4 14 L10 14 L10 20 M14 10 L21 3 M10 14 L3 21',
 } as const
 
 export type IconName = keyof typeof ICONS

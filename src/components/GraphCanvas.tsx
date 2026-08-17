@@ -333,6 +333,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Freezes wheel-zoom, drag-to-pan, and keyboard zoom/pan (see usePanZoom's locked option) —
     // toggled by GraphToolbar's lock button. Internal/uncontrolled, like hoveredNodeId/dragPositions.
     const [locked, setLocked] = useState(false)
+    // Mirrors document.fullscreenElement === containerRef.current — kept in sync by the
+    // fullscreenchange listener below rather than just set inside toggleFullscreen, so Esc and
+    // any other exit path (not just GraphToolbar's own button) update it too.
+    const [isFullscreen, setIsFullscreen] = useState(false)
 
     // Structural hierarchy over the FULL node/edge list — independent of what's currently
     // hidden, so a collapsed node's affordance (hasChildren, hiddenDescendantCount) stays
@@ -495,6 +499,23 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       })
       ro.observe(container)
       return () => ro.disconnect()
+    }, [])
+
+    // Keeps isFullscreen in sync with the platform's own fullscreen state regardless of how it
+    // changed — Esc, browser chrome's own exit control, or another element entirely taking over
+    // fullscreen would otherwise leave GraphToolbar's button showing the wrong icon.
+    useEffect(() => {
+      const syncFullscreen = () => setIsFullscreen(document.fullscreenElement === containerRef.current)
+      document.addEventListener('fullscreenchange', syncFullscreen)
+      return () => document.removeEventListener('fullscreenchange', syncFullscreen)
+    }, [])
+
+    const toggleFullscreen = useCallback(() => {
+      if (document.fullscreenElement === containerRef.current) {
+        document.exitFullscreen?.()
+      } else {
+        containerRef.current?.requestFullscreen?.()
+      }
     }, [])
 
     const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
@@ -710,7 +731,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setPan: panTo,
       locked,
       setLocked,
-    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo, locked])
+      isFullscreen,
+      toggleFullscreen,
+    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo, locked, isFullscreen, toggleFullscreen])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)

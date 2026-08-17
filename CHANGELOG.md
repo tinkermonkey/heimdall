@@ -74,6 +74,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   hidden. Hovering/selecting a touching node, or `showAllRelations`, still
   reveals them at full opacity, same as before. Removes the internal
   `NON_STRUCTURAL_DIM_OPACITY` constant this replaces.
+- **`GraphToolbar`** — a fifth button toggles the canvas container in and out
+  of the Fullscreen API. Tracks the platform's own fullscreen state (not
+  just its own clicks), so Esc or any other exit path updates the icon too.
+  New exports on `GraphCanvasContextValue`: `isFullscreen`,
+  `toggleFullscreen`. New icons: `fullscreen`, `fullscreenExit`.
 
 ### Changed
 

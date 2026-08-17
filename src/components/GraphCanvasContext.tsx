@@ -26,6 +26,15 @@ export interface GraphCanvasContextValue {
    *  input locking is meant to guard against. Read/set by GraphToolbar's lock button. */
   locked: boolean
   setLocked: Dispatch<SetStateAction<boolean>>
+  /** Whether the canvas's own container element is the page's current Fullscreen API element.
+   *  Kept in sync with the platform's own fullscreen state (not just calls through
+   *  toggleFullscreen) — Esc, browser chrome, or any other exit path all update this too. */
+  isFullscreen: boolean
+  /** Requests/exits fullscreen on the canvas container via the Fullscreen API. A no-op (resolves
+   *  immediately) in an environment without Fullscreen API support (e.g. iOS Safari) — check
+   *  `document.fullscreenEnabled` yourself first if you need to hide the affordance entirely
+   *  there instead of having it silently do nothing. */
+  toggleFullscreen: () => void
 }
 
 export const GraphCanvasContext = createContext<GraphCanvasContextValue | null>(null)

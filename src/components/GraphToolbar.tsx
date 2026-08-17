@@ -21,14 +21,14 @@ export interface GraphToolbarProps extends React.HTMLAttributes<HTMLDivElement> 
 const ZOOM_BUTTON_FACTOR = 1.3
 
 /**
- * Floating zoom in / zoom out / zoom to fit / lock controls for a GraphCanvas. Must be rendered
- * where useGraphCanvas() can reach it — GraphCanvas renders one itself by default (see its
- * showToolbar/toolbarPosition props), so most consumers never need to use this directly; it's
- * exported for anyone building a custom placement or a different control set.
+ * Floating zoom in / zoom out / zoom to fit / lock / fullscreen controls for a GraphCanvas. Must
+ * be rendered where useGraphCanvas() can reach it — GraphCanvas renders one itself by default
+ * (see its showToolbar/toolbarPosition props), so most consumers never need to use this directly;
+ * it's exported for anyone building a custom placement or a different control set.
  */
 export const GraphToolbar = React.forwardRef<HTMLDivElement, GraphToolbarProps>(
   ({ position = 'bottom-right', className = '', ...props }, ref) => {
-    const { zoom, setZoom, zoomToFit, locked, setLocked } = useGraphCanvas()
+    const { zoom, setZoom, zoomToFit, locked, setLocked, isFullscreen, toggleFullscreen } = useGraphCanvas()
 
     const zoomIn = useCallback(() => setZoom(zoom * ZOOM_BUTTON_FACTOR), [zoom, setZoom])
     const zoomOut = useCallback(() => setZoom(zoom / ZOOM_BUTTON_FACTOR), [zoom, setZoom])
@@ -68,6 +68,16 @@ export const GraphToolbar = React.forwardRef<HTMLDivElement, GraphToolbarProps>(
           aria-label={locked ? 'Unlock pan and zoom' : 'Lock pan and zoom'}
         >
           <Icon name={locked ? 'lock' : 'unlock'} size={16} />
+        </button>
+        <div className="graph-toolbar__divider" />
+        <button
+          type="button"
+          className="graph-toolbar__btn"
+          onClick={toggleFullscreen}
+          aria-pressed={isFullscreen}
+          aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+        >
+          <Icon name={isFullscreen ? 'fullscreenExit' : 'fullscreen'} size={16} />
         </button>
       </div>
     )
