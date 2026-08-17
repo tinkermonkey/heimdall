@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
 import { computeEdgePath, computeFitViewport, edgeLabelSize, findClearLabelPosition, type BoundingBox, type EdgeAnchor } from '../utils/graph'
-import { forceLayout } from '../utils/graphLayout'
+import { forceLayout, clusteredForceLayout } from '../utils/graphLayout'
 import { galaxyLayout } from '../utils/galaxyLayout'
 import { buildStructuralForest, structuralDescendants } from '../utils/graphHierarchy'
 import { usePanZoom } from '../hooks/usePanZoom'
@@ -173,8 +173,11 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   renderNode?: (node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta) => React.ReactNode
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes without
    *  explicit coordinates. 'galaxy' arranges nodes as a radial hierarchy of orbits, built from
-   *  structural edges (see isStructuralEdge). Nodes with x and y are pinned under either layout. */
-  layout?: 'manual' | 'force' | 'galaxy'
+   *  structural edges (see isStructuralEdge). 'force-clustered' additionally groups nodes into
+   *  nested bubbles by graph structure (see clusteredForceLayout in utils/graphLayout) before
+   *  running the same spring simulation within each bubble — larger canvas, less-even
+   *  distribution, by design. Nodes with x and y are pinned under any of these layouts. */
+  layout?: 'manual' | 'force' | 'galaxy' | 'force-clustered'
   /**
    * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
    * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
@@ -352,6 +355,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [nodes, hiddenIds]
     )
 
+    // Only populated when layout='force-clustered' — top-level cluster
+    // bounding circles, for the optional bubble-boundary render layer.
+    const [clusterBoundaries, setClusterBoundaries] = useState<Map<string, { x: number; y: number; r: number }>>(
+      new Map()
+    )
+
     const containerRef = useRef<HTMLDivElement>(null)
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({})
     // Tracks whether we've applied the initial canvas-center offset
@@ -413,14 +422,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDims(next)
     }, [visibleNodes, renderNode])
 
-    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy')
+    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered')
     useEffect(() => {
-      if ((layout !== 'force' && layout !== 'galaxy') || dims.size === 0) return
+      if ((layout !== 'force' && layout !== 'galaxy' && layout !== 'force-clustered') || dims.size === 0) return
 
       const layoutNodes = visibleNodes.map((n, i) => ({
         id: n.id,
-        // Nodes without explicit coords start on a circle so 'force' converges cleanly.
-        // 'galaxy' ignores this seed — its home position is computed from the hierarchy.
+        // Nodes without explicit coords start on a circle so 'force'/'force-clustered' converge
+        // cleanly. 'galaxy' ignores this seed — its home position is computed from the hierarchy.
         x: n.x ?? Math.cos((2 * Math.PI * i) / visibleNodes.length) * 120,
         y: n.y ?? Math.sin((2 * Math.PI * i) / visibleNodes.length) * 120,
         width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
@@ -430,6 +439,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (layout === 'force') {
         const layoutEdges = (edges ?? []).map(e => ({ source: e.sourceId, target: e.targetId }))
         setComputedPositions(forceLayout(layoutNodes, layoutEdges, { nodeMargin }))
+        setClusterBoundaries(new Map())
+      } else if (layout === 'force-clustered') {
+        const layoutEdges = (edges ?? []).map(e => ({ source: e.sourceId, target: e.targetId }))
+        const { positions, clusterBoundaries: boundaries } = clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin })
+        setComputedPositions(positions)
+        setClusterBoundaries(boundaries)
       } else {
         const layoutEdges = (edges ?? []).map(e => ({
           source: e.sourceId,
@@ -437,6 +452,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           structural: isStructuralEdge ? isStructuralEdge(e) : true,
         }))
         setComputedPositions(galaxyLayout(layoutNodes, layoutEdges, { nodeMargin }))
+        setClusterBoundaries(new Map())
       }
     }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge])
 
@@ -483,11 +499,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     useEffect(() => {
       if (didCenterRef.current) return
       if (!containerSize || dims.size === 0 || visibleNodes.length === 0) return
-      // 'manual' has no engine layout to wait on. 'force'/'galaxy' both compute positions
-      // asynchronously (see the engine-layout effect above) — without waiting for galaxy here
-      // too, this could run with computedPositions still empty, every node falling back to
+      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered' all compute
+      // positions asynchronously (see the engine-layout effect above) — without waiting for them
+      // here too, this could run with computedPositions still empty, every node falling back to
       // {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
-      if ((layout === 'force' || layout === 'galaxy') && computedPositions.size === 0) return
+      if ((layout === 'force' || layout === 'galaxy' || layout === 'force-clustered') && computedPositions.size === 0) return
 
       const bbox = computeBoundingBox()
       if (!bbox) return
@@ -741,6 +757,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               data-testid="graph-viewport"
               transform={transform}
             >
+              {clusterBoundaries.size > 0 && (
+                <g className="graph-clusters" aria-hidden="true">
+                  {[...clusterBoundaries.entries()].map(([id, c]) => (
+                    <circle key={id} className="graph-cluster-boundary" cx={c.x} cy={c.y} r={c.r} />
+                  ))}
+                </g>
+              )}
+
               <g className="graph-edges">
                 {edges?.map(edge => {
                   // Only isStructuralEdge callers opt into dimming — without it every edge

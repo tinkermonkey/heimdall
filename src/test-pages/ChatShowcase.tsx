@@ -327,6 +327,29 @@ This will require calling analyze_distribution with the dataset parameters.`
           />
         </section>
 
+        {/* ChatComposer with Accept Prop */}
+        <section style={{ marginBottom: '32px' }}>
+          <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: 'rgb(var(--canvas-fg-1))' }}>
+            ChatComposer with Accept Prop (Images Only)
+          </h2>
+          <div style={{ color: 'rgb(var(--canvas-fg-3))', fontSize: '12px', marginBottom: '16px' }}>
+            This composer restricts file selection to images only (PNG, JPEG, WebP).
+          </div>
+          <ChatComposer
+            data-testid="chat-composer-images-only"
+            placeholder="Attach images only..."
+            value={composerValue}
+            onChange={setComposerValue}
+            onSubmit={handleComposerSubmit}
+            onContextChange={setContextItems}
+            onAttachmentChange={setAttachments}
+            scopeLabel="Image Analyzer"
+            contextItems={contextItems}
+            attachments={attachments}
+            accept="image/png,image/jpeg,image/webp"
+          />
+        </section>
+
         {/* Light/Dark Canvas Mode Test */}
         <section style={{ marginBottom: '32px' }}>
           <h2 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '16px', color: 'rgb(var(--canvas-fg-1))' }}>

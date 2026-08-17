@@ -110,6 +110,37 @@ function pseudoMetricPercent(id: string): number {
   return Math.abs(hash)
 }
 
+// Two loosely-connected communities with a couple of bridge edges — enough
+// structure for Louvain to find real clusters (see graphClustering.ts),
+// deliberately WITHOUT explicit x/y so layout="force-clustered" actually
+// computes bubble-packed positions instead of just drawing boundary
+// circles around pinned coordinates.
+const CLUSTERED_NODES: GraphNodeData[] = [
+  { id: 'cl_a1', label: 'A1' },
+  { id: 'cl_a2', label: 'A2' },
+  { id: 'cl_a3', label: 'A3' },
+  { id: 'cl_a4', label: 'A4' },
+  { id: 'cl_b1', label: 'B1' },
+  { id: 'cl_b2', label: 'B2' },
+  { id: 'cl_b3', label: 'B3' },
+  { id: 'cl_b4', label: 'B4' },
+]
+
+const CLUSTERED_EDGES: EdgeData[] = [
+  { id: 'cl_edge_a12', sourceId: 'cl_a1', targetId: 'cl_a2' },
+  { id: 'cl_edge_a13', sourceId: 'cl_a1', targetId: 'cl_a3' },
+  { id: 'cl_edge_a14', sourceId: 'cl_a1', targetId: 'cl_a4' },
+  { id: 'cl_edge_a23', sourceId: 'cl_a2', targetId: 'cl_a3' },
+  { id: 'cl_edge_a34', sourceId: 'cl_a3', targetId: 'cl_a4' },
+  { id: 'cl_edge_b12', sourceId: 'cl_b1', targetId: 'cl_b2' },
+  { id: 'cl_edge_b13', sourceId: 'cl_b1', targetId: 'cl_b3' },
+  { id: 'cl_edge_b14', sourceId: 'cl_b1', targetId: 'cl_b4' },
+  { id: 'cl_edge_b23', sourceId: 'cl_b2', targetId: 'cl_b3' },
+  { id: 'cl_edge_b34', sourceId: 'cl_b3', targetId: 'cl_b4' },
+  // Single bridge edge between the two communities.
+  { id: 'cl_edge_bridge', sourceId: 'cl_a1', targetId: 'cl_b1' },
+]
+
 function FitViewControls() {
   // GraphCanvas also renders node content off-screen (outside the context provider) to
   // measure natural size, so this must tolerate a missing context rather than throw.
@@ -176,7 +207,7 @@ const TOPOLOGY_NODES = [
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
-  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy'>('graph')
+  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy' | 'clustered'>('graph')
   const [showAllRelations, setShowAllRelations] = useState(false)
   const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
@@ -371,6 +402,23 @@ export default function GraphShowcase() {
     />
   )
 
+  const clusteredCanvas = (
+    <GraphCanvas
+      key="clustered-canvas"
+      data-testid="clustered-canvas"
+      layout="force-clustered"
+      nodes={CLUSTERED_NODES}
+      edges={CLUSTERED_EDGES}
+      fitView
+      fitPadding={40}
+      selectedNodeId={selectedNodeId}
+      onNodeSelect={handleNodeSelect}
+      onBackgroundClick={handleBackgroundClick}
+      renderNode={renderFitViewNode}
+      style={{ height: '100%' }}
+    />
+  )
+
   const fitViewCanvas = (
     <div style={{ padding: '20px', height: '100%', overflow: 'auto' }}>
       <div
@@ -501,6 +549,21 @@ export default function GraphShowcase() {
           >
             Galaxy View
           </button>
+          <button
+            type="button"
+            data-testid="clustered-view-button"
+            onClick={() => setCanvasMode('clustered')}
+            style={{
+              padding: '8px 16px',
+              background: canvasMode === 'clustered' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: canvasMode === 'clustered' ? 600 : 400,
+            }}
+          >
+            Clustered View
+          </button>
           {canvasMode === 'graph' && (
             <button
               type="button"
@@ -564,7 +627,9 @@ export default function GraphShowcase() {
               ? busCanvas
               : canvasMode === 'galaxy'
                 ? galaxyCanvas
-                : fitViewCanvas}
+                : canvasMode === 'clustered'
+                  ? clusteredCanvas
+                  : fitViewCanvas}
 
         <DetailDrawer
           data-testid="graph-detail-drawer"

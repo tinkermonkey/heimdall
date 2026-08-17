@@ -48,6 +48,15 @@
   pointer-events: none;
 }
 
+/* Cluster bubble boundary — layout="force-clustered" only. Border only, no
+   fill/shadow, per the design system's restrained-surface convention. */
+.graph-cluster-boundary {
+  fill: rgb(var(--canvas-fg-3) / 0.04);
+  stroke: rgb(var(--canvas-border-2));
+  stroke-width: 1;
+  pointer-events: none;
+}
+
 body.dark-canvas {
   --graph-edge: rgb(var(--canvas-border-2));
   --graph-edge-strong: rgb(var(--canvas-border-strong));

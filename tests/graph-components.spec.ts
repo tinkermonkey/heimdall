@@ -1054,6 +1054,68 @@ test.describe('Graph Canvas Components', () => {
       await expect(canvas).toHaveScreenshot('graph-canvas-galaxy-view-cards-light.png')
     })
   })
+
+  test.describe('Clustered View - Bubble Packing (layout="force-clustered")', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.locator('[data-testid="clustered-view-button"]').click()
+      // Force-clustered runs two full forceLayout passes (macro + micro, see
+      // clusteredForceLayout in graphLayout.ts) plus Louvain/pack — give it
+      // more settle time than the plain force-layout views above.
+      await page.waitForTimeout(500)
+    })
+
+    test('renders every node and at least one cluster boundary bubble', async ({ page }) => {
+      const canvas = page.locator('[data-testid="clustered-canvas"]')
+      await expect(canvas).toBeVisible()
+
+      const nodes = page.locator('[data-testid^="graph-node-cl_"]')
+      await expect(nodes).toHaveCount(8)
+
+      const bubbles = canvas.locator('.graph-cluster-boundary')
+      expect(await bubbles.count()).toBeGreaterThan(0)
+    })
+
+    test('the two communities land in separate cluster bubbles', async ({ page }) => {
+      // CLUSTERED_NODES/EDGES (GraphShowcase.tsx) is two dense 4-node groups
+      // joined by a single bridge edge (cl_a1 - cl_b1). Comparing just that
+      // bridge pair's distance against an ordinary within-group pair isn't a
+      // valid test: both are direct graph edges, so forceLayout pulls both
+      // toward the same springLength regardless of cluster — of course
+      // they're comparable. Instead compare each group's CENTROID separation
+      // against its own internal spread: Louvain should still keep the two
+      // groups as distinct top-level clusters, so group-to-group distance
+      // should clearly exceed the spread within either group.
+      const centroid = async (ids: string[]) => {
+        const boxes = await Promise.all(ids.map(id => page.locator(`[data-testid="graph-node-${id}"]`).boundingBox()))
+        if (boxes.some(b => !b)) throw new Error('expected clustered nodes not visible')
+        const pts = boxes as { x: number; y: number; width: number; height: number }[]
+        const cx = pts.reduce((s, b) => s + b.x + b.width / 2, 0) / pts.length
+        const cy = pts.reduce((s, b) => s + b.y + b.height / 2, 0) / pts.length
+        return { x: cx, y: cy, pts }
+      }
+      const dist = (p: { x: number; y: number }, q: { x: number; y: number }) => Math.hypot(p.x - q.x, p.y - q.y)
+      const spread = (group: { x: number; y: number; pts: { x: number; y: number }[] }) =>
+        group.pts.reduce((s, p) => s + dist(p, group), 0) / group.pts.length
+
+      const groupA = await centroid(['cl_a1', 'cl_a2', 'cl_a3', 'cl_a4'])
+      const groupB = await centroid(['cl_b1', 'cl_b2', 'cl_b3', 'cl_b4'])
+
+      const centroidDistance = dist(groupA, groupB)
+      const avgSpread = (spread(groupA) + spread(groupB)) / 2
+      expect(centroidDistance).toBeGreaterThan(avgSpread)
+    })
+
+    test('Clustered View visual snapshot', async ({ page }) => {
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-clustered-view-light.png')
+    })
+
+    test('Clustered View visual snapshot in dark mode', async ({ page }) => {
+      await applyDarkCanvasMode(page)
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toHaveScreenshot('graph-canvas-clustered-view-dark.png')
+    })
+  })
 })
 
 // A standalone tuning/regression aid for galaxyLayout itself, not a component showcase (see

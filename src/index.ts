@@ -139,9 +139,19 @@ export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
 export { GraphToolbar, type GraphToolbarProps, type GraphToolbarPosition } from './components/GraphToolbar'
 export { DetailDrawer, type DetailDrawerProps } from './components/DetailDrawer'
-export { forceLayout, type LayoutNode, type LayoutEdge, type ForceLayoutOptions } from './utils/graphLayout'
+export {
+  forceLayout,
+  clusteredForceLayout,
+  type LayoutNode,
+  type LayoutEdge,
+  type ForceLayoutOptions,
+  type ClusteredLayoutOptions,
+  type ClusteredLayoutResult,
+} from './utils/graphLayout'
 export { galaxyLayout, type GalaxyLayoutNode, type GalaxyLayoutEdge, type GalaxyLayoutOptions } from './utils/galaxyLayout'
 export { buildStructuralForest, structuralDescendants, type HierarchyEdge, type StructuralForest } from './utils/graphHierarchy'
+export { louvainCluster, type ClusterEdge, type ClusterTreeNode, type LouvainOptions } from './utils/graphClustering'
+export { packClusters, type PackedCircle, type PackOptions } from './utils/graphPacking'
 export {
   GraphInspector,
   type GraphNodeMetadata,

@@ -35,6 +35,7 @@ export interface ChatComposerProps
   disabled?: boolean
   loading?: boolean
   label?: string
+  accept?: string
 }
 
 export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
@@ -52,6 +53,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       disabled = false,
       loading = false,
       label = 'Message',
+      accept,
       className,
       ...props
     },
@@ -179,6 +181,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
                 ref={fileInputRef}
                 type="file"
                 multiple
+                accept={accept}
                 onChange={handleFileSelect}
                 className="chat-composer__file-input"
                 aria-label="Attach files"

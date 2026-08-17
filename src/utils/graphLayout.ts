@@ -1,3 +1,6 @@
+import { louvainCluster, type ClusterTreeNode } from './graphClustering.ts'
+import { packClusters } from './graphPacking.ts'
+
 export interface LayoutNode {
   id: string
   x: number
@@ -5,6 +8,25 @@ export interface LayoutNode {
   width: number
   height: number
   pinned?: boolean
+  /**
+   * Optional point the center-gravity term pulls this node toward, instead
+   * of the shared origin. Unset ⇒ {x:0,y:0}, today's behavior — used by
+   * clusteredForceLayout() below to keep nodes near their own cluster's
+   * centroid instead of the whole graph's center, without changing
+   * forceLayout()'s own behavior for any caller that doesn't set it.
+   */
+  gravityTarget?: { x: number; y: number }
+  /**
+   * Multiplier on centerStrength for this node's gravity term. Unset ⇒ 1,
+   * today's behavior (uniform gravity for every node) — used by
+   * clusteredForceLayout() below to pull nodes in a LARGE cluster harder
+   * toward their centroid (many members sharing one repulsion budget tend
+   * to blur into neighboring clusters otherwise) and nodes in a SMALL
+   * cluster more gently (a uniform pull that's fine for a 100-member
+   * cluster is strong enough to out-crowd a 3-member cluster's few
+   * repulsion pairs, causing overlap) — see GRAVITY_STRENGTH_* below.
+   */
+  gravityStrength?: number
 }
 
 export interface LayoutEdge {
@@ -144,8 +166,11 @@ export function forceLayout(
     for (const node of nodes) {
       if (node.pinned) continue
       const p = pos.get(node.id)!
-      const nvx = (vx.get(node.id)! - p.x * centerStrength) * damping
-      const nvy = (vy.get(node.id)! - p.y * centerStrength) * damping
+      const gx = node.gravityTarget?.x ?? 0
+      const gy = node.gravityTarget?.y ?? 0
+      const gStrength = node.gravityStrength ?? 1
+      const nvx = (vx.get(node.id)! - (p.x - gx) * centerStrength * gStrength) * damping
+      const nvy = (vy.get(node.id)! - (p.y - gy) * centerStrength * gStrength) * damping
       vx.set(node.id, nvx)
       vy.set(node.id, nvy)
       pos.set(node.id, { x: p.x + nvx, y: p.y + nvy })
@@ -320,4 +345,259 @@ function relaxationStep(
     vy.set(node.id, nvy)
     pos.set(node.id, { x: p.x + nvx, y: p.y + nvy })
   }
+}
+// ─── Opt-in clustering: nested bubble-packing + a two-level force pass ────
+//
+// forceLayout() above treats every node as equally repelled from every
+// other node, pulled toward one shared center — it spreads nodes evenly,
+// which is the opposite of what a graph with real community structure
+// wants for readability (see docs/layout-loop-design.md's clustering
+// section). clusteredForceLayout() is strictly additive/opt-in: it doesn't
+// change forceLayout()'s behavior for any existing caller, and is only
+// reached if a caller explicitly chooses it (GraphCanvas's
+// layout="force-clustered").
+//
+// Pipeline, reusing forceLayout() itself for both the macro and micro
+// passes rather than writing new physics:
+//   1. louvainCluster() derives a nested community dendrogram purely from
+//      edge structure (graphClustering.ts) — the "bubbles containing
+//      bubbles" hierarchy.
+//   2. packClusters() (graphPacking.ts, d3-hierarchy) packs that whole
+//      dendrogram into non-overlapping nested circles sized to each leaf's
+//      real bounding box. This alone guarantees leaf circles don't
+//      overlap, and — because packing adds exactly the space nesting +
+//      padding need — is what gives clustering its "increase overall
+//      size" property, with no manual canvas-size tuning.
+//   3. Macro pass: forceLayout() runs again, but on a *coarsened* graph of
+//      one pseudo-node per top-level cluster (sized to its packed
+//      footprint) — with one LayoutEdge per real cross-cluster edge, so
+//      pairs of clusters connected by more edges pull harder together
+//      (forceLayout applies spring force per edge independently; repeated
+//      edges between the same pair simply compound — no edge-weight
+//      concept needed in forceLayout itself). This is what actually
+//      reduces inter-cluster edge crossings: d3.pack's sibling order is a
+//      packing-efficiency choice, not an edge-aware one, so without this
+//      pass two heavily-connected sibling clusters could land on opposite
+//      sides of their parent bubble.
+//   4. Micro pass: forceLayout() runs a final time over every real node
+//      and edge, seeded at (macro cluster centroid + its pack-relative
+//      offset from step 2) and gravity-biased toward that same centroid
+//      via the new gravityTarget field — so the existing spring/repulsion
+//      simulation (and its overlap-resolution post-process) refines
+//      structure within each bubble without nodes drifting back toward
+//      the graph's shared center.
+
+export interface ClusteredLayoutOptions extends ForceLayoutOptions {
+  /** Gap between sibling circles in the pack layout. See graphPacking.ts's PackOptions.padding. */
+  clusterPadding?: number | ((depth: number) => number)
+  /**
+   * Overrides for the macro (cluster-to-cluster) force pass. Unset fields
+   * fall back to a size-derived default — see MACRO_SPRING_LENGTH_FACTOR
+   * below — not forceLayout()'s own defaults, which assume individual
+   * node-sized (not cluster-sized) geometry.
+   */
+  macro?: ForceLayoutOptions
+}
+
+// Macro-pass defaults are derived from cluster size rather than reusing
+// forceLayout()'s node-scale constants (springLength 160 / repulsion 8000)
+// as-is: a cluster pseudo-node's diameter can be much larger than a single
+// node's, and using node-scale constants unmodified would under-space
+// clusters relative to their own size. These are a reasonable starting
+// heuristic, not a tuned result — expected to be refined like any other
+// forceLayout constant via this repo's normal PROPOSE loop
+// (docs/layout-loop-design.md), not treated as final here.
+const MACRO_SPRING_LENGTH_FACTOR = 1.2
+const MACRO_MIN_SPRING_LENGTH = 160
+const BASE_SPRING_LENGTH = 160
+const BASE_REPULSION = 8000
+const MACRO_EDGE_CAP = 8
+
+// Size-aware gravity for the micro pass (see LayoutNode.gravityStrength):
+// a node's cluster-centroid pull scales DOWN for small top-level clusters,
+// never up for large ones. Fit from a manual sweep (2026-08-14, see
+// experiments/log.jsonl's clustering-track entries): real-technology-layer
+// (clusters of 2-16 members) wants weaker-than-uniform gravity — reduces
+// overlap/crossings/edgeLenDev and improves neighborhoodPreservation there.
+// Trying the reverse (scaling ABOVE 1x for medium/communities.json's large
+// ~95-101 member top clusters) was tested and rejected: it helped
+// crossings/overlap marginally there but regressed edgeLengthDeviation by
+// ~9-13%, past the 5% gate — pulling many nodes harder toward one shared
+// centroid compresses edges below springLength, which a bigger repulsion
+// budget doesn't fully counteract. GRAVITY_STRENGTH_MAX is therefore
+// capped at 1 (baseline strength), not raised — see
+// scripts/decide-keep-revert-clustered.mjs for the gate this was validated
+// against. A heuristic starting point, not a claimed optimum — expected to
+// be refined by future clustering-track PROPOSE iterations.
+const GRAVITY_SIZE_REFERENCE = 40
+const GRAVITY_STRENGTH_MIN = 0.3
+const GRAVITY_STRENGTH_MAX = 1.0
+
+function topClusterSizes(topClusters: readonly ClusterTreeNode[]): Map<string, number> {
+  const countLeaves = (node: ClusterTreeNode): number =>
+    node.children ? node.children.reduce((sum, c) => sum + countLeaves(c), 0) : 1
+  return new Map(topClusters.map(c => [c.id, countLeaves(c)]))
+}
+
+function collectLeafToTopCluster(topClusters: readonly ClusterTreeNode[]): Map<string, string> {
+  const leafToTop = new Map<string, string>()
+  const visit = (node: ClusterTreeNode, topId: string): void => {
+    if (!node.children) {
+      leafToTop.set(node.id, topId)
+      return
+    }
+    for (const child of node.children) visit(child, topId)
+  }
+  for (const top of topClusters) visit(top, top.id)
+  return leafToTop
+}
+
+export interface ClusteredLayoutResult {
+  positions: Map<string, { x: number; y: number }>
+  /**
+   * Approximate bounding circle per top-level cluster (center + radius),
+   * for optional visual rendering of bubble boundaries. Computed from
+   * FINAL post-simulation node positions, not the pre-relaxation pack
+   * geometry, so it actually contains the rendered nodes — a simple
+   * centroid + max-member-reach circle, not a minimal enclosing circle,
+   * which is enough for a boundary outline and keeps this deterministic
+   * and cheap.
+   */
+  clusterBoundaries: Map<string, { x: number; y: number; r: number }>
+}
+
+export function clusteredForceLayout(
+  nodes: readonly LayoutNode[],
+  edges: readonly LayoutEdge[],
+  options: ClusteredLayoutOptions = {}
+): ClusteredLayoutResult {
+  if (nodes.length === 0) return { positions: new Map(), clusterBoundaries: new Map() }
+
+  const nodeMap = new Map(nodes.map(n => [n.id, n]))
+  const tree = louvainCluster(nodes.map(n => n.id), edges)
+  const radiusOf = (id: string): number => {
+    const n = nodeMap.get(id)
+    return n ? Math.hypot(n.width, n.height) / 2 : 20
+  }
+  const circles = packClusters(tree, { radiusOf, padding: options.clusterPadding })
+
+  const topClusters = tree.children ?? []
+  const leafToTop = collectLeafToTopCluster(topClusters)
+
+  // Macro pass — one pseudo-node per top-level cluster, sized to its
+  // packed footprint, seeded at its packed position.
+  const macroNodes: LayoutNode[] = topClusters.map(cluster => {
+    const circle = circles.get(cluster.id)!
+    return { id: cluster.id, x: circle.x, y: circle.y, width: circle.r * 2, height: circle.r * 2 }
+  })
+  // One macro LayoutEdge per real cross-cluster edge, capped per cluster
+  // pair — more real connections between two clusters should still pull
+  // them harder together, but uncapped this diverges exactly like the
+  // hub-topology bug in "Known scaling/stability issue"
+  // (docs/layout-loop-design.md): a near-complete pathological graph can
+  // put hundreds of real edges between the same two clusters (measured:
+  // 564 on pathological/dense-cluster), and forceLayout's spring force is
+  // additive per edge, so that many duplicates at full springStrength
+  // overwhelms the simulation. MACRO_EDGE_CAP is a no-op on every other
+  // corpus fixture (measured max duplicate count elsewhere: 6).
+  const macroEdgeCounts = new Map<string, number>()
+  const macroEdges: LayoutEdge[] = []
+  for (const edge of edges) {
+    const a = leafToTop.get(edge.source)
+    const b = leafToTop.get(edge.target)
+    if (!a || !b || a === b) continue
+    const pairKey = a < b ? `${a}\u0000${b}` : `${b}\u0000${a}`
+    const count = macroEdgeCounts.get(pairKey) ?? 0
+    if (count >= MACRO_EDGE_CAP) continue
+    macroEdgeCounts.set(pairKey, count + 1)
+    macroEdges.push({ source: a, target: b })
+  }
+
+  const maxClusterDiameter = macroNodes.reduce((max, n) => Math.max(max, n.width), 0)
+  const macroSpringLength =
+    options.macro?.springLength ?? Math.max(maxClusterDiameter * MACRO_SPRING_LENGTH_FACTOR, MACRO_MIN_SPRING_LENGTH)
+  const macroScale = (macroSpringLength / BASE_SPRING_LENGTH) ** 2
+  const macroOptions: ForceLayoutOptions = {
+    iterations: options.macro?.iterations ?? 300,
+    springLength: macroSpringLength,
+    springStrength: options.macro?.springStrength ?? 0.04,
+    repulsion: options.macro?.repulsion ?? BASE_REPULSION * macroScale,
+    damping: options.macro?.damping ?? 0.85,
+    centerStrength: options.macro?.centerStrength ?? 0.005,
+  }
+  const macroPositions = macroNodes.length > 0 ? forceLayout(macroNodes, macroEdges, macroOptions) : new Map()
+
+  // Micro pass — every real node, seeded at (its cluster's macro centroid
+  // + its pack-relative offset) and gravity-biased toward that centroid,
+  // at a strength scaled to that cluster's size (see GRAVITY_SIZE_REFERENCE
+  // above).
+  const clusterSizes = topClusterSizes(topClusters)
+  const microNodes: LayoutNode[] = nodes.map(n => {
+    const topId = leafToTop.get(n.id)
+    const macroPos = topId ? macroPositions.get(topId) : undefined
+    const leafCircle = circles.get(n.id)
+    const topCircle = topId ? circles.get(topId) : undefined
+    const gravityTarget = macroPos ?? { x: 0, y: 0 }
+    const offsetX = leafCircle && topCircle ? leafCircle.x - topCircle.x : 0
+    const offsetY = leafCircle && topCircle ? leafCircle.y - topCircle.y : 0
+    const clusterSize = topId ? (clusterSizes.get(topId) ?? 1) : 1
+    const gravityStrength = Math.min(
+      GRAVITY_STRENGTH_MAX,
+      Math.max(GRAVITY_STRENGTH_MIN, clusterSize / GRAVITY_SIZE_REFERENCE)
+    )
+    return {
+      ...n,
+      x: n.pinned ? n.x : gravityTarget.x + offsetX,
+      y: n.pinned ? n.y : gravityTarget.y + offsetY,
+      gravityTarget,
+      gravityStrength,
+    }
+  })
+
+  const positions = forceLayout(microNodes, edges, options)
+  const clusterBoundaries = boundingCirclesByTopCluster(nodes, positions, leafToTop, radiusOf)
+  return { positions, clusterBoundaries }
+}
+
+// Simple (non-minimal) enclosing circle per top-level cluster: centroid of
+// its members' final positions, radius = furthest member's own bounding
+// radius plus its distance from that centroid. Cheap and deterministic;
+// not as tight as a true minimal-enclosing-circle algorithm, which isn't
+// needed just to draw a boundary outline.
+function boundingCirclesByTopCluster(
+  nodes: readonly LayoutNode[],
+  positions: Map<string, { x: number; y: number }>,
+  leafToTop: Map<string, string>,
+  radiusOf: (id: string) => number
+): Map<string, { x: number; y: number; r: number }> {
+  const membersByTop = new Map<string, LayoutNode[]>()
+  for (const n of nodes) {
+    const topId = leafToTop.get(n.id)
+    if (!topId) continue
+    if (!membersByTop.has(topId)) membersByTop.set(topId, [])
+    membersByTop.get(topId)!.push(n)
+  }
+
+  const boundaries = new Map<string, { x: number; y: number; r: number }>()
+  for (const [topId, members] of membersByTop) {
+    let cx = 0
+    let cy = 0
+    for (const m of members) {
+      const p = positions.get(m.id)
+      if (!p) continue
+      cx += p.x
+      cy += p.y
+    }
+    cx /= members.length
+    cy /= members.length
+
+    let r = 0
+    for (const m of members) {
+      const p = positions.get(m.id)
+      if (!p) continue
+      r = Math.max(r, Math.hypot(p.x - cx, p.y - cy) + radiusOf(m.id))
+    }
+    boundaries.set(topId, { x: cx, y: cy, r })
+  }
+  return boundaries
 }

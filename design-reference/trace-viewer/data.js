@@ -110,4 +110,8 @@ const SPANS = [
     start: 672, dur: 12, status: 'ok', attrs: { 'content.type': 'application/json', 'response.size': '286 B' } },
 ];
 
-window.TRACE = { meta: TRACE_META, services: SERVICES, spans: SPANS };
+/* eslint-disable no-undef */
+if (typeof window !== 'undefined') {
+  window.TRACE = { meta: TRACE_META, services: SERVICES, spans: SPANS };
+}
+/* eslint-enable no-undef */

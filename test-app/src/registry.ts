@@ -37,7 +37,6 @@ import {
   BareTabBar,
 } from './bare/Navigation'
 import {
-  BareShell,
   BareAppTitle,
   BareTitlebar,
   BareStatusbar,
@@ -108,7 +107,6 @@ import {
 import {
   BareHierarchySection,
   BareHierarchyRow,
-  BareHierarchyTree,
   BareTopologyNode,
 } from './bare/Hierarchy'
 import { BareInspectorPanel } from './bare/Inspector'
