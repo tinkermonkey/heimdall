@@ -267,6 +267,28 @@ test.describe('Graph Canvas Components', () => {
     expect(await canvas.evaluate(() => document.fullscreenElement)).toBeNull()
   })
 
+  test('the toolbar live-simulation button only appears for layout="galaxy" and toggles aria-pressed', async ({ page }) => {
+    // Default view here is layout="manual" (Graph View) — no galaxy-only control.
+    await expect(page.locator('[aria-label="Enable live simulation"]')).not.toBeAttached()
+    await expect(page.locator('[aria-label="Disable live simulation"]')).not.toBeAttached()
+
+    // layout="force-clustered" — still not galaxy.
+    await page.locator('[data-testid="clustered-view-button"]').click()
+    await page.waitForTimeout(200)
+    await expect(page.locator('[aria-label="Enable live simulation"]')).not.toBeAttached()
+
+    await page.locator('[data-testid="galaxy-view-button"]').click()
+    await page.waitForTimeout(200)
+    const enableBtn = page.locator('[aria-label="Enable live simulation"]')
+    await expect(enableBtn).toBeVisible()
+    await expect(enableBtn).toHaveAttribute('aria-pressed', 'false')
+
+    await enableBtn.click()
+    const disableBtn = page.locator('[aria-label="Disable live simulation"]')
+    await expect(disableBtn).toBeVisible()
+    await expect(disableBtn).toHaveAttribute('aria-pressed', 'true')
+  })
+
   test('detail drawer is hidden until a node is selected', async ({ page }) => {
     const drawer = page.locator('[data-testid="graph-detail-drawer"]')
 
@@ -1061,6 +1083,103 @@ test.describe('Graph Canvas Components', () => {
       await expect(toggle).toBeVisible()
       await toggle.click()
       await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+    })
+
+    test.describe('Live simulation', () => {
+      test.beforeEach(async ({ page }) => {
+        await page.locator('[aria-label="Enable live simulation"]').click()
+        await page.waitForTimeout(100)
+      })
+
+      // Presses down on a node and drags it by (dx, dy) screen px, leaving the button held (no
+      // mouse.up() — callers release once they're done asserting mid-drag or want to control
+      // exactly when the drop happens). Galaxy View's fitView zoom can render a node's hit area
+      // only a few CSS px tall, so a first move big enough to cross DRAG_THRESHOLD in one jump
+      // can carry the cursor off that tiny area before the node's own onPointerMove ever fires —
+      // pointer capture (which is what lets the rest of the drag ignore hit-testing) never
+      // engages. Nudge in small horizontal steps first, comfortably inside even the tightest
+      // node's half-width, to trigger capture while still over the node; the final position only
+      // ever depends on total displacement from the initial pointerdown, not the path taken, so
+      // this doesn't skew the eventual drop point.
+      async function dragNode(page: import('@playwright/test').Page, testId: string, dx: number, dy: number) {
+        const node = page.locator(`[data-testid="${testId}"]`)
+        const box = await node.boundingBox()
+        if (!box) throw new Error(`${testId} not visible`)
+        const startX = box.x + box.width / 2
+        const startY = box.y + box.height / 2
+
+        await page.mouse.move(startX, startY)
+        await page.mouse.down()
+        await page.mouse.move(startX + 2, startY)
+        await page.mouse.move(startX + 4, startY)
+        await page.mouse.move(startX + dx, startY + dy, { steps: 10 })
+        return { startX, startY }
+      }
+
+      test('dragging a "sun" node cascades to its children in real time', async ({ page }) => {
+        // organism -> eukaryote -> cell -> {nucleus, mitochondrion, membrane} (contains)
+        const child = page.locator('[data-testid="graph-node-nucleus"]')
+        const childBefore = await child.boundingBox()
+        if (!childBefore) throw new Error('Nodes not visible')
+
+        // Held (no mouse.up() yet) so the live simulation has a moving pin to react to.
+        await dragNode(page, 'graph-node-cell', 150, -100)
+
+        // A loose "moved," not an exact target — real convergence for this dataset's scale is
+        // low tens of ms, so a generous 500ms bound leaves headroom for slower CI machines.
+        await expect.poll(async () => {
+          const childNow = await child.boundingBox()
+          if (!childNow) return 0
+          return Math.hypot(childNow.x - childBefore.x, childNow.y - childBefore.y)
+        }, { timeout: 500 }).toBeGreaterThan(5)
+
+        await page.mouse.up()
+      })
+
+      test('a dropped "sun" node stays exactly at its drop point', async ({ page }) => {
+        const parent = page.locator('[data-testid="graph-node-cell"]')
+        const before = await parent.boundingBox()
+        if (!before) throw new Error('Node not visible')
+
+        const dx = 150
+        const dy = -100
+        await dragNode(page, 'graph-node-cell', dx, dy)
+        await page.mouse.up()
+
+        // Deterministic, no wait needed — a pinned node's position is fixed the instant the pin
+        // is set, not something the simulation could nudge afterward.
+        const after = await parent.boundingBox()
+        if (!after) throw new Error('Node not visible after drop')
+        expect(Math.abs(after.x - (before.x + dx))).toBeLessThan(2)
+        expect(Math.abs(after.y - (before.y + dy))).toBeLessThan(2)
+      })
+
+      test('the simulation goes idle once settled', async ({ page }) => {
+        await dragNode(page, 'graph-node-cell', 150, -100)
+        await page.mouse.up()
+
+        const ids = ['cell', 'nucleus', 'mitochondrion', 'membrane']
+        const sample = async () => {
+          const positions: Record<string, { x: number; y: number }> = {}
+          for (const id of ids) {
+            const b = await page.locator(`[data-testid="graph-node-${id}"]`).boundingBox()
+            if (b) positions[id] = { x: b.x, y: b.y }
+          }
+          return positions
+        }
+
+        // Sample after a settle window comfortably past the ~0.5s idle-dwell threshold, sample
+        // again shortly after — proving motion genuinely stopped, not asserting a frame count.
+        await page.waitForTimeout(600)
+        const s1 = await sample()
+        await page.waitForTimeout(250)
+        const s2 = await sample()
+
+        for (const id of ids) {
+          expect(Math.abs(s2[id].x - s1[id].x)).toBeLessThan(1)
+          expect(Math.abs(s2[id].y - s1[id].y)).toBeLessThan(1)
+        }
+      })
     })
 
     test('Galaxy View visual snapshot', async ({ page }) => {

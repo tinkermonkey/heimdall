@@ -80,6 +80,9 @@ export const ICONS = {
   // fullscreen toggle sitting next to it doesn't read as a duplicate button.
   fullscreen: 'M15 3 L21 3 L21 9 M9 21 L3 21 L3 15 M21 3 L14 10 M3 21 L10 14',
   fullscreenExit: 'M20 10 L14 10 L14 4 M4 14 L10 14 L10 20 M14 10 L21 3 M10 14 L3 21',
+  // A flat orbit ring with one small satellite riding it — "live simulation" toggle, deliberately
+  // distinct from every other icon in the graph toolbar.
+  orbit: 'M21 12 C21 9.52 16.97 7.5 12 7.5 C7.03 7.5 3 9.52 3 12 C3 14.48 7.03 16.5 12 16.5 C16.97 16.5 21 14.48 21 12 M22.8 12 C22.8 13 22 13.8 21 13.8 C20 13.8 19.2 13 19.2 12 C19.2 11 20 10.2 21 10.2 C22 10.2 22.8 11 22.8 12',
 } as const
 
 export type IconName = keyof typeof ICONS

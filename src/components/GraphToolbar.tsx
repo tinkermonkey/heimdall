@@ -21,19 +21,24 @@ export interface GraphToolbarProps extends React.HTMLAttributes<HTMLDivElement> 
 const ZOOM_BUTTON_FACTOR = 1.3
 
 /**
- * Floating zoom in / zoom out / zoom to fit / lock / fullscreen controls for a GraphCanvas. Must
- * be rendered where useGraphCanvas() can reach it — GraphCanvas renders one itself by default
- * (see its showToolbar/toolbarPosition props), so most consumers never need to use this directly;
- * it's exported for anyone building a custom placement or a different control set.
+ * Floating zoom in / zoom out / zoom to fit / lock / fullscreen controls for a GraphCanvas, plus
+ * a live-simulation toggle shown only when layout="galaxy" (meaningless otherwise). Must be
+ * rendered where useGraphCanvas() can reach it — GraphCanvas renders one itself by default (see
+ * its showToolbar/toolbarPosition props), so most consumers never need to use this directly; it's
+ * exported for anyone building a custom placement or a different control set.
  */
 export const GraphToolbar = React.forwardRef<HTMLDivElement, GraphToolbarProps>(
   ({ position = 'bottom-right', className = '', ...props }, ref) => {
-    const { zoom, setZoom, zoomToFit, locked, setLocked, isFullscreen, toggleFullscreen } = useGraphCanvas()
+    const {
+      zoom, setZoom, zoomToFit, locked, setLocked, isFullscreen, toggleFullscreen,
+      layout, liveSimulation, setLiveSimulation,
+    } = useGraphCanvas()
 
     const zoomIn = useCallback(() => setZoom(zoom * ZOOM_BUTTON_FACTOR), [zoom, setZoom])
     const zoomOut = useCallback(() => setZoom(zoom / ZOOM_BUTTON_FACTOR), [zoom, setZoom])
     const fitToView = useCallback(() => zoomToFit(), [zoomToFit])
     const toggleLocked = useCallback(() => setLocked(l => !l), [setLocked])
+    const toggleLiveSimulation = useCallback(() => setLiveSimulation(v => !v), [setLiveSimulation])
 
     const classNames = [
       'graph-toolbar',
@@ -79,6 +84,20 @@ export const GraphToolbar = React.forwardRef<HTMLDivElement, GraphToolbarProps>(
         >
           <Icon name={isFullscreen ? 'fullscreenExit' : 'fullscreen'} size={16} />
         </button>
+        {layout === 'galaxy' && (
+          <>
+            <div className="graph-toolbar__divider" />
+            <button
+              type="button"
+              className="graph-toolbar__btn"
+              onClick={toggleLiveSimulation}
+              aria-pressed={liveSimulation}
+              aria-label={liveSimulation ? 'Disable live simulation' : 'Enable live simulation'}
+            >
+              <Icon name="orbit" size={16} />
+            </button>
+          </>
+        )}
       </div>
     )
   }

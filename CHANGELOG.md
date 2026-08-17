@@ -77,6 +77,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`GraphToolbar`** — a fifth button toggles the canvas container in and out
   of the Fullscreen API. Tracks the platform's own fullscreen state (not
   just its own clicks), so Esc or any other exit path updates the icon too.
+- **`galaxyLayout`** — top-level group boundary circles (the same ones
+  `showClusterBoundaries` renders) no longer overlap each other, on by
+  default. After the existing per-node settle cycles, a macro separation
+  pass treats each group's boundary circle as a single pseudo-node, pushes
+  apart any that overlap, then rigidly shifts each group's members by the
+  resulting delta — preserving each group's already-correct internal
+  arrangement. Computed unconditionally, independent of whether boundaries
+  are actually rendered. New `GalaxyLayoutOptions.separateGroups` option
+  (default `true`) opts back out. New export: `galaxyGroupHeads` (from
+  `utils/graphHierarchy`) — the "a root with children delegates
+  group-headship to each of its own children" rule, now shared between this
+  pass and `GraphCanvas`'s own boundary rendering so the two always agree on
+  what a "group" is.
+- **`GraphCanvas`** — opt-in live simulation for `layout="galaxy"`: instead
+  of a one-shot computed-then-frozen layout, run a continuous elastic
+  simulation. Drag any node ("sun") and its descendants follow in real time,
+  spring-pulled toward their algorithmic home position with collision
+  detection keeping siblings apart throughout; releasing a node leaves it
+  exactly where it was dropped, permanently pinned, same as a static-mode
+  drag. A sixth `GraphToolbar` button (galaxy layout only) toggles it —
+  purely internal state, no controlling prop. The simulation self-idles
+  (stops scheduling animation frames) once movement drops below a small
+  threshold for about half a second, and wakes on the next drag. New
+  exports: `galaxySimulationStep` (from `utils/galaxyLayout`, the
+  single-step primitive `galaxyLayout` itself now loops over),
+  `useGalaxySimulation` (new hook, `hooks/useGalaxySimulation`), and a new
+  `orbit` icon. `GraphCanvasContextValue` gains `layout` (read-only),
+  `liveSimulation`, and `setLiveSimulation`.
   New exports on `GraphCanvasContextValue`: `isFullscreen`,
   `toggleFullscreen`. New icons: `fullscreen`, `fullscreenExit`.
 

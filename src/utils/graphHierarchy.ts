@@ -60,6 +60,18 @@ export function buildStructuralForest(nodeIds: readonly string[], edges: readonl
   return { parentOf, childrenOf, roots }
 }
 
+/**
+ * Top-level "group head" ids for the galaxy layout's boundary-circle grouping: a root with
+ * children delegates its group-headship to each of its own children (so a single deep tree still
+ * reads as several groups instead of one all-encompassing circle around everything); a childless
+ * root has nothing to delegate to, so it stays its own group head. Shared by galaxyLayout (to
+ * keep group boundaries from overlapping each other) and GraphCanvas (to render them via
+ * showClusterBoundaries) so both always agree on the same grouping.
+ */
+export function galaxyGroupHeads(roots: readonly string[], childrenOf: ReadonlyMap<string, string[]>): string[] {
+  return roots.flatMap(rootId => childrenOf.get(rootId) ?? [rootId])
+}
+
 /** BFS descendant closure of a node's structural children, not including the node itself. */
 export function structuralDescendants(id: string, childrenOf: ReadonlyMap<string, string[]>): Set<string> {
   const result = new Set<string>()

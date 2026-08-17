@@ -35,6 +35,15 @@ export interface GraphCanvasContextValue {
    *  `document.fullscreenEnabled` yourself first if you need to hide the affordance entirely
    *  there instead of having it silently do nothing. */
   toggleFullscreen: () => void
+  /** The canvas's own `layout` prop, exposed read-only — GraphToolbar uses this to conditionally
+   *  show controls that are only meaningful for one engine (e.g. its live-simulation button,
+   *  galaxy-only). Not settable through context; change the `layout` prop on GraphCanvas itself. */
+  layout: 'manual' | 'force' | 'galaxy' | 'force-clustered'
+  /** Whether GraphCanvas is running galaxy layout as a continuous, draggable elastic simulation
+   *  instead of a one-shot computed-then-frozen layout. Meaningful only when layout="galaxy" — no
+   *  effect otherwise. Read/set by GraphToolbar's live-simulation button. */
+  liveSimulation: boolean
+  setLiveSimulation: Dispatch<SetStateAction<boolean>>
 }
 
 export const GraphCanvasContext = createContext<GraphCanvasContextValue | null>(null)

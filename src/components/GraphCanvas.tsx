@@ -1,9 +1,10 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
 import { computeEdgePath, computeFitViewport, edgeLabelSize, findClearLabelPosition, type BoundingBox, type EdgeAnchor } from '../utils/graph'
 import { forceLayout, clusteredForceLayout, boundingCirclesByGroup } from '../utils/graphLayout'
-import { galaxyLayout } from '../utils/galaxyLayout'
-import { buildStructuralForest, structuralDescendants } from '../utils/graphHierarchy'
+import { galaxyLayout, type GalaxyLayoutNode } from '../utils/galaxyLayout'
+import { buildStructuralForest, structuralDescendants, galaxyGroupHeads } from '../utils/graphHierarchy'
 import { usePanZoom } from '../hooks/usePanZoom'
+import { useGalaxySimulation } from '../hooks/useGalaxySimulation'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
 import GraphNode from './GraphNode'
 import { GraphEdgeShape } from './GraphEdgeShape'
@@ -337,6 +338,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // fullscreenchange listener below rather than just set inside toggleFullscreen, so Esc and
     // any other exit path (not just GraphToolbar's own button) update it too.
     const [isFullscreen, setIsFullscreen] = useState(false)
+    // Only meaningful for layout="galaxy" (see liveActive below) — toggled by GraphToolbar's
+    // live-simulation button. Internal/uncontrolled, like locked/isFullscreen.
+    const [liveSimulation, setLiveSimulation] = useState(false)
+    const liveActive = liveSimulation && layout === 'galaxy'
+    // Read-only guard for the engine-layout effect below (not a dependency of it — see there for
+    // why) so the static one-shot galaxy computation knows to skip while the live hook owns
+    // computedPositions instead, without toggling liveSimulation itself re-triggering that effect.
+    const liveActiveRef = useRef(liveActive)
+    useEffect(() => {
+      liveActiveRef.current = liveActive
+    }, [liveActive])
 
     // Structural hierarchy over the FULL node/edge list — independent of what's currently
     // hidden, so a collapsed node's affordance (hasChildren, hiddenDescendantCount) stays
@@ -438,6 +450,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered')
     useEffect(() => {
       if ((layout !== 'force' && layout !== 'galaxy' && layout !== 'force-clustered') || dims.size === 0) return
+      // While live-simulation mode owns computedPositions, this effect intentionally no-ops for
+      // galaxy — recomputing a fresh static layout here would immediately overwrite whatever the
+      // live hook just produced. liveActiveRef, not liveActive itself, so toggling the mode
+      // doesn't retrigger this effect (see liveActiveRef's own comment above) — only genuine
+      // layout-input changes should, and those are already this effect's real dependencies.
+      if (layout === 'galaxy' && liveActiveRef.current) return
 
       const layoutNodes = visibleNodes.map((n, i) => ({
         id: n.id,
@@ -474,7 +492,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         // one boundary each, same as before, since a childless root has nothing to delegate to);
         // each group head's full recursive subtree is then one boundary, same as a Louvain
         // cluster's members are for force-clustered.
-        const groupHeads = forest.roots.flatMap(rootId => forest.childrenOf.get(rootId) ?? [rootId])
+        const groupHeads = galaxyGroupHeads(forest.roots, forest.childrenOf)
         const leafToGroup = new Map<string, string>()
         for (const headId of groupHeads) {
           leafToGroup.set(headId, headId)
@@ -488,6 +506,46 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
     }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge, forest])
 
+    // Live-simulation mode's own continuous layout (see useGalaxySimulation) — a "sun" node's
+    // dragPositions override doubles as its pin here, same priority getNodePosition already
+    // gives dragPositions over any prop-level x/y, so a dropped node stays exactly where it was
+    // dropped and its descendants keep orbiting live from that position. These build unconditionally
+    // (empty when not live-active) so the hook's own call below has stable inputs across renders
+    // regardless of whether live mode is currently on.
+    const liveLayoutNodes = useMemo<GalaxyLayoutNode[]>(() => {
+      if (!liveActive) return []
+      return visibleNodes.map(n => {
+        const drag = dragPositions.get(n.id)
+        const x = drag?.x ?? n.x
+        const y = drag?.y ?? n.y
+        return {
+          id: n.id,
+          width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+          height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+          x,
+          y,
+          pinned: x !== undefined && y !== undefined,
+        }
+      })
+    }, [liveActive, visibleNodes, dims, dragPositions])
+
+    const liveLayoutEdges = useMemo(() => {
+      if (!liveActive) return []
+      return (edges ?? []).map(e => ({
+        source: e.sourceId,
+        target: e.targetId,
+        structural: isStructuralEdge ? isStructuralEdge(e) : true,
+      }))
+    }, [liveActive, edges, isStructuralEdge])
+
+    const { wake: wakeGalaxySimulation } = useGalaxySimulation({
+      active: liveActive,
+      nodes: liveLayoutNodes,
+      edges: liveLayoutEdges,
+      options: { nodeMargin },
+      onTick: setComputedPositions,
+      initialPositions: computedPositions,
+    })
 
     // Track the rendered container size so the auto-center effect can react to it.
     useEffect(() => {
@@ -634,7 +692,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         updated.set(state.id, next)
         return updated
       })
-    }, [viewport.zoom])
+      // No-op while live-simulation mode is off. While it's on, this is what lets a "sun" being
+      // dragged elastically carry its descendants along in real time rather than only jumping
+      // them once the drag ends — see useGalaxySimulation's own wake() docs.
+      wakeGalaxySimulation()
+    }, [viewport.zoom, wakeGalaxySimulation])
 
     // Shared by a real pointerup/pointercancel and by the draggable-toggled-off effect below —
     // either way, a drag that was actually in progress needs the same finalization: fire
@@ -733,7 +795,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setLocked,
       isFullscreen,
       toggleFullscreen,
-    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo, locked, isFullscreen, toggleFullscreen])
+      layout,
+      liveSimulation,
+      setLiveSimulation,
+    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo, locked, isFullscreen, toggleFullscreen, layout, liveSimulation])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)
