@@ -226,4 +226,45 @@ test.describe('galaxySimulationStep', () => {
       expect(Math.hypot(stepped.x - oneShot.x, stepped.y - oneShot.y)).toBeLessThan(5)
     }
   })
+
+  // Regression: home-level separation (the fix above) keeps the algorithmic TARGET layout
+  // non-overlapping, but says nothing about a group's real, currently-dragged footprint growing
+  // into a neighbor's real territory — before this fix, dragging a "sun" close enough to another
+  // group left the OTHER group's nodes sitting exactly where they were while the dragged group's
+  // honestly-reaching boundary circle simply ballooned out to enclose them, reading as "I dragged
+  // a node into another group" even though membership never changed. The correct reaction is
+  // collision avoidance, same as individual nodes already get: the other group's real nodes move
+  // out of the way.
+  test('dragging one group into another\'s territory pushes the other group away, not just its boundary circle', () => {
+    const nodes: GalaxyLayoutNode[] = [
+      node('rootA'), node('sunA'), node('a1'), node('a2'), node('a3'),
+      node('rootB'), node('sunB'), node('b1'), node('b2'), node('b3'),
+    ]
+    const edges: GalaxyLayoutEdge[] = [
+      structuralEdge('rootA', 'sunA'),
+      structuralEdge('sunA', 'a1'), structuralEdge('sunA', 'a2'), structuralEdge('sunA', 'a3'),
+      structuralEdge('rootB', 'sunB'),
+      structuralEdge('sunB', 'b1'), structuralEdge('sunB', 'b2'), structuralEdge('sunB', 'b3'),
+    ]
+
+    const settled = galaxyLayout(nodes, edges)
+    const sunB = settled.get('sunB')!
+    const bBefore = ['b1', 'b2', 'b3'].map(id => settled.get(id)!)
+
+    // Live-drag sunA (with its own subtree cascading along, per place()'s pin-cascade) right on
+    // top of sunB's group.
+    const draggedNodes = nodes.map(n => (n.id === 'sunA' ? { ...n, pinned: true, x: sunB.x, y: sunB.y } : n))
+    let pos: Map<string, { x: number; y: number }> | undefined = new Map(settled)
+    for (let i = 0; i < 60; i++) pos = galaxySimulationStep(draggedNodes, edges, pos)
+
+    const boundaries = groupBoundaries(draggedNodes, edges, pos!)
+    expect(worstGroupOverlap(boundaries)).toBeLessThanOrEqual(0)
+
+    // sunB's group was never touched directly — the only way its members end up somewhere new is
+    // if the reactive push-away actually moved them.
+    const bAfter = ['b1', 'b2', 'b3'].map(id => pos!.get(id)!)
+    for (let i = 0; i < 3; i++) {
+      expect(Math.hypot(bAfter[i].x - bBefore[i].x, bAfter[i].y - bBefore[i].y)).toBeGreaterThan(10)
+    }
+  })
 })

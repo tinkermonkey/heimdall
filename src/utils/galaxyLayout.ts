@@ -146,6 +146,15 @@ export function galaxySimulationStep(
     })
   }
 
+  const groupHeads = separateGroups ? galaxyGroupHeads(roots, childrenOf) : []
+  const leafToGroup = new Map<string, string>()
+  if (separateGroups) {
+    for (const headId of groupHeads) {
+      leafToGroup.set(headId, headId)
+      for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
+    }
+  }
+
   // Group-separate the home positions themselves, not just a settled/pinned pos snapshot —
   // otherwise every tick's homeStrength nudge pulls unpinned nodes straight back toward their
   // raw, un-separated home, eroding a one-time position-level correction within a handful of
@@ -153,7 +162,7 @@ export function galaxySimulationStep(
   // final pass runs, minus its individual-node safety-net cleanup (unnecessary here — the
   // separationPass call a few lines down, plus every subsequent tick's own pass, already keeps
   // actual `pos` clear of individual overlap; this only needs the group-level shift).
-  const effectiveHome = separateGroups ? shiftGroupsApart(nodeMap, childrenOf, roots, home) : home
+  const effectiveHome = separateGroups ? shiftGroupsApart(nodeMap, groupHeads, leafToGroup, home) : home
 
   // Seed from prevPositions for continuity (a live tick nudges from wherever things currently
   // are, never restarts from raw home) — falling back to home for any node not seen before (the
@@ -183,6 +192,29 @@ export function galaxySimulationStep(
     const p = pos.get(node.id)!
     const h = effectiveHome.get(node.id)!
     pos.set(node.id, { x: p.x + (h.x - p.x) * homeStrength, y: p.y + (h.y - p.y) * homeStrength })
+  }
+
+  // A dragged/dropped "sun" carries its own group's ACTUAL boundary circle wherever it goes —
+  // home-level separation above keeps the algorithmic TARGET layout non-overlapping, but says
+  // nothing about a group's real, currently-dragged footprint growing into a neighbor's real
+  // territory. Without this, that neighbor's nodes just sit there while the dragged group's
+  // (correctly rendered, honestly reaching) boundary circle balloons out to enclose them —
+  // reading as "I dragged a node into another group," even though membership never changed.
+  // React the same way collision avoidance already does for individual nodes: push the *other*
+  // groups' real positions out of the way, leaving whichever group contains a currently-pinned
+  // node exactly where the user put it. Only worth the extra pass when something's actually
+  // pinned — absent that, `pos` already tracks `effectiveHome` closely enough (see the dedicated
+  // regression test) that a second group-level correction here would just be wasted work.
+  if (separateGroups && groupHeads.length > 1) {
+    const pinnedGroups = new Set<string>()
+    for (const node of nodes) {
+      if (!node.pinned || node.x === undefined || node.y === undefined) continue
+      const groupId = leafToGroup.get(node.id)
+      if (groupId) pinnedGroups.add(groupId)
+    }
+    if (pinnedGroups.size > 0) {
+      return shiftGroupsApart(nodeMap, groupHeads, leafToGroup, pos, pinnedGroups)
+    }
   }
 
   return pos
@@ -243,31 +275,28 @@ export function galaxyLayout(
  * same delta so each group's already-correct internal arrangement is preserved. Plain separation
  * between group pseudo-nodes, not a spring simulation — galaxy groups aren't meaningfully
  * "spring-connected" to each other, and pulling unrelated groups together would fight the radial
- * structure the algorithm is built around.
+ * structure the algorithm is built around. `pinnedGroups` (if any) keeps those groups' pseudo-
+ * nodes fixed in the macro pass — used for a currently-dragged group's real footprint, which
+ * should displace its neighbors rather than get displaced itself.
  *
- * No individual-node safety-net cleanup here — this is the shared core both galaxyLayout's final
- * pass and galaxySimulationStep's every-tick home computation call directly; the former runs its
- * own cleanup pass afterward on the actual settled positions (see applyGroupSeparation below),
- * the latter doesn't need one since `home` is a target to pull toward, not something that itself
- * needs to end up overlap-free — the real per-tick `pos` already gets its own separationPass call
- * regardless of this. Cheap enough for every animation frame either way: `positions` in, one O(n)
- * boundary computation, one bounded O(g²) macro-separation loop (g = number of top-level groups,
- * always small), one O(g·n) rigid translate.
+ * No individual-node safety-net cleanup here — this is the shared core every caller (galaxyLayout's
+ * final pass, and galaxySimulationStep's every-tick home computation AND its reactive real-position
+ * push-away while something's pinned) calls directly; galaxyLayout's own final pass runs its own
+ * cleanup afterward on the actual settled positions (see applyGroupSeparation below), the others
+ * don't need one — `home` is a target to pull toward, not something that itself needs to end up
+ * overlap-free, and the real per-tick `pos` already gets its own separationPass call regardless of
+ * this. Cheap enough for every animation frame either way: `positions` in, one O(n) boundary
+ * computation, one bounded O(g²) macro-separation loop (g = number of top-level groups, always
+ * small), one O(g·n) rigid translate.
  */
 function shiftGroupsApart(
   nodeMap: ReadonlyMap<string, GalaxyLayoutNode>,
-  childrenOf: ReadonlyMap<string, string[]>,
-  roots: readonly string[],
-  positions: Map<string, { x: number; y: number }>
+  groupHeads: readonly string[],
+  leafToGroup: Map<string, string>,
+  positions: Map<string, { x: number; y: number }>,
+  pinnedGroups?: ReadonlySet<string>
 ): Map<string, { x: number; y: number }> {
-  const groupHeads = galaxyGroupHeads(roots, childrenOf)
   if (groupHeads.length <= 1) return positions
-
-  const leafToGroup = new Map<string, string>()
-  for (const headId of groupHeads) {
-    leafToGroup.set(headId, headId)
-    for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
-  }
 
   const radiusOf = (id: string): number => {
     const n = nodeMap.get(id)
@@ -283,7 +312,7 @@ function shiftGroupsApart(
   // seeds with the real circle centers) — set to 0 for clarity, same convention every other
   // separationPass call in this file already uses.
   const macroNodes: LayoutNode[] = [...boundaries.entries()].map(([id, c]) => ({
-    id, x: 0, y: 0, width: c.r * 2, height: c.r * 2,
+    id, x: 0, y: 0, width: c.r * 2, height: c.r * 2, pinned: pinnedGroups?.has(id),
   }))
   const macroPos = new Map([...boundaries.entries()].map(([id, c]) => [id, { x: c.x, y: c.y }]))
   for (let pass = 0; pass < FINAL_CLEANUP_MAX_PASSES; pass++) {
@@ -322,7 +351,13 @@ function applyGroupSeparation(
 ): Map<string, { x: number; y: number }> {
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
-  const next = shiftGroupsApart(nodeMap, childrenOf, roots, pos)
+  const groupHeads = galaxyGroupHeads(roots, childrenOf)
+  const leafToGroup = new Map<string, string>()
+  for (const headId of groupHeads) {
+    leafToGroup.set(headId, headId)
+    for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
+  }
+  const next = shiftGroupsApart(nodeMap, groupHeads, leafToGroup, pos)
   if (next === pos) return pos
 
   const cleanupNodes: LayoutNode[] = nodes.map(n => ({ id: n.id, width: n.width, height: n.height, pinned: n.pinned, x: 0, y: 0 }))

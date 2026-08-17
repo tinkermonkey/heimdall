@@ -113,7 +113,15 @@ export function usePanZoom({
   const listenersAttachedRef = useRef(false)
   const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
   const handlePointerUpRef = useRef<() => void>()
-  const rafRef = useRef<number | null>(null)
+  // Separate per-gesture rAF refs — drag-pan, wheel-zoom, and keyboard pan/zoom can all fire in
+  // the same frame (e.g. a trackpad pinch with a hand also resting near a mouse button, or wheel
+  // input arriving just as a keyboard shortcut fires), and previously shared a single `rafRef`:
+  // whichever gesture's handler ran last would silently cancelAnimationFrame() the others'
+  // already-scheduled update before it ever committed, dropping that gesture's zoom/pan change
+  // entirely for the frame — not a rendering glitch so much as one input source stomping another.
+  const dragRafRef = useRef<number | null>(null)
+  const wheelRafRef = useRef<number | null>(null)
+  const keyRafRef = useRef<number | null>(null)
   const inertiaRafRef = useRef<number | null>(null)
 
   // Keep refs current for event handlers
@@ -183,11 +191,11 @@ export function usePanZoom({
     dragRef.current.lastX = e.clientX
     dragRef.current.lastY = e.clientY
 
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current)
+    if (dragRafRef.current !== null) {
+      cancelAnimationFrame(dragRafRef.current)
     }
 
-    rafRef.current = requestAnimationFrame(() => {
+    dragRafRef.current = requestAnimationFrame(() => {
       if (!dragRef.current) return
 
       const newPan = clampPan(
@@ -196,7 +204,7 @@ export function usePanZoom({
       )
 
       setPan(newPan)
-      rafRef.current = null
+      dragRafRef.current = null
     })
   }, [clampPan])
 
@@ -280,8 +288,14 @@ export function usePanZoom({
   useEffect(() => {
     return () => {
       detachListeners()
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current)
+      if (dragRafRef.current !== null) {
+        cancelAnimationFrame(dragRafRef.current)
+      }
+      if (wheelRafRef.current !== null) {
+        cancelAnimationFrame(wheelRafRef.current)
+      }
+      if (keyRafRef.current !== null) {
+        cancelAnimationFrame(keyRafRef.current)
       }
       if (inertiaRafRef.current !== null) {
         cancelAnimationFrame(inertiaRafRef.current)
@@ -308,14 +322,14 @@ export function usePanZoom({
     const anchored = anchoredPan(cx, cy, prev, next, panRef.current)
     const newPan = clampPan(anchored.x, anchored.y)
 
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current)
+    if (wheelRafRef.current !== null) {
+      cancelAnimationFrame(wheelRafRef.current)
     }
 
-    rafRef.current = requestAnimationFrame(() => {
+    wheelRafRef.current = requestAnimationFrame(() => {
       setZoom(next)
       setPan(newPan)
-      rafRef.current = null
+      wheelRafRef.current = null
     })
   }, [clampPan, minZoom, maxZoom])
 
@@ -355,18 +369,18 @@ export function usePanZoom({
       }
 
       if (updateZoom !== null || updatePan !== null) {
-        if (rafRef.current !== null) {
-          cancelAnimationFrame(rafRef.current)
+        if (keyRafRef.current !== null) {
+          cancelAnimationFrame(keyRafRef.current)
         }
 
-        rafRef.current = requestAnimationFrame(() => {
+        keyRafRef.current = requestAnimationFrame(() => {
           if (updateZoom !== null) {
             setZoom(updateZoom)
           }
           if (updatePan !== null) {
             setPan(updatePan)
           }
-          rafRef.current = null
+          keyRafRef.current = null
         })
       }
     },

@@ -151,6 +151,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   one-shot-only cost), so live mode holds the same non-overlapping bubbles
   its seed layout started with instead of drifting back to full overlap
   within about a second of idling.
+- **`galaxySimulationStep`**: dragging a "sun" close enough to another
+  group's territory left that OTHER group's real nodes sitting exactly
+  where they were, while the dragged group's honestly-reaching boundary
+  circle simply grew to enclose them — reading as "I dragged a node into
+  another group" even though membership never changed (the fix two commits
+  ago kept the *algorithmic target* layout separated, but nothing reacted
+  to a group's *actual, currently-dragged* footprint growing into a
+  neighbor's actual space). Live ticks now push the other group's real
+  positions out of the way instead, the same collision-avoidance reaction
+  individual nodes already get — whichever group contains a currently
+  pinned/dragged node stays exactly where the user put it; every other
+  group yields.
+- **`usePanZoom`**: wheel-zoom, drag-to-pan, and keyboard pan/zoom shared a
+  single `requestAnimationFrame` ref — if two of those gestures' handlers
+  both fired before the frame committed (plausible any time a trackpad
+  pinch and a stray pointer event land close together), whichever ran last
+  would cancel the others' already-scheduled update before it committed,
+  silently dropping that gesture's change for the frame. Each now gets its
+  own rAF ref so one input source can no longer clobber another's pending
+  update.
 
 - **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
   settle at force equilibrium with their rendered bounding boxes still
