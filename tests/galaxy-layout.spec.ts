@@ -187,4 +187,43 @@ test.describe('galaxySimulationStep', () => {
       expect(Math.hypot(stepped.x - oneShot.x, stepped.y - oneShot.y)).toBeLessThan(1)
     }
   })
+
+  // Regression: galaxySimulationStep's home computation didn't account for group separation at
+  // all — only galaxyLayout's own one-shot final pass applied it, as a single rigid shift on top
+  // of already-settled positions. Live mode (GraphCanvas's opt-in continuous simulation) drives
+  // this function every animation frame, and every tick's homeStrength nudge pulls each unpinned
+  // node back toward its raw, un-separated home — so group separation eroded within a handful of
+  // frames of live mode simply running with no user interaction at all, even though the one-shot
+  // layout it started from was correctly separated a moment earlier.
+  test('running many ticks with no user interaction does not erode group separation over time', () => {
+    const { nodes, edges } = busyMultiRootNodes()
+
+    // Seed from the correctly-separated one-shot layout — the exact "live mode just turned on"
+    // scenario (GraphCanvas seeds useGalaxySimulation from its last static galaxyLayout() result).
+    let pos: Map<string, { x: number; y: number }> | undefined = galaxyLayout(nodes, edges)
+    expect(worstGroupOverlap(groupBoundaries(nodes, edges, pos))).toBeLessThanOrEqual(0)
+
+    // Many ticks' worth of an idle live session — nothing pinned, nothing dragging.
+    for (let i = 0; i < 120; i++) pos = galaxySimulationStep(nodes, edges, pos)
+
+    expect(worstGroupOverlap(groupBoundaries(nodes, edges, pos!))).toBeLessThanOrEqual(0)
+  })
+
+  test('separateGroups: false opts the per-tick home out of group separation too', () => {
+    const { nodes, edges } = busyMultiRootNodes()
+
+    let pos: Map<string, { x: number; y: number }> | undefined
+    for (let i = 0; i < 60; i++) pos = galaxySimulationStep(nodes, edges, pos, { separateGroups: false })
+
+    // Reproduces galaxyLayout's own un-separated result closely (busyMultiRootNodes' 4 roots x 6
+    // children need a bit more settling than the simpler 3-node chain the sibling convergence
+    // test above uses, hence the looser tolerance) — proving the option genuinely reaches the
+    // per-tick home computation, not just galaxyLayout's separate final-pass call.
+    const unseparated = galaxyLayout(nodes, edges, { separateGroups: false, settleCycles: 60 })
+    for (const n of nodes) {
+      const stepped = pos!.get(n.id)!
+      const oneShot = unseparated.get(n.id)!
+      expect(Math.hypot(stepped.x - oneShot.x, stepped.y - oneShot.y)).toBeLessThan(5)
+    }
+  })
 })

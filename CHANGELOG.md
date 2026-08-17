@@ -139,6 +139,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   circle not at all, even though its descendants correctly followed in real
   time. The live tick now recomputes cluster boundaries too (skipped
   entirely when boundaries aren't shown, to avoid the extra per-frame work).
+- **`galaxySimulationStep`**: group separation eroded within the first few
+  animation frames of live mode, even with zero user interaction — every
+  tick's `homeStrength` nudge pulled each unpinned node straight back toward
+  a raw, un-separated home position, since only `galaxyLayout`'s one-shot
+  final pass applied `separateGroups` as a single rigid shift on top of
+  already-settled positions; nothing kept correcting for it tick after tick.
+  `galaxySimulationStep` now group-separates its own per-tick home
+  positions too (the group-boundary macro pass only — the individual-node
+  safety-net cleanup galaxyLayout's own final pass also runs stays a
+  one-shot-only cost), so live mode holds the same non-overlapping bubbles
+  its seed layout started with instead of drifting back to full overlap
+  within about a second of idling.
 
 - **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
   settle at force equilibrium with their rendered bounding boxes still
