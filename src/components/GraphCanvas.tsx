@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
 import { computeEdgePath, computeFitViewport, edgeLabelSize, findClearLabelPosition, type BoundingBox, type EdgeAnchor } from '../utils/graph'
 import { forceLayout, clusteredForceLayout, boundingCirclesByGroup } from '../utils/graphLayout'
-import { galaxyLayout, type GalaxyLayoutNode } from '../utils/galaxyLayout'
+import { galaxyLayout, resolveAspectRatioScale, type GalaxyLayoutNode } from '../utils/galaxyLayout'
 import { buildStructuralForest, structuralDescendants, galaxyGroupHeads } from '../utils/graphHierarchy'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { useGalaxySimulation } from '../hooks/useGalaxySimulation'
@@ -568,6 +568,29 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }))
     }, [liveActive, edges, isStructuralEdge])
 
+    // A drag/pin-independent view of the same nodes, purely for resolving the aspectRatio scale
+    // below — deliberately NOT `liveLayoutNodes` (which changes identity every animation frame
+    // during a drag, via `dragPositions`). Resolving the scale is expensive enough (a bounded
+    // search — see resolveAspectRatioScale) that re-running it every frame would blow the
+    // animation-frame budget; keying it on structure only means it only re-resolves when the
+    // graph's actual shape or the target ratio changes, not on every pointer move.
+    const galaxyStructuralNodes = useMemo<GalaxyLayoutNode[]>(() => {
+      if (!liveActive) return []
+      return visibleNodes.map(n => ({
+        id: n.id,
+        width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+        height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+      }))
+    }, [liveActive, visibleNodes, dims])
+
+    // Pre-resolved once here (see GalaxyLayoutOptions.resolvedAspectScale /
+    // resolveAspectRatioScale's own docs for why) rather than left for every live-simulation
+    // animation frame to resolve for itself.
+    const galaxyResolvedAspectScale = useMemo(() => {
+      if (!liveActive || galaxyAspectRatio === undefined) return undefined
+      return resolveAspectRatioScale(galaxyStructuralNodes, liveLayoutEdges, { nodeMargin, aspectRatio: galaxyAspectRatio })
+    }, [liveActive, galaxyStructuralNodes, liveLayoutEdges, nodeMargin, galaxyAspectRatio])
+
     // Topology-only half of the boundary-circle grouping (see the static engine-layout effect's
     // own galaxy branch above, which this mirrors) — depends on `forest`, not on positions, so it
     // stays cheap to recompute every live-simulation tick below rather than needing its own
@@ -609,7 +632,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       active: liveActive,
       nodes: liveLayoutNodes,
       edges: liveLayoutEdges,
-      options: { nodeMargin, aspectRatio: galaxyAspectRatio },
+      options: { nodeMargin, aspectRatio: galaxyAspectRatio, resolvedAspectScale: galaxyResolvedAspectScale },
       onTick: handleLiveTick,
       initialPositions: computedPositions,
     })

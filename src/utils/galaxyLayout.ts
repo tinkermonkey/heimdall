@@ -107,62 +107,45 @@ export interface GalaxyLayoutOptions {
    * strongly as a single tree's internal orbits do).
    */
   aspectRatio?: number
+  /**
+   * Pre-resolved output of `resolveAspectRatioScale` — when provided, `aspectRatio` is ignored and
+   * this exact {x, y} elliptical scale is used directly, skipping the natural-shape measurement
+   * and binary search that resolving it from scratch requires. `galaxyLayout` always resolves it
+   * itself, once, before its settle loop (rather than paying that cost on every one of its 24
+   * cycles). A live-simulation caller driving `galaxySimulationStep` directly once per animation
+   * frame should do the same — resolve it once (e.g. in a `useMemo` keyed on the graph's
+   * structure and the target ratio, deliberately NOT on live drag positions — see
+   * resolveAspectRatioScale's own docs for why re-resolving on every frame is both too slow and
+   * not actually desirable) and pass the resolved value in here every tick instead of a raw
+   * `aspectRatio`, which — unresolved — would otherwise re-run that search on every single frame.
+   */
+  resolvedAspectScale?: { x: number; y: number }
 }
 
 /**
- * Computes one settle iteration for a galaxy layout: recomputes every node's orbital "home"
- * position (see below), seeds/continues from `prevPositions` (or home/pinned positions if this
- * is the first call), runs one collision-separation pass, then nudges every unpinned node one
- * `homeStrength` fraction of the way toward its home. Exported so it can be driven either as a
- * bounded, synchronous batch (see galaxyLayout, which calls this `settleCycles` times) or as a
- * live, continuous simulation — e.g. GraphCanvas's opt-in live-simulation mode, which calls this
- * once per animation frame, feeding back its own previous frame's output as `prevPositions` and a
- * currently-dragged node's live pointer position as a `pinned` override — so dragging any node
- * (a "sun" or otherwise) elastically repositions its descendants in real time.
- *
- * Home positions are computed by a recursive walk that spreads each node's children evenly
- * around a full circle centered on it (not a half-arc fanned away from it — that full-circle
- * spread plus a parent-angle offset is what gives the layout its "galaxy arm" look instead of
- * reading as a plain radial org chart), seeded from a virtual hub at the origin so independent
- * root trees spread around a shared center. A pinned node's own actual position — not the
- * position the recursive walk would have otherwise assigned it — is used both as that node's own
- * home AND as the anchor its own children's home positions are computed relative to, so pinning
- * (or live-dragging) an ancestor cascades correctly to its whole subtree. When `options.aspectRatio`
- * is set, this walk runs twice — once unwarped to measure the tree's own natural shape, once more
- * with a corrective elliptical scale based on that measurement — see GalaxyLayoutOptions.aspectRatio
- * for why a single warp-a-circle pass isn't enough.
+ * Builds a `computeHome(ellipseX, ellipseY)` closure for a fixed tree shape (nodeMap, childrenOf,
+ * roots) and settle-independent options (radiusOf, nodeSpread, startAngle) — the recursive "spread
+ * children around a full circle, seeded from a virtual hub" placement described in
+ * galaxySimulationStep's own docs, with the elliptical scale left as a parameter so both
+ * `galaxySimulationStep` (a single call at the resolved scale) and `resolveAspectRatioScale` (many
+ * calls at different trial scales during its search) can reuse the same tree/subtreeReach setup
+ * instead of rebuilding it per call.
  */
-export function galaxySimulationStep(
-  nodes: readonly GalaxyLayoutNode[],
-  edges: readonly GalaxyLayoutEdge[],
-  prevPositions: Map<string, { x: number; y: number }> | undefined,
-  options: GalaxyLayoutOptions = {}
-): Map<string, { x: number; y: number }> {
-  const {
-    nodeSpread = 3.2,
-    startAngle = -Math.PI / 2,
-    homeStrength = 0.18,
-    nodeMargin,
-    separateGroups = true,
-    aspectRatio,
-  } = options
-
-  if (nodes.length === 0) return new Map()
-
-  const nodeMap = new Map(nodes.map(n => [n.id, n]))
-  const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
-
-  const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
-
+function buildComputeHome(
+  nodeMap: ReadonlyMap<string, GalaxyLayoutNode>,
+  childrenOf: ReadonlyMap<string, string[]>,
+  roots: readonly string[],
+  radiusOf: (n: GalaxyLayoutNode) => number,
+  nodeSpread: number,
+  startAngle: number
+): (ellipseX: number, ellipseY: number) => Map<string, { x: number; y: number }> {
   // How far a node's own subtree extends beyond the node's own position — 0 for a leaf (nothing
   // to account for), otherwise the largest child orbital distance plus that child's own reach.
   // Root-ring seeding (below) uses this so a root with a large subtree gets pushed proportionally
   // further from the shared hub, instead of every root — a lone orphan and the root of a 9-node,
   // 4-level chain alike — starting at essentially the same tiny distance (just its own radius).
-  // Left unmemoized: called once per root from computeHome's loop below, each call's recursion
-  // touches only that root's own (disjoint) subtree, so there's no repeated work across roots.
-  // Independent of ellipseX/ellipseY (a pure scalar distance), so computed once and reused by
-  // both computeHome passes below.
+  // Independent of ellipseX/ellipseY (a pure scalar distance), so computed once here and reused by
+  // every call to the returned computeHome, regardless of what scale it's called at.
   const subtreeReach = (id: string): number => {
     const kids = childrenOf.get(id) ?? []
     if (kids.length === 0) return 0
@@ -176,11 +159,7 @@ export function galaxySimulationStep(
     return maxReach
   }
 
-  // Computes home positions for a given elliptical scale — the same recursive "spread children
-  // around a full circle" placement, just with the polar-to-cartesian conversion scaled
-  // non-uniformly. Parameterized (rather than a single fixed pass) because getting the requested
-  // aspectRatio right takes two passes — see the calls below.
-  const computeHome = (ellipseX: number, ellipseY: number): Map<string, { x: number; y: number }> => {
+  return (ellipseX: number, ellipseY: number): Map<string, { x: number; y: number }> => {
     const result = new Map<string, { x: number; y: number }>()
     const offset = (distance: number, angle: number): { x: number; y: number } => ({
       x: distance * ellipseX * Math.cos(angle),
@@ -228,50 +207,155 @@ export function galaxySimulationStep(
 
     return result
   }
+}
 
-  // See GalaxyLayoutOptions.aspectRatio for the full reasoning. Short version: a single formula
-  // mapping the target ratio directly to an elliptical scale (as if warping a circle) badly
-  // misjudges how much correction is actually needed, because this layout's own *natural*
-  // (unwarped) shape is rarely circular to begin with — a tree with a long single-child chain, in
-  // particular, can be dramatically elongated on its own, in either direction, before any
-  // aspect-ratio option is even involved. So this runs computeHome twice: once unwarped, to
-  // measure the tree's own natural bounding-box ratio (weighted by each node's own radius, not
-  // just its center point), then again with a correction scaled to how far *that* already is from
-  // the target — not how far a hypothetical circle would be.
-  let home: Map<string, { x: number; y: number }>
-  if (aspectRatio === undefined || aspectRatio === 1) {
-    home = computeHome(1, 1)
-  } else {
-    const naturalHome = computeHome(1, 1)
-    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
-    for (const [id, p] of naturalHome) {
-      const r = radiusOf(nodeMap.get(id)!)
-      minX = Math.min(minX, p.x - r); maxX = Math.max(maxX, p.x + r)
-      minY = Math.min(minY, p.y - r); maxY = Math.max(maxY, p.y + r)
-    }
-    const naturalWidth = maxX - minX || 1
-    const naturalHeight = maxY - minY || 1
-    const naturalRatio = naturalWidth / naturalHeight
-    // How much MORE (or less) horizontal-vs-vertical spread is needed beyond what's already
-    // natural — clamped the same way a raw container ratio would be, since this can end up more
-    // extreme than the target ratio itself once a strongly-biased natural shape is factored out
-    // (e.g. a naturally very tall tree targeting a wide container needs a much bigger correction
-    // than the container's own ratio alone would suggest).
-    const clampedTarget = Math.min(8, Math.max(1 / 8, aspectRatio))
-    const correction = Math.min(8, Math.max(1 / 8, clampedTarget / naturalRatio))
-    // Damped via a fourth root rather than applied directly — separationPass's collision floor
-    // only pushes back against *compression*, not expansion, so an undamped correction doesn't
-    // actually preserve area the way scaleX * scaleY === 1 suggests: the squeezed axis gets
-    // fought back up toward its natural size while the stretched axis applies in full, and the
-    // result is a layout that's dramatically *larger* overall, not just a different shape — for a
-    // tree whose natural ratio is already far from the target (this is common — see the natural-
-    // shape measurement above), even a modest correction, undamped, was observed to balloon total
-    // rendered area 3-13x for no corresponding ratio benefit past the first quarter of the curve.
-    // The fourth root keeps that growth within roughly 1.0-1.2x across the whole clamped range.
-    const dampedCorrection = Math.pow(correction, 0.25)
-    home = computeHome(dampedCorrection, 1 / dampedCorrection)
+// Weighted bounding box of a settled position map — a plain center-point bbox undercounts by up
+// to one node radius on every edge, so every caller that needs a real footprint measurement
+// (resolveAspectRatioScale's search, most notably) uses this instead.
+function weightedBboxOf(
+  positions: ReadonlyMap<string, { x: number; y: number }>,
+  nodeMap: ReadonlyMap<string, GalaxyLayoutNode>,
+  radiusOf: (n: GalaxyLayoutNode) => number
+): { width: number; height: number; ratio: number; area: number } {
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+  for (const [id, p] of positions) {
+    const r = radiusOf(nodeMap.get(id)!)
+    minX = Math.min(minX, p.x - r); maxX = Math.max(maxX, p.x + r)
+    minY = Math.min(minY, p.y - r); maxY = Math.max(maxY, p.y + r)
   }
+  const width = maxX - minX || 1
+  const height = maxY - minY || 1
+  return { width, height, ratio: width / height, area: width * height }
+}
 
+/**
+ * Computes one settle iteration for a galaxy layout: recomputes every node's orbital "home"
+ * position (see below), seeds/continues from `prevPositions` (or home/pinned positions if this
+ * is the first call), runs one collision-separation pass, then nudges every unpinned node one
+ * `homeStrength` fraction of the way toward its home. Exported so it can be driven either as a
+ * bounded, synchronous batch (see galaxyLayout, which calls this `settleCycles` times) or as a
+ * live, continuous simulation — e.g. GraphCanvas's opt-in live-simulation mode, which calls this
+ * once per animation frame, feeding back its own previous frame's output as `prevPositions` and a
+ * currently-dragged node's live pointer position as a `pinned` override — so dragging any node
+ * (a "sun" or otherwise) elastically repositions its descendants in real time.
+ *
+ * Home positions are computed by a recursive walk that spreads each node's children evenly
+ * around a full circle centered on it (not a half-arc fanned away from it — that full-circle
+ * spread plus a parent-angle offset is what gives the layout its "galaxy arm" look instead of
+ * reading as a plain radial org chart), seeded from a virtual hub at the origin so independent
+ * root trees spread around a shared center. A pinned node's own actual position — not the
+ * position the recursive walk would have otherwise assigned it — is used both as that node's own
+ * home AND as the anchor its own children's home positions are computed relative to, so pinning
+ * (or live-dragging) an ancestor cascades correctly to its whole subtree. When `options.aspectRatio`
+ * is set, this walk runs twice — once unwarped to measure the tree's own natural shape, once more
+ * with a corrective elliptical scale based on that measurement — see GalaxyLayoutOptions.aspectRatio
+ * for why a single warp-a-circle pass isn't enough.
+ */
+/**
+ * Resolves `options.aspectRatio` (a raw container ratio) into the actual {x, y} elliptical scale
+ * `galaxySimulationStep`'s home computation should use — the natural-shape measurement plus
+ * binary search described in `GalaxyLayoutOptions.aspectRatio`'s own docs, pulled out into its own
+ * function so it can be resolved *once* and reused, rather than re-run on every settle cycle or
+ * every live-simulation animation frame (each resolution costs roughly 8 trial evaluations, each
+ * of which runs a full group-separation pass — cheap once, but 24x (a settle loop) or 60x/sec (a
+ * live tick) too expensive to repeat with the exact same answer every time).
+ *
+ * `galaxyLayout` always calls this once before its settle loop and threads the result through
+ * `resolvedAspectScale`. A live-simulation caller driving `galaxySimulationStep` directly should
+ * do the same — resolve it once (e.g. a `useMemo` keyed on the target ratio and the graph's own
+ * structure) and pass `resolvedAspectScale` into every tick's options instead of a raw
+ * `aspectRatio`. Deliberately key that memo on structure only, NOT on live drag/pin positions:
+ * besides the performance reason above, a resolution that shifted mid-drag would read as the
+ * whole layout's target shape subtly changing while the user is mid-gesture, which is worse UX
+ * than the (already-accepted) tradeoff of the ellipse not tracking a temporarily-pinned node's
+ * exact contribution to the natural-shape measurement.
+ *
+ * Returns {x: 1, y: 1} (no warp) when `aspectRatio` is omitted or exactly 1.
+ */
+export function resolveAspectRatioScale(
+  nodes: readonly GalaxyLayoutNode[],
+  edges: readonly GalaxyLayoutEdge[],
+  options: GalaxyLayoutOptions = {}
+): { x: number; y: number } {
+  const { aspectRatio } = options
+  if (aspectRatio === undefined || aspectRatio === 1 || nodes.length === 0) return { x: 1, y: 1 }
+
+  const nodeMap = new Map(nodes.map(n => [n.id, n]))
+  const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
+
+  // Natural (unwarped) shape, measured through one real settle step (home -> group separation ->
+  // individual separationPass -> homeStrength nudge) — not just the raw elliptical home position.
+  // This matters: a raw-home-only measurement (an earlier version of this function used
+  // computeHome + shiftGroupsApart directly, skipping individual separationPass and the
+  // homeStrength nudge) significantly OVERESTIMATES how much a given correction actually distorts
+  // the real, settled layout for a tree with several small, tightly-packed sibling groups — the
+  // group-level macro shift alone, unaided by individual-level separation, has to resolve overlap
+  // by brute rigid translation, while the real pipeline's individual pass resolves most of it far
+  // more cheaply. Measured concretely: a fixture with 5 sibling branches showed the raw-home
+  // proxy predicting area growth past 2x from almost the very first, smallest trial correction,
+  // while the actually-settled result stayed under 1.3x across the *entire* correction range —
+  // the raw proxy was rejecting every correction as unsafe when none of them actually were.
+  const naturalPos = galaxySimulationStep(nodes, edges, undefined, { ...options, resolvedAspectScale: { x: 1, y: 1 } })
+  const naturalBbox = weightedBboxOf(naturalPos, nodeMap, radiusOf)
+  const clampedTarget = Math.min(8, Math.max(1 / 8, aspectRatio))
+  const rawCorrection = Math.min(8, Math.max(1 / 8, clampedTarget / naturalBbox.ratio))
+
+  // Applying rawCorrection directly is not safe: `separationPass`/`shiftGroupsApart`'s collision
+  // floors resist *compression* but not *expansion*, so an uncapped correction doesn't trade
+  // width for height the way scaleX * scaleY === 1 suggests — it mostly just adds width, measured
+  // to inflate total rendered area by as much as 9x on real trees for one dataset, while on
+  // ANOTHER dataset the exact same fixed damping left the ratio barely improved at all (a badly
+  // overcorrecting fourth-root: fine for a mildly-biased tree, far too weak for a severely
+  // chain-dominated one — no single constant serves both). So instead of a fixed exponent, binary-
+  // search the exponent itself: find the strongest correction whose *actual, settled* rendered
+  // area stays within AREA_GROWTH_CAP of natural — one real settle step per trial (not the full
+  // multi-cycle settle loop galaxyLayout itself runs; one step is enough to be representative —
+  // see above — and each one measured well under 15ms even on a 50+-node stress dataset, six
+  // trials total, done once per resolution rather than once per settle cycle or animation frame).
+  const AREA_GROWTH_CAP = 2
+  const areaGrowthAt = (t: number): number => {
+    const trialCorrection = Math.pow(rawCorrection, t)
+    const trialPos = galaxySimulationStep(nodes, edges, undefined, {
+      ...options,
+      resolvedAspectScale: { x: trialCorrection, y: 1 / trialCorrection },
+    })
+    return weightedBboxOf(trialPos, nodeMap, radiusOf).area / naturalBbox.area
+  }
+  let lo = 0, hi = 1
+  for (let i = 0; i < 6; i++) {
+    const mid = (lo + hi) / 2
+    if (areaGrowthAt(mid) <= AREA_GROWTH_CAP) lo = mid
+    else hi = mid
+  }
+  const finalCorrection = Math.pow(rawCorrection, lo)
+  return { x: finalCorrection, y: 1 / finalCorrection }
+}
+
+export function galaxySimulationStep(
+  nodes: readonly GalaxyLayoutNode[],
+  edges: readonly GalaxyLayoutEdge[],
+  prevPositions: Map<string, { x: number; y: number }> | undefined,
+  options: GalaxyLayoutOptions = {}
+): Map<string, { x: number; y: number }> {
+  const {
+    nodeSpread = 3.2,
+    startAngle = -Math.PI / 2,
+    homeStrength = 0.18,
+    nodeMargin,
+    separateGroups = true,
+    resolvedAspectScale,
+  } = options
+
+  if (nodes.length === 0) return new Map()
+
+  const nodeMap = new Map(nodes.map(n => [n.id, n]))
+  const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
+
+  const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
+  const computeHome = buildComputeHome(nodeMap, childrenOf, roots, radiusOf, nodeSpread, startAngle)
+
+  // Grouping is purely structural (independent of ellipseX/ellipseY), so it's resolved once here
+  // and reused by the real effectiveHome computation below.
   const groupHeads = separateGroups ? galaxyGroupHeads(roots, childrenOf) : []
   const leafToGroup = new Map<string, string>()
   if (separateGroups) {
@@ -280,6 +364,13 @@ export function galaxySimulationStep(
       for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
     }
   }
+
+  // See GalaxyLayoutOptions.aspectRatio / resolveAspectRatioScale for the full reasoning — the
+  // caller (galaxyLayout, or a live-simulation caller) is expected to have already resolved
+  // `options.aspectRatio` into `resolvedAspectScale` once and reused it across repeated calls;
+  // resolving it fresh here is only a fallback for a direct caller that didn't.
+  const scale = resolvedAspectScale ?? resolveAspectRatioScale(nodes, edges, options)
+  const home = computeHome(scale.x, scale.y)
 
   // Group-separate the home positions themselves, not just a settled/pinned pos snapshot —
   // otherwise every tick's homeStrength nudge pulls unpinned nodes straight back toward their
@@ -372,13 +463,19 @@ export function galaxyLayout(
 
   if (nodes.length === 0) return new Map()
 
+  // Resolved once here rather than left for galaxySimulationStep to resolve itself on every one
+  // of the settleCycles calls below — see resolveAspectRatioScale's own docs for why re-resolving
+  // it that many times over would be far more expensive than the settle loop it's feeding.
+  const resolvedAspectScale = resolveAspectRatioScale(nodes, edges, options)
+  const stepOptions: GalaxyLayoutOptions = { ...options, resolvedAspectScale }
+
   let pos: Map<string, { x: number; y: number }> | undefined
   for (let cycle = 0; cycle < settleCycles; cycle++) {
-    pos = galaxySimulationStep(nodes, edges, pos, options)
+    pos = galaxySimulationStep(nodes, edges, pos, stepOptions)
   }
   // settleCycles: 0 is an unusual but legal input (skips the settle loop above) — still run one
   // step so `pos` is always defined, rather than falling back to raw unseparated home positions.
-  if (!pos) pos = galaxySimulationStep(nodes, edges, undefined, options)
+  if (!pos) pos = galaxySimulationStep(nodes, edges, undefined, stepOptions)
 
   // Shares forceLayout's cleanup-pass budget (see FINAL_CLEANUP_MAX_PASSES) rather than its own
   // independent constant — a dense orbit of large/card-sized nodes can hit the same non-convergence
@@ -414,13 +511,18 @@ export function galaxyLayout(
  * this. Cheap enough for every animation frame either way: `positions` in, one O(n) boundary
  * computation, one bounded O(g²) macro-separation loop (g = number of top-level groups, always
  * small), one O(g·n) rigid translate.
+ *
+ * `maxPasses` (default FINAL_CLEANUP_MAX_PASSES) caps the macro-separation loop below — lowered by
+ * resolveAspectRatioScale's search, which calls this many times per resolution and only needs a
+ * rough area estimate from each trial, not full convergence.
  */
 function shiftGroupsApart(
   nodeMap: ReadonlyMap<string, GalaxyLayoutNode>,
   groupHeads: readonly string[],
   leafToGroup: Map<string, string>,
   positions: Map<string, { x: number; y: number }>,
-  pinnedGroups?: ReadonlySet<string>
+  pinnedGroups?: ReadonlySet<string>,
+  maxPasses: number = FINAL_CLEANUP_MAX_PASSES
 ): Map<string, { x: number; y: number }> {
   if (groupHeads.length <= 1) return positions
 
@@ -441,7 +543,7 @@ function shiftGroupsApart(
     id, x: 0, y: 0, width: c.r * 2, height: c.r * 2, pinned: pinnedGroups?.has(id),
   }))
   const macroPos = new Map([...boundaries.entries()].map(([id, c]) => [id, { x: c.x, y: c.y }]))
-  for (let pass = 0; pass < FINAL_CLEANUP_MAX_PASSES; pass++) {
+  for (let pass = 0; pass < maxPasses; pass++) {
     if (!separationPass(macroNodes, macroPos)) break
   }
 

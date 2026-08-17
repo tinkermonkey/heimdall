@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { galaxyLayout, galaxySimulationStep, type GalaxyLayoutNode, type GalaxyLayoutEdge } from '../src/utils/galaxyLayout'
+import { galaxyLayout, galaxySimulationStep, resolveAspectRatioScale, type GalaxyLayoutNode, type GalaxyLayoutEdge } from '../src/utils/galaxyLayout'
 import { boundingCirclesByGroup } from '../src/utils/graphLayout'
 import { buildStructuralForest, structuralDescendants, galaxyGroupHeads } from '../src/utils/graphHierarchy'
 
@@ -342,9 +342,10 @@ test.describe('aspectRatio (elliptical warp)', () => {
 
     // Circular layout's own width/height ratio (whatever it naturally is) should shift measurably
     // toward wide once aspectRatio biases it, not just wobble from unrelated settle-cycle noise —
-    // separationPass mildly counteracts the ellipse (see GalaxyLayoutOptions.aspectRatio's own
-    // docs), so this doesn't assert the full theoretical scaleX/scaleY shift, just a clear one.
-    expect(wide.width / wide.height).toBeGreaterThan((circular.width / circular.height) * 1.15)
+    // the AREA_GROWTH_CAP search (see GalaxyLayoutOptions.aspectRatio's own docs) deliberately
+    // stops short of the full theoretical scaleX/scaleY shift, so this only asserts a clear,
+    // meaningful move in the right direction, not the full magnitude.
+    expect(wide.width / wide.height).toBeGreaterThan((circular.width / circular.height) * 1.3)
   })
 
   test('the ratio is clamped to [1/8, 8] — extreme values beyond the clamp are indistinguishable from the boundary', () => {
@@ -363,41 +364,31 @@ test.describe('aspectRatio (elliptical warp)', () => {
     }
   })
 
-  test('formula: warped x-offset equals the natural x-offset scaled by the damped target/natural correction', () => {
+  test('formula: warped x-offset equals the natural x-offset scaled by resolveAspectRatioScale\'s own result', () => {
     // startAngle: 0 isolates cos(0)=1, sin(0)=0 for the root-ring seed itself (a single root, so
     // its own placement IS the root-ring seed with i=0, n=1 -> angle = startAngle exactly), which
     // in turn keeps the single child's own angle at 0 too (n=1 kids, no parity offset at depth 0).
     // So this whole fixture only ever moves along x — an easy way to isolate one axis of the
     // two-pass correction (see GalaxyLayoutOptions.aspectRatio) without reproducing its full
-    // recursive placement math by hand here.
+    // recursive placement (or the search's own bisection) by hand here — just cross-check that
+    // galaxyLayout actually applies the exact scale resolveAspectRatioScale independently returns
+    // for these same inputs.
     const nodes = [node('root'), node('child')]
     const edges = [structuralEdge('root', 'child')]
     const ratio = 4
+    const layoutOptions = { aspectRatio: ratio, startAngle: 0, settleCycles: 0 }
 
-    // Pass 1 (as the implementation itself does): measure the tree's own natural, unwarped shape.
     const natural = galaxyLayout(nodes, edges, { startAngle: 0, settleCycles: 0 })
-    const naturalRoot = natural.get('root')!
-    const naturalChild = natural.get('child')!
-    const rootR = Math.hypot(nodes[0].width, nodes[0].height) / 2
-    const childR = Math.hypot(nodes[1].width, nodes[1].height) / 2
-    // Natural bbox is just this one x-axis span (both nodes sit on y=0 pre-warp) vs. the taller of
-    // the two nodes' own diameters — same weighting the implementation uses.
-    const naturalWidth = (naturalChild.x + childR) - (naturalRoot.x - rootR)
-    const naturalHeight = 2 * Math.max(rootR, childR)
-    const naturalRatio = naturalWidth / naturalHeight
-    const correction = Math.min(8, Math.max(1 / 8, ratio / naturalRatio))
-    // Damped via a fourth root — see GalaxyLayoutOptions.aspectRatio for why the raw correction
-    // isn't applied directly (it inflates total rendered area for barely any further ratio gain).
-    const dampedCorrection = Math.pow(correction, 0.25)
+    const naturalXOffset = natural.get('child')!.x - natural.get('root')!.x
 
-    // Pass 2: the actual warped output under test.
-    const warped = galaxyLayout(nodes, edges, { aspectRatio: ratio, startAngle: 0, settleCycles: 0 })
+    const scale = resolveAspectRatioScale(nodes, edges, layoutOptions)
+
+    const warped = galaxyLayout(nodes, edges, layoutOptions)
     const root = warped.get('root')!
     const child = warped.get('child')!
 
-    const naturalXOffset = naturalChild.x - naturalRoot.x
     expect(root.y).toBeCloseTo(0, 5)
-    expect(child.x - root.x).toBeCloseTo(naturalXOffset * dampedCorrection, 5)
+    expect(child.x - root.x).toBeCloseTo(naturalXOffset * scale.x, 5)
     expect(child.y - root.y).toBeCloseTo(0, 5)
   })
 

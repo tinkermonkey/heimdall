@@ -120,28 +120,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   particular, is often already far from circular on its own, and correcting
   against the wrong baseline can misjudge the needed warp badly enough to
   move the result in the wrong direction entirely. Both the target ratio and
-  the resulting correction factor are clamped to `[1/8, 8]`, then the
-  correction is damped via a fourth root before being applied — `separationPass`'s
-  collision floor resists *compression* but not *expansion*, so an undamped
-  correction doesn't trade width for height the way it looks like it should;
-  it mostly just adds width, inflating the layout's total rendered area
-  several-fold for little further ratio benefit. The fourth root keeps that
-  growth within roughly 1.0-1.2x of natural size across the whole clamped
-  range while still moving the drawn ratio meaningfully in the right
-  direction. Omitted (or exactly `1`) reproduces prior circular placement
-  bit-for-bit. `GraphCanvas` feeds its own real container aspect ratio in
-  automatically for `layout="galaxy"` (rounded to the nearest 5% so
-  sub-pixel resize noise doesn't churn it), and redraws the layout —
+  the resulting correction factor are clamped to `[1/8, 8]`; the correction
+  is then bounded, not by a fixed damping constant, but by a binary search
+  over how strong a correction the graph can actually take — `separationPass`'s
+  collision floor resists *compression* but not *expansion*, so an
+  undamped correction doesn't trade width for height the way it looks like
+  it should, it mostly just adds width, and how much depends heavily on the
+  graph's own structure (a single fixed damping constant measurably
+  under-corrected some real graphs while over-inflating others). The search
+  finds the strongest correction whose actual rendered area — measured via
+  one real settle step per trial, not just the raw elliptical placement,
+  which meaningfully overestimates distortion for graphs with several small
+  sibling groups — stays within roughly double the natural (unwarped) area.
+  New export `resolveAspectRatioScale` performs this resolution and is what
+  `galaxyLayout` calls once per invocation (rather than once per settle
+  cycle) and what a live-simulation caller driving `galaxySimulationStep`
+  directly should call once per structural/target-ratio change (via its own
+  new `resolvedAspectScale` option) rather than paying the search's cost on
+  every animation frame. Omitted `aspectRatio` (or exactly `1`) reproduces
+  prior circular placement bit-for-bit. `GraphCanvas` feeds its own real
+  container aspect ratio in automatically for `layout="galaxy"` (rounded to
+  the nearest 5% so sub-pixel resize noise doesn't churn it) and pre-resolves
+  it the same way for its own live-simulation loop, and redraws the layout —
   respecting a currently-pinned/dropped node's position exactly — whenever
   that ratio changes meaningfully and pan/zoom isn't locked; live-simulation
   mode eases toward a new shape smoothly via its existing spring mechanism
   instead of snapping. No new `GraphCanvas` prop — the existing lock toggle
-  is the complete opt-out. Known limitation: even a full (undamped)
-  correction has a practical ceiling — `separationPass` refuses to compress
-  nodes past their own rendered size — so a layout dominated by one long
-  chain won't ever fully reach an extreme target ratio; the damping above
-  means the *drawn* result deliberately stops short of that ceiling too, in
-  exchange for not ballooning the layout's absolute size to get there.
+  is the complete opt-out. Known limitation: even the strongest correction
+  the search allows has a practical ceiling — `separationPass` refuses to
+  compress nodes past their own rendered size — so a layout dominated by one
+  long chain won't ever fully reach an extreme target ratio; the area-growth
+  bound means the *drawn* result deliberately stops short of that ceiling
+  too, in exchange for not ballooning the layout's absolute size to get
+  there.
 
 ### Changed
 
