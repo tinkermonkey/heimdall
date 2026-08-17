@@ -162,6 +162,50 @@ test.describe('galaxyLayout', () => {
     }
   })
 
+  test('a root with exactly one child stays in that child\'s group — delegating headship to a single child would orphan the root from every group', () => {
+    // galaxyGroupHeads() itself first: a root with >1 children delegates headship to each of
+    // them, but one with 0 or exactly 1 child does not — the single-child case has to be treated
+    // like the childless one, not like the multi-child one (see galaxyGroupHeads' own docs).
+    const oneChild = buildStructuralForest(['root', 'child'], [structuralEdge('root', 'child')])
+    expect(galaxyGroupHeads(oneChild.roots, oneChild.childrenOf)).toEqual(['root'])
+
+    const twoChildren = buildStructuralForest(['root', 'a', 'b'], [structuralEdge('root', 'a'), structuralEdge('root', 'b')])
+    expect(galaxyGroupHeads(twoChildren.roots, twoChildren.childrenOf).sort()).toEqual(['a', 'b'])
+
+    const noChildren = buildStructuralForest(['root'], [])
+    expect(galaxyGroupHeads(noChildren.roots, noChildren.childrenOf)).toEqual(['root'])
+
+    // Then the actual regression this guards: two independent single-child chains, busy enough
+    // that separateGroups has real work to do. Before the fix, delegating root1's headship to its
+    // only child excluded root1 from every group's leafToGroup entry entirely (it's nobody's
+    // descendant, and no longer its own group's head either) — the group-level rigid shift then
+    // moved child1's whole subtree to resolve overlap with the other group, while root1 itself,
+    // belonging to no group, never moved — visibly severing a direct structural edge that should
+    // stay a normal, short orbital hop.
+    const nodes: GalaxyLayoutNode[] = [
+      node('root1'), node('child1'), node('a1'), node('a2'), node('a3'),
+      node('root2'), node('child2'), node('b1'), node('b2'), node('b3'),
+    ]
+    const edges: GalaxyLayoutEdge[] = [
+      structuralEdge('root1', 'child1'),
+      structuralEdge('child1', 'a1'), structuralEdge('child1', 'a2'), structuralEdge('child1', 'a3'),
+      structuralEdge('root2', 'child2'),
+      structuralEdge('child2', 'b1'), structuralEdge('child2', 'b2'), structuralEdge('child2', 'b3'),
+    ]
+
+    const positions = galaxyLayout(nodes, edges)
+    const root1 = positions.get('root1')!
+    const child1 = positions.get('child1')!
+    const dist = Math.hypot(child1.x - root1.x, child1.y - root1.y)
+
+    // Expected orbital distance is just root1's own radius + child1's radius * nodeSpread — the
+    // same formula every parent/child pair in this layout uses. The orphaning bug blew this out
+    // by well over an order of magnitude, not just some jitter.
+    const r = Math.hypot(nodes[0].width, nodes[0].height) / 2
+    const expectedDistance = r + r * 3.2 // default nodeSpread
+    expect(dist).toBeLessThan(expectedDistance * 1.5)
+  })
+
   test('a single-root tree has nothing to separate — separateGroups is a no-op', () => {
     const nodes = [node('root'), node('child1'), node('child2')]
     const edges = [structuralEdge('root', 'child1'), structuralEdge('root', 'child2')]
@@ -261,13 +305,18 @@ test.describe('galaxySimulationStep', () => {
   // out of the way.
   test('dragging one group into another\'s territory pushes the other group away, not just its boundary circle', () => {
     const nodes: GalaxyLayoutNode[] = [
-      node('rootA'), node('sunA'), node('a1'), node('a2'), node('a3'),
-      node('rootB'), node('sunB'), node('b1'), node('b2'), node('b3'),
+      // rootA/rootB each need a SECOND child (dummyA/dummyB) so galaxyGroupHeads actually
+      // delegates their headship down to sunA/sunB — a root with only one child (just sunA/sunB
+      // alone) now stays its own group head instead (see galaxyGroupHeads' own docs), which would
+      // make rootA/rootB the group anchor instead of sunA/sunB and defeat the point of this
+      // fixture. dummyA/dummyB otherwise play no role in the assertions below.
+      node('rootA'), node('dummyA'), node('sunA'), node('a1'), node('a2'), node('a3'),
+      node('rootB'), node('dummyB'), node('sunB'), node('b1'), node('b2'), node('b3'),
     ]
     const edges: GalaxyLayoutEdge[] = [
-      structuralEdge('rootA', 'sunA'),
+      structuralEdge('rootA', 'dummyA'), structuralEdge('rootA', 'sunA'),
       structuralEdge('sunA', 'a1'), structuralEdge('sunA', 'a2'), structuralEdge('sunA', 'a3'),
-      structuralEdge('rootB', 'sunB'),
+      structuralEdge('rootB', 'dummyB'), structuralEdge('rootB', 'sunB'),
       structuralEdge('sunB', 'b1'), structuralEdge('sunB', 'b2'), structuralEdge('sunB', 'b3'),
     ]
 

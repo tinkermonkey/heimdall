@@ -62,14 +62,26 @@ export function buildStructuralForest(nodeIds: readonly string[], edges: readonl
 
 /**
  * Top-level "group head" ids for the galaxy layout's boundary-circle grouping: a root with
- * children delegates its group-headship to each of its own children (so a single deep tree still
- * reads as several groups instead of one all-encompassing circle around everything); a childless
- * root has nothing to delegate to, so it stays its own group head. Shared by galaxyLayout (to
- * keep group boundaries from overlapping each other) and GraphCanvas (to render them via
- * showClusterBoundaries) so both always agree on the same grouping.
+ * *more than one* child delegates its group-headship to each of its own children (so a bushy root
+ * still reads as several groups instead of one all-encompassing circle around everything); a
+ * childless root, OR a root with exactly one child, has nothing genuinely separate to delegate to
+ * and stays its own group head. The single-child case matters, not just the childless one: a root
+ * with exactly one child only has one branch anyway, so delegating to that lone child produces
+ * exactly the same one-group outcome as not delegating — except the root itself, having no
+ * structural PARENT, is never anyone's *descendant* either, so it would be the one node left out
+ * of every group's `leafToGroup` entry entirely. Group-separation's macro pass only ever
+ * translates nodes it can find a group for, so an excluded root stays frozen at its own computeHome
+ * position while its now-independently-grouped child subtree gets rigidly shifted to resolve
+ * overlap with other groups — visibly severing a root from the very child it's directly
+ * structurally connected to, worse the more that subtree's group actually needs to move. Shared by
+ * galaxyLayout (to keep group boundaries from overlapping each other) and GraphCanvas (to render
+ * them via showClusterBoundaries) so both always agree on the same grouping.
  */
 export function galaxyGroupHeads(roots: readonly string[], childrenOf: ReadonlyMap<string, string[]>): string[] {
-  return roots.flatMap(rootId => childrenOf.get(rootId) ?? [rootId])
+  return roots.flatMap(rootId => {
+    const kids = childrenOf.get(rootId)
+    return kids && kids.length > 1 ? kids : [rootId]
+  })
 }
 
 /** BFS descendant closure of a node's structural children, not including the node itself. */
