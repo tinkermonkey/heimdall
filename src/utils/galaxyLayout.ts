@@ -69,28 +69,42 @@ export interface GalaxyLayoutOptions {
   /**
    * Container width/height (px), i.e. containerWidth / containerHeight. When provided, warps every
    * orbital ring from a circle into an ellipse so the layout's overall shape leans toward the
-   * container's own proportions, instead of always producing a circular footprint that a wide-short
-   * or tall-narrow container then has to letterbox. Omitted (or exactly 1) reproduces today's exact
-   * circular placement bit-for-bit — every `distance` still comes from the same nodeSpread-based
+   * container's own proportions, instead of always producing a footprint that a wide-short or
+   * tall-narrow container then has to letterbox. Omitted (or exactly 1) reproduces today's exact
+   * un-warped placement bit-for-bit — every `distance` still comes from the same nodeSpread-based
    * radius math; only the polar-to-cartesian conversion changes, so nodeMargin, separationPass, and
    * shiftGroupsApart all keep working unmodified against the resulting elliptically-placed
    * positions (they only ever read real x/y + width/height, with no notion of how a position was
    * derived).
    *
-   * The raw ratio is clamped to [1/8, 8] (guards a transient 0-height container measurement from
-   * producing Infinity/NaN) and damped via a fourth root (`clamped ** 0.25`) rather than the
-   * textbook sqrt(ratio) ellipse formula — unlike a generic scatter plot, this layout fans every
-   * node's children a full 360° around it at *every* level of the tree, so a straight sqrt scale
-   * visibly over-elongates it well before a 4:1 container: it squeezes adjacent orbital slices on
-   * the compressed axis close enough that separationPass has to fight the ellipse just to keep them
-   * apart, eroding the effect. The fourth root keeps the response smooth and monotonic while
-   * roughly halving the distortion at extreme ratios (4:1 yields ~1.41x/0.71x axis scaling, not
-   * sqrt's raw 2x/0.5x). scaleX * scaleY === 1 always (area-preserving), so the layout doesn't get
-   * uniformly bigger or smaller as a side effect of reshaping. Not applied to shiftGroupsApart's own
-   * group-vs-group macro pass — that still treats group boundary circles as literally circular when
-   * pushing them apart from each other, a known, deliberately out-of-scope limitation (multi-group
-   * top-level arrangement won't lean into the aspect ratio quite as strongly as a single tree's
-   * internal orbits do).
+   * The correction is computed *relative to this tree's own natural (unwarped) shape*, not
+   * relative to a hypothetical circle — see galaxySimulationStep's own docs for why a naive
+   * "warp a circle toward the target ratio" formula badly misjudges how much correction is
+   * actually needed: a tree with a long single-child chain, in particular, can be dramatically
+   * non-circular on its own, in either direction, before this option is even involved, and
+   * measuring the wrong starting point can make a mismatch *worse* instead of better. Both the
+   * target ratio and the resulting correction factor are clamped to [1/8, 8] (guards a transient
+   * 0-height container measurement from producing Infinity/NaN, and keeps an extreme correction
+   * — a naturally very tall tree targeting a very wide container, say — from spiraling), then
+   * damped via a fourth root (`clampedCorrection ** 0.25`) before being applied as the x-axis
+   * scale (and its reciprocal as the y-axis scale). The damping isn't optional polish — applying
+   * the raw correction directly was tried and measured to *inflate the layout's total rendered
+   * area 3-13x* for realistic trees, for barely any further ratio benefit past the first quarter
+   * of the curve. The reason scaleX * scaleY === 1 doesn't actually keep the *displayed* area
+   * constant the way it looks like it should: `separationPass`'s collision floor pushes back
+   * against *compression* (a squeezed axis gets fought back up toward its natural size) but does
+   * nothing to resist *expansion* (a stretched axis applies in full) — so an undamped correction
+   * on a tree whose natural shape is already far from the target doesn't trade width for height,
+   * it just adds width. The fourth root keeps that growth within roughly 1.0-1.2x of natural
+   * across the whole clamped range while still moving the drawn ratio meaningfully in the right
+   * direction. Even a large (damped) correction still has a practical ceiling regardless of this
+   * option's own math: `separationPass` refuses to compress adjacent nodes past their own
+   * rendered size, so a long chain that genuinely needs N node-heights of room in one direction
+   * can't be squeezed below that no matter how aggressively this option asks it to. Not applied to
+   * shiftGroupsApart's own group-vs-group macro pass — that still treats group boundary circles as
+   * literally circular when pushing them apart from each other, a known, deliberately out-of-scope
+   * limitation (multi-group top-level arrangement won't lean into the aspect ratio quite as
+   * strongly as a single tree's internal orbits do).
    */
   aspectRatio?: number
 }
@@ -113,7 +127,10 @@ export interface GalaxyLayoutOptions {
  * root trees spread around a shared center. A pinned node's own actual position — not the
  * position the recursive walk would have otherwise assigned it — is used both as that node's own
  * home AND as the anchor its own children's home positions are computed relative to, so pinning
- * (or live-dragging) an ancestor cascades correctly to its whole subtree.
+ * (or live-dragging) an ancestor cascades correctly to its whole subtree. When `options.aspectRatio`
+ * is set, this walk runs twice — once unwarped to measure the tree's own natural shape, once more
+ * with a corrective elliptical scale based on that measurement — see GalaxyLayoutOptions.aspectRatio
+ * for why a single warp-a-circle pass isn't enough.
  */
 export function galaxySimulationStep(
   nodes: readonly GalaxyLayoutNode[],
@@ -135,52 +152,17 @@ export function galaxySimulationStep(
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
   const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
 
-  // See GalaxyLayoutOptions.aspectRatio for the reasoning behind the clamp and the fourth-root
-  // damping. aspectRatio omitted (or exactly 1) collapses to ellipseX = ellipseY = 1 — multiplying
-  // by exactly 1 is bit-identical to the un-warped math this replaces.
-  const clampedAspectRatio = Math.min(8, Math.max(1 / 8, aspectRatio ?? 1))
-  const dampedAspectRatio = Math.pow(clampedAspectRatio, 0.25)
-  const ellipseX = dampedAspectRatio
-  const ellipseY = 1 / dampedAspectRatio
-  const ellipticalOffset = (distance: number, angle: number): { x: number; y: number } => ({
-    x: distance * ellipseX * Math.cos(angle),
-    y: distance * ellipseY * Math.sin(angle),
-  })
-
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
-
-  const home = new Map<string, { x: number; y: number }>()
-  const place = (id: string, cx: number, cy: number, angle: number, depth: number): void => {
-    const node = nodeMap.get(id)!
-    // A pinned node's actual position overrides the (cx, cy) it was handed — both as its own
-    // home, and as the center its children are placed around, so the whole subtree follows.
-    const anchored = node.pinned && node.x !== undefined && node.y !== undefined
-    const ax = anchored ? node.x! : cx
-    const ay = anchored ? node.y! : cy
-    home.set(id, { x: ax, y: ay })
-    const kids = childrenOf.get(id) ?? []
-    const n = kids.length
-    if (n === 0) return
-    const r = radiusOf(node)
-    kids.forEach((childId, i) => {
-      const childR = radiusOf(nodeMap.get(childId)!)
-      const distance = r + childR * nodeSpread
-      // Even sibling counts below the root ring get a half-slot rotation so a child never lands
-      // directly opposite its own parent-facing edge into the grandparent.
-      const parity = n % 2 === 0 && depth > 0 ? Math.PI / n : 0
-      const childAngle = angle + (2 * Math.PI * i) / n + parity
-      const off = ellipticalOffset(distance, childAngle)
-      place(childId, ax + off.x, ay + off.y, childAngle, depth + 1)
-    })
-  }
 
   // How far a node's own subtree extends beyond the node's own position — 0 for a leaf (nothing
   // to account for), otherwise the largest child orbital distance plus that child's own reach.
   // Root-ring seeding (below) uses this so a root with a large subtree gets pushed proportionally
   // further from the shared hub, instead of every root — a lone orphan and the root of a 9-node,
   // 4-level chain alike — starting at essentially the same tiny distance (just its own radius).
-  // Left unmemoized: called once per root from the loop below, each call's recursion touches only
-  // that root's own (disjoint) subtree, so there's no repeated work across different roots.
+  // Left unmemoized: called once per root from computeHome's loop below, each call's recursion
+  // touches only that root's own (disjoint) subtree, so there's no repeated work across roots.
+  // Independent of ellipseX/ellipseY (a pure scalar distance), so computed once and reused by
+  // both computeHome passes below.
   const subtreeReach = (id: string): number => {
     const kids = childrenOf.get(id) ?? []
     if (kids.length === 0) return 0
@@ -194,22 +176,100 @@ export function galaxySimulationStep(
     return maxReach
   }
 
-  // A virtual radius-0 hub at the origin seeds the root ring: every real root — including
-  // orphans, which are just one-node trees — becomes one of its "children", so independent
-  // trees spread around a shared center instead of all stacking at (0, 0).
-  {
+  // Computes home positions for a given elliptical scale — the same recursive "spread children
+  // around a full circle" placement, just with the polar-to-cartesian conversion scaled
+  // non-uniformly. Parameterized (rather than a single fixed pass) because getting the requested
+  // aspectRatio right takes two passes — see the calls below.
+  const computeHome = (ellipseX: number, ellipseY: number): Map<string, { x: number; y: number }> => {
+    const result = new Map<string, { x: number; y: number }>()
+    const offset = (distance: number, angle: number): { x: number; y: number } => ({
+      x: distance * ellipseX * Math.cos(angle),
+      y: distance * ellipseY * Math.sin(angle),
+    })
+    const place = (id: string, cx: number, cy: number, angle: number, depth: number): void => {
+      const node = nodeMap.get(id)!
+      // A pinned node's actual position overrides the (cx, cy) it was handed — both as its own
+      // home, and as the center its children are placed around, so the whole subtree follows.
+      const anchored = node.pinned && node.x !== undefined && node.y !== undefined
+      const ax = anchored ? node.x! : cx
+      const ay = anchored ? node.y! : cy
+      result.set(id, { x: ax, y: ay })
+      const kids = childrenOf.get(id) ?? []
+      const n = kids.length
+      if (n === 0) return
+      const r = radiusOf(node)
+      kids.forEach((childId, i) => {
+        const childR = radiusOf(nodeMap.get(childId)!)
+        const distance = r + childR * nodeSpread
+        // Even sibling counts below the root ring get a half-slot rotation so a child never lands
+        // directly opposite its own parent-facing edge into the grandparent.
+        const parity = n % 2 === 0 && depth > 0 ? Math.PI / n : 0
+        const childAngle = angle + (2 * Math.PI * i) / n + parity
+        const off = offset(distance, childAngle)
+        place(childId, ax + off.x, ay + off.y, childAngle, depth + 1)
+      })
+    }
+
+    // A virtual radius-0 hub at the origin seeds the root ring: every real root — including
+    // orphans, which are just one-node trees — becomes one of its "children", so independent
+    // trees spread around a shared center instead of all stacking at (0, 0).
     const n = roots.length
     roots.forEach((rootId, i) => {
       const rootR = radiusOf(nodeMap.get(rootId)!)
       // Own-radius term unchanged from before (so a childless root — an orphan, or any leaf-only
       // tree — seeds at exactly the same distance it always has); the added subtreeReach term is
       // what actually fixes a root WITH descendants landing right next to (or visually inside)
-      // an unrelated neighbor's territory — see this function's own docs above.
+      // an unrelated neighbor's territory — see subtreeReach's own docs above.
       const distance = rootR * nodeSpread + subtreeReach(rootId)
       const angle = startAngle + (2 * Math.PI * i) / n
-      const off = ellipticalOffset(distance, angle)
+      const off = offset(distance, angle)
       place(rootId, off.x, off.y, angle, 0)
     })
+
+    return result
+  }
+
+  // See GalaxyLayoutOptions.aspectRatio for the full reasoning. Short version: a single formula
+  // mapping the target ratio directly to an elliptical scale (as if warping a circle) badly
+  // misjudges how much correction is actually needed, because this layout's own *natural*
+  // (unwarped) shape is rarely circular to begin with — a tree with a long single-child chain, in
+  // particular, can be dramatically elongated on its own, in either direction, before any
+  // aspect-ratio option is even involved. So this runs computeHome twice: once unwarped, to
+  // measure the tree's own natural bounding-box ratio (weighted by each node's own radius, not
+  // just its center point), then again with a correction scaled to how far *that* already is from
+  // the target — not how far a hypothetical circle would be.
+  let home: Map<string, { x: number; y: number }>
+  if (aspectRatio === undefined || aspectRatio === 1) {
+    home = computeHome(1, 1)
+  } else {
+    const naturalHome = computeHome(1, 1)
+    let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+    for (const [id, p] of naturalHome) {
+      const r = radiusOf(nodeMap.get(id)!)
+      minX = Math.min(minX, p.x - r); maxX = Math.max(maxX, p.x + r)
+      minY = Math.min(minY, p.y - r); maxY = Math.max(maxY, p.y + r)
+    }
+    const naturalWidth = maxX - minX || 1
+    const naturalHeight = maxY - minY || 1
+    const naturalRatio = naturalWidth / naturalHeight
+    // How much MORE (or less) horizontal-vs-vertical spread is needed beyond what's already
+    // natural — clamped the same way a raw container ratio would be, since this can end up more
+    // extreme than the target ratio itself once a strongly-biased natural shape is factored out
+    // (e.g. a naturally very tall tree targeting a wide container needs a much bigger correction
+    // than the container's own ratio alone would suggest).
+    const clampedTarget = Math.min(8, Math.max(1 / 8, aspectRatio))
+    const correction = Math.min(8, Math.max(1 / 8, clampedTarget / naturalRatio))
+    // Damped via a fourth root rather than applied directly — separationPass's collision floor
+    // only pushes back against *compression*, not expansion, so an undamped correction doesn't
+    // actually preserve area the way scaleX * scaleY === 1 suggests: the squeezed axis gets
+    // fought back up toward its natural size while the stretched axis applies in full, and the
+    // result is a layout that's dramatically *larger* overall, not just a different shape — for a
+    // tree whose natural ratio is already far from the target (this is common — see the natural-
+    // shape measurement above), even a modest correction, undamped, was observed to balloon total
+    // rendered area 3-13x for no corresponding ratio benefit past the first quarter of the curve.
+    // The fourth root keeps that growth within roughly 1.0-1.2x across the whole clamped range.
+    const dampedCorrection = Math.pow(correction, 0.25)
+    home = computeHome(dampedCorrection, 1 / dampedCorrection)
   }
 
   const groupHeads = separateGroups ? galaxyGroupHeads(roots, childrenOf) : []

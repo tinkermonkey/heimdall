@@ -363,28 +363,41 @@ test.describe('aspectRatio (elliptical warp)', () => {
     }
   })
 
-  test('formula: a child at angle 0 lands at distance * ratio**0.25 along x, ~0 along y', () => {
+  test('formula: warped x-offset equals the natural x-offset scaled by the damped target/natural correction', () => {
     // startAngle: 0 isolates cos(0)=1, sin(0)=0 for the root-ring seed itself (a single root, so
-    // its own placement IS the root-ring seed with i=0, n=1 -> angle = startAngle exactly).
+    // its own placement IS the root-ring seed with i=0, n=1 -> angle = startAngle exactly), which
+    // in turn keeps the single child's own angle at 0 too (n=1 kids, no parity offset at depth 0).
+    // So this whole fixture only ever moves along x — an easy way to isolate one axis of the
+    // two-pass correction (see GalaxyLayoutOptions.aspectRatio) without reproducing its full
+    // recursive placement math by hand here.
     const nodes = [node('root'), node('child')]
     const edges = [structuralEdge('root', 'child')]
-
     const ratio = 4
-    const positions = galaxyLayout(nodes, edges, { aspectRatio: ratio, startAngle: 0, settleCycles: 0 })
-    const root = positions.get('root')!
-    const child = positions.get('child')!
 
-    // root itself: distance = rootR * nodeSpread + subtreeReach(root); reproduce it independently
-    // via the same radiusOf/nodeSpread math the implementation uses, rather than hardcoding a
-    // number that would silently stop meaning anything if an unrelated default ever changes.
+    // Pass 1 (as the implementation itself does): measure the tree's own natural, unwarped shape.
+    const natural = galaxyLayout(nodes, edges, { startAngle: 0, settleCycles: 0 })
+    const naturalRoot = natural.get('root')!
+    const naturalChild = natural.get('child')!
     const rootR = Math.hypot(nodes[0].width, nodes[0].height) / 2
     const childR = Math.hypot(nodes[1].width, nodes[1].height) / 2
-    const nodeSpread = 3.2 // matches GalaxyLayoutOptions.nodeSpread's own default
-    const childDistance = rootR + childR * nodeSpread
-    const expectedScale = Math.pow(ratio, 0.25)
+    // Natural bbox is just this one x-axis span (both nodes sit on y=0 pre-warp) vs. the taller of
+    // the two nodes' own diameters — same weighting the implementation uses.
+    const naturalWidth = (naturalChild.x + childR) - (naturalRoot.x - rootR)
+    const naturalHeight = 2 * Math.max(rootR, childR)
+    const naturalRatio = naturalWidth / naturalHeight
+    const correction = Math.min(8, Math.max(1 / 8, ratio / naturalRatio))
+    // Damped via a fourth root — see GalaxyLayoutOptions.aspectRatio for why the raw correction
+    // isn't applied directly (it inflates total rendered area for barely any further ratio gain).
+    const dampedCorrection = Math.pow(correction, 0.25)
 
+    // Pass 2: the actual warped output under test.
+    const warped = galaxyLayout(nodes, edges, { aspectRatio: ratio, startAngle: 0, settleCycles: 0 })
+    const root = warped.get('root')!
+    const child = warped.get('child')!
+
+    const naturalXOffset = naturalChild.x - naturalRoot.x
     expect(root.y).toBeCloseTo(0, 5)
-    expect(child.x - root.x).toBeCloseTo(childDistance * expectedScale, 5)
+    expect(child.x - root.x).toBeCloseTo(naturalXOffset * dampedCorrection, 5)
     expect(child.y - root.y).toBeCloseTo(0, 5)
   })
 
@@ -406,7 +419,15 @@ test.describe('aspectRatio (elliptical warp)', () => {
     for (const id of chain) nodes.push(node(id))
     for (let i = 0; i < chain.length - 1; i++) edges.push(structuralEdge(chain[i], chain[i + 1]))
 
-    const positions = galaxyLayout(nodes, edges, { aspectRatio: 3 })
+    // startAngle: 0 puts both 2-root-ring roots on the x-axis (angles 0 and π), so an elliptical
+    // warp scales both root positions by the same x-axis factor — isolating the property under
+    // test (subtreeReach still composes with aspectRatio) from the unrelated fact that an
+    // elliptical warp scales differently-angled points by different amounts. separateGroups: false
+    // isolates it further from shiftGroupsApart's own group-vs-group macro pass, which treats
+    // group boundary circles as literally circular regardless of aspectRatio (a known, documented,
+    // separately-tested limitation — see "composes with separateGroups" below — not something this
+    // test is trying to verify).
+    const positions = galaxyLayout(nodes, edges, { aspectRatio: 3, startAngle: 0, separateGroups: false })
     const lonelyDist = Math.hypot(positions.get('lonelyRoot')!.x, positions.get('lonelyRoot')!.y)
     const deepDist = Math.hypot(positions.get('deepRoot')!.x, positions.get('deepRoot')!.y)
 

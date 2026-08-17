@@ -111,21 +111,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `GalaxyLayoutOptions.aspectRatio` option (container width/height) warps
   every orbital ring from a circle into an ellipse so the layout's overall
   shape leans toward the container's own proportions, instead of always
-  producing a circular footprint that a wide-short or tall-narrow container
-  then has to letterbox — the established technique radial tree layouts
-  (e.g. Perforce's `IlvTree`, the `d3-radial` library) use for the same
-  problem. The raw ratio is clamped to `[1/8, 8]` and damped via a fourth
-  root rather than the textbook square root, since this layout fans every
-  node's children a full 360° at *every* level, so a straight sqrt scale
-  over-elongates well before a 4:1 container. Omitted (or exactly `1`)
-  reproduces prior circular placement bit-for-bit. `GraphCanvas` feeds its
-  own real container aspect ratio in automatically for `layout="galaxy"`
-  (rounded to the nearest 5% so sub-pixel resize noise doesn't churn it),
-  and redraws the layout — respecting a currently-pinned/dropped node's
-  position exactly — whenever that ratio changes meaningfully and pan/zoom
-  isn't locked; live-simulation mode eases toward a new shape smoothly via
-  its existing spring mechanism instead of snapping. No new `GraphCanvas`
-  prop — the existing lock toggle is the complete opt-out.
+  producing a footprint that a wide-short or tall-narrow container then has
+  to letterbox — the established technique radial tree layouts (e.g.
+  Perforce's `IlvTree`, the `d3-radial` library) use for the same problem.
+  The correction is computed *relative to the tree's own natural, unwarped
+  shape* (measured with a first placement pass) rather than relative to a
+  hypothetical circle — a tree with a long single-child chain, in
+  particular, is often already far from circular on its own, and correcting
+  against the wrong baseline can misjudge the needed warp badly enough to
+  move the result in the wrong direction entirely. Both the target ratio and
+  the resulting correction factor are clamped to `[1/8, 8]`, then the
+  correction is damped via a fourth root before being applied — `separationPass`'s
+  collision floor resists *compression* but not *expansion*, so an undamped
+  correction doesn't trade width for height the way it looks like it should;
+  it mostly just adds width, inflating the layout's total rendered area
+  several-fold for little further ratio benefit. The fourth root keeps that
+  growth within roughly 1.0-1.2x of natural size across the whole clamped
+  range while still moving the drawn ratio meaningfully in the right
+  direction. Omitted (or exactly `1`) reproduces prior circular placement
+  bit-for-bit. `GraphCanvas` feeds its own real container aspect ratio in
+  automatically for `layout="galaxy"` (rounded to the nearest 5% so
+  sub-pixel resize noise doesn't churn it), and redraws the layout —
+  respecting a currently-pinned/dropped node's position exactly — whenever
+  that ratio changes meaningfully and pan/zoom isn't locked; live-simulation
+  mode eases toward a new shape smoothly via its existing spring mechanism
+  instead of snapping. No new `GraphCanvas` prop — the existing lock toggle
+  is the complete opt-out. Known limitation: even a full (undamped)
+  correction has a practical ceiling — `separationPass` refuses to compress
+  nodes past their own rendered size — so a layout dominated by one long
+  chain won't ever fully reach an extreme target ratio; the damping above
+  means the *drawn* result deliberately stops short of that ceiling too, in
+  exchange for not ballooning the layout's absolute size to get there.
 
 ### Changed
 
