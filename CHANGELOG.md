@@ -26,6 +26,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `ClusteredLayoutOptions`, `ClusteredLayoutResult`, `louvainCluster`,
   `ClusterEdge`, `ClusterTreeNode`, `LouvainOptions`, `packClusters`,
   `PackedCircle`, `PackOptions`. New dependency: `d3-hierarchy`.
+- **`GraphCanvas`** — `onBackgroundClick` prop fires the typical "click empty
+  space to deselect" gesture: a press-and-release within a few px of each
+  other on genuine canvas background (not a node, edge, or opted-out
+  element). A real pan drag never fires it, and it works independently of
+  `usePanZoom`'s own drag tracking so it still works while pan/zoom is locked.
+- **`DetailDrawer`** — an auto-hiding overlay panel: floats over its nearest
+  `position: relative` ancestor (a `GraphCanvas`, for instance) instead of
+  reserving dedicated layout space, expanding only once `open` and its
+  children are truthy. Translucent/blurred background, no border by default,
+  and a left-edge resize handle that highlights in the accent color on hover
+  so users can tell it's resizable without a visible seam at rest. New
+  exports: `DetailDrawer`, `DetailDrawerProps`.
+- **`GraphToolbar`** — a built-in zoom/pan/lock control cluster for
+  `GraphCanvas`, shown by default (`showToolbar`, default `true`) in any of
+  the 4 corners or 4 edge-centers (`toolbarPosition`, default
+  `'bottom-right'`): zoom in, zoom out, zoom to fit, and lock pan/zoom (backed
+  by `usePanZoom`'s new `locked` option, which gates wheel/drag/keyboard
+  input but not imperative `setZoom`/`setPan`/`zoomToFit` calls). New
+  exports: `GraphToolbar`, `GraphToolbarProps`, `GraphToolbarPosition`.
+- **`galaxyLayout`** — opt-in `nodeMargin` option, and `GraphCanvas`'s
+  existing `nodeMargin` prop (previously `layout="force"` only) now applies
+  to `layout="galaxy"` and `layout="force-clustered"` too. Padding is applied
+  only during galaxy's settle-cycle separation passes, never its final
+  cleanup pass, so the "zero literal overlap" guarantee still holds
+  regardless of the margin value. Defaults to `0` (unpadded) for `"galaxy"`
+  specifically — unlike `"force"`/`"force-clustered"`, which default to each
+  node's own rendered width — since galaxy's radial placement already spaces
+  most layouts generously and defaulting padding on would shift every
+  existing galaxy layout's node positions for what's a narrow, opt-in-worthy
+  edge case (verified on a real 56-node/4-level hierarchy with heavy size
+  variance: the tightest sibling pairs went from under 1px apart to 8px+
+  with `nodeMargin={12}`, zero overlaps either way).
 
 ### Changed
 

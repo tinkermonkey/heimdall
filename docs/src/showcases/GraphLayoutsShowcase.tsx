@@ -157,7 +157,7 @@ function pseudoMetricPercent(id: string): number {
 
 export function GraphLayoutsShowcase() {
   const [datasetKey, setDatasetKey] = useState<DatasetKey>('ontology')
-  const [layout, setLayout] = useState<'force' | 'galaxy'>('galaxy')
+  const [layout, setLayout] = useState<'force' | 'galaxy' | 'force-clustered'>('galaxy')
   const [edgeStyle, setEdgeStyle] = useState<'curved' | 'straight'>('curved')
   const [nodeStyle, setNodeStyle] = useState<'compact' | 'cards'>('compact')
   const [showAllRelations, setShowAllRelations] = useState(false)
@@ -166,9 +166,11 @@ export function GraphLayoutsShowcase() {
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
   const [draggable, setDraggable] = useState(true)
   const [drawerWidth, setDrawerWidth] = useState(360)
-  // undefined = GraphCanvas's own default (each node's own rendered width). 'tight' goes to 0 —
-  // the minimum legal packing, no breathing room for edges. Only meaningful for layout="force";
-  // galaxy's radial hierarchy doesn't use nodeMargin at all.
+  // undefined = GraphCanvas's own per-engine default: each node's own rendered width for
+  // force/force-clustered, 0 (unpadded) for galaxy. 'tight' goes to 0 explicitly — the minimum
+  // legal packing, no breathing room for edges — same result as galaxy's own default. Only shown
+  // in the UI for force/force-clustered (see the control below), since galaxy already defaults
+  // to the 'tight' behavior and toggling it there would just look like the control does nothing.
   const [nodeMarginPreset, setNodeMarginPreset] = useState<'tight' | 'default' | 'wide'>('default')
   const nodeMargin = nodeMarginPreset === 'tight' ? 0 : nodeMarginPreset === 'wide' ? 280 : undefined
 
@@ -312,11 +314,11 @@ export function GraphLayoutsShowcase() {
     <div>
       <PageHeader
         name="Graph Layouts"
-        description="Compares GraphCanvas's automatic layout engines side by side: force (spring simulation) and galaxy (radial hierarchy of orbits, built from structural edges). Same controls also demonstrate straight vs. curved edges and compact chips vs. substantial-size cards — the layouts measure real rendered node size either way, so switching node style never causes overlap."
+        description="Compares GraphCanvas's automatic layout engines side by side: force (spring simulation), galaxy (radial hierarchy of orbits, built from structural edges), and force-clustered (nodes grouped into nested bubbles by graph structure via Louvain community detection, then spring-simulated within each bubble). Same controls also demonstrate straight vs. curved edges and compact chips vs. substantial-size cards — the layouts measure real rendered node size either way, so switching node style never causes overlap."
       />
       <ShowcaseSection
         label="Interactive comparison"
-        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Dimmed edges are relational (not part of the hierarchy); hover a node or turn on 'All relations' to see them at full opacity. Drag a node to reposition it, or turn dragging off. Node margin (force layout only) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them. Selecting a node or edge opens a detail panel over the canvas — drag its left edge to resize. The corner toolbar zooms and can lock pan/zoom against accidental scroll or drag."
+        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Dimmed edges are relational (not part of the hierarchy); hover a node or turn on 'All relations' to see them at full opacity. Drag a node to reposition it, or turn dragging off. Node margin (force and force-clustered only — galaxy's radial placement already defaults to the same tight packing) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them. Selecting a node or edge opens a detail panel over the canvas — drag its left edge to resize. The corner toolbar zooms and can lock pan/zoom against accidental scroll or drag."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -331,8 +333,12 @@ export function GraphLayoutsShowcase() {
               <Control label="Layout">
                 <SegmentedControl
                   value={layout}
-                  onChange={(v) => setLayout(v as 'force' | 'galaxy')}
-                  options={[{ value: 'galaxy', label: 'Galaxy' }, { value: 'force', label: 'Force' }]}
+                  onChange={(v) => setLayout(v as 'force' | 'galaxy' | 'force-clustered')}
+                  options={[
+                    { value: 'galaxy', label: 'Galaxy' },
+                    { value: 'force', label: 'Force' },
+                    { value: 'force-clustered', label: 'Clustered' },
+                  ]}
                 />
               </Control>
               <Control label="Edges">
@@ -363,7 +369,7 @@ export function GraphLayoutsShowcase() {
                   options={[{ value: 'on', label: 'On' }, { value: 'off', label: 'Off' }]}
                 />
               </Control>
-              {layout === 'force' && (
+              {layout !== 'galaxy' && (
                 <Control label="Node margin">
                   <SegmentedControl
                     value={nodeMarginPreset}
@@ -382,11 +388,10 @@ export function GraphLayoutsShowcase() {
               <GraphCanvas
                 // GraphCanvas only auto-fits the viewport once per mount, so anything that
                 // changes the overall footprint (a different dataset, a different layout
-                // engine, cards vs. compact nodes, or the force layout's node margin) needs a
-                // fresh mount to re-fit — otherwise the camera stays wherever it was framed
-                // for the previous shape. Dimming/edge-curvature/collapse/drag state don't
-                // affect the footprint enough to warrant it, so they're deliberately left out
-                // of this key.
+                // engine, cards vs. compact nodes, or node margin) needs a fresh mount to
+                // re-fit — otherwise the camera stays wherever it was framed for the previous
+                // shape. Dimming/edge-curvature/collapse/drag state don't affect the footprint
+                // enough to warrant it, so they're deliberately left out of this key.
                 key={`${datasetKey}-${layout}-${nodeStyle}-${nodeMarginPreset}`}
                 nodes={dataset.nodes}
                 edges={edges}
