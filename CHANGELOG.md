@@ -4,18 +4,10 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.2]
+## [0.6.0]
 
 ### Added
 
-- **`GraphCanvas`/`GraphEdge`** — weighted, styled edges: a new `weight`
-  prop (0-100) maps to a 1-8px stroke width via a square-root curve so
-  low-end differences stay visually distinguishable, plus independent
-  `opacity` and `strokeDash` (single value or `[dash, gap]` tuple) controls.
-  Arrow markers scale proportionally with stroke width. New export
-  `EdgeAnchor` type from `utils/graph`.
-- **`Icon`** — six new icons: `image`, `code`, `map`, `sparkles`, `share`,
-  `ellipsis`.
 - **`GraphCanvas`** — opt-in nested bubble-packing layout: `layout="force-clustered"`
   groups nodes into clusters (and clusters of clusters) derived purely from
   edge structure via deterministic Louvain modularity clustering, packs
@@ -159,13 +151,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   too, in exchange for not ballooning the layout's absolute size to get
   there.
 
-### Changed
-
-- **`ShellLayout`** canvas panel is now responsive instead of a fixed
-  `min-width: 1100px` — padding steps down at the `1024px` and `640px`
-  breakpoints and the canvas reflows instead of forcing horizontal scroll
-  on narrower viewports.
-
 ### Fixed
 
 - **`GraphCanvas`**: the viewport's visual center didn't survive a container
@@ -247,6 +232,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a childless root's placement is unchanged; a root with descendants now
   seeds proportionally farther out, landing on the same radial line as the
   rest of its subtree instead of near the hub.
+
+## [0.5.2]
+
+### Added
+
+- **`GraphCanvas`/`GraphEdge`** — weighted, styled edges: a new `weight`
+  prop (0-100) maps to a 1-8px stroke width via a square-root curve so
+  low-end differences stay visually distinguishable, plus independent
+  `opacity` and `strokeDash` (single value or `[dash, gap]` tuple) controls.
+  Arrow markers scale proportionally with stroke width. New export
+  `EdgeAnchor` type from `utils/graph`.
+- **`Icon`** — six new icons: `image`, `code`, `map`, `sparkles`, `share`,
+  `ellipsis`.
+
+### Changed
+
+- **`ShellLayout`** canvas panel is now responsive instead of a fixed
+  `min-width: 1100px` — padding steps down at the `1024px` and `640px`
+  breakpoints and the canvas reflows instead of forcing horizontal scroll
+  on narrower viewports.
+
+### Fixed
 
 - **Graph force layout** (`forceLayout`, used by `GraphCanvas`): nodes could
   settle at force equilibrium with their rendered bounding boxes still

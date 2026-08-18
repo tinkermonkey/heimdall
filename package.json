@@ -1,6 +1,6 @@
 {
   "name": "@tinkermonkey/heimdall-ui",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Heimdall design system component library",
   "type": "module",
   "license": "MIT",
