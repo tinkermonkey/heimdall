@@ -16,7 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a node directly on the canvas (you had to see it to click it); `centerOnSelect` closes that gap.
   Skipped until the initial mount center/fit has run and while pan/zoom is `locked`, and only acts
   on a genuine change to `selectedNodeId` — it never fights a user's own subsequent pan away from
-  the selected node on a re-render.
+  the selected node on a re-render. Combining `centerOnSelect` with `fitView` and an already-set
+  `selectedNodeId` at mount correctly uses the post-fit zoom rather than a stale pre-fit one; a
+  `selectedNodeId` that isn't resolvable yet (e.g. inside a currently-collapsed subtree) is
+  retried on a later render instead of being silently given up on.
 
 ## [0.6.0]
 

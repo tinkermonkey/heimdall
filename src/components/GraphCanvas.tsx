@@ -460,6 +460,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({})
     // Tracks whether we've applied the initial canvas-center offset
     const didCenterRef = useRef(false)
+    // State mirror of didCenterRef, set in the same effect right alongside it — exists only so
+    // the centerOnSelect effect below can gate on a value that doesn't update until the NEXT
+    // render (see that effect's own comment for why a live ref read is the wrong signal there).
+    const [mountCenterDone, setMountCenterDone] = useState(false)
     const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
     // Previous containerSize, so the resize re-anchor effect below can tell a genuine size change
     // (e.g. entering/exiting fullscreen) apart from a same-size re-render.
@@ -771,6 +775,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (!bbox) return
 
       didCenterRef.current = true
+      setMountCenterDone(true)
 
       if (fitView) {
         const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, minZoom, maxZoom)
@@ -788,26 +793,48 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
     // Tracks the selectedNodeId centerOnSelect last reacted to, so it only pans on a
     // genuine CHANGE — never repeatedly on every render, which would fight a user's own
-    // pan away from the selected node.
+    // pan away from the selected node. Written only once a pan actually happens (or the
+    // selection is explicitly cleared) — NOT the instant selectedNodeId changes — so an id
+    // that isn't in visibleNodes yet (e.g. a nav-tree selection inside a currently-collapsed
+    // subtree the consumer is about to expand) keeps retrying on later renders instead of
+    // being silently marked "handled" with no pan ever having happened.
     const prevCenterSelectedIdRef = useRef<string | undefined>(undefined)
 
     // centerOnSelect (opt-in, see its own prop doc) — pans to keep selectedNodeId
     // centered whenever it changes, once the initial mount center/fit above has run.
+    //
+    // Gated on `mountCenterDone` STATE, not `didCenterRef` directly, despite the mount effect
+    // above setting the ref synchronously the instant it runs: this effect can fire in that
+    // exact same commit (both effects share containerSize as a dependency, so the render that
+    // first satisfies the mount effect's guards also re-runs this one), and a live ref read
+    // sees the sibling effect's synchronous write immediately — but `viewport.zoom` in THIS
+    // effect's own closure is still the PRE-fit value, since zoomTo()/panTo() only schedule a
+    // state update for next render. Reading a ref would let this effect pan using that stale
+    // zoom, and it would never get another chance to correct it (the id guard right below
+    // marks the selection "handled" on this same, wrong, run). Gating on state instead means
+    // this effect's own closure still sees `mountCenterDone === false` on that first shared
+    // commit (state updates from a sibling effect in the same flush aren't visible until the
+    // NEXT render) — so it correctly bails out and waits for the following render, where both
+    // `mountCenterDone` and `viewport.zoom` are the fit-adjusted values.
     useEffect(() => {
       if (!centerOnSelect) return
-      if (!didCenterRef.current) return
+      if (!mountCenterDone) return
       if (locked) return
       if (selectedNodeId === prevCenterSelectedIdRef.current) return
-      prevCenterSelectedIdRef.current = selectedNodeId
-      if (!selectedNodeId || !containerSize) return
+      if (!selectedNodeId) {
+        prevCenterSelectedIdRef.current = undefined
+        return
+      }
+      if (!containerSize) return
       const node = visibleNodes.find(n => n.id === selectedNodeId)
       if (!node) return
+      prevCenterSelectedIdRef.current = selectedNodeId
       const pos = getNodePosition(node)
       panTo(
         containerSize.width / 2 - pos.x * viewport.zoom,
         containerSize.height / 2 - pos.y * viewport.zoom
       )
-    }, [centerOnSelect, selectedNodeId, locked, containerSize, visibleNodes, getNodePosition, viewport.zoom, panTo])
+    }, [centerOnSelect, mountCenterDone, selectedNodeId, locked, containerSize, visibleNodes, getNodePosition, viewport.zoom, panTo])
 
     // Re-anchors pan whenever the container's own rendered size changes after that initial
     // auto-center/fit — entering/exiting the Fullscreen API is the main trigger (the container

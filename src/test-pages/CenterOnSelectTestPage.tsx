@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { GraphCanvas, type GraphNodeData, type GraphEdgeData } from '../index'
 
 // Deliberately spread far apart (manual layout, exact coordinates) so several are
@@ -25,9 +25,23 @@ const EDGES: GraphEdgeData[] = [
  * canvas itself, which is what this prop exists to handle (a nav-tree selection can
  * pick a node that's currently off-screen; clicking a node ON the canvas never has
  * that problem, since you had to see it to click it).
+ *
+ * centerOnSelect defaults OFF (via the toggle button, mirroring the prop's own
+ * default) so the spec can assert the off-by-default no-op behavior is real, not just
+ * documented. `?centerOnSelect=1`, `?fitView=1`, and `?initialSelected=<id>` seed the
+ * corresponding initial state directly (rather than requiring a click after mount) —
+ * needed to reproduce the specific race between the mount center/fit effect and the
+ * centerOnSelect effect when a selection already exists on the very first render.
+ * `select-ghost` selects an id with NO matching node, to exercise (and prove safe) the
+ * "node not found in visibleNodes" path the effect has to guard against.
  */
 export default function CenterOnSelectTestPage() {
-  const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
+  const params = useMemo(() => new URLSearchParams(window.location.search), [])
+  const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>(
+    params.get('initialSelected') ?? undefined
+  )
+  const [centerOnSelectEnabled, setCenterOnSelectEnabled] = useState(params.get('centerOnSelect') === '1')
+  const useFitView = params.get('fitView') === '1'
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -48,6 +62,18 @@ export default function CenterOnSelectTestPage() {
             {n.label}
           </button>
         ))}
+        <button type="button" data-testid="select-ghost" onClick={() => setSelectedNodeId('ghost')}>
+          Select nonexistent node
+        </button>
+        <button
+          type="button"
+          data-testid="toggle-center-on-select"
+          onClick={() => setCenterOnSelectEnabled(v => !v)}
+          aria-pressed={centerOnSelectEnabled}
+          style={{ marginLeft: 'auto' }}
+        >
+          centerOnSelect: {centerOnSelectEnabled ? 'on' : 'off'}
+        </button>
       </div>
       <div style={{ flex: 1, minHeight: 0 }}>
         <GraphCanvas
@@ -56,7 +82,9 @@ export default function CenterOnSelectTestPage() {
           layout="manual"
           selectedNodeId={selectedNodeId}
           onNodeSelect={setSelectedNodeId}
-          centerOnSelect
+          centerOnSelect={centerOnSelectEnabled}
+          fitView={useFitView}
+          fitPadding={40}
           style={{ width: '100%', height: '100%' }}
         />
       </div>
