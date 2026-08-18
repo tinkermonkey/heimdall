@@ -25,6 +25,7 @@ import FormsShowcase from './test-pages/FormsShowcase'
 import GraphShowcase from './test-pages/GraphShowcase'
 import GalaxyLayoutLab from './test-pages/GalaxyLayoutLab'
 import CenterOnSelectTestPage from './test-pages/CenterOnSelectTestPage'
+import FullscreenContainerRefTestPage from './test-pages/FullscreenContainerRefTestPage'
 import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
 import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
 import TabBarTestPage from './test-pages/TabBarTestPage'
@@ -126,6 +127,10 @@ export default function App() {
 
   if (exampleParam === 'center-on-select') {
     return <CenterOnSelectTestPage />
+  }
+
+  if (exampleParam === 'fullscreen-container-ref') {
+    return <FullscreenContainerRefTestPage />
   }
 
   if (exampleParam === 'inspector-panel') {

@@ -20,6 +20,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `selectedNodeId` at mount correctly uses the post-fit zoom rather than a stale pre-fit one; a
   `selectedNodeId` that isn't resolvable yet (e.g. inside a currently-collapsed subtree) is
   retried on a later render instead of being silently given up on.
+- **`GraphCanvas`** — `fullscreenContainerRef` prop: pass a ref to an ancestor element and the
+  built-in toolbar's Fullscreen button (and `toggleFullscreen`/`isFullscreen` from
+  `useGraphCanvas()`) request/track fullscreen on that ancestor instead of GraphCanvas's own root.
+  Motivating case: GraphCanvas doesn't accept `children` — it fully owns its internal tree — so a
+  consumer composing sibling overlay content next to it (a control strip above it, a
+  `DetailDrawer` beside it, the same pattern GraphLayoutsShowcase itself uses) previously lost
+  that content the instant Fullscreen was used, since the native Fullscreen API only renders the
+  fullscreened element's own DOM subtree. GraphCanvas still measures and lays out against its own
+  container's size regardless of which ancestor is actually fullscreened, so nothing else about
+  its behavior changes; omitting the prop is identical to previous behavior. Entering/exiting
+  fullscreen is bounded and failure-safe: a rejected `requestFullscreen()`/`exitFullscreen()` (no
+  permissions-policy grant, a detached or mid-unmount target, ...) is caught and logged via
+  `console.warn` instead of surfacing as an unhandled rejection, and the fit applied on entering
+  fullscreen no longer stays armed indefinitely waiting for a container resize that may never
+  come (a target that's already viewport-sized on entry, say) — it's bounded to a short window
+  after entry, so it can't fire later against an unrelated resize instead.
 
 ## [0.6.0]
 
