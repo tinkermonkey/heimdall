@@ -133,6 +133,10 @@ function GraphEdgeInternal({
       role={interactive ? 'button' : 'presentation'}
       aria-hidden={interactive ? undefined : true}
       aria-pressed={interactive ? !!selected : undefined}
+      // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible name
+      // by assistive tech, and a label-less edge has nothing at all — without this a screen reader
+      // announces a bare "button".
+      aria-label={interactive ? (label ? `${label}: ${sourceId} to ${targetId}` : `${sourceId} to ${targetId}`) : undefined}
       tabIndex={interactive ? 0 : undefined}
       onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(id) } } : undefined}
       data-testid={`graph-edge-${id}`}
@@ -320,6 +324,36 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       target: SVGGElement
     } | null>(null)
 
+    // Shared by a real pointerup/pointercancel, by the draggable-toggled-off effect, and by the
+    // node-id-set-changed effect below — any of the three needs the same finalization for a drag
+    // that was actually in progress: fire onNodeDragEnd once with wherever it ended up, then clear
+    // drag state so nothing's left stranded. suppressUpcomingClick is only true for a genuine
+    // pointerup: that's the only case the browser follows with a synthetic click (pointercancel —
+    // e.g. a touch/gesture takeover — never gets one), so registering the one-time suppressor for
+    // pointercancel would just leak an event listener that never fires, silently swallowing that
+    // node's next real click forever.
+    const finalizeDrag = useCallback((suppressUpcomingClick: boolean) => {
+      const state = dragStateRef.current
+      if (!state) return
+      if (state.dragging) {
+        if (suppressUpcomingClick) {
+          const target = state.target
+          const suppressClick = (ev: MouseEvent) => { ev.stopPropagation(); ev.preventDefault() }
+          target.addEventListener('click', suppressClick, { capture: true, once: true })
+        }
+        const finalPos = dragPositions.get(state.id) ?? { x: state.startX, y: state.startY }
+        onNodeDragEnd?.(state.id, finalPos)
+      }
+      dragStateRef.current = null
+    }, [dragPositions, onNodeDragEnd])
+    // Read by the node-id-set-changed effect below via a ref, not as a direct dependency —
+    // finalizeDrag's own identity changes on every dragPositions update (i.e. continuously while a
+    // drag is in progress), and that effect must react only to nodeIdsKey actually changing, not to
+    // finalizeDrag churning; putting finalizeDrag directly in that effect's deps made it re-run —
+    // and finalize/clear the in-progress drag — on every single pointermove during a normal drag.
+    const finalizeDragRef = useRef(finalizeDrag)
+    useEffect(() => { finalizeDragRef.current = finalizeDrag }, [finalizeDrag])
+
     // draggable's own JSDoc promises a drag override persists "until the node list changes" —
     // without this, a stale override for a since-removed (or filtered-out-and-back) node id would
     // silently keep applying forever, since dragPositions is otherwise never cleared on its own.
@@ -327,8 +361,23 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const didMountDragClearRef = useRef(false)
     useEffect(() => {
       if (!didMountDragClearRef.current) { didMountDragClearRef.current = true; return }
+      // A node the user is actively dragging can be torn down by the SAME prop change that
+      // triggered this effect (e.g. an unrelated polling refresh that happens to touch `nodes`) —
+      // finalize through the same path a real pointerup/pointercancel would, instead of just
+      // dropping dragStateRef, so onNodeDragEnd still fires and pointer capture still gets
+      // released. Previously this just reset dragStateRef directly: onNodeDragEnd never fired for
+      // an in-progress drag, and the node's pointer capture stayed held on an element about to
+      // lose its drag state, leaving later pointermove/up events for that pointer silently ignored.
+      const state = dragStateRef.current
+      if (state?.dragging) {
+        try {
+          state.target.releasePointerCapture(state.pointerId)
+        } catch (err) {
+          if (!(err instanceof DOMException)) console.warn('GraphCanvas: releasePointerCapture failed', err)
+        }
+      }
+      finalizeDragRef.current(false)
       setDragPositions(new Map())
-      dragStateRef.current = null
     }, [nodeIdsKey])
 
     // Freezes wheel-zoom, drag-to-pan, and keyboard zoom/pan (see usePanZoom's locked option) —
@@ -834,11 +883,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
       // won't find one here and renders nothing (see GraphEdgeInternal's null guard).
       const node = visibleNodes.find(n => n.id === id)
-      if (!node) return null
+      if (!node) {
+        // Distinguish a legitimately hidden node (expected, silent) from an id that isn't in
+        // `nodes` at all — a real caller bug (a typo, or an edge left dangling after its node
+        // was removed) that would otherwise render as "edge just doesn't appear" with no signal,
+        // indistinguishable from the collapsed case. GraphEdge (the standalone component) already
+        // warns on exactly this; this keeps GraphCanvas's own internal edge renderer consistent
+        // with it instead of staying silent. Only scans the full node list on the already-rare
+        // not-found path, not on every lookup.
+        if (!nodes.some(n => n.id === id)) console.warn(`GraphCanvas: node "${id}" not found`)
+        return null
+      }
       const pos = getNodePosition(node)
       const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
       return { x: pos.x, y: pos.y, width: d.width, height: d.height }
-    }, [visibleNodes, dims, getNodePosition])
+    }, [nodes, visibleNodes, dims, getNodePosition])
 
     // Node dragging. Pointer capture is deliberately NOT taken on pointerdown — capturing
     // retargets every subsequent event for that pointer to the capturing element, including the
@@ -893,28 +952,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       wakeGalaxySimulation()
     }, [viewport.zoom, wakeGalaxySimulation])
 
-    // Shared by a real pointerup/pointercancel and by the draggable-toggled-off effect below —
-    // either way, a drag that was actually in progress needs the same finalization: fire
-    // onNodeDragEnd once with wherever it ended up, then clear drag state so nothing's left
-    // stranded. suppressUpcomingClick is only true for a genuine pointerup: that's the only case
-    // the browser follows with a synthetic click (pointercancel — e.g. a touch/gesture takeover —
-    // never gets one), so registering the one-time suppressor for pointercancel would just leak an
-    // event listener that never fires, silently swallowing that node's next real click forever.
-    const finalizeDrag = useCallback((suppressUpcomingClick: boolean) => {
-      const state = dragStateRef.current
-      if (!state) return
-      if (state.dragging) {
-        if (suppressUpcomingClick) {
-          const target = state.target
-          const suppressClick = (ev: MouseEvent) => { ev.stopPropagation(); ev.preventDefault() }
-          target.addEventListener('click', suppressClick, { capture: true, once: true })
-        }
-        const finalPos = dragPositions.get(state.id) ?? { x: state.startX, y: state.startY }
-        onNodeDragEnd?.(state.id, finalPos)
-      }
-      dragStateRef.current = null
-    }, [dragPositions, onNodeDragEnd])
-
     const handleNodePointerUp = useCallback((e: React.PointerEvent<SVGGElement>) => {
       const state = dragStateRef.current
       if (!state || state.pointerId !== e.pointerId) return
@@ -933,7 +970,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const state = dragStateRef.current
       if (!state) return
       if (state.dragging) {
-        try { state.target.releasePointerCapture(state.pointerId) } catch { /* already released */ }
+        try {
+          state.target.releasePointerCapture(state.pointerId)
+        } catch (err) {
+          // The expected case — pointer capture was already released (e.g. by a real pointerup
+          // racing this same-tick draggable-toggle-off) — throws a DOMException and is safe to
+          // ignore. Anything else (a detached element, a browser-specific quirk) is unexpected
+          // enough to be worth a signal rather than disappearing silently.
+          if (!(err instanceof DOMException)) console.warn('GraphCanvas: releasePointerCapture failed', err)
+        }
       }
       finalizeDrag(false)
     }, [draggable, finalizeDrag])

@@ -1410,7 +1410,7 @@ test.describe('Graph Canvas Components', () => {
 })
 
 // A standalone tuning/regression aid for galaxyLayout itself, not a component showcase (see
-// GalaxyLayoutLab.tsx) — real hierarchy, 56 nodes/4 levels/~4 orders of magnitude of size
+// GalaxyLayoutLab.tsx) — real hierarchy, 57 nodes/4 levels/~4 orders of magnitude of size
 // variance, much denser than GALAXY_DEMO_NODES above. No visual snapshots here deliberately:
 // this page exists to be eyeballed and iterated on directly, not pinned to a baseline.
 test.describe('Galaxy Layout Lab (POC dataset stress test)', () => {

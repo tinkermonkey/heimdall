@@ -83,6 +83,10 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
         role={interactive ? 'button' : 'presentation'}
         aria-hidden={interactive ? undefined : true}
         aria-pressed={interactive ? selected : undefined}
+        // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible
+        // name by assistive tech, and a label-less edge has nothing at all — without this a screen
+        // reader announces a bare "button". {...props} below still lets a caller override it.
+        aria-label={interactive ? (label ? `${label}: ${sourceId} to ${targetId}` : `${sourceId} to ${targetId}`) : undefined}
         tabIndex={interactive ? 0 : undefined}
         onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(id) } } : undefined}
         data-testid={`graph-edge-${id}`}

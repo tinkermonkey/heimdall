@@ -48,6 +48,34 @@ export const DetailDrawer = React.forwardRef<HTMLDivElement, DetailDrawerProps>(
     const resizable = !!onWidthChange
     const currentWidth = resizable ? internalWidth : width
 
+    // Own ref to the root element regardless of whether/how a caller also passed one (a callback
+    // ref, an object ref, or nothing) — needed to set `inert` imperatively below, since `@types/
+    // react` (still, as of 18.3) doesn't type `inert` as a valid HTMLAttributes prop, and setting
+    // it via a JSX string attribute rather than the DOM property has its own footgun: an element
+    // is inert if the `inert` ATTRIBUTE IS PRESENT AT ALL, regardless of its string value — so
+    // `inert="false"` (which is what a naive `inert={open ? false : true}` JSX prop can render as,
+    // absent React's special-cased boolean-attribute handling for known ones like `disabled`)
+    // would leave the element inert even while open. Setting `.inert` as a DOM property sidesteps
+    // both problems.
+    const drawerRef = useRef<HTMLDivElement | null>(null)
+    const mergeRefs = useCallback((refs: Array<React.Ref<HTMLDivElement>>) => {
+      return (element: HTMLDivElement | null) => {
+        refs.forEach(r => {
+          if (typeof r === 'function') r(element)
+          else if (r) (r as React.MutableRefObject<HTMLDivElement | null>).current = element
+        })
+      }
+    }, [])
+
+    // Closed children stay mounted (clipped to width: 0, not unmounted — see the content div's own
+    // comment below) but must not stay reachable by keyboard: aria-hidden alone doesn't prevent
+    // tabbing into a focusable descendant, which browsers flag ("Blocked aria-hidden on an element
+    // because its descendant retained focus") and strands a keyboard user on an invisible control.
+    // inert covers both focus and assistive-tech visibility in one go.
+    useEffect(() => {
+      if (drawerRef.current) drawerRef.current.inert = !open
+    }, [open])
+
     const dragStartRef = useRef<{ startX: number; startWidth: number } | null>(null)
     // Exactly the two function references actually passed to addEventListener, captured at attach
     // time — removeEventListener only works with the identical reference it was given, and
@@ -119,7 +147,7 @@ export const DetailDrawer = React.forwardRef<HTMLDivElement, DetailDrawerProps>(
 
     return (
       <div
-        ref={ref}
+        ref={mergeRefs([drawerRef, ref])}
         className={['detail-drawer', open && 'detail-drawer--open', className].filter(Boolean).join(' ')}
         style={{ width: open ? currentWidth : 0 }}
         aria-hidden={!open}

@@ -62,8 +62,18 @@ body.dark-canvas .graph-edge.selected .graph-edge__label-bg {
   stroke: rgb(var(--accent-primary));
 }
 
-.graph-edge[role='button']:focus-visible .graph-edge__line {
+/* Dashed, not solid — a focused-but-unselected edge needs to read as distinct from
+   .selected (a solid accent-colored line), not identical to it; outline: none above already
+   removed the <g>'s own native focus ring (an axis-aligned rectangle looks wrong around a
+   curved path), so this is the only focus indicator a keyboard user gets. :not(.selected)
+   deliberately yields to .selected's own (higher-specificity-independent, since this selector
+   would otherwise win the tie) solid styling — the common case right after activating an edge via
+   Enter is selected-and-still-focused, and that should read as selected, not as "still just
+   focused". */
+.graph-edge[role='button']:focus-visible:not(.selected) .graph-edge__line {
   stroke: rgb(var(--accent-primary));
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
 }
 
 .graph-edge--hot .graph-edge__line {

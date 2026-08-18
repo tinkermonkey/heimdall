@@ -1,5 +1,5 @@
 import { separationPass, FINAL_CLEANUP_MAX_PASSES, boundingCirclesByGroup, type LayoutNode } from './graphLayout'
-import { buildStructuralForest, galaxyGroupMap } from './graphHierarchy'
+import { buildStructuralForest, galaxyGroupMap, type HierarchyEdge } from './graphHierarchy'
 
 export interface GalaxyLayoutNode {
   id: string
@@ -14,9 +14,15 @@ export interface GalaxyLayoutNode {
   pinned?: boolean
 }
 
-export interface GalaxyLayoutEdge {
-  source: string
-  target: string
+/**
+ * Same shape as `HierarchyEdge` (source = parent, target = child for a structural edge) — declared
+ * as an explicit extension, not a coincidentally-identical redeclaration, since `galaxyLayout.ts`
+ * already builds its hierarchy via `buildStructuralForest`, which is typed against `HierarchyEdge`
+ * directly. Kept as its own named type (rather than just re-exporting `HierarchyEdge`) for the
+ * galaxy-specific doc note below and because it's the name galaxy layout's own public API already
+ * shipped under.
+ */
+export interface GalaxyLayoutEdge extends HierarchyEdge {
   /** Structural edges define the orbital hierarchy (source = parent, target = child).
    *  Non-structural edges are ignored by the layout entirely. */
   structural: boolean
@@ -39,7 +45,7 @@ export interface GalaxyLayoutOptions {
    * needed to just avoid overlap — same idea as forceLayout's nodeMargin, and for the same
    * reason: settleCycles' separation passes (see separationPass) only resolve literal overlap, so
    * without this, a handful of sibling/cross-orbit pairs can converge to touching or a few px of
-   * gap even though most of the layout is well spread — verified on a 56-node/4-level hierarchy
+   * gap even though most of the layout is well spread — verified on a 57-node/4-level hierarchy
    * with real-world size variance (galaxyBudgetData in the repo's test pages), where the tightest
    * pairs landed under 1px apart. Defaults to 0 (unpadded, today's existing behavior) rather than
    * forceLayout's own width default — galaxyLayout's nodeSpread-based initial placement already
@@ -87,26 +93,27 @@ export interface GalaxyLayoutOptions {
    * 0-height container measurement from producing an Infinity correction — a NaN ratio, e.g. from
    * an unmeasured 0/0 element, is caught earlier by an explicit Number.isFinite check, since
    * Math.max would just propagate NaN straight through the clamp — and keeps an extreme correction
-   * — a naturally very tall tree targeting a very wide container, say — from spiraling), then
-   * damped via a fourth root (`clampedCorrection ** 0.25`) before being applied as the x-axis
-   * scale (and its reciprocal as the y-axis scale). The damping isn't optional polish — applying
-   * the raw correction directly was tried and measured to *inflate the layout's total rendered
-   * area 3-13x* for realistic trees, for barely any further ratio benefit past the first quarter
-   * of the curve. The reason scaleX * scaleY === 1 doesn't actually keep the *displayed* area
-   * constant the way it looks like it should: `separationPass`'s collision floor pushes back
-   * against *compression* (a squeezed axis gets fought back up toward its natural size) but does
-   * nothing to resist *expansion* (a stretched axis applies in full) — so an undamped correction
-   * on a tree whose natural shape is already far from the target doesn't trade width for height,
-   * it just adds width. The fourth root keeps that growth within roughly 1.0-1.2x of natural
-   * across the whole clamped range while still moving the drawn ratio meaningfully in the right
-   * direction. Even a large (damped) correction still has a practical ceiling regardless of this
-   * option's own math: `separationPass` refuses to compress adjacent nodes past their own
-   * rendered size, so a long chain that genuinely needs N node-heights of room in one direction
-   * can't be squeezed below that no matter how aggressively this option asks it to. Not applied to
-   * shiftGroupsApart's own group-vs-group macro pass — that still treats group boundary circles as
-   * literally circular when pushing them apart from each other, a known, deliberately out-of-scope
-   * limitation (multi-group top-level arrangement won't lean into the aspect ratio quite as
-   * strongly as a single tree's internal orbits do).
+   * — a naturally very tall tree targeting a very wide container, say — from spiraling).
+   *
+   * That clamped correction is then *not* applied directly — see `resolveAspectRatioScale` for the
+   * full mechanism, but in short: a fixed damping formula (this option's earlier implementation
+   * used a flat fourth root) measurably under-corrected some real trees while over-inflating
+   * others, so a single constant can't serve both. Instead, `resolveAspectRatioScale` binary-
+   * searches how much of the correction is safe to apply, bounded by how much the *actual settled*
+   * rendered area is allowed to grow (roughly double the natural, unwarped area) — not a blind
+   * formula. The reason scaleX * scaleY === 1 doesn't keep the *displayed* area constant the way
+   * it looks like it should: `separationPass`'s collision floor pushes back against *compression*
+   * (a squeezed axis gets fought back up toward its natural size) but does nothing to resist
+   * *expansion* (a stretched axis applies in full) — so an uncapped correction on a tree whose
+   * natural shape is already far from the target doesn't trade width for height, it just adds
+   * width. Even the strongest correction the search allows still has a practical ceiling
+   * regardless of this option's own math: `separationPass` refuses to compress adjacent nodes past
+   * their own rendered size, so a long chain that genuinely needs N node-heights of room in one
+   * direction can't be squeezed below that no matter how aggressively this option asks it to. Not
+   * applied to shiftGroupsApart's own group-vs-group macro pass — that still treats group boundary
+   * circles as literally circular when pushing them apart from each other, a known, deliberately
+   * out-of-scope limitation (multi-group top-level arrangement won't lean into the aspect ratio
+   * quite as strongly as a single tree's internal orbits do).
    */
   aspectRatio?: number
   /**
@@ -231,36 +238,14 @@ function weightedBboxOf(
 }
 
 /**
- * Computes one settle iteration for a galaxy layout: recomputes every node's orbital "home"
- * position (see below), seeds/continues from `prevPositions` (or home/pinned positions if this
- * is the first call), runs one collision-separation pass, then nudges every unpinned node one
- * `homeStrength` fraction of the way toward its home. Exported so it can be driven either as a
- * bounded, synchronous batch (see galaxyLayout, which calls this `settleCycles` times) or as a
- * live, continuous simulation — e.g. GraphCanvas's opt-in live-simulation mode, which calls this
- * once per animation frame, feeding back its own previous frame's output as `prevPositions` and a
- * currently-dragged node's live pointer position as a `pinned` override — so dragging any node
- * (a "sun" or otherwise) elastically repositions its descendants in real time.
- *
- * Home positions are computed by a recursive walk that spreads each node's children evenly
- * around a full circle centered on it (not a half-arc fanned away from it — that full-circle
- * spread plus a parent-angle offset is what gives the layout its "galaxy arm" look instead of
- * reading as a plain radial org chart), seeded from a virtual hub at the origin so independent
- * root trees spread around a shared center. A pinned node's own actual position — not the
- * position the recursive walk would have otherwise assigned it — is used both as that node's own
- * home AND as the anchor its own children's home positions are computed relative to, so pinning
- * (or live-dragging) an ancestor cascades correctly to its whole subtree. When `options.aspectRatio`
- * is set, this walk runs twice — once unwarped to measure the tree's own natural shape, once more
- * with a corrective elliptical scale based on that measurement — see GalaxyLayoutOptions.aspectRatio
- * for why a single warp-a-circle pass isn't enough.
- */
-/**
  * Resolves `options.aspectRatio` (a raw container ratio) into the actual {x, y} elliptical scale
  * `galaxySimulationStep`'s home computation should use — the natural-shape measurement plus
  * binary search described in `GalaxyLayoutOptions.aspectRatio`'s own docs, pulled out into its own
  * function so it can be resolved *once* and reused, rather than re-run on every settle cycle or
- * every live-simulation animation frame (each resolution costs roughly 8 trial evaluations, each
- * of which runs a full group-separation pass — cheap once, but 24x (a settle loop) or 60x/sec (a
- * live tick) too expensive to repeat with the exact same answer every time).
+ * every live-simulation animation frame (each resolution costs 7 trial evaluations — one natural-
+ * shape baseline plus 6 binary-search steps — each of which runs a full group-separation pass:
+ * cheap once, but 24x (a settle loop) or 60x/sec (a live tick) too expensive to repeat with the
+ * exact same answer every time).
  *
  * `galaxyLayout` always calls this once before its settle loop and threads the result through
  * `resolvedAspectScale`. A live-simulation caller driving `galaxySimulationStep` directly should
@@ -337,6 +322,30 @@ export function resolveAspectRatioScale(
   return { x: finalCorrection, y: 1 / finalCorrection }
 }
 
+/**
+ * Computes one settle iteration for a galaxy layout: recomputes every node's orbital "home"
+ * position (see below), seeds/continues from `prevPositions` (or home/pinned positions if this
+ * is the first call), runs one collision-separation pass, then nudges every unpinned node one
+ * `homeStrength` fraction of the way toward its home. Exported so it can be driven either as a
+ * bounded, synchronous batch (see galaxyLayout, which calls this `settleCycles` times) or as a
+ * live, continuous simulation — e.g. GraphCanvas's opt-in live-simulation mode, which calls this
+ * once per animation frame, feeding back its own previous frame's output as `prevPositions` and a
+ * currently-dragged node's live pointer position as a `pinned` override — so dragging any node
+ * (a "sun" or otherwise) elastically repositions its descendants in real time.
+ *
+ * Home positions are computed by a recursive walk that spreads each node's children evenly
+ * around a full circle centered on it (not a half-arc fanned away from it — that full-circle
+ * spread plus a parent-angle offset is what gives the layout its "galaxy arm" look instead of
+ * reading as a plain radial org chart), seeded from a virtual hub at the origin so independent
+ * root trees spread around a shared center. A pinned node's own actual position — not the
+ * position the recursive walk would have otherwise assigned it — is used both as that node's own
+ * home AND as the anchor its own children's home positions are computed relative to, so pinning
+ * (or live-dragging) an ancestor cascades correctly to its whole subtree. When `options.aspectRatio`
+ * is set, this walk's elliptical scale comes from `resolvedAspectScale` if the caller already
+ * resolved one, or from resolving it fresh here otherwise — see `resolveAspectRatioScale` for the
+ * natural-shape measurement and binary search behind that resolution, and why a single warp-a-
+ * circle formula isn't enough on its own.
+ */
 export function galaxySimulationStep(
   nodes: readonly GalaxyLayoutNode[],
   edges: readonly GalaxyLayoutEdge[],
@@ -512,18 +521,13 @@ export function galaxyLayout(
  * this. Cheap enough for every animation frame either way: `positions` in, one O(n) boundary
  * computation, one bounded O(g²) macro-separation loop (g = number of top-level groups, always
  * small), one O(g·n) rigid translate.
- *
- * `maxPasses` (default FINAL_CLEANUP_MAX_PASSES) caps the macro-separation loop below — lowered by
- * resolveAspectRatioScale's search, which calls this many times per resolution and only needs a
- * rough area estimate from each trial, not full convergence.
  */
 function shiftGroupsApart(
   nodeMap: ReadonlyMap<string, GalaxyLayoutNode>,
   groupHeads: readonly string[],
   leafToGroup: Map<string, string>,
   positions: Map<string, { x: number; y: number }>,
-  pinnedGroups?: ReadonlySet<string>,
-  maxPasses: number = FINAL_CLEANUP_MAX_PASSES
+  pinnedGroups?: ReadonlySet<string>
 ): Map<string, { x: number; y: number }> {
   if (groupHeads.length <= 1) return positions
 
@@ -544,7 +548,7 @@ function shiftGroupsApart(
     id, x: 0, y: 0, width: c.r * 2, height: c.r * 2, pinned: pinnedGroups?.has(id),
   }))
   const macroPos = new Map([...boundaries.entries()].map(([id, c]) => [id, { x: c.x, y: c.y }]))
-  for (let pass = 0; pass < maxPasses; pass++) {
+  for (let pass = 0; pass < FINAL_CLEANUP_MAX_PASSES; pass++) {
     if (!separationPass(macroNodes, macroPos)) break
   }
 

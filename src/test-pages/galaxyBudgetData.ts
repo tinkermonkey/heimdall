@@ -3,7 +3,7 @@ import type { GraphNodeData, GraphEdgeData } from '../index'
 /**
  * Demo dataset and sphere-sizing math ported from a prior D3 galaxy-chart proof of concept
  * (github.com/austinsand/rivande — `galaxy_chart.js` / `fixture.js`), used here purely as a
- * stress test for heimdall's own `galaxyLayout` algorithm: a real, uneven hierarchy — 56 nodes,
+ * stress test for heimdall's own `galaxyLayout` algorithm: a real, uneven hierarchy — 57 nodes,
  * 4 levels deep, node "weight" (size) spanning almost 4 orders of magnitude between the root and
  * its smallest leaf — is a much harder case than the hand-built GALAXY_DEMO_NODES fixture (12-27
  * roughly-uniform nodes) and surfaces spacing/overlap issues that don't show up at that scale.

@@ -55,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   node's own rendered width — since galaxy's radial placement already spaces
   most layouts generously and defaulting padding on would shift every
   existing galaxy layout's node positions for what's a narrow, opt-in-worthy
-  edge case (verified on a real 56-node/4-level hierarchy with heavy size
+  edge case (verified on a real 57-node/4-level hierarchy with heavy size
   variance: the tightest sibling pairs went from under 1px apart to 8px+
   with `nodeMargin={12}`, zero overlaps either way).
 - **`GraphCanvas`** — `showClusterBoundaries` prop (default `true`) and
