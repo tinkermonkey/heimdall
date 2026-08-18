@@ -26,15 +26,26 @@
 
 /* Hover and selected read off the outer <g> (see GraphEdgeInternal/GraphEdge) so both the
    fat invisible hit-stroke and the visible label pill trigger the same feedback, whichever
-   one the pointer is actually over. */
+   one the pointer is actually over. The width-only bump applies to every edge regardless of
+   --hot/--irrelevant status; the color change is scoped to plain edges only (a separate,
+   more-specific rule below) — .graph-edge:hover on its own has higher specificity than
+   .graph-edge--hot/--irrelevant, so a bare `stroke` here would silently override those
+   semantic colors right when the user is interacting with the edge (hovering a hot edge would
+   read as losing its amber highlight, not gaining emphasis). */
 .graph-edge:hover .graph-edge__line {
-  stroke: rgb(var(--canvas-fg-2));
   stroke-width: 1.75;
 }
 
 .graph-edge:hover .graph-edge__label-bg {
-  stroke: rgb(var(--canvas-fg-2));
   stroke-width: 2.5;
+}
+
+.graph-edge:not(.graph-edge--hot):not(.graph-edge--irrelevant):hover .graph-edge__line {
+  stroke: rgb(var(--canvas-fg-2));
+}
+
+.graph-edge:not(.graph-edge--hot):not(.graph-edge--irrelevant):hover .graph-edge__label-bg {
+  stroke: rgb(var(--canvas-fg-2));
 }
 
 .graph-edge.selected .graph-edge__line {

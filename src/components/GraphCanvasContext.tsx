@@ -17,8 +17,16 @@ export interface GraphCanvasContextValue {
   selectedNodeId?: string
   /** Recomputes the current node bounding box and fits it within the container, optionally overriding fitPadding. */
   zoomToFit: (padding?: number) => void
-  /** Sets zoom without altering pan. */
+  /** Sets zoom without altering pan — the fixed point of the resulting transform is wherever
+   *  world (0, 0) currently projects to, which is usually off-screen after any pan/fitView. For a
+   *  zoom step that should visually stay centered in the viewport (e.g. a zoom in/out button),
+   *  use `zoomBy` instead. */
   setZoom: (zoom: number) => void
+  /** Multiplies the current zoom by `factor`, anchored at the container's own visual center
+   *  (falls back to `setZoom(zoom * factor)`'s world-origin anchor only if the container hasn't
+   *  been measured yet) — GraphToolbar's zoom in/out buttons use this so the visible content stays
+   *  put instead of flinging sideways toward wherever world-origin happens to currently project. */
+  zoomBy: (factor: number) => void
   /** Sets pan without altering zoom. */
   setPan: (x: number, y: number) => void
   /** Whether wheel-zoom, drag-to-pan, and the keyboard zoom/pan shortcuts are frozen. Doesn't

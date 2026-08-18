@@ -1,5 +1,5 @@
 import { separationPass, FINAL_CLEANUP_MAX_PASSES, boundingCirclesByGroup, type LayoutNode } from './graphLayout'
-import { buildStructuralForest, structuralDescendants, galaxyGroupHeads } from './graphHierarchy'
+import { buildStructuralForest, galaxyGroupMap } from './graphHierarchy'
 
 export interface GalaxyLayoutNode {
   id: string
@@ -84,7 +84,9 @@ export interface GalaxyLayoutOptions {
    * non-circular on its own, in either direction, before this option is even involved, and
    * measuring the wrong starting point can make a mismatch *worse* instead of better. Both the
    * target ratio and the resulting correction factor are clamped to [1/8, 8] (guards a transient
-   * 0-height container measurement from producing Infinity/NaN, and keeps an extreme correction
+   * 0-height container measurement from producing an Infinity correction — a NaN ratio, e.g. from
+   * an unmeasured 0/0 element, is caught earlier by an explicit Number.isFinite check, since
+   * Math.max would just propagate NaN straight through the clamp — and keeps an extreme correction
    * — a naturally very tall tree targeting a very wide container, say — from spiraling), then
    * damped via a fourth root (`clampedCorrection ** 0.25`) before being applied as the x-axis
    * scale (and its reciprocal as the y-axis scale). The damping isn't optional polish — applying
@@ -278,7 +280,11 @@ export function resolveAspectRatioScale(
   options: GalaxyLayoutOptions = {}
 ): { x: number; y: number } {
   const { aspectRatio } = options
-  if (aspectRatio === undefined || aspectRatio === 1 || nodes.length === 0) return { x: 1, y: 1 }
+  // Number.isFinite(NaN) is false, so this also catches a NaN ratio (e.g. a caller computing
+  // width/height from an unmeasured 0/0 element) — the [1/8, 8] clamp below guards Infinity, but
+  // Math.max(1/8, NaN) is still NaN, so an unguarded NaN would otherwise propagate through
+  // rawCorrection into every returned position.
+  if (aspectRatio === undefined || aspectRatio === 1 || !Number.isFinite(aspectRatio) || nodes.length === 0) return { x: 1, y: 1 }
 
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
   const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
@@ -356,14 +362,9 @@ export function galaxySimulationStep(
 
   // Grouping is purely structural (independent of ellipseX/ellipseY), so it's resolved once here
   // and reused by the real effectiveHome computation below.
-  const groupHeads = separateGroups ? galaxyGroupHeads(roots, childrenOf) : []
-  const leafToGroup = new Map<string, string>()
-  if (separateGroups) {
-    for (const headId of groupHeads) {
-      leafToGroup.set(headId, headId)
-      for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
-    }
-  }
+  const { groupHeads, leafToGroup } = separateGroups
+    ? galaxyGroupMap(roots, childrenOf)
+    : { groupHeads: [] as string[], leafToGroup: new Map<string, string>() }
 
   // See GalaxyLayoutOptions.aspectRatio / resolveAspectRatioScale for the full reasoning — the
   // caller (galaxyLayout, or a live-simulation caller) is expected to have already resolved
@@ -579,13 +580,18 @@ function applyGroupSeparation(
 ): Map<string, { x: number; y: number }> {
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
-  const groupHeads = galaxyGroupHeads(roots, childrenOf)
-  const leafToGroup = new Map<string, string>()
-  for (const headId of groupHeads) {
-    leafToGroup.set(headId, headId)
-    for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
+  const { groupHeads, leafToGroup } = galaxyGroupMap(roots, childrenOf)
+  // Same pinned-group carve-out galaxySimulationStep's own reactive push-away uses (see its docs
+  // a few lines above) — without this, galaxyLayout's one-shot batch entry point would rigidly
+  // translate a pinned node's whole group right along with everyone else's, silently ignoring the
+  // pin the caller asked for.
+  const pinnedGroups = new Set<string>()
+  for (const node of nodes) {
+    if (!node.pinned || node.x === undefined || node.y === undefined) continue
+    const groupId = leafToGroup.get(node.id)
+    if (groupId) pinnedGroups.add(groupId)
   }
-  const next = shiftGroupsApart(nodeMap, groupHeads, leafToGroup, pos)
+  const next = shiftGroupsApart(nodeMap, groupHeads, leafToGroup, pos, pinnedGroups.size > 0 ? pinnedGroups : undefined)
   if (next === pos) return pos
 
   const cleanupNodes: LayoutNode[] = nodes.map(n => ({ id: n.id, width: n.width, height: n.height, pinned: n.pinned, x: 0, y: 0 }))

@@ -102,6 +102,24 @@ export function useGalaxySimulation({
     }
   }, [active, tick])
 
+  // Auto-wake whenever the actual set of node ids changes — a node being added or removed while
+  // the loop has already idled out (see IDLE_FRAMES_THRESHOLD) would otherwise never get a tick at
+  // all: the loop-owning effect below deliberately depends on `active` only (see its own docs), so
+  // input changes alone never reschedule it, and the ONLY other place anything calls wake() is a
+  // live node drag or an aspect-ratio change — neither fires just from the node/edge set itself
+  // changing. Without this, a newly-added node has no computed position until the user happens to
+  // drag something unrelated and reawaken the loop as a side effect; until then it renders at
+  // whatever fallback (0, 0) its caller uses for an unpositioned node. Keyed on the id *set*, not
+  // node/edge array identity — those churn on every render in the common case (a fresh `.map()`
+  // building GalaxyLayoutNode[] each time), which would wake the loop constantly for no reason.
+  const nodeIdsKeyRef = useRef<string | null>(null)
+  useEffect(() => {
+    const key = nodes.map(n => n.id).sort().join(' ')
+    const changed = nodeIdsKeyRef.current !== null && nodeIdsKeyRef.current !== key
+    nodeIdsKeyRef.current = key
+    if (changed) wake()
+  }, [nodes, wake])
+
   useEffect(() => {
     if (!active) {
       if (rafRef.current !== null) {

@@ -30,12 +30,12 @@ const ZOOM_BUTTON_FACTOR = 1.3
 export const GraphToolbar = React.forwardRef<HTMLDivElement, GraphToolbarProps>(
   ({ position = 'bottom-right', className = '', ...props }, ref) => {
     const {
-      zoom, setZoom, zoomToFit, locked, setLocked, isFullscreen, toggleFullscreen,
+      zoomBy, zoomToFit, locked, setLocked, isFullscreen, toggleFullscreen,
       layout, liveSimulation, setLiveSimulation,
     } = useGraphCanvas()
 
-    const zoomIn = useCallback(() => setZoom(zoom * ZOOM_BUTTON_FACTOR), [zoom, setZoom])
-    const zoomOut = useCallback(() => setZoom(zoom / ZOOM_BUTTON_FACTOR), [zoom, setZoom])
+    const zoomIn = useCallback(() => zoomBy(ZOOM_BUTTON_FACTOR), [zoomBy])
+    const zoomOut = useCallback(() => zoomBy(1 / ZOOM_BUTTON_FACTOR), [zoomBy])
     const fitToView = useCallback(() => zoomToFit(), [zoomToFit])
     const toggleLocked = useCallback(() => setLocked(l => !l), [setLocked])
     const toggleLiveSimulation = useCallback(() => setLiveSimulation(v => !v), [setLiveSimulation])

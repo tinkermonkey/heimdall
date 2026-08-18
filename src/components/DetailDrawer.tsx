@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './DetailDrawer.css'
 
 export interface DetailDrawerProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -49,6 +49,13 @@ export const DetailDrawer = React.forwardRef<HTMLDivElement, DetailDrawerProps>(
     const currentWidth = resizable ? internalWidth : width
 
     const dragStartRef = useRef<{ startX: number; startWidth: number } | null>(null)
+    // Exactly the two function references actually passed to addEventListener, captured at attach
+    // time — removeEventListener only works with the identical reference it was given, and
+    // handleResizeMove/handleResizeUp can get new identities between mousedown and unmount (e.g. a
+    // minWidth/maxWidth/onWidthChange prop change mid-drag), so the unmount-cleanup effect below
+    // can't just close over whatever the latest render's handleResizeMove/handleResizeUp happen to
+    // be — it needs these exact ones or the removal silently no-ops.
+    const attachedHandlersRef = useRef<{ move: (e: MouseEvent) => void; up: () => void } | null>(null)
 
     const handleResizeMove = useCallback((e: MouseEvent) => {
       const drag = dragStartRef.current
@@ -63,17 +70,37 @@ export const DetailDrawer = React.forwardRef<HTMLDivElement, DetailDrawerProps>(
     const handleResizeUp = useCallback(() => {
       dragStartRef.current = null
       setDragging(false)
-      document.removeEventListener('mousemove', handleResizeMove)
-      document.removeEventListener('mouseup', handleResizeUp)
-    }, [handleResizeMove])
+      const attached = attachedHandlersRef.current
+      if (attached) {
+        document.removeEventListener('mousemove', attached.move)
+        document.removeEventListener('mouseup', attached.up)
+        attachedHandlersRef.current = null
+      }
+    }, [])
 
     const handleResizeDown = useCallback((e: React.MouseEvent) => {
       e.preventDefault()
       dragStartRef.current = { startX: e.clientX, startWidth: currentWidth }
       setDragging(true)
+      attachedHandlersRef.current = { move: handleResizeMove, up: handleResizeUp }
       document.addEventListener('mousemove', handleResizeMove)
       document.addEventListener('mouseup', handleResizeUp)
     }, [currentWidth, handleResizeMove, handleResizeUp])
+
+    // Unmounting mid-drag (a route change, the host closing the panel outright, `resizable`
+    // flipping off) would otherwise leave both document listeners attached forever, each future
+    // mouse move calling setInternalWidth on an unmounted component. Empty deps deliberately —
+    // this must run only on mount/unmount, reading whatever's currently in attachedHandlersRef at
+    // that moment rather than closing over a specific render's handlers.
+    useEffect(() => {
+      return () => {
+        const attached = attachedHandlersRef.current
+        if (attached) {
+          document.removeEventListener('mousemove', attached.move)
+          document.removeEventListener('mouseup', attached.up)
+        }
+      }
+    }, [])
 
     const handleResizeKeyDown = useCallback((e: React.KeyboardEvent) => {
       const step = e.shiftKey ? 40 : 10

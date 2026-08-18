@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMe
 import { computeEdgePath, computeFitViewport, edgeLabelSize, findClearLabelPosition, type BoundingBox, type EdgeAnchor } from '../utils/graph'
 import { forceLayout, clusteredForceLayout, boundingCirclesByGroup } from '../utils/graphLayout'
 import { galaxyLayout, resolveAspectRatioScale, type GalaxyLayoutNode } from '../utils/galaxyLayout'
-import { buildStructuralForest, structuralDescendants, galaxyGroupHeads } from '../utils/graphHierarchy'
+import { buildStructuralForest, structuralDescendants, galaxyGroupMap } from '../utils/graphHierarchy'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { useGalaxySimulation } from '../hooks/useGalaxySimulation'
 import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
@@ -515,12 +515,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         // one boundary each, same as before, since a childless root has nothing to delegate to);
         // each group head's full recursive subtree is then one boundary, same as a Louvain
         // cluster's members are for force-clustered.
-        const groupHeads = galaxyGroupHeads(forest.roots, forest.childrenOf)
-        const leafToGroup = new Map<string, string>()
-        for (const headId of groupHeads) {
-          leafToGroup.set(headId, headId)
-          for (const descendantId of structuralDescendants(headId, forest.childrenOf)) leafToGroup.set(descendantId, headId)
-        }
+        const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf)
         const radiusOf = (id: string): number => {
           const d = dims.get(id)
           return d ? Math.hypot(d.width, d.height) / 2 : 20
@@ -597,13 +592,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // separate effect/state.
     const galaxyLeafToGroup = useMemo(() => {
       if (!liveActive) return null
-      const groupHeads = galaxyGroupHeads(forest.roots, forest.childrenOf)
-      const map = new Map<string, string>()
-      for (const headId of groupHeads) {
-        map.set(headId, headId)
-        for (const descendantId of structuralDescendants(headId, forest.childrenOf)) map.set(descendantId, headId)
-      }
-      return map
+      return galaxyGroupMap(forest.roots, forest.childrenOf).leafToGroup
     }, [liveActive, forest])
 
     // While live simulation owns computedPositions, it must also own clusterBoundaries — the
@@ -754,12 +743,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // batches the state updates, so there's no visible intermediate frame).
     const prevGalaxyAspectRatioRef = useRef<number | undefined>(undefined)
     useEffect(() => {
-      const prev = prevGalaxyAspectRatioRef.current
-      prevGalaxyAspectRatioRef.current = galaxyAspectRatio
       if (layout !== 'galaxy' || galaxyAspectRatio === undefined) return
-      if (prev === galaxyAspectRatio) return
+      if (prevGalaxyAspectRatioRef.current === galaxyAspectRatio) return
       if (locked) return
       if (dims.size === 0) return
+      // Written only once every guard above has passed — i.e. once this run is actually about to
+      // act on the new ratio, not preemptively at the top. Writing it early would mark a resize
+      // that lands while locked (or before dims are measured) as "already handled" even though no
+      // relayout happened; unlocking later re-runs this effect (locked is a dependency below), but
+      // prevGalaxyAspectRatioRef.current already equals the current galaxyAspectRatio by then, so
+      // the guard above would skip the relayout it was supposed to catch up on — permanently
+      // leaving the galaxy shaped for whatever container it had before the resize.
+      prevGalaxyAspectRatioRef.current = galaxyAspectRatio
 
       // Live mode already reads aspectRatio from its own options every tick and eases toward the
       // new shape smoothly via the existing homeStrength mechanism — waking it (in case the loop
@@ -781,12 +776,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
       // Boundary circles must track the reshaped positions too — same computation the static
       // engine-layout effect's own galaxy branch already does.
-      const groupHeads = galaxyGroupHeads(forest.roots, forest.childrenOf)
-      const leafToGroup = new Map<string, string>()
-      for (const headId of groupHeads) {
-        leafToGroup.set(headId, headId)
-        for (const descendantId of structuralDescendants(headId, forest.childrenOf)) leafToGroup.set(descendantId, headId)
-      }
+      const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf)
       const radiusOf = (id: string): number => {
         const d = dims.get(id)
         return d ? Math.hypot(d.width, d.height) / 2 : 20
@@ -832,6 +822,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       panTo(fit.panX, fit.panY)
     }, [computeBoundingBox, containerSize, fitPadding, minZoom, maxZoom, zoomTo, panTo])
 
+    // See GraphCanvasContextValue.zoomBy's own docs — anchors at the container's visual center
+    // instead of setZoom's raw "wherever world (0,0) projects to" behavior.
+    const zoomBy = useCallback((factor: number) => {
+      if (!containerSize) { zoomTo(viewport.zoom * factor); return }
+      zoomTo(viewport.zoom * factor, containerSize.width / 2, containerSize.height / 2)
+    }, [containerSize, viewport.zoom, zoomTo])
+
 
     const getNodeRect = useCallback((id: string) => {
       // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
@@ -873,9 +870,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const handleNodePointerMove = useCallback((e: React.PointerEvent<SVGGElement>) => {
       const state = dragStateRef.current
       if (!state || state.pointerId !== e.pointerId) return
-      const dx = (e.clientX - state.startClientX) / viewport.zoom
-      const dy = (e.clientY - state.startClientY) / viewport.zoom
-      if (!state.dragging && Math.hypot(dx, dy) < DRAG_THRESHOLD) return
+      // DRAG_THRESHOLD is screen-space px (same bar handleCanvasPointerUp's background-click
+      // check uses) — compare the raw client delta, not the world-space one, or the effective
+      // screen threshold silently scales with zoom (a single px of tremor reads as a drag at a
+      // heavily zoomed-out fitView; tens of px of dead travel before a node budges at max zoom).
+      const screenDx = e.clientX - state.startClientX
+      const screenDy = e.clientY - state.startClientY
+      if (!state.dragging && Math.hypot(screenDx, screenDy) < DRAG_THRESHOLD) return
+      const dx = screenDx / viewport.zoom
+      const dy = screenDy / viewport.zoom
       if (!state.dragging) e.currentTarget.setPointerCapture(e.pointerId)
       state.dragging = true
       const next = { x: state.startX + dx, y: state.startY + dy }
@@ -982,6 +985,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       selectedNodeId,
       zoomToFit,
       setZoom: zoomTo,
+      zoomBy,
       setPan: panTo,
       locked,
       setLocked,
@@ -990,7 +994,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       layout,
       liveSimulation,
       setLiveSimulation,
-    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, panTo, locked, isFullscreen, toggleFullscreen, layout, liveSimulation])
+    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, zoomBy, panTo, locked, isFullscreen, toggleFullscreen, layout, liveSimulation])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { galaxyLayout, galaxySimulationStep, resolveAspectRatioScale, type GalaxyLayoutNode, type GalaxyLayoutEdge } from '../src/utils/galaxyLayout'
 import { boundingCirclesByGroup } from '../src/utils/graphLayout'
-import { buildStructuralForest, structuralDescendants, galaxyGroupHeads } from '../src/utils/graphHierarchy'
+import { buildStructuralForest, galaxyGroupMap, galaxyGroupHeads } from '../src/utils/graphHierarchy'
 
 function node(id: string, extra: Partial<GalaxyLayoutNode> = {}): GalaxyLayoutNode {
   return { id, width: 100, height: 40, ...extra }
@@ -16,12 +16,7 @@ function structuralEdge(source: string, target: string): GalaxyLayoutEdge {
 // rather than just trusting the algorithm did the right thing.
 function groupBoundaries(nodes: readonly GalaxyLayoutNode[], edges: readonly GalaxyLayoutEdge[], positions: Map<string, { x: number; y: number }>) {
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
-  const groupHeads = galaxyGroupHeads(roots, childrenOf)
-  const leafToGroup = new Map<string, string>()
-  for (const headId of groupHeads) {
-    leafToGroup.set(headId, headId)
-    for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
-  }
+  const { leafToGroup } = galaxyGroupMap(roots, childrenOf)
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
   const radiusOf = (id: string) => {
     const n = nodeMap.get(id)
@@ -91,6 +86,29 @@ test.describe('galaxyLayout', () => {
 
     const positions = galaxyLayout(nodes, edges)
 
+    expect(positions.get('pinned')).toEqual({ x: 500, y: 500 })
+  })
+
+  test('galaxyLayout (the batch entry point) respects a pinned node even when separateGroups has real work to do', () => {
+    // Needs >1 groups — shiftGroupsApart short-circuits entirely at groupHeads.length <= 1 (see
+    // its own guard), so a single-root fixture like the test above can't catch a missing
+    // pinnedGroups carve-out: applyGroupSeparation (galaxyLayout's final settle pass) used to call
+    // shiftGroupsApart without one at all, unlike galaxySimulationStep's per-tick reactive
+    // push-away, which passes pinnedGroups correctly — so the *one-shot batch* galaxyLayout() call
+    // rigidly translated every group, pinned members included, silently ignoring the pin.
+    // 'pinned' has exactly one child, so it stays its own group head (no dependency on the
+    // separate multi-child-delegation fix above) — isolates this test to just the pinnedGroups
+    // carve-out this test is actually guarding.
+    const nodes: GalaxyLayoutNode[] = [
+      node('pinned', { x: 500, y: 500, pinned: true }), node('p1'),
+      node('other'), node('o1'), node('o2'), node('o3'),
+    ]
+    const edges: GalaxyLayoutEdge[] = [
+      structuralEdge('pinned', 'p1'),
+      structuralEdge('other', 'o1'), structuralEdge('other', 'o2'), structuralEdge('other', 'o3'),
+    ]
+
+    const positions = galaxyLayout(nodes, edges)
     expect(positions.get('pinned')).toEqual({ x: 500, y: 500 })
   })
 
@@ -201,6 +219,49 @@ test.describe('galaxyLayout', () => {
     // Expected orbital distance is just root1's own radius + child1's radius * nodeSpread — the
     // same formula every parent/child pair in this layout uses. The orphaning bug blew this out
     // by well over an order of magnitude, not just some jitter.
+    const r = Math.hypot(nodes[0].width, nodes[0].height) / 2
+    const expectedDistance = r + r * 3.2 // default nodeSpread
+    expect(dist).toBeLessThan(expectedDistance * 1.5)
+  })
+
+  test('a root with more than one child (a genuinely delegating root) still travels with its own subtree', () => {
+    // galaxyGroupMap() itself: a delegating multi-child root is excluded from groupHeads (that's
+    // the whole point — it splits into one group per branch), but it must still land in
+    // leafToGroup somewhere, or it's the one node no group's rigid translation ever carries along.
+    const twoChildren = buildStructuralForest(['root', 'a', 'b'], [structuralEdge('root', 'a'), structuralEdge('root', 'b')])
+    const { leafToGroup } = galaxyGroupMap(twoChildren.roots, twoChildren.childrenOf)
+    expect(leafToGroup.get('root')).toBe('a') // first child wins, same tie-break buildStructuralForest itself uses
+    expect(leafToGroup.get('a')).toBe('a')
+    expect(leafToGroup.get('b')).toBe('b')
+
+    // The actual regression: two independent two-child roots, each branch busy enough that
+    // separateGroups has real work to do. Before the fix, a multi-child root was excluded from
+    // every group's leafToGroup entry (it delegates headship away, but is nobody's structural
+    // descendant either) — group-level rigid shifts then moved every child subtree while the root
+    // itself, belonging to no group, stayed frozen at its original computeHome position, ending up
+    // stranded arbitrarily far from all of its own children.
+    const nodes: GalaxyLayoutNode[] = [
+      node('root1'), node('a1'), node('a1_1'), node('a1_2'), node('a1_3'), node('b1'), node('b1_1'), node('b1_2'), node('b1_3'),
+      node('root2'), node('a2'), node('a2_1'), node('a2_2'), node('a2_3'), node('b2'), node('b2_1'), node('b2_2'), node('b2_3'),
+    ]
+    const edges: GalaxyLayoutEdge[] = [
+      structuralEdge('root1', 'a1'), structuralEdge('root1', 'b1'),
+      structuralEdge('a1', 'a1_1'), structuralEdge('a1', 'a1_2'), structuralEdge('a1', 'a1_3'),
+      structuralEdge('b1', 'b1_1'), structuralEdge('b1', 'b1_2'), structuralEdge('b1', 'b1_3'),
+      structuralEdge('root2', 'a2'), structuralEdge('root2', 'b2'),
+      structuralEdge('a2', 'a2_1'), structuralEdge('a2', 'a2_2'), structuralEdge('a2', 'a2_3'),
+      structuralEdge('b2', 'b2_1'), structuralEdge('b2', 'b2_2'), structuralEdge('b2', 'b2_3'),
+    ]
+
+    const positions = galaxyLayout(nodes, edges)
+    const root1 = positions.get('root1')!
+    const a1 = positions.get('a1')!
+    const dist = Math.hypot(a1.x - root1.x, a1.y - root1.y)
+
+    // root1's first child is 'a1' — same tie-break as above. Expected orbital distance is just
+    // root1's own radius + a1's radius * nodeSpread; the orphaning bug blew this out by well over
+    // an order of magnitude (the root stays put while its whole subtree, a1 included, moves to
+    // resolve overlap with the other root's group).
     const r = Math.hypot(nodes[0].width, nodes[0].height) / 2
     const expectedDistance = r + r * 3.2 // default nodeSpread
     expect(dist).toBeLessThan(expectedDistance * 1.5)
@@ -411,6 +472,19 @@ test.describe('aspectRatio (elliptical warp)', () => {
     for (const n of nodes) {
       expect(wayBelowFloor.get(n.id)).toEqual(atFloor.get(n.id))
     }
+  })
+
+  test('a NaN aspectRatio (e.g. from an unmeasured 0/0 container) is treated as omitted, not propagated', () => {
+    const { nodes, edges } = branchyTree()
+
+    const nat = galaxyLayout(nodes, edges)
+    const nan = galaxyLayout(nodes, edges, { aspectRatio: NaN })
+    for (const n of nodes) {
+      expect(nan.get(n.id)).toEqual(nat.get(n.id))
+    }
+
+    const scale = resolveAspectRatioScale(nodes, edges, { aspectRatio: NaN })
+    expect(scale).toEqual({ x: 1, y: 1 })
   })
 
   test('formula: warped x-offset equals the natural x-offset scaled by resolveAspectRatioScale\'s own result', () => {

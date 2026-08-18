@@ -88,11 +88,48 @@ export function galaxyGroupHeads(roots: readonly string[], childrenOf: ReadonlyM
 export function structuralDescendants(id: string, childrenOf: ReadonlyMap<string, string[]>): Set<string> {
   const result = new Set<string>()
   const queue = [...(childrenOf.get(id) ?? [])]
-  while (queue.length > 0) {
-    const next = queue.shift()!
+  let head = 0
+  while (head < queue.length) {
+    const next = queue[head++]
     if (result.has(next)) continue
     result.add(next)
     queue.push(...(childrenOf.get(next) ?? []))
   }
   return result
+}
+
+/**
+ * The full galaxy-layout group mapping: `galaxyGroupHeads`'s head ids, plus every node — including
+ * a *delegating* multi-child root — mapped to its group. `galaxyGroupHeads` deliberately excludes a
+ * bushy root from being its own group's head (splitting it into one group per child instead), but
+ * that root is nobody's structural descendant either (it has no parent), so left unmapped it would
+ * be the one node no group's rigid translation ever carries along — stranded at its own computeHome
+ * position while every one of its children's subtrees moves out from under it during group
+ * separation (the same failure `galaxyGroupHeads`'s own docs describe for the single-child case,
+ * which delegating only when a root has *more than one* child already avoids — this covers the
+ * remaining multi-child case). Assigned here to its first child's group — the same "first edge
+ * wins" tie-break `buildStructuralForest` already uses for ambiguous structural ownership — so it
+ * travels with one real group instead of belonging to none.
+ *
+ * Every caller that needs `leafToGroup` for galaxy layout should build it through this function
+ * rather than re-deriving the head+descendants loop inline — that duplication (six call sites,
+ * pre-fix) is exactly how the multi-child-root gap went unnoticed.
+ */
+export function galaxyGroupMap(
+  roots: readonly string[],
+  childrenOf: ReadonlyMap<string, string[]>
+): { groupHeads: string[]; leafToGroup: Map<string, string> } {
+  const groupHeads = galaxyGroupHeads(roots, childrenOf)
+  const leafToGroup = new Map<string, string>()
+  for (const headId of groupHeads) {
+    leafToGroup.set(headId, headId)
+    for (const descendantId of structuralDescendants(headId, childrenOf)) leafToGroup.set(descendantId, headId)
+  }
+  for (const rootId of roots) {
+    if (leafToGroup.has(rootId)) continue
+    const firstChild = childrenOf.get(rootId)?.[0]
+    const group = firstChild !== undefined ? leafToGroup.get(firstChild) : undefined
+    if (group !== undefined) leafToGroup.set(rootId, group)
+  }
+  return { groupHeads, leafToGroup }
 }

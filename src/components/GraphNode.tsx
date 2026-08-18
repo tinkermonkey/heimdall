@@ -47,7 +47,14 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         data-domain={domainColor}
         data-kind={kind}
         onClick={(e) => { e.stopPropagation(); onSelect?.(id) }}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onSelect?.(id) } }}
+        onKeyDown={(e) => {
+          // A keydown from the collapse toggle button below bubbles up here too — bail out before
+          // hijacking Enter/Space, or the toggle's own native button activation never fires
+          // (preventDefault suppresses it) and the whole progressive-disclosure affordance becomes
+          // keyboard-inoperable, selecting the node instead of collapsing/expanding it.
+          if (e.target !== e.currentTarget) return
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onSelect?.(id) }
+        }}
         role={onSelect ? 'button' : undefined}
         tabIndex={onSelect ? 0 : undefined}
         aria-pressed={onSelect ? selected : undefined}

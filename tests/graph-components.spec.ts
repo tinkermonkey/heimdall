@@ -957,6 +957,32 @@ test.describe('Graph Canvas Components', () => {
       expect(overlaps).toBe(0)
     })
 
+    test('toolbar zoom in/out buttons anchor at the viewport center, not wherever world origin projects to', async ({ page }) => {
+      // Regression: GraphToolbar's zoom buttons called setZoom(zoom * factor) with no anchor
+      // point, so zoomTo's underlying pan-preservation left pan completely untouched — the fixed
+      // point of the resulting transform was wherever world (0, 0) currently projected to (usually
+      // off-screen after fitView), flinging the visible content sideways instead of zooming in
+      // place. zoomBy fixes this by anchoring at the container's own center.
+      const transform = await page.locator('[data-testid="graph-viewport"]').getAttribute('transform')
+      const before = transform!.match(/matrix\(([^,]+),[^,]+,[^,]+,[^,]+,([^,]+),([^)]+)\)/)!
+      const beforeZoom = parseFloat(before[1])
+      const beforePanX = parseFloat(before[2])
+
+      await page.getByRole('button', { name: 'Zoom in' }).click()
+      await page.waitForTimeout(100)
+
+      const afterTransform = await page.locator('[data-testid="graph-viewport"]').getAttribute('transform')
+      const after = afterTransform!.match(/matrix\(([^,]+),[^,]+,[^,]+,[^,]+,([^,]+),([^)]+)\)/)!
+      const afterZoom = parseFloat(after[1])
+      const afterPanX = parseFloat(after[2])
+
+      expect(afterZoom).toBeGreaterThan(beforeZoom)
+      // Center-anchored zoom must also shift pan to compensate — the bug this guards against left
+      // pan completely unchanged (only zoom moved), which is what a world-origin-anchored zoom
+      // looks like for any fitted view whose center isn't already sitting on world (0, 0).
+      expect(Math.abs(afterPanX - beforePanX)).toBeGreaterThan(1)
+    })
+
     test('an orphan node renders on its own, with no attached edge', async ({ page }) => {
       const orphan = page.locator('[data-testid="graph-node-note_deprecated"]')
       await expect(orphan).toBeVisible()
@@ -1047,6 +1073,25 @@ test.describe('Graph Canvas Components', () => {
       expect(overlaps).toBe(0)
     })
 
+    test('collapse toggle is keyboard-operable — Enter/Space activate it, not the parent node\'s onSelect', async ({ page }) => {
+      // Regression: the node root's own onKeyDown handled Enter/Space unconditionally, so a
+      // keydown bubbling up from the nested toggle button hit preventDefault before the button's
+      // native activation ever fired — Enter/Space on a focused toggle selected the node instead
+      // of collapsing it, and the toggle had no other way to activate from the keyboard at all.
+      const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+      await toggle.focus()
+      await page.keyboard.press('Enter')
+
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+      // If the keydown had instead reached the node's own onSelect, the node would read as
+      // selected — it shouldn't, since only the toggle was activated.
+      await expect(page.locator('[data-testid="graph-node-organism"]')).not.toHaveAttribute('aria-pressed', 'true')
+
+      await toggle.focus()
+      await page.keyboard.press(' ')
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).toBeVisible()
+    })
+
     test('nodes without structural children render no collapse toggle', async ({ page }) => {
       // brca1 is a leaf — reachable only via instanceOf from chromosome, no children of its own
       await expect(page.locator('[data-testid="graph-node-brca1"] .graph-node__collapse-toggle')).not.toBeAttached()
@@ -1129,6 +1174,28 @@ test.describe('Graph Canvas Components', () => {
         const after = await clusterBoundingBox(page)
 
         expect(after.width / after.height).toBeCloseTo(before.width / before.height, 1)
+      })
+
+      test('unlocking after a resize catches up the relayout it was blocked from doing, instead of staying stale forever', async ({ page }) => {
+        // Regression: the effect wrote its "last handled ratio" ref before checking `locked`, so a
+        // resize that landed while locked got marked as already-handled despite never actually
+        // relaying out — unlocking re-ran the effect (locked is a dependency), but the ref already
+        // matched the current ratio, so the guard skipped the catch-up relayout it was supposed to
+        // do. The shape stayed stuck at whatever it was before the resize, permanently, until some
+        // *other* ratio change happened to come along.
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+        const before = await clusterBoundingBox(page)
+
+        await page.locator('[aria-label="Lock pan and zoom"]').click()
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await page.waitForTimeout(200)
+
+        await page.locator('[aria-label="Unlock pan and zoom"]').click()
+        await page.waitForTimeout(200)
+        const after = await clusterBoundingBox(page)
+
+        expect(after.width / after.height).toBeGreaterThan((before.width / before.height) * 1.2)
       })
 
       test('live simulation eases toward the new shape on resize instead of snapping', async ({ page }) => {
