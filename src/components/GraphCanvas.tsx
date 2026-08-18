@@ -164,6 +164,21 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   selectedNodeId?: string
   onNodeSelect?: (nodeId: string) => void
   /**
+   * Pan (preserving the current zoom level — never re-fits/re-zooms) to keep
+   * `selectedNodeId` centered whenever it changes to a resolvable node. Off by
+   * default: `selectedNodeId` otherwise only drives highlighting (and, with
+   * `isStructuralEdge` set, which non-structural edges reveal) — it has no
+   * effect on the viewport at all. Turn this on when selection can originate
+   * from OUTSIDE the canvas (a sidebar, a nav tree, a search result) and so
+   * may pick something currently off-screen; a plain click on a node already
+   * on screen doesn't need it, though the pan still fires and is harmless
+   * there too (usually a no-op nudge, since a clicked node was already
+   * visible). Skipped before the initial mount center/fit below has run (that
+   * effect owns the very first frame) and while pan/zoom is locked, same as
+   * every other automatic viewport change GraphCanvas makes.
+   */
+  centerOnSelect?: boolean
+  /**
    * Render the HTML content for each node. GraphCanvas wraps it in a foreignObject
    * and positions it via an SVG <g> transform. If omitted, the default GraphNode is used.
    * The third argument carries structural-hierarchy info (see GraphNodeHierarchyMeta) — read it
@@ -279,6 +294,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       edges = [],
       selectedNodeId,
       onNodeSelect,
+      centerOnSelect = false,
       renderNode,
       layout = 'manual',
       nodeMargin,
@@ -769,6 +785,29 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         )
       }
     }, [containerSize, dims, computedPositions, visibleNodes, layout, viewport.zoom, panTo, zoomTo, fitView, fitPadding, computeBoundingBox])
+
+    // Tracks the selectedNodeId centerOnSelect last reacted to, so it only pans on a
+    // genuine CHANGE — never repeatedly on every render, which would fight a user's own
+    // pan away from the selected node.
+    const prevCenterSelectedIdRef = useRef<string | undefined>(undefined)
+
+    // centerOnSelect (opt-in, see its own prop doc) — pans to keep selectedNodeId
+    // centered whenever it changes, once the initial mount center/fit above has run.
+    useEffect(() => {
+      if (!centerOnSelect) return
+      if (!didCenterRef.current) return
+      if (locked) return
+      if (selectedNodeId === prevCenterSelectedIdRef.current) return
+      prevCenterSelectedIdRef.current = selectedNodeId
+      if (!selectedNodeId || !containerSize) return
+      const node = visibleNodes.find(n => n.id === selectedNodeId)
+      if (!node) return
+      const pos = getNodePosition(node)
+      panTo(
+        containerSize.width / 2 - pos.x * viewport.zoom,
+        containerSize.height / 2 - pos.y * viewport.zoom
+      )
+    }, [centerOnSelect, selectedNodeId, locked, containerSize, visibleNodes, getNodePosition, viewport.zoom, panTo])
 
     // Re-anchors pan whenever the container's own rendered size changes after that initial
     // auto-center/fit — entering/exiting the Fullscreen API is the main trigger (the container

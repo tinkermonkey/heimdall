@@ -4,6 +4,20 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0]
+
+### Added
+
+- **`GraphCanvas`** — `centerOnSelect` prop (default `false`): pans to keep `selectedNodeId`
+  centered in the viewport whenever it changes, preserving the current zoom (never re-fits or
+  re-zooms). Off by default so existing consumers relying on `selectedNodeId` purely for
+  highlighting/inspector wiring see no behavior change. Motivating case: an external selection
+  origin — a sidebar, a nav tree — can select a node that's currently off-screen, unlike clicking
+  a node directly on the canvas (you had to see it to click it); `centerOnSelect` closes that gap.
+  Skipped until the initial mount center/fit has run and while pan/zoom is `locked`, and only acts
+  on a genuine change to `selectedNodeId` — it never fights a user's own subsequent pan away from
+  the selected node on a re-render.
+
 ## [0.6.0]
 
 ### Added
