@@ -286,6 +286,7 @@ export function GraphCanvasShowcase() {
           <PropRow name="edges" type="GraphEdgeData[]" def="[]" description="Edge definitions linking node IDs with optional labels" />
           <PropRow name="selectedNodeId" type="string" description="Currently selected node ID (controlled)" />
           <PropRow name="onNodeSelect" type="(id: string) => void" description="Called when a node is clicked" />
+          <PropRow name="centerOnSelect" type="boolean" def="false" description="Pans (preserving the current zoom — never re-fits or re-zooms) to keep selectedNodeId centered whenever it changes. For selection originating outside the canvas (a sidebar, a nav tree, a search result), which can pick a node that's currently off-screen; a click on the canvas doesn't need it, since you had to see the node to click it. Skipped until the initial mount center/fit has run and while pan/zoom is locked." />
           <PropRow name="selectedEdgeId" type="string" description="Currently selected edge ID (controlled)" />
           <PropRow name="onEdgeSelect" type="(id: string) => void" description="Called when an edge's line or label is clicked. Without it, edges render but aren't interactive." />
           <PropRow name="onBackgroundClick" type="() => void" description="Called when empty canvas background is clicked — the 'click away to deselect' gesture. A genuine pan drag never fires it. Pair with clearing selectedNodeId/selectedEdgeId yourself." />

@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`GraphCanvas`** — `centerOnSelect` prop (default `false`): pans to keep `selectedNodeId`
+  centered in the viewport whenever it changes, preserving the current zoom (never re-fits or
+  re-zooms). Off by default so existing consumers relying on `selectedNodeId` purely for
+  highlighting/inspector wiring see no behavior change. Motivating case: an external selection
+  origin — a sidebar, a nav tree — can select a node that's currently off-screen, unlike clicking
+  a node directly on the canvas (you had to see it to click it); `centerOnSelect` closes that gap.
+  Skipped until the initial mount center/fit has run and while pan/zoom is `locked`, and only acts
+  on a genuine change to `selectedNodeId` — it never fights a user's own subsequent pan away from
+  the selected node on a re-render. Combining `centerOnSelect` with `fitView` and an already-set
+  `selectedNodeId` at mount correctly uses the post-fit zoom rather than a stale pre-fit one; a
+  `selectedNodeId` that isn't resolvable yet (e.g. inside a currently-collapsed subtree) is
+  retried on a later render instead of being silently given up on.
 - **`GraphCanvas`** — `fullscreenContainerRef` prop: pass a ref to an ancestor element and the
   built-in toolbar's Fullscreen button (and `toggleFullscreen`/`isFullscreen` from
   `useGraphCanvas()`) request/track fullscreen on that ancestor instead of GraphCanvas's own root.
