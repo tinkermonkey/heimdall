@@ -24,6 +24,7 @@ import ChatShowcase from './test-pages/ChatShowcase'
 import FormsShowcase from './test-pages/FormsShowcase'
 import GraphShowcase from './test-pages/GraphShowcase'
 import GalaxyLayoutLab from './test-pages/GalaxyLayoutLab'
+import FullscreenContainerRefTestPage from './test-pages/FullscreenContainerRefTestPage'
 import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
 import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
 import TabBarTestPage from './test-pages/TabBarTestPage'
@@ -121,6 +122,10 @@ export default function App() {
 
   if (exampleParam === 'galaxy-layout-lab') {
     return <GalaxyLayoutLab />
+  }
+
+  if (exampleParam === 'fullscreen-container-ref') {
+    return <FullscreenContainerRefTestPage />
   }
 
   if (exampleParam === 'inspector-panel') {

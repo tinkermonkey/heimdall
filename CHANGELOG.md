@@ -4,6 +4,21 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0]
+
+### Added
+
+- **`GraphCanvas`** — `fullscreenContainerRef` prop: pass a ref to an ancestor element and the
+  built-in toolbar's Fullscreen button (and `toggleFullscreen`/`isFullscreen` from
+  `useGraphCanvas()`) request/track fullscreen on that ancestor instead of GraphCanvas's own root.
+  Motivating case: GraphCanvas doesn't accept `children` — it fully owns its internal tree — so a
+  consumer composing sibling overlay content next to it (a control strip above it, a
+  `DetailDrawer` beside it, the same pattern GraphLayoutsShowcase itself uses) previously lost
+  that content the instant Fullscreen was used, since the native Fullscreen API only renders the
+  fullscreened element's own DOM subtree. GraphCanvas still measures and lays out against its own
+  container's size regardless of which ancestor is actually fullscreened, so nothing else about
+  its behavior changes; omitting the prop is identical to previous behavior.
+
 ## [0.6.0]
 
 ### Added

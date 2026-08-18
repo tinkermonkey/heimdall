@@ -267,6 +267,21 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** Where the built-in toolbar sits — any of the 4 corners or 4 edge-centers. Default
    *  'bottom-right'. No effect when showToolbar is false. */
   toolbarPosition?: GraphToolbarPosition
+  /**
+   * Ancestor element to request/exit the Fullscreen API on instead of GraphCanvas's own root —
+   * pass this when GraphCanvas is composed alongside sibling overlay content (a control strip
+   * above it, a `DetailDrawer` beside it, ...) that should stay visible while fullscreen too.
+   * The native Fullscreen API only renders the fullscreened element's own DOM subtree, and
+   * GraphCanvas doesn't accept `children` — it fully owns its internal tree — so any sibling
+   * content is otherwise invisible for as long as GraphCanvas's own root is what's fullscreened.
+   * Must contain GraphCanvas's rendered root somewhere in its subtree for the browser to accept
+   * it as a fullscreen target; GraphCanvas itself still measures and lays out against its own
+   * container's size regardless of which ancestor is actually fullscreened, so nothing else about
+   * its behavior changes. `isFullscreen` (from `useGraphCanvas()`/the built-in toolbar's icon)
+   * tracks `document.fullscreenElement` against this ref when provided, GraphCanvas's own root
+   * otherwise — unchanged default behavior when omitted.
+   */
+  fullscreenContainerRef?: React.RefObject<HTMLElement | null>
 }
 
 type NodeDims = Map<string, { width: number; height: number }>
@@ -298,6 +313,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onNodeDragEnd,
       showToolbar = true,
       toolbarPosition = 'bottom-right',
+      fullscreenContainerRef,
       className = '',
       ...props
     },
@@ -383,9 +399,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Freezes wheel-zoom, drag-to-pan, and keyboard zoom/pan (see usePanZoom's locked option) —
     // toggled by GraphToolbar's lock button. Internal/uncontrolled, like hoveredNodeId/dragPositions.
     const [locked, setLocked] = useState(false)
-    // Mirrors document.fullscreenElement === containerRef.current — kept in sync by the
-    // fullscreenchange listener below rather than just set inside toggleFullscreen, so Esc and
-    // any other exit path (not just GraphToolbar's own button) update it too.
+    // Mirrors document.fullscreenElement === (fullscreenContainerRef?.current ?? containerRef.current)
+    // — kept in sync by the fullscreenchange listener below rather than just set inside
+    // toggleFullscreen, so Esc and any other exit path (not just GraphToolbar's own button) update
+    // it too.
     const [isFullscreen, setIsFullscreen] = useState(false)
     // Set by the fullscreenchange listener the instant fullscreen is entered, consumed by the
     // containerSize-driven effect further down once the container's real post-transition
@@ -697,7 +714,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // fullscreen would otherwise leave GraphToolbar's button showing the wrong icon.
     useEffect(() => {
       const syncFullscreen = () => {
-        const nowFullscreen = document.fullscreenElement === containerRef.current
+        const target = fullscreenContainerRef?.current ?? containerRef.current
+        const nowFullscreen = document.fullscreenElement === target
         setIsFullscreen(nowFullscreen)
         // Only on entry — on exit, the resize re-anchor effect below already keeps whatever was
         // centered on screen in view, which reads better than snapping to a from-scratch fit.
@@ -705,15 +723,16 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
       document.addEventListener('fullscreenchange', syncFullscreen)
       return () => document.removeEventListener('fullscreenchange', syncFullscreen)
-    }, [])
+    }, [fullscreenContainerRef])
 
     const toggleFullscreen = useCallback(() => {
-      if (document.fullscreenElement === containerRef.current) {
+      const target = fullscreenContainerRef?.current ?? containerRef.current
+      if (document.fullscreenElement === target) {
         document.exitFullscreen?.()
       } else {
-        containerRef.current?.requestFullscreen?.()
+        target?.requestFullscreen?.()
       }
-    }, [])
+    }, [fullscreenContainerRef])
 
     const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
       const dragged = dragPositions.get(node.id)
