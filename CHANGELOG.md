@@ -77,6 +77,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`GraphToolbar`** — a fifth button toggles the canvas container in and out
   of the Fullscreen API. Tracks the platform's own fullscreen state (not
   just its own clicks), so Esc or any other exit path updates the icon too.
+  Entering fullscreen also zooms/pans to fit the current nodes once the
+  container has actually resized to its new (larger) fullscreen dimensions
+  — a previously zoomed-in view no longer stays zoomed into a random corner
+  when the canvas suddenly has much more room. Skipped while pan/zoom is
+  locked, same as every other automatic viewport change in `GraphCanvas`.
 - **`galaxyLayout`** — top-level group boundary circles (the same ones
   `showClusterBoundaries` renders) no longer overlap each other, on by
   default. After the existing per-node settle cycles, a macro separation

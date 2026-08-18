@@ -387,6 +387,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // fullscreenchange listener below rather than just set inside toggleFullscreen, so Esc and
     // any other exit path (not just GraphToolbar's own button) update it too.
     const [isFullscreen, setIsFullscreen] = useState(false)
+    // Set by the fullscreenchange listener the instant fullscreen is entered, consumed by the
+    // containerSize-driven effect further down once the container's real post-transition
+    // dimensions actually land (see that effect's own comment for why it can't just fit
+    // immediately here — the browser hasn't resized the element yet at this point).
+    const pendingFullscreenFitRef = useRef(false)
     // Only meaningful for layout="galaxy" (see liveActive below) — toggled by GraphToolbar's
     // live-simulation button. Internal/uncontrolled, like locked/isFullscreen.
     const [liveSimulation, setLiveSimulation] = useState(false)
@@ -691,7 +696,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // changed — Esc, browser chrome's own exit control, or another element entirely taking over
     // fullscreen would otherwise leave GraphToolbar's button showing the wrong icon.
     useEffect(() => {
-      const syncFullscreen = () => setIsFullscreen(document.fullscreenElement === containerRef.current)
+      const syncFullscreen = () => {
+        const nowFullscreen = document.fullscreenElement === containerRef.current
+        setIsFullscreen(nowFullscreen)
+        // Only on entry — on exit, the resize re-anchor effect below already keeps whatever was
+        // centered on screen in view, which reads better than snapping to a from-scratch fit.
+        if (nowFullscreen) pendingFullscreenFitRef.current = true
+      }
       document.addEventListener('fullscreenchange', syncFullscreen)
       return () => document.removeEventListener('fullscreenchange', syncFullscreen)
     }, [])
@@ -870,6 +881,19 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       zoomTo(fit.zoom)
       panTo(fit.panX, fit.panY)
     }, [computeBoundingBox, containerSize, fitPadding, minZoom, maxZoom, zoomTo, panTo])
+
+    // Fulfills pendingFullscreenFitRef once the container's real, post-transition size has
+    // actually landed — containerSize only updates via the ResizeObserver effect above once the
+    // browser finishes resizing the fullscreened element, so this is the first point a fit against
+    // accurate dimensions is possible. Skipped while locked, matching every other automatic
+    // pan/zoom effect in this file (the aspect-ratio redraw effect above included) — locked means
+    // the user opted out of automatic viewport changes, entering fullscreen doesn't override that.
+    useEffect(() => {
+      if (!pendingFullscreenFitRef.current || !containerSize) return
+      pendingFullscreenFitRef.current = false
+      if (locked) return
+      zoomToFit()
+    }, [containerSize, zoomToFit, locked])
 
     // See GraphCanvasContextValue.zoomBy's own docs — anchors at the container's visual center
     // instead of setZoom's raw "wherever world (0,0) projects to" behavior.
