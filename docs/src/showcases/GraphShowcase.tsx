@@ -303,6 +303,7 @@ export function GraphCanvasShowcase() {
           <PropRow name="maxZoom" type="number" def="8" description="Upper zoom bound." />
           <PropRow name="showToolbar" type="boolean" def="true" description="Shows the built-in zoom in/out/fit, pan-and-zoom-lock, fullscreen, and (layout='galaxy' only) live-simulation toolbar. Set false to omit it entirely." />
           <PropRow name="toolbarPosition" type="GraphToolbarPosition" def="'bottom-right'" description="Any of the 4 corners or 4 edge-centers. No effect when showToolbar is false." />
+          <PropRow name="fullscreenContainerRef" type="React.RefObject<HTMLElement | null>" description="Ancestor element to request/exit the Fullscreen API on instead of GraphCanvas's own root — pass this when GraphCanvas is composed alongside sibling overlay content (a control strip, a DetailDrawer) that should stay visible while fullscreen too, since GraphCanvas doesn't accept children and the native Fullscreen API only renders the fullscreened element's own subtree. Must contain GraphCanvas's rendered root, or the graph itself disappears on entry. Omit for the previous default behavior (fullscreens GraphCanvas's own root)." />
         </PropsTable>
       </ShowcaseSection>
       <ShowcaseSection label="Props (GraphNode)">

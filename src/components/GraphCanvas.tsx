@@ -274,12 +274,16 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * The native Fullscreen API only renders the fullscreened element's own DOM subtree, and
    * GraphCanvas doesn't accept `children` — it fully owns its internal tree — so any sibling
    * content is otherwise invisible for as long as GraphCanvas's own root is what's fullscreened.
-   * Must contain GraphCanvas's rendered root somewhere in its subtree for the browser to accept
-   * it as a fullscreen target; GraphCanvas itself still measures and lays out against its own
-   * container's size regardless of which ancestor is actually fullscreened, so nothing else about
-   * its behavior changes. `isFullscreen` (from `useGraphCanvas()`/the built-in toolbar's icon)
-   * tracks `document.fullscreenElement` against this ref when provided, GraphCanvas's own root
-   * otherwise — unchanged default behavior when omitted.
+   * Must contain GraphCanvas's rendered root somewhere in its subtree — NOT because the browser
+   * requires that (it doesn't; any connected, policy-permitted element is a valid fullscreen
+   * target regardless of what it contains) but because otherwise the graph itself silently
+   * disappears the moment fullscreen is entered, with no error and nothing to debug against:
+   * containment is this prop's own invariant to hold, not a platform-enforced one. GraphCanvas
+   * itself still measures and lays out against its own container's size regardless of which
+   * ancestor is actually fullscreened, so nothing else about its behavior changes. `isFullscreen`
+   * (from `useGraphCanvas()`/the built-in toolbar's icon) tracks `document.fullscreenElement`
+   * against this ref when provided, GraphCanvas's own root otherwise — unchanged default behavior
+   * when omitted.
    */
   fullscreenContainerRef?: React.RefObject<HTMLElement | null>
 }
@@ -407,8 +411,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Set by the fullscreenchange listener the instant fullscreen is entered, consumed by the
     // containerSize-driven effect further down once the container's real post-transition
     // dimensions actually land (see that effect's own comment for why it can't just fit
-    // immediately here — the browser hasn't resized the element yet at this point).
+    // immediately here — the browser hasn't resized the element yet at this point). Cleared on a
+    // bounded timeout (see the listener below) rather than staying armed indefinitely: fullscreen
+    // entry doesn't always change the target's measured size (e.g. it was already viewport-sized),
+    // and without a bound this flag would sit waiting for the NEXT containerSize change no matter
+    // when that happens — potentially firing a surprise zoomToFit against a much later, entirely
+    // unrelated resize, against whatever pan/zoom the user had set in the meantime.
     const pendingFullscreenFitRef = useRef(false)
+    const pendingFullscreenFitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     // Only meaningful for layout="galaxy" (see liveActive below) — toggled by GraphToolbar's
     // live-simulation button. Internal/uncontrolled, like locked/isFullscreen.
     const [liveSimulation, setLiveSimulation] = useState(false)
@@ -717,20 +727,60 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const target = fullscreenContainerRef?.current ?? containerRef.current
         const nowFullscreen = document.fullscreenElement === target
         setIsFullscreen(nowFullscreen)
-        // Only on entry — on exit, the resize re-anchor effect below already keeps whatever was
-        // centered on screen in view, which reads better than snapping to a from-scratch fit.
-        if (nowFullscreen) pendingFullscreenFitRef.current = true
+        if (pendingFullscreenFitTimeoutRef.current !== null) {
+          clearTimeout(pendingFullscreenFitTimeoutRef.current)
+          pendingFullscreenFitTimeoutRef.current = null
+        }
+        if (nowFullscreen) {
+          // Only on entry — on exit, the resize re-anchor effect below already keeps whatever was
+          // centered on screen in view, which reads better than snapping to a from-scratch fit.
+          pendingFullscreenFitRef.current = true
+          // Bounds how long the pending fit stays armed waiting for containerSize to report the
+          // transition's own resize (see pendingFullscreenFitRef's own comment for why an
+          // unbounded wait is a bug). 500ms comfortably covers a real fullscreen-transition
+          // reflow — typically one or two frames, with margin for a slower device or an animated
+          // OS-level fullscreen transition — while still being short enough that anything arriving
+          // after it is clearly a later, unrelated resize rather than this transition's own. If no
+          // resize lands in time, there's nothing to fit differently than what's already on screen.
+          pendingFullscreenFitTimeoutRef.current = setTimeout(() => {
+            pendingFullscreenFitRef.current = false
+            pendingFullscreenFitTimeoutRef.current = null
+          }, 500)
+        } else {
+          // Nothing still armed from a fullscreen session that's now over should survive to fire
+          // against some later, unrelated resize either.
+          pendingFullscreenFitRef.current = false
+        }
       }
       document.addEventListener('fullscreenchange', syncFullscreen)
-      return () => document.removeEventListener('fullscreenchange', syncFullscreen)
+      return () => {
+        document.removeEventListener('fullscreenchange', syncFullscreen)
+        if (pendingFullscreenFitTimeoutRef.current !== null) clearTimeout(pendingFullscreenFitTimeoutRef.current)
+      }
     }, [fullscreenContainerRef])
 
     const toggleFullscreen = useCallback(() => {
       const target = fullscreenContainerRef?.current ?? containerRef.current
+      // Both calls return a Promise that rejects if the platform refuses (no permissions-policy
+      // grant, target detached/mid-unmount, an ancestor is inside a restrictive iframe, ...) —
+      // reachable in practice specifically because fullscreenContainerRef makes the target
+      // consumer-supplied rather than always GraphCanvas's own attached root. Swallowed rather
+      // than surfaced as a component-level error state: the toolbar button doing nothing IS the
+      // correct visible behavior when the platform says no, same as it already silently does
+      // nothing when requestFullscreen/exitFullscreen aren't defined at all (the `?.` above). The
+      // warn is so a consumer who passed a bad ref has something to go on instead of a bare
+      // unhandled-rejection console entry with no attribution to this prop.
       if (document.fullscreenElement === target) {
-        document.exitFullscreen?.()
+        document.exitFullscreen?.()?.catch((err: unknown) => {
+          console.warn('GraphCanvas: exitFullscreen() was rejected', err)
+        })
       } else {
-        target?.requestFullscreen?.()
+        target?.requestFullscreen?.()?.catch((err: unknown) => {
+          console.warn(
+            'GraphCanvas: requestFullscreen() was rejected for the fullscreenContainerRef (or default root) target',
+            err
+          )
+        })
       }
     }, [fullscreenContainerRef])
 
