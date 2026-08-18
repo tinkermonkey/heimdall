@@ -146,6 +146,23 @@ body.dark-canvas .topology-node {
   color: rgb(var(--canvas-fg-1));
 }
 
+/* Reasserts the hover border color under dark canvas — same specificity issue as GraphNode.css:
+   body.dark-canvas .topology-node (extra `body` type selector) is more specific than
+   .topology-node:hover alone, so without this the hover state was silently cancelled back to the
+   resting border color in dark canvas. */
+body.dark-canvas .topology-node:hover {
+  border-color: rgb(var(--accent-primary-deep));
+}
+
+/* Same specificity issue again for the selected state — body.dark-canvas .topology-node beats
+   .topology-node--selected (and, since --selected:hover ties on class count too, that as well)
+   on its own, so a selected card's amber border silently reverted to the resting one in dark
+   canvas, both at rest and while hovered. */
+body.dark-canvas .topology-node--selected,
+body.dark-canvas .topology-node--selected:hover {
+  border-color: rgb(var(--accent-primary));
+}
+
 body.dark-canvas .topology-node__title {
   color: rgb(var(--canvas-fg-1));
 }

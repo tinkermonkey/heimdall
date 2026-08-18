@@ -2,6 +2,10 @@
   pointer-events: none;
 }
 
+.graph-edge[role='button'] {
+  outline: none;
+}
+
 .graph-edge__line {
   fill: none;
   stroke: var(--graph-edge, rgb(var(--canvas-border-strong)));
@@ -18,6 +22,58 @@
   stroke-width: 14;
   pointer-events: stroke;
   cursor: pointer;
+}
+
+/* Hover and selected read off the outer <g> (see GraphEdgeInternal/GraphEdge) so both the
+   fat invisible hit-stroke and the visible label pill trigger the same feedback, whichever
+   one the pointer is actually over. The width-only bump applies to every edge regardless of
+   --hot/--irrelevant status; the color change is scoped to plain edges only (a separate,
+   more-specific rule below) — .graph-edge:hover on its own has higher specificity than
+   .graph-edge--hot/--irrelevant, so a bare `stroke` here would silently override those
+   semantic colors right when the user is interacting with the edge (hovering a hot edge would
+   read as losing its amber highlight, not gaining emphasis). */
+.graph-edge:hover .graph-edge__line {
+  stroke-width: 1.75;
+}
+
+.graph-edge:hover .graph-edge__label-bg {
+  stroke-width: 2.5;
+}
+
+.graph-edge:not(.graph-edge--hot):not(.graph-edge--irrelevant):hover .graph-edge__line {
+  stroke: rgb(var(--canvas-fg-2));
+}
+
+.graph-edge:not(.graph-edge--hot):not(.graph-edge--irrelevant):hover .graph-edge__label-bg {
+  stroke: rgb(var(--canvas-fg-2));
+}
+
+.graph-edge.selected .graph-edge__line {
+  stroke: rgb(var(--accent-primary));
+  stroke-width: 2;
+}
+
+.graph-edge.selected .graph-edge__label-bg {
+  stroke: rgb(var(--accent-primary-deep));
+  stroke-width: 1.5;
+}
+
+body.dark-canvas .graph-edge.selected .graph-edge__label-bg {
+  stroke: rgb(var(--accent-primary));
+}
+
+/* Dashed, not solid — a focused-but-unselected edge needs to read as distinct from
+   .selected (a solid accent-colored line), not identical to it; outline: none above already
+   removed the <g>'s own native focus ring (an axis-aligned rectangle looks wrong around a
+   curved path), so this is the only focus indicator a keyboard user gets. :not(.selected)
+   deliberately yields to .selected's own (higher-specificity-independent, since this selector
+   would otherwise win the tie) solid styling — the common case right after activating an edge via
+   Enter is selected-and-still-focused, and that should read as selected, not as "still just
+   focused". */
+.graph-edge[role='button']:focus-visible:not(.selected) .graph-edge__line {
+  stroke: rgb(var(--accent-primary));
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
 }
 
 .graph-edge--hot .graph-edge__line {
@@ -38,6 +94,11 @@
 
 .graph-edge__label {
   pointer-events: none;
+}
+
+.graph-edge__label--clickable {
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .graph-edge__label-bg {

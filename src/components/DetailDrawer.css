@@ -1,0 +1,69 @@
+.detail-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  overflow: hidden;
+  background: rgb(var(--canvas-card) / 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  transition: width 160ms ease;
+  z-index: 2;
+}
+
+.detail-drawer__resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  cursor: col-resize;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  /* Invisible until hovered/focused/dragged — reads as a plain edge otherwise, per the drawer's
+     own default-borderless look. */
+  transition: background 100ms ease-out;
+}
+
+/* Wider invisible hit area than the 2px visible sliver, same trick SplitPane's divider uses. */
+.detail-drawer__resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -5px;
+  right: -5px;
+}
+
+.detail-drawer__resize-handle:hover,
+.detail-drawer__resize-handle:focus-visible,
+.detail-drawer__resize-handle--active {
+  background: rgb(var(--accent-primary));
+}
+
+.detail-drawer__resize-handle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.detail-drawer__content {
+  height: 100%;
+  padding: 14px 14px 14px 1em;
+  box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--canvas-border-strong)) transparent;
+}
+
+.detail-drawer__content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.detail-drawer__content::-webkit-scrollbar-thumb {
+  background: rgb(var(--canvas-border-strong));
+  border-radius: 4px;
+}

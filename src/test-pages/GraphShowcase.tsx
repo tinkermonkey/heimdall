@@ -3,10 +3,12 @@ import { GraphCanvas } from '../components/GraphCanvas'
 import { GraphCanvasContext } from '../components/GraphCanvasContext'
 import GraphNode from '../components/GraphNode'
 import GraphInspector, { type GraphNodeMetadata, type RelationshipLink } from '../components/GraphInspector'
-import { SplitPane } from '../components/SplitPane'
-import TopologyNode from '../components/TopologyNode'
+import GraphEdgeInspector, { type GraphEdgeMetadata } from '../components/GraphEdgeInspector'
+import { DetailDrawer } from '../components/DetailDrawer'
+import TopologyNode, { type TopologyNodeStatus } from '../components/TopologyNode'
 import type { EdgeAnchor } from '../utils/graph'
-import type { GraphNodeData } from '../components/GraphCanvas'
+import type { GraphNodeData, GraphNodeHierarchyMeta } from '../components/GraphCanvas'
+import { GALAXY_DEMO_NODES, GALAXY_DEMO_EDGES, isGalaxyDemoEdgeStructural } from './galaxyDemoData'
 
 interface NodeData extends GraphNodeData {
   title?: string
@@ -92,6 +94,21 @@ const BUS_EDGES: EdgeData[] = [
   { id: 'bus_edge_b_dep3', sourceId: 'bus_agent_b', targetId: 'bus_dep_3', sourceAnchor: 'right', targetAnchor: 'left' },
   { id: 'bus_edge_b_dep4', sourceId: 'bus_agent_b', targetId: 'bus_dep_4', sourceAnchor: 'right', targetAnchor: 'left', label: 'depends on' },
 ]
+
+// Status coloring for the "Cards" galaxy demo — purely decorative, one status per domain.
+const GALAXY_CARD_STATUS: Record<string, TopologyNodeStatus> = {
+  life: 'ok',
+  climate: 'warning',
+  software: 'idle',
+}
+
+// Deterministic 0-100 value derived from the node id, used only to give the "Cards" demo's
+// metric bar some visual variety — not a real measurement, and stable across renders/snapshots.
+function pseudoMetricPercent(id: string): number {
+  let hash = 0
+  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) % 100
+  return Math.abs(hash)
+}
 
 // Two loosely-connected communities with a couple of bridge edges — enough
 // structure for Louvain to find real clusters (see graphClustering.ts),
@@ -189,7 +206,37 @@ const TOPOLOGY_NODES = [
 
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
-  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'clustered'>('graph')
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
+  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy' | 'clustered'>('graph')
+  const [showAllRelations, setShowAllRelations] = useState(false)
+  const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
+  const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
+  const [draggable, setDraggable] = useState(true)
+  const [drawerWidth, setDrawerWidth] = useState(360)
+
+  const handleNodeSelect = useCallback((id: string) => {
+    setSelectedNodeId(id)
+    setSelectedEdgeId(undefined)
+  }, [])
+
+  const handleEdgeSelect = useCallback((id: string) => {
+    setSelectedEdgeId(id)
+    setSelectedNodeId(undefined)
+  }, [])
+
+  const handleBackgroundClick = useCallback(() => {
+    setSelectedNodeId(undefined)
+    setSelectedEdgeId(undefined)
+  }, [])
+
+  const handleToggleCollapse = useCallback((id: string) => {
+    setCollapsedNodeIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }, [])
 
   const selectedNode = GRAPH_NODES.find(n => n.id === selectedNodeId)
   const inspectorNode: GraphNodeMetadata | undefined = selectedNode
@@ -220,6 +267,23 @@ export default function GraphShowcase() {
         })
     : []
 
+  const selectedEdge = selectedEdgeId ? GRAPH_EDGES.find(e => e.id === selectedEdgeId) : undefined
+  const edgeSourceNode = selectedEdge ? GRAPH_NODES.find(n => n.id === selectedEdge.sourceId) : undefined
+  const edgeTargetNode = selectedEdge ? GRAPH_NODES.find(n => n.id === selectedEdge.targetId) : undefined
+  const edgeInspectorData: GraphEdgeMetadata | undefined = selectedEdge && edgeSourceNode && edgeTargetNode
+    ? {
+        id: selectedEdge.id,
+        predicate: selectedEdge.label ?? 'related',
+        sourceId: edgeSourceNode.id,
+        sourceTitle: edgeSourceNode.title || edgeSourceNode.label,
+        sourceDomain: edgeSourceNode.domain,
+        targetId: edgeTargetNode.id,
+        targetTitle: edgeTargetNode.title || edgeTargetNode.label,
+        targetDomain: edgeTargetNode.domain,
+        weight: selectedEdge.weight,
+      }
+    : undefined
+
   const renderGraphNode = useCallback((node: GraphNodeData, selected: boolean) => (
     <GraphNode
       id={node.id}
@@ -227,14 +291,61 @@ export default function GraphShowcase() {
       kind={node.kind}
       domainColor={node.domainColor}
       selected={selected}
-      onSelect={setSelectedNodeId}
+      onSelect={handleNodeSelect}
     />
-  ), [])
+  ), [handleNodeSelect])
 
   const renderFitViewNode = useCallback((node: GraphNodeData, selected: boolean) => {
     if (node.id === 'fv_controls') return <FitViewControls />
-    return <GraphNode id={node.id} label={node.label} selected={selected} onSelect={setSelectedNodeId} />
-  }, [])
+    return <GraphNode id={node.id} label={node.label} selected={selected} onSelect={handleNodeSelect} />
+  }, [handleNodeSelect])
+
+  // Proves galaxy layout works for substantial-size cards, not just compact GraphNode chips —
+  // TopologyNode is ~180px+ wide and grows with each metric row, versus GraphNode's ~30px tall
+  // default. Also demonstrates reading GraphNodeHierarchyMeta in a fully custom renderNode: the
+  // collapse/expand affordance here is hand-built, not GraphNode's built-in one.
+  const renderGalaxyCardNode = useCallback((node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta) => {
+    const percent = pseudoMetricPercent(node.id)
+    return (
+      <div style={{ position: 'relative' }}>
+        <TopologyNode
+          title={node.label}
+          nodeRole={node.kind === 'I' ? 'individual' : 'class'}
+          status={GALAXY_CARD_STATUS[node.domainColor ?? ''] ?? 'idle'}
+          metrics={[{ label: 'Weight', value: `${percent}%`, percent, sparklineData: [], color: 'amber' }]}
+          selected={selected}
+          onSelect={() => handleNodeSelect(node.id)}
+        />
+        {hierarchy?.hasChildren && hierarchy.onToggleCollapse && (
+          // No data-testid: GraphCanvas renders this content twice (once off-screen for
+          // measurement, once in the real SVG) — see GraphNode's collapse toggle for the same
+          // reasoning. Locate via .galaxy-card-collapse-toggle scoped under the node's own
+          // unique [data-testid="graph-node-{id}"].
+          <button
+            type="button"
+            className="galaxy-card-collapse-toggle"
+            onClick={(e) => { e.stopPropagation(); hierarchy.onToggleCollapse!() }}
+            aria-label={hierarchy.collapsed ? 'Expand' : 'Collapse'}
+            style={{
+              position: 'absolute',
+              top: 6,
+              right: 6,
+              width: 20,
+              height: 20,
+              borderRadius: 4,
+              border: '1px solid var(--canvas-border, #d8dde5)',
+              background: 'var(--canvas-bg-2, #f4f5f7)',
+              cursor: 'pointer',
+              fontSize: 11,
+              lineHeight: 1,
+            }}
+          >
+            {hierarchy.collapsed ? `+${hierarchy.hiddenDescendantCount}` : '−'}
+          </button>
+        )}
+      </div>
+    )
+  }, [handleNodeSelect])
 
   const graphCanvas = (
     <GraphCanvas
@@ -242,7 +353,11 @@ export default function GraphShowcase() {
       nodes={GRAPH_NODES}
       edges={GRAPH_EDGES}
       selectedNodeId={selectedNodeId}
-      onNodeSelect={setSelectedNodeId}
+      onNodeSelect={handleNodeSelect}
+      selectedEdgeId={selectedEdgeId}
+      onEdgeSelect={handleEdgeSelect}
+      onBackgroundClick={handleBackgroundClick}
+      draggable={draggable}
       renderNode={renderGraphNode}
       style={{ height: '100%' }}
     />
@@ -257,8 +372,32 @@ export default function GraphShowcase() {
       fitView
       fitPadding={40}
       selectedNodeId={selectedNodeId}
-      onNodeSelect={setSelectedNodeId}
+      onNodeSelect={handleNodeSelect}
+      onBackgroundClick={handleBackgroundClick}
       renderNode={renderFitViewNode}
+      style={{ height: '100%' }}
+    />
+  )
+
+  const galaxyCanvas = (
+    <GraphCanvas
+      key="galaxy-canvas"
+      data-testid="galaxy-canvas"
+      nodes={GALAXY_DEMO_NODES}
+      edges={GALAXY_DEMO_EDGES}
+      layout="galaxy"
+      isStructuralEdge={isGalaxyDemoEdgeStructural}
+      showAllRelations={showAllRelations}
+      collapsedNodeIds={collapsedNodeIds}
+      onToggleCollapse={handleToggleCollapse}
+      fitView
+      fitPadding={40}
+      selectedNodeId={selectedNodeId}
+      onNodeSelect={handleNodeSelect}
+      onBackgroundClick={handleBackgroundClick}
+      // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
+      // up domainColor/kind styling and the collapse toggle from hierarchy meta.
+      renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
       style={{ height: '100%' }}
     />
   )
@@ -273,7 +412,8 @@ export default function GraphShowcase() {
       fitView
       fitPadding={40}
       selectedNodeId={selectedNodeId}
-      onNodeSelect={setSelectedNodeId}
+      onNodeSelect={handleNodeSelect}
+      onBackgroundClick={handleBackgroundClick}
       renderNode={renderFitViewNode}
       style={{ height: '100%' }}
     />
@@ -292,8 +432,13 @@ export default function GraphShowcase() {
           fitView
           fitPadding={20}
           selectedNodeId={selectedNodeId}
-          onNodeSelect={setSelectedNodeId}
+          onNodeSelect={handleNodeSelect}
+          onBackgroundClick={handleBackgroundClick}
           renderNode={renderFitViewNode}
+          // This demo already embeds its own Fit/Zoom/Pan buttons as a graph node
+          // (FitViewControls, via useGraphCanvas()) specifically to demonstrate that API — the
+          // built-in toolbar would be redundant on top of it, and in this small a panel, overlaps it.
+          showToolbar={false}
           style={{ height: '100%' }}
         />
       </div>
@@ -391,6 +536,21 @@ export default function GraphShowcase() {
           </button>
           <button
             type="button"
+            data-testid="galaxy-view-button"
+            onClick={() => setCanvasMode('galaxy')}
+            style={{
+              padding: '8px 16px',
+              background: canvasMode === 'galaxy' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: canvasMode === 'galaxy' ? 600 : 400,
+            }}
+          >
+            Galaxy View
+          </button>
+          <button
+            type="button"
             data-testid="clustered-view-button"
             onClick={() => setCanvasMode('clustered')}
             style={{
@@ -404,38 +564,109 @@ export default function GraphShowcase() {
           >
             Clustered View
           </button>
+          {canvasMode === 'graph' && (
+            <button
+              type="button"
+              data-testid="graph-draggable-toggle"
+              onClick={() => setDraggable(v => !v)}
+              style={{
+                padding: '8px 16px',
+                background: draggable ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: draggable ? 600 : 400,
+              }}
+            >
+              Draggable: {draggable ? 'On' : 'Off'}
+            </button>
+          )}
+          {canvasMode === 'galaxy' && (
+            <button
+              type="button"
+              data-testid="galaxy-show-all-relations-button"
+              onClick={() => setShowAllRelations(v => !v)}
+              style={{
+                padding: '8px 16px',
+                background: showAllRelations ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: showAllRelations ? 600 : 400,
+              }}
+            >
+              Show all relations
+            </button>
+          )}
+          {canvasMode === 'galaxy' && (
+            <button
+              type="button"
+              data-testid="galaxy-card-size-button"
+              onClick={() => setGalaxyCardSize(v => (v === 'compact' ? 'cards' : 'compact'))}
+              style={{
+                padding: '8px 16px',
+                background: galaxyCardSize === 'cards' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: galaxyCardSize === 'cards' ? 600 : 400,
+              }}
+            >
+              {galaxyCardSize === 'cards' ? 'Cards' : 'Compact'}
+            </button>
+          )}
         </div>
       </div>
 
-      <div style={{ flex: 1, minHeight: 0, display: 'flex' }}>
-        <SplitPane
-          data-testid="graph-inspector-split-pane"
-          direction="horizontal"
-          initialSplitPercent={70}
-          minSize={300}
-          maxSize={900}
-          first={
-            canvasMode === 'graph'
-              ? graphCanvas
-              : canvasMode === 'topology'
-                ? topologyCanvas
-                : canvasMode === 'bus'
-                  ? busCanvas
-                  : canvasMode === 'clustered'
-                    ? clusteredCanvas
-                    : fitViewCanvas
-          }
-          second={
+      <div style={{ flex: 1, minHeight: 0, position: 'relative' }} data-testid="graph-content-area">
+        {canvasMode === 'graph'
+          ? graphCanvas
+          : canvasMode === 'topology'
+            ? topologyCanvas
+            : canvasMode === 'bus'
+              ? busCanvas
+              : canvasMode === 'galaxy'
+                ? galaxyCanvas
+                : canvasMode === 'clustered'
+                  ? clusteredCanvas
+                  : fitViewCanvas}
+
+        <DetailDrawer
+          data-testid="graph-detail-drawer"
+          open={!!(selectedNodeId || selectedEdgeId)}
+          width={drawerWidth}
+          onWidthChange={setDrawerWidth}
+        >
+          {edgeInspectorData ? (
+            <div data-testid="graph-edge-inspector-stack" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {edgeSourceNode && (
+                <GraphInspector
+                  data-testid="graph-inspector-panel-source"
+                  node={{ id: edgeSourceNode.id, title: edgeSourceNode.title || edgeSourceNode.label, kind: edgeSourceNode.kind, domain: edgeSourceNode.domain }}
+                  onNodeSelect={handleNodeSelect}
+                />
+              )}
+              <GraphEdgeInspector data-testid="graph-edge-inspector-panel" edge={edgeInspectorData} onNodeSelect={handleNodeSelect} />
+              {edgeTargetNode && (
+                <GraphInspector
+                  data-testid="graph-inspector-panel-target"
+                  node={{ id: edgeTargetNode.id, title: edgeTargetNode.title || edgeTargetNode.label, kind: edgeTargetNode.kind, domain: edgeTargetNode.domain }}
+                  onNodeSelect={handleNodeSelect}
+                />
+              )}
+            </div>
+          ) : inspectorNode ? (
+            // No empty-state render here — the drawer being closed (open=false above) already
+            // is the empty state; rendering GraphInspector's own "nothing selected" text inside
+            // a drawer that exists specifically because something's selected would be redundant.
             <GraphInspector
               data-testid="graph-inspector-panel"
               node={inspectorNode}
               relationships={relationships}
-              onNodeSelect={setSelectedNodeId}
-              emptyStateText={canvasMode === 'graph' ? 'Select a node to inspect.' : 'Select a service to view details.'}
+              onNodeSelect={handleNodeSelect}
             />
-          }
-          style={{ height: '100%', flex: 1 }}
-        />
+          ) : null}
+        </DetailDrawer>
       </div>
     </div>
   )

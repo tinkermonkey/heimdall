@@ -71,6 +71,18 @@ export const ICONS = {
   sparkles: 'M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z M19 3 L20 5.5 L22.5 6.5 L20 7.5 L19 10 L18 7.5 L15.5 6.5 L18 5.5 Z',
   share: 'M18 8 C19.66 8 21 6.66 21 5 C21 3.34 19.66 2 18 2 C16.34 2 15 3.34 15 5 C15 6.66 16.34 8 18 8 Z M6 15 C7.66 15 9 13.66 9 12 C9 10.34 7.66 9 6 9 C4.34 9 3 10.34 3 12 C3 13.66 4.34 15 6 15 Z M18 22 C19.66 22 21 20.66 21 19 C21 17.34 19.66 16 18 16 C16.34 16 15 17.34 15 19 C15 20.66 16.34 22 18 22 Z M8.59 13.51 L15.42 17.49 M15.41 6.51 L8.59 10.49',
   ellipsis: 'M6 12 C6 13.1 5.1 14 4 14 C2.9 14 2 13.1 2 12 C2 10.9 2.9 10 4 10 C5.1 10 6 10.9 6 12 Z M14 12 C14 13.1 13.1 14 12 14 C10.9 14 10 13.1 10 12 C10 10.9 10.9 10 12 10 C13.1 10 14 10.9 14 12 Z M22 12 C22 13.1 21.1 14 20 14 C18.9 14 18 13.1 18 12 C18 10.9 18.9 10 20 10 C21.1 10 22 10.9 22 12 Z',
+  zoomIn: 'M11 3 C15.42 3 19 6.58 19 11 C19 15.42 15.42 19 11 19 C6.58 19 3 15.42 3 11 C3 6.58 6.58 3 11 3 M21 21 L16.65 16.65 M11 8 L11 14 M8 11 L14 11',
+  zoomOut: 'M11 3 C15.42 3 19 6.58 19 11 C19 15.42 15.42 19 11 19 C6.58 19 3 15.42 3 11 C3 6.58 6.58 3 11 3 M21 21 L16.65 16.65 M8 11 L14 11',
+  // Four outward-facing corner brackets — "fit to view" / "zoom to extents".
+  maximize: 'M3 8 L3 3 L8 3 M16 3 L21 3 L21 8 M21 16 L21 21 L16 21 M8 21 L3 21 L3 16',
+  // Two-corner brackets (top-right + bottom-left) with diagonal arrows pointing outward toward
+  // them — deliberately distinct from `maximize`'s four-corner-bracket "fit to view" glyph so a
+  // fullscreen toggle sitting next to it doesn't read as a duplicate button.
+  fullscreen: 'M15 3 L21 3 L21 9 M9 21 L3 21 L3 15 M21 3 L14 10 M3 21 L10 14',
+  fullscreenExit: 'M20 10 L14 10 L14 4 M4 14 L10 14 L10 20 M14 10 L21 3 M10 14 L3 21',
+  // A flat orbit ring with one small satellite riding it — "live simulation" toggle, deliberately
+  // distinct from every other icon in the graph toolbar.
+  orbit: 'M21 12 C21 9.52 16.97 7.5 12 7.5 C7.03 7.5 3 9.52 3 12 C3 14.48 7.03 16.5 12 16.5 C16.97 16.5 21 14.48 21 12 M22.8 12 C22.8 13 22 13.8 21 13.8 C20 13.8 19.2 13 19.2 12 C19.2 11 20 10.2 21 10.2 C22 10.2 22.8 11 22.8 12',
 } as const
 
 export type IconName = keyof typeof ICONS

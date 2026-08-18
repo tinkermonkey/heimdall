@@ -16,6 +16,21 @@
 .split-pane__first,
 .split-pane__second {
   overflow: auto;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--canvas-border-strong)) transparent;
+}
+
+.split-pane__first::-webkit-scrollbar,
+.split-pane__second::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.split-pane__first::-webkit-scrollbar-thumb,
+.split-pane__second::-webkit-scrollbar-thumb {
+  background: rgb(var(--canvas-border-strong));
+  border-radius: 4px;
 }
 
 .split-pane__divider {

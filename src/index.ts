@@ -132,19 +132,25 @@ export {
   type GraphEdge as GraphEdgeData,
   type GraphCanvasProps,
   type BaseGraphNodeComponentProps,
+  type GraphNodeHierarchyMeta,
 } from './components/GraphCanvas'
 export { type GraphCanvasContextValue, type GraphNodeRect } from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
+export { GraphToolbar, type GraphToolbarProps, type GraphToolbarPosition } from './components/GraphToolbar'
+export { DetailDrawer, type DetailDrawerProps } from './components/DetailDrawer'
 export {
   forceLayout,
   clusteredForceLayout,
+  boundingCirclesByGroup,
   type LayoutNode,
   type LayoutEdge,
   type ForceLayoutOptions,
   type ClusteredLayoutOptions,
   type ClusteredLayoutResult,
 } from './utils/graphLayout'
+export { galaxyLayout, type GalaxyLayoutNode, type GalaxyLayoutEdge, type GalaxyLayoutOptions } from './utils/galaxyLayout'
+export { buildStructuralForest, structuralDescendants, type HierarchyEdge, type StructuralForest } from './utils/graphHierarchy'
 export { louvainCluster, type ClusterEdge, type ClusterTreeNode, type LouvainOptions } from './utils/graphClustering'
 export { packClusters, type PackedCircle, type PackOptions } from './utils/graphPacking'
 export {
@@ -153,8 +159,22 @@ export {
   type RelationshipLink,
   type GraphInspectorProps,
 } from './components/GraphInspector'
+export {
+  GraphEdgeInspector,
+  type GraphEdgeMetadata,
+  type GraphEdgeInspectorProps,
+} from './components/GraphEdgeInspector'
 export { TopologyNode, type TopologyNodeStatus, type TopologyNodeMetric, type TopologyNodeProps } from './components/TopologyNode'
-export { bezierPath, rectEdgePoint, type Point, type BezierPathResult, type EdgeAnchor } from './utils/graph'
+export {
+  bezierPath,
+  rectEdgePoint,
+  rectEdgeDirection,
+  edgeLabelSize,
+  findClearLabelPosition,
+  type Point,
+  type BezierPathResult,
+  type EdgeAnchor,
+} from './utils/graph'
 export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type HierarchyDomain } from './components/HierarchyRow'
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'

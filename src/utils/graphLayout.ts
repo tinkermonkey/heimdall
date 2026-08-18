@@ -41,6 +41,20 @@ export interface ForceLayoutOptions {
   repulsion?: number
   damping?: number
   centerStrength?: number
+  collisionStrength?: number
+  /**
+   * Extra breathing room kept clear around each node's own footprint, on top of what's needed to
+   * just avoid overlap. This is what actually leaves room for an edge to be visible between two
+   * connected nodes instead of their boxes settling nearly flush — with substantial cards
+   * (renderNode content), the tightest-legal-packing default previously used left edges with
+   * almost no visible line, reading as if edges were missing entirely.
+   *
+   * Defaults to each node's own width, which reads well for both compact chips and substantial
+   * cards without extra configuration — a wider card asks for more clearance around itself.
+   * Pass a fixed number to use the same margin for every node regardless of size, or 0 to go back
+   * to the tightest legal packing.
+   */
+  nodeMargin?: number
 }
 
 export function forceLayout(
@@ -55,9 +69,30 @@ export function forceLayout(
     repulsion = 8000,
     damping = 0.85,
     centerStrength = 0.005,
+    collisionStrength = 0.3,
+    nodeMargin,
   } = options
 
   if (nodes.length === 0) return new Map()
+
+  // See ForceLayoutOptions.nodeMargin. undefined -> each node's own width; a number -> that
+  // fixed margin for every node.
+  const marginFor = (n: LayoutNode): number => nodeMargin ?? n.width
+
+  // Rest length actually used for a given edge — never shorter than what the two connected
+  // boxes' own footprints need to clear each other, plus their averaged margin. springLength
+  // alone is a flat constant with no awareness of node size: fine for default-ish chip-sized
+  // nodes (where it's already larger than two half-diagonals combined, so this is a no-op), but
+  // for substantially larger nodes (e.g. card-style renderNode content) a 160px rest length can
+  // be shorter than the boxes themselves — the spring then permanently pulls connected large
+  // nodes into overlap, and the capped separation-pass post-process below can only partially
+  // fight that every cycle, never fully winning for bushier graphs with several large nodes
+  // competing around one hub.
+  const restLength = (a: LayoutNode, b: LayoutNode): number =>
+    Math.max(
+      springLength,
+      (Math.hypot(a.width, a.height) + Math.hypot(b.width, b.height)) / 2 * 1.1 + (marginFor(a) + marginFor(b)) / 2
+    )
 
   const vx = new Map<string, number>(nodes.map(n => [n.id, 0]))
   const vy = new Map<string, number>(nodes.map(n => [n.id, 0]))
@@ -83,6 +118,30 @@ export function forceLayout(
         const fy = (dy / dist) * force
         if (!a.pinned) { vx.set(a.id, vx.get(a.id)! - fx); vy.set(a.id, vy.get(a.id)! - fy) }
         if (!b.pinned) { vx.set(b.id, vx.get(b.id)! + fx); vy.set(b.id, vy.get(b.id)! + fy) }
+
+        // Collision: an extra corrective push for any pair currently closer than their combined
+        // margin-padded footprints, proportional to the overlap depth — same idea as the
+        // separationPass post-process below (which stays literal/unpadded — see resolveOverlaps),
+        // but applied continuously as a soft force during the simulation, against padded
+        // footprints so it also contributes to the "spread out" effect nodeMargin asks for,
+        // instead of only in a fixed-budget pass at the end. Generic inverse-square repulsion
+        // above has no notion of node size, so for large nodes (e.g. card-style renderNode
+        // content) — especially several of them fanned out as siblings around one hub, which
+        // aren't spring-connected to each other at all — it alone settles into an equilibrium
+        // with real box overlap that repulsion never resolves on its own.
+        const paddedWidthA = a.width + marginFor(a)
+        const paddedWidthB = b.width + marginFor(b)
+        const paddedHeightA = a.height + marginFor(a)
+        const paddedHeightB = b.height + marginFor(b)
+        const overlapX = (paddedWidthA + paddedWidthB) / 2 - Math.abs(dx)
+        const overlapY = (paddedHeightA + paddedHeightB) / 2 - Math.abs(dy)
+        if (overlapX > 0 && overlapY > 0) {
+          const depth = Math.min(overlapX, overlapY) * collisionStrength
+          const cfx = (dx / dist) * depth
+          const cfy = (dy / dist) * depth
+          if (!a.pinned) { vx.set(a.id, vx.get(a.id)! - cfx); vy.set(a.id, vy.get(a.id)! - cfy) }
+          if (!b.pinned) { vx.set(b.id, vx.get(b.id)! + cfx); vy.set(b.id, vy.get(b.id)! + cfy) }
+        }
       }
     }
 
@@ -96,7 +155,7 @@ export function forceLayout(
       const dx = pt.x - ps.x || 0.1
       const dy = pt.y - ps.y || 0.1
       const dist = Math.max(Math.hypot(dx, dy), 1)
-      const force = springStrength * (dist - springLength)
+      const force = springStrength * (dist - restLength(src, tgt))
       const fx = (dx / dist) * force
       const fy = (dy / dist) * force
       if (!src.pinned) { vx.set(src.id, vx.get(src.id)! + fx); vy.set(src.id, vy.get(src.id)! + fy) }
@@ -118,7 +177,7 @@ export function forceLayout(
     }
   }
 
-  resolveOverlaps(nodes, edges, pos, vx, vy, nodeMap, { springLength, springStrength, damping })
+  resolveOverlaps(nodes, edges, pos, vx, vy, nodeMap, { restLength, springStrength, damping })
 
   return pos
 }
@@ -141,9 +200,23 @@ export function forceLayout(
 //     relaxation mixed in) until either no overlap remains or a generous
 //     pass budget is exhausted, rather than ending on one uncapped pass
 //     that could itself overshoot into a new overlap or crossing.
+//
+// FINAL_CLEANUP_MAX_PASSES is generous (well beyond what small/default-sized nodes ever need)
+// because with substantially larger nodes (e.g. card-style renderNode content) a bushy topology
+// can leave several nodes mutually overlapping at once — resolving one pair can nudge a third
+// node into a new marginal overlap, so full convergence takes noticeably more passes than a
+// single pair would. It's still bounded and each pass is O(n²) but cheap; the loop exits as soon
+// as a pass finds nothing to fix, so this only costs extra time in that dense-overlap case, never
+// in the common one. In rare, extreme cases (verified: 18 large cards in one dense hub-and-spoke
+// topology) a single sub-pixel-to-few-pixel sliver of overlap can still survive even this budget —
+// increasing it further empirically stopped helping past this point, suggesting a genuine
+// two-pair oscillation rather than a budget shortfall; harmless in practice but worth knowing.
 const OVERLAP_RESOLUTION_CYCLES = 40
 const RELAXATION_STEPS_PER_CYCLE = 3
-const FINAL_CLEANUP_MAX_PASSES = 50
+// Exported so other layout engines sharing separationPass (see below) use the same budget
+// instead of an independent, easy-to-miss-when-tuning magic number of their own — galaxyLayout's
+// own final cleanup loop hit the identical large-node non-convergence case this was raised for.
+export const FINAL_CLEANUP_MAX_PASSES = 400
 const SEPARATION_STEP_CAP = 6
 
 function resolveOverlaps(
@@ -153,7 +226,7 @@ function resolveOverlaps(
   vx: Map<string, number>,
   vy: Map<string, number>,
   nodeMap: Map<string, LayoutNode>,
-  options: { springLength: number; springStrength: number; damping: number }
+  options: { restLength: (a: LayoutNode, b: LayoutNode) => number; springStrength: number; damping: number }
 ): void {
   for (let cycle = 0; cycle < OVERLAP_RESOLUTION_CYCLES; cycle++) {
     separationPass(nodes, pos)
@@ -173,7 +246,10 @@ function resolveOverlaps(
 // early exit). All pairs are evaluated against the pass's STARTING
 // positions and moves are applied afterward, so resolving one pair in a
 // pass never skews another pair's overlap check within that same pass.
-function separationPass(nodes: readonly LayoutNode[], pos: Map<string, { x: number; y: number }>): boolean {
+//
+// Exported so other layout engines (e.g. galaxyLayout) can reuse the same
+// box-overlap resolution instead of duplicating it.
+export function separationPass(nodes: readonly LayoutNode[], pos: Map<string, { x: number; y: number }>): boolean {
   let anyOverlap = false
   const moves = new Map<string, { x: number; y: number }>(nodes.map(n => [n.id, { x: 0, y: 0 }]))
 
@@ -243,7 +319,7 @@ function relaxationStep(
   vx: Map<string, number>,
   vy: Map<string, number>,
   nodeMap: Map<string, LayoutNode>,
-  { springLength, springStrength, damping }: { springLength: number; springStrength: number; damping: number }
+  { restLength, springStrength, damping }: { restLength: (a: LayoutNode, b: LayoutNode) => number; springStrength: number; damping: number }
 ): void {
   for (const edge of edges) {
     const src = nodeMap.get(edge.source)
@@ -254,7 +330,7 @@ function relaxationStep(
     const dx = pt.x - ps.x || 0.1
     const dy = pt.y - ps.y || 0.1
     const dist = Math.max(Math.hypot(dx, dy), 1)
-    const force = springStrength * (dist - springLength)
+    const force = springStrength * (dist - restLength(src, tgt))
     const fx = (dx / dist) * force
     const fy = (dy / dist) * force
     if (!src.pinned) { vx.set(src.id, vx.get(src.id)! + fx); vy.set(src.id, vy.get(src.id)! + fy) }
@@ -479,24 +555,43 @@ export function clusteredForceLayout(
   })
 
   const positions = forceLayout(microNodes, edges, options)
-  const clusterBoundaries = boundingCirclesByTopCluster(nodes, positions, leafToTop, radiusOf)
+  const clusterBoundaries = boundingCirclesByGroup(nodes, positions, leafToTop, radiusOf)
   return { positions, clusterBoundaries }
 }
 
-// Simple (non-minimal) enclosing circle per top-level cluster: centroid of
-// its members' final positions, radius = furthest member's own bounding
-// radius plus its distance from that centroid. Cheap and deterministic;
-// not as tight as a true minimal-enclosing-circle algorithm, which isn't
-// needed just to draw a boundary outline.
-function boundingCirclesByTopCluster(
+// Simple (non-minimal) enclosing circle per top-level group: center is either the centroid of
+// its members' final positions, or (see anchorToHead below) the group's own head node's
+// position; radius = furthest member's own bounding radius plus its distance from that center.
+// Cheap and deterministic; not as tight as a true minimal-enclosing-circle algorithm, which
+// isn't needed just to draw a boundary outline.
+//
+// Exported so any layout engine that produces a "member -> top-level group" mapping can draw the
+// same boundary-circle visual — clusteredForceLayout uses it for Louvain's top-level clusters
+// (see above); GraphCanvas reuses it directly for galaxyLayout's root subtrees (each root's id ->
+// itself, each descendant's id -> its root), since galaxyLayout itself has no "cluster" concept
+// of its own to return one from.
+export function boundingCirclesByGroup(
   nodes: readonly LayoutNode[],
   positions: Map<string, { x: number; y: number }>,
-  leafToTop: Map<string, string>,
-  radiusOf: (id: string) => number
+  leafToGroup: Map<string, string>,
+  radiusOf: (id: string) => number,
+  /**
+   * When true, centers each circle on the group head's own position (`positions.get(topId)`) —
+   * valid whenever `topId` is itself a real, positioned member of its own group, which galaxy's
+   * leafToGroup always arranges (see galaxyGroupHeads). Falls back to the centroid if the head
+   * has no position. Galaxy passes true: its groups radiate outward from one "sun" node rather
+   * than spreading symmetrically, so a deep, lopsided subtree (a long one-directional chain, say)
+   * can drift its members' average position well away from the sun itself — centering on the
+   * centroid there would draw a circle over empty space nowhere near the node it's meant to
+   * encircle. Louvain clusters (force-clustered) have no such single natural anchor, so that
+   * caller leaves this false and keeps the centroid, which is the more space-efficient choice
+   * when there's no specific node the circle needs to stay anchored to.
+   */
+  anchorToHead = false
 ): Map<string, { x: number; y: number; r: number }> {
   const membersByTop = new Map<string, LayoutNode[]>()
   for (const n of nodes) {
-    const topId = leafToTop.get(n.id)
+    const topId = leafToGroup.get(n.id)
     if (!topId) continue
     if (!membersByTop.has(topId)) membersByTop.set(topId, [])
     membersByTop.get(topId)!.push(n)
@@ -504,16 +599,24 @@ function boundingCirclesByTopCluster(
 
   const boundaries = new Map<string, { x: number; y: number; r: number }>()
   for (const [topId, members] of membersByTop) {
-    let cx = 0
-    let cy = 0
-    for (const m of members) {
-      const p = positions.get(m.id)
-      if (!p) continue
-      cx += p.x
-      cy += p.y
+    let cx: number
+    let cy: number
+    const headPos = anchorToHead ? positions.get(topId) : undefined
+    if (headPos) {
+      cx = headPos.x
+      cy = headPos.y
+    } else {
+      cx = 0
+      cy = 0
+      for (const m of members) {
+        const p = positions.get(m.id)
+        if (!p) continue
+        cx += p.x
+        cy += p.y
+      }
+      cx /= members.length
+      cy /= members.length
     }
-    cx /= members.length
-    cy /= members.length
 
     let r = 0
     for (const m of members) {

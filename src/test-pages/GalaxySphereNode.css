@@ -1,0 +1,25 @@
+.galaxy-sphere-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgb(var(--canvas-card));
+  border: 2px solid #5bc0de;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-width 120ms ease;
+}
+
+.galaxy-sphere-node.selected {
+  border-width: 3px;
+}
+
+.galaxy-sphere-node__title {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgb(var(--canvas-fg-1));
+  text-align: center;
+  pointer-events: none;
+  overflow: hidden;
+  padding: 0 2px;
+}

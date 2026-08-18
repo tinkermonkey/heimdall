@@ -41,6 +41,10 @@
 }
 
 body.dark-canvas .graph-node.selected {
+  /* border-color reasserted for the same reason as :hover above — body.dark-canvas .graph-node
+     is specific enough to beat .graph-node.selected's border-color on its own; box-shadow was
+     already being overridden here for dark-mode contrast, so only border-color was missing. */
+  border-color: rgb(var(--accent-primary-deep));
   box-shadow:
     0 0 0 2px rgb(var(--accent-primary)),
     0 4px 10px rgba(0, 0, 0, 0.5);
@@ -101,8 +105,67 @@ body.dark-canvas .graph-node {
   color: rgb(var(--canvas-fg-1));
 }
 
+/* Reasserts the hover border color under dark canvas — body.dark-canvas .graph-node above is
+   more specific than .graph-node:hover alone (extra `body` type selector), so without this the
+   hover state was silently cancelled back to the resting border color in dark canvas; light
+   canvas was never affected since it has no such override to begin with. */
+body.dark-canvas .graph-node:hover {
+  border-color: rgb(var(--accent-primary-deep));
+}
+
 body.dark-canvas .graph-node__kind {
   background: rgb(var(--canvas-bg-2));
   border-color: rgb(var(--canvas-border));
   color: rgb(var(--canvas-fg-3));
+}
+
+.graph-node__collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  padding: 1px 3px;
+  border: 1px solid rgb(var(--canvas-border));
+  border-radius: 3px;
+  background: rgb(var(--canvas-bg-2));
+  color: rgb(var(--canvas-fg-2));
+  flex: none;
+  cursor: pointer;
+  transition:
+    background 0.1s,
+    border-color 0.1s;
+}
+
+.graph-node__collapse-toggle:hover {
+  background: rgb(var(--canvas-border));
+  border-color: rgb(var(--canvas-border-strong));
+}
+
+.graph-node__collapse-toggle:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.graph-node__hidden-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgb(var(--accent-primary-deep));
+}
+
+body.dark-canvas .graph-node__collapse-toggle {
+  background: rgb(var(--canvas-bg-2));
+  border-color: rgb(var(--canvas-border));
+  color: rgb(var(--canvas-fg-2));
+}
+
+/* Same specificity issue as the node's own hover above. */
+body.dark-canvas .graph-node__collapse-toggle:hover {
+  background: rgb(var(--canvas-border));
+  border-color: rgb(var(--canvas-border-strong));
+}
+
+body.dark-canvas .graph-node__hidden-badge {
+  color: rgb(var(--accent-primary));
 }

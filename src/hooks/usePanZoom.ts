@@ -10,6 +10,20 @@ export interface UsePanZoomOptions {
     maxY: number
   }
   onViewportChange?: (viewport: { x: number; y: number; zoom: number }) => void
+  /**
+   * The element to zoom/pan from wheel and pinch-zoom gestures. Required for those to work:
+   * React registers onWheel as a passive listener, so calling event.preventDefault() inside a
+   * synthetic handler is silently a no-op — the browser's own native scroll/pinch-zoom then
+   * fires *alongside* ours, uncoordinated, which is what actually causes the "jumpy, snaps to a
+   * random center" symptom (not React state, and not the cursor-anchor math — both were already
+   * correct). Wheel handling is instead attached here as a real { passive: false } native
+   * listener, which can genuinely suppress the browser default.
+   */
+  containerRef: React.RefObject<HTMLElement>
+  /** Freezes wheel-zoom, drag-to-pan, and the keyboard zoom/pan shortcuts. Doesn't affect
+   *  imperative calls (zoomTo/panTo/reset) — those are deliberate actions, not the accidental
+   *  scroll/drag input this is meant to guard against. Default false. */
+  locked?: boolean
 }
 
 export interface UsePanZoomReturn {
@@ -17,7 +31,6 @@ export interface UsePanZoomReturn {
   viewport: { x: number; y: number; zoom: number }
   bind: {
     onPointerDown: (e: React.PointerEvent<HTMLElement>) => void
-    onWheel: (e: React.WheelEvent<HTMLElement>) => void
     onKeyDown: (e: React.KeyboardEvent<HTMLElement>) => void
     tabIndex: number
     role: string
@@ -34,6 +47,44 @@ const PAN_STEP = 20
 const INERTIA_DECAY = 0.95
 const MIN_VELOCITY = 0.1
 
+// Wheel-to-zoom sensitivity, ported from d3-zoom's default wheelDelta: zoom scales
+// exponentially with deltaY (2^(-deltaY * sensitivity)) instead of jumping ZOOM_STEP per
+// event regardless of magnitude. That's what makes a light trackpad scroll produce a light
+// zoom change — a flat per-event step blows past the target after a couple of the dozens of
+// small events one scroll gesture fires. deltaMode distinguishes pixel (0, trackpads and most
+// mice), line (1), and page (2) delta units, which otherwise differ by 1-2 orders of magnitude.
+// ctrlKey is how browsers report a trackpad pinch gesture over 'wheel'; its deltaY tends to be
+// much smaller per event than a scroll's, so it gets amplified to match — also straight from d3.
+const WHEEL_PIXEL_SENSITIVITY = 0.002
+const WHEEL_LINE_SENSITIVITY = 0.05
+const WHEEL_PAGE_SENSITIVITY = 1
+const WHEEL_CTRL_MULTIPLIER = 10
+
+function wheelZoomFactor(e: WheelEvent): number {
+  const sensitivity =
+    e.deltaMode === 1 ? WHEEL_LINE_SENSITIVITY : e.deltaMode === 2 ? WHEEL_PAGE_SENSITIVITY : WHEEL_PIXEL_SENSITIVITY
+  const multiplier = e.ctrlKey ? WHEEL_CTRL_MULTIPLIER : 1
+  return Math.pow(2, -e.deltaY * sensitivity * multiplier)
+}
+
+// The exact point-under-cursor-stays-under-cursor solution for transform matrix(zoom,0,0,zoom,panX,panY)
+// (screen = world * zoom + pan): a linear approximation (pan - (cursor/zoom)*Δzoom, used here
+// previously) only holds for infinitesimally small Δzoom and drifts visibly as either the step
+// size or the distance from zoom=1 grows — this is correct for any zoom change.
+function anchoredPan(
+  cx: number,
+  cy: number,
+  prevZoom: number,
+  nextZoom: number,
+  prevPan: { x: number; y: number }
+): { x: number; y: number } {
+  const ratio = nextZoom / prevZoom
+  return {
+    x: cx - ratio * (cx - prevPan.x),
+    y: cy - ratio * (cy - prevPan.y),
+  }
+}
+
 function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
@@ -43,17 +94,34 @@ export function usePanZoom({
   maxZoom = DEFAULT_MAX_ZOOM,
   bounds,
   onViewportChange,
-}: UsePanZoomOptions = {}): UsePanZoomReturn {
+  containerRef,
+  locked = false,
+}: UsePanZoomOptions): UsePanZoomReturn {
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
 
   const zoomRef = useRef(1)
   const panRef = useRef({ x: 0, y: 0 })
+  // Read from input handlers instead of taking `locked` as a dependency — those handlers
+  // (attached as a native listener, or otherwise expensive to reattach) shouldn't need to be
+  // torn down and recreated just because lock was toggled.
+  const lockedRef = useRef(locked)
+  useEffect(() => {
+    lockedRef.current = locked
+  }, [locked])
   const dragRef = useRef<{ x: number; y: number; lastX: number; lastY: number; panX: number; panY: number; vx: number; vy: number; time: number } | null>(null)
   const listenersAttachedRef = useRef(false)
   const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
   const handlePointerUpRef = useRef<() => void>()
-  const rafRef = useRef<number | null>(null)
+  // Separate per-gesture rAF refs — drag-pan, wheel-zoom, and keyboard pan/zoom can all fire in
+  // the same frame (e.g. a trackpad pinch with a hand also resting near a mouse button, or wheel
+  // input arriving just as a keyboard shortcut fires), and previously shared a single `rafRef`:
+  // whichever gesture's handler ran last would silently cancelAnimationFrame() the others'
+  // already-scheduled update before it ever committed, dropping that gesture's zoom/pan change
+  // entirely for the frame — not a rendering glitch so much as one input source stomping another.
+  const dragRafRef = useRef<number | null>(null)
+  const wheelRafRef = useRef<number | null>(null)
+  const keyRafRef = useRef<number | null>(null)
   const inertiaRafRef = useRef<number | null>(null)
 
   // Keep refs current for event handlers
@@ -123,11 +191,11 @@ export function usePanZoom({
     dragRef.current.lastX = e.clientX
     dragRef.current.lastY = e.clientY
 
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current)
+    if (dragRafRef.current !== null) {
+      cancelAnimationFrame(dragRafRef.current)
     }
 
-    rafRef.current = requestAnimationFrame(() => {
+    dragRafRef.current = requestAnimationFrame(() => {
       if (!dragRef.current) return
 
       const newPan = clampPan(
@@ -136,7 +204,7 @@ export function usePanZoom({
       )
 
       setPan(newPan)
-      rafRef.current = null
+      dragRafRef.current = null
     })
   }, [clampPan])
 
@@ -187,6 +255,7 @@ export function usePanZoom({
   }, [detachListeners, clampPan])
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
+    if (lockedRef.current) return
     if (inertiaRafRef.current !== null) {
       cancelAnimationFrame(inertiaRafRef.current)
       inertiaRafRef.current = null
@@ -219,8 +288,14 @@ export function usePanZoom({
   useEffect(() => {
     return () => {
       detachListeners()
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current)
+      if (dragRafRef.current !== null) {
+        cancelAnimationFrame(dragRafRef.current)
+      }
+      if (wheelRafRef.current !== null) {
+        cancelAnimationFrame(wheelRafRef.current)
+      }
+      if (keyRafRef.current !== null) {
+        cancelAnimationFrame(keyRafRef.current)
       }
       if (inertiaRafRef.current !== null) {
         cancelAnimationFrame(inertiaRafRef.current)
@@ -228,39 +303,47 @@ export function usePanZoom({
     }
   }, [detachListeners])
 
-  const handleWheel = useCallback((e: React.WheelEvent<HTMLElement>) => {
+  // Native WheelEvent, not React.WheelEvent — this is attached directly via addEventListener
+  // below (with { passive: false }) rather than as a React onWheel prop, specifically so
+  // preventDefault() actually works. See UsePanZoomOptions.containerRef for why.
+  const handleWheel = useCallback((e: WheelEvent) => {
+    if (lockedRef.current) return
     e.preventDefault()
 
-    const container = e.currentTarget
+    const container = e.currentTarget as HTMLElement
     const rect = container.getBoundingClientRect()
     const cx = e.clientX - rect.left
     const cy = e.clientY - rect.top
 
     if (!Number.isFinite(cx) || !Number.isFinite(cy)) return
 
-    const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP
     const prev = zoomRef.current
-    const next = Math.min(maxZoom, Math.max(minZoom, prev + delta))
-    const change = next - prev
+    const next = Math.min(maxZoom, Math.max(minZoom, prev * wheelZoomFactor(e)))
+    const anchored = anchoredPan(cx, cy, prev, next, panRef.current)
+    const newPan = clampPan(anchored.x, anchored.y)
 
-    const newPan = clampPan(
-      panRef.current.x - (cx / prev) * change,
-      panRef.current.y - (cy / prev) * change
-    )
-
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current)
+    if (wheelRafRef.current !== null) {
+      cancelAnimationFrame(wheelRafRef.current)
     }
 
-    rafRef.current = requestAnimationFrame(() => {
+    wheelRafRef.current = requestAnimationFrame(() => {
       setZoom(next)
       setPan(newPan)
-      rafRef.current = null
+      wheelRafRef.current = null
     })
   }, [clampPan, minZoom, maxZoom])
 
+  // A real, non-passive native listener — see UsePanZoomOptions.containerRef.
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    container.addEventListener('wheel', handleWheel, { passive: false })
+    return () => container.removeEventListener('wheel', handleWheel)
+  }, [containerRef, handleWheel])
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLElement>) => {
+      if (lockedRef.current) return
       const key = e.key
       let updateZoom: number | null = null
       let updatePan: { x: number; y: number } | null = null
@@ -286,18 +369,18 @@ export function usePanZoom({
       }
 
       if (updateZoom !== null || updatePan !== null) {
-        if (rafRef.current !== null) {
-          cancelAnimationFrame(rafRef.current)
+        if (keyRafRef.current !== null) {
+          cancelAnimationFrame(keyRafRef.current)
         }
 
-        rafRef.current = requestAnimationFrame(() => {
+        keyRafRef.current = requestAnimationFrame(() => {
           if (updateZoom !== null) {
             setZoom(updateZoom)
           }
           if (updatePan !== null) {
             setPan(updatePan)
           }
-          rafRef.current = null
+          keyRafRef.current = null
         })
       }
     },
@@ -308,16 +391,12 @@ export function usePanZoom({
     (targetZoom: number, cx?: number, cy?: number) => {
       const clamped = Math.min(maxZoom, Math.max(minZoom, targetZoom))
       const prev = zoomRef.current
-      const change = clamped - prev
 
       setZoom(clamped)
 
       if (cx !== undefined && cy !== undefined) {
-        const newPan = clampPan(
-          panRef.current.x - (cx / prev) * change,
-          panRef.current.y - (cy / prev) * change
-        )
-        setPan(newPan)
+        const anchored = anchoredPan(cx, cy, prev, clamped, panRef.current)
+        setPan(clampPan(anchored.x, anchored.y))
       }
     },
     [clampPan, minZoom, maxZoom]
@@ -348,7 +427,6 @@ export function usePanZoom({
     viewport: { x: pan.x, y: pan.y, zoom },
     bind: {
       onPointerDown: handlePointerDown,
-      onWheel: handleWheel,
       onKeyDown: handleKeyDown,
       tabIndex: 0,
       role: 'region',

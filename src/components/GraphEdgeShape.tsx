@@ -1,4 +1,5 @@
 import React from 'react'
+import { edgeLabelSize } from '../utils/graph'
 import {
   DEFAULT_EDGE_MARKER_SIZE,
   DEFAULT_EDGE_STROKE_WIDTH,
@@ -22,6 +23,12 @@ export interface GraphEdgeShapeProps {
   strokeDash?: number | [number, number]
   /** Standalone GraphEdge exposes finer-grained test ids than the canvas-internal renderer. */
   detailedTestIds?: boolean
+  /** Called with `id` when the line or label is clicked, or activated via keyboard on the
+   *  owning <g> (see GraphEdge/GraphEdgeInternal). Without it, the edge isn't interactive —
+   *  the hit-target stroke is still there, but nothing responds to it. The owning <g> is
+   *  responsible for the `selected` visual state (see its own `.graph-edge.selected` class) —
+   *  this component doesn't need to know selection state itself, just where to send clicks. */
+  onSelect?: (id: string) => void
 }
 
 // Shared by GraphEdgeInternal and standalone GraphEdge to prevent drift.
@@ -35,6 +42,7 @@ export function GraphEdgeShape({
   opacity,
   strokeDash,
   detailedTestIds = false,
+  onSelect,
 }: GraphEdgeShapeProps) {
   const markerId = `arrow-${id}`
   const markerRoseId = `arrow-rose-${id}`
@@ -60,6 +68,9 @@ export function GraphEdgeShape({
   const defaultMarkerSize = markerSize(DEFAULT_EDGE_MARKER_SIZE.default)
   const roseMarkerSize = markerSize(DEFAULT_EDGE_MARKER_SIZE.irrelevant)
   const cyanMarkerSize = markerSize(DEFAULT_EDGE_MARKER_SIZE.hot)
+
+  const handleClick = onSelect ? (e: React.MouseEvent) => { e.stopPropagation(); onSelect(id) } : undefined
+  const labelSize = label ? edgeLabelSize(label) : null
 
   return (
     <>
@@ -102,7 +113,12 @@ export function GraphEdgeShape({
         </marker>
       </defs>
 
-      <path className="graph-edge__hit" d={d} data-testid={detailedTestIds ? `graph-edge-hit-${id}` : undefined} />
+      <path
+        className="graph-edge__hit"
+        d={d}
+        onClick={handleClick}
+        data-testid={detailedTestIds ? `graph-edge-hit-${id}` : undefined}
+      />
       <path
         className="graph-edge__line"
         d={d}
@@ -111,21 +127,26 @@ export function GraphEdgeShape({
         data-testid={detailedTestIds ? `graph-edge-line-${id}` : undefined}
       />
 
-      {label && (
+      {label && labelSize && (
         <g
-          className="graph-edge__label"
-          transform={`translate(${mid.x - (label.length * 3.3 + 7)}, ${mid.y - 9})`}
+          className={
+            onSelect
+              ? 'graph-edge__label graph-edge__label--clickable'
+              : 'graph-edge__label'
+          }
+          transform={`translate(${mid.x - labelSize.width / 2}, ${mid.y - labelSize.height / 2})`}
+          onClick={handleClick}
         >
           <rect
-            width={label.length * 6.6 + 14}
-            height="18"
+            width={labelSize.width}
+            height={labelSize.height}
             rx="3"
             className="graph-edge__label-bg"
             data-testid={detailedTestIds ? `graph-edge-label-bg-${id}` : undefined}
           />
           <text
-            x={label.length * 3.3 + 7}
-            y="12"
+            x={labelSize.width / 2}
+            y={labelSize.height / 2 + 3}
             className="graph-edge__label-text"
             data-testid={detailedTestIds ? `graph-edge-label-text-${id}` : undefined}
           >

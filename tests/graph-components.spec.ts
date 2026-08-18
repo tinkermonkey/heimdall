@@ -47,6 +47,160 @@ test.describe('Graph Canvas Components', () => {
     await expect(inspectorTitle).toContainText('Cell')
   })
 
+  test('clicking an edge line selects it and shows the source/edge/target panel stack', async ({ page }) => {
+    const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+    await expect(edge).toBeVisible()
+
+    // .graph-edge__hit is the fat invisible stroke — the actual click target, not the thin
+    // visible line — same as a real user's imprecise click on a 1.25px-wide path.
+    await edge.locator('.graph-edge__hit').dispatchEvent('click')
+
+    await expect(edge).toHaveClass(/selected/)
+    await expect(page.locator('[data-testid="graph-edge-inspector-stack"]')).toBeVisible()
+    await expect(page.locator('[data-testid="graph-edge-inspector-panel"]')).toBeVisible()
+    await expect(page.locator('[data-testid="graph-inspector-panel-source"]')).toContainText('Cell')
+    await expect(page.locator('[data-testid="graph-inspector-panel-target"]')).toContainText('Nucleus')
+  })
+
+  test('clicking an edge label selects the same edge as clicking its line', async ({ page }) => {
+    const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+    await edge.locator('.graph-edge__label').dispatchEvent('click')
+
+    await expect(edge).toHaveClass(/selected/)
+    await expect(page.locator('[data-testid="edge-inspector-title"]')).toContainText('contains')
+  })
+
+  test('selecting a different edge deselects the previous one', async ({ page }) => {
+    const edge1 = page.locator('[data-testid="graph-edge-edge_1"]')
+    const edge2 = page.locator('[data-testid="graph-edge-edge_2"]')
+
+    await edge1.locator('.graph-edge__hit').dispatchEvent('click')
+    await expect(edge1).toHaveClass(/selected/)
+
+    await edge2.locator('.graph-edge__hit').dispatchEvent('click')
+    await expect(edge2).toHaveClass(/selected/)
+    await expect(edge1).not.toHaveClass(/selected/)
+  })
+
+  test('selecting a node clears any selected edge', async ({ page }) => {
+    const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+    await edge.locator('.graph-edge__hit').dispatchEvent('click')
+    await expect(edge).toHaveClass(/selected/)
+
+    await page.locator('[data-testid="graph-node-cls_mito"]').click()
+
+    await expect(edge).not.toHaveClass(/selected/)
+    await expect(page.locator('[data-testid="graph-edge-inspector-stack"]')).not.toBeVisible()
+    await expect(page.locator('[data-testid="inspector-title"]')).toContainText('Mitochondrion')
+  })
+
+  test('dragging a node repositions it', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    await expect(node).toBeVisible()
+    const before = await node.getAttribute('transform')
+
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const startX = box.x + box.width / 2
+    const startY = box.y + box.height / 2
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    // Past DRAG_THRESHOLD and with enough steps for pointermove to fire more than once.
+    await page.mouse.move(startX + 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    const after = await node.getAttribute('transform')
+    expect(after).not.toBe(before)
+  })
+
+  test('a real drag does not also fire node selection', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const startX = box.x + box.width / 2
+    const startY = box.y + box.height / 2
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    await page.mouse.move(startX + 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    await expect(node).not.toHaveClass(/selected/)
+  })
+
+  test('draggable=false disables node dragging without affecting click-to-select', async ({ page }) => {
+    await page.locator('[data-testid="graph-draggable-toggle"]').click()
+
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const before = await node.getAttribute('transform')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const startX = box.x + box.width / 2
+    const startY = box.y + box.height / 2
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    await page.mouse.move(startX + 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    const after = await node.getAttribute('transform')
+    expect(after).toBe(before)
+
+    // Dragging being off shouldn't break the ordinary click path.
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+  })
+
+  // Regression: a drag interrupted by pointercancel (e.g. a touch/gesture takeover) — rather than
+  // a normal pointerup — used to leak a one-time click-suppressor listener that never got a click
+  // to consume it, silently swallowing the node's next real click. Low-level pointer events
+  // (rather than page.mouse) so pointerId is under test control and matches what the component's
+  // own pointerId-matching logic expects.
+  test('a drag interrupted by pointercancel does not swallow the next click', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const cx = box.x + box.width / 2
+    const cy = box.y + box.height / 2
+
+    await node.evaluate((el, { cx, cy }) => {
+      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 77, clientX: cx, clientY: cy }))
+      el.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, pointerId: 77, clientX: cx + 50, clientY: cy + 40 }))
+      el.dispatchEvent(new PointerEvent('pointercancel', { bubbles: true, pointerId: 77 }))
+    }, { cx, cy })
+
+    // If the suppressor leaked, this first real click is the one that would get silently eaten.
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+  })
+
+  // Regression: draggable flipping to false mid-drag (this file's own toggle button makes this
+  // reachable) used to strand pointer capture and drag state, since onPointerMove/Up/Cancel are
+  // only bound while draggable is true and so never fire again to clean up after themselves.
+  test('toggling draggable off mid-drag leaves the node in a normal, clickable state', async ({ page }) => {
+    const node = page.locator('[data-testid="graph-node-cls_mito"]')
+    const box = await node.boundingBox()
+    if (!box) throw new Error('Node not visible')
+    const cx = box.x + box.width / 2
+    const cy = box.y + box.height / 2
+
+    await node.evaluate((el, { cx, cy }) => {
+      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 88, clientX: cx, clientY: cy }))
+      el.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, pointerId: 88, clientX: cx + 50, clientY: cy + 40 }))
+    }, { cx, cy })
+
+    // Flip draggable off without ever sending a pointerup/pointercancel for pointerId 88 —
+    // the gesture is abandoned mid-drag, same as the real toggle-while-dragging scenario.
+    await page.locator('[data-testid="graph-draggable-toggle"]').click()
+    await page.locator('[data-testid="graph-draggable-toggle"]').click()
+
+    // Not stuck: an ordinary click still selects normally, with no leaked suppressor from the
+    // abandoned gesture and no pointer capture still pinned to the old pointerId.
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+  })
+
   test('GraphCanvas panning works on mouse drag', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
     const viewport = page.locator('[data-testid="graph-viewport"]')
@@ -56,11 +210,13 @@ test.describe('Graph Canvas Components', () => {
     const box = await canvas.boundingBox()
     if (!box) throw new Error('Canvas not visible')
 
-    // Click in the lower-right quadrant, away from any nodes
-    const startX = box.x + box.width - 60
-    const startY = box.y + box.height - 60
+    // Top-center, away from any node and from the default toolbar (bottom-right, per
+    // GraphCanvas's toolbarPosition default) — verified empty background at this canvas's
+    // current node layout, unlike either bottom corner or the top-left/right corners.
+    const startX = box.x + box.width / 2
+    const startY = box.y + 40
     const endX = startX - 80
-    const endY = startY - 80
+    const endY = startY + 60
 
     await page.mouse.move(startX, startY)
     await page.mouse.down()
@@ -91,20 +247,107 @@ test.describe('Graph Canvas Components', () => {
     expect(initialTransform).not.toBe(newTransform)
   })
 
-  test('GraphInspector displays empty state when no node selected', async ({ page }) => {
-    const emptyState = page.locator('[data-testid="inspector-empty"]')
+  test('the toolbar fullscreen button toggles the canvas into and out of the Fullscreen API', async ({ page }) => {
+    const canvas = page.locator('.graph-canvas')
+    const enterBtn = page.locator('[aria-label="Fullscreen"]')
+    const exitBtn = page.locator('[aria-label="Exit fullscreen"]')
 
-    // Verify empty state is visible on initial load
-    await expect(emptyState).toBeVisible()
+    await expect(enterBtn).toBeVisible()
+    expect(await canvas.evaluate((el) => el === document.fullscreenElement)).toBe(false)
 
-    // Click a node to dismiss the empty state
+    await enterBtn.click()
+    await expect(exitBtn).toBeVisible()
+    expect(await canvas.evaluate((el) => el === document.fullscreenElement)).toBe(true)
+
+    // Exiting via document.exitFullscreen() (what pressing Esc does under the hood) rather than
+    // clicking our own button — confirms the button's pressed state tracks the platform's actual
+    // fullscreen state via the fullscreenchange listener, not just its own click handler.
+    await page.evaluate(() => document.exitFullscreen())
+    await expect(enterBtn).toBeVisible()
+    expect(await canvas.evaluate(() => document.fullscreenElement)).toBeNull()
+  })
+
+  test('the toolbar live-simulation button only appears for layout="galaxy" and toggles aria-pressed', async ({ page }) => {
+    // Default view here is layout="manual" (Graph View) — no galaxy-only control.
+    await expect(page.locator('[aria-label="Enable live simulation"]')).not.toBeAttached()
+    await expect(page.locator('[aria-label="Disable live simulation"]')).not.toBeAttached()
+
+    // layout="force-clustered" — still not galaxy.
+    await page.locator('[data-testid="clustered-view-button"]').click()
+    await page.waitForTimeout(200)
+    await expect(page.locator('[aria-label="Enable live simulation"]')).not.toBeAttached()
+
+    await page.locator('[data-testid="galaxy-view-button"]').click()
+    await page.waitForTimeout(200)
+    const enableBtn = page.locator('[aria-label="Enable live simulation"]')
+    await expect(enableBtn).toBeVisible()
+    await expect(enableBtn).toHaveAttribute('aria-pressed', 'false')
+
+    await enableBtn.click()
+    const disableBtn = page.locator('[aria-label="Disable live simulation"]')
+    await expect(disableBtn).toBeVisible()
+    await expect(disableBtn).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  test('detail drawer is hidden until a node is selected', async ({ page }) => {
+    const drawer = page.locator('[data-testid="graph-detail-drawer"]')
+
+    // Auto-hidden on initial load — no node selected, nothing to show.
+    await expect(drawer).not.toBeVisible()
+
     const allNodes = page.locator('[data-testid^="graph-node-"]')
     const firstNode = allNodes.first()
 
     await expect(firstNode).toBeVisible()
     await firstNode.click()
 
-    await expect(emptyState).not.toBeVisible()
+    await expect(drawer).toBeVisible()
+    await expect(page.locator('[data-testid="graph-inspector-panel"]')).toBeVisible()
+  })
+
+  test('clicking the canvas background deselects the node and closes the drawer', async ({ page }) => {
+    const canvas = page.locator('.graph-canvas')
+    const drawer = page.locator('[data-testid="graph-detail-drawer"]')
+    const node = page.locator('[data-testid="graph-node-cls_cell"]')
+
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+    await expect(drawer).toBeVisible()
+
+    const box = await canvas.boundingBox()
+    if (!box) throw new Error('Canvas not visible')
+
+    // Top-center, away from any node and from the default toolbar (bottom-right) — same
+    // verified-empty background spot the panning test below uses.
+    await canvas.click({ position: { x: box.width / 2, y: 40 } })
+
+    await expect(node).not.toHaveClass(/selected/)
+    await expect(drawer).not.toBeVisible()
+  })
+
+  test('a background pan drag does not deselect the node or close the drawer', async ({ page }) => {
+    const canvas = page.locator('.graph-canvas')
+    const drawer = page.locator('[data-testid="graph-detail-drawer"]')
+    const node = page.locator('[data-testid="graph-node-cls_cell"]')
+
+    await node.click()
+    await expect(node).toHaveClass(/selected/)
+    await expect(drawer).toBeVisible()
+
+    const box = await canvas.boundingBox()
+    if (!box) throw new Error('Canvas not visible')
+
+    const startX = box.x + box.width / 2
+    const startY = box.y + 40
+
+    await page.mouse.move(startX, startY)
+    await page.mouse.down()
+    // Past DRAG_THRESHOLD and with enough steps for pointermove to fire more than once.
+    await page.mouse.move(startX - 80, startY + 60, { steps: 10 })
+    await page.mouse.up()
+
+    await expect(node).toHaveClass(/selected/)
+    await expect(drawer).toBeVisible()
   })
 
   test('GraphInspector shows node metadata', async ({ page }) => {
@@ -223,15 +466,19 @@ test.describe('Graph Canvas Components', () => {
     expect(dotCount).toBeGreaterThan(0)
   })
 
-  test('SplitPane composition works with GraphCanvas and GraphInspector', async ({ page }) => {
-    const splitPane = page.locator('.split-pane')
-    await expect(splitPane).toBeVisible()
-
+  test('detail drawer overlays the graph canvas rather than sharing space with it', async ({ page }) => {
     const canvas = page.locator('.graph-canvas')
-    const inspector = page.locator('.graph-inspector')
-
     await expect(canvas).toBeVisible()
+    const canvasBoxBefore = await canvas.boundingBox()
+
+    await page.locator('[data-testid="graph-node-cls_cell"]').click()
+
+    const inspector = page.locator('.graph-inspector')
     await expect(inspector).toBeVisible()
+    // The canvas doesn't shrink to make room for it — the drawer floats in front, confirmed by
+    // the canvas's own box being unchanged now that something's selected and the drawer is open.
+    const canvasBoxAfter = await canvas.boundingBox()
+    expect(canvasBoxAfter).toEqual(canvasBoxBefore)
   })
 
   test('Node selection persists across canvas interactions', async ({ page }) => {
@@ -431,6 +678,9 @@ test.describe('Graph Canvas Components', () => {
     })
 
     test('GraphInspector panel visual snapshot', async ({ page }) => {
+      // The detail drawer (and the GraphInspector inside it) only renders once something's
+      // selected — there's no standalone always-visible empty state to screenshot anymore.
+      await page.locator('[data-testid="graph-node-cls_cell"]').click()
       const inspector = page.locator('.graph-inspector')
       await expect(inspector).toHaveScreenshot('graph-inspector-light.png')
     })
@@ -503,6 +753,7 @@ test.describe('Graph Canvas Components', () => {
     })
 
     test('GraphInspector panel visual snapshot in dark mode', async ({ page }) => {
+      await page.locator('[data-testid="graph-node-cls_cell"]').click()
       const inspector = page.locator('.graph-inspector')
       await expect(inspector).toHaveScreenshot('graph-inspector-dark.png')
     })
@@ -525,6 +776,29 @@ test.describe('Graph Canvas Components', () => {
 
       const canvas = page.locator('.graph-canvas')
       await expect(canvas).toHaveScreenshot('graph-canvas-weighted-edges-dark.png')
+    })
+
+    // Regression: body.dark-canvas .graph-node { border-color: ... } is more specific than
+    // .graph-node:hover alone (extra `body` type selector), so the hover border color was
+    // silently cancelled back to the resting one in dark canvas — light canvas was unaffected,
+    // which is why this went unnoticed for a while. GraphNode.css now reasserts it explicitly
+    // under body.dark-canvas.
+    test('node hover border color still applies in dark canvas', async ({ page }) => {
+      const node = page.locator('[data-testid="graph-node-cls_cell"] .graph-node')
+      const resting = await node.evaluate(el => getComputedStyle(el).borderColor)
+
+      await node.hover()
+      await expect.poll(() => node.evaluate(el => getComputedStyle(el).borderColor)).not.toBe(resting)
+    })
+
+    // Same bug, same fix, one state over: .selected had the identical dark-canvas specificity
+    // problem for border-color (box-shadow was already being reasserted here, border-color wasn't).
+    test('node selected border color still applies in dark canvas', async ({ page }) => {
+      const node = page.locator('[data-testid="graph-node-cls_cell"] .graph-node')
+      const resting = await node.evaluate(el => getComputedStyle(el).borderColor)
+
+      await node.click()
+      await expect.poll(() => node.evaluate(el => getComputedStyle(el).borderColor)).not.toBe(resting)
     })
   })
 
@@ -651,6 +925,427 @@ test.describe('Graph Canvas Components', () => {
     })
   })
 
+  test.describe('Galaxy View - Layout & Relations', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.locator('[data-testid="galaxy-view-button"]').click()
+      await page.waitForTimeout(200)
+    })
+
+    async function nodeOverlaps(page: import('@playwright/test').Page) {
+      const nodes = page.locator('[data-testid^="graph-node-"]')
+      const count = await nodes.count()
+      const boxes = []
+      for (let i = 0; i < count; i++) {
+        const box = await nodes.nth(i).boundingBox()
+        if (box) boxes.push(box)
+      }
+      let overlaps = 0
+      for (let i = 0; i < boxes.length; i++) {
+        for (let j = i + 1; j < boxes.length; j++) {
+          const a = boxes[i], b = boxes[j]
+          const overlapX = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x)
+          const overlapY = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y)
+          if (overlapX > 0 && overlapY > 0) overlaps++
+        }
+      }
+      return { count, overlaps }
+    }
+
+    test('renders every node with no overlapping bounding boxes', async ({ page }) => {
+      const { count, overlaps } = await nodeOverlaps(page)
+      expect(count).toBe(28) // GALAXY_DEMO_NODES length, including the two orphans
+      expect(overlaps).toBe(0)
+    })
+
+    test('toolbar zoom in/out buttons anchor at the viewport center, not wherever world origin projects to', async ({ page }) => {
+      // Regression: GraphToolbar's zoom buttons called setZoom(zoom * factor) with no anchor
+      // point, so zoomTo's underlying pan-preservation left pan completely untouched — the fixed
+      // point of the resulting transform was wherever world (0, 0) currently projected to (usually
+      // off-screen after fitView), flinging the visible content sideways instead of zooming in
+      // place. zoomBy fixes this by anchoring at the container's own center.
+      const transform = await page.locator('[data-testid="graph-viewport"]').getAttribute('transform')
+      const before = transform!.match(/matrix\(([^,]+),[^,]+,[^,]+,[^,]+,([^,]+),([^)]+)\)/)!
+      const beforeZoom = parseFloat(before[1])
+      const beforePanX = parseFloat(before[2])
+
+      await page.getByRole('button', { name: 'Zoom in' }).click()
+      await page.waitForTimeout(100)
+
+      const afterTransform = await page.locator('[data-testid="graph-viewport"]').getAttribute('transform')
+      const after = afterTransform!.match(/matrix\(([^,]+),[^,]+,[^,]+,[^,]+,([^,]+),([^)]+)\)/)!
+      const afterZoom = parseFloat(after[1])
+      const afterPanX = parseFloat(after[2])
+
+      expect(afterZoom).toBeGreaterThan(beforeZoom)
+      // Center-anchored zoom must also shift pan to compensate — the bug this guards against left
+      // pan completely unchanged (only zoom moved), which is what a world-origin-anchored zoom
+      // looks like for any fitted view whose center isn't already sitting on world (0, 0).
+      expect(Math.abs(afterPanX - beforePanX)).toBeGreaterThan(1)
+    })
+
+    test('an orphan node renders on its own, with no attached edge', async ({ page }) => {
+      const orphan = page.locator('[data-testid="graph-node-note_deprecated"]')
+      await expect(orphan).toBeVisible()
+
+      const orphanEdges = page.locator('[data-testid^="graph-edge-"][data-testid*="note_deprecated"]')
+      expect(await orphanEdges.count()).toBe(0)
+    })
+
+    test('structural edges render at full opacity by default', async ({ page }) => {
+      // organism --contains--> eukaryote, a structural predicate
+      const line = page.locator('[data-testid="graph-edge-e_organism_eukaryote"] path.graph-edge__line')
+      const opacity = await line.evaluate(el => getComputedStyle(el).opacity)
+      expect(parseFloat(opacity)).toBeCloseTo(1, 2)
+    })
+
+    test('non-structural edges are hidden by default', async ({ page }) => {
+      // brca1 --encodes--> protein, co2 --causes--> ocean_acidification, both relational
+      const encodes = page.locator('[data-testid="graph-edge-r_brca1_protein"]')
+      const causes = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"]')
+
+      // Not just invisible — not rendered at all (line, marker, and label alike), so it's also
+      // not clickable while hidden.
+      await expect(encodes).not.toBeAttached()
+      await expect(causes).not.toBeAttached()
+    })
+
+    test('hovering a node reveals its hidden non-structural edges', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-r_brca1_protein"]')
+      await expect(edge).not.toBeAttached()
+
+      // brca1 sits 5 hierarchy levels deep; fitView zooms out enough to fit the whole graph that
+      // its rendered box can end up sub-pixel at this viewport size (a real user would zoom in
+      // first), which makes geometric hover (and even .hover({force: true}), which still routes
+      // through real screen coordinates) unreliable here. React translates native 'pointerover'
+      // into its synthetic onPointerEnter — dispatch that directly on the element, bypassing
+      // screen-coordinate hit-testing entirely.
+      await page.locator('[data-testid="graph-node-brca1"]').dispatchEvent('pointerover')
+      await expect(edge).toBeAttached()
+      const opacity = await edge.locator('path.graph-edge__line').evaluate(el => getComputedStyle(el).opacity)
+      expect(parseFloat(opacity)).toBeCloseTo(1, 2)
+    })
+
+    test('"Show all relations" renders every non-structural edge', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-r_co2_ocean_acid"]')
+      await expect(edge).not.toBeAttached()
+
+      await page.locator('[data-testid="galaxy-show-all-relations-button"]').click()
+      await expect(edge).toBeAttached()
+      const opacity = await edge.locator('path.graph-edge__line').evaluate(el => getComputedStyle(el).opacity)
+      expect(parseFloat(opacity)).toBeCloseTo(1, 2)
+    })
+
+    test('collapsing a node hides its structural descendants and shows a hidden-count badge', async ({ page }) => {
+      // organism -> eukaryote, prokaryote -> ... -> 10 structural descendants total
+      const { count: before } = await nodeOverlaps(page)
+
+      const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+      await expect(toggle).toBeVisible()
+      await toggle.click()
+
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+      await expect(page.locator('[data-testid="graph-node-chromosome"]')).not.toBeAttached()
+      // organism itself stays visible, collapsed — only its subtree disappears
+      await expect(page.locator('[data-testid="graph-node-organism"]')).toBeVisible()
+
+      const { count: after } = await nodeOverlaps(page)
+      expect(before - after).toBe(10)
+
+      const badge = toggle.locator('.graph-node__hidden-badge')
+      await expect(badge).toHaveText('10')
+
+      // Edges into the hidden subtree disappear too (no dangling endpoints)
+      await expect(page.locator('[data-testid="graph-edge-e_organism_eukaryote"]')).not.toBeAttached()
+    })
+
+    test('expanding a collapsed node restores its structural descendants', async ({ page }) => {
+      const { count: before } = await nodeOverlaps(page)
+
+      const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+      await toggle.click()
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+
+      await toggle.click()
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).toBeVisible()
+
+      const { count: after, overlaps } = await nodeOverlaps(page)
+      expect(after).toBe(before)
+      expect(overlaps).toBe(0)
+    })
+
+    test('collapse toggle is keyboard-operable — Enter/Space activate it, not the parent node\'s onSelect', async ({ page }) => {
+      // Regression: the node root's own onKeyDown handled Enter/Space unconditionally, so a
+      // keydown bubbling up from the nested toggle button hit preventDefault before the button's
+      // native activation ever fired — Enter/Space on a focused toggle selected the node instead
+      // of collapsing it, and the toggle had no other way to activate from the keyboard at all.
+      const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+      await toggle.focus()
+      await page.keyboard.press('Enter')
+
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+      // If the keydown had instead reached the node's own onSelect, the node would read as
+      // selected — it shouldn't, since only the toggle was activated.
+      await expect(page.locator('[data-testid="graph-node-organism"]')).not.toHaveAttribute('aria-pressed', 'true')
+
+      await toggle.focus()
+      await page.keyboard.press(' ')
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).toBeVisible()
+    })
+
+    test('nodes without structural children render no collapse toggle', async ({ page }) => {
+      // brca1 is a leaf — reachable only via instanceOf from chromosome, no children of its own
+      await expect(page.locator('[data-testid="graph-node-brca1"] .graph-node__collapse-toggle')).not.toBeAttached()
+    })
+
+    test('"Cards" mode renders substantial-size TopologyNode cards without overlap', async ({ page }) => {
+      await page.locator('[data-testid="galaxy-card-size-button"]').click()
+
+      // Scoped under the node's own unique outer testid — TopologyNode's inner testid, like
+      // any content resolveNodeContent returns, is duplicated into the off-screen measurement copy.
+      const card = page.locator('[data-testid="graph-node-organism"] [data-testid="topology-node-organism"]')
+      await expect(card).toBeVisible()
+      const box = await card.boundingBox()
+      expect(box).toBeTruthy()
+
+      // fitView zooms the whole graph to fit the panel, so the on-screen box is scaled down from
+      // its true CSS size — divide out the current zoom to compare against TopologyNode's actual
+      // min-width (much larger than GraphNode's ~138px default).
+      const transform = await page.locator('[data-testid="graph-viewport"]').getAttribute('transform')
+      const zoom = parseFloat(transform!.match(/matrix\(([^,]+)/)![1])
+      // A tiny tolerance against float division rounding (box.width / zoom can land a fraction of
+      // a px under the true 180 depending on the exact zoom value) — asserting the exact integer
+      // boundary made this fail on legitimate sub-pixel jitter unrelated to the card's real size.
+      expect(box!.width / zoom).toBeGreaterThanOrEqual(179.5)
+
+      const { overlaps } = await nodeOverlaps(page)
+      expect(overlaps).toBe(0)
+    })
+
+    test('"Cards" mode supports collapse/expand via a fully custom renderNode', async ({ page }) => {
+      await page.locator('[data-testid="galaxy-card-size-button"]').click()
+
+      const toggle = page.locator('[data-testid="graph-node-organism"] .galaxy-card-collapse-toggle')
+      await expect(toggle).toBeVisible()
+      await toggle.click()
+      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+    })
+
+    test.describe('Aspect-ratio-aware layout', () => {
+      // Width/height of the smallest box enclosing every rendered node, in screen space — zoom is
+      // always uniform (never non-uniform stretching), so this box's own width/height RATIO is a
+      // valid proxy for the underlying layout's shape regardless of whatever zoom level fitView
+      // landed on.
+      async function clusterBoundingBox(page: import('@playwright/test').Page) {
+        const nodes = page.locator('[data-testid^="graph-node-"]')
+        const count = await nodes.count()
+        let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+        for (let i = 0; i < count; i++) {
+          const box = await nodes.nth(i).boundingBox()
+          if (!box) continue
+          minX = Math.min(minX, box.x); maxX = Math.max(maxX, box.x + box.width)
+          minY = Math.min(minY, box.y); maxY = Math.max(maxY, box.y + box.height)
+        }
+        return { width: maxX - minX, height: maxY - minY }
+      }
+
+      test('the layout reshapes to lean into the container when its aspect ratio changes', async ({ page }) => {
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+        const tall = await clusterBoundingBox(page)
+
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await page.waitForTimeout(200)
+        const wide = await clusterBoundingBox(page)
+
+        // Directional, not exact-pixel: the wide viewport's own width/height ratio should end up
+        // measurably larger than the tall viewport's, proving the layout actually reshaped rather
+        // than just being re-fit (uniform scaling) into differently shaped boxes.
+        expect(wide.width / wide.height).toBeGreaterThan((tall.width / tall.height) * 1.3)
+      })
+
+      test('locking pan/zoom prevents the redraw on resize', async ({ page }) => {
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+        const before = await clusterBoundingBox(page)
+
+        await page.locator('[aria-label="Lock pan and zoom"]').click()
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await page.waitForTimeout(200)
+        const after = await clusterBoundingBox(page)
+
+        expect(after.width / after.height).toBeCloseTo(before.width / before.height, 1)
+      })
+
+      test('unlocking after a resize catches up the relayout it was blocked from doing, instead of staying stale forever', async ({ page }) => {
+        // Regression: the effect wrote its "last handled ratio" ref before checking `locked`, so a
+        // resize that landed while locked got marked as already-handled despite never actually
+        // relaying out — unlocking re-ran the effect (locked is a dependency), but the ref already
+        // matched the current ratio, so the guard skipped the catch-up relayout it was supposed to
+        // do. The shape stayed stuck at whatever it was before the resize, permanently, until some
+        // *other* ratio change happened to come along.
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+        const before = await clusterBoundingBox(page)
+
+        await page.locator('[aria-label="Lock pan and zoom"]').click()
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await page.waitForTimeout(200)
+
+        await page.locator('[aria-label="Unlock pan and zoom"]').click()
+        await page.waitForTimeout(200)
+        const after = await clusterBoundingBox(page)
+
+        expect(after.width / after.height).toBeGreaterThan((before.width / before.height) * 1.2)
+      })
+
+      test('live simulation eases toward the new shape on resize instead of snapping', async ({ page }) => {
+        await page.setViewportSize({ width: 500, height: 1200 })
+        await page.waitForTimeout(200)
+
+        await page.locator('[aria-label="Enable live simulation"]').click()
+        await page.waitForTimeout(200)
+        const before = await clusterBoundingBox(page)
+
+        await page.setViewportSize({ width: 1400, height: 500 })
+        await expect.poll(async () => {
+          const box = await clusterBoundingBox(page)
+          return box.width / box.height
+        }, { timeout: 2000 }).toBeGreaterThan((before.width / before.height) * 1.2)
+      })
+    })
+
+    test.describe('Live simulation', () => {
+      test.beforeEach(async ({ page }) => {
+        await page.locator('[aria-label="Enable live simulation"]').click()
+        await page.waitForTimeout(100)
+      })
+
+      // Presses down on a node and drags it by (dx, dy) screen px, leaving the button held (no
+      // mouse.up() — callers release once they're done asserting mid-drag or want to control
+      // exactly when the drop happens). Galaxy View's fitView zoom can render a node's hit area
+      // only a few CSS px tall, so a first move big enough to cross DRAG_THRESHOLD in one jump
+      // can carry the cursor off that tiny area before the node's own onPointerMove ever fires —
+      // pointer capture (which is what lets the rest of the drag ignore hit-testing) never
+      // engages. Nudge in small horizontal steps first, comfortably inside even the tightest
+      // node's half-width, to trigger capture while still over the node; the final position only
+      // ever depends on total displacement from the initial pointerdown, not the path taken, so
+      // this doesn't skew the eventual drop point.
+      async function dragNode(page: import('@playwright/test').Page, testId: string, dx: number, dy: number) {
+        const node = page.locator(`[data-testid="${testId}"]`)
+        // Live mode nudges every still-unpinned node a little every tick (homeStrength pulling it
+        // toward its computed home) — wait for THIS node to actually stop moving before grabbing
+        // it, so the real mouse.move()/mouse.down() round-trip below (each its own async gap the
+        // simulation keeps ticking through) doesn't race a target that's still drifting out from
+        // under a coordinate read a tick or two earlier, which — given how small this node's hit
+        // area renders at this dataset's fit zoom — is enough to miss it outright.
+        let box = await node.boundingBox()
+        if (!box) throw new Error(`${testId} not visible`)
+        for (let i = 0; i < 30; i++) {
+          await page.waitForTimeout(20)
+          const next = await node.boundingBox()
+          if (!next) throw new Error(`${testId} not visible`)
+          const stable = Math.abs(next.x - box.x) < 0.25 && Math.abs(next.y - box.y) < 0.25
+          box = next
+          if (stable) break
+        }
+        const startX = box.x + box.width / 2
+        const startY = box.y + box.height / 2
+
+        await page.mouse.move(startX, startY)
+        await page.mouse.down()
+        await page.mouse.move(startX + 2, startY)
+        await page.mouse.move(startX + 4, startY)
+        await page.mouse.move(startX + dx, startY + dy, { steps: 10 })
+        // Returns the box this measured — while live mode is on, an as-yet-unpinned/undragged
+        // node keeps drifting a little every tick (homeStrength nudging it toward its computed
+        // home), so a caller that wants an exact before/after delta must diff against THIS box,
+        // not a separate boundingBox() read of its own: two reads a few ticks apart can each see
+        // a slightly different position, and that gap alone can exceed a tight pixel tolerance.
+        return { startX, startY, box }
+      }
+
+      test('dragging a "sun" node cascades to its children in real time', async ({ page }) => {
+        // organism -> eukaryote -> cell -> {nucleus, mitochondrion, membrane} (contains)
+        const child = page.locator('[data-testid="graph-node-nucleus"]')
+        const childBefore = await child.boundingBox()
+        if (!childBefore) throw new Error('Nodes not visible')
+
+        // Held (no mouse.up() yet) so the live simulation has a moving pin to react to.
+        await dragNode(page, 'graph-node-cell', 150, -100)
+
+        // A loose "moved," not an exact target — real convergence for this dataset's scale is
+        // low tens of ms, so a generous 500ms bound leaves headroom for slower CI machines.
+        await expect.poll(async () => {
+          const childNow = await child.boundingBox()
+          if (!childNow) return 0
+          return Math.hypot(childNow.x - childBefore.x, childNow.y - childBefore.y)
+        }, { timeout: 500 }).toBeGreaterThan(5)
+
+        await page.mouse.up()
+      })
+
+      test('a dropped "sun" node stays exactly at its drop point', async ({ page }) => {
+        const parent = page.locator('[data-testid="graph-node-cell"]')
+
+        const dx = 150
+        const dy = -100
+        const { box: before } = await dragNode(page, 'graph-node-cell', dx, dy)
+        await page.mouse.up()
+
+        // Deterministic, no wait needed — a pinned node's position is fixed the instant the pin
+        // is set, not something the simulation could nudge afterward.
+        const after = await parent.boundingBox()
+        if (!after) throw new Error('Node not visible after drop')
+        expect(Math.abs(after.x - (before.x + dx))).toBeLessThan(2)
+        expect(Math.abs(after.y - (before.y + dy))).toBeLessThan(2)
+      })
+
+      test('the simulation goes idle once settled', async ({ page }) => {
+        await dragNode(page, 'graph-node-cell', 150, -100)
+        await page.mouse.up()
+
+        const ids = ['cell', 'nucleus', 'mitochondrion', 'membrane']
+        const sample = async () => {
+          const positions: Record<string, { x: number; y: number }> = {}
+          for (const id of ids) {
+            const b = await page.locator(`[data-testid="graph-node-${id}"]`).boundingBox()
+            if (b) positions[id] = { x: b.x, y: b.y }
+          }
+          return positions
+        }
+
+        // Sample after a settle window comfortably past the ~0.5s idle-dwell threshold, sample
+        // again shortly after — proving motion genuinely stopped, not asserting a frame count.
+        await page.waitForTimeout(600)
+        const s1 = await sample()
+        await page.waitForTimeout(250)
+        const s2 = await sample()
+
+        for (const id of ids) {
+          expect(Math.abs(s2[id].x - s1[id].x)).toBeLessThan(1)
+          expect(Math.abs(s2[id].y - s1[id].y)).toBeLessThan(1)
+        }
+      })
+    })
+
+    test('Galaxy View visual snapshot', async ({ page }) => {
+      const canvas = page.locator('[data-testid="galaxy-canvas"]')
+      await expect(canvas).toHaveScreenshot('graph-canvas-galaxy-view-light.png')
+    })
+
+    test('Galaxy View visual snapshot in dark mode', async ({ page }) => {
+      await applyDarkCanvasMode(page)
+      const canvas = page.locator('[data-testid="galaxy-canvas"]')
+      await expect(canvas).toHaveScreenshot('graph-canvas-galaxy-view-dark.png')
+    })
+
+    test('Galaxy View Cards mode visual snapshot', async ({ page }) => {
+      await page.locator('[data-testid="galaxy-card-size-button"]').click()
+      const canvas = page.locator('[data-testid="galaxy-canvas"]')
+      await expect(canvas).toHaveScreenshot('graph-canvas-galaxy-view-cards-light.png')
+    })
+  })
+
   test.describe('Clustered View - Bubble Packing (layout="force-clustered")', () => {
     test.beforeEach(async ({ page }) => {
       await page.locator('[data-testid="clustered-view-button"]').click()
@@ -711,5 +1406,41 @@ test.describe('Graph Canvas Components', () => {
       const canvas = page.locator('.graph-canvas')
       await expect(canvas).toHaveScreenshot('graph-canvas-clustered-view-dark.png')
     })
+  })
+})
+
+// A standalone tuning/regression aid for galaxyLayout itself, not a component showcase (see
+// GalaxyLayoutLab.tsx) — real hierarchy, 57 nodes/4 levels/~4 orders of magnitude of size
+// variance, much denser than GALAXY_DEMO_NODES above. No visual snapshots here deliberately:
+// this page exists to be eyeballed and iterated on directly, not pinned to a baseline.
+test.describe('Galaxy Layout Lab (POC dataset stress test)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=galaxy-layout-lab')
+    await page.waitForLoadState('networkidle')
+    await loadSelfHostedFonts(page)
+    await assertFontsLoaded(page)
+    await freezeAnimations(page)
+  })
+
+  test('renders every node with no overlapping bounding boxes', async ({ page }) => {
+    const nodes = page.locator('[data-testid^="graph-node-"]')
+    const count = await nodes.count()
+    expect(count).toBe(57) // 56 budget rows + the synthetic root
+
+    const boxes = []
+    for (let i = 0; i < count; i++) {
+      const box = await nodes.nth(i).boundingBox()
+      if (box) boxes.push(box)
+    }
+    let overlaps = 0
+    for (let i = 0; i < boxes.length; i++) {
+      for (let j = i + 1; j < boxes.length; j++) {
+        const a = boxes[i], b = boxes[j]
+        const overlapX = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x)
+        const overlapY = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y)
+        if (overlapX > 0 && overlapY > 0) overlaps++
+      }
+    }
+    expect(overlaps).toBe(0)
   })
 })
