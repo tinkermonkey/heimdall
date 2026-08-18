@@ -381,7 +381,17 @@ export default function GraphShowcase() {
 
   const galaxyCanvas = (
     <GraphCanvas
-      key="galaxy-canvas"
+      // Keyed on galaxyCardSize (not just a static "galaxy-canvas") deliberately: GraphCanvas
+      // only ever auto-fits pan/zoom once, on mount — by design, so it never fights a user's own
+      // pan/zoom on a later prop change (nodeMargin, showAllRelations, etc. all leave the
+      // viewport alone too). Compact and Cards renderNode content differ hugely in rendered size,
+      // so without a remount here, toggling this button would recompute layout POSITIONS for the
+      // new (much bigger) Cards-mode cards while leaving pan/zoom fit for the old, much smaller
+      // Compact-mode ones — the content overflows the container well past the visible area,
+      // dragging some nodes' controls out from under the canvas entirely and under this page's
+      // own button row above it. Remounting re-runs the one-time auto-fit against the new sizes,
+      // same as a real consumer swapping renderNode would need to trigger a fresh fit itself.
+      key={`galaxy-canvas-${galaxyCardSize}`}
       data-testid="galaxy-canvas"
       nodes={GALAXY_DEMO_NODES}
       edges={GALAXY_DEMO_EDGES}
