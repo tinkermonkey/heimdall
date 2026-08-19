@@ -7,7 +7,7 @@ import {
   removeDarkCanvasMode,
 } from './utils/test-helpers'
 
-test.describe('Chart Components', () => {
+test.describe('integration: Chart Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=charts')
     await page.waitForLoadState('networkidle')

@@ -6,7 +6,7 @@ async function viewportZoom(page: import('@playwright/test').Page): Promise<numb
   return parseFloat(match![1])
 }
 
-test.describe('GraphCanvas fullscreenContainerRef', () => {
+test.describe('integration: GraphCanvas fullscreenContainerRef', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=fullscreen-container-ref')
     await page.waitForLoadState('networkidle')

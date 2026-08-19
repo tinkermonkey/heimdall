@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
-test.describe('WorkspaceSwitcherDialog', () => {
+test.describe('integration: WorkspaceSwitcherDialog', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/?example=overlays')
     await page.waitForLoadState('networkidle')

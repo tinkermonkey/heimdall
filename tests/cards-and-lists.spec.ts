@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
-test.describe('ResultCard Component', () => {
+test.describe('integration: ResultCard Component', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=cards-and-lists')
     await page.waitForLoadState('networkidle')
@@ -289,7 +289,7 @@ test.describe('ResultCard Component', () => {
   })
 })
 
-test.describe('AssetCard Component', () => {
+test.describe('integration: AssetCard Component', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=cards-and-lists')
     await page.waitForLoadState('networkidle')
@@ -476,7 +476,7 @@ test.describe('AssetCard Component', () => {
   })
 })
 
-test.describe('LogStream Component', () => {
+test.describe('integration: LogStream Component', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=cards-and-lists')
     await page.waitForLoadState('networkidle')

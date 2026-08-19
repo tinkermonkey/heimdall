@@ -6,7 +6,7 @@ import {
   applyDarkCanvasMode,
 } from "./utils/test-helpers";
 
-test.describe("KanbanBoard Component", () => {
+test.describe("integration: KanbanBoard Component", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("http://localhost:5173/?example=kanban-board");
     await page.waitForLoadState("networkidle");

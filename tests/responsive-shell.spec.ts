@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
-test.describe('Shell Components Responsive Behavior', () => {
+test.describe('integration: Shell Components Responsive Behavior', () => {
   test.describe('Mobile viewport at 768px', () => {
     test.beforeEach(async ({ page }) => {
       // Set viewport to 768px (breakpoint width)

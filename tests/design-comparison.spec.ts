@@ -32,7 +32,7 @@ const VIEWPORT = { width: 700, height: 900 }
 const DESIGN_DIFF_RATIO = 0.03
 
 for (const fixture of FIXTURES) {
-  test.describe(fixture.label, () => {
+  test.describe(`integration: ${fixture.label}`, () => {
     test(`${fixture.id} — design reference`, async ({ page }) => {
       await page.setViewportSize(VIEWPORT)
       await setupDesignRef(page, fixture.design.file)

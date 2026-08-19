@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnimations } from './utils/test-helpers'
 
-test.describe('Calendar Components', () => {
+test.describe('integration: Calendar Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=calendar-test')
     await page.waitForLoadState('networkidle')

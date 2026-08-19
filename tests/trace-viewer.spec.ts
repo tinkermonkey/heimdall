@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
-test.describe('TraceViewer', () => {
+test.describe('integration: TraceViewer', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=trace-viewer')
     await page.waitForLoadState('networkidle')

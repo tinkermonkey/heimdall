@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnimations } from './utils/test-helpers'
 
-test.describe('Primitive Components', () => {
+test.describe('integration: Primitive Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the primitives test page which renders actual React components
     await page.goto('http://localhost:5173/?example=primitives')

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnimations } from './utils/test-helpers'
 
-test.describe('LineageRail Component', () => {
+test.describe('integration: LineageRail Component', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=lineage-rail')
     await page.waitForLoadState('networkidle')

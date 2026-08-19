@@ -21,7 +21,7 @@ async function viewportZoom(page: import('@playwright/test').Page): Promise<numb
   return parseFloat(match![1])
 }
 
-test.describe('GraphCanvas centerOnSelect', () => {
+test.describe('integration: GraphCanvas centerOnSelect', () => {
   test('is off by default — selecting an off-screen node does not pan the viewport', async ({ page }) => {
     await page.goto('http://localhost:5173/?example=center-on-select')
     await page.waitForLoadState('networkidle')

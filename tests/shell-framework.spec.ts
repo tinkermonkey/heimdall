@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
-test.describe('Shell Framework Components', () => {
+test.describe('integration: Shell Framework Components', () => {
   test.describe('Topbar and TabBar Components - Visual Regression', () => {
     test.beforeEach(async ({ page }) => {
       // Navigate to the shell-framework test page which renders actual React components
