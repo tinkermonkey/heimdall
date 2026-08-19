@@ -420,6 +420,7 @@ function App() {
       }}
       statusbar={{
         left: <span>heimdall-ui</span>,
+        center: <span style={{ fontSize: '11.5px', color: 'rgb(var(--shell-fg-3))' }}>v0.1.0</span>,
         right: <span>{NAV_SECTIONS.reduce((n, s) => n + s.items.length, 0)} components</span>,
       }}
     >

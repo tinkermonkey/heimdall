@@ -7,8 +7,8 @@ test.describe('Shell Components Responsive Behavior', () => {
       // Set viewport to 768px (breakpoint width)
       await page.setViewportSize({ width: 768, height: 1024 })
 
-      // Navigate to the shell-framework test page
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      // Navigate to the shell test page
+      await page.goto('http://localhost:5173/?example=shell')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts
@@ -95,8 +95,8 @@ test.describe('Shell Components Responsive Behavior', () => {
       // Set viewport to 414px (mobile phone width)
       await page.setViewportSize({ width: 414, height: 896 })
 
-      // Navigate to the shell-framework test page
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      // Navigate to the shell test page
+      await page.goto('http://localhost:5173/?example=shell')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts
@@ -126,8 +126,8 @@ test.describe('Shell Components Responsive Behavior', () => {
       // Set viewport to desktop size
       await page.setViewportSize({ width: 1200, height: 800 })
 
-      // Navigate to the shell-framework test page
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      // Navigate to the shell test page
+      await page.goto('http://localhost:5173/?example=shell')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Topbar } from '../components/Topbar'
 import { TabBar } from '../components/TabBar'
 import { ShellLayout } from '../components/ShellLayout'
 
@@ -39,6 +38,11 @@ export default function ShellFrameworkTestPage() {
         collapsed: !sidebarOpen,
         onCollapse: setSidebarOpen,
       }}
+      topbar={{
+        breadcrumbs,
+        searchPlaceholder: 'Search systems...',
+        onSearch: (query) => console.log('Search:', query),
+      }}
       statusbar={{
         left: (
           <>
@@ -65,6 +69,7 @@ export default function ShellFrameworkTestPage() {
             </div>
           </>
         ),
+        center: <span style={{ fontSize: '11.5px', color: 'rgb(var(--shell-fg-3))' }}>v0.1.0</span>,
         right: (
           <>
             <div className="statusbar__item">
@@ -85,12 +90,6 @@ export default function ShellFrameworkTestPage() {
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <Topbar
-          breadcrumbs={breadcrumbs}
-          searchPlaceholder="Search systems..."
-          onSearch={(query) => console.log('Search:', query)}
-        />
-
         <div style={{ borderBottom: '1px solid rgb(var(--canvas-border))' }}>
           <TabBar tabs={tabs} activeTabId={activeTab} onSelectTab={setActiveTab} />
         </div>
