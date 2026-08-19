@@ -47,15 +47,6 @@ body.dark-canvas .shell-layout__content {
   }
 }
 
-@media (max-width: 768px) {
-  .shell-layout__sidebar-col {
-    display: none;
-  }
-
-  .shell-layout__mobile-menu-toggle {
-    display: flex;
-  }
-}
 
 @media (max-width: 640px) {
   .shell-layout__canvas {
@@ -82,7 +73,7 @@ body.dark-canvas .shell-layout__content {
 }
 
 .shell-layout__mobile-menu-toggle {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 32px;
