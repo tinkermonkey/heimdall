@@ -65,6 +65,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     const sidebarPropsWithMobileOverrides = isMobile
       ? {
           ...sidebarProps,
+          collapsed: false,
           showCollapseToggle: false,
           onSelectItem: handleSidebarSelect,
         }
@@ -81,12 +82,12 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       </button>
     )
 
-    const topbarPropsWithMobileMenu = renderTopbar && (isMobile && mobileMenuToggle)
+    const topbarPropsWithMobileMenu = renderTopbar
       ? {
           ...topbarProps,
           leadingContent: (
             <>
-              {mobileMenuToggle}
+              {isMobile && mobileMenuToggle}
               {topbarProps?.leadingContent}
             </>
           ),
@@ -111,6 +112,11 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
           ) : null}
           <div className="shell-layout__content">
             {renderTopbar && <Topbar {...topbarPropsWithMobileMenu} />}
+            {!renderTopbar && isMobile && mobileMenuToggle && (
+              <div className="shell-layout__mobile-header">
+                {mobileMenuToggle}
+              </div>
+            )}
             <main className="shell-layout__canvas">{children}</main>
           </div>
         </div>

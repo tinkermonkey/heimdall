@@ -47,6 +47,16 @@ body.dark-canvas .shell-layout__content {
   }
 }
 
+@media (max-width: 768px) {
+  .shell-layout__sidebar-col {
+    display: none;
+  }
+
+  .shell-layout__mobile-menu-toggle {
+    display: flex;
+  }
+}
+
 @media (max-width: 640px) {
   .shell-layout__canvas {
     padding: 14px 16px 24px;
@@ -72,7 +82,7 @@ body.dark-canvas .shell-layout__content {
 }
 
 .shell-layout__mobile-menu-toggle {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: 32px;
@@ -94,6 +104,15 @@ body.dark-canvas .shell-layout__content {
 
 .shell-layout__mobile-menu-toggle:focus-visible {
   box-shadow: var(--focus-ring);
+}
+
+.shell-layout__mobile-header {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgb(var(--shell-border));
+  background: rgb(var(--shell-bg));
 }
 
 .drawer__body > .sidebar {
