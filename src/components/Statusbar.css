@@ -128,7 +128,8 @@
     overflow: hidden;
   }
 
-  .statusbar__item {
+  .statusbar__label {
+    min-width: 0;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from '../tests/utils/test-helpers'
+import { loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
 test.describe('Shell Components Responsive Behavior', () => {
   test.describe('Mobile viewport at 768px', () => {
@@ -59,33 +59,34 @@ test.describe('Shell Components Responsive Behavior', () => {
 
       // Check if center slot exists and has overflow handling
       const centerSlot = statusbar.locator('.statusbar__slot--center')
-      const centerExists = await centerSlot.count() > 0
+      expect(await centerSlot.count()).toBeGreaterThan(0)
 
-      if (centerExists) {
-        const overflow = await centerSlot.evaluate((el) => {
-          return window.getComputedStyle(el).overflow
-        })
-        expect(overflow).toBe('hidden')
-      }
+      const overflow = await centerSlot.evaluate((el) => {
+        return window.getComputedStyle(el).overflow
+      })
+      expect(overflow).toBe('hidden')
     })
 
     test('Statusbar items should have text truncation', async ({ page }) => {
       const statusbarItems = page.locator('.statusbar__item')
-      if (await statusbarItems.count() > 0) {
-        const firstItem = statusbarItems.first()
-        const computed = await firstItem.evaluate((el) => {
-          const styles = window.getComputedStyle(el)
-          return {
-            whiteSpace: styles.whiteSpace,
-            textOverflow: styles.textOverflow,
-            overflow: styles.overflow,
-          }
-        })
+      expect(await statusbarItems.count()).toBeGreaterThan(0)
 
-        expect(computed.whiteSpace).toBe('nowrap')
-        expect(computed.textOverflow).toBe('ellipsis')
-        expect(computed.overflow).toBe('hidden')
-      }
+      const firstItem = statusbarItems.first()
+      const statusbarLabel = firstItem.locator('.statusbar__label')
+      expect(await statusbarLabel.count()).toBeGreaterThan(0)
+
+      const computed = await statusbarLabel.evaluate((el) => {
+        const styles = window.getComputedStyle(el)
+        return {
+          whiteSpace: styles.whiteSpace,
+          textOverflow: styles.textOverflow,
+          overflow: styles.overflow,
+        }
+      })
+
+      expect(computed.whiteSpace).toBe('nowrap')
+      expect(computed.textOverflow).toBe('ellipsis')
+      expect(computed.overflow).toBe('hidden')
     })
   })
 
