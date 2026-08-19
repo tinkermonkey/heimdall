@@ -109,3 +109,20 @@
   border-color: rgb(var(--accent-primary));
   box-shadow: var(--focus-ring);
 }
+
+@media (max-width: 768px) {
+  .topbar {
+    gap: 8px;
+  }
+
+  .topbar__search-wrap {
+    display: none;
+  }
+
+  .breadcrumbs {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

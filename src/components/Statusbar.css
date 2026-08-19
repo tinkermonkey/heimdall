@@ -122,3 +122,15 @@
 .statusbar__item--mono {
   color: rgb(var(--shell-fg-2));
 }
+
+@media (max-width: 768px) {
+  .statusbar__slot--center {
+    overflow: hidden;
+  }
+
+  .statusbar__item {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
