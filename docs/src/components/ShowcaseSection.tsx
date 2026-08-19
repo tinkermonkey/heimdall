@@ -47,9 +47,10 @@ export function DemoRow({ children, gap = 10, wrap = true }: { children: React.R
   )
 }
 
-export function DemoGrid({ children, cols = 3, gap = 12, minWidth = 240 }: { children: React.ReactNode; cols?: number; gap?: number; minWidth?: number }) {
+export function DemoGrid({ children, cols = 3, gap = 12, minWidth }: { children: React.ReactNode; cols?: number; gap?: number; minWidth?: number }) {
+  const effectiveMinWidth = minWidth ?? Math.max(100, Math.floor((900 - gap * (cols - 1)) / cols))
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}px, 1fr))`, gap }}>
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${effectiveMinWidth}px, 1fr))`, gap }}>
       {children}
     </div>
   )
