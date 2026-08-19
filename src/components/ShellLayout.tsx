@@ -138,6 +138,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
             onClose={() => setMobileMenuOpen(false)}
             position="left"
             width="280px"
+            keepMounted={true}
           >
             <Sidebar
               {...sidebarPropsWithMobileOverrides}
