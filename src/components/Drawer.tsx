@@ -11,10 +11,11 @@ export interface DrawerProps extends React.HTMLAttributes<HTMLDivElement> {
   position?: 'left' | 'right'
   width?: string
   children: React.ReactNode
+  keepMounted?: boolean
 }
 
 export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
-  ({ isOpen, onClose, title, position = 'right', width = '320px', children, className = '', ...props }, ref) => {
+  ({ isOpen, onClose, title, position = 'right', width = '320px', children, className = '', keepMounted = false, ...props }, ref) => {
     const titleId = React.useId()
     const drawerRef = useRef<HTMLDivElement>(null)
 
@@ -42,6 +43,10 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       if (e.target === e.currentTarget) {
         onClose()
       }
+    }
+
+    if (!keepMounted && !isOpen) {
+      return null
     }
 
     return (
