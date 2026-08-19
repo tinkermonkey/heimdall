@@ -70,3 +70,45 @@ body.dark-canvas .shell-layout__content {
 .shell-layout__canvas::-webkit-scrollbar-thumb:hover {
   background: rgb(var(--canvas-border-strong));
 }
+
+.shell-layout__mobile-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgb(var(--shell-fg-2));
+  cursor: pointer;
+  transition: background 80ms ease-out, color 80ms ease-out;
+}
+
+.shell-layout__mobile-menu-toggle:hover {
+  background: rgb(var(--shell-surface));
+  color: rgb(var(--shell-fg-1));
+}
+
+.shell-layout__mobile-menu-toggle:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+@media (min-width: 769px) {
+  .shell-layout__mobile-menu-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .shell-layout__sidebar-col {
+    display: none;
+  }
+}
+
+.drawer__body > .sidebar {
+  width: 100%;
+  border-right: none;
+}

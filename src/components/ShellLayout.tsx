@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AppTitle, AppTitleProps } from './AppTitle'
 import { Titlebar, TitlebarProps } from './Titlebar'
 import { Statusbar, StatusbarProps } from './Statusbar'
 import { Sidebar, SidebarProps } from './Sidebar'
 import { Topbar, TopbarProps } from './Topbar'
+import { Drawer } from './Drawer'
+import { Icon } from './Icon'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import './ShellLayout.css'
 
 export interface ShellLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -12,6 +15,8 @@ export interface ShellLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   topbar?: TopbarProps & { hide?: boolean }
   sidebar?: SidebarProps & { hide?: boolean }
   statusbar?: StatusbarProps & { hide?: boolean }
+  /** Mobile breakpoint in pixels (default: 768). Set to false to disable mobile sidebar overlay behavior. */
+  mobileBreakpoint?: number | false
 }
 
 export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
@@ -24,10 +29,17 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       statusbar,
       children,
       className = '',
+      mobileBreakpoint = 768,
       ...props
     },
     ref
   ) => {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    const isMobile = useMediaQuery(
+      mobileBreakpoint !== false ? `(max-width: ${mobileBreakpoint}px)` : '(max-width: 0px)'
+    )
+
     const classNames = ['shell-layout', className].filter(Boolean).join(' ')
 
     const { hide: _titlebarHide, ...titlebarProps } = titlebar ?? {} as TitlebarProps & { hide?: boolean }
@@ -45,26 +57,76 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     const { hide: _statusbarHide, ...statusbarProps } = statusbar ?? {} as StatusbarProps & { hide?: boolean }
     const renderStatusbar = statusbar && !statusbar.hide
 
+    const handleSidebarSelect = (itemId: string) => {
+      sidebarProps?.onSelectItem?.(itemId)
+      setMobileMenuOpen(false)
+    }
+
+    const sidebarPropsWithMobileOverrides = isMobile
+      ? {
+          ...sidebarProps,
+          showCollapseToggle: false,
+          onSelectItem: handleSidebarSelect,
+        }
+      : sidebarProps
+
+    const mobileMenuToggle = isMobile && renderSidebar && (
+      <button
+        type="button"
+        className="shell-layout__mobile-menu-toggle"
+        onClick={() => setMobileMenuOpen(true)}
+        aria-label="Open sidebar menu"
+      >
+        <Icon name="menu" size={20} />
+      </button>
+    )
+
+    const topbarPropsWithMobileMenu = renderTopbar && (isMobile && mobileMenuToggle)
+      ? {
+          ...topbarProps,
+          leadingContent: (
+            <>
+              {mobileMenuToggle}
+              {topbarProps?.leadingContent}
+            </>
+          ),
+        }
+      : topbarProps
+
     return (
       <div ref={ref} className={classNames} {...props}>
         {renderTitlebar && <Titlebar {...titlebarProps} />}
         <div className="shell-layout__main">
-          {renderSidebar ? (
+          {!isMobile && renderSidebar ? (
             <div className="shell-layout__sidebar-col">
               <Sidebar
-                {...sidebarProps}
-                appTitle={renderAppTitle ? appTitleProps : sidebarProps.appTitle}
+                {...sidebarPropsWithMobileOverrides}
+                appTitle={renderAppTitle ? appTitleProps : sidebarPropsWithMobileOverrides.appTitle}
               />
             </div>
-          ) : renderAppTitle ? (
+          ) : !isMobile && renderAppTitle ? (
             <AppTitle {...appTitleProps} />
           ) : null}
           <div className="shell-layout__content">
-            {renderTopbar && <Topbar {...topbarProps} />}
+            {renderTopbar && <Topbar {...topbarPropsWithMobileMenu} />}
             <main className="shell-layout__canvas">{children}</main>
           </div>
         </div>
         {renderStatusbar && <Statusbar {...statusbarProps} />}
+
+        {isMobile && renderSidebar && (
+          <Drawer
+            isOpen={mobileMenuOpen}
+            onClose={() => setMobileMenuOpen(false)}
+            position="left"
+            width="280px"
+          >
+            <Sidebar
+              {...sidebarPropsWithMobileOverrides}
+              appTitle={renderAppTitle ? appTitleProps : sidebarPropsWithMobileOverrides.appTitle}
+            />
+          </Drawer>
+        )}
       </div>
     )
   }
