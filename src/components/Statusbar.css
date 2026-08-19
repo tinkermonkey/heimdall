@@ -146,3 +146,15 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+/* Undo hardcoded @media (max-width: 768px) styles when JS has determined desktop mode */
+.statusbar[data-mobile="false"] .statusbar__slot--center {
+  overflow: visible;
+}
+
+.statusbar[data-mobile="false"] .statusbar__label {
+  min-width: auto;
+  white-space: initial;
+  text-overflow: initial;
+  overflow: visible;
+}

@@ -85,7 +85,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     const topbarPropsWithMobileMenu = renderTopbar
       ? {
           ...topbarProps,
-          mobileBreakpoint,
+          mobileBreakpoint: mobileBreakpoint !== false ? mobileBreakpoint : undefined,
           leadingContent: (
             <>
               {isMobile && mobileMenuToggle}
@@ -121,7 +121,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
             <main className="shell-layout__canvas">{children}</main>
           </div>
         </div>
-        {renderStatusbar && <Statusbar {...statusbarProps} mobileBreakpoint={mobileBreakpoint} />}
+        {renderStatusbar && <Statusbar {...statusbarProps} mobileBreakpoint={mobileBreakpoint !== false ? mobileBreakpoint : undefined} />}
 
         {isMobile && renderSidebar && (
           <Drawer

@@ -151,3 +151,30 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.topbar[data-mobile="true"] .topbar__search-wrap {
+  display: none;
+}
+
+/* Undo hardcoded @media (max-width: 768px) styles when JS has determined desktop mode */
+.topbar[data-mobile="false"] {
+  gap: 16px;
+}
+
+.topbar[data-mobile="false"] .topbar__search-wrap {
+  display: flex;
+}
+
+.topbar[data-mobile="false"] .breadcrumbs {
+  min-width: 0;
+  overflow: visible;
+  text-overflow: initial;
+  white-space: initial;
+}
+
+.topbar[data-mobile="false"] .breadcrumbs__link {
+  min-width: 0;
+  overflow: visible;
+  text-overflow: initial;
+  white-space: initial;
+}
