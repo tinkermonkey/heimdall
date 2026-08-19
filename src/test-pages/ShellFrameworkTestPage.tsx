@@ -28,7 +28,15 @@ export default function ShellFrameworkTestPage() {
             title: 'Navigation',
             items: [
               { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-              { id: 'systems', label: 'Systems', icon: 'data' },
+              {
+                id: 'systems',
+                label: 'Systems',
+                icon: 'data',
+                children: [
+                  { id: 'systems-overview', label: 'Overview' },
+                  { id: 'systems-details', label: 'Details' },
+                ],
+              },
               { id: 'monitoring', label: 'Monitoring', icon: 'clock' },
               { id: 'logs', label: 'Logs', icon: 'info' },
               { id: 'settings', label: 'Settings', icon: 'settings' },

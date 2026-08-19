@@ -208,7 +208,7 @@ test.describe('Shell Components Responsive Behavior', () => {
     test('Clicking drawer backdrop closes the drawer', async ({ page }) => {
       const toggle = page.locator('.shell-layout__mobile-menu-toggle')
       const drawer = page.locator('.drawer')
-      const backdrop = drawer.locator('.drawer__backdrop')
+      const backdrop = page.locator('.drawer-backdrop')
 
       // Open drawer
       await toggle.click()
@@ -263,11 +263,11 @@ test.describe('Shell Components Responsive Behavior', () => {
       await toggle.click()
       await expect(drawer).toHaveAttribute('data-open', 'true')
 
-      // Find a parent nav item (one with children indicator)
-      const navItems = drawer.locator('.sidebar__item')
+      // Find a parent nav item (one with aria-expanded attribute)
+      const parentItem = drawer.locator('.sidebar__item[aria-expanded]').first()
 
-      // Click the first expandable item
-      await navItems.first().click()
+      // Click the parent item to expand/toggle it
+      await parentItem.click()
 
       // Drawer should still be open (not closed by parent selection)
       await expect(drawer).toHaveAttribute('data-open', 'true')

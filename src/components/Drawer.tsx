@@ -44,20 +44,20 @@ export const Drawer = React.forwardRef<HTMLDivElement, DrawerProps>(
       }
     }
 
-    if (!isOpen) return null
-
     return (
       <div
         className="drawer-backdrop"
-        onClick={handleBackdropClick}
+        onClick={isOpen ? handleBackdropClick : undefined}
+        style={{ display: isOpen ? 'block' : 'none' }}
       >
         <div
           ref={drawerRef}
           className={['drawer', `drawer--${position}`, className].filter(Boolean).join(' ')}
           style={{ width }}
           role="dialog"
-          aria-modal="true"
+          aria-modal={isOpen}
           aria-labelledby={title ? titleId : undefined}
+          data-open={isOpen ? 'true' : 'false'}
           {...props}
         >
           <div className={['drawer__header', !title ? 'drawer__header--no-title' : ''].filter(Boolean).join(' ')}>
