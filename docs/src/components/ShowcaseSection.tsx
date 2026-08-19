@@ -47,9 +47,9 @@ export function DemoRow({ children, gap = 10, wrap = true }: { children: React.R
   )
 }
 
-export function DemoGrid({ children, cols = 3, gap = 12 }: { children: React.ReactNode; cols?: number; gap?: number }) {
+export function DemoGrid({ children, cols = 3, gap = 12, minWidth = 240 }: { children: React.ReactNode; cols?: number; gap?: number; minWidth?: number }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap }}>
+    <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}px, 1fr))`, gap }}>
       {children}
     </div>
   )
@@ -71,11 +71,11 @@ export function DemoCard({ children, label }: { children: React.ReactNode; label
 export function PropRow({ name, type, def, description, required }: { name: string; type: string; def?: string; description: string; required?: boolean }) {
   return (
     <tr>
-      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))' }}>
+      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))', whiteSpace: 'nowrap' }}>
         {name}{required && <span style={{ color: 'rgb(var(--accent-rose, 244 63 94))', marginLeft: 2 }}>*</span>}
       </td>
-      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3 }}>{type}</td>
-      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3 }}>{def ?? '—'}</td>
+      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3, whiteSpace: 'nowrap' }}>{type}</td>
+      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3, whiteSpace: 'nowrap' }}>{def ?? '—'}</td>
       <td style={{ padding: '7px 12px', fontSize: 12, color: fg2 }}>{description}</td>
     </tr>
   )
@@ -83,12 +83,12 @@ export function PropRow({ name, type, def, description, required }: { name: stri
 
 export function PropsTable({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ border: `1px solid ${border}`, borderRadius: 6, overflow: 'hidden' }}>
+    <div style={{ border: `1px solid ${border}`, borderRadius: 6, overflow: 'auto' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
         <thead>
           <tr style={{ background: 'rgb(var(--canvas-bg-2, 243 244 246))' }}>
             {['Prop', 'Type', 'Default', 'Description'].map(h => (
-              <th key={h} style={{ padding: '7px 12px', textAlign: 'left', fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: fg3, fontWeight: 500 }}>{h}</th>
+              <th key={h} style={{ padding: '7px 12px', textAlign: 'left', fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: fg3, fontWeight: 500, whiteSpace: 'nowrap', minWidth: h === 'Description' ? 200 : 'auto' }}>{h}</th>
             ))}
           </tr>
         </thead>
