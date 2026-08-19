@@ -89,7 +89,7 @@ export function CalendarShowcase() {
 
       <ShowcaseSection label="MiniCalendar Sidebar">
         <DemoRow>
-          <div style={{ width: '280px' }}>
+          <div style={{ maxWidth: '280px', width: '100%' }}>
             <MiniCalendar
               focusedDate={focusedDate}
               selectedDate={selectedDate}

@@ -1044,7 +1044,7 @@ export function MetricRowShowcase() {
       <PageHeader name="MetricRow" description="Composite row combining label, progress bar, sparkline trend, and value. Used for live resource metrics." />
       <ShowcaseSection label="Resource metrics">
         <ChartFrame>
-          <div style={{ width: 520 }}>
+          <div style={{ maxWidth: 520, width: '100%' }}>
             <MetricRow label="CPU Usage"   value={72}   unit="%" percent={72} sparklineData={[45,52,48,65,72,68,75,70,72,68]} color="amber" />
             <MetricRow label="Memory"      value={1084} unit="MB" percent={45} sparklineData={[890,920,950,1000,1050,1080,1084,1075,1070,1065]} color="emerald" />
             <MetricRow label="Network I/O" value={234}  unit="Mbps" percent={85} sparklineData={[150,180,200,220,210,230,234,225,220,215]} color="cyan" />
