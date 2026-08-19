@@ -69,7 +69,7 @@ export default function ShellFrameworkTestPage() {
             </div>
           </>
         ),
-        center: <span style={{ fontSize: '11.5px', color: 'rgb(var(--shell-fg-3))' }}>v0.1.0</span>,
+        center: <span style={{ fontSize: '11px', color: 'rgb(var(--shell-fg-3))' }}>v0.1.0</span>,
         right: (
           <>
             <div className="statusbar__item">
