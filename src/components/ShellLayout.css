@@ -96,18 +96,6 @@ body.dark-canvas .shell-layout__content {
   box-shadow: var(--focus-ring);
 }
 
-@media (min-width: 769px) {
-  .shell-layout__mobile-menu-toggle {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .shell-layout__sidebar-col {
-    display: none;
-  }
-}
-
 .drawer__body > .sidebar {
   width: 100%;
   border-right: none;

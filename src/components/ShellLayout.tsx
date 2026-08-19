@@ -97,14 +97,16 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       <div ref={ref} className={classNames} {...props}>
         {renderTitlebar && <Titlebar {...titlebarProps} />}
         <div className="shell-layout__main">
-          {!isMobile && renderSidebar ? (
-            <div className="shell-layout__sidebar-col">
-              <Sidebar
-                {...sidebarPropsWithMobileOverrides}
-                appTitle={renderAppTitle ? appTitleProps : sidebarPropsWithMobileOverrides.appTitle}
-              />
-            </div>
-          ) : !isMobile && renderAppTitle ? (
+          {renderSidebar ? (
+            !isMobile && (
+              <div className="shell-layout__sidebar-col">
+                <Sidebar
+                  {...sidebarPropsWithMobileOverrides}
+                  appTitle={renderAppTitle ? appTitleProps : sidebarPropsWithMobileOverrides.appTitle}
+                />
+              </div>
+            )
+          ) : renderAppTitle ? (
             <AppTitle {...appTitleProps} />
           ) : null}
           <div className="shell-layout__content">

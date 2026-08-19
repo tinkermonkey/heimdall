@@ -150,4 +150,148 @@ test.describe('Shell Components Responsive Behavior', () => {
       expect(gap).toBe('16px')
     })
   })
+
+  test.describe('Mobile sidebar overlay behavior at 768px', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 })
+      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.waitForLoadState('networkidle')
+      await loadSelfHostedFonts(page)
+      await assertFontsLoaded(page)
+    })
+
+    test('Hamburger toggle should be visible at 768px', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      await expect(toggle).toBeVisible()
+    })
+
+    test('Hamburger toggle should have menu icon', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const icon = toggle.locator('svg')
+      await expect(icon).toBeVisible()
+    })
+
+    test('Sidebar column should not be visible at 768px', async ({ page }) => {
+      const sidebarCol = page.locator('.shell-layout__sidebar-col')
+      // Sidebar column should not exist in DOM or be hidden
+      const isVisible = await sidebarCol.isVisible().catch(() => false)
+      expect(isVisible).toBe(false)
+    })
+
+    test('Clicking hamburger toggle opens sidebar drawer', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const drawer = page.locator('.drawer')
+
+      // Drawer should not be open initially
+      await expect(drawer).toHaveAttribute('data-open', 'false')
+
+      // Click toggle
+      await toggle.click()
+
+      // Drawer should now be open
+      await expect(drawer).toHaveAttribute('data-open', 'true')
+    })
+
+    test('Drawer sidebar should be visible when toggle is clicked', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const drawer = page.locator('.drawer')
+      const sidebarInDrawer = drawer.locator('.sidebar')
+
+      // Open drawer
+      await toggle.click()
+      await expect(drawer).toHaveAttribute('data-open', 'true')
+
+      // Sidebar should be visible in drawer
+      await expect(sidebarInDrawer).toBeVisible()
+    })
+
+    test('Clicking drawer backdrop closes the drawer', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const drawer = page.locator('.drawer')
+      const backdrop = drawer.locator('.drawer__backdrop')
+
+      // Open drawer
+      await toggle.click()
+      await expect(drawer).toHaveAttribute('data-open', 'true')
+
+      // Click backdrop
+      await backdrop.click()
+
+      // Drawer should be closed
+      await expect(drawer).toHaveAttribute('data-open', 'false')
+    })
+
+    test('Pressing Escape key closes the drawer', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const drawer = page.locator('.drawer')
+
+      // Open drawer
+      await toggle.click()
+      await expect(drawer).toHaveAttribute('data-open', 'true')
+
+      // Press Escape
+      await page.keyboard.press('Escape')
+
+      // Drawer should be closed
+      await expect(drawer).toHaveAttribute('data-open', 'false')
+    })
+
+    test('Selecting a leaf nav item closes the drawer', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const drawer = page.locator('.drawer')
+
+      // Open drawer
+      await toggle.click()
+      await expect(drawer).toHaveAttribute('data-open', 'true')
+
+      // Find and click a leaf nav item (one without children)
+      const navItems = drawer.locator('.sidebar__item')
+      const firstLeafItem = navItems.first()
+
+      // Click the first item
+      await firstLeafItem.click()
+
+      // Drawer should close after selecting leaf item
+      await expect(drawer).toHaveAttribute('data-open', 'false')
+    })
+
+    test('Selecting a parent nav item does not close the drawer', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const drawer = page.locator('.drawer')
+
+      // Open drawer
+      await toggle.click()
+      await expect(drawer).toHaveAttribute('data-open', 'true')
+
+      // Find a parent nav item (one with children indicator)
+      const navItems = drawer.locator('.sidebar__item')
+
+      // Click the first expandable item
+      await navItems.first().click()
+
+      // Drawer should still be open (not closed by parent selection)
+      await expect(drawer).toHaveAttribute('data-open', 'true')
+    })
+  })
+
+  test.describe('Hamburger toggle hidden at desktop', () => {
+    test.beforeEach(async ({ page }) => {
+      await page.setViewportSize({ width: 1200, height: 800 })
+      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.waitForLoadState('networkidle')
+      await loadSelfHostedFonts(page)
+      await assertFontsLoaded(page)
+    })
+
+    test('Hamburger toggle should not be visible at 1200px', async ({ page }) => {
+      const toggle = page.locator('.shell-layout__mobile-menu-toggle')
+      const isVisible = await toggle.isVisible().catch(() => false)
+      expect(isVisible).toBe(false)
+    })
+
+    test('Sidebar column should be visible at 1200px', async ({ page }) => {
+      const sidebarCol = page.locator('.shell-layout__sidebar-col')
+      await expect(sidebarCol).toBeVisible()
+    })
+  })
 })
