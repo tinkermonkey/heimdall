@@ -10,7 +10,7 @@
 // when radius() is unset). That's what actually gives clustering its
 // "increase overall size" property for free — d3.pack adds exactly the
 // space nesting + padding needs, no manual canvas-size tuning required.
-import { hierarchy, pack as d3pack } from 'd3-hierarchy'
+import { hierarchy, pack as d3pack, type HierarchyCircularNode } from 'd3-hierarchy'
 import type { ClusterTreeNode } from './graphClustering.ts'
 
 export interface PackedCircle {
@@ -44,16 +44,16 @@ const DEFAULT_PADDING = 6
 export function packClusters(tree: ClusterTreeNode, options: PackOptions): Map<string, PackedCircle> {
   const { radiusOf, padding = DEFAULT_PADDING } = options
 
-  const layout = d3pack<ClusterTreeNode>().radius(node => (node.children ? 0 : radiusOf(node.data.id)))
+  const layout = d3pack<ClusterTreeNode>().radius((node: HierarchyCircularNode<ClusterTreeNode>) => (node.children ? 0 : radiusOf(node.data.id)))
   if (typeof padding === 'function') {
-    layout.padding(node => padding(node.depth))
+    layout.padding((node: HierarchyCircularNode<ClusterTreeNode>) => padding(node.depth))
   } else {
     layout.padding(padding)
   }
   const packedRoot = layout(hierarchy(tree))
 
   const circles = new Map<string, PackedCircle>()
-  packedRoot.each(node => {
+  packedRoot.each((node: HierarchyCircularNode<ClusterTreeNode>) => {
     circles.set(node.data.id, { x: node.x, y: node.y, r: node.r })
   })
   return circles

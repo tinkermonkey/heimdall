@@ -115,6 +115,7 @@ USER orchestrator
 # ============================================================================
 RUN claude --version && \
     git --version && \
-    gh --version
+    gh --version && \
+    node -e "require('d3-hierarchy')"
 
 CMD ["/bin/bash"]
