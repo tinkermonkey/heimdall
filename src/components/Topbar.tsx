@@ -16,8 +16,8 @@ export interface TopbarProps extends React.HTMLAttributes<HTMLDivElement> {
   leadingContent?: React.ReactNode
   /** Optional keyboard-shortcut glyph rendered inside the search box on the right. */
   searchHint?: React.ReactNode
-  /** Mobile breakpoint in pixels (default: 768). */
-  mobileBreakpoint?: number
+  /** Mobile breakpoint in pixels (default: 768). Set to false to disable mobile behavior. */
+  mobileBreakpoint?: number | false
 }
 
 export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
@@ -35,7 +35,9 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
     },
     ref
   ) => {
-    const isMobile = useMediaQuery(`(max-width: ${mobileBreakpoint}px)`)
+    const isMobile = useMediaQuery(
+      mobileBreakpoint !== false ? `(max-width: ${mobileBreakpoint}px)` : '(max-width: 0px)'
+    )
     const classNames = ['topbar', className].filter(Boolean).join(' ')
     const lastIndex = breadcrumbs ? breadcrumbs.length - 1 : -1
 

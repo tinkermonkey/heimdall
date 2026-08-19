@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppTitle, AppTitleProps } from './AppTitle'
 import { Titlebar, TitlebarProps } from './Titlebar'
 import { Statusbar, StatusbarProps } from './Statusbar'
@@ -40,6 +40,12 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       mobileBreakpoint !== false ? `(max-width: ${mobileBreakpoint}px)` : '(max-width: 0px)'
     )
 
+    useEffect(() => {
+      if (!isMobile) {
+        setMobileMenuOpen(false)
+      }
+    }, [isMobile])
+
     const classNames = ['shell-layout', className].filter(Boolean).join(' ')
 
     const { hide: _titlebarHide, ...titlebarProps } = titlebar ?? {} as TitlebarProps & { hide?: boolean }
@@ -58,8 +64,11 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     const renderStatusbar = statusbar && !statusbar.hide
 
     const handleSidebarSelect = (itemId: string) => {
-      sidebarProps?.onSelectItem?.(itemId)
-      setMobileMenuOpen(false)
+      try {
+        sidebarProps?.onSelectItem?.(itemId)
+      } finally {
+        setMobileMenuOpen(false)
+      }
     }
 
     const sidebarPropsWithMobileOverrides = isMobile
@@ -85,7 +94,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     const topbarPropsWithMobileMenu = renderTopbar
       ? {
           ...topbarProps,
-          mobileBreakpoint: mobileBreakpoint !== false ? mobileBreakpoint : undefined,
+          mobileBreakpoint: mobileBreakpoint,
           leadingContent: (
             <>
               {isMobile && mobileMenuToggle}
@@ -121,7 +130,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
             <main className="shell-layout__canvas">{children}</main>
           </div>
         </div>
-        {renderStatusbar && <Statusbar {...statusbarProps} mobileBreakpoint={mobileBreakpoint !== false ? mobileBreakpoint : undefined} />}
+        {renderStatusbar && <Statusbar {...statusbarProps} mobileBreakpoint={mobileBreakpoint} />}
 
         {isMobile && renderSidebar && (
           <Drawer
