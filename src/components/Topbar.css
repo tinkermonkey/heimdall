@@ -133,3 +133,21 @@
     white-space: nowrap;
   }
 }
+
+.topbar[data-mobile="true"] {
+  gap: 8px;
+}
+
+.topbar[data-mobile="true"] .breadcrumbs {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.topbar[data-mobile="true"] .breadcrumbs__link {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

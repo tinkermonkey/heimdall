@@ -1,4 +1,5 @@
 import React from 'react'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import './Topbar.css'
 
 export interface BreadcrumbItem {
@@ -15,6 +16,8 @@ export interface TopbarProps extends React.HTMLAttributes<HTMLDivElement> {
   leadingContent?: React.ReactNode
   /** Optional keyboard-shortcut glyph rendered inside the search box on the right. */
   searchHint?: React.ReactNode
+  /** Mobile breakpoint in pixels (default: 768). */
+  mobileBreakpoint?: number
 }
 
 export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
@@ -27,15 +30,17 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
       searchHint,
       children,
       className = '',
+      mobileBreakpoint = 768,
       ...props
     },
     ref
   ) => {
+    const isMobile = useMediaQuery(`(max-width: ${mobileBreakpoint}px)`)
     const classNames = ['topbar', className].filter(Boolean).join(' ')
     const lastIndex = breadcrumbs ? breadcrumbs.length - 1 : -1
 
     return (
-      <div ref={ref} className={classNames} {...props}>
+      <div ref={ref} className={classNames} data-mobile={isMobile} {...props}>
         {leadingContent && <div className="topbar__leading">{leadingContent}</div>}
         <div className="topbar__breadcrumbs">
           {breadcrumbs && breadcrumbs.length > 0 && (
@@ -75,7 +80,7 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
         </div>
 
         <div className="topbar__actions">
-          {onSearch && (
+          {onSearch && !isMobile && (
             <div className="topbar__search-wrap">
               <input
                 type="search"

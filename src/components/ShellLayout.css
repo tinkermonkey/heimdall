@@ -110,3 +110,15 @@ body.dark-canvas .shell-layout__content {
   width: 100%;
   border-right: none;
 }
+
+@media (max-width: 768px) {
+  .shell-layout__sidebar-col {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .shell-layout__mobile-menu-toggle {
+    display: none;
+  }
+}
