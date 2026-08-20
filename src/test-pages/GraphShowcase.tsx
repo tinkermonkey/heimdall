@@ -9,6 +9,7 @@ import TopologyNode, { type TopologyNodeStatus } from '../components/TopologyNod
 import type { EdgeAnchor } from '../utils/graph'
 import type { GraphNodeData, GraphNodeHierarchyMeta } from '../components/GraphCanvas'
 import { GALAXY_DEMO_NODES, GALAXY_DEMO_EDGES, isGalaxyDemoEdgeStructural } from './galaxyDemoData'
+import { weightToStrokeWidth, strokeDashToDasharray } from '../utils/graphEdgeStyle'
 
 interface NodeData extends GraphNodeData {
   title?: string
@@ -355,9 +356,15 @@ export default function GraphShowcase() {
     _selected: boolean
   ) => {
     const labelSize = edge.label ? { width: (edge.label.length * 5.5) + 12, height: 20 } : null
+
+    const strokeWidth = edge.weight !== undefined ? weightToStrokeWidth(edge.weight) : 1.25
+    const lineStyle: React.CSSProperties = { strokeWidth }
+    if (edge.opacity !== undefined) lineStyle.opacity = edge.opacity
+    if (edge.strokeDash !== undefined) lineStyle.strokeDasharray = strokeDashToDasharray(edge.strokeDash)
+
     return (
       <>
-        <path d={path.d} fill="none" stroke="currentColor" strokeWidth="1.25" />
+        <path d={path.d} fill="none" stroke="currentColor" className="graph-edge__line" style={lineStyle} />
         {/* Small decorative circle at the midpoint */}
         <circle
           cx={path.mid.x}

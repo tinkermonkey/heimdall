@@ -162,6 +162,7 @@ function GraphEdgeInternal({
       // announces a bare "button".
       aria-label={interactive ? (label ? `${label}: ${sourceId} to ${targetId}` : `${sourceId} to ${targetId}`) : undefined}
       tabIndex={interactive ? 0 : undefined}
+      onClick={handleClick}
       onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(id) } } : undefined}
       onPointerEnter={onHoverStart ? () => onHoverStart(id) : undefined}
       onPointerLeave={onHoverEnd ? () => onHoverEnd(id) : undefined}
