@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
-test.describe('Avatar Component', () => {
+test.describe('integration: Avatar Component', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=avatar-test')
     await page.waitForLoadState('networkidle')

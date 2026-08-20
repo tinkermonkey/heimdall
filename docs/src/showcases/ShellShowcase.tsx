@@ -63,7 +63,7 @@ export function AppTitleShowcase() {
     <div>
       <PageHeader name="AppTitle" description="Brand mark and app name at the top of the sidebar column. Amber gradient logo square, app name, and optional version tag." />
       <ShowcaseSection label="Expanded">
-        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', width: 256 }}>
+        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', maxWidth: 256, width: '100%' }}>
           <AppTitle title="Heimdall" version="v0.1.0" />
         </div>
       </ShowcaseSection>
@@ -73,7 +73,7 @@ export function AppTitleShowcase() {
         </div>
       </ShowcaseSection>
       <ShowcaseSection label="With trailing action (e.g. collapse toggle)" description="The action slot hosts a control in the brand row — pair with Sidebar showCollapseToggle={false}.">
-        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', width: 256 }}>
+        <div style={{ border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', maxWidth: 256, width: '100%' }}>
           <AppTitle
             title="Heimdall"
             version="v0.1.0"

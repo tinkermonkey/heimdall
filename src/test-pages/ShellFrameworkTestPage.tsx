@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Topbar } from '../components/Topbar'
 import { TabBar } from '../components/TabBar'
 import { ShellLayout } from '../components/ShellLayout'
 
@@ -29,7 +28,15 @@ export default function ShellFrameworkTestPage() {
             title: 'Navigation',
             items: [
               { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-              { id: 'systems', label: 'Systems', icon: 'data' },
+              {
+                id: 'systems',
+                label: 'Systems',
+                icon: 'data',
+                children: [
+                  { id: 'systems-overview', label: 'Overview' },
+                  { id: 'systems-details', label: 'Details' },
+                ],
+              },
               { id: 'monitoring', label: 'Monitoring', icon: 'clock' },
               { id: 'logs', label: 'Logs', icon: 'info' },
               { id: 'settings', label: 'Settings', icon: 'settings' },
@@ -38,6 +45,11 @@ export default function ShellFrameworkTestPage() {
         ],
         collapsed: !sidebarOpen,
         onCollapse: setSidebarOpen,
+      }}
+      topbar={{
+        breadcrumbs,
+        searchPlaceholder: 'Search systems...',
+        onSearch: (query) => console.log('Search:', query),
       }}
       statusbar={{
         left: (
@@ -65,6 +77,7 @@ export default function ShellFrameworkTestPage() {
             </div>
           </>
         ),
+        center: <span style={{ fontSize: '11px', color: 'rgb(var(--shell-fg-3))' }}>v0.1.0</span>,
         right: (
           <>
             <div className="statusbar__item">
@@ -85,12 +98,6 @@ export default function ShellFrameworkTestPage() {
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        <Topbar
-          breadcrumbs={breadcrumbs}
-          searchPlaceholder="Search systems..."
-          onSearch={(query) => console.log('Search:', query)}
-        />
-
         <div style={{ borderBottom: '1px solid rgb(var(--canvas-border))' }}>
           <TabBar tabs={tabs} activeTabId={activeTab} onSelectTab={setActiveTab} />
         </div>

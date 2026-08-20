@@ -47,6 +47,7 @@ body.dark-canvas .shell-layout__content {
   }
 }
 
+
 @media (max-width: 640px) {
   .shell-layout__canvas {
     padding: 14px 16px 24px;
@@ -69,4 +70,72 @@ body.dark-canvas .shell-layout__content {
 
 .shell-layout__canvas::-webkit-scrollbar-thumb:hover {
   background: rgb(var(--canvas-border-strong));
+}
+
+.shell-layout__mobile-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgb(var(--shell-fg-2));
+  cursor: pointer;
+  transition: background 80ms ease-out, color 80ms ease-out;
+}
+
+.shell-layout__mobile-menu-toggle:hover {
+  background: rgb(var(--shell-surface));
+  color: rgb(var(--shell-fg-1));
+}
+
+.shell-layout__mobile-menu-toggle:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.shell-layout__mobile-header {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgb(var(--shell-border));
+  background: rgb(var(--shell-bg));
+}
+
+.drawer__body > .sidebar {
+  width: 100%;
+  border-right: none;
+}
+
+@media (max-width: 768px) {
+  .shell-layout__sidebar-col {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .shell-layout__mobile-menu-toggle {
+    display: none;
+  }
+}
+
+.shell-layout[data-mobile="true"] .shell-layout__sidebar-col {
+  display: none;
+}
+
+.shell-layout[data-mobile="true"] .shell-layout__mobile-menu-toggle {
+  display: flex;
+}
+
+/* Undo hardcoded @media (max-width: 768px) styles when JS has determined desktop mode */
+.shell-layout[data-mobile="false"] .shell-layout__sidebar-col {
+  display: flex;
+}
+
+.shell-layout[data-mobile="false"] .shell-layout__mobile-menu-toggle {
+  display: none;
 }

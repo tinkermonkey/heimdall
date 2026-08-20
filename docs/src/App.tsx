@@ -420,10 +420,11 @@ function App() {
       }}
       statusbar={{
         left: <span>heimdall-ui</span>,
+        center: <span style={{ fontSize: '11px', color: 'rgb(var(--shell-fg-3))' }}>v0.1.0</span>,
         right: <span>{NAV_SECTIONS.reduce((n, s) => n + s.items.length, 0)} components</span>,
       }}
     >
-      <div style={{ padding: '22px 26px 32px', maxWidth: 900 }}>
+      <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <Showcase />
       </div>
     </ShellLayout>

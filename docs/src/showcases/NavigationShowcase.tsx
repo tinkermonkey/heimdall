@@ -26,7 +26,7 @@ export function NavItemShowcase() {
     <div>
       <PageHeader name="NavItem" description="Single navigation item for the sidebar. Active state: 2px amber left border + shell-surface background. Supports one level of sub-item hierarchy." />
       <ShowcaseSection label="Flat and hierarchical">
-        <div style={{ background: shellBg, borderRadius: 8, padding: '10px 8px', width: 280, border: `1px solid #1e2733` }}>
+        <div style={{ background: shellBg, borderRadius: 8, padding: '10px 8px', maxWidth: 280, width: '100%', border: `1px solid #1e2733` }}>
           {items.map(item => (
             <div key={item.id}>
               <NavItem

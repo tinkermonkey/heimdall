@@ -7,7 +7,7 @@ import {
   removeDarkCanvasMode,
 } from './utils/test-helpers'
 
-test.describe('Page Pattern Components', () => {
+test.describe('integration: Page Pattern Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://127.0.0.1:5173/?example=page-patterns')
     await page.waitForLoadState('networkidle')

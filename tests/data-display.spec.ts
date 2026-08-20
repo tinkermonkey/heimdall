@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode } from './utils/test-helpers'
 
-test.describe('Data Display Components', () => {
+test.describe('integration: Data Display Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the data-display test page which renders actual React components
     await page.goto('http://localhost:5173/?example=data-display')

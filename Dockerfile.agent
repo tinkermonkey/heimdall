@@ -29,6 +29,7 @@ RUN apt-get update -qq && \
         libdbus-glib-1-2 \
         xvfb \
         fonts-liberation \
+        fonts-dejavu-core \
         fonts-noto-color-emoji \
         libnss3 \
         libnspr4 \
@@ -45,12 +46,13 @@ RUN apt-get update -qq && \
     && rm -rf /var/lib/apt/lists/*
 
 # ============================================================================
-# Fontconfig: deterministic rendering (no hinting, grayscale AA, sRGB)
-# Prevents pixel diffs from font rendering variations across environments.
-# Also rejects unknown fallback fonts to avoid system-dependent substitution.
+# Fontconfig: deterministic rendering (no hinting, grayscale AA, 96 DPI)
+# Placed in conf.d so the default fonts.conf chain includes it — setting
+# FONTCONFIG_FILE to local.conf would bypass font-directory definitions and
+# break system font discovery (Liberation, DejaVu, Noto), causing fallback
+# rendering inconsistencies.
 # ============================================================================
-RUN mkdir -p /etc/fonts && \
-    cat > /etc/fonts/local.conf << 'FONTEOF'
+RUN cat > /etc/fonts/conf.d/99-heimdall-rendering.conf << 'FONTEOF'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
@@ -71,9 +73,13 @@ RUN mkdir -p /etc/fonts && \
 FONTEOF
 
 # ============================================================================
-# Install project fonts system-wide for consistent file:// rendering
+# Install project fonts for the dev server to serve via CSS @font-face
+# (woff2 is a web format — fontconfig cannot index it, but the fontconfig
+#  settings above still govern how Chromium rasterizes the glyphs)
 # ============================================================================
 COPY public/fonts /usr/share/fonts/heimdall
+
+# Rebuild font cache so system fonts (Liberation, DejaVu, Noto) are indexed
 RUN fc-cache -f
 
 # ============================================================================
@@ -104,6 +110,9 @@ RUN chown -R orchestrator:orchestrator /workspace/heimdall/node_modules && \
 # ============================================================================
 ENV CI=true
 ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers
+ENV TZ=UTC
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 
 # ============================================================================
 # Switch to runtime user
@@ -115,6 +124,11 @@ USER orchestrator
 # ============================================================================
 RUN claude --version && \
     git --version && \
-    gh --version
+    gh --version && \
+    node -e "require('d3-hierarchy')" && \
+    test -f /usr/share/fonts/heimdall/inter/Inter-Regular.woff2 && \
+    test -f /usr/share/fonts/heimdall/jetbrains-mono/JetBrainsMono-Regular.woff2 && \
+    fc-list | grep -qi "liberation" && \
+    fc-list | grep -qi "dejavu"
 
 CMD ["/bin/bash"]

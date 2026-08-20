@@ -7,7 +7,7 @@ import {
   removeDarkCanvasMode,
 } from './utils/test-helpers'
 
-test.describe('Chat Components', () => {
+test.describe('integration: Chat Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the chat showcase test page
     await page.goto('http://localhost:5173/?example=chat')

@@ -7,7 +7,7 @@ import {
   removeDarkCanvasMode,
 } from './utils/test-helpers'
 
-test.describe('Graph Canvas Components', () => {
+test.describe('integration: Graph Canvas Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=graph')
     await page.waitForLoadState('networkidle')
@@ -1413,7 +1413,7 @@ test.describe('Graph Canvas Components', () => {
 // GalaxyLayoutLab.tsx) — real hierarchy, 57 nodes/4 levels/~4 orders of magnitude of size
 // variance, much denser than GALAXY_DEMO_NODES above. No visual snapshots here deliberately:
 // this page exists to be eyeballed and iterated on directly, not pinned to a baseline.
-test.describe('Galaxy Layout Lab (POC dataset stress test)', () => {
+test.describe('integration: Galaxy Layout Lab (POC dataset stress test)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=galaxy-layout-lab')
     await page.waitForLoadState('networkidle')

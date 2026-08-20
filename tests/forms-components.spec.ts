@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
-test.describe('Forms Components', () => {
+test.describe('integration: Forms Components', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5173/?example=forms')
     await page.waitForLoadState('networkidle')

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnimations } from './utils/test-helpers'
 
-test.describe('DiffViewer Components', () => {
+test.describe('integration: DiffViewer Components', () => {
   test('light canvas full page snapshot (covers empty, small, overflow states and glyph rendering)', async ({ page }) => {
     await page.goto('http://localhost:5173/?example=diff-viewer')
     await page.waitForLoadState('networkidle')

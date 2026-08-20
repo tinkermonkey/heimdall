@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnimations } from './utils/test-helpers'
 
-test.describe('VersionTimeline Component', () => {
+test.describe('integration: VersionTimeline Component', () => {
   test('light canvas snapshot', async ({ page }) => {
     await page.goto('http://localhost:5173/?example=version-timeline')
     await page.waitForLoadState('networkidle')

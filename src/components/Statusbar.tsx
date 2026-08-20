@@ -1,4 +1,5 @@
 import React from 'react'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import { Icon, type IconName } from './Icon'
 import './Statusbar.css'
 
@@ -28,6 +29,8 @@ export interface StatusbarProps extends React.HTMLAttributes<HTMLDivElement> {
   left?: React.ReactNode | StatusbarItem[]
   center?: React.ReactNode | StatusbarItem[]
   right?: React.ReactNode | StatusbarItem[]
+  /** Mobile breakpoint in pixels (default: 768). Set to false to disable mobile behavior. */
+  mobileBreakpoint?: number | false
 }
 
 const isStatusbarItem = (item: unknown): item is StatusbarItem => {
@@ -66,7 +69,10 @@ const renderStatusbarItems = (items: StatusbarItem[]): React.ReactNode => {
 }
 
 export const Statusbar = React.forwardRef<HTMLDivElement, StatusbarProps>(
-  ({ left, center, right, className = '', ...props }, ref) => {
+  ({ left, center, right, className = '', mobileBreakpoint = 768, ...props }, ref) => {
+    const isMobile = useMediaQuery(
+      mobileBreakpoint !== false ? `(max-width: ${mobileBreakpoint}px)` : '(max-width: 0px)'
+    )
     const classNames = ['statusbar', className].filter(Boolean).join(' ')
 
     const renderSlot = (content: React.ReactNode | StatusbarItem[] | undefined): React.ReactNode => {
@@ -78,7 +84,7 @@ export const Statusbar = React.forwardRef<HTMLDivElement, StatusbarProps>(
     }
 
     return (
-      <div ref={ref} role="status" className={classNames} {...props}>
+      <div ref={ref} role="status" className={classNames} data-mobile={isMobile} {...props}>
         {left && <div className="statusbar__slot statusbar__slot--left statusbar__left">{renderSlot(left)}</div>}
         {center && <div className="statusbar__slot statusbar__slot--center">{renderSlot(center)}</div>}
         {right && <div className="statusbar__slot statusbar__slot--right statusbar__right">{renderSlot(right)}</div>}
