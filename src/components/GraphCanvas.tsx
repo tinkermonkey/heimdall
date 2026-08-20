@@ -91,6 +91,7 @@ type InternalEdgeProps = GraphEdge & {
   onSelect?: (id: string) => void
   onHoverStart?: (id: string) => void
   onHoverEnd?: (id: string) => void
+  renderEdge?: (edge: GraphEdge, path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> }, selected: boolean) => React.ReactNode
 }
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -112,6 +113,7 @@ function GraphEdgeInternal({
   onSelect,
   onHoverStart,
   onHoverEnd,
+  renderEdge,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas()
 
@@ -132,6 +134,21 @@ function GraphEdgeInternal({
     .filter(Boolean)
     .join(' ')
   const interactive = !!onSelect
+
+  const edgeData: GraphEdge = {
+    id,
+    sourceId,
+    targetId,
+    label,
+    variant,
+    weight,
+    opacity,
+    strokeDash,
+    sourceAnchor,
+    targetAnchor,
+    curvature,
+  }
+
   return (
     <g
       className={classNames}
@@ -148,17 +165,19 @@ function GraphEdgeInternal({
       onPointerLeave={onHoverEnd ? () => onHoverEnd(id) : undefined}
       data-testid={`graph-edge-${id}`}
     >
-      <GraphEdgeShape
-        id={id}
-        d={result.d}
-        mid={result.labelPos}
-        label={label}
-        variant={variant}
-        weight={weight}
-        opacity={opacity}
-        strokeDash={strokeDash}
-        onSelect={onSelect}
-      />
+      {renderEdge ? renderEdge(edgeData, { d: result.d, mid: result.labelPos, points: result.points }, !!selected) : (
+        <GraphEdgeShape
+          id={id}
+          d={result.d}
+          mid={result.labelPos}
+          label={label}
+          variant={variant}
+          weight={weight}
+          opacity={opacity}
+          strokeDash={strokeDash}
+          onSelect={onSelect}
+        />
+      )}
     </g>
   )
 }
@@ -216,6 +235,16 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * Tip: memoize with useCallback to avoid unnecessary re-measurements.
    */
   renderNode?: (node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta) => React.ReactNode
+  /**
+   * Render custom SVG content for each edge. If omitted, the default GraphEdgeShape is used.
+   * Receives the edge data, computed path info (d, mid point, points array), and selection state.
+   * The path info lets you draw decorators, arrow customizations, or other SVG overlays on top
+   * of or instead of the default line rendering. The owning <g> element handles hover/select
+   * styling and event handlers independently of your content.
+   *
+   * Tip: memoize with useCallback to avoid unnecessary re-computations.
+   */
+  renderEdge?: (edge: GraphEdge, path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> }, selected: boolean) => React.ReactNode
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes without
    *  explicit coordinates. 'galaxy' arranges nodes as a radial hierarchy of orbits, built from
    *  structural edges (see isStructuralEdge). 'force-clustered' additionally groups nodes into
@@ -353,6 +382,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       edgeTooltip,
       centerOnSelect = false,
       renderNode,
+      renderEdge,
       layout = 'manual',
       nodeMargin,
       showClusterBoundaries = true,
@@ -1397,6 +1427,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       onSelect={onEdgeSelect}
                       onHoverStart={setHoveredEdgeId}
                       onHoverEnd={handleEdgeHoverEnd}
+                      renderEdge={renderEdge}
                     />
                   )
                 })}

@@ -207,6 +207,8 @@ const TOPOLOGY_NODES = [
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>()
+  const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>()
   const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy' | 'clustered'>('graph')
   const [showAllRelations, setShowAllRelations] = useState(false)
   const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
@@ -347,22 +349,77 @@ export default function GraphShowcase() {
     )
   }, [handleNodeSelect])
 
+  const renderCustomEdge = useCallback((_edge: any, path: any) => (
+    <>
+      <path d={path.d} />
+      {/* Small decorative circle at the midpoint */}
+      <circle
+        cx={path.mid.x}
+        cy={path.mid.y}
+        r="3"
+        fill="currentColor"
+        opacity="0.6"
+        style={{ pointerEvents: 'none' }}
+      />
+    </>
+  ), [])
+
   const graphCanvas = (
-    <GraphCanvas
-      key="graph-canvas"
-      nodes={GRAPH_NODES}
-      edges={GRAPH_EDGES}
-      selectedNodeId={selectedNodeId}
-      onNodeSelect={handleNodeSelect}
-      selectedEdgeId={selectedEdgeId}
-      onEdgeSelect={handleEdgeSelect}
-      onBackgroundClick={handleBackgroundClick}
-      draggable={draggable}
-      renderNode={renderGraphNode}
-      nodeTooltip={(node) => (node as NodeData).title || node.label}
-      edgeTooltip={(edge) => edge.label ?? `${edge.sourceId} → ${edge.targetId}`}
-      style={{ height: '100%' }}
-    />
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {(hoveredNodeId || hoveredEdgeId) && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-hover-indicator"
+        >
+          {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
+        </div>
+      )}
+      <GraphCanvas
+        key="graph-canvas"
+        nodes={GRAPH_NODES}
+        edges={GRAPH_EDGES}
+        selectedNodeId={selectedNodeId}
+        onNodeSelect={handleNodeSelect}
+        onNodeHover={setHoveredNodeId}
+        selectedEdgeId={selectedEdgeId}
+        onEdgeSelect={handleEdgeSelect}
+        onEdgeHover={setHoveredEdgeId}
+        onBackgroundClick={handleBackgroundClick}
+        draggable={draggable}
+        renderNode={renderGraphNode}
+        renderEdge={renderCustomEdge}
+        nodeTooltip={(node) => (
+          <div style={{ maxWidth: '200px' }}>
+            <div style={{ fontWeight: 600 }}>{(node as NodeData).title || node.label}</div>
+            {(node as NodeData).description && (
+              <div style={{ marginTop: '4px', fontSize: '12px', opacity: 0.8 }}>
+                {(node as NodeData).description}
+              </div>
+            )}
+          </div>
+        )}
+        edgeTooltip={(edge) => (
+          <div style={{ maxWidth: '180px' }}>
+            <div style={{ fontWeight: 600 }}>{edge.label || 'Relationship'}</div>
+            <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px' }}>
+              {edge.sourceId} → {edge.targetId}
+            </div>
+            {edge.weight !== undefined && (
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>
+                Weight: {edge.weight}
+              </div>
+            )}
+          </div>
+        )}
+        style={{ flex: 1, minHeight: 0 }}
+      />
+    </div>
   )
 
   const busCanvas = (
