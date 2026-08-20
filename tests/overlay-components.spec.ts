@@ -412,6 +412,94 @@ test.describe('integration: Overlay Components', () => {
     })
   })
 
+  test.describe('Tooltip Component', () => {
+    test('should show on hover after the configured delay and hide on pointer leave', async ({ page }) => {
+      const trigger = page.locator('button:has-text("Top")').first()
+      await trigger.hover()
+
+      const tooltip = page.locator('[role="tooltip"]').first()
+      await expect(tooltip).toBeVisible()
+      await expect(tooltip).toHaveText('Appears above the trigger')
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('tooltip-top-open.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+
+      // Move the pointer elsewhere on the page to leave the trigger + tooltip
+      await page.mouse.move(10, 10)
+      await expect(tooltip).not.toBeVisible()
+    })
+
+    test('should support bottom, left, and right placements', async ({ page }) => {
+      const placements: Array<{ label: string; text: string }> = [
+        { label: 'Bottom', text: 'Appears below the trigger' },
+        { label: 'Left', text: 'Appears left of the trigger' },
+        { label: 'Right', text: 'Appears right of the trigger' },
+      ]
+
+      for (const { label, text } of placements) {
+        const trigger = page.locator(`button:has-text("${label}")`).first()
+        await trigger.hover()
+
+        const tooltip = page.locator('[role="tooltip"]').first()
+        await expect(tooltip).toBeVisible()
+        await expect(tooltip).toHaveText(text)
+
+        await page.mouse.move(10, 10)
+        await expect(tooltip).not.toBeVisible()
+      }
+    })
+
+    test('should not show when disabled', async ({ page }) => {
+      const trigger = page.locator('button:has-text("Disabled")').first()
+      await trigger.hover()
+
+      // Give it more than the default delay to confirm it never appears
+      await page.waitForTimeout(400)
+
+      const tooltip = page.locator('[role="tooltip"]')
+      await expect(tooltip).toHaveCount(0)
+
+      await page.mouse.move(10, 10)
+    })
+
+    test('should associate the trigger with the tooltip via aria-describedby', async ({ page }) => {
+      const trigger = page.locator('button:has-text("No delay")').first()
+      await trigger.hover()
+
+      const tooltip = page.locator('[role="tooltip"]').first()
+      await expect(tooltip).toBeVisible()
+
+      const describedBy = await trigger.getAttribute('aria-describedby')
+      expect(describedBy).toBeTruthy()
+      await expect(tooltip).toHaveAttribute('id', describedBy as string)
+
+      await page.mouse.move(10, 10)
+    })
+  })
+
+  test.describe('Tooltip dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('tooltip dark snapshot', async ({ page }) => {
+      const trigger = page.locator('button:has-text("Top")').first()
+      await trigger.hover()
+
+      const tooltip = page.locator('[role="tooltip"]').first()
+      await expect(tooltip).toBeVisible()
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('tooltip-top-open-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+
+      await page.mouse.move(10, 10)
+    })
+  })
+
   test.describe('Modal dark canvas', () => {
     test.beforeEach(async ({ page }) => {
       await applyDarkCanvasMode(page)
