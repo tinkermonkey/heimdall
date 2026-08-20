@@ -111,13 +111,13 @@ body.dark-canvas .shell-layout__content {
   border-right: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .shell-layout__sidebar-col {
     display: none;
   }
 }
 
-@media (min-width: 641px) {
+@media (min-width: 769px) {
   .shell-layout__mobile-menu-toggle {
     display: none;
   }
@@ -131,7 +131,7 @@ body.dark-canvas .shell-layout__content {
   display: flex;
 }
 
-/* Undo hardcoded @media (max-width: 640px) styles when JS has determined desktop mode */
+/* Undo hardcoded @media (max-width: 768px) styles when JS has determined desktop mode */
 .shell-layout[data-mobile="false"] .shell-layout__sidebar-col {
   display: flex;
 }
