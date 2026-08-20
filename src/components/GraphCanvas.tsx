@@ -88,6 +88,8 @@ const DRAG_THRESHOLD = 3
 type InternalEdgeProps = GraphEdge & {
   selected?: boolean
   onSelect?: (id: string) => void
+  onHoverStart?: (id: string) => void
+  onHoverEnd?: (id: string) => void
 }
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -107,6 +109,8 @@ function GraphEdgeInternal({
   curvature,
   selected,
   onSelect,
+  onHoverStart,
+  onHoverEnd,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas()
 
@@ -139,6 +143,8 @@ function GraphEdgeInternal({
       aria-label={interactive ? (label ? `${label}: ${sourceId} to ${targetId}` : `${sourceId} to ${targetId}`) : undefined}
       tabIndex={interactive ? 0 : undefined}
       onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(id) } } : undefined}
+      onPointerEnter={onHoverStart ? () => onHoverStart(id) : undefined}
+      onPointerLeave={onHoverEnd ? () => onHoverEnd(id) : undefined}
       data-testid={`graph-edge-${id}`}
     >
       <GraphEdgeShape
@@ -163,6 +169,13 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   edges?: GraphEdge[]
   selectedNodeId?: string
   onNodeSelect?: (nodeId: string) => void
+  /** Called with a node's id on pointer-enter and undefined on pointer-leave (or when hover
+   *  moves off without landing on another node). Mirrors the hoveredNodeId state GraphCanvas
+   *  already tracks internally for relational-edge visibility (see isStructuralEdge) — this
+   *  just exposes it. A custom renderNode's own hover handling (if any) keeps working
+   *  unchanged, since this fires from the node's own <g> wrapper, one level above renderNode's
+   *  content. */
+  onNodeHover?: (nodeId: string | undefined) => void
   /**
    * Pan (preserving the current zoom level — never re-fits/re-zooms) to keep
    * `selectedNodeId` centered whenever it changes to a resolvable node. Off by
@@ -260,6 +273,12 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   /** Called with an edge's ID when its line or label is clicked. Wires up hit targets on both;
    *  without it, edges render but aren't interactive. */
   onEdgeSelect?: (edgeId: string) => void
+  /** Called with an edge's id on pointer-enter of its hit area (the same invisible hit-stroke
+   *  the CSS-only hover styling already uses — see .graph-edge__hit) and undefined on
+   *  pointer-leave. Purely an additional callback: doesn't change the existing CSS-driven edge
+   *  hover styling (stroke thickening, label border shift), which keeps working off :hover
+   *  regardless of whether this prop is set. */
+  onEdgeHover?: (edgeId: string | undefined) => void
   /** Called when the canvas background — not a node, not an edge — is clicked: the typical
    *  "click empty space to deselect" gesture. Pair with clearing selectedNodeId/selectedEdgeId
    *  (and closing a detail panel driven by them) yourself; GraphCanvas doesn't do either on its
@@ -313,6 +332,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       edges = [],
       selectedNodeId,
       onNodeSelect,
+      onNodeHover,
       centerOnSelect = false,
       renderNode,
       layout = 'manual',
@@ -328,6 +348,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       maxZoom = DEFAULT_MAX_ZOOM,
       selectedEdgeId,
       onEdgeSelect,
+      onEdgeHover,
       onBackgroundClick,
       draggable = true,
       onNodeDragEnd,
@@ -342,6 +363,16 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const [dims, setDims] = useState<NodeDims>(new Map())
     const [computedPositions, setComputedPositions] = useState<NodePositions>(new Map())
     const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>()
+    const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>()
+    // Lifts hover state out to the caller-supplied callbacks, decoupled from the pointer
+    // handlers that set the state itself (see the node <g> and GraphEdgeInternal's onHoverStart/
+    // onHoverEnd below) — mirrors usePanZoom's onViewportChange effect.
+    useEffect(() => {
+      onNodeHover?.(hoveredNodeId)
+    }, [hoveredNodeId, onNodeHover])
+    useEffect(() => {
+      onEdgeHover?.(hoveredEdgeId)
+    }, [hoveredEdgeId, onEdgeHover])
     // Manual drag overrides, keyed by node id — takes precedence over explicit x/y or the
     // computed layout position (see getNodePosition). Local/uncontrolled: not written back to
     // the nodes prop, so a caller that wants to persist a dropped position needs onNodeDragEnd.
@@ -1038,6 +1069,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     }, [containerSize, viewport.zoom, zoomTo])
 
 
+    const handleEdgeHoverEnd = useCallback((id: string) => {
+      setHoveredEdgeId(current => (current === id ? undefined : current))
+    }, [])
+
     const getNodeRect = useCallback((id: string) => {
       // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
       // won't find one here and renders nothing (see GraphEdgeInternal's null guard).
@@ -1198,7 +1233,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       layout,
       liveSimulation,
       setLiveSimulation,
-    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, zoomBy, panTo, locked, isFullscreen, toggleFullscreen, layout, liveSimulation])
+      hoveredNodeId,
+      hoveredEdgeId,
+    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, zoomBy, panTo, locked, isFullscreen, toggleFullscreen, layout, liveSimulation, hoveredNodeId, hoveredEdgeId])
 
     const handleRef = (el: HTMLDivElement | null) => {
       if (typeof ref === 'function') ref(el)
@@ -1310,6 +1347,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       curvature={edge.curvature}
                       selected={edge.id === selectedEdgeId}
                       onSelect={onEdgeSelect}
+                      onHoverStart={setHoveredEdgeId}
+                      onHoverEnd={handleEdgeHoverEnd}
                     />
                   )
                 })}
