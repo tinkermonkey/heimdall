@@ -15,7 +15,7 @@ export interface ShellLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   topbar?: TopbarProps & { hide?: boolean }
   sidebar?: SidebarProps & { hide?: boolean }
   statusbar?: StatusbarProps & { hide?: boolean }
-  /** Mobile breakpoint in pixels (default: 768). Set to false to disable mobile sidebar overlay behavior. */
+  /** Mobile breakpoint in pixels (default: 640, matching the library's mobile media-query tier). Set to false to disable mobile sidebar overlay behavior. */
   mobileBreakpoint?: number | false
 }
 
@@ -29,7 +29,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       statusbar,
       children,
       className = '',
-      mobileBreakpoint = 768,
+      mobileBreakpoint = 640,
       ...props
     },
     ref
@@ -105,7 +105,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       : topbarProps
 
     return (
-      <div ref={ref} className={classNames} {...props}>
+      <div ref={ref} className={classNames} data-mobile={isMobile} {...props}>
         {renderTitlebar && <Titlebar {...titlebarProps} />}
         <div className="shell-layout__main">
           {renderSidebar ? (

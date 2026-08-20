@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded } from './utils/test-helpers'
 
 test.describe('integration: Shell Components Responsive Behavior', () => {
-  test.describe('Mobile viewport at 768px', () => {
+  test.describe('Mobile viewport at 640px', () => {
     test.beforeEach(async ({ page }) => {
-      // Set viewport to 768px (breakpoint width)
-      await page.setViewportSize({ width: 768, height: 1024 })
+      // Set viewport to 640px (breakpoint width)
+      await page.setViewportSize({ width: 640, height: 1024 })
 
       // Navigate to the shell test page
       await page.goto('http://localhost:5173/?example=shell-framework')
@@ -16,7 +16,7 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
       await assertFontsLoaded(page)
     })
 
-    test('Topbar search input should be hidden at 768px', async ({ page }) => {
+    test('Topbar search input should be hidden at 640px', async ({ page }) => {
       const searchWrap = page.locator('.topbar__search-wrap')
       await expect(searchWrap).not.toBeVisible()
     })
@@ -151,16 +151,16 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
     })
   })
 
-  test.describe('Mobile sidebar overlay behavior at 768px', () => {
+  test.describe('Mobile sidebar overlay behavior at 640px', () => {
     test.beforeEach(async ({ page }) => {
-      await page.setViewportSize({ width: 768, height: 1024 })
+      await page.setViewportSize({ width: 640, height: 1024 })
       await page.goto('http://localhost:5173/?example=shell-framework')
       await page.waitForLoadState('networkidle')
       await loadSelfHostedFonts(page)
       await assertFontsLoaded(page)
     })
 
-    test('Hamburger toggle should be visible at 768px', async ({ page }) => {
+    test('Hamburger toggle should be visible at 640px', async ({ page }) => {
       const toggle = page.locator('.shell-layout__mobile-menu-toggle')
       await expect(toggle).toBeVisible()
     })
@@ -171,7 +171,7 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
       await expect(icon).toBeVisible()
     })
 
-    test('Sidebar column should not be visible at 768px', async ({ page }) => {
+    test('Sidebar column should not be visible at 640px', async ({ page }) => {
       const sidebarCol = page.locator('.shell-layout__sidebar-col')
       // Sidebar column should not exist in DOM or be hidden
       const isVisible = await sidebarCol.isVisible().catch(() => false)

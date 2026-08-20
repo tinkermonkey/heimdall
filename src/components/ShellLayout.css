@@ -111,14 +111,31 @@ body.dark-canvas .shell-layout__content {
   border-right: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .shell-layout__sidebar-col {
     display: none;
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 641px) {
   .shell-layout__mobile-menu-toggle {
     display: none;
   }
+}
+
+.shell-layout[data-mobile="true"] .shell-layout__sidebar-col {
+  display: none;
+}
+
+.shell-layout[data-mobile="true"] .shell-layout__mobile-menu-toggle {
+  display: flex;
+}
+
+/* Undo hardcoded @media (max-width: 640px) styles when JS has determined desktop mode */
+.shell-layout[data-mobile="false"] .shell-layout__sidebar-col {
+  display: flex;
+}
+
+.shell-layout[data-mobile="false"] .shell-layout__mobile-menu-toggle {
+  display: none;
 }
