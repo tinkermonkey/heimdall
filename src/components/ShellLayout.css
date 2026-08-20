@@ -111,13 +111,13 @@ body.dark-canvas .shell-layout__content {
   border-right: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .shell-layout__sidebar-col {
     display: none;
   }
 }
 
-@media (min-width: 769px) {
+@media (min-width: 641px) {
   .shell-layout__mobile-menu-toggle {
     display: none;
   }
