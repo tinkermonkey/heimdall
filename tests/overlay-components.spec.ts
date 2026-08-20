@@ -464,6 +464,23 @@ test.describe('integration: Overlay Components', () => {
       await page.mouse.move(10, 10)
     })
 
+    test('should stay visible when the pointer moves from the trigger onto the tooltip content', async ({ page }) => {
+      const trigger = page.locator('button:has-text("Top")').first()
+      await trigger.hover()
+
+      const tooltip = page.locator('[role="tooltip"]').first()
+      await expect(tooltip).toBeVisible()
+
+      // Move the pointer from the trigger directly onto the tooltip content —
+      // it must remain visible since the pointer never left the trigger+tooltip region.
+      await tooltip.hover()
+      await expect(tooltip).toBeVisible()
+
+      // Only leaving both the trigger and the tooltip should hide it.
+      await page.mouse.move(10, 10)
+      await expect(tooltip).not.toBeVisible()
+    })
+
     test('should associate the trigger with the tooltip via aria-describedby', async ({ page }) => {
       const trigger = page.locator('button:has-text("No delay")').first()
       await trigger.hover()

@@ -15,7 +15,6 @@
   font-size: 12px;
   line-height: 1.4;
   white-space: normal;
-  pointer-events: none;
   z-index: 300;
   animation: tooltipFadeIn 80ms ease;
 }
