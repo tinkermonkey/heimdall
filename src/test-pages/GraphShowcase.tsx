@@ -359,6 +359,8 @@ export default function GraphShowcase() {
       onBackgroundClick={handleBackgroundClick}
       draggable={draggable}
       renderNode={renderGraphNode}
+      nodeTooltip={(node) => (node as NodeData).title || node.label}
+      edgeTooltip={(edge) => edge.label ?? `${edge.sourceId} → ${edge.targetId}`}
       style={{ height: '100%' }}
     />
   )

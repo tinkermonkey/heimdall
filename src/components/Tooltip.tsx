@@ -11,6 +11,15 @@ export interface TooltipProps {
   offset?: number
   className?: string
   disabled?: boolean
+  /**
+   * Drives visibility externally instead of the component's own pointer-enter/leave and
+   * focus/blur tracking on `children` — e.g. GraphCanvas's nodeTooltip/edgeTooltip overlay, whose
+   * hover state lives on the node/edge itself rather than on whatever wraps this Tooltip. When
+   * set, `children`'s pointer/focus events no longer show or hide the tooltip and `delay` has no
+   * effect; visibility tracks this prop directly. Omit for the default hover/focus-driven
+   * behavior.
+   */
+  open?: boolean
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({
@@ -21,8 +30,11 @@ export const Tooltip: React.FC<TooltipProps> = ({
   offset = 6,
   className = '',
   disabled = false,
+  open,
 }) => {
-  const [visible, setVisible] = useState(false)
+  const isControlled = open !== undefined
+  const [uncontrolledVisible, setUncontrolledVisible] = useState(false)
+  const visible = isControlled ? open : uncontrolledVisible
   const [resolvedPlacement, setResolvedPlacement] = useState<TooltipPlacement>(placement)
   const showTimer = useRef<ReturnType<typeof setTimeout>>()
   const tooltipRef = useRef<HTMLDivElement>(null)
@@ -33,9 +45,17 @@ export const Tooltip: React.FC<TooltipProps> = ({
   useEffect(() => {
     if (disabled) {
       clearTimeout(showTimer.current)
-      setVisible(false)
+      if (!isControlled) setUncontrolledVisible(false)
     }
-  }, [disabled])
+  }, [disabled, isControlled])
+
+  // Resets to the caller-requested placement on hide, so a flip applied while visible (below)
+  // doesn't linger unflipped into the next show — uncontrolled mode gets this for free from
+  // show()'s own setResolvedPlacement(placement), but controlled mode has no per-show hook to
+  // reset from, since visibility just follows `open` directly.
+  useEffect(() => {
+    if (!visible) setResolvedPlacement(placement)
+  }, [visible, placement])
 
   useLayoutEffect(() => {
     if (!visible) return
@@ -55,17 +75,18 @@ export const Tooltip: React.FC<TooltipProps> = ({
   }, [visible, placement])
 
   const show = () => {
-    if (disabled) return
+    if (disabled || isControlled) return
     clearTimeout(showTimer.current)
     showTimer.current = setTimeout(() => {
       setResolvedPlacement(placement)
-      setVisible(true)
+      setUncontrolledVisible(true)
     }, delay)
   }
 
   const hide = () => {
+    if (isControlled) return
     clearTimeout(showTimer.current)
-    setVisible(false)
+    setUncontrolledVisible(false)
   }
 
   const showTooltip = visible && !disabled && content != null

@@ -802,6 +802,61 @@ test.describe('integration: Graph Canvas Components', () => {
     })
   })
 
+  test.describe('Node & Edge Tooltips', () => {
+    test('nodeTooltip shows content near the hovered node and hides on hover-end', async ({ page }) => {
+      const tooltip = page.locator('[role="tooltip"]')
+      await expect(tooltip).toHaveCount(0)
+
+      // Dispatched directly on the node (see the "hovering a node reveals..." test above for why
+      // this bypasses screen-coordinate hit-testing) — React translates native 'pointerover'/
+      // 'pointerout' into its synthetic onPointerEnter/onPointerLeave.
+      await page.locator('[data-testid="graph-node-cls_cell"]').dispatchEvent('pointerover')
+      await expect(tooltip).toBeVisible()
+      await expect(tooltip).toContainText('Cell')
+
+      await page.locator('[data-testid="graph-node-cls_cell"]').dispatchEvent('pointerout')
+      await expect(tooltip).toHaveCount(0)
+    })
+
+    test('edgeTooltip shows content near the hovered edge and hides on hover-end', async ({ page }) => {
+      const tooltip = page.locator('[role="tooltip"]')
+      await expect(tooltip).toHaveCount(0)
+
+      await page.locator('[data-testid="graph-edge-edge_1"]').dispatchEvent('pointerover')
+      await expect(tooltip).toBeVisible()
+      await expect(tooltip).toContainText('contains')
+
+      await page.locator('[data-testid="graph-edge-edge_1"]').dispatchEvent('pointerout')
+      await expect(tooltip).toHaveCount(0)
+    })
+
+    test('only one tooltip renders at a time', async ({ page }) => {
+      await page.locator('[data-testid="graph-node-cls_cell"]').dispatchEvent('pointerover')
+      await expect(page.locator('[role="tooltip"]')).toHaveCount(1)
+
+      await page.locator('[data-testid="graph-node-cls_cell"]').dispatchEvent('pointerout')
+      await page.locator('[data-testid="graph-edge-edge_1"]').dispatchEvent('pointerover')
+      await expect(page.locator('[role="tooltip"]')).toHaveCount(1)
+    })
+
+    test('tooltip position tracks pan and zoom while visible', async ({ page }) => {
+      const tooltip = page.locator('[role="tooltip"]')
+      await page.locator('[data-testid="graph-node-cls_cell"]').dispatchEvent('pointerover')
+      await expect(tooltip).toBeVisible()
+      const before = await tooltip.boundingBox()
+
+      // Same wheel+ctrl zoom gesture the "GraphCanvas zoom works with scroll" test above uses.
+      await page.locator('.graph-canvas').evaluate((el) => {
+        el.dispatchEvent(new WheelEvent('wheel', { bubbles: true, ctrlKey: true, deltaY: -100 }))
+      })
+
+      await expect.poll(async () => {
+        const after = await tooltip.boundingBox()
+        return after && before ? Math.hypot(after.x - before.x, after.y - before.y) > 1 : false
+      }).toBe(true)
+    })
+  })
+
   test.describe('Bus View - Edge Anchors & Curvature', () => {
     // Reads a path's endpoint in screen coordinates so it can be compared directly against a
     // node's rendered bounding box, independent of the current pan/zoom transform.

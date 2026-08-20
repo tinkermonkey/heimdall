@@ -43,6 +43,22 @@
   pointer-events: none;
 }
 
+/* nodeTooltip/edgeTooltip overlay (see GraphCanvas's own props) — sits above the SVG in screen
+   space. pointer-events: none throughout so it never intercepts clicks/drags meant for the
+   canvas underneath; content that pans outside .graph-canvas's own bounds is clipped by this
+   element's overflow: hidden, same as any other canvas content. */
+.graph-tooltip-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.graph-tooltip-anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
 .graph-svg {
   display: block;
 }
