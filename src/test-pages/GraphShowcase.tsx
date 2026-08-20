@@ -349,20 +349,48 @@ export default function GraphShowcase() {
     )
   }, [handleNodeSelect])
 
-  const renderCustomEdge = useCallback((_edge: any, path: any) => (
-    <>
-      <path d={path.d} />
-      {/* Small decorative circle at the midpoint */}
-      <circle
-        cx={path.mid.x}
-        cy={path.mid.y}
-        r="3"
-        fill="currentColor"
-        opacity="0.6"
-        style={{ pointerEvents: 'none' }}
-      />
-    </>
-  ), [])
+  const renderCustomEdge = useCallback((
+    edge: typeof GRAPH_EDGES[0],
+    path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> },
+    _selected: boolean
+  ) => {
+    const labelSize = edge.label ? { width: (edge.label.length * 5.5) + 12, height: 20 } : null
+    return (
+      <>
+        <path d={path.d} fill="none" stroke="currentColor" strokeWidth="1.25" />
+        {/* Small decorative circle at the midpoint */}
+        <circle
+          cx={path.mid.x}
+          cy={path.mid.y}
+          r="3"
+          fill="currentColor"
+          opacity="0.6"
+          style={{ pointerEvents: 'none' }}
+        />
+        {/* Render label if present, same structure as GraphEdgeShape */}
+        {edge.label && labelSize && (
+          <g
+            className="graph-edge__label graph-edge__label--clickable"
+            transform={`translate(${path.mid.x - labelSize.width / 2}, ${path.mid.y - labelSize.height / 2})`}
+          >
+            <rect
+              width={labelSize.width}
+              height={labelSize.height}
+              rx="3"
+              className="graph-edge__label-bg"
+            />
+            <text
+              x={labelSize.width / 2}
+              y={labelSize.height / 2 + 3}
+              className="graph-edge__label-text"
+            >
+              {edge.label}
+            </text>
+          </g>
+        )}
+      </>
+    )
+  }, [])
 
   const graphCanvas = (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>

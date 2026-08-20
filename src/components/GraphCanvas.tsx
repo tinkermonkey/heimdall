@@ -149,6 +149,8 @@ function GraphEdgeInternal({
     curvature,
   }
 
+  const handleClick = onSelect ? (e: React.MouseEvent) => { e.stopPropagation(); onSelect(id) } : undefined
+
   return (
     <g
       className={classNames}
@@ -165,7 +167,17 @@ function GraphEdgeInternal({
       onPointerLeave={onHoverEnd ? () => onHoverEnd(id) : undefined}
       data-testid={`graph-edge-${id}`}
     >
-      {renderEdge ? renderEdge(edgeData, { d: result.d, mid: result.labelPos, points: result.points }, !!selected) : (
+      {renderEdge ? (
+        <>
+          {renderEdge(edgeData, { d: result.d, mid: result.labelPos, points: result.points }, !!selected)}
+          {/* Always render hit target for interactivity, even with custom renderEdge */}
+          <path
+            className="graph-edge__hit"
+            d={result.d}
+            onClick={handleClick}
+          />
+        </>
+      ) : (
         <GraphEdgeShape
           id={id}
           d={result.d}
