@@ -7,7 +7,7 @@ import GraphEdgeInspector, { type GraphEdgeMetadata } from '../components/GraphE
 import { DetailDrawer } from '../components/DetailDrawer'
 import TopologyNode, { type TopologyNodeStatus } from '../components/TopologyNode'
 import type { EdgeAnchor } from '../utils/graph'
-import type { GraphNodeData, GraphNodeHierarchyMeta } from '../components/GraphCanvas'
+import type { GraphNodeData, GraphNodeHierarchyMeta, EdgePath } from '../components/GraphCanvas'
 import { GALAXY_DEMO_NODES, GALAXY_DEMO_EDGES, isGalaxyDemoEdgeStructural } from './galaxyDemoData'
 import { weightToStrokeWidth, strokeDashToDasharray } from '../utils/graphEdgeStyle'
 
@@ -352,8 +352,9 @@ export default function GraphShowcase() {
 
   const renderCustomEdge = useCallback((
     edge: typeof GRAPH_EDGES[0],
-    path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> },
-    _selected: boolean
+    path: EdgePath,
+    _selected: boolean,
+    hovered: boolean
   ) => {
     const labelSize = edge.label ? { width: (edge.label.length * 5.5) + 12, height: 20 } : null
 
@@ -371,9 +372,25 @@ export default function GraphShowcase() {
           cy={path.mid.y}
           r="3"
           fill="var(--graph-edge, rgb(var(--canvas-border-strong)))"
-          opacity="0.6"
+          opacity={hovered ? "1" : "0.6"}
           style={{ pointerEvents: 'none' }}
+          data-testid={`edge-mid-marker-${edge.id}`}
+          data-mid-x={Math.round(path.mid.x * 100) / 100}
+          data-mid-y={Math.round(path.mid.y * 100) / 100}
+          data-angle={Math.round(path.angle * 10000) / 10000}
         />
+        {/* Angle indicator: small rotated triangle marker */}
+        <g
+          transform={`translate(${path.mid.x}, ${path.mid.y}) rotate(${path.angle * 180 / Math.PI})`}
+          style={{ pointerEvents: 'none' }}
+          data-testid={`edge-angle-marker-${edge.id}`}
+        >
+          <polygon
+            points="0,-4 3,4 -3,4"
+            fill="var(--accent-primary, #fbbf24)"
+            opacity={hovered ? "0.8" : "0.4"}
+          />
+        </g>
         {/* Render label if present, same structure as GraphEdgeShape */}
         {edge.label && labelSize && (
           <g

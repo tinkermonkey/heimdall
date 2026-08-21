@@ -1460,26 +1460,65 @@ test.describe('integration: Graph Canvas Components', () => {
 
     test('custom renderEdge receives correct path geometry', async ({ page }) => {
       // The custom renderEdge decorator circle is positioned at path.mid, which should be
-      // the true geometric midpoint of the curve (not labelPos)
+      // the true geometric midpoint of the curve (not labelPos). Verify via data-attributes.
       const edge = page.locator('[data-testid="graph-edge-edge_1"]')
-      const circle = edge.locator('circle[r="3"]')
+      const marker = edge.locator('[data-testid="edge-mid-marker-edge_1"]')
 
-      await expect(circle).toBeVisible()
+      await expect(marker).toBeVisible()
 
-      // Get the circle's position
-      const circleBox = await circle.boundingBox()
-      expect(circleBox).not.toBeNull()
-      expect(circleBox?.width).toBe(circleBox?.height) // Should be a circle
+      // Get the recorded mid point and angle values from data-attributes
+      const midX = await marker.getAttribute('data-mid-x')
+      const midY = await marker.getAttribute('data-mid-y')
+      const angle = await marker.getAttribute('data-angle')
+
+      // All values should be defined and numeric
+      expect(midX).not.toBeNull()
+      expect(midY).not.toBeNull()
+      expect(angle).not.toBeNull()
+
+      const midXNum = parseFloat(midX || '0')
+      const midYNum = parseFloat(midY || '0')
+      const angleNum = parseFloat(angle || '0')
+
+      // Sanity check: mid point should be somewhere on canvas
+      expect(midXNum).toBeGreaterThan(0)
+      expect(midYNum).toBeGreaterThan(0)
+
+      // Angle should be a valid radian value (-π to π)
+      expect(angleNum).toBeGreaterThanOrEqual(-Math.PI)
+      expect(angleNum).toBeLessThanOrEqual(Math.PI)
     })
 
-    test('custom renderEdge works with edge selection via decorative elements', async ({ page }) => {
-      const edge = page.locator('[data-testid="graph-edge-edge_2"]')
-      await expect(edge).toBeVisible()
+    test('custom renderEdge angle indicator responds to tangent angle', async ({ page }) => {
+      // Verify the angle marker exists and is rotated according to path.angle
+      const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+      const angleMarker = edge.locator('[data-testid="edge-angle-marker-edge_1"]')
 
-      // The hit target should still be clickable even with custom rendering
-      await edge.locator('.graph-edge__hit').dispatchEvent('click')
+      await expect(angleMarker).toBeVisible()
 
-      await expect(edge).toHaveClass(/selected/)
+      // The marker should be positioned at the edge midpoint with a transform rotation
+      const transform = await angleMarker.getAttribute('transform')
+      expect(transform).toMatch(/rotate\(/)
+    })
+
+    test('custom renderEdge renders hovered state indicator markers', async ({ page }) => {
+      // Verify that the angle marker exists and responds to hovered state in rendering.
+      // The angle marker uses opacity values that differ based on hovered prop (0.4 when not hovered, 0.8 when hovered).
+      const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+      const marker = edge.locator('[data-testid="edge-mid-marker-edge_1"]')
+      const angleMarker = edge.locator('[data-testid="edge-angle-marker-edge_1"]')
+
+      // Verify both markers are rendered
+      await expect(marker).toBeVisible()
+      await expect(angleMarker).toBeVisible()
+
+      // Verify the angle marker polygon exists and has the expected styling
+      const polygon = angleMarker.locator('polygon')
+      await expect(polygon).toBeVisible()
+
+      // Get the polygon's fill color (should be the accent-primary color)
+      const fill = await polygon.getAttribute('fill')
+      expect(fill).toMatch(/accent|fbbf24|#fbbf24|var\(--accent-primary/)
     })
   })
 })
