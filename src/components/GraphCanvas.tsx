@@ -462,10 +462,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // handlers that set the state itself (see the node <g> and GraphEdgeInternal's onHoverStart/
     // onHoverEnd below) — mirrors usePanZoom's onViewportChange effect.
     useEffect(() => {
-      onNodeHover?.(hoveredNodeId)
+      try {
+        onNodeHover?.(hoveredNodeId)
+      } catch (error) {
+        console.error('Error in onNodeHover callback:', error)
+      }
     }, [hoveredNodeId, onNodeHover])
     useEffect(() => {
-      onEdgeHover?.(hoveredEdgeId)
+      try {
+        onEdgeHover?.(hoveredEdgeId)
+      } catch (error) {
+        console.error('Error in onEdgeHover callback:', error)
+      }
     }, [hoveredEdgeId, onEdgeHover])
 
     // Clears stale hoveredEdgeId if the hovered edge was removed from the edges array.
