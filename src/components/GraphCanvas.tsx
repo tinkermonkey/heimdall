@@ -86,18 +86,23 @@ const DEFAULT_MAX_ZOOM = 8
 // than a click — below this, it's just an imprecise click and should still fire onSelect.
 const DRAG_THRESHOLD = 3
 
-export type EdgePath = { d: string; mid: { x: number; y: number }; angle: number; points: Array<{ x: number; y: number }> }
+export type EdgeGeometry = {
+  path: string
+  mid: { x: number; y: number }
+  labelPos: { x: number; y: number }
+  angle: number
+  selected: boolean
+  hovered: boolean
+}
 
 // Safe wrapper to catch errors from consumer-provided callbacks during render phase
 function safeRenderEdgeCallback(
-  renderEdge: (edge: GraphEdge, path: EdgePath, selected: boolean, hovered: boolean) => React.ReactNode,
+  renderEdge: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode,
   edge: GraphEdge,
-  path: EdgePath,
-  selected: boolean,
-  hovered: boolean
+  geometry: EdgeGeometry
 ): React.ReactNode {
   try {
-    return renderEdge(edge, path, selected, hovered)
+    return renderEdge(edge, geometry)
   } catch (error) {
     console.error('Error in renderEdge callback:', error)
     return null
@@ -110,7 +115,7 @@ type InternalEdgeProps = GraphEdge & {
   onSelect?: (id: string) => void
   onHoverStart?: (id: string) => void
   onHoverEnd?: (id: string) => void
-  renderEdge?: (edge: GraphEdge, path: EdgePath, selected: boolean, hovered: boolean) => React.ReactNode
+  renderEdge?: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode
 }
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -190,7 +195,14 @@ function GraphEdgeInternal({
     >
       {renderEdge ? (
         <>
-          {safeRenderEdgeCallback(renderEdge, edgeData, { d: result.d, mid: result.mid, angle: result.angle, points: result.points }, !!selected, !!hovered)}
+          {safeRenderEdgeCallback(renderEdge, edgeData, {
+            path: result.d,
+            mid: result.mid,
+            labelPos: result.labelPos,
+            angle: result.angle,
+            selected: !!selected,
+            hovered: !!hovered,
+          })}
           {/* Always render hit target for interactivity, even with custom renderEdge */}
           <path
             className="graph-edge__hit"
@@ -270,14 +282,15 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   renderNode?: (node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta) => React.ReactNode
   /**
    * Render custom SVG content for each edge. If omitted, the default GraphEdgeShape is used.
-   * Receives the edge data, computed path info (d, mid point, angle, points array), selection state, and hover state.
-   * The path info lets you draw decorators, arrow customizations, or other SVG overlays on top
+   * Receives the edge data and a geometry object containing the computed path (SVG d string),
+   * curve midpoint, collision-cleared label position, tangent angle, and selection/hover state.
+   * The geometry info lets you draw decorators, arrow customizations, or other SVG overlays on top
    * of or instead of the default line rendering. The owning <g> element handles hover/select
    * styling and event handlers independently of your content.
    *
    * Tip: memoize with useCallback to avoid unnecessary re-computations.
    */
-  renderEdge?: (edge: GraphEdge, path: EdgePath, selected: boolean, hovered: boolean) => React.ReactNode
+  renderEdge?: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes without
    *  explicit coordinates. 'galaxy' arranges nodes as a radial hierarchy of orbits, built from
    *  structural edges (see isStructuralEdge). 'force-clustered' additionally groups nodes into
