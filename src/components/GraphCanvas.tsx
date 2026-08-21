@@ -87,6 +87,8 @@ export interface BaseGraphNodeComponentProps {
   label: string;
   selected?: boolean;
   onSelect?: (id: string) => void;
+  /** Called when the node is clicked with a nodePopover configured. */
+  onPopoverOpen?: () => void;
 }
 
 /**
@@ -248,7 +250,7 @@ function GraphEdgeInternal({
   ]
     .filter(Boolean)
     .join(" ");
-  const interactive = !!onSelect;
+  const interactive = !!onSelect || !!hasPopover;
 
   const edgeData: GraphEdge = {
     id,
@@ -264,10 +266,14 @@ function GraphEdgeInternal({
     curvature,
   };
 
-  const handleClick = onSelect
+  const handleClick = interactive
     ? (e: React.MouseEvent) => {
         e.stopPropagation();
-        onSelect(id);
+        if (hasPopover && onPopoverOpen) {
+          onPopoverOpen(id);
+        } else if (onSelect) {
+          onSelect(id);
+        }
       }
     : undefined;
 
@@ -297,7 +303,8 @@ function GraphEdgeInternal({
                 e.preventDefault();
                 if (hasPopover && onPopoverOpen) {
                   onPopoverOpen(id);
-                } else if (onSelect) {
+                }
+                if (onSelect) {
                   onSelect(id);
                 }
               }
@@ -1795,6 +1802,22 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [forest, collapsedNodeIds, onToggleCollapse],
     );
 
+    const handleNodePopoverOpen = useCallback(
+      (nodeId: string) => {
+        setActivePopoverNodeId(nodeId);
+        setActivePopoverEdgeId(undefined);
+      },
+      [],
+    );
+
+    const handleEdgePopoverOpen = useCallback(
+      (edgeId: string) => {
+        setActivePopoverEdgeId(edgeId);
+        setActivePopoverNodeId(undefined);
+      },
+      [],
+    );
+
     const resolveNodeContent = useCallback(
       (node: GraphNodeData, selected: boolean): React.ReactNode => {
         const hierarchy = hierarchyMetaFor(node.id);
@@ -1808,6 +1831,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             domainColor={node.domainColor}
             selected={selected}
             onSelect={onNodeSelect}
+            onPopoverOpen={nodePopover ? () => handleNodePopoverOpen(node.id) : undefined}
             hasChildren={hierarchy.hasChildren}
             collapsed={hierarchy.collapsed}
             hiddenDescendantCount={hierarchy.hiddenDescendantCount}
@@ -1815,7 +1839,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, handleNodePopoverOpen],
     );
 
     // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
@@ -2115,10 +2139,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       onHoverEnd={handleEdgeHoverEndWithDelay}
                       renderEdge={renderEdge}
                       hasPopover={!!edgePopover}
-                      onPopoverOpen={(id) => {
-                        setActivePopoverEdgeId(id);
-                        setActivePopoverNodeId(undefined);
-                      }}
+                      onPopoverOpen={handleEdgePopoverOpen}
                     />
                   );
                 })}
@@ -2132,7 +2153,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     height: DEFAULT_NODE_H,
                   };
                   const selected = node.id === selectedNodeId;
-                  const hasNodePopover = !!nodePopover;
                   return (
                     <g
                       key={node.id}
@@ -2147,29 +2167,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       ]
                         .filter(Boolean)
                         .join(" ")}
-                      tabIndex={hasNodePopover ? 0 : undefined}
-                      role={hasNodePopover ? "button" : undefined}
-                      aria-haspopup={hasNodePopover ? "dialog" : undefined}
-                      onClick={
-                        hasNodePopover
-                          ? (e) => {
-                              e.stopPropagation();
-                              setActivePopoverNodeId(node.id);
-                              setActivePopoverEdgeId(undefined);
-                            }
-                          : undefined
-                      }
-                      onKeyDown={
-                        hasNodePopover
-                          ? (e) => {
-                              if (e.key === "Enter" || e.key === " ") {
-                                e.preventDefault();
-                                setActivePopoverNodeId(node.id);
-                                setActivePopoverEdgeId(undefined);
-                              }
-                            }
-                          : undefined
-                      }
                       onPointerEnter={() => handleNodeHoverStart(node.id)}
                       onPointerLeave={() => handleNodeHoverEndWithDelay(node.id)}
                       onPointerDown={
@@ -2232,6 +2229,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   open={true}
                   onOpenChange={(open) => {
                     if (!open) {
+                      // Restore focus to the element that triggered the popover
+                      if (popoverTarget.type === "node") {
+                        const nodeEl = document.querySelector<HTMLElement>(
+                          `[data-testid="graph-node-${popoverTarget.nodeId}"] .graph-node`
+                        );
+                        nodeEl?.focus();
+                      } else if (popoverTarget.type === "edge") {
+                        const edgeEl = document.querySelector<SVGElement>(
+                          `[data-testid="graph-edge-${popoverTarget.edgeId}"]`
+                        );
+                        (edgeEl as any)?.focus?.();
+                      }
                       setActivePopoverNodeId(undefined);
                       setActivePopoverEdgeId(undefined);
                     }
