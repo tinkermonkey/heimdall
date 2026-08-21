@@ -455,17 +455,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onEdgeHover?.(hoveredEdgeId)
     }, [hoveredEdgeId, onEdgeHover])
 
-    // Clears stale hoveredNodeId if the hovered node was collapsed away and is no longer visible.
-    // Without this, a hovered node that gets hidden never fires the onNodeHover(undefined) callback,
-    // leaving the caller's state permanently showing the removed item as hovered.
-    useEffect(() => {
-      if (!hoveredNodeId) return
-      const nodeStillVisible = visibleNodes.some(n => n.id === hoveredNodeId)
-      if (!nodeStillVisible) {
-        setHoveredNodeId(undefined)
-      }
-    }, [hoveredNodeId, visibleNodes])
-
     // Clears stale hoveredEdgeId if the hovered edge was removed from the edges array.
     // Without this, a hovered edge that gets removed never fires the onEdgeHover(undefined) callback,
     // leaving the caller's state permanently showing the removed item as hovered.
@@ -610,6 +599,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       () => (hiddenIds.size === 0 ? nodes : nodes.filter(n => !hiddenIds.has(n.id))),
       [nodes, hiddenIds]
     )
+
+    // Clears stale hoveredNodeId if the hovered node was collapsed away and is no longer visible.
+    // Without this, a hovered node that gets hidden never fires the onNodeHover(undefined) callback,
+    // leaving the caller's state permanently showing the removed item as hovered.
+    useEffect(() => {
+      if (!hoveredNodeId) return
+      const nodeStillVisible = visibleNodes.some(n => n.id === hoveredNodeId)
+      if (!nodeStillVisible) {
+        setHoveredNodeId(undefined)
+      }
+    }, [hoveredNodeId, visibleNodes])
 
     // Only populated when layout='force-clustered' — top-level cluster
     // bounding circles, for the optional bubble-boundary render layer.
