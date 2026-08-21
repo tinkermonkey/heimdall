@@ -454,6 +454,28 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     useEffect(() => {
       onEdgeHover?.(hoveredEdgeId)
     }, [hoveredEdgeId, onEdgeHover])
+
+    // Clears stale hoveredNodeId if the hovered node was collapsed away and is no longer visible.
+    // Without this, a hovered node that gets hidden never fires the onNodeHover(undefined) callback,
+    // leaving the caller's state permanently showing the removed item as hovered.
+    useEffect(() => {
+      if (!hoveredNodeId) return
+      const nodeStillVisible = visibleNodes.some(n => n.id === hoveredNodeId)
+      if (!nodeStillVisible) {
+        setHoveredNodeId(undefined)
+      }
+    }, [hoveredNodeId, visibleNodes])
+
+    // Clears stale hoveredEdgeId if the hovered edge was removed from the edges array.
+    // Without this, a hovered edge that gets removed never fires the onEdgeHover(undefined) callback,
+    // leaving the caller's state permanently showing the removed item as hovered.
+    useEffect(() => {
+      if (!hoveredEdgeId) return
+      const edgeStillExists = (edges ?? []).some(e => e.id === hoveredEdgeId)
+      if (!edgeStillExists) {
+        setHoveredEdgeId(undefined)
+      }
+    }, [hoveredEdgeId, edges])
     // Manual drag overrides, keyed by node id — takes precedence over explicit x/y or the
     // computed layout position (see getNodePosition). Local/uncontrolled: not written back to
     // the nodes prop, so a caller that wants to persist a dropped position needs onNodeDragEnd.
