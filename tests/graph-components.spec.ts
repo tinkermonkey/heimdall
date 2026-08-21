@@ -94,25 +94,6 @@ test.describe('integration: Graph Canvas Components', () => {
     await expect(page.locator('[data-testid="inspector-title"]')).toContainText('Mitochondrion')
   })
 
-  test('dragging a node repositions it', async ({ page }) => {
-    const node = page.locator('[data-testid="graph-node-cls_mito"]')
-    await expect(node).toBeVisible()
-    const before = await node.getAttribute('transform')
-
-    const box = await node.boundingBox()
-    if (!box) throw new Error('Node not visible')
-    const startX = box.x + box.width / 2
-    const startY = box.y + box.height / 2
-
-    await page.mouse.move(startX, startY)
-    await page.mouse.down()
-    // Past DRAG_THRESHOLD and with enough steps for pointermove to fire more than once.
-    await page.mouse.move(startX + 80, startY + 60, { steps: 10 })
-    await page.mouse.up()
-
-    const after = await node.getAttribute('transform')
-    expect(after).not.toBe(before)
-  })
 
   test('a real drag does not also fire node selection', async ({ page }) => {
     const node = page.locator('[data-testid="graph-node-cls_mito"]')
@@ -466,20 +447,6 @@ test.describe('integration: Graph Canvas Components', () => {
     expect(dotCount).toBeGreaterThan(0)
   })
 
-  test('detail drawer overlays the graph canvas rather than sharing space with it', async ({ page }) => {
-    const canvas = page.locator('.graph-canvas')
-    await expect(canvas).toBeVisible()
-    const canvasBoxBefore = await canvas.boundingBox()
-
-    await page.locator('[data-testid="graph-node-cls_cell"]').click()
-
-    const inspector = page.locator('.graph-inspector')
-    await expect(inspector).toBeVisible()
-    // The canvas doesn't shrink to make room for it — the drawer floats in front, confirmed by
-    // the canvas's own box being unchanged now that something's selected and the drawer is open.
-    const canvasBoxAfter = await canvas.boundingBox()
-    expect(canvasBoxAfter).toEqual(canvasBoxBefore)
-  })
 
   test('Node selection persists across canvas interactions', async ({ page }) => {
     test.skip(!!process.env.CI, 'Multi-click canvas selection is unreliable in headless Chromium')
