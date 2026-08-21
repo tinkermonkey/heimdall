@@ -4,6 +4,34 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0]
+
+### Added
+
+- **`Tooltip`** — new component (`content`, `children`, `placement`, `delay`, `offset`,
+  `disabled`, `open`). Positions relative to its trigger with automatic edge-flip, and supports an
+  `open` prop for external/controlled visibility (used by `GraphCanvas`'s node/edge tooltip
+  overlays, whose hover state lives on the node or edge rather than on whatever wraps the
+  tooltip) — when set, the trigger's own pointer/focus tracking and `delay` are bypassed.
+- **`GraphCanvas`** — `nodeTooltip` and `edgeTooltip` render-prop options to show a `Tooltip` over
+  a hovered node or edge.
+- **`GraphCanvas`** — `onEdgeHover` event, mirroring the existing `onNodeHover`.
+- **`GraphCanvas`** — `renderEdge` render-prop (paired with the new exported `EdgeGeometry` type
+  and `GraphEdgeShape` component) for fully custom edge rendering, mirroring the existing
+  `renderNode`.
+- **`useMediaQuery`** — new hook: subscribes to a media query string and returns whether it
+  currently matches, updating on change. SSR-safe (returns `false` until mounted).
+- **`ShellLayout`** — `mobileBreakpoint` prop (default `768`, matching `Topbar`/`Statusbar`; pass
+  `false` to disable): below the breakpoint the sidebar collapses into a slide-over overlay opened
+  via a mobile menu toggle instead of the persistent rail.
+- **`Drawer`** — `keepMounted` prop: keeps the drawer in the DOM (hidden) while closed instead of
+  unmounting it, for consumers that need to preserve its internal state across opens.
+
+### Fixed
+
+- **`Tooltip`** — pointer moving from the trigger onto the tooltip's own content no longer hides
+  it immediately; hover now persists across that boundary as intended.
+
 ## [0.7.0]
 
 ### Added
