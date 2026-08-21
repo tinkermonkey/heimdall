@@ -86,11 +86,13 @@ const DEFAULT_MAX_ZOOM = 8
 // than a click — below this, it's just an imprecise click and should still fire onSelect.
 const DRAG_THRESHOLD = 3
 
+type EdgePath = { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> }
+
 // Safe wrapper to catch errors from consumer-provided callbacks during render phase
 function safeRenderEdgeCallback(
-  renderEdge: (edge: GraphEdge, path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> }, selected: boolean) => React.ReactNode,
+  renderEdge: (edge: GraphEdge, path: EdgePath, selected: boolean) => React.ReactNode,
   edge: GraphEdge,
-  path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> },
+  path: EdgePath,
   selected: boolean
 ): React.ReactNode {
   try {
@@ -106,7 +108,7 @@ type InternalEdgeProps = GraphEdge & {
   onSelect?: (id: string) => void
   onHoverStart?: (id: string) => void
   onHoverEnd?: (id: string) => void
-  renderEdge?: (edge: GraphEdge, path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> }, selected: boolean) => React.ReactNode
+  renderEdge?: (edge: GraphEdge, path: EdgePath, selected: boolean) => React.ReactNode
 }
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -1308,6 +1310,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             return { content, worldX: pos.x, worldY: pos.y - d.height / 2 }
           } catch (error) {
             console.error('Error in nodeTooltip callback:', error)
+            return null
           }
         }
       }
@@ -1326,6 +1329,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             return { content, worldX: path.mid.x, worldY: path.mid.y }
           } catch (error) {
             console.error('Error in edgeTooltip callback:', error)
+            return null
           }
         }
       }
