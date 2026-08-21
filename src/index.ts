@@ -134,10 +134,12 @@ export {
   type GraphCanvasProps,
   type BaseGraphNodeComponentProps,
   type GraphNodeHierarchyMeta,
+  type EdgePath,
 } from './components/GraphCanvas'
 export { type GraphCanvasContextValue, type GraphNodeRect } from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
+export { GraphEdgeShape, type GraphEdgeShapeProps } from './components/GraphEdgeShape'
 export { GraphToolbar, type GraphToolbarProps, type GraphToolbarPosition } from './components/GraphToolbar'
 export { DetailDrawer, type DetailDrawerProps } from './components/DetailDrawer'
 export {

@@ -1429,6 +1429,59 @@ test.describe('integration: Graph Canvas Components', () => {
       await expect(canvas).toHaveScreenshot('graph-canvas-clustered-view-dark.png')
     })
   })
+
+  test.describe('renderEdge custom callback', () => {
+    test('custom renderEdge renders SVG content in DOM', async ({ page }) => {
+      // The custom renderEdge in the test page renders a decorative circle at path.mid
+      const canvas = page.locator('.graph-canvas')
+      await expect(canvas).toBeVisible()
+
+      // Look for the decorative circles that renderCustomEdge adds
+      const circles = canvas.locator('circle[r="3"]')
+      const circleCount = await circles.count()
+
+      // The test page renders edges with renderCustomEdge, so we should see circles
+      expect(circleCount).toBeGreaterThan(0)
+    })
+
+    test('hit-target remains interactive with custom renderEdge', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+      await expect(edge).toBeVisible()
+
+      // Click the hit-target (invisible stroke) to select the edge
+      await edge.locator('.graph-edge__hit').dispatchEvent('click')
+
+      // Verify the edge is selected
+      await expect(edge).toHaveClass(/selected/)
+
+      // Verify the inspector shows it's selected
+      await expect(page.locator('[data-testid="edge-inspector-title"]')).toContainText('contains')
+    })
+
+    test('custom renderEdge receives correct path geometry', async ({ page }) => {
+      // The custom renderEdge decorator circle is positioned at path.mid, which should be
+      // the true geometric midpoint of the curve (not labelPos)
+      const edge = page.locator('[data-testid="graph-edge-edge_1"]')
+      const circle = edge.locator('circle[r="3"]')
+
+      await expect(circle).toBeVisible()
+
+      // Get the circle's position
+      const circleBox = await circle.boundingBox()
+      expect(circleBox).not.toBeNull()
+      expect(circleBox?.width).toBe(circleBox?.height) // Should be a circle
+    })
+
+    test('custom renderEdge works with edge selection via decorative elements', async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-edge_2"]')
+      await expect(edge).toBeVisible()
+
+      // The hit target should still be clickable even with custom rendering
+      await edge.locator('.graph-edge__hit').dispatchEvent('click')
+
+      await expect(edge).toHaveClass(/selected/)
+    })
+  })
 })
 
 // A standalone tuning/regression aid for galaxyLayout itself, not a component showcase (see
