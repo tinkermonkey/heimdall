@@ -271,7 +271,8 @@ function GraphEdgeInternal({
         e.stopPropagation();
         if (hasPopover && onPopoverOpen) {
           onPopoverOpen(id);
-        } else if (onSelect) {
+        }
+        if (onSelect) {
           onSelect(id);
         }
       }
