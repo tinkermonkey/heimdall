@@ -596,25 +596,28 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       (suppressUpcomingClick: boolean) => {
         const state = dragStateRef.current;
         if (!state) return;
-        if (state.dragging) {
-          if (suppressUpcomingClick) {
-            const target = state.target;
-            const suppressClick = (ev: MouseEvent) => {
-              ev.stopPropagation();
-              ev.preventDefault();
+        try {
+          if (state.dragging) {
+            if (suppressUpcomingClick) {
+              const target = state.target;
+              const suppressClick = (ev: MouseEvent) => {
+                ev.stopPropagation();
+                ev.preventDefault();
+              };
+              target.addEventListener("click", suppressClick, {
+                capture: true,
+                once: true,
+              });
+            }
+            const finalPos = dragPositions.get(state.id) ?? {
+              x: state.startX,
+              y: state.startY,
             };
-            target.addEventListener("click", suppressClick, {
-              capture: true,
-              once: true,
-            });
+            onNodeDragEnd?.(state.id, finalPos);
           }
-          const finalPos = dragPositions.get(state.id) ?? {
-            x: state.startX,
-            y: state.startY,
-          };
-          onNodeDragEnd?.(state.id, finalPos);
+        } finally {
+          dragStateRef.current = null;
         }
-        dragStateRef.current = null;
       },
       [dragPositions, onNodeDragEnd],
     );
