@@ -43,6 +43,11 @@ import "./GraphEdge.css";
 export type { GraphCanvasContextValue } from "./GraphCanvasContext";
 export { useGraphCanvas } from "./GraphCanvasContext";
 
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+/** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
+const TOOLTIP_SHOW_DELAY_MS = 200;
+
 // ─── Public data types ────────────────────────────────────────────────────────
 
 export interface GraphNodeData {
@@ -602,6 +607,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const edgeStillExists = (edges ?? []).some((e) => e.id === hoveredEdgeId);
       if (!edgeStillExists) {
         setHoveredEdgeId(undefined);
+        if (tooltipDelayRef.current.edgeTimer)
+          clearTimeout(tooltipDelayRef.current.edgeTimer);
+        setDelayedHoveredEdgeId(undefined);
       }
     }, [hoveredEdgeId, edges]);
 
@@ -797,6 +805,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const nodeStillVisible = visibleNodes.some((n) => n.id === hoveredNodeId);
       if (!nodeStillVisible) {
         setHoveredNodeId(undefined);
+        if (tooltipDelayRef.current.nodeTimer)
+          clearTimeout(tooltipDelayRef.current.nodeTimer);
+        setDelayedHoveredNodeId(undefined);
       }
     }, [hoveredNodeId, visibleNodes]);
 
@@ -1563,7 +1574,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           clearTimeout(tooltipDelayRef.current.edgeTimer);
         tooltipDelayRef.current.edgeTimer = setTimeout(() => {
           setDelayedHoveredEdgeId(id);
-        }, 200);
+        }, TOOLTIP_SHOW_DELAY_MS);
       }
     }, [edgeTooltip]);
 
@@ -1573,6 +1584,26 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         clearTimeout(tooltipDelayRef.current.edgeTimer);
       setDelayedHoveredEdgeId(undefined);
     }, [handleEdgeHoverEnd]);
+
+    const handleNodeHoverStart = useCallback((id: string) => {
+      setHoveredNodeId(id);
+      if (nodeTooltip) {
+        if (tooltipDelayRef.current.nodeTimer)
+          clearTimeout(tooltipDelayRef.current.nodeTimer);
+        tooltipDelayRef.current.nodeTimer = setTimeout(() => {
+          setDelayedHoveredNodeId(id);
+        }, TOOLTIP_SHOW_DELAY_MS);
+      }
+    }, [nodeTooltip]);
+
+    const handleNodeHoverEndWithDelay = useCallback((id: string) => {
+      setHoveredNodeId((current) =>
+        current === id ? undefined : current,
+      );
+      if (tooltipDelayRef.current.nodeTimer)
+        clearTimeout(tooltipDelayRef.current.nodeTimer);
+      setDelayedHoveredNodeId(undefined);
+    }, []);
 
     const getNodeRect = useCallback(
       (id: string) => {
@@ -2005,24 +2036,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       ]
                         .filter(Boolean)
                         .join(" ")}
-                      onPointerEnter={() => {
-                        setHoveredNodeId(node.id);
-                        if (nodeTooltip) {
-                          if (tooltipDelayRef.current.nodeTimer)
-                            clearTimeout(tooltipDelayRef.current.nodeTimer);
-                          tooltipDelayRef.current.nodeTimer = setTimeout(() => {
-                            setDelayedHoveredNodeId(node.id);
-                          }, 200);
-                        }
-                      }}
-                      onPointerLeave={() => {
-                        setHoveredNodeId((current) =>
-                          current === node.id ? undefined : current,
-                        );
-                        if (tooltipDelayRef.current.nodeTimer)
-                          clearTimeout(tooltipDelayRef.current.nodeTimer);
-                        setDelayedHoveredNodeId(undefined);
-                      }}
+                      onPointerEnter={() => handleNodeHoverStart(node.id)}
+                      onPointerLeave={() => handleNodeHoverEndWithDelay(node.id)}
                       onPointerDown={
                         draggable
                           ? (e) => handleNodePointerDown(e, node)
