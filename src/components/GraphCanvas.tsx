@@ -86,6 +86,21 @@ const DEFAULT_MAX_ZOOM = 8
 // than a click — below this, it's just an imprecise click and should still fire onSelect.
 const DRAG_THRESHOLD = 3
 
+// Safe wrapper to catch errors from consumer-provided callbacks during render phase
+function safeRenderEdgeCallback(
+  renderEdge: (edge: GraphEdge, path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> }, selected: boolean) => React.ReactNode,
+  edge: GraphEdge,
+  path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> },
+  selected: boolean
+): React.ReactNode {
+  try {
+    return renderEdge(edge, path, selected)
+  } catch (error) {
+    console.error('Error in renderEdge callback:', error)
+    return null
+  }
+}
+
 type InternalEdgeProps = GraphEdge & {
   selected?: boolean
   onSelect?: (id: string) => void
@@ -170,7 +185,7 @@ function GraphEdgeInternal({
     >
       {renderEdge ? (
         <>
-          {renderEdge(edgeData, { d: result.d, mid: result.labelPos, points: result.points }, !!selected)}
+          {safeRenderEdgeCallback(renderEdge, edgeData, { d: result.d, mid: result.labelPos, points: result.points }, !!selected)}
           {/* Always render hit target for interactivity, even with custom renderEdge */}
           <path
             className="graph-edge__hit"
@@ -1288,7 +1303,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         if (node) {
           const pos = getNodePosition(node)
           const d = dims.get(node.id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
-          return { content: nodeTooltip(node), worldX: pos.x, worldY: pos.y - d.height / 2 }
+          try {
+            const content = nodeTooltip(node)
+            return { content, worldX: pos.x, worldY: pos.y - d.height / 2 }
+          } catch (error) {
+            console.error('Error in nodeTooltip callback:', error)
+          }
         }
       }
       if (edgeTooltip && hoveredEdgeId) {
@@ -1301,7 +1321,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             targetAnchor: edge.targetAnchor,
             curvature: edge.curvature,
           })
-          return { content: edgeTooltip(edge), worldX: path.mid.x, worldY: path.mid.y }
+          try {
+            const content = edgeTooltip(edge)
+            return { content, worldX: path.mid.x, worldY: path.mid.y }
+          } catch (error) {
+            console.error('Error in edgeTooltip callback:', error)
+          }
         }
       }
       return null
