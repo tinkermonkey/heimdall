@@ -59,6 +59,25 @@
   height: 0;
 }
 
+/* nodePopover/edgePopover overlay (see GraphCanvas's own props) — sits above the SVG in screen
+   space, similar to tooltip layer but with pointer-events: auto on the panel itself so
+   interactive content (links, buttons) can be clicked. */
+.graph-popover-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.graph-popover-anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.graph-popover-layer .popover-panel {
+  pointer-events: auto;
+}
+
 .graph-svg {
   display: block;
 }
