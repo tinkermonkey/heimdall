@@ -986,6 +986,8 @@ test.describe("integration: Graph Canvas Components", () => {
       await page
         .locator('[data-testid="graph-node-cls_cell"]')
         .dispatchEvent("pointerover");
+      // Tooltip has a 200ms show delay to prevent flicker during fast mouse traversal
+      await page.waitForTimeout(250);
       await expect(tooltip).toBeVisible();
       await expect(tooltip).toContainText("Cell");
 
@@ -1004,6 +1006,8 @@ test.describe("integration: Graph Canvas Components", () => {
       await page
         .locator('[data-testid="graph-edge-edge_1"]')
         .dispatchEvent("pointerover");
+      // Tooltip has a 200ms show delay to prevent flicker during fast mouse traversal
+      await page.waitForTimeout(250);
       await expect(tooltip).toBeVisible();
       await expect(tooltip).toContainText("contains");
 
@@ -1017,6 +1021,8 @@ test.describe("integration: Graph Canvas Components", () => {
       await page
         .locator('[data-testid="graph-node-cls_cell"]')
         .dispatchEvent("pointerover");
+      // Tooltip has a 200ms show delay to prevent flicker during fast mouse traversal
+      await page.waitForTimeout(250);
       await expect(page.locator('[role="tooltip"]')).toHaveCount(1);
 
       await page
@@ -1025,6 +1031,7 @@ test.describe("integration: Graph Canvas Components", () => {
       await page
         .locator('[data-testid="graph-edge-edge_1"]')
         .dispatchEvent("pointerover");
+      await page.waitForTimeout(250);
       await expect(page.locator('[role="tooltip"]')).toHaveCount(1);
     });
 
@@ -1035,6 +1042,8 @@ test.describe("integration: Graph Canvas Components", () => {
       await page
         .locator('[data-testid="graph-node-cls_cell"]')
         .dispatchEvent("pointerover");
+      // Tooltip has a 200ms show delay to prevent flicker during fast mouse traversal
+      await page.waitForTimeout(250);
       await expect(tooltip).toBeVisible();
       const before = await tooltip.boundingBox();
 

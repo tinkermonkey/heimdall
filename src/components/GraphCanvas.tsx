@@ -567,6 +567,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     );
     const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>();
     const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>();
+    const [delayedHoveredNodeId, setDelayedHoveredNodeId] =
+      useState<string | undefined>();
+    const [delayedHoveredEdgeId, setDelayedHoveredEdgeId] =
+      useState<string | undefined>();
+    const tooltipDelayRef = useRef<{
+      nodeTimer?: ReturnType<typeof setTimeout>;
+      edgeTimer?: ReturnType<typeof setTimeout>;
+    }>({});
+
     // Lifts hover state out to the caller-supplied callbacks, decoupled from the pointer
     // handlers that set the state itself (see the node <g> and GraphEdgeInternal's onHoverStart/
     // onHoverEnd below) — mirrors usePanZoom's onViewportChange effect.
@@ -595,6 +604,16 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         setHoveredEdgeId(undefined);
       }
     }, [hoveredEdgeId, edges]);
+
+    // Cleanup tooltip delays on unmount.
+    useEffect(() => {
+      return () => {
+        if (tooltipDelayRef.current.nodeTimer)
+          clearTimeout(tooltipDelayRef.current.nodeTimer);
+        if (tooltipDelayRef.current.edgeTimer)
+          clearTimeout(tooltipDelayRef.current.edgeTimer);
+      };
+    }, []);
     // Manual drag overrides, keyed by node id — takes precedence over explicit x/y or the
     // computed layout position (see getNodePosition). Local/uncontrolled: not written back to
     // the nodes prop, so a caller that wants to persist a dropped position needs onNodeDragEnd.
@@ -1537,6 +1556,24 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setHoveredEdgeId((current) => (current === id ? undefined : current));
     }, []);
 
+    const handleEdgeHoverStart = useCallback((id: string) => {
+      setHoveredEdgeId(id);
+      if (edgeTooltip) {
+        if (tooltipDelayRef.current.edgeTimer)
+          clearTimeout(tooltipDelayRef.current.edgeTimer);
+        tooltipDelayRef.current.edgeTimer = setTimeout(() => {
+          setDelayedHoveredEdgeId(id);
+        }, 200);
+      }
+    }, [edgeTooltip]);
+
+    const handleEdgeHoverEndWithDelay = useCallback((id: string) => {
+      handleEdgeHoverEnd(id);
+      if (tooltipDelayRef.current.edgeTimer)
+        clearTimeout(tooltipDelayRef.current.edgeTimer);
+      setDelayedHoveredEdgeId(undefined);
+    }, [handleEdgeHoverEnd]);
+
     const getNodeRect = useCallback(
       (id: string) => {
         // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
@@ -1716,10 +1753,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // edgeTooltip overlay below, resolved from current hover state. Screen position is derived
     // from this at render time via the live viewport (see the overlay JSX), so it tracks pan/zoom
     // exactly like the hovered node/edge itself does — no separate "reposition on pan" handling
-    // needed.
+    // needed. Uses delayed hover states to apply the same 200ms anti-flicker delay as the
+    // standalone Tooltip component.
     const tooltipTarget = useMemo(() => {
-      if (nodeTooltip && hoveredNodeId) {
-        const node = visibleNodes.find((n) => n.id === hoveredNodeId);
+      if (nodeTooltip && delayedHoveredNodeId) {
+        const node = visibleNodes.find((n) => n.id === delayedHoveredNodeId);
         if (node) {
           const pos = getNodePosition(node);
           const d = dims.get(node.id) ?? {
@@ -1735,8 +1773,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           }
         }
       }
-      if (edgeTooltip && hoveredEdgeId) {
-        const edge = edges.find((e) => e.id === hoveredEdgeId);
+      if (edgeTooltip && delayedHoveredEdgeId) {
+        const edge = edges.find((e) => e.id === delayedHoveredEdgeId);
         const src = edge && getNodeRect(edge.sourceId);
         const tgt = edge && getNodeRect(edge.targetId);
         if (edge && src && tgt) {
@@ -1758,8 +1796,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     }, [
       nodeTooltip,
       edgeTooltip,
-      hoveredNodeId,
-      hoveredEdgeId,
+      delayedHoveredNodeId,
+      delayedHoveredEdgeId,
       visibleNodes,
       dims,
       getNodePosition,
@@ -1937,8 +1975,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       selected={edge.id === selectedEdgeId}
                       hovered={edge.id === hoveredEdgeId}
                       onSelect={onEdgeSelect}
-                      onHoverStart={setHoveredEdgeId}
-                      onHoverEnd={handleEdgeHoverEnd}
+                      onHoverStart={handleEdgeHoverStart}
+                      onHoverEnd={handleEdgeHoverEndWithDelay}
                       renderEdge={renderEdge}
                     />
                   );
@@ -1967,12 +2005,24 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       ]
                         .filter(Boolean)
                         .join(" ")}
-                      onPointerEnter={() => setHoveredNodeId(node.id)}
-                      onPointerLeave={() =>
+                      onPointerEnter={() => {
+                        setHoveredNodeId(node.id);
+                        if (nodeTooltip) {
+                          if (tooltipDelayRef.current.nodeTimer)
+                            clearTimeout(tooltipDelayRef.current.nodeTimer);
+                          tooltipDelayRef.current.nodeTimer = setTimeout(() => {
+                            setDelayedHoveredNodeId(node.id);
+                          }, 200);
+                        }
+                      }}
+                      onPointerLeave={() => {
                         setHoveredNodeId((current) =>
                           current === node.id ? undefined : current,
-                        )
-                      }
+                        );
+                        if (tooltipDelayRef.current.nodeTimer)
+                          clearTimeout(tooltipDelayRef.current.nodeTimer);
+                        setDelayedHoveredNodeId(undefined);
+                      }}
                       onPointerDown={
                         draggable
                           ? (e) => handleNodePointerDown(e, node)
