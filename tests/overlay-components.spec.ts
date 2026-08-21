@@ -756,6 +756,58 @@ test.describe('integration: Overlay Components', () => {
         maxDiffPixelRatio: 0.01,
       })
     })
+
+    test('controlled mode: should open and close via external state', async ({ page }) => {
+      // Find the controlled popover trigger (labeled "Controlled")
+      const trigger = page.locator('button:has-text("Controlled")').first()
+
+      // Initially should be closed
+      let popover = page.locator('[role="dialog"][aria-modal="false"]')
+      await expect(popover).toHaveCount(0)
+
+      // Click trigger to open
+      await trigger.click()
+
+      // Popover should now be visible
+      popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Click the close button inside the popover
+      const closeButton = popover.locator('button:has-text("Close")').first()
+      await closeButton.click()
+
+      // Popover should be closed
+      await expect(popover).not.toBeVisible()
+    })
+
+    test('controlled mode: should respond to external state changes', async ({ page }) => {
+      // Find the controlled popover trigger
+      const trigger = page.locator('button:has-text("Controlled")').first()
+
+      // Open the popover
+      await trigger.click()
+
+      let popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Close via the internal close button
+      const closeButton = popover.locator('button:has-text("Close")').first()
+      await closeButton.click()
+
+      // Popover should close
+      await expect(popover).not.toBeVisible()
+
+      // Open again
+      await trigger.click()
+      popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Close via Escape
+      await page.keyboard.press('Escape')
+
+      // Should be closed
+      await expect(popover).not.toBeVisible()
+    })
   })
 
   test.describe('Popover dark canvas', () => {
