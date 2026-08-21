@@ -218,20 +218,18 @@ export default function GraphShowcase() {
   const [drawerWidth, setDrawerWidth] = useState(360)
   const [galaxyNodePositions, setGalaxyNodePositions] = useState<Record<string, { x: number; y: number }>>({})
 
-  const galaxyNodes = useMemo(() => {
-    const nodes = GALAXY_DEMO_NODES.map(node => {
+  const galaxyNodes = useMemo(() =>
+    GALAXY_DEMO_NODES.map(node => {
       const override = galaxyNodePositions[node.id]
       if (!override) return node
-      // Create a new node object with the dragged position applied
-      // The node will be marked as pinned by GraphCanvas since it has explicit x/y
       return {
         ...node,
         x: override.x,
         y: override.y,
       }
-    })
-    return nodes
-  }, [galaxyNodePositions])
+    }),
+    [galaxyNodePositions]
+  )
 
   const handleGalaxyNodeDragEnd = useCallback((nodeId: string, position: { x: number; y: number }) => {
     setGalaxyNodePositions(prev => ({
