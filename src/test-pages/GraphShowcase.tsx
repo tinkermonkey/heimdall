@@ -364,13 +364,13 @@ export default function GraphShowcase() {
 
     return (
       <>
-        <path d={path.d} fill="none" stroke="currentColor" className="graph-edge__line" style={lineStyle} />
+        <path d={path.d} fill="none" className="graph-edge__line" style={lineStyle} />
         {/* Small decorative circle at the midpoint */}
         <circle
           cx={path.mid.x}
           cy={path.mid.y}
           r="3"
-          fill="currentColor"
+          fill="var(--graph-edge, rgb(var(--canvas-border-strong)))"
           opacity="0.6"
           style={{ pointerEvents: 'none' }}
         />

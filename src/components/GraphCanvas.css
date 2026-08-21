@@ -83,6 +83,11 @@
   pointer-events: none;
 }
 
+.graph-canvas {
+  --graph-edge: rgb(var(--canvas-fg-2));
+  --graph-edge-strong: rgb(var(--canvas-fg-3));
+}
+
 body.dark-canvas {
   --graph-edge: rgb(var(--canvas-border-2));
   --graph-edge-strong: rgb(var(--canvas-border-strong));
