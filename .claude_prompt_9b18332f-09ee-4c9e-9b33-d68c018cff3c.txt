@@ -1,0 +1,30 @@
+Your goal is to fix ALL failing integration tests in this project. Every failure listed below must pass before you are done.
+
+Analysis has identified the likely root cause:
+The GraphShowcase test page is missing an onNodeDragEnd handler implementation. When nodes are dragged and dropped, the dragPositions state is not cleared after the drag completes because onNodeDragEnd callback (which should persist the final position to the node's x/y props) is never implemented. This causes: (1) child nodes to not track parent movement during live simulation since the graph simulation operates on computed positions, not dragPositions; (2) dropped nodes to revert to their original positions after release since dragPositions remains set but is eventually overridden by the live simulation updating computedPositions back to the original layout. The fix requires adding an onNodeDragEnd handler to GraphShowcase.tsx that updates the dragged node's x/y props with the final position.
+
+## Current failure state
+
+Total failures: 2 across 1 files
+
+## Error types (by frequency)
+  dragging a "sun" node cascades to its children in real time: 1 occurrences
+    e.g. tests/graph-components.spec.ts: Expected: < 2
+Received: 150
+  a dropped "sun" node stays exactly at its drop point: 1 occurrences
+    e.g. tests/graph-components.spec.ts: Expected: < 2
+Received: 150
+
+## Most affected files (top 1 of 1)
+  tests/graph-components.spec.ts: 2 failures (dragging a "sun" node cascades to its children in real time×1, a dropped "sun" node stays exactly at its drop point×1)
+
+
+
+This is attempt 2/3. Focus on the remaining failures shown above.
+
+## How to approach this
+
+1. Examine representative failing files to understand the root cause. The failure state above shows a sample — the full set of affected files may be larger.
+2. Use grep or glob to discover every file in the project that exhibits the same pattern, not just the ones listed above.
+3. Apply fixes comprehensively across all affected files. Prefer bulk approaches (scripted edits, sed, ast-based transforms) over editing files one at a time.
+4. After fixing, run the integration checks to measure progress. Repeat until all failures are resolved.

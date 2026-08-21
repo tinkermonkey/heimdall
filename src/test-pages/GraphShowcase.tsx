@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import { GraphCanvas } from '../components/GraphCanvas'
 import { GraphCanvasContext } from '../components/GraphCanvasContext'
 import GraphNode from '../components/GraphNode'
@@ -216,6 +216,29 @@ export default function GraphShowcase() {
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
   const [draggable, setDraggable] = useState(true)
   const [drawerWidth, setDrawerWidth] = useState(360)
+  const [galaxyNodePositions, setGalaxyNodePositions] = useState<Record<string, { x: number; y: number }>>({})
+
+  const galaxyNodes = useMemo(() => {
+    const nodes = GALAXY_DEMO_NODES.map(node => {
+      const override = galaxyNodePositions[node.id]
+      if (!override) return node
+      // Create a new node object with the dragged position applied
+      // The node will be marked as pinned by GraphCanvas since it has explicit x/y
+      return {
+        ...node,
+        x: override.x,
+        y: override.y,
+      }
+    })
+    return nodes
+  }, [galaxyNodePositions])
+
+  const handleGalaxyNodeDragEnd = useCallback((nodeId: string, position: { x: number; y: number }) => {
+    setGalaxyNodePositions(prev => ({
+      ...prev,
+      [nodeId]: position,
+    }))
+  }, [])
 
   const handleNodeSelect = useCallback((id: string) => {
     setSelectedNodeId(id)
@@ -517,13 +540,15 @@ export default function GraphShowcase() {
         // same as a real consumer swapping renderNode would need to trigger a fresh fit itself.
         key={`galaxy-canvas-${galaxyCardSize}`}
         data-testid="galaxy-canvas"
-        nodes={GALAXY_DEMO_NODES}
+        nodes={galaxyNodes}
         edges={GALAXY_DEMO_EDGES}
         layout="galaxy"
         isStructuralEdge={isGalaxyDemoEdgeStructural}
         showAllRelations={showAllRelations}
         collapsedNodeIds={collapsedNodeIds}
         onToggleCollapse={handleToggleCollapse}
+        draggable
+        onNodeDragEnd={handleGalaxyNodeDragEnd}
         fitView
         fitPadding={40}
         selectedNodeId={selectedNodeId}
