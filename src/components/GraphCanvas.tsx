@@ -274,7 +274,7 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    *
    * Tip: memoize with useCallback to avoid unnecessary re-computations.
    */
-  renderEdge?: (edge: GraphEdge, path: { d: string; mid: { x: number; y: number }; points: Array<{ x: number; y: number }> }, selected: boolean) => React.ReactNode
+  renderEdge?: (edge: GraphEdge, path: EdgePath, selected: boolean) => React.ReactNode
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes without
    *  explicit coordinates. 'galaxy' arranges nodes as a radial hierarchy of orbits, built from
    *  structural edges (see isStructuralEdge). 'force-clustered' additionally groups nodes into
