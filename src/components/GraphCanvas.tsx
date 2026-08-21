@@ -522,7 +522,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           target.addEventListener('click', suppressClick, { capture: true, once: true })
         }
         const finalPos = dragPositions.get(state.id) ?? { x: state.startX, y: state.startY }
+        const nodeId = state.id
         onNodeDragEnd?.(state.id, finalPos)
+        // After calling onNodeDragEnd to persist the position, schedule clearing dragPositions
+        // on the next tick to allow the persisted position to take effect first
+        Promise.resolve().then(() => {
+          setDragPositions(prev => {
+            const updated = new Map(prev)
+            updated.delete(nodeId)
+            return updated
+          })
+        })
       }
       dragStateRef.current = null
     }, [dragPositions, onNodeDragEnd])
