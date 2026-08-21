@@ -136,6 +136,37 @@ function safeRenderEdgeCallback(
   }
 }
 
+function safeRenderNodeCallback(
+  renderNode: (
+    node: GraphNodeData,
+    selected: boolean,
+    hierarchy?: GraphNodeHierarchyMeta,
+  ) => React.ReactNode,
+  node: GraphNodeData,
+  selected: boolean,
+  hierarchy?: GraphNodeHierarchyMeta,
+): React.ReactNode {
+  try {
+    return renderNode(node, selected, hierarchy);
+  } catch (error) {
+    console.error("Error in renderNode callback:", error);
+    return null;
+  }
+}
+
+function safeIsStructuralEdge(
+  isStructuralEdge: ((edge: GraphEdge) => boolean) | undefined,
+  edge: GraphEdge,
+): boolean {
+  if (!isStructuralEdge) return true;
+  try {
+    return isStructuralEdge(edge);
+  } catch (error) {
+    console.error("Error in isStructuralEdge callback:", error);
+    return true;
+  }
+}
+
 type InternalEdgeProps = GraphEdge & {
   selected?: boolean;
   hovered?: boolean;
@@ -708,7 +739,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const hierarchyEdges = edges.map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: isStructuralEdge ? isStructuralEdge(e) : true,
+        structural: safeIsStructuralEdge(isStructuralEdge, e),
       }));
       return buildStructuralForest(
         nodes.map((n) => n.id),
@@ -910,7 +941,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
           target: e.targetId,
-          structural: isStructuralEdge ? isStructuralEdge(e) : true,
+          structural: safeIsStructuralEdge(isStructuralEdge, e),
         }));
         const positions = galaxyLayout(layoutNodes, layoutEdges, {
           nodeMargin,
@@ -988,7 +1019,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return (edges ?? []).map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: isStructuralEdge ? isStructuralEdge(e) : true,
+        structural: safeIsStructuralEdge(isStructuralEdge, e),
       }));
     }, [liveActive, edges, isStructuralEdge]);
 
@@ -1367,7 +1398,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const layoutEdges = (edges ?? []).map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: isStructuralEdge ? isStructuralEdge(e) : true,
+        structural: safeIsStructuralEdge(isStructuralEdge, e),
       }));
       const positions = galaxyLayout(layoutNodes, layoutEdges, {
         nodeMargin,
@@ -1661,7 +1692,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const resolveNodeContent = useCallback(
       (node: GraphNodeData, selected: boolean): React.ReactNode => {
         const hierarchy = hierarchyMetaFor(node.id);
-        if (renderNode) return renderNode(node, selected, hierarchy);
+        if (renderNode)
+          return safeRenderNodeCallback(renderNode, node, selected, hierarchy);
         return (
           <GraphNode
             id={node.id}
@@ -1875,9 +1907,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                 {edges?.map((edge) => {
                   // Only isStructuralEdge callers opt into hiding — without it every edge
                   // is treated as structural, so this never changes existing behavior.
-                  const structural = isStructuralEdge
-                    ? isStructuralEdge(edge)
-                    : true;
+                  const structural = safeIsStructuralEdge(isStructuralEdge, edge);
                   const touchesFocus =
                     edge.sourceId === hoveredNodeId ||
                     edge.targetId === hoveredNodeId ||
