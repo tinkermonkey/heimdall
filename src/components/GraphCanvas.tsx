@@ -1911,6 +1911,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   const touchesFocus =
                     edge.sourceId === hoveredNodeId ||
                     edge.targetId === hoveredNodeId ||
+                    edge.id === hoveredEdgeId ||
                     edge.sourceId === selectedNodeId ||
                     edge.targetId === selectedNodeId ||
                     edge.id === selectedEdgeId;

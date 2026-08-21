@@ -1,0 +1,71 @@
+You are a Senior Software Engineer.
+
+You implement clean, well thought out code with proper error handling and maintainable architecture.
+
+### Work Item
+
+These are the requirements to implement.
+
+**Title**:
+[PR Feedback] Edge Hover State
+
+**Description**:
+Based on consolidated PR review, address the following in **Edge Hover State**:
+
+- **Stale `hoveredEdgeId` when non-structural edge hides while pointer is on it**: In `src/components/GraphCanvas.tsx:1878`, the `touchesFocus` visibility check for non-structural edges does not include `edge.id === hoveredEdgeId`. When a user moves the pointer from a node onto an adjacent non-structural edge, React 18 batching clears `hoveredNodeId` and sets `hoveredEdgeId` in one render — `touchesFocus` evaluates false, the edge unmounts (no `pointerleave` fires), and `hoveredEdgeId` is permanently stale. The existing cleanup effect (lines 558-566) only checks edges removed from the `edges` prop, not edges hidden by `isStructuralEdge`. Fix: add `edge.id === hoveredEdgeId` to `touchesFocus`.
+
+---
+_Created by PR Review Stage - Consolidation Phase_
+
+---
+
+## Concurrent Fix Issues (Same Review Cycle)
+
+The following issues are being fixed simultaneously in this review cycle. Check these issues for any files they modify before making your own changes to avoid introducing conflicts:
+
+- #204: [PR Feedback] Drag State Management
+- #205: [PR Feedback] Consumer Callback Error Protection
+- #207: [PR Feedback] Graph Tooltip Behavior
+
+### Previous Work
+
+
+
+### Guidelines
+
+
+Implement the specified code changes to meet the requirements specified.
+
+### Project-Specific Expert Agents
+
+Check `/workspace/CLAUDE.md` for a "Specialized Sub-Agents" section. If any listed agent matches your task domain (e.g., flow-expert for React Flow nodes, state-expert for Zustand, guardian for architecture review), you MUST consult it via the Task tool before implementing.
+
+Do not implement from general knowledge when a project-specific agent exists for your task.
+
+### For UI/Frontend Changes
+
+- Use Playwright MCP to test your changes in the browser before completing
+- Run accessibility checks (Playwright has built-in a11y testing)
+- Verify responsive behaviour on different viewport sizes
+- Test form interactions and validation
+
+### Important Implementation Guidelines
+
+- Don't over-engineer, implement only what is necessary to meet the requirements
+- Focus on re-use of existing code, libraries and patterns
+- Don't name files "phase 1", "phase 2", etc, use descriptive names only for files, variable, and comments
+- Don't create reports or documentation, your output should be code only
+
+### Output Instructions
+
+**IMPORTANT**:
+- Provide a short summary of your work as the final output
+- Use proper markdown formatting (headers, lists, code blocks)
+- You may create, edit, or modify files as needed to complete your task
+- Your changes will be auto-committed to git
+
+**CRITICAL — MARK YOUR FINAL OUTPUT**: Wrap your summary between these exact markers, as the last thing you write:
+`<<<FINAL_OUTPUT>>>`
+...your short summary...
+`<<<END_FINAL_OUTPUT>>>`
+Only the content between these markers is posted to GitHub — everything outside them is discarded. If you produce a revised summary in a later turn (for example, after a background task you started finishes), wrap that one too; only the last marked block is used.
