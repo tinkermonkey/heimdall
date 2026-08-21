@@ -88,7 +88,7 @@
   --graph-edge-strong: rgb(var(--canvas-fg-3));
 }
 
-body.dark-canvas {
+body.dark-canvas .graph-canvas {
   --graph-edge: rgb(var(--canvas-border-2));
   --graph-edge-strong: rgb(var(--canvas-border-strong));
 }
