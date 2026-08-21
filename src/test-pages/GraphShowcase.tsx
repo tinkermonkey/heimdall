@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from 'react'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import { GraphCanvas } from '../components/GraphCanvas'
 import { GraphCanvasContext } from '../components/GraphCanvasContext'
 import GraphNode from '../components/GraphNode'
@@ -7,8 +7,9 @@ import GraphEdgeInspector, { type GraphEdgeMetadata } from '../components/GraphE
 import { DetailDrawer } from '../components/DetailDrawer'
 import TopologyNode, { type TopologyNodeStatus } from '../components/TopologyNode'
 import type { EdgeAnchor } from '../utils/graph'
-import type { GraphNodeData, GraphNodeHierarchyMeta } from '../components/GraphCanvas'
+import type { GraphNodeData, GraphNodeHierarchyMeta, EdgeGeometry } from '../components/GraphCanvas'
 import { GALAXY_DEMO_NODES, GALAXY_DEMO_EDGES, isGalaxyDemoEdgeStructural } from './galaxyDemoData'
+import { weightToStrokeWidth, strokeDashToDasharray } from '../utils/graphEdgeStyle'
 
 interface NodeData extends GraphNodeData {
   title?: string
@@ -207,12 +208,35 @@ const TOPOLOGY_NODES = [
 export default function GraphShowcase() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>()
+  const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>()
   const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy' | 'clustered'>('graph')
   const [showAllRelations, setShowAllRelations] = useState(false)
   const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
   const [draggable, setDraggable] = useState(true)
   const [drawerWidth, setDrawerWidth] = useState(360)
+  const [galaxyNodePositions, setGalaxyNodePositions] = useState<Record<string, { x: number; y: number }>>({})
+
+  const galaxyNodes = useMemo(() =>
+    GALAXY_DEMO_NODES.map(node => {
+      const override = galaxyNodePositions[node.id]
+      if (!override) return node
+      return {
+        ...node,
+        x: override.x,
+        y: override.y,
+      }
+    }),
+    [galaxyNodePositions]
+  )
+
+  const handleGalaxyNodeDragEnd = useCallback((nodeId: string, position: { x: number; y: number }) => {
+    setGalaxyNodePositions(prev => ({
+      ...prev,
+      [nodeId]: position,
+    }))
+  }, [])
 
   const handleNodeSelect = useCallback((id: string) => {
     setSelectedNodeId(id)
@@ -347,20 +371,126 @@ export default function GraphShowcase() {
     )
   }, [handleNodeSelect])
 
+  const renderCustomEdge = useCallback((
+    edge: typeof GRAPH_EDGES[0],
+    geometry: EdgeGeometry
+  ) => {
+    const labelSize = edge.label ? { width: (edge.label.length * 5.5) + 12, height: 20 } : null
+
+    const strokeWidth = edge.weight !== undefined ? weightToStrokeWidth(edge.weight) : 1.25
+    const lineStyle: React.CSSProperties = { strokeWidth }
+    if (edge.opacity !== undefined) lineStyle.opacity = edge.opacity
+    if (edge.strokeDash !== undefined) lineStyle.strokeDasharray = strokeDashToDasharray(edge.strokeDash)
+
+    return (
+      <>
+        <path d={geometry.path} fill="none" className="graph-edge__line" style={lineStyle} />
+        {/* Small decorative circle at the midpoint */}
+        <circle
+          cx={geometry.mid.x}
+          cy={geometry.mid.y}
+          r="3"
+          fill="var(--graph-edge, rgb(var(--canvas-border-strong)))"
+          opacity={geometry.hovered ? "1" : "0.6"}
+          style={{ pointerEvents: 'none' }}
+          data-testid={`edge-mid-marker-${edge.id}`}
+          data-mid-x={Math.round(geometry.mid.x * 100) / 100}
+          data-mid-y={Math.round(geometry.mid.y * 100) / 100}
+          data-angle={Math.round(geometry.angle * 10000) / 10000}
+        />
+        {/* Angle indicator: small rotated triangle marker */}
+        <g
+          transform={`translate(${geometry.mid.x}, ${geometry.mid.y}) rotate(${geometry.angle * 180 / Math.PI})`}
+          style={{ pointerEvents: 'none' }}
+          data-testid={`edge-angle-marker-${edge.id}`}
+        >
+          <polygon
+            points="0,-4 3,4 -3,4"
+            fill="var(--accent-primary, #fbbf24)"
+            opacity={geometry.hovered ? "0.8" : "0.4"}
+          />
+        </g>
+        {/* Render label if present, using collision-cleared labelPos */}
+        {edge.label && labelSize && (
+          <g
+            className="graph-edge__label graph-edge__label--clickable"
+            transform={`translate(${geometry.labelPos.x - labelSize.width / 2}, ${geometry.labelPos.y - labelSize.height / 2})`}
+          >
+            <rect
+              width={labelSize.width}
+              height={labelSize.height}
+              rx="3"
+              className="graph-edge__label-bg"
+            />
+            <text
+              x={labelSize.width / 2}
+              y={labelSize.height / 2 + 3}
+              className="graph-edge__label-text"
+            >
+              {edge.label}
+            </text>
+          </g>
+        )}
+      </>
+    )
+  }, [])
+
   const graphCanvas = (
-    <GraphCanvas
-      key="graph-canvas"
-      nodes={GRAPH_NODES}
-      edges={GRAPH_EDGES}
-      selectedNodeId={selectedNodeId}
-      onNodeSelect={handleNodeSelect}
-      selectedEdgeId={selectedEdgeId}
-      onEdgeSelect={handleEdgeSelect}
-      onBackgroundClick={handleBackgroundClick}
-      draggable={draggable}
-      renderNode={renderGraphNode}
-      style={{ height: '100%' }}
-    />
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {(hoveredNodeId || hoveredEdgeId) && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-hover-indicator"
+        >
+          {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
+        </div>
+      )}
+      <GraphCanvas
+        key="graph-canvas"
+        nodes={GRAPH_NODES}
+        edges={GRAPH_EDGES}
+        selectedNodeId={selectedNodeId}
+        onNodeSelect={handleNodeSelect}
+        onNodeHover={setHoveredNodeId}
+        selectedEdgeId={selectedEdgeId}
+        onEdgeSelect={handleEdgeSelect}
+        onEdgeHover={setHoveredEdgeId}
+        onBackgroundClick={handleBackgroundClick}
+        draggable={draggable}
+        renderNode={renderGraphNode}
+        renderEdge={renderCustomEdge}
+        nodeTooltip={(node) => (
+          <div style={{ maxWidth: '200px' }}>
+            <div style={{ fontWeight: 600 }}>{(node as NodeData).title || node.label}</div>
+            {(node as NodeData).description && (
+              <div style={{ marginTop: '4px', fontSize: '12px', opacity: 0.8 }}>
+                {(node as NodeData).description}
+              </div>
+            )}
+          </div>
+        )}
+        edgeTooltip={(edge) => (
+          <div style={{ maxWidth: '180px' }}>
+            <div style={{ fontWeight: 600 }}>{edge.label || 'Relationship'}</div>
+            <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px' }}>
+              {edge.sourceId} → {edge.targetId}
+            </div>
+            {edge.weight !== undefined && (
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>
+                Weight: {edge.weight}
+              </div>
+            )}
+          </div>
+        )}
+        style={{ flex: 1, minHeight: 0 }}
+      />
+    </div>
   )
 
   const busCanvas = (
@@ -380,53 +510,95 @@ export default function GraphShowcase() {
   )
 
   const galaxyCanvas = (
-    <GraphCanvas
-      // Keyed on galaxyCardSize (not just a static "galaxy-canvas") deliberately: GraphCanvas
-      // only ever auto-fits pan/zoom once, on mount — by design, so it never fights a user's own
-      // pan/zoom on a later prop change (nodeMargin, showAllRelations, etc. all leave the
-      // viewport alone too). Compact and Cards renderNode content differ hugely in rendered size,
-      // so without a remount here, toggling this button would recompute layout POSITIONS for the
-      // new (much bigger) Cards-mode cards while leaving pan/zoom fit for the old, much smaller
-      // Compact-mode ones — the content overflows the container well past the visible area,
-      // dragging some nodes' controls out from under the canvas entirely and under this page's
-      // own button row above it. Remounting re-runs the one-time auto-fit against the new sizes,
-      // same as a real consumer swapping renderNode would need to trigger a fresh fit itself.
-      key={`galaxy-canvas-${galaxyCardSize}`}
-      data-testid="galaxy-canvas"
-      nodes={GALAXY_DEMO_NODES}
-      edges={GALAXY_DEMO_EDGES}
-      layout="galaxy"
-      isStructuralEdge={isGalaxyDemoEdgeStructural}
-      showAllRelations={showAllRelations}
-      collapsedNodeIds={collapsedNodeIds}
-      onToggleCollapse={handleToggleCollapse}
-      fitView
-      fitPadding={40}
-      selectedNodeId={selectedNodeId}
-      onNodeSelect={handleNodeSelect}
-      onBackgroundClick={handleBackgroundClick}
-      // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
-      // up domainColor/kind styling and the collapse toggle from hierarchy meta.
-      renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
-      style={{ height: '100%' }}
-    />
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {(hoveredNodeId || hoveredEdgeId) && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-hover-indicator"
+        >
+          {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
+        </div>
+      )}
+      <GraphCanvas
+        // Keyed on galaxyCardSize (not just a static "galaxy-canvas") deliberately: GraphCanvas
+        // only ever auto-fits pan/zoom once, on mount — by design, so it never fights a user's own
+        // pan/zoom on a later prop change (nodeMargin, showAllRelations, etc. all leave the
+        // viewport alone too). Compact and Cards renderNode content differ hugely in rendered size,
+        // so without a remount here, toggling this button would recompute layout POSITIONS for the
+        // new (much bigger) Cards-mode cards while leaving pan/zoom fit for the old, much smaller
+        // Compact-mode ones — the content overflows the container well past the visible area,
+        // dragging some nodes' controls out from under the canvas entirely and under this page's
+        // own button row above it. Remounting re-runs the one-time auto-fit against the new sizes,
+        // same as a real consumer swapping renderNode would need to trigger a fresh fit itself.
+        key={`galaxy-canvas-${galaxyCardSize}`}
+        data-testid="galaxy-canvas"
+        nodes={galaxyNodes}
+        edges={GALAXY_DEMO_EDGES}
+        layout="galaxy"
+        isStructuralEdge={isGalaxyDemoEdgeStructural}
+        showAllRelations={showAllRelations}
+        collapsedNodeIds={collapsedNodeIds}
+        onToggleCollapse={handleToggleCollapse}
+        draggable
+        onNodeDragEnd={handleGalaxyNodeDragEnd}
+        fitView
+        fitPadding={40}
+        selectedNodeId={selectedNodeId}
+        onNodeSelect={handleNodeSelect}
+        onNodeHover={setHoveredNodeId}
+        selectedEdgeId={selectedEdgeId}
+        onEdgeSelect={handleEdgeSelect}
+        onEdgeHover={setHoveredEdgeId}
+        onBackgroundClick={handleBackgroundClick}
+        // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
+        // up domainColor/kind styling and the collapse toggle from hierarchy meta.
+        renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
+        style={{ height: '100%' }}
+      />
+    </div>
   )
 
   const clusteredCanvas = (
-    <GraphCanvas
-      key="clustered-canvas"
-      data-testid="clustered-canvas"
-      layout="force-clustered"
-      nodes={CLUSTERED_NODES}
-      edges={CLUSTERED_EDGES}
-      fitView
-      fitPadding={40}
-      selectedNodeId={selectedNodeId}
-      onNodeSelect={handleNodeSelect}
-      onBackgroundClick={handleBackgroundClick}
-      renderNode={renderFitViewNode}
-      style={{ height: '100%' }}
-    />
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {(hoveredNodeId || hoveredEdgeId) && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-hover-indicator"
+        >
+          {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
+        </div>
+      )}
+      <GraphCanvas
+        key="clustered-canvas"
+        data-testid="clustered-canvas"
+        layout="force-clustered"
+        nodes={CLUSTERED_NODES}
+        edges={CLUSTERED_EDGES}
+        fitView
+        fitPadding={40}
+        selectedNodeId={selectedNodeId}
+        onNodeSelect={handleNodeSelect}
+        onNodeHover={setHoveredNodeId}
+        selectedEdgeId={selectedEdgeId}
+        onEdgeSelect={handleEdgeSelect}
+        onEdgeHover={setHoveredEdgeId}
+        onBackgroundClick={handleBackgroundClick}
+        renderNode={renderFitViewNode}
+        style={{ height: '100%' }}
+      />
+    </div>
   )
 
   const fitViewCanvas = (

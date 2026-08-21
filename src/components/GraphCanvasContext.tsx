@@ -52,6 +52,13 @@ export interface GraphCanvasContextValue {
    *  effect otherwise. Read/set by GraphToolbar's live-simulation button. */
   liveSimulation: boolean
   setLiveSimulation: Dispatch<SetStateAction<boolean>>
+  /** The currently pointer-hovered node's id, or undefined when none is hovered. Mirrors
+   *  GraphCanvas's onNodeHover callback prop — read this instead of wiring up the callback
+   *  yourself if a consumer already has access to context. */
+  hoveredNodeId?: string
+  /** The currently pointer-hovered edge's id (via its invisible hit-stroke), or undefined.
+   *  Mirrors GraphCanvas's onEdgeHover callback prop. */
+  hoveredEdgeId?: string
 }
 
 export const GraphCanvasContext = createContext<GraphCanvasContextValue | null>(null)

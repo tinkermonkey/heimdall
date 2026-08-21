@@ -3,6 +3,7 @@ import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { Toast } from '../components/Toast'
+import { Tooltip } from '../components/Tooltip'
 import { WorkspaceSwitcherDialog, type Workspace } from '../components/WorkspaceSwitcherDialog'
 
 export default function OverlayComponentsTestPage() {
@@ -131,6 +132,41 @@ export default function OverlayComponentsTestPage() {
           >
             Show Toast
           </Button>
+        </div>
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          Tooltip Component
+        </div>
+        <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap', padding: '40px 0' }}>
+          <Tooltip content="Appears above the trigger" placement="top">
+            <Button variant="secondary">Top</Button>
+          </Tooltip>
+          <Tooltip content="Appears below the trigger" placement="bottom">
+            <Button variant="secondary">Bottom</Button>
+          </Tooltip>
+          <Tooltip content="Appears left of the trigger" placement="left">
+            <Button variant="secondary">Left</Button>
+          </Tooltip>
+          <Tooltip content="Appears right of the trigger" placement="right">
+            <Button variant="secondary">Right</Button>
+          </Tooltip>
+          <Tooltip content="This tooltip is disabled and will never show" disabled>
+            <Button variant="secondary">Disabled</Button>
+          </Tooltip>
+          <Tooltip content="Shows almost instantly" delay={0}>
+            <Button variant="secondary">No delay</Button>
+          </Tooltip>
         </div>
       </section>
 

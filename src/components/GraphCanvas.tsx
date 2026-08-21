@@ -1,58 +1,91 @@
-import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useMemo, useId } from 'react'
-import { computeEdgePath, computeFitViewport, edgeLabelSize, findClearLabelPosition, type BoundingBox, type EdgeAnchor } from '../utils/graph'
-import { forceLayout, clusteredForceLayout, boundingCirclesByGroup } from '../utils/graphLayout'
-import { galaxyLayout, resolveAspectRatioScale, type GalaxyLayoutNode } from '../utils/galaxyLayout'
-import { buildStructuralForest, structuralDescendants, galaxyGroupMap } from '../utils/graphHierarchy'
-import { usePanZoom } from '../hooks/usePanZoom'
-import { useGalaxySimulation } from '../hooks/useGalaxySimulation'
-import { GraphCanvasContext, useGraphCanvas } from './GraphCanvasContext'
-import GraphNode from './GraphNode'
-import { GraphEdgeShape } from './GraphEdgeShape'
-import { GraphToolbar, type GraphToolbarPosition } from './GraphToolbar'
-import './GraphCanvas.css'
-import './GraphEdge.css'
+import React, {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useId,
+} from "react";
+import {
+  computeEdgePath,
+  computeFitViewport,
+  edgeLabelSize,
+  findClearLabelPosition,
+  type BoundingBox,
+  type EdgeAnchor,
+} from "../utils/graph";
+import {
+  forceLayout,
+  clusteredForceLayout,
+  boundingCirclesByGroup,
+} from "../utils/graphLayout";
+import {
+  galaxyLayout,
+  resolveAspectRatioScale,
+  type GalaxyLayoutNode,
+} from "../utils/galaxyLayout";
+import {
+  buildStructuralForest,
+  structuralDescendants,
+  galaxyGroupMap,
+} from "../utils/graphHierarchy";
+import { usePanZoom } from "../hooks/usePanZoom";
+import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
+import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
+import GraphNode from "./GraphNode";
+import { GraphEdgeShape } from "./GraphEdgeShape";
+import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
+import { Tooltip } from "./Tooltip";
+import "./GraphCanvas.css";
+import "./GraphEdge.css";
 
-export type { GraphCanvasContextValue } from './GraphCanvasContext'
-export { useGraphCanvas } from './GraphCanvasContext'
+export type { GraphCanvasContextValue } from "./GraphCanvasContext";
+export { useGraphCanvas } from "./GraphCanvasContext";
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+/** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
+const TOOLTIP_SHOW_DELAY_MS = 200;
 
 // ─── Public data types ────────────────────────────────────────────────────────
 
 export interface GraphNodeData {
-  id: string
-  label: string
-  kind?: string
-  domainColor?: string
+  id: string;
+  label: string;
+  kind?: string;
+  domainColor?: string;
   /** Explicit position. When omitted with layout="force", the engine places the node. */
-  x?: number
-  y?: number
+  x?: number;
+  y?: number;
 }
 
 export interface GraphEdge {
-  id: string
-  sourceId: string
-  targetId: string
-  label?: string
-  variant?: 'default' | 'hot' | 'irrelevant'
+  id: string;
+  sourceId: string;
+  targetId: string;
+  label?: string;
+  variant?: "default" | "hot" | "irrelevant";
   /** 0-100. Maps to a 1-8px stroke width via a square-root curve. Unset renders the current variant default. */
-  weight?: number
+  weight?: number;
   /** 0-1. Applied to the line and arrow marker independently of the label background. Default 1. */
-  opacity?: number
+  opacity?: number;
   /** A single number (equal dash/gap) or a [dash, gap] tuple. Overrides variant-based dashing. */
-  strokeDash?: number | [number, number]
+  strokeDash?: number | [number, number];
   /** Pins the source endpoint to a side of the node instead of facing the target's center. Default 'auto'. */
-  sourceAnchor?: EdgeAnchor
+  sourceAnchor?: EdgeAnchor;
   /** Pins the target endpoint to a side of the node instead of facing the source's center. Default 'auto'. */
-  targetAnchor?: EdgeAnchor
+  targetAnchor?: EdgeAnchor;
   /** Overrides the default curve strength (0.22, used for both auto/auto and anchored endpoints). */
-  curvature?: number
+  curvature?: number;
 }
 
 /** Props that a custom node component receives from renderNode. */
 export interface BaseGraphNodeComponentProps {
-  id: string
-  label: string
-  selected?: boolean
-  onSelect?: (id: string) => void
+  id: string;
+  label: string;
+  selected?: boolean;
+  onSelect?: (id: string) => void;
 }
 
 /**
@@ -63,42 +96,100 @@ export interface BaseGraphNodeComponentProps {
  */
 export interface GraphNodeHierarchyMeta {
   /** Whether this node has at least one structural child. */
-  hasChildren: boolean
+  hasChildren: boolean;
   /** Whether this node is currently in collapsedNodeIds. */
-  collapsed: boolean
+  collapsed: boolean;
   /** Total structural descendants currently hidden because this node is collapsed. 0 when expanded. */
-  hiddenDescendantCount: number
+  hiddenDescendantCount: number;
   /** Toggles this node's collapsed state. Undefined if the caller didn't pass onToggleCollapse. */
-  onToggleCollapse?: () => void
+  onToggleCollapse?: () => void;
 }
 
 // ─── Internal edge component ──────────────────────────────────────────────────
 
-const DEFAULT_NODE_W = 138
-const DEFAULT_NODE_H = 30
+const DEFAULT_NODE_W = 138;
+const DEFAULT_NODE_H = 30;
 // Wide by default — a caller with a graph that spans thousands of px should be able to zoom out
 // far enough to see it all in frame. Narrower limits are still useful (e.g. a small fixed-size
 // diagram where zooming out past the content is pointless), so both are also exposed as props.
-const DEFAULT_MIN_ZOOM = 0.05
-const DEFAULT_MAX_ZOOM = 8
+const DEFAULT_MIN_ZOOM = 0.05;
+const DEFAULT_MAX_ZOOM = 8;
 // Screen-space pixels of pointer movement before a node pointerdown is treated as a drag rather
 // than a click — below this, it's just an imprecise click and should still fire onSelect.
-const DRAG_THRESHOLD = 3
+const DRAG_THRESHOLD = 3;
 
-type InternalEdgeProps = GraphEdge & {
-  selected?: boolean
-  onSelect?: (id: string) => void
+export type EdgeGeometry = {
+  path: string;
+  mid: { x: number; y: number };
+  labelPos: { x: number; y: number };
+  angle: number;
+  selected: boolean;
+  hovered: boolean;
+};
+
+// Safe wrapper to catch errors from consumer-provided callbacks during render phase
+function safeRenderEdgeCallback(
+  renderEdge: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode,
+  edge: GraphEdge,
+  geometry: EdgeGeometry,
+): React.ReactNode {
+  try {
+    return renderEdge(edge, geometry);
+  } catch (error) {
+    console.error("Error in renderEdge callback:", error);
+    return null;
+  }
 }
 
+function safeRenderNodeCallback(
+  renderNode: (
+    node: GraphNodeData,
+    selected: boolean,
+    hierarchy?: GraphNodeHierarchyMeta,
+  ) => React.ReactNode,
+  node: GraphNodeData,
+  selected: boolean,
+  hierarchy?: GraphNodeHierarchyMeta,
+): React.ReactNode {
+  try {
+    return renderNode(node, selected, hierarchy);
+  } catch (error) {
+    console.error("Error in renderNode callback:", error);
+    return null;
+  }
+}
+
+function safeIsStructuralEdge(
+  isStructuralEdge: ((edge: GraphEdge) => boolean) | undefined,
+  edge: GraphEdge,
+): boolean {
+  if (!isStructuralEdge) return true;
+  try {
+    return isStructuralEdge(edge);
+  } catch (error) {
+    console.error("Error in isStructuralEdge callback:", error);
+    return true;
+  }
+}
+
+type InternalEdgeProps = GraphEdge & {
+  selected?: boolean;
+  hovered?: boolean;
+  onSelect?: (id: string) => void;
+  onHoverStart?: (id: string) => void;
+  onHoverEnd?: (id: string) => void;
+  renderEdge?: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode;
+};
+
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
-const EDGE_LABEL_MARGIN = 6
+const EDGE_LABEL_MARGIN = 6;
 
 function GraphEdgeInternal({
   id,
   sourceId,
   targetId,
   label,
-  variant = 'default',
+  variant = "default",
   weight,
   opacity,
   strokeDash,
@@ -106,63 +197,173 @@ function GraphEdgeInternal({
   targetAnchor,
   curvature,
   selected,
+  hovered,
   onSelect,
+  onHoverStart,
+  onHoverEnd,
+  renderEdge,
 }: InternalEdgeProps) {
-  const { getNodeRect, nodeRects } = useGraphCanvas()
+  const { getNodeRect, nodeRects } = useGraphCanvas();
 
   const result = useMemo(() => {
-    const src = getNodeRect(sourceId)
-    const tgt = getNodeRect(targetId)
-    if (!src || !tgt) return null
-    const path = computeEdgePath(src, tgt, { sourceAnchor, targetAnchor, curvature })
+    const src = getNodeRect(sourceId);
+    const tgt = getNodeRect(targetId);
+    if (!src || !tgt) return null;
+    const path = computeEdgePath(src, tgt, {
+      sourceAnchor,
+      targetAnchor,
+      curvature,
+    });
     const labelPos = label
-      ? findClearLabelPosition(path.points, edgeLabelSize(label), nodeRects, EDGE_LABEL_MARGIN)
-      : path.mid
-    return { ...path, labelPos }
-  }, [getNodeRect, sourceId, targetId, sourceAnchor, targetAnchor, curvature, label, nodeRects])
+      ? findClearLabelPosition(
+          path.points,
+          edgeLabelSize(label),
+          nodeRects,
+          EDGE_LABEL_MARGIN,
+        )
+      : path.mid;
+    return { ...path, labelPos };
+  }, [
+    getNodeRect,
+    sourceId,
+    targetId,
+    sourceAnchor,
+    targetAnchor,
+    curvature,
+    label,
+    nodeRects,
+  ]);
 
-  if (!result) return null
+  if (!result) return null;
 
-  const classNames = ['graph-edge', variant !== 'default' && `graph-edge--${variant}`, selected && 'selected']
+  const classNames = [
+    "graph-edge",
+    variant !== "default" && `graph-edge--${variant}`,
+    selected && "selected",
+  ]
     .filter(Boolean)
-    .join(' ')
-  const interactive = !!onSelect
+    .join(" ");
+  const interactive = !!onSelect;
+
+  const edgeData: GraphEdge = {
+    id,
+    sourceId,
+    targetId,
+    label,
+    variant,
+    weight,
+    opacity,
+    strokeDash,
+    sourceAnchor,
+    targetAnchor,
+    curvature,
+  };
+
+  const handleClick = onSelect
+    ? (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onSelect(id);
+      }
+    : undefined;
+
   return (
     <g
       className={classNames}
-      role={interactive ? 'button' : 'presentation'}
+      role={interactive ? "button" : "presentation"}
       aria-hidden={interactive ? undefined : true}
       aria-pressed={interactive ? !!selected : undefined}
       // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible name
       // by assistive tech, and a label-less edge has nothing at all — without this a screen reader
       // announces a bare "button".
-      aria-label={interactive ? (label ? `${label}: ${sourceId} to ${targetId}` : `${sourceId} to ${targetId}`) : undefined}
+      aria-label={
+        interactive
+          ? label
+            ? `${label}: ${sourceId} to ${targetId}`
+            : `${sourceId} to ${targetId}`
+          : undefined
+      }
       tabIndex={interactive ? 0 : undefined}
-      onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(id) } } : undefined}
+      onClick={handleClick}
+      onKeyDown={
+        interactive
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelect!(id);
+              }
+            }
+          : undefined
+      }
+      onPointerEnter={onHoverStart ? () => onHoverStart(id) : undefined}
+      onPointerLeave={onHoverEnd ? () => onHoverEnd(id) : undefined}
       data-testid={`graph-edge-${id}`}
     >
-      <GraphEdgeShape
-        id={id}
-        d={result.d}
-        mid={result.labelPos}
-        label={label}
-        variant={variant}
-        weight={weight}
-        opacity={opacity}
-        strokeDash={strokeDash}
-        onSelect={onSelect}
-      />
+      {renderEdge ? (
+        <>
+          {safeRenderEdgeCallback(renderEdge, edgeData, {
+            path: result.d,
+            mid: result.mid,
+            labelPos: result.labelPos,
+            angle: result.angle,
+            selected: !!selected,
+            hovered: !!hovered,
+          })}
+          {/* Always render hit target for interactivity, even with custom renderEdge */}
+          <path
+            className="graph-edge__hit"
+            d={result.d}
+            onClick={handleClick}
+          />
+        </>
+      ) : (
+        <GraphEdgeShape
+          id={id}
+          d={result.d}
+          mid={result.labelPos}
+          label={label}
+          variant={variant}
+          weight={weight}
+          opacity={opacity}
+          strokeDash={strokeDash}
+          onSelect={onSelect}
+        />
+      )}
     </g>
-  )
+  );
 }
 
 // ─── GraphCanvas ──────────────────────────────────────────────────────────────
 
-export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
-  nodes: GraphNodeData[]
-  edges?: GraphEdge[]
-  selectedNodeId?: string
-  onNodeSelect?: (nodeId: string) => void
+export interface GraphCanvasProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  "onSelect"
+> {
+  nodes: GraphNodeData[];
+  edges?: GraphEdge[];
+  selectedNodeId?: string;
+  onNodeSelect?: (nodeId: string) => void;
+  /** Called with a node's id on pointer-enter and undefined on pointer-leave (or when hover
+   *  moves off without landing on another node). Mirrors the hoveredNodeId state GraphCanvas
+   *  already tracks internally for relational-edge visibility (see isStructuralEdge) — this
+   *  just exposes it. A custom renderNode's own hover handling (if any) keeps working
+   *  unchanged, since this fires from the node's own <g> wrapper, one level above renderNode's
+   *  content. */
+  onNodeHover?: (nodeId: string | undefined) => void;
+  /**
+   * Renders content in a positioned overlay near a hovered node — shown while the node is
+   * hovered (see onNodeHover/hoveredNodeId) and hidden on hover-end. Independent of renderNode:
+   * works with the default GraphNode and with a custom renderNode that has no hover handling of
+   * its own. Positioned via the same world-to-screen conversion the graph's own pan/zoom
+   * transform uses, so it tracks the node correctly as the canvas is panned or zoomed; panning it
+   * outside the canvas hides it the same way any other canvas content does (the container's own
+   * overflow: hidden). Internally rendered with the Tooltip component, in controlled (`open`)
+   * mode. Only one of nodeTooltip/edgeTooltip renders at a time, tied to current hover state —
+   * node takes priority in the (practically unreachable, hover is a single pointer) case both
+   * hoveredNodeId and hoveredEdgeId are set at once.
+   */
+  nodeTooltip?: (node: GraphNodeData) => React.ReactNode;
+  /** Same as nodeTooltip, for a hovered edge instead — positioned at the edge path's midpoint. */
+  edgeTooltip?: (edge: GraphEdge) => React.ReactNode;
   /**
    * Pan (preserving the current zoom level — never re-fits/re-zooms) to keep
    * `selectedNodeId` centered whenever it changes to a resolvable node. Off by
@@ -177,7 +378,7 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * effect owns the very first frame) and while pan/zoom is locked, same as
    * every other automatic viewport change GraphCanvas makes.
    */
-  centerOnSelect?: boolean
+  centerOnSelect?: boolean;
   /**
    * Render the HTML content for each node. GraphCanvas wraps it in a foreignObject
    * and positions it via an SVG <g> transform. If omitted, the default GraphNode is used.
@@ -186,7 +387,22 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    *
    * Tip: memoize with useCallback to avoid unnecessary re-measurements.
    */
-  renderNode?: (node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta) => React.ReactNode
+  renderNode?: (
+    node: GraphNodeData,
+    selected: boolean,
+    hierarchy?: GraphNodeHierarchyMeta,
+  ) => React.ReactNode;
+  /**
+   * Render custom SVG content for each edge. If omitted, the default GraphEdgeShape is used.
+   * Receives the edge data and a geometry object containing the computed path (SVG d string),
+   * curve midpoint, collision-cleared label position, tangent angle, and selection/hover state.
+   * The geometry info lets you draw decorators, arrow customizations, or other SVG overlays on top
+   * of or instead of the default line rendering. The owning <g> element handles hover/select
+   * styling and event handlers independently of your content.
+   *
+   * Tip: memoize with useCallback to avoid unnecessary re-computations.
+   */
+  renderEdge?: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode;
   /** 'manual' relies on explicit x/y per node. 'force' runs a spring layout for nodes without
    *  explicit coordinates. 'galaxy' arranges nodes as a radial hierarchy of orbits, built from
    *  structural edges (see isStructuralEdge). 'force-clustered' additionally groups nodes into
@@ -196,7 +412,7 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    *  'galaxy' and 'force-clustered' both draw a boundary circle per top-level group (see
    *  showClusterBoundaries) — one per root subtree for 'galaxy', one per top-level Louvain
    *  cluster for 'force-clustered'. */
-  layout?: 'manual' | 'force' | 'galaxy' | 'force-clustered'
+  layout?: "manual" | "force" | "galaxy" | "force-clustered";
   /**
    * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
    * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
@@ -210,7 +426,7 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * GalaxyLayoutOptions.nodeMargin. Pass a fixed number for either engine to use the same margin
    * for every node.
    */
-  nodeMargin?: number
+  nodeMargin?: number;
   /**
    * layout="galaxy" | "force-clustered" only, no effect otherwise. Shows a `.graph-cluster-boundary`
    * circle around each top-level group the engine produced — galaxy's independent root subtrees,
@@ -218,7 +434,7 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * caller can switch between the two engines without the "what groups with what" affordance
    * disappearing. Default true (matches force-clustered's behavior before this prop existed).
    */
-  showClusterBoundaries?: boolean
+  showClusterBoundaries?: boolean;
   /**
    * Classifies an edge as structural (defines the galaxy layout's parent/child hierarchy,
    * source = parent) vs. relational (rendered but layout-irrelevant). Only meaningful with
@@ -230,10 +446,10 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * showAllRelations is set — it's not just dimmed, so it also isn't clickable while hidden. This
    * works under any layout, not just "galaxy".
    */
-  isStructuralEdge?: (edge: GraphEdge) => boolean
+  isStructuralEdge?: (edge: GraphEdge) => boolean;
   /** When isStructuralEdge is set, renders every non-structural edge instead of hiding it (see
    *  isStructuralEdge). Default false. No effect without isStructuralEdge. */
-  showAllRelations?: boolean
+  showAllRelations?: boolean;
   /**
    * IDs of nodes whose structural descendants (per isStructuralEdge; every edge counts as
    * structural if it's omitted) should be hidden — progressive disclosure for dense hierarchies.
@@ -241,47 +457,53 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * disappears. Controlled: GraphCanvas doesn't track this itself, so pair it with
    * onToggleCollapse or nothing will change when a node's toggle is clicked.
    */
-  collapsedNodeIds?: ReadonlySet<string>
+  collapsedNodeIds?: ReadonlySet<string>;
   /** Called with a node's ID when its collapse/expand affordance is activated (default GraphNode's
    *  toggle, or read from renderNode's GraphNodeHierarchyMeta for a custom one). Toggling is the
    *  caller's responsibility — update collapsedNodeIds in response. */
-  onToggleCollapse?: (nodeId: string) => void
+  onToggleCollapse?: (nodeId: string) => void;
   /** Zoom out/in on first layout so the full node bounding box fits within the container. Default false. */
-  fitView?: boolean
+  fitView?: boolean;
   /** Padding in px around the fitted bounding box when fitView is enabled. Default 40. */
-  fitPadding?: number
+  fitPadding?: number;
   /** Lower zoom bound. Default 0.05 — deliberately permissive so a large graph can always be
    *  zoomed out far enough to fit in frame. Narrow it for a small fixed-size diagram instead. */
-  minZoom?: number
+  minZoom?: number;
   /** Upper zoom bound. Default 8. */
-  maxZoom?: number
+  maxZoom?: number;
   /** IDs of selected edges — draws each in the accent color. Pair with onEdgeSelect. */
-  selectedEdgeId?: string
+  selectedEdgeId?: string;
   /** Called with an edge's ID when its line or label is clicked. Wires up hit targets on both;
    *  without it, edges render but aren't interactive. */
-  onEdgeSelect?: (edgeId: string) => void
+  onEdgeSelect?: (edgeId: string) => void;
+  /** Called with an edge's id on pointer-enter of its hit area (the same invisible hit-stroke
+   *  the CSS-only hover styling already uses — see .graph-edge__hit) and undefined on
+   *  pointer-leave. Purely an additional callback: doesn't change the existing CSS-driven edge
+   *  hover styling (stroke thickening, label border shift), which keeps working off :hover
+   *  regardless of whether this prop is set. */
+  onEdgeHover?: (edgeId: string | undefined) => void;
   /** Called when the canvas background — not a node, not an edge — is clicked: the typical
    *  "click empty space to deselect" gesture. Pair with clearing selectedNodeId/selectedEdgeId
    *  (and closing a detail panel driven by them) yourself; GraphCanvas doesn't do either on its
    *  own since both are controlled props. A genuine pan drag never fires this — only a press and
    *  release within a few px of each other counts as a click. */
-  onBackgroundClick?: () => void
+  onBackgroundClick?: () => void;
   /** Lets a node be repositioned by dragging it. Default true. The dropped position persists
    *  locally (overriding explicit x/y or the computed layout position) until the node list
    *  changes; it isn't written back to the nodes prop. Pair with onNodeDragEnd to persist it
    *  yourself. Set false to disable — e.g. a read-only view, or a layout='force'/'galaxy' canvas
    *  where manual repositioning would just be undone the next time the layout recomputes. */
-  draggable?: boolean
+  draggable?: boolean;
   /** Called once a drag ends, with the node's new position — only fires for an actual drag (past
    *  a small movement threshold), not a plain click. No effect without draggable. */
-  onNodeDragEnd?: (nodeId: string, position: { x: number; y: number }) => void
+  onNodeDragEnd?: (nodeId: string, position: { x: number; y: number }) => void;
   /** Shows the built-in zoom in/out/fit and pan-and-zoom-lock toolbar. Default true. Set false
    *  to omit it entirely — e.g. to build a custom control set with the separately-exported
    *  GraphToolbar (or your own), or a read-only view with no viewport controls at all. */
-  showToolbar?: boolean
+  showToolbar?: boolean;
   /** Where the built-in toolbar sits — any of the 4 corners or 4 edge-centers. Default
    *  'bottom-right'. No effect when showToolbar is false. */
-  toolbarPosition?: GraphToolbarPosition
+  toolbarPosition?: GraphToolbarPosition;
   /**
    * Ancestor element to request/exit the Fullscreen API on instead of GraphCanvas's own root —
    * pass this when GraphCanvas is composed alongside sibling overlay content (a control strip
@@ -300,11 +522,11 @@ export interface GraphCanvasProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * against this ref when provided, GraphCanvas's own root otherwise — unchanged default behavior
    * when omitted.
    */
-  fullscreenContainerRef?: React.RefObject<HTMLElement | null>
+  fullscreenContainerRef?: React.RefObject<HTMLElement | null>;
 }
 
-type NodeDims = Map<string, { width: number; height: number }>
-type NodePositions = Map<string, { x: number; y: number }>
+type NodeDims = Map<string, { width: number; height: number }>;
+type NodePositions = Map<string, { x: number; y: number }>;
 
 export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
   (
@@ -313,9 +535,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       edges = [],
       selectedNodeId,
       onNodeSelect,
+      onNodeHover,
+      nodeTooltip,
+      edgeTooltip,
       centerOnSelect = false,
       renderNode,
-      layout = 'manual',
+      renderEdge,
+      layout = "manual",
       nodeMargin,
       showClusterBoundaries = true,
       isStructuralEdge,
@@ -328,37 +554,93 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       maxZoom = DEFAULT_MAX_ZOOM,
       selectedEdgeId,
       onEdgeSelect,
+      onEdgeHover,
       onBackgroundClick,
       draggable = true,
       onNodeDragEnd,
       showToolbar = true,
-      toolbarPosition = 'bottom-right',
+      toolbarPosition = "bottom-right",
       fullscreenContainerRef,
-      className = '',
+      className = "",
       ...props
     },
-    ref
+    ref,
   ) => {
-    const [dims, setDims] = useState<NodeDims>(new Map())
-    const [computedPositions, setComputedPositions] = useState<NodePositions>(new Map())
-    const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>()
+    const [dims, setDims] = useState<NodeDims>(new Map());
+    const [computedPositions, setComputedPositions] = useState<NodePositions>(
+      new Map(),
+    );
+    const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>();
+    const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>();
+    const [delayedHoveredNodeId, setDelayedHoveredNodeId] =
+      useState<string | undefined>();
+    const [delayedHoveredEdgeId, setDelayedHoveredEdgeId] =
+      useState<string | undefined>();
+    const tooltipDelayRef = useRef<{
+      nodeTimer?: ReturnType<typeof setTimeout>;
+      edgeTimer?: ReturnType<typeof setTimeout>;
+    }>({});
+
+    // Lifts hover state out to the caller-supplied callbacks, decoupled from the pointer
+    // handlers that set the state itself (see the node <g> and GraphEdgeInternal's onHoverStart/
+    // onHoverEnd below) — mirrors usePanZoom's onViewportChange effect.
+    useEffect(() => {
+      try {
+        onNodeHover?.(hoveredNodeId);
+      } catch (error) {
+        console.error("Error in onNodeHover callback:", error);
+      }
+    }, [hoveredNodeId, onNodeHover]);
+    useEffect(() => {
+      try {
+        onEdgeHover?.(hoveredEdgeId);
+      } catch (error) {
+        console.error("Error in onEdgeHover callback:", error);
+      }
+    }, [hoveredEdgeId, onEdgeHover]);
+
+    // Clears stale hoveredEdgeId if the hovered edge was removed from the edges array.
+    // Without this, a hovered edge that gets removed never fires the onEdgeHover(undefined) callback,
+    // leaving the caller's state permanently showing the removed item as hovered.
+    useEffect(() => {
+      if (!hoveredEdgeId) return;
+      const edgeStillExists = (edges ?? []).some((e) => e.id === hoveredEdgeId);
+      if (!edgeStillExists) {
+        setHoveredEdgeId(undefined);
+        if (tooltipDelayRef.current.edgeTimer)
+          clearTimeout(tooltipDelayRef.current.edgeTimer);
+        setDelayedHoveredEdgeId(undefined);
+      }
+    }, [hoveredEdgeId, edges]);
+
+    // Cleanup tooltip delays on unmount.
+    useEffect(() => {
+      return () => {
+        if (tooltipDelayRef.current.nodeTimer)
+          clearTimeout(tooltipDelayRef.current.nodeTimer);
+        if (tooltipDelayRef.current.edgeTimer)
+          clearTimeout(tooltipDelayRef.current.edgeTimer);
+      };
+    }, []);
     // Manual drag overrides, keyed by node id — takes precedence over explicit x/y or the
     // computed layout position (see getNodePosition). Local/uncontrolled: not written back to
     // the nodes prop, so a caller that wants to persist a dropped position needs onNodeDragEnd.
-    const [dragPositions, setDragPositions] = useState<NodePositions>(new Map())
+    const [dragPositions, setDragPositions] = useState<NodePositions>(
+      new Map(),
+    );
     const dragStateRef = useRef<{
-      id: string
-      pointerId: number
-      startClientX: number
-      startClientY: number
-      startX: number
-      startY: number
-      dragging: boolean
+      id: string;
+      pointerId: number;
+      startClientX: number;
+      startClientY: number;
+      startX: number;
+      startY: number;
+      dragging: boolean;
       // The <g> pointer capture was (or would be) taken on — kept so a drag can be finalized
       // from outside its own pointer handlers (see the draggable-toggled-off effect below),
       // not just from the pointerup/pointercancel that started it.
-      target: SVGGElement
-    } | null>(null)
+      target: SVGGElement;
+    } | null>(null);
 
     // Shared by a real pointerup/pointercancel, by the draggable-toggled-off effect, and by the
     // node-id-set-changed effect below — any of the three needs the same finalization for a drag
@@ -368,35 +650,62 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // e.g. a touch/gesture takeover — never gets one), so registering the one-time suppressor for
     // pointercancel would just leak an event listener that never fires, silently swallowing that
     // node's next real click forever.
-    const finalizeDrag = useCallback((suppressUpcomingClick: boolean) => {
-      const state = dragStateRef.current
-      if (!state) return
-      if (state.dragging) {
-        if (suppressUpcomingClick) {
-          const target = state.target
-          const suppressClick = (ev: MouseEvent) => { ev.stopPropagation(); ev.preventDefault() }
-          target.addEventListener('click', suppressClick, { capture: true, once: true })
+    const finalizeDrag = useCallback(
+      (suppressUpcomingClick: boolean) => {
+        const state = dragStateRef.current;
+        if (!state) return;
+        try {
+          if (state.dragging) {
+            if (suppressUpcomingClick) {
+              const target = state.target;
+              const suppressClick = (ev: MouseEvent) => {
+                ev.stopPropagation();
+                ev.preventDefault();
+              };
+              target.addEventListener("click", suppressClick, {
+                capture: true,
+                once: true,
+              });
+            }
+            const finalPos = dragPositions.get(state.id) ?? {
+              x: state.startX,
+              y: state.startY,
+            };
+            onNodeDragEnd?.(state.id, finalPos);
+          }
+        } finally {
+          dragStateRef.current = null;
         }
-        const finalPos = dragPositions.get(state.id) ?? { x: state.startX, y: state.startY }
-        onNodeDragEnd?.(state.id, finalPos)
-      }
-      dragStateRef.current = null
-    }, [dragPositions, onNodeDragEnd])
+      },
+      [dragPositions, onNodeDragEnd],
+    );
     // Read by the node-id-set-changed effect below via a ref, not as a direct dependency —
     // finalizeDrag's own identity changes on every dragPositions update (i.e. continuously while a
     // drag is in progress), and that effect must react only to nodeIdsKey actually changing, not to
     // finalizeDrag churning; putting finalizeDrag directly in that effect's deps made it re-run —
     // and finalize/clear the in-progress drag — on every single pointermove during a normal drag.
-    const finalizeDragRef = useRef(finalizeDrag)
-    useEffect(() => { finalizeDragRef.current = finalizeDrag }, [finalizeDrag])
+    const finalizeDragRef = useRef(finalizeDrag);
+    useEffect(() => {
+      finalizeDragRef.current = finalizeDrag;
+    }, [finalizeDrag]);
 
     // draggable's own JSDoc promises a drag override persists "until the node list changes" —
     // without this, a stale override for a since-removed (or filtered-out-and-back) node id would
     // silently keep applying forever, since dragPositions is otherwise never cleared on its own.
-    const nodeIdsKey = useMemo(() => nodes.map(n => n.id).sort().join(' '), [nodes])
-    const didMountDragClearRef = useRef(false)
+    const nodeIdsKey = useMemo(
+      () =>
+        nodes
+          .map((n) => n.id)
+          .sort()
+          .join(" "),
+      [nodes],
+    );
+    const didMountDragClearRef = useRef(false);
     useEffect(() => {
-      if (!didMountDragClearRef.current) { didMountDragClearRef.current = true; return }
+      if (!didMountDragClearRef.current) {
+        didMountDragClearRef.current = true;
+        return;
+      }
       // A node the user is actively dragging can be torn down by the SAME prop change that
       // triggered this effect (e.g. an unrelated polling refresh that happens to touch `nodes`) —
       // finalize through the same path a real pointerup/pointercancel would, instead of just
@@ -404,26 +713,27 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // released. Previously this just reset dragStateRef directly: onNodeDragEnd never fired for
       // an in-progress drag, and the node's pointer capture stayed held on an element about to
       // lose its drag state, leaving later pointermove/up events for that pointer silently ignored.
-      const state = dragStateRef.current
+      const state = dragStateRef.current;
       if (state?.dragging) {
         try {
-          state.target.releasePointerCapture(state.pointerId)
+          state.target.releasePointerCapture(state.pointerId);
         } catch (err) {
-          if (!(err instanceof DOMException)) console.warn('GraphCanvas: releasePointerCapture failed', err)
+          if (!(err instanceof DOMException))
+            console.warn("GraphCanvas: releasePointerCapture failed", err);
         }
       }
-      finalizeDragRef.current(false)
-      setDragPositions(new Map())
-    }, [nodeIdsKey])
+      finalizeDragRef.current(false);
+      setDragPositions(new Map());
+    }, [nodeIdsKey]);
 
     // Freezes wheel-zoom, drag-to-pan, and keyboard zoom/pan (see usePanZoom's locked option) —
     // toggled by GraphToolbar's lock button. Internal/uncontrolled, like hoveredNodeId/dragPositions.
-    const [locked, setLocked] = useState(false)
+    const [locked, setLocked] = useState(false);
     // Mirrors document.fullscreenElement === (fullscreenContainerRef?.current ?? containerRef.current)
     // — kept in sync by the fullscreenchange listener below rather than just set inside
     // toggleFullscreen, so Esc and any other exit path (not just GraphToolbar's own button) update
     // it too.
-    const [isFullscreen, setIsFullscreen] = useState(false)
+    const [isFullscreen, setIsFullscreen] = useState(false);
     // Set by the fullscreenchange listener the instant fullscreen is entered, consumed by the
     // containerSize-driven effect further down once the container's real post-transition
     // dimensions actually land (see that effect's own comment for why it can't just fit
@@ -433,68 +743,98 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // and without a bound this flag would sit waiting for the NEXT containerSize change no matter
     // when that happens — potentially firing a surprise zoomToFit against a much later, entirely
     // unrelated resize, against whatever pan/zoom the user had set in the meantime.
-    const pendingFullscreenFitRef = useRef(false)
-    const pendingFullscreenFitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const pendingFullscreenFitRef = useRef(false);
+    const pendingFullscreenFitTimeoutRef = useRef<ReturnType<
+      typeof setTimeout
+    > | null>(null);
     // Only meaningful for layout="galaxy" (see liveActive below) — toggled by GraphToolbar's
     // live-simulation button. Internal/uncontrolled, like locked/isFullscreen.
-    const [liveSimulation, setLiveSimulation] = useState(false)
-    const liveActive = liveSimulation && layout === 'galaxy'
+    const [liveSimulation, setLiveSimulation] = useState(false);
+    const liveActive = liveSimulation && layout === "galaxy";
     // Read-only guard for the engine-layout effect below (not a dependency of it — see there for
     // why) so the static one-shot galaxy computation knows to skip while the live hook owns
     // computedPositions instead, without toggling liveSimulation itself re-triggering that effect.
-    const liveActiveRef = useRef(liveActive)
+    const liveActiveRef = useRef(liveActive);
     useEffect(() => {
-      liveActiveRef.current = liveActive
-    }, [liveActive])
+      liveActiveRef.current = liveActive;
+    }, [liveActive]);
 
     // Structural hierarchy over the FULL node/edge list — independent of what's currently
     // hidden, so a collapsed node's affordance (hasChildren, hiddenDescendantCount) stays
     // correct even while its subtree isn't rendered.
     const forest = useMemo(() => {
-      const hierarchyEdges = edges.map(e => ({
+      const hierarchyEdges = edges.map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: isStructuralEdge ? isStructuralEdge(e) : true,
-      }))
-      return buildStructuralForest(nodes.map(n => n.id), hierarchyEdges)
-    }, [nodes, edges, isStructuralEdge])
+        structural: safeIsStructuralEdge(isStructuralEdge, e),
+      }));
+      return buildStructuralForest(
+        nodes.map((n) => n.id),
+        hierarchyEdges,
+      );
+    }, [nodes, edges, isStructuralEdge]);
 
     // Every structural descendant of a collapsed node is hidden — not just its direct children.
     const hiddenIds = useMemo(() => {
-      if (!collapsedNodeIds || collapsedNodeIds.size === 0) return new Set<string>()
-      const hidden = new Set<string>()
+      if (!collapsedNodeIds || collapsedNodeIds.size === 0)
+        return new Set<string>();
+      const hidden = new Set<string>();
       for (const id of collapsedNodeIds) {
-        for (const descendant of structuralDescendants(id, forest.childrenOf)) hidden.add(descendant)
+        for (const descendant of structuralDescendants(id, forest.childrenOf))
+          hidden.add(descendant);
       }
-      return hidden
-    }, [collapsedNodeIds, forest])
+      return hidden;
+    }, [collapsedNodeIds, forest]);
 
     // The node list actually measured, laid out, and rendered. Edges touching a hidden node
     // simply don't resolve a rect (see getNodeRect below) and render nothing — no separate
     // edge filtering needed.
     const visibleNodes = useMemo(
-      () => (hiddenIds.size === 0 ? nodes : nodes.filter(n => !hiddenIds.has(n.id))),
-      [nodes, hiddenIds]
-    )
+      () =>
+        hiddenIds.size === 0
+          ? nodes
+          : nodes.filter((n) => !hiddenIds.has(n.id)),
+      [nodes, hiddenIds],
+    );
+
+    // Clears stale hoveredNodeId if the hovered node was collapsed away and is no longer visible.
+    // Without this, a hovered node that gets hidden never fires the onNodeHover(undefined) callback,
+    // leaving the caller's state permanently showing the removed item as hovered.
+    useEffect(() => {
+      if (!hoveredNodeId) return;
+      const nodeStillVisible = visibleNodes.some((n) => n.id === hoveredNodeId);
+      if (!nodeStillVisible) {
+        setHoveredNodeId(undefined);
+        if (tooltipDelayRef.current.nodeTimer)
+          clearTimeout(tooltipDelayRef.current.nodeTimer);
+        setDelayedHoveredNodeId(undefined);
+      }
+    }, [hoveredNodeId, visibleNodes]);
 
     // Only populated when layout='force-clustered' — top-level cluster
     // bounding circles, for the optional bubble-boundary render layer.
-    const [clusterBoundaries, setClusterBoundaries] = useState<Map<string, { x: number; y: number; r: number }>>(
-      new Map()
-    )
+    const [clusterBoundaries, setClusterBoundaries] = useState<
+      Map<string, { x: number; y: number; r: number }>
+    >(new Map());
 
-    const containerRef = useRef<HTMLDivElement>(null)
-    const measureRefs = useRef<Record<string, HTMLDivElement | null>>({})
+    const containerRef = useRef<HTMLDivElement>(null);
+    const measureRefs = useRef<Record<string, HTMLDivElement | null>>({});
     // Tracks whether we've applied the initial canvas-center offset
-    const didCenterRef = useRef(false)
+    const didCenterRef = useRef(false);
     // State mirror of didCenterRef, set in the same effect right alongside it — exists only so
     // the centerOnSelect effect below can gate on a value that doesn't update until the NEXT
     // render (see that effect's own comment for why a live ref read is the wrong signal there).
-    const [mountCenterDone, setMountCenterDone] = useState(false)
-    const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null)
+    const [mountCenterDone, setMountCenterDone] = useState(false);
+    const [containerSize, setContainerSize] = useState<{
+      width: number;
+      height: number;
+    } | null>(null);
     // Previous containerSize, so the resize re-anchor effect below can tell a genuine size change
     // (e.g. entering/exiting fullscreen) apart from a same-size re-render.
-    const prevContainerSizeRef = useRef<{ width: number; height: number } | null>(null)
+    const prevContainerSizeRef = useRef<{
+      width: number;
+      height: number;
+    } | null>(null);
 
     // Only galaxy reads this (see galaxyLayout's own aspectRatio option) — force/force-clustered
     // ignore it, so this is a stable `undefined` for those layouts and a resize never retriggers
@@ -502,57 +842,69 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // noise (a scrollbar toggling, a font-metrics reflow) never crosses a bucket boundary and
     // triggers a redraw, while an actual ~5%+ resize/reflow reliably does.
     const galaxyAspectRatio = useMemo(() => {
-      if (layout !== 'galaxy' || !containerSize || containerSize.height === 0) return undefined
-      return Math.round((containerSize.width / containerSize.height) * 20) / 20
-    }, [layout, containerSize])
+      if (layout !== "galaxy" || !containerSize || containerSize.height === 0)
+        return undefined;
+      return Math.round((containerSize.width / containerSize.height) * 20) / 20;
+    }, [layout, containerSize]);
 
     // Read via a ref (not a dependency) inside the engine-layout effect below, same idiom
     // liveActiveRef above already uses — the effect should pick up whatever the aspect ratio
     // currently is whenever it runs for any other reason, but a resize alone shouldn't retrigger
     // the whole settle-cycle computation (that's the dedicated resize-triggered relayout effect's
     // job, further down).
-    const galaxyAspectRatioRef = useRef(galaxyAspectRatio)
+    const galaxyAspectRatioRef = useRef(galaxyAspectRatio);
     useEffect(() => {
-      galaxyAspectRatioRef.current = galaxyAspectRatio
-    })
+      galaxyAspectRatioRef.current = galaxyAspectRatio;
+    });
 
     const { transform, viewport, bind, panTo, zoomTo } = usePanZoom({
       minZoom,
       maxZoom,
       containerRef,
       locked,
-    })
+    });
 
     // Start of a potential background click — recorded whenever the gesture begins on genuine
     // background (not a node, not an edge, not something opting out via data-no-drag, e.g. the
     // toolbar), regardless of whether pan/zoom is locked: clicking to deselect is unrelated to
     // the viewport lock, so it shouldn't be gated by it the way the pan drag itself is.
-    const backgroundClickStartRef = useRef<{ x: number; y: number } | null>(null)
+    const backgroundClickStartRef = useRef<{ x: number; y: number } | null>(
+      null,
+    );
 
-    const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-      if (e.target instanceof Element && e.target.closest('.graph-node, .graph-edge, [data-no-drag]')) {
-        backgroundClickStartRef.current = null
-        return
-      }
-      backgroundClickStartRef.current = { x: e.clientX, y: e.clientY }
-      bind.onPointerDown(e)
-    }, [bind])
+    const handlePointerDown = useCallback(
+      (e: React.PointerEvent<HTMLDivElement>) => {
+        if (
+          e.target instanceof Element &&
+          e.target.closest(".graph-node, .graph-edge, [data-no-drag]")
+        ) {
+          backgroundClickStartRef.current = null;
+          return;
+        }
+        backgroundClickStartRef.current = { x: e.clientX, y: e.clientY };
+        bind.onPointerDown(e);
+      },
+      [bind],
+    );
 
     // A genuine pan drag never fires onBackgroundClick — only a press and release within
     // DRAG_THRESHOLD px of each other does, the same "was this actually a drag" bar node
     // dragging uses. Independent of usePanZoom's own drag machinery (which document-level
     // pointermove/up listeners only run while a pan is in progress, and not at all while
     // locked) so this keeps working even when pan/zoom is locked.
-    const handleCanvasPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-      const start = backgroundClickStartRef.current
-      backgroundClickStartRef.current = null
-      if (!start || !onBackgroundClick) return
-      const distance = Math.hypot(e.clientX - start.x, e.clientY - start.y)
-      if (distance < DRAG_THRESHOLD) onBackgroundClick()
-    }, [onBackgroundClick])
+    const handleCanvasPointerUp = useCallback(
+      (e: React.PointerEvent<HTMLDivElement>) => {
+        const start = backgroundClickStartRef.current;
+        backgroundClickStartRef.current = null;
+        if (!start || !onBackgroundClick) return;
+        const distance = Math.hypot(e.clientX - start.x, e.clientY - start.y);
+        if (distance < DRAG_THRESHOLD) onBackgroundClick();
+      },
+      [onBackgroundClick],
+    );
 
-    const rawId = useId()
-    const gridPatternId = `grid${rawId.replace(/:/g, '')}`
+    const rawId = useId();
+    const gridPatternId = `grid${rawId.replace(/:/g, "")}`;
 
     // Measure each node's natural HTML dimensions from the hidden off-screen div. Re-runs
     // whenever the node list changes, or renderNode itself changes (e.g. a caller swaps in a
@@ -560,26 +912,32 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // identity across re-renders that don't change its output, so this doesn't cause the
     // thrashing an unmemoized inline function would.
     useLayoutEffect(() => {
-      const next: NodeDims = new Map()
+      const next: NodeDims = new Map();
       for (const node of visibleNodes) {
-        const el = measureRefs.current[node.id]
+        const el = measureRefs.current[node.id];
         next.set(node.id, {
           width: el?.offsetWidth || DEFAULT_NODE_W,
           height: el?.offsetHeight || DEFAULT_NODE_H,
-        })
+        });
       }
-      setDims(next)
-    }, [visibleNodes, renderNode])
+      setDims(next);
+    }, [visibleNodes, renderNode]);
 
     // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered')
     useEffect(() => {
-      if ((layout !== 'force' && layout !== 'galaxy' && layout !== 'force-clustered') || dims.size === 0) return
+      if (
+        (layout !== "force" &&
+          layout !== "galaxy" &&
+          layout !== "force-clustered") ||
+        dims.size === 0
+      )
+        return;
       // While live-simulation mode owns computedPositions, this effect intentionally no-ops for
       // galaxy — recomputing a fresh static layout here would immediately overwrite whatever the
       // live hook just produced. liveActiveRef, not liveActive itself, so toggling the mode
       // doesn't retrigger this effect (see liveActiveRef's own comment above) — only genuine
       // layout-input changes should, and those are already this effect's real dependencies.
-      if (layout === 'galaxy' && liveActiveRef.current) return
+      if (layout === "galaxy" && liveActiveRef.current) return;
 
       const layoutNodes = visibleNodes.map((n, i) => ({
         id: n.id,
@@ -590,24 +948,36 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
         height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
         pinned: n.x !== undefined && n.y !== undefined,
-      }))
-      if (layout === 'force') {
-        const layoutEdges = (edges ?? []).map(e => ({ source: e.sourceId, target: e.targetId }))
-        setComputedPositions(forceLayout(layoutNodes, layoutEdges, { nodeMargin }))
-        setClusterBoundaries(new Map())
-      } else if (layout === 'force-clustered') {
-        const layoutEdges = (edges ?? []).map(e => ({ source: e.sourceId, target: e.targetId }))
-        const { positions, clusterBoundaries: boundaries } = clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin })
-        setComputedPositions(positions)
-        setClusterBoundaries(boundaries)
-      } else {
-        const layoutEdges = (edges ?? []).map(e => ({
+      }));
+      if (layout === "force") {
+        const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
           target: e.targetId,
-          structural: isStructuralEdge ? isStructuralEdge(e) : true,
-        }))
-        const positions = galaxyLayout(layoutNodes, layoutEdges, { nodeMargin, aspectRatio: galaxyAspectRatioRef.current })
-        setComputedPositions(positions)
+        }));
+        setComputedPositions(
+          forceLayout(layoutNodes, layoutEdges, { nodeMargin }),
+        );
+        setClusterBoundaries(new Map());
+      } else if (layout === "force-clustered") {
+        const layoutEdges = (edges ?? []).map((e) => ({
+          source: e.sourceId,
+          target: e.targetId,
+        }));
+        const { positions, clusterBoundaries: boundaries } =
+          clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin });
+        setComputedPositions(positions);
+        setClusterBoundaries(boundaries);
+      } else {
+        const layoutEdges = (edges ?? []).map((e) => ({
+          source: e.sourceId,
+          target: e.targetId,
+          structural: safeIsStructuralEdge(isStructuralEdge, e),
+        }));
+        const positions = galaxyLayout(layoutNodes, layoutEdges, {
+          nodeMargin,
+          aspectRatio: galaxyAspectRatioRef.current,
+        });
+        setComputedPositions(positions);
         // galaxyLayout has no "cluster" concept of its own to return boundaries from (unlike
         // clusteredForceLayout), so build one here from `forest`. One boundary per root would be
         // correct but not very useful on a single-root tree (e.g. one org chart under one CEO) —
@@ -616,14 +986,30 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         // one boundary each, same as before, since a childless root has nothing to delegate to);
         // each group head's full recursive subtree is then one boundary, same as a Louvain
         // cluster's members are for force-clustered.
-        const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf)
+        const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf);
         const radiusOf = (id: string): number => {
-          const d = dims.get(id)
-          return d ? Math.hypot(d.width, d.height) / 2 : 20
-        }
-        setClusterBoundaries(boundingCirclesByGroup(layoutNodes, positions, leafToGroup, radiusOf, true))
+          const d = dims.get(id);
+          return d ? Math.hypot(d.width, d.height) / 2 : 20;
+        };
+        setClusterBoundaries(
+          boundingCirclesByGroup(
+            layoutNodes,
+            positions,
+            leafToGroup,
+            radiusOf,
+            true,
+          ),
+        );
       }
-    }, [visibleNodes, edges, dims, layout, nodeMargin, isStructuralEdge, forest])
+    }, [
+      visibleNodes,
+      edges,
+      dims,
+      layout,
+      nodeMargin,
+      isStructuralEdge,
+      forest,
+    ]);
 
     // A node's dragPositions override doubles as its pin here, same priority getNodePosition
     // already gives dragPositions over any prop-level x/y, so a dropped node stays exactly where
@@ -632,37 +1018,40 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // NOT used by the static engine-layout effect above, whose own dependency array intentionally
     // excludes dragPositions so a plain (non-live) drag moves only the dragged node instead of
     // retriggering a full relayout of everything else on every pointermove.
-    const buildGalaxyLayoutNodes = useCallback((): GalaxyLayoutNode[] =>
-      visibleNodes.map(n => {
-        const drag = dragPositions.get(n.id)
-        const x = drag?.x ?? n.x
-        const y = drag?.y ?? n.y
-        return {
-          id: n.id,
-          width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
-          height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
-          x,
-          y,
-          pinned: x !== undefined && y !== undefined,
-        }
-      }), [visibleNodes, dims, dragPositions])
+    const buildGalaxyLayoutNodes = useCallback(
+      (): GalaxyLayoutNode[] =>
+        visibleNodes.map((n) => {
+          const drag = dragPositions.get(n.id);
+          const x = drag?.x ?? n.x;
+          const y = drag?.y ?? n.y;
+          return {
+            id: n.id,
+            width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+            height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+            x,
+            y,
+            pinned: x !== undefined && y !== undefined,
+          };
+        }),
+      [visibleNodes, dims, dragPositions],
+    );
 
     // Live-simulation mode's own continuous layout (see useGalaxySimulation). Builds
     // unconditionally (empty when not live-active) so the hook's own call below has stable inputs
     // across renders regardless of whether live mode is currently on.
     const liveLayoutNodes = useMemo<GalaxyLayoutNode[]>(() => {
-      if (!liveActive) return []
-      return buildGalaxyLayoutNodes()
-    }, [liveActive, buildGalaxyLayoutNodes])
+      if (!liveActive) return [];
+      return buildGalaxyLayoutNodes();
+    }, [liveActive, buildGalaxyLayoutNodes]);
 
     const liveLayoutEdges = useMemo(() => {
-      if (!liveActive) return []
-      return (edges ?? []).map(e => ({
+      if (!liveActive) return [];
+      return (edges ?? []).map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: isStructuralEdge ? isStructuralEdge(e) : true,
-      }))
-    }, [liveActive, edges, isStructuralEdge])
+        structural: safeIsStructuralEdge(isStructuralEdge, e),
+      }));
+    }, [liveActive, edges, isStructuralEdge]);
 
     // A drag/pin-independent view of the same nodes, purely for resolving the aspectRatio scale
     // below — deliberately NOT `liveLayoutNodes` (which changes identity every animation frame
@@ -671,90 +1060,114 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // animation-frame budget; keying it on structure only means it only re-resolves when the
     // graph's actual shape or the target ratio changes, not on every pointer move.
     const galaxyStructuralNodes = useMemo<GalaxyLayoutNode[]>(() => {
-      if (!liveActive) return []
-      return visibleNodes.map(n => ({
+      if (!liveActive) return [];
+      return visibleNodes.map((n) => ({
         id: n.id,
         width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
         height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
-      }))
-    }, [liveActive, visibleNodes, dims])
+      }));
+    }, [liveActive, visibleNodes, dims]);
 
     // Pre-resolved once here (see GalaxyLayoutOptions.resolvedAspectScale /
     // resolveAspectRatioScale's own docs for why) rather than left for every live-simulation
     // animation frame to resolve for itself.
     const galaxyResolvedAspectScale = useMemo(() => {
-      if (!liveActive || galaxyAspectRatio === undefined) return undefined
-      return resolveAspectRatioScale(galaxyStructuralNodes, liveLayoutEdges, { nodeMargin, aspectRatio: galaxyAspectRatio })
-    }, [liveActive, galaxyStructuralNodes, liveLayoutEdges, nodeMargin, galaxyAspectRatio])
+      if (!liveActive || galaxyAspectRatio === undefined) return undefined;
+      return resolveAspectRatioScale(galaxyStructuralNodes, liveLayoutEdges, {
+        nodeMargin,
+        aspectRatio: galaxyAspectRatio,
+      });
+    }, [
+      liveActive,
+      galaxyStructuralNodes,
+      liveLayoutEdges,
+      nodeMargin,
+      galaxyAspectRatio,
+    ]);
 
     // Topology-only half of the boundary-circle grouping (see the static engine-layout effect's
     // own galaxy branch above, which this mirrors) — depends on `forest`, not on positions, so it
     // stays cheap to recompute every live-simulation tick below rather than needing its own
     // separate effect/state.
     const galaxyLeafToGroup = useMemo(() => {
-      if (!liveActive) return null
-      return galaxyGroupMap(forest.roots, forest.childrenOf).leafToGroup
-    }, [liveActive, forest])
+      if (!liveActive) return null;
+      return galaxyGroupMap(forest.roots, forest.childrenOf).leafToGroup;
+    }, [liveActive, forest]);
 
     // While live simulation owns computedPositions, it must also own clusterBoundaries — the
     // static effect above no-ops for galaxy whenever live is active (see liveActiveRef), so
     // nothing else keeps the rendered boundary circles in sync with nodes moving in real time.
     // Skipped entirely when boundaries aren't shown at all, since recomputing them is otherwise
     // pure waste on every single animation frame.
-    const handleLiveTick = useCallback((positions: Map<string, { x: number; y: number }>) => {
-      setComputedPositions(positions)
-      if (!showClusterBoundaries || !galaxyLeafToGroup) return
-      const boundaryNodes = visibleNodes.map(n => ({
-        id: n.id,
-        width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
-        height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
-        x: 0,
-        y: 0,
-      }))
-      const radiusOf = (id: string): number => {
-        const d = dims.get(id)
-        return d ? Math.hypot(d.width, d.height) / 2 : 20
-      }
-      setClusterBoundaries(boundingCirclesByGroup(boundaryNodes, positions, galaxyLeafToGroup, radiusOf, true))
-    }, [showClusterBoundaries, galaxyLeafToGroup, visibleNodes, dims])
+    const handleLiveTick = useCallback(
+      (positions: Map<string, { x: number; y: number }>) => {
+        setComputedPositions(positions);
+        if (!showClusterBoundaries || !galaxyLeafToGroup) return;
+        const boundaryNodes = visibleNodes.map((n) => ({
+          id: n.id,
+          width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+          height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+          x: 0,
+          y: 0,
+        }));
+        const radiusOf = (id: string): number => {
+          const d = dims.get(id);
+          return d ? Math.hypot(d.width, d.height) / 2 : 20;
+        };
+        setClusterBoundaries(
+          boundingCirclesByGroup(
+            boundaryNodes,
+            positions,
+            galaxyLeafToGroup,
+            radiusOf,
+            true,
+          ),
+        );
+      },
+      [showClusterBoundaries, galaxyLeafToGroup, visibleNodes, dims],
+    );
 
     const { wake: wakeGalaxySimulation } = useGalaxySimulation({
       active: liveActive,
       nodes: liveLayoutNodes,
       edges: liveLayoutEdges,
-      options: { nodeMargin, aspectRatio: galaxyAspectRatio, resolvedAspectScale: galaxyResolvedAspectScale },
+      options: {
+        nodeMargin,
+        aspectRatio: galaxyAspectRatio,
+        resolvedAspectScale: galaxyResolvedAspectScale,
+      },
       onTick: handleLiveTick,
       initialPositions: computedPositions,
-    })
+    });
 
     // Track the rendered container size so the auto-center effect can react to it.
     useEffect(() => {
-      const container = containerRef.current
-      if (!container) return
-      const ro = new ResizeObserver(entries => {
-        const { width, height } = entries[0].contentRect
-        if (width > 0 && height > 0) setContainerSize({ width, height })
-      })
-      ro.observe(container)
-      return () => ro.disconnect()
-    }, [])
+      const container = containerRef.current;
+      if (!container) return;
+      const ro = new ResizeObserver((entries) => {
+        const { width, height } = entries[0].contentRect;
+        if (width > 0 && height > 0) setContainerSize({ width, height });
+      });
+      ro.observe(container);
+      return () => ro.disconnect();
+    }, []);
 
     // Keeps isFullscreen in sync with the platform's own fullscreen state regardless of how it
     // changed — Esc, browser chrome's own exit control, or another element entirely taking over
     // fullscreen would otherwise leave GraphToolbar's button showing the wrong icon.
     useEffect(() => {
       const syncFullscreen = () => {
-        const target = fullscreenContainerRef?.current ?? containerRef.current
-        const nowFullscreen = document.fullscreenElement === target
-        setIsFullscreen(nowFullscreen)
+        const target = fullscreenContainerRef?.current ?? containerRef.current;
+        const nowFullscreen = document.fullscreenElement === target;
+        setIsFullscreen(nowFullscreen);
         if (pendingFullscreenFitTimeoutRef.current !== null) {
-          clearTimeout(pendingFullscreenFitTimeoutRef.current)
-          pendingFullscreenFitTimeoutRef.current = null
+          clearTimeout(pendingFullscreenFitTimeoutRef.current);
+          pendingFullscreenFitTimeoutRef.current = null;
         }
         if (nowFullscreen) {
           // Only on entry — on exit, the resize re-anchor effect below already keeps whatever was
           // centered on screen in view, which reads better than snapping to a from-scratch fit.
-          pendingFullscreenFitRef.current = true
+          pendingFullscreenFitRef.current = true;
           // Bounds how long the pending fit stays armed waiting for containerSize to report the
           // transition's own resize (see pendingFullscreenFitRef's own comment for why an
           // unbounded wait is a bug). 500ms comfortably covers a real fullscreen-transition
@@ -763,24 +1176,25 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           // after it is clearly a later, unrelated resize rather than this transition's own. If no
           // resize lands in time, there's nothing to fit differently than what's already on screen.
           pendingFullscreenFitTimeoutRef.current = setTimeout(() => {
-            pendingFullscreenFitRef.current = false
-            pendingFullscreenFitTimeoutRef.current = null
-          }, 500)
+            pendingFullscreenFitRef.current = false;
+            pendingFullscreenFitTimeoutRef.current = null;
+          }, 500);
         } else {
           // Nothing still armed from a fullscreen session that's now over should survive to fire
           // against some later, unrelated resize either.
-          pendingFullscreenFitRef.current = false
+          pendingFullscreenFitRef.current = false;
         }
-      }
-      document.addEventListener('fullscreenchange', syncFullscreen)
+      };
+      document.addEventListener("fullscreenchange", syncFullscreen);
       return () => {
-        document.removeEventListener('fullscreenchange', syncFullscreen)
-        if (pendingFullscreenFitTimeoutRef.current !== null) clearTimeout(pendingFullscreenFitTimeoutRef.current)
-      }
-    }, [fullscreenContainerRef])
+        document.removeEventListener("fullscreenchange", syncFullscreen);
+        if (pendingFullscreenFitTimeoutRef.current !== null)
+          clearTimeout(pendingFullscreenFitTimeoutRef.current);
+      };
+    }, [fullscreenContainerRef]);
 
     const toggleFullscreen = useCallback(() => {
-      const target = fullscreenContainerRef?.current ?? containerRef.current
+      const target = fullscreenContainerRef?.current ?? containerRef.current;
       // Both calls return a Promise that rejects if the platform refuses (no permissions-policy
       // grant, target detached/mid-unmount, an ancestor is inside a restrictive iframe, ...) —
       // reachable in practice specifically because fullscreenContainerRef makes the target
@@ -792,73 +1206,109 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // unhandled-rejection console entry with no attribution to this prop.
       if (document.fullscreenElement === target) {
         document.exitFullscreen?.()?.catch((err: unknown) => {
-          console.warn('GraphCanvas: exitFullscreen() was rejected', err)
-        })
+          console.warn("GraphCanvas: exitFullscreen() was rejected", err);
+        });
       } else {
         target?.requestFullscreen?.()?.catch((err: unknown) => {
           console.warn(
-            'GraphCanvas: requestFullscreen() was rejected for the fullscreenContainerRef (or default root) target',
-            err
-          )
-        })
+            "GraphCanvas: requestFullscreen() was rejected for the fullscreenContainerRef (or default root) target",
+            err,
+          );
+        });
       }
-    }, [fullscreenContainerRef])
+    }, [fullscreenContainerRef]);
 
-    const getNodePosition = useCallback((node: GraphNodeData): { x: number; y: number } => {
-      const dragged = dragPositions.get(node.id)
-      if (dragged) return dragged
-      if (node.x !== undefined && node.y !== undefined) return { x: node.x, y: node.y }
-      return computedPositions.get(node.id) ?? { x: 0, y: 0 }
-    }, [dragPositions, computedPositions])
+    const getNodePosition = useCallback(
+      (node: GraphNodeData): { x: number; y: number } => {
+        const dragged = dragPositions.get(node.id);
+        if (dragged) return dragged;
+        if (node.x !== undefined && node.y !== undefined)
+          return { x: node.x, y: node.y };
+        return computedPositions.get(node.id) ?? { x: 0, y: 0 };
+      },
+      [dragPositions, computedPositions],
+    );
 
     // Computes the current node bounding box in graph space (world coordinates).
     // Shared by the initial fit/center effect and the imperative zoomToFit().
     const computeBoundingBox = useCallback((): BoundingBox | null => {
-      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+      let minX = Infinity,
+        maxX = -Infinity,
+        minY = Infinity,
+        maxY = -Infinity;
       for (const node of visibleNodes) {
         // Includes any drag override (see getNodePosition) so zoomToFit() after manually
         // repositioning a node reframes to where it actually is, not where the layout put it.
-        const pos = getNodePosition(node)
-        const d = dims.get(node.id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
-        minX = Math.min(minX, pos.x - d.width / 2)
-        maxX = Math.max(maxX, pos.x + d.width / 2)
-        minY = Math.min(minY, pos.y - d.height / 2)
-        maxY = Math.max(maxY, pos.y + d.height / 2)
+        const pos = getNodePosition(node);
+        const d = dims.get(node.id) ?? {
+          width: DEFAULT_NODE_W,
+          height: DEFAULT_NODE_H,
+        };
+        minX = Math.min(minX, pos.x - d.width / 2);
+        maxX = Math.max(maxX, pos.x + d.width / 2);
+        minY = Math.min(minY, pos.y - d.height / 2);
+        maxY = Math.max(maxY, pos.y + d.height / 2);
       }
-      if (!Number.isFinite(minX)) return null
-      return { minX, maxX, minY, maxY }
-    }, [visibleNodes, dims, getNodePosition])
+      if (!Number.isFinite(minX)) return null;
+      return { minX, maxX, minY, maxY };
+    }, [visibleNodes, dims, getNodePosition]);
 
     // Auto-center (or fit) the node bounding box once positions and dims are ready.
     // Runs once — re-centering on later prop changes would fight user pan/zoom.
     useEffect(() => {
-      if (didCenterRef.current) return
-      if (!containerSize || dims.size === 0 || visibleNodes.length === 0) return
+      if (didCenterRef.current) return;
+      if (!containerSize || dims.size === 0 || visibleNodes.length === 0)
+        return;
       // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered' all compute
       // positions asynchronously (see the engine-layout effect above) — without waiting for them
       // here too, this could run with computedPositions still empty, every node falling back to
       // {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
-      if ((layout === 'force' || layout === 'galaxy' || layout === 'force-clustered') && computedPositions.size === 0) return
+      if (
+        (layout === "force" ||
+          layout === "galaxy" ||
+          layout === "force-clustered") &&
+        computedPositions.size === 0
+      )
+        return;
 
-      const bbox = computeBoundingBox()
-      if (!bbox) return
+      const bbox = computeBoundingBox();
+      if (!bbox) return;
 
-      didCenterRef.current = true
-      setMountCenterDone(true)
+      didCenterRef.current = true;
+      setMountCenterDone(true);
 
       if (fitView) {
-        const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, minZoom, maxZoom)
-        zoomTo(fit.zoom)
-        panTo(fit.panX, fit.panY)
+        const fit = computeFitViewport(
+          bbox,
+          containerSize.width,
+          containerSize.height,
+          fitPadding,
+          minZoom,
+          maxZoom,
+        );
+        zoomTo(fit.zoom);
+        panTo(fit.panX, fit.panY);
       } else {
-        const centroidX = (bbox.minX + bbox.maxX) / 2
-        const centroidY = (bbox.minY + bbox.maxY) / 2
+        const centroidX = (bbox.minX + bbox.maxX) / 2;
+        const centroidY = (bbox.minY + bbox.maxY) / 2;
         panTo(
           containerSize.width / 2 - centroidX * viewport.zoom,
-          containerSize.height / 2 - centroidY * viewport.zoom
-        )
+          containerSize.height / 2 - centroidY * viewport.zoom,
+        );
       }
-    }, [containerSize, dims, computedPositions, visibleNodes, layout, viewport.zoom, panTo, zoomTo, fitView, fitPadding, computeBoundingBox])
+    }, [
+      containerSize,
+      dims,
+      computedPositions,
+      visibleNodes,
+      layout,
+      viewport.zoom,
+      panTo,
+      zoomTo,
+      fitView,
+      fitPadding,
+      computeBoundingBox,
+    ]);
 
     // Tracks the selectedNodeId centerOnSelect last reacted to, so it only pans on a
     // genuine CHANGE — never repeatedly on every render, which would fight a user's own
@@ -867,7 +1317,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // that isn't in visibleNodes yet (e.g. a nav-tree selection inside a currently-collapsed
     // subtree the consumer is about to expand) keeps retrying on later renders instead of
     // being silently marked "handled" with no pan ever having happened.
-    const prevCenterSelectedIdRef = useRef<string | undefined>(undefined)
+    const prevCenterSelectedIdRef = useRef<string | undefined>(undefined);
 
     // centerOnSelect (opt-in, see its own prop doc) — pans to keep selectedNodeId
     // centered whenever it changes, once the initial mount center/fit above has run.
@@ -886,24 +1336,34 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // NEXT render) — so it correctly bails out and waits for the following render, where both
     // `mountCenterDone` and `viewport.zoom` are the fit-adjusted values.
     useEffect(() => {
-      if (!centerOnSelect) return
-      if (!mountCenterDone) return
-      if (locked) return
-      if (selectedNodeId === prevCenterSelectedIdRef.current) return
+      if (!centerOnSelect) return;
+      if (!mountCenterDone) return;
+      if (locked) return;
+      if (selectedNodeId === prevCenterSelectedIdRef.current) return;
       if (!selectedNodeId) {
-        prevCenterSelectedIdRef.current = undefined
-        return
+        prevCenterSelectedIdRef.current = undefined;
+        return;
       }
-      if (!containerSize) return
-      const node = visibleNodes.find(n => n.id === selectedNodeId)
-      if (!node) return
-      prevCenterSelectedIdRef.current = selectedNodeId
-      const pos = getNodePosition(node)
+      if (!containerSize) return;
+      const node = visibleNodes.find((n) => n.id === selectedNodeId);
+      if (!node) return;
+      prevCenterSelectedIdRef.current = selectedNodeId;
+      const pos = getNodePosition(node);
       panTo(
         containerSize.width / 2 - pos.x * viewport.zoom,
-        containerSize.height / 2 - pos.y * viewport.zoom
-      )
-    }, [centerOnSelect, mountCenterDone, selectedNodeId, locked, containerSize, visibleNodes, getNodePosition, viewport.zoom, panTo])
+        containerSize.height / 2 - pos.y * viewport.zoom,
+      );
+    }, [
+      centerOnSelect,
+      mountCenterDone,
+      selectedNodeId,
+      locked,
+      containerSize,
+      visibleNodes,
+      getNodePosition,
+      viewport.zoom,
+      panTo,
+    ]);
 
     // Re-anchors pan whenever the container's own rendered size changes after that initial
     // auto-center/fit — entering/exiting the Fullscreen API is the main trigger (the container
@@ -914,17 +1374,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // itself is a different size, snapping whatever was centered on screen off to one side (or
     // out of view entirely) instead of keeping it in view.
     useEffect(() => {
-      const prev = prevContainerSizeRef.current
-      prevContainerSizeRef.current = containerSize
-      if (!didCenterRef.current || !prev || !containerSize) return
-      if (prev.width === containerSize.width && prev.height === containerSize.height) return
-      const centerWorldX = (prev.width / 2 - viewport.x) / viewport.zoom
-      const centerWorldY = (prev.height / 2 - viewport.y) / viewport.zoom
+      const prev = prevContainerSizeRef.current;
+      prevContainerSizeRef.current = containerSize;
+      if (!didCenterRef.current || !prev || !containerSize) return;
+      if (
+        prev.width === containerSize.width &&
+        prev.height === containerSize.height
+      )
+        return;
+      const centerWorldX = (prev.width / 2 - viewport.x) / viewport.zoom;
+      const centerWorldY = (prev.height / 2 - viewport.y) / viewport.zoom;
       panTo(
         containerSize.width / 2 - centerWorldX * viewport.zoom,
-        containerSize.height / 2 - centerWorldY * viewport.zoom
-      )
-    }, [containerSize, viewport.x, viewport.y, viewport.zoom, panTo])
+        containerSize.height / 2 - centerWorldY * viewport.zoom,
+      );
+    }, [containerSize, viewport.x, viewport.y, viewport.zoom, panTo]);
 
     // Redraws the galaxy layout when the container's aspect ratio actually changes (see
     // galaxyAspectRatio's own docs for the rounding/threshold) and pan/zoom isn't locked — the
@@ -936,12 +1400,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // win over that one's "just preserve the old center" pan — React runs same-commit effects in
     // declaration order, last state write wins, and both firing is harmless either way (React
     // batches the state updates, so there's no visible intermediate frame).
-    const prevGalaxyAspectRatioRef = useRef<number | undefined>(undefined)
+    const prevGalaxyAspectRatioRef = useRef<number | undefined>(undefined);
     useEffect(() => {
-      if (layout !== 'galaxy' || galaxyAspectRatio === undefined) return
-      if (prevGalaxyAspectRatioRef.current === galaxyAspectRatio) return
-      if (locked) return
-      if (dims.size === 0) return
+      if (layout !== "galaxy" || galaxyAspectRatio === undefined) return;
+      if (prevGalaxyAspectRatioRef.current === galaxyAspectRatio) return;
+      if (locked) return;
+      if (dims.size === 0) return;
       // Written only once every guard above has passed — i.e. once this run is actually about to
       // act on the new ratio, not preemptively at the top. Writing it early would mark a resize
       // that lands while locked (or before dims are measured) as "already handled" even though no
@@ -949,73 +1413,125 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // prevGalaxyAspectRatioRef.current already equals the current galaxyAspectRatio by then, so
       // the guard above would skip the relayout it was supposed to catch up on — permanently
       // leaving the galaxy shaped for whatever container it had before the resize.
-      prevGalaxyAspectRatioRef.current = galaxyAspectRatio
+      prevGalaxyAspectRatioRef.current = galaxyAspectRatio;
 
       // Live mode already reads aspectRatio from its own options every tick and eases toward the
       // new shape smoothly via the existing homeStrength mechanism — waking it (in case the loop
       // had gone idle) is enough; a competing one-shot relayout+hard-reframe here would either
       // freeze that transition mid-flight or fight it every subsequent frame.
       if (liveActiveRef.current) {
-        wakeGalaxySimulation()
-        return
+        wakeGalaxySimulation();
+        return;
       }
 
-      const layoutNodes = buildGalaxyLayoutNodes()
-      const layoutEdges = (edges ?? []).map(e => ({
+      const layoutNodes = buildGalaxyLayoutNodes();
+      const layoutEdges = (edges ?? []).map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: isStructuralEdge ? isStructuralEdge(e) : true,
-      }))
-      const positions = galaxyLayout(layoutNodes, layoutEdges, { nodeMargin, aspectRatio: galaxyAspectRatio })
-      setComputedPositions(positions)
+        structural: safeIsStructuralEdge(isStructuralEdge, e),
+      }));
+      const positions = galaxyLayout(layoutNodes, layoutEdges, {
+        nodeMargin,
+        aspectRatio: galaxyAspectRatio,
+      });
+      setComputedPositions(positions);
 
       // Boundary circles must track the reshaped positions too — same computation the static
       // engine-layout effect's own galaxy branch already does.
-      const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf)
+      const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf);
       const radiusOf = (id: string): number => {
-        const d = dims.get(id)
-        return d ? Math.hypot(d.width, d.height) / 2 : 20
-      }
+        const d = dims.get(id);
+        return d ? Math.hypot(d.width, d.height) / 2 : 20;
+      };
       // boundingCirclesByGroup only reads id/width/height off each node (positions come from the
       // separate `positions` map) — x/y here are dummy placeholders, same convention used
       // elsewhere in this file (see handleLiveTick's own boundaryNodes).
-      const boundaryNodes = layoutNodes.map(n => ({ id: n.id, width: n.width, height: n.height, x: 0, y: 0 }))
-      setClusterBoundaries(boundingCirclesByGroup(boundaryNodes, positions, leafToGroup, radiusOf, true))
+      const boundaryNodes = layoutNodes.map((n) => ({
+        id: n.id,
+        width: n.width,
+        height: n.height,
+        x: 0,
+        y: 0,
+      }));
+      setClusterBoundaries(
+        boundingCirclesByGroup(
+          boundaryNodes,
+          positions,
+          leafToGroup,
+          radiusOf,
+          true,
+        ),
+      );
 
       // Re-frame using the just-computed `positions` directly, not stale `computedPositions` state
       // (the setComputedPositions call above won't be reflected until next render) — mirrors the
       // mount-time auto-center effect's own fitView/else branching exactly.
-      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+      let minX = Infinity,
+        maxX = -Infinity,
+        minY = Infinity,
+        maxY = -Infinity;
       for (const n of visibleNodes) {
-        const p = dragPositions.get(n.id) ?? positions.get(n.id) ?? { x: 0, y: 0 }
-        const d = dims.get(n.id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
-        minX = Math.min(minX, p.x - d.width / 2)
-        maxX = Math.max(maxX, p.x + d.width / 2)
-        minY = Math.min(minY, p.y - d.height / 2)
-        maxY = Math.max(maxY, p.y + d.height / 2)
+        const p = dragPositions.get(n.id) ??
+          positions.get(n.id) ?? { x: 0, y: 0 };
+        const d = dims.get(n.id) ?? {
+          width: DEFAULT_NODE_W,
+          height: DEFAULT_NODE_H,
+        };
+        minX = Math.min(minX, p.x - d.width / 2);
+        maxX = Math.max(maxX, p.x + d.width / 2);
+        minY = Math.min(minY, p.y - d.height / 2);
+        maxY = Math.max(maxY, p.y + d.height / 2);
       }
       if (Number.isFinite(minX) && containerSize) {
-        const bbox = { minX, maxX, minY, maxY }
+        const bbox = { minX, maxX, minY, maxY };
         if (fitView) {
-          const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, fitPadding, minZoom, maxZoom)
-          zoomTo(fit.zoom)
-          panTo(fit.panX, fit.panY)
+          const fit = computeFitViewport(
+            bbox,
+            containerSize.width,
+            containerSize.height,
+            fitPadding,
+            minZoom,
+            maxZoom,
+          );
+          zoomTo(fit.zoom);
+          panTo(fit.panX, fit.panY);
         } else {
-          const cx = (bbox.minX + bbox.maxX) / 2
-          const cy = (bbox.minY + bbox.maxY) / 2
-          panTo(containerSize.width / 2 - cx * viewport.zoom, containerSize.height / 2 - cy * viewport.zoom)
+          const cx = (bbox.minX + bbox.maxX) / 2;
+          const cy = (bbox.minY + bbox.maxY) / 2;
+          panTo(
+            containerSize.width / 2 - cx * viewport.zoom,
+            containerSize.height / 2 - cy * viewport.zoom,
+          );
         }
       }
-    }, [galaxyAspectRatio, layout, locked])
+    }, [galaxyAspectRatio, layout, locked]);
 
     // Imperative viewport controls, exposed via useGraphCanvas().
-    const zoomToFit = useCallback((padding?: number) => {
-      const bbox = computeBoundingBox()
-      if (!bbox || !containerSize) return
-      const fit = computeFitViewport(bbox, containerSize.width, containerSize.height, padding ?? fitPadding, minZoom, maxZoom)
-      zoomTo(fit.zoom)
-      panTo(fit.panX, fit.panY)
-    }, [computeBoundingBox, containerSize, fitPadding, minZoom, maxZoom, zoomTo, panTo])
+    const zoomToFit = useCallback(
+      (padding?: number) => {
+        const bbox = computeBoundingBox();
+        if (!bbox || !containerSize) return;
+        const fit = computeFitViewport(
+          bbox,
+          containerSize.width,
+          containerSize.height,
+          padding ?? fitPadding,
+          minZoom,
+          maxZoom,
+        );
+        zoomTo(fit.zoom);
+        panTo(fit.panX, fit.panY);
+      },
+      [
+        computeBoundingBox,
+        containerSize,
+        fitPadding,
+        minZoom,
+        maxZoom,
+        zoomTo,
+        panTo,
+      ],
+    );
 
     // Fulfills pendingFullscreenFitRef once the container's real, post-transition size has
     // actually landed — containerSize only updates via the ResizeObserver effect above once the
@@ -1024,39 +1540,97 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // pan/zoom effect in this file (the aspect-ratio redraw effect above included) — locked means
     // the user opted out of automatic viewport changes, entering fullscreen doesn't override that.
     useEffect(() => {
-      if (!pendingFullscreenFitRef.current || !containerSize) return
-      pendingFullscreenFitRef.current = false
-      if (locked) return
-      zoomToFit()
-    }, [containerSize, zoomToFit, locked])
+      if (!pendingFullscreenFitRef.current || !containerSize) return;
+      pendingFullscreenFitRef.current = false;
+      if (locked) return;
+      zoomToFit();
+    }, [containerSize, zoomToFit, locked]);
 
     // See GraphCanvasContextValue.zoomBy's own docs — anchors at the container's visual center
     // instead of setZoom's raw "wherever world (0,0) projects to" behavior.
-    const zoomBy = useCallback((factor: number) => {
-      if (!containerSize) { zoomTo(viewport.zoom * factor); return }
-      zoomTo(viewport.zoom * factor, containerSize.width / 2, containerSize.height / 2)
-    }, [containerSize, viewport.zoom, zoomTo])
+    const zoomBy = useCallback(
+      (factor: number) => {
+        if (!containerSize) {
+          zoomTo(viewport.zoom * factor);
+          return;
+        }
+        zoomTo(
+          viewport.zoom * factor,
+          containerSize.width / 2,
+          containerSize.height / 2,
+        );
+      },
+      [containerSize, viewport.zoom, zoomTo],
+    );
 
+    const handleEdgeHoverEnd = useCallback((id: string) => {
+      setHoveredEdgeId((current) => (current === id ? undefined : current));
+    }, []);
 
-    const getNodeRect = useCallback((id: string) => {
-      // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
-      // won't find one here and renders nothing (see GraphEdgeInternal's null guard).
-      const node = visibleNodes.find(n => n.id === id)
-      if (!node) {
-        // Distinguish a legitimately hidden node (expected, silent) from an id that isn't in
-        // `nodes` at all — a real caller bug (a typo, or an edge left dangling after its node
-        // was removed) that would otherwise render as "edge just doesn't appear" with no signal,
-        // indistinguishable from the collapsed case. GraphEdge (the standalone component) already
-        // warns on exactly this; this keeps GraphCanvas's own internal edge renderer consistent
-        // with it instead of staying silent. Only scans the full node list on the already-rare
-        // not-found path, not on every lookup.
-        if (!nodes.some(n => n.id === id)) console.warn(`GraphCanvas: node "${id}" not found`)
-        return null
+    const handleEdgeHoverStart = useCallback((id: string) => {
+      setHoveredEdgeId(id);
+      if (edgeTooltip) {
+        if (tooltipDelayRef.current.edgeTimer)
+          clearTimeout(tooltipDelayRef.current.edgeTimer);
+        tooltipDelayRef.current.edgeTimer = setTimeout(() => {
+          setDelayedHoveredEdgeId(id);
+        }, TOOLTIP_SHOW_DELAY_MS);
       }
-      const pos = getNodePosition(node)
-      const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
-      return { x: pos.x, y: pos.y, width: d.width, height: d.height }
-    }, [nodes, visibleNodes, dims, getNodePosition])
+    }, [edgeTooltip]);
+
+    const handleEdgeHoverEndWithDelay = useCallback((id: string) => {
+      handleEdgeHoverEnd(id);
+      if (tooltipDelayRef.current.edgeTimer)
+        clearTimeout(tooltipDelayRef.current.edgeTimer);
+      setDelayedHoveredEdgeId(undefined);
+    }, [handleEdgeHoverEnd]);
+
+    const handleNodeHoverStart = useCallback((id: string) => {
+      setHoveredNodeId(id);
+      if (nodeTooltip) {
+        if (tooltipDelayRef.current.nodeTimer)
+          clearTimeout(tooltipDelayRef.current.nodeTimer);
+        tooltipDelayRef.current.nodeTimer = setTimeout(() => {
+          setDelayedHoveredNodeId(id);
+        }, TOOLTIP_SHOW_DELAY_MS);
+      }
+    }, [nodeTooltip]);
+
+    const handleNodeHoverEndWithDelay = useCallback((id: string) => {
+      setHoveredNodeId((current) =>
+        current === id ? undefined : current,
+      );
+      if (tooltipDelayRef.current.nodeTimer)
+        clearTimeout(tooltipDelayRef.current.nodeTimer);
+      setDelayedHoveredNodeId(undefined);
+    }, []);
+
+    const getNodeRect = useCallback(
+      (id: string) => {
+        // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
+        // won't find one here and renders nothing (see GraphEdgeInternal's null guard).
+        const node = visibleNodes.find((n) => n.id === id);
+        if (!node) {
+          // Distinguish a legitimately hidden node (expected, silent) from an id that isn't in
+          // `nodes` at all — a real caller bug (a typo, or an edge left dangling after its node
+          // was removed) that would otherwise render as "edge just doesn't appear" with no signal,
+          // indistinguishable from the collapsed case. GraphEdge (the standalone component) already
+          // warns on exactly this; this keeps GraphCanvas's own internal edge renderer consistent
+          // with it instead of staying silent. Only scans the full node list on the already-rare
+          // not-found path, not on every lookup.
+          if (!nodes.some((n) => n.id === id))
+            console.warn(`GraphCanvas: node "${id}" not found`);
+          return null;
+        }
+        const pos = getNodePosition(node);
+        const d = dims.get(id) ?? {
+          width: DEFAULT_NODE_W,
+          height: DEFAULT_NODE_H,
+        };
+        return { x: pos.x, y: pos.y, width: d.width, height: d.height };
+      },
+      [nodes, visibleNodes, dims, getNodePosition],
+    );
 
     // Node dragging. Pointer capture is deliberately NOT taken on pointerdown — capturing
     // retargets every subsequent event for that pointer to the capturing element, including the
@@ -1065,57 +1639,67 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // click-to-select for every node. Capture is instead taken only once a move has actually
     // crossed DRAG_THRESHOLD — a plain click never captures at all, so it's unaffected — which
     // also keeps later move/up events targeted at this <g> even once the cursor leaves it.
-    const handleNodePointerDown = useCallback((e: React.PointerEvent<SVGGElement>, node: GraphNodeData) => {
-      if (!draggable) return
-      // Stop this from also being treated as the start of a canvas pan — same guard GraphCanvas's
-      // own pointerdown handler already applies for HTML .graph-node content, needed again here
-      // because dragging starts from the SVG <g> wrapping it, which that closest() check doesn't
-      // otherwise see (the event both starts and is handled here, so it never bubbles that far).
-      e.stopPropagation()
-      const pos = getNodePosition(node)
-      dragStateRef.current = {
-        id: node.id,
-        pointerId: e.pointerId,
-        startClientX: e.clientX,
-        startClientY: e.clientY,
-        startX: pos.x,
-        startY: pos.y,
-        dragging: false,
-        target: e.currentTarget,
-      }
-    }, [draggable, getNodePosition])
+    const handleNodePointerDown = useCallback(
+      (e: React.PointerEvent<SVGGElement>, node: GraphNodeData) => {
+        if (!draggable) return;
+        // Stop this from also being treated as the start of a canvas pan — same guard GraphCanvas's
+        // own pointerdown handler already applies for HTML .graph-node content, needed again here
+        // because dragging starts from the SVG <g> wrapping it, which that closest() check doesn't
+        // otherwise see (the event both starts and is handled here, so it never bubbles that far).
+        e.stopPropagation();
+        const pos = getNodePosition(node);
+        dragStateRef.current = {
+          id: node.id,
+          pointerId: e.pointerId,
+          startClientX: e.clientX,
+          startClientY: e.clientY,
+          startX: pos.x,
+          startY: pos.y,
+          dragging: false,
+          target: e.currentTarget,
+        };
+      },
+      [draggable, getNodePosition],
+    );
 
-    const handleNodePointerMove = useCallback((e: React.PointerEvent<SVGGElement>) => {
-      const state = dragStateRef.current
-      if (!state || state.pointerId !== e.pointerId) return
-      // DRAG_THRESHOLD is screen-space px (same bar handleCanvasPointerUp's background-click
-      // check uses) — compare the raw client delta, not the world-space one, or the effective
-      // screen threshold silently scales with zoom (a single px of tremor reads as a drag at a
-      // heavily zoomed-out fitView; tens of px of dead travel before a node budges at max zoom).
-      const screenDx = e.clientX - state.startClientX
-      const screenDy = e.clientY - state.startClientY
-      if (!state.dragging && Math.hypot(screenDx, screenDy) < DRAG_THRESHOLD) return
-      const dx = screenDx / viewport.zoom
-      const dy = screenDy / viewport.zoom
-      if (!state.dragging) e.currentTarget.setPointerCapture(e.pointerId)
-      state.dragging = true
-      const next = { x: state.startX + dx, y: state.startY + dy }
-      setDragPositions(prev => {
-        const updated = new Map(prev)
-        updated.set(state.id, next)
-        return updated
-      })
-      // No-op while live-simulation mode is off. While it's on, this is what lets a "sun" being
-      // dragged elastically carry its descendants along in real time rather than only jumping
-      // them once the drag ends — see useGalaxySimulation's own wake() docs.
-      wakeGalaxySimulation()
-    }, [viewport.zoom, wakeGalaxySimulation])
+    const handleNodePointerMove = useCallback(
+      (e: React.PointerEvent<SVGGElement>) => {
+        const state = dragStateRef.current;
+        if (!state || state.pointerId !== e.pointerId) return;
+        // DRAG_THRESHOLD is screen-space px (same bar handleCanvasPointerUp's background-click
+        // check uses) — compare the raw client delta, not the world-space one, or the effective
+        // screen threshold silently scales with zoom (a single px of tremor reads as a drag at a
+        // heavily zoomed-out fitView; tens of px of dead travel before a node budges at max zoom).
+        const screenDx = e.clientX - state.startClientX;
+        const screenDy = e.clientY - state.startClientY;
+        if (!state.dragging && Math.hypot(screenDx, screenDy) < DRAG_THRESHOLD)
+          return;
+        const dx = screenDx / viewport.zoom;
+        const dy = screenDy / viewport.zoom;
+        if (!state.dragging) e.currentTarget.setPointerCapture(e.pointerId);
+        state.dragging = true;
+        const next = { x: state.startX + dx, y: state.startY + dy };
+        setDragPositions((prev) => {
+          const updated = new Map(prev);
+          updated.set(state.id, next);
+          return updated;
+        });
+        // No-op while live-simulation mode is off. While it's on, this is what lets a "sun" being
+        // dragged elastically carry its descendants along in real time rather than only jumping
+        // them once the drag ends — see useGalaxySimulation's own wake() docs.
+        wakeGalaxySimulation();
+      },
+      [viewport.zoom, wakeGalaxySimulation],
+    );
 
-    const handleNodePointerUp = useCallback((e: React.PointerEvent<SVGGElement>) => {
-      const state = dragStateRef.current
-      if (!state || state.pointerId !== e.pointerId) return
-      finalizeDrag(e.type === 'pointerup')
-    }, [finalizeDrag])
+    const handleNodePointerUp = useCallback(
+      (e: React.PointerEvent<SVGGElement>) => {
+        const state = dragStateRef.current;
+        if (!state || state.pointerId !== e.pointerId) return;
+        finalizeDrag(e.type === "pointerup");
+      },
+      [finalizeDrag],
+    );
 
     // draggable can flip to false mid-gesture (this library's own docs demo exposes exactly this
     // toggle) — onPointerMove/Up/Cancel below are only bound while draggable is true, so React
@@ -1125,97 +1709,191 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // fires despite a real drag having happened. Finalizes exactly like a normal pointerup would,
     // just triggered by the prop change instead of the pointer event.
     useEffect(() => {
-      if (draggable) return
-      const state = dragStateRef.current
-      if (!state) return
+      if (draggable) return;
+      const state = dragStateRef.current;
+      if (!state) return;
       if (state.dragging) {
         try {
-          state.target.releasePointerCapture(state.pointerId)
+          state.target.releasePointerCapture(state.pointerId);
         } catch (err) {
           // The expected case — pointer capture was already released (e.g. by a real pointerup
           // racing this same-tick draggable-toggle-off) — throws a DOMException and is safe to
           // ignore. Anything else (a detached element, a browser-specific quirk) is unexpected
           // enough to be worth a signal rather than disappearing silently.
-          if (!(err instanceof DOMException)) console.warn('GraphCanvas: releasePointerCapture failed', err)
+          if (!(err instanceof DOMException))
+            console.warn("GraphCanvas: releasePointerCapture failed", err);
         }
       }
-      finalizeDrag(false)
-    }, [draggable, finalizeDrag])
+      finalizeDrag(false);
+    }, [draggable, finalizeDrag]);
 
     // Every visible node's rect, for edges to steer their label clear of (see
     // findClearLabelPosition). Recomputes on the same cadence as getNodeRect itself — layout and
     // measurement changes, not pan/zoom/hover — so this doesn't add extra churn beyond that.
     const nodeRects = useMemo(
-      () => visibleNodes.map(n => getNodeRect(n.id)).filter((r): r is NonNullable<typeof r> => r !== null),
-      [visibleNodes, getNodeRect]
-    )
+      () =>
+        visibleNodes
+          .map((n) => getNodeRect(n.id))
+          .filter((r): r is NonNullable<typeof r> => r !== null),
+      [visibleNodes, getNodeRect],
+    );
 
-    const hierarchyMetaFor = useCallback((id: string): GraphNodeHierarchyMeta => {
-      const hasChildren = (forest.childrenOf.get(id)?.length ?? 0) > 0
-      const collapsed = collapsedNodeIds?.has(id) ?? false
-      const hiddenDescendantCount = collapsed ? structuralDescendants(id, forest.childrenOf).size : 0
-      return {
-        hasChildren,
-        collapsed,
-        hiddenDescendantCount,
-        onToggleCollapse: onToggleCollapse ? () => onToggleCollapse(id) : undefined,
+    const hierarchyMetaFor = useCallback(
+      (id: string): GraphNodeHierarchyMeta => {
+        const hasChildren = (forest.childrenOf.get(id)?.length ?? 0) > 0;
+        const collapsed = collapsedNodeIds?.has(id) ?? false;
+        const hiddenDescendantCount = collapsed
+          ? structuralDescendants(id, forest.childrenOf).size
+          : 0;
+        return {
+          hasChildren,
+          collapsed,
+          hiddenDescendantCount,
+          onToggleCollapse: onToggleCollapse
+            ? () => onToggleCollapse(id)
+            : undefined,
+        };
+      },
+      [forest, collapsedNodeIds, onToggleCollapse],
+    );
+
+    const resolveNodeContent = useCallback(
+      (node: GraphNodeData, selected: boolean): React.ReactNode => {
+        const hierarchy = hierarchyMetaFor(node.id);
+        if (renderNode)
+          return safeRenderNodeCallback(renderNode, node, selected, hierarchy);
+        return (
+          <GraphNode
+            id={node.id}
+            label={node.label}
+            kind={node.kind}
+            domainColor={node.domainColor}
+            selected={selected}
+            onSelect={onNodeSelect}
+            hasChildren={hierarchy.hasChildren}
+            collapsed={hierarchy.collapsed}
+            hiddenDescendantCount={hierarchy.hiddenDescendantCount}
+            onToggleCollapse={hierarchy.onToggleCollapse}
+          />
+        );
+      },
+      [renderNode, onNodeSelect, hierarchyMetaFor],
+    );
+
+    // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
+    // edgeTooltip overlay below, resolved from current hover state. Screen position is derived
+    // from this at render time via the live viewport (see the overlay JSX), so it tracks pan/zoom
+    // exactly like the hovered node/edge itself does — no separate "reposition on pan" handling
+    // needed. Uses delayed hover states to apply the same 200ms anti-flicker delay as the
+    // standalone Tooltip component.
+    const tooltipTarget = useMemo(() => {
+      if (nodeTooltip && delayedHoveredNodeId) {
+        const node = visibleNodes.find((n) => n.id === delayedHoveredNodeId);
+        if (node) {
+          const pos = getNodePosition(node);
+          const d = dims.get(node.id) ?? {
+            width: DEFAULT_NODE_W,
+            height: DEFAULT_NODE_H,
+          };
+          try {
+            const content = nodeTooltip(node);
+            return { content, worldX: pos.x, worldY: pos.y - d.height / 2 };
+          } catch (error) {
+            console.error("Error in nodeTooltip callback:", error);
+            return null;
+          }
+        }
       }
-    }, [forest, collapsedNodeIds, onToggleCollapse])
-
-    const resolveNodeContent = useCallback((node: GraphNodeData, selected: boolean): React.ReactNode => {
-      const hierarchy = hierarchyMetaFor(node.id)
-      if (renderNode) return renderNode(node, selected, hierarchy)
-      return (
-        <GraphNode
-          id={node.id}
-          label={node.label}
-          kind={node.kind}
-          domainColor={node.domainColor}
-          selected={selected}
-          onSelect={onNodeSelect}
-          hasChildren={hierarchy.hasChildren}
-          collapsed={hierarchy.collapsed}
-          hiddenDescendantCount={hierarchy.hiddenDescendantCount}
-          onToggleCollapse={hierarchy.onToggleCollapse}
-        />
-      )
-    }, [renderNode, onNodeSelect, hierarchyMetaFor])
-
-    const contextValue = useMemo(() => ({
+      if (edgeTooltip && delayedHoveredEdgeId) {
+        const edge = edges.find((e) => e.id === delayedHoveredEdgeId);
+        const src = edge && getNodeRect(edge.sourceId);
+        const tgt = edge && getNodeRect(edge.targetId);
+        if (edge && src && tgt) {
+          const path = computeEdgePath(src, tgt, {
+            sourceAnchor: edge.sourceAnchor,
+            targetAnchor: edge.targetAnchor,
+            curvature: edge.curvature,
+          });
+          try {
+            const content = edgeTooltip(edge);
+            return { content, worldX: path.mid.x, worldY: path.mid.y };
+          } catch (error) {
+            console.error("Error in edgeTooltip callback:", error);
+            return null;
+          }
+        }
+      }
+      return null;
+    }, [
+      nodeTooltip,
+      edgeTooltip,
+      delayedHoveredNodeId,
+      delayedHoveredEdgeId,
+      visibleNodes,
+      dims,
+      getNodePosition,
+      edges,
       getNodeRect,
-      nodeRects,
-      zoom: viewport.zoom,
-      pan: { x: viewport.x, y: viewport.y },
-      selectedNodeId,
-      zoomToFit,
-      setZoom: zoomTo,
-      zoomBy,
-      setPan: panTo,
-      locked,
-      setLocked,
-      isFullscreen,
-      toggleFullscreen,
-      layout,
-      liveSimulation,
-      setLiveSimulation,
-    }), [getNodeRect, nodeRects, viewport, selectedNodeId, zoomToFit, zoomTo, zoomBy, panTo, locked, isFullscreen, toggleFullscreen, layout, liveSimulation])
+    ]);
+
+    const contextValue = useMemo(
+      () => ({
+        getNodeRect,
+        nodeRects,
+        zoom: viewport.zoom,
+        pan: { x: viewport.x, y: viewport.y },
+        selectedNodeId,
+        zoomToFit,
+        setZoom: zoomTo,
+        zoomBy,
+        setPan: panTo,
+        locked,
+        setLocked,
+        isFullscreen,
+        toggleFullscreen,
+        layout,
+        liveSimulation,
+        setLiveSimulation,
+        hoveredNodeId,
+        hoveredEdgeId,
+      }),
+      [
+        getNodeRect,
+        nodeRects,
+        viewport,
+        selectedNodeId,
+        zoomToFit,
+        zoomTo,
+        zoomBy,
+        panTo,
+        locked,
+        isFullscreen,
+        toggleFullscreen,
+        layout,
+        liveSimulation,
+        hoveredNodeId,
+        hoveredEdgeId,
+      ],
+    );
 
     const handleRef = (el: HTMLDivElement | null) => {
-      if (typeof ref === 'function') ref(el)
-      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = el
-      ;(containerRef as React.MutableRefObject<HTMLDivElement | null>).current = el
-    }
+      if (typeof ref === "function") ref(el);
+      else if (ref)
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = el;
+      (containerRef as React.MutableRefObject<HTMLDivElement | null>).current =
+        el;
+    };
 
     // Grid dots track pan/zoom via the SVG pattern transform
-    const tileSize = 18 * viewport.zoom
-    const patternX = ((viewport.x % tileSize) + tileSize) % tileSize
-    const patternY = ((viewport.y % tileSize) + tileSize) % tileSize
+    const tileSize = 18 * viewport.zoom;
+    const patternX = ((viewport.x % tileSize) + tileSize) % tileSize;
+    const patternY = ((viewport.y % tileSize) + tileSize) % tileSize;
 
     return (
       <div
         ref={handleRef}
         aria-label="Graph canvas"
-        className={['graph-canvas', className].filter(Boolean).join(' ')}
+        className={["graph-canvas", className].filter(Boolean).join(" ")}
         onPointerDown={handlePointerDown}
         onPointerUp={handleCanvasPointerUp}
         onKeyDown={bind.onKeyDown}
@@ -1228,11 +1906,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             custom renderNode (e.g. one embedding viewport controls) can tell this measurement
             pass apart from the real one and opt out of rendering anything for it. */}
         <div className="graph-measure" aria-hidden="true">
-          {visibleNodes.map(node => (
+          {visibleNodes.map((node) => (
             <div
               key={node.id}
-              ref={el => { measureRefs.current[node.id] = el }}
-              style={{ display: 'inline-block' }}
+              ref={(el) => {
+                measureRefs.current[node.id] = el;
+              }}
+              style={{ display: "inline-block" }}
             >
               {resolveNodeContent(node, false)}
             </div>
@@ -1244,7 +1924,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             className="graph-svg"
             width="100%"
             height="100%"
-            style={{ position: 'absolute', inset: 0, overflow: 'visible' }}
+            style={{ position: "absolute", inset: 0, overflow: "visible" }}
           >
             <defs>
               <pattern
@@ -1265,7 +1945,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             </defs>
 
             {/* Grid fills the full SVG surface */}
-            <rect width="100%" height="100%" fill={`url(#${gridPatternId})`} className="graph-grid" />
+            <rect
+              width="100%"
+              height="100%"
+              fill={`url(#${gridPatternId})`}
+              className="graph-grid"
+            />
 
             {/* Single viewport transform — edges and nodes share this coordinate space */}
             <g
@@ -1276,24 +1961,34 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               {showClusterBoundaries && clusterBoundaries.size > 0 && (
                 <g className="graph-clusters" aria-hidden="true">
                   {[...clusterBoundaries.entries()].map(([id, c]) => (
-                    <circle key={id} className="graph-cluster-boundary" cx={c.x} cy={c.y} r={c.r} />
+                    <circle
+                      key={id}
+                      className="graph-cluster-boundary"
+                      cx={c.x}
+                      cy={c.y}
+                      r={c.r}
+                    />
                   ))}
                 </g>
               )}
 
               <g className="graph-edges">
-                {edges?.map(edge => {
+                {edges?.map((edge) => {
                   // Only isStructuralEdge callers opt into hiding — without it every edge
                   // is treated as structural, so this never changes existing behavior.
-                  const structural = isStructuralEdge ? isStructuralEdge(edge) : true
+                  const structural = safeIsStructuralEdge(isStructuralEdge, edge);
                   const touchesFocus =
-                    edge.sourceId === hoveredNodeId || edge.targetId === hoveredNodeId ||
-                    edge.sourceId === selectedNodeId || edge.targetId === selectedNodeId ||
-                    edge.id === selectedEdgeId
-                  const hidden = !structural && !showAllRelations && !touchesFocus
+                    edge.sourceId === hoveredNodeId ||
+                    edge.targetId === hoveredNodeId ||
+                    edge.id === hoveredEdgeId ||
+                    edge.sourceId === selectedNodeId ||
+                    edge.targetId === selectedNodeId ||
+                    edge.id === selectedEdgeId;
+                  const hidden =
+                    !structural && !showAllRelations && !touchesFocus;
                   // Not rendered at all rather than dimmed to a low opacity — line, marker, and
                   // label alike disappear, and it isn't clickable while hidden either.
-                  if (hidden) return null
+                  if (hidden) return null;
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -1309,17 +2004,24 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       targetAnchor={edge.targetAnchor}
                       curvature={edge.curvature}
                       selected={edge.id === selectedEdgeId}
+                      hovered={edge.id === hoveredEdgeId}
                       onSelect={onEdgeSelect}
+                      onHoverStart={handleEdgeHoverStart}
+                      onHoverEnd={handleEdgeHoverEndWithDelay}
+                      renderEdge={renderEdge}
                     />
-                  )
+                  );
                 })}
               </g>
 
               <g className="graph-nodes">
-                {visibleNodes.map(node => {
-                  const pos = getNodePosition(node)
-                  const d = dims.get(node.id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H }
-                  const selected = node.id === selectedNodeId
+                {visibleNodes.map((node) => {
+                  const pos = getNodePosition(node);
+                  const d = dims.get(node.id) ?? {
+                    width: DEFAULT_NODE_W,
+                    height: DEFAULT_NODE_H,
+                  };
+                  const selected = node.id === selectedNodeId;
                   return (
                     <g
                       key={node.id}
@@ -1327,13 +2029,27 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       data-node-id={node.id}
                       data-testid={`graph-node-${node.id}`}
                       data-domain={node.domainColor}
-                      className={['graph-canvas-node', draggable && 'draggable', selected && 'selected'].filter(Boolean).join(' ')}
-                      onPointerEnter={() => setHoveredNodeId(node.id)}
-                      onPointerLeave={() => setHoveredNodeId(current => (current === node.id ? undefined : current))}
-                      onPointerDown={draggable ? (e) => handleNodePointerDown(e, node) : undefined}
-                      onPointerMove={draggable ? handleNodePointerMove : undefined}
+                      className={[
+                        "graph-canvas-node",
+                        draggable && "draggable",
+                        selected && "selected",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      onPointerEnter={() => handleNodeHoverStart(node.id)}
+                      onPointerLeave={() => handleNodeHoverEndWithDelay(node.id)}
+                      onPointerDown={
+                        draggable
+                          ? (e) => handleNodePointerDown(e, node)
+                          : undefined
+                      }
+                      onPointerMove={
+                        draggable ? handleNodePointerMove : undefined
+                      }
                       onPointerUp={draggable ? handleNodePointerUp : undefined}
-                      onPointerCancel={draggable ? handleNodePointerUp : undefined}
+                      onPointerCancel={
+                        draggable ? handleNodePointerUp : undefined
+                      }
                     >
                       <foreignObject
                         x={-d.width / 2}
@@ -1345,19 +2061,35 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                         {resolveNodeContent(node, selected)}
                       </foreignObject>
                     </g>
-                  )
+                  );
                 })}
               </g>
             </g>
           </svg>
 
           {showToolbar && <GraphToolbar position={toolbarPosition} />}
+
+          {tooltipTarget && (
+            <div className="graph-tooltip-layer" aria-hidden="true">
+              <div
+                className="graph-tooltip-anchor"
+                style={{
+                  left: tooltipTarget.worldX * viewport.zoom + viewport.x,
+                  top: tooltipTarget.worldY * viewport.zoom + viewport.y,
+                }}
+              >
+                <Tooltip open content={tooltipTarget.content} placement="top">
+                  <span />
+                </Tooltip>
+              </div>
+            </div>
+          )}
         </GraphCanvasContext.Provider>
       </div>
-    )
-  }
-)
+    );
+  },
+);
 
-GraphCanvas.displayName = 'GraphCanvas'
+GraphCanvas.displayName = "GraphCanvas";
 
-export default GraphCanvas
+export default GraphCanvas;

@@ -58,6 +58,7 @@ export {
   type FilterDropdownRadioProps,
 } from './components/FilterDropdown'
 export { Toast, type ToastProps, type ToastVariant } from './components/Toast'
+export { Tooltip, type TooltipProps, type TooltipPlacement } from './components/Tooltip'
 export { CommandPalette, type Command, type CommandPaletteProps } from './components/CommandPalette'
 export { Panel, type PanelProps } from './components/Panel'
 export { Drawer, type DrawerProps } from './components/Drawer'
@@ -133,10 +134,12 @@ export {
   type GraphCanvasProps,
   type BaseGraphNodeComponentProps,
   type GraphNodeHierarchyMeta,
+  type EdgeGeometry,
 } from './components/GraphCanvas'
 export { type GraphCanvasContextValue, type GraphNodeRect } from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
+export { GraphEdgeShape, type GraphEdgeShapeProps } from './components/GraphEdgeShape'
 export { GraphToolbar, type GraphToolbarProps, type GraphToolbarPosition } from './components/GraphToolbar'
 export { DetailDrawer, type DetailDrawerProps } from './components/DetailDrawer'
 export {
