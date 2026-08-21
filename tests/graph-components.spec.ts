@@ -1435,32 +1435,22 @@ test.describe('integration: Graph Canvas Components', () => {
       await page.locator('[data-testid="galaxy-view-button"]').click()
       await page.waitForTimeout(200)
 
-      // Set up tracking for onNodeHover callbacks
-      const callbackLog: (string | undefined)[] = []
-      await page.exposeFunction('trackHover', (id: string | undefined) => {
-        callbackLog.push(id)
-      })
-
-      // Inject hook to track onNodeHover calls
-      await page.evaluate(() => {
-        const originalLog = console.log
-        ;(window as any).callbackLog = []
-        ;(window as any).trackNodeHover = (id: string | undefined) => {
-          ;(window as any).callbackLog.push(id)
-        }
-      })
-
-      // Hover over organism node
-      await page.locator('[data-testid="graph-node-organism"]').dispatchEvent('pointerover')
+      // Hover over a child node (eukaryote) — not the parent (organism)
+      await page.locator('[data-testid="graph-node-eukaryote"]').dispatchEvent('pointerover')
       await page.waitForTimeout(100)
 
-      // Collapse the organism node
-      const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
-      await toggle.click()
+      // Verify the indicator shows the hovered node
+      const indicator = page.locator('[data-testid="graph-hover-indicator"]')
+      await expect(indicator).toContainText('Hovering node: eukaryote')
+
+      // Collapse the parent node (organism), which hides eukaryote
+      const toggleButton = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+      await toggleButton.click()
       await page.waitForTimeout(100)
 
-      // Verify that the node is no longer visible after collapse
-      await expect(page.locator('[data-testid="graph-node-eukaryote"]')).not.toBeAttached()
+      // After collapse, eukaryote is no longer visible, so the cleanup effect fires
+      // and onNodeHover(undefined) is called, causing the indicator to disappear
+      await expect(indicator).not.toBeAttached()
     })
 
     test('onEdgeHover fires with undefined when a hovered edge is removed', async ({ page }) => {
@@ -1471,20 +1461,18 @@ test.describe('integration: Graph Canvas Components', () => {
       await firstEdge.dispatchEvent('pointerover')
       await page.waitForTimeout(100)
 
-      // Verify edge is hovered (has the hovered state)
-      const hovered = await firstEdge.evaluate(el => {
-        const parentG = el.closest('g[data-testid^="graph-edge-"]')
-        return parentG?.querySelector('path.graph-edge__line') !== null
-      })
-      expect(hovered).toBe(true)
+      // Verify the indicator shows the hovered edge (confirms callback fired)
+      const indicator = page.locator('[data-testid="graph-hover-indicator"]')
+      await expect(indicator).toContainText('Hovering edge: edge_1')
 
       // Simulate edge removal by navigating to a different view
       // This verifies the internal cleanup when edges change
       await page.locator('[data-testid="clustered-view-button"]').click()
       await page.waitForTimeout(200)
 
-      // The edge should no longer exist after view change
-      await expect(firstEdge).not.toBeAttached()
+      // After the view change, the edge is removed and onEdgeHover(undefined) is called,
+      // so the indicator disappears
+      await expect(indicator).not.toBeAttached()
     })
   })
 

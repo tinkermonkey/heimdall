@@ -489,53 +489,93 @@ export default function GraphShowcase() {
   )
 
   const galaxyCanvas = (
-    <GraphCanvas
-      // Keyed on galaxyCardSize (not just a static "galaxy-canvas") deliberately: GraphCanvas
-      // only ever auto-fits pan/zoom once, on mount — by design, so it never fights a user's own
-      // pan/zoom on a later prop change (nodeMargin, showAllRelations, etc. all leave the
-      // viewport alone too). Compact and Cards renderNode content differ hugely in rendered size,
-      // so without a remount here, toggling this button would recompute layout POSITIONS for the
-      // new (much bigger) Cards-mode cards while leaving pan/zoom fit for the old, much smaller
-      // Compact-mode ones — the content overflows the container well past the visible area,
-      // dragging some nodes' controls out from under the canvas entirely and under this page's
-      // own button row above it. Remounting re-runs the one-time auto-fit against the new sizes,
-      // same as a real consumer swapping renderNode would need to trigger a fresh fit itself.
-      key={`galaxy-canvas-${galaxyCardSize}`}
-      data-testid="galaxy-canvas"
-      nodes={GALAXY_DEMO_NODES}
-      edges={GALAXY_DEMO_EDGES}
-      layout="galaxy"
-      isStructuralEdge={isGalaxyDemoEdgeStructural}
-      showAllRelations={showAllRelations}
-      collapsedNodeIds={collapsedNodeIds}
-      onToggleCollapse={handleToggleCollapse}
-      fitView
-      fitPadding={40}
-      selectedNodeId={selectedNodeId}
-      onNodeSelect={handleNodeSelect}
-      onBackgroundClick={handleBackgroundClick}
-      // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
-      // up domainColor/kind styling and the collapse toggle from hierarchy meta.
-      renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
-      style={{ height: '100%' }}
-    />
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {(hoveredNodeId || hoveredEdgeId) && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-hover-indicator"
+        >
+          {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
+        </div>
+      )}
+      <GraphCanvas
+        // Keyed on galaxyCardSize (not just a static "galaxy-canvas") deliberately: GraphCanvas
+        // only ever auto-fits pan/zoom once, on mount — by design, so it never fights a user's own
+        // pan/zoom on a later prop change (nodeMargin, showAllRelations, etc. all leave the
+        // viewport alone too). Compact and Cards renderNode content differ hugely in rendered size,
+        // so without a remount here, toggling this button would recompute layout POSITIONS for the
+        // new (much bigger) Cards-mode cards while leaving pan/zoom fit for the old, much smaller
+        // Compact-mode ones — the content overflows the container well past the visible area,
+        // dragging some nodes' controls out from under the canvas entirely and under this page's
+        // own button row above it. Remounting re-runs the one-time auto-fit against the new sizes,
+        // same as a real consumer swapping renderNode would need to trigger a fresh fit itself.
+        key={`galaxy-canvas-${galaxyCardSize}`}
+        data-testid="galaxy-canvas"
+        nodes={GALAXY_DEMO_NODES}
+        edges={GALAXY_DEMO_EDGES}
+        layout="galaxy"
+        isStructuralEdge={isGalaxyDemoEdgeStructural}
+        showAllRelations={showAllRelations}
+        collapsedNodeIds={collapsedNodeIds}
+        onToggleCollapse={handleToggleCollapse}
+        fitView
+        fitPadding={40}
+        selectedNodeId={selectedNodeId}
+        onNodeSelect={handleNodeSelect}
+        onNodeHover={setHoveredNodeId}
+        selectedEdgeId={selectedEdgeId}
+        onEdgeSelect={handleEdgeSelect}
+        onEdgeHover={setHoveredEdgeId}
+        onBackgroundClick={handleBackgroundClick}
+        // Omitted entirely in 'compact' mode: GraphCanvas's own default GraphNode already wires
+        // up domainColor/kind styling and the collapse toggle from hierarchy meta.
+        renderNode={galaxyCardSize === 'cards' ? renderGalaxyCardNode : undefined}
+        style={{ height: '100%' }}
+      />
+    </div>
   )
 
   const clusteredCanvas = (
-    <GraphCanvas
-      key="clustered-canvas"
-      data-testid="clustered-canvas"
-      layout="force-clustered"
-      nodes={CLUSTERED_NODES}
-      edges={CLUSTERED_EDGES}
-      fitView
-      fitPadding={40}
-      selectedNodeId={selectedNodeId}
-      onNodeSelect={handleNodeSelect}
-      onBackgroundClick={handleBackgroundClick}
-      renderNode={renderFitViewNode}
-      style={{ height: '100%' }}
-    />
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {(hoveredNodeId || hoveredEdgeId) && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-hover-indicator"
+        >
+          {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
+        </div>
+      )}
+      <GraphCanvas
+        key="clustered-canvas"
+        data-testid="clustered-canvas"
+        layout="force-clustered"
+        nodes={CLUSTERED_NODES}
+        edges={CLUSTERED_EDGES}
+        fitView
+        fitPadding={40}
+        selectedNodeId={selectedNodeId}
+        onNodeSelect={handleNodeSelect}
+        onNodeHover={setHoveredNodeId}
+        selectedEdgeId={selectedEdgeId}
+        onEdgeSelect={handleEdgeSelect}
+        onEdgeHover={setHoveredEdgeId}
+        onBackgroundClick={handleBackgroundClick}
+        renderNode={renderFitViewNode}
+        style={{ height: '100%' }}
+      />
+    </div>
   )
 
   const fitViewCanvas = (
