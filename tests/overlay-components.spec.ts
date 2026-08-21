@@ -668,8 +668,8 @@ test.describe('integration: Overlay Components', () => {
     })
 
     test('should support interactive content without closing', async ({ page }) => {
-      // Open popover with interactive content (last one - "With Link")
-      const trigger = page.locator('[aria-haspopup="dialog"]').last()
+      // Open popover with interactive content ("With Link" - 5th popover)
+      const trigger = page.locator('[aria-haspopup="dialog"]').nth(4)
       await trigger.click()
 
       const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
