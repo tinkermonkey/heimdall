@@ -1987,9 +1987,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodeRect,
     ]);
 
-    // Clear active popover state if the content callback threw an error and popoverTarget is null.
-    // This prevents a dead state where the active ID is set but no popover renders and the
-    // tooltip is suppressed. Resets the state so the user can click the node again.
+    // Prevents dead state when popoverTarget callback throws — resets so the node is clickable again.
     useEffect(() => {
       if (popoverTarget === null && (activePopoverNodeId || activePopoverEdgeId)) {
         setActivePopoverNodeId(undefined);

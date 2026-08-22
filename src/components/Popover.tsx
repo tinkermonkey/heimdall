@@ -133,10 +133,7 @@ const PopoverComponent = React.forwardRef<
         if (e.key === 'Escape') {
           e.preventDefault()
           handleOpenChange(false)
-          // Restore focus to trigger, but only if it's a meaningful interactive element.
-          // Skip zero-size elements (like invisible anchors used by GraphCanvas) where the
-          // parent handles focus restoration to a different target. Defer to allow parent's
-          // onOpenChange to complete first.
+          // Skip zero-size triggers — the parent handles its own focus restoration.
           requestAnimationFrame(() => {
             const trigger = triggerRef.current
             if (trigger && trigger.offsetWidth > 0 && trigger.offsetHeight > 0) {
