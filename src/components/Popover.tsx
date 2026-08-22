@@ -13,11 +13,7 @@ import './Popover.css'
 
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right'
 
-export interface PopoverProps {
-  /** Controlled open state. Omit for uncontrolled (internal state). */
-  open?: boolean
-  /** Called when open state changes — required for controlled mode. */
-  onOpenChange?: (open: boolean) => void
+interface PopoverBaseProps {
   /** Panel placement relative to trigger. Default: 'bottom'. */
   placement?: PopoverPlacement
   /** Gap between trigger and panel in px. Default: 8. */
@@ -28,6 +24,22 @@ export interface PopoverProps {
   panelId?: string
   children: React.ReactNode
 }
+
+interface UncontrolledPopoverProps extends PopoverBaseProps {
+  /** Omit to use uncontrolled (internal state). */
+  open?: never
+  /** Omit for uncontrolled mode. */
+  onOpenChange?: never
+}
+
+interface ControlledPopoverProps extends PopoverBaseProps {
+  /** Controlled open state — must be paired with onOpenChange. */
+  open: boolean
+  /** Called when open state changes — required when open is provided. */
+  onOpenChange: (open: boolean) => void
+}
+
+export type PopoverProps = UncontrolledPopoverProps | ControlledPopoverProps
 
 export interface PopoverTriggerProps {
   children: React.ReactElement
@@ -92,6 +104,17 @@ const PopoverComponent = React.forwardRef<
     const wrapperRef = useRef<HTMLDivElement>(null)
 
     useFocusTrap(panelRef, isOpen, { mode: 'popup' })
+
+    // Validate controlled mode: if open is provided, onOpenChange must also be provided
+    useEffect(() => {
+      if (isControlled && !onOpenChange) {
+        console.warn(
+          '[Popover] Controlled mode detected (open prop provided) but onOpenChange handler is missing. ' +
+          'The popover will not respond to user interactions and will remain stuck in its current state. ' +
+          'Either: (1) provide onOpenChange callback, or (2) remove open prop to use uncontrolled mode.'
+        )
+      }
+    }, [isControlled, onOpenChange])
 
     // Reset placement when closed or placement prop changes
     useEffect(() => {
