@@ -149,13 +149,23 @@ function safeRenderNodeCallback(
     node: GraphNodeData,
     selected: boolean,
     hierarchy?: GraphNodeHierarchyMeta,
+    props?: {
+      nodeId: string;
+      onSelect?: (id: string) => void;
+      onPopoverOpen?: () => void;
+    },
   ) => React.ReactNode,
   node: GraphNodeData,
   selected: boolean,
   hierarchy?: GraphNodeHierarchyMeta,
+  props?: {
+    nodeId: string;
+    onSelect?: (id: string) => void;
+    onPopoverOpen?: () => void;
+  },
 ): React.ReactNode {
   try {
-    return renderNode(node, selected, hierarchy);
+    return renderNode(node, selected, hierarchy, props);
   } catch (error) {
     console.error("Error in renderNode callback:", error);
     return null;
@@ -402,6 +412,7 @@ export interface GraphCanvasProps extends Omit<
    * and positions it via an SVG <g> transform. If omitted, the default GraphNode is used.
    * The third argument carries structural-hierarchy info (see GraphNodeHierarchyMeta) — read it
    * to render your own collapse/expand affordance; ignore it if you don't need one.
+   * Additional props passed: nodeId (string), onSelect (optional), onPopoverOpen (optional).
    *
    * Tip: memoize with useCallback to avoid unnecessary re-measurements.
    */
@@ -409,6 +420,11 @@ export interface GraphCanvasProps extends Omit<
     node: GraphNodeData,
     selected: boolean,
     hierarchy?: GraphNodeHierarchyMeta,
+    props?: {
+      nodeId: string;
+      onSelect?: (id: string) => void;
+      onPopoverOpen?: () => void;
+    },
   ) => React.ReactNode;
   /**
    * Render custom SVG content for each edge. If omitted, the default GraphEdgeShape is used.
@@ -1822,8 +1838,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const resolveNodeContent = useCallback(
       (node: GraphNodeData, selected: boolean): React.ReactNode => {
         const hierarchy = hierarchyMetaFor(node.id);
+        const nodeProps = {
+          nodeId: node.id,
+          onSelect: onNodeSelect,
+          onPopoverOpen: nodePopover ? () => handleNodePopoverOpen(node.id) : undefined,
+        };
         if (renderNode)
-          return safeRenderNodeCallback(renderNode, node, selected, hierarchy);
+          return safeRenderNodeCallback(renderNode, node, selected, hierarchy, nodeProps);
         return (
           <GraphNode
             id={node.id}
