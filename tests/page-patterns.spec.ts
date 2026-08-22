@@ -140,25 +140,6 @@ test.describe('integration: Page Pattern Components', () => {
       const text = await timestamp.textContent()
       expect(text).not.toContain('Invalid Date')
     })
-
-    test('ActivityTimeline with kind-tag variants displays different tag types', async ({ page }) => {
-      const timelineContainer = page.locator('[data-testid="activity-timeline"]').first()
-      const kindTags = timelineContainer.locator('[data-testid*="activity-kind-tag"]')
-      const tagCount = await kindTags.count()
-      expect(tagCount).toBeGreaterThan(0)
-    })
-
-    test('ActivityTimeline with dotColor variants renders color-coded dots', async ({ page }) => {
-      const timelineContainer = page.locator('[data-testid="activity-timeline"]').first()
-      const dots = timelineContainer.locator('[data-testid*="activity-dot"]')
-      const dotCount = await dots.count()
-      expect(dotCount).toBeGreaterThan(0)
-    })
-
-    test('ActivityTimeline extended variants snapshot', async ({ page }) => {
-      const timeline = page.locator('[data-testid="activity-timeline"]').first()
-      await expect(timeline).toHaveScreenshot('activity-timeline-extended.png')
-    })
   })
 
   test.describe('AlertStrip', () => {

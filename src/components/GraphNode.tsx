@@ -15,6 +15,10 @@ export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.
   hiddenDescendantCount?: number
   /** Activates the collapse/expand toggle. Omit to render hasChildren without an interactive toggle. */
   onToggleCollapse?: () => void
+  /** Whether the node's popover is currently open. */
+  popoverOpen?: boolean
+  /** ID of the popover panel for aria-controls. */
+  popoverPanelId?: string
 }
 
 export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
@@ -30,6 +34,9 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       collapsed = false,
       hiddenDescendantCount = 0,
       onToggleCollapse,
+      onPopoverOpen,
+      popoverOpen = false,
+      popoverPanelId,
       className = '',
       style: _style,
       ...props
@@ -46,18 +53,21 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         className={classNames}
         data-domain={domainColor}
         data-kind={kind}
-        onClick={(e) => { e.stopPropagation(); onSelect?.(id) }}
+        onClick={(e) => { e.stopPropagation(); onSelect?.(id); onPopoverOpen?.(e.currentTarget as HTMLElement) }}
         onKeyDown={(e) => {
           // A keydown from the collapse toggle button below bubbles up here too — bail out before
           // hijacking Enter/Space, or the toggle's own native button activation never fires
           // (preventDefault suppresses it) and the whole progressive-disclosure affordance becomes
           // keyboard-inoperable, selecting the node instead of collapsing/expanding it.
           if (e.target !== e.currentTarget) return
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onSelect?.(id) }
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onSelect?.(id); onPopoverOpen?.(e.currentTarget as HTMLElement) }
         }}
-        role={onSelect ? 'button' : undefined}
-        tabIndex={onSelect ? 0 : undefined}
+        role={onSelect || onPopoverOpen ? 'button' : undefined}
+        tabIndex={onSelect || onPopoverOpen ? 0 : undefined}
         aria-pressed={onSelect ? selected : undefined}
+        aria-haspopup={onPopoverOpen ? 'dialog' : undefined}
+        {...(onPopoverOpen && { 'aria-expanded': popoverOpen })}
+        {...(onPopoverOpen && popoverPanelId && { 'aria-controls': popoverPanelId })}
         {...props}
       >
         <span className="graph-node__swatch" />

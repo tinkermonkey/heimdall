@@ -4,6 +4,7 @@ import { Modal } from '../components/Modal'
 import { ConfirmDialog } from '../components/ConfirmDialog'
 import { Toast } from '../components/Toast'
 import { Tooltip } from '../components/Tooltip'
+import { Popover } from '../components/Popover'
 import { WorkspaceSwitcherDialog, type Workspace } from '../components/WorkspaceSwitcherDialog'
 
 export default function OverlayComponentsTestPage() {
@@ -12,6 +13,7 @@ export default function OverlayComponentsTestPage() {
   const [toastOpen, setToastOpen] = useState(false)
   const [toastVariant, setToastVariant] = useState<'success' | 'error' | 'warning' | 'info'>('info')
   const [workspaceSwitcherOpen, setWorkspaceSwitcherOpen] = useState(false)
+  const [controlledPopoverOpen, setControlledPopoverOpen] = useState(false)
 
   const recentWorkspaces: Workspace[] = [
     { id: '1', name: 'molgraph-research', path: '/users/dev/molgraph-research', classCount: 20, individualCount: 267 },
@@ -167,6 +169,116 @@ export default function OverlayComponentsTestPage() {
           <Tooltip content="Shows almost instantly" delay={0}>
             <Button variant="secondary">No delay</Button>
           </Tooltip>
+        </div>
+      </section>
+
+      <section style={{ marginBottom: '32px' }}>
+        <div
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: 'rgb(var(--canvas-fg-3))',
+            marginBottom: '14px',
+          }}
+        >
+          Popover Component
+        </div>
+        <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap', padding: '40px 0' }}>
+          <Popover placement="top">
+            <Popover.Trigger>
+              <Button variant="secondary">Top</Button>
+            </Popover.Trigger>
+            <Popover.Panel aria-label="Popover example">
+              <div style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px', fontWeight: 500 }}>Popover content</div>
+                <p style={{ marginBottom: '12px', fontSize: '13px', color: 'rgb(var(--shell-fg-2))' }}>
+                  This appears above the trigger.
+                </p>
+                <Button size="sm" variant="primary">Action</Button>
+              </div>
+            </Popover.Panel>
+          </Popover>
+
+          <Popover placement="bottom">
+            <Popover.Trigger>
+              <Button variant="secondary">Bottom</Button>
+            </Popover.Trigger>
+            <Popover.Panel aria-label="Popover example">
+              <div style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px', fontWeight: 500 }}>Popover content</div>
+                <p style={{ marginBottom: '12px', fontSize: '13px', color: 'rgb(var(--shell-fg-2))' }}>
+                  This appears below the trigger.
+                </p>
+                <Button size="sm" variant="primary">Action</Button>
+              </div>
+            </Popover.Panel>
+          </Popover>
+
+          <Popover placement="left">
+            <Popover.Trigger>
+              <Button variant="secondary">Left</Button>
+            </Popover.Trigger>
+            <Popover.Panel aria-label="Popover example">
+              <div style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px', fontWeight: 500 }}>Popover content</div>
+                <p style={{ marginBottom: '12px', fontSize: '13px', color: 'rgb(var(--shell-fg-2))' }}>
+                  This appears left of the trigger.
+                </p>
+                <Button size="sm" variant="primary">Action</Button>
+              </div>
+            </Popover.Panel>
+          </Popover>
+
+          <Popover placement="right">
+            <Popover.Trigger>
+              <Button variant="secondary">Right</Button>
+            </Popover.Trigger>
+            <Popover.Panel aria-label="Popover example">
+              <div style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px', fontWeight: 500 }}>Popover content</div>
+                <p style={{ marginBottom: '12px', fontSize: '13px', color: 'rgb(var(--shell-fg-2))' }}>
+                  This appears right of the trigger.
+                </p>
+                <Button size="sm" variant="primary">Action</Button>
+              </div>
+            </Popover.Panel>
+          </Popover>
+
+          <Popover placement="bottom">
+            <Popover.Trigger>
+              <Button variant="secondary">With Link</Button>
+            </Popover.Trigger>
+            <Popover.Panel aria-label="Popover with interactive content">
+              <div style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px', fontWeight: 500 }}>Interactive content</div>
+                <p style={{ marginBottom: '12px', fontSize: '13px', color: 'rgb(var(--shell-fg-2))' }}>
+                  You can interact with buttons and links without closing this popover.
+                </p>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <Button size="sm" variant="primary">Primary</Button>
+                  <Button size="sm" variant="ghost">Ghost</Button>
+                  <a href="#" style={{ fontSize: '13px', color: 'rgb(var(--accent-primary))' }}>Link</a>
+                </div>
+              </div>
+            </Popover.Panel>
+          </Popover>
+
+          <Popover placement="bottom" open={controlledPopoverOpen} onOpenChange={setControlledPopoverOpen}>
+            <Popover.Trigger>
+              <Button variant="secondary">Controlled</Button>
+            </Popover.Trigger>
+            <Popover.Panel aria-label="Controlled popover example">
+              <div style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px', fontWeight: 500 }}>Controlled popover</div>
+                <p style={{ marginBottom: '12px', fontSize: '13px', color: 'rgb(var(--shell-fg-2))' }}>
+                  This popover state is controlled by external state.
+                </p>
+                <Button size="sm" variant="primary" onClick={() => setControlledPopoverOpen(false)}>Close</Button>
+              </div>
+            </Popover.Panel>
+          </Popover>
         </div>
       </section>
 

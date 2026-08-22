@@ -59,6 +59,13 @@ export {
 } from './components/FilterDropdown'
 export { Toast, type ToastProps, type ToastVariant } from './components/Toast'
 export { Tooltip, type TooltipProps, type TooltipPlacement } from './components/Tooltip'
+export {
+  Popover,
+  type PopoverProps,
+  type PopoverTriggerProps,
+  type PopoverPanelProps,
+  type PopoverPlacement,
+} from './components/Popover'
 export { CommandPalette, type Command, type CommandPaletteProps } from './components/CommandPalette'
 export { Panel, type PanelProps } from './components/Panel'
 export { Drawer, type DrawerProps } from './components/Drawer'

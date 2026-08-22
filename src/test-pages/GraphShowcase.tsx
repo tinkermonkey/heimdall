@@ -217,6 +217,7 @@ export default function GraphShowcase() {
   const [draggable, setDraggable] = useState(true)
   const [drawerWidth, setDrawerWidth] = useState(360)
   const [galaxyNodePositions, setGalaxyNodePositions] = useState<Record<string, { x: number; y: number }>>({})
+  const [lastPopoverAction, setLastPopoverAction] = useState<string | undefined>()
 
   const galaxyNodes = useMemo(() =>
     GALAXY_DEMO_NODES.map(node => {
@@ -308,16 +309,22 @@ export default function GraphShowcase() {
       }
     : undefined
 
-  const renderGraphNode = useCallback((node: GraphNodeData, selected: boolean) => (
+  const renderGraphNode = useCallback((
+    node: GraphNodeData,
+    selected: boolean,
+    _hierarchy?: GraphNodeHierarchyMeta,
+    props?: { nodeId: string; onSelect?: (id: string) => void; onPopoverOpen?: (triggeringElement: HTMLElement) => void }
+  ) => (
     <GraphNode
       id={node.id}
       label={node.label}
       kind={node.kind}
       domainColor={node.domainColor}
       selected={selected}
-      onSelect={handleNodeSelect}
+      onSelect={props?.onSelect}
+      onPopoverOpen={props?.onPopoverOpen}
     />
-  ), [handleNodeSelect])
+  ), [])
 
   const renderFitViewNode = useCallback((node: GraphNodeData, selected: boolean) => {
     if (node.id === 'fv_controls') return <FitViewControls />
@@ -451,6 +458,20 @@ export default function GraphShowcase() {
           {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
         </div>
       )}
+      {lastPopoverAction && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-popover-action-indicator"
+        >
+          Popover action: {lastPopoverAction}
+        </div>
+      )}
       <GraphCanvas
         key="graph-canvas"
         nodes={GRAPH_NODES}
@@ -486,6 +507,82 @@ export default function GraphShowcase() {
                 Weight: {edge.weight}
               </div>
             )}
+          </div>
+        )}
+        nodePopover={(node) => (
+          <div style={{ maxWidth: '240px', padding: '12px' }} data-testid={`node-popover-${node.id}`}>
+            <div style={{ fontWeight: 600, marginBottom: '8px' }}>{(node as NodeData).title || node.label}</div>
+            {(node as NodeData).description && (
+              <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '12px' }}>
+                {(node as NodeData).description}
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <button
+                type="button"
+                data-testid={`node-popover-action-${node.id}`}
+                onClick={() => setLastPopoverAction(`node-${node.id}-clicked`)}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  background: 'var(--accent-primary, #fbbf24)',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                }}
+              >
+                View Details
+              </button>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setLastPopoverAction(`node-${node.id}-link-clicked`)
+                }}
+                data-testid={`node-popover-link-${node.id}`}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  color: 'var(--accent-primary-deep, #b45309)',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                More Info
+              </a>
+            </div>
+          </div>
+        )}
+        edgePopover={(edge) => (
+          <div style={{ maxWidth: '240px', padding: '12px' }} data-testid={`edge-popover-${edge.id}`}>
+            <div style={{ fontWeight: 600, marginBottom: '8px' }}>{edge.label || 'Relationship'}</div>
+            <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '8px' }}>
+              {edge.sourceId} → {edge.targetId}
+            </div>
+            {edge.weight !== undefined && (
+              <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '12px' }}>
+                Weight: {edge.weight}
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <button
+                type="button"
+                data-testid={`edge-popover-action-${edge.id}`}
+                onClick={() => setLastPopoverAction(`edge-${edge.id}-clicked`)}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  background: 'var(--accent-primary, #fbbf24)',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                }}
+              >
+                Explore
+              </button>
+            </div>
           </div>
         )}
         style={{ flex: 1, minHeight: 0 }}
