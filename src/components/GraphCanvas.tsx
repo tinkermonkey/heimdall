@@ -88,7 +88,7 @@ export interface BaseGraphNodeComponentProps {
   selected?: boolean;
   onSelect?: (id: string) => void;
   /** Called when the node is clicked with a nodePopover configured. */
-  onPopoverOpen?: () => void;
+  onPopoverOpen?: (triggeringElement: HTMLElement) => void;
 }
 
 /**
@@ -152,7 +152,7 @@ function safeRenderNodeCallback(
     props?: {
       nodeId: string;
       onSelect?: (id: string) => void;
-      onPopoverOpen?: () => void;
+      onPopoverOpen?: (triggeringElement: HTMLElement) => void;
     },
   ) => React.ReactNode,
   node: GraphNodeData,
@@ -161,7 +161,7 @@ function safeRenderNodeCallback(
   props?: {
     nodeId: string;
     onSelect?: (id: string) => void;
-    onPopoverOpen?: () => void;
+    onPopoverOpen?: (triggeringElement: HTMLElement) => void;
   },
 ): React.ReactNode {
   try {
@@ -192,7 +192,7 @@ type InternalEdgeProps = GraphEdge & {
   onHoverStart?: (id: string) => void;
   onHoverEnd?: (id: string) => void;
   renderEdge?: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode;
-  onPopoverOpen?: (id: string) => void;
+  onPopoverOpen?: (id: string, triggeringElement: SVGElement) => void;
   hasPopover?: boolean;
   popoverOpen?: boolean;
   popoverPanelId?: string;
@@ -284,7 +284,7 @@ function GraphEdgeInternal({
     ? (e: React.MouseEvent) => {
         e.stopPropagation();
         if (hasPopover && onPopoverOpen) {
-          onPopoverOpen(id);
+          onPopoverOpen(id, e.currentTarget as SVGElement);
         }
         if (onSelect) {
           onSelect(id);
@@ -319,7 +319,7 @@ function GraphEdgeInternal({
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
                 if (hasPopover && onPopoverOpen) {
-                  onPopoverOpen(id);
+                  onPopoverOpen(id, e.currentTarget as SVGElement);
                 }
                 if (onSelect) {
                   onSelect(id);
@@ -429,7 +429,7 @@ export interface GraphCanvasProps extends Omit<
     props?: {
       nodeId: string;
       onSelect?: (id: string) => void;
-      onPopoverOpen?: () => void;
+      onPopoverOpen?: (triggeringElement: HTMLElement) => void;
     },
   ) => React.ReactNode;
   /**
@@ -645,6 +645,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       nodeTimer?: ReturnType<typeof setTimeout>;
       edgeTimer?: ReturnType<typeof setTimeout>;
     }>({});
+    const popoverTriggeringElementRef = useRef<
+      HTMLElement | SVGElement | null
+    >(null);
 
     // Lifts hover state out to the caller-supplied callbacks, decoupled from the pointer
     // handlers that set the state itself (see the node <g> and GraphEdgeInternal's onHoverStart/
@@ -1827,7 +1830,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     );
 
     const handleNodePopoverOpen = useCallback(
-      (nodeId: string) => {
+      (nodeId: string, triggeringElement: HTMLElement | SVGElement) => {
+        popoverTriggeringElementRef.current = triggeringElement;
         setActivePopoverNodeId(nodeId);
         setActivePopoverEdgeId(undefined);
       },
@@ -1835,7 +1839,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     );
 
     const handleEdgePopoverOpen = useCallback(
-      (edgeId: string) => {
+      (edgeId: string, triggeringElement: SVGElement) => {
+        popoverTriggeringElementRef.current = triggeringElement;
         setActivePopoverEdgeId(edgeId);
         setActivePopoverNodeId(undefined);
       },
@@ -1849,7 +1854,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const nodeProps = {
           nodeId: node.id,
           onSelect: onNodeSelect,
-          onPopoverOpen: nodePopover ? () => handleNodePopoverOpen(node.id) : undefined,
+          onPopoverOpen: nodePopover ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined,
         };
         if (renderNode)
           return safeRenderNodeCallback(renderNode, node, selected, hierarchy, nodeProps);
@@ -1861,7 +1866,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             domainColor={node.domainColor}
             selected={selected}
             onSelect={onNodeSelect}
-            onPopoverOpen={nodePopover ? () => handleNodePopoverOpen(node.id) : undefined}
+            onPopoverOpen={nodePopover ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined}
             hasChildren={hierarchy.hasChildren}
             collapsed={hierarchy.collapsed}
             hiddenDescendantCount={hierarchy.hiddenDescendantCount}
@@ -2285,23 +2290,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                 }}
               >
                 <Popover
+                  key={popoverTarget.type === "node" ? popoverTarget.nodeId : popoverTarget.edgeId}
                   open={true}
                   onOpenChange={(open) => {
                     if (!open) {
                       // Restore focus to the element that triggered the popover
-                      if (popoverTarget.type === "node") {
-                        const nodeEl = document.querySelector<HTMLElement>(
-                          `[data-testid="graph-node-${popoverTarget.nodeId}"] .graph-node`
-                        );
-                        nodeEl?.focus();
-                      } else if (popoverTarget.type === "edge") {
-                        const edgeEl = document.querySelector<SVGElement>(
-                          `[data-testid="graph-edge-${popoverTarget.edgeId}"]`
-                        );
-                        (edgeEl as any)?.focus?.();
+                      const triggeringElement = popoverTriggeringElementRef.current;
+                      if (triggeringElement && document.body.contains(triggeringElement)) {
+                        triggeringElement.focus();
                       }
                       setActivePopoverNodeId(undefined);
                       setActivePopoverEdgeId(undefined);
+                      popoverTriggeringElementRef.current = null;
                     }
                   }}
                   placement="top"
