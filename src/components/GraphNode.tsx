@@ -17,6 +17,10 @@ export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.
   onToggleCollapse?: () => void
   /** Called when the node is clicked with an active popover. Allows popover activation alongside selection. */
   onPopoverOpen?: () => void
+  /** Whether the node's popover is currently open. */
+  popoverOpen?: boolean
+  /** ID of the popover panel for aria-controls. */
+  popoverPanelId?: string
 }
 
 export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
@@ -33,6 +37,8 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       hiddenDescendantCount = 0,
       onToggleCollapse,
       onPopoverOpen,
+      popoverOpen = false,
+      popoverPanelId,
       className = '',
       style: _style,
       ...props
@@ -62,6 +68,8 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         tabIndex={onSelect || onPopoverOpen ? 0 : undefined}
         aria-pressed={onSelect ? selected : undefined}
         aria-haspopup={onPopoverOpen ? 'dialog' : undefined}
+        {...(onPopoverOpen && { 'aria-expanded': popoverOpen })}
+        {...(onPopoverOpen && popoverPanelId && { 'aria-controls': popoverPanelId })}
         {...props}
       >
         <span className="graph-node__swatch" />

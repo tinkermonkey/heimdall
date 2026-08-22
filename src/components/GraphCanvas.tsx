@@ -194,6 +194,8 @@ type InternalEdgeProps = GraphEdge & {
   renderEdge?: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode;
   onPopoverOpen?: (id: string) => void;
   hasPopover?: boolean;
+  popoverOpen?: boolean;
+  popoverPanelId?: string;
 };
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -219,6 +221,8 @@ function GraphEdgeInternal({
   renderEdge,
   onPopoverOpen,
   hasPopover,
+  popoverOpen,
+  popoverPanelId,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas();
 
@@ -295,6 +299,8 @@ function GraphEdgeInternal({
       aria-hidden={interactive ? undefined : true}
       aria-pressed={interactive ? !!selected : undefined}
       aria-haspopup={hasPopover ? "dialog" : undefined}
+      {...(hasPopover && { 'aria-expanded': !!popoverOpen })}
+      {...(hasPopover && popoverPanelId && { 'aria-controls': popoverPanelId })}
       // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible name
       // by assistive tech, and a label-less edge has nothing at all — without this a screen reader
       // announces a bare "button".
@@ -1838,6 +1844,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const resolveNodeContent = useCallback(
       (node: GraphNodeData, selected: boolean): React.ReactNode => {
         const hierarchy = hierarchyMetaFor(node.id);
+        const isPopoverOpen = activePopoverNodeId === node.id;
         const nodeProps = {
           nodeId: node.id,
           onSelect: onNodeSelect,
@@ -1858,10 +1865,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             collapsed={hierarchy.collapsed}
             hiddenDescendantCount={hierarchy.hiddenDescendantCount}
             onToggleCollapse={hierarchy.onToggleCollapse}
+            popoverOpen={isPopoverOpen}
+            popoverPanelId={isPopoverOpen ? `popover-node-${node.id}` : undefined}
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, handleNodePopoverOpen],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, handleNodePopoverOpen, activePopoverNodeId],
     );
 
     // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
@@ -2148,6 +2157,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   // Not rendered at all rather than dimmed to a low opacity — line, marker, and
                   // label alike disappear, and it isn't clickable while hidden either.
                   if (hidden) return null;
+                  const isPopoverOpen = activePopoverEdgeId === edge.id;
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -2170,6 +2180,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       renderEdge={renderEdge}
                       hasPopover={!!edgePopover}
                       onPopoverOpen={handleEdgePopoverOpen}
+                      popoverOpen={isPopoverOpen}
+                      popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
                     />
                   );
                 })}
@@ -2276,12 +2288,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     }
                   }}
                   placement="top"
-                  disableOutsideClick={true}
+                  disableOutsideClick={false}
+                  panelId={popoverTarget.type === "node" ? `popover-node-${popoverTarget.nodeId}` : `popover-edge-${popoverTarget.edgeId}`}
                 >
                   <Popover.Trigger>
                     <div style={{ width: 0, height: 0 }} />
                   </Popover.Trigger>
-                  <Popover.Panel>{popoverTarget.content}</Popover.Panel>
+                  <Popover.Panel>
+                    {popoverTarget.content}
+                  </Popover.Panel>
                 </Popover>
               </div>
             </div>

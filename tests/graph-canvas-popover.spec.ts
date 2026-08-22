@@ -223,6 +223,68 @@ test.describe("integration: GraphCanvas Popover Components", () => {
     });
   });
 
+  test.describe("Popover Keyboard & Outside-Click Dismissal", () => {
+    test("nodePopover closes when Escape key is pressed", async ({ page }) => {
+      const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
+      await cellNode.click();
+
+      const popover = page.locator('[data-testid="node-popover-cls_cell"]');
+      await expect(popover).toBeVisible();
+
+      // Press Escape key
+      await page.keyboard.press('Escape');
+
+      // Popover should hide
+      await expect(popover).not.toBeVisible();
+    });
+
+    test("edgePopover closes when Escape key is pressed", async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-edge_1"]');
+      await edge.locator(".graph-edge__hit").dispatchEvent("click");
+
+      const popover = page.locator('[data-testid="edge-popover-edge_1"]');
+      await expect(popover).toBeVisible();
+
+      // Press Escape key
+      await page.keyboard.press('Escape');
+
+      // Popover should hide
+      await expect(popover).not.toBeVisible();
+    });
+
+    test("nodePopover closes when clicking on canvas background", async ({ page }) => {
+      const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
+      await cellNode.click();
+
+      const popover = page.locator('[data-testid="node-popover-cls_cell"]');
+      await expect(popover).toBeVisible();
+
+      // Click on empty canvas background to close popover
+      const canvas = page.locator(".graph-canvas");
+      const box = await canvas.boundingBox();
+      if (!box) throw new Error("Canvas not visible");
+
+      await canvas.click({ position: { x: box.width / 2, y: 40 } });
+
+      // Popover should hide
+      await expect(popover).not.toBeVisible();
+    });
+
+    test("nodePopover closes when clicking outside the entire GraphCanvas", async ({ page }) => {
+      const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
+      await cellNode.click();
+
+      const popover = page.locator('[data-testid="node-popover-cls_cell"]');
+      await expect(popover).toBeVisible();
+
+      // Click somewhere outside the canvas (e.g., on the page body)
+      await page.click('body', { position: { x: 10, y: 10 } });
+
+      // Popover should hide
+      await expect(popover).not.toBeVisible();
+    });
+  });
+
   test.describe("Tooltip vs Popover Coexistence", () => {
     test("hovering (tooltip) does not interfere with popover open state", async ({
       page,
