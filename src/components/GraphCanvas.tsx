@@ -2004,6 +2004,22 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
     }, [popoverTarget, activePopoverNodeId, activePopoverEdgeId]);
 
+    // Document-level mousedown listener to dismiss popover when clicking outside the GraphCanvas container.
+    // This preserves smooth in-canvas transitions while fixing the original issue of popovers not closing
+    // when clicking on page chrome (sidebar, toolbar, etc).
+    useEffect(() => {
+      if (!popoverTarget) return;
+      const handleMouseDown = (e: MouseEvent) => {
+        const container = containerRef.current;
+        if (container && !container.contains(e.target as Node)) {
+          setActivePopoverNodeId(undefined);
+          setActivePopoverEdgeId(undefined);
+        }
+      };
+      document.addEventListener('mousedown', handleMouseDown);
+      return () => document.removeEventListener('mousedown', handleMouseDown);
+    }, [popoverTarget]);
+
     const contextValue = useMemo(
       () => ({
         getNodeRect,
@@ -2288,7 +2304,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     }
                   }}
                   placement="top"
-                  disableOutsideClick={false}
+                  disableOutsideClick={true}
                   panelId={popoverTarget.type === "node" ? `popover-node-${popoverTarget.nodeId}` : `popover-edge-${popoverTarget.edgeId}`}
                 >
                   <Popover.Trigger>
