@@ -130,7 +130,10 @@ const PopoverComponent = React.forwardRef<
         if (e.key === 'Escape') {
           e.preventDefault()
           handleOpenChange(false)
-          triggerRef.current?.focus()
+          // Defer focus restoration to allow parent's onOpenChange to complete first
+          requestAnimationFrame(() => {
+            triggerRef.current?.focus()
+          })
         }
       }
 

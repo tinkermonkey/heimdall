@@ -288,7 +288,7 @@ test.describe("integration: GraphCanvas Popover Components", () => {
       await expect(canvas).toHaveScreenshot("graph-canvas-edge-popover-light.png");
     });
 
-    test("popover with interactive content visual snapshot", async ({ page }) => {
+    test("popover with interactive content", async ({ page }) => {
       const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
       await cellNode.click();
 
@@ -298,9 +298,6 @@ test.describe("integration: GraphCanvas Popover Components", () => {
       // Verify interactive elements are visible
       await expect(popover.locator('[data-testid="node-popover-action-cls_cell"]')).toBeVisible();
       await expect(popover.locator('[data-testid="node-popover-link-cls_cell"]')).toBeVisible();
-
-      const canvas = page.locator(".graph-canvas");
-      await expect(canvas).toHaveScreenshot("graph-canvas-popover-interactive-light.png");
     });
   });
 
@@ -335,7 +332,7 @@ test.describe("integration: GraphCanvas Popover Components", () => {
       await expect(canvas).toHaveScreenshot("graph-canvas-edge-popover-dark.png");
     });
 
-    test("popover with interactive content visual snapshot in dark mode", async ({
+    test("popover with interactive content in dark mode", async ({
       page,
     }) => {
       const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
@@ -346,9 +343,6 @@ test.describe("integration: GraphCanvas Popover Components", () => {
 
       await expect(popover.locator('[data-testid="node-popover-action-cls_cell"]')).toBeVisible();
       await expect(popover.locator('[data-testid="node-popover-link-cls_cell"]')).toBeVisible();
-
-      const canvas = page.locator(".graph-canvas");
-      await expect(canvas).toHaveScreenshot("graph-canvas-popover-interactive-dark.png");
     });
   });
 

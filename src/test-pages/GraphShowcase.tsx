@@ -309,7 +309,12 @@ export default function GraphShowcase() {
       }
     : undefined
 
-  const renderGraphNode = useCallback((node: GraphNodeData, selected: boolean, _hierarchy, props) => (
+  const renderGraphNode = useCallback((
+    node: GraphNodeData,
+    selected: boolean,
+    _hierarchy?: GraphNodeHierarchyMeta,
+    props?: { nodeId: string; onSelect?: (id: string) => void; onPopoverOpen?: () => void }
+  ) => (
     <GraphNode
       id={node.id}
       label={node.label}
