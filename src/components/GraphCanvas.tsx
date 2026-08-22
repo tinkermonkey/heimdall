@@ -445,7 +445,8 @@ export interface GraphCanvasProps extends Omit<
   renderEdge?: (edge: GraphEdge, geometry: EdgeGeometry) => React.ReactNode;
   /**
    * Renders interactive content in a positioned popover anchored to a clicked/focused node — shown
-   * when the node is clicked or when focused and Enter/Space is pressed, and closed on Escape.
+   * when the node is clicked or when focused and Enter/Space is pressed, and closed on Escape,
+   * canvas background click, or click outside the graph container.
    * Independent of renderNode and nodeTooltip: works with the default GraphNode, a custom
    * renderNode, and/or a nodeTooltip on the same node. Unlike nodeTooltip (which is aria-hidden
    * and pointer-events: none), popover content is inside a proper dialog that accepts pointer
