@@ -22,6 +22,8 @@ export interface PopoverProps {
   placement?: PopoverPlacement
   /** Gap between trigger and panel in px. Default: 8. */
   offset?: number
+  /** Disable automatic closing when clicking outside the popover. Default: false. Useful when popover is managed programmatically. */
+  disableOutsideClick?: boolean
   children: React.ReactNode
 }
 
@@ -69,6 +71,7 @@ const PopoverComponent = React.forwardRef<
       onOpenChange,
       placement = 'bottom',
       offset = 8,
+      disableOutsideClick = false,
       children,
     },
     ref
@@ -143,7 +146,7 @@ const PopoverComponent = React.forwardRef<
 
     // Outside click handler
     useEffect(() => {
-      if (!isOpen) return
+      if (!isOpen || disableOutsideClick) return
 
       const handleMouseDown = (e: MouseEvent) => {
         const target = e.target as Node
@@ -157,7 +160,7 @@ const PopoverComponent = React.forwardRef<
 
       document.addEventListener('mousedown', handleMouseDown)
       return () => document.removeEventListener('mousedown', handleMouseDown)
-    }, [isOpen, handleOpenChange])
+    }, [isOpen, disableOutsideClick, handleOpenChange])
 
     const contextValue: PopoverContextValue = {
       isOpen,

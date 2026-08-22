@@ -2268,6 +2268,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     }
                   }}
                   placement="top"
+                  disableOutsideClick={true}
                 >
                   <Popover.Trigger>
                     <div style={{ width: 0, height: 0 }} />
