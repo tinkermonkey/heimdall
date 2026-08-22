@@ -15,7 +15,7 @@ export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.
   hiddenDescendantCount?: number
   /** Activates the collapse/expand toggle. Omit to render hasChildren without an interactive toggle. */
   onToggleCollapse?: () => void
-  /** Called when the node is clicked with an active popover. Allows popover activation alongside selection. */
+  /** Called when the node is clicked with a nodePopover configured. */
   onPopoverOpen?: () => void
   /** Whether the node's popover is currently open. */
   popoverOpen?: boolean
