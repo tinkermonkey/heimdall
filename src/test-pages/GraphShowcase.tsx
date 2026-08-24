@@ -210,7 +210,7 @@ export default function GraphShowcase() {
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
   const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>()
   const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>()
-  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy' | 'clustered'>('graph')
+  const [canvasMode, setCanvasMode] = useState<'graph' | 'topology' | 'fitview' | 'bus' | 'galaxy' | 'clustered' | 'click-tooltip'>('graph')
   const [showAllRelations, setShowAllRelations] = useState(false)
   const [galaxyCardSize, setGalaxyCardSize] = useState<'compact' | 'cards'>('compact')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(() => new Set())
@@ -698,6 +698,81 @@ export default function GraphShowcase() {
     </div>
   )
 
+  const clickTooltipCanvas = (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {(hoveredNodeId || hoveredEdgeId) && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-hover-indicator"
+        >
+          {hoveredNodeId ? `Hovering node: ${hoveredNodeId}` : `Hovering edge: ${hoveredEdgeId}`}
+        </div>
+      )}
+      {lastPopoverAction && (
+        <div
+          style={{
+            padding: '8px 12px',
+            background: 'var(--canvas-bg-2, #f4f5f7)',
+            borderBottom: '1px solid var(--canvas-border, #d8dde5)',
+            fontSize: '12px',
+            color: 'var(--canvas-fg, #1a1d24)',
+          }}
+          data-testid="graph-popover-action-indicator"
+        >
+          Popover action: {lastPopoverAction}
+        </div>
+      )}
+      <GraphCanvas
+        key="click-tooltip-canvas"
+        data-testid="click-tooltip-canvas"
+        nodes={GRAPH_NODES}
+        edges={GRAPH_EDGES}
+        selectedNodeId={selectedNodeId}
+        onNodeSelect={handleNodeSelect}
+        onNodeHover={setHoveredNodeId}
+        selectedEdgeId={selectedEdgeId}
+        onEdgeSelect={handleEdgeSelect}
+        onEdgeHover={setHoveredEdgeId}
+        onBackgroundClick={handleBackgroundClick}
+        draggable={draggable}
+        renderNode={renderGraphNode}
+        renderEdge={renderCustomEdge}
+        nodeTooltip={(node) => (
+          <div style={{ maxWidth: '200px' }}>
+            <div style={{ fontWeight: 600 }}>{(node as NodeData).title || node.label}</div>
+            {(node as NodeData).description && (
+              <div style={{ marginTop: '4px', fontSize: '12px', opacity: 0.8 }}>
+                {(node as NodeData).description}
+              </div>
+            )}
+          </div>
+        )}
+        edgeTooltip={(edge) => (
+          <div style={{ maxWidth: '180px' }}>
+            <div style={{ fontWeight: 600 }}>{edge.label || 'Relationship'}</div>
+            <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '4px' }}>
+              {edge.sourceId} → {edge.targetId}
+            </div>
+            {edge.weight !== undefined && (
+              <div style={{ fontSize: '12px', opacity: 0.8 }}>
+                Weight: {edge.weight}
+              </div>
+            )}
+          </div>
+        )}
+        nodeTooltipTrigger="click"
+        edgeTooltipTrigger="click"
+        style={{ flex: 1, minHeight: 0 }}
+      />
+    </div>
+  )
+
   const fitViewCanvas = (
     <div style={{ padding: '20px', height: '100%', overflow: 'auto' }}>
       <div
@@ -843,6 +918,21 @@ export default function GraphShowcase() {
           >
             Clustered View
           </button>
+          <button
+            type="button"
+            data-testid="click-tooltip-view-button"
+            onClick={() => setCanvasMode('click-tooltip')}
+            style={{
+              padding: '8px 16px',
+              background: canvasMode === 'click-tooltip' ? 'var(--accent-primary, #f59e0b)' : '#ccc',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontWeight: canvasMode === 'click-tooltip' ? 600 : 400,
+            }}
+          >
+            Click Tooltip Mode
+          </button>
           {canvasMode === 'graph' && (
             <button
               type="button"
@@ -908,7 +998,9 @@ export default function GraphShowcase() {
                 ? galaxyCanvas
                 : canvasMode === 'clustered'
                   ? clusteredCanvas
-                  : fitViewCanvas}
+                  : canvasMode === 'click-tooltip'
+                    ? clickTooltipCanvas
+                    : fitViewCanvas}
 
         <DetailDrawer
           data-testid="graph-detail-drawer"
