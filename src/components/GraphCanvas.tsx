@@ -390,14 +390,30 @@ export interface GraphCanvasProps extends Omit<
    * its own. Positioned via the same world-to-screen conversion the graph's own pan/zoom
    * transform uses, so it tracks the node correctly as the canvas is panned or zoomed; panning it
    * outside the canvas hides it the same way any other canvas content does (the container's own
-   * overflow: hidden). Internally rendered with the Tooltip component, in controlled (`open`)
-   * mode. Only one of nodeTooltip/edgeTooltip renders at a time, tied to current hover state —
-   * node takes priority in the (practically unreachable, hover is a single pointer) case both
-   * hoveredNodeId and hoveredEdgeId are set at once.
+   * overflow: hidden). Internally rendered with the Tooltip component in 'hover' trigger mode or
+   * Popover component in 'click' trigger mode (see nodeTooltipTrigger). In controlled (`open`)
+   * mode. Only one of nodeTooltip/edgeTooltip renders at a time, tied to current hover or active
+   * click state — node takes priority in the (practically unreachable, hover is a single pointer)
+   * case both hoveredNodeId and hoveredEdgeId are set at once.
    */
   nodeTooltip?: (node: GraphNodeData) => React.ReactNode;
-  /** Same as nodeTooltip, for a hovered edge instead — positioned at the edge path's midpoint. */
+  /**
+   * Specifies whether nodeTooltip should be triggered by hover or click. Default: 'hover'.
+   * - 'hover': traditional tooltip behavior (aria-hidden, non-interactive)
+   * - 'click': interactive popover behavior (accessible, supports buttons/links/content interaction)
+   * When 'click', the tooltip content is rendered using Popover (same as nodePopover) for full
+   * accessibility and interactivity, providing a migration path from Tooltip to Popover without
+   * needing to rename the prop. Choose 'click' to support interactive content like buttons or links
+   * in your tooltip.
+   */
+  nodeTooltipTrigger?: 'hover' | 'click';
+  /** Same as nodeTooltip, for a hovered or clicked edge instead — positioned at the edge path's midpoint. */
   edgeTooltip?: (edge: GraphEdge) => React.ReactNode;
+  /**
+   * Specifies whether edgeTooltip should be triggered by hover or click. Default: 'hover'.
+   * See nodeTooltipTrigger for behavior details.
+   */
+  edgeTooltipTrigger?: 'hover' | 'click';
   /**
    * Pan (preserving the current zoom level — never re-fits/re-zooms) to keep
    * `selectedNodeId` centered whenever it changes to a resolvable node. Off by
@@ -596,7 +612,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onNodeSelect,
       onNodeHover,
       nodeTooltip,
+      nodeTooltipTrigger = 'hover',
       edgeTooltip,
+      edgeTooltipTrigger = 'hover',
       nodePopover,
       edgePopover,
       centerOnSelect = false,
@@ -1851,10 +1869,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       (node: GraphNodeData, selected: boolean): React.ReactNode => {
         const hierarchy = hierarchyMetaFor(node.id);
         const isPopoverOpen = activePopoverNodeId === node.id;
+        // Node has a popover/click-triggered tooltip if nodePopover exists OR nodeTooltipTrigger is 'click'
+        const hasNodePopoverOrClickTooltip = nodePopover || (nodeTooltipTrigger === 'click' && nodeTooltip);
         const nodeProps = {
           nodeId: node.id,
           onSelect: onNodeSelect,
-          onPopoverOpen: nodePopover ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined,
+          onPopoverOpen: hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined,
         };
         if (renderNode)
           return safeRenderNodeCallback(renderNode, node, selected, hierarchy, nodeProps);
@@ -1866,7 +1886,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             domainColor={node.domainColor}
             selected={selected}
             onSelect={onNodeSelect}
-            onPopoverOpen={nodePopover ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined}
+            onPopoverOpen={hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined}
             hasChildren={hierarchy.hasChildren}
             collapsed={hierarchy.collapsed}
             hiddenDescendantCount={hierarchy.hiddenDescendantCount}
@@ -1876,7 +1896,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, handleNodePopoverOpen, activePopoverNodeId],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId],
     );
 
     // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
@@ -1885,8 +1905,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // exactly like the hovered node/edge itself does — no separate "reposition on pan" handling
     // needed. Uses delayed hover states to apply the same 200ms anti-flicker delay as the
     // standalone Tooltip component. Suppressed when a popover is open for the same node/edge.
+    // Only used for 'hover' trigger mode; 'click' trigger mode uses popoverTarget instead.
     const tooltipTarget = useMemo(() => {
-      if (nodeTooltip && delayedHoveredNodeId && delayedHoveredNodeId !== activePopoverNodeId) {
+      if (nodeTooltip && nodeTooltipTrigger === 'hover' && delayedHoveredNodeId && delayedHoveredNodeId !== activePopoverNodeId) {
         const node = visibleNodes.find((n) => n.id === delayedHoveredNodeId);
         if (node) {
           const pos = getNodePosition(node);
@@ -1903,7 +1924,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           }
         }
       }
-      if (edgeTooltip && delayedHoveredEdgeId && delayedHoveredEdgeId !== activePopoverEdgeId) {
+      if (edgeTooltip && edgeTooltipTrigger === 'hover' && delayedHoveredEdgeId && delayedHoveredEdgeId !== activePopoverEdgeId) {
         const edge = edges.find((e) => e.id === delayedHoveredEdgeId);
         const src = edge && getNodeRect(edge.sourceId);
         const tgt = edge && getNodeRect(edge.targetId);
@@ -1925,7 +1946,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return null;
     }, [
       nodeTooltip,
+      nodeTooltipTrigger,
       edgeTooltip,
+      edgeTooltipTrigger,
       delayedHoveredNodeId,
       delayedHoveredEdgeId,
       activePopoverNodeId,
@@ -1940,8 +1963,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // World-space anchor for popover rendering — resolved from active popover state
     // (unlike tooltipTarget which uses delayed hover). Screen position is derived from this at
     // render time via the live viewport, so it tracks pan/zoom exactly like the node/edge itself.
+    // Also renders click-triggered tooltips (nodeTooltipTrigger='click' or edgeTooltipTrigger='click')
+    // using the popover rendering path.
     const popoverTarget = useMemo(() => {
-      if (nodePopover && activePopoverNodeId) {
+      if (activePopoverNodeId) {
         const node = visibleNodes.find((n) => n.id === activePopoverNodeId);
         if (node) {
           const pos = getNodePosition(node);
@@ -1950,21 +1975,27 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             height: DEFAULT_NODE_H,
           };
           try {
-            const content = nodePopover(node);
-            return {
-              type: "node" as const,
-              nodeId: activePopoverNodeId,
-              content,
-              worldX: pos.x,
-              worldY: pos.y - d.height / 2,
-            };
+            // Prefer nodePopover, fall back to click-triggered nodeTooltip
+            const content = nodePopover
+              ? nodePopover(node)
+              : (nodeTooltipTrigger === 'click' && nodeTooltip ? nodeTooltip(node) : null);
+
+            if (content !== null && content !== undefined) {
+              return {
+                type: "node" as const,
+                nodeId: activePopoverNodeId,
+                content,
+                worldX: pos.x,
+                worldY: pos.y - d.height / 2,
+              };
+            }
           } catch (error) {
-            console.error("Error in nodePopover callback:", error);
+            console.error("Error in nodePopover/nodeTooltip callback:", error);
             return null;
           }
         }
       }
-      if (edgePopover && activePopoverEdgeId) {
+      if (activePopoverEdgeId) {
         const edge = edges.find((e) => e.id === activePopoverEdgeId);
         const src = edge && getNodeRect(edge.sourceId);
         const tgt = edge && getNodeRect(edge.targetId);
@@ -1975,16 +2006,22 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             curvature: edge.curvature,
           });
           try {
-            const content = edgePopover(edge);
-            return {
-              type: "edge" as const,
-              edgeId: activePopoverEdgeId,
-              content,
-              worldX: path.mid.x,
-              worldY: path.mid.y,
-            };
+            // Prefer edgePopover, fall back to click-triggered edgeTooltip
+            const content = edgePopover
+              ? edgePopover(edge)
+              : (edgeTooltipTrigger === 'click' && edgeTooltip ? edgeTooltip(edge) : null);
+
+            if (content !== null && content !== undefined) {
+              return {
+                type: "edge" as const,
+                edgeId: activePopoverEdgeId,
+                content,
+                worldX: path.mid.x,
+                worldY: path.mid.y,
+              };
+            }
           } catch (error) {
-            console.error("Error in edgePopover callback:", error);
+            console.error("Error in edgePopover/edgeTooltip callback:", error);
             return null;
           }
         }
@@ -1992,7 +2029,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return null;
     }, [
       nodePopover,
+      nodeTooltip,
+      nodeTooltipTrigger,
       edgePopover,
+      edgeTooltip,
+      edgeTooltipTrigger,
       activePopoverNodeId,
       activePopoverEdgeId,
       visibleNodes,
@@ -2200,7 +2241,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       onHoverStart={handleEdgeHoverStart}
                       onHoverEnd={handleEdgeHoverEndWithDelay}
                       renderEdge={renderEdge}
-                      hasPopover={!!edgePopover}
+                      hasPopover={!!edgePopover || (edgeTooltipTrigger === 'click' && !!edgeTooltip)}
                       onPopoverOpen={handleEdgePopoverOpen}
                       popoverOpen={isPopoverOpen}
                       popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
