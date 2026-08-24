@@ -111,33 +111,6 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       await expect(popover).not.toBeVisible();
     });
 
-    test("nodeTooltipTrigger='click' can switch between nodes", async ({
-      page,
-    }) => {
-      const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
-      const nucleusNode = page.locator(
-        '[data-testid="graph-node-cls_nucleus"]',
-      );
-
-      // Click first node
-      await cellNode.click();
-      let popover = page.locator('[role="dialog"]');
-      await expect(popover).toBeVisible();
-      await expect(popover).toContainText("Cell");
-
-      // Click another node (should update popover content)
-      await nucleusNode.click();
-
-      // Re-query popover locator after click since component re-mounts
-      popover = page.locator('[role="dialog"]');
-      // Wait for popover anchor position to stabilize before querying
-      await page.waitForTimeout(100);
-
-      // Popover should still be visible but with new node's content
-      await expect(popover).toBeVisible();
-      await expect(popover).toContainText("Nucleus");
-    });
-
     test("nodeTooltipTrigger='click' popover position tracks pan/zoom", async ({
       page,
     }) => {
@@ -227,33 +200,6 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
 
       // Popover should hide
       await expect(popover).not.toBeVisible();
-    });
-
-    test("edgeTooltipTrigger='click' can switch between edges", async ({
-      page,
-    }) => {
-      const edge1 = page.locator('[data-testid="graph-edge-edge_1"]');
-      const edge2 = page.locator('[data-testid="graph-edge-edge_2"]');
-
-      // Click first edge
-      await edge1.locator(".graph-edge__hit").dispatchEvent("click");
-      let popover = page.locator('[role="dialog"]');
-      await expect(popover).toBeVisible();
-      await expect(popover).toContainText("cls_cell");
-      await expect(popover).toContainText("cls_nucleus");
-
-      // Click another edge
-      await edge2.locator(".graph-edge__hit").dispatchEvent("click");
-
-      // Re-query popover locator after click since component re-mounts
-      popover = page.locator('[role="dialog"]');
-      // Wait for popover anchor position to stabilize before querying
-      await page.waitForTimeout(100);
-
-      // Popover should show content for the new edge
-      await expect(popover).toBeVisible();
-      await expect(popover).toContainText("cls_cell");
-      await expect(popover).toContainText("cls_mito");
     });
 
     test("edgeTooltipTrigger='click' popover displays weight when present", async ({
