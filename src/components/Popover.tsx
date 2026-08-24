@@ -170,15 +170,23 @@ const PopoverComponent = React.forwardRef<
 
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
-          e.preventDefault()
-          handleOpenChange(false)
-          // Skip zero-size triggers — the parent handles its own focus restoration.
-          requestAnimationFrame(() => {
-            const trigger = triggerRef.current
-            if (trigger && trigger.offsetWidth > 0 && trigger.offsetHeight > 0) {
-              trigger.focus()
-            }
-          })
+          const wrapperEl = wrapperRef.current
+          const activeEl = document.activeElement as HTMLElement | null
+
+          // Only close this popover if focus is within the popover wrapper (trigger or panel).
+          // This prevents cascading closures in nested Escape-listening components like Modal.
+          if (wrapperEl && activeEl && wrapperEl.contains(activeEl)) {
+            e.preventDefault()
+            e.stopPropagation()
+            handleOpenChange(false)
+            // Skip zero-size triggers — the parent handles its own focus restoration.
+            requestAnimationFrame(() => {
+              const trigger = triggerRef.current
+              if (trigger && trigger.offsetWidth > 0 && trigger.offsetHeight > 0) {
+                trigger.focus()
+              }
+            })
+          }
         }
       }
 
