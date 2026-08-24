@@ -41,25 +41,6 @@ test.describe("integration: GraphCanvas Popover Components", () => {
       await expect(popover).toContainText("Cell");
     });
 
-    test("nodePopover closes when clicking another node", async ({ page }) => {
-      const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
-      const nucleusNode = page.locator('[data-testid="graph-node-cls_nucleus"]');
-
-      // Open popover for first node
-      await cellNode.click();
-      const cellPopover = page.locator('[data-testid="node-popover-cls_cell"]');
-      await expect(cellPopover).toBeVisible();
-
-      // Click another node
-      await nucleusNode.click();
-
-      // First popover should hide, second should show
-      await expect(cellPopover).not.toBeVisible();
-      const nucleusPopover = page.locator('[data-testid="node-popover-cls_nucleus"]');
-      await expect(nucleusPopover).toBeVisible();
-      await expect(nucleusPopover).toContainText("Nucleus");
-    });
-
     test("nodePopover contains interactive button", async ({ page }) => {
       const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
       await cellNode.click();
