@@ -659,7 +659,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       useState<string | undefined>();
     const [activePopoverEdgeId, setActivePopoverEdgeId] =
       useState<string | undefined>();
-    const [popoverError, setPopoverError] = useState<boolean>(false);
+    const popoverErrorRef = useRef<boolean>(false);
     const tooltipDelayRef = useRef<{
       nodeTimer?: ReturnType<typeof setTimeout>;
       edgeTimer?: ReturnType<typeof setTimeout>;
@@ -1849,21 +1849,47 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     );
 
     const handleNodePopoverOpen = useCallback(
-      (nodeId: string, triggeringElement: HTMLElement | SVGElement) => {
+      (node: GraphNodeData, triggeringElement: HTMLElement | SVGElement) => {
         popoverTriggeringElementRef.current = triggeringElement;
-        setActivePopoverNodeId(nodeId);
-        setActivePopoverEdgeId(undefined);
+        try {
+          // Pre-check content before setting state — skip if callback returns null/undefined
+          const content = nodePopover
+            ? nodePopover(node)
+            : (nodeTooltipTrigger === 'click' && nodeTooltip ? nodeTooltip(node) : null);
+          if (content !== null && content !== undefined) {
+            setActivePopoverNodeId(node.id);
+            setActivePopoverEdgeId(undefined);
+          }
+        } catch (error) {
+          console.error("Error in nodePopover/nodeTooltip callback:", error);
+          popoverErrorRef.current = true;
+          setActivePopoverNodeId(node.id);
+          setActivePopoverEdgeId(undefined);
+        }
       },
-      [],
+      [nodePopover, nodeTooltip, nodeTooltipTrigger],
     );
 
     const handleEdgePopoverOpen = useCallback(
-      (edgeId: string, triggeringElement: SVGElement) => {
+      (edge: GraphEdge, triggeringElement: SVGElement) => {
         popoverTriggeringElementRef.current = triggeringElement;
-        setActivePopoverEdgeId(edgeId);
-        setActivePopoverNodeId(undefined);
+        try {
+          // Pre-check content before setting state — skip if callback returns null/undefined
+          const content = edgePopover
+            ? edgePopover(edge)
+            : (edgeTooltipTrigger === 'click' && edgeTooltip ? edgeTooltip(edge) : null);
+          if (content !== null && content !== undefined) {
+            setActivePopoverEdgeId(edge.id);
+            setActivePopoverNodeId(undefined);
+          }
+        } catch (error) {
+          console.error("Error in edgePopover/edgeTooltip callback:", error);
+          popoverErrorRef.current = true;
+          setActivePopoverEdgeId(edge.id);
+          setActivePopoverNodeId(undefined);
+        }
       },
-      [],
+      [edgePopover, edgeTooltip, edgeTooltipTrigger],
     );
 
     const resolveNodeContent = useCallback(
@@ -1875,7 +1901,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const nodeProps = {
           nodeId: node.id,
           onSelect: onNodeSelect,
-          onPopoverOpen: hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined,
+          onPopoverOpen: hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node, triggeringElement) : undefined,
         };
         if (renderNode)
           return safeRenderNodeCallback(renderNode, node, selected, hierarchy, nodeProps);
@@ -1887,7 +1913,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             domainColor={node.domainColor}
             selected={selected}
             onSelect={onNodeSelect}
-            onPopoverOpen={hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node.id, triggeringElement) : undefined}
+            onPopoverOpen={hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node, triggeringElement) : undefined}
             hasChildren={hierarchy.hasChildren}
             collapsed={hierarchy.collapsed}
             hiddenDescendantCount={hierarchy.hiddenDescendantCount}
@@ -1967,7 +1993,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Also renders click-triggered tooltips (nodeTooltipTrigger='click' or edgeTooltipTrigger='click')
     // using the popover rendering path.
     const popoverTarget = useMemo(() => {
-      setPopoverError(false);
+      popoverErrorRef.current = false;
       if (activePopoverNodeId) {
         const node = visibleNodes.find((n) => n.id === activePopoverNodeId);
         if (node) {
@@ -1995,7 +2021,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             return null;
           } catch (error) {
             console.error("Error in nodePopover/nodeTooltip callback:", error);
-            setPopoverError(true);
+            popoverErrorRef.current = true;
             return null;
           }
         }
@@ -2029,7 +2055,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             return null;
           } catch (error) {
             console.error("Error in edgePopover/edgeTooltip callback:", error);
-            setPopoverError(true);
+            popoverErrorRef.current = true;
             return null;
           }
         }
@@ -2054,17 +2080,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Prevents dead state when popoverTarget callback throws — resets so the node is clickable again.
     // Only clear if there was an error, not if content is legitimately null/undefined.
     useEffect(() => {
-      if (popoverError && (activePopoverNodeId || activePopoverEdgeId)) {
+      if (popoverErrorRef.current && (activePopoverNodeId || activePopoverEdgeId)) {
         setActivePopoverNodeId(undefined);
         setActivePopoverEdgeId(undefined);
-        setPopoverError(false);
+        popoverErrorRef.current = false;
       }
-    }, [popoverError, activePopoverNodeId, activePopoverEdgeId]);
+    }, [popoverTarget, activePopoverNodeId, activePopoverEdgeId]);
 
-    // Move focus to popover panel's first focusable child for keyboard accessibility (WCAG 2.1.1).
-    // When a popover opens via keyboard (Enter/Space on a graph node), focus should move into the
-    // popover instead of staying on the SVG node, so keyboard users can reach interactive content
-    // without tabbing through all remaining graph nodes and toolbar buttons.
+    // Move focus to popover panel's first focusable child when popover opens (WCAG 2.1.1).
     useEffect(() => {
       if (!popoverTarget) return;
 
@@ -2270,7 +2293,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       onHoverEnd={handleEdgeHoverEndWithDelay}
                       renderEdge={renderEdge}
                       hasPopover={!!edgePopover || (edgeTooltipTrigger === 'click' && !!edgeTooltip)}
-                      onPopoverOpen={handleEdgePopoverOpen}
+                      onPopoverOpen={(_edgeId: string, e: SVGElement) => handleEdgePopoverOpen(edge, e)}
                       popoverOpen={isPopoverOpen}
                       popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
                     />
