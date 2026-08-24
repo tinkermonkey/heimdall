@@ -160,28 +160,6 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       }
     });
 
-    test("nodeTooltipTrigger='click' with null tooltip content doesn't open popover", async ({
-      page,
-    }) => {
-      // This test verifies the fallback logic at lines 1979-1981:
-      // Content is legitimately null/undefined — don't set error
-      // We need to inject a node that returns null from nodeTooltip.
-      // For now, we'll test that normal tooltips work and demonstrate the behavior.
-      const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
-
-      // Click and verify popover opens with content
-      await cellNode.click();
-      let popover = page.locator('[role="dialog"]');
-      await expect(popover).toBeVisible();
-
-      // Click background to close
-      const canvas = page.locator(".graph-canvas");
-      const box = await canvas.boundingBox();
-      if (!box) throw new Error("Canvas not visible");
-      await canvas.click({ position: { x: box.width / 2, y: 40 } });
-
-      await expect(popover).not.toBeVisible();
-    });
   });
 
   test.describe("Edge Click-Triggered Tooltip", () => {
@@ -454,7 +432,7 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
   });
 
   test.describe("Visual Regression - Light Canvas", () => {
-    test.skip("nodeTooltipTrigger='click' popover visual snapshot", async ({
+    test("nodeTooltipTrigger='click' popover visual snapshot", async ({
       page,
     }) => {
       const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
@@ -469,7 +447,7 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       );
     });
 
-    test.skip("edgeTooltipTrigger='click' popover visual snapshot", async ({
+    test("edgeTooltipTrigger='click' popover visual snapshot", async ({
       page,
     }) => {
       const edge = page.locator('[data-testid="graph-edge-edge_1"]');
@@ -490,7 +468,7 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       await applyDarkCanvasMode(page);
     });
 
-    test.skip("nodeTooltipTrigger='click' popover visual snapshot in dark mode", async ({
+    test("nodeTooltipTrigger='click' popover visual snapshot in dark mode", async ({
       page,
     }) => {
       const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
@@ -505,7 +483,7 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       );
     });
 
-    test.skip("edgeTooltipTrigger='click' popover visual snapshot in dark mode", async ({
+    test("edgeTooltipTrigger='click' popover visual snapshot in dark mode", async ({
       page,
     }) => {
       const edge = page.locator('[data-testid="graph-edge-edge_1"]');
