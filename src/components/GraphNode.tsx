@@ -53,14 +53,23 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         className={classNames}
         data-domain={domainColor}
         data-kind={kind}
-        onClick={(e) => { e.stopPropagation(); onSelect?.(id); onPopoverOpen?.(e.currentTarget as HTMLElement) }}
+        onClick={(e) => {
+          e.stopPropagation()
+          try { onSelect?.(id) } catch (err) { console.error('onSelect failed:', err) }
+          try { onPopoverOpen?.(e.currentTarget as HTMLElement) } catch (err) { console.error('onPopoverOpen failed:', err) }
+        }}
         onKeyDown={(e) => {
           // A keydown from the collapse toggle button below bubbles up here too — bail out before
           // hijacking Enter/Space, or the toggle's own native button activation never fires
           // (preventDefault suppresses it) and the whole progressive-disclosure affordance becomes
           // keyboard-inoperable, selecting the node instead of collapsing/expanding it.
           if (e.target !== e.currentTarget) return
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onSelect?.(id); onPopoverOpen?.(e.currentTarget as HTMLElement) }
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            e.stopPropagation()
+            try { onSelect?.(id) } catch (err) { console.error('onSelect failed:', err) }
+            try { onPopoverOpen?.(e.currentTarget as HTMLElement) } catch (err) { console.error('onPopoverOpen failed:', err) }
+          }
         }}
         role={onSelect || onPopoverOpen ? 'button' : undefined}
         tabIndex={onSelect || onPopoverOpen ? 0 : undefined}
