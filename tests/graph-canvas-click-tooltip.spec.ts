@@ -54,7 +54,9 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
     test("nodeTooltipTrigger='click' does not show tooltip on hover", async ({
       page,
     }) => {
-      const nucleusNode = page.locator('[data-testid="graph-node-cls_nucleus"]');
+      const nucleusNode = page.locator(
+        '[data-testid="graph-node-cls_nucleus"]',
+      );
 
       // Hover over the node (shouldn't show tooltip in click mode)
       await nucleusNode.dispatchEvent("pointerover");
@@ -113,20 +115,27 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       page,
     }) => {
       const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
-      const nucleusNode = page.locator('[data-testid="graph-node-cls_nucleus"]');
+      const nucleusNode = page.locator(
+        '[data-testid="graph-node-cls_nucleus"]',
+      );
 
       // Click first node
       await cellNode.click();
-      const popover = page.locator('[role="dialog"]');
+      let popover = page.locator('[role="dialog"]');
       await expect(popover).toBeVisible();
       await expect(popover).toContainText("Cell");
 
       // Click another node (should update popover content)
       await nucleusNode.click();
 
+      // Re-query popover locator after click since component re-mounts
+      popover = page.locator('[role="dialog"]');
+      // Wait for popover anchor position to stabilize before querying
+      await page.waitForTimeout(100);
+
       // Popover should still be visible but with new node's content
-      // Use a more robust wait for the text to appear
-      await expect(popover).toContainText("Nucleus", { timeout: 10000 });
+      await expect(popover).toBeVisible();
+      await expect(popover).toContainText("Nucleus");
     });
 
     test("nodeTooltipTrigger='click' popover position tracks pan/zoom", async ({
@@ -159,7 +168,6 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
         ).toBeGreaterThan(1);
       }
     });
-
   });
 
   test.describe("Edge Click-Triggered Tooltip", () => {
@@ -237,8 +245,12 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       // Click another edge
       await edge2.locator(".graph-edge__hit").dispatchEvent("click");
 
-      // Popover should show content for the new edge
+      // Re-query popover locator after click since component re-mounts
       popover = page.locator('[role="dialog"]');
+      // Wait for popover anchor position to stabilize before querying
+      await page.waitForTimeout(100);
+
+      // Popover should show content for the new edge
       await expect(popover).toBeVisible();
       await expect(popover).toContainText("cls_cell");
       await expect(popover).toContainText("cls_mito");
