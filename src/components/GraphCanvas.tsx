@@ -2311,7 +2311,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   <Popover.Trigger>
                     <div style={{ width: 0, height: 0 }} />
                   </Popover.Trigger>
-                  <Popover.Panel>
+                  <Popover.Panel aria-label={`Details for ${popoverTarget.nodeId || popoverTarget.edgeId}`}>
                     {popoverTarget.content}
                   </Popover.Panel>
                 </Popover>

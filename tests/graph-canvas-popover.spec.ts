@@ -285,6 +285,34 @@ test.describe("integration: GraphCanvas Popover Components", () => {
     });
   });
 
+  test.describe("Accessibility", () => {
+    test("nodePopover has accessible aria-label on panel", async ({ page }) => {
+      const cellNode = page.locator('[data-testid="graph-node-cls_cell"]');
+      await cellNode.click();
+
+      const popoverPanel = page.locator('[role="dialog"]');
+      await expect(popoverPanel).toBeVisible();
+
+      // Verify aria-label contains the node ID
+      const ariaLabel = await popoverPanel.getAttribute("aria-label");
+      expect(ariaLabel).toContain("cls_cell");
+      expect(ariaLabel).toContain("Details for");
+    });
+
+    test("edgePopover has accessible aria-label on panel", async ({ page }) => {
+      const edge = page.locator('[data-testid="graph-edge-edge_1"]');
+      await edge.locator(".graph-edge__hit").dispatchEvent("click");
+
+      const popoverPanel = page.locator('[role="dialog"]');
+      await expect(popoverPanel).toBeVisible();
+
+      // Verify aria-label contains the edge ID
+      const ariaLabel = await popoverPanel.getAttribute("aria-label");
+      expect(ariaLabel).toContain("edge_1");
+      expect(ariaLabel).toContain("Details for");
+    });
+  });
+
   test.describe("Tooltip vs Popover Coexistence", () => {
     test("hovering (tooltip) does not interfere with popover open state", async ({
       page,
