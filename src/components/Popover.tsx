@@ -75,6 +75,18 @@ function usePopoverContext() {
   return context
 }
 
+function mergeRefs(refs: Array<React.Ref<HTMLElement>>) {
+  return (element: HTMLElement | null) => {
+    refs.forEach(r => {
+      if (typeof r === 'function') {
+        r(element)
+      } else if (r) {
+        (r as React.MutableRefObject<HTMLElement | null>).current = element
+      }
+    })
+  }
+}
+
 const PopoverComponent = React.forwardRef<
   HTMLDivElement,
   PopoverProps
@@ -242,7 +254,7 @@ function PopoverTrigger({ children }: PopoverTriggerProps) {
   }
 
   return React.cloneElement(children, {
-    ref: triggerRef,
+    ref: mergeRefs([triggerRef, (children as any).ref]),
     id: triggerId,
     onClick: (e: React.MouseEvent) => {
       handleClick(e)

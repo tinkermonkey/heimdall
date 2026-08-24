@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Button } from '../components/Button'
 import { Modal } from '../components/Modal'
 import { ConfirmDialog } from '../components/ConfirmDialog'
@@ -14,6 +14,8 @@ export default function OverlayComponentsTestPage() {
   const [toastVariant, setToastVariant] = useState<'success' | 'error' | 'warning' | 'info'>('info')
   const [workspaceSwitcherOpen, setWorkspaceSwitcherOpen] = useState(false)
   const [controlledPopoverOpen, setControlledPopoverOpen] = useState(false)
+  const consumerRefPopoverTrigger = useRef<HTMLButtonElement>(null)
+  const [consumerRefAccessible, setConsumerRefAccessible] = useState(false)
 
   const recentWorkspaces: Workspace[] = [
     { id: '1', name: 'molgraph-research', path: '/users/dev/molgraph-research', classCount: 20, individualCount: 267 },
@@ -276,6 +278,26 @@ export default function OverlayComponentsTestPage() {
                   This popover state is controlled by external state.
                 </p>
                 <Button size="sm" variant="primary" onClick={() => setControlledPopoverOpen(false)}>Close</Button>
+              </div>
+            </Popover.Panel>
+          </Popover>
+
+          <Popover placement="bottom">
+            <Popover.Trigger>
+              <Button
+                ref={consumerRefPopoverTrigger}
+                variant="secondary"
+                onClick={() => setConsumerRefAccessible(consumerRefPopoverTrigger.current !== null)}
+              >
+                Test Ref
+              </Button>
+            </Popover.Trigger>
+            <Popover.Panel aria-label="Consumer ref test">
+              <div style={{ padding: '12px' }}>
+                <div style={{ marginBottom: '12px', fontWeight: 500 }}>Consumer ref test</div>
+                <p style={{ marginBottom: '12px', fontSize: '13px', color: 'rgb(var(--shell-fg-2))' }}>
+                  Ref is {consumerRefAccessible ? 'accessible' : 'not accessible'}.
+                </p>
               </div>
             </Popover.Panel>
           </Popover>
