@@ -567,4 +567,265 @@ test.describe('integration: Overlay Components', () => {
       })
     })
   })
+
+  test.describe('Popover Component', () => {
+    test('should open on trigger click', async ({ page }) => {
+      // Find the first popover trigger
+      const trigger = page.locator('[aria-haspopup="dialog"]').first()
+      await trigger.click()
+
+      // Popover should be visible with role="dialog"
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('popover-top-open.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('should close on Escape key', async ({ page }) => {
+      // Open popover
+      const trigger = page.locator('[aria-haspopup="dialog"]').first()
+      await trigger.click()
+
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Press Escape
+      await page.keyboard.press('Escape')
+
+      // Popover should be hidden
+      await expect(popover).not.toBeVisible()
+    })
+
+    test('should close on outside click', async ({ page }) => {
+      // Open popover
+      const trigger = page.locator('[aria-haspopup="dialog"]').nth(1)
+      await trigger.click()
+
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Click outside the popover and trigger
+      await page.click('body', { position: { x: 50, y: 50 } })
+
+      // Popover should be hidden
+      await expect(popover).not.toBeVisible()
+    })
+
+    test('should open via keyboard activation (Enter)', async ({ page }) => {
+      // Focus the trigger
+      const trigger = page.locator('[aria-haspopup="dialog"]').nth(2)
+      await trigger.focus()
+
+      // Press Enter
+      await page.keyboard.press('Enter')
+
+      // Popover should be visible
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('popover-left-open.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('should open via keyboard activation (Space)', async ({ page }) => {
+      // Focus the trigger
+      const trigger = page.locator('[aria-haspopup="dialog"]').nth(3)
+      await trigger.focus()
+
+      // Press Space
+      await page.keyboard.press(' ')
+
+      // Popover should be visible
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('popover-right-open.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('should return focus to trigger on close', async ({ page }) => {
+      // Get trigger element
+      const trigger = page.locator('[aria-haspopup="dialog"]').first()
+
+      // Click to open
+      await trigger.click()
+
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Close via Escape
+      await page.keyboard.press('Escape')
+
+      // Trigger should have focus
+      await expect(trigger).toBeFocused()
+    })
+
+    test('should support interactive content without closing', async ({ page }) => {
+      // Open popover with interactive content ("With Link" - 5th popover)
+      const trigger = page.locator('[aria-haspopup="dialog"]').nth(4)
+      await trigger.click()
+
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Click a button inside the popover - should NOT close it
+      const button = popover.locator('button').first()
+      await button.click()
+
+      // Popover should still be visible
+      await expect(popover).toBeVisible()
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('popover-interactive.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('trigger should have correct ARIA attributes', async ({ page }) => {
+      const trigger = page.locator('[aria-haspopup="dialog"]').first()
+
+      // Check aria-haspopup
+      await expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
+
+      // Check aria-expanded is false when closed
+      await expect(trigger).toHaveAttribute('aria-expanded', 'false')
+
+      // Open popover
+      await trigger.click()
+
+      // Check aria-expanded is true when open
+      await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+
+      // Check aria-controls points to panel id
+      const ariaControls = await trigger.getAttribute('aria-controls')
+      expect(ariaControls).toBeTruthy()
+
+      const popover = page.locator(`[id="${ariaControls}"]`)
+      await expect(popover).toBeVisible()
+    })
+
+    test('panel should have correct role', async ({ page }) => {
+      // Open popover
+      const trigger = page.locator('[aria-haspopup="dialog"]').nth(1)
+      await trigger.click()
+
+      // Check panel role
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toHaveAttribute('role', 'dialog')
+    })
+
+    test('panel should not be inside aria-hidden ancestor while open', async ({ page }) => {
+      // Open popover
+      const trigger = page.locator('[aria-haspopup="dialog"]').first()
+      await trigger.click()
+
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Check that popover is not inside aria-hidden=true
+      const ariaHidden = await popover.evaluate((el) => {
+        let current: HTMLElement | null = el.parentElement
+        while (current) {
+          if (current.getAttribute('aria-hidden') === 'true') {
+            return true
+          }
+          current = current.parentElement
+        }
+        return false
+      })
+
+      expect(ariaHidden).toBe(false)
+    })
+
+    test('should support bottom placement', async ({ page }) => {
+      const trigger = page.locator('[aria-haspopup="dialog"]').nth(1)
+      await trigger.click()
+
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('popover-bottom-open.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+
+    test('controlled mode: should open and close via external state', async ({ page }) => {
+      // Find the controlled popover trigger (labeled "Controlled")
+      const trigger = page.locator('button:has-text("Controlled")').first()
+
+      // Initially should be closed
+      let popover = page.locator('[role="dialog"][aria-modal="false"]')
+      await expect(popover).toHaveCount(0)
+
+      // Click trigger to open
+      await trigger.click()
+
+      // Popover should now be visible
+      popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Click the close button inside the popover
+      const closeButton = popover.locator('button:has-text("Close")').first()
+      await closeButton.click()
+
+      // Popover should be closed
+      await expect(popover).not.toBeVisible()
+    })
+
+    test('controlled mode: should respond to external state changes', async ({ page }) => {
+      // Find the controlled popover trigger
+      const trigger = page.locator('button:has-text("Controlled")').first()
+
+      // Open the popover
+      await trigger.click()
+
+      let popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Close via the internal close button
+      const closeButton = popover.locator('button:has-text("Close")').first()
+      await closeButton.click()
+
+      // Popover should close
+      await expect(popover).not.toBeVisible()
+
+      // Open again
+      await trigger.click()
+      popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      // Close via Escape
+      await page.keyboard.press('Escape')
+
+      // Should be closed
+      await expect(popover).not.toBeVisible()
+    })
+  })
+
+  test.describe('Popover dark canvas', () => {
+    test.beforeEach(async ({ page }) => {
+      await applyDarkCanvasMode(page)
+    })
+
+    test('popover dark snapshot', async ({ page }) => {
+      const trigger = page.locator('[aria-haspopup="dialog"]').first()
+      await trigger.click()
+
+      const popover = page.locator('[role="dialog"][aria-modal="false"]').first()
+      await expect(popover).toBeVisible()
+
+      await freezeAnimations(page)
+      await expect(page).toHaveScreenshot('popover-open-dark.png', {
+        maxDiffPixelRatio: 0.01,
+      })
+    })
+  })
 })
