@@ -1944,7 +1944,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           };
           try {
             const content = nodeTooltip(node);
-            return { content, worldX: pos.x, worldY: pos.y - d.height / 2 };
+            return { type: "node" as const, nodeId: delayedHoveredNodeId, content, worldX: pos.x, worldY: pos.y - d.height / 2 };
           } catch (error) {
             console.error("Error in nodeTooltip callback:", error);
             return null;
@@ -1963,7 +1963,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           });
           try {
             const content = edgeTooltip(edge);
-            return { content, worldX: path.mid.x, worldY: path.mid.y };
+            return { type: "edge" as const, edgeId: delayedHoveredEdgeId, content, worldX: path.mid.x, worldY: path.mid.y };
           } catch (error) {
             console.error("Error in edgeTooltip callback:", error);
             return null;
