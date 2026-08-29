@@ -410,8 +410,8 @@ export interface GraphCanvasProps extends Omit<
   nodeTooltip?: (node: GraphNodeData) => React.ReactNode;
   /**
    * Specifies whether nodeTooltip should be triggered by hover or click. Default: 'hover'.
-   * - 'hover': traditional tooltip behavior (aria-hidden, non-interactive)
-   * - 'click': interactive popover behavior (accessible, supports buttons/links/content interaction)
+   * - 'hover': tooltip triggered on hover, with aria-describedby linking trigger to tooltip content
+   * - 'click': interactive popover behavior (role="dialog", supports buttons/links/content interaction)
    * When 'click', the tooltip content is rendered using Popover (same as nodePopover) for full
    * accessibility and interactivity, providing a migration path from Tooltip to Popover without
    * needing to rename the prop. Choose 'click' to support interactive content like buttons or links
@@ -476,9 +476,9 @@ export interface GraphCanvasProps extends Omit<
    * when the node is clicked or when focused and Enter/Space is pressed, and closed on Escape,
    * canvas background click, or click outside the graph container.
    * Independent of renderNode and nodeTooltip: works with the default GraphNode, a custom
-   * renderNode, and/or a nodeTooltip on the same node. Unlike nodeTooltip (which is aria-hidden
-   * and pointer-events: none), popover content is inside a proper dialog that accepts pointer
-   * interaction on the panel itself — e.g. a link or button inside the popover can be clicked.
+   * renderNode, and/or a nodeTooltip on the same node. Like nodeTooltip, popover content is
+   * inside an accessible dialog (role="dialog") that accepts pointer interaction on the panel
+   * itself — e.g. a link or button inside the popover can be clicked.
    * Positioned via the same world-to-screen conversion the graph's own pan/zoom transform uses,
    * so it tracks the node correctly as the canvas is panned or zoomed. Only one of
    * nodePopover/edgePopover renders at a time; opening a new one closes any previously open
