@@ -476,9 +476,10 @@ export interface GraphCanvasProps extends Omit<
    * when the node is clicked or when focused and Enter/Space is pressed, and closed on Escape,
    * canvas background click, or click outside the graph container.
    * Independent of renderNode and nodeTooltip: works with the default GraphNode, a custom
-   * renderNode, and/or a nodeTooltip on the same node. Like nodeTooltip, popover content is
-   * inside an accessible dialog (role="dialog") that accepts pointer interaction on the panel
-   * itself — e.g. a link or button inside the popover can be clicked.
+   * renderNode, and/or a nodeTooltip on the same node. Unlike nodeTooltip (which uses
+   * role="tooltip" and is pointer-events: none), popover content is inside a dialog
+   * (role="dialog") that accepts pointer interaction on the panel itself — e.g. a link
+   * or button inside the popover can be clicked.
    * Positioned via the same world-to-screen conversion the graph's own pan/zoom transform uses,
    * so it tracks the node correctly as the canvas is panned or zoomed. Only one of
    * nodePopover/edgePopover renders at a time; opening a new one closes any previously open
