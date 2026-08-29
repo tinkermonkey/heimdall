@@ -20,6 +20,12 @@ export interface TooltipProps {
    * behavior.
    */
   open?: boolean
+  /**
+   * Optional externally-controlled id for the tooltip card element. When provided, this id is used
+   * instead of the auto-generated one, allowing trigger elements elsewhere in the DOM to reference
+   * it via `aria-describedby`. Omit to use the default auto-generated id.
+   */
+  id?: string
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({
@@ -31,6 +37,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
   className = '',
   disabled = false,
   open,
+  id,
 }) => {
   const isControlled = open !== undefined
   const [uncontrolledVisible, setUncontrolledVisible] = useState(false)
@@ -38,7 +45,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const [resolvedPlacement, setResolvedPlacement] = useState<TooltipPlacement>(placement)
   const showTimer = useRef<ReturnType<typeof setTimeout>>()
   const tooltipRef = useRef<HTMLDivElement>(null)
-  const tooltipId = useId()
+  const autoId = useId()
+  const tooltipId = id ?? autoId
 
   useEffect(() => () => clearTimeout(showTimer.current), [])
 
