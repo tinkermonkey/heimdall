@@ -2368,7 +2368,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           {showToolbar && <GraphToolbar position={toolbarPosition} />}
 
           {tooltipTarget && (
-            <div className="graph-tooltip-layer" aria-hidden="true">
+            <div className="graph-tooltip-layer">
               <div
                 className="graph-tooltip-anchor"
                 style={{
