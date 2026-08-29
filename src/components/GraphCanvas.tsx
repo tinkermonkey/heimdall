@@ -151,6 +151,7 @@ function safeRenderNodeCallback(
     hierarchy?: GraphNodeHierarchyMeta,
     props?: {
       nodeId: string;
+      tooltipId?: string;
       onSelect?: (id: string) => void;
       onPopoverOpen?: (triggeringElement: HTMLElement) => void;
     },
@@ -160,6 +161,7 @@ function safeRenderNodeCallback(
   hierarchy?: GraphNodeHierarchyMeta,
   props?: {
     nodeId: string;
+    tooltipId?: string;
     onSelect?: (id: string) => void;
     onPopoverOpen?: (triggeringElement: HTMLElement) => void;
   },
@@ -437,7 +439,7 @@ export interface GraphCanvasProps extends Omit<
    * and positions it via an SVG <g> transform. If omitted, the default GraphNode is used.
    * The third argument carries structural-hierarchy info (see GraphNodeHierarchyMeta) — read it
    * to render your own collapse/expand affordance; ignore it if you don't need one.
-   * Additional props passed: nodeId (string), onSelect (optional), onPopoverOpen (optional).
+   * Additional props passed: nodeId (string), tooltipId (optional), onSelect (optional), onPopoverOpen (optional).
    *
    * Tip: memoize with useCallback to avoid unnecessary re-measurements.
    */
@@ -447,6 +449,7 @@ export interface GraphCanvasProps extends Omit<
     hierarchy?: GraphNodeHierarchyMeta,
     props?: {
       nodeId: string;
+      tooltipId?: string;
       onSelect?: (id: string) => void;
       onPopoverOpen?: (triggeringElement: HTMLElement) => void;
     },
