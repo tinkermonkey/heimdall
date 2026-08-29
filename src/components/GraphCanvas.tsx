@@ -49,6 +49,12 @@ export { useGraphCanvas } from "./GraphCanvasContext";
 /** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
 const TOOLTIP_SHOW_DELAY_MS = 200;
 
+/** Generate deterministic tooltip ID for a node. */
+const nodeTooltipId = (nodeId: string): string => `tooltip-node-${nodeId}`;
+
+/** Generate deterministic tooltip ID for an edge. */
+const edgeTooltipId = (edgeId: string): string => `tooltip-edge-${edgeId}`;
+
 // ─── Public data types ────────────────────────────────────────────────────────
 
 export interface GraphNodeData {
@@ -1952,7 +1958,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           };
           try {
             const content = nodeTooltip(node);
-            return { type: "node" as const, nodeId: delayedHoveredNodeId, tooltipId: `tooltip-node-${delayedHoveredNodeId}`, content, worldX: pos.x, worldY: pos.y - d.height / 2 };
+            return { type: "node" as const, nodeId: delayedHoveredNodeId, tooltipId: nodeTooltipId(delayedHoveredNodeId), content, worldX: pos.x, worldY: pos.y - d.height / 2 };
           } catch (error) {
             console.error("Error in nodeTooltip callback:", error);
             return null;
@@ -1971,7 +1977,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           });
           try {
             const content = edgeTooltip(edge);
-            return { type: "edge" as const, edgeId: delayedHoveredEdgeId, tooltipId: `tooltip-edge-${delayedHoveredEdgeId}`, content, worldX: path.mid.x, worldY: path.mid.y };
+            return { type: "edge" as const, edgeId: delayedHoveredEdgeId, tooltipId: edgeTooltipId(delayedHoveredEdgeId), content, worldX: path.mid.x, worldY: path.mid.y };
           } catch (error) {
             console.error("Error in edgeTooltip callback:", error);
             return null;
@@ -2280,7 +2286,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   // label alike disappear, and it isn't clickable while hidden either.
                   if (hidden) return null;
                   const isPopoverOpen = activePopoverEdgeId === edge.id;
-                  const tooltipId = delayedHoveredEdgeId === edge.id ? `tooltip-edge-${edge.id}` : undefined;
+                  const tooltipId = tooltipTarget?.type === 'edge' && tooltipTarget.edgeId === edge.id ? tooltipTarget.tooltipId : undefined;
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -2319,7 +2325,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     height: DEFAULT_NODE_H,
                   };
                   const selected = node.id === selectedNodeId;
-                  const tooltipId = delayedHoveredNodeId === node.id ? `tooltip-node-${node.id}` : undefined;
+                  const tooltipId = tooltipTarget?.type === 'node' && tooltipTarget.nodeId === node.id ? tooltipTarget.tooltipId : undefined;
                   return (
                     <g
                       key={node.id}
