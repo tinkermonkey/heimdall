@@ -1067,6 +1067,134 @@ test.describe("integration: Graph Canvas Components", () => {
         })
         .toBe(true);
     });
+
+    test("node tooltip aria-describedby points to visible role=tooltip element with no aria-hidden ancestor", async ({
+      page,
+    }) => {
+      const node = page.locator('[data-testid="graph-node-cls_cell"]');
+      const nodeElement = node.locator(".graph-node");
+
+      // Hover to show tooltip
+      await node.dispatchEvent("pointerover");
+      await page.waitForTimeout(250);
+
+      const tooltip = page.locator('[role="tooltip"]');
+      await expect(tooltip).toBeVisible();
+
+      // Get the tooltip ID
+      const tooltipId = await tooltip.getAttribute("id");
+      expect(tooltipId).toBeTruthy();
+      expect(tooltipId).toMatch(/^tooltip-node-/);
+
+      // Verify node element has aria-describedby pointing to tooltip
+      const describedBy = await nodeElement.getAttribute("aria-describedby");
+      expect(describedBy).toBe(tooltipId);
+
+      // Verify tooltip element is not hidden by aria-hidden ancestor
+      const isAriaHidden = await tooltip.evaluate((el) => {
+        let current: HTMLElement | null = el.parentElement;
+        while (current) {
+          if (current.getAttribute("aria-hidden") === "true") {
+            return true;
+          }
+          current = current.parentElement;
+        }
+        return false;
+      });
+      expect(isAriaHidden).toBe(false);
+
+      await node.dispatchEvent("pointerout");
+    });
+
+    test("edge tooltip aria-describedby points to visible role=tooltip element with no aria-hidden ancestor", async ({
+      page,
+    }) => {
+      const edge = page.locator('[data-testid="graph-edge-edge_1"]');
+
+      // Hover to show tooltip
+      await edge.dispatchEvent("pointerover");
+      await page.waitForTimeout(250);
+
+      const tooltip = page.locator('[role="tooltip"]');
+      await expect(tooltip).toBeVisible();
+
+      // Get the tooltip ID
+      const tooltipId = await tooltip.getAttribute("id");
+      expect(tooltipId).toBeTruthy();
+      expect(tooltipId).toMatch(/^tooltip-edge-/);
+
+      // Get the <g> element (edge wrapper) and verify it has aria-describedby
+      const describedBy = await edge.getAttribute("aria-describedby");
+      expect(describedBy).toBe(tooltipId);
+
+      // Verify tooltip element is not hidden by aria-hidden ancestor
+      const isAriaHidden = await tooltip.evaluate((el) => {
+        let current: HTMLElement | null = el.parentElement;
+        while (current) {
+          if (current.getAttribute("aria-hidden") === "true") {
+            return true;
+          }
+          current = current.parentElement;
+        }
+        return false;
+      });
+      expect(isAriaHidden).toBe(false);
+
+      await edge.dispatchEvent("pointerout");
+    });
+
+    test("aria-describedby is present only while tooltip is visible for the specific trigger", async ({
+      page,
+    }) => {
+      const nodeCell = page.locator('[data-testid="graph-node-cls_cell"]');
+      const nodeCellElement = nodeCell.locator(".graph-node");
+      const nodeNucleus = page.locator('[data-testid="graph-node-cls_nucleus"]');
+      const nodeNucleusElement = nodeNucleus.locator(".graph-node");
+
+      // Initially, no tooltips and no aria-describedby
+      let describedBy = await nodeCellElement.getAttribute("aria-describedby");
+      expect(describedBy).toBeNull();
+
+      // Hover over first node — it should get aria-describedby
+      await nodeCell.dispatchEvent("pointerover");
+      await page.waitForTimeout(250);
+
+      let tooltip = page.locator('[role="tooltip"]');
+      await expect(tooltip).toBeVisible();
+
+      describedBy = await nodeCellElement.getAttribute("aria-describedby");
+      expect(describedBy).toBeTruthy();
+      expect(describedBy).toMatch(/^tooltip-node-cls_cell$/);
+
+      // Second node should NOT have aria-describedby (tooltip only for one node at a time)
+      let describedByNucleus = await nodeNucleusElement.getAttribute("aria-describedby");
+      expect(describedByNucleus).toBeNull();
+
+      // Hover away from first node
+      await nodeCell.dispatchEvent("pointerout");
+      await expect(tooltip).toHaveCount(0);
+
+      // After leaving, first node should NOT have aria-describedby anymore
+      describedBy = await nodeCellElement.getAttribute("aria-describedby");
+      expect(describedBy).toBeNull();
+
+      // Hover over second node — it should get aria-describedby
+      await nodeNucleus.dispatchEvent("pointerover");
+      await page.waitForTimeout(250);
+
+      tooltip = page.locator('[role="tooltip"]');
+      await expect(tooltip).toBeVisible();
+
+      describedByNucleus = await nodeNucleusElement.getAttribute("aria-describedby");
+      expect(describedByNucleus).toBeTruthy();
+      expect(describedByNucleus).toMatch(/^tooltip-node-cls_nucleus$/);
+
+      // First node still should NOT have aria-describedby
+      describedBy = await nodeCellElement.getAttribute("aria-describedby");
+      expect(describedBy).toBeNull();
+
+      await nodeNucleus.dispatchEvent("pointerout");
+    });
   });
 
   test.describe("Bus View - Edge Anchors & Curvature", () => {

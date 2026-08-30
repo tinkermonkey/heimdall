@@ -313,7 +313,7 @@ export default function GraphShowcase() {
     node: GraphNodeData,
     selected: boolean,
     _hierarchy?: GraphNodeHierarchyMeta,
-    props?: { nodeId: string; onSelect?: (id: string) => void; onPopoverOpen?: (triggeringElement: HTMLElement) => void }
+    props?: { nodeId: string; tooltipId?: string; onSelect?: (id: string) => void; onPopoverOpen?: (triggeringElement: HTMLElement) => void }
   ) => (
     <GraphNode
       id={node.id}
@@ -323,6 +323,7 @@ export default function GraphShowcase() {
       selected={selected}
       onSelect={props?.onSelect}
       onPopoverOpen={props?.onPopoverOpen}
+      tooltipId={props?.tooltipId}
     />
   ), [])
 

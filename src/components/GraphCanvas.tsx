@@ -49,6 +49,12 @@ export { useGraphCanvas } from "./GraphCanvasContext";
 /** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
 const TOOLTIP_SHOW_DELAY_MS = 200;
 
+/** Generate deterministic tooltip ID for a node. */
+const nodeTooltipId = (nodeId: string): string => `tooltip-node-${nodeId}`;
+
+/** Generate deterministic tooltip ID for an edge. */
+const edgeTooltipId = (edgeId: string): string => `tooltip-edge-${edgeId}`;
+
 // ─── Public data types ────────────────────────────────────────────────────────
 
 export interface GraphNodeData {
@@ -151,6 +157,7 @@ function safeRenderNodeCallback(
     hierarchy?: GraphNodeHierarchyMeta,
     props?: {
       nodeId: string;
+      tooltipId?: string;
       onSelect?: (id: string) => void;
       onPopoverOpen?: (triggeringElement: HTMLElement) => void;
     },
@@ -160,6 +167,7 @@ function safeRenderNodeCallback(
   hierarchy?: GraphNodeHierarchyMeta,
   props?: {
     nodeId: string;
+    tooltipId?: string;
     onSelect?: (id: string) => void;
     onPopoverOpen?: (triggeringElement: HTMLElement) => void;
   },
@@ -196,6 +204,7 @@ type InternalEdgeProps = GraphEdge & {
   hasPopover?: boolean;
   popoverOpen?: boolean;
   popoverPanelId?: string;
+  tooltipId?: string;
 };
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -223,6 +232,7 @@ function GraphEdgeInternal({
   hasPopover,
   popoverOpen,
   popoverPanelId,
+  tooltipId,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas();
 
@@ -301,6 +311,7 @@ function GraphEdgeInternal({
       aria-haspopup={hasPopover ? "dialog" : undefined}
       {...(hasPopover && { 'aria-expanded': !!popoverOpen })}
       {...(hasPopover && popoverPanelId && { 'aria-controls': popoverPanelId })}
+      {...(tooltipId && { 'aria-describedby': tooltipId })}
       // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible name
       // by assistive tech, and a label-less edge has nothing at all — without this a screen reader
       // announces a bare "button".
@@ -399,8 +410,8 @@ export interface GraphCanvasProps extends Omit<
   nodeTooltip?: (node: GraphNodeData) => React.ReactNode;
   /**
    * Specifies whether nodeTooltip should be triggered by hover or click. Default: 'hover'.
-   * - 'hover': traditional tooltip behavior (aria-hidden, non-interactive)
-   * - 'click': interactive popover behavior (accessible, supports buttons/links/content interaction)
+   * - 'hover': tooltip triggered on hover, with aria-describedby linking trigger to tooltip content
+   * - 'click': interactive popover behavior (role="dialog", supports buttons/links/content interaction)
    * When 'click', the tooltip content is rendered using Popover (same as nodePopover) for full
    * accessibility and interactivity, providing a migration path from Tooltip to Popover without
    * needing to rename the prop. Choose 'click' to support interactive content like buttons or links
@@ -434,7 +445,7 @@ export interface GraphCanvasProps extends Omit<
    * and positions it via an SVG <g> transform. If omitted, the default GraphNode is used.
    * The third argument carries structural-hierarchy info (see GraphNodeHierarchyMeta) — read it
    * to render your own collapse/expand affordance; ignore it if you don't need one.
-   * Additional props passed: nodeId (string), onSelect (optional), onPopoverOpen (optional).
+   * Additional props passed: nodeId (string), tooltipId (optional), onSelect (optional), onPopoverOpen (optional).
    *
    * Tip: memoize with useCallback to avoid unnecessary re-measurements.
    */
@@ -444,6 +455,7 @@ export interface GraphCanvasProps extends Omit<
     hierarchy?: GraphNodeHierarchyMeta,
     props?: {
       nodeId: string;
+      tooltipId?: string;
       onSelect?: (id: string) => void;
       onPopoverOpen?: (triggeringElement: HTMLElement) => void;
     },
@@ -464,9 +476,10 @@ export interface GraphCanvasProps extends Omit<
    * when the node is clicked or when focused and Enter/Space is pressed, and closed on Escape,
    * canvas background click, or click outside the graph container.
    * Independent of renderNode and nodeTooltip: works with the default GraphNode, a custom
-   * renderNode, and/or a nodeTooltip on the same node. Unlike nodeTooltip (which is aria-hidden
-   * and pointer-events: none), popover content is inside a proper dialog that accepts pointer
-   * interaction on the panel itself — e.g. a link or button inside the popover can be clicked.
+   * renderNode, and/or a nodeTooltip on the same node. Unlike nodeTooltip (which uses
+   * role="tooltip" and is pointer-events: none), popover content is inside a dialog
+   * (role="dialog") that accepts pointer interaction on the panel itself — e.g. a link
+   * or button inside the popover can be clicked.
    * Positioned via the same world-to-screen conversion the graph's own pan/zoom transform uses,
    * so it tracks the node correctly as the canvas is panned or zoomed. Only one of
    * nodePopover/edgePopover renders at a time; opening a new one closes any previously open
@@ -1893,13 +1906,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     );
 
     const resolveNodeContent = useCallback(
-      (node: GraphNodeData, selected: boolean): React.ReactNode => {
+      (node: GraphNodeData, selected: boolean, tooltipId?: string): React.ReactNode => {
         const hierarchy = hierarchyMetaFor(node.id);
         const isPopoverOpen = activePopoverNodeId === node.id;
         // Node has a popover/click-triggered tooltip if nodePopover exists OR nodeTooltipTrigger is 'click'
         const hasNodePopoverOrClickTooltip = nodePopover || (nodeTooltipTrigger === 'click' && nodeTooltip);
         const nodeProps = {
           nodeId: node.id,
+          tooltipId,
           onSelect: onNodeSelect,
           onPopoverOpen: hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node, triggeringElement) : undefined,
         };
@@ -1920,6 +1934,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             onToggleCollapse={hierarchy.onToggleCollapse}
             popoverOpen={isPopoverOpen}
             popoverPanelId={isPopoverOpen ? `popover-node-${node.id}` : undefined}
+            tooltipId={tooltipId}
           />
         );
       },
@@ -1944,7 +1959,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           };
           try {
             const content = nodeTooltip(node);
-            return { content, worldX: pos.x, worldY: pos.y - d.height / 2 };
+            return { type: "node" as const, nodeId: delayedHoveredNodeId, tooltipId: nodeTooltipId(delayedHoveredNodeId), content, worldX: pos.x, worldY: pos.y - d.height / 2 };
           } catch (error) {
             console.error("Error in nodeTooltip callback:", error);
             return null;
@@ -1963,7 +1978,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           });
           try {
             const content = edgeTooltip(edge);
-            return { content, worldX: path.mid.x, worldY: path.mid.y };
+            return { type: "edge" as const, edgeId: delayedHoveredEdgeId, tooltipId: edgeTooltipId(delayedHoveredEdgeId), content, worldX: path.mid.x, worldY: path.mid.y };
           } catch (error) {
             console.error("Error in edgeTooltip callback:", error);
             return null;
@@ -2272,6 +2287,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   // label alike disappear, and it isn't clickable while hidden either.
                   if (hidden) return null;
                   const isPopoverOpen = activePopoverEdgeId === edge.id;
+                  const tooltipId = tooltipTarget?.type === 'edge' && tooltipTarget.edgeId === edge.id ? tooltipTarget.tooltipId : undefined;
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -2296,6 +2312,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       onPopoverOpen={(_edgeId: string, e: SVGElement) => handleEdgePopoverOpen(edge, e)}
                       popoverOpen={isPopoverOpen}
                       popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
+                      tooltipId={tooltipId}
                     />
                   );
                 })}
@@ -2309,6 +2326,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     height: DEFAULT_NODE_H,
                   };
                   const selected = node.id === selectedNodeId;
+                  const tooltipId = tooltipTarget?.type === 'node' && tooltipTarget.nodeId === node.id ? tooltipTarget.tooltipId : undefined;
                   return (
                     <g
                       key={node.id}
@@ -2345,7 +2363,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                         height={d.height}
                         overflow="visible"
                       >
-                        {resolveNodeContent(node, selected)}
+                        {resolveNodeContent(node, selected, tooltipId)}
                       </foreignObject>
                     </g>
                   );
@@ -2357,7 +2375,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           {showToolbar && <GraphToolbar position={toolbarPosition} />}
 
           {tooltipTarget && (
-            <div className="graph-tooltip-layer" aria-hidden="true">
+            <div className="graph-tooltip-layer">
               <div
                 className="graph-tooltip-anchor"
                 style={{
@@ -2365,7 +2383,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   top: tooltipTarget.worldY * viewport.zoom + viewport.y,
                 }}
               >
-                <Tooltip open content={tooltipTarget.content} placement="top">
+                <Tooltip open content={tooltipTarget.content} placement="top" id={tooltipTarget.tooltipId}>
                   <span />
                 </Tooltip>
               </div>

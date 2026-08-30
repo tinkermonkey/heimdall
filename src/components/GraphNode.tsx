@@ -19,6 +19,8 @@ export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.
   popoverOpen?: boolean
   /** ID of the popover panel for aria-controls. */
   popoverPanelId?: string
+  /** ID of the tooltip for aria-describedby when the tooltip is shown for this node. */
+  tooltipId?: string
 }
 
 export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
@@ -37,6 +39,7 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       onPopoverOpen,
       popoverOpen = false,
       popoverPanelId,
+      tooltipId,
       className = '',
       style: _style,
       ...props
@@ -77,6 +80,7 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         aria-haspopup={onPopoverOpen ? 'dialog' : undefined}
         {...(onPopoverOpen && { 'aria-expanded': popoverOpen })}
         {...(onPopoverOpen && popoverPanelId && { 'aria-controls': popoverPanelId })}
+        {...(tooltipId && { 'aria-describedby': tooltipId })}
         {...props}
       >
         <span className="graph-node__swatch" />
