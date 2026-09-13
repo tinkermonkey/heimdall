@@ -177,37 +177,76 @@ export function uxNavLayout(
     updateTreePositions(rootId)
 
     // Update offset for next tree
-    const treeWidth = bounds.maxX - bounds.minX
+    // Account for view fan width extending to the right of the page tree
+    let maxTreeExtent = bounds.maxX
+    const treeNodeIds = new Set<string>()
+    const collectTreeNodes = (id: string) => {
+      treeNodeIds.add(id)
+      for (const childId of pageChildrenOf.get(id) ?? []) {
+        collectTreeNodes(childId)
+      }
+    }
+    collectTreeNodes(rootId)
+
+    // Find the rightmost page in the tree and include its view fan width
+    for (const pageId of treeNodeIds) {
+      const pos = pagePositions.get(pageId)
+      if (pos) {
+        const pageDim = getNodeDim(pageId)
+        const fanWidth = getViewFanWidth(pageId)
+        const rightExtent = pos.x + pageDim.width / 2 + fanWidth
+        maxTreeExtent = Math.max(maxTreeExtent, rightExtent)
+      }
+    }
+
+    const treeWidth = maxTreeExtent - bounds.minX
     currentXOffset += treeWidth + trunkSpacing
   }
 
   // Pass 3: View fan placement
-  // Position view nodes horizontally to the right of their parent pages
-  for (const viewId of viewIds) {
-    const parent = forest.parentOf.get(viewId)
-    if (!parent || !pageIds.has(parent)) continue
+  // Build map of page → view children from structural edges (allows multiple parents)
+  const pageViewChildren = new Map<string, string[]>()
+  for (const edge of edges) {
+    if (!edge.structural) continue
+    const parent = edge.source
+    const child = edge.target
+    if (!pageIds.has(parent) || !viewIds.has(child)) continue
 
-    const parentPos = pagePositions.get(parent)
-    if (!parentPos) continue
-
-    const parentDim = getNodeDim(parent)
-
-    // Get all view children of this parent in order
-    const children = forest.childrenOf.get(parent) ?? []
-    const viewChildren = children.filter(id => viewIds.has(id))
-    const viewIndex = viewChildren.indexOf(viewId)
-
-    // Calculate horizontal position within the fan (starting from right edge of parent)
-    let fanX = parentPos.x + parentDim.width + viewFanGap
-
-    // Add widths of previous views
-    for (let i = 0; i < viewIndex; i++) {
-      const prevViewWidth = getNodeDim(viewChildren[i]).width
-      fanX += prevViewWidth + viewSpacing
+    if (!pageViewChildren.has(parent)) {
+      pageViewChildren.set(parent, [])
     }
+    const childList = pageViewChildren.get(parent)!
+    if (!childList.includes(child)) {
+      childList.push(child)
+    }
+  }
 
-    // Views align vertically with their parent page
-    result.set(viewId, { x: fanX, y: parentPos.y })
+  // Position view nodes horizontally to the right of their parent pages
+  // For each page, place its view children as a horizontal fan
+  for (const [pageId, viewChildren] of pageViewChildren) {
+    const pagePos = pagePositions.get(pageId)
+    if (!pagePos) continue
+
+    const pageDim = getNodeDim(pageId)
+
+    // Position each view child
+    for (let i = 0; i < viewChildren.length; i++) {
+      const viewId = viewChildren[i]
+
+      // Calculate horizontal position within the fan (starting from right edge of parent)
+      let fanX = pagePos.x + pageDim.width / 2 + viewFanGap
+
+      // Add widths of previous views
+      for (let j = 0; j < i; j++) {
+        const prevViewWidth = getNodeDim(viewChildren[j]).width
+        fanX += prevViewWidth + viewSpacing
+      }
+
+      // Views align vertically with their parent page
+      // If a view is already positioned (from a previous parent), we need to handle positioning
+      // For reused views, each instance gets positioned separately
+      result.set(viewId, { x: fanX, y: pagePos.y })
+    }
   }
 
   // Add all page positions to result
