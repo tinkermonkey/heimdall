@@ -25,6 +25,7 @@ import {
   resolveAspectRatioScale,
   type GalaxyLayoutNode,
 } from "../utils/galaxyLayout";
+import { uxNavLayout } from "../utils/uxNavLayout";
 import {
   buildStructuralForest,
   structuralDescendants,
@@ -499,8 +500,10 @@ export interface GraphCanvasProps extends Omit<
    *  distribution, by design. Nodes with x and y are pinned under any of these layouts.
    *  'galaxy' and 'force-clustered' both draw a boundary circle per top-level group (see
    *  showClusterBoundaries) — one per root subtree for 'galaxy', one per top-level Louvain
-   *  cluster for 'force-clustered'. */
-  layout?: "manual" | "force" | "galaxy" | "force-clustered";
+   *  cluster for 'force-clustered'. 'ux-navigation' arranges page nodes as independent
+   *  top-to-bottom trees with view nodes positioned as horizontal fans attached to their
+   *  parent pages (see isPageNode). */
+  layout?: "manual" | "force" | "galaxy" | "force-clustered" | "ux-navigation";
   /**
    * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
    * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
@@ -535,6 +538,13 @@ export interface GraphCanvasProps extends Omit<
    * works under any layout, not just "galaxy".
    */
   isStructuralEdge?: (edge: GraphEdge) => boolean;
+  /**
+   * Classifies a node as a page (returns true) or view (returns false) for ux-navigation layout.
+   * Only meaningful with layout="ux-navigation". Page nodes are positioned in the top-to-bottom
+   * tree hierarchy; view nodes are positioned as horizontal fans attached to their parent pages.
+   * When omitted with ux-navigation layout, all nodes are treated as pages.
+   */
+  isPageNode?: (node: GraphNodeData) => boolean;
   /** When isStructuralEdge is set, renders every non-structural edge instead of hiding it (see
    *  isStructuralEdge). Default false. No effect without isStructuralEdge. */
   showAllRelations?: boolean;
@@ -637,6 +647,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       nodeMargin,
       showClusterBoundaries = true,
       isStructuralEdge,
+      isPageNode,
       showAllRelations = false,
       collapsedNodeIds,
       onToggleCollapse,
@@ -1027,12 +1038,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDims(next);
     }, [visibleNodes, renderNode]);
 
-    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered')
+    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered' | 'ux-navigation')
     useEffect(() => {
       if (
         (layout !== "force" &&
           layout !== "galaxy" &&
-          layout !== "force-clustered") ||
+          layout !== "force-clustered" &&
+          layout !== "ux-navigation") ||
         dims.size === 0
       )
         return;
@@ -1071,6 +1083,22 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin });
         setComputedPositions(positions);
         setClusterBoundaries(boundaries);
+      } else if (layout === "ux-navigation") {
+        const layoutEdges = (edges ?? []).map((e) => ({
+          source: e.sourceId,
+          target: e.targetId,
+          structural: safeIsStructuralEdge(isStructuralEdge, e),
+        }));
+        const pageNode = isPageNode ?? (() => true);
+        const positions = uxNavLayout(
+          layoutNodes,
+          layoutEdges,
+          dims,
+          (node) => pageNode(nodes.find(n => n.id === node.id)!),
+          collapsedNodeIds,
+        );
+        setComputedPositions(positions);
+        setClusterBoundaries(new Map());
       } else {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1112,7 +1140,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       layout,
       nodeMargin,
       isStructuralEdge,
+      isPageNode,
       forest,
+      nodes,
+      collapsedNodeIds,
     ]);
 
     // A node's dragPositions override doubles as its pin here, same priority getNodePosition

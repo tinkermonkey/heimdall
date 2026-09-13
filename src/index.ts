@@ -160,6 +160,7 @@ export {
   type ClusteredLayoutResult,
 } from './utils/graphLayout'
 export { galaxyLayout, type GalaxyLayoutNode, type GalaxyLayoutEdge, type GalaxyLayoutOptions } from './utils/galaxyLayout'
+export { uxNavLayout, type UxNavLayoutOptions } from './utils/uxNavLayout'
 export { buildStructuralForest, structuralDescendants, type HierarchyEdge, type StructuralForest } from './utils/graphHierarchy'
 export { louvainCluster, type ClusterEdge, type ClusterTreeNode, type LouvainOptions } from './utils/graphClustering'
 export { packClusters, type PackedCircle, type PackOptions } from './utils/graphPacking'
