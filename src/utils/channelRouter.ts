@@ -143,8 +143,6 @@ function buildOrthogonalPath(
 
   // Fallback: route outside the bounding box of all obstacles
   if (obstacles.length > 0) {
-    const minX = Math.min(...obstacles.map(o => o.x - o.width / 2))
-    const maxX = Math.max(...obstacles.map(o => o.x + o.width / 2))
     const minY = Math.min(...obstacles.map(o => o.y - o.height / 2))
     const maxY = Math.max(...obstacles.map(o => o.y + o.height / 2))
 
