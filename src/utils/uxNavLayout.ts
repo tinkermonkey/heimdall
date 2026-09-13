@@ -156,6 +156,31 @@ export function uxNavLayout(
 
     if (!bounds) continue
 
+    // Collect all nodes in this tree (before translation) to compute extent in d3 space
+    const treeNodeIds = new Set<string>()
+    const collectTreeNodes = (id: string) => {
+      treeNodeIds.add(id)
+      for (const childId of pageChildrenOf.get(id) ?? []) {
+        collectTreeNodes(childId)
+      }
+    }
+    collectTreeNodes(rootId)
+
+    // Compute tree extent in d3 coordinate space (before translation)
+    // Include view fan widths so adjacent trees don't overlap
+    let maxTreeExtent = bounds.maxX
+    for (const pageId of treeNodeIds) {
+      const pos = pagePositions.get(pageId)
+      if (pos) {
+        const pageDim = getNodeDim(pageId)
+        const fanWidth = getViewFanWidth(pageId)
+        const rightExtent = pos.x + pageDim.width / 2 + fanWidth
+        maxTreeExtent = Math.max(maxTreeExtent, rightExtent)
+      }
+    }
+
+    const treeWidth = maxTreeExtent - bounds.minX
+
     // Translate this tree's positions
     const treeTranslateX = currentXOffset - bounds.minX
     const treeTranslateY = -bounds.minY // top-align all trees at y=0
@@ -177,53 +202,15 @@ export function uxNavLayout(
     updateTreePositions(rootId)
 
     // Update offset for next tree
-    // Account for view fan width extending to the right of the page tree
-    let maxTreeExtent = bounds.maxX
-    const treeNodeIds = new Set<string>()
-    const collectTreeNodes = (id: string) => {
-      treeNodeIds.add(id)
-      for (const childId of pageChildrenOf.get(id) ?? []) {
-        collectTreeNodes(childId)
-      }
-    }
-    collectTreeNodes(rootId)
-
-    // Find the rightmost page in the tree and include its view fan width
-    for (const pageId of treeNodeIds) {
-      const pos = pagePositions.get(pageId)
-      if (pos) {
-        const pageDim = getNodeDim(pageId)
-        const fanWidth = getViewFanWidth(pageId)
-        const rightExtent = pos.x + pageDim.width / 2 + fanWidth
-        maxTreeExtent = Math.max(maxTreeExtent, rightExtent)
-      }
-    }
-
-    const treeWidth = maxTreeExtent - bounds.minX
     currentXOffset += treeWidth + trunkSpacing
   }
 
   // Pass 3: View fan placement
-  // Build map of page → view children from structural edges (allows multiple parents)
-  const pageViewChildren = new Map<string, string[]>()
-  for (const edge of edges) {
-    if (!edge.structural) continue
-    const parent = edge.source
-    const child = edge.target
-    if (!pageIds.has(parent) || !viewIds.has(child)) continue
-
-    if (!pageViewChildren.has(parent)) {
-      pageViewChildren.set(parent, [])
-    }
-    const childList = pageViewChildren.get(parent)!
-    if (!childList.includes(child)) {
-      childList.push(child)
-    }
-  }
-
   // Position view nodes horizontally to the right of their parent pages
   // For each page, place its view children as a horizontal fan
-  for (const [pageId, viewChildren] of pageViewChildren) {
+  for (const [pageId, viewChildren] of forest.childrenOf) {
+    if (!pageIds.has(pageId)) continue
+
     const pagePos = pagePositions.get(pageId)
     if (!pagePos) continue
 
@@ -232,19 +219,20 @@ export function uxNavLayout(
     // Position each view child
     for (let i = 0; i < viewChildren.length; i++) {
       const viewId = viewChildren[i]
+      if (!viewIds.has(viewId)) continue
 
       // Calculate horizontal position within the fan (starting from right edge of parent)
       let fanX = pagePos.x + pageDim.width / 2 + viewFanGap
 
       // Add widths of previous views
       for (let j = 0; j < i; j++) {
-        const prevViewWidth = getNodeDim(viewChildren[j]).width
+        const prevViewId = viewChildren[j]
+        if (!viewIds.has(prevViewId)) continue
+        const prevViewWidth = getNodeDim(prevViewId).width
         fanX += prevViewWidth + viewSpacing
       }
 
       // Views align vertically with their parent page
-      // If a view is already positioned (from a previous parent), we need to handle positioning
-      // For reused views, each instance gets positioned separately
       result.set(viewId, { x: fanX, y: pagePos.y })
     }
   }
