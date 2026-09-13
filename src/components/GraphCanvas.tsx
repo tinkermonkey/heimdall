@@ -187,13 +187,40 @@ function safeRenderNodeCallback(
 function safeIsStructuralEdge(
   isStructuralEdge: ((edge: GraphEdge) => boolean) | undefined,
   edge: GraphEdge,
+  layout?: string,
 ): boolean {
-  if (!isStructuralEdge) return true;
+  if (!isStructuralEdge) return layout !== "ux-navigation";
   try {
     return isStructuralEdge(edge);
   } catch (error) {
     console.error("Error in isStructuralEdge callback:", error);
+    return layout !== "ux-navigation";
+  }
+}
+
+function safeIsPageNode(
+  isPageNode: ((node: GraphNodeData) => boolean) | undefined,
+  node: GraphNodeData,
+): boolean {
+  if (!isPageNode) return true;
+  try {
+    return isPageNode(node);
+  } catch (error) {
+    console.error("Error in isPageNode callback:", error);
     return true;
+  }
+}
+
+function safeIsNavigationRoute(
+  isNavigationRoute: ((edge: GraphEdge) => boolean) | undefined,
+  edge: GraphEdge,
+): boolean {
+  if (!isNavigationRoute) return false;
+  try {
+    return isNavigationRoute(edge);
+  } catch (error) {
+    console.error("Error in isNavigationRoute callback:", error);
+    return false;
   }
 }
 
@@ -247,8 +274,13 @@ function GraphEdgeInternal({
     const tgt = getNodeRect(targetId);
     if (!src || !tgt) return null;
 
+    const obstacleRects = nodeRects.filter(
+      (r) => !(r.x === src.x && r.y === src.y && r.width === src.width && r.height === src.height) &&
+             !(r.x === tgt.x && r.y === tgt.y && r.width === tgt.width && r.height === tgt.height)
+    );
+
     const path = isNavigationRoute
-      ? routeNavigationEdge(src, tgt, nodeRects.filter(r => r !== src && r !== tgt))
+      ? routeNavigationEdge(src, tgt, obstacleRects)
       : computeEdgePath(src, tgt, {
           sourceAnchor,
           targetAnchor,
@@ -905,13 +937,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const hierarchyEdges = edges.map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: safeIsStructuralEdge(isStructuralEdge, e),
+        structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
       }));
       return buildStructuralForest(
         nodes.map((n) => n.id),
         hierarchyEdges,
       );
-    }, [nodes, edges, isStructuralEdge]);
+    }, [nodes, edges, isStructuralEdge, layout]);
 
     // Every structural descendant of a collapsed node is hidden — not just its direct children.
     const hiddenIds = useMemo(() => {
@@ -931,17 +963,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const visibleNavigationRouteIds = useMemo(() => {
       if (layout !== "ux-navigation" || !isNavigationRoute) return new Set<string>();
       const nodeMap = new Map(nodes.map(n => [n.id, n]));
-      const pageNodePredicate = isPageNode
-        ? (nodeId: string) => {
-            const node = nodeMap.get(nodeId);
-            return node ? isPageNode(node) : false;
-          }
-        : () => true;
+      const pageNodePredicate = (nodeId: string) => {
+        const node = nodeMap.get(nodeId);
+        return node ? safeIsPageNode(isPageNode, node) : false;
+      };
       return visibleNavigationEdgeIds(
         edges,
         hoveredNodeId,
         pageNodePredicate,
-        isNavigationRoute,
+        (edge) => safeIsNavigationRoute(isNavigationRoute, edge),
         forest,
         collapsedNodeIds,
       );
@@ -1137,15 +1167,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
           target: e.targetId,
-          structural: safeIsStructuralEdge(isStructuralEdge, e),
+          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
         }));
-        const pageNode = isPageNode ?? (() => true);
         const nodeMap = new Map(nodes.map(n => [n.id, n]));
         const positions = uxNavLayout(
           layoutNodes,
           layoutEdges,
           dims,
-          (node) => pageNode(nodeMap.get(node.id)!),
+          (node) => {
+            const fullNode = nodeMap.get(node.id);
+            return fullNode ? safeIsPageNode(isPageNode, fullNode) : true;
+          },
         );
         setComputedPositions(positions);
         setClusterBoundaries(new Map());
@@ -1153,7 +1185,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
           target: e.targetId,
-          structural: safeIsStructuralEdge(isStructuralEdge, e),
+          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
         }));
         const positions = galaxyLayout(layoutNodes, layoutEdges, {
           nodeMargin,
@@ -1234,9 +1266,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return (edges ?? []).map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: safeIsStructuralEdge(isStructuralEdge, e),
+        structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
       }));
-    }, [liveActive, edges, isStructuralEdge]);
+    }, [liveActive, edges, isStructuralEdge, layout]);
 
     // A drag/pin-independent view of the same nodes, purely for resolving the aspectRatio scale
     // below — deliberately NOT `liveLayoutNodes` (which changes identity every animation frame
@@ -1444,14 +1476,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (didCenterRef.current) return;
       if (!containerSize || dims.size === 0 || visibleNodes.length === 0)
         return;
-      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered' all compute
-      // positions asynchronously (see the engine-layout effect above) — without waiting for them
-      // here too, this could run with computedPositions still empty, every node falling back to
-      // {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
+      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered'/'ux-navigation'
+      // all compute positions asynchronously (see the engine-layout effect above) — without waiting
+      // for them here too, this could run with computedPositions still empty, every node falling
+      // back to {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
       if (
         (layout === "force" ||
           layout === "galaxy" ||
-          layout === "force-clustered") &&
+          layout === "force-clustered" ||
+          layout === "ux-navigation") &&
         computedPositions.size === 0
       )
         return;
@@ -2360,8 +2393,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                 {edges?.map((edge) => {
                   // Only isStructuralEdge callers opt into hiding — without it every edge
                   // is treated as structural, so this never changes existing behavior.
-                  const structural = safeIsStructuralEdge(isStructuralEdge, edge);
-                  const navigationRoute = isNavigationRoute?.(edge) ?? false;
+                  const structural = safeIsStructuralEdge(isStructuralEdge, edge, layout);
+                  // Navigation routes only meaningful with ux-navigation layout
+                  const navigationRoute = layout === "ux-navigation"
+                    ? safeIsNavigationRoute(isNavigationRoute, edge)
+                    : false;
                   const touchesFocus =
                     edge.sourceId === hoveredNodeId ||
                     edge.targetId === hoveredNodeId ||
