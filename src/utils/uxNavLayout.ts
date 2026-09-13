@@ -3,7 +3,6 @@ import { buildStructuralForest, type HierarchyEdge } from './graphHierarchy'
 import type { LayoutNode } from './graphLayout'
 
 export interface UxNavLayoutOptions {
-  nodeMargin?: number
   rowSpacing?: number       // vertical gap between tree depth levels (default: ~80)
   columnSpacing?: number    // horizontal gap between sibling subtrees (default: ~60)
   viewFanGap?: number       // gap between page node and first view (default: ~40)
@@ -27,7 +26,6 @@ export function uxNavLayout(
   edges: readonly HierarchyEdge[],
   dims: ReadonlyMap<string, { width: number; height: number }>,
   isPageNode: (node: LayoutNode) => boolean,
-  collapsedNodeIds: ReadonlySet<string> | undefined,
   options: UxNavLayoutOptions = {},
 ): Map<string, { x: number; y: number }> {
   const {
@@ -92,24 +90,9 @@ export function uxNavLayout(
   const treeBounds: Array<{ minX: number; maxX: number; minY: number; maxY: number }> = []
 
   for (const rootId of pageRoots) {
-    // Build the set of visible page nodes for this tree
-    const visiblePages = new Set<string>()
-    const addVisible = (id: string) => {
-      if (visiblePages.has(id)) return
-      visiblePages.add(id)
-      if (!collapsedNodeIds?.has(id)) {
-        for (const childId of pageChildrenOf.get(id) ?? []) {
-          addVisible(childId)
-        }
-      }
-    }
-    addVisible(rootId)
-
-    // Build d3 hierarchy for visible pages only
+    // Build d3 hierarchy for page nodes (caller provides only visible nodes)
     const buildHierarchy = (id: string): any => {
-      const children = pageChildrenOf
-        .get(id)
-        ?.filter(childId => visiblePages.has(childId)) ?? []
+      const children = pageChildrenOf.get(id) ?? []
       return {
         id,
         children: children.map(buildHierarchy),
@@ -211,7 +194,6 @@ export function uxNavLayout(
     if (!parentPos) continue
 
     const parentDim = getNodeDim(parent)
-    const viewDim = getNodeDim(viewId)
 
     // Get all view children of this parent in order
     const children = forest.childrenOf.get(parent) ?? []
