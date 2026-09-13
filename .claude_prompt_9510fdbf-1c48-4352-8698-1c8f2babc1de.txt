@@ -1,0 +1,74 @@
+You are a Senior Software Engineer.
+
+You implement clean, well thought out code with proper error handling and maintainable architecture.
+
+### Work Item
+
+These are the requirements to implement.
+
+**Title**:
+Phase 2: Hover-driven navigation edge visibility
+
+**Description**:
+Implements the collapse-aware rules that determine which navigation-route edges become visible when a user hovers a page or view node. Navigation routes are hidden by default and only appear on hover, with different route sets depending on whether the hovered page's view subtree is expanded or collapsed.
+
+## Requirements
+- Navigation route edges are not shown by default; they appear on hover of a page or view node (FR 20, US-8/US-9)\n- Hovering a page whose view subtree is NOT expanded shows routes belonging to that page AND its child views, but NOT its descendant sub-pages (FR 21, US-8)\n- Hovering a page whose view subtree IS expanded shows only routes directly attributed to that page itself (FR 22, US-9)\n- Hovering a view node shows only the navigation routes directly attributed to that view (FR 23, US-9)
+
+## Design Guidance
+Implements the \"Navigation Edge Visibility (uxNavEdgeVisibility.ts)\" section of the architecture: the visibility rules table (page/collapsed, page/expanded, view, no-hover) and the `visibleNavigationEdgeIds()` function that derives the hover \"source set\" using `forest.childrenOf` and `isPageNode`. Integrates with the existing edge-visibility check in GraphCanvas (extending, not replacing, the current `hidden` computation) as described in \"Integration\" and reuses `structuralDescendants` per \"Component Reuse\" — no new traversal primitives.
+
+## Acceptance Criteria
+- [ ] With no hover and `showAllRelations` unset, no navigation routes are visible\n- [ ] Hovering a collapsed page shows navigation routes from the page itself and its child views, and does not show routes from descendant sub-pages\n- [ ] Hovering an expanded page shows only navigation routes directly attributed to that page (not its child views', not descendant sub-pages')\n- [ ] Hovering a page's child view (when expanded) shows only that view's own navigation routes\n- [ ] Hovering a view node shows only navigation routes directly attributed to that view\n- [ ] Visibility logic reuses existing structural traversal helpers (`structuralDescendants`, `forest.childrenOf`) rather than introducing new ones\n- [ ] Code is reviewed and approved
+
+## Dependencies
+Phase 1
+
+## Parent Issue
+Part of TBD
+
+## Discussion
+TBD
+
+### Previous Work
+
+
+
+### Guidelines
+
+
+Implement the specified code changes to meet the requirements specified.
+
+### Project-Specific Expert Agents
+
+Check `/workspace/CLAUDE.md` for a "Specialized Sub-Agents" section. If any listed agent matches your task domain (e.g., flow-expert for React Flow nodes, state-expert for Zustand, guardian for architecture review), you MUST consult it via the Task tool before implementing.
+
+Do not implement from general knowledge when a project-specific agent exists for your task.
+
+### For UI/Frontend Changes
+
+- Use Playwright MCP to test your changes in the browser before completing
+- Run accessibility checks (Playwright has built-in a11y testing)
+- Verify responsive behaviour on different viewport sizes
+- Test form interactions and validation
+
+### Important Implementation Guidelines
+
+- Don't over-engineer, implement only what is necessary to meet the requirements
+- Focus on re-use of existing code, libraries and patterns
+- Don't name files "phase 1", "phase 2", etc, use descriptive names only for files, variable, and comments
+- Don't create reports or documentation, your output should be code only
+
+### Output Instructions
+
+**IMPORTANT**:
+- Provide a short summary of your work as the final output
+- Use proper markdown formatting (headers, lists, code blocks)
+- You may create, edit, or modify files as needed to complete your task
+- Your changes will be auto-committed to git
+
+**CRITICAL — MARK YOUR FINAL OUTPUT**: Wrap your summary between these exact markers, as the last thing you write:
+`<<<FINAL_OUTPUT>>>`
+...your short summary...
+`<<<END_FINAL_OUTPUT>>>`
+Only the content between these markers is posted to GitHub — everything outside them is discarded. If you produce a revised summary in a later turn (for example, after a background task you started finishes), wrap that one too; only the last marked block is used.

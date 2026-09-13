@@ -31,6 +31,7 @@ import {
   structuralDescendants,
   galaxyGroupMap,
 } from "../utils/graphHierarchy";
+import { visibleNavigationEdgeIds } from "../utils/uxNavEdgeVisibility";
 import { usePanZoom } from "../hooks/usePanZoom";
 import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
 import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
@@ -545,6 +546,14 @@ export interface GraphCanvasProps extends Omit<
    * When omitted with ux-navigation layout, all nodes are treated as pages.
    */
   isPageNode?: (node: GraphNodeData) => boolean;
+  /**
+   * Classifies an edge as a navigation route for ux-navigation layout.
+   * Only meaningful with layout="ux-navigation". Navigation route edges are hidden by default
+   * and only become visible when hovering a page or view node, with the visible set depending
+   * on whether the hovered node is a collapsed page, expanded page, or view.
+   * When omitted, no edges are treated as navigation routes.
+   */
+  isNavigationRoute?: (edge: GraphEdge) => boolean;
   /** When isStructuralEdge is set, renders every non-structural edge instead of hiding it (see
    *  isStructuralEdge). Default false. No effect without isStructuralEdge. */
   showAllRelations?: boolean;
@@ -648,6 +657,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       showClusterBoundaries = true,
       isStructuralEdge,
       isPageNode,
+      isNavigationRoute,
       showAllRelations = false,
       collapsedNodeIds,
       onToggleCollapse,
@@ -896,6 +906,28 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
       return hidden;
     }, [collapsedNodeIds, forest]);
+
+    // Navigation route visibility for ux-navigation layout: compute which navigation-route
+    // edges should be visible based on the currently hovered node, its expansion state, and
+    // whether it's a page or view.
+    const visibleNavigationRouteIds = useMemo(() => {
+      if (layout !== "ux-navigation" || !isNavigationRoute) return new Set<string>();
+      const nodeMap = new Map(nodes.map(n => [n.id, n]));
+      const pageNodePredicate = isPageNode
+        ? (nodeId: string) => {
+            const node = nodeMap.get(nodeId);
+            return node ? isPageNode(node) : false;
+          }
+        : () => true;
+      return visibleNavigationEdgeIds(
+        edges,
+        hoveredNodeId,
+        pageNodePredicate,
+        isNavigationRoute,
+        forest,
+        collapsedNodeIds,
+      );
+    }, [layout, isNavigationRoute, edges, hoveredNodeId, forest, collapsedNodeIds, isPageNode, nodes]);
 
     // The node list actually measured, laid out, and rendered. Edges touching a hidden node
     // simply don't resolve a rect (see getNodeRect below) and render nothing — no separate
@@ -2312,8 +2344,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     edge.sourceId === selectedNodeId ||
                     edge.targetId === selectedNodeId ||
                     edge.id === selectedEdgeId;
+                  // Check if this is a visible navigation route (ux-navigation layout only)
+                  const isVisibleNavigationRoute = visibleNavigationRouteIds.has(edge.id);
                   const hidden =
-                    !structural && !showAllRelations && !touchesFocus;
+                    !structural && !showAllRelations && !touchesFocus && !isVisibleNavigationRoute;
                   // Not rendered at all rather than dimmed to a low opacity — line, marker, and
                   // label alike disappear, and it isn't clickable while hidden either.
                   if (hidden) return null;
