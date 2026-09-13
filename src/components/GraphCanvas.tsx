@@ -1090,12 +1090,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           structural: safeIsStructuralEdge(isStructuralEdge, e),
         }));
         const pageNode = isPageNode ?? (() => true);
-        const nodeById = new Map(nodes.map(n => [n.id, n]));
+        const nodeMap = new Map(nodes.map(n => [n.id, n]));
         const positions = uxNavLayout(
           layoutNodes,
           layoutEdges,
           dims,
-          (node) => pageNode(nodeById.get(node.id)!),
+          (node) => pageNode(nodeMap.get(node.id)!),
         );
         setComputedPositions(positions);
         setClusterBoundaries(new Map());
