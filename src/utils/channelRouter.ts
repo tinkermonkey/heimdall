@@ -251,10 +251,3 @@ function pointsToPathString(points: Point[]): string {
   ]
   return parts.join(' ')
 }
-
-export function nudgeOverlappingSegments(routes: RoutedEdge[]): string[] {
-  // For now, return the original paths — full implementation would detect shared segments
-  // and apply perpendicular offsets to make them visually distinct. This is a foundation
-  // that can be enhanced in future iterations.
-  return routes.map(r => r.d)
-}
