@@ -300,16 +300,19 @@ const LABEL_CANDIDATE_TS = [0.5, 0.38, 0.62, 0.26, 0.74, 0.15, 0.85]
  * routing/repositioning scheme for what's meant to stay "just that".
  *
  * Handles both bezier control polygons (3-4 points) and orthogonal polylines (3+ points).
- * Polylines with 5+ points are sampled linearly; bezier paths use curve functions.
+ * Polylines use linear interpolation; bezier paths use curve functions.
+ * @param isPolyline - If true, treats points as an orthogonal polyline (linear sampling).
+ *                     If false/undefined, interprets based on point count (3=quadratic, 4=cubic).
  */
 export function findClearLabelPosition(
   points: readonly Point[],
   size: { width: number; height: number },
   obstacles: readonly EdgeEndpointRect[],
-  margin: number = 6
+  margin: number = 6,
+  isPolyline?: boolean
 ): Point {
   const sampleAt =
-    points.length > 4
+    isPolyline
       ? (t: number) => polylinePointAt(points, t)
       : points.length === 4
       ? (t: number) => cubicPointAt(points[0], points[1], points[2], points[3], t)

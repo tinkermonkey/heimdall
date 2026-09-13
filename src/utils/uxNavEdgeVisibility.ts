@@ -8,8 +8,8 @@ import type { GraphEdge } from '../components/GraphCanvas'
  * and only become visible when hovering a page or view node. Different edge sets are shown
  * depending on whether the hovered node is:
  * - A collapsed page: shows routes from the page + its child views, not descendant sub-pages
- * - An expanded page: shows only routes directly attributed to the page
- * - A view: shows only routes directly attributed to that view
+ * - An expanded page: shows only routes connected to the page
+ * - A view: shows only routes connected to that view
  *
  * @param edges - All edges in the graph
  * @param hoveredNodeId - Currently hovered node ID, or undefined for no hover

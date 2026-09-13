@@ -5,6 +5,10 @@ export interface RoutedEdge {
   mid: Point
   angle: number
   points: Point[]
+  /** Marks this as an orthogonal polyline (not a bezier curve). Used to distinguish from
+   *  BezierPathResult when sampling label positions — polylines use linear interpolation,
+   *  while beziers use curve functions. */
+  isPolyline: true
 }
 
 /** Default spacing (px) between parallel segments when nudging overlapping edges apart */
@@ -34,7 +38,7 @@ export function routeNavigationEdge(
     points[points.length - 1].x - points[points.length - 2].x
   )
 
-  return { d, mid, angle, points }
+  return { d, mid, angle, points, isPolyline: true }
 }
 
 /**
@@ -82,9 +86,12 @@ function nudgeOverlappingSegments(
   routes: Map<string, RoutedEdge>,
   traceSpacing: number = DEFAULT_TRACE_SPACING
 ): void {
+  // Track which route pairs have already been nudged to avoid double-nudging
+  const nudgedPairs = new Set<string>()
+
   // Group segments by their axis and position
-  const horizontalSegments = new Map<number, Array<{ id: string; x1: number; x2: number }>>()
-  const verticalSegments = new Map<number, Array<{ id: string; y1: number; y2: number }>>()
+  const horizontalSegments = new Map<number, Array<{ id: string; segmentIndex: number; x1: number; x2: number }>>()
+  const verticalSegments = new Map<number, Array<{ id: string; segmentIndex: number; y1: number; y2: number }>>()
 
   for (const [id, route] of routes) {
     for (let i = 0; i < route.points.length - 1; i++) {
@@ -99,6 +106,7 @@ function nudgeOverlappingSegments(
         }
         horizontalSegments.get(y)!.push({
           id,
+          segmentIndex: i,
           x1: Math.min(p1.x, p2.x),
           x2: Math.max(p1.x, p2.x),
         })
@@ -112,6 +120,7 @@ function nudgeOverlappingSegments(
         }
         verticalSegments.get(x)!.push({
           id,
+          segmentIndex: i,
           y1: Math.min(p1.y, p2.y),
           y2: Math.max(p1.y, p2.y),
         })
@@ -128,10 +137,14 @@ function nudgeOverlappingSegments(
 
         // Check if segments overlap in x
         if (seg1.x1 < seg2.x2 && seg1.x2 > seg2.x1) {
-          const route1 = routes.get(seg1.id)!
-          const route2 = routes.get(seg2.id)!
-          if (route1 && route2) {
-            nudgeSegmentsApart(route1, route2, 'horizontal', traceSpacing)
+          const pairKey = [seg1.id, seg2.id].sort().join(':')
+          if (!nudgedPairs.has(pairKey)) {
+            const route1 = routes.get(seg1.id)!
+            const route2 = routes.get(seg2.id)!
+            if (route1 && route2) {
+              nudgeHorizontalSegment(route1, seg1.segmentIndex, route2, seg2.segmentIndex, traceSpacing)
+              nudgedPairs.add(pairKey)
+            }
           }
         }
       }
@@ -147,10 +160,14 @@ function nudgeOverlappingSegments(
 
         // Check if segments overlap in y
         if (seg1.y1 < seg2.y2 && seg1.y2 > seg2.y1) {
-          const route1 = routes.get(seg1.id)!
-          const route2 = routes.get(seg2.id)!
-          if (route1 && route2) {
-            nudgeSegmentsApart(route1, route2, 'vertical', traceSpacing)
+          const pairKey = [seg1.id, seg2.id].sort().join(':')
+          if (!nudgedPairs.has(pairKey)) {
+            const route1 = routes.get(seg1.id)!
+            const route2 = routes.get(seg2.id)!
+            if (route1 && route2) {
+              nudgeVerticalSegment(route1, seg1.segmentIndex, route2, seg2.segmentIndex, traceSpacing)
+              nudgedPairs.add(pairKey)
+            }
           }
         }
       }
@@ -159,66 +176,74 @@ function nudgeOverlappingSegments(
 }
 
 /**
- * Nudges two routed edges apart by applying perpendicular offsets to avoid visual overlap.
+ * Nudges a specific horizontal segment of a route vertically to separate from another.
+ * Only modifies points that form the exact segment, not all horizontal segments in the route.
  */
-function nudgeSegmentsApart(
+function nudgeHorizontalSegment(
   route1: RoutedEdge,
+  segmentIndex1: number,
   route2: RoutedEdge,
-  direction: 'horizontal' | 'vertical',
+  segmentIndex2: number,
   spacing: number
 ): void {
   const offset = spacing / 2
 
-  if (direction === 'horizontal') {
-    // Nudge horizontally parallel segments apart vertically
-    for (let i = 0; i < route1.points.length; i++) {
-      const p = route1.points[i]
-      // Check if this point is part of a horizontal segment
-      if ((i === 0 || route1.points[i - 1].y !== p.y) && (i === route1.points.length - 1 || route1.points[i + 1].y !== p.y)) {
-        continue
-      }
-      route1.points[i] = { x: p.x, y: p.y - offset }
-    }
+  // Nudge the two endpoints of each segment
+  const seg1Start = segmentIndex1
+  const seg1End = segmentIndex1 + 1
+  const seg2Start = segmentIndex2
+  const seg2End = segmentIndex2 + 1
 
-    for (let i = 0; i < route2.points.length; i++) {
-      const p = route2.points[i]
-      if ((i === 0 || route2.points[i - 1].y !== p.y) && (i === route2.points.length - 1 || route2.points[i + 1].y !== p.y)) {
-        continue
-      }
-      route2.points[i] = { x: p.x, y: p.y + offset }
-    }
-  } else {
-    // Nudge vertically parallel segments apart horizontally
-    for (let i = 0; i < route1.points.length; i++) {
-      const p = route1.points[i]
-      if ((i === 0 || route1.points[i - 1].x !== p.x) && (i === route1.points.length - 1 || route1.points[i + 1].x !== p.x)) {
-        continue
-      }
-      route1.points[i] = { x: p.x - offset, y: p.y }
-    }
+  route1.points[seg1Start] = { x: route1.points[seg1Start].x, y: route1.points[seg1Start].y - offset }
+  route1.points[seg1End] = { x: route1.points[seg1End].x, y: route1.points[seg1End].y - offset }
 
-    for (let i = 0; i < route2.points.length; i++) {
-      const p = route2.points[i]
-      if ((i === 0 || route2.points[i - 1].x !== p.x) && (i === route2.points.length - 1 || route2.points[i + 1].x !== p.x)) {
-        continue
-      }
-      route2.points[i] = { x: p.x + offset, y: p.y }
-    }
-  }
+  route2.points[seg2Start] = { x: route2.points[seg2Start].x, y: route2.points[seg2Start].y + offset }
+  route2.points[seg2End] = { x: route2.points[seg2End].x, y: route2.points[seg2End].y + offset }
 
   // Recompute path string and metadata after nudging
-  route1.d = pointsToPathString(route1.points)
-  route1.mid = route1.points[Math.floor(route1.points.length / 2)]
-  route1.angle = Math.atan2(
-    route1.points[route1.points.length - 1].y - route1.points[route1.points.length - 2].y,
-    route1.points[route1.points.length - 1].x - route1.points[route1.points.length - 2].x
-  )
+  updateRouteMetadata(route1)
+  updateRouteMetadata(route2)
+}
 
-  route2.d = pointsToPathString(route2.points)
-  route2.mid = route2.points[Math.floor(route2.points.length / 2)]
-  route2.angle = Math.atan2(
-    route2.points[route2.points.length - 1].y - route2.points[route2.points.length - 2].y,
-    route2.points[route2.points.length - 1].x - route2.points[route2.points.length - 2].x
+/**
+ * Nudges a specific vertical segment of a route horizontally to separate from another.
+ * Only modifies points that form the exact segment, not all vertical segments in the route.
+ */
+function nudgeVerticalSegment(
+  route1: RoutedEdge,
+  segmentIndex1: number,
+  route2: RoutedEdge,
+  segmentIndex2: number,
+  spacing: number
+): void {
+  const offset = spacing / 2
+
+  // Nudge the two endpoints of each segment
+  const seg1Start = segmentIndex1
+  const seg1End = segmentIndex1 + 1
+  const seg2Start = segmentIndex2
+  const seg2End = segmentIndex2 + 1
+
+  route1.points[seg1Start] = { x: route1.points[seg1Start].x - offset, y: route1.points[seg1Start].y }
+  route1.points[seg1End] = { x: route1.points[seg1End].x - offset, y: route1.points[seg1End].y }
+
+  route2.points[seg2Start] = { x: route2.points[seg2Start].x + offset, y: route2.points[seg2Start].y }
+  route2.points[seg2End] = { x: route2.points[seg2End].x + offset, y: route2.points[seg2End].y }
+
+  // Recompute path string and metadata after nudging
+  updateRouteMetadata(route1)
+  updateRouteMetadata(route2)
+}
+
+/**
+ * Updates the path string and metadata (mid, angle) of a route after points have been modified.
+ */
+function updateRouteMetadata(route: RoutedEdge): void {
+  route.d = pointsToPathString(route.points)
+  route.mid = route.points[Math.floor(route.points.length / 2)]
+  route.angle = Math.atan2(
+    route.points[route.points.length - 1].y - route.points[route.points.length - 2].y,
+    route.points[route.points.length - 1].x - route.points[route.points.length - 2].x
   )
 }
 

@@ -16,7 +16,7 @@ import {
   type BoundingBox,
   type EdgeAnchor,
 } from "../utils/graph";
-import { routeNavigationEdge } from "../utils/channelRouter";
+import { routeNavigationEdge, routeNavigationEdges, DEFAULT_TRACE_SPACING } from "../utils/channelRouter";
 import {
   forceLayout,
   clusteredForceLayout,
@@ -237,6 +237,7 @@ type InternalEdgeProps = GraphEdge & {
   popoverPanelId?: string;
   tooltipId?: string;
   isNavigationRoute?: boolean;
+  preRoutedEdge?: any; // RoutedEdge type from channelRouter
 };
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -266,10 +267,25 @@ function GraphEdgeInternal({
   popoverPanelId,
   tooltipId,
   isNavigationRoute = false,
+  preRoutedEdge,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas();
 
   const result = useMemo(() => {
+    // If this is a pre-routed navigation edge from batch routing, use that directly
+    if (preRoutedEdge) {
+      const labelPos = label
+        ? findClearLabelPosition(
+            preRoutedEdge.points,
+            edgeLabelSize(label),
+            nodeRects,
+            EDGE_LABEL_MARGIN,
+            preRoutedEdge.isPolyline,
+          )
+        : preRoutedEdge.mid;
+      return { ...preRoutedEdge, labelPos };
+    }
+
     const src = getNodeRect(sourceId);
     const tgt = getNodeRect(targetId);
     if (!src || !tgt) return null;
@@ -293,18 +309,20 @@ function GraphEdgeInternal({
           edgeLabelSize(label),
           nodeRects,
           EDGE_LABEL_MARGIN,
+          (path as any).isPolyline,
         )
       : path.mid;
     return { ...path, labelPos };
   }, [
+    preRoutedEdge,
+    label,
+    nodeRects,
     getNodeRect,
     sourceId,
     targetId,
     sourceAnchor,
     targetAnchor,
     curvature,
-    label,
-    nodeRects,
     isNavigationRoute,
   ]);
 
@@ -1956,6 +1974,37 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [visibleNodes, getNodeRect],
     );
 
+    // Batch-route all navigation edges together with overlapping-segment nudging
+    const navigationEdgeRoutes = useMemo(() => {
+      if (layout !== "ux-navigation" || !isNavigationRoute) return new Map<string, any>();
+
+      // Filter edges to get only navigation routes
+      const navEdges = edges.filter((edge) => {
+        try {
+          return isNavigationRoute(edge);
+        } catch {
+          return false;
+        }
+      });
+
+      if (navEdges.length === 0) return new Map<string, any>();
+
+      // Collect edge data with their rects
+      const edgesWithRects = navEdges
+        .map((edge) => {
+          const src = getNodeRect(edge.sourceId);
+          const tgt = getNodeRect(edge.targetId);
+          if (!src || !tgt) return null;
+          return { id: edge.id, source: src, target: tgt };
+        })
+        .filter((e): e is NonNullable<typeof e> => e !== null);
+
+      if (edgesWithRects.length === 0) return new Map<string, any>();
+
+      // Call batch router with all navigation edges and all node rects as obstacles
+      return routeNavigationEdges(edgesWithRects, nodeRects, DEFAULT_TRACE_SPACING);
+    }, [layout, isNavigationRoute, edges, getNodeRect, nodeRects]);
+
     const hierarchyMetaFor = useCallback(
       (id: string): GraphNodeHierarchyMeta => {
         const hasChildren = (forest.childrenOf.get(id)?.length ?? 0) > 0;
@@ -2441,6 +2490,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
                       tooltipId={tooltipId}
                       isNavigationRoute={navigationRoute}
+                      preRoutedEdge={navigationEdgeRoutes.get(edge.id)}
                     />
                   );
                 })}
