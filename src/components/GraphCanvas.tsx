@@ -2043,10 +2043,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const src = edge && getNodeRect(edge.sourceId);
         const tgt = edge && getNodeRect(edge.targetId);
         if (edge && src && tgt) {
+          const edgeCurvature = edge.curvature ?? (safeIsStructuralEdge(isStructuralEdge, edge) ? structuralEdgeCurvature : undefined);
           const path = computeEdgePath(src, tgt, {
             sourceAnchor: edge.sourceAnchor,
             targetAnchor: edge.targetAnchor,
-            curvature: edge.curvature,
+            curvature: edgeCurvature,
           });
           try {
             const content = edgeTooltip(edge);
@@ -2072,6 +2073,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodePosition,
       edges,
       getNodeRect,
+      isStructuralEdge,
+      structuralEdgeCurvature,
     ]);
 
     // World-space anchor for popover rendering — resolved from active popover state
@@ -2118,10 +2121,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const src = edge && getNodeRect(edge.sourceId);
         const tgt = edge && getNodeRect(edge.targetId);
         if (edge && src && tgt) {
+          const edgeCurvature = edge.curvature ?? (safeIsStructuralEdge(isStructuralEdge, edge) ? structuralEdgeCurvature : undefined);
           const path = computeEdgePath(src, tgt, {
             sourceAnchor: edge.sourceAnchor,
             targetAnchor: edge.targetAnchor,
-            curvature: edge.curvature,
+            curvature: edgeCurvature,
           });
           try {
             // Prefer edgePopover, fall back to click-triggered edgeTooltip
@@ -2162,6 +2166,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodePosition,
       edges,
       getNodeRect,
+      isStructuralEdge,
+      structuralEdgeCurvature,
     ]);
 
     // Prevents dead state when popoverTarget callback throws — resets so the node is clickable again.
