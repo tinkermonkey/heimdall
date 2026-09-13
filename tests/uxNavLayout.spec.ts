@@ -4,7 +4,7 @@ import type { LayoutNode } from '../src/utils/graphLayout'
 import type { HierarchyEdge } from '../src/utils/graphHierarchy'
 
 test.describe('uxNavLayout', () => {
-  const createNode = (id: string): LayoutNode => ({ id })
+  const createNode = (id: string): LayoutNode => ({ id, x: 0, y: 0, width: 138, height: 30 })
 
   const createDims = (ids: string[]): Map<string, { width: number; height: number }> => {
     const dims = new Map<string, { width: number; height: number }>()

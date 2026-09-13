@@ -81,10 +81,25 @@ test.describe('channelRouter', () => {
 
       const route = routeNavigationEdge(source, target, [obstacle])
 
-      // Route should avoid passing through obstacle center
-      // Check that the path doesn't straight-line through the obstacle
-      const hasDetour = route.points.length > 2
-      expect(hasDetour).toBe(true)
+      // Source and target are both at y=0, so a valid detour must have a waypoint
+      // that deviates in y (above or below the obstacle) to avoid it
+      const hasVerticalDetour = route.points.some((point) => Math.abs(point.y) > 0.1)
+      expect(hasVerticalDetour).toBe(true)
+
+      // Also verify the path doesn't pass through the obstacle's center
+      for (let i = 0; i < route.points.length - 1; i++) {
+        const p1 = route.points[i]
+        const p2 = route.points[i + 1]
+        // For vertical segments, check that x is outside obstacle bounds
+        if (Math.abs(p1.x - p2.x) < 0.01) {
+          const x = p1.x
+          const obstacleLeft = obstacle.x
+          const obstacleRight = obstacle.x + obstacle.width
+          const isInsideObstacle =
+            x > obstacleLeft && x < obstacleRight && p1.y >= obstacle.y && p1.y <= obstacle.y + obstacle.height
+          expect(isInsideObstacle).toBe(false)
+        }
+      }
     })
 
     test('handles target to the left of source', () => {
