@@ -32,6 +32,14 @@ export function visibleNavigationEdgeIds(
   // No hover → no navigation routes visible
   if (!hoveredNodeId) return visible
 
+  // Compute the "source set" for the hovered node once (arguments don't change per edge)
+  const sourceSet = computeNavigationSourceSet(
+    hoveredNodeId,
+    isPageNode,
+    forest,
+    collapsedNodeIds,
+  )
+
   // For each navigation route edge, determine if it should be visible based on:
   // - Which node it's attributed to
   // - Whether that node is in the "source set" (visible set of nodes for this hover)
@@ -41,14 +49,6 @@ export function visibleNavigationEdgeIds(
     // Assume an edge is attributed to its source node (page/view that "owns" the route)
     const attributedNodeId = edge.sourceId
     if (!attributedNodeId) continue
-
-    // Compute the "source set" for the hovered node
-    const sourceSet = computeNavigationSourceSet(
-      hoveredNodeId,
-      isPageNode,
-      forest,
-      collapsedNodeIds,
-    )
 
     if (sourceSet.has(attributedNodeId)) {
       visible.add(edge.id)
