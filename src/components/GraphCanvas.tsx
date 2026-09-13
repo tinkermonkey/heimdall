@@ -247,10 +247,8 @@ function GraphEdgeInternal({
     const tgt = getNodeRect(targetId);
     if (!src || !tgt) return null;
 
-    // Use orthogonal circuit-trace routing for navigation edges,
-    // bezier curves for structural/relational edges
     const path = isNavigationRoute
-      ? routeNavigationEdge(src, tgt, nodeRects)
+      ? routeNavigationEdge(src, tgt, nodeRects.filter(r => r !== src && r !== tgt))
       : computeEdgePath(src, tgt, {
           sourceAnchor,
           targetAnchor,

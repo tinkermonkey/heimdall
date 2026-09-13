@@ -1,9 +1,5 @@
 import type { Point, EdgeEndpointRect } from './graph'
 
-/**
- * A routed edge using orthogonal (Manhattan) paths instead of bezier curves.
- * Used for navigation edges in the circuit-trace router.
- */
 export interface RoutedEdge {
   d: string
   mid: Point
@@ -11,22 +7,6 @@ export interface RoutedEdge {
   points: Point[]
 }
 
-/**
- * Computes an orthogonal (Manhattan) path from source to target, routing around obstacles.
- * The path consists of alternating horizontal and vertical segments (h→v→h or v→h→v pattern).
- *
- * Algorithm:
- * 1. Start at the source exit point (perpendicular to the source edge)
- * 2. Route through available channels (gaps between rows/columns of obstacle nodes)
- * 3. Avoid crossing obstacle bounding boxes
- * 4. End at the target entry point
- * 5. Return a path string and metadata for rendering
- *
- * @param source - Source node bounding box
- * @param target - Target node bounding box
- * @param obstacles - Other nodes to route around (empty array for no obstacles)
- * @returns A routed edge with SVG path string and metadata
- */
 export function routeNavigationEdge(
   source: EdgeEndpointRect,
   target: EdgeEndpointRect,
@@ -54,10 +34,6 @@ export function routeNavigationEdge(
   return { d, mid, angle, points }
 }
 
-/**
- * Gets the exit point from a source node — middle of the side facing the target.
- * For orthogonal routing, we exit from the right or left side depending on target position.
- */
 function getExitPoint(source: EdgeEndpointRect, target: EdgeEndpointRect): Point {
   const sourceCenter = { x: source.x, y: source.y }
   const targetCenter = { x: target.x, y: target.y }
@@ -81,10 +57,6 @@ function getExitPoint(source: EdgeEndpointRect, target: EdgeEndpointRect): Point
   }
 }
 
-/**
- * Gets the entry point to a target node — middle of the side facing the source.
- * For orthogonal routing, we enter from the right or left side depending on source position.
- */
 function getEntryPoint(target: EdgeEndpointRect, source: EdgeEndpointRect): Point {
   const sourceCenter = { x: source.x, y: source.y }
   const targetCenter = { x: target.x, y: target.y }
@@ -108,9 +80,6 @@ function getEntryPoint(target: EdgeEndpointRect, source: EdgeEndpointRect): Poin
   }
 }
 
-/**
- * Determines if a horizontal segment intersects a box.
- */
 function hSegmentIntersectsBox(
   x1: number,
   x2: number,
@@ -134,9 +103,6 @@ function hSegmentIntersectsBox(
   )
 }
 
-/**
- * Determines if a vertical segment intersects a box.
- */
 function vSegmentIntersectsBox(
   x: number,
   y1: number,
@@ -160,11 +126,6 @@ function vSegmentIntersectsBox(
   )
 }
 
-/**
- * Builds an orthogonal path from source exit to target entry, routing around obstacles.
- * Uses a simple channel-based approach: tries direct horizontal→vertical paths first,
- * then vertical→horizontal, adjusting to avoid obstacles.
- */
 function buildOrthogonalPath(
   source: Point,
   target: Point,
@@ -180,13 +141,28 @@ function buildOrthogonalPath(
   const vFirstPath = tryVerticalFirstPath(source, target, obstacles, padding)
   if (vFirstPath) return vFirstPath
 
-  // Fallback to simple direct path
+  // Fallback: route outside the bounding box of all obstacles
+  if (obstacles.length > 0) {
+    const minX = Math.min(...obstacles.map(o => o.x - o.width / 2))
+    const maxX = Math.max(...obstacles.map(o => o.x + o.width / 2))
+    const minY = Math.min(...obstacles.map(o => o.y - o.height / 2))
+    const maxY = Math.max(...obstacles.map(o => o.y + o.height / 2))
+
+    // Try routing above or below the obstacle cluster
+    const aboveY = minY - padding
+    const belowY = maxY + padding
+
+    const distToAbove = Math.abs(aboveY - source.y)
+    const distToBelow = Math.abs(belowY - source.y)
+    const routeY = distToAbove <= distToBelow ? aboveY : belowY
+
+    return [source, { x: source.x, y: routeY }, { x: target.x, y: routeY }, target]
+  }
+
+  // No obstacles: simple L-path
   return [source, { x: target.x, y: source.y }, target]
 }
 
-/**
- * Tries to route horizontally first, then vertically to reach target.
- */
 function tryHorizontalFirstPath(
   source: Point,
   target: Point,
@@ -228,9 +204,6 @@ function tryHorizontalFirstPath(
   return null
 }
 
-/**
- * Tries to route vertically first, then horizontally to reach target.
- */
 function tryVerticalFirstPath(
   source: Point,
   target: Point,
@@ -272,9 +245,6 @@ function tryVerticalFirstPath(
   return null
 }
 
-/**
- * Converts an array of points to an SVG path string (M → L → L → ...).
- */
 function pointsToPathString(points: Point[]): string {
   if (points.length === 0) return ''
   const parts = [
@@ -284,16 +254,6 @@ function pointsToPathString(points: Point[]): string {
   return parts.join(' ')
 }
 
-/**
- * Applies nudging to a set of routed edges that share segments, separating them
- * visually so overlapping traces remain distinguishable.
- *
- * This is a simplified nudge implementation: edges sharing the exact same segment
- * are offset perpendicular to that segment.
- *
- * @param routes - Array of routed edges with their source/target info
- * @returns Modified route strings for each edge
- */
 export function nudgeOverlappingSegments(routes: RoutedEdge[]): string[] {
   // For now, return the original paths — full implementation would detect shared segments
   // and apply perpendicular offsets to make them visually distinct. This is a foundation
