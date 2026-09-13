@@ -16,6 +16,7 @@ import {
   type BoundingBox,
   type EdgeAnchor,
 } from "../utils/graph";
+import { routeNavigationEdge } from "../utils/channelRouter";
 import {
   forceLayout,
   clusteredForceLayout,
@@ -208,6 +209,7 @@ type InternalEdgeProps = GraphEdge & {
   popoverOpen?: boolean;
   popoverPanelId?: string;
   tooltipId?: string;
+  isNavigationRoute?: boolean;
 };
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -236,6 +238,7 @@ function GraphEdgeInternal({
   popoverOpen,
   popoverPanelId,
   tooltipId,
+  isNavigationRoute = false,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas();
 
@@ -243,11 +246,17 @@ function GraphEdgeInternal({
     const src = getNodeRect(sourceId);
     const tgt = getNodeRect(targetId);
     if (!src || !tgt) return null;
-    const path = computeEdgePath(src, tgt, {
-      sourceAnchor,
-      targetAnchor,
-      curvature,
-    });
+
+    // Use orthogonal circuit-trace routing for navigation edges,
+    // bezier curves for structural/relational edges
+    const path = isNavigationRoute
+      ? routeNavigationEdge(src, tgt, nodeRects)
+      : computeEdgePath(src, tgt, {
+          sourceAnchor,
+          targetAnchor,
+          curvature,
+        });
+
     const labelPos = label
       ? findClearLabelPosition(
           path.points,
@@ -266,6 +275,7 @@ function GraphEdgeInternal({
     curvature,
     label,
     nodeRects,
+    isNavigationRoute,
   ]);
 
   if (!result) return null;
@@ -273,6 +283,7 @@ function GraphEdgeInternal({
   const classNames = [
     "graph-edge",
     variant !== "default" && `graph-edge--${variant}`,
+    isNavigationRoute && "graph-edge--navigation",
     selected && "selected",
   ]
     .filter(Boolean)
@@ -2352,6 +2363,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   // Only isStructuralEdge callers opt into hiding — without it every edge
                   // is treated as structural, so this never changes existing behavior.
                   const structural = safeIsStructuralEdge(isStructuralEdge, edge);
+                  const navigationRoute = isNavigationRoute?.(edge) ?? false;
                   const touchesFocus =
                     edge.sourceId === hoveredNodeId ||
                     edge.targetId === hoveredNodeId ||
@@ -2394,6 +2406,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       popoverOpen={isPopoverOpen}
                       popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
                       tooltipId={tooltipId}
+                      isNavigationRoute={navigationRoute}
                     />
                   );
                 })}
