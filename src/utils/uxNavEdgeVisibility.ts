@@ -46,11 +46,8 @@ export function visibleNavigationEdgeIds(
   for (const edge of edges) {
     if (!isNavigationRoute(edge)) continue
 
-    // Assume an edge is attributed to its source node (page/view that "owns" the route)
-    const attributedNodeId = edge.sourceId
-    if (!attributedNodeId) continue
-
-    if (sourceSet.has(attributedNodeId)) {
+    // An edge is visible if either its source or target is in the source set
+    if (sourceSet.has(edge.sourceId) || sourceSet.has(edge.targetId)) {
       visible.add(edge.id)
     }
   }

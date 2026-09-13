@@ -84,4 +84,24 @@ test.describe('findClearLabelPosition', () => {
     expect(pos.x).toBeCloseTo(path.mid.x, 5)
     expect(pos.y).toBeCloseTo(path.mid.y, 5)
   })
+
+  test('handles orthogonal polyline paths (5+ waypoints) for navigation edges', () => {
+    // Orthogonal polyline with 5 points (typical for navigation edge routing)
+    const polylinePoints = [
+      { x: 0, y: 0 },      // start
+      { x: 100, y: 0 },    // horizontal segment
+      { x: 100, y: 100 },  // vertical segment
+      { x: 200, y: 100 },  // horizontal segment
+      { x: 200, y: 200 },  // vertical segment to end
+    ]
+    const size = edgeLabelSize('contains')
+    const blocker: EdgeEndpointRect = { x: 100, y: 100, width: 138, height: 30 }
+
+    const pos = findClearLabelPosition(polylinePoints, size, [blocker], 6)
+
+    // Should find a clear position, not crash or treat it as a bezier
+    expect(overlaps(pos, size, blocker)).toBe(false)
+    expect(pos.x).toBeDefined()
+    expect(pos.y).toBeDefined()
+  })
 })

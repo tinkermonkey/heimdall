@@ -168,4 +168,32 @@ test.describe('visibleNavigationEdgeIds', () => {
     expect(visible.has('nav_view1')).toBe(true)
     expect(visible.has('nav_view2')).toBe(true)
   })
+
+  test('hovering a node that is the target of an edge: shows edges where hovered node is target', () => {
+    const edges: GraphEdge[] = [
+      { id: 'nav_from_page1', sourceId: 'page1', targetId: 'external1' },
+      { id: 'nav_to_view1', sourceId: 'external2', targetId: 'view1' },
+      { id: 'nav_between_nodes', sourceId: 'page2', targetId: 'view1' },
+    ]
+
+    const forest = createForest([
+      { source: 'page1', target: 'view1' },
+    ])
+
+    const isPageNode = (nodeId: string) => nodeId.includes('page')
+
+    const visible = visibleNavigationEdgeIds(
+      edges,
+      'view1', // hovering view1 (target of some edges)
+      isPageNode,
+      () => true,
+      forest,
+      new Set(),
+    )
+
+    // Should show edges where view1 is either sourceId or targetId
+    expect(visible.has('nav_to_view1')).toBe(true) // view1 is targetId
+    expect(visible.has('nav_between_nodes')).toBe(true) // view1 is targetId
+    expect(visible.has('nav_from_page1')).toBe(false) // view1 is neither source nor target
+  })
 })
