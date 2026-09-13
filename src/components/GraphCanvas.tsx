@@ -12,6 +12,7 @@ import {
   computeFitViewport,
   edgeLabelSize,
   findClearLabelPosition,
+  DEFAULT_QUADRATIC_CURVATURE,
   type BoundingBox,
   type EdgeAnchor,
 } from "../utils/graph";
@@ -540,6 +541,13 @@ export interface GraphCanvasProps extends Omit<
    */
   isStructuralEdge?: (edge: GraphEdge) => boolean;
   /**
+   * Curvature applied to structural edges (page-to-page hierarchy and page-to-view composition).
+   * 0 produces straight lines; 0.22 (default) produces the standard curve. Values > 0 increase
+   * curve intensity. Only applied to structural edges that don't have their own curvature override.
+   * Default 0.22.
+   */
+  structuralEdgeCurvature?: number;
+  /**
    * Classifies a node as a page (returns true) or view (returns false) for ux-navigation layout.
    * Only meaningful with layout="ux-navigation". Page nodes are positioned in the top-to-bottom
    * tree hierarchy; view nodes are positioned as horizontal fans attached to their parent pages.
@@ -656,6 +664,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       nodeMargin,
       showClusterBoundaries = true,
       isStructuralEdge,
+      structuralEdgeCurvature = DEFAULT_QUADRATIC_CURVATURE,
       isPageNode,
       isNavigationRoute,
       showAllRelations = false,
@@ -2353,6 +2362,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   if (hidden) return null;
                   const isPopoverOpen = activePopoverEdgeId === edge.id;
                   const tooltipId = tooltipTarget?.type === 'edge' && tooltipTarget.edgeId === edge.id ? tooltipTarget.tooltipId : undefined;
+                  const edgeCurvature = edge.curvature ?? (structural ? structuralEdgeCurvature : undefined);
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -2366,7 +2376,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       strokeDash={edge.strokeDash}
                       sourceAnchor={edge.sourceAnchor}
                       targetAnchor={edge.targetAnchor}
-                      curvature={edge.curvature}
+                      curvature={edgeCurvature}
                       selected={edge.id === selectedEdgeId}
                       hovered={edge.id === hoveredEdgeId}
                       onSelect={onEdgeSelect}

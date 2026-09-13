@@ -148,6 +148,19 @@ test.describe('Graph Utilities', () => {
       expect(withDefault.d).toBe(withExplicit.d)
     })
 
+    test('curvature=0 produces a straight-line path with control point at the midpoint', () => {
+      const p1: Point = { x: 0, y: 0 }
+      const p2: Point = { x: 100, y: 100 }
+      const result = bezierPath(p1, p2, 0)
+
+      // With curvature=0, the offset is 0, so the control point is exactly at the midpoint
+      const expectedMid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 }
+      expect(result.points[1]).toEqual(expectedMid)
+
+      // The path should be a quadratic bezier with control point at the midpoint
+      expect(result.d).toContain('Q 50 50')
+    })
+
     test('produces symmetric paths for symmetric inputs', () => {
       const p1: Point = { x: 0, y: 0 }
       const p2: Point = { x: 100, y: 0 }
