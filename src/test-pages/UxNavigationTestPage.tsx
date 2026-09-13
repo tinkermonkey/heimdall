@@ -20,30 +20,30 @@ interface EdgeData {
 // Two independent page trees with multiple views per page and navigation routes
 const UX_NAV_NODES: NodeData[] = [
   // Tree 1 - Pages and views
-  { id: 'page1', x: 0, y: 0, label: 'Dashboard', kind: 'P', title: 'Dashboard' },
-  { id: 'page1_child1', x: 0, y: 0, label: 'Analytics', kind: 'P', title: 'Analytics' },
-  { id: 'page1_child2', x: 0, y: 0, label: 'Reports', kind: 'P', title: 'Reports' },
+  { id: 'page1', label: 'Dashboard', kind: 'P', title: 'Dashboard' },
+  { id: 'page1_child1', label: 'Analytics', kind: 'P', title: 'Analytics' },
+  { id: 'page1_child2', label: 'Reports', kind: 'P', title: 'Reports' },
 
-  { id: 'view1_1', x: 0, y: 0, label: 'Metrics', kind: 'V', title: 'Metrics' },
-  { id: 'view1_2', x: 0, y: 0, label: 'Charts', kind: 'V', title: 'Charts' },
-  { id: 'view1_3', x: 0, y: 0, label: 'Export', kind: 'V', title: 'Export' },
+  { id: 'view1_1', label: 'Metrics', kind: 'V', title: 'Metrics' },
+  { id: 'view1_2', label: 'Charts', kind: 'V', title: 'Charts' },
+  { id: 'view1_3', label: 'Export', kind: 'V', title: 'Export' },
 
-  { id: 'view2_1', x: 0, y: 0, label: 'Trends', kind: 'V', title: 'Trends' },
-  { id: 'view2_2', x: 0, y: 0, label: 'Comparison', kind: 'V', title: 'Comparison' },
+  { id: 'view2_1', label: 'Trends', kind: 'V', title: 'Trends' },
+  { id: 'view2_2', label: 'Comparison', kind: 'V', title: 'Comparison' },
 
-  { id: 'view3_1', x: 0, y: 0, label: 'PDF', kind: 'V', title: 'PDF' },
-  { id: 'view3_2', x: 0, y: 0, label: 'CSV', kind: 'V', title: 'CSV' },
+  { id: 'view3_1', label: 'PDF', kind: 'V', title: 'PDF' },
+  { id: 'view3_2', label: 'CSV', kind: 'V', title: 'CSV' },
 
   // Tree 2 - Different pages with views
-  { id: 'page2', x: 0, y: 0, label: 'Settings', kind: 'P', title: 'Settings' },
-  { id: 'page2_child1', x: 0, y: 0, label: 'Profile', kind: 'P', title: 'Profile' },
-  { id: 'page2_child2', x: 0, y: 0, label: 'Security', kind: 'P', title: 'Security' },
+  { id: 'page2', label: 'Settings', kind: 'P', title: 'Settings' },
+  { id: 'page2_child1', label: 'Profile', kind: 'P', title: 'Profile' },
+  { id: 'page2_child2', label: 'Security', kind: 'P', title: 'Security' },
 
-  { id: 'view4_1', x: 0, y: 0, label: 'Account', kind: 'V', title: 'Account' },
-  { id: 'view4_2', x: 0, y: 0, label: 'Preferences', kind: 'V', title: 'Preferences' },
+  { id: 'view4_1', label: 'Account', kind: 'V', title: 'Account' },
+  { id: 'view4_2', label: 'Preferences', kind: 'V', title: 'Preferences' },
 
-  { id: 'view5_1', x: 0, y: 0, label: '2FA', kind: 'V', title: 'Two-Factor' },
-  { id: 'view5_2', x: 0, y: 0, label: 'Sessions', kind: 'V', title: 'Sessions' },
+  { id: 'view5_1', label: '2FA', kind: 'V', title: 'Two-Factor' },
+  { id: 'view5_2', label: 'Sessions', kind: 'V', title: 'Sessions' },
 ]
 
 // Structural edges (tree relationships) and navigation routes
