@@ -1989,20 +1989,26 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
       if (navEdges.length === 0) return new Map<string, any>();
 
-      // Collect edge data with their rects
+      // Collect edge data with their rects, tracking all endpoint rects
+      const endpointRects = new Set<typeof nodeRects[0]>();
       const edgesWithRects = navEdges
         .map((edge) => {
           const src = getNodeRect(edge.sourceId);
           const tgt = getNodeRect(edge.targetId);
           if (!src || !tgt) return null;
+          endpointRects.add(src);
+          endpointRects.add(tgt);
           return { id: edge.id, source: src, target: tgt };
         })
         .filter((e): e is NonNullable<typeof e> => e !== null);
 
       if (edgesWithRects.length === 0) return new Map<string, any>();
 
-      // Call batch router with all navigation edges and all node rects as obstacles
-      return routeNavigationEdges(edgesWithRects, nodeRects, DEFAULT_TRACE_SPACING);
+      // Exclude endpoint nodes from obstacles (to match single-edge routing behavior)
+      const obstacleRects = nodeRects.filter((rect) => !endpointRects.has(rect));
+
+      // Call batch router with all navigation edges and filtered obstacles
+      return routeNavigationEdges(edgesWithRects, obstacleRects, DEFAULT_TRACE_SPACING);
     }, [layout, isNavigationRoute, edges, getNodeRect, nodeRects]);
 
     const hierarchyMetaFor = useCallback(
