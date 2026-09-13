@@ -46,9 +46,6 @@ export function uxNavLayout(
     edges,
   )
 
-  // Map of node ID to node object for quick lookup
-  const nodeMap = new Map(nodes.map(n => [n.id, n]))
-
   // Identify which nodes are pages vs views
   const pageIds = new Set(nodes.filter(n => isPageNode(n)).map(n => n.id))
   const viewIds = new Set(nodes.filter(n => !isPageNode(n)).map(n => n.id))
