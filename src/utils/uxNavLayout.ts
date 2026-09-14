@@ -246,8 +246,12 @@ export function uxNavLayout(
 
   // Pass 3: View fan placement
   // Position view nodes horizontally to the right of their parent pages.
-  // Multi-parent views use synthetic IDs "viewId:parentId" so they appear under each parent.
+  // Multi-parent views use synthetic IDs "viewId:parentId" so they appear under each parent,
+  // and also store a fallback position under the original ID (using the first parent's position
+  // for backward compatibility with consumer code).
   // Single-parent views use their original ID.
+  const multiParentFirstPositions = new Map<string, { x: number; y: number }>()
+
   for (const [pageId, allChildren] of allParentChildren) {
     if (!pageIds.has(pageId)) continue
 
@@ -274,11 +278,26 @@ export function uxNavLayout(
         fanX += prevViewWidth + viewSpacing
       }
 
-      // Use synthetic ID for multi-parent views so they appear under each parent,
-      // otherwise use original ID
-      const resultKey = multiParentViews.has(viewId) ? `${viewId}:${pageId}` : viewId
-      result.set(resultKey, { x: fanX, y: pagePos.y })
+      const position = { x: fanX, y: pagePos.y }
+
+      // Use synthetic ID for multi-parent views so they appear under each parent
+      if (multiParentViews.has(viewId)) {
+        const resultKey = `${viewId}:${pageId}`
+        result.set(resultKey, position)
+        // Store first parent's position under original ID for fallback
+        if (!multiParentFirstPositions.has(viewId)) {
+          multiParentFirstPositions.set(viewId, position)
+        }
+      } else {
+        // Single-parent views use original ID
+        result.set(viewId, position)
+      }
     }
+  }
+
+  // Add fallback positions for multi-parent views using original IDs
+  for (const [viewId, position] of multiParentFirstPositions) {
+    result.set(viewId, position)
   }
 
   // Add all page positions to result
