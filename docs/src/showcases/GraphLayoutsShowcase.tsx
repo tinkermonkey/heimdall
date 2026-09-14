@@ -20,17 +20,18 @@ const fg3 = 'rgb(var(--canvas-fg-3, 107 114 128))'
 const mono = 'var(--font-mono, "JetBrains Mono", monospace)'
 
 // ─── Datasets ──────────────────────────────────────────────────────────────
-// Two differently-shaped datasets so the same controls read as a genuine
-// comparison, not just one demo: Ontology is deep and narrow (a 6-level
+// Three differently-shaped datasets: Ontology is deep and narrow (a 6-level
 // biology chain beside a shallower climate branch); Services is wide and
-// shallow (a 3-level org/infra tree with wide fan-out at every level). Both
-// mix structural hierarchy with cross-cutting relational edges and include
-// one true orphan, so collapse/expand and "show all relations" have
-// something real to demonstrate on either one.
+// shallow (a 3-level org/infra tree with wide fan-out at every level); UX
+// Layout models a real app screen graph — page nodes arranged in a top-down
+// hierarchy with view nodes fanning out from their parent pages and navigation
+// routes connecting pages to show user flows. All three mix structural and
+// relational edges and include at least one orphan node for completeness.
 
 interface DemoNode extends GraphNodeData {
   title?: string
   domain?: string
+  isPage?: boolean
 }
 
 const STRUCTURAL_PREDICATES = new Set(['contains', 'instanceOf'])
@@ -123,6 +124,45 @@ const SERVICES_EDGES: GraphEdgeData[] = [
   { id: 's_analytics_db', sourceId: 'analytics_warehouse', targetId: 'primary_db', label: 'readsFrom' },
 ]
 
+const UX_NODES: DemoNode[] = [
+  // Pages — arranged as a hierarchy; isPage: true marks them for the ux-navigation engine
+  { id: 'app', label: 'App', kind: 'C', domainColor: 'life', title: 'App', domain: 'shell', isPage: true },
+  { id: 'dashboard', label: 'Dashboard', kind: 'C', domainColor: 'life', title: 'Dashboard', domain: 'shell', isPage: true },
+  { id: 'users', label: 'Users', kind: 'C', domainColor: 'software', title: 'Users', domain: 'users', isPage: true },
+  { id: 'settings', label: 'Settings', kind: 'C', domainColor: 'climate', title: 'Settings', domain: 'settings', isPage: true },
+  { id: 'reports', label: 'Reports', kind: 'C', domainColor: 'climate', title: 'Reports', domain: 'reports', isPage: true },
+  // Views — fans that attach horizontally to their parent pages; isPage: false
+  { id: 'user_list', label: 'User List', kind: 'C', domainColor: 'software', title: 'User List', domain: 'users', isPage: false },
+  { id: 'user_detail', label: 'User Detail', kind: 'C', domainColor: 'software', title: 'User Detail', domain: 'users', isPage: false },
+  { id: 'user_edit', label: 'User Edit', kind: 'C', domainColor: 'software', title: 'User Edit', domain: 'users', isPage: false },
+  { id: 'settings_profile', label: 'Profile', kind: 'C', domainColor: 'climate', title: 'Profile', domain: 'settings', isPage: false },
+  { id: 'settings_billing', label: 'Billing', kind: 'C', domainColor: 'climate', title: 'Billing', domain: 'settings', isPage: false },
+  { id: 'report_viewer', label: 'Report Viewer', kind: 'C', domainColor: 'climate', title: 'Report Viewer', domain: 'reports', isPage: false },
+  // A true orphan — no edges at all.
+  { id: 'legacy_modal', label: 'Legacy Modal', kind: 'C', domainColor: 'life', title: 'Legacy Modal', domain: 'shell', isPage: false },
+]
+
+const UX_EDGES: GraphEdgeData[] = [
+  // Structural: page hierarchy
+  { id: 'ux_app_dashboard', sourceId: 'app', targetId: 'dashboard', label: 'contains' },
+  { id: 'ux_app_users', sourceId: 'app', targetId: 'users', label: 'contains' },
+  { id: 'ux_app_settings', sourceId: 'app', targetId: 'settings', label: 'contains' },
+  { id: 'ux_app_reports', sourceId: 'app', targetId: 'reports', label: 'contains' },
+  // Structural: views owned by their pages
+  { id: 'ux_users_list', sourceId: 'users', targetId: 'user_list', label: 'contains' },
+  { id: 'ux_users_detail', sourceId: 'users', targetId: 'user_detail', label: 'contains' },
+  { id: 'ux_users_edit', sourceId: 'users', targetId: 'user_edit', label: 'contains' },
+  { id: 'ux_settings_profile', sourceId: 'settings', targetId: 'settings_profile', label: 'contains' },
+  { id: 'ux_settings_billing', sourceId: 'settings', targetId: 'settings_billing', label: 'contains' },
+  { id: 'ux_reports_viewer', sourceId: 'reports', targetId: 'report_viewer', label: 'contains' },
+  // Navigation routes — user flows; hidden by default, shown on hover in ux-navigation layout
+  { id: 'ux_nav_dashboard_users', sourceId: 'dashboard', targetId: 'users', label: 'navigatesTo' },
+  { id: 'ux_nav_dashboard_reports', sourceId: 'dashboard', targetId: 'reports', label: 'navigatesTo' },
+  { id: 'ux_nav_list_detail', sourceId: 'user_list', targetId: 'user_detail', label: 'navigatesTo' },
+  { id: 'ux_nav_detail_edit', sourceId: 'user_detail', targetId: 'user_edit', label: 'navigatesTo' },
+  { id: 'ux_nav_detail_settings', sourceId: 'user_detail', targetId: 'settings', label: 'navigatesTo' },
+]
+
 const DATASETS = {
   ontology: {
     label: 'Ontology',
@@ -135,6 +175,12 @@ const DATASETS = {
     nodes: SERVICES_NODES,
     edges: SERVICES_EDGES,
     description: 'Wide and shallow — a 3-level org/infra tree with 3-4 children at every branch instead of one long chain.',
+  },
+  ux: {
+    label: 'UX layout',
+    nodes: UX_NODES,
+    edges: UX_EDGES,
+    description: 'App screen graph — page nodes in a top-down hierarchy with view fans and navigation routes showing user flows.',
   },
 } as const
 
@@ -157,7 +203,7 @@ function pseudoMetricPercent(id: string): number {
 
 export function GraphLayoutsShowcase() {
   const [datasetKey, setDatasetKey] = useState<DatasetKey>('ontology')
-  const [layout, setLayout] = useState<'force' | 'galaxy' | 'force-clustered'>('galaxy')
+  const [layout, setLayout] = useState<'force' | 'galaxy' | 'force-clustered' | 'ux-navigation'>('galaxy')
   const [edgeStyle, setEdgeStyle] = useState<'curved' | 'straight'>('curved')
   const [nodeStyle, setNodeStyle] = useState<'compact' | 'cards'>('compact')
   const [showAllRelations, setShowAllRelations] = useState(false)
@@ -182,6 +228,8 @@ export function GraphLayoutsShowcase() {
     setSelectedNodeId(undefined)
     setSelectedEdgeId(undefined)
     setCollapsedNodeIds(new Set())
+    if (key === 'ux') setLayout('ux-navigation')
+    else setLayout(prev => prev === 'ux-navigation' ? 'galaxy' : prev)
   }, [])
 
   // Node and edge selection are mutually exclusive in this demo's inspector column — picking
@@ -315,11 +363,11 @@ export function GraphLayoutsShowcase() {
     <div>
       <PageHeader
         name="Graph Layouts"
-        description="Compares GraphCanvas's automatic layout engines side by side: force (spring simulation), galaxy (radial hierarchy of orbits, built from structural edges), and force-clustered (nodes grouped into nested bubbles by graph structure via Louvain community detection, then spring-simulated within each bubble). Same controls also demonstrate straight vs. curved edges and compact chips vs. substantial-size cards — the layouts measure real rendered node size either way, so switching node style never causes overlap."
+        description="Compares GraphCanvas's automatic layout engines side by side: force (spring simulation), galaxy (radial hierarchy of orbits, built from structural edges), force-clustered (nodes grouped into nested bubbles by graph structure via Louvain community detection, then spring-simulated within each bubble), and ux-navigation (page nodes in a top-down tree, view nodes as horizontal fans, navigation routes shown on hover). Same controls also demonstrate straight vs. curved edges and compact chips vs. substantial-size cards — the layouts measure real rendered node size either way, so switching node style never causes overlap."
       />
       <ShowcaseSection
         label="Interactive comparison"
-        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Relational edges (not part of the hierarchy) are hidden entirely by default, line and label alike — hover a node or turn on 'All relations' to reveal the ones touching it. Drag a node to reposition it, or turn dragging off. Node margin (force and force-clustered only — galaxy's radial placement already defaults to the same tight packing) controls how much breathing room the layout leaves around each node — tight packing can leave connected nodes with almost no visible edge between them. Boundaries (galaxy and force-clustered only) toggles the top-level group circle behind each layout's own notion of a group — a root subtree for galaxy, a Louvain cluster for force-clustered; galaxy keeps these circles from overlapping each other by default (separateGroups). Selecting a node or edge opens a detail panel over the canvas — drag its left edge to resize. The corner toolbar zooms, can lock pan/zoom against accidental scroll or drag, can go fullscreen, and — galaxy layout only — can switch to a live elastic simulation: drag any node and its descendants follow in real time, released nodes stay exactly where dropped, and collision detection keeps siblings apart throughout."
+        description="Nodes with a chevron have structural children — click it to collapse/expand their subtree. Relational edges (not part of the hierarchy) are hidden entirely by default, line and label alike — hover a node or turn on 'All relations' to reveal the ones touching it. Drag a node to reposition it, or turn dragging off. Node margin (force and force-clustered only) controls how much breathing room the layout leaves around each node. Boundaries (galaxy and force-clustered only) toggles the top-level group circle. For ux-navigation, navigation route edges are revealed on hover; hover any node to see which pages it connects to. Selecting a node or edge opens a detail panel over the canvas — drag its left edge to resize."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -334,11 +382,12 @@ export function GraphLayoutsShowcase() {
               <Control label="Layout">
                 <SegmentedControl
                   value={layout}
-                  onChange={(v) => setLayout(v as 'force' | 'galaxy' | 'force-clustered')}
+                  onChange={(v) => setLayout(v as 'force' | 'galaxy' | 'force-clustered' | 'ux-navigation')}
                   options={[
                     { value: 'galaxy', label: 'Galaxy' },
                     { value: 'force', label: 'Force' },
                     { value: 'force-clustered', label: 'Clustered' },
+                    { value: 'ux-navigation', label: 'UX' },
                   ]}
                 />
               </Control>
@@ -356,13 +405,15 @@ export function GraphLayoutsShowcase() {
                   options={[{ value: 'compact', label: 'Compact' }, { value: 'cards', label: 'Cards' }]}
                 />
               </Control>
-              <Control label="Relations">
-                <SegmentedControl
-                  value={showAllRelations ? 'all' : 'structural'}
-                  onChange={(v) => setShowAllRelations(v === 'all')}
-                  options={[{ value: 'structural', label: 'Structural' }, { value: 'all', label: 'All' }]}
-                />
-              </Control>
+              {layout !== 'ux-navigation' && (
+                <Control label="Relations">
+                  <SegmentedControl
+                    value={showAllRelations ? 'all' : 'structural'}
+                    onChange={(v) => setShowAllRelations(v === 'all')}
+                    options={[{ value: 'structural', label: 'Structural' }, { value: 'all', label: 'All' }]}
+                  />
+                </Control>
+              )}
               <Control label="Drag">
                 <SegmentedControl
                   value={draggable ? 'on' : 'off'}
@@ -370,7 +421,7 @@ export function GraphLayoutsShowcase() {
                   options={[{ value: 'on', label: 'On' }, { value: 'off', label: 'Off' }]}
                 />
               </Control>
-              {layout !== 'galaxy' && (
+              {layout !== 'galaxy' && layout !== 'ux-navigation' && (
                 <Control label="Node margin">
                   <SegmentedControl
                     value={nodeMarginPreset}
@@ -383,7 +434,7 @@ export function GraphLayoutsShowcase() {
                   />
                 </Control>
               )}
-              {layout !== 'force' && (
+              {layout !== 'force' && layout !== 'ux-navigation' && (
                 <Control label="Boundaries">
                   <SegmentedControl
                     value={showClusterBoundaries ? 'on' : 'off'}
@@ -409,6 +460,8 @@ export function GraphLayoutsShowcase() {
                 nodeMargin={nodeMargin}
                 showClusterBoundaries={showClusterBoundaries}
                 isStructuralEdge={isStructuralEdge}
+                isPageNode={layout === 'ux-navigation' ? (node) => !!(node as DemoNode).isPage : undefined}
+                isNavigationRoute={layout === 'ux-navigation' ? (edge) => edge.label === 'navigatesTo' : undefined}
                 showAllRelations={showAllRelations}
                 collapsedNodeIds={collapsedNodeIds}
                 onToggleCollapse={handleToggleCollapse}

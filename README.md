@@ -2,6 +2,8 @@
 
 Production component library for the Heimdall design system. Built with React 18, TypeScript, Tailwind CSS, and self-hosted fonts.
 
+**Live component showcase:** https://tinkermonkey.github.io/heimdall/
+
 ## Phase 1: Foundation & Core Components
 
 This phase establishes the token system, build infrastructure, and core component library.
