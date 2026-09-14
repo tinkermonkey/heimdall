@@ -53,30 +53,10 @@ function extractChannels(nodes: readonly EdgeEndpointRect[]): {
   return { verticalChannels, horizontalChannels }
 }
 
-/**
- * Snaps a coordinate to the nearest channel line if it's close enough.
- * This encourages routing along layout channels.
- */
-function snapToChannel(value: number, channels: number[], threshold: number = 30): number {
-  let closest = value
-  let minDist = threshold
-
-  for (const channel of channels) {
-    const dist = Math.abs(value - channel)
-    if (dist < minDist) {
-      minDist = dist
-      closest = channel
-    }
-  }
-
-  return closest
-}
-
 export function routeNavigationEdge(
   source: EdgeEndpointRect,
   target: EdgeEndpointRect,
-  obstacles: readonly EdgeEndpointRect[] = [],
-  channels?: { verticalChannels: number[]; horizontalChannels: number[] }
+  obstacles: readonly EdgeEndpointRect[] = []
 ): RoutedEdge {
   // Exit point from source (middle of right/left edge depending on target position)
   const sourceExit = getExitPoint(source, target)
@@ -84,8 +64,8 @@ export function routeNavigationEdge(
   // Entry point to target (middle of right/left edge depending on source position)
   const targetEntry = getEntryPoint(target, source)
 
-  // Build the orthogonal path with obstacle avoidance and channel awareness
-  const points = buildOrthogonalPath(sourceExit, targetEntry, obstacles, channels)
+  // Build the orthogonal path with obstacle avoidance
+  const points = buildOrthogonalPath(sourceExit, targetEntry, obstacles)
 
   // Convert points to SVG path string
   const d = pointsToPathString(points)
@@ -406,8 +386,7 @@ function vSegmentIntersectsBox(
 function buildOrthogonalPath(
   source: Point,
   target: Point,
-  obstacles: readonly EdgeEndpointRect[],
-  channels?: { verticalChannels: number[]; horizontalChannels: number[] }
+  obstacles: readonly EdgeEndpointRect[]
 ): Point[] {
   const padding = 20
 
@@ -435,7 +414,7 @@ function buildOrthogonalPath(
     return [source, { x: source.x, y: routeY }, { x: target.x, y: routeY }, target]
   }
 
-  // No obstacles: simple L-path (channels guide overall strategy but don't modify waypoints)
+  // No obstacles: simple L-path
   return [source, { x: target.x, y: source.y }, target]
 }
 
