@@ -228,6 +228,12 @@ export function GraphLayoutsShowcase() {
     setSelectedNodeId(undefined)
     setSelectedEdgeId(undefined)
     setCollapsedNodeIds(new Set())
+    // Selecting the ux dataset always activates ux-navigation layout since that is the only
+    // layout that renders it meaningfully. Selecting any other dataset exits ux-navigation
+    // (resetting to galaxy) because ux-navigation is only meaningful for the ux dataset.
+    // The inverse — manually switching the layout control away from ux-navigation while the
+    // ux dataset is still loaded — is intentionally allowed; the ux dataset still renders
+    // under galaxy/force/force-clustered, just without the page/view semantics.
     if (key === 'ux') setLayout('ux-navigation')
     else setLayout(prev => prev === 'ux-navigation' ? 'galaxy' : prev)
   }, [])
@@ -359,6 +365,11 @@ export function GraphLayoutsShowcase() {
       }
     : undefined
 
+  // Stable callbacks for ux-navigation props — defined unconditionally so their references
+  // don't change between renders; only passed to GraphCanvas when layout === 'ux-navigation'.
+  const isPageNodeCallback = useCallback((node: GraphNodeData) => !!(node as DemoNode).isPage, [])
+  const isNavigationRouteCallback = useCallback((edge: GraphEdgeData) => edge.label === 'navigatesTo', [])
+
   return (
     <div>
       <PageHeader
@@ -460,8 +471,8 @@ export function GraphLayoutsShowcase() {
                 nodeMargin={nodeMargin}
                 showClusterBoundaries={showClusterBoundaries}
                 isStructuralEdge={isStructuralEdge}
-                isPageNode={layout === 'ux-navigation' ? (node) => !!(node as DemoNode).isPage : undefined}
-                isNavigationRoute={layout === 'ux-navigation' ? (edge) => edge.label === 'navigatesTo' : undefined}
+                isPageNode={layout === 'ux-navigation' ? isPageNodeCallback : undefined}
+                isNavigationRoute={layout === 'ux-navigation' ? isNavigationRouteCallback : undefined}
                 showAllRelations={showAllRelations}
                 collapsedNodeIds={collapsedNodeIds}
                 onToggleCollapse={handleToggleCollapse}
