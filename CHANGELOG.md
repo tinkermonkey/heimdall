@@ -4,6 +4,12 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1]
+
+### Added
+
+- **`ChatComposer`** — `enterBehavior` prop (`'send' | 'newline'`, default `'send'`): controls Enter key behavior in the message textarea. When set to `'send'`, bare Enter submits the message and Shift+Enter inserts a newline (default behavior). When set to `'newline'`, bare Enter inserts a newline and Shift+Enter also inserts a newline — Submit only via the Send button. Enables touch-friendly and mobile-optimized input modes without forking or DOM-patching the component. The shortcut hint text automatically hides desktop-specific wording when `enterBehavior='newline'`.
+
 ## [0.8.0]
 
 ### Added
