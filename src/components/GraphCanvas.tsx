@@ -53,11 +53,15 @@ export { useGraphCanvas } from "./GraphCanvasContext";
 /** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
 const TOOLTIP_SHOW_DELAY_MS = 200;
 
+/** Sanitize an ID for use as an HTML id attribute. Replaces invalid characters with underscores. */
+const sanitizeId = (id: string): string =>
+  id.replace(/[^\w:.-]/g, "_");
+
 /** Generate deterministic tooltip ID for a node. */
-const nodeTooltipId = (nodeId: string): string => `tooltip-node-${nodeId}`;
+const nodeTooltipId = (nodeId: string): string => `tooltip-node-${sanitizeId(nodeId)}`;
 
 /** Generate deterministic tooltip ID for an edge. */
-const edgeTooltipId = (edgeId: string): string => `tooltip-edge-${edgeId}`;
+const edgeTooltipId = (edgeId: string): string => `tooltip-edge-${sanitizeId(edgeId)}`;
 
 // ─── Public data types ────────────────────────────────────────────────────────
 
@@ -373,7 +377,7 @@ function GraphEdgeInternal({
       aria-haspopup={hasPopover ? "dialog" : undefined}
       {...(hasPopover && { 'aria-expanded': !!popoverOpen })}
       {...(hasPopover && popoverPanelId && { 'aria-controls': popoverPanelId })}
-      {...(tooltipId && { 'aria-describedby': tooltipId })}
+      {...(interactive && tooltipId && { 'aria-describedby': tooltipId })}
       // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible name
       // by assistive tech, and a label-less edge has nothing at all — without this a screen reader
       // announces a bare "button".
@@ -472,7 +476,8 @@ export interface GraphCanvasProps extends Omit<
   nodeTooltip?: (node: GraphNodeData) => React.ReactNode;
   /**
    * Specifies whether nodeTooltip should be triggered by hover or click. Default: 'hover'.
-   * - 'hover': tooltip triggered on hover, with aria-describedby linking trigger to tooltip content
+   * - 'hover': tooltip triggered on hover. For interactive nodes (with onNodeSelect or nodePopover),
+   *   aria-describedby links the trigger to tooltip content.
    * - 'click': interactive popover behavior (role="dialog", supports buttons/links/content interaction)
    * When 'click', the tooltip content is rendered using Popover (same as nodePopover) for full
    * accessibility and interactivity, providing a migration path from Tooltip to Popover without
