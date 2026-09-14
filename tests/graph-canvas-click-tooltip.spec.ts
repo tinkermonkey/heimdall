@@ -399,7 +399,11 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       const popover = page.locator('[role="dialog"]');
       await expect(popover).toBeVisible();
 
-      const canvas = page.locator(".graph-canvas");
+      // Move mouse far away to clear any hover state
+      await page.mouse.move(2000, 2000);
+      await page.waitForTimeout(100);
+
+      const canvas = page.locator('[data-testid="click-tooltip-canvas"]');
       await expect(canvas).toHaveScreenshot(
         "graph-canvas-click-tooltip-node-light.png",
       );
@@ -414,7 +418,11 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       const popover = page.locator('[role="dialog"]');
       await expect(popover).toBeVisible();
 
-      const canvas = page.locator(".graph-canvas");
+      // Move mouse far away to clear any hover state
+      await page.mouse.move(2000, 2000);
+      await page.waitForTimeout(100);
+
+      const canvas = page.locator('[data-testid="click-tooltip-canvas"]');
       await expect(canvas).toHaveScreenshot(
         "graph-canvas-click-tooltip-edge-light.png",
       );
@@ -435,7 +443,11 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       const popover = page.locator('[role="dialog"]');
       await expect(popover).toBeVisible();
 
-      const canvas = page.locator(".graph-canvas");
+      // Move mouse far away to clear any hover state
+      await page.mouse.move(2000, 2000);
+      await page.waitForTimeout(100);
+
+      const canvas = page.locator('[data-testid="click-tooltip-canvas"]');
       await expect(canvas).toHaveScreenshot(
         "graph-canvas-click-tooltip-node-dark.png",
       );
@@ -450,7 +462,11 @@ test.describe("integration: GraphCanvas Click-Triggered Tooltips", () => {
       const popover = page.locator('[role="dialog"]');
       await expect(popover).toBeVisible();
 
-      const canvas = page.locator(".graph-canvas");
+      // Move mouse far away to clear any hover state
+      await page.mouse.move(2000, 2000);
+      await page.waitForTimeout(100);
+
+      const canvas = page.locator('[data-testid="click-tooltip-canvas"]');
       await expect(canvas).toHaveScreenshot(
         "graph-canvas-click-tooltip-edge-dark.png",
       );

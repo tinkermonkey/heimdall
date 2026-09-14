@@ -144,3 +144,21 @@ body.dark-canvas .graph-edge--hot .graph-edge__label-bg {
 body.dark-canvas .graph-edge--hot .graph-edge__label-text {
   fill: rgb(var(--canvas-bg));
 }
+
+/* Navigation edges — orthogonal circuit-trace routed paths. Distinct from structural edges
+   (bezier curves) and styled to emphasize the circuit-board trace aesthetic. */
+.graph-edge--navigation .graph-edge__line {
+  stroke: rgb(var(--status-cyan));
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.graph-edge--navigation:hover .graph-edge__line {
+  stroke-width: 2;
+}
+
+.graph-edge--navigation.selected .graph-edge__line {
+  stroke: rgb(var(--accent-primary));
+  stroke-width: 2.5;
+}

@@ -12,9 +12,11 @@ import {
   computeFitViewport,
   edgeLabelSize,
   findClearLabelPosition,
+  DEFAULT_QUADRATIC_CURVATURE,
   type BoundingBox,
   type EdgeAnchor,
 } from "../utils/graph";
+import { routeNavigationEdge, routeNavigationEdges, DEFAULT_TRACE_SPACING } from "../utils/channelRouter";
 import {
   forceLayout,
   clusteredForceLayout,
@@ -25,11 +27,13 @@ import {
   resolveAspectRatioScale,
   type GalaxyLayoutNode,
 } from "../utils/galaxyLayout";
+import { uxNavLayout } from "../utils/uxNavLayout";
 import {
   buildStructuralForest,
   structuralDescendants,
   galaxyGroupMap,
 } from "../utils/graphHierarchy";
+import { visibleNavigationEdgeIds } from "../utils/uxNavEdgeVisibility";
 import { usePanZoom } from "../hooks/usePanZoom";
 import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
 import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
@@ -49,11 +53,15 @@ export { useGraphCanvas } from "./GraphCanvasContext";
 /** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
 const TOOLTIP_SHOW_DELAY_MS = 200;
 
+/** Sanitize an ID for use as an HTML id attribute. Replaces invalid characters with underscores. */
+const sanitizeId = (id: string): string =>
+  id.replace(/[^\w:.-]/g, "_");
+
 /** Generate deterministic tooltip ID for a node. */
-const nodeTooltipId = (nodeId: string): string => `tooltip-node-${nodeId}`;
+const nodeTooltipId = (nodeId: string): string => `tooltip-node-${sanitizeId(nodeId)}`;
 
 /** Generate deterministic tooltip ID for an edge. */
-const edgeTooltipId = (edgeId: string): string => `tooltip-edge-${edgeId}`;
+const edgeTooltipId = (edgeId: string): string => `tooltip-edge-${sanitizeId(edgeId)}`;
 
 // ─── Public data types ────────────────────────────────────────────────────────
 
@@ -183,13 +191,40 @@ function safeRenderNodeCallback(
 function safeIsStructuralEdge(
   isStructuralEdge: ((edge: GraphEdge) => boolean) | undefined,
   edge: GraphEdge,
+  layout?: string,
 ): boolean {
-  if (!isStructuralEdge) return true;
+  if (!isStructuralEdge) return layout !== "ux-navigation";
   try {
     return isStructuralEdge(edge);
   } catch (error) {
     console.error("Error in isStructuralEdge callback:", error);
+    return layout !== "ux-navigation";
+  }
+}
+
+function safeIsPageNode(
+  isPageNode: ((node: GraphNodeData) => boolean) | undefined,
+  node: GraphNodeData,
+): boolean {
+  if (!isPageNode) return true;
+  try {
+    return isPageNode(node);
+  } catch (error) {
+    console.error("Error in isPageNode callback:", error);
     return true;
+  }
+}
+
+function safeIsNavigationRoute(
+  isNavigationRoute: ((edge: GraphEdge) => boolean) | undefined,
+  edge: GraphEdge,
+): boolean {
+  if (!isNavigationRoute) return false;
+  try {
+    return isNavigationRoute(edge);
+  } catch (error) {
+    console.error("Error in isNavigationRoute callback:", error);
+    return false;
   }
 }
 
@@ -205,6 +240,8 @@ type InternalEdgeProps = GraphEdge & {
   popoverOpen?: boolean;
   popoverPanelId?: string;
   tooltipId?: string;
+  isNavigationRoute?: boolean;
+  preRoutedEdge?: any; // RoutedEdge type from channelRouter
 };
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
@@ -233,36 +270,64 @@ function GraphEdgeInternal({
   popoverOpen,
   popoverPanelId,
   tooltipId,
+  isNavigationRoute = false,
+  preRoutedEdge,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas();
 
   const result = useMemo(() => {
+    // If this is a pre-routed navigation edge from batch routing, use that directly
+    if (preRoutedEdge) {
+      const labelPos = label
+        ? findClearLabelPosition(
+            preRoutedEdge.points,
+            edgeLabelSize(label),
+            nodeRects,
+            EDGE_LABEL_MARGIN,
+            preRoutedEdge.isPolyline,
+          )
+        : preRoutedEdge.mid;
+      return { ...preRoutedEdge, labelPos };
+    }
+
     const src = getNodeRect(sourceId);
     const tgt = getNodeRect(targetId);
     if (!src || !tgt) return null;
-    const path = computeEdgePath(src, tgt, {
-      sourceAnchor,
-      targetAnchor,
-      curvature,
-    });
+
+    const obstacleRects = nodeRects.filter(
+      (r) => !(r.x === src.x && r.y === src.y && r.width === src.width && r.height === src.height) &&
+             !(r.x === tgt.x && r.y === tgt.y && r.width === tgt.width && r.height === tgt.height)
+    );
+
+    const path = isNavigationRoute
+      ? routeNavigationEdge(src, tgt, obstacleRects)
+      : computeEdgePath(src, tgt, {
+          sourceAnchor,
+          targetAnchor,
+          curvature,
+        });
+
     const labelPos = label
       ? findClearLabelPosition(
           path.points,
           edgeLabelSize(label),
           nodeRects,
           EDGE_LABEL_MARGIN,
+          (path as any).isPolyline,
         )
       : path.mid;
     return { ...path, labelPos };
   }, [
+    preRoutedEdge,
+    label,
+    nodeRects,
     getNodeRect,
     sourceId,
     targetId,
     sourceAnchor,
     targetAnchor,
     curvature,
-    label,
-    nodeRects,
+    isNavigationRoute,
   ]);
 
   if (!result) return null;
@@ -270,11 +335,12 @@ function GraphEdgeInternal({
   const classNames = [
     "graph-edge",
     variant !== "default" && `graph-edge--${variant}`,
+    isNavigationRoute && "graph-edge--navigation",
     selected && "selected",
   ]
     .filter(Boolean)
     .join(" ");
-  const interactive = !!onSelect || !!hasPopover;
+  const interactive = !!onSelect || !!hasPopover || !!tooltipId;
 
   const edgeData: GraphEdge = {
     id,
@@ -311,7 +377,7 @@ function GraphEdgeInternal({
       aria-haspopup={hasPopover ? "dialog" : undefined}
       {...(hasPopover && { 'aria-expanded': !!popoverOpen })}
       {...(hasPopover && popoverPanelId && { 'aria-controls': popoverPanelId })}
-      {...(tooltipId && { 'aria-describedby': tooltipId })}
+      {...(interactive && tooltipId && { 'aria-describedby': tooltipId })}
       // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible name
       // by assistive tech, and a label-less edge has nothing at all — without this a screen reader
       // announces a bare "button".
@@ -410,7 +476,8 @@ export interface GraphCanvasProps extends Omit<
   nodeTooltip?: (node: GraphNodeData) => React.ReactNode;
   /**
    * Specifies whether nodeTooltip should be triggered by hover or click. Default: 'hover'.
-   * - 'hover': tooltip triggered on hover, with aria-describedby linking trigger to tooltip content
+   * - 'hover': tooltip triggered on hover. For interactive nodes (with onNodeSelect or nodePopover),
+   *   aria-describedby links the trigger to tooltip content.
    * - 'click': interactive popover behavior (role="dialog", supports buttons/links/content interaction)
    * When 'click', the tooltip content is rendered using Popover (same as nodePopover) for full
    * accessibility and interactivity, providing a migration path from Tooltip to Popover without
@@ -499,8 +566,10 @@ export interface GraphCanvasProps extends Omit<
    *  distribution, by design. Nodes with x and y are pinned under any of these layouts.
    *  'galaxy' and 'force-clustered' both draw a boundary circle per top-level group (see
    *  showClusterBoundaries) — one per root subtree for 'galaxy', one per top-level Louvain
-   *  cluster for 'force-clustered'. */
-  layout?: "manual" | "force" | "galaxy" | "force-clustered";
+   *  cluster for 'force-clustered'. 'ux-navigation' arranges page nodes as independent
+   *  top-to-bottom trees with view nodes positioned as horizontal fans attached to their
+   *  parent pages (see isPageNode). */
+  layout?: "manual" | "force" | "galaxy" | "force-clustered" | "ux-navigation";
   /**
    * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
    * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
@@ -535,6 +604,28 @@ export interface GraphCanvasProps extends Omit<
    * works under any layout, not just "galaxy".
    */
   isStructuralEdge?: (edge: GraphEdge) => boolean;
+  /**
+   * Curvature applied to structural edges (page-to-page hierarchy and page-to-view composition).
+   * 0 produces straight lines; 0.22 (default) produces the standard curve. Values > 0 increase
+   * curve intensity. Only applied to structural edges that don't have their own curvature override.
+   * Default 0.22.
+   */
+  structuralEdgeCurvature?: number;
+  /**
+   * Classifies a node as a page (returns true) or view (returns false) for ux-navigation layout.
+   * Only meaningful with layout="ux-navigation". Page nodes are positioned in the top-to-bottom
+   * tree hierarchy; view nodes are positioned as horizontal fans attached to their parent pages.
+   * When omitted with ux-navigation layout, all nodes are treated as pages.
+   */
+  isPageNode?: (node: GraphNodeData) => boolean;
+  /**
+   * Classifies an edge as a navigation route for ux-navigation layout.
+   * Only meaningful with layout="ux-navigation". Navigation route edges are hidden by default
+   * and only become visible when hovering a page or view node, with the visible set depending
+   * on whether the hovered node is a collapsed page, expanded page, or view.
+   * When omitted, no edges are treated as navigation routes.
+   */
+  isNavigationRoute?: (edge: GraphEdge) => boolean;
   /** When isStructuralEdge is set, renders every non-structural edge instead of hiding it (see
    *  isStructuralEdge). Default false. No effect without isStructuralEdge. */
   showAllRelations?: boolean;
@@ -637,6 +728,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       nodeMargin,
       showClusterBoundaries = true,
       isStructuralEdge,
+      structuralEdgeCurvature = DEFAULT_QUADRATIC_CURVATURE,
+      isPageNode,
+      isNavigationRoute,
       showAllRelations = false,
       collapsedNodeIds,
       onToggleCollapse,
@@ -866,13 +960,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const hierarchyEdges = edges.map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: safeIsStructuralEdge(isStructuralEdge, e),
+        structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
       }));
       return buildStructuralForest(
         nodes.map((n) => n.id),
         hierarchyEdges,
       );
-    }, [nodes, edges, isStructuralEdge]);
+    }, [nodes, edges, isStructuralEdge, layout]);
 
     // Every structural descendant of a collapsed node is hidden — not just its direct children.
     const hiddenIds = useMemo(() => {
@@ -885,6 +979,26 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
       return hidden;
     }, [collapsedNodeIds, forest]);
+
+    // Navigation route visibility for ux-navigation layout: compute which navigation-route
+    // edges should be visible based on the currently hovered node, its expansion state, and
+    // whether it's a page or view.
+    const visibleNavigationRouteIds = useMemo(() => {
+      if (layout !== "ux-navigation" || !isNavigationRoute) return new Set<string>();
+      const nodeMap = new Map(nodes.map(n => [n.id, n]));
+      const pageNodePredicate = (nodeId: string) => {
+        const node = nodeMap.get(nodeId);
+        return node ? safeIsPageNode(isPageNode, node) : false;
+      };
+      return visibleNavigationEdgeIds(
+        edges,
+        hoveredNodeId,
+        pageNodePredicate,
+        (edge) => safeIsNavigationRoute(isNavigationRoute, edge),
+        forest,
+        collapsedNodeIds,
+      );
+    }, [layout, isNavigationRoute, edges, hoveredNodeId, forest, collapsedNodeIds, isPageNode, nodes]);
 
     // The node list actually measured, laid out, and rendered. Edges touching a hidden node
     // simply don't resolve a rect (see getNodeRect below) and render nothing — no separate
@@ -1027,12 +1141,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDims(next);
     }, [visibleNodes, renderNode]);
 
-    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered')
+    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered' | 'ux-navigation')
     useEffect(() => {
       if (
         (layout !== "force" &&
           layout !== "galaxy" &&
-          layout !== "force-clustered") ||
+          layout !== "force-clustered" &&
+          layout !== "ux-navigation") ||
         dims.size === 0
       )
         return;
@@ -1071,11 +1186,29 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin });
         setComputedPositions(positions);
         setClusterBoundaries(boundaries);
+      } else if (layout === "ux-navigation") {
+        const layoutEdges = (edges ?? []).map((e) => ({
+          source: e.sourceId,
+          target: e.targetId,
+          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
+        }));
+        const nodeMap = new Map(nodes.map(n => [n.id, n]));
+        const positions = uxNavLayout(
+          layoutNodes,
+          layoutEdges,
+          dims,
+          (node) => {
+            const fullNode = nodeMap.get(node.id);
+            return fullNode ? safeIsPageNode(isPageNode, fullNode) : true;
+          },
+        );
+        setComputedPositions(positions);
+        setClusterBoundaries(new Map());
       } else {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
           target: e.targetId,
-          structural: safeIsStructuralEdge(isStructuralEdge, e),
+          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
         }));
         const positions = galaxyLayout(layoutNodes, layoutEdges, {
           nodeMargin,
@@ -1112,7 +1245,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       layout,
       nodeMargin,
       isStructuralEdge,
+      isPageNode,
       forest,
+      nodes,
+      collapsedNodeIds,
     ]);
 
     // A node's dragPositions override doubles as its pin here, same priority getNodePosition
@@ -1153,9 +1289,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return (edges ?? []).map((e) => ({
         source: e.sourceId,
         target: e.targetId,
-        structural: safeIsStructuralEdge(isStructuralEdge, e),
+        structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
       }));
-    }, [liveActive, edges, isStructuralEdge]);
+    }, [liveActive, edges, isStructuralEdge, layout]);
 
     // A drag/pin-independent view of the same nodes, purely for resolving the aspectRatio scale
     // below — deliberately NOT `liveLayoutNodes` (which changes identity every animation frame
@@ -1363,14 +1499,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (didCenterRef.current) return;
       if (!containerSize || dims.size === 0 || visibleNodes.length === 0)
         return;
-      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered' all compute
-      // positions asynchronously (see the engine-layout effect above) — without waiting for them
-      // here too, this could run with computedPositions still empty, every node falling back to
-      // {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
+      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered'/'ux-navigation'
+      // all compute positions asynchronously (see the engine-layout effect above) — without waiting
+      // for them here too, this could run with computedPositions still empty, every node falling
+      // back to {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
       if (
         (layout === "force" ||
           layout === "galaxy" ||
-          layout === "force-clustered") &&
+          layout === "force-clustered" ||
+          layout === "ux-navigation") &&
         computedPositions.size === 0
       )
         return;
@@ -1842,6 +1979,44 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [visibleNodes, getNodeRect],
     );
 
+    // Batch-route all navigation edges together with overlapping-segment nudging
+    const navigationEdgeRoutes = useMemo(() => {
+      if (layout !== "ux-navigation" || !isNavigationRoute) return new Map<string, any>();
+
+      // Filter edges to get only navigation routes
+      const navEdges = edges.filter((edge) => {
+        try {
+          return isNavigationRoute(edge);
+        } catch {
+          return false;
+        }
+      });
+
+      if (navEdges.length === 0) return new Map<string, any>();
+
+      // Collect edge data with their rects, tracking all endpoint rects
+      const endpointRects = new Set<typeof nodeRects[0]>();
+      const edgesWithRects = navEdges
+        .map((edge) => {
+          const src = getNodeRect(edge.sourceId);
+          const tgt = getNodeRect(edge.targetId);
+          if (!src || !tgt) return null;
+          endpointRects.add(src);
+          endpointRects.add(tgt);
+          return { id: edge.id, source: src, target: tgt };
+        })
+        .filter((e): e is NonNullable<typeof e> => e !== null);
+
+      if (edgesWithRects.length === 0) return new Map<string, any>();
+
+      // Exclude endpoint nodes from obstacles (to match single-edge routing behavior)
+      const obstacleRects = nodeRects.filter((rect) => !endpointRects.has(rect));
+
+      // Navigation edges route over structural edges, not around them
+      // Call batch router with all navigation edges and filtered obstacles
+      return routeNavigationEdges(edgesWithRects, obstacleRects, DEFAULT_TRACE_SPACING);
+    }, [layout, isNavigationRoute, edges, getNodeRect, nodeRects, isStructuralEdge, structuralEdgeCurvature]);
+
     const hierarchyMetaFor = useCallback(
       (id: string): GraphNodeHierarchyMeta => {
         const hasChildren = (forest.childrenOf.get(id)?.length ?? 0) > 0;
@@ -1971,10 +2146,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const src = edge && getNodeRect(edge.sourceId);
         const tgt = edge && getNodeRect(edge.targetId);
         if (edge && src && tgt) {
+          const edgeCurvature = edge.curvature ?? (safeIsStructuralEdge(isStructuralEdge, edge) ? structuralEdgeCurvature : undefined);
           const path = computeEdgePath(src, tgt, {
             sourceAnchor: edge.sourceAnchor,
             targetAnchor: edge.targetAnchor,
-            curvature: edge.curvature,
+            curvature: edgeCurvature,
           });
           try {
             const content = edgeTooltip(edge);
@@ -2000,6 +2176,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodePosition,
       edges,
       getNodeRect,
+      isStructuralEdge,
+      structuralEdgeCurvature,
     ]);
 
     // World-space anchor for popover rendering — resolved from active popover state
@@ -2046,10 +2224,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const src = edge && getNodeRect(edge.sourceId);
         const tgt = edge && getNodeRect(edge.targetId);
         if (edge && src && tgt) {
+          const edgeCurvature = edge.curvature ?? (safeIsStructuralEdge(isStructuralEdge, edge) ? structuralEdgeCurvature : undefined);
           const path = computeEdgePath(src, tgt, {
             sourceAnchor: edge.sourceAnchor,
             targetAnchor: edge.targetAnchor,
-            curvature: edge.curvature,
+            curvature: edgeCurvature,
           });
           try {
             // Prefer edgePopover, fall back to click-triggered edgeTooltip
@@ -2090,6 +2269,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodePosition,
       edges,
       getNodeRect,
+      isStructuralEdge,
+      structuralEdgeCurvature,
     ]);
 
     // Prevents dead state when popoverTarget callback throws — resets so the node is clickable again.
@@ -2273,7 +2454,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                 {edges?.map((edge) => {
                   // Only isStructuralEdge callers opt into hiding — without it every edge
                   // is treated as structural, so this never changes existing behavior.
-                  const structural = safeIsStructuralEdge(isStructuralEdge, edge);
+                  const structural = safeIsStructuralEdge(isStructuralEdge, edge, layout);
+                  // Navigation routes only meaningful with ux-navigation layout
+                  const navigationRoute = layout === "ux-navigation"
+                    ? safeIsNavigationRoute(isNavigationRoute, edge)
+                    : false;
                   const touchesFocus =
                     edge.sourceId === hoveredNodeId ||
                     edge.targetId === hoveredNodeId ||
@@ -2281,13 +2466,16 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     edge.sourceId === selectedNodeId ||
                     edge.targetId === selectedNodeId ||
                     edge.id === selectedEdgeId;
+                  // Check if this is a visible navigation route (ux-navigation layout only)
+                  const isVisibleNavigationRoute = visibleNavigationRouteIds.has(edge.id);
                   const hidden =
-                    !structural && !showAllRelations && !touchesFocus;
+                    !structural && !showAllRelations && !touchesFocus && !isVisibleNavigationRoute;
                   // Not rendered at all rather than dimmed to a low opacity — line, marker, and
                   // label alike disappear, and it isn't clickable while hidden either.
                   if (hidden) return null;
                   const isPopoverOpen = activePopoverEdgeId === edge.id;
                   const tooltipId = tooltipTarget?.type === 'edge' && tooltipTarget.edgeId === edge.id ? tooltipTarget.tooltipId : undefined;
+                  const edgeCurvature = edge.curvature ?? (structural ? structuralEdgeCurvature : undefined);
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -2301,7 +2489,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       strokeDash={edge.strokeDash}
                       sourceAnchor={edge.sourceAnchor}
                       targetAnchor={edge.targetAnchor}
-                      curvature={edge.curvature}
+                      curvature={edgeCurvature}
                       selected={edge.id === selectedEdgeId}
                       hovered={edge.id === hoveredEdgeId}
                       onSelect={onEdgeSelect}
@@ -2313,6 +2501,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       popoverOpen={isPopoverOpen}
                       popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
                       tooltipId={tooltipId}
+                      isNavigationRoute={navigationRoute}
+                      preRoutedEdge={navigationEdgeRoutes.get(edge.id)}
                     />
                   );
                 })}

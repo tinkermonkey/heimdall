@@ -273,6 +273,20 @@ function cubicPointAt(p1: Point, c1: Point, c2: Point, p2: Point, t: number): Po
   }
 }
 
+function polylinePointAt(points: readonly Point[], t: number): Point {
+  const totalLength = points.length - 1
+  const segmentIndex = Math.floor(t * totalLength)
+  const localT = (t * totalLength) - segmentIndex
+
+  const p1 = points[Math.min(segmentIndex, points.length - 1)]
+  const p2 = points[Math.min(segmentIndex + 1, points.length - 1)]
+
+  return {
+    x: p1.x + (p2.x - p1.x) * localT,
+    y: p1.y + (p2.y - p1.y) * localT,
+  }
+}
+
 // Tried in order, starting at the curve's true midpoint and stepping outward toward each
 // endpoint — the first candidate whose label footprint clears every obstacle wins, so the label
 // stays as close to the visual middle of the edge as the nearby nodes allow.
@@ -280,19 +294,27 @@ const LABEL_CANDIDATE_TS = [0.5, 0.38, 0.62, 0.26, 0.74, 0.15, 0.85]
 
 /**
  * Where to center an edge label so it clears every node in `obstacles` by `margin` px, without
- * moving the edge or any node — just samples a handful of points along the curve `points` already
- * describes (see BezierPathResult.points) and picks the first that's clear. Falls back to the
- * curve's exact midpoint (t=0.5) if every candidate collides; occasionally sitting a label over a
- * node beats a more complex routing/repositioning scheme for what's meant to stay "just that".
+ * moving the edge or any node — just samples a handful of points along the path `points` already
+ * describes and picks the first that's clear. Falls back to the path's exact midpoint (t=0.5)
+ * if every candidate collides; occasionally sitting a label over a node beats a more complex
+ * routing/repositioning scheme for what's meant to stay "just that".
+ *
+ * Handles both bezier control polygons (3-4 points) and orthogonal polylines (3+ points).
+ * Polylines use linear interpolation; bezier paths use curve functions.
+ * @param isPolyline - If true, treats points as an orthogonal polyline (linear sampling).
+ *                     If false/undefined, interprets based on point count (3=quadratic, 4=cubic).
  */
 export function findClearLabelPosition(
   points: readonly Point[],
   size: { width: number; height: number },
   obstacles: readonly EdgeEndpointRect[],
-  margin: number = 6
+  margin: number = 6,
+  isPolyline?: boolean
 ): Point {
   const sampleAt =
-    points.length >= 4
+    isPolyline
+      ? (t: number) => polylinePointAt(points, t)
+      : points.length === 4
       ? (t: number) => cubicPointAt(points[0], points[1], points[2], points[3], t)
       : (t: number) => quadraticPointAt(points[0], points[1], points[2], t)
 
