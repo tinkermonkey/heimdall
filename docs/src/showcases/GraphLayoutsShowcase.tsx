@@ -125,21 +125,21 @@ const SERVICES_EDGES: GraphEdgeData[] = [
 ]
 
 const UX_NODES: DemoNode[] = [
-  // Pages — arranged as a hierarchy; isPage: true marks them for the ux-navigation engine
-  { id: 'app', label: 'App', kind: 'C', domainColor: 'life', title: 'App', domain: 'shell', isPage: true },
-  { id: 'dashboard', label: 'Dashboard', kind: 'C', domainColor: 'life', title: 'Dashboard', domain: 'shell', isPage: true },
-  { id: 'users', label: 'Users', kind: 'C', domainColor: 'software', title: 'Users', domain: 'users', isPage: true },
-  { id: 'settings', label: 'Settings', kind: 'C', domainColor: 'climate', title: 'Settings', domain: 'settings', isPage: true },
-  { id: 'reports', label: 'Reports', kind: 'C', domainColor: 'climate', title: 'Reports', domain: 'reports', isPage: true },
-  // Views — fans that attach horizontally to their parent pages; isPage: false
-  { id: 'user_list', label: 'User List', kind: 'C', domainColor: 'software', title: 'User List', domain: 'users', isPage: false },
-  { id: 'user_detail', label: 'User Detail', kind: 'C', domainColor: 'software', title: 'User Detail', domain: 'users', isPage: false },
-  { id: 'user_edit', label: 'User Edit', kind: 'C', domainColor: 'software', title: 'User Edit', domain: 'users', isPage: false },
-  { id: 'settings_profile', label: 'Profile', kind: 'C', domainColor: 'climate', title: 'Profile', domain: 'settings', isPage: false },
-  { id: 'settings_billing', label: 'Billing', kind: 'C', domainColor: 'climate', title: 'Billing', domain: 'settings', isPage: false },
-  { id: 'report_viewer', label: 'Report Viewer', kind: 'C', domainColor: 'climate', title: 'Report Viewer', domain: 'reports', isPage: false },
+  // Pages — 'P' kind; isPage: true marks them for the ux-navigation engine's top-down tree
+  { id: 'app', label: 'App', kind: 'P', domainColor: 'life', title: 'App', domain: 'shell', isPage: true },
+  { id: 'dashboard', label: 'Dashboard', kind: 'P', domainColor: 'life', title: 'Dashboard', domain: 'shell', isPage: true },
+  { id: 'users', label: 'Users', kind: 'P', domainColor: 'software', title: 'Users', domain: 'users', isPage: true },
+  { id: 'settings', label: 'Settings', kind: 'P', domainColor: 'climate', title: 'Settings', domain: 'settings', isPage: true },
+  { id: 'reports', label: 'Reports', kind: 'P', domainColor: 'climate', title: 'Reports', domain: 'reports', isPage: true },
+  // Views — 'V' kind; isPage: false; fanned out horizontally from their parent pages
+  { id: 'user_list', label: 'User List', kind: 'V', domainColor: 'software', title: 'User List', domain: 'users', isPage: false },
+  { id: 'user_detail', label: 'User Detail', kind: 'V', domainColor: 'software', title: 'User Detail', domain: 'users', isPage: false },
+  { id: 'user_edit', label: 'User Edit', kind: 'V', domainColor: 'software', title: 'User Edit', domain: 'users', isPage: false },
+  { id: 'settings_profile', label: 'Profile', kind: 'V', domainColor: 'climate', title: 'Profile', domain: 'settings', isPage: false },
+  { id: 'settings_billing', label: 'Billing', kind: 'V', domainColor: 'climate', title: 'Billing', domain: 'settings', isPage: false },
+  { id: 'report_viewer', label: 'Report Viewer', kind: 'V', domainColor: 'climate', title: 'Report Viewer', domain: 'reports', isPage: false },
   // A true orphan — no edges at all.
-  { id: 'legacy_modal', label: 'Legacy Modal', kind: 'C', domainColor: 'life', title: 'Legacy Modal', domain: 'shell', isPage: false },
+  { id: 'legacy_modal', label: 'Legacy Modal', kind: 'V', domainColor: 'life', title: 'Legacy Modal', domain: 'shell', isPage: false },
 ]
 
 const UX_EDGES: GraphEdgeData[] = [
