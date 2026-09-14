@@ -14,45 +14,6 @@ export interface RoutedEdge {
 /** Default spacing (px) between parallel segments when nudging overlapping edges apart */
 export const DEFAULT_TRACE_SPACING = 16
 
-/**
- * Extracts routing channels from node positions in the layout.
- * Channels are computed as the midpoints between adjacent node positions,
- * representing the gaps between nodes where edges naturally flow.
- */
-function extractChannels(nodes: readonly EdgeEndpointRect[]): {
-  verticalChannels: number[]
-  horizontalChannels: number[]
-} {
-  if (nodes.length === 0) {
-    return { verticalChannels: [], horizontalChannels: [] }
-  }
-
-  // Collect unique x and y positions from all nodes
-  const xs = new Set<number>()
-  const ys = new Set<number>()
-
-  for (const node of nodes) {
-    xs.add(Math.round(node.x))
-    ys.add(Math.round(node.y))
-  }
-
-  const sortedXs = Array.from(xs).sort((a, b) => a - b)
-  const sortedYs = Array.from(ys).sort((a, b) => a - b)
-
-  // Compute channels as midpoints between adjacent nodes
-  const verticalChannels: number[] = []
-  for (let i = 0; i < sortedXs.length - 1; i++) {
-    verticalChannels.push(Math.round((sortedXs[i] + sortedXs[i + 1]) / 2))
-  }
-
-  const horizontalChannels: number[] = []
-  for (let i = 0; i < sortedYs.length - 1; i++) {
-    horizontalChannels.push(Math.round((sortedYs[i] + sortedYs[i + 1]) / 2))
-  }
-
-  return { verticalChannels, horizontalChannels }
-}
-
 export function routeNavigationEdge(
   source: EdgeEndpointRect,
   target: EdgeEndpointRect,
@@ -81,27 +42,21 @@ export function routeNavigationEdge(
 }
 
 /**
- * Routes multiple navigation edges at once with channel-based awareness.
- * Extracts routing channels from node positions in the layout and routes edges through them,
- * then applies a nudge pass to spread overlapping segments.
+ * Routes multiple navigation edges at once with obstacle avoidance.
+ * Routes each edge individually and applies a nudge pass to spread overlapping segments.
  */
 export function routeNavigationEdges(
   edges: Array<{ id: string; source: EdgeEndpointRect; target: EdgeEndpointRect }>,
   allObstacles: readonly EdgeEndpointRect[] = [],
-  traceSpacing: number = DEFAULT_TRACE_SPACING,
-  layoutNodes?: readonly EdgeEndpointRect[]
+  traceSpacing: number = DEFAULT_TRACE_SPACING
 ): Map<string, RoutedEdge> {
-  // Extract channels from layout nodes (all obstacles + endpoints)
-  const channelNodes = layoutNodes || allObstacles
-  const channels = extractChannels(channelNodes)
-
   // Route each edge individually, but consider previous routes as soft obstacles
   const routes = new Map<string, RoutedEdge>()
   const routedRects: EdgeEndpointRect[] = []
 
   for (const edge of edges) {
     const obstacles = [...allObstacles, ...routedRects]
-    const routed = routeNavigationEdge(edge.source, edge.target, obstacles, channels)
+    const routed = routeNavigationEdge(edge.source, edge.target, obstacles)
     routes.set(edge.id, routed)
 
     // Create a bounding rect for this route to use as obstacle for subsequent edges

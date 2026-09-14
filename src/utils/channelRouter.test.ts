@@ -19,10 +19,7 @@ describe('channelRouter', () => {
         const p2 = result.points[i + 1]
         const isHorizontal = Math.abs(p1.y - p2.y) < 0.01
         const isVertical = Math.abs(p1.x - p2.x) < 0.01
-        expect(isHorizontal || isVertical).toBe(
-          true,
-          `Segment ${i}->${i + 1} is diagonal: (${p1.x},${p1.y}) -> (${p2.x},${p2.y})`
-        )
+        expect(isHorizontal || isVertical).toBe(true)
       }
     })
 
@@ -46,26 +43,19 @@ describe('channelRouter', () => {
       }
     })
 
-    it('maintains orthogonality with channels present', () => {
+    it('maintains orthogonality without obstacles', () => {
       const source: EdgeEndpointRect = { x: 0, y: 0, width: 50, height: 50 }
       const target: EdgeEndpointRect = { x: 200, y: 150, width: 50, height: 50 }
-      const channels = {
-        verticalChannels: [50, 100, 150],
-        horizontalChannels: [50, 100, 150],
-      }
 
-      const result = routeNavigationEdge(source, target, [], channels)
+      const result = routeNavigationEdge(source, target)
 
-      // Even with channels, path must be orthogonal
+      // Path must be orthogonal
       for (let i = 0; i < result.points.length - 1; i++) {
         const p1 = result.points[i]
         const p2 = result.points[i + 1]
         const isHorizontal = Math.abs(p1.y - p2.y) < 0.01
         const isVertical = Math.abs(p1.x - p2.x) < 0.01
-        expect(isHorizontal || isVertical).toBe(
-          true,
-          `Segment ${i}->${i + 1} violates orthogonality: (${p1.x},${p1.y}) -> (${p2.x},${p2.y})`
-        )
+        expect(isHorizontal || isVertical).toBe(true)
       }
     })
   })
@@ -102,7 +92,7 @@ describe('channelRouter', () => {
       }
     })
 
-    it('extracts and uses channels from layout nodes', () => {
+    it('routes single edge with specified trace spacing', () => {
       const edges = [
         {
           id: 'edge1',
@@ -111,14 +101,7 @@ describe('channelRouter', () => {
         },
       ]
 
-      // Define layout nodes
-      const layoutNodes = [
-        { x: 100, y: 100, width: 50, height: 50 }, // node at 100,100
-        { x: 100, y: 200, width: 50, height: 50 }, // node at 100,200
-        { x: 200, y: 100, width: 50, height: 50 }, // node at 200,100
-      ]
-
-      const result = routeNavigationEdges(edges, [], 16, layoutNodes)
+      const result = routeNavigationEdges(edges, [], 16)
 
       expect(result.size).toBe(1)
       const route = result.get('edge1')!
