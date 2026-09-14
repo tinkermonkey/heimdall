@@ -2010,55 +2010,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (edgesWithRects.length === 0) return new Map<string, any>();
 
       // Exclude endpoint nodes from obstacles (to match single-edge routing behavior)
-      let obstacleRects = nodeRects.filter((rect) => !endpointRects.has(rect));
+      const obstacleRects = nodeRects.filter((rect) => !endpointRects.has(rect));
 
-      // Add structural edges as obstacles to prevent navigation routes from crossing them
-      const structuralEdgeObstacles = edges
-        .filter((edge) => {
-          if (safeIsNavigationRoute(isNavigationRoute, edge)) return false;
-          return safeIsStructuralEdge(isStructuralEdge, edge, layout);
-        })
-        .map((edge) => {
-          const src = getNodeRect(edge.sourceId);
-          const tgt = getNodeRect(edge.targetId);
-          if (!src || !tgt) return null;
-
-          // Compute the structural edge path
-          const edgeCurvature = edge.curvature ?? structuralEdgeCurvature;
-          const path = computeEdgePath(src, tgt, {
-            sourceAnchor: edge.sourceAnchor,
-            targetAnchor: edge.targetAnchor,
-            curvature: edgeCurvature,
-          });
-
-          // Convert path to a bounding box obstacle
-          // Use the control points (path.points) to determine the extent of the edge
-          const points = path.points;
-          let minX = points[0].x;
-          let maxX = points[0].x;
-          let minY = points[0].y;
-          let maxY = points[0].y;
-
-          for (const p of points) {
-            minX = Math.min(minX, p.x);
-            maxX = Math.max(maxX, p.x);
-            minY = Math.min(minY, p.y);
-            maxY = Math.max(maxY, p.y);
-          }
-
-          // Add padding to the bounding box to ensure navigation routes clear the curved edge
-          const padding = 20;
-          return {
-            x: (minX + maxX) / 2,
-            y: (minY + maxY) / 2,
-            width: maxX - minX + padding,
-            height: maxY - minY + padding,
-          };
-        })
-        .filter((o): o is typeof obstacleRects[0] => o !== null);
-
-      obstacleRects = [...obstacleRects, ...structuralEdgeObstacles];
-
+      // Navigation edges route over structural edges, not around them
       // Call batch router with all navigation edges and filtered obstacles
       return routeNavigationEdges(edgesWithRects, obstacleRects, DEFAULT_TRACE_SPACING);
     }, [layout, isNavigationRoute, edges, getNodeRect, nodeRects, isStructuralEdge, structuralEdgeCurvature]);
