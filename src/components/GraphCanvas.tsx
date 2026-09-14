@@ -336,7 +336,7 @@ function GraphEdgeInternal({
   ]
     .filter(Boolean)
     .join(" ");
-  const interactive = !!onSelect || !!hasPopover;
+  const interactive = !!onSelect || !!hasPopover || !!tooltipId;
 
   const edgeData: GraphEdge = {
     id,
