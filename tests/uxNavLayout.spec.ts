@@ -570,7 +570,6 @@ test.describe("uxNavLayout", () => {
     // The offset from page2 to uniqueView should be approximately viewFanGap (40px default)
     // not viewFanGap + sharedView.width
     const page2DefaultOptions = { viewFanGap: 40 };
-    const expectedMinX = page2Pos.x + dims.get("page2")!.width / 2 + page2DefaultOptions.viewFanGap;
     const uniqueViewOffset = uniqueViewPos.x - (page2Pos.x + dims.get("page2")!.width / 2);
 
     // Should be close to viewFanGap, not including sharedView width in calculation
