@@ -35,7 +35,7 @@ export interface RadialTreeLayoutResult {
  * 4. Apply separation pass as final overlap resolution
  *
  * @param visibleNodes - Only currently visible (non-collapsed) nodes for placement
- * @param edges - All edges (both structural and relational)
+ * @param edges - Unused; accepted for API consistency with other layout functions
  * @param dims - Measured dimensions for each node
  * @param fullForest - Structural forest from ALL nodes (used for sizing pass)
  * @param options - Layout configuration
@@ -62,33 +62,14 @@ export function radialTreeLayout(
   if (visibleNodes.length === 0) return result
 
   const forest = fullForest
-  const visibleNodeMap = new Map(visibleNodes.map(n => [n.id, n]))
   const visibleNodeIds = new Set(visibleNodes.map(n => n.id))
 
   // Helper: get dimensions for a node
   const getDims = (id: string): { width: number; height: number } =>
     dims.get(id) ?? { width: 40, height: 40 }
 
-  // Helper: collect all descendants of a node (including the node itself)
-  const getAllDescendants = (id: string): Set<string> => {
-    const result = new Set<string>([id])
-    const queue = [id]
-    let head = 0
-    while (head < queue.length) {
-      const current = queue[head++]
-      const children = forest.childrenOf.get(current) ?? []
-      for (const child of children) {
-        if (!result.has(child)) {
-          result.add(child)
-          queue.push(child)
-        }
-      }
-    }
-    return result
-  }
-
   // Helper: custom separation function that accounts for node sizes
-  const createSeparationFunction = () => {
+  const createSeparationFunction = (maxRadius: number, maxDepth: number) => {
     return (a: HierarchyNode<any>, b: HierarchyNode<any>): number => {
       if (a.depth !== b.depth) return 1
       if (a.parent !== b.parent) return 1
@@ -97,7 +78,8 @@ export function radialTreeLayout(
       const bW = getDims(b.data.id).width
 
       const depth = a.depth
-      const radius = Math.max(40, depth * ringSpacing)
+      // Compute radius based on actual tree geometry: depth d maps to (d/maxDepth) * maxRadius
+      const radius = Math.max(40, (depth / Math.max(maxDepth, 1)) * maxRadius)
       const circumference = 2 * Math.PI * Math.max(radius, 1)
 
       // Angular space needed for the two nodes plus gap
@@ -123,7 +105,7 @@ export function radialTreeLayout(
   }
 
   const layoutTrunk = (rootId: string, useVisibleOnly: boolean): LayoutPassResult => {
-    const result: LayoutPassResult = {
+    const passResult: LayoutPassResult = {
       positions: new Map(),
       maxRadius: 0,
       ringRadii: new Map(),
@@ -145,16 +127,20 @@ export function radialTreeLayout(
     const treeData = buildHierarchy(rootId)
     const root = hierarchy(treeData)
 
-    // Compute max radius based on tree size
+    // Compute max radius and max depth based on tree size
     // For sizing pass, estimate from all descendants; for placement pass, use visible count
     let nodeCount = 0
-    root.each(() => { nodeCount++ })
+    let maxDepth = 0
+    root.each((node) => {
+      nodeCount++
+      maxDepth = Math.max(maxDepth, node.depth)
+    })
     const maxRadius = Math.max(nodeCount * ringSpacing, 300)
 
     // Create tree layout with polar coordinates
     const treeLayout = d3tree<any>()
       .size([2 * Math.PI, maxRadius])
-      .separation(createSeparationFunction())
+      .separation(createSeparationFunction(maxRadius, maxDepth))
 
     treeLayout(root)
 
@@ -172,20 +158,20 @@ export function radialTreeLayout(
       }
       depthLevels.get(node.depth)!.push(radius)
 
-      result.maxRadius = Math.max(result.maxRadius, radius)
+      passResult.maxRadius = Math.max(passResult.maxRadius, radius)
 
       // Convert polar to Cartesian
       const x = radius * Math.cos(angle)
       const y = radius * Math.sin(angle)
-      result.positions.set(id, { x, y })
+      passResult.positions.set(id, { x, y })
     })
 
     // Compute ring radii
     for (const [depth, radii] of depthLevels) {
-      result.ringRadii.set(depth, Math.max(...radii))
+      passResult.ringRadii.set(depth, Math.max(...radii))
     }
 
-    return result
+    return passResult
   }
 
   // Phase 1: Sizing pass — compute bubble radius for each trunk
@@ -209,7 +195,7 @@ export function radialTreeLayout(
 
   // Phase 2: Pack trunk bubbles without overlap
   const packedTrunks = packSiblings(
-    trunkBubbles.map(b => ({ r: b.radius })),
+    trunkBubbles.map(b => ({ r: b.radius + trunkPadding })),
   )
 
   const trunkOffsets = new Map<string, { x: number; y: number }>()
@@ -236,9 +222,10 @@ export function radialTreeLayout(
       })
     }
 
-    // Record ring geometry
+    // Record ring geometry (skip depth 0, which is a zero-radius point)
     const bubble = trunkBubbles[i]
     for (const [depth, radius] of layoutResult.ringRadii) {
+      if (depth === 0) continue
       result.ringGeometry.push({
         trunkId: rootId,
         cx: offset.x,

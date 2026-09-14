@@ -303,9 +303,8 @@ describe('radialTreeLayout', () => {
         expect(ring.r).toBeGreaterThan(0)
       }
 
-      // Ring depths should correspond to tree depths
+      // Ring depths should correspond to tree depths (depth 0 is skipped as it's a zero-radius point)
       const depths = new Set(result.ringGeometry.map(r => r.depth))
-      expect(depths.has(0)).toBe(true) // root at depth 0
       expect(depths.has(1)).toBe(true) // child at depth 1
       expect(depths.has(2)).toBe(true) // grandchild at depth 2
     })
