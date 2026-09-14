@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url'
 const __dirname = process.env.VITE_PROJECT_DIR || path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-  plugins: [react(), dts({ include: 'src' })],
+  plugins: [react(), dts({ include: 'src', exclude: ['**/*.test.ts', '**/*.test.tsx'] })],
   cacheDir: process.env.CI ? '/tmp/.vite' : undefined,
   resolve: {
     alias: {

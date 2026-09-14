@@ -2013,8 +2013,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const obstacleRects = nodeRects.filter((rect) => !endpointRects.has(rect));
 
       // Navigation edges route over structural edges, not around them
-      // Call batch router with all navigation edges and filtered obstacles
-      return routeNavigationEdges(edgesWithRects, obstacleRects, DEFAULT_TRACE_SPACING);
+      // Call batch router with all navigation edges, filtered obstacles, and layout nodes for channel extraction
+      return routeNavigationEdges(edgesWithRects, obstacleRects, DEFAULT_TRACE_SPACING, nodeRects);
     }, [layout, isNavigationRoute, edges, getNodeRect, nodeRects, isStructuralEdge, structuralEdgeCurvature]);
 
     const hierarchyMetaFor = useCallback(

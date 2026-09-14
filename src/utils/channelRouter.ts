@@ -16,8 +16,8 @@ export const DEFAULT_TRACE_SPACING = 16
 
 /**
  * Extracts routing channels from node positions in the layout.
- * Channels are the vertical and horizontal lines that pass through node centers,
- * representing the gaps between nodes where edges can naturally flow.
+ * Channels are computed as the midpoints between adjacent node positions,
+ * representing the gaps between nodes where edges naturally flow.
  */
 function extractChannels(nodes: readonly EdgeEndpointRect[]): {
   verticalChannels: number[]
@@ -27,6 +27,7 @@ function extractChannels(nodes: readonly EdgeEndpointRect[]): {
     return { verticalChannels: [], horizontalChannels: [] }
   }
 
+  // Collect unique x and y positions from all nodes
   const xs = new Set<number>()
   const ys = new Set<number>()
 
@@ -35,10 +36,21 @@ function extractChannels(nodes: readonly EdgeEndpointRect[]): {
     ys.add(Math.round(node.y))
   }
 
-  return {
-    verticalChannels: Array.from(xs).sort((a, b) => a - b),
-    horizontalChannels: Array.from(ys).sort((a, b) => a - b),
+  const sortedXs = Array.from(xs).sort((a, b) => a - b)
+  const sortedYs = Array.from(ys).sort((a, b) => a - b)
+
+  // Compute channels as midpoints between adjacent nodes
+  const verticalChannels: number[] = []
+  for (let i = 0; i < sortedXs.length - 1; i++) {
+    verticalChannels.push(Math.round((sortedXs[i] + sortedXs[i + 1]) / 2))
   }
+
+  const horizontalChannels: number[] = []
+  for (let i = 0; i < sortedYs.length - 1; i++) {
+    horizontalChannels.push(Math.round((sortedYs[i] + sortedYs[i + 1]) / 2))
+  }
+
+  return { verticalChannels, horizontalChannels }
 }
 
 /**
@@ -229,7 +241,7 @@ function nudgeOverlappingSegments(
 
 /**
  * Nudges a specific horizontal segment of a route vertically to separate from another.
- * Propagates the offset to connected perpendicular segments to maintain 90° joints.
+ * Nudging the endpoints maintains 90° joints at the shared corner points.
  */
 function nudgeHorizontalSegment(
   route1: RoutedEdge,
@@ -252,44 +264,14 @@ function nudgeHorizontalSegment(
   route2.points[seg2Start] = { x: route2.points[seg2Start].x, y: route2.points[seg2Start].y + offset }
   route2.points[seg2End] = { x: route2.points[seg2End].x, y: route2.points[seg2End].y + offset }
 
-  // Propagate offset to connected perpendicular segments in route1
-  propagateHorizontalNudge(route1, seg1Start, seg1End, -offset)
-  // Propagate offset to connected perpendicular segments in route2
-  propagateHorizontalNudge(route2, seg2Start, seg2End, offset)
-
   // Recompute path string and metadata after nudging
   updateRouteMetadata(route1)
   updateRouteMetadata(route2)
 }
 
 /**
- * Propagates a horizontal nudge (vertical offset) to connected perpendicular (vertical) segments.
- */
-function propagateHorizontalNudge(route: RoutedEdge, segStart: number, segEnd: number, yOffset: number): void {
-  // Check segment before segStart for perpendicular connection
-  if (segStart > 0) {
-    const prevSeg = route.points[segStart - 1]
-    const currStart = route.points[segStart]
-    // If previous segment is vertical and shares the point, propagate offset
-    if (Math.abs(prevSeg.x - currStart.x) < 0.01) {
-      route.points[segStart - 1] = { x: prevSeg.x, y: prevSeg.y + yOffset }
-    }
-  }
-
-  // Check segment after segEnd for perpendicular connection
-  if (segEnd < route.points.length - 1) {
-    const currEnd = route.points[segEnd]
-    const nextSeg = route.points[segEnd + 1]
-    // If next segment is vertical and shares the point, propagate offset
-    if (Math.abs(currEnd.x - nextSeg.x) < 0.01) {
-      route.points[segEnd + 1] = { x: nextSeg.x, y: nextSeg.y + yOffset }
-    }
-  }
-}
-
-/**
  * Nudges a specific vertical segment of a route horizontally to separate from another.
- * Propagates the offset to connected perpendicular segments to maintain 90° joints.
+ * Nudging the endpoints maintains 90° joints at the shared corner points.
  */
 function nudgeVerticalSegment(
   route1: RoutedEdge,
@@ -312,39 +294,9 @@ function nudgeVerticalSegment(
   route2.points[seg2Start] = { x: route2.points[seg2Start].x + offset, y: route2.points[seg2Start].y }
   route2.points[seg2End] = { x: route2.points[seg2End].x + offset, y: route2.points[seg2End].y }
 
-  // Propagate offset to connected perpendicular segments in route1
-  propagateVerticalNudge(route1, seg1Start, seg1End, -offset)
-  // Propagate offset to connected perpendicular segments in route2
-  propagateVerticalNudge(route2, seg2Start, seg2End, offset)
-
   // Recompute path string and metadata after nudging
   updateRouteMetadata(route1)
   updateRouteMetadata(route2)
-}
-
-/**
- * Propagates a vertical nudge (horizontal offset) to connected perpendicular (horizontal) segments.
- */
-function propagateVerticalNudge(route: RoutedEdge, segStart: number, segEnd: number, xOffset: number): void {
-  // Check segment before segStart for perpendicular connection
-  if (segStart > 0) {
-    const prevSeg = route.points[segStart - 1]
-    const currStart = route.points[segStart]
-    // If previous segment is horizontal and shares the point, propagate offset
-    if (Math.abs(prevSeg.y - currStart.y) < 0.01) {
-      route.points[segStart - 1] = { x: prevSeg.x + xOffset, y: prevSeg.y }
-    }
-  }
-
-  // Check segment after segEnd for perpendicular connection
-  if (segEnd < route.points.length - 1) {
-    const currEnd = route.points[segEnd]
-    const nextSeg = route.points[segEnd + 1]
-    // If next segment is horizontal and shares the point, propagate offset
-    if (Math.abs(currEnd.y - nextSeg.y) < 0.01) {
-      route.points[segEnd + 1] = { x: nextSeg.x + xOffset, y: nextSeg.y }
-    }
-  }
 }
 
 /**
@@ -460,11 +412,11 @@ function buildOrthogonalPath(
   const padding = 20
 
   // Try horizontal-first routing (right/left then up/down)
-  const hFirstPath = tryHorizontalFirstPath(source, target, obstacles, padding, channels)
+  const hFirstPath = tryHorizontalFirstPath(source, target, obstacles, padding)
   if (hFirstPath) return hFirstPath
 
   // Try vertical-first routing (up/down then right/left)
-  const vFirstPath = tryVerticalFirstPath(source, target, obstacles, padding, channels)
+  const vFirstPath = tryVerticalFirstPath(source, target, obstacles, padding)
   if (vFirstPath) return vFirstPath
 
   // Fallback: route outside the bounding box of all obstacles
@@ -478,47 +430,29 @@ function buildOrthogonalPath(
 
     const distToAbove = Math.abs(aboveY - source.y)
     const distToBelow = Math.abs(belowY - source.y)
-    let routeY = distToAbove <= distToBelow ? aboveY : belowY
-
-    // Snap to nearest channel if available
-    if (channels) {
-      routeY = snapToChannel(routeY, channels.horizontalChannels, padding)
-    }
+    const routeY = distToAbove <= distToBelow ? aboveY : belowY
 
     return [source, { x: source.x, y: routeY }, { x: target.x, y: routeY }, target]
   }
 
-  // No obstacles: simple L-path, snapped to channels if available
-  let cornerX = target.x
-  let cornerY = source.y
-
-  if (channels) {
-    cornerX = snapToChannel(cornerX, channels.verticalChannels)
-    cornerY = snapToChannel(cornerY, channels.horizontalChannels)
-  }
-
-  return [source, { x: cornerX, y: cornerY }, target]
+  // No obstacles: simple L-path (channels guide overall strategy but don't modify waypoints)
+  return [source, { x: target.x, y: source.y }, target]
 }
 
 function tryHorizontalFirstPath(
   source: Point,
   target: Point,
   obstacles: readonly EdgeEndpointRect[],
-  padding: number,
-  channels?: { verticalChannels: number[]; horizontalChannels: number[] }
+  padding: number
 ): Point[] | null {
-  let midX = target.x
-  if (channels) {
-    midX = snapToChannel(midX, channels.verticalChannels)
-  }
-  const corner = { x: midX, y: source.y }
+  const corner = { x: target.x, y: source.y }
 
   // Check if direct path crosses obstacles
   const hSegClear = !obstacles.some(obs =>
-    hSegmentIntersectsBox(source.x, midX, source.y, obs, padding)
+    hSegmentIntersectsBox(source.x, target.x, source.y, obs, padding)
   )
   const vSegClear = !obstacles.some(obs =>
-    vSegmentIntersectsBox(midX, source.y, target.y, obs, padding)
+    vSegmentIntersectsBox(target.x, source.y, target.y, obs, padding)
   )
 
   if (hSegClear && vSegClear) {
@@ -527,7 +461,7 @@ function tryHorizontalFirstPath(
 
   // If blocked, try routing above/below obstacles
   const obstaclesOnPath = obstacles.filter(obs =>
-    hSegmentIntersectsBox(source.x, midX, source.y, obs, padding)
+    hSegmentIntersectsBox(source.x, target.x, source.y, obs, padding)
   )
 
   if (obstaclesOnPath.length > 0) {
@@ -535,14 +469,10 @@ function tryHorizontalFirstPath(
     const topmost = obstaclesOnPath.reduce((min, obs) =>
       obs.y - obs.height / 2 < min.y - min.height / 2 ? obs : min
     )
-    let routeY = topmost.y - topmost.height / 2 - padding
-    if (channels) {
-      routeY = snapToChannel(routeY, channels.horizontalChannels, padding)
-    }
+    const routeY = topmost.y - topmost.height / 2 - padding
     const waypoint1 = { x: source.x, y: routeY }
-    const waypoint2 = { x: midX, y: routeY }
-    const waypoint3 = { x: midX, y: target.y }
-    return [source, waypoint1, waypoint2, waypoint3, target]
+    const waypoint2 = { x: target.x, y: routeY }
+    return [source, waypoint1, waypoint2, target]
   }
 
   return null
@@ -552,21 +482,16 @@ function tryVerticalFirstPath(
   source: Point,
   target: Point,
   obstacles: readonly EdgeEndpointRect[],
-  padding: number,
-  channels?: { verticalChannels: number[]; horizontalChannels: number[] }
+  padding: number
 ): Point[] | null {
-  let midY = target.y
-  if (channels) {
-    midY = snapToChannel(midY, channels.horizontalChannels)
-  }
-  const corner = { x: source.x, y: midY }
+  const corner = { x: source.x, y: target.y }
 
   // Check if direct path crosses obstacles
   const vSegClear = !obstacles.some(obs =>
-    vSegmentIntersectsBox(source.x, source.y, midY, obs, padding)
+    vSegmentIntersectsBox(source.x, source.y, target.y, obs, padding)
   )
   const hSegClear = !obstacles.some(obs =>
-    hSegmentIntersectsBox(source.x, target.x, midY, obs, padding)
+    hSegmentIntersectsBox(source.x, target.x, target.y, obs, padding)
   )
 
   if (vSegClear && hSegClear) {
@@ -575,7 +500,7 @@ function tryVerticalFirstPath(
 
   // If blocked, try routing left/right of obstacles
   const obstaclesOnPath = obstacles.filter(obs =>
-    vSegmentIntersectsBox(source.x, source.y, midY, obs, padding)
+    vSegmentIntersectsBox(source.x, source.y, target.y, obs, padding)
   )
 
   if (obstaclesOnPath.length > 0) {
@@ -583,14 +508,10 @@ function tryVerticalFirstPath(
     const rightmost = obstaclesOnPath.reduce((max, obs) =>
       obs.x + obs.width / 2 > max.x + max.width / 2 ? obs : max
     )
-    let routeX = rightmost.x + rightmost.width / 2 + padding
-    if (channels) {
-      routeX = snapToChannel(routeX, channels.verticalChannels, padding)
-    }
+    const routeX = rightmost.x + rightmost.width / 2 + padding
     const waypoint1 = { x: routeX, y: source.y }
-    const waypoint2 = { x: routeX, y: midY }
-    const waypoint3 = { x: target.x, y: midY }
-    return [source, waypoint1, waypoint2, waypoint3, target]
+    const waypoint2 = { x: routeX, y: target.y }
+    return [source, waypoint1, waypoint2, target]
   }
 
   return null
