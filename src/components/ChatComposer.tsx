@@ -36,6 +36,7 @@ export interface ChatComposerProps
   loading?: boolean
   label?: string
   accept?: string
+  enterBehavior?: 'send' | 'newline'
 }
 
 export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
@@ -54,6 +55,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
       loading = false,
       label = 'Message',
       accept,
+      enterBehavior = 'send',
       className,
       ...props
     },
@@ -74,7 +76,7 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
     }, [value])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+      if (e.key === 'Enter' && !e.shiftKey && enterBehavior === 'send') {
         e.preventDefault()
         if (value.trim() && !disabled && !loading) {
           onSubmit(value, contextItems)
@@ -172,9 +174,11 @@ export const ChatComposer = React.forwardRef<HTMLDivElement, ChatComposerProps>(
 
           <div className="chat-composer__footer">
             <div className="chat-composer__footer-start">
-              <span className="chat-composer__hint">
-                <b>↵</b> send · <b>⇧↵</b> newline
-              </span>
+              {enterBehavior === 'send' && (
+                <span className="chat-composer__hint">
+                  <b>↵</b> send · <b>⇧↵</b> newline
+                </span>
+              )}
             </div>
             <div className="chat-composer__footer-end">
               <input
