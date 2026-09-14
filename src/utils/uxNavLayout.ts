@@ -223,6 +223,8 @@ export function uxNavLayout(
   }
 
   // For each page, place its view children as a horizontal fan
+  // Positions are recalculated for each parent a view belongs to; when a view has multiple parents,
+  // the last parent's position takes precedence (see childrenOf iteration order from buildStructuralForest)
   for (const [pageId, allChildren] of allParentChildren) {
     if (!pageIds.has(pageId)) continue
 
@@ -235,21 +237,16 @@ export function uxNavLayout(
     const viewChildren = allChildren.filter(id => viewIds.has(id))
     if (viewChildren.length === 0) continue
 
-    // Pre-filter to only unpositioned views to avoid phantom gaps in second-parent fans
-    // (already-positioned views from first-parent placement shouldn't contribute to offset calculation)
-    const unpositionedViews = viewChildren.filter(id => !result.has(id))
-    if (unpositionedViews.length === 0) continue
-
-    // Position each unpositioned view child
-    for (let i = 0; i < unpositionedViews.length; i++) {
-      const viewId = unpositionedViews[i]
+    // Position each view child
+    for (let i = 0; i < viewChildren.length; i++) {
+      const viewId = viewChildren[i]
 
       // Calculate horizontal position within the fan (starting from right edge of parent)
       let fanX = pagePos.x + pageDim.width / 2 + viewFanGap
 
-      // Add widths of previous unpositioned views only
+      // Add widths of previous views in this parent's fan
       for (let j = 0; j < i; j++) {
-        const prevViewId = unpositionedViews[j]
+        const prevViewId = viewChildren[j]
         const prevViewWidth = getNodeDim(prevViewId).width
         fanX += prevViewWidth + viewSpacing
       }
