@@ -464,4 +464,69 @@ test.describe("uxNavLayout", () => {
     expect(grandchild.y).toBeGreaterThan(child.y);
     expect(great.y).toBeGreaterThan(grandchild.y);
   });
+
+  test("positions reused views under multiple parent pages", () => {
+    const nodes = [
+      createNode("page1"),
+      createNode("page2"),
+      createNode("sharedView"),
+    ];
+    const edges: HierarchyEdge[] = [
+      { source: "page1", target: "sharedView", structural: true },
+      { source: "page2", target: "sharedView", structural: true },
+    ];
+    const dims = createDims(["page1", "page2", "sharedView"]);
+
+    const positions = uxNavLayout(nodes, edges, dims, (n) =>
+      n.id.includes("page"),
+    );
+
+    expect(positions.has("page1")).toBe(true);
+    expect(positions.has("page2")).toBe(true);
+    expect(positions.has("sharedView")).toBe(true);
+
+    const page1Pos = positions.get("page1")!;
+    const sharedViewPos = positions.get("sharedView")!;
+
+    // Shared view should be positioned relative to first parent
+    // (positioned at first parent encountered in edge order)
+    expect(sharedViewPos.x).toBeGreaterThan(page1Pos.x);
+    // View should align with first parent's y position
+    expect(sharedViewPos.y).toBe(page1Pos.y);
+  });
+
+  test("handles complex multi-parent view scenario", () => {
+    const nodes = [
+      createNode("page1"),
+      createNode("page1_child"),
+      createNode("page2"),
+      createNode("view1"),
+      createNode("view2"),
+      createNode("sharedView"),
+    ];
+    const edges: HierarchyEdge[] = [
+      { source: "page1", target: "page1_child", structural: true },
+      { source: "page1", target: "view1", structural: true },
+      { source: "page1", target: "sharedView", structural: true },
+      { source: "page1_child", target: "view2", structural: true },
+      { source: "page2", target: "sharedView", structural: true },
+    ];
+    const dims = createDims(nodes.map((n) => n.id));
+
+    const positions = uxNavLayout(nodes, edges, dims, (n) =>
+      n.id.includes("page"),
+    );
+
+    // All nodes should be positioned
+    for (const node of nodes) {
+      expect(positions.has(node.id)).toBe(true);
+    }
+
+    const page1Pos = positions.get("page1")!;
+    const sharedViewPos = positions.get("sharedView")!;
+
+    // Shared view should be positioned in fan of first parent
+    expect(sharedViewPos.x).toBeGreaterThan(page1Pos.x);
+    expect(sharedViewPos.y).toBe(page1Pos.y);
+  });
 });

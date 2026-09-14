@@ -44,6 +44,9 @@ const UX_NAV_NODES: NodeData[] = [
 
   { id: 'view5_1', label: '2FA', kind: 'V', title: 'Two-Factor' },
   { id: 'view5_2', label: 'Sessions', kind: 'V', title: 'Sessions' },
+
+  // Shared view appearing in multiple pages
+  { id: 'sharedView', label: 'Help & Support', kind: 'V', title: 'Help & Support' },
 ]
 
 // Structural edges (tree relationships) and navigation routes
@@ -87,6 +90,10 @@ const UX_NAV_EDGES: EdgeData[] = [
   // Navigation routes from Tree 2
   { id: 'nav_page2', sourceId: 'page2', targetId: 'page1', structural: false },
   { id: 'nav_view4', sourceId: 'view4_1', targetId: 'page1_child1', structural: false },
+
+  // Multi-parent shared view
+  { id: 'shared_view_page1', sourceId: 'page1', targetId: 'sharedView', structural: true },
+  { id: 'shared_view_page2', sourceId: 'page2', targetId: 'sharedView', structural: true },
 ]
 
 export default function UxNavigationTestPage() {

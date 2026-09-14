@@ -47,6 +47,7 @@ export function uxNavLayout(
   )
 
   // Identify which nodes are pages vs views
+  const nodeIds = new Set(nodes.map(n => n.id))
   const pageIds = new Set(nodes.filter(n => isPageNode(n)).map(n => n.id))
   const viewIds = new Set(nodes.filter(n => !isPageNode(n)).map(n => n.id))
 
@@ -206,9 +207,23 @@ export function uxNavLayout(
   }
 
   // Pass 3: View fan placement
-  // Position view nodes horizontally to the right of their parent pages
+  // Position view nodes horizontally to the right of their parent pages.
+  // Build a multimap of all structural parent-child relationships to support multi-parent views.
+  const allParentChildren = new Map<string, string[]>()
+  for (const edge of edges) {
+    if (!edge.structural) continue
+    if (edge.source === edge.target) continue
+    if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) continue
+
+    const children = allParentChildren.get(edge.source) ?? []
+    if (!children.includes(edge.target)) {
+      children.push(edge.target)
+    }
+    allParentChildren.set(edge.source, children)
+  }
+
   // For each page, place its view children as a horizontal fan
-  for (const [pageId, viewChildren] of forest.childrenOf) {
+  for (const [pageId, allChildren] of allParentChildren) {
     if (!pageIds.has(pageId)) continue
 
     const pagePos = pagePositions.get(pageId)
@@ -216,10 +231,13 @@ export function uxNavLayout(
 
     const pageDim = getNodeDim(pageId)
 
+    // Filter to view children only
+    const viewChildren = allChildren.filter(id => viewIds.has(id))
+    if (viewChildren.length === 0) continue
+
     // Position each view child
     for (let i = 0; i < viewChildren.length; i++) {
       const viewId = viewChildren[i]
-      if (!viewIds.has(viewId)) continue
 
       // Calculate horizontal position within the fan (starting from right edge of parent)
       let fanX = pagePos.x + pageDim.width / 2 + viewFanGap
@@ -227,13 +245,15 @@ export function uxNavLayout(
       // Add widths of previous views
       for (let j = 0; j < i; j++) {
         const prevViewId = viewChildren[j]
-        if (!viewIds.has(prevViewId)) continue
         const prevViewWidth = getNodeDim(prevViewId).width
         fanX += prevViewWidth + viewSpacing
       }
 
-      // Views align vertically with their parent page
-      result.set(viewId, { x: fanX, y: pagePos.y })
+      // For multi-parent views, only set position if not already positioned
+      // (first parent wins in order of appearance in edges)
+      if (!result.has(viewId)) {
+        result.set(viewId, { x: fanX, y: pagePos.y })
+      }
     }
   }
 
