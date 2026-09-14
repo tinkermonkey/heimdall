@@ -4,7 +4,7 @@ import {
   routeNavigationEdges,
   DEFAULT_TRACE_SPACING,
 } from '../src/utils/channelRouter'
-import type { EdgeEndpointRect, Point } from '../src/utils/graph'
+import type { EdgeEndpointRect } from '../src/utils/graph'
 
 test.describe('channelRouter', () => {
   const createRect = (x: number, y: number, width: number = 100, height: number = 60): EdgeEndpointRect => ({
