@@ -20,6 +20,10 @@ export interface UxNavLayoutOptions {
  * Pass 2 — Page tree layout: For each independent page tree, use d3.tree() with nodeSize()
  *          configured for uniform spacing. Custom separation() accounts for view fan width.
  * Pass 3 — View fan placement: For each page, position its child views horizontally to the right
+ *
+ * Multi-parent views: Views with multiple parents appear as separate node instances under each parent.
+ * Each instance uses a synthetic ID "viewId:parentId" to distinguish instances of the same view.
+ * Page nodes always use their ID directly (they don't support multiple parents).
  */
 export function uxNavLayout(
   nodes: readonly LayoutNode[],
@@ -68,10 +72,25 @@ export function uxNavLayout(
     height: dims.get(id)?.height ?? 30,
   })
 
+  // Build multimap of all structural parent-child relationships for use in spacing calculations
+  const allParentChildren = new Map<string, string[]>()
+  for (const edge of edges) {
+    if (!edge.structural) continue
+    if (edge.source === edge.target) continue
+    if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) continue
+
+    const children = allParentChildren.get(edge.source) ?? []
+    if (!children.includes(edge.target)) {
+      children.push(edge.target)
+    }
+    allParentChildren.set(edge.source, children)
+  }
+
   // Helper to calculate view fan width for a page
+  // Accounts for all structural children including shared views under all parents
   const getViewFanWidth = (pageId: string): number => {
     let width = 0
-    const children = forest.childrenOf.get(pageId) ?? []
+    const children = allParentChildren.get(pageId) ?? []
     const viewChildren = children.filter(id => viewIds.has(id))
     if (viewChildren.length === 0) return 0
 
@@ -206,25 +225,29 @@ export function uxNavLayout(
     currentXOffset += treeWidth + trunkSpacing
   }
 
-  // Pass 3: View fan placement
-  // Position view nodes horizontally to the right of their parent pages.
-  // Build a multimap of all structural parent-child relationships to support multi-parent views.
-  const allParentChildren = new Map<string, string[]>()
-  for (const edge of edges) {
-    if (!edge.structural) continue
-    if (edge.source === edge.target) continue
-    if (!nodeIds.has(edge.source) || !nodeIds.has(edge.target)) continue
-
-    const children = allParentChildren.get(edge.source) ?? []
-    if (!children.includes(edge.target)) {
-      children.push(edge.target)
+  // Identify views with multiple parents
+  // Views with multiple parents will use synthetic IDs "viewId:parentId" to appear under each parent
+  const viewParentCount = new Map<string, Set<string>>()
+  for (const [parent, children] of allParentChildren) {
+    for (const child of children) {
+      if (viewIds.has(child)) {
+        const parents = viewParentCount.get(child) ?? new Set()
+        parents.add(parent)
+        viewParentCount.set(child, parents)
+      }
     }
-    allParentChildren.set(edge.source, children)
   }
 
-  // For each page, place its view children as a horizontal fan
-  // Positions are recalculated for each parent a view belongs to; when a view has multiple parents,
-  // the last parent's position takes precedence (see childrenOf iteration order from buildStructuralForest)
+  const multiParentViews = new Set(
+    Array.from(viewParentCount.entries())
+      .filter(([_, parents]) => parents.size > 1)
+      .map(([viewId]) => viewId)
+  )
+
+  // Pass 3: View fan placement
+  // Position view nodes horizontally to the right of their parent pages.
+  // Multi-parent views use synthetic IDs "viewId:parentId" so they appear under each parent.
+  // Single-parent views use their original ID.
   for (const [pageId, allChildren] of allParentChildren) {
     if (!pageIds.has(pageId)) continue
 
@@ -237,7 +260,7 @@ export function uxNavLayout(
     const viewChildren = allChildren.filter(id => viewIds.has(id))
     if (viewChildren.length === 0) continue
 
-    // Position each view child
+    // Position each view child in this parent's fan
     for (let i = 0; i < viewChildren.length; i++) {
       const viewId = viewChildren[i]
 
@@ -251,7 +274,10 @@ export function uxNavLayout(
         fanX += prevViewWidth + viewSpacing
       }
 
-      result.set(viewId, { x: fanX, y: pagePos.y })
+      // Use synthetic ID for multi-parent views so they appear under each parent,
+      // otherwise use original ID
+      const resultKey = multiParentViews.has(viewId) ? `${viewId}:${pageId}` : viewId
+      result.set(resultKey, { x: fanX, y: pagePos.y })
     }
   }
 

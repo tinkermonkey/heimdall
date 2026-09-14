@@ -483,17 +483,23 @@ test.describe("uxNavLayout", () => {
 
     expect(positions.has("page1")).toBe(true);
     expect(positions.has("page2")).toBe(true);
-    expect(positions.has("sharedView")).toBe(true);
+
+    // Shared view with multiple parents uses synthetic IDs
+    expect(positions.has("sharedView:page1")).toBe(true);
+    expect(positions.has("sharedView:page2")).toBe(true);
 
     const page1Pos = positions.get("page1")!;
     const page2Pos = positions.get("page2")!;
-    const sharedViewPos = positions.get("sharedView")!;
+    const sharedViewUnderPage1 = positions.get("sharedView:page1")!;
+    const sharedViewUnderPage2 = positions.get("sharedView:page2")!;
 
-    // Shared view should be positioned relative to last parent
-    // (last parent's position takes precedence when a view has multiple parents)
-    expect(sharedViewPos.x).toBeGreaterThan(page2Pos.x);
-    // View should align with last parent's y position
-    expect(sharedViewPos.y).toBe(page2Pos.y);
+    // Shared view should appear under page1 (positioned relative to page1)
+    expect(sharedViewUnderPage1.x).toBeGreaterThan(page1Pos.x);
+    expect(sharedViewUnderPage1.y).toBe(page1Pos.y);
+
+    // Shared view should also appear under page2 (positioned relative to page2)
+    expect(sharedViewUnderPage2.x).toBeGreaterThan(page2Pos.x);
+    expect(sharedViewUnderPage2.y).toBe(page2Pos.y);
   });
 
   test("handles complex multi-parent view scenario", () => {
@@ -518,18 +524,31 @@ test.describe("uxNavLayout", () => {
       n.id.includes("page"),
     );
 
-    // All nodes should be positioned
-    for (const node of nodes) {
-      expect(positions.has(node.id)).toBe(true);
-    }
+    // All page nodes should be positioned
+    expect(positions.has("page1")).toBe(true);
+    expect(positions.has("page1_child")).toBe(true);
+    expect(positions.has("page2")).toBe(true);
+
+    // Single-parent views use original IDs
+    expect(positions.has("view1")).toBe(true);
+    expect(positions.has("view2")).toBe(true);
+
+    // Multi-parent shared view uses synthetic IDs
+    expect(positions.has("sharedView:page1")).toBe(true);
+    expect(positions.has("sharedView:page2")).toBe(true);
 
     const page1Pos = positions.get("page1")!;
     const page2Pos = positions.get("page2")!;
-    const sharedViewPos = positions.get("sharedView")!;
+    const sharedViewUnderPage1 = positions.get("sharedView:page1")!;
+    const sharedViewUnderPage2 = positions.get("sharedView:page2")!;
 
-    // Shared view should be positioned in fan of last parent (page2)
-    expect(sharedViewPos.x).toBeGreaterThan(page2Pos.x);
-    expect(sharedViewPos.y).toBe(page2Pos.y);
+    // Shared view should appear under page1
+    expect(sharedViewUnderPage1.x).toBeGreaterThan(page1Pos.x);
+    expect(sharedViewUnderPage1.y).toBe(page1Pos.y);
+
+    // Shared view should also appear under page2
+    expect(sharedViewUnderPage2.x).toBeGreaterThan(page2Pos.x);
+    expect(sharedViewUnderPage2.y).toBe(page2Pos.y);
   });
 
   test("handles second-parent fan with shared and unique views (no phantom gap)", () => {
@@ -552,27 +571,35 @@ test.describe("uxNavLayout", () => {
 
     expect(positions.has("page1")).toBe(true);
     expect(positions.has("page2")).toBe(true);
-    expect(positions.has("sharedView")).toBe(true);
+
+    // Shared view with multiple parents uses synthetic IDs
+    expect(positions.has("sharedView:page1")).toBe(true);
+    expect(positions.has("sharedView:page2")).toBe(true);
+
+    // Unique view with single parent uses original ID
     expect(positions.has("uniqueView")).toBe(true);
 
     const page1Pos = positions.get("page1")!;
     const page2Pos = positions.get("page2")!;
-    const sharedViewPos = positions.get("sharedView")!;
+    const sharedViewUnderPage2 = positions.get("sharedView:page2")!;
     const uniqueViewPos = positions.get("uniqueView")!;
 
-    // Shared view should be positioned under page2 (last parent encountered)
-    // because each parent repositions it relative to itself
-    expect(sharedViewPos.y).toBe(page2Pos.y);
-    expect(sharedViewPos.x).toBeGreaterThan(page2Pos.x);
+    // Shared view should appear under page1
+    const sharedViewUnderPage1 = positions.get("sharedView:page1")!;
+    expect(sharedViewUnderPage1.x).toBeGreaterThan(page1Pos.x);
+    expect(sharedViewUnderPage1.y).toBe(page1Pos.y);
+
+    // Shared view should also appear under page2 at the start of page2's fan
+    expect(sharedViewUnderPage2.y).toBe(page2Pos.y);
+    expect(sharedViewUnderPage2.x).toBeGreaterThan(page2Pos.x);
 
     // Unique view should be positioned under page2 after sharedView in the fan
     expect(uniqueViewPos.y).toBe(page2Pos.y);
-    expect(uniqueViewPos.x).toBeGreaterThan(sharedViewPos.x);
+    expect(uniqueViewPos.x).toBeGreaterThan(sharedViewUnderPage2.x);
 
     // Check that uniqueView is positioned correctly relative to sharedView in page2's fan
-    const page2Dim = dims.get("page2")!;
     const sharedViewWidth = dims.get("sharedView")!.width;
-    const expectedUniqueViewX = sharedViewPos.x + sharedViewWidth + 20; // viewSpacing default is 20
+    const expectedUniqueViewX = sharedViewUnderPage2.x + sharedViewWidth + 20; // viewSpacing default is 20
 
     expect(Math.abs(uniqueViewPos.x - expectedUniqueViewX)).toBeLessThan(1);
   });
