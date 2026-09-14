@@ -235,25 +235,26 @@ export function uxNavLayout(
     const viewChildren = allChildren.filter(id => viewIds.has(id))
     if (viewChildren.length === 0) continue
 
-    // Position each view child
-    for (let i = 0; i < viewChildren.length; i++) {
-      const viewId = viewChildren[i]
+    // Pre-filter to only unpositioned views to avoid phantom gaps in second-parent fans
+    // (already-positioned views from first-parent placement shouldn't contribute to offset calculation)
+    const unpositionedViews = viewChildren.filter(id => !result.has(id))
+    if (unpositionedViews.length === 0) continue
+
+    // Position each unpositioned view child
+    for (let i = 0; i < unpositionedViews.length; i++) {
+      const viewId = unpositionedViews[i]
 
       // Calculate horizontal position within the fan (starting from right edge of parent)
       let fanX = pagePos.x + pageDim.width / 2 + viewFanGap
 
-      // Add widths of previous views
+      // Add widths of previous unpositioned views only
       for (let j = 0; j < i; j++) {
-        const prevViewId = viewChildren[j]
+        const prevViewId = unpositionedViews[j]
         const prevViewWidth = getNodeDim(prevViewId).width
         fanX += prevViewWidth + viewSpacing
       }
 
-      // For multi-parent views, only set position if not already positioned
-      // (first parent wins in order of appearance in edges)
-      if (!result.has(viewId)) {
-        result.set(viewId, { x: fanX, y: pagePos.y })
-      }
+      result.set(viewId, { x: fanX, y: pagePos.y })
     }
   }
 

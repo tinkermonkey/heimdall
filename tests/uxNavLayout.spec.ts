@@ -529,4 +529,52 @@ test.describe("uxNavLayout", () => {
     expect(sharedViewPos.x).toBeGreaterThan(page1Pos.x);
     expect(sharedViewPos.y).toBe(page1Pos.y);
   });
+
+  test("handles second-parent fan with shared and unique views (no phantom gap)", () => {
+    const nodes = [
+      createNode("page1"),
+      createNode("page2"),
+      createNode("sharedView"),
+      createNode("uniqueView"),
+    ];
+    const edges: HierarchyEdge[] = [
+      { source: "page1", target: "sharedView", structural: true },
+      { source: "page2", target: "sharedView", structural: true },
+      { source: "page2", target: "uniqueView", structural: true },
+    ];
+    const dims = createDims(["page1", "page2", "sharedView", "uniqueView"]);
+
+    const positions = uxNavLayout(nodes, edges, dims, (n) =>
+      n.id.includes("page"),
+    );
+
+    expect(positions.has("page1")).toBe(true);
+    expect(positions.has("page2")).toBe(true);
+    expect(positions.has("sharedView")).toBe(true);
+    expect(positions.has("uniqueView")).toBe(true);
+
+    const page1Pos = positions.get("page1")!;
+    const page2Pos = positions.get("page2")!;
+    const sharedViewPos = positions.get("sharedView")!;
+    const uniqueViewPos = positions.get("uniqueView")!;
+
+    // Shared view should be positioned under page1 (first parent encountered)
+    expect(sharedViewPos.y).toBe(page1Pos.y);
+    expect(sharedViewPos.x).toBeGreaterThan(page1Pos.x);
+
+    // Unique view should be positioned under page2 with no phantom gap
+    // It should be flush right of page2, not offset by sharedView's width
+    expect(uniqueViewPos.y).toBe(page2Pos.y);
+    expect(uniqueViewPos.x).toBeGreaterThan(page2Pos.x);
+
+    // The offset from page2 to uniqueView should be approximately viewFanGap (40px default)
+    // not viewFanGap + sharedView.width
+    const page2DefaultOptions = { viewFanGap: 40 };
+    const expectedMinX = page2Pos.x + dims.get("page2")!.width / 2 + page2DefaultOptions.viewFanGap;
+    const uniqueViewOffset = uniqueViewPos.x - (page2Pos.x + dims.get("page2")!.width / 2);
+
+    // Should be close to viewFanGap, not including sharedView width in calculation
+    expect(uniqueViewOffset).toBeGreaterThan(page2DefaultOptions.viewFanGap * 0.8);
+    expect(uniqueViewOffset).toBeLessThan(page2DefaultOptions.viewFanGap * 1.2);
+  });
 });
