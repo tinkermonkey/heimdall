@@ -86,18 +86,35 @@ test.describe('channelRouter', () => {
       const hasVerticalDetour = route.points.some((point) => Math.abs(point.y) > 0.1)
       expect(hasVerticalDetour).toBe(true)
 
-      // Also verify the path doesn't pass through the obstacle's center
+      // Also verify the path doesn't pass through the obstacle
+      const obstacleLeft = obstacle.x
+      const obstacleRight = obstacle.x + obstacle.width
+      const obstacleTop = obstacle.y
+      const obstacleBottom = obstacle.y + obstacle.height
+
       for (let i = 0; i < route.points.length - 1; i++) {
         const p1 = route.points[i]
         const p2 = route.points[i + 1]
-        // For vertical segments, check that x is outside obstacle bounds
+
+        // Check vertical segments
         if (Math.abs(p1.x - p2.x) < 0.01) {
           const x = p1.x
-          const obstacleLeft = obstacle.x
-          const obstacleRight = obstacle.x + obstacle.width
-          const isInsideObstacle =
-            x > obstacleLeft && x < obstacleRight && p1.y >= obstacle.y && p1.y <= obstacle.y + obstacle.height
-          expect(isInsideObstacle).toBe(false)
+          const segMinY = Math.min(p1.y, p2.y)
+          const segMaxY = Math.max(p1.y, p2.y)
+          const intersectsObstacle =
+            x > obstacleLeft && x < obstacleRight &&
+            segMinY < obstacleBottom && segMaxY > obstacleTop
+          expect(intersectsObstacle).toBe(false)
+        }
+        // Check horizontal segments
+        else if (Math.abs(p1.y - p2.y) < 0.01) {
+          const y = p1.y
+          const segMinX = Math.min(p1.x, p2.x)
+          const segMaxX = Math.max(p1.x, p2.x)
+          const intersectsObstacle =
+            y > obstacleTop && y < obstacleBottom &&
+            segMinX < obstacleRight && segMaxX > obstacleLeft
+          expect(intersectsObstacle).toBe(false)
         }
       }
     })
