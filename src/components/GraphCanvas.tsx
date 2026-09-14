@@ -2010,13 +2010,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // Add structural edges as obstacles to prevent navigation routes from crossing them
       const structuralEdgeObstacles = edges
         .filter((edge) => {
-          // Include edges that are not navigation routes
-          try {
-            if (isNavigationRoute(edge)) return false;
-          } catch {
-            return true; // Treat callback errors as non-navigation routes
-          }
-          // Check if this edge is structural
+          if (safeIsNavigationRoute(isNavigationRoute, edge)) return false;
           return safeIsStructuralEdge(isStructuralEdge, edge, layout);
         })
         .map((edge) => {
