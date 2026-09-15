@@ -10,6 +10,8 @@ USER root
 # ============================================================================
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
+        libglib2.0-0t64 \
+        libdbus-1-3 \
         libxcomposite1 \
         libxdamage1 \
         libxfixes3 \
@@ -83,26 +85,29 @@ COPY public/fonts /usr/share/fonts/heimdall
 RUN fc-cache -f
 
 # ============================================================================
-# Pre-install project dependencies
+# Pre-install project dependencies at /opt/deps (outside /workspace)
 # ============================================================================
-WORKDIR /workspace/heimdall
+WORKDIR /opt/deps
 
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json /tmp/heimdall-manifests/
 
 RUN --mount=type=cache,target=/root/.npm \
+    cd /tmp/heimdall-manifests && \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 \
-    npm ci --ignore-scripts
+    npm ci --ignore-scripts && \
+    mv /tmp/heimdall-manifests/node_modules /opt/deps/node_modules && \
+    rm -rf /tmp/heimdall-manifests
 
 # ============================================================================
 # Install Playwright Chromium browser
 # ============================================================================
 RUN PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers \
-    npx playwright install chromium
+    npx --prefix /opt/deps playwright install chromium
 
 # ============================================================================
-# Fix ownership of pre-installed node_modules and browser cache
+# Fix ownership of pre-installed dependencies and browser cache
 # ============================================================================
-RUN chown -R orchestrator:orchestrator /workspace/heimdall/node_modules && \
+RUN chown -R orchestrator:orchestrator /opt/deps/node_modules && \
     chmod -R a+r /opt/playwright-browsers
 
 # ============================================================================
@@ -118,6 +123,7 @@ ENV LC_ALL=C.UTF-8
 # Switch to runtime user
 # ============================================================================
 USER orchestrator
+WORKDIR /workspace
 
 # ============================================================================
 # Verification
@@ -125,7 +131,7 @@ USER orchestrator
 RUN claude --version && \
     git --version && \
     gh --version && \
-    node -e "require('d3-hierarchy')" && \
+    node -e "require('/opt/deps/node_modules/d3-hierarchy')" && \
     test -f /usr/share/fonts/heimdall/inter/Inter-Regular.woff2 && \
     test -f /usr/share/fonts/heimdall/jetbrains-mono/JetBrainsMono-Regular.woff2 && \
     fc-list | grep -qi "liberation" && \
