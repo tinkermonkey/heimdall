@@ -21,7 +21,10 @@ npm run dev
 # Production package — build
 npm run build
 
-# Visual regression tests (Playwright)
+# Visual regression tests (Playwright) — see "Running the visual regression
+# suite" under Visual Regression Tests below before running this: the suite
+# is large and CI runs it single-threaded, so a full run genuinely takes a
+# long time and that is expected, not a hang.
 npm test
 ```
 
@@ -173,12 +176,13 @@ Icon spec: Lucide-style outline, 24×24 viewBox, `strokeWidth={1.75}`, `currentC
 
 Tests live in `tests/`. Each spec captures screenshots of test pages and compares against snapshots in `tests/*.spec.ts-snapshots/`. Run `npm test` to check; after an intentional visual change, run `npm test -- --update-snapshots` locally to regenerate baselines for both platforms (see [Playwright snapshot baselines are per-OS](#playwright-snapshot-baselines-are-per-os) below).
 
-Test suites:
-- `primitives.spec.ts` — Button, Chip, Badge, inputs, Icon, Field
-- `data-display.spec.ts` — Table, StatTile, StatGrid, Sidebar nav
-- `shell-framework.spec.ts` — ShellLayout, Topbar, Titlebar, Statusbar, TabBar
-- `overlay-components.spec.ts` — Modal, ConfirmDialog, Toast
-- `overlay-advanced.spec.ts` — CommandPalette, Drawer, SplitPane
+One spec file per component/feature area, named for what it covers (e.g. `primitives.spec.ts`, `graph-layout.spec.ts`, `overlay-advanced.spec.ts`). The suite has grown well past a size worth enumerating here and will keep growing — run `ls tests/*.spec.ts` for the current list rather than trusting a hard-coded one in this file.
+
+### Running the visual regression suite
+
+`npm test` runs the *entire* suite (there is no default subset) via `playwright.config.ts`, which in CI (`CI=1`/`CI=true`) sets `workers: 1` (single-threaded, so screenshots rasterize under consistent load) and `retries: 2` (each failing test reruns up to 2 more times before it counts as failed). With dozens of spec files, that combination makes a full CI run genuinely slow — tens of minutes is expected, not a sign anything is stuck or broken.
+
+**Run it as a single blocking foreground command and wait for it to actually exit — do not background it, do not poll it with a separate watcher process, and do not end a turn on a status update like "tests are still running, I'll check back."** There is no later turn in which the result gets checked: whatever process runs `npm test` must be the one that blocks until Playwright's own summary line (or `PLAYWRIGHT_EXIT=...`, if you captured the exit code) appears in its output, however long that takes. Scope to one spec file (`npx playwright test tests/<name>.spec.ts`) when you only need to verify a change to one component — that's faster and still a single blocking call, not a workaround for waiting on the full suite.
 
 ### Playwright snapshot baselines are per-OS
 
