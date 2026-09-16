@@ -223,7 +223,6 @@ export function radialTreeLayout(
     }
 
     // Record ring geometry (skip depth 0, which is a zero-radius point)
-    const bubble = trunkBubbles[i]
     for (const [depth, radius] of layoutResult.ringRadii) {
       if (depth === 0) continue
       result.ringGeometry.push({
@@ -234,20 +233,59 @@ export function radialTreeLayout(
         depth,
       })
     }
-
-    // Record trunk boundary
-    result.trunkBoundaries.set(rootId, {
-      x: offset.x,
-      y: offset.y,
-      r: bubble.radius,
-    })
   }
 
-  // Phase 4: Final separation pass
+  // Phase 4: Final separation pass (runs globally across all trunks)
   const layoutNodesForSeparation = visibleNodes.filter(n => allPositions.has(n.id))
   separationPass(layoutNodesForSeparation, allPositions)
 
   result.positions = allPositions
+
+  // Phase 5: Recompute trunk boundaries after separation pass
+  // The separation pass may move nodes outward, so we recompute bounds based on final positions
+  for (let i = 0; i < trunks.length; i++) {
+    const rootId = trunks[i]
+    const offset = trunkOffsets.get(rootId)!
+    const bubble = trunkBubbles[i]
+
+    let maxDistFromCenter = bubble.radius
+
+    // Find the farthest node in this trunk from its center
+    for (const [id, pos] of allPositions) {
+      const node = visibleNodes.find(n => n.id === id)
+      if (!node) continue
+
+      // Determine which trunk this node belongs to by checking if it's in the subtree
+      let belongsToTrunk = false
+      let current = id
+      const visited = new Set<string>()
+
+      while (current && !visited.has(current)) {
+        visited.add(current)
+        if (current === rootId) {
+          belongsToTrunk = true
+          break
+        }
+        current = forest.parentOf.get(current) ?? ''
+      }
+
+      if (belongsToTrunk) {
+        const nodeDims = getDims(id)
+        const nodeRadius = Math.hypot(nodeDims.width, nodeDims.height) / 2
+        const distFromCenter = Math.hypot(
+          pos.x - offset.x,
+          pos.y - offset.y,
+        ) + nodeRadius
+        maxDistFromCenter = Math.max(maxDistFromCenter, distFromCenter)
+      }
+    }
+
+    result.trunkBoundaries.set(rootId, {
+      x: offset.x,
+      y: offset.y,
+      r: maxDistFromCenter,
+    })
+  }
 
   return result
 }
