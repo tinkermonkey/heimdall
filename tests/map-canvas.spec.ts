@@ -88,11 +88,12 @@ test.describe('integration: MapCanvas Component', () => {
 
       // Verify the pulse animation exists in the dot
       const dot = selectedPin.locator('.map-pin__dot')
+      await page.waitForTimeout(50)
       const styles = await dot.evaluate((el) => {
         const computed = window.getComputedStyle(el)
         return computed.animation
       })
-      expect(styles).toBeTruthy()
+      expect(styles).toContain('pulse-glow')
     })
 
     test('pulse animation should be suppressed under prefers-reduced-motion', async ({ page }) => {
