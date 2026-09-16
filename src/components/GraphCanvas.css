@@ -102,6 +102,17 @@
   pointer-events: none;
 }
 
+/* Hierarchy depth rings — layout="radial-tree" only, gated by showHierarchyRings.
+   Dashed strokes with low opacity to distinguish from solid cluster boundaries.
+   One ring per occupied depth level, centered on trunk origin. */
+.graph-hierarchy-ring {
+  fill: none;
+  stroke: rgb(var(--canvas-fg-3) / 0.3);
+  stroke-width: 1;
+  stroke-dasharray: 4, 4;
+  pointer-events: none;
+}
+
 .graph-canvas {
   --graph-edge: rgb(var(--canvas-fg-2));
   --graph-edge-strong: rgb(var(--canvas-fg-3));

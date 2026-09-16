@@ -28,7 +28,7 @@ import {
   type GalaxyLayoutNode,
 } from "../utils/galaxyLayout";
 import { uxNavLayout } from "../utils/uxNavLayout";
-import { radialTreeLayout } from "../utils/radialTreeLayout";
+import { radialTreeLayout, type RingGeometry } from "../utils/radialTreeLayout";
 import {
   buildStructuralForest,
   structuralDescendants,
@@ -596,6 +596,12 @@ export interface GraphCanvasProps extends Omit<
    */
   showClusterBoundaries?: boolean;
   /**
+   * layout="radial-tree" only, no effect otherwise. Shows concentric rings marking each occupied
+   * hierarchy depth level per trunk, centered on that trunk's layout origin. Purely visual — does
+   * not affect node placement, edge routing, or interaction. Default false.
+   */
+  showHierarchyRings?: boolean;
+  /**
    * Classifies an edge as structural (defines the galaxy layout's parent/child hierarchy,
    * source = parent) vs. relational (rendered but layout-irrelevant). Only meaningful with
    * layout="galaxy". When omitted, every edge is treated as structural — the same as before
@@ -730,6 +736,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       layout = "manual",
       nodeMargin,
       showClusterBoundaries = true,
+      showHierarchyRings = false,
       isStructuralEdge,
       structuralEdgeCurvature = DEFAULT_QUADRATIC_CURVATURE,
       isPageNode,
@@ -1034,6 +1041,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       Map<string, { x: number; y: number; r: number }>
     >(new Map());
 
+    // Only populated when layout='radial-tree' — per-trunk hierarchy rings,
+    // one per occupied depth level, for the optional ring-visualization layer.
+    const [ringGeometry, setRingGeometry] = useState<RingGeometry[]>([]);
+
     const containerRef = useRef<HTMLDivElement>(null);
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({});
     // Tracks whether we've applied the initial canvas-center offset
@@ -1181,6 +1192,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           forceLayout(layoutNodes, layoutEdges, { nodeMargin }),
         );
         setClusterBoundaries(new Map());
+        setRingGeometry([]);
       } else if (layout === "force-clustered") {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1190,6 +1202,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin });
         setComputedPositions(positions);
         setClusterBoundaries(boundaries);
+        setRingGeometry([]);
       } else if (layout === "ux-navigation") {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1208,13 +1221,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         );
         setComputedPositions(positions);
         setClusterBoundaries(new Map());
+        setRingGeometry([]);
       } else if (layout === "radial-tree") {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
           target: e.targetId,
           structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
         }));
-        const { positions, trunkBoundaries } = radialTreeLayout(
+        const { positions, trunkBoundaries, ringGeometry: rings } = radialTreeLayout(
           layoutNodes,
           layoutEdges,
           dims,
@@ -1222,6 +1236,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         );
         setComputedPositions(positions);
         setClusterBoundaries(trunkBoundaries);
+        setRingGeometry(rings);
       } else {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1255,6 +1270,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             true,
           ),
         );
+        setRingGeometry([]);
       }
     }, [
       visibleNodes,
@@ -2464,6 +2480,20 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       cx={c.x}
                       cy={c.y}
                       r={c.r}
+                    />
+                  ))}
+                </g>
+              )}
+
+              {showHierarchyRings && ringGeometry.length > 0 && (
+                <g className="graph-hierarchy-rings" aria-hidden="true">
+                  {ringGeometry.map((ring, idx) => (
+                    <circle
+                      key={`${ring.trunkId}-depth-${ring.depth}-${idx}`}
+                      className="graph-hierarchy-ring"
+                      cx={ring.cx}
+                      cy={ring.cy}
+                      r={ring.r}
                     />
                   ))}
                 </g>
