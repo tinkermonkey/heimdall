@@ -120,6 +120,16 @@ ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 
 # ============================================================================
+# Entrypoint: symlinks /opt/deps/node_modules into /workspace/node_modules at
+# container start (the bind mount that lands the real checkout on /workspace
+# happens at `docker run` time, after any build-time symlink there would
+# already have been shadowed -- see heimdall-docker-entrypoint.sh). Wraps,
+# rather than replaces, the base image's own entrypoint (SSH/gh-auth setup).
+# ============================================================================
+COPY heimdall-docker-entrypoint.sh /usr/local/bin/heimdall-docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/heimdall-docker-entrypoint.sh
+
+# ============================================================================
 # Switch to runtime user
 # ============================================================================
 USER orchestrator
@@ -137,4 +147,5 @@ RUN claude --version && \
     fc-list | grep -qi "liberation" && \
     fc-list | grep -qi "dejavu"
 
+ENTRYPOINT ["/usr/local/bin/heimdall-docker-entrypoint.sh"]
 CMD ["/bin/bash"]
