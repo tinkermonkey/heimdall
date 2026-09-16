@@ -28,6 +28,7 @@ import {
   type GalaxyLayoutNode,
 } from "../utils/galaxyLayout";
 import { uxNavLayout } from "../utils/uxNavLayout";
+import { radialTreeLayout } from "../utils/radialTreeLayout";
 import {
   buildStructuralForest,
   structuralDescendants,
@@ -564,12 +565,14 @@ export interface GraphCanvasProps extends Omit<
    *  nested bubbles by graph structure (see clusteredForceLayout in utils/graphLayout) before
    *  running the same spring simulation within each bubble — larger canvas, less-even
    *  distribution, by design. Nodes with x and y are pinned under any of these layouts.
-   *  'galaxy' and 'force-clustered' both draw a boundary circle per top-level group (see
-   *  showClusterBoundaries) — one per root subtree for 'galaxy', one per top-level Louvain
-   *  cluster for 'force-clustered'. 'ux-navigation' arranges page nodes as independent
-   *  top-to-bottom trees with view nodes positioned as horizontal fans attached to their
-   *  parent pages (see isPageNode). */
-  layout?: "manual" | "force" | "galaxy" | "force-clustered" | "ux-navigation";
+   *  'galaxy', 'force-clustered', and 'radial-tree' all draw boundary circles per top-level group
+   *  (see showClusterBoundaries) — one per root subtree for 'galaxy' and 'radial-tree', one per
+   *  top-level Louvain cluster for 'force-clustered'. 'ux-navigation' arranges page nodes as
+   *  independent top-to-bottom trees with view nodes positioned as horizontal fans attached to
+   *  their parent pages (see isPageNode). 'radial-tree' arranges each structural tree as a
+   *  centered radial hierarchy with descendants on depth rings, and multiple trunks packed without
+   *  overlap. */
+  layout?: "manual" | "force" | "galaxy" | "force-clustered" | "ux-navigation" | "radial-tree";
   /**
    * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
    * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
@@ -1141,13 +1144,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDims(next);
     }, [visibleNodes, renderNode]);
 
-    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered' | 'ux-navigation')
+    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered' | 'ux-navigation' | 'radial-tree')
     useEffect(() => {
       if (
         (layout !== "force" &&
           layout !== "galaxy" &&
           layout !== "force-clustered" &&
-          layout !== "ux-navigation") ||
+          layout !== "ux-navigation" &&
+          layout !== "radial-tree") ||
         dims.size === 0
       )
         return;
@@ -1204,6 +1208,20 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         );
         setComputedPositions(positions);
         setClusterBoundaries(new Map());
+      } else if (layout === "radial-tree") {
+        const layoutEdges = (edges ?? []).map((e) => ({
+          source: e.sourceId,
+          target: e.targetId,
+          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
+        }));
+        const { positions, trunkBoundaries } = radialTreeLayout(
+          layoutNodes,
+          layoutEdges,
+          dims,
+          forest,
+        );
+        setComputedPositions(positions);
+        setClusterBoundaries(trunkBoundaries);
       } else {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1499,7 +1517,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (didCenterRef.current) return;
       if (!containerSize || dims.size === 0 || visibleNodes.length === 0)
         return;
-      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered'/'ux-navigation'
+      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered'/'ux-navigation'/'radial-tree'
       // all compute positions asynchronously (see the engine-layout effect above) — without waiting
       // for them here too, this could run with computedPositions still empty, every node falling
       // back to {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
@@ -1507,7 +1525,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         (layout === "force" ||
           layout === "galaxy" ||
           layout === "force-clustered" ||
-          layout === "ux-navigation") &&
+          layout === "ux-navigation" ||
+          layout === "radial-tree") &&
         computedPositions.size === 0
       )
         return;

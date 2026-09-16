@@ -1,5 +1,5 @@
 import { hierarchy, tree as d3tree, packSiblings, type HierarchyNode } from 'd3-hierarchy'
-import { buildStructuralForest, type HierarchyEdge, type StructuralForest } from './graphHierarchy'
+import { type HierarchyEdge, type StructuralForest } from './graphHierarchy'
 import { separationPass, type LayoutNode } from './graphLayout'
 
 export interface RadialTreeLayoutOptions {
@@ -42,7 +42,7 @@ export interface RadialTreeLayoutResult {
  */
 export function radialTreeLayout(
   visibleNodes: readonly LayoutNode[],
-  edges: readonly HierarchyEdge[],
+  _edges: readonly HierarchyEdge[],
   dims: ReadonlyMap<string, { width: number; height: number }>,
   fullForest: StructuralForest,
   options: RadialTreeLayoutOptions = {},
@@ -149,8 +149,8 @@ export function radialTreeLayout(
 
     root.each((node: HierarchyNode<any>) => {
       const id = node.data.id
-      const angle = node.x // 0 to 2π
-      const radius = Math.max(0, node.y) // 0 to maxRadius
+      const angle = node.x! // 0 to 2π
+      const radius = Math.max(0, node.y!) // 0 to maxRadius
 
       // Track occupied depths
       if (!depthLevels.has(node.depth)) {
