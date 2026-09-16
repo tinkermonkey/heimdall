@@ -8,19 +8,19 @@ The node hierarchy/forest computation is including 4 additional nodes (14 instea
 Total failures: 3 across 1 files
 
 ## Error types (by frequency)
-  integration: Graph Canvas Components › Galaxy View - Layout & Relations › renders every node with no overlapping bounding boxes: 1 occurrences
-    e.g. tests/graph-components.spec.ts: Test failed - assertion error during graph layout validation
-  integration: Graph Canvas Components › Galaxy View - Layout & Relations › collapsing a node hides its structural descendants and shows a hidden-count badge: 1 occurrences
-    e.g. tests/graph-components.spec.ts: Test failed - assertion error during node collapse behavior validation
-  integration: Graph Canvas Components › Galaxy View - Layout & Relations › expanding a collapsed node restores its structural descendants: 1 occurrences
-    e.g. tests/graph-components.spec.ts: Test failed - assertion error during node expand behavior validation
+  renders every node with no overlapping bounding boxes: 1 occurrences
+    e.g. tests/graph-components.spec.ts: Expected node count 28, received 39 nodes
+  collapsing a node hides its structural descendants and shows a hidden-count badge: 1 occurrences
+    e.g. tests/graph-components.spec.ts: Expected 10 hidden nodes (count difference), received 14
+  expanding a collapsed node restores its structural descendants: 1 occurrences
+    e.g. tests/graph-components.spec.ts: Expected 0 overlaps after expanding, received 6
 
 ## Most affected files (top 1 of 1)
-  tests/graph-components.spec.ts: 3 failures (integration: Graph Canvas Components › Galaxy View - Layout & Relations › renders every node with no overlapping bounding boxes×1, integration: Graph Canvas Components › Galaxy View - Layout & Relations › collapsing a node hides its structural descendants and shows a hidden-count badge×1, integration: Graph Canvas Components › Galaxy View - Layout & Relations › expanding a collapsed node restores its structural descendants×1)
+  tests/graph-components.spec.ts: 3 failures (renders every node with no overlapping bounding boxes×1, collapsing a node hides its structural descendants and shows a hidden-count badge×1, expanding a collapsed node restores its structural descendants×1)
 
 
 
-This is attempt 2/3. Focus on the remaining failures shown above.
+This is attempt 3/3. Focus on the remaining failures shown above.
 
 ## How to approach this
 

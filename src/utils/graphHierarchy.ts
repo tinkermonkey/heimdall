@@ -40,7 +40,7 @@ export function buildStructuralForest(nodeIds: readonly string[], edges: readonl
     else childrenOf.set(edge.source, [edge.target])
   }
 
-  const rootIds = new Set(nodeIds.filter(id => !parentOf.has(id)))
+  const rootIds = new Set(uniqueNodeIds.filter(id => !parentOf.has(id)))
   const roots: string[] = Array.from(rootIds)
   const visited = new Set<string>()
   const visit = (id: string): void => {
