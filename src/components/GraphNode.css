@@ -119,3 +119,28 @@ body.dark-canvas .graph-node__kind {
   color: rgb(var(--canvas-fg-3));
 }
 
+.graph-node__collapse-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin-left: 4px;
+  border: none;
+  background: transparent;
+  color: rgb(var(--canvas-fg-2));
+  cursor: pointer;
+  flex: none;
+  outline: none;
+}
+
+.graph-node__collapse-toggle:hover {
+  color: rgb(var(--accent-primary));
+}
+
+.graph-node__collapse-toggle:focus-visible {
+  outline: 2px solid rgb(var(--accent-primary));
+  outline-offset: -2px;
+}
+

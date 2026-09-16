@@ -35,8 +35,6 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       selected = false,
       onSelect,
       hasChildren = false,
-      collapsed = false,
-      hiddenDescendantCount = 0,
       onToggleCollapse,
       onPopoverOpen,
       popoverOpen = false,
@@ -92,6 +90,29 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         <span className="graph-node__swatch" />
         <span className="graph-node__label">{label}</span>
         {kind && <span className="graph-node__kind">{kind}</span>}
+        {hasChildren && onToggleCollapse && (
+          <button
+            className="graph-node__collapse-toggle"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              try { onToggleCollapse() } catch (err) { console.error('onToggleCollapse failed:', err) }
+            }}
+            onKeyDown={(e) => {
+              if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) {
+                e.preventDefault()
+                e.stopPropagation()
+                try { onToggleCollapse() } catch (err) { console.error('onToggleCollapse failed:', err) }
+              }
+            }}
+            type="button"
+            aria-label={`Toggle children for ${label}`}
+          >
+            <svg className="graph-node__toggle-icon" viewBox="0 0 24 24" width="12" height="12">
+              <polyline points="6 9 12 15 18 9" strokeWidth="1.75" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        )}
       </div>
     )
   }
