@@ -136,11 +136,11 @@ body.dark-canvas .graph-node__kind {
 }
 
 .graph-node__collapse-toggle:hover {
+  background: rgb(var(--canvas-bg-2));
   color: rgb(var(--accent-primary));
 }
 
 .graph-node__collapse-toggle:focus-visible {
-  outline: 2px solid rgb(var(--accent-primary));
-  outline-offset: -2px;
+  box-shadow: var(--focus-ring);
 }
 
