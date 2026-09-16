@@ -79,6 +79,7 @@ function isStructuralEdge(edge: GraphEdge): boolean {
 
 export default function RadialTreeTestPage() {
   const [view, setView] = useState<'single' | 'multi' | 'mixed' | 'custom'>('single')
+  const [layout, setLayout] = useState<'radial-tree' | 'galaxy'>('radial-tree')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(new Set())
   const [showRings, setShowRings] = useState(true)
   const [useCustomRender, setUseCustomRender] = useState(false)
@@ -230,16 +231,39 @@ export default function RadialTreeTestPage() {
         </div>
 
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <label style={{ fontSize: '12px' }}>
-            <input
-              type="checkbox"
-              checked={showRings}
-              onChange={(e) => setShowRings(e.target.checked)}
-              style={{ marginRight: '4px' }}
-            />
-            Show Rings
-          </label>
+          <label style={{ fontSize: '12px', fontWeight: 500 }}>Layout:</label>
+          <select
+            value={layout}
+            onChange={(e) => {
+              setLayout(e.target.value as any)
+              setCollapsedNodeIds(new Set())
+            }}
+            style={{
+              padding: '4px 8px',
+              borderRadius: '4px',
+              border: '1px solid var(--canvas-border)',
+              background: 'var(--canvas-bg-2)',
+              color: 'var(--canvas-fg)',
+            }}
+          >
+            <option value="radial-tree">Radial Tree</option>
+            <option value="galaxy">Galaxy</option>
+          </select>
         </div>
+
+        {layout === 'radial-tree' && (
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <label style={{ fontSize: '12px' }}>
+              <input
+                type="checkbox"
+                checked={showRings}
+                onChange={(e) => setShowRings(e.target.checked)}
+                style={{ marginRight: '4px' }}
+              />
+              Show Rings
+            </label>
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <label style={{ fontSize: '12px' }}>
@@ -296,7 +320,7 @@ export default function RadialTreeTestPage() {
         <GraphCanvas
           nodes={nodes}
           edges={edges}
-          layout="radial-tree"
+          layout={layout}
           selectedNodeId={selectedNodeId}
           onNodeSelect={setSelectedNodeId}
           collapsedNodeIds={collapsedNodeIds}
@@ -304,7 +328,7 @@ export default function RadialTreeTestPage() {
           isStructuralEdge={isStructuralEdge}
           renderNode={renderNode}
           showClusterBoundaries={false}
-          showHierarchyRings={showRings}
+          showHierarchyRings={layout === 'radial-tree' && showRings}
         />
       </div>
 

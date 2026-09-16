@@ -45,7 +45,20 @@ test.describe('integration: Radial Tree Layout', () => {
     await expect(canvas).toBeVisible()
 
     // Take snapshot with default rings shown
-    await expect(canvas).toHaveScreenshot('radial-tree-single-trunk-rings-light.png')
+    await expect(canvas).toHaveScreenshot('radial-tree-single-trunk-rings-on-light.png')
+  })
+
+  test('Single-trunk radial tree with rings disabled', async ({ page }) => {
+    const canvas = page.locator('.graph-canvas')
+    await expect(canvas).toBeVisible()
+
+    // Uncheck the "Show Rings" checkbox
+    const showRingsCheckbox = page.locator('input[type="checkbox"]').nth(0)
+    await showRingsCheckbox.uncheck()
+    await page.waitForTimeout(500)
+
+    // Take snapshot with rings disabled
+    await expect(canvas).toHaveScreenshot('radial-tree-single-trunk-rings-off-light.png')
   })
 
   test('Multi-trunk layout with orphan nodes', async ({ page }) => {
@@ -135,10 +148,15 @@ test.describe('integration: Radial Tree Layout', () => {
     await viewSelect.selectOption('custom')
     await page.waitForTimeout(500)
 
+    // Enable the "Custom Collapse Control" checkbox
+    const customCollapseCheckbox = page.locator('input[type="checkbox"]').nth(1)
+    await customCollapseCheckbox.check()
+    await page.waitForTimeout(500)
+
     const canvas = page.locator('.graph-canvas')
     await expect(canvas).toBeVisible()
 
-    // Verify the custom view renders correctly
+    // Verify the custom view renders with custom collapse control enabled
     await expect(canvas).toHaveScreenshot('radial-tree-custom-collapse-light.png')
   })
 
@@ -146,6 +164,11 @@ test.describe('integration: Radial Tree Layout', () => {
     // Switch to custom view
     const viewSelect = page.locator('select')
     await viewSelect.selectOption('custom')
+    await page.waitForTimeout(500)
+
+    // Enable the "Custom Collapse Control" checkbox
+    const customCollapseCheckbox = page.locator('input[type="checkbox"]').nth(1)
+    await customCollapseCheckbox.check()
     await page.waitForTimeout(500)
 
     // Apply dark canvas mode
@@ -176,8 +199,13 @@ test.describe('integration: Radial Tree Layout', () => {
       const beforeSnapshot = await canvas.screenshot()
       expect(beforeSnapshot).toBeTruthy()
 
+      // Click the "Set Mixed Collapse" button to collapse a child node
+      const setMixedCollapseButton = page.locator('button:has-text("Set Mixed Collapse")')
+      await setMixedCollapseButton.click()
+      await page.waitForTimeout(500)
+
       // After collapse interactions, verify position stability
-      // The position should remain stable (within floating-point tolerance)
+      // The root node's position should remain stable (within floating-point tolerance)
       const afterCollapse = await rootNode.boundingBox()
       if (afterCollapse) {
         const xDiff = Math.abs(beforeCollapse.x - afterCollapse.x)
@@ -185,6 +213,9 @@ test.describe('integration: Radial Tree Layout', () => {
         // Allow small tolerance for layout calculations
         expect(xDiff + yDiff).toBeLessThan(20)
       }
+
+      // Take snapshot after collapse to show the state change
+      await expect(canvas).toHaveScreenshot('radial-tree-trunk-stability-collapsed.png')
     }
   })
 
@@ -217,5 +248,55 @@ test.describe('integration: Radial Tree Layout', () => {
 
     // Take screenshot showing selection
     await expect(canvas).toHaveScreenshot('radial-tree-node-selected-light.png')
+  })
+
+  test('Galaxy layout with collapse control - cross-layout consistency', async ({ page }) => {
+    // Switch to custom view to access collapse controls
+    const viewSelect = page.locator('select').nth(0)
+    await viewSelect.selectOption('custom')
+    await page.waitForTimeout(500)
+
+    // Switch to galaxy layout
+    const layoutSelect = page.locator('select').nth(1)
+    await layoutSelect.selectOption('galaxy')
+    await page.waitForTimeout(500)
+
+    // Enable the "Custom Collapse Control" checkbox
+    const customCollapseCheckbox = page.locator('input[type="checkbox"]').nth(0)
+    await customCollapseCheckbox.check()
+    await page.waitForTimeout(500)
+
+    const canvas = page.locator('.graph-canvas')
+    await expect(canvas).toBeVisible()
+
+    // Take snapshot showing custom collapse control in galaxy layout
+    await expect(canvas).toHaveScreenshot('radial-tree-galaxy-custom-collapse-light.png')
+  })
+
+  test('Galaxy layout with collapse control - dark mode cross-layout', async ({ page }) => {
+    // Switch to custom view
+    const viewSelect = page.locator('select').nth(0)
+    await viewSelect.selectOption('custom')
+    await page.waitForTimeout(500)
+
+    // Switch to galaxy layout
+    const layoutSelect = page.locator('select').nth(1)
+    await layoutSelect.selectOption('galaxy')
+    await page.waitForTimeout(500)
+
+    // Enable the "Custom Collapse Control" checkbox
+    const customCollapseCheckbox = page.locator('input[type="checkbox"]').nth(0)
+    await customCollapseCheckbox.check()
+    await page.waitForTimeout(500)
+
+    // Apply dark canvas mode
+    await applyDarkCanvasMode(page)
+    await page.waitForTimeout(500)
+
+    const canvas = page.locator('.graph-canvas')
+    await expect(canvas).toBeVisible()
+
+    // Take snapshot showing custom collapse control in galaxy layout under dark canvas
+    await expect(canvas).toHaveScreenshot('radial-tree-galaxy-custom-collapse-dark.png')
   })
 })
