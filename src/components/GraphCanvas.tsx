@@ -1012,20 +1012,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
     // The node list actually measured, laid out, and rendered. Edges touching a hidden node
     // simply don't resolve a rect (see getNodeRect below) and render nothing — no separate
-    // edge filtering needed. Deduplicate nodes by ID to ensure each node renders only once.
+    // edge filtering needed.
     const visibleNodes = useMemo(
       () => {
-        // First, deduplicate nodes by ID to handle any duplicate node entries
+        // Filter out nodes with duplicate IDs, keeping only the first occurrence
         const seenIds = new Set<string>();
-        const dedupedNodes = nodes.filter((n) => {
-          if (seenIds.has(n.id)) return false;
-          seenIds.add(n.id);
-          return true;
-        });
-        // Then filter by visibility
-        return hiddenIds.size === 0
-          ? dedupedNodes
-          : dedupedNodes.filter((n) => !hiddenIds.has(n.id));
+        const result: GraphNodeData[] = [];
+        for (const node of nodes) {
+          if (!seenIds.has(node.id)) {
+            seenIds.add(node.id);
+            if (!hiddenIds.has(node.id)) {
+              result.push(node);
+            }
+          }
+        }
+        return result;
       },
       [nodes, hiddenIds],
     );
