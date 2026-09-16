@@ -82,7 +82,6 @@ export default function RadialTreeTestPage() {
   const [layout, setLayout] = useState<'radial-tree' | 'galaxy'>('radial-tree')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(new Set())
   const [showRings, setShowRings] = useState(true)
-  const [useCustomRender, setUseCustomRender] = useState(false)
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
 
   const handleToggleCollapse = useCallback((id: string) => {
@@ -232,18 +231,6 @@ export default function RadialTreeTestPage() {
             </label>
           </div>
         )}
-
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <label style={{ fontSize: '12px' }}>
-            <input
-              type="checkbox"
-              checked={useCustomRender}
-              onChange={(e) => setUseCustomRender(e.target.checked)}
-              style={{ marginRight: '4px' }}
-            />
-            Custom Collapse Control
-          </label>
-        </div>
 
         {collapsedNodeIds.size > 0 && (
           <button
