@@ -1,5 +1,6 @@
 import React from 'react'
 import { type BaseGraphNodeComponentProps } from './GraphCanvas'
+import { GraphCanvasContext } from './GraphCanvasContext'
 import './GraphNode.css'
 
 export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'id' | 'onSelect' | 'onFocus' | 'onBlur'> {
@@ -7,6 +8,10 @@ export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.
   domainColor?: string
   /** Whether this node has structural children. When true and onToggleCollapse is set, the node becomes focusable and Shift+Enter triggers collapse. */
   hasChildren?: boolean
+  /** Whether this node's children are currently collapsed. */
+  collapsed?: boolean
+  /** Count of structural descendants currently hidden because this node is collapsed. */
+  hiddenDescendantCount?: number
   /** Activates collapse/expand via Shift+Enter keyboard input. Omit to disable keyboard-driven collapse. */
   onToggleCollapse?: () => void
   /** Whether the node's popover is currently open. */
@@ -31,6 +36,8 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       selected = false,
       onSelect,
       hasChildren = false,
+      collapsed = false,
+      hiddenDescendantCount = 0,
       onToggleCollapse,
       onPopoverOpen,
       popoverOpen = false,
@@ -44,6 +51,10 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
     },
     ref
   ) => {
+    // Check if we're in the measurement pass (GraphCanvasContext not available) or the real render.
+    // Only render the toggle button in the real render, not in the off-screen measurement pass.
+    const inGraphCanvas = React.useContext(GraphCanvasContext) !== null
+
     const classNames = ['graph-node', selected && 'selected', className]
       .filter(Boolean)
       .join(' ')
@@ -86,6 +97,38 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         <span className="graph-node__swatch" />
         <span className="graph-node__label">{label}</span>
         {kind && <span className="graph-node__kind">{kind}</span>}
+        {inGraphCanvas && hasChildren && onToggleCollapse && (
+          <button
+            className="graph-node__collapse-toggle"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              try { onToggleCollapse() } catch (err) { console.error('onToggleCollapse failed:', err) }
+            }}
+            onKeyDown={(e) => {
+              if ((e.key === 'Enter' || e.key === ' ') && e.target === e.currentTarget) {
+                e.preventDefault()
+                e.stopPropagation()
+                try { onToggleCollapse() } catch (err) { console.error('onToggleCollapse failed:', err) }
+              }
+            }}
+            type="button"
+            aria-label={`${collapsed ? 'Expand' : 'Collapse'} ${label}`}
+            aria-expanded={!collapsed}
+            data-testid={`graph-node-collapse-toggle-${id}`}
+          >
+            {collapsed && hiddenDescendantCount > 0 && (
+              <span className="graph-node__hidden-badge">{hiddenDescendantCount}</span>
+            )}
+            <svg className="graph-node__toggle-icon" viewBox="0 0 24 24" width="12" height="12">
+              {collapsed ? (
+                <polyline points="9 6 15 12 9 18" strokeWidth="1.75" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              ) : (
+                <polyline points="6 9 12 15 18 9" strokeWidth="1.75" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              )}
+            </svg>
+          </button>
+        )}
       </div>
     )
   }

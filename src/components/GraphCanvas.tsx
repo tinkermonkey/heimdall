@@ -1893,16 +1893,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       );
     }, []);
 
-    const handleCollapseControlPointerEnter = useCallback((nodeId: string) => {
-      setHoveredNodeId(nodeId);
-    }, []);
-
-    const handleCollapseControlPointerLeave = useCallback((nodeId: string) => {
-      setHoveredNodeId((current) =>
-        current === nodeId ? undefined : current,
-      );
-    }, []);
-
     const getNodeRect = useCallback(
       (id: string) => {
         // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
@@ -2161,6 +2151,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             onSelect={onNodeSelect}
             onPopoverOpen={hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node, triggeringElement) : undefined}
             hasChildren={hierarchy.hasChildren}
+            collapsed={hierarchy.collapsed}
+            hiddenDescendantCount={hierarchy.hiddenDescendantCount}
             onToggleCollapse={hierarchy.onToggleCollapse}
             popoverOpen={isPopoverOpen}
             popoverPanelId={isPopoverOpen ? `popover-node-${node.id}` : undefined}
@@ -2734,24 +2726,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             </div>
           )}
 
-          {collapseControl && (
-            <div
-              className="graph-collapse-controls"
-              onPointerEnter={() => handleCollapseControlPointerEnter(collapseControl.nodeId)}
-              onPointerLeave={() => handleCollapseControlPointerLeave(collapseControl.nodeId)}
-            >
-              <GraphCollapseControl
-                key={collapseControl.nodeId}
-                nodeId={collapseControl.nodeId}
-                label={collapseControl.label}
-                collapsed={collapseControl.collapsed}
-                hiddenDescendantCount={collapseControl.hiddenDescendantCount}
-                onToggleCollapse={() => onToggleCollapse?.(collapseControl.nodeId)}
-                screenX={collapseControl.screenX}
-                screenY={collapseControl.screenY}
-              />
-            </div>
-          )}
         </GraphCanvasContext.Provider>
       </div>
     );
