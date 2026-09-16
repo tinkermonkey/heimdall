@@ -40,7 +40,6 @@ import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
 import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
 import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
-import { GraphCollapseControl } from "./GraphCollapseControl";
 import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
 import { Tooltip } from "./Tooltip";
 import { Popover } from "./Popover";
@@ -768,7 +767,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       new Map(),
     );
     const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>();
-    const [focusedNodeId, setFocusedNodeId] = useState<string | undefined>();
     const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>();
     const [delayedHoveredNodeId, setDelayedHoveredNodeId] =
       useState<string | undefined>();
@@ -1014,12 +1012,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
     // The node list actually measured, laid out, and rendered. Edges touching a hidden node
     // simply don't resolve a rect (see getNodeRect below) and render nothing — no separate
-    // edge filtering needed.
+    // edge filtering needed. Deduplicate nodes by ID to ensure each node renders only once.
     const visibleNodes = useMemo(
-      () =>
-        hiddenIds.size === 0
-          ? nodes
-          : nodes.filter((n) => !hiddenIds.has(n.id)),
+      () => {
+        // First, deduplicate nodes by ID to handle any duplicate node entries
+        const seenIds = new Set<string>();
+        const dedupedNodes = nodes.filter((n) => {
+          if (seenIds.has(n.id)) return false;
+          seenIds.add(n.id);
+          return true;
+        });
+        // Then filter by visibility
+        return hiddenIds.size === 0
+          ? dedupedNodes
+          : dedupedNodes.filter((n) => !hiddenIds.has(n.id));
+      },
       [nodes, hiddenIds],
     );
 
@@ -1883,16 +1890,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDelayedHoveredNodeId(undefined);
     }, []);
 
-    const handleNodeFocus = useCallback((id: string) => {
-      setFocusedNodeId(id);
-    }, []);
-
-    const handleNodeBlur = useCallback((id: string) => {
-      setFocusedNodeId((current) =>
-        current === id ? undefined : current,
-      );
-    }, []);
-
     const getNodeRect = useCallback(
       (id: string) => {
         // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
@@ -2157,12 +2154,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             popoverOpen={isPopoverOpen}
             popoverPanelId={isPopoverOpen ? `popover-node-${node.id}` : undefined}
             tooltipId={tooltipId}
-            onFocus={() => handleNodeFocus(node.id)}
-            onBlur={() => handleNodeBlur(node.id)}
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, handleNodeFocus, handleNodeBlur],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId],
     );
 
     // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
@@ -2362,50 +2357,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       document.addEventListener('mousedown', handleMouseDown);
       return () => document.removeEventListener('mousedown', handleMouseDown);
     }, [popoverTarget]);
-
-    // Collapse control positioning — shown when hovering or focusing a node with children.
-    // Positioned at the top-left corner of the node's bounding box.
-    const collapseControl = useMemo(() => {
-      // Show control on hover OR focus
-      const targetNodeId = hoveredNodeId || focusedNodeId;
-      if (!targetNodeId || !onToggleCollapse) return null;
-      const node = visibleNodes.find((n) => n.id === targetNodeId);
-      if (!node) return null;
-      const hierarchy = hierarchyMetaFor(targetNodeId);
-      if (!hierarchy.hasChildren) return null;
-
-      const rect = getNodeRect(targetNodeId);
-      if (!rect) return null;
-
-      // rect.x, rect.y are in world space (node center)
-      // rect.width, rect.height are the node dimensions
-      // Top-left corner of node bbox is at (x - width/2, y - height/2) in world space
-      const topLeftWorldX = rect.x - rect.width / 2;
-      const topLeftWorldY = rect.y - rect.height / 2;
-
-      // Convert to screen coordinates and add a small offset to position away from the corner
-      const screenX = topLeftWorldX * viewport.zoom + viewport.x - 6;
-      const screenY = topLeftWorldY * viewport.zoom + viewport.y - 6;
-
-      return {
-        nodeId: targetNodeId,
-        label: node.label,
-        collapsed: hierarchy.collapsed,
-        hiddenDescendantCount: hierarchy.hiddenDescendantCount,
-        screenX,
-        screenY,
-      };
-    }, [
-      hoveredNodeId,
-      focusedNodeId,
-      onToggleCollapse,
-      visibleNodes,
-      hierarchyMetaFor,
-      getNodeRect,
-      viewport.zoom,
-      viewport.x,
-      viewport.y,
-    ]);
 
     const contextValue = useMemo(
       () => ({

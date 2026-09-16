@@ -22,11 +22,16 @@ export function buildStructuralForest(nodeIds: readonly string[], edges: readonl
   const idSet = new Set(nodeIds)
   const parentOf = new Map<string, string>()
   const childrenOf = new Map<string, string[]>()
+  const seenEdges = new Set<string>()  // Track edges we've already processed
   for (const edge of edges) {
     if (!edge.structural) continue
     if (edge.source === edge.target) continue
     if (!idSet.has(edge.source) || !idSet.has(edge.target)) continue
     if (parentOf.has(edge.target)) continue
+    // Skip if we've already processed this exact edge (source -> target)
+    const edgeKey = `${edge.source}->${edge.target}`
+    if (seenEdges.has(edgeKey)) continue
+    seenEdges.add(edgeKey)
     parentOf.set(edge.target, edge.source)
     const siblings = childrenOf.get(edge.source)
     if (siblings) siblings.push(edge.target)
