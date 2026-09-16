@@ -2161,8 +2161,6 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             onSelect={onNodeSelect}
             onPopoverOpen={hasNodePopoverOrClickTooltip ? (triggeringElement: HTMLElement) => handleNodePopoverOpen(node, triggeringElement) : undefined}
             hasChildren={hierarchy.hasChildren}
-            collapsed={hierarchy.collapsed}
-            hiddenDescendantCount={hierarchy.hiddenDescendantCount}
             onToggleCollapse={hierarchy.onToggleCollapse}
             popoverOpen={isPopoverOpen}
             popoverPanelId={isPopoverOpen ? `popover-node-${node.id}` : undefined}

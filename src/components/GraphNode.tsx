@@ -5,14 +5,9 @@ import './GraphNode.css'
 export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'id' | 'onSelect' | 'onFocus' | 'onBlur'> {
   kind?: string
   domainColor?: string
-  /** Whether this node has structural children — draws the collapse/expand toggle when true.
-   *  Matches GraphCanvas's GraphNodeHierarchyMeta.hasChildren. */
+  /** Whether this node has structural children. When true and onToggleCollapse is set, the node becomes focusable and Shift+Enter triggers collapse. */
   hasChildren?: boolean
-  /** Whether the node's subtree is currently hidden. Flips the toggle's chevron direction. */
-  collapsed?: boolean
-  /** Shown as a "+N" badge next to the toggle while collapsed. 0 renders no badge. */
-  hiddenDescendantCount?: number
-  /** Activates the collapse/expand toggle. Omit to render hasChildren without an interactive toggle. */
+  /** Activates collapse/expand via Shift+Enter keyboard input. Omit to disable keyboard-driven collapse. */
   onToggleCollapse?: () => void
   /** Whether the node's popover is currently open. */
   popoverOpen?: boolean
@@ -36,8 +31,6 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       selected = false,
       onSelect,
       hasChildren = false,
-      collapsed = false,
-      hiddenDescendantCount = 0,
       onToggleCollapse,
       onPopoverOpen,
       popoverOpen = false,
@@ -70,16 +63,15 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         onBlur={onBlur}
         onKeyDown={(e) => {
           if (e.target !== e.currentTarget) return
-          if (e.key === 'Enter' || e.key === ' ') {
+          if ((e.key === 'Enter' || e.key === ' ') && !e.shiftKey) {
             e.preventDefault()
             e.stopPropagation()
-            // If the node has children and a collapse callback, prioritize collapse/expand
-            if (hasChildren && onToggleCollapse) {
-              try { onToggleCollapse() } catch (err) { console.error('onToggleCollapse failed:', err) }
-            } else {
-              try { onSelect?.(id) } catch (err) { console.error('onSelect failed:', err) }
-              try { onPopoverOpen?.(e.currentTarget as HTMLElement) } catch (err) { console.error('onPopoverOpen failed:', err) }
-            }
+            try { onSelect?.(id) } catch (err) { console.error('onSelect failed:', err) }
+            try { onPopoverOpen?.(e.currentTarget as HTMLElement) } catch (err) { console.error('onPopoverOpen failed:', err) }
+          } else if (e.key === 'Enter' && e.shiftKey && hasChildren && onToggleCollapse) {
+            e.preventDefault()
+            e.stopPropagation()
+            try { onToggleCollapse() } catch (err) { console.error('onToggleCollapse failed:', err) }
           }
         }}
         role={onSelect || onPopoverOpen || (hasChildren && onToggleCollapse) ? 'button' : undefined}
