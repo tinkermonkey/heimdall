@@ -768,6 +768,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       new Map(),
     );
     const [hoveredNodeId, setHoveredNodeId] = useState<string | undefined>();
+    const [focusedNodeId, setFocusedNodeId] = useState<string | undefined>();
     const [hoveredEdgeId, setHoveredEdgeId] = useState<string | undefined>();
     const [delayedHoveredNodeId, setDelayedHoveredNodeId] =
       useState<string | undefined>();
@@ -1882,6 +1883,16 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDelayedHoveredNodeId(undefined);
     }, []);
 
+    const handleNodeFocus = useCallback((id: string) => {
+      setFocusedNodeId(id);
+    }, []);
+
+    const handleNodeBlur = useCallback((id: string) => {
+      setFocusedNodeId((current) =>
+        current === id ? undefined : current,
+      );
+    }, []);
+
     const handleCollapseControlPointerEnter = useCallback((nodeId: string) => {
       setHoveredNodeId(nodeId);
     }, []);
@@ -2156,10 +2167,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             popoverOpen={isPopoverOpen}
             popoverPanelId={isPopoverOpen ? `popover-node-${node.id}` : undefined}
             tooltipId={tooltipId}
+            onFocus={() => handleNodeFocus(node.id)}
+            onBlur={() => handleNodeBlur(node.id)}
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, handleNodeFocus, handleNodeBlur],
     );
 
     // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
@@ -2360,16 +2373,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return () => document.removeEventListener('mousedown', handleMouseDown);
     }, [popoverTarget]);
 
-    // Collapse control positioning — shown when hovering a node with children.
+    // Collapse control positioning — shown when hovering or focusing a node with children.
     // Positioned at the top-left corner of the node's bounding box.
     const collapseControl = useMemo(() => {
-      if (!hoveredNodeId || !onToggleCollapse) return null;
-      const node = visibleNodes.find((n) => n.id === hoveredNodeId);
+      // Show control on hover OR focus
+      const targetNodeId = hoveredNodeId || focusedNodeId;
+      if (!targetNodeId || !onToggleCollapse) return null;
+      const node = visibleNodes.find((n) => n.id === targetNodeId);
       if (!node) return null;
-      const hierarchy = hierarchyMetaFor(hoveredNodeId);
+      const hierarchy = hierarchyMetaFor(targetNodeId);
       if (!hierarchy.hasChildren) return null;
 
-      const rect = getNodeRect(hoveredNodeId);
+      const rect = getNodeRect(targetNodeId);
       if (!rect) return null;
 
       // rect.x, rect.y are in world space (node center)
@@ -2383,7 +2398,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const screenY = topLeftWorldY * viewport.zoom + viewport.y - 6;
 
       return {
-        nodeId: hoveredNodeId,
+        nodeId: targetNodeId,
         label: node.label,
         collapsed: hierarchy.collapsed,
         hiddenDescendantCount: hierarchy.hiddenDescendantCount,
@@ -2392,6 +2407,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       };
     }, [
       hoveredNodeId,
+      focusedNodeId,
       onToggleCollapse,
       visibleNodes,
       hierarchyMetaFor,

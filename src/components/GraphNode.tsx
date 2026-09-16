@@ -1,9 +1,8 @@
 import React from 'react'
 import { type BaseGraphNodeComponentProps } from './GraphCanvas'
-import { Icon } from './Icon'
 import './GraphNode.css'
 
-export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'id' | 'onSelect'> {
+export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.HTMLAttributes<HTMLDivElement>, 'id' | 'onSelect' | 'onFocus' | 'onBlur'> {
   kind?: string
   domainColor?: string
   /** Whether this node has structural children — draws the collapse/expand toggle when true.
@@ -21,6 +20,10 @@ export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.
   popoverPanelId?: string
   /** ID of the tooltip for aria-describedby when the tooltip is shown for this node. */
   tooltipId?: string
+  /** Called when the node receives focus. */
+  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void
+  /** Called when the node loses focus. */
+  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void
 }
 
 export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
@@ -40,6 +43,8 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       popoverOpen = false,
       popoverPanelId,
       tooltipId,
+      onFocus,
+      onBlur,
       className = '',
       style: _style,
       ...props
@@ -61,21 +66,24 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
           try { onSelect?.(id) } catch (err) { console.error('onSelect failed:', err) }
           try { onPopoverOpen?.(e.currentTarget as HTMLElement) } catch (err) { console.error('onPopoverOpen failed:', err) }
         }}
+        onFocus={onFocus}
+        onBlur={onBlur}
         onKeyDown={(e) => {
-          // A keydown from the collapse toggle button below bubbles up here too — bail out before
-          // hijacking Enter/Space, or the toggle's own native button activation never fires
-          // (preventDefault suppresses it) and the whole progressive-disclosure affordance becomes
-          // keyboard-inoperable, selecting the node instead of collapsing/expanding it.
           if (e.target !== e.currentTarget) return
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
             e.stopPropagation()
-            try { onSelect?.(id) } catch (err) { console.error('onSelect failed:', err) }
-            try { onPopoverOpen?.(e.currentTarget as HTMLElement) } catch (err) { console.error('onPopoverOpen failed:', err) }
+            // If the node has children and a collapse callback, prioritize collapse/expand
+            if (hasChildren && onToggleCollapse) {
+              try { onToggleCollapse() } catch (err) { console.error('onToggleCollapse failed:', err) }
+            } else {
+              try { onSelect?.(id) } catch (err) { console.error('onSelect failed:', err) }
+              try { onPopoverOpen?.(e.currentTarget as HTMLElement) } catch (err) { console.error('onPopoverOpen failed:', err) }
+            }
           }
         }}
-        role={onSelect || onPopoverOpen ? 'button' : undefined}
-        tabIndex={onSelect || onPopoverOpen ? 0 : undefined}
+        role={onSelect || onPopoverOpen || (hasChildren && onToggleCollapse) ? 'button' : undefined}
+        tabIndex={onSelect || onPopoverOpen || (hasChildren && onToggleCollapse) ? 0 : undefined}
         aria-pressed={onSelect ? selected : undefined}
         aria-haspopup={onPopoverOpen ? 'dialog' : undefined}
         {...(onPopoverOpen && { 'aria-expanded': popoverOpen })}
@@ -86,28 +94,6 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
         <span className="graph-node__swatch" />
         <span className="graph-node__label">{label}</span>
         {kind && <span className="graph-node__kind">{kind}</span>}
-        {/* Only rendered when the caller actually wired onToggleCollapse — hasChildren alone
-            (true for any node with a structural child, which every edge is by default) would
-            otherwise put this on nodes whose callers never opted into collapse/expand at all.
-            No data-testid here deliberately: GraphCanvas renders this same content twice (once
-            off-screen for measurement, once in the real SVG), so a testid on anything inside it
-            — not just the outer node <g>, which GraphCanvas itself controls — would resolve to
-            two elements. Locate it via .graph-node__collapse-toggle scoped under the node's own
-            unique [data-testid="graph-node-{id}"] instead. */}
-        {hasChildren && onToggleCollapse && (
-          <button
-            type="button"
-            className="graph-node__collapse-toggle"
-            aria-label={collapsed ? 'Expand' : 'Collapse'}
-            aria-expanded={!collapsed}
-            onClick={(e) => { e.stopPropagation(); onToggleCollapse() }}
-          >
-            {collapsed && hiddenDescendantCount > 0 && (
-              <span className="graph-node__hidden-badge">{hiddenDescendantCount}</span>
-            )}
-            <Icon name={collapsed ? 'chevronRight' : 'chevronDown'} size={12} />
-          </button>
-        )}
       </div>
     )
   }
