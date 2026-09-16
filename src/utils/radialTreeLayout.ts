@@ -208,6 +208,7 @@ export function radialTreeLayout(
 
   // Phase 3: Placement pass — position visible nodes
   const allPositions = new Map<string, { x: number; y: number }>()
+  const trunkMembership = new Map<string, string>()
 
   for (let i = 0; i < trunks.length; i++) {
     const rootId = trunks[i]
@@ -220,6 +221,7 @@ export function radialTreeLayout(
         x: pos.x + offset.x,
         y: pos.y + offset.y,
       })
+      trunkMembership.set(id, rootId)
     }
 
     // Record ring geometry (skip depth 0, which is a zero-radius point)
@@ -252,32 +254,15 @@ export function radialTreeLayout(
 
     // Find the farthest node in this trunk from its center
     for (const [id, pos] of allPositions) {
-      const node = visibleNodes.find(n => n.id === id)
-      if (!node) continue
+      if (trunkMembership.get(id) !== rootId) continue
 
-      // Determine which trunk this node belongs to by checking if it's in the subtree
-      let belongsToTrunk = false
-      let current = id
-      const visited = new Set<string>()
-
-      while (current && !visited.has(current)) {
-        visited.add(current)
-        if (current === rootId) {
-          belongsToTrunk = true
-          break
-        }
-        current = forest.parentOf.get(current) ?? ''
-      }
-
-      if (belongsToTrunk) {
-        const nodeDims = getDims(id)
-        const nodeRadius = Math.hypot(nodeDims.width, nodeDims.height) / 2
-        const distFromCenter = Math.hypot(
-          pos.x - offset.x,
-          pos.y - offset.y,
-        ) + nodeRadius
-        maxDistFromCenter = Math.max(maxDistFromCenter, distFromCenter)
-      }
+      const nodeDims = getDims(id)
+      const nodeRadius = Math.hypot(nodeDims.width, nodeDims.height) / 2
+      const distFromCenter = Math.hypot(
+        pos.x - offset.x,
+        pos.y - offset.y,
+      ) + nodeRadius
+      maxDistFromCenter = Math.max(maxDistFromCenter, distFromCenter)
     }
 
     result.trunkBoundaries.set(rootId, {
