@@ -41,6 +41,7 @@ import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
 import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
 import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
+import { GraphCollapseControl } from "./GraphCollapseControl";
 import { Tooltip } from "./Tooltip";
 import { Popover } from "./Popover";
 import "./GraphCanvas.css";
@@ -2618,6 +2619,31 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   );
                 })}
               </g>
+
+              {hoveredNodeId && (
+                <g className="graph-collapse-controls">
+                  {(() => {
+                    const nodeRect = getNodeRect(hoveredNodeId);
+                    if (!nodeRect) return null;
+                    const hierarchy = hierarchyMetaFor(hoveredNodeId);
+                    if (!hierarchy.hasChildren) return null;
+                    return (
+                      <GraphCollapseControl
+                        key={hoveredNodeId}
+                        nodeId={hoveredNodeId}
+                        label={visibleNodes.find(n => n.id === hoveredNodeId)?.label || hoveredNodeId}
+                        collapsed={hierarchy.collapsed}
+                        hiddenDescendantCount={hierarchy.hiddenDescendantCount}
+                        onToggleCollapse={hierarchy.onToggleCollapse || (() => {})}
+                        x={nodeRect.x}
+                        y={nodeRect.y}
+                        nodeWidth={nodeRect.width}
+                        nodeHeight={nodeRect.height}
+                      />
+                    );
+                  })()}
+                </g>
+              )}
             </g>
           </svg>
 

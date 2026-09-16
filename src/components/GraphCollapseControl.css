@@ -1,5 +1,9 @@
+.graph-collapse-control-container {
+  pointer-events: auto;
+}
+
 .graph-collapse-control {
-  position: absolute;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,8 +17,7 @@
   color: var(--canvas-fg);
   transition: background-color 80ms ease, border-color 80ms ease;
   outline: none;
-  z-index: 100;
-  transform: translate(-50%, -50%);
+  font-family: inherit;
 }
 
 .graph-collapse-control:focus-visible {
@@ -43,14 +46,4 @@
   padding: 2px 4px;
   border-radius: 2px;
   pointer-events: none;
-}
-
-.graph-collapse-controls {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.graph-collapse-controls .graph-collapse-control {
-  pointer-events: auto;
 }
