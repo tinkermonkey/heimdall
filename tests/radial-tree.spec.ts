@@ -63,7 +63,7 @@ test.describe('integration: Radial Tree Layout', () => {
 
   test('Multi-trunk layout with orphan nodes', async ({ page }) => {
     // Switch to multi-trunk view
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('multi')
     await page.waitForTimeout(500)
 
@@ -81,7 +81,7 @@ test.describe('integration: Radial Tree Layout', () => {
 
   test('Mixed view combining single and multi-trunk', async ({ page }) => {
     // Switch to mixed view
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('mixed')
     await page.waitForTimeout(500)
 
@@ -97,7 +97,7 @@ test.describe('integration: Radial Tree Layout', () => {
 
   test('Custom collapse control view', async ({ page }) => {
     // Switch to custom view
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('custom')
     await page.waitForTimeout(500)
 
@@ -134,7 +134,7 @@ test.describe('integration: Radial Tree Layout', () => {
     await page.waitForTimeout(500)
 
     // Switch to multi-trunk view
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('multi')
     await page.waitForTimeout(500)
 
@@ -144,7 +144,7 @@ test.describe('integration: Radial Tree Layout', () => {
 
   test('Custom collapse control - light mode', async ({ page }) => {
     // Switch to custom view and enable custom render
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('custom')
     await page.waitForTimeout(500)
 
@@ -162,7 +162,7 @@ test.describe('integration: Radial Tree Layout', () => {
 
   test('Custom collapse control - dark mode', async ({ page }) => {
     // Switch to custom view
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('custom')
     await page.waitForTimeout(500)
 
@@ -182,7 +182,7 @@ test.describe('integration: Radial Tree Layout', () => {
 
   test('Trunk bubble stability verification', async ({ page }) => {
     // Switch to custom view to access mixed collapse button
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('custom')
     await page.waitForTimeout(500)
 
@@ -221,7 +221,7 @@ test.describe('integration: Radial Tree Layout', () => {
 
   test('Multi-trunk orphan nodes are distinct', async ({ page }) => {
     // Switch to multi-trunk view
-    const viewSelect = page.locator('select')
+    const viewSelect = page.locator('select').nth(0)
     await viewSelect.selectOption('multi')
     await page.waitForTimeout(500)
 
