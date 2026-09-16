@@ -229,8 +229,7 @@ test.describe('integration: Galaxy Layout Collapse/Expand', () => {
     await expect(badge).toHaveText('10')
 
     // Expand and badge should disappear
-    const toggle2 = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
-    await toggle2.click()
+    await toggle.click()
     await page.waitForTimeout(300)
 
     // Hover again to see the control (should have no badge now)
@@ -313,11 +312,10 @@ test.describe('integration: Galaxy Layout Collapse/Expand', () => {
       }
     }
 
-    if (collapsedAnother) {
-      const { count: afterSecond, overlaps: overlapsAfterSecond } = await nodeOverlaps(page)
-      expect(afterSecond).toBeLessThan(afterFirst)
-      expect(overlapsAfterSecond).toBe(0)
-    }
+    expect(collapsedAnother).toBe(true)
+    const { count: afterSecond, overlaps: overlapsAfterSecond } = await nodeOverlaps(page)
+    expect(afterSecond).toBeLessThan(afterFirst)
+    expect(overlapsAfterSecond).toBe(0)
   })
 
   test.skip('galaxy layout collapse visual snapshot', async ({ page }) => {
