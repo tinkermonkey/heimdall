@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback } from 'react';
 import { Icon } from './Icon';
 import './GraphCollapseControl.css';
 
@@ -29,8 +29,6 @@ export const GraphCollapseControl = React.forwardRef<
     },
     ref,
   ) => {
-    const buttonRef = useRef<HTMLButtonElement>(null);
-
     const handleClick = useCallback(
       (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -58,11 +56,9 @@ export const GraphCollapseControl = React.forwardRef<
 
     const accessibleLabel = `${collapsed ? 'Expand' : 'Collapse'} ${label}`;
 
-    React.useImperativeHandle(ref, () => buttonRef.current!);
-
     return (
       <button
-        ref={buttonRef}
+        ref={ref}
         type="button"
         className="graph-collapse-control"
         style={{

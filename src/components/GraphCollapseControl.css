@@ -18,8 +18,8 @@
 }
 
 .graph-collapse-control:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 0;
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 .graph-collapse-control:hover {

@@ -1882,6 +1882,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDelayedHoveredNodeId(undefined);
     }, []);
 
+    const handleCollapseControlPointerEnter = useCallback(() => {
+      if (collapseControl) {
+        setHoveredNodeId(collapseControl.nodeId);
+      }
+    }, [collapseControl]);
+
+    const handleCollapseControlPointerLeave = useCallback(() => {
+      setHoveredNodeId((current) =>
+        current === collapseControl?.nodeId ? undefined : current,
+      );
+    }, [collapseControl]);
+
     const getNodeRect = useCallback(
       (id: string) => {
         // Only visible nodes resolve — an edge touching a hidden (collapsed-away) node just
@@ -2353,7 +2365,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Collapse control positioning — shown when hovering a node with children.
     // Positioned at the top-left corner of the node's bounding box.
     const collapseControl = useMemo(() => {
-      if (!hoveredNodeId || !onToggleCollapse || !containerRef.current) return null;
+      if (!hoveredNodeId || !onToggleCollapse) return null;
       const node = visibleNodes.find((n) => n.id === hoveredNodeId);
       if (!node) return null;
       const hierarchy = hierarchyMetaFor(hoveredNodeId);
@@ -2711,7 +2723,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           )}
 
           {collapseControl && (
-            <div className="graph-collapse-controls">
+            <div
+              className="graph-collapse-controls"
+              onPointerEnter={handleCollapseControlPointerEnter}
+              onPointerLeave={handleCollapseControlPointerLeave}
+            >
               <GraphCollapseControl
                 key={collapseControl.nodeId}
                 nodeId={collapseControl.nodeId}
