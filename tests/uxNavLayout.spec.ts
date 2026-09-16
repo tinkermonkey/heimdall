@@ -603,4 +603,45 @@ test.describe("uxNavLayout", () => {
 
     expect(Math.abs(uniqueViewPos.x - expectedUniqueViewX)).toBeLessThan(1);
   });
+
+  // REGRESSION GUARD — every other test in this file uses createDims()'s
+  // uniform 138px width for every node. That uniformity masked a real bug:
+  // the fan-placement loop computed each view's LEFT EDGE (accumulating full
+  // widths + spacing correctly for that purpose) but then used it directly
+  // as the view's CENTER, shifting every view left by half its own width.
+  // With equal-width siblings the error is identical for every view and
+  // cancels out in all the relative (greater-than) assertions above — it
+  // only surfaces once a view is wider than 2*viewFanGap, which any node
+  // with a realistic text label routinely is (confirmed against real
+  // documentation_robotics_viewer data in heimdall-layout-loop's corpus:
+  // three independent single-view page trees rendered with the view
+  // overlapping its own parent page by 21-28px). Kept as one dims map with
+  // deliberately mismatched widths so this can't regress silently again.
+  test("view wider than 2x viewFanGap does not overlap its parent page", () => {
+    const nodes = [createNode("page1"), createNode("wideView")];
+    const edges: HierarchyEdge[] = [
+      { source: "page1", target: "wideView", structural: true },
+    ];
+    const dims = new Map<string, { width: number; height: number }>([
+      ["page1", { width: 130, height: 23 }],
+      // Wider than 2 * the default viewFanGap (40) — this is what exposes
+      // the bug; createDims()'s uniform 138 does not.
+      ["wideView", { width: 240, height: 23 }],
+    ]);
+
+    const positions = uxNavLayout(nodes, edges, dims, (n) => n.id === "page1");
+
+    const pagePos = positions.get("page1")!;
+    const viewPos = positions.get("wideView")!;
+    const pageDim = dims.get("page1")!;
+    const viewDim = dims.get("wideView")!;
+
+    const pageRightEdge = pagePos.x + pageDim.width / 2;
+    const viewLeftEdge = viewPos.x - viewDim.width / 2;
+
+    // The default viewFanGap (40) should be the actual gap between the
+    // page's right edge and the view's left edge — not merely a positive
+    // number, and specifically not negative (overlapping).
+    expect(viewLeftEdge - pageRightEdge).toBeCloseTo(40, 5);
+  });
 });

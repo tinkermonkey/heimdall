@@ -267,18 +267,28 @@ export function uxNavLayout(
     // Position each view child in this parent's fan
     for (let i = 0; i < viewChildren.length; i++) {
       const viewId = viewChildren[i]
+      const viewWidth = getNodeDim(viewId).width
 
-      // Calculate horizontal position within the fan (starting from right edge of parent)
-      let fanX = pagePos.x + pageDim.width / 2 + viewFanGap
+      // Left edge of this view's slot in the fan (starting from right edge of parent)
+      let leftEdge = pagePos.x + pageDim.width / 2 + viewFanGap
 
       // Add widths of previous views in this parent's fan
       for (let j = 0; j < i; j++) {
         const prevViewId = viewChildren[j]
         const prevViewWidth = getNodeDim(prevViewId).width
-        fanX += prevViewWidth + viewSpacing
+        leftEdge += prevViewWidth + viewSpacing
       }
 
-      const position = { x: fanX, y: pagePos.y }
+      // `position` is the view's CENTER (matches how every other position in this
+      // file, and the caller's dims-based collision math, treat node positions) —
+      // leftEdge alone was previously used directly as the center, which shifted
+      // every view left by half its own width. Harmless for narrow demo nodes
+      // (viewWidth/2 < viewFanGap kept it looking fine), but with a view wider than
+      // 2*viewFanGap (routine for real text labels) the first view in a fan
+      // overlapped its own parent page by exactly viewWidth/2 - viewFanGap —
+      // confirmed against real data: 21.5px/23.5px/28px overlaps, one per
+      // overlapping pair, matching that formula exactly for each view's real width.
+      const position = { x: leftEdge + viewWidth / 2, y: pagePos.y }
 
       // Use synthetic ID for multi-parent views so they appear under each parent
       if (multiParentViews.has(viewId)) {
