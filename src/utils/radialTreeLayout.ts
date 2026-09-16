@@ -3,7 +3,7 @@ import { type HierarchyEdge, type StructuralForest } from './graphHierarchy'
 import { separationPass, type LayoutNode } from './graphLayout'
 
 export interface RadialTreeLayoutOptions {
-  /** Ring spacing multiplier — controls radial distance per depth level. Default 80. */
+  /** Ring spacing multiplier — scales with node count to control overall radial extent (maxRadius = nodeCount * ringSpacing). Default 80. */
   ringSpacing?: number
   /** Gap between sibling nodes at the same depth. Default 4. */
   nodeSeparationGap?: number
@@ -28,11 +28,12 @@ export interface RadialTreeLayoutResult {
 /**
  * Radial tree layout engine for hierarchical graph visualization.
  *
- * For each trunk (root + descendants):
- * 1. Sizing pass: compute bubble radius from fully expanded tree structure (using forest)
- * 2. Placement pass: compute positions for visible nodes with polar-to-Cartesian conversion
- * 3. Pack all trunk bubbles without overlap
- * 4. Apply separation pass as final overlap resolution
+ * Execution phases:
+ * 1. Sizing pass (per-trunk): compute bubble radius from fully expanded tree structure
+ * 2. Packing pass (global): arrange trunk bubbles in 2D space without overlap
+ * 3. Placement pass (per-trunk): compute positions for visible nodes with polar-to-Cartesian conversion
+ * 4. Separation pass (global): apply final overlap resolution across all trunks
+ * 5. Recompute trunk boundaries (per-trunk): adjust bounds after separation moves nodes
  *
  * @param visibleNodes - Only currently visible (non-collapsed) nodes for placement
  * @param edges - Unused; accepted for API consistency with other layout functions
