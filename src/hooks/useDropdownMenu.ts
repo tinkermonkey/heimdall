@@ -87,7 +87,9 @@ export function useDropdownMenu({
       const items = getItems()
       if (items.length === 0) return
 
-      const currentIndex = items.indexOf(focusedValue ?? '')
+      let currentIndex = items.indexOf(focusedValue ?? '')
+      // If focusedValue doesn't match any item, use the first item
+      if (currentIndex < 0) currentIndex = 0
       const lastIndex = items.length - 1
       const targetIsItem = (e.target as HTMLElement | null)?.hasAttribute('data-dropdown-item')
 
