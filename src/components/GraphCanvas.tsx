@@ -2626,7 +2626,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     const nodeRect = getNodeRect(hoveredNodeId);
                     if (!nodeRect) return null;
                     const hierarchy = hierarchyMetaFor(hoveredNodeId);
-                    if (!hierarchy.hasChildren) return null;
+                    if (!hierarchy.hasChildren || !hierarchy.onToggleCollapse) return null;
                     return (
                       <GraphCollapseControl
                         key={hoveredNodeId}
@@ -2634,11 +2634,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                         label={visibleNodes.find(n => n.id === hoveredNodeId)?.label || hoveredNodeId}
                         collapsed={hierarchy.collapsed}
                         hiddenDescendantCount={hierarchy.hiddenDescendantCount}
-                        onToggleCollapse={hierarchy.onToggleCollapse || (() => {})}
+                        onToggleCollapse={hierarchy.onToggleCollapse}
                         x={nodeRect.x}
                         y={nodeRect.y}
                         nodeWidth={nodeRect.width}
-                        nodeHeight={nodeRect.height}
                       />
                     );
                   })()}

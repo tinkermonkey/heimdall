@@ -160,39 +160,8 @@ export default function RadialTreeTestPage() {
     selected: boolean,
     hierarchy?: GraphNodeHierarchyMeta
   ) => (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <GraphNode id={node.id} label={node.label} kind={node.kind} selected={selected} onSelect={() => setSelectedNodeId(node.id)} />
-      {useCustomRender && hierarchy?.hasChildren && hierarchy.onToggleCollapse && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation()
-            hierarchy.onToggleCollapse!()
-          }}
-          aria-label={hierarchy.collapsed ? 'Expand' : 'Collapse'}
-          style={{
-            position: 'absolute',
-            top: 2,
-            right: 2,
-            width: 20,
-            height: 20,
-            borderRadius: 3,
-            border: '1px solid var(--canvas-border)',
-            background: 'var(--canvas-bg-2)',
-            cursor: 'pointer',
-            fontSize: '11px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 0,
-          }}
-          data-testid={`collapse-control-${node.id}`}
-        >
-          {hierarchy.collapsed ? `+` : '−'}
-        </button>
-      )}
-    </div>
-  ), [useCustomRender])
+    <GraphNode id={node.id} label={node.label} kind={node.kind} selected={selected} onSelect={() => setSelectedNodeId(node.id)} />
+  ), [])
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'rgb(var(--canvas-bg))' }}>

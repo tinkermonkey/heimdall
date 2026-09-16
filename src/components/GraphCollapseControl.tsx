@@ -10,12 +10,10 @@ export interface GraphCollapseControlProps {
   onToggleCollapse: () => void;
   /** World-space x coordinate (center of node) */
   x: number;
-  /** World-space y coordinate (top of node) */
+  /** World-space y coordinate (center of node) */
   y: number;
   /** Node width for positioning offset */
   nodeWidth: number;
-  /** Node height for vertical centering */
-  nodeHeight: number;
 }
 
 const CONTROL_SIZE = 24;
@@ -35,7 +33,6 @@ export const GraphCollapseControl = React.forwardRef<
       x,
       y,
       nodeWidth,
-      nodeHeight,
     },
     ref,
   ) => {
