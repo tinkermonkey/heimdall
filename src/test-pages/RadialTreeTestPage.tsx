@@ -279,6 +279,7 @@ export default function RadialTreeTestPage() {
 
         {collapsedNodeIds.size > 0 && (
           <button
+            type="button"
             onClick={() => setCollapsedNodeIds(new Set())}
             style={{
               padding: '4px 12px',
@@ -296,6 +297,7 @@ export default function RadialTreeTestPage() {
 
         {view === 'custom' && collapsedNodeIds.size === 0 && (
           <button
+            type="button"
             onClick={() => {
               // Collapse some nodes to show mixed state
               setCollapsedNodeIds(new Set(['l1_b']))
