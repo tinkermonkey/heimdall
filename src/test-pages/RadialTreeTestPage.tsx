@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { GraphCanvas, type GraphNodeData, type GraphEdge, type GraphNodeHierarchyMeta } from '../components/GraphCanvas'
+import { GraphCanvas, type GraphNodeData, type GraphEdge } from '../components/GraphCanvas'
 import GraphNode from '../components/GraphNode'
 
 interface RadialTreeNode extends GraphNodeData {
@@ -154,11 +154,10 @@ export default function RadialTreeTestPage() {
     return [visible, filteredEdges]
   }, [view, getVisibleNodes])
 
-  // Custom renderNode that shows collapse control
+  // Custom renderNode
   const renderNode = useCallback((
     node: GraphNodeData,
-    selected: boolean,
-    hierarchy?: GraphNodeHierarchyMeta
+    selected: boolean
   ) => (
     <GraphNode id={node.id} label={node.label} kind={node.kind} selected={selected} onSelect={() => setSelectedNodeId(node.id)} />
   ), [])
