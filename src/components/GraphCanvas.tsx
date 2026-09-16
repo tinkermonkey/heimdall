@@ -1882,17 +1882,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDelayedHoveredNodeId(undefined);
     }, []);
 
-    const handleCollapseControlPointerEnter = useCallback(() => {
-      if (collapseControl) {
-        setHoveredNodeId(collapseControl.nodeId);
-      }
-    }, [collapseControl]);
+    const handleCollapseControlPointerEnter = useCallback((nodeId: string) => {
+      setHoveredNodeId(nodeId);
+    }, []);
 
-    const handleCollapseControlPointerLeave = useCallback(() => {
+    const handleCollapseControlPointerLeave = useCallback((nodeId: string) => {
       setHoveredNodeId((current) =>
-        current === collapseControl?.nodeId ? undefined : current,
+        current === nodeId ? undefined : current,
       );
-    }, [collapseControl]);
+    }, []);
 
     const getNodeRect = useCallback(
       (id: string) => {
@@ -2725,8 +2723,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           {collapseControl && (
             <div
               className="graph-collapse-controls"
-              onPointerEnter={handleCollapseControlPointerEnter}
-              onPointerLeave={handleCollapseControlPointerLeave}
+              onPointerEnter={() => handleCollapseControlPointerEnter(collapseControl.nodeId)}
+              onPointerLeave={() => handleCollapseControlPointerLeave(collapseControl.nodeId)}
             >
               <GraphCollapseControl
                 key={collapseControl.nodeId}
