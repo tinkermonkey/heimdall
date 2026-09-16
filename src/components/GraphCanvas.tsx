@@ -40,6 +40,7 @@ import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
 import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
 import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
+import { GraphCollapseControl } from "./GraphCollapseControl";
 import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
 import { Tooltip } from "./Tooltip";
 import { Popover } from "./Popover";
@@ -2349,6 +2350,47 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return () => document.removeEventListener('mousedown', handleMouseDown);
     }, [popoverTarget]);
 
+    // Collapse control positioning — shown when hovering a node with children.
+    // Positioned at the top-left corner of the node's bounding box.
+    const collapseControl = useMemo(() => {
+      if (!hoveredNodeId || !onToggleCollapse || !containerRef.current) return null;
+      const node = visibleNodes.find((n) => n.id === hoveredNodeId);
+      if (!node) return null;
+      const hierarchy = hierarchyMetaFor(hoveredNodeId);
+      if (!hierarchy.hasChildren) return null;
+
+      const rect = getNodeRect(hoveredNodeId);
+      if (!rect) return null;
+
+      // rect.x, rect.y are in world space (node center)
+      // rect.width, rect.height are the node dimensions
+      // Top-left corner of node bbox is at (x - width/2, y - height/2) in world space
+      const topLeftWorldX = rect.x - rect.width / 2;
+      const topLeftWorldY = rect.y - rect.height / 2;
+
+      // Convert to screen coordinates and add a small offset to position away from the corner
+      const screenX = topLeftWorldX * viewport.zoom + viewport.x - 6;
+      const screenY = topLeftWorldY * viewport.zoom + viewport.y - 6;
+
+      return {
+        nodeId: hoveredNodeId,
+        label: node.label,
+        collapsed: hierarchy.collapsed,
+        hiddenDescendantCount: hierarchy.hiddenDescendantCount,
+        screenX,
+        screenY,
+      };
+    }, [
+      hoveredNodeId,
+      onToggleCollapse,
+      visibleNodes,
+      hierarchyMetaFor,
+      getNodeRect,
+      viewport.zoom,
+      viewport.x,
+      viewport.y,
+    ]);
+
     const contextValue = useMemo(
       () => ({
         getNodeRect,
@@ -2665,6 +2707,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   </Popover.Panel>
                 </Popover>
               </div>
+            </div>
+          )}
+
+          {collapseControl && (
+            <div className="graph-collapse-controls">
+              <GraphCollapseControl
+                key={collapseControl.nodeId}
+                nodeId={collapseControl.nodeId}
+                label={collapseControl.label}
+                collapsed={collapseControl.collapsed}
+                hiddenDescendantCount={collapseControl.hiddenDescendantCount}
+                onToggleCollapse={() => onToggleCollapse?.(collapseControl.nodeId)}
+                screenX={collapseControl.screenX}
+                screenY={collapseControl.screenY}
+              />
             </div>
           )}
         </GraphCanvasContext.Provider>

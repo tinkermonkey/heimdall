@@ -1,0 +1,56 @@
+.graph-collapse-control {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: var(--shell-surface);
+  border: 1px solid var(--shell-border-2);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--canvas-fg);
+  transition: background-color 80ms ease, border-color 80ms ease;
+  outline: none;
+  z-index: 100;
+  transform: translate(-50%, -50%);
+}
+
+.graph-collapse-control:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 0;
+}
+
+.graph-collapse-control:hover {
+  background: var(--shell-surface-2);
+  border-color: var(--shell-border);
+}
+
+.graph-collapse-control:active {
+  background: var(--shell-surface);
+}
+
+.graph-collapse-control__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent-primary);
+  color: var(--shell-bg);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.graph-collapse-controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.graph-collapse-controls .graph-collapse-control {
+  pointer-events: auto;
+}
