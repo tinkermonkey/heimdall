@@ -43,6 +43,7 @@ import CardsAndListsTestPage from '@/test-pages/CardsAndListsTestPage'
 import CalendarTestPage from '@/test-pages/CalendarTestPage'
 import KanbanBoardTestPage from '@/test-pages/KanbanBoardTestPage'
 import MapCanvasTestPage from '@/test-pages/MapCanvasTestPage'
+import RadialTreeTestPage from '@/test-pages/RadialTreeTestPage'
 import { CalendarShowcase } from './showcases/CalendarShowcase'
 import { MapCanvasShowcase } from './showcases/MapCanvasShowcase'
 import { LineageRailShowcase } from './showcases/LineageRailShowcase'
@@ -181,6 +182,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   'graph-inspector': GraphInspectorShowcase,
   'graph-edge-inspector': GraphEdgeInspectorShowcase,
   'topology-node': TopologyNodeShowcase,
+  'radial-tree-test': RadialTreeTestPage,
   graph: GraphShowcase,
   // Observability
   'trace-viewer': TraceViewerShowcase,
