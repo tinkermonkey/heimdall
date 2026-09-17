@@ -40,7 +40,7 @@ export const GraphCollapseControl = React.forwardRef<
       (e: React.MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        onToggleCollapse();
+        try { onToggleCollapse(); } catch (err) { console.error('onToggleCollapse failed:', err); }
       },
       [onToggleCollapse],
     );
@@ -55,7 +55,7 @@ export const GraphCollapseControl = React.forwardRef<
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           e.stopPropagation();
-          onToggleCollapse();
+          try { onToggleCollapse(); } catch (err) { console.error('onToggleCollapse failed:', err); }
         }
       },
       [onToggleCollapse],
