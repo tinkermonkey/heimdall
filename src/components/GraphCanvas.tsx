@@ -2577,6 +2577,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   };
                   const selected = node.id === selectedNodeId;
                   const tooltipId = tooltipTarget?.type === 'node' && tooltipTarget.nodeId === node.id ? tooltipTarget.tooltipId : undefined;
+                  const hierarchy = hierarchyMetaFor(node.id);
                   return (
                     <g
                       key={node.id}
@@ -2591,8 +2592,34 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       ]
                         .filter(Boolean)
                         .join(" ")}
+                      tabIndex={hierarchy.hasChildren && hierarchy.onToggleCollapse ? 0 : -1}
+                      role={hierarchy.hasChildren && hierarchy.onToggleCollapse ? "button" : undefined}
+                      aria-expanded={hierarchy.hasChildren && hierarchy.onToggleCollapse ? !hierarchy.collapsed : undefined}
+                      aria-label={hierarchy.hasChildren && hierarchy.onToggleCollapse ? `${node.label} (${hierarchy.collapsed ? 'collapsed' : 'expanded'})` : undefined}
                       onPointerEnter={() => handleNodeHoverStart(node.id)}
                       onPointerLeave={() => handleNodeHoverEndWithDelay(node.id)}
+                      onFocus={() => {
+                        if (hierarchy.hasChildren && hierarchy.onToggleCollapse) {
+                          handleNodeHoverStart(node.id);
+                        }
+                      }}
+                      onBlur={() => {
+                        if (hierarchy.hasChildren && hierarchy.onToggleCollapse) {
+                          handleNodeHoverEndWithDelay(node.id);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Shift' || e.key === 'shift' || e.key === 'ShiftLeft' || e.key === 'ShiftRight') return;
+                        if (e.key === 'Enter' && e.shiftKey && hierarchy.hasChildren && hierarchy.onToggleCollapse) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          try {
+                            hierarchy.onToggleCollapse();
+                          } catch (err) {
+                            console.error('onToggleCollapse failed:', err);
+                          }
+                        }
+                      }}
                       onPointerDown={
                         draggable
                           ? (e) => handleNodePointerDown(e, node)
