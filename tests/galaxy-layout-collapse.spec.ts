@@ -342,4 +342,106 @@ test.describe('integration: Galaxy Layout Collapse/Expand', () => {
       'galaxy-layout-expanded-light.png',
     )
   })
+
+  test('inline collapse toggle has correct aria-expanded and aria-label in expanded state', async ({
+    page,
+  }) => {
+    const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+
+    // In expanded state
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await expect(toggle).toHaveAttribute('aria-label', 'Collapse Organism')
+  })
+
+  test('inline collapse toggle updates aria-expanded and aria-label when collapsed', async ({
+    page,
+  }) => {
+    const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+
+    // Initially expanded
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await expect(toggle).toHaveAttribute('aria-label', 'Collapse Organism')
+
+    // Collapse
+    await toggle.click()
+    await page.waitForTimeout(300)
+
+    // After collapse
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await expect(toggle).toHaveAttribute('aria-label', 'Expand Organism')
+  })
+
+  test('inline hidden badge displays with correct count when collapsed', async ({
+    page,
+  }) => {
+    const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+    const badge = toggle.locator('.graph-node__hidden-badge')
+
+    // Badge should not be visible in expanded state
+    await expect(badge).not.toBeAttached()
+
+    // Collapse
+    await toggle.click()
+    await page.waitForTimeout(300)
+
+    // Badge should now be visible with correct count (10 descendants hidden)
+    await expect(badge).toBeAttached()
+    await expect(badge).toBeVisible()
+    await expect(badge).toHaveText('10')
+  })
+
+  test('inline chevron icon points right when collapsed and down when expanded', async ({
+    page,
+  }) => {
+    const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+    const svg = toggle.locator('svg.graph-node__toggle-icon')
+
+    // Initially expanded — chevron should point down
+    // SVG with down-pointing polyline: points="6 9 12 15 18 9"
+    let polyline = svg.locator('polyline')
+    await expect(polyline).toHaveAttribute('points', '6 9 12 15 18 9')
+
+    // Collapse
+    await toggle.click()
+    await page.waitForTimeout(300)
+
+    // After collapse — chevron should point right
+    // SVG with right-pointing polyline: points="9 6 15 12 9 18"
+    polyline = svg.locator('polyline')
+    await expect(polyline).toHaveAttribute('points', '9 6 15 12 9 18')
+
+    // Expand again
+    await toggle.click()
+    await page.waitForTimeout(300)
+
+    // Back to down-pointing
+    polyline = svg.locator('polyline')
+    await expect(polyline).toHaveAttribute('points', '6 9 12 15 18 9')
+  })
+
+  test('restored features work in dark canvas mode', async ({ page }) => {
+    await applyDarkCanvasMode(page)
+    await page.waitForTimeout(200)
+
+    const toggle = page.locator('[data-testid="graph-node-organism"] .graph-node__collapse-toggle')
+    const badge = toggle.locator('.graph-node__hidden-badge')
+
+    // Verify expanded state
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await expect(toggle).toHaveAttribute('aria-label', 'Collapse Organism')
+
+    // Collapse
+    await toggle.click()
+    await page.waitForTimeout(300)
+
+    // Verify collapsed state with badge
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    await expect(toggle).toHaveAttribute('aria-label', 'Expand Organism')
+    await expect(badge).toHaveText('10')
+
+    // Verify chevron points right when collapsed
+    const svg = toggle.locator('svg.graph-node__toggle-icon')
+    const polyline = svg.locator('polyline')
+    await expect(polyline).toHaveAttribute('points', '9 6 15 12 9 18')
+  })
 })
