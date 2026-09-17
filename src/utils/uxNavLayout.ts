@@ -225,6 +225,39 @@ export function uxNavLayout(
     currentXOffset += treeWidth + trunkSpacing
   }
 
+  // Pass 2c: Orphan views — views with no structural PAGE parent at all
+  // (real, not hypothetical: e.g. a library component referenced only via a
+  // non-structural edge, or — also real — a view with a structural edge to
+  // another view, which Pass 3 below never positions since it only fans a
+  // page's own children: uxNavLayout's page/view model is 2-tier, a view
+  // cannot itself have positioned children). Anything Pass 3 won't reach
+  // was previously never added to the returned position map at all, and the
+  // caller (GraphCanvas) falls back to {x:0,y:0} for any node missing from
+  // it, silently stacking every orphan view (and whatever real page/view
+  // happens to occupy the origin) on top of each other. Give each orphan
+  // view the same trunk-spaced treatment Pass 2b already gives an
+  // independent single-node page tree, appended in the same row after them.
+  //
+  // Must filter to pageIds.has(parentId) exactly like Pass 3 does below —
+  // an earlier version of this filtered nothing, so a view-sourced
+  // structural edge (a real shape: "subview A uses librarysubview B") made
+  // this think B was placed when Pass 3 actually skips that entry entirely,
+  // silently reintroducing the exact {0,0}-stacking bug for exactly the
+  // nodes this pass exists to catch.
+  const placedViewIds = new Set<string>()
+  for (const [parentId, children] of allParentChildren) {
+    if (!pageIds.has(parentId)) continue
+    for (const id of children) {
+      if (viewIds.has(id)) placedViewIds.add(id)
+    }
+  }
+  for (const viewId of viewIds) {
+    if (placedViewIds.has(viewId)) continue
+    const dim = getNodeDim(viewId)
+    result.set(viewId, { x: currentXOffset + dim.width / 2, y: 0 })
+    currentXOffset += dim.width + trunkSpacing
+  }
+
   // Identify views with multiple parents
   // Views with multiple parents will use synthetic IDs "viewId:parentId" to appear under each parent
   const viewParentCount = new Map<string, Set<string>>()

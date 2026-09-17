@@ -256,7 +256,18 @@ test.describe("uxNavLayout", () => {
     expect(spacingLarge).toBeGreaterThan(spacingSmall);
   });
 
-  test("ignores non-page nodes not in structural hierarchy", () => {
+  // Was "ignores non-page nodes not in structural hierarchy", asserting the
+  // opposite of what's below — that an orphan view should NOT be
+  // positioned. That was the bug: GraphCanvas falls back to {x:0,y:0} for
+  // any node uxNavLayout doesn't return a position for, so leaving orphan
+  // views unpositioned meant every one of them (plus whatever real page/view
+  // legitimately sits at the origin) silently stacked exactly on top of each
+  // other. Confirmed against real documentation_robotics_viewer data: ~25 of
+  // 41 nodes were views connected only via non-structural relationships
+  // (uses/renders/specializes) and all collapsed onto one point. A view is
+  // still a real node the caller asked to render; not positioning it at all
+  // is worse than positioning it off to the side.
+  test("positions a page-disconnected view instead of leaving it unpositioned", () => {
     const nodes = [createNode("page1"), createNode("orphan_view")];
     const edges: HierarchyEdge[] = [];
     const dims = createDims(["page1", "orphan_view"]);
@@ -265,10 +276,67 @@ test.describe("uxNavLayout", () => {
       n.id.includes("page"),
     );
 
-    // page1 should be positioned
     expect(positions.has("page1")).toBe(true);
-    // Orphan view not connected to any page should not be positioned
-    expect(positions.has("orphan_view")).toBe(false);
+    expect(positions.has("orphan_view")).toBe(true);
+
+    // Must not land on top of page1 (or anything else) — the whole point.
+    const pagePos = positions.get("page1")!;
+    const orphanPos = positions.get("orphan_view")!;
+    expect(Math.abs(orphanPos.x - pagePos.x)).toBeGreaterThan(0);
+  });
+
+  test("two page-disconnected views do not overlap each other", () => {
+    const nodes = [
+      createNode("page1"),
+      createNode("orphan_view_a"),
+      createNode("orphan_view_b"),
+    ];
+    const edges: HierarchyEdge[] = [];
+    const dims = createDims(["page1", "orphan_view_a", "orphan_view_b"]);
+
+    const positions = uxNavLayout(nodes, edges, dims, (n) =>
+      n.id.includes("page"),
+    );
+
+    const a = positions.get("orphan_view_a")!;
+    const b = positions.get("orphan_view_b")!;
+    expect(a).toBeTruthy();
+    expect(b).toBeTruthy();
+    expect(Math.abs(a.x - b.x)).toBeGreaterThan(0);
+  });
+
+  // REGRESSION GUARD — a real shape found in documentation_robotics_viewer
+  // data: a structural edge sourced from a VIEW, not a page (e.g. "subview A
+  // uses librarysubview B"). Pass 3 only fans a page's own children —
+  // uxNavLayout's page/view model is 2-tier, a view can't itself have
+  // positioned children — so it silently skips this edge entirely. An
+  // earlier version of the orphan-view fix above didn't account for this: it
+  // scanned allParentChildren without checking whether the parent was a
+  // page, so it wrongly concluded the target view was "placed" when Pass 3
+  // actually never touches it, leaving it with no position at all and
+  // reintroducing the exact {0,0}-stacking bug for exactly this shape.
+  test("view targeted only by another view's structural edge still gets a position", () => {
+    const nodes = [
+      createNode("page1"),
+      createNode("view1"),
+      createNode("orphanedByViewEdge"),
+    ];
+    const edges: HierarchyEdge[] = [
+      { source: "page1", target: "view1", structural: true },
+      // view1 -> orphanedByViewEdge: source is a VIEW, not a page.
+      { source: "view1", target: "orphanedByViewEdge", structural: true },
+    ];
+    const dims = createDims(["page1", "view1", "orphanedByViewEdge"]);
+
+    const positions = uxNavLayout(nodes, edges, dims, (n) => n.id === "page1");
+
+    expect(positions.has("page1")).toBe(true);
+    expect(positions.has("view1")).toBe(true);
+    expect(positions.has("orphanedByViewEdge")).toBe(true);
+
+    const view1Pos = positions.get("view1")!;
+    const orphanPos = positions.get("orphanedByViewEdge")!;
+    expect(Math.abs(orphanPos.x - view1Pos.x)).toBeGreaterThan(0);
   });
 
   test("handles mixed tree structures with multiple levels and views", () => {
