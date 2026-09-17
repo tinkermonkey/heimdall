@@ -2592,24 +2592,25 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       ]
                         .filter(Boolean)
                         .join(" ")}
-                      tabIndex={hierarchy.hasChildren && hierarchy.onToggleCollapse ? 0 : -1}
-                      role={hierarchy.hasChildren && hierarchy.onToggleCollapse ? "button" : undefined}
-                      aria-expanded={hierarchy.hasChildren && hierarchy.onToggleCollapse ? !hierarchy.collapsed : undefined}
-                      aria-label={hierarchy.hasChildren && hierarchy.onToggleCollapse ? `${node.label} (${hierarchy.collapsed ? 'collapsed' : 'expanded'})` : undefined}
+                      tabIndex={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? 0 : -1}
+                      role={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? "group" : undefined}
+                      aria-expanded={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? !hierarchy.collapsed : undefined}
+                      aria-label={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? node.label : undefined}
                       onPointerEnter={() => handleNodeHoverStart(node.id)}
                       onPointerLeave={() => handleNodeHoverEndWithDelay(node.id)}
-                      onFocus={() => {
+                      onFocus={renderNode ? () => {
                         if (hierarchy.hasChildren && hierarchy.onToggleCollapse) {
                           handleNodeHoverStart(node.id);
                         }
-                      }}
-                      onBlur={() => {
+                      } : undefined}
+                      onBlur={renderNode ? (e) => {
                         if (hierarchy.hasChildren && hierarchy.onToggleCollapse) {
-                          handleNodeHoverEndWithDelay(node.id);
+                          if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                            handleNodeHoverEndWithDelay(node.id);
+                          }
                         }
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Shift' || e.key === 'shift' || e.key === 'ShiftLeft' || e.key === 'ShiftRight') return;
+                      } : undefined}
+                      onKeyDown={renderNode ? (e) => {
                         if (e.key === 'Enter' && e.shiftKey && hierarchy.hasChildren && hierarchy.onToggleCollapse) {
                           e.preventDefault();
                           e.stopPropagation();
@@ -2619,7 +2620,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                             console.error('onToggleCollapse failed:', err);
                           }
                         }
-                      }}
+                      } : undefined}
                       onPointerDown={
                         draggable
                           ? (e) => handleNodePointerDown(e, node)
