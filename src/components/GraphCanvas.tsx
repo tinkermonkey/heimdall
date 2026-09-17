@@ -589,11 +589,11 @@ export interface GraphCanvasProps extends Omit<
    */
   nodeMargin?: number;
   /**
-   * layout="galaxy" | "force-clustered" only, no effect otherwise. Shows a `.graph-cluster-boundary`
+   * layout="galaxy" | "force-clustered" | "radial-tree" only, no effect otherwise. Shows a `.graph-cluster-boundary`
    * circle around each top-level group the engine produced — galaxy's independent root subtrees,
-   * or force-clustered's top-level Louvain clusters — same visual language either way, so a
-   * caller can switch between the two engines without the "what groups with what" affordance
-   * disappearing. Default true (matches force-clustered's behavior before this prop existed).
+   * force-clustered's top-level Louvain clusters, or radial-tree's trunk root points — same visual
+   * language either way, so a caller can switch between the engines without the "what groups with
+   * what" affordance disappearing. Default true (matches force-clustered's behavior before this prop existed).
    */
   showClusterBoundaries?: boolean;
   /**
@@ -603,10 +603,11 @@ export interface GraphCanvasProps extends Omit<
    */
   showHierarchyRings?: boolean;
   /**
-   * Classifies an edge as structural (defines the galaxy layout's parent/child hierarchy,
-   * source = parent) vs. relational (rendered but layout-irrelevant). Only meaningful with
-   * layout="galaxy". When omitted, every edge is treated as structural — the same as before
-   * this prop existed.
+   * Classifies an edge as structural (defines the parent/child hierarchy, source = parent) vs.
+   * relational (rendered but layout-irrelevant). Meaningful with layout="galaxy" and "radial-tree" —
+   * both use structural edges to compute the hierarchy; galaxy builds it for orbit placement and
+   * radial-tree builds it for hierarchy depth and trunk construction via buildStructuralForest.
+   * When omitted, every edge is treated as structural — the same as before this prop existed.
    *
    * Also controls edge visibility: with this prop set, a non-structural edge (line, marker, and
    * label alike) doesn't render at all unless it touches the hovered or selected node, or
