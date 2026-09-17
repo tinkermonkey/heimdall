@@ -35,6 +35,8 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
       selected = false,
       onSelect,
       hasChildren = false,
+      collapsed = false,
+      hiddenDescendantCount = 0,
       onToggleCollapse,
       onPopoverOpen,
       popoverOpen = false,
@@ -106,11 +108,19 @@ export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
               }
             }}
             type="button"
-            aria-label={`Toggle children for ${label}`}
+            aria-label={collapsed ? `Expand ${label}` : `Collapse ${label}`}
+            aria-expanded={!collapsed}
           >
             <svg className="graph-node__toggle-icon" viewBox="0 0 24 24" width="12" height="12">
-              <polyline points="6 9 12 15 18 9" strokeWidth="1.75" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              {collapsed ? (
+                <polyline points="9 6 15 12 9 18" strokeWidth="1.75" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              ) : (
+                <polyline points="6 9 12 15 18 9" strokeWidth="1.75" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              )}
             </svg>
+            {collapsed && hiddenDescendantCount > 0 && (
+              <span className="graph-node__hidden-badge">{hiddenDescendantCount}</span>
+            )}
           </button>
         )}
       </div>

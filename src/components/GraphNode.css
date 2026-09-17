@@ -123,6 +123,7 @@ body.dark-canvas .graph-node__kind {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   width: 16px;
   height: 16px;
   padding: 0;
@@ -142,5 +143,23 @@ body.dark-canvas .graph-node__kind {
 
 .graph-node__collapse-toggle:focus-visible {
   box-shadow: var(--focus-ring);
+}
+
+.graph-node__hidden-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  font-size: 9px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: rgb(var(--accent-primary));
+  color: rgb(var(--shell-bg));
+  font-family: var(--font-mono, monospace);
 }
 
