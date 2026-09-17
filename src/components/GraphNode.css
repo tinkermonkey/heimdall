@@ -150,7 +150,7 @@ body.dark-canvas .graph-node__kind {
   align-items: center;
   justify-content: center;
   position: absolute;
-  bottom: -2px;
+  bottom: 0;
   right: -2px;
   min-width: 16px;
   height: 16px;
