@@ -39,6 +39,7 @@ import DiffViewerTestPage from './test-pages/DiffViewerTestPage'
 import VersionTimelineTestPage from './test-pages/VersionTimelineTestPage'
 import TraceViewerTestPage from './test-pages/TraceViewerTestPage'
 import UxNavigationTestPage from './test-pages/UxNavigationTestPage'
+import RadialTreeTestPage from './test-pages/RadialTreeTestPage'
 
 export default function App() {
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([])
@@ -184,6 +185,10 @@ export default function App() {
 
   if (exampleParam === 'ux-navigation') {
     return <UxNavigationTestPage />
+  }
+
+  if (exampleParam === 'radial-tree-test') {
+    return <RadialTreeTestPage />
   }
 
   if (testParam === 'foundation') {

@@ -122,50 +122,44 @@ body.dark-canvas .graph-node__kind {
 .graph-node__collapse-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  margin-left: 6px;
-  padding: 1px 3px;
-  border: 1px solid rgb(var(--canvas-border));
-  border-radius: 3px;
-  background: rgb(var(--canvas-bg-2));
+  justify-content: center;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin-left: 4px;
+  border: none;
+  background: transparent;
   color: rgb(var(--canvas-fg-2));
-  flex: none;
   cursor: pointer;
-  transition:
-    background 0.1s,
-    border-color 0.1s;
+  flex: none;
+  outline: none;
 }
 
 .graph-node__collapse-toggle:hover {
-  background: rgb(var(--canvas-border));
-  border-color: rgb(var(--canvas-border-strong));
+  background: rgb(var(--canvas-bg-2));
+  color: rgb(var(--accent-primary));
 }
 
 .graph-node__collapse-toggle:focus-visible {
-  outline: none;
   box-shadow: var(--focus-ring);
 }
 
 .graph-node__hidden-badge {
-  font-family: var(--font-mono, monospace);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
   font-size: 9px;
   font-weight: 600;
-  line-height: 1;
-  color: rgb(var(--accent-primary-deep));
+  border-radius: 8px;
+  background: rgb(var(--accent-primary));
+  color: rgb(var(--shell-bg));
+  font-family: var(--font-mono, monospace);
 }
 
-body.dark-canvas .graph-node__collapse-toggle {
-  background: rgb(var(--canvas-bg-2));
-  border-color: rgb(var(--canvas-border));
-  color: rgb(var(--canvas-fg-2));
-}
-
-/* Same specificity issue as the node's own hover above. */
-body.dark-canvas .graph-node__collapse-toggle:hover {
-  background: rgb(var(--canvas-border));
-  border-color: rgb(var(--canvas-border-strong));
-}
-
-body.dark-canvas .graph-node__hidden-badge {
-  color: rgb(var(--accent-primary));
-}

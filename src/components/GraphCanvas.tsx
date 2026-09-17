@@ -28,6 +28,7 @@ import {
   type GalaxyLayoutNode,
 } from "../utils/galaxyLayout";
 import { uxNavLayout } from "../utils/uxNavLayout";
+import { radialTreeLayout, type RingGeometry } from "../utils/radialTreeLayout";
 import {
   buildStructuralForest,
   structuralDescendants,
@@ -40,6 +41,7 @@ import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
 import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
 import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
+import { GraphCollapseControl } from "./GraphCollapseControl";
 import { Tooltip } from "./Tooltip";
 import { Popover } from "./Popover";
 import "./GraphCanvas.css";
@@ -564,12 +566,14 @@ export interface GraphCanvasProps extends Omit<
    *  nested bubbles by graph structure (see clusteredForceLayout in utils/graphLayout) before
    *  running the same spring simulation within each bubble — larger canvas, less-even
    *  distribution, by design. Nodes with x and y are pinned under any of these layouts.
-   *  'galaxy' and 'force-clustered' both draw a boundary circle per top-level group (see
-   *  showClusterBoundaries) — one per root subtree for 'galaxy', one per top-level Louvain
-   *  cluster for 'force-clustered'. 'ux-navigation' arranges page nodes as independent
-   *  top-to-bottom trees with view nodes positioned as horizontal fans attached to their
-   *  parent pages (see isPageNode). */
-  layout?: "manual" | "force" | "galaxy" | "force-clustered" | "ux-navigation";
+   *  'galaxy', 'force-clustered', and 'radial-tree' all draw boundary circles per top-level group
+   *  (see showClusterBoundaries) — one per root subtree for 'galaxy' and 'radial-tree', one per
+   *  top-level Louvain cluster for 'force-clustered'. 'ux-navigation' arranges page nodes as
+   *  independent top-to-bottom trees with view nodes positioned as horizontal fans attached to
+   *  their parent pages (see isPageNode). 'radial-tree' arranges each structural tree as a
+   *  centered radial hierarchy with descendants on depth rings, and multiple trunks packed without
+   *  overlap. */
+  layout?: "manual" | "force" | "galaxy" | "force-clustered" | "ux-navigation" | "radial-tree";
   /**
    * layout="force" | "galaxy". Extra breathing room kept clear around each node's own footprint,
    * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
@@ -585,18 +589,25 @@ export interface GraphCanvasProps extends Omit<
    */
   nodeMargin?: number;
   /**
-   * layout="galaxy" | "force-clustered" only, no effect otherwise. Shows a `.graph-cluster-boundary`
+   * layout="galaxy" | "force-clustered" | "radial-tree" only, no effect otherwise. Shows a `.graph-cluster-boundary`
    * circle around each top-level group the engine produced — galaxy's independent root subtrees,
-   * or force-clustered's top-level Louvain clusters — same visual language either way, so a
-   * caller can switch between the two engines without the "what groups with what" affordance
-   * disappearing. Default true (matches force-clustered's behavior before this prop existed).
+   * force-clustered's top-level Louvain clusters, or radial-tree's trunk root points — same visual
+   * language either way, so a caller can switch between the engines without the "what groups with
+   * what" affordance disappearing. Default true (matches force-clustered's behavior before this prop existed).
    */
   showClusterBoundaries?: boolean;
   /**
-   * Classifies an edge as structural (defines the galaxy layout's parent/child hierarchy,
-   * source = parent) vs. relational (rendered but layout-irrelevant). Only meaningful with
-   * layout="galaxy". When omitted, every edge is treated as structural — the same as before
-   * this prop existed.
+   * layout="radial-tree" only, no effect otherwise. Shows concentric rings marking each occupied
+   * hierarchy depth level per trunk, centered on that trunk's layout origin. Purely visual — does
+   * not affect node placement, edge routing, or interaction. Default false.
+   */
+  showHierarchyRings?: boolean;
+  /**
+   * Classifies an edge as structural (defines the parent/child hierarchy, source = parent) vs.
+   * relational (rendered but layout-irrelevant). Meaningful with layout="galaxy" and "radial-tree" —
+   * both use structural edges to compute the hierarchy; galaxy builds it for orbit placement and
+   * radial-tree builds it for hierarchy depth and trunk construction via buildStructuralForest.
+   * When omitted, every edge is treated as structural — the same as before this prop existed.
    *
    * Also controls edge visibility: with this prop set, a non-structural edge (line, marker, and
    * label alike) doesn't render at all unless it touches the hovered or selected node, or
@@ -727,6 +738,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       layout = "manual",
       nodeMargin,
       showClusterBoundaries = true,
+      showHierarchyRings = false,
       isStructuralEdge,
       structuralEdgeCurvature = DEFAULT_QUADRATIC_CURVATURE,
       isPageNode,
@@ -1004,10 +1016,20 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // simply don't resolve a rect (see getNodeRect below) and render nothing — no separate
     // edge filtering needed.
     const visibleNodes = useMemo(
-      () =>
-        hiddenIds.size === 0
-          ? nodes
-          : nodes.filter((n) => !hiddenIds.has(n.id)),
+      () => {
+        // Filter out nodes with duplicate IDs, keeping only the first occurrence
+        const seenIds = new Set<string>();
+        const result: GraphNodeData[] = [];
+        for (const node of nodes) {
+          if (!seenIds.has(node.id)) {
+            seenIds.add(node.id);
+            if (!hiddenIds.has(node.id)) {
+              result.push(node);
+            }
+          }
+        }
+        return result;
+      },
       [nodes, hiddenIds],
     );
 
@@ -1030,6 +1052,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const [clusterBoundaries, setClusterBoundaries] = useState<
       Map<string, { x: number; y: number; r: number }>
     >(new Map());
+
+    // Only populated when layout='radial-tree' — per-trunk hierarchy rings,
+    // one per occupied depth level, for the optional ring-visualization layer.
+    const [ringGeometry, setRingGeometry] = useState<RingGeometry[]>([]);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -1141,13 +1167,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDims(next);
     }, [visibleNodes, renderNode]);
 
-    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered' | 'ux-navigation')
+    // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered' | 'ux-navigation' | 'radial-tree')
     useEffect(() => {
       if (
         (layout !== "force" &&
           layout !== "galaxy" &&
           layout !== "force-clustered" &&
-          layout !== "ux-navigation") ||
+          layout !== "ux-navigation" &&
+          layout !== "radial-tree") ||
         dims.size === 0
       )
         return;
@@ -1177,6 +1204,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           forceLayout(layoutNodes, layoutEdges, { nodeMargin }),
         );
         setClusterBoundaries(new Map());
+        setRingGeometry([]);
       } else if (layout === "force-clustered") {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1186,6 +1214,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin });
         setComputedPositions(positions);
         setClusterBoundaries(boundaries);
+        setRingGeometry([]);
       } else if (layout === "ux-navigation") {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1204,6 +1233,22 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         );
         setComputedPositions(positions);
         setClusterBoundaries(new Map());
+        setRingGeometry([]);
+      } else if (layout === "radial-tree") {
+        const layoutEdges = (edges ?? []).map((e) => ({
+          source: e.sourceId,
+          target: e.targetId,
+          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
+        }));
+        const { positions, trunkBoundaries, ringGeometry: rings } = radialTreeLayout(
+          layoutNodes,
+          layoutEdges,
+          dims,
+          forest,
+        );
+        setComputedPositions(positions);
+        setClusterBoundaries(trunkBoundaries);
+        setRingGeometry(rings);
       } else {
         const layoutEdges = (edges ?? []).map((e) => ({
           source: e.sourceId,
@@ -1237,6 +1282,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             true,
           ),
         );
+        setRingGeometry([]);
       }
     }, [
       visibleNodes,
@@ -1499,7 +1545,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (didCenterRef.current) return;
       if (!containerSize || dims.size === 0 || visibleNodes.length === 0)
         return;
-      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered'/'ux-navigation'
+      // 'manual' has no engine layout to wait on. 'force'/'galaxy'/'force-clustered'/'ux-navigation'/'radial-tree'
       // all compute positions asynchronously (see the engine-layout effect above) — without waiting
       // for them here too, this could run with computedPositions still empty, every node falling
       // back to {x:0,y:0}, and fit/center on that degenerate single-point box instead of the real layout.
@@ -1507,7 +1553,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         (layout === "force" ||
           layout === "galaxy" ||
           layout === "force-clustered" ||
-          layout === "ux-navigation") &&
+          layout === "ux-navigation" ||
+          layout === "radial-tree") &&
         computedPositions.size === 0
       )
         return;
@@ -2450,6 +2497,20 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                 </g>
               )}
 
+              {showHierarchyRings && ringGeometry.length > 0 && (
+                <g className="graph-hierarchy-rings" aria-hidden="true">
+                  {ringGeometry.map((ring, idx) => (
+                    <circle
+                      key={`${ring.trunkId}-depth-${ring.depth}-${idx}`}
+                      className="graph-hierarchy-ring"
+                      cx={ring.cx}
+                      cy={ring.cy}
+                      r={ring.r}
+                    />
+                  ))}
+                </g>
+              )}
+
               <g className="graph-edges">
                 {edges?.map((edge) => {
                   // Only isStructuralEdge callers opt into hiding — without it every edge
@@ -2517,6 +2578,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   };
                   const selected = node.id === selectedNodeId;
                   const tooltipId = tooltipTarget?.type === 'node' && tooltipTarget.nodeId === node.id ? tooltipTarget.tooltipId : undefined;
+                  const hierarchy = hierarchyMetaFor(node.id);
                   return (
                     <g
                       key={node.id}
@@ -2531,8 +2593,35 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       ]
                         .filter(Boolean)
                         .join(" ")}
+                      tabIndex={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? 0 : -1}
+                      role={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? "group" : undefined}
+                      aria-expanded={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? !hierarchy.collapsed : undefined}
+                      aria-label={renderNode && hierarchy.hasChildren && hierarchy.onToggleCollapse ? node.label : undefined}
                       onPointerEnter={() => handleNodeHoverStart(node.id)}
                       onPointerLeave={() => handleNodeHoverEndWithDelay(node.id)}
+                      onFocus={renderNode ? () => {
+                        if (hierarchy.hasChildren && hierarchy.onToggleCollapse) {
+                          handleNodeHoverStart(node.id);
+                        }
+                      } : undefined}
+                      onBlur={renderNode ? (e) => {
+                        if (hierarchy.hasChildren && hierarchy.onToggleCollapse) {
+                          if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                            handleNodeHoverEndWithDelay(node.id);
+                          }
+                        }
+                      } : undefined}
+                      onKeyDown={renderNode ? (e) => {
+                        if (e.key === 'Enter' && e.shiftKey && hierarchy.hasChildren && hierarchy.onToggleCollapse) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          try {
+                            hierarchy.onToggleCollapse();
+                          } catch (err) {
+                            console.error('onToggleCollapse failed:', err);
+                          }
+                        }
+                      } : undefined}
                       onPointerDown={
                         draggable
                           ? (e) => handleNodePointerDown(e, node)
@@ -2559,6 +2648,30 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   );
                 })}
               </g>
+
+              {hoveredNodeId && (
+                <g className="graph-collapse-controls">
+                  {(() => {
+                    const nodeRect = getNodeRect(hoveredNodeId);
+                    if (!nodeRect) return null;
+                    const hierarchy = hierarchyMetaFor(hoveredNodeId);
+                    if (!hierarchy.hasChildren || !hierarchy.onToggleCollapse) return null;
+                    return (
+                      <GraphCollapseControl
+                        key={hoveredNodeId}
+                        nodeId={hoveredNodeId}
+                        label={visibleNodes.find(n => n.id === hoveredNodeId)?.label || hoveredNodeId}
+                        collapsed={hierarchy.collapsed}
+                        hiddenDescendantCount={hierarchy.hiddenDescendantCount}
+                        onToggleCollapse={hierarchy.onToggleCollapse}
+                        x={nodeRect.x}
+                        y={nodeRect.y}
+                        nodeWidth={nodeRect.width}
+                      />
+                    );
+                  })()}
+                </g>
+              )}
             </g>
           </svg>
 
@@ -2618,6 +2731,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               </div>
             </div>
           )}
+
         </GraphCanvasContext.Provider>
       </div>
     );

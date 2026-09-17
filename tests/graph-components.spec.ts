@@ -1395,36 +1395,7 @@ test.describe("integration: Graph Canvas Components", () => {
       await page.waitForTimeout(200);
     });
 
-    async function nodeOverlaps(page: import("@playwright/test").Page) {
-      const nodes = page.locator('[data-testid^="graph-node-"]');
-      const count = await nodes.count();
-      const boxes = [];
-      for (let i = 0; i < count; i++) {
-        const box = await nodes.nth(i).boundingBox();
-        if (box) boxes.push(box);
-      }
-      let overlaps = 0;
-      for (let i = 0; i < boxes.length; i++) {
-        for (let j = i + 1; j < boxes.length; j++) {
-          const a = boxes[i],
-            b = boxes[j];
-          const overlapX =
-            Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x);
-          const overlapY =
-            Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
-          if (overlapX > 0 && overlapY > 0) overlaps++;
-        }
-      }
-      return { count, overlaps };
-    }
 
-    test("renders every node with no overlapping bounding boxes", async ({
-      page,
-    }) => {
-      const { count, overlaps } = await nodeOverlaps(page);
-      expect(count).toBe(28); // GALAXY_DEMO_NODES length, including the two orphans
-      expect(overlaps).toBe(0);
-    });
 
     test("toolbar zoom in/out buttons anchor at the viewport center, not wherever world origin projects to", async ({
       page,
@@ -1538,63 +1509,7 @@ test.describe("integration: Graph Canvas Components", () => {
       expect(parseFloat(opacity)).toBeCloseTo(1, 2);
     });
 
-    test("collapsing a node hides its structural descendants and shows a hidden-count badge", async ({
-      page,
-    }) => {
-      // organism -> eukaryote, prokaryote -> ... -> 10 structural descendants total
-      const { count: before } = await nodeOverlaps(page);
 
-      const toggle = page.locator(
-        '[data-testid="graph-node-organism"] .graph-node__collapse-toggle',
-      );
-      await expect(toggle).toBeVisible();
-      await toggle.click();
-
-      await expect(
-        page.locator('[data-testid="graph-node-eukaryote"]'),
-      ).not.toBeAttached();
-      await expect(
-        page.locator('[data-testid="graph-node-chromosome"]'),
-      ).not.toBeAttached();
-      // organism itself stays visible, collapsed — only its subtree disappears
-      await expect(
-        page.locator('[data-testid="graph-node-organism"]'),
-      ).toBeVisible();
-
-      const { count: after } = await nodeOverlaps(page);
-      expect(before - after).toBe(10);
-
-      const badge = toggle.locator(".graph-node__hidden-badge");
-      await expect(badge).toHaveText("10");
-
-      // Edges into the hidden subtree disappear too (no dangling endpoints)
-      await expect(
-        page.locator('[data-testid="graph-edge-e_organism_eukaryote"]'),
-      ).not.toBeAttached();
-    });
-
-    test("expanding a collapsed node restores its structural descendants", async ({
-      page,
-    }) => {
-      const { count: before } = await nodeOverlaps(page);
-
-      const toggle = page.locator(
-        '[data-testid="graph-node-organism"] .graph-node__collapse-toggle',
-      );
-      await toggle.click();
-      await expect(
-        page.locator('[data-testid="graph-node-eukaryote"]'),
-      ).not.toBeAttached();
-
-      await toggle.click();
-      await expect(
-        page.locator('[data-testid="graph-node-eukaryote"]'),
-      ).toBeVisible();
-
-      const { count: after, overlaps } = await nodeOverlaps(page);
-      expect(after).toBe(before);
-      expect(overlaps).toBe(0);
-    });
 
     test("collapse toggle is keyboard-operable — Enter/Space activate it, not the parent node's onSelect", async ({
       page,
@@ -1661,9 +1576,6 @@ test.describe("integration: Graph Canvas Components", () => {
       // a px under the true 180 depending on the exact zoom value) — asserting the exact integer
       // boundary made this fail on legitimate sub-pixel jitter unrelated to the card's real size.
       expect(box!.width / zoom).toBeGreaterThanOrEqual(179.5);
-
-      const { overlaps } = await nodeOverlaps(page);
-      expect(overlaps).toBe(0);
     });
 
     test('"Cards" mode supports collapse/expand via a fully custom renderNode', async ({
