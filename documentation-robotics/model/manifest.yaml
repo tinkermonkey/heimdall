@@ -1,0 +1,76 @@
+version: 0.1.0
+schema: documentation-robotics-v1
+cli_version: 0.2.0
+spec_version: 0.10.0
+created: 2026-09-18T14:21:24.388Z
+updated: 2026-09-18T14:21:24.390Z
+project:
+  name: heimdall-ux
+  version: 0.1.0
+documentation: .dr/README.md
+layers:
+  motivation:
+    order: 1
+    name: Motivation
+    path: documentation-robotics/model/01_motivation/
+    enabled: true
+  business:
+    order: 2
+    name: Business
+    path: documentation-robotics/model/02_business/
+    enabled: true
+  product:
+    order: 3
+    name: Product
+    path: documentation-robotics/model/03_product/
+    enabled: true
+  security:
+    order: 4
+    name: Security
+    path: documentation-robotics/model/04_security/
+    enabled: true
+  application:
+    order: 5
+    name: Application
+    path: documentation-robotics/model/05_application/
+    enabled: true
+  technology:
+    order: 6
+    name: Technology
+    path: documentation-robotics/model/06_technology/
+    enabled: true
+  api:
+    order: 7
+    name: Api
+    path: documentation-robotics/model/07_api/
+    enabled: true
+  data-model:
+    order: 8
+    name: Data model
+    path: documentation-robotics/model/08_data-model/
+    enabled: true
+  data-store:
+    order: 9
+    name: Data store
+    path: documentation-robotics/model/09_data-store/
+    enabled: true
+  ux:
+    order: 10
+    name: Ux
+    path: documentation-robotics/model/10_ux/
+    enabled: true
+  navigation:
+    order: 11
+    name: Navigation
+    path: documentation-robotics/model/11_navigation/
+    enabled: true
+  apm:
+    order: 12
+    name: Apm
+    path: documentation-robotics/model/12_apm/
+    enabled: true
+  testing:
+    order: 13
+    name: Testing
+    path: documentation-robotics/model/13_testing/
+    enabled: true
