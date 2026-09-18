@@ -1,0 +1,445 @@
+- type: add
+  elementId: data-model.schemadefinition.graph-node-data
+  layerName: data-model
+  after:
+    id: 0cb54e99-77c8-4a0e-a316-8a2f9330df08
+    path: data-model.schemadefinition.graph-node-data
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: GraphNodeData
+    description: "Public data shape for a graph node passed to GraphCanvas: id,
+      label, optional kind/domainColor, optional explicit x/y (pins the node
+      under any engine layout)."
+    attributes:
+      title: GraphNodeData
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: GraphNodeData
+    metadata:
+      created_at: 2026-09-18T14:34:05.092Z
+      updated_at: 2026-09-18T14:34:05.092Z
+      version: 1
+  timestamp: 2026-09-18T14:34:05.114Z
+  sequenceNumber: 0
+- type: add
+  elementId: data-model.schemadefinition.graph-edge-data-shape
+  layerName: data-model
+  after:
+    id: d5069e0e-9f76-4b87-a97a-9852d788a6fd
+    path: data-model.schemadefinition.graph-edge-data-shape
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: GraphEdge (data shape)
+    description: "Public data shape for a graph edge: id/sourceId/targetId plus
+      optional label, variant, weight (0-100, mapped to stroke width), opacity,
+      strokeDash, per-endpoint anchor, and curvature."
+    attributes:
+      title: GraphEdge
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: GraphEdge
+    metadata:
+      created_at: 2026-09-18T14:34:05.365Z
+      updated_at: 2026-09-18T14:34:05.365Z
+      version: 1
+  timestamp: 2026-09-18T14:34:05.388Z
+  sequenceNumber: 1
+- type: add
+  elementId: data-model.schemadefinition.layout-node
+  layerName: data-model
+  after:
+    id: 2dafc460-9308-486d-9b23-c29d7e4c74e6
+    path: data-model.schemadefinition.layout-node
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: LayoutNode
+    description: "Internal layout-engine node shape shared by
+      forceLayout/clusteredForceLayout/separationPass: id, x/y, width/height,
+      optional pinned, gravityTarget, gravityStrength."
+    attributes:
+      title: LayoutNode
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: LayoutNode
+    metadata:
+      created_at: 2026-09-18T14:34:05.648Z
+      updated_at: 2026-09-18T14:34:05.648Z
+      version: 1
+  timestamp: 2026-09-18T14:34:05.673Z
+  sequenceNumber: 2
+- type: add
+  elementId: data-model.schemadefinition.layout-edge
+  layerName: data-model
+  after:
+    id: 00b0c584-3a2e-4d21-a995-a5566183100c
+    path: data-model.schemadefinition.layout-edge
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: LayoutEdge
+    description: "Internal layout-engine edge shape: source/target node ids, used by
+      forceLayout's spring-force pass."
+    attributes:
+      title: LayoutEdge
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: LayoutEdge
+    metadata:
+      created_at: 2026-09-18T14:34:05.935Z
+      updated_at: 2026-09-18T14:34:05.935Z
+      version: 1
+  timestamp: 2026-09-18T14:34:05.960Z
+  sequenceNumber: 3
+- type: add
+  elementId: data-model.schemadefinition.force-layout-options
+  layerName: data-model
+  after:
+    id: 2217cefa-cd93-4227-9b77-d8b02cd2e507
+    path: data-model.schemadefinition.force-layout-options
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: ForceLayoutOptions
+    description: "Tuning parameters for forceLayout: iterations,
+      springLength/Strength, repulsion, damping, centerStrength,
+      collisionStrength, nodeMargin."
+    attributes:
+      title: ForceLayoutOptions
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: ForceLayoutOptions
+    metadata:
+      created_at: 2026-09-18T14:34:06.221Z
+      updated_at: 2026-09-18T14:34:06.221Z
+      version: 1
+  timestamp: 2026-09-18T14:34:06.246Z
+  sequenceNumber: 4
+- type: add
+  elementId: data-model.schemadefinition.clustered-layout-options
+  layerName: data-model
+  after:
+    id: f36d928b-ee2c-48b5-98b2-4551222b0e3c
+    path: data-model.schemadefinition.clustered-layout-options
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: ClusteredLayoutOptions
+    description: Extends ForceLayoutOptions with clusterPadding and macro-pass
+      overrides for clusteredForceLayout's cluster-to-cluster force pass.
+    attributes:
+      title: ClusteredLayoutOptions
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: ClusteredLayoutOptions
+    metadata:
+      created_at: 2026-09-18T14:34:06.511Z
+      updated_at: 2026-09-18T14:34:06.511Z
+      version: 1
+  timestamp: 2026-09-18T14:34:06.537Z
+  sequenceNumber: 5
+- type: add
+  elementId: data-model.schemadefinition.clustered-layout-result
+  layerName: data-model
+  after:
+    id: 39dc2d32-1fb0-4b1f-943c-111db9ca4931
+    path: data-model.schemadefinition.clustered-layout-result
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: ClusteredLayoutResult
+    description: "Return shape of clusteredForceLayout: final node positions plus an
+      approximate bounding circle per top-level Louvain cluster."
+    attributes:
+      title: ClusteredLayoutResult
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: ClusteredLayoutResult
+    metadata:
+      created_at: 2026-09-18T14:34:06.813Z
+      updated_at: 2026-09-18T14:34:06.813Z
+      version: 1
+  timestamp: 2026-09-18T14:34:06.839Z
+  sequenceNumber: 6
+- type: add
+  elementId: data-model.schemadefinition.galaxy-layout-node
+  layerName: data-model
+  after:
+    id: a19eb0eb-1ecb-4308-9812-2debb0405e43
+    path: data-model.schemadefinition.galaxy-layout-node
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: GalaxyLayoutNode
+    description: "Node shape for galaxyLayout/galaxySimulationStep: id,
+      width/height, optional explicit x/y and pinned (cascades to the whole
+      structural subtree)."
+    attributes:
+      title: GalaxyLayoutNode
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/galaxyLayout.ts
+          symbol: GalaxyLayoutNode
+    metadata:
+      created_at: 2026-09-18T14:34:07.125Z
+      updated_at: 2026-09-18T14:34:07.125Z
+      version: 1
+  timestamp: 2026-09-18T14:34:07.155Z
+  sequenceNumber: 7
+- type: add
+  elementId: data-model.schemadefinition.galaxy-layout-edge
+  layerName: data-model
+  after:
+    id: 4576160a-835a-43dc-baf5-f6f9e3ba64d8
+    path: data-model.schemadefinition.galaxy-layout-edge
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: GalaxyLayoutEdge
+    description: Extends HierarchyEdge with a structural flag distinguishing
+      orbit-defining edges from layout-irrelevant relational edges.
+    attributes:
+      title: GalaxyLayoutEdge
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/galaxyLayout.ts
+          symbol: GalaxyLayoutEdge
+    metadata:
+      created_at: 2026-09-18T14:34:07.441Z
+      updated_at: 2026-09-18T14:34:07.441Z
+      version: 1
+  timestamp: 2026-09-18T14:34:07.466Z
+  sequenceNumber: 8
+- type: add
+  elementId: data-model.schemadefinition.galaxy-layout-options
+  layerName: data-model
+  after:
+    id: 98a916c1-c72a-4347-9300-aea00468b947
+    path: data-model.schemadefinition.galaxy-layout-options
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: GalaxyLayoutOptions
+    description: "Tuning parameters for galaxyLayout: nodeSpread, startAngle,
+      settleCycles, homeStrength, nodeMargin, separateGroups, aspectRatio,
+      resolvedAspectScale."
+    attributes:
+      title: GalaxyLayoutOptions
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/galaxyLayout.ts
+          symbol: GalaxyLayoutOptions
+    metadata:
+      created_at: 2026-09-18T14:34:07.744Z
+      updated_at: 2026-09-18T14:34:07.744Z
+      version: 1
+  timestamp: 2026-09-18T14:34:07.770Z
+  sequenceNumber: 9
+- type: add
+  elementId: data-model.schemadefinition.hierarchy-edge
+  layerName: data-model
+  after:
+    id: 2fbb5557-a66c-4a9e-8693-0140c26da8e4
+    path: data-model.schemadefinition.hierarchy-edge
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: HierarchyEdge
+    description: Shared structural-edge shape (source=parent, target=child,
+      structural flag) consumed by buildStructuralForest and reused by
+      galaxyLayout/radialTreeLayout/uxNavLayout.
+    attributes:
+      title: HierarchyEdge
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphHierarchy.ts
+          symbol: HierarchyEdge
+    metadata:
+      created_at: 2026-09-18T14:34:08.058Z
+      updated_at: 2026-09-18T14:34:08.058Z
+      version: 1
+  timestamp: 2026-09-18T14:34:08.083Z
+  sequenceNumber: 10
+- type: add
+  elementId: data-model.schemadefinition.structural-forest
+  layerName: data-model
+  after:
+    id: eccd1b8f-2472-4edf-af4c-27e44144845f
+    path: data-model.schemadefinition.structural-forest
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: StructuralForest
+    description: "Output of buildStructuralForest: parentOf map, childrenOf map, and
+      roots array describing the parent/child forest derived from structural
+      edges."
+    attributes:
+      title: StructuralForest
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphHierarchy.ts
+          symbol: StructuralForest
+    metadata:
+      created_at: 2026-09-18T14:34:08.364Z
+      updated_at: 2026-09-18T14:34:08.364Z
+      version: 1
+  timestamp: 2026-09-18T14:34:08.394Z
+  sequenceNumber: 11
+- type: add
+  elementId: data-model.schemadefinition.cluster-tree-node
+  layerName: data-model
+  after:
+    id: a3b09468-e036-4b1f-8f0d-eae44121d9dd
+    path: data-model.schemadefinition.cluster-tree-node
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: ClusterTreeNode
+    description: "d3-hierarchy-compatible dendrogram node produced by
+      louvainCluster: leaves are real node ids, internal nodes are synthetic
+      cluster ids with children."
+    attributes:
+      title: ClusterTreeNode
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphClustering.ts
+          symbol: ClusterTreeNode
+    metadata:
+      created_at: 2026-09-18T14:34:08.691Z
+      updated_at: 2026-09-18T14:34:08.691Z
+      version: 1
+  timestamp: 2026-09-18T14:34:08.718Z
+  sequenceNumber: 12
+- type: add
+  elementId: data-model.schemadefinition.edge-geometry
+  layerName: data-model
+  after:
+    id: 33b245b5-367e-408d-9e2f-f0430117d639
+    path: data-model.schemadefinition.edge-geometry
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: EdgeGeometry
+    description: "Computed rendering geometry passed to a custom renderEdge
+      callback: SVG path string, curve midpoint, collision-cleared label
+      position, tangent angle, selected/hovered state."
+    attributes:
+      title: EdgeGeometry
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: EdgeGeometry
+    metadata:
+      created_at: 2026-09-18T14:34:09.024Z
+      updated_at: 2026-09-18T14:34:09.024Z
+      version: 1
+  timestamp: 2026-09-18T14:34:09.050Z
+  sequenceNumber: 13
+- type: add
+  elementId: data-model.schemadefinition.radial-tree-layout-result
+  layerName: data-model
+  after:
+    id: 81cac95c-6e44-4773-b190-918571cfb3dc
+    path: data-model.schemadefinition.radial-tree-layout-result
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: RadialTreeLayoutResult
+    description: "Return shape of radialTreeLayout: node positions, per-trunk
+      boundary circles, and ring geometry for the optional depth-ring
+      visualization."
+    attributes:
+      title: RadialTreeLayoutResult
+      type: object
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/radialTreeLayout.ts
+          symbol: RadialTreeLayoutResult
+    metadata:
+      created_at: 2026-09-18T14:34:09.334Z
+      updated_at: 2026-09-18T14:34:09.334Z
+      version: 1
+  timestamp: 2026-09-18T14:34:09.361Z
+  sequenceNumber: 14
+- type: relationship-add
+  elementId: data-model.schemadefinition.clustered-layout-result::references::data-model.schemadefinition.layout-node
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.clustered-layout-result
+    target: data-model.schemadefinition.layout-node
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:34:17.154Z
+  sequenceNumber: 15
+- type: relationship-add
+  elementId: data-model.schemadefinition.cluster-tree-node::references::data-model.schemadefinition.clustered-layout-result
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.cluster-tree-node
+    target: data-model.schemadefinition.clustered-layout-result
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:34:17.488Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: data-model.schemadefinition.structural-forest::references::data-model.schemadefinition.hierarchy-edge
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.structural-forest
+    target: data-model.schemadefinition.hierarchy-edge
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:34:17.845Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: data-model.schemadefinition.radial-tree-layout-result::references::data-model.schemadefinition.structural-forest
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.radial-tree-layout-result
+    target: data-model.schemadefinition.structural-forest
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:34:18.190Z
+  sequenceNumber: 18

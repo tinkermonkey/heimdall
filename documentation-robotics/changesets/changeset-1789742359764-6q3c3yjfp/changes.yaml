@@ -1,0 +1,601 @@
+- type: add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library
+  layerName: ux
+  after:
+    id: ab621423-4d28-42ed-8914-f65b5fb107a3
+    path: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    spec_node_id: ux.uxlibrary
+    type: uxlibrary
+    layer_id: ux
+    name: Heimdall Graph Visualization UX Library
+    description: "The graph-visualization subset of @tinkermonkey/heimdall-ui
+      (v0.8.0): GraphCanvas and its supporting components, covering node/edge
+      rendering and interaction behavior for embedding an interactive graph
+      view."
+    attributes:
+      version: 0.8.0
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: version
+    metadata:
+      created_at: 2026-09-18T14:39:44.732Z
+      updated_at: 2026-09-18T14:39:44.732Z
+      version: 1
+  timestamp: 2026-09-18T14:39:44.757Z
+  sequenceNumber: 0
+- type: add
+  elementId: ux.librarycomponent.graph-canvas-ux
+  layerName: ux
+  after:
+    id: c575ece3-3ebb-4c86-88d7-f2eada224c81
+    path: ux.librarycomponent.graph-canvas-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphCanvas (UX)
+    description: "Interactive graph canvas: pan/zoom viewport,
+      selectable/hoverable/draggable nodes and edges, tooltips/popovers,
+      toolbar, and progressive-disclosure collapse controls."
+    attributes:
+      type: display
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: GraphCanvas
+    metadata:
+      created_at: 2026-09-18T14:39:45.025Z
+      updated_at: 2026-09-18T14:39:45.025Z
+      version: 1
+  timestamp: 2026-09-18T14:39:45.050Z
+  sequenceNumber: 1
+- type: add
+  elementId: ux.librarycomponent.graph-node-ux
+  layerName: ux
+  after:
+    id: cb2f4e0b-5469-4312-bad3-cb73909afa5d
+    path: ux.librarycomponent.graph-node-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphNode (UX)
+    description: "Default node visual: label, kind badge, domain-color swatch,
+      selection ring, and (when hierarchical) a collapse/expand chevron with
+      hidden-descendant-count badge."
+    attributes:
+      type: display
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphNode.tsx
+          symbol: GraphNode
+    metadata:
+      created_at: 2026-09-18T14:39:45.326Z
+      updated_at: 2026-09-18T14:39:45.326Z
+      version: 1
+  timestamp: 2026-09-18T14:39:45.351Z
+  sequenceNumber: 2
+- type: add
+  elementId: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: ux
+  after:
+    id: c0aeda3c-e6f2-4e47-aefc-bdc655fe2808
+    path: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphEdge/GraphEdgeShape (UX)
+    description: "Default edge visual: curved or orthogonal line, directional arrow
+      marker, optional collision-cleared label pill, variant-based
+      (default/hot/irrelevant) styling."
+    attributes:
+      type: display
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphEdgeShape.tsx
+          symbol: GraphEdgeShape
+    metadata:
+      created_at: 2026-09-18T14:39:45.631Z
+      updated_at: 2026-09-18T14:39:45.631Z
+      version: 1
+  timestamp: 2026-09-18T14:39:45.656Z
+  sequenceNumber: 3
+- type: add
+  elementId: ux.librarycomponent.graph-toolbar-ux
+  layerName: ux
+  after:
+    id: 6bcb4d41-f2b0-45a8-ab54-e86eb6ec3533
+    path: ux.librarycomponent.graph-toolbar-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphToolbar (UX)
+    description: "Floating control cluster: zoom in/out/fit, pan-lock toggle,
+      fullscreen toggle, and (galaxy layout only) live-simulation toggle."
+    attributes:
+      type: navigation
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphToolbar.tsx
+          symbol: GraphToolbar
+    metadata:
+      created_at: 2026-09-18T14:39:45.933Z
+      updated_at: 2026-09-18T14:39:45.933Z
+      version: 1
+  timestamp: 2026-09-18T14:39:45.959Z
+  sequenceNumber: 4
+- type: add
+  elementId: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: ux
+  after:
+    id: 49c60c71-678a-42bf-9716-90cd286e348e
+    path: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphInspector / GraphEdgeInspector (UX)
+    description: "Detail-panel pair for a selected node or edge: title/badges,
+      description, key-value metadata, and (node) outgoing/incoming relationship
+      navigation links."
+    attributes:
+      type: display
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphInspector.tsx
+          symbol: GraphInspector
+    metadata:
+      created_at: 2026-09-18T14:39:46.233Z
+      updated_at: 2026-09-18T14:39:46.233Z
+      version: 1
+  timestamp: 2026-09-18T14:39:46.258Z
+  sequenceNumber: 5
+- type: add
+  elementId: ux.librarycomponent.graph-collapse-control-ux
+  layerName: ux
+  after:
+    id: 7bb0aa42-8b6c-441d-bf64-a25f868a86c3
+    path: ux.librarycomponent.graph-collapse-control-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphCollapseControl (UX)
+    description: Small floating button anchored to a node's right edge for toggling
+      structural collapse/expand, with a hidden-descendant-count badge when
+      collapsed.
+    attributes:
+      type: feedback
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCollapseControl.tsx
+          symbol: GraphCollapseControl
+    metadata:
+      created_at: 2026-09-18T14:39:46.534Z
+      updated_at: 2026-09-18T14:39:46.534Z
+      version: 1
+  timestamp: 2026-09-18T14:39:46.560Z
+  sequenceNumber: 6
+- type: add
+  elementId: ux.actionpattern.node-select-on-click-or-enterspace
+  layerName: ux
+  after:
+    id: 96e030f5-e56d-4af5-8732-0b9abe605d16
+    path: ux.actionpattern.node-select-on-click-or-enterspace
+    spec_node_id: ux.actionpattern
+    type: actionpattern
+    layer_id: ux
+    name: Node Select on Click or Enter/Space
+    description: Clicking a node, or pressing Enter/Space while it's focused, fires
+      onSelect — GraphNode's primary interaction.
+    attributes:
+      category: crud
+      trigger: click
+      feedback: inline-message
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphNode.tsx
+          symbol: onSelect
+    metadata:
+      created_at: 2026-09-18T14:39:46.840Z
+      updated_at: 2026-09-18T14:39:46.840Z
+      version: 1
+  timestamp: 2026-09-18T14:39:46.865Z
+  sequenceNumber: 7
+- type: add
+  elementId: ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+  layerName: ux
+  after:
+    id: 27c03741-ccd3-4511-9718-fe098c41a195
+    path: ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+    spec_node_id: ux.actionpattern
+    type: actionpattern
+    layer_id: ux
+    name: Collapse/Expand Toggle (Shift+Enter or Chevron Click)
+    description: Shift+Enter on a focused hierarchical node, or clicking its chevron
+      button, toggles collapsed state via onToggleCollapse — progressive
+      disclosure for dense hierarchies.
+    attributes:
+      category: crud
+      trigger: keyboard
+      feedback: animation
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphNode.tsx
+          symbol: onToggleCollapse
+    metadata:
+      created_at: 2026-09-18T14:39:47.159Z
+      updated_at: 2026-09-18T14:39:47.159Z
+      version: 1
+  timestamp: 2026-09-18T14:39:47.183Z
+  sequenceNumber: 8
+- type: add
+  elementId: ux.actionpattern.node-drag-reposition
+  layerName: ux
+  after:
+    id: abb36b11-680a-4a89-9038-31f8d5400f98
+    path: ux.actionpattern.node-drag-reposition
+    spec_node_id: ux.actionpattern
+    type: actionpattern
+    layer_id: ux
+    name: Node Drag Reposition
+    description: Dragging a node past DRAG_THRESHOLD pixels repositions it,
+      persisting locally until the node list changes; onNodeDragEnd lets the
+      caller persist it elsewhere.
+    attributes:
+      category: crud
+      trigger: click
+      feedback: none
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: onNodeDragEnd
+    metadata:
+      created_at: 2026-09-18T14:39:47.472Z
+      updated_at: 2026-09-18T14:39:47.472Z
+      version: 1
+  timestamp: 2026-09-18T14:39:47.497Z
+  sequenceNumber: 9
+- type: add
+  elementId: ux.actionpattern.panzoom-viewport-gesture
+  layerName: ux
+  after:
+    id: 097112ea-025b-4665-9d7a-93bcdd2e3fe5
+    path: ux.actionpattern.panzoom-viewport-gesture
+    spec_node_id: ux.actionpattern
+    type: actionpattern
+    layer_id: ux
+    name: Pan/Zoom Viewport Gesture
+    description: Wheel/pinch zoom (anchored under the cursor), pointer-drag pan with
+      release inertia, and +/-/arrow-key shortcuts, via usePanZoom.
+    attributes:
+      category: navigation
+      trigger: swipe
+      feedback: none
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/hooks/usePanZoom.ts
+          symbol: usePanZoom
+    metadata:
+      created_at: 2026-09-18T14:39:47.790Z
+      updated_at: 2026-09-18T14:39:47.790Z
+      version: 1
+  timestamp: 2026-09-18T14:39:47.816Z
+  sequenceNumber: 10
+- type: add
+  elementId: ux.statepattern.node-hover-and-selection-state
+  layerName: ux
+  after:
+    id: ddbe4ce4-be4a-4f28-b2e3-cbdc9952d3d9
+    path: ux.statepattern.node-hover-and-selection-state
+    spec_node_id: ux.statepattern
+    type: statepattern
+    layer_id: ux
+    name: Node Hover and Selection State
+    description: hoveredNodeId/selectedNodeId (and their edge equivalents) tracked
+      in GraphCanvasContext, driving highlighting, tooltip/popover visibility,
+      and structural/relational edge reveal.
+    attributes:
+      category: data-loading
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvasContext.tsx
+          symbol: hoveredNodeId
+    metadata:
+      created_at: 2026-09-18T14:39:48.113Z
+      updated_at: 2026-09-18T14:39:48.113Z
+      version: 1
+  timestamp: 2026-09-18T14:39:48.138Z
+  sequenceNumber: 11
+- type: add
+  elementId: ux.statepattern.collapsed-node-set-progressive-disclosure
+  layerName: ux
+  after:
+    id: 8b590278-6d94-49f5-985e-a686221cc643
+    path: ux.statepattern.collapsed-node-set-progressive-disclosure
+    spec_node_id: ux.statepattern
+    type: statepattern
+    layer_id: ux
+    name: Collapsed Node Set (Progressive Disclosure)
+    description: collapsedNodeIds (controlled by the caller) hides a collapsed
+      node's structural descendants and any edge touching one, while the
+      collapsed node itself keeps rendering.
+    attributes:
+      category: data-loading
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: collapsedNodeIds
+    metadata:
+      created_at: 2026-09-18T14:39:48.433Z
+      updated_at: 2026-09-18T14:39:48.433Z
+      version: 1
+  timestamp: 2026-09-18T14:39:48.458Z
+  sequenceNumber: 12
+- type: add
+  elementId: ux.statepattern.live-simulation-vs-static-layout-state
+  layerName: ux
+  after:
+    id: 47a14b85-7762-4249-9b63-47704b11094e
+    path: ux.statepattern.live-simulation-vs-static-layout-state
+    spec_node_id: ux.statepattern
+    type: statepattern
+    layer_id: ux
+    name: Live Simulation vs. Static Layout State
+    description: liveSimulation (galaxy layout only) switches GraphCanvas between a
+      one-shot computed-then-frozen layout and a continuous, draggable elastic
+      simulation.
+    attributes:
+      category: data-loading
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvasContext.tsx
+          symbol: liveSimulation
+    metadata:
+      created_at: 2026-09-18T14:39:48.753Z
+      updated_at: 2026-09-18T14:39:48.753Z
+      version: 1
+  timestamp: 2026-09-18T14:39:48.778Z
+  sequenceNumber: 13
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-canvas-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:15.440Z
+  sequenceNumber: 14
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-node-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-node-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:15.810Z
+  sequenceNumber: 15
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:16.181Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-toolbar-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-toolbar-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:16.548Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:16.917Z
+  sequenceNumber: 18
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-collapse-control-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-collapse-control-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:17.294Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::composes::ux.librarycomponent.graph-node-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.librarycomponent.graph-node-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:17.696Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::composes::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:18.068Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::composes::ux.librarycomponent.graph-toolbar-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.librarycomponent.graph-toolbar-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:18.441Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::composes::ux.librarycomponent.graph-collapse-control-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.librarycomponent.graph-collapse-control-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:18.835Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::uses::ux.actionpattern.panzoom-viewport-gesture
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.actionpattern.panzoom-viewport-gesture
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:19.211Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::uses::ux.statepattern.live-simulation-vs-static-layout-state
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.statepattern.live-simulation-vs-static-layout-state
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:19.627Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::uses::ux.statepattern.collapsed-node-set-progressive-disclosure
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.statepattern.collapsed-node-set-progressive-disclosure
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:20.037Z
+  sequenceNumber: 26
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::uses::ux.statepattern.node-hover-and-selection-state
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.statepattern.node-hover-and-selection-state
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:20.423Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-node-ux::uses::ux.actionpattern.node-select-on-click-or-enterspace
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-node-ux
+    target: ux.actionpattern.node-select-on-click-or-enterspace
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:20.812Z
+  sequenceNumber: 28
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-node-ux::uses::ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-node-ux
+    target: ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:21.194Z
+  sequenceNumber: 29
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::uses::ux.actionpattern.node-drag-reposition
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.actionpattern.node-drag-reposition
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:21.578Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-collapse-control-ux::uses::ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-collapse-control-ux
+    target: ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:21.982Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: ux.actionpattern.node-select-on-click-or-enterspace::associated-with::ux.statepattern.node-hover-and-selection-state
+  layerName: ux
+  after:
+    source: ux.actionpattern.node-select-on-click-or-enterspace
+    target: ux.statepattern.node-hover-and-selection-state
+    predicate: associated-with
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:22.374Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click::associated-with::ux.statepattern.collapsed-node-set-progressive-disclosure
+  layerName: ux
+  after:
+    source: ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+    target: ux.statepattern.collapsed-node-set-progressive-disclosure
+    predicate: associated-with
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:22.771Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: ux.actionpattern.node-drag-reposition::associated-with::ux.statepattern.node-hover-and-selection-state
+  layerName: ux
+  after:
+    source: ux.actionpattern.node-drag-reposition
+    target: ux.statepattern.node-hover-and-selection-state
+    predicate: associated-with
+    layer: ux
+    category: structural
+  timestamp: 2026-09-18T14:40:23.157Z
+  sequenceNumber: 34

@@ -1,0 +1,975 @@
+- type: add
+  elementId: api.tag.graph
+  layerName: api
+  after:
+    id: 093ad787-9bd6-451f-8756-b4fc263a8508
+    path: api.tag.graph
+    spec_node_id: api.tag
+    type: tag
+    layer_id: api
+    name: graph
+    description: Graph visualization and layout portion of
+      @tinkermonkey/heimdall-ui's public exported API surface (src/index.ts).
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphCanvas
+    metadata:
+      created_at: 2026-09-18T14:37:29.385Z
+      updated_at: 2026-09-18T14:37:29.385Z
+      version: 1
+  timestamp: 2026-09-18T14:37:29.409Z
+  sequenceNumber: 0
+- type: add
+  elementId: api.operation.graph-canvas
+  layerName: api
+  after:
+    id: 9eddabd5-e8e7-44f6-9b9b-74b083203090
+    path: api.operation.graph-canvas
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphCanvas
+    description: Exported React component — the public entry point for rendering an
+      interactive graph.
+    attributes:
+      operationId: GraphCanvas
+      summary: Render an interactive, pan/zoomable graph with a pluggable layout engine
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphCanvas
+    metadata:
+      created_at: 2026-09-18T14:38:03.058Z
+      updated_at: 2026-09-18T14:38:03.058Z
+      version: 1
+  timestamp: 2026-09-18T14:38:03.084Z
+  sequenceNumber: 1
+- type: add
+  elementId: api.operation.graph-node
+  layerName: api
+  after:
+    id: 2bdef60b-a43f-4339-9a77-f3aab951841e
+    path: api.operation.graph-node
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphNode
+    description: Exported default node renderer component, usable standalone or via
+      GraphCanvas's renderNode.
+    attributes:
+      operationId: GraphNode
+      summary: Default graph node renderer
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphNode
+    metadata:
+      created_at: 2026-09-18T14:38:03.383Z
+      updated_at: 2026-09-18T14:38:03.383Z
+      version: 1
+  timestamp: 2026-09-18T14:38:03.413Z
+  sequenceNumber: 2
+- type: add
+  elementId: api.operation.graph-edge
+  layerName: api
+  after:
+    id: 037dfc67-1c2b-4dff-ad9e-726579807eea
+    path: api.operation.graph-edge
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphEdge
+    description: Exported standalone edge component for use outside GraphCanvas's
+      own internal edge renderer.
+    attributes:
+      operationId: GraphEdge
+      summary: Standalone graph edge component
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphEdge
+    metadata:
+      created_at: 2026-09-18T14:38:03.681Z
+      updated_at: 2026-09-18T14:38:03.681Z
+      version: 1
+  timestamp: 2026-09-18T14:38:03.706Z
+  sequenceNumber: 3
+- type: add
+  elementId: api.operation.graph-edge-shape
+  layerName: api
+  after:
+    id: 9c973f74-f499-4eec-9a6d-180a43ef5d0e
+    path: api.operation.graph-edge-shape
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphEdgeShape
+    description: Exported low-level SVG edge-drawing primitive (line, markers, hit
+      target, label pill), for fully custom renderEdge callbacks.
+    attributes:
+      operationId: GraphEdgeShape
+      summary: Low-level SVG edge shape primitive
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphEdgeShape
+    metadata:
+      created_at: 2026-09-18T14:38:03.975Z
+      updated_at: 2026-09-18T14:38:03.975Z
+      version: 1
+  timestamp: 2026-09-18T14:38:04.000Z
+  sequenceNumber: 4
+- type: add
+  elementId: api.operation.graph-toolbar
+  layerName: api
+  after:
+    id: 1b9bab7b-40b4-4a03-a484-988650ca61b3
+    path: api.operation.graph-toolbar
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphToolbar
+    description: Exported floating zoom/pan/lock/fullscreen/live-simulation control
+      cluster, for a custom toolbar placement.
+    attributes:
+      operationId: GraphToolbar
+      summary: Zoom/pan/lock/fullscreen toolbar for GraphCanvas
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphToolbar
+    metadata:
+      created_at: 2026-09-18T14:38:04.273Z
+      updated_at: 2026-09-18T14:38:04.273Z
+      version: 1
+  timestamp: 2026-09-18T14:38:04.298Z
+  sequenceNumber: 5
+- type: add
+  elementId: api.operation.graph-collapse-control
+  layerName: api
+  after:
+    id: 85be95eb-949e-4901-a581-73d9791d31f6
+    path: api.operation.graph-collapse-control
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphCollapseControl
+    description: Exported collapse/expand affordance button for a node with
+      structural children.
+    attributes:
+      operationId: GraphCollapseControl
+      summary: Collapse/expand affordance for a hierarchical node
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphCollapseControl
+    metadata:
+      created_at: 2026-09-18T14:38:04.581Z
+      updated_at: 2026-09-18T14:38:04.581Z
+      version: 1
+  timestamp: 2026-09-18T14:38:04.606Z
+  sequenceNumber: 6
+- type: add
+  elementId: api.operation.graph-inspector
+  layerName: api
+  after:
+    id: e32cda96-fec3-47c7-a69b-08bd6d8d508d
+    path: api.operation.graph-inspector
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphInspector
+    description: Exported detail panel component for a selected node's metadata and
+      relationships.
+    attributes:
+      operationId: GraphInspector
+      summary: Detail panel for a selected graph node
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphInspector
+    metadata:
+      created_at: 2026-09-18T14:38:04.924Z
+      updated_at: 2026-09-18T14:38:04.924Z
+      version: 1
+  timestamp: 2026-09-18T14:38:04.952Z
+  sequenceNumber: 7
+- type: add
+  elementId: api.operation.graph-edge-inspector
+  layerName: api
+  after:
+    id: 37e11ef0-f472-4c04-90d0-5ba893f02a7f
+    path: api.operation.graph-edge-inspector
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphEdgeInspector
+    description: Exported detail panel component for a selected edge's endpoints and
+      metadata.
+    attributes:
+      operationId: GraphEdgeInspector
+      summary: Detail panel for a selected graph edge
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphEdgeInspector
+    metadata:
+      created_at: 2026-09-18T14:38:05.235Z
+      updated_at: 2026-09-18T14:38:05.235Z
+      version: 1
+  timestamp: 2026-09-18T14:38:05.260Z
+  sequenceNumber: 8
+- type: add
+  elementId: api.operation.force-layout
+  layerName: api
+  after:
+    id: a951408f-3b02-4775-81a7-19e62e282b57
+    path: api.operation.force-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: forceLayout
+    description: Exported function running the spring/repulsion force-directed
+      layout algorithm.
+    attributes:
+      operationId: forceLayout
+      summary: Compute a force-directed layout for a node/edge set
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: forceLayout
+    metadata:
+      created_at: 2026-09-18T14:38:05.548Z
+      updated_at: 2026-09-18T14:38:05.548Z
+      version: 1
+  timestamp: 2026-09-18T14:38:05.574Z
+  sequenceNumber: 9
+- type: add
+  elementId: api.operation.clustered-force-layout
+  layerName: api
+  after:
+    id: 90740f8a-2d89-4c34-8dba-c777f34a4d90
+    path: api.operation.clustered-force-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: clusteredForceLayout
+    description: Exported function running the Louvain-clustered nested-bubble force layout.
+    attributes:
+      operationId: clusteredForceLayout
+      summary: Compute a community-clustered force layout
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: clusteredForceLayout
+    metadata:
+      created_at: 2026-09-18T14:38:05.858Z
+      updated_at: 2026-09-18T14:38:05.858Z
+      version: 1
+  timestamp: 2026-09-18T14:38:05.883Z
+  sequenceNumber: 10
+- type: add
+  elementId: api.operation.galaxy-layout
+  layerName: api
+  after:
+    id: 0386bc09-e2cf-4263-8933-03116d221ebf
+    path: api.operation.galaxy-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: galaxyLayout
+    description: Exported function running the radial-orbit galaxy layout algorithm.
+    attributes:
+      operationId: galaxyLayout
+      summary: Compute a radial-hierarchy galaxy layout
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: galaxyLayout
+    metadata:
+      created_at: 2026-09-18T14:38:06.175Z
+      updated_at: 2026-09-18T14:38:06.175Z
+      version: 1
+  timestamp: 2026-09-18T14:38:06.199Z
+  sequenceNumber: 11
+- type: add
+  elementId: api.operation.ux-nav-layout
+  layerName: api
+  after:
+    id: 546b643b-7381-4483-bfed-28b2598617f7
+    path: api.operation.ux-nav-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: uxNavLayout
+    description: Exported function running the page/view navigation tree layout algorithm.
+    attributes:
+      operationId: uxNavLayout
+      summary: Compute a page-tree + view-fan navigation layout
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: uxNavLayout
+    metadata:
+      created_at: 2026-09-18T14:38:06.498Z
+      updated_at: 2026-09-18T14:38:06.498Z
+      version: 1
+  timestamp: 2026-09-18T14:38:06.530Z
+  sequenceNumber: 12
+- type: add
+  elementId: api.operation.radial-tree-layout
+  layerName: api
+  after:
+    id: 184fab9c-30da-4049-b5fc-6f5265b47601
+    path: api.operation.radial-tree-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: radialTreeLayout
+    description: Exported function running the radial-tree (concentric ring) layout
+      algorithm.
+    attributes:
+      operationId: radialTreeLayout
+      summary: Compute a radial-tree layout with depth rings
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: radialTreeLayout
+    metadata:
+      created_at: 2026-09-18T14:38:06.823Z
+      updated_at: 2026-09-18T14:38:06.823Z
+      version: 1
+  timestamp: 2026-09-18T14:38:06.848Z
+  sequenceNumber: 13
+- type: add
+  elementId: api.operation.louvain-cluster
+  layerName: api
+  after:
+    id: a72ec6eb-0790-437a-a41c-0f31a1124dfe
+    path: api.operation.louvain-cluster
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: louvainCluster
+    description: Exported function running deterministic multi-level Louvain
+      community clustering.
+    attributes:
+      operationId: louvainCluster
+      summary: Compute a deterministic Louvain cluster dendrogram
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: louvainCluster
+    metadata:
+      created_at: 2026-09-18T14:38:07.154Z
+      updated_at: 2026-09-18T14:38:07.154Z
+      version: 1
+  timestamp: 2026-09-18T14:38:07.183Z
+  sequenceNumber: 14
+- type: add
+  elementId: api.operation.pack-clusters
+  layerName: api
+  after:
+    id: ee0757b4-3256-4699-8760-38ce07a0bbda
+    path: api.operation.pack-clusters
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: packClusters
+    description: Exported function packing a cluster dendrogram into non-overlapping
+      nested circles.
+    attributes:
+      operationId: packClusters
+      summary: Pack a cluster dendrogram into nested circles
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: packClusters
+    metadata:
+      created_at: 2026-09-18T14:38:07.485Z
+      updated_at: 2026-09-18T14:38:07.485Z
+      version: 1
+  timestamp: 2026-09-18T14:38:07.512Z
+  sequenceNumber: 15
+- type: add
+  elementId: api.operation.build-structural-forest
+  layerName: api
+  after:
+    id: f586314d-8ef0-4bde-86f6-4aafae7cd10b
+    path: api.operation.build-structural-forest
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: buildStructuralForest
+    description: Exported function deriving a parent/child forest from structural edges.
+    attributes:
+      operationId: buildStructuralForest
+      summary: Build a structural parent/child forest from edges
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: buildStructuralForest
+    metadata:
+      created_at: 2026-09-18T14:38:07.807Z
+      updated_at: 2026-09-18T14:38:07.807Z
+      version: 1
+  timestamp: 2026-09-18T14:38:07.833Z
+  sequenceNumber: 16
+- type: add
+  elementId: api.operation.visible-navigation-edge-ids
+  layerName: api
+  after:
+    id: 0e5dcb3e-2ecb-473e-900c-bad677db8023
+    path: api.operation.visible-navigation-edge-ids
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: visibleNavigationEdgeIds
+    description: Exported function computing which ux-navigation route edges should
+      be visible for a given hover/collapse state.
+    attributes:
+      operationId: visibleNavigationEdgeIds
+      summary: Compute visible navigation-route edge ids for a hover state
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: visibleNavigationEdgeIds
+    metadata:
+      created_at: 2026-09-18T14:38:08.127Z
+      updated_at: 2026-09-18T14:38:08.127Z
+      version: 1
+  timestamp: 2026-09-18T14:38:08.154Z
+  sequenceNumber: 17
+- type: add
+  elementId: api.operation.use-pan-zoom
+  layerName: api
+  after:
+    id: a736be53-61a4-4b8a-a130-ac39854b4562
+    path: api.operation.use-pan-zoom
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: usePanZoom
+    description: Exported React hook implementing wheel/pinch/drag/keyboard
+      pan-and-zoom with inertia.
+    attributes:
+      operationId: usePanZoom
+      summary: Pan/zoom viewport hook with inertia
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: usePanZoom
+    metadata:
+      created_at: 2026-09-18T14:38:08.453Z
+      updated_at: 2026-09-18T14:38:08.453Z
+      version: 1
+  timestamp: 2026-09-18T14:38:08.480Z
+  sequenceNumber: 18
+- type: add
+  elementId: api.operation.compute-edge-path
+  layerName: api
+  after:
+    id: 7f2e342c-d219-408e-8d15-0f5328a59f7d
+    path: api.operation.compute-edge-path
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: computeEdgePath
+    description: Exported function resolving the rendered bezier path between two
+      node rectangles.
+    attributes:
+      operationId: computeEdgePath
+      summary: Compute the rendered path between two node rectangles
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: computeEdgePath
+    metadata:
+      created_at: 2026-09-18T14:38:08.783Z
+      updated_at: 2026-09-18T14:38:08.783Z
+      version: 1
+  timestamp: 2026-09-18T14:38:08.812Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: api.operation.graph-canvas::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-canvas
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:36.973Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: api.operation.graph-node::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-node
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:37.356Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: api.operation.graph-edge::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-edge
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:37.725Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: api.operation.graph-edge-shape::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-edge-shape
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:38.099Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: api.operation.graph-toolbar::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-toolbar
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:38.499Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: api.operation.graph-collapse-control::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-collapse-control
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:38.870Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: api.operation.graph-inspector::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-inspector
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:39.347Z
+  sequenceNumber: 26
+- type: relationship-add
+  elementId: api.operation.graph-edge-inspector::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.graph-edge-inspector
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:39.830Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: api.operation.force-layout::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.force-layout
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:40.207Z
+  sequenceNumber: 28
+- type: relationship-add
+  elementId: api.operation.clustered-force-layout::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.clustered-force-layout
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:40.582Z
+  sequenceNumber: 29
+- type: relationship-add
+  elementId: api.operation.galaxy-layout::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.galaxy-layout
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:40.975Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: api.operation.ux-nav-layout::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.ux-nav-layout
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:41.361Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: api.operation.radial-tree-layout::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.radial-tree-layout
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:41.737Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: api.operation.louvain-cluster::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.louvain-cluster
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:42.126Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: api.operation.pack-clusters::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.pack-clusters
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:42.509Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: api.operation.build-structural-forest::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.build-structural-forest
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:42.887Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: api.operation.visible-navigation-edge-ids::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.visible-navigation-edge-ids
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:43.262Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: api.operation.use-pan-zoom::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.use-pan-zoom
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:43.652Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: api.operation.compute-edge-path::aggregates::api.tag.graph
+  layerName: api
+  after:
+    source: api.operation.compute-edge-path
+    target: api.tag.graph
+    predicate: aggregates
+    layer: api
+    category: structural
+  timestamp: 2026-09-18T14:38:44.034Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: api.operation.force-layout::realizes::application.applicationfunction.force-directed-layout-algorithm
+  layerName: api
+  after:
+    source: api.operation.force-layout
+    target: application.applicationfunction.force-directed-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:44.417Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: api.operation.clustered-force-layout::realizes::application.applicationfunction.clustered-force-layout-algorithm
+  layerName: api
+  after:
+    source: api.operation.clustered-force-layout
+    target: application.applicationfunction.clustered-force-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:44.799Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: api.operation.galaxy-layout::realizes::application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+  layerName: api
+  after:
+    source: api.operation.galaxy-layout
+    target: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:45.192Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: api.operation.ux-nav-layout::realizes::application.applicationfunction.ux-navigation-tree-layout-algorithm
+  layerName: api
+  after:
+    source: api.operation.ux-nav-layout
+    target: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:45.581Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: api.operation.radial-tree-layout::realizes::application.applicationfunction.radial-tree-layout-algorithm
+  layerName: api
+  after:
+    source: api.operation.radial-tree-layout
+    target: application.applicationfunction.radial-tree-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:45.969Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: api.operation.louvain-cluster::realizes::application.applicationfunction.louvain-community-clustering
+  layerName: api
+  after:
+    source: api.operation.louvain-cluster
+    target: application.applicationfunction.louvain-community-clustering
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:46.375Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: api.operation.pack-clusters::realizes::application.applicationfunction.cluster-circle-packing
+  layerName: api
+  after:
+    source: api.operation.pack-clusters
+    target: application.applicationfunction.cluster-circle-packing
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:46.769Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: api.operation.build-structural-forest::realizes::application.applicationfunction.structural-forest-construction
+  layerName: api
+  after:
+    source: api.operation.build-structural-forest
+    target: application.applicationfunction.structural-forest-construction
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:47.156Z
+  sequenceNumber: 46
+- type: relationship-add
+  elementId: api.operation.compute-edge-path::realizes::application.applicationfunction.bezier-edge-path-computation
+  layerName: api
+  after:
+    source: api.operation.compute-edge-path
+    target: application.applicationfunction.bezier-edge-path-computation
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:47.567Z
+  sequenceNumber: 47
+- type: relationship-add
+  elementId: api.operation.visible-navigation-edge-ids::realizes::application.applicationfunction.ux-navigation-tree-layout-algorithm
+  layerName: api
+  after:
+    source: api.operation.visible-navigation-edge-ids
+    target: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:47.965Z
+  sequenceNumber: 48
+- type: relationship-add
+  elementId: api.operation.graph-canvas::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  after:
+    source: api.operation.graph-canvas
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:48.368Z
+  sequenceNumber: 49
+- type: relationship-add
+  elementId: api.operation.graph-canvas::references::application.applicationservice.live-galaxy-simulation-service
+  layerName: api
+  after:
+    source: api.operation.graph-canvas
+    target: application.applicationservice.live-galaxy-simulation-service
+    predicate: references
+    layer: api
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:38:48.764Z
+  sequenceNumber: 50
+- type: relationship-add
+  elementId: data-model.schemadefinition.layout-node::realizes::application.dataobject.node-position-map
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.layout-node
+    target: application.dataobject.node-position-map
+    predicate: realizes
+    layer: data-model
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:39:06.790Z
+  sequenceNumber: 51
+- type: relationship-add
+  elementId: data-model.schemadefinition.graph-node-data::realizes::application.dataobject.node-rect-registry
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.graph-node-data
+    target: application.dataobject.node-rect-registry
+    predicate: realizes
+    layer: data-model
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:39:07.202Z
+  sequenceNumber: 52
+- type: relationship-add
+  elementId: data-model.schemadefinition.graph-edge-data-shape::references::data-model.schemadefinition.edge-geometry
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.graph-edge-data-shape
+    target: data-model.schemadefinition.edge-geometry
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:39:07.627Z
+  sequenceNumber: 53
+- type: relationship-add
+  elementId: data-model.schemadefinition.layout-edge::references::data-model.schemadefinition.hierarchy-edge
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.layout-edge
+    target: data-model.schemadefinition.hierarchy-edge
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:39:08.032Z
+  sequenceNumber: 54
+- type: relationship-add
+  elementId: data-model.schemadefinition.force-layout-options::references::data-model.schemadefinition.layout-node
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.force-layout-options
+    target: data-model.schemadefinition.layout-node
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:39:08.446Z
+  sequenceNumber: 55
+- type: relationship-add
+  elementId: data-model.schemadefinition.galaxy-layout-node::references::data-model.schemadefinition.galaxy-layout-options
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.galaxy-layout-node
+    target: data-model.schemadefinition.galaxy-layout-options
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:39:08.858Z
+  sequenceNumber: 56
+- type: relationship-add
+  elementId: data-model.schemadefinition.clustered-layout-options::references::data-model.schemadefinition.force-layout-options
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.clustered-layout-options
+    target: data-model.schemadefinition.force-layout-options
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:39:13.991Z
+  sequenceNumber: 57
+- type: relationship-add
+  elementId: data-model.schemadefinition.galaxy-layout-edge::references::data-model.schemadefinition.galaxy-layout-node
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.galaxy-layout-edge
+    target: data-model.schemadefinition.galaxy-layout-node
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-09-18T14:39:14.405Z
+  sequenceNumber: 58

@@ -1,0 +1,10 @@
+id: changeset-1789742359764-6q3c3yjfp
+name: extract-ux-layer
+created: 2026-09-18T14:39:19.772Z
+modified: 2026-09-18T14:40:30.751Z
+status: committed
+baseSnapshot: sha256:d2e40762ee0557d0952ca5b25a9d8c1031eed608f5bcea78f45f9dcce3f328b9
+stats:
+  additions: 35
+  modifications: 0
+  deletions: 0

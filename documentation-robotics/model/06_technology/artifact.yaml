@@ -1,0 +1,125 @@
+technology.artifact.heimdall-ui-package:
+  id: f4ff6b31-1ce8-420d-9737-0e40bcc8ed60
+  path: technology.artifact.heimdall-ui-package
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Heimdall UI Package
+  description: The published @tinkermonkey/heimdall-ui npm package artifact
+    (library) whose graph-visualization surface (GraphCanvas + layout engines)
+    this model covers.
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: name
+  metadata:
+    created_at: 2026-09-18T14:33:14.088Z
+    updated_at: 2026-09-18T14:33:14.088Z
+    version: 1
+technology.artifact.react-peer-dependency:
+  id: f753e7a3-8553-49e8-867a-6f648ded9201
+  path: technology.artifact.react-peer-dependency
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: React (peer dependency)
+  description: React 18/19 peer dependency GraphCanvas and all other components
+    are built against.
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: peerDependencies.react
+  metadata:
+    created_at: 2026-09-18T14:33:14.378Z
+    updated_at: 2026-09-18T14:33:14.378Z
+    version: 1
+technology.artifact.d3-hierarchy:
+  id: 72d69f90-b58d-4d47-bb3d-d9b20581ac3a
+  path: technology.artifact.d3-hierarchy
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: d3-hierarchy
+  description: Real runtime dependency used directly by uxNavLayout (tree),
+    radialTreeLayout (tree, packSiblings), and graphPacking (pack, hierarchy)
+    for tree layout and circle packing.
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: dependencies.d3-hierarchy
+  metadata:
+    created_at: 2026-09-18T14:33:14.663Z
+    updated_at: 2026-09-18T14:33:14.663Z
+    version: 1
+technology.artifact.type-script-compiler-configuration:
+  id: ad329cf8-7aa9-4b74-a4e5-cef8a565bd1a
+  path: technology.artifact.type-script-compiler-configuration
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: TypeScript Compiler Configuration
+  description: tsconfig.json — strict TypeScript configuration, including
+    allowImportingTsExtensions so scripts/render-and-score.mjs (in the sibling
+    layout-loop harness) can import graphLayout.ts directly via Node's
+    --experimental-strip-types without a build step.
+  attributes:
+    artifactType: configuration
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tsconfig.json
+        symbol: compilerOptions
+  metadata:
+    created_at: 2026-09-18T14:33:14.947Z
+    updated_at: 2026-09-18T14:33:14.947Z
+    version: 1
+technology.artifact.playwright-test-runner:
+  id: 11db3096-9300-4451-906b-bc78b1ee821b
+  path: technology.artifact.playwright-test-runner
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Playwright Test Runner
+  description: "@playwright/test devDependency driving the browser-based
+    visual/behavioral regression suite in tests/, including all graph-*.spec.ts
+    files."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: devDependencies.@playwright/test
+  metadata:
+    created_at: 2026-09-18T14:33:15.236Z
+    updated_at: 2026-09-18T14:33:15.236Z
+    version: 1
+technology.artifact.vitest:
+  id: c7bc7dff-5aa6-489f-b990-11bec4298232
+  path: technology.artifact.vitest
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Vitest
+  description: vitest devDependency running pure-function unit tests for
+    layout/routing algorithms (channelRouter.test.ts, radialTreeLayout.test.ts).
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: devDependencies.vitest
+  metadata:
+    created_at: 2026-09-18T14:33:15.525Z
+    updated_at: 2026-09-18T14:33:15.525Z
+    version: 1

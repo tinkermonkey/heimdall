@@ -1,0 +1,58 @@
+motivation.stakeholder.heimdall-layout-loop-quality-harness:
+  id: dc4bb5f9-177f-4d26-b313-8e708d6db489
+  path: motivation.stakeholder.heimdall-layout-loop-quality-harness
+  spec_node_id: motivation.stakeholder
+  type: stakeholder
+  layer_id: motivation
+  name: heimdall-layout-loop Quality Harness
+  description: Inferred from CHANGELOG.md's reference to 'the project's own
+    layout-quality test loop' — an external, automated regression harness that
+    renders/scores heimdall's layout output and gates which proposed algorithm
+    changes are kept.
+  attributes:
+    type: system
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: CHANGELOG.md
+        symbol: Graph force layout (forceLayout, used by GraphCanvas)
+  metadata:
+    created_at: 2026-09-18T14:43:26.878Z
+    updated_at: 2026-09-18T14:43:26.878Z
+    version: 1
+motivation.stakeholder.embedding-application-developer-npm-consumer:
+  id: 587dfc83-8016-4dcd-9e55-1085a6761c85
+  path: motivation.stakeholder.embedding-application-developer-npm-consumer
+  spec_node_id: motivation.stakeholder
+  type: stakeholder
+  layer_id: motivation
+  name: Embedding Application Developer (npm consumer)
+  description: "Inferred: the external developer consuming
+    @tinkermonkey/heimdall-ui's public API (src/index.ts) to embed a graph view
+    in their own product."
+  attributes:
+    type: external
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:43:27.193Z
+    updated_at: 2026-09-18T14:43:27.193Z
+    version: 1
+motivation.stakeholder.end-user-of-an-embedding-application:
+  id: a8a15b3d-ac9b-441b-8fbf-01378c510479
+  path: motivation.stakeholder.end-user-of-an-embedding-application
+  spec_node_id: motivation.stakeholder
+  type: stakeholder
+  layer_id: motivation
+  name: End User of an Embedding Application
+  description: "Inferred: the person who ultimately interacts with a rendered
+    GraphCanvas inside whatever application embedded it, with no awareness of
+    heimdall itself."
+  attributes:
+    type: end-user
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:44:02.481Z
+    updated_at: 2026-09-18T14:44:02.481Z
+    version: 1

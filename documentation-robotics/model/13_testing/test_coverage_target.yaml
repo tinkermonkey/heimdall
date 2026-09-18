@@ -1,0 +1,152 @@
+testing.testcoveragetarget.graph-canvas-rendering-and-interaction:
+  id: 2e2b8d0d-4aa1-4020-ad4b-9e753d159fb5
+  path: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: GraphCanvas Rendering and Interaction
+  description: "Integration coverage for GraphCanvas: fit-view/viewport controls,
+    tooltips/popovers, bus-view edge anchors, hover-state cleanup, custom
+    renderEdge."
+  attributes:
+    targetType: ui-component
+    priority: critical
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-components.spec.ts
+        symbol: "integration: Graph Canvas Components"
+  metadata:
+    created_at: 2026-09-18T14:40:54.181Z
+    updated_at: 2026-09-18T14:40:54.181Z
+    version: 1
+testing.testcoveragetarget.force-force-clustered-layout-algorithms:
+  id: 273742e5-8bf4-4fd4-ac64-fa83a391f584
+  path: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Force / Force-Clustered Layout Algorithms
+  description: "Unit + integration coverage for forceLayout/clusteredForceLayout:
+    pinned-node behavior, non-overlap under chip and card-sized nodes,
+    nodeMargin defaults, and the Clustered View bubble-packing integration
+    suite."
+  attributes:
+    targetType: ui-component
+    priority: critical
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-layout.spec.ts
+        symbol: forceLayout
+  metadata:
+    created_at: 2026-09-18T14:40:54.477Z
+    updated_at: 2026-09-18T14:40:54.477Z
+    version: 1
+testing.testcoveragetarget.galaxy-layout-and-live-simulation:
+  id: d91c03bd-7d28-4d2b-b2fd-86a84c5471ad
+  path: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Galaxy Layout and Live Simulation
+  description: "Integration coverage for galaxy layout: relations,
+    aspect-ratio-aware layout, live simulation, and a dedicated Galaxy Layout
+    Lab POC-dataset stress test."
+  attributes:
+    targetType: ui-component
+    priority: high
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-components.spec.ts
+        symbol: Galaxy View - Layout & Relations
+  metadata:
+    created_at: 2026-09-18T14:40:54.776Z
+    updated_at: 2026-09-18T14:40:54.776Z
+    version: 1
+testing.testcoveragetarget.radial-tree-layout-algorithm:
+  id: e1395fe2-c1fc-4ebc-b046-0750d2b70a4f
+  path: testing.testcoveragetarget.radial-tree-layout-algorithm
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Radial Tree Layout Algorithm
+  description: "Unit coverage for radialTreeLayout:
+    single-node/multi-level/multiple-trunk trees, collapsed nodes, ring
+    geometry, empty graphs, non-structural edges."
+  attributes:
+    targetType: ui-component
+    priority: high
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/__tests__/radialTreeLayout.test.ts
+        symbol: radialTreeLayout
+  metadata:
+    created_at: 2026-09-18T14:40:55.071Z
+    updated_at: 2026-09-18T14:40:55.071Z
+    version: 1
+testing.testcoveragetarget.navigation-edge-channel-routing:
+  id: b244be19-f490-4dac-aae5-30dd6e9fec72
+  path: testing.testcoveragetarget.navigation-edge-channel-routing
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Navigation Edge Channel Routing
+  description: "Unit coverage for routeNavigationEdge/routeNavigationEdges:
+    obstacle avoidance and multi-edge nudge-apart routing."
+  attributes:
+    targetType: ui-component
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/channelRouter.test.ts
+        symbol: channelRouter
+  metadata:
+    created_at: 2026-09-18T14:40:55.376Z
+    updated_at: 2026-09-18T14:40:55.376Z
+    version: 1
+testing.testcoveragetarget.graph-edge-geometry-utilities:
+  id: 119b7fa7-3bd9-4397-9774-c8e8b2bb34ff
+  path: testing.testcoveragetarget.graph-edge-geometry-utilities
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Graph Edge Geometry Utilities
+  description: Unit coverage for
+    rectEdgePoint/bezierPath/anchoredEdgePoint/cubicBezierPath/computeEdgePath/computeFitViewport.
+  attributes:
+    targetType: ui-component
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-utils.spec.ts
+        symbol: Graph Utilities
+  metadata:
+    created_at: 2026-09-18T14:40:55.686Z
+    updated_at: 2026-09-18T14:40:55.686Z
+    version: 1
+testing.testcoveragetarget.edge-label-placement-and-styling:
+  id: d085897d-0add-4514-8686-02e463d81d9d
+  path: testing.testcoveragetarget.edge-label-placement-and-styling
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Edge Label Placement and Styling
+  description: Unit coverage for findClearLabelPosition (collision-avoidance label
+    placement) and the weight/marker/dash edge-style utilities.
+  attributes:
+    targetType: ui-component
+    priority: low
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-edge-label.spec.ts
+        symbol: findClearLabelPosition
+  metadata:
+    created_at: 2026-09-18T14:40:55.989Z
+    updated_at: 2026-09-18T14:40:55.989Z
+    version: 1

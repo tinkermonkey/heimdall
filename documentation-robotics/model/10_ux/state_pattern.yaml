@@ -1,0 +1,63 @@
+ux.statepattern.node-hover-and-selection-state:
+  id: ddbe4ce4-be4a-4f28-b2e3-cbdc9952d3d9
+  path: ux.statepattern.node-hover-and-selection-state
+  spec_node_id: ux.statepattern
+  type: statepattern
+  layer_id: ux
+  name: Node Hover and Selection State
+  description: hoveredNodeId/selectedNodeId (and their edge equivalents) tracked
+    in GraphCanvasContext, driving highlighting, tooltip/popover visibility, and
+    structural/relational edge reveal.
+  attributes:
+    category: data-loading
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvasContext.tsx
+        symbol: hoveredNodeId
+  metadata:
+    created_at: 2026-09-18T14:39:48.113Z
+    updated_at: 2026-09-18T14:39:48.113Z
+    version: 1
+ux.statepattern.collapsed-node-set-progressive-disclosure:
+  id: 8b590278-6d94-49f5-985e-a686221cc643
+  path: ux.statepattern.collapsed-node-set-progressive-disclosure
+  spec_node_id: ux.statepattern
+  type: statepattern
+  layer_id: ux
+  name: Collapsed Node Set (Progressive Disclosure)
+  description: collapsedNodeIds (controlled by the caller) hides a collapsed
+    node's structural descendants and any edge touching one, while the collapsed
+    node itself keeps rendering.
+  attributes:
+    category: data-loading
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: collapsedNodeIds
+  metadata:
+    created_at: 2026-09-18T14:39:48.433Z
+    updated_at: 2026-09-18T14:39:48.433Z
+    version: 1
+ux.statepattern.live-simulation-vs-static-layout-state:
+  id: 47a14b85-7762-4249-9b63-47704b11094e
+  path: ux.statepattern.live-simulation-vs-static-layout-state
+  spec_node_id: ux.statepattern
+  type: statepattern
+  layer_id: ux
+  name: Live Simulation vs. Static Layout State
+  description: liveSimulation (galaxy layout only) switches GraphCanvas between a
+    one-shot computed-then-frozen layout and a continuous, draggable elastic
+    simulation.
+  attributes:
+    category: data-loading
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvasContext.tsx
+        symbol: liveSimulation
+  metadata:
+    created_at: 2026-09-18T14:39:48.753Z
+    updated_at: 2026-09-18T14:39:48.753Z
+    version: 1

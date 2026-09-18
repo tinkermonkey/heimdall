@@ -1,0 +1,226 @@
+- type: add
+  elementId: technology.artifact.heimdall-ui-package
+  layerName: technology
+  after:
+    id: f4ff6b31-1ce8-420d-9737-0e40bcc8ed60
+    path: technology.artifact.heimdall-ui-package
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: Heimdall UI Package
+    description: The published @tinkermonkey/heimdall-ui npm package artifact
+      (library) whose graph-visualization surface (GraphCanvas + layout engines)
+      this model covers.
+    attributes:
+      artifactType: library
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: name
+    metadata:
+      created_at: 2026-09-18T14:33:14.088Z
+      updated_at: 2026-09-18T14:33:14.088Z
+      version: 1
+  timestamp: 2026-09-18T14:33:14.111Z
+  sequenceNumber: 0
+- type: add
+  elementId: technology.artifact.react-peer-dependency
+  layerName: technology
+  after:
+    id: f753e7a3-8553-49e8-867a-6f648ded9201
+    path: technology.artifact.react-peer-dependency
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: React (peer dependency)
+    description: React 18/19 peer dependency GraphCanvas and all other components
+      are built against.
+    attributes:
+      artifactType: library
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: peerDependencies.react
+    metadata:
+      created_at: 2026-09-18T14:33:14.378Z
+      updated_at: 2026-09-18T14:33:14.378Z
+      version: 1
+  timestamp: 2026-09-18T14:33:14.402Z
+  sequenceNumber: 1
+- type: add
+  elementId: technology.artifact.d3-hierarchy
+  layerName: technology
+  after:
+    id: 72d69f90-b58d-4d47-bb3d-d9b20581ac3a
+    path: technology.artifact.d3-hierarchy
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: d3-hierarchy
+    description: Real runtime dependency used directly by uxNavLayout (tree),
+      radialTreeLayout (tree, packSiblings), and graphPacking (pack, hierarchy)
+      for tree layout and circle packing.
+    attributes:
+      artifactType: library
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: dependencies.d3-hierarchy
+    metadata:
+      created_at: 2026-09-18T14:33:14.663Z
+      updated_at: 2026-09-18T14:33:14.663Z
+      version: 1
+  timestamp: 2026-09-18T14:33:14.686Z
+  sequenceNumber: 2
+- type: add
+  elementId: technology.artifact.type-script-compiler-configuration
+  layerName: technology
+  after:
+    id: ad329cf8-7aa9-4b74-a4e5-cef8a565bd1a
+    path: technology.artifact.type-script-compiler-configuration
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: TypeScript Compiler Configuration
+    description: tsconfig.json — strict TypeScript configuration, including
+      allowImportingTsExtensions so scripts/render-and-score.mjs (in the sibling
+      layout-loop harness) can import graphLayout.ts directly via Node's
+      --experimental-strip-types without a build step.
+    attributes:
+      artifactType: configuration
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tsconfig.json
+          symbol: compilerOptions
+    metadata:
+      created_at: 2026-09-18T14:33:14.947Z
+      updated_at: 2026-09-18T14:33:14.947Z
+      version: 1
+  timestamp: 2026-09-18T14:33:14.973Z
+  sequenceNumber: 3
+- type: add
+  elementId: technology.artifact.playwright-test-runner
+  layerName: technology
+  after:
+    id: 11db3096-9300-4451-906b-bc78b1ee821b
+    path: technology.artifact.playwright-test-runner
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: Playwright Test Runner
+    description: "@playwright/test devDependency driving the browser-based
+      visual/behavioral regression suite in tests/, including all
+      graph-*.spec.ts files."
+    attributes:
+      artifactType: library
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: devDependencies.@playwright/test
+    metadata:
+      created_at: 2026-09-18T14:33:15.236Z
+      updated_at: 2026-09-18T14:33:15.236Z
+      version: 1
+  timestamp: 2026-09-18T14:33:15.260Z
+  sequenceNumber: 4
+- type: add
+  elementId: technology.artifact.vitest
+  layerName: technology
+  after:
+    id: c7bc7dff-5aa6-489f-b990-11bec4298232
+    path: technology.artifact.vitest
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: Vitest
+    description: vitest devDependency running pure-function unit tests for
+      layout/routing algorithms (channelRouter.test.ts,
+      radialTreeLayout.test.ts).
+    attributes:
+      artifactType: library
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: devDependencies.vitest
+    metadata:
+      created_at: 2026-09-18T14:33:15.525Z
+      updated_at: 2026-09-18T14:33:15.525Z
+      version: 1
+  timestamp: 2026-09-18T14:33:15.551Z
+  sequenceNumber: 5
+- type: add
+  elementId: technology.technologyfunction.library-bundling-and-type-declaration-generation
+  layerName: technology
+  after:
+    id: e126d913-5d38-45b8-bbfe-14e04048f4cf
+    path: technology.technologyfunction.library-bundling-and-type-declaration-generation
+    spec_node_id: technology.technologyfunction
+    type: technologyfunction
+    layer_id: technology
+    name: Library Bundling and Type Declaration Generation
+    description: Vite library-mode build (rollup under the hood) plus
+      vite-plugin-dts, producing dist/index.js and dist/index.d.ts from
+      src/index.ts's barrel export, with react/react-dom externalized.
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: vite.config.mjs
+          symbol: build.lib
+    metadata:
+      created_at: 2026-09-18T14:33:15.835Z
+      updated_at: 2026-09-18T14:33:15.835Z
+      version: 1
+  timestamp: 2026-09-18T14:33:15.860Z
+  sequenceNumber: 6
+- type: add
+  elementId: technology.technologyprocess.npm-run-build-vite-build
+  layerName: technology
+  after:
+    id: 03d96a76-3631-4c8a-b53c-10d5dfd8f700
+    path: technology.technologyprocess.npm-run-build-vite-build
+    spec_node_id: technology.technologyprocess
+    type: technologyprocess
+    layer_id: technology
+    name: npm run build (vite build)
+    description: The package.json 'build'/'prepare' script that invokes the Vite
+      build — runs automatically on npm install via the prepare lifecycle hook,
+      producing the dist/ artifact this package publishes.
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: scripts.build
+    metadata:
+      created_at: 2026-09-18T14:33:16.129Z
+      updated_at: 2026-09-18T14:33:16.129Z
+      version: 1
+  timestamp: 2026-09-18T14:33:16.155Z
+  sequenceNumber: 7
+- type: relationship-add
+  elementId: technology.artifact.heimdall-ui-package::depends-on::technology.artifact.react-peer-dependency
+  layerName: technology
+  after:
+    source: technology.artifact.heimdall-ui-package
+    target: technology.artifact.react-peer-dependency
+    predicate: depends-on
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:33:25.365Z
+  sequenceNumber: 8
+- type: relationship-add
+  elementId: technology.artifact.heimdall-ui-package::depends-on::technology.artifact.d3-hierarchy
+  layerName: technology
+  after:
+    source: technology.artifact.heimdall-ui-package
+    target: technology.artifact.d3-hierarchy
+    predicate: depends-on
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:33:25.674Z
+  sequenceNumber: 9

@@ -1,0 +1,25 @@
+motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers:
+  id: 98547c4a-0f8d-45aa-8000-9a9304c6461b
+  path: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Layout Engines Must Be Pluggable Without Breaking Existing Callers
+  description: "Inferred from clusteredForceLayout's own docs ('strictly
+    additive/opt-in: it doesn't change forceLayout's behavior for any existing
+    caller, and is only reached if a caller explicitly chooses it') and
+    GraphCanvas's layout prop union growing over multiple CHANGELOG releases
+    (force -> galaxy -> force-clustered -> ux-navigation -> radial-tree) without
+    breaking earlier modes."
+  attributes:
+    requirementType: non-functional
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: clusteredForceLayout
+  metadata:
+    created_at: 2026-09-18T14:43:26.253Z
+    updated_at: 2026-09-18T14:43:26.253Z
+    version: 1

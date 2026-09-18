@@ -1,0 +1,107 @@
+testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology:
+  id: 405b3d61-b964-411d-9cb1-0b4b7f7507ed
+  path: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: Large Card Nodes Stay Non-Overlapping in a Bushy Hub-and-Spoke Topology
+  description: forceLayout regression test verifying card-sized (not just default
+    chip-sized) nodes resolve to non-overlapping positions in a hub-and-spoke
+    graph.
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-layout.spec.ts
+        symbol: keeps large card-sized nodes non-overlapping in a bushy hub-and-spoke
+          topology
+  metadata:
+    created_at: 2026-09-18T14:40:56.637Z
+    updated_at: 2026-09-18T14:40:56.637Z
+    version: 1
+testing.testcasesketch.clustered-view-bubble-packing-integration:
+  id: fd17ad17-286f-4e1e-8a17-7b40455a3a53
+  path: testing.testcasesketch.clustered-view-bubble-packing-integration
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: Clustered View Bubble Packing Integration
+  description: 'Integration test suite for layout="force-clustered": nested bubble
+    boundaries render and separate correctly per top-level Louvain cluster.'
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-components.spec.ts
+        symbol: Clustered View - Bubble Packing (layout="force-clustered")
+  metadata:
+    created_at: 2026-09-18T14:40:56.955Z
+    updated_at: 2026-09-18T14:40:56.955Z
+    version: 1
+testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test:
+  id: 22c9b36b-f659-4005-b325-5285a145f46b
+  path: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: Galaxy Layout Lab POC Dataset Stress Test
+  description: Integration stress test exercising galaxy layout against a larger
+    proof-of-concept dataset.
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-components.spec.ts
+        symbol: "integration: Galaxy Layout Lab (POC dataset stress test)"
+  metadata:
+    created_at: 2026-09-18T14:40:57.295Z
+    updated_at: 2026-09-18T14:40:57.295Z
+    version: 1
+testing.testcasesketch.radial-tree-layout-collapsed-nodes:
+  id: 86ce0f5e-9622-426f-8b13-df2de231e95e
+  path: testing.testcasesketch.radial-tree-layout-collapsed-nodes
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: radialTreeLayout Collapsed Nodes
+  description: Verifies radialTreeLayout positions only currently-visible
+    (non-collapsed) nodes while still sizing trunk bubbles from the full tree.
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/__tests__/radialTreeLayout.test.ts
+        symbol: collapsed nodes
+  metadata:
+    created_at: 2026-09-18T14:40:57.620Z
+    updated_at: 2026-09-18T14:40:57.620Z
+    version: 1
+testing.testcasesketch.route-navigation-edge-avoids-obstacles:
+  id: 1bddbcce-bb59-4f10-a1f5-a02ed9220420
+  path: testing.testcasesketch.route-navigation-edge-avoids-obstacles
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: routeNavigationEdge Avoids Obstacles
+  description: Verifies orthogonal navigation-edge routing detours around obstacle
+    rectangles instead of crossing them.
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/channelRouter.test.ts
+        symbol: routeNavigationEdge
+  metadata:
+    created_at: 2026-09-18T14:40:57.942Z
+    updated_at: 2026-09-18T14:40:57.942Z
+    version: 1

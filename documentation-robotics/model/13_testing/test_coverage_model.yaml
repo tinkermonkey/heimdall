@@ -1,0 +1,22 @@
+testing.testcoveragemodel.heimdall-graph-layout-test-coverage:
+  id: 4d0c24e6-d82c-4bbf-a8a6-e1bd924d5b55
+  path: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+  spec_node_id: testing.testcoveragemodel
+  type: testcoveragemodel
+  layer_id: testing
+  name: Heimdall Graph Layout Test Coverage
+  description: "Coverage model for heimdall's graph-visualization surface:
+    Playwright browser tests (tests/graph-*.spec.ts) plus Vitest pure-function
+    unit tests (src/utils/*.test.ts)."
+  attributes:
+    version: 0.8.0
+    application: heimdall-ui
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: scripts.test
+  metadata:
+    created_at: 2026-09-18T14:40:53.890Z
+    updated_at: 2026-09-18T14:40:53.890Z
+    version: 1

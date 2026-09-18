@@ -1,0 +1,45 @@
+motivation.principle.deterministic-reproducible-layout-output:
+  id: 8b65be95-1067-42d4-8fd2-2362cdcb8a68
+  path: motivation.principle.deterministic-reproducible-layout-output
+  spec_node_id: motivation.principle
+  type: principle
+  layer_id: motivation
+  name: Deterministic, Reproducible Layout Output
+  description: "Inferred from graphClustering.ts's header comment: louvainCluster
+    never uses Math.random or wall-clock time, always iterates in a fixed order,
+    and breaks every tie deterministically, because the layout loop's scoring
+    depends on reproducible layouts across runs of the same input."
+  attributes:
+    category: development
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/graphClustering.ts
+        symbol: louvainCluster
+  metadata:
+    created_at: 2026-09-18T14:43:25.647Z
+    updated_at: 2026-09-18T14:43:25.647Z
+    version: 1
+motivation.principle.zero-literal-node-overlap-guarantee:
+  id: cf666d18-d56d-4943-b72b-3e3157aa06e1
+  path: motivation.principle.zero-literal-node-overlap-guarantee
+  spec_node_id: motivation.principle
+  type: principle
+  layer_id: motivation
+  name: Zero Literal Node-Overlap Guarantee
+  description: Inferred from repeated 'zero literal overlap' language across
+    graphLayout.ts/galaxyLayout.ts (resolveOverlaps, FINAL_CLEANUP_MAX_PASSES,
+    nodeMargin docs) — every layout engine runs an unpadded final cleanup pass
+    specifically to guarantee this regardless of what padding options were
+    requested.
+  attributes:
+    category: architecture
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/galaxyLayout.ts
+        symbol: FINAL_CLEANUP_MAX_PASSES
+  metadata:
+    created_at: 2026-09-18T14:43:25.951Z
+    updated_at: 2026-09-18T14:43:25.951Z
+    version: 1

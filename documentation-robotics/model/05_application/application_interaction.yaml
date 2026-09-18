@@ -1,0 +1,21 @@
+application.applicationinteraction.panzoom-gesture-handling:
+  id: 59e21377-56d1-43ff-9945-4556d35265c9
+  path: application.applicationinteraction.panzoom-gesture-handling
+  spec_node_id: application.applicationinteraction
+  type: applicationinteraction
+  layer_id: application
+  name: Pan/Zoom Gesture Handling
+  description: "usePanZoom(): wheel/pinch/drag/keyboard-driven pan and zoom with
+    inertia, anchored-zoom math, and bounds clamping — reacts continuously to
+    pointer/wheel/keyboard events rather than a single request/response."
+  attributes:
+    pattern: event-driven
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/usePanZoom.ts
+        symbol: usePanZoom
+  metadata:
+    created_at: 2026-09-18T14:35:20.132Z
+    updated_at: 2026-09-18T14:35:20.132Z
+    version: 1

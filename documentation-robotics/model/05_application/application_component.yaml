@@ -1,0 +1,166 @@
+application.applicationcomponent.graph-canvas-component:
+  id: 46abcf82-6aff-49ca-85f2-d42625ca97b6
+  path: application.applicationcomponent.graph-canvas-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphCanvas Component
+  description: "The primary orchestrating React component: manages node
+    measurement, dispatches to whichever layout engine is selected, owns
+    pan/zoom/selection/hover/collapse state, and renders nodes, edges, toolbar,
+    tooltips, and popovers."
+  attributes:
+    type: service-component
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: GraphCanvas
+  metadata:
+    created_at: 2026-09-18T14:34:35.709Z
+    updated_at: 2026-09-18T14:34:35.709Z
+    version: 1
+application.applicationcomponent.graph-node-component:
+  id: 5eab1be5-9898-4757-818c-a1378301c471
+  path: application.applicationcomponent.graph-node-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphNode Component
+  description: "Default node renderer: label/kind/domain swatch, click/keyboard
+    select, Shift+Enter collapse toggle, popover trigger."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphNode.tsx
+        symbol: GraphNode
+  metadata:
+    created_at: 2026-09-18T14:34:35.992Z
+    updated_at: 2026-09-18T14:34:35.992Z
+    version: 1
+application.applicationcomponent.graph-edge-component:
+  id: 2466d906-1d46-405f-a82c-b26d580312c5
+  path: application.applicationcomponent.graph-edge-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphEdge Component
+  description: Standalone exported edge component (for use outside GraphCanvas's
+    own internal edge renderer) — computes its own path via computeEdgePath and
+    delegates drawing to GraphEdgeShape.
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphEdge.tsx
+        symbol: GraphEdge
+  metadata:
+    created_at: 2026-09-18T14:34:36.293Z
+    updated_at: 2026-09-18T14:34:36.293Z
+    version: 1
+application.applicationcomponent.graph-edge-shape-component:
+  id: 64946a5b-15cb-46da-9a3d-2b331c26d2d9
+  path: application.applicationcomponent.graph-edge-shape-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphEdgeShape Component
+  description: "Shared SVG drawing primitive for an edge: line, arrow markers (per
+    variant), hit-target path, and collision-cleared label pill. Used by both
+    GraphEdge and GraphCanvas's internal edge renderer to prevent visual drift
+    between the two."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphEdgeShape.tsx
+        symbol: GraphEdgeShape
+  metadata:
+    created_at: 2026-09-18T14:34:36.592Z
+    updated_at: 2026-09-18T14:34:36.592Z
+    version: 1
+application.applicationcomponent.graph-toolbar-component:
+  id: 3a96181e-c48f-4641-8468-e3f67b7df38d
+  path: application.applicationcomponent.graph-toolbar-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphToolbar Component
+  description: Floating zoom in/out/fit, pan-lock, fullscreen, and (layout=galaxy
+    only) live-simulation toggle controls, reading/writing GraphCanvasContext.
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphToolbar.tsx
+        symbol: GraphToolbar
+  metadata:
+    created_at: 2026-09-18T14:34:36.881Z
+    updated_at: 2026-09-18T14:34:36.881Z
+    version: 1
+application.applicationcomponent.graph-inspector-component:
+  id: 158661b1-d682-4ba0-984d-b2b955e37094
+  path: application.applicationcomponent.graph-inspector-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphInspector Component
+  description: "Detail panel for a selected node: title/kind/domain badges,
+    description, metadata key-value list, and outgoing/incoming relationship
+    links."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphInspector.tsx
+        symbol: GraphInspector
+  metadata:
+    created_at: 2026-09-18T14:34:37.175Z
+    updated_at: 2026-09-18T14:34:37.175Z
+    version: 1
+application.applicationcomponent.graph-edge-inspector-component:
+  id: 02df26ef-c374-48e5-bb73-1fcf7e40d607
+  path: application.applicationcomponent.graph-edge-inspector-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphEdgeInspector Component
+  description: "Lighter detail panel for a selected edge: predicate/title,
+    source/target endpoint buttons, weight and scalar metadata."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphEdgeInspector.tsx
+        symbol: GraphEdgeInspector
+  metadata:
+    created_at: 2026-09-18T14:34:37.466Z
+    updated_at: 2026-09-18T14:34:37.466Z
+    version: 1
+application.applicationcomponent.graph-collapse-control-component:
+  id: 4348422b-9a36-478f-b8b6-d374d35f56b5
+  path: application.applicationcomponent.graph-collapse-control-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: GraphCollapseControl Component
+  description: Floating foreignObject button rendered at a node's right edge for
+    toggling structural collapse/expand, with a hidden-descendant-count badge.
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCollapseControl.tsx
+        symbol: GraphCollapseControl
+  metadata:
+    created_at: 2026-09-18T14:34:37.787Z
+    updated_at: 2026-09-18T14:34:37.787Z
+    version: 1

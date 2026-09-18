@@ -1,0 +1,18 @@
+api.tag.graph:
+  id: 093ad787-9bd6-451f-8756-b4fc263a8508
+  path: api.tag.graph
+  spec_node_id: api.tag
+  type: tag
+  layer_id: api
+  name: graph
+  description: Graph visualization and layout portion of
+    @tinkermonkey/heimdall-ui's public exported API surface (src/index.ts).
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphCanvas
+  metadata:
+    created_at: 2026-09-18T14:37:29.385Z
+    updated_at: 2026-09-18T14:37:29.385Z
+    version: 1

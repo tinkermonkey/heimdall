@@ -1,0 +1,90 @@
+ux.actionpattern.node-select-on-click-or-enterspace:
+  id: 96e030f5-e56d-4af5-8732-0b9abe605d16
+  path: ux.actionpattern.node-select-on-click-or-enterspace
+  spec_node_id: ux.actionpattern
+  type: actionpattern
+  layer_id: ux
+  name: Node Select on Click or Enter/Space
+  description: Clicking a node, or pressing Enter/Space while it's focused, fires
+    onSelect — GraphNode's primary interaction.
+  attributes:
+    category: crud
+    trigger: click
+    feedback: inline-message
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphNode.tsx
+        symbol: onSelect
+  metadata:
+    created_at: 2026-09-18T14:39:46.840Z
+    updated_at: 2026-09-18T14:39:46.840Z
+    version: 1
+ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click:
+  id: 27c03741-ccd3-4511-9718-fe098c41a195
+  path: ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click
+  spec_node_id: ux.actionpattern
+  type: actionpattern
+  layer_id: ux
+  name: Collapse/Expand Toggle (Shift+Enter or Chevron Click)
+  description: Shift+Enter on a focused hierarchical node, or clicking its chevron
+    button, toggles collapsed state via onToggleCollapse — progressive
+    disclosure for dense hierarchies.
+  attributes:
+    category: crud
+    trigger: keyboard
+    feedback: animation
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphNode.tsx
+        symbol: onToggleCollapse
+  metadata:
+    created_at: 2026-09-18T14:39:47.159Z
+    updated_at: 2026-09-18T14:39:47.159Z
+    version: 1
+ux.actionpattern.node-drag-reposition:
+  id: abb36b11-680a-4a89-9038-31f8d5400f98
+  path: ux.actionpattern.node-drag-reposition
+  spec_node_id: ux.actionpattern
+  type: actionpattern
+  layer_id: ux
+  name: Node Drag Reposition
+  description: Dragging a node past DRAG_THRESHOLD pixels repositions it,
+    persisting locally until the node list changes; onNodeDragEnd lets the
+    caller persist it elsewhere.
+  attributes:
+    category: crud
+    trigger: click
+    feedback: none
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onNodeDragEnd
+  metadata:
+    created_at: 2026-09-18T14:39:47.472Z
+    updated_at: 2026-09-18T14:39:47.472Z
+    version: 1
+ux.actionpattern.panzoom-viewport-gesture:
+  id: 097112ea-025b-4665-9d7a-93bcdd2e3fe5
+  path: ux.actionpattern.panzoom-viewport-gesture
+  spec_node_id: ux.actionpattern
+  type: actionpattern
+  layer_id: ux
+  name: Pan/Zoom Viewport Gesture
+  description: Wheel/pinch zoom (anchored under the cursor), pointer-drag pan with
+    release inertia, and +/-/arrow-key shortcuts, via usePanZoom.
+  attributes:
+    category: navigation
+    trigger: swipe
+    feedback: none
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/usePanZoom.ts
+        symbol: usePanZoom
+  metadata:
+    created_at: 2026-09-18T14:39:47.790Z
+    updated_at: 2026-09-18T14:39:47.790Z
+    version: 1

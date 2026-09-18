@@ -1,0 +1,270 @@
+application.applicationfunction.force-directed-layout-algorithm:
+  id: ffe2ed94-e04c-4eba-b485-904089edeb2e
+  path: application.applicationfunction.force-directed-layout-algorithm
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Force-Directed Layout Algorithm
+  description: "forceLayout(): spring/repulsion/collision/center-gravity
+    simulation placing nodes without explicit coordinates, followed by a
+    capped-displacement overlap-resolution post-process
+    (resolveOverlaps/separationPass)."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: forceLayout
+  metadata:
+    created_at: 2026-09-18T14:34:59.089Z
+    updated_at: 2026-09-18T14:34:59.089Z
+    version: 1
+application.applicationfunction.clustered-force-layout-algorithm:
+  id: 34cb4fde-5404-4ffc-bbb6-668b7d78e8af
+  path: application.applicationfunction.clustered-force-layout-algorithm
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Clustered Force Layout Algorithm
+  description: "clusteredForceLayout(): opt-in nested-bubble layout — Louvain
+    clustering + circle packing + a macro force pass over cluster pseudo-nodes +
+    a micro force pass over real nodes gravity-biased toward their cluster
+    centroid."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: clusteredForceLayout
+  metadata:
+    created_at: 2026-09-18T14:34:59.388Z
+    updated_at: 2026-09-18T14:34:59.388Z
+    version: 1
+application.applicationfunction.galaxy-radial-orbit-layout-algorithm:
+  id: 9a68fdb8-4dbb-4f2b-b04b-aa0aff53227a
+  path: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Galaxy Radial Orbit Layout Algorithm
+  description: "galaxyLayout(): positions nodes as a radial hierarchy of orbits
+    from structural edges, settled over repeated galaxySimulationStep cycles,
+    then group-separated so independent root subtrees don't overlap."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/galaxyLayout.ts
+        symbol: galaxyLayout
+  metadata:
+    created_at: 2026-09-18T14:34:59.689Z
+    updated_at: 2026-09-18T14:34:59.689Z
+    version: 1
+application.applicationfunction.galaxy-live-simulation-step:
+  id: dcdddb7a-3562-4c11-87c9-7669e92ed863
+  path: application.applicationfunction.galaxy-live-simulation-step
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Galaxy Live Simulation Step
+  description: "galaxySimulationStep(): one settle iteration of the galaxy
+    algorithm — recomputed orbital home positions, collision separation,
+    homeStrength nudge — driven either as a bounded batch (galaxyLayout) or
+    continuously per animation frame for live dragging."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/galaxyLayout.ts
+        symbol: galaxySimulationStep
+  metadata:
+    created_at: 2026-09-18T14:35:00.006Z
+    updated_at: 2026-09-18T14:35:00.006Z
+    version: 1
+application.applicationfunction.galaxy-aspect-ratio-resolution:
+  id: b282da87-7e86-4d7b-be20-cebe198cde3c
+  path: application.applicationfunction.galaxy-aspect-ratio-resolution
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Galaxy Aspect-Ratio Resolution
+  description: "resolveAspectRatioScale(): binary-searches how much a galaxy
+    layout's orbital ellipse can be warped toward a container's aspect ratio
+    without inflating rendered area past a cap."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/galaxyLayout.ts
+        symbol: resolveAspectRatioScale
+  metadata:
+    created_at: 2026-09-18T14:35:00.314Z
+    updated_at: 2026-09-18T14:35:00.314Z
+    version: 1
+application.applicationfunction.ux-navigation-tree-layout-algorithm:
+  id: 21b6627e-7da6-4816-ad57-7b9b0c88c865
+  path: application.applicationfunction.ux-navigation-tree-layout-algorithm
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: UX Navigation Tree Layout Algorithm
+  description: "uxNavLayout(): positions page nodes as independent top-down
+    d3.tree() hierarchies and view nodes as horizontal fans attached to their
+    parent pages, handling multi-parent views and orphan views."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/uxNavLayout.ts
+        symbol: uxNavLayout
+  metadata:
+    created_at: 2026-09-18T14:35:00.628Z
+    updated_at: 2026-09-18T14:35:00.628Z
+    version: 1
+application.applicationfunction.radial-tree-layout-algorithm:
+  id: 87966d3e-54e7-40da-9143-45f651cba8bc
+  path: application.applicationfunction.radial-tree-layout-algorithm
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Radial Tree Layout Algorithm
+  description: "radialTreeLayout(): per-trunk sizing, d3.tree()-based polar
+    placement of descendants on depth rings, trunk packing (d3 packSiblings),
+    and a global separation pass."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/radialTreeLayout.ts
+        symbol: radialTreeLayout
+  metadata:
+    created_at: 2026-09-18T14:35:00.940Z
+    updated_at: 2026-09-18T14:35:00.940Z
+    version: 1
+application.applicationfunction.louvain-community-clustering:
+  id: 2bc54e5c-56ac-4d19-a4f0-ff075a7158c4
+  path: application.applicationfunction.louvain-community-clustering
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Louvain Community Clustering
+  description: "louvainCluster(): deterministic multi-level Louvain modularity
+    clustering producing a nested dendrogram, used as the community structure
+    clusteredForceLayout packs and lays out."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphClustering.ts
+        symbol: louvainCluster
+  metadata:
+    created_at: 2026-09-18T14:35:01.275Z
+    updated_at: 2026-09-18T14:35:01.275Z
+    version: 1
+application.applicationfunction.cluster-circle-packing:
+  id: 09f24215-8fda-4806-af49-779567dfe1b8
+  path: application.applicationfunction.cluster-circle-packing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Cluster Circle Packing
+  description: "packClusters(): wraps d3-hierarchy's pack() to turn a Louvain
+    dendrogram into concrete non-overlapping nested circles sized to each leaf's
+    real bounding box."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphPacking.ts
+        symbol: packClusters
+  metadata:
+    created_at: 2026-09-18T14:35:01.589Z
+    updated_at: 2026-09-18T14:35:01.589Z
+    version: 1
+application.applicationfunction.structural-forest-construction:
+  id: 72ab6c36-e8d9-4b07-9103-f1596bab9e68
+  path: application.applicationfunction.structural-forest-construction
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Structural Forest Construction
+  description: "buildStructuralForest(): derives a parent/child forest from
+    structural edges only, breaking structural cycles by promoting one node per
+    cycle to a root. Shared by galaxyLayout, radialTreeLayout, uxNavLayout, and
+    GraphCanvas's collapse/expand logic."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphHierarchy.ts
+        symbol: buildStructuralForest
+  metadata:
+    created_at: 2026-09-18T14:35:01.913Z
+    updated_at: 2026-09-18T14:35:01.913Z
+    version: 1
+application.applicationfunction.node-overlap-separation-pass:
+  id: f7a0981d-85ef-44b5-9170-4e5211506740
+  path: application.applicationfunction.node-overlap-separation-pass
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Node Overlap Separation Pass
+  description: "separationPass(): pushes every currently-overlapping node pair
+    apart along the least-movement axis, capped per node — shared post-process
+    reused by forceLayout, galaxyLayout, and radialTreeLayout."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: separationPass
+  metadata:
+    created_at: 2026-09-18T14:35:02.268Z
+    updated_at: 2026-09-18T14:35:02.268Z
+    version: 1
+application.applicationfunction.navigation-edge-orthogonal-routing:
+  id: cef57710-27c1-400e-91ab-2c93c9da299d
+  path: application.applicationfunction.navigation-edge-orthogonal-routing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Navigation Edge Orthogonal Routing
+  description: "routeNavigationEdge/routeNavigationEdges(): builds
+    obstacle-avoiding orthogonal (right-angle) paths for ux-navigation route
+    edges, with a nudge pass spreading overlapping parallel segments."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/channelRouter.ts
+        symbol: routeNavigationEdges
+  metadata:
+    created_at: 2026-09-18T14:35:02.640Z
+    updated_at: 2026-09-18T14:35:02.640Z
+    version: 1
+application.applicationfunction.bezier-edge-path-computation:
+  id: 7aaf6989-0a17-460d-8e1f-24842a0e2f06
+  path: application.applicationfunction.bezier-edge-path-computation
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Bezier Edge Path Computation
+  description: "computeEdgePath()/bezierPath()/cubicBezierPath(): resolves the
+    rendered curve between two node rectangles, choosing quadratic vs. cubic
+    bezier depending on whether either endpoint has a fixed anchor side."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graph.ts
+        symbol: computeEdgePath
+  metadata:
+    created_at: 2026-09-18T14:35:02.989Z
+    updated_at: 2026-09-18T14:35:02.989Z
+    version: 1
+application.applicationfunction.edge-label-clear-position-search:
+  id: e1c32e43-29cd-49e6-a636-48876fbbd4f7
+  path: application.applicationfunction.edge-label-clear-position-search
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Edge Label Clear-Position Search
+  description: "findClearLabelPosition(): samples candidate points along an edge's
+    path and picks the first whose label footprint clears every node, falling
+    back to the exact midpoint."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graph.ts
+        symbol: findClearLabelPosition
+  metadata:
+    created_at: 2026-09-18T14:35:03.333Z
+    updated_at: 2026-09-18T14:35:03.333Z
+    version: 1

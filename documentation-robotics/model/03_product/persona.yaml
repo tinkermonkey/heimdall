@@ -1,0 +1,38 @@
+product.persona.application-developer-embedding-a-graph-view:
+  id: 0226af9e-4717-4fea-bc1b-f255ffdd9556
+  path: product.persona.application-developer-embedding-a-graph-view
+  spec_node_id: product.persona
+  type: persona
+  layer_id: product
+  name: Application Developer Embedding a Graph View
+  description: "Inferred persona: a React/TypeScript developer integrating
+    GraphCanvas into their own product, choosing layout mode and supplying
+    data/callbacks."
+  attributes:
+    category: primary
+    proficiency: advanced
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:42:17.430Z
+    updated_at: 2026-09-18T14:42:17.430Z
+    version: 1
+product.persona.end-user-exploring-a-rendered-graph:
+  id: 1db3f2a3-ca47-4373-bde6-d3d3676d20e8
+  path: product.persona.end-user-exploring-a-rendered-graph
+  spec_node_id: product.persona
+  type: persona
+  layer_id: product
+  name: End User Exploring a Rendered Graph
+  description: "Inferred persona: the person who ultimately interacts with the
+    rendered graph (pan/zoom/select/hover/drag/collapse) without knowledge of
+    the underlying library."
+  attributes:
+    category: served
+    proficiency: novice
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:42:17.764Z
+    updated_at: 2026-09-18T14:42:17.764Z
+    version: 1

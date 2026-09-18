@@ -1,0 +1,67 @@
+product.feature.live-draggable-galaxy-simulation:
+  id: 14b189e9-c37d-4ac2-9c41-d479b45147b1
+  path: product.feature.live-draggable-galaxy-simulation
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Live Draggable Galaxy Simulation
+  description: Opt-in continuous elastic simulation for galaxy layout, so dragging
+    a node repositions its subtree in real time instead of freezing after one
+    computed layout.
+  attributes:
+    priority: medium
+    status: delivered
+    size: m
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useGalaxySimulation.ts
+        symbol: useGalaxySimulation
+  metadata:
+    created_at: 2026-09-18T14:42:16.451Z
+    updated_at: 2026-09-18T14:42:16.451Z
+    version: 1
+product.feature.progressive-disclosure-via-node-collapseexpand:
+  id: 27f7db7f-8438-4977-9171-c5a4999c6d09
+  path: product.feature.progressive-disclosure-via-node-collapseexpand
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Progressive Disclosure via Node Collapse/Expand
+  description: Collapse a node to hide its structural descendants (and their
+    edges) for dense hierarchies, with a hidden-descendant-count badge.
+  attributes:
+    priority: medium
+    status: delivered
+    size: s
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCollapseControl.tsx
+        symbol: GraphCollapseControl
+  metadata:
+    created_at: 2026-09-18T14:42:16.776Z
+    updated_at: 2026-09-18T14:42:16.776Z
+    version: 1
+product.feature.node-and-edge-tooltips-and-popovers:
+  id: 1c700810-fdff-4c4c-b7cb-d89fd3e6cf27
+  path: product.feature.node-and-edge-tooltips-and-popovers
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Node and Edge Tooltips and Popovers
+  description: Render-prop tooltip/popover overlays anchored to a hovered/clicked
+    node or edge, positioned via the canvas's own pan/zoom transform.
+  attributes:
+    priority: low
+    status: delivered
+    size: s
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: nodeTooltip
+  metadata:
+    created_at: 2026-09-18T14:42:17.097Z
+    updated_at: 2026-09-18T14:42:17.097Z
+    version: 1

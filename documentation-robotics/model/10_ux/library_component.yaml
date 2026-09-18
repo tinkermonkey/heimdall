@@ -1,0 +1,125 @@
+ux.librarycomponent.graph-canvas-ux:
+  id: c575ece3-3ebb-4c86-88d7-f2eada224c81
+  path: ux.librarycomponent.graph-canvas-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphCanvas (UX)
+  description: "Interactive graph canvas: pan/zoom viewport,
+    selectable/hoverable/draggable nodes and edges, tooltips/popovers, toolbar,
+    and progressive-disclosure collapse controls."
+  attributes:
+    type: display
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: GraphCanvas
+  metadata:
+    created_at: 2026-09-18T14:39:45.025Z
+    updated_at: 2026-09-18T14:39:45.025Z
+    version: 1
+ux.librarycomponent.graph-node-ux:
+  id: cb2f4e0b-5469-4312-bad3-cb73909afa5d
+  path: ux.librarycomponent.graph-node-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphNode (UX)
+  description: "Default node visual: label, kind badge, domain-color swatch,
+    selection ring, and (when hierarchical) a collapse/expand chevron with
+    hidden-descendant-count badge."
+  attributes:
+    type: display
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphNode.tsx
+        symbol: GraphNode
+  metadata:
+    created_at: 2026-09-18T14:39:45.326Z
+    updated_at: 2026-09-18T14:39:45.326Z
+    version: 1
+ux.librarycomponent.graph-edgegraph-edge-shape-ux:
+  id: c0aeda3c-e6f2-4e47-aefc-bdc655fe2808
+  path: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphEdge/GraphEdgeShape (UX)
+  description: "Default edge visual: curved or orthogonal line, directional arrow
+    marker, optional collision-cleared label pill, variant-based
+    (default/hot/irrelevant) styling."
+  attributes:
+    type: display
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphEdgeShape.tsx
+        symbol: GraphEdgeShape
+  metadata:
+    created_at: 2026-09-18T14:39:45.631Z
+    updated_at: 2026-09-18T14:39:45.631Z
+    version: 1
+ux.librarycomponent.graph-toolbar-ux:
+  id: 6bcb4d41-f2b0-45a8-ab54-e86eb6ec3533
+  path: ux.librarycomponent.graph-toolbar-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphToolbar (UX)
+  description: "Floating control cluster: zoom in/out/fit, pan-lock toggle,
+    fullscreen toggle, and (galaxy layout only) live-simulation toggle."
+  attributes:
+    type: navigation
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphToolbar.tsx
+        symbol: GraphToolbar
+  metadata:
+    created_at: 2026-09-18T14:39:45.933Z
+    updated_at: 2026-09-18T14:39:45.933Z
+    version: 1
+ux.librarycomponent.graph-inspector-graph-edge-inspector-ux:
+  id: 49c60c71-678a-42bf-9716-90cd286e348e
+  path: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphInspector / GraphEdgeInspector (UX)
+  description: "Detail-panel pair for a selected node or edge: title/badges,
+    description, key-value metadata, and (node) outgoing/incoming relationship
+    navigation links."
+  attributes:
+    type: display
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphInspector.tsx
+        symbol: GraphInspector
+  metadata:
+    created_at: 2026-09-18T14:39:46.233Z
+    updated_at: 2026-09-18T14:39:46.233Z
+    version: 1
+ux.librarycomponent.graph-collapse-control-ux:
+  id: 7bb0aa42-8b6c-441d-bf64-a25f868a86c3
+  path: ux.librarycomponent.graph-collapse-control-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphCollapseControl (UX)
+  description: Small floating button anchored to a node's right edge for toggling
+    structural collapse/expand, with a hidden-descendant-count badge when
+    collapsed.
+  attributes:
+    type: feedback
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCollapseControl.tsx
+        symbol: GraphCollapseControl
+  metadata:
+    created_at: 2026-09-18T14:39:46.534Z
+    updated_at: 2026-09-18T14:39:46.534Z
+    version: 1

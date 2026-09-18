@@ -1,0 +1,136 @@
+- type: add
+  elementId: technology.technologyfunction.automated-test-execution
+  layerName: technology
+  after:
+    id: 9c3eda9a-2b82-4038-891b-5b4bca064231
+    path: technology.technologyfunction.automated-test-execution
+    spec_node_id: technology.technologyfunction
+    type: technologyfunction
+    layer_id: technology
+    name: Automated Test Execution
+    description: The capability of running heimdall's graph-visualization test suite
+      — Playwright browser tests (tests/graph-*.spec.ts) and Vitest unit tests
+      (src/utils/*.test.ts) — via 'npm test' / 'npm run test:unit'.
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: scripts.test
+    metadata:
+      created_at: 2026-09-18T14:45:05.767Z
+      updated_at: 2026-09-18T14:45:05.767Z
+      version: 1
+  timestamp: 2026-09-18T14:45:05.795Z
+  sequenceNumber: 0
+- type: add
+  elementId: technology.technologyprocess.npm-test-npm-run-testunit
+  layerName: technology
+  after:
+    id: 2818f9ec-a363-4375-8230-7a611665add6
+    path: technology.technologyprocess.npm-test-npm-run-testunit
+    spec_node_id: technology.technologyprocess
+    type: technologyprocess
+    layer_id: technology
+    name: npm test / npm run test:unit
+    description: The package.json scripts invoking Playwright ('test'/'test:ui') and
+      Vitest ('test:unit') against the graph-visualization test suite.
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: scripts.test
+    metadata:
+      created_at: 2026-09-18T14:45:06.110Z
+      updated_at: 2026-09-18T14:45:06.110Z
+      version: 1
+  timestamp: 2026-09-18T14:45:06.135Z
+  sequenceNumber: 1
+- type: relationship-add
+  elementId: technology.artifact.type-script-compiler-configuration::flows-to::technology.technologyprocess.npm-run-build-vite-build
+  layerName: technology
+  after:
+    source: technology.artifact.type-script-compiler-configuration
+    target: technology.technologyprocess.npm-run-build-vite-build
+    predicate: flows-to
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:45:13.248Z
+  sequenceNumber: 2
+- type: relationship-add
+  elementId: technology.technologyfunction.library-bundling-and-type-declaration-generation::accesses::technology.artifact.type-script-compiler-configuration
+  layerName: technology
+  after:
+    source: technology.technologyfunction.library-bundling-and-type-declaration-generation
+    target: technology.artifact.type-script-compiler-configuration
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:45:13.617Z
+  sequenceNumber: 3
+- type: relationship-add
+  elementId: technology.technologyfunction.library-bundling-and-type-declaration-generation::accesses::technology.artifact.heimdall-ui-package
+  layerName: technology
+  after:
+    source: technology.technologyfunction.library-bundling-and-type-declaration-generation
+    target: technology.artifact.heimdall-ui-package
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:45:13.960Z
+  sequenceNumber: 4
+- type: relationship-add
+  elementId: technology.technologyfunction.library-bundling-and-type-declaration-generation::flows-to::technology.technologyprocess.npm-run-build-vite-build
+  layerName: technology
+  after:
+    source: technology.technologyfunction.library-bundling-and-type-declaration-generation
+    target: technology.technologyprocess.npm-run-build-vite-build
+    predicate: flows-to
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:45:14.309Z
+  sequenceNumber: 5
+- type: relationship-add
+  elementId: technology.technologyfunction.automated-test-execution::accesses::technology.artifact.playwright-test-runner
+  layerName: technology
+  after:
+    source: technology.technologyfunction.automated-test-execution
+    target: technology.artifact.playwright-test-runner
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:45:14.666Z
+  sequenceNumber: 6
+- type: relationship-add
+  elementId: technology.technologyfunction.automated-test-execution::accesses::technology.artifact.vitest
+  layerName: technology
+  after:
+    source: technology.technologyfunction.automated-test-execution
+    target: technology.artifact.vitest
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:45:15.020Z
+  sequenceNumber: 7
+- type: relationship-add
+  elementId: technology.technologyfunction.automated-test-execution::flows-to::technology.technologyprocess.npm-test-npm-run-testunit
+  layerName: technology
+  after:
+    source: technology.technologyfunction.automated-test-execution
+    target: technology.technologyprocess.npm-test-npm-run-testunit
+    predicate: flows-to
+    layer: technology
+    category: structural
+  timestamp: 2026-09-18T14:45:15.392Z
+  sequenceNumber: 8
+- type: relationship-add
+  elementId: technology.technologyfunction.automated-test-execution::serves::application.applicationfunction.force-directed-layout-algorithm
+  layerName: technology
+  after:
+    source: technology.technologyfunction.automated-test-execution
+    target: application.applicationfunction.force-directed-layout-algorithm
+    predicate: serves
+    layer: technology
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:45:15.766Z
+  sequenceNumber: 9

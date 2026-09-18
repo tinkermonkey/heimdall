@@ -1,0 +1,44 @@
+motivation.goal.readable-layout-for-structurally-complex-graphs:
+  id: 6f654b0b-a0a5-47e3-a93e-c51e7dfca70b
+  path: motivation.goal.readable-layout-for-structurally-complex-graphs
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: Readable Layout for Structurally Complex Graphs
+  description: "Inferred from graphLayout.ts's resolveOverlaps/separationPass
+    documentation and repeated CHANGELOG entries: minimize node overlap and edge
+    crossings, and keep edge-length deviation / neighborhood preservation good,
+    even for bushy hub-and-spoke or large-card-node topologies."
+  attributes:
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: resolveOverlaps
+  metadata:
+    created_at: 2026-09-18T14:43:25.037Z
+    updated_at: 2026-09-18T14:43:25.037Z
+    version: 1
+motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs:
+  id: 362775e0-7239-4ff6-8ac2-fd8df208829d
+  path: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: Layout Algorithms That Scale to Large, Dense, and Pathological Graphs
+  description: Inferred from graphLayout.ts's MACRO_EDGE_CAP handling of a
+    measured 564-duplicate-edge pathological dense-cluster fixture, and
+    FINAL_CLEANUP_MAX_PASSES's docs about an 18-large-card dense hub-and-spoke
+    case.
+  attributes:
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: MACRO_EDGE_CAP
+  metadata:
+    created_at: 2026-09-18T14:43:25.337Z
+    updated_at: 2026-09-18T14:43:25.337Z
+    version: 1

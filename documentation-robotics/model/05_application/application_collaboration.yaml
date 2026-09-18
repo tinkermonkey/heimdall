@@ -1,0 +1,19 @@
+application.applicationcollaboration.graph-canvas-layoutviewport-collaboration:
+  id: bcfa9365-11eb-4f3d-9720-c6a039e5d979
+  path: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
+  spec_node_id: application.applicationcollaboration
+  type: applicationcollaboration
+  layer_id: application
+  name: GraphCanvas Layout/Viewport Collaboration
+  description: The runtime collaboration between GraphCanvas, its selected layout
+    engine, usePanZoom, and (layout=galaxy) useGalaxySimulation — GraphCanvas
+    owns state and orchestrates calls into the others each render/frame.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: GraphCanvas
+  metadata:
+    created_at: 2026-09-18T14:35:21.827Z
+    updated_at: 2026-09-18T14:35:21.827Z
+    version: 1

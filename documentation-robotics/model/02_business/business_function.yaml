@@ -1,0 +1,32 @@
+business.businessfunction.automatic-node-layout-computation:
+  id: 56996a91-72e4-477b-ad9a-f613aa405c5a
+  path: business.businessfunction.automatic-node-layout-computation
+  spec_node_id: business.businessfunction
+  type: businessfunction
+  layer_id: business
+  name: Automatic Node Layout Computation
+  description: "Inferred business function: given arbitrary node/edge data with no
+    pre-set positions, automatically compute a readable 2D arrangement instead
+    of requiring a consumer to hand-place nodes."
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:42:00.072Z
+    updated_at: 2026-09-18T14:42:00.072Z
+    version: 1
+business.businessfunction.community-and-cluster-discovery-in-relationship-graphs:
+  id: af6733e7-25da-40a4-8bf7-f5fd90ef9824
+  path: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+  spec_node_id: business.businessfunction
+  type: businessfunction
+  layer_id: business
+  name: Community and Cluster Discovery in Relationship Graphs
+  description: "Inferred business function: surface community structure in a
+    relationship graph (via Louvain clustering) so densely-interconnected groups
+    read visually as groups."
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:42:00.365Z
+    updated_at: 2026-09-18T14:42:00.365Z
+    version: 1

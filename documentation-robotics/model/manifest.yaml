@@ -3,9 +3,10 @@ schema: documentation-robotics-v1
 cli_version: 0.2.0
 spec_version: 0.10.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-09-18T14:21:24.390Z
+updated: 2026-09-18T14:45:21.201Z
 project:
   name: heimdall-ux
+  description: ""
   version: 0.1.0
 documentation: .dr/README.md
 layers:
@@ -14,63 +15,115 @@ layers:
     name: Motivation
     path: documentation-robotics/model/01_motivation/
     enabled: true
+    elements:
+      driver: 1
+      goal: 2
+      principle: 2
+      requirement: 1
+      stakeholder: 3
   business:
     order: 2
     name: Business
     path: documentation-robotics/model/02_business/
     enabled: true
+    elements:
+      businessactor: 2
+      businessfunction: 2
+      businessprocess: 1
+      businessservice: 2
   product:
     order: 3
     name: Product
     path: documentation-robotics/model/03_product/
     enabled: true
+    elements:
+      capability: 5
+      feature: 3
+      persona: 2
   security:
     order: 4
     name: Security
     path: documentation-robotics/model/04_security/
     enabled: true
+    elements: {}
   application:
     order: 5
     name: Application
     path: documentation-robotics/model/05_application/
     enabled: true
+    elements:
+      applicationcollaboration: 1
+      applicationcomponent: 8
+      applicationevent: 2
+      applicationfunction: 14
+      applicationinteraction: 1
+      applicationprocess: 1
+      applicationservice: 2
+      dataobject: 2
   technology:
     order: 6
     name: Technology
     path: documentation-robotics/model/06_technology/
     enabled: true
+    elements:
+      artifact: 6
+      technologyfunction: 2
+      technologyprocess: 2
   api:
     order: 7
     name: Api
     path: documentation-robotics/model/07_api/
     enabled: true
+    elements:
+      operation: 19
+      tag: 1
   data-model:
     order: 8
     name: Data model
     path: documentation-robotics/model/08_data-model/
     enabled: true
+    elements:
+      schemadefinition: 15
   data-store:
     order: 9
     name: Data store
     path: documentation-robotics/model/09_data-store/
     enabled: true
+    elements: {}
   ux:
     order: 10
     name: Ux
     path: documentation-robotics/model/10_ux/
     enabled: true
+    elements:
+      actionpattern: 4
+      librarycomponent: 6
+      statepattern: 3
+      uxlibrary: 1
   navigation:
     order: 11
     name: Navigation
     path: documentation-robotics/model/11_navigation/
     enabled: true
+    elements: {}
   apm:
     order: 12
     name: Apm
     path: documentation-robotics/model/12_apm/
     enabled: true
+    elements: {}
   testing:
     order: 13
     name: Testing
     path: documentation-robotics/model/13_testing/
     enabled: true
+    elements:
+      coveragerequirement: 1
+      coveragesummary: 1
+      testcasesketch: 5
+      testcoveragemodel: 1
+      testcoveragetarget: 7
+changeset_history:
+  - name: wire-technology-orphans
+    committed_at: 2026-09-18T14:45:21.201Z
+    action: committed

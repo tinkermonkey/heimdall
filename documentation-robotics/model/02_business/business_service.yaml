@@ -1,0 +1,33 @@
+business.businessservice.large-graph-visualization:
+  id: 1470bc5d-4d23-4b07-ae88-6b9b9a5bc938
+  path: business.businessservice.large-graph-visualization
+  spec_node_id: business.businessservice
+  type: businessservice
+  layer_id: business
+  name: Large Graph Visualization
+  description: "Inferred business capability: enable consumers to render and let
+    end users navigate graphs with hundreds of nodes while staying visually
+    readable (non-overlapping, low edge-crossing) — the problem
+    forceLayout/clusteredForceLayout solve."
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:41:59.487Z
+    updated_at: 2026-09-18T14:41:59.487Z
+    version: 1
+business.businessservice.hierarchical-and-navigation-structure-visualization:
+  id: 9209184a-28f4-4d43-90d5-8fe4cb558a29
+  path: business.businessservice.hierarchical-and-navigation-structure-visualization
+  spec_node_id: business.businessservice
+  type: businessservice
+  layer_id: business
+  name: Hierarchical and Navigation Structure Visualization
+  description: "Inferred business capability: visualize page/view navigation
+    hierarchies and general tree/DAG structures as radial or top-down layouts —
+    the problem galaxyLayout/uxNavLayout/radialTreeLayout solve."
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:41:59.775Z
+    updated_at: 2026-09-18T14:41:59.775Z
+    version: 1

@@ -1,0 +1,412 @@
+api.operation.graph-canvas:
+  id: 9eddabd5-e8e7-44f6-9b9b-74b083203090
+  path: api.operation.graph-canvas
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphCanvas
+  description: Exported React component — the public entry point for rendering an
+    interactive graph.
+  attributes:
+    operationId: GraphCanvas
+    summary: Render an interactive, pan/zoomable graph with a pluggable layout engine
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphCanvas
+  metadata:
+    created_at: 2026-09-18T14:38:03.058Z
+    updated_at: 2026-09-18T14:38:03.058Z
+    version: 1
+api.operation.graph-node:
+  id: 2bdef60b-a43f-4339-9a77-f3aab951841e
+  path: api.operation.graph-node
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphNode
+  description: Exported default node renderer component, usable standalone or via
+    GraphCanvas's renderNode.
+  attributes:
+    operationId: GraphNode
+    summary: Default graph node renderer
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphNode
+  metadata:
+    created_at: 2026-09-18T14:38:03.383Z
+    updated_at: 2026-09-18T14:38:03.383Z
+    version: 1
+api.operation.graph-edge:
+  id: 037dfc67-1c2b-4dff-ad9e-726579807eea
+  path: api.operation.graph-edge
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphEdge
+  description: Exported standalone edge component for use outside GraphCanvas's
+    own internal edge renderer.
+  attributes:
+    operationId: GraphEdge
+    summary: Standalone graph edge component
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphEdge
+  metadata:
+    created_at: 2026-09-18T14:38:03.681Z
+    updated_at: 2026-09-18T14:38:03.681Z
+    version: 1
+api.operation.graph-edge-shape:
+  id: 9c973f74-f499-4eec-9a6d-180a43ef5d0e
+  path: api.operation.graph-edge-shape
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphEdgeShape
+  description: Exported low-level SVG edge-drawing primitive (line, markers, hit
+    target, label pill), for fully custom renderEdge callbacks.
+  attributes:
+    operationId: GraphEdgeShape
+    summary: Low-level SVG edge shape primitive
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphEdgeShape
+  metadata:
+    created_at: 2026-09-18T14:38:03.975Z
+    updated_at: 2026-09-18T14:38:03.975Z
+    version: 1
+api.operation.graph-toolbar:
+  id: 1b9bab7b-40b4-4a03-a484-988650ca61b3
+  path: api.operation.graph-toolbar
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphToolbar
+  description: Exported floating zoom/pan/lock/fullscreen/live-simulation control
+    cluster, for a custom toolbar placement.
+  attributes:
+    operationId: GraphToolbar
+    summary: Zoom/pan/lock/fullscreen toolbar for GraphCanvas
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphToolbar
+  metadata:
+    created_at: 2026-09-18T14:38:04.273Z
+    updated_at: 2026-09-18T14:38:04.273Z
+    version: 1
+api.operation.graph-collapse-control:
+  id: 85be95eb-949e-4901-a581-73d9791d31f6
+  path: api.operation.graph-collapse-control
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphCollapseControl
+  description: Exported collapse/expand affordance button for a node with
+    structural children.
+  attributes:
+    operationId: GraphCollapseControl
+    summary: Collapse/expand affordance for a hierarchical node
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphCollapseControl
+  metadata:
+    created_at: 2026-09-18T14:38:04.581Z
+    updated_at: 2026-09-18T14:38:04.581Z
+    version: 1
+api.operation.graph-inspector:
+  id: e32cda96-fec3-47c7-a69b-08bd6d8d508d
+  path: api.operation.graph-inspector
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphInspector
+  description: Exported detail panel component for a selected node's metadata and
+    relationships.
+  attributes:
+    operationId: GraphInspector
+    summary: Detail panel for a selected graph node
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphInspector
+  metadata:
+    created_at: 2026-09-18T14:38:04.924Z
+    updated_at: 2026-09-18T14:38:04.924Z
+    version: 1
+api.operation.graph-edge-inspector:
+  id: 37e11ef0-f472-4c04-90d0-5ba893f02a7f
+  path: api.operation.graph-edge-inspector
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: GraphEdgeInspector
+  description: Exported detail panel component for a selected edge's endpoints and metadata.
+  attributes:
+    operationId: GraphEdgeInspector
+    summary: Detail panel for a selected graph edge
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: GraphEdgeInspector
+  metadata:
+    created_at: 2026-09-18T14:38:05.235Z
+    updated_at: 2026-09-18T14:38:05.235Z
+    version: 1
+api.operation.force-layout:
+  id: a951408f-3b02-4775-81a7-19e62e282b57
+  path: api.operation.force-layout
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: forceLayout
+  description: Exported function running the spring/repulsion force-directed
+    layout algorithm.
+  attributes:
+    operationId: forceLayout
+    summary: Compute a force-directed layout for a node/edge set
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: forceLayout
+  metadata:
+    created_at: 2026-09-18T14:38:05.548Z
+    updated_at: 2026-09-18T14:38:05.548Z
+    version: 1
+api.operation.clustered-force-layout:
+  id: 90740f8a-2d89-4c34-8dba-c777f34a4d90
+  path: api.operation.clustered-force-layout
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: clusteredForceLayout
+  description: Exported function running the Louvain-clustered nested-bubble force layout.
+  attributes:
+    operationId: clusteredForceLayout
+    summary: Compute a community-clustered force layout
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: clusteredForceLayout
+  metadata:
+    created_at: 2026-09-18T14:38:05.858Z
+    updated_at: 2026-09-18T14:38:05.858Z
+    version: 1
+api.operation.galaxy-layout:
+  id: 0386bc09-e2cf-4263-8933-03116d221ebf
+  path: api.operation.galaxy-layout
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: galaxyLayout
+  description: Exported function running the radial-orbit galaxy layout algorithm.
+  attributes:
+    operationId: galaxyLayout
+    summary: Compute a radial-hierarchy galaxy layout
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: galaxyLayout
+  metadata:
+    created_at: 2026-09-18T14:38:06.175Z
+    updated_at: 2026-09-18T14:38:06.175Z
+    version: 1
+api.operation.ux-nav-layout:
+  id: 546b643b-7381-4483-bfed-28b2598617f7
+  path: api.operation.ux-nav-layout
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: uxNavLayout
+  description: Exported function running the page/view navigation tree layout algorithm.
+  attributes:
+    operationId: uxNavLayout
+    summary: Compute a page-tree + view-fan navigation layout
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: uxNavLayout
+  metadata:
+    created_at: 2026-09-18T14:38:06.498Z
+    updated_at: 2026-09-18T14:38:06.498Z
+    version: 1
+api.operation.radial-tree-layout:
+  id: 184fab9c-30da-4049-b5fc-6f5265b47601
+  path: api.operation.radial-tree-layout
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: radialTreeLayout
+  description: Exported function running the radial-tree (concentric ring) layout algorithm.
+  attributes:
+    operationId: radialTreeLayout
+    summary: Compute a radial-tree layout with depth rings
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: radialTreeLayout
+  metadata:
+    created_at: 2026-09-18T14:38:06.823Z
+    updated_at: 2026-09-18T14:38:06.823Z
+    version: 1
+api.operation.louvain-cluster:
+  id: a72ec6eb-0790-437a-a41c-0f31a1124dfe
+  path: api.operation.louvain-cluster
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: louvainCluster
+  description: Exported function running deterministic multi-level Louvain
+    community clustering.
+  attributes:
+    operationId: louvainCluster
+    summary: Compute a deterministic Louvain cluster dendrogram
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: louvainCluster
+  metadata:
+    created_at: 2026-09-18T14:38:07.154Z
+    updated_at: 2026-09-18T14:38:07.154Z
+    version: 1
+api.operation.pack-clusters:
+  id: ee0757b4-3256-4699-8760-38ce07a0bbda
+  path: api.operation.pack-clusters
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: packClusters
+  description: Exported function packing a cluster dendrogram into non-overlapping
+    nested circles.
+  attributes:
+    operationId: packClusters
+    summary: Pack a cluster dendrogram into nested circles
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: packClusters
+  metadata:
+    created_at: 2026-09-18T14:38:07.485Z
+    updated_at: 2026-09-18T14:38:07.485Z
+    version: 1
+api.operation.build-structural-forest:
+  id: f586314d-8ef0-4bde-86f6-4aafae7cd10b
+  path: api.operation.build-structural-forest
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: buildStructuralForest
+  description: Exported function deriving a parent/child forest from structural edges.
+  attributes:
+    operationId: buildStructuralForest
+    summary: Build a structural parent/child forest from edges
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: buildStructuralForest
+  metadata:
+    created_at: 2026-09-18T14:38:07.807Z
+    updated_at: 2026-09-18T14:38:07.807Z
+    version: 1
+api.operation.visible-navigation-edge-ids:
+  id: 0e5dcb3e-2ecb-473e-900c-bad677db8023
+  path: api.operation.visible-navigation-edge-ids
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: visibleNavigationEdgeIds
+  description: Exported function computing which ux-navigation route edges should
+    be visible for a given hover/collapse state.
+  attributes:
+    operationId: visibleNavigationEdgeIds
+    summary: Compute visible navigation-route edge ids for a hover state
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: visibleNavigationEdgeIds
+  metadata:
+    created_at: 2026-09-18T14:38:08.127Z
+    updated_at: 2026-09-18T14:38:08.127Z
+    version: 1
+api.operation.use-pan-zoom:
+  id: a736be53-61a4-4b8a-a130-ac39854b4562
+  path: api.operation.use-pan-zoom
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: usePanZoom
+  description: Exported React hook implementing wheel/pinch/drag/keyboard
+    pan-and-zoom with inertia.
+  attributes:
+    operationId: usePanZoom
+    summary: Pan/zoom viewport hook with inertia
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: usePanZoom
+  metadata:
+    created_at: 2026-09-18T14:38:08.453Z
+    updated_at: 2026-09-18T14:38:08.453Z
+    version: 1
+api.operation.compute-edge-path:
+  id: 7f2e342c-d219-408e-8d15-0f5328a59f7d
+  path: api.operation.compute-edge-path
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: computeEdgePath
+  description: Exported function resolving the rendered bezier path between two
+    node rectangles.
+  attributes:
+    operationId: computeEdgePath
+    summary: Compute the rendered path between two node rectangles
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: computeEdgePath
+  metadata:
+    created_at: 2026-09-18T14:38:08.783Z
+    updated_at: 2026-09-18T14:38:08.783Z
+    version: 1

@@ -1,0 +1,20 @@
+application.applicationprocess.graph-render-and-layout-recomputation-pipeline:
+  id: 2fb8b21c-b1f9-4268-aee8-4ec6f7bd090f
+  path: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+  spec_node_id: application.applicationprocess
+  type: applicationprocess
+  layer_id: application
+  name: Graph Render and Layout Recomputation Pipeline
+  description: "GraphCanvas's core pipeline: measure node dimensions -> run the
+    selected layout engine once dims are ready -> commit positions to state ->
+    compute per-edge geometry (path/label) against the committed node rects ->
+    render nodes/edges/toolbar."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: layout
+  metadata:
+    created_at: 2026-09-18T14:35:22.191Z
+    updated_at: 2026-09-18T14:35:22.191Z
+    version: 1

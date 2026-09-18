@@ -1,0 +1,24 @@
+motivation.driver.external-regression-gated-layout-quality-loop:
+  id: 9a3af437-8fc3-4077-9d59-dca9298f3479
+  path: motivation.driver.external-regression-gated-layout-quality-loop
+  spec_node_id: motivation.driver
+  type: driver
+  layer_id: motivation
+  name: External Regression-Gated Layout Quality Loop
+  description: "Inferred from CHANGELOG.md: forceLayout's resolveOverlaps fix was
+    'verified against a real 31-node/33-edge reference layer via the project's
+    own layout-quality test loop... the first of 8 proposed changes to that
+    loop's regression-gated test to actually pass it' — i.e. a sibling harness
+    (this very heimdall-layout-loop repo) drives heimdall's own layout-algorithm
+    changes."
+  attributes:
+    category: technological
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: CHANGELOG.md
+        symbol: Graph force layout (forceLayout, used by GraphCanvas)
+  metadata:
+    created_at: 2026-09-18T14:43:26.560Z
+    updated_at: 2026-09-18T14:43:26.560Z
+    version: 1

@@ -1,0 +1,37 @@
+technology.technologyprocess.npm-run-build-vite-build:
+  id: 03d96a76-3631-4c8a-b53c-10d5dfd8f700
+  path: technology.technologyprocess.npm-run-build-vite-build
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: npm run build (vite build)
+  description: The package.json 'build'/'prepare' script that invokes the Vite
+    build — runs automatically on npm install via the prepare lifecycle hook,
+    producing the dist/ artifact this package publishes.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: scripts.build
+  metadata:
+    created_at: 2026-09-18T14:33:16.129Z
+    updated_at: 2026-09-18T14:33:16.129Z
+    version: 1
+technology.technologyprocess.npm-test-npm-run-testunit:
+  id: 2818f9ec-a363-4375-8230-7a611665add6
+  path: technology.technologyprocess.npm-test-npm-run-testunit
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: npm test / npm run test:unit
+  description: The package.json scripts invoking Playwright ('test'/'test:ui') and
+    Vitest ('test:unit') against the graph-visualization test suite.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: scripts.test
+  metadata:
+    created_at: 2026-09-18T14:45:06.110Z
+    updated_at: 2026-09-18T14:45:06.110Z
+    version: 1

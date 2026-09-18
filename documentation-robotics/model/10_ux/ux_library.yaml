@@ -1,0 +1,21 @@
+ux.uxlibrary.heimdall-graph-visualization-ux-library:
+  id: ab621423-4d28-42ed-8914-f65b5fb107a3
+  path: ux.uxlibrary.heimdall-graph-visualization-ux-library
+  spec_node_id: ux.uxlibrary
+  type: uxlibrary
+  layer_id: ux
+  name: Heimdall Graph Visualization UX Library
+  description: "The graph-visualization subset of @tinkermonkey/heimdall-ui
+    (v0.8.0): GraphCanvas and its supporting components, covering node/edge
+    rendering and interaction behavior for embedding an interactive graph view."
+  attributes:
+    version: 0.8.0
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: version
+  metadata:
+    created_at: 2026-09-18T14:39:44.732Z
+    updated_at: 2026-09-18T14:39:44.732Z
+    version: 1

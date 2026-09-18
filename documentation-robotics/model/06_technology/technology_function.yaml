@@ -1,0 +1,38 @@
+technology.technologyfunction.library-bundling-and-type-declaration-generation:
+  id: e126d913-5d38-45b8-bbfe-14e04048f4cf
+  path: technology.technologyfunction.library-bundling-and-type-declaration-generation
+  spec_node_id: technology.technologyfunction
+  type: technologyfunction
+  layer_id: technology
+  name: Library Bundling and Type Declaration Generation
+  description: Vite library-mode build (rollup under the hood) plus
+    vite-plugin-dts, producing dist/index.js and dist/index.d.ts from
+    src/index.ts's barrel export, with react/react-dom externalized.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+        symbol: build.lib
+  metadata:
+    created_at: 2026-09-18T14:33:15.835Z
+    updated_at: 2026-09-18T14:33:15.835Z
+    version: 1
+technology.technologyfunction.automated-test-execution:
+  id: 9c3eda9a-2b82-4038-891b-5b4bca064231
+  path: technology.technologyfunction.automated-test-execution
+  spec_node_id: technology.technologyfunction
+  type: technologyfunction
+  layer_id: technology
+  name: Automated Test Execution
+  description: The capability of running heimdall's graph-visualization test suite
+    — Playwright browser tests (tests/graph-*.spec.ts) and Vitest unit tests
+    (src/utils/*.test.ts) — via 'npm test' / 'npm run test:unit'.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+        symbol: scripts.test
+  metadata:
+    created_at: 2026-09-18T14:45:05.767Z
+    updated_at: 2026-09-18T14:45:05.767Z
+    version: 1

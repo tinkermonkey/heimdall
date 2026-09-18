@@ -1,0 +1,100 @@
+product.capability.force-directed-graph-layout:
+  id: 93dd6c9f-119a-4366-8272-41a7d1399d21
+  path: product.capability.force-directed-graph-layout
+  spec_node_id: product.capability
+  type: capability
+  layer_id: product
+  name: Force-Directed Graph Layout
+  description: "Shipped capability: spring/repulsion-based automatic layout for
+    arbitrary node/edge graphs."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: forceLayout
+  metadata:
+    created_at: 2026-09-18T14:42:14.862Z
+    updated_at: 2026-09-18T14:42:14.862Z
+    version: 1
+product.capability.clustered-force-layout-community-bubbles:
+  id: 8b5f7a9f-0c9d-4dd9-8161-d2ad3031752e
+  path: product.capability.clustered-force-layout-community-bubbles
+  spec_node_id: product.capability
+  type: capability
+  layer_id: product
+  name: Clustered Force Layout (Community Bubbles)
+  description: "Shipped capability: nested-bubble layout grouping nodes by Louvain
+    community structure."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: clusteredForceLayout
+  metadata:
+    created_at: 2026-09-18T14:42:15.192Z
+    updated_at: 2026-09-18T14:42:15.192Z
+    version: 1
+product.capability.galaxy-radial-orbit-layout:
+  id: 3f9102df-1aac-4ffb-b8e2-4a3824e440a1
+  path: product.capability.galaxy-radial-orbit-layout
+  spec_node_id: product.capability
+  type: capability
+  layer_id: product
+  name: Galaxy Radial Orbit Layout
+  description: "Shipped capability: radial hierarchy-of-orbits layout for
+    structural trees/forests."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/galaxyLayout.ts
+        symbol: galaxyLayout
+  metadata:
+    created_at: 2026-09-18T14:42:15.508Z
+    updated_at: 2026-09-18T14:42:15.508Z
+    version: 1
+product.capability.ux-navigation-tree-layout:
+  id: 61cf7c2b-a6d7-426a-b77f-2b3691df4aee
+  path: product.capability.ux-navigation-tree-layout
+  spec_node_id: product.capability
+  type: capability
+  layer_id: product
+  name: UX Navigation Tree Layout
+  description: "Shipped capability: page-tree + view-fan layout for visualizing
+    page/view navigation structures."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/uxNavLayout.ts
+        symbol: uxNavLayout
+  metadata:
+    created_at: 2026-09-18T14:42:15.814Z
+    updated_at: 2026-09-18T14:42:15.814Z
+    version: 1
+product.capability.radial-tree-layout:
+  id: 8eb2ca4d-c241-4d11-9591-e2d24aa0892f
+  path: product.capability.radial-tree-layout
+  spec_node_id: product.capability
+  type: capability
+  layer_id: product
+  name: Radial Tree Layout
+  description: "Shipped capability: concentric-ring radial tree layout with
+    multi-trunk packing."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/radialTreeLayout.ts
+        symbol: radialTreeLayout
+  metadata:
+    created_at: 2026-09-18T14:42:16.128Z
+    updated_at: 2026-09-18T14:42:16.128Z
+    version: 1

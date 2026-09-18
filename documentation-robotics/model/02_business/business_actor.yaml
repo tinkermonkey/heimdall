@@ -1,0 +1,31 @@
+business.businessactor.embedding-application-developer:
+  id: 15d1b459-a1fd-4935-b051-9dc6d22b216b
+  path: business.businessactor.embedding-application-developer
+  spec_node_id: business.businessactor
+  type: businessactor
+  layer_id: business
+  name: Embedding Application Developer
+  description: "Inferred actor: the developer who installs
+    @tinkermonkey/heimdall-ui and wires GraphCanvas into their own application,
+    choosing a layout mode and supplying node/edge data."
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:42:00.666Z
+    updated_at: 2026-09-18T14:42:00.666Z
+    version: 1
+business.businessactor.end-user-exploring-a-graph-view:
+  id: 44398c38-3521-4715-b863-ec8318d8e8be
+  path: business.businessactor.end-user-exploring-a-graph-view
+  spec_node_id: business.businessactor
+  type: businessactor
+  layer_id: business
+  name: End User Exploring a Graph View
+  description: "Inferred actor: the person who ultimately pans, zooms, selects,
+    hovers, drags, and collapses/expands nodes in a rendered GraphCanvas."
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:42:00.964Z
+    updated_at: 2026-09-18T14:42:00.964Z
+    version: 1

@@ -1,0 +1,474 @@
+- type: add
+  elementId: motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: motivation
+  after:
+    id: 6f654b0b-a0a5-47e3-a93e-c51e7dfca70b
+    path: motivation.goal.readable-layout-for-structurally-complex-graphs
+    spec_node_id: motivation.goal
+    type: goal
+    layer_id: motivation
+    name: Readable Layout for Structurally Complex Graphs
+    description: "Inferred from graphLayout.ts's resolveOverlaps/separationPass
+      documentation and repeated CHANGELOG entries: minimize node overlap and
+      edge crossings, and keep edge-length deviation / neighborhood preservation
+      good, even for bushy hub-and-spoke or large-card-node topologies."
+    attributes:
+      priority: high
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: resolveOverlaps
+    metadata:
+      created_at: 2026-09-18T14:43:25.037Z
+      updated_at: 2026-09-18T14:43:25.037Z
+      version: 1
+  timestamp: 2026-09-18T14:43:25.059Z
+  sequenceNumber: 0
+- type: add
+  elementId: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+  layerName: motivation
+  after:
+    id: 362775e0-7239-4ff6-8ac2-fd8df208829d
+    path: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+    spec_node_id: motivation.goal
+    type: goal
+    layer_id: motivation
+    name: Layout Algorithms That Scale to Large, Dense, and Pathological Graphs
+    description: Inferred from graphLayout.ts's MACRO_EDGE_CAP handling of a
+      measured 564-duplicate-edge pathological dense-cluster fixture, and
+      FINAL_CLEANUP_MAX_PASSES's docs about an 18-large-card dense hub-and-spoke
+      case.
+    attributes:
+      priority: high
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: MACRO_EDGE_CAP
+    metadata:
+      created_at: 2026-09-18T14:43:25.337Z
+      updated_at: 2026-09-18T14:43:25.337Z
+      version: 1
+  timestamp: 2026-09-18T14:43:25.357Z
+  sequenceNumber: 1
+- type: add
+  elementId: motivation.principle.deterministic-reproducible-layout-output
+  layerName: motivation
+  after:
+    id: 8b65be95-1067-42d4-8fd2-2362cdcb8a68
+    path: motivation.principle.deterministic-reproducible-layout-output
+    spec_node_id: motivation.principle
+    type: principle
+    layer_id: motivation
+    name: Deterministic, Reproducible Layout Output
+    description: "Inferred from graphClustering.ts's header comment: louvainCluster
+      never uses Math.random or wall-clock time, always iterates in a fixed
+      order, and breaks every tie deterministically, because the layout loop's
+      scoring depends on reproducible layouts across runs of the same input."
+    attributes:
+      category: development
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: src/utils/graphClustering.ts
+          symbol: louvainCluster
+    metadata:
+      created_at: 2026-09-18T14:43:25.647Z
+      updated_at: 2026-09-18T14:43:25.647Z
+      version: 1
+  timestamp: 2026-09-18T14:43:25.671Z
+  sequenceNumber: 2
+- type: add
+  elementId: motivation.principle.zero-literal-node-overlap-guarantee
+  layerName: motivation
+  after:
+    id: cf666d18-d56d-4943-b72b-3e3157aa06e1
+    path: motivation.principle.zero-literal-node-overlap-guarantee
+    spec_node_id: motivation.principle
+    type: principle
+    layer_id: motivation
+    name: Zero Literal Node-Overlap Guarantee
+    description: Inferred from repeated 'zero literal overlap' language across
+      graphLayout.ts/galaxyLayout.ts (resolveOverlaps, FINAL_CLEANUP_MAX_PASSES,
+      nodeMargin docs) — every layout engine runs an unpadded final cleanup pass
+      specifically to guarantee this regardless of what padding options were
+      requested.
+    attributes:
+      category: architecture
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: src/utils/galaxyLayout.ts
+          symbol: FINAL_CLEANUP_MAX_PASSES
+    metadata:
+      created_at: 2026-09-18T14:43:25.951Z
+      updated_at: 2026-09-18T14:43:25.951Z
+      version: 1
+  timestamp: 2026-09-18T14:43:25.973Z
+  sequenceNumber: 3
+- type: add
+  elementId: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  layerName: motivation
+  after:
+    id: 98547c4a-0f8d-45aa-8000-9a9304c6461b
+    path: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+    spec_node_id: motivation.requirement
+    type: requirement
+    layer_id: motivation
+    name: Layout Engines Must Be Pluggable Without Breaking Existing Callers
+    description: "Inferred from clusteredForceLayout's own docs ('strictly
+      additive/opt-in: it doesn't change forceLayout's behavior for any existing
+      caller, and is only reached if a caller explicitly chooses it') and
+      GraphCanvas's layout prop union growing over multiple CHANGELOG releases
+      (force -> galaxy -> force-clustered -> ux-navigation -> radial-tree)
+      without breaking earlier modes."
+    attributes:
+      requirementType: non-functional
+      priority: high
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: clusteredForceLayout
+    metadata:
+      created_at: 2026-09-18T14:43:26.253Z
+      updated_at: 2026-09-18T14:43:26.253Z
+      version: 1
+  timestamp: 2026-09-18T14:43:26.276Z
+  sequenceNumber: 4
+- type: add
+  elementId: motivation.driver.external-regression-gated-layout-quality-loop
+  layerName: motivation
+  after:
+    id: 9a3af437-8fc3-4077-9d59-dca9298f3479
+    path: motivation.driver.external-regression-gated-layout-quality-loop
+    spec_node_id: motivation.driver
+    type: driver
+    layer_id: motivation
+    name: External Regression-Gated Layout Quality Loop
+    description: "Inferred from CHANGELOG.md: forceLayout's resolveOverlaps fix was
+      'verified against a real 31-node/33-edge reference layer via the project's
+      own layout-quality test loop... the first of 8 proposed changes to that
+      loop's regression-gated test to actually pass it' — i.e. a sibling harness
+      (this very heimdall-layout-loop repo) drives heimdall's own
+      layout-algorithm changes."
+    attributes:
+      category: technological
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: CHANGELOG.md
+          symbol: Graph force layout (forceLayout, used by GraphCanvas)
+    metadata:
+      created_at: 2026-09-18T14:43:26.560Z
+      updated_at: 2026-09-18T14:43:26.560Z
+      version: 1
+  timestamp: 2026-09-18T14:43:26.584Z
+  sequenceNumber: 5
+- type: add
+  elementId: motivation.stakeholder.heimdall-layout-loop-quality-harness
+  layerName: motivation
+  after:
+    id: dc4bb5f9-177f-4d26-b313-8e708d6db489
+    path: motivation.stakeholder.heimdall-layout-loop-quality-harness
+    spec_node_id: motivation.stakeholder
+    type: stakeholder
+    layer_id: motivation
+    name: heimdall-layout-loop Quality Harness
+    description: Inferred from CHANGELOG.md's reference to 'the project's own
+      layout-quality test loop' — an external, automated regression harness that
+      renders/scores heimdall's layout output and gates which proposed algorithm
+      changes are kept.
+    attributes:
+      type: system
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: CHANGELOG.md
+          symbol: Graph force layout (forceLayout, used by GraphCanvas)
+    metadata:
+      created_at: 2026-09-18T14:43:26.878Z
+      updated_at: 2026-09-18T14:43:26.878Z
+      version: 1
+  timestamp: 2026-09-18T14:43:26.901Z
+  sequenceNumber: 6
+- type: add
+  elementId: motivation.stakeholder.embedding-application-developer-npm-consumer
+  layerName: motivation
+  after:
+    id: 587dfc83-8016-4dcd-9e55-1085a6761c85
+    path: motivation.stakeholder.embedding-application-developer-npm-consumer
+    spec_node_id: motivation.stakeholder
+    type: stakeholder
+    layer_id: motivation
+    name: Embedding Application Developer (npm consumer)
+    description: "Inferred: the external developer consuming
+      @tinkermonkey/heimdall-ui's public API (src/index.ts) to embed a graph
+      view in their own product."
+    attributes:
+      type: external
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:43:27.193Z
+      updated_at: 2026-09-18T14:43:27.193Z
+      version: 1
+  timestamp: 2026-09-18T14:43:27.215Z
+  sequenceNumber: 7
+- type: add
+  elementId: motivation.stakeholder.end-user-of-an-embedding-application
+  layerName: motivation
+  after:
+    id: a8a15b3d-ac9b-441b-8fbf-01378c510479
+    path: motivation.stakeholder.end-user-of-an-embedding-application
+    spec_node_id: motivation.stakeholder
+    type: stakeholder
+    layer_id: motivation
+    name: End User of an Embedding Application
+    description: "Inferred: the person who ultimately interacts with a rendered
+      GraphCanvas inside whatever application embedded it, with no awareness of
+      heimdall itself."
+    attributes:
+      type: end-user
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:44:02.481Z
+      updated_at: 2026-09-18T14:44:02.481Z
+      version: 1
+  timestamp: 2026-09-18T14:44:02.503Z
+  sequenceNumber: 8
+- type: relationship-add
+  elementId: motivation.driver.external-regression-gated-layout-quality-loop::influence::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: motivation
+  after:
+    source: motivation.driver.external-regression-gated-layout-quality-loop
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: influence
+    layer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:02.877Z
+  sequenceNumber: 9
+- type: relationship-add
+  elementId: motivation.driver.external-regression-gated-layout-quality-loop::influence::motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+  layerName: motivation
+  after:
+    source: motivation.driver.external-regression-gated-layout-quality-loop
+    target: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+    predicate: influence
+    layer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:03.215Z
+  sequenceNumber: 10
+- type: relationship-add
+  elementId: motivation.principle.deterministic-reproducible-layout-output::realizes::motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+  layerName: motivation
+  after:
+    source: motivation.principle.deterministic-reproducible-layout-output
+    target: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:03.561Z
+  sequenceNumber: 11
+- type: relationship-add
+  elementId: motivation.principle.zero-literal-node-overlap-guarantee::realizes::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: motivation
+  after:
+    source: motivation.principle.zero-literal-node-overlap-guarantee
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:03.901Z
+  sequenceNumber: 12
+- type: relationship-add
+  elementId: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers::associated-with::motivation.driver.external-regression-gated-layout-quality-loop
+  layerName: motivation
+  after:
+    source: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+    target: motivation.driver.external-regression-gated-layout-quality-loop
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:04.261Z
+  sequenceNumber: 13
+- type: relationship-add
+  elementId: motivation.stakeholder.heimdall-layout-loop-quality-harness::associated-with::motivation.driver.external-regression-gated-layout-quality-loop
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.heimdall-layout-loop-quality-harness
+    target: motivation.driver.external-regression-gated-layout-quality-loop
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:04.598Z
+  sequenceNumber: 14
+- type: relationship-add
+  elementId: motivation.stakeholder.embedding-application-developer-npm-consumer::associated-with::motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.embedding-application-developer-npm-consumer
+    target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:04.934Z
+  sequenceNumber: 15
+- type: relationship-add
+  elementId: application.applicationcomponent.graph-canvas-component::realizes::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: application
+  after:
+    source: application.applicationcomponent.graph-canvas-component
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: realizes
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:05.295Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: application.applicationcomponent.graph-canvas-component::realizes::motivation.principle.zero-literal-node-overlap-guarantee
+  layerName: application
+  after:
+    source: application.applicationcomponent.graph-canvas-component
+    target: motivation.principle.zero-literal-node-overlap-guarantee
+    predicate: realizes
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:05.662Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: application.applicationfunction.clustered-force-layout-algorithm::satisfies::motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  layerName: application
+  after:
+    source: application.applicationfunction.clustered-force-layout-algorithm
+    target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:06.017Z
+  sequenceNumber: 18
+- type: relationship-add
+  elementId: application.applicationfunction.force-directed-layout-algorithm::satisfies::motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  layerName: application
+  after:
+    source: application.applicationfunction.force-directed-layout-algorithm
+    target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:06.384Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: product.capability.force-directed-graph-layout::supports::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: product
+  after:
+    source: product.capability.force-directed-graph-layout
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: supports
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:06.739Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: product.capability.clustered-force-layout-community-bubbles::supports::motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+  layerName: product
+  after:
+    source: product.capability.clustered-force-layout-community-bubbles
+    target: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+    predicate: supports
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:07.102Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: product.capability.galaxy-radial-orbit-layout::supports::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: product
+  after:
+    source: product.capability.galaxy-radial-orbit-layout
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: supports
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:07.469Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: product.capability.radial-tree-layout::supports::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: product
+  after:
+    source: product.capability.radial-tree-layout
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: supports
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:07.925Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: product.capability.ux-navigation-tree-layout::supports::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: product
+  after:
+    source: product.capability.ux-navigation-tree-layout
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: supports
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:08.432Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: product.persona.application-developer-embedding-a-graph-view::realizes::motivation.stakeholder.embedding-application-developer-npm-consumer
+  layerName: product
+  after:
+    source: product.persona.application-developer-embedding-a-graph-view
+    target: motivation.stakeholder.embedding-application-developer-npm-consumer
+    predicate: realizes
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:08.795Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: product.persona.end-user-exploring-a-rendered-graph::realizes::motivation.stakeholder.end-user-of-an-embedding-application
+  layerName: product
+  after:
+    source: product.persona.end-user-exploring-a-rendered-graph
+    target: motivation.stakeholder.end-user-of-an-embedding-application
+    predicate: realizes
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:09.161Z
+  sequenceNumber: 26
+- type: relationship-add
+  elementId: business.businessactor.embedding-application-developer::serves::motivation.stakeholder.embedding-application-developer-npm-consumer
+  layerName: business
+  after:
+    source: business.businessactor.embedding-application-developer
+    target: motivation.stakeholder.embedding-application-developer-npm-consumer
+    predicate: serves
+    layer: business
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:09.524Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: business.businessactor.end-user-exploring-a-graph-view::serves::motivation.stakeholder.end-user-of-an-embedding-application
+  layerName: business
+  after:
+    source: business.businessactor.end-user-exploring-a-graph-view
+    target: motivation.stakeholder.end-user-of-an-embedding-application
+    predicate: serves
+    layer: business
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-09-18T14:44:09.894Z
+  sequenceNumber: 28

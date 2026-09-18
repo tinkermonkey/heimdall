@@ -1,0 +1,23 @@
+testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation:
+  id: 37782269-b8ff-40b4-a99f-04cbaf57c139
+  path: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+  spec_node_id: testing.coveragerequirement
+  type: coveragerequirement
+  layer_id: testing
+  name: Zero Literal Node-Overlap Under Layout Simulation
+  description: Every layout engine's output must keep rendered node bounding boxes
+    non-overlapping (within a small documented tolerance — see OVERLAP_TOLERANCE
+    in tests/graph-layout.spec.ts) across default chip-sized and larger
+    card-sized nodes.
+  attributes:
+    coverageCriteria: boundary-values
+    priority: critical
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tests/graph-layout.spec.ts
+        symbol: OVERLAP_TOLERANCE
+  metadata:
+    created_at: 2026-09-18T14:40:56.309Z
+    updated_at: 2026-09-18T14:40:56.309Z
+    version: 1

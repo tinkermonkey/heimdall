@@ -1,0 +1,10 @@
+id: changeset-1789742507283-wohi4vx1e
+name: extract-business-product-layers
+created: 2026-09-18T14:41:47.292Z
+modified: 2026-09-18T14:43:07.442Z
+status: committed
+baseSnapshot: sha256:06d9afa1cc02fe6874479ff9650d38333b9254784ce6af5973d0f0bacf316779
+stats:
+  additions: 38
+  modifications: 0
+  deletions: 0

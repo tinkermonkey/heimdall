@@ -1,0 +1,789 @@
+- type: add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+  layerName: testing
+  after:
+    id: 4d0c24e6-d82c-4bbf-a8a6-e1bd924d5b55
+    path: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    spec_node_id: testing.testcoveragemodel
+    type: testcoveragemodel
+    layer_id: testing
+    name: Heimdall Graph Layout Test Coverage
+    description: "Coverage model for heimdall's graph-visualization surface:
+      Playwright browser tests (tests/graph-*.spec.ts) plus Vitest pure-function
+      unit tests (src/utils/*.test.ts)."
+    attributes:
+      version: 0.8.0
+      application: heimdall-ui
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: package.json
+          symbol: scripts.test
+    metadata:
+      created_at: 2026-09-18T14:40:53.890Z
+      updated_at: 2026-09-18T14:40:53.890Z
+      version: 1
+  timestamp: 2026-09-18T14:40:53.912Z
+  sequenceNumber: 0
+- type: add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+  layerName: testing
+  after:
+    id: 2e2b8d0d-4aa1-4020-ad4b-9e753d159fb5
+    path: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: GraphCanvas Rendering and Interaction
+    description: "Integration coverage for GraphCanvas: fit-view/viewport controls,
+      tooltips/popovers, bus-view edge anchors, hover-state cleanup, custom
+      renderEdge."
+    attributes:
+      targetType: ui-component
+      priority: critical
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-components.spec.ts
+          symbol: "integration: Graph Canvas Components"
+    metadata:
+      created_at: 2026-09-18T14:40:54.181Z
+      updated_at: 2026-09-18T14:40:54.181Z
+      version: 1
+  timestamp: 2026-09-18T14:40:54.202Z
+  sequenceNumber: 1
+- type: add
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+  layerName: testing
+  after:
+    id: 273742e5-8bf4-4fd4-ac64-fa83a391f584
+    path: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Force / Force-Clustered Layout Algorithms
+    description: "Unit + integration coverage for forceLayout/clusteredForceLayout:
+      pinned-node behavior, non-overlap under chip and card-sized nodes,
+      nodeMargin defaults, and the Clustered View bubble-packing integration
+      suite."
+    attributes:
+      targetType: ui-component
+      priority: critical
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-layout.spec.ts
+          symbol: forceLayout
+    metadata:
+      created_at: 2026-09-18T14:40:54.477Z
+      updated_at: 2026-09-18T14:40:54.477Z
+      version: 1
+  timestamp: 2026-09-18T14:40:54.500Z
+  sequenceNumber: 2
+- type: add
+  elementId: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+  layerName: testing
+  after:
+    id: d91c03bd-7d28-4d2b-b2fd-86a84c5471ad
+    path: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Galaxy Layout and Live Simulation
+    description: "Integration coverage for galaxy layout: relations,
+      aspect-ratio-aware layout, live simulation, and a dedicated Galaxy Layout
+      Lab POC-dataset stress test."
+    attributes:
+      targetType: ui-component
+      priority: high
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-components.spec.ts
+          symbol: Galaxy View - Layout & Relations
+    metadata:
+      created_at: 2026-09-18T14:40:54.776Z
+      updated_at: 2026-09-18T14:40:54.776Z
+      version: 1
+  timestamp: 2026-09-18T14:40:54.798Z
+  sequenceNumber: 3
+- type: add
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm
+  layerName: testing
+  after:
+    id: e1395fe2-c1fc-4ebc-b046-0750d2b70a4f
+    path: testing.testcoveragetarget.radial-tree-layout-algorithm
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Radial Tree Layout Algorithm
+    description: "Unit coverage for radialTreeLayout:
+      single-node/multi-level/multiple-trunk trees, collapsed nodes, ring
+      geometry, empty graphs, non-structural edges."
+    attributes:
+      targetType: ui-component
+      priority: high
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/__tests__/radialTreeLayout.test.ts
+          symbol: radialTreeLayout
+    metadata:
+      created_at: 2026-09-18T14:40:55.071Z
+      updated_at: 2026-09-18T14:40:55.071Z
+      version: 1
+  timestamp: 2026-09-18T14:40:55.094Z
+  sequenceNumber: 4
+- type: add
+  elementId: testing.testcoveragetarget.navigation-edge-channel-routing
+  layerName: testing
+  after:
+    id: b244be19-f490-4dac-aae5-30dd6e9fec72
+    path: testing.testcoveragetarget.navigation-edge-channel-routing
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Navigation Edge Channel Routing
+    description: "Unit coverage for routeNavigationEdge/routeNavigationEdges:
+      obstacle avoidance and multi-edge nudge-apart routing."
+    attributes:
+      targetType: ui-component
+      priority: medium
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/channelRouter.test.ts
+          symbol: channelRouter
+    metadata:
+      created_at: 2026-09-18T14:40:55.376Z
+      updated_at: 2026-09-18T14:40:55.376Z
+      version: 1
+  timestamp: 2026-09-18T14:40:55.399Z
+  sequenceNumber: 5
+- type: add
+  elementId: testing.testcoveragetarget.graph-edge-geometry-utilities
+  layerName: testing
+  after:
+    id: 119b7fa7-3bd9-4397-9774-c8e8b2bb34ff
+    path: testing.testcoveragetarget.graph-edge-geometry-utilities
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Graph Edge Geometry Utilities
+    description: Unit coverage for
+      rectEdgePoint/bezierPath/anchoredEdgePoint/cubicBezierPath/computeEdgePath/computeFitViewport.
+    attributes:
+      targetType: ui-component
+      priority: medium
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-utils.spec.ts
+          symbol: Graph Utilities
+    metadata:
+      created_at: 2026-09-18T14:40:55.686Z
+      updated_at: 2026-09-18T14:40:55.686Z
+      version: 1
+  timestamp: 2026-09-18T14:40:55.709Z
+  sequenceNumber: 6
+- type: add
+  elementId: testing.testcoveragetarget.edge-label-placement-and-styling
+  layerName: testing
+  after:
+    id: d085897d-0add-4514-8686-02e463d81d9d
+    path: testing.testcoveragetarget.edge-label-placement-and-styling
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Edge Label Placement and Styling
+    description: Unit coverage for findClearLabelPosition (collision-avoidance label
+      placement) and the weight/marker/dash edge-style utilities.
+    attributes:
+      targetType: ui-component
+      priority: low
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-edge-label.spec.ts
+          symbol: findClearLabelPosition
+    metadata:
+      created_at: 2026-09-18T14:40:55.989Z
+      updated_at: 2026-09-18T14:40:55.989Z
+      version: 1
+  timestamp: 2026-09-18T14:40:56.013Z
+  sequenceNumber: 7
+- type: add
+  elementId: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+  layerName: testing
+  after:
+    id: 37782269-b8ff-40b4-a99f-04cbaf57c139
+    path: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    spec_node_id: testing.coveragerequirement
+    type: coveragerequirement
+    layer_id: testing
+    name: Zero Literal Node-Overlap Under Layout Simulation
+    description: Every layout engine's output must keep rendered node bounding boxes
+      non-overlapping (within a small documented tolerance — see
+      OVERLAP_TOLERANCE in tests/graph-layout.spec.ts) across default chip-sized
+      and larger card-sized nodes.
+    attributes:
+      coverageCriteria: boundary-values
+      priority: critical
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-layout.spec.ts
+          symbol: OVERLAP_TOLERANCE
+    metadata:
+      created_at: 2026-09-18T14:40:56.309Z
+      updated_at: 2026-09-18T14:40:56.309Z
+      version: 1
+  timestamp: 2026-09-18T14:40:56.334Z
+  sequenceNumber: 8
+- type: add
+  elementId: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+  layerName: testing
+  after:
+    id: 405b3d61-b964-411d-9cb1-0b4b7f7507ed
+    path: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: Large Card Nodes Stay Non-Overlapping in a Bushy Hub-and-Spoke Topology
+    description: forceLayout regression test verifying card-sized (not just default
+      chip-sized) nodes resolve to non-overlapping positions in a hub-and-spoke
+      graph.
+    attributes:
+      status: automated
+      implementationFormat: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-layout.spec.ts
+          symbol: keeps large card-sized nodes non-overlapping in a bushy hub-and-spoke
+            topology
+    metadata:
+      created_at: 2026-09-18T14:40:56.637Z
+      updated_at: 2026-09-18T14:40:56.637Z
+      version: 1
+  timestamp: 2026-09-18T14:40:56.663Z
+  sequenceNumber: 9
+- type: add
+  elementId: testing.testcasesketch.clustered-view-bubble-packing-integration
+  layerName: testing
+  after:
+    id: fd17ad17-286f-4e1e-8a17-7b40455a3a53
+    path: testing.testcasesketch.clustered-view-bubble-packing-integration
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: Clustered View Bubble Packing Integration
+    description: 'Integration test suite for layout="force-clustered": nested bubble
+      boundaries render and separate correctly per top-level Louvain cluster.'
+    attributes:
+      status: automated
+      implementationFormat: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-components.spec.ts
+          symbol: Clustered View - Bubble Packing (layout="force-clustered")
+    metadata:
+      created_at: 2026-09-18T14:40:56.955Z
+      updated_at: 2026-09-18T14:40:56.955Z
+      version: 1
+  timestamp: 2026-09-18T14:40:56.981Z
+  sequenceNumber: 10
+- type: add
+  elementId: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
+  layerName: testing
+  after:
+    id: 22c9b36b-f659-4005-b325-5285a145f46b
+    path: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: Galaxy Layout Lab POC Dataset Stress Test
+    description: Integration stress test exercising galaxy layout against a larger
+      proof-of-concept dataset.
+    attributes:
+      status: automated
+      implementationFormat: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/graph-components.spec.ts
+          symbol: "integration: Galaxy Layout Lab (POC dataset stress test)"
+    metadata:
+      created_at: 2026-09-18T14:40:57.295Z
+      updated_at: 2026-09-18T14:40:57.295Z
+      version: 1
+  timestamp: 2026-09-18T14:40:57.320Z
+  sequenceNumber: 11
+- type: add
+  elementId: testing.testcasesketch.radial-tree-layout-collapsed-nodes
+  layerName: testing
+  after:
+    id: 86ce0f5e-9622-426f-8b13-df2de231e95e
+    path: testing.testcasesketch.radial-tree-layout-collapsed-nodes
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: radialTreeLayout Collapsed Nodes
+    description: Verifies radialTreeLayout positions only currently-visible
+      (non-collapsed) nodes while still sizing trunk bubbles from the full tree.
+    attributes:
+      status: automated
+      implementationFormat: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/__tests__/radialTreeLayout.test.ts
+          symbol: collapsed nodes
+    metadata:
+      created_at: 2026-09-18T14:40:57.620Z
+      updated_at: 2026-09-18T14:40:57.620Z
+      version: 1
+  timestamp: 2026-09-18T14:40:57.646Z
+  sequenceNumber: 12
+- type: add
+  elementId: testing.testcasesketch.route-navigation-edge-avoids-obstacles
+  layerName: testing
+  after:
+    id: 1bddbcce-bb59-4f10-a1f5-a02ed9220420
+    path: testing.testcasesketch.route-navigation-edge-avoids-obstacles
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: routeNavigationEdge Avoids Obstacles
+    description: Verifies orthogonal navigation-edge routing detours around obstacle
+      rectangles instead of crossing them.
+    attributes:
+      status: automated
+      implementationFormat: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/channelRouter.test.ts
+          symbol: routeNavigationEdge
+    metadata:
+      created_at: 2026-09-18T14:40:57.942Z
+      updated_at: 2026-09-18T14:40:57.942Z
+      version: 1
+  timestamp: 2026-09-18T14:40:57.968Z
+  sequenceNumber: 13
+- type: add
+  elementId: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
+  layerName: testing
+  after:
+    id: c5c395ea-e222-4fd5-92a4-5cec5f52c4ae
+    path: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
+    spec_node_id: testing.coveragesummary
+    type: coveragesummary
+    layer_id: testing
+    name: Graph Layout & Rendering Test Coverage Summary
+    description: Roll-up counts for this extraction's testing-layer coverage of
+      heimdall's graph-visualization surface.
+    attributes:
+      totalTargets: 7
+      totalRequirements: 1
+      totalSketches: 5
+    source_reference:
+      provenance: inferred
+      locations:
+        - file: package.json
+          symbol: scripts.test
+    metadata:
+      created_at: 2026-09-18T14:40:58.267Z
+      updated_at: 2026-09-18T14:40:58.267Z
+      version: 1
+  timestamp: 2026-09-18T14:40:58.294Z
+  sequenceNumber: 14
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::aggregates::testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:24.920Z
+  sequenceNumber: 15
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::aggregates::testing.testcoveragetarget.force-force-clustered-layout-algorithms
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:25.311Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::aggregates::testing.testcoveragetarget.galaxy-layout-and-live-simulation
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:25.702Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::aggregates::testing.testcoveragetarget.radial-tree-layout-algorithm
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.radial-tree-layout-algorithm
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:26.092Z
+  sequenceNumber: 18
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::aggregates::testing.testcoveragetarget.navigation-edge-channel-routing
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.navigation-edge-channel-routing
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:26.490Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::aggregates::testing.testcoveragetarget.graph-edge-geometry-utilities
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.graph-edge-geometry-utilities
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:26.883Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::aggregates::testing.testcoveragetarget.edge-label-placement-and-styling
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.edge-label-placement-and-styling
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:27.278Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::composes::testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:27.680Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::composes::testing.coveragesummary.graph-layout-rendering-test-coverage-summary
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:28.084Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:28.489Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:28.895Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::application.applicationservice.graph-layout-engine-service
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:29.679Z
+  sequenceNumber: 26
+- type: relationship-add
+  elementId: testing.testcoveragetarget.galaxy-layout-and-live-simulation::covers::application.applicationservice.live-galaxy-simulation-service
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+    target: application.applicationservice.live-galaxy-simulation-service
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:30.092Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::covers::application.applicationservice.graph-layout-engine-service
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:30.502Z
+  sequenceNumber: 28
+- type: relationship-add
+  elementId: testing.testcoveragetarget.navigation-edge-channel-routing::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.navigation-edge-channel-routing
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:30.940Z
+  sequenceNumber: 29
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-edge-geometry-utilities::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-edge-geometry-utilities
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:31.362Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: testing.testcoveragetarget.edge-label-placement-and-styling::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.edge-label-placement-and-styling
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:31.777Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::composes::testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:32.206Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::composes::testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:32.623Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation::flows-to::testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+  layerName: testing
+  after:
+    source: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    target: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+    predicate: flows-to
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:33.058Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation::covers::application.applicationfunction.node-overlap-separation-pass
+  layerName: testing
+  after:
+    source: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    target: application.applicationfunction.node-overlap-separation-pass
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:33.477Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology::tests::application.applicationfunction.force-directed-layout-algorithm
+  layerName: testing
+  after:
+    source: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+    target: application.applicationfunction.force-directed-layout-algorithm
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:33.900Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology::validates::testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+  layerName: testing
+  after:
+    source: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+    target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    predicate: validates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:34.326Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: testing.testcasesketch.clustered-view-bubble-packing-integration::tests::application.applicationfunction.clustered-force-layout-algorithm
+  layerName: testing
+  after:
+    source: testing.testcasesketch.clustered-view-bubble-packing-integration
+    target: application.applicationfunction.clustered-force-layout-algorithm
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:34.749Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: testing.testcasesketch.clustered-view-bubble-packing-integration::validates::testing.testcoveragetarget.force-force-clustered-layout-algorithms
+  layerName: testing
+  after:
+    source: testing.testcasesketch.clustered-view-bubble-packing-integration
+    target: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    predicate: validates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:35.175Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test::tests::application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+  layerName: testing
+  after:
+    source: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
+    target: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:35.621Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test::validates::testing.testcoveragetarget.galaxy-layout-and-live-simulation
+  layerName: testing
+  after:
+    source: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
+    target: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+    predicate: validates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:36.052Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: testing.testcasesketch.radial-tree-layout-collapsed-nodes::tests::application.applicationfunction.radial-tree-layout-algorithm
+  layerName: testing
+  after:
+    source: testing.testcasesketch.radial-tree-layout-collapsed-nodes
+    target: application.applicationfunction.radial-tree-layout-algorithm
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:36.495Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: testing.testcasesketch.radial-tree-layout-collapsed-nodes::validates::testing.testcoveragetarget.radial-tree-layout-algorithm
+  layerName: testing
+  after:
+    source: testing.testcasesketch.radial-tree-layout-collapsed-nodes
+    target: testing.testcoveragetarget.radial-tree-layout-algorithm
+    predicate: validates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:36.941Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: testing.testcasesketch.route-navigation-edge-avoids-obstacles::tests::application.applicationfunction.navigation-edge-orthogonal-routing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.route-navigation-edge-avoids-obstacles
+    target: application.applicationfunction.navigation-edge-orthogonal-routing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:41:37.383Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: testing.testcasesketch.route-navigation-edge-avoids-obstacles::validates::testing.testcoveragetarget.navigation-edge-channel-routing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.route-navigation-edge-avoids-obstacles
+    target: testing.testcoveragetarget.navigation-edge-channel-routing
+    predicate: validates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:37.822Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: testing.coveragesummary.graph-layout-rendering-test-coverage-summary::serves::testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+  layerName: testing
+  after:
+    source: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
+    target: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    predicate: serves
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:38.268Z
+  sequenceNumber: 46
+- type: relationship-add
+  elementId: testing.coveragesummary.graph-layout-rendering-test-coverage-summary::aggregates::testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+  layerName: testing
+  after:
+    source: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
+    target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:38.716Z
+  sequenceNumber: 47
+- type: relationship-add
+  elementId: testing.coveragesummary.graph-layout-rendering-test-coverage-summary::aggregates::testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+  layerName: testing
+  after:
+    source: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
+    target: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
+    predicate: aggregates
+    layer: testing
+    category: structural
+  timestamp: 2026-09-18T14:41:39.166Z
+  sequenceNumber: 48

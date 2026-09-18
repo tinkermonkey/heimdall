@@ -1,0 +1,39 @@
+application.dataobject.node-position-map:
+  id: 31be1c8d-7dc7-4a74-b2f5-b737d3b54fb9
+  path: application.dataobject.node-position-map
+  spec_node_id: application.dataobject
+  type: dataobject
+  layer_id: application
+  name: Node Position Map
+  description: Map<string, {x, y}> — the universal output shape every layout
+    engine (forceLayout, galaxyLayout, uxNavLayout, radialTreeLayout,
+    clusteredForceLayout) returns, consumed uniformly by GraphCanvas regardless
+    of which engine produced it.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: forceLayout
+  metadata:
+    created_at: 2026-09-18T14:35:22.538Z
+    updated_at: 2026-09-18T14:35:22.538Z
+    version: 1
+application.dataobject.node-rect-registry:
+  id: a7efcdfb-84a2-4f85-81f8-b854d4f5bc1d
+  path: application.dataobject.node-rect-registry
+  spec_node_id: application.dataobject
+  type: dataobject
+  layer_id: application
+  name: Node Rect Registry
+  description: GraphCanvasContext's nodeRects/getNodeRect — every
+    currently-visible node's measured rect, used by edge components to compute
+    paths and keep labels clear of node boxes.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvasContext.tsx
+        symbol: GraphNodeRect
+  metadata:
+    created_at: 2026-09-18T14:35:22.886Z
+    updated_at: 2026-09-18T14:35:22.886Z
+    version: 1

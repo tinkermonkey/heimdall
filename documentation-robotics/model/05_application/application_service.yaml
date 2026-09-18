@@ -1,0 +1,44 @@
+application.applicationservice.graph-layout-engine-service:
+  id: efed7bdb-56b4-4705-b7da-a373ee4bec48
+  path: application.applicationservice.graph-layout-engine-service
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Graph Layout Engine Service
+  description: The set of one-shot layout engines
+    (forceLayout/clusteredForceLayout/galaxyLayout/uxNavLayout/radialTreeLayout)
+    GraphCanvas dispatches to synchronously by its layout prop to compute node
+    positions from graph structure.
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: layout
+  metadata:
+    created_at: 2026-09-18T14:35:21.141Z
+    updated_at: 2026-09-18T14:35:21.141Z
+    version: 1
+application.applicationservice.live-galaxy-simulation-service:
+  id: 2cb2c8a6-442a-42ed-baf5-97645e938e58
+  path: application.applicationservice.live-galaxy-simulation-service
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Live Galaxy Simulation Service
+  description: "useGalaxySimulation(): a continuous, self-scheduling
+    requestAnimationFrame loop over galaxySimulationStep — the 'live'
+    counterpart to galaxyLayout's bounded one-shot settle loop, coalescing input
+    changes into at most one commit per frame."
+  attributes:
+    serviceType: event-driven
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useGalaxySimulation.ts
+        symbol: useGalaxySimulation
+  metadata:
+    created_at: 2026-09-18T14:35:21.480Z
+    updated_at: 2026-09-18T14:35:21.480Z
+    version: 1

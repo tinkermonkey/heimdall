@@ -1,0 +1,16 @@
+business.businessprocess.render-graph-from-domain-data-to-interactive-view:
+  id: a1e00acc-c354-4c44-ad80-a26b23eea013
+  path: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+  spec_node_id: business.businessprocess
+  type: businessprocess
+  layer_id: business
+  name: Render Graph From Domain Data to Interactive View
+  description: "Inferred end-to-end business process: a consumer's domain data
+    (nodes/edges) enters GraphCanvas, is laid out by the selected engine, and
+    becomes an interactive, explorable view for the end user."
+  source_reference:
+    provenance: inferred
+  metadata:
+    created_at: 2026-09-18T14:42:01.280Z
+    updated_at: 2026-09-18T14:42:01.280Z
+    version: 1

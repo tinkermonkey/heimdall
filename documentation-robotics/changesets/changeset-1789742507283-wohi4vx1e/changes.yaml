@@ -1,0 +1,641 @@
+- type: add
+  elementId: business.businessservice.large-graph-visualization
+  layerName: business
+  after:
+    id: 1470bc5d-4d23-4b07-ae88-6b9b9a5bc938
+    path: business.businessservice.large-graph-visualization
+    spec_node_id: business.businessservice
+    type: businessservice
+    layer_id: business
+    name: Large Graph Visualization
+    description: "Inferred business capability: enable consumers to render and let
+      end users navigate graphs with hundreds of nodes while staying visually
+      readable (non-overlapping, low edge-crossing) — the problem
+      forceLayout/clusteredForceLayout solve."
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:41:59.487Z
+      updated_at: 2026-09-18T14:41:59.487Z
+      version: 1
+  timestamp: 2026-09-18T14:41:59.508Z
+  sequenceNumber: 0
+- type: add
+  elementId: business.businessservice.hierarchical-and-navigation-structure-visualization
+  layerName: business
+  after:
+    id: 9209184a-28f4-4d43-90d5-8fe4cb558a29
+    path: business.businessservice.hierarchical-and-navigation-structure-visualization
+    spec_node_id: business.businessservice
+    type: businessservice
+    layer_id: business
+    name: Hierarchical and Navigation Structure Visualization
+    description: "Inferred business capability: visualize page/view navigation
+      hierarchies and general tree/DAG structures as radial or top-down layouts
+      — the problem galaxyLayout/uxNavLayout/radialTreeLayout solve."
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:41:59.775Z
+      updated_at: 2026-09-18T14:41:59.775Z
+      version: 1
+  timestamp: 2026-09-18T14:41:59.796Z
+  sequenceNumber: 1
+- type: add
+  elementId: business.businessfunction.automatic-node-layout-computation
+  layerName: business
+  after:
+    id: 56996a91-72e4-477b-ad9a-f613aa405c5a
+    path: business.businessfunction.automatic-node-layout-computation
+    spec_node_id: business.businessfunction
+    type: businessfunction
+    layer_id: business
+    name: Automatic Node Layout Computation
+    description: "Inferred business function: given arbitrary node/edge data with no
+      pre-set positions, automatically compute a readable 2D arrangement instead
+      of requiring a consumer to hand-place nodes."
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:42:00.072Z
+      updated_at: 2026-09-18T14:42:00.072Z
+      version: 1
+  timestamp: 2026-09-18T14:42:00.093Z
+  sequenceNumber: 2
+- type: add
+  elementId: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+  layerName: business
+  after:
+    id: af6733e7-25da-40a4-8bf7-f5fd90ef9824
+    path: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+    spec_node_id: business.businessfunction
+    type: businessfunction
+    layer_id: business
+    name: Community and Cluster Discovery in Relationship Graphs
+    description: "Inferred business function: surface community structure in a
+      relationship graph (via Louvain clustering) so densely-interconnected
+      groups read visually as groups."
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:42:00.365Z
+      updated_at: 2026-09-18T14:42:00.365Z
+      version: 1
+  timestamp: 2026-09-18T14:42:00.386Z
+  sequenceNumber: 3
+- type: add
+  elementId: business.businessactor.embedding-application-developer
+  layerName: business
+  after:
+    id: 15d1b459-a1fd-4935-b051-9dc6d22b216b
+    path: business.businessactor.embedding-application-developer
+    spec_node_id: business.businessactor
+    type: businessactor
+    layer_id: business
+    name: Embedding Application Developer
+    description: "Inferred actor: the developer who installs
+      @tinkermonkey/heimdall-ui and wires GraphCanvas into their own
+      application, choosing a layout mode and supplying node/edge data."
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:42:00.666Z
+      updated_at: 2026-09-18T14:42:00.666Z
+      version: 1
+  timestamp: 2026-09-18T14:42:00.689Z
+  sequenceNumber: 4
+- type: add
+  elementId: business.businessactor.end-user-exploring-a-graph-view
+  layerName: business
+  after:
+    id: 44398c38-3521-4715-b863-ec8318d8e8be
+    path: business.businessactor.end-user-exploring-a-graph-view
+    spec_node_id: business.businessactor
+    type: businessactor
+    layer_id: business
+    name: End User Exploring a Graph View
+    description: "Inferred actor: the person who ultimately pans, zooms, selects,
+      hovers, drags, and collapses/expands nodes in a rendered GraphCanvas."
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:42:00.964Z
+      updated_at: 2026-09-18T14:42:00.964Z
+      version: 1
+  timestamp: 2026-09-18T14:42:00.986Z
+  sequenceNumber: 5
+- type: add
+  elementId: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+  layerName: business
+  after:
+    id: a1e00acc-c354-4c44-ad80-a26b23eea013
+    path: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+    spec_node_id: business.businessprocess
+    type: businessprocess
+    layer_id: business
+    name: Render Graph From Domain Data to Interactive View
+    description: "Inferred end-to-end business process: a consumer's domain data
+      (nodes/edges) enters GraphCanvas, is laid out by the selected engine, and
+      becomes an interactive, explorable view for the end user."
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:42:01.280Z
+      updated_at: 2026-09-18T14:42:01.280Z
+      version: 1
+  timestamp: 2026-09-18T14:42:01.303Z
+  sequenceNumber: 6
+- type: add
+  elementId: product.capability.force-directed-graph-layout
+  layerName: product
+  after:
+    id: 93dd6c9f-119a-4366-8272-41a7d1399d21
+    path: product.capability.force-directed-graph-layout
+    spec_node_id: product.capability
+    type: capability
+    layer_id: product
+    name: Force-Directed Graph Layout
+    description: "Shipped capability: spring/repulsion-based automatic layout for
+      arbitrary node/edge graphs."
+    attributes:
+      status: delivered
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: forceLayout
+    metadata:
+      created_at: 2026-09-18T14:42:14.862Z
+      updated_at: 2026-09-18T14:42:14.862Z
+      version: 1
+  timestamp: 2026-09-18T14:42:14.889Z
+  sequenceNumber: 7
+- type: add
+  elementId: product.capability.clustered-force-layout-community-bubbles
+  layerName: product
+  after:
+    id: 8b5f7a9f-0c9d-4dd9-8161-d2ad3031752e
+    path: product.capability.clustered-force-layout-community-bubbles
+    spec_node_id: product.capability
+    type: capability
+    layer_id: product
+    name: Clustered Force Layout (Community Bubbles)
+    description: "Shipped capability: nested-bubble layout grouping nodes by Louvain
+      community structure."
+    attributes:
+      status: delivered
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: clusteredForceLayout
+    metadata:
+      created_at: 2026-09-18T14:42:15.192Z
+      updated_at: 2026-09-18T14:42:15.192Z
+      version: 1
+  timestamp: 2026-09-18T14:42:15.214Z
+  sequenceNumber: 8
+- type: add
+  elementId: product.capability.galaxy-radial-orbit-layout
+  layerName: product
+  after:
+    id: 3f9102df-1aac-4ffb-b8e2-4a3824e440a1
+    path: product.capability.galaxy-radial-orbit-layout
+    spec_node_id: product.capability
+    type: capability
+    layer_id: product
+    name: Galaxy Radial Orbit Layout
+    description: "Shipped capability: radial hierarchy-of-orbits layout for
+      structural trees/forests."
+    attributes:
+      status: delivered
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/galaxyLayout.ts
+          symbol: galaxyLayout
+    metadata:
+      created_at: 2026-09-18T14:42:15.508Z
+      updated_at: 2026-09-18T14:42:15.508Z
+      version: 1
+  timestamp: 2026-09-18T14:42:15.533Z
+  sequenceNumber: 9
+- type: add
+  elementId: product.capability.ux-navigation-tree-layout
+  layerName: product
+  after:
+    id: 61cf7c2b-a6d7-426a-b77f-2b3691df4aee
+    path: product.capability.ux-navigation-tree-layout
+    spec_node_id: product.capability
+    type: capability
+    layer_id: product
+    name: UX Navigation Tree Layout
+    description: "Shipped capability: page-tree + view-fan layout for visualizing
+      page/view navigation structures."
+    attributes:
+      status: delivered
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/uxNavLayout.ts
+          symbol: uxNavLayout
+    metadata:
+      created_at: 2026-09-18T14:42:15.814Z
+      updated_at: 2026-09-18T14:42:15.814Z
+      version: 1
+  timestamp: 2026-09-18T14:42:15.838Z
+  sequenceNumber: 10
+- type: add
+  elementId: product.capability.radial-tree-layout
+  layerName: product
+  after:
+    id: 8eb2ca4d-c241-4d11-9591-e2d24aa0892f
+    path: product.capability.radial-tree-layout
+    spec_node_id: product.capability
+    type: capability
+    layer_id: product
+    name: Radial Tree Layout
+    description: "Shipped capability: concentric-ring radial tree layout with
+      multi-trunk packing."
+    attributes:
+      status: delivered
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/radialTreeLayout.ts
+          symbol: radialTreeLayout
+    metadata:
+      created_at: 2026-09-18T14:42:16.128Z
+      updated_at: 2026-09-18T14:42:16.128Z
+      version: 1
+  timestamp: 2026-09-18T14:42:16.152Z
+  sequenceNumber: 11
+- type: add
+  elementId: product.feature.live-draggable-galaxy-simulation
+  layerName: product
+  after:
+    id: 14b189e9-c37d-4ac2-9c41-d479b45147b1
+    path: product.feature.live-draggable-galaxy-simulation
+    spec_node_id: product.feature
+    type: feature
+    layer_id: product
+    name: Live Draggable Galaxy Simulation
+    description: Opt-in continuous elastic simulation for galaxy layout, so dragging
+      a node repositions its subtree in real time instead of freezing after one
+      computed layout.
+    attributes:
+      priority: medium
+      status: delivered
+      size: m
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/hooks/useGalaxySimulation.ts
+          symbol: useGalaxySimulation
+    metadata:
+      created_at: 2026-09-18T14:42:16.451Z
+      updated_at: 2026-09-18T14:42:16.451Z
+      version: 1
+  timestamp: 2026-09-18T14:42:16.474Z
+  sequenceNumber: 12
+- type: add
+  elementId: product.feature.progressive-disclosure-via-node-collapseexpand
+  layerName: product
+  after:
+    id: 27f7db7f-8438-4977-9171-c5a4999c6d09
+    path: product.feature.progressive-disclosure-via-node-collapseexpand
+    spec_node_id: product.feature
+    type: feature
+    layer_id: product
+    name: Progressive Disclosure via Node Collapse/Expand
+    description: Collapse a node to hide its structural descendants (and their
+      edges) for dense hierarchies, with a hidden-descendant-count badge.
+    attributes:
+      priority: medium
+      status: delivered
+      size: s
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCollapseControl.tsx
+          symbol: GraphCollapseControl
+    metadata:
+      created_at: 2026-09-18T14:42:16.776Z
+      updated_at: 2026-09-18T14:42:16.776Z
+      version: 1
+  timestamp: 2026-09-18T14:42:16.801Z
+  sequenceNumber: 13
+- type: add
+  elementId: product.feature.node-and-edge-tooltips-and-popovers
+  layerName: product
+  after:
+    id: 1c700810-fdff-4c4c-b7cb-d89fd3e6cf27
+    path: product.feature.node-and-edge-tooltips-and-popovers
+    spec_node_id: product.feature
+    type: feature
+    layer_id: product
+    name: Node and Edge Tooltips and Popovers
+    description: Render-prop tooltip/popover overlays anchored to a hovered/clicked
+      node or edge, positioned via the canvas's own pan/zoom transform.
+    attributes:
+      priority: low
+      status: delivered
+      size: s
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: nodeTooltip
+    metadata:
+      created_at: 2026-09-18T14:42:17.097Z
+      updated_at: 2026-09-18T14:42:17.097Z
+      version: 1
+  timestamp: 2026-09-18T14:42:17.122Z
+  sequenceNumber: 14
+- type: add
+  elementId: product.persona.application-developer-embedding-a-graph-view
+  layerName: product
+  after:
+    id: 0226af9e-4717-4fea-bc1b-f255ffdd9556
+    path: product.persona.application-developer-embedding-a-graph-view
+    spec_node_id: product.persona
+    type: persona
+    layer_id: product
+    name: Application Developer Embedding a Graph View
+    description: "Inferred persona: a React/TypeScript developer integrating
+      GraphCanvas into their own product, choosing layout mode and supplying
+      data/callbacks."
+    attributes:
+      category: primary
+      proficiency: advanced
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:42:17.430Z
+      updated_at: 2026-09-18T14:42:17.430Z
+      version: 1
+  timestamp: 2026-09-18T14:42:17.457Z
+  sequenceNumber: 15
+- type: add
+  elementId: product.persona.end-user-exploring-a-rendered-graph
+  layerName: product
+  after:
+    id: 1db3f2a3-ca47-4373-bde6-d3d3676d20e8
+    path: product.persona.end-user-exploring-a-rendered-graph
+    spec_node_id: product.persona
+    type: persona
+    layer_id: product
+    name: End User Exploring a Rendered Graph
+    description: "Inferred persona: the person who ultimately interacts with the
+      rendered graph (pan/zoom/select/hover/drag/collapse) without knowledge of
+      the underlying library."
+    attributes:
+      category: served
+      proficiency: novice
+    source_reference:
+      provenance: inferred
+    metadata:
+      created_at: 2026-09-18T14:42:17.764Z
+      updated_at: 2026-09-18T14:42:17.764Z
+      version: 1
+  timestamp: 2026-09-18T14:42:17.790Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: business.businessprocess.render-graph-from-domain-data-to-interactive-view::realizes::business.businessservice.large-graph-visualization
+  layerName: business
+  after:
+    source: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+    target: business.businessservice.large-graph-visualization
+    predicate: realizes
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:49.745Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: business.businessprocess.render-graph-from-domain-data-to-interactive-view::realizes::business.businessservice.hierarchical-and-navigation-structure-visualization
+  layerName: business
+  after:
+    source: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+    target: business.businessservice.hierarchical-and-navigation-structure-visualization
+    predicate: realizes
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:50.117Z
+  sequenceNumber: 18
+- type: relationship-add
+  elementId: business.businessprocess.render-graph-from-domain-data-to-interactive-view::aggregates::application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+  layerName: business
+  after:
+    source: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+    target: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+    predicate: aggregates
+    layer: business
+    targetLayer: application
+    category: structural
+  timestamp: 2026-09-18T14:42:50.492Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: business.businessprocess.render-graph-from-domain-data-to-interactive-view::triggers::business.businessfunction.automatic-node-layout-computation
+  layerName: business
+  after:
+    source: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+    target: business.businessfunction.automatic-node-layout-computation
+    predicate: triggers
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:50.856Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: business.businessfunction.automatic-node-layout-computation::realizes::business.businessservice.large-graph-visualization
+  layerName: business
+  after:
+    source: business.businessfunction.automatic-node-layout-computation
+    target: business.businessservice.large-graph-visualization
+    predicate: realizes
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:51.218Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs::realizes::business.businessservice.large-graph-visualization
+  layerName: business
+  after:
+    source: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+    target: business.businessservice.large-graph-visualization
+    predicate: realizes
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:51.611Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: business.businessfunction.automatic-node-layout-computation::composes::business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+  layerName: business
+  after:
+    source: business.businessfunction.automatic-node-layout-computation
+    target: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+    predicate: composes
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:52.043Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: business.businessservice.large-graph-visualization::serves::business.businessactor.end-user-exploring-a-graph-view
+  layerName: business
+  after:
+    source: business.businessservice.large-graph-visualization
+    target: business.businessactor.end-user-exploring-a-graph-view
+    predicate: serves
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:52.460Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: business.businessservice.hierarchical-and-navigation-structure-visualization::serves::business.businessactor.end-user-exploring-a-graph-view
+  layerName: business
+  after:
+    source: business.businessservice.hierarchical-and-navigation-structure-visualization
+    target: business.businessactor.end-user-exploring-a-graph-view
+    predicate: serves
+    layer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:52.885Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: product.capability.force-directed-graph-layout::realizes::business.businessfunction.automatic-node-layout-computation
+  layerName: product
+  after:
+    source: product.capability.force-directed-graph-layout
+    target: business.businessfunction.automatic-node-layout-computation
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:53.322Z
+  sequenceNumber: 26
+- type: relationship-add
+  elementId: product.capability.clustered-force-layout-community-bubbles::realizes::business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+  layerName: product
+  after:
+    source: product.capability.clustered-force-layout-community-bubbles
+    target: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:53.798Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: product.capability.galaxy-radial-orbit-layout::realizes::business.businessfunction.automatic-node-layout-computation
+  layerName: product
+  after:
+    source: product.capability.galaxy-radial-orbit-layout
+    target: business.businessfunction.automatic-node-layout-computation
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:54.226Z
+  sequenceNumber: 28
+- type: relationship-add
+  elementId: product.capability.ux-navigation-tree-layout::realizes::business.businessfunction.automatic-node-layout-computation
+  layerName: product
+  after:
+    source: product.capability.ux-navigation-tree-layout
+    target: business.businessfunction.automatic-node-layout-computation
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:54.687Z
+  sequenceNumber: 29
+- type: relationship-add
+  elementId: product.capability.radial-tree-layout::realizes::business.businessfunction.automatic-node-layout-computation
+  layerName: product
+  after:
+    source: product.capability.radial-tree-layout
+    target: business.businessfunction.automatic-node-layout-computation
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:55.113Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: product.capability.clustered-force-layout-community-bubbles::aggregates::product.capability.force-directed-graph-layout
+  layerName: product
+  after:
+    source: product.capability.clustered-force-layout-community-bubbles
+    target: product.capability.force-directed-graph-layout
+    predicate: aggregates
+    layer: product
+    category: structural
+  timestamp: 2026-09-18T14:42:55.546Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: product.feature.live-draggable-galaxy-simulation::realizes::product.capability.galaxy-radial-orbit-layout
+  layerName: product
+  after:
+    source: product.feature.live-draggable-galaxy-simulation
+    target: product.capability.galaxy-radial-orbit-layout
+    predicate: realizes
+    layer: product
+    category: structural
+  timestamp: 2026-09-18T14:42:56.000Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: product.feature.progressive-disclosure-via-node-collapseexpand::realizes::business.businessservice.hierarchical-and-navigation-structure-visualization
+  layerName: product
+  after:
+    source: product.feature.progressive-disclosure-via-node-collapseexpand
+    target: business.businessservice.hierarchical-and-navigation-structure-visualization
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:56.436Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: product.feature.node-and-edge-tooltips-and-popovers::realizes::business.businessservice.large-graph-visualization
+  layerName: product
+  after:
+    source: product.feature.node-and-edge-tooltips-and-popovers
+    target: business.businessservice.large-graph-visualization
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-09-18T14:42:56.889Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: product.feature.live-draggable-galaxy-simulation::serves::product.persona.application-developer-embedding-a-graph-view
+  layerName: product
+  after:
+    source: product.feature.live-draggable-galaxy-simulation
+    target: product.persona.application-developer-embedding-a-graph-view
+    predicate: serves
+    layer: product
+    category: structural
+  timestamp: 2026-09-18T14:42:57.291Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: product.feature.progressive-disclosure-via-node-collapseexpand::serves::product.persona.end-user-exploring-a-rendered-graph
+  layerName: product
+  after:
+    source: product.feature.progressive-disclosure-via-node-collapseexpand
+    target: product.persona.end-user-exploring-a-rendered-graph
+    predicate: serves
+    layer: product
+    category: structural
+  timestamp: 2026-09-18T14:42:57.658Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: product.feature.node-and-edge-tooltips-and-popovers::serves::product.persona.end-user-exploring-a-rendered-graph
+  layerName: product
+  after:
+    source: product.feature.node-and-edge-tooltips-and-popovers
+    target: product.persona.end-user-exploring-a-rendered-graph
+    predicate: serves
+    layer: product
+    category: structural
+  timestamp: 2026-09-18T14:42:58.023Z
+  sequenceNumber: 37
