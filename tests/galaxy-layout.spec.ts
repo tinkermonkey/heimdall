@@ -14,16 +14,31 @@ function structuralEdge(source: string, target: string): GalaxyLayoutEdge {
 // Every top-level group's boundary circle, keyed by group head id — same computation
 // GraphCanvas's showClusterBoundaries rendering uses, reused here to verify Part 1 directly
 // rather than just trusting the algorithm did the right thing.
-function groupBoundaries(nodes: readonly GalaxyLayoutNode[], edges: readonly GalaxyLayoutEdge[], positions: Map<string, { x: number; y: number }>) {
+// Galaxy's group separation separates whole galaxies — one group per structural root (2026-10-24;
+// previously each delegated child subtree of a bushy root was its own group, which rigidly moved
+// satellite systems off their orbital slots). So "groups" here are per root too.
+function rootGroups(nodes: readonly GalaxyLayoutNode[], edges: readonly GalaxyLayoutEdge[]): Map<string, string> {
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
-  const { leafToGroup } = galaxyGroupMap(roots, childrenOf)
+  const leafToGroup = new Map<string, string>()
+  const visit = (id: string, root: string): void => {
+    leafToGroup.set(id, root)
+    for (const k of childrenOf.get(id) ?? []) visit(k, root)
+  }
+  for (const r of roots) visit(r, r)
+  return leafToGroup
+}
+
+function groupBoundaries(nodes: readonly GalaxyLayoutNode[], edges: readonly GalaxyLayoutEdge[], positions: Map<string, { x: number; y: number }>) {
+  const leafToGroup = rootGroups(nodes, edges)
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
   const radiusOf = (id: string) => {
     const n = nodeMap.get(id)
     return n ? Math.hypot(n.width, n.height) / 2 : 20
   }
   const layoutNodes = nodes.map(n => ({ id: n.id, width: n.width, height: n.height, x: 0, y: 0 }))
-  return boundingCirclesByGroup(layoutNodes, positions, leafToGroup, radiusOf)
+  // anchorToHead: each galaxy's circle centred on its own root, exactly as galaxy's separation pass
+  // and GraphCanvas's rendered discs define it (a centroid circle drifts off a lopsided galaxy).
+  return boundingCirclesByGroup(layoutNodes, positions, leafToGroup, radiusOf, true)
 }
 
 function worstGroupOverlap(boundaries: Map<string, { x: number; y: number; r: number }>): number {
@@ -335,7 +350,9 @@ test.describe('galaxySimulationStep', () => {
     // Many ticks' worth of an idle live session — nothing pinned, nothing dragging.
     for (let i = 0; i < 120; i++) pos = galaxySimulationStep(nodes, edges, pos)
 
-    expect(worstGroupOverlap(groupBoundaries(nodes, edges, pos!))).toBeLessThanOrEqual(0)
+    // < 1e-6, not <= 0: galaxies left exactly touching measure ~1e-13 of cos/sin noise (same
+    // tolerance as the elliptical-warp composition test below).
+    expect(worstGroupOverlap(groupBoundaries(nodes, edges, pos!))).toBeLessThan(1e-6)
   })
 
   test('separateGroups: false opts the per-tick home out of group separation too', () => {
@@ -444,8 +461,17 @@ test.describe('aspectRatio (elliptical warp)', () => {
     }
   })
 
-  test('a wide aspectRatio produces a measurably wider-than-tall bounding box', () => {
+  test('a single galaxy is never squashed to fit a wide aspectRatio — its orbits stay round', () => {
     const { nodes, edges } = branchyTree()
+
+    const natural = boundingBoxSize(galaxyLayout(nodes, edges))
+    const wide = boundingBoxSize(galaxyLayout(nodes, edges, { aspectRatio: 4 }))
+
+    expect(wide.width / wide.height).toBeCloseTo(natural.width / natural.height, 1)
+  })
+
+  test('a wide aspectRatio spreads a forest\'s galaxies into a measurably wider-than-tall arrangement', () => {
+    const { nodes, edges } = busyMultiRootNodes()
 
     const circular = boundingBoxSize(galaxyLayout(nodes, edges))
     const wide = boundingBoxSize(galaxyLayout(nodes, edges, { aspectRatio: 4 }))
@@ -487,7 +513,7 @@ test.describe('aspectRatio (elliptical warp)', () => {
     expect(scale).toEqual({ x: 1, y: 1 })
   })
 
-  test('formula: warped x-offset equals the natural x-offset scaled by resolveAspectRatioScale\'s own result', () => {
+  test('formula: the warp scales the root-ring offset by resolveAspectRatioScale\'s result and leaves orbits unwarped', () => {
     // startAngle: 0 isolates cos(0)=1, sin(0)=0 for the root-ring seed itself (a single root, so
     // its own placement IS the root-ring seed with i=0, n=1 -> angle = startAngle exactly), which
     // in turn keeps the single child's own angle at 0 too (n=1 kids, no parity offset at depth 0).
@@ -510,8 +536,10 @@ test.describe('aspectRatio (elliptical warp)', () => {
     const root = warped.get('root')!
     const child = warped.get('child')!
 
+    // The root's own seed on the root ring is warped; its satellite's orbit around it is not.
     expect(root.y).toBeCloseTo(0, 5)
-    expect(child.x - root.x).toBeCloseTo(naturalXOffset * scale.x, 5)
+    expect(root.x).toBeCloseTo(natural.get('root')!.x * scale.x, 5)
+    expect(child.x - root.x).toBeCloseTo(naturalXOffset, 5)
     expect(child.y - root.y).toBeCloseTo(0, 5)
   })
 

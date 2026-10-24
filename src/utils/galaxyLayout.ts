@@ -1,5 +1,5 @@
 import { separationPass, FINAL_CLEANUP_MAX_PASSES, boundingCirclesByGroup, type LayoutNode } from './graphLayout'
-import { buildStructuralForest, galaxyGroupMap, type HierarchyEdge } from './graphHierarchy'
+import { buildStructuralForest, type HierarchyEdge } from './graphHierarchy'
 
 export interface GalaxyLayoutNode {
   id: string
@@ -12,6 +12,102 @@ export interface GalaxyLayoutNode {
   x?: number
   y?: number
   pinned?: boolean
+  /** Size weight (galaxy's primary encoding — area ∝ weight). Children orbit their parent
+   *  heaviest-first. Optional: see galaxyEffectiveWeights for how a missing weight resolves. */
+  weight?: number
+  /** True body radius for a round body. When set, it replaces the box half-diagonal as this node's
+   *  radius in every orbit/separation computation (a circle's half-diagonal overstates it by √2). */
+  radius?: number
+}
+
+/** A node's radius for orbit placement: its explicit `radius` (round bodies), otherwise the
+ *  half-diagonal of its box (cards). */
+export function galaxyRadiusOf(n: Pick<GalaxyLayoutNode, 'width' | 'height' | 'radius'>): number {
+  return n.radius !== undefined && Number.isFinite(n.radius) && n.radius > 0 ? n.radius : Math.hypot(n.width, n.height) / 2
+}
+
+/**
+ * Effective size weight per node (design-material/galaxy/vision-statement.md, "Weight"): a node's
+ * own weight when it has one (finite, >= 0); otherwise the sum of its structural children's. If no
+ * node has a weight at all, every leaf weighs 1, so each node weighs its subtree leaf count.
+ * `childrenOf` should be the FULL forest (not just currently visible nodes), so collapsing a
+ * subtree doesn't change its parent's weight.
+ */
+export function galaxyEffectiveWeights(
+  ids: readonly string[],
+  childrenOf: ReadonlyMap<string, readonly string[]>,
+  givenWeight: (id: string) => number | undefined
+): Map<string, number> {
+  const given = new Map<string, number>()
+  for (const id of ids) {
+    const w = givenWeight(id)
+    if (w !== undefined && Number.isFinite(w) && w >= 0) given.set(id, w)
+  }
+  const anyGiven = given.size > 0
+  const weightOf = new Map<string, number>()
+  const resolve = (id: string): number => {
+    const known = weightOf.get(id)
+    if (known !== undefined) return known
+    weightOf.set(id, 0) // cycle guard (buildStructuralForest breaks cycles, but stay safe)
+    const own = given.get(id)
+    const kids = childrenOf.get(id) ?? []
+    const w = own !== undefined ? own : kids.length ? kids.reduce((sum, k) => sum + resolve(k), 0) : anyGiven ? 0 : 1
+    weightOf.set(id, w)
+    return w
+  }
+  for (const id of ids) resolve(id)
+  return weightOf
+}
+
+/** Smallest and largest round-body radius (px) galaxy draws when it sizes bodies by weight. */
+export const GALAXY_BODY_MIN_RADIUS = 8
+export const GALAXY_BODY_MAX_RADIUS = 64
+
+/**
+ * Body radius per node from effective weights: body AREA is a linear rescale of weight into
+ * [MIN², MAX²] across all the given nodes (the rivande POC's sizing), so area tracks weight and a
+ * parent with the sum of its children's weight has their summed area. A floor keeps the smallest
+ * leaves visible as dots. All-equal weights (including a single node) get the middle area.
+ */
+export function galaxyBodyRadii(
+  weightOf: ReadonlyMap<string, number>,
+  { minRadius = GALAXY_BODY_MIN_RADIUS, maxRadius = GALAXY_BODY_MAX_RADIUS }: { minRadius?: number; maxRadius?: number } = {}
+): Map<string, number> {
+  const ws = [...weightOf.values()]
+  const lo = Math.min(...ws)
+  const hi = Math.max(...ws)
+  const minA = minRadius ** 2
+  const maxA = maxRadius ** 2
+  const radii = new Map<string, number>()
+  for (const [id, w] of weightOf) {
+    const t = hi > lo ? (w - lo) / (hi - lo) : 0.5
+    radii.set(id, Math.sqrt(minA + t * (maxA - minA)))
+  }
+  return radii
+}
+
+/** Heaviest first; ties keep their original (data) order. Returns a new array. */
+function heaviestFirst(ids: readonly string[], weightOf: ReadonlyMap<string, number>): string[] {
+  return ids
+    .map((id, i) => ({ id, i, w: weightOf.get(id) ?? 0 }))
+    .sort((a, b) => b.w - a.w || a.i - b.i)
+    .map(x => x.id)
+}
+
+/**
+ * One group per structural root: each node maps to the root of its own tree. Galaxy's group
+ * separation separates independent galaxies (roots), never one galaxy's own satellites — moving a
+ * satellite system rigidly would knock it off its orbital slot (vision items 2-4).
+ */
+function rootGroupMap(roots: readonly string[], childrenOf: ReadonlyMap<string, readonly string[]>): { groupHeads: string[]; leafToGroup: Map<string, string> } {
+  const leafToGroup = new Map<string, string>()
+  const visit = (id: string, root: string): void => {
+    if (leafToGroup.has(id)) return
+    leafToGroup.set(id, root)
+    for (const k of childrenOf.get(id) ?? []) visit(k, root)
+  }
+  for (const r of roots) visit(r, r)
+  return { groupHeads: [...roots], leafToGroup }
 }
 
 /**
@@ -146,7 +242,8 @@ function buildComputeHome(
   roots: readonly string[],
   radiusOf: (n: GalaxyLayoutNode) => number,
   nodeSpread: number,
-  startAngle: number
+  startAngle: number,
+  weightOf: ReadonlyMap<string, number>
 ): (ellipseX: number, ellipseY: number) => Map<string, { x: number; y: number }> {
   // How far a node's own subtree extends beyond the node's own position — 0 for a leaf (nothing
   // to account for), otherwise the largest child orbital distance plus that child's own reach.
@@ -170,9 +267,15 @@ function buildComputeHome(
 
   return (ellipseX: number, ellipseY: number): Map<string, { x: number; y: number }> => {
     const result = new Map<string, { x: number; y: number }>()
-    const offset = (distance: number, angle: number): { x: number; y: number } => ({
+    // The aspect-ratio warp applies to the root ring only (where independent galaxies sit). Orbits
+    // inside a galaxy stay circular: warping them squashed every system into a band (vision item 5).
+    const rootOffset = (distance: number, angle: number): { x: number; y: number } => ({
       x: distance * ellipseX * Math.cos(angle),
       y: distance * ellipseY * Math.sin(angle),
+    })
+    const orbitOffset = (distance: number, angle: number): { x: number; y: number } => ({
+      x: distance * Math.cos(angle),
+      y: distance * Math.sin(angle),
     })
     const place = (id: string, cx: number, cy: number, angle: number, depth: number): void => {
       const node = nodeMap.get(id)!
@@ -182,7 +285,8 @@ function buildComputeHome(
       const ax = anchored ? node.x! : cx
       const ay = anchored ? node.y! : cy
       result.set(id, { x: ax, y: ay })
-      const kids = childrenOf.get(id) ?? []
+      // Heaviest satellite first: slot 0 is the parent's own outward heading (vision item 2).
+      const kids = heaviestFirst(childrenOf.get(id) ?? [], weightOf)
       const n = kids.length
       if (n === 0) return
       const r = radiusOf(node)
@@ -193,7 +297,7 @@ function buildComputeHome(
         // directly opposite its own parent-facing edge into the grandparent.
         const parity = n % 2 === 0 && depth > 0 ? Math.PI / n : 0
         const childAngle = angle + (2 * Math.PI * i) / n + parity
-        const off = offset(distance, childAngle)
+        const off = orbitOffset(distance, childAngle)
         place(childId, ax + off.x, ay + off.y, childAngle, depth + 1)
       })
     }
@@ -202,7 +306,7 @@ function buildComputeHome(
     // orphans, which are just one-node trees — becomes one of its "children", so independent
     // trees spread around a shared center instead of all stacking at (0, 0).
     const n = roots.length
-    roots.forEach((rootId, i) => {
+    heaviestFirst(roots, weightOf).forEach((rootId, i) => {
       const rootR = radiusOf(nodeMap.get(rootId)!)
       // Own-radius term unchanged from before (so a childless root — an orphan, or any leaf-only
       // tree — seeds at exactly the same distance it always has); the added subtreeReach term is
@@ -210,7 +314,7 @@ function buildComputeHome(
       // an unrelated neighbor's territory — see subtreeReach's own docs above.
       const distance = rootR * nodeSpread + subtreeReach(rootId)
       const angle = startAngle + (2 * Math.PI * i) / n
-      const off = offset(distance, angle)
+      const off = rootOffset(distance, angle)
       place(rootId, off.x, off.y, angle, 0)
     })
 
@@ -272,7 +376,7 @@ export function resolveAspectRatioScale(
   if (aspectRatio === undefined || aspectRatio === 1 || !Number.isFinite(aspectRatio) || nodes.length === 0) return { x: 1, y: 1 }
 
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
-  const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
+  const radiusOf = galaxyRadiusOf
 
   // Natural (unwarped) shape, measured through one real settle step (home -> group separation ->
   // individual separationPass -> homeStrength nudge) — not just the raw elliptical home position.
@@ -364,15 +468,18 @@ export function galaxySimulationStep(
   if (nodes.length === 0) return new Map()
 
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
-  const radiusOf = (n: GalaxyLayoutNode) => Math.hypot(n.width, n.height) / 2
+  const radiusOf = galaxyRadiusOf
 
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
-  const computeHome = buildComputeHome(nodeMap, childrenOf, roots, radiusOf, nodeSpread, startAngle)
+  // A caller that knows the full hierarchy (GraphCanvas) passes each node's already-effective
+  // weight; resolving again here is then a no-op. A direct caller with no weights gets leaf counts.
+  const weightOf = galaxyEffectiveWeights(nodes.map(n => n.id), childrenOf, id => nodeMap.get(id)?.weight)
+  const computeHome = buildComputeHome(nodeMap, childrenOf, roots, radiusOf, nodeSpread, startAngle, weightOf)
 
   // Grouping is purely structural (independent of ellipseX/ellipseY), so it's resolved once here
   // and reused by the real effectiveHome computation below.
   const { groupHeads, leafToGroup } = separateGroups
-    ? galaxyGroupMap(roots, childrenOf)
+    ? rootGroupMap(roots, childrenOf)
     : { groupHeads: [] as string[], leafToGroup: new Map<string, string>() }
 
   // See GalaxyLayoutOptions.aspectRatio / resolveAspectRatioScale for the full reasoning — the
@@ -503,8 +610,8 @@ export function galaxyLayout(
 }
 
 /**
- * Pushes apart any top-level group boundary circles (see boundingCirclesByGroup,
- * galaxyGroupHeads) that overlap each other, then rigidly translates each group's members by the
+ * Pushes apart any galaxies (one group per structural root, see rootGroupMap) whose bounding
+ * circles (see boundingCirclesByGroup) overlap each other, then rigidly translates each group's members by the
  * same delta so each group's already-correct internal arrangement is preserved. Plain separation
  * between group pseudo-nodes, not a spring simulation — galaxy groups aren't meaningfully
  * "spring-connected" to each other, and pulling unrelated groups together would fight the radial
@@ -533,12 +640,13 @@ function shiftGroupsApart(
 
   const radiusOf = (id: string): number => {
     const n = nodeMap.get(id)
-    return n ? Math.hypot(n.width, n.height) / 2 : 20
+    return n ? galaxyRadiusOf(n) : 20
   }
   const layoutNodes: LayoutNode[] = [...nodeMap.values()].map(n => ({ id: n.id, width: n.width, height: n.height, x: 0, y: 0 }))
-  // anchorToHead: true — must match GraphCanvas's own boundingCirclesByGroup call for rendering
-  // (see its comment); otherwise this pass would separate the centroid-based circles while the
-  // rendered head-anchored ones stayed exactly where they were, reintroducing visible overlap.
+  // anchorToHead: true — each galaxy's circle is centred on its own root ("sun"). Groups here are
+  // one per structural root (rootGroupMap), so this separates whole galaxies. GraphCanvas's
+  // rendered boundary discs still use galaxyGroupHeads' delegated grouping (a bushy root's
+  // children each get a disc); those discs are drawing, not something this pass separates.
   const boundaries = boundingCirclesByGroup(layoutNodes, positions, leafToGroup, radiusOf, true)
 
   // macroNodes' own x/y are ignored by separationPass (it only reads pos, which macroPos below
@@ -584,7 +692,7 @@ function applyGroupSeparation(
 ): Map<string, { x: number; y: number }> {
   const { childrenOf, roots } = buildStructuralForest(nodes.map(n => n.id), edges)
   const nodeMap = new Map(nodes.map(n => [n.id, n]))
-  const { groupHeads, leafToGroup } = galaxyGroupMap(roots, childrenOf)
+  const { groupHeads, leafToGroup } = rootGroupMap(roots, childrenOf)
   // Same pinned-group carve-out galaxySimulationStep's own reactive push-away uses (see its docs
   // a few lines above) — without this, galaxyLayout's one-shot batch entry point would rigidly
   // translate a pinned node's whole group right along with everyone else's, silently ignoring the

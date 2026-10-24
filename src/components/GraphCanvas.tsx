@@ -25,6 +25,8 @@ import {
 import {
   galaxyLayout,
   resolveAspectRatioScale,
+  galaxyEffectiveWeights,
+  galaxyBodyRadii,
   type GalaxyLayoutNode,
 } from "../utils/galaxyLayout";
 import { uxNavLayout } from "../utils/uxNavLayout";
@@ -75,6 +77,14 @@ export interface GraphNodeData {
   /** Explicit position. When omitted with layout="force", the engine places the node. */
   x?: number;
   y?: number;
+  /**
+   * layout="galaxy" only (ignored by every other layout): the node's size weight, e.g. a budget
+   * figure or headcount. Galaxy draws each node as a round body whose AREA is proportional to its
+   * weight, and orbits each parent's children heaviest-first. A node without a weight weighs the
+   * sum of its structural children; when no node has one, every node weighs its subtree leaf
+   * count. Not related to `GraphEdge.weight`, which is an edge's stroke width.
+   */
+  weight?: number;
 }
 
 export interface GraphEdge {
@@ -980,6 +990,42 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       );
     }, [nodes, edges, isStructuralEdge, layout]);
 
+    // layout="galaxy": each node's effective weight, over the FULL forest (so collapsing a subtree
+    // never changes its parent's weight or makes bodies resize), and — when galaxy draws its own
+    // default bodies (no renderNode) — each node's round-body radius, area ∝ weight.
+    const galaxyWeights = useMemo(() => {
+      if (layout !== "galaxy") return null;
+      const weightById = new Map(nodes.map((n) => [n.id, n.weight]));
+      return galaxyEffectiveWeights(
+        nodes.map((n) => n.id),
+        forest.childrenOf,
+        (id) => weightById.get(id),
+      );
+    }, [layout, nodes, forest]);
+    const galaxyRadii = useMemo(
+      () => (galaxyWeights && !renderNode ? galaxyBodyRadii(galaxyWeights) : null),
+      [galaxyWeights, renderNode],
+    );
+    // The galaxy-only fields every galaxy layout-node builder adds (see GalaxyLayoutNode).
+    const galaxyNodeExtras = useCallback(
+      (id: string): Pick<GalaxyLayoutNode, "weight" | "radius"> => ({
+        weight: galaxyWeights?.get(id),
+        radius: galaxyRadii?.get(id),
+      }),
+      [galaxyWeights, galaxyRadii],
+    );
+    // Boundary-circle radius for galaxy: the true body radius when galaxy draws round bodies,
+    // otherwise the measured box's half-diagonal.
+    const galaxyBoundaryRadiusOf = useCallback(
+      (id: string): number => {
+        const r = galaxyRadii?.get(id);
+        if (r !== undefined) return r;
+        const d = dims.get(id);
+        return d ? Math.hypot(d.width, d.height) / 2 : 20;
+      },
+      [galaxyRadii, dims],
+    );
+
     // Every structural descendant of a collapsed node is hidden — not just its direct children.
     const hiddenIds = useMemo(() => {
       if (!collapsedNodeIds || collapsedNodeIds.size === 0)
@@ -1165,7 +1211,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         });
       }
       setDims(next);
-    }, [visibleNodes, renderNode]);
+    }, [visibleNodes, renderNode, galaxyRadii]);
 
     // Run the engine layout when dims are ready (only for layout='force' | 'galaxy' | 'force-clustered' | 'ux-navigation' | 'radial-tree')
     useEffect(() => {
@@ -1255,10 +1301,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           target: e.targetId,
           structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
         }));
-        const positions = galaxyLayout(layoutNodes, layoutEdges, {
-          nodeMargin,
-          aspectRatio: galaxyAspectRatioRef.current,
-        });
+        const positions = galaxyLayout(
+          layoutNodes.map((n) => ({ ...n, ...galaxyNodeExtras(n.id) })),
+          layoutEdges,
+          {
+            nodeMargin,
+            aspectRatio: galaxyAspectRatioRef.current,
+          },
+        );
         setComputedPositions(positions);
         // galaxyLayout has no "cluster" concept of its own to return boundaries from (unlike
         // clusteredForceLayout), so build one here from `forest`. One boundary per root would be
@@ -1269,10 +1319,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         // each group head's full recursive subtree is then one boundary, same as a Louvain
         // cluster's members are for force-clustered.
         const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf);
-        const radiusOf = (id: string): number => {
-          const d = dims.get(id);
-          return d ? Math.hypot(d.width, d.height) / 2 : 20;
-        };
+        const radiusOf = galaxyBoundaryRadiusOf;
         setClusterBoundaries(
           boundingCirclesByGroup(
             layoutNodes,
@@ -1295,6 +1342,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       forest,
       nodes,
       collapsedNodeIds,
+      galaxyNodeExtras,
+      galaxyBoundaryRadiusOf,
     ]);
 
     // A node's dragPositions override doubles as its pin here, same priority getNodePosition
@@ -1317,9 +1366,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             x,
             y,
             pinned: x !== undefined && y !== undefined,
+            ...galaxyNodeExtras(n.id),
           };
         }),
-      [visibleNodes, dims, dragPositions],
+      [visibleNodes, dims, dragPositions, galaxyNodeExtras],
     );
 
     // Live-simulation mode's own continuous layout (see useGalaxySimulation). Builds
@@ -1351,8 +1401,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         id: n.id,
         width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
         height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+        ...galaxyNodeExtras(n.id),
       }));
-    }, [liveActive, visibleNodes, dims]);
+    }, [liveActive, visibleNodes, dims, galaxyNodeExtras]);
 
     // Pre-resolved once here (see GalaxyLayoutOptions.resolvedAspectScale /
     // resolveAspectRatioScale's own docs for why) rather than left for every live-simulation
@@ -1396,10 +1447,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           x: 0,
           y: 0,
         }));
-        const radiusOf = (id: string): number => {
-          const d = dims.get(id);
-          return d ? Math.hypot(d.width, d.height) / 2 : 20;
-        };
+        const radiusOf = galaxyBoundaryRadiusOf;
         setClusterBoundaries(
           boundingCirclesByGroup(
             boundaryNodes,
@@ -1410,7 +1458,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           ),
         );
       },
-      [showClusterBoundaries, galaxyLeafToGroup, visibleNodes, dims],
+      [showClusterBoundaries, galaxyLeafToGroup, visibleNodes, dims, galaxyBoundaryRadiusOf],
     );
 
     const { wake: wakeGalaxySimulation } = useGalaxySimulation({
@@ -1727,10 +1775,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // Boundary circles must track the reshaped positions too — same computation the static
       // engine-layout effect's own galaxy branch already does.
       const { leafToGroup } = galaxyGroupMap(forest.roots, forest.childrenOf);
-      const radiusOf = (id: string): number => {
-        const d = dims.get(id);
-        return d ? Math.hypot(d.width, d.height) / 2 : 20;
-      };
+      const radiusOf = galaxyBoundaryRadiusOf;
       // boundingCirclesByGroup only reads id/width/height off each node (positions come from the
       // separate `positions` map) — x/y here are dummy placeholders, same convention used
       // elsewhere in this file (see handleLiveTick's own boundaryNodes).
@@ -2143,6 +2188,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           return safeRenderNodeCallback(renderNode, node, selected, hierarchy, nodeProps);
         return (
           <GraphNode
+            bodyRadius={galaxyRadii?.get(node.id)}
             id={node.id}
             label={node.label}
             kind={node.kind}
@@ -2160,7 +2206,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii],
     );
 
     // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
