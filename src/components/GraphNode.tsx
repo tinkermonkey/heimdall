@@ -33,8 +33,10 @@ export interface GraphNodeProps extends BaseGraphNodeComponentProps, Omit<React.
   bodyRadius?: number
 }
 
-/** Bodies narrower than this (px) don't show their label inline. */
-const MIN_LABELED_BODY_DIAMETER = 28
+/** Bodies narrower than this (px) don't show their label inline (vision item 9: a body too small
+ *  for a legible label shows none at full view; hover/selection still name it). 28px gave labels
+ *  cut to fragments like "Gra ph…". */
+const MIN_LABELED_BODY_DIAMETER = 44
 
 export const GraphNode = React.forwardRef<HTMLDivElement, GraphNodeProps>(
   (

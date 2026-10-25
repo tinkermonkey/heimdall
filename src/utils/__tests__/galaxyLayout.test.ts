@@ -46,12 +46,18 @@ describe('galaxyEffectiveWeights', () => {
 })
 
 describe('galaxyBodyRadii', () => {
-  it('maps weight to area linearly between the min and max radius', () => {
-    const r = galaxyBodyRadii(new Map([['lo', 0], ['mid', 50], ['hi', 100]]))
+  it('maps the square root of weight to area between the min and max radius', () => {
+    const r = galaxyBodyRadii(new Map([['lo', 0], ['quarter', 25], ['hi', 100]]))
     expect(r.get('lo')).toBeCloseTo(GALAXY_BODY_MIN_RADIUS)
     expect(r.get('hi')).toBeCloseTo(GALAXY_BODY_MAX_RADIUS)
+    // sqrt(25) is halfway between sqrt(0) and sqrt(100), so its area is halfway too.
     const midArea = (GALAXY_BODY_MIN_RADIUS ** 2 + GALAXY_BODY_MAX_RADIUS ** 2) / 2
-    expect(r.get('mid')! ** 2).toBeCloseTo(midArea)
+    expect(r.get('quarter')! ** 2).toBeCloseTo(midArea)
+  })
+
+  it('keeps small weights distinguishable across a wide range', () => {
+    const r = galaxyBodyRadii(new Map([['root', 956129], ['a', 264], ['b', 4000]]))
+    expect(r.get('b')! - r.get('a')!).toBeGreaterThan(1)
   })
 
   it('gives all-equal weights the middle area instead of dividing by zero', () => {
