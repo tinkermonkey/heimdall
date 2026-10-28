@@ -301,6 +301,339 @@ export function separationPass(nodes: readonly LayoutNode[], pos: Map<string, { 
   return anyOverlap
 }
 
+/** Work done by a SeparationJob so far: separation passes run, and box pairs tested for overlap. */
+export interface SeparationStats {
+  passes: number
+  pairChecks: number
+}
+
+// A grid cell's two indices are packed into one integer map key. Near the first box's cell they
+// pack into a small integer (V8 hashes those fastest); a layout that spreads further switches to a
+// wide packing, exact up to GRID_INDEX_LIMIT cells from the origin, past which a SeparationJob
+// falls back to separationPass.
+const SMALL_CELL_RANGE = 2 ** 14
+const SMALL_KEY_STRIDE = 2 ** 15
+const GRID_INDEX_LIMIT = 2 ** 25
+const GRID_KEY_STRIDE = 2 * GRID_INDEX_LIMIT + 1
+
+/**
+ * Resumable equivalent of `for (pass < maxPasses) if (!separationPass(nodes, pos)) break`. When it
+ * finishes, `pos` holds bit-for-bit what that loop leaves (the same overlapping pairs, pushed in
+ * the same order, so floating-point sums match), but it doesn't test all n² pairs every pass:
+ *
+ *   - Two boxes overlap only if they sit in the same or adjacent cells of a uniform grid whose
+ *     cell is at least the largest box, so the first pass tests only those pairs.
+ *   - A pair neither of whose boxes moved in the previous pass overlaps now exactly when it did
+ *     then, so every later pass re-tests only the previous pass's overlapping pairs plus the grid
+ *     neighbours of the boxes that moved.
+ *   - A pass that finds overlaps but moves nothing (pushes that cancel out, or are too small to
+ *     change a coordinate) would repeat identically until the pass budget runs out, so the job
+ *     stops there.
+ *
+ * Overlaps confined to a few boxes then cost about O(n) for the first pass and O(moving boxes)
+ * per pass after it, instead of O(n²) per pass. `run(budget)` stops after the pass that reaches
+ * `budget` pair checks and can be called again to continue, so a caller with a frame budget can
+ * spread the work over frames; `pos` is updated after every pass. Inputs the grid can't
+ * represent (non-finite or negative sizes or positions, duplicate ids, a coordinate range beyond
+ * the grid's key space) fall back to separationPass itself.
+ */
+export class SeparationJob {
+  readonly stats: SeparationStats = { passes: 0, pairChecks: 0 }
+  private finished = false
+  private plain = false
+  private readonly n: number
+  private readonly px: Float64Array
+  private readonly py: Float64Array
+  private readonly w: Float64Array
+  private readonly h: Float64Array
+  private readonly isPinned: Uint8Array
+  private readonly cellX: Float64Array
+  private readonly cellY: Float64Array
+  private readonly cellW: number
+  private readonly cellH: number
+  private originX = 0
+  private originY = 0
+  private wide = false
+  private readonly grid = new Map<number, number[]>()
+  /** This pass's overlapping pairs (keys as in `overlapping`), in the order found. */
+  private hits = new Float64Array(1024)
+  private hitCount = 0
+  private readonly isMover: Uint8Array
+  private readonly mx: Float64Array
+  private readonly my: Float64Array
+  /** Pairs as i * n + j (i < j): numeric order is separationPass's loop order. */
+  private overlapping: number[] = []
+  /** Boxes the last pass moved; undefined before the first pass (test every adjacent pair). */
+  private moved: number[] | undefined
+
+  private readonly nodes: readonly LayoutNode[]
+  private readonly pos: Map<string, { x: number; y: number }>
+  private readonly maxPasses: number
+
+  // No TypeScript parameter properties: scripts load this file through Node's type stripping,
+  // which only erases types (see tsconfig.json's allowImportingTsExtensions note).
+  constructor(nodes: readonly LayoutNode[], pos: Map<string, { x: number; y: number }>, maxPasses: number) {
+    this.nodes = nodes
+    this.pos = pos
+    this.maxPasses = maxPasses
+    const n = (this.n = nodes.length)
+    this.px = new Float64Array(n)
+    this.py = new Float64Array(n)
+    this.w = new Float64Array(n)
+    this.h = new Float64Array(n)
+    this.isPinned = new Uint8Array(n)
+    this.cellX = new Float64Array(n)
+    this.cellY = new Float64Array(n)
+    this.mx = new Float64Array(n)
+    this.my = new Float64Array(n)
+    this.isMover = new Uint8Array(n)
+    let maxW = 0
+    let maxH = 0
+    const seen = new Set<string>()
+    for (let i = 0; i < n; i++) {
+      const node = nodes[i]
+      const p = pos.get(node.id)
+      const representable =
+        p !== undefined && !seen.has(node.id) && Number.isFinite(p.x) && Number.isFinite(p.y) &&
+        Number.isFinite(node.width) && Number.isFinite(node.height) && node.width >= 0 && node.height >= 0
+      if (!representable) {
+        this.plain = true
+        break
+      }
+      seen.add(node.id)
+      this.px[i] = p.x
+      this.py[i] = p.y
+      this.w[i] = node.width
+      this.h[i] = node.height
+      this.isPinned[i] = node.pinned ? 1 : 0
+      maxW = Math.max(maxW, node.width)
+      maxH = Math.max(maxH, node.height)
+    }
+    // Overlap needs |dx| < (wa + wb) / 2 <= the largest width (same for y), so with cells at least
+    // that large every overlapping pair is at most one cell apart. The slack absorbs rounding.
+    this.cellW = maxW * 1.01 + 1
+    this.cellH = maxH * 1.01 + 1
+    if (!this.plain && n > 0) {
+      this.originX = Math.floor(this.px[0] / this.cellW)
+      this.originY = Math.floor(this.py[0] / this.cellH)
+      for (let i = 0; i < n && !this.plain; i++) if (!this.locate(i)) this.plain = true
+      if (!this.plain) for (let i = 0; i < n; i++) this.insert(i)
+    }
+  }
+
+  /** True once the loop this job replaces would have stopped. */
+  get done(): boolean {
+    return this.finished
+  }
+
+  /** Runs passes until done, or until the pass that brings this call's pair checks to `budget`.
+   *  Returns `done`. */
+  run(budget = Infinity): boolean {
+    const startChecks = this.stats.pairChecks
+    while (!this.finished && this.stats.pairChecks - startChecks < budget) {
+      if (this.stats.passes >= this.maxPasses) {
+        this.finished = true
+        break
+      }
+      this.stats.passes++
+      if (this.plain) {
+        this.stats.pairChecks += (this.n * (this.n - 1)) / 2
+        if (!separationPass(this.nodes, this.pos)) this.finished = true
+        continue
+      }
+      this.pass()
+    }
+    return this.finished
+  }
+
+  private keyOf(cx: number, cy: number): number {
+    return this.wide
+      ? (cx + GRID_INDEX_LIMIT) * GRID_KEY_STRIDE + (cy + GRID_INDEX_LIMIT)
+      : (cx - this.originX) * SMALL_KEY_STRIDE + (cy - this.originY)
+  }
+
+  /** Records the cell of box i's current position (switching to wide keys if it's beyond the
+   *  small ones' reach); false if it's beyond the grid altogether. */
+  private locate(i: number): boolean {
+    const cx = Math.floor(this.px[i] / this.cellW)
+    const cy = Math.floor(this.py[i] / this.cellH)
+    if (!(Math.abs(cx) < GRID_INDEX_LIMIT - 1 && Math.abs(cy) < GRID_INDEX_LIMIT - 1)) return false
+    if (Math.abs(cx - this.originX) >= SMALL_CELL_RANGE - 1 || Math.abs(cy - this.originY) >= SMALL_CELL_RANGE - 1) this.wide = true
+    this.cellX[i] = cx
+    this.cellY[i] = cy
+    return true
+  }
+
+  private insert(i: number): void {
+    const key = this.keyOf(this.cellX[i], this.cellY[i])
+    const bucket = this.grid.get(key)
+    if (bucket) bucket.push(i)
+    else this.grid.set(key, [i])
+  }
+
+  private remove(i: number): void {
+    const bucket = this.grid.get(this.keyOf(this.cellX[i], this.cellY[i]))!
+    bucket.splice(bucket.indexOf(i), 1)
+  }
+
+  /** Tests pair (i, j), i < j, against current positions; records it if the boxes overlap. */
+  private test(i: number, j: number): void {
+    if (this.isPinned[i] && this.isPinned[j]) return
+    this.stats.pairChecks++
+    const { px, py, w, h } = this
+    if ((w[i] + w[j]) / 2 - Math.abs(px[j] - px[i]) <= 0 || (h[i] + h[j]) / 2 - Math.abs(py[j] - py[i]) <= 0) return
+    if (this.hitCount === this.hits.length) {
+      const grown = new Float64Array(this.hits.length * 2)
+      grown.set(this.hits)
+      this.hits = grown
+    }
+    this.hits[this.hitCount++] = i * this.n + j
+  }
+
+  /** Tests box i against every box in its own and the 8 adjacent cells, except those `skip`
+   *  rejects. */
+  private testNeighbours(i: number, skip: (j: number) => boolean): void {
+    const cx = this.cellX[i]
+    const cy = this.cellY[i]
+    for (let gx = cx - 1; gx <= cx + 1; gx++) {
+      for (let gy = cy - 1; gy <= cy + 1; gy++) {
+        const bucket = this.grid.get(this.keyOf(gx, gy))
+        if (!bucket) continue
+        for (const j of bucket) {
+          if (j === i || skip(j)) continue
+          if (i < j) this.test(i, j)
+          else this.test(j, i)
+        }
+      }
+    }
+  }
+
+  /** One pass, identical in effect to separationPass(nodes, pos). */
+  private pass(): void {
+    const { n, px, py, w, h, isPinned, mx, my } = this
+    // Find this pass's overlapping pairs, each candidate pair tested once. Overlap depends only on
+    // the pass's starting positions, so the order of testing doesn't matter.
+    this.hitCount = 0
+    const previouslyMoved = this.moved
+    if (!previouslyMoved) {
+      for (let i = 0; i < n; i++) this.testNeighbours(i, j => j < i)
+    } else {
+      const isMover = this.isMover
+      for (const m of previouslyMoved) isMover[m] = 1
+      // Pairs without a mover are unchanged; pairs with one are found from the mover (from the
+      // lower-indexed one when both moved).
+      for (const pair of this.overlapping) {
+        let i = Math.floor(pair / n)
+        if (i * n > pair) i--
+        const j = pair - i * n
+        if (!isMover[i] && !isMover[j]) this.test(i, j)
+      }
+      for (const m of previouslyMoved) this.testNeighbours(m, j => isMover[j] === 1 && j < m)
+      for (const m of previouslyMoved) isMover[m] = 0
+    }
+
+    // Push the overlapping pairs apart in separationPass's (i, j) order, so the per-box sums are
+    // accumulated in the same order and round identically.
+    const hits = this.hits.subarray(0, this.hitCount).sort()
+    const overlapping: number[] = []
+    const touched: number[] = []
+    for (let c = 0; c < hits.length; c++) {
+      const pair = hits[c]
+      let i = Math.floor(pair / n)
+      if (i * n > pair) i--
+      const j = pair - i * n
+      overlapping.push(pair)
+      // From here to the moves: separationPass's pair body, unchanged but for array storage.
+      const dx = px[j] - px[i]
+      const dy = py[j] - py[i]
+      const overlapX = (w[i] + w[j]) / 2 - Math.abs(dx)
+      const overlapY = (h[i] + h[j]) / 2 - Math.abs(dy)
+
+      let pushX = 0
+      let pushY = 0
+      if (overlapX < overlapY) {
+        pushX = (dx >= 0 ? 1 : -1) * overlapX
+      } else {
+        pushY = (dy >= 0 ? 1 : -1) * overlapY
+      }
+      let halfX = pushX / 2
+      let halfY = pushY / 2
+      const mag = Math.hypot(halfX, halfY)
+      if (mag > SEPARATION_STEP_CAP) {
+        const scale = SEPARATION_STEP_CAP / mag
+        halfX *= scale
+        halfY *= scale
+      }
+
+      touched.push(i, j)
+      if (isPinned[i]) {
+        mx[j] += halfX * 2
+        my[j] += halfY * 2
+      } else if (isPinned[j]) {
+        mx[i] -= halfX * 2
+        my[i] -= halfY * 2
+      } else {
+        mx[i] -= halfX
+        my[i] -= halfY
+        mx[j] += halfX
+        my[j] += halfY
+      }
+    }
+
+    // Apply exactly as separationPass does; remember who actually changed position.
+    const moved: number[] = []
+    for (const i of touched) {
+      if (isPinned[i] || (mx[i] === 0 && my[i] === 0)) continue
+      const x = px[i] + mx[i]
+      const y = py[i] + my[i]
+      mx[i] = 0
+      my[i] = 0
+      this.pos.set(this.nodes[i].id, { x, y })
+      if (x === px[i] && y === py[i]) continue
+      px[i] = x
+      py[i] = y
+      moved.push(i)
+    }
+    for (const i of touched) {
+      mx[i] = 0
+      my[i] = 0
+    }
+
+    this.overlapping = overlapping
+    this.moved = moved
+    // No overlap left: separationPass returns false and the loop ends. Overlaps but nothing moved:
+    // every remaining pass would repeat this one exactly, so the end state is already reached.
+    if (overlapping.length === 0 || moved.length === 0) {
+      this.finished = true
+      return
+    }
+    for (const i of moved) this.remove(i)
+    const wasWide = this.wide
+    for (const i of moved) {
+      if (!this.locate(i)) {
+        // Off the grid: finish with the plain all-pairs pass (pos is already up to date).
+        this.plain = true
+        return
+      }
+    }
+    if (this.wide === wasWide) {
+      for (const i of moved) this.insert(i)
+    } else {
+      // Keys changed packing: re-file everything.
+      this.grid.clear()
+      for (let i = 0; i < n; i++) this.insert(i)
+    }
+  }
+}
+
+/** Runs a SeparationJob to completion: separationPass until a pass finds no overlap, at most
+ *  `maxPasses` times, with the same result but without all-pairs work per pass. */
+export function separateUntilClear(nodes: readonly LayoutNode[], pos: Map<string, { x: number; y: number }>, maxPasses: number): SeparationStats {
+  const job = new SeparationJob(nodes, pos, maxPasses)
+  job.run()
+  return job.stats
+}
+
 // One spring-only relaxation step: spring force + damping, no repulsion or
 // center gravity — lets edge lengths pull back toward springLength between
 // separation passes without reintroducing the repulsion that created the

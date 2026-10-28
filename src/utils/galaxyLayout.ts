@@ -1,5 +1,5 @@
 import { packEnclose, packSiblings } from 'd3-hierarchy'
-import { separationPass, FINAL_CLEANUP_MAX_PASSES, type LayoutNode } from './graphLayout'
+import { SeparationJob, FINAL_CLEANUP_MAX_PASSES, type LayoutNode, type SeparationStats } from './graphLayout'
 import { buildStructuralForest, type HierarchyEdge } from './graphHierarchy'
 
 /*
@@ -528,21 +528,55 @@ function applyPins(nodes: readonly GalaxyLayoutNode[], forest: Forest, base: Rea
 // both are cached (one entry each) instead of rebuilt per frame — arrangeToAspect alone is
 // quadratic in galaxy count (300 ms/frame at 500 roots before this).
 let baseCache: { key: string; edges: readonly GalaxyLayoutEdge[]; home: Map<string, { x: number; y: number }> } | undefined
-let pinnedCache: { key: string; edges: readonly GalaxyLayoutEdge[]; home: Map<string, { x: number; y: number }> } | undefined
+/** `job` is the pinned target's overlap separation while it is still unfinished (live simulation
+ *  spreads it over frames); `home` holds its progress so far. */
+let pinnedCache: { key: string; edges: readonly GalaxyLayoutEdge[]; home: Map<string, { x: number; y: number }>; job?: SeparationJob } | undefined
+
+/**
+ * Pair checks of pinned-overlap separation a live-simulation tick may spend before it returns the
+ * target as resolved so far (#287). Every drag frame moves a pin, so every drag frame starts the
+ * separation afresh: without a cap a 2000-node star spent 300-500 ms per frame on it (14 s before
+ * the grid-based SeparationJob). Unfinished work resumes on the next tick while the pin holds
+ * still, so the settled target is exactly galaxyLayout's. Counted in pair checks, not time, so the
+ * frames a drag produces are deterministic. About 4-5 ms of work at most; flare (252 nodes)
+ * finishes within one frame.
+ */
+export const GALAXY_LIVE_SEPARATION_BUDGET = 50_000
+
+/** What the most recent galaxyLayout / galaxySimulationStep call spent on pinned-overlap
+ *  separation, and whether it left that separation unfinished. */
+let lastSeparation: SeparationStats & { pending: boolean } = { passes: 0, pairChecks: 0, pending: false }
+
+/** Separation work the most recent galaxyLayout / galaxySimulationStep call did (zero when nothing
+ *  was pinned or the pinned target was cached). For tests and benchmarks. */
+export function galaxyLastSeparationWork(): SeparationStats {
+  return { passes: lastSeparation.passes, pairChecks: lastSeparation.pairChecks }
+}
+
+/** True when the most recent galaxySimulationStep returned a pinned target whose separation it
+ *  hadn't finished: the target keeps changing on the next ticks, so the simulation loop shouldn't
+ *  count itself idle yet. */
+export function galaxySimulationSettling(): boolean {
+  return lastSeparation.pending
+}
 
 function structureKey(nodes: readonly GalaxyLayoutNode[], options: GalaxyLayoutOptions, startAngle: number): string {
   const parts = nodes.map(n => `${n.id}|${n.width}|${n.height}|${n.radius ?? ''}|${n.weight ?? ''}`)
   return `${startAngle}|${options.aspectRatio ?? ''}|${options.nodeMargin ?? ''}|${options.nodeSpread ?? ''}#${parts.join(';')}`
 }
 
-/** Home positions, pins applied and (when pinned) overlaps resolved on the target. Cached. */
+/** Home positions, pins applied and (when pinned) overlaps resolved on the target. Cached. At most
+ *  `separationBudget` pair checks go into the overlap resolution per call; the rest resumes on the
+ *  next call with the same pins. */
 function computeHome(
   nodes: readonly GalaxyLayoutNode[],
   edges: readonly GalaxyLayoutEdge[],
   forest: Forest,
   options: GalaxyLayoutOptions,
-  startAngle: number
+  startAngle: number,
+  separationBudget = Infinity
 ): Map<string, { x: number; y: number }> {
+  lastSeparation = { passes: 0, pairChecks: 0, pending: false }
   const key = structureKey(nodes, options, startAngle)
   if (!baseCache || baseCache.key !== key || baseCache.edges !== edges) {
     baseCache = { key, edges, home: computeBaseHome(forest, startAngle, options.aspectRatio) }
@@ -555,8 +589,16 @@ function computeHome(
     const home = applyPins(nodes, forest, baseCache.home)
     // Pins can push a dragged system into its neighbours: resolve that on the TARGET (pinned nodes
     // fixed). Separating the moving positions every tick fought the pull toward home forever.
-    separateUntilClear(nodes, home, forest.gap / 2)
-    pinnedCache = { key: pinKey, edges, home }
+    const margin = forest.gap / 2
+    const padded: LayoutNode[] = nodes.map(n => ({ id: n.id, width: n.width + margin, height: n.height + margin, pinned: n.pinned, x: 0, y: 0 }))
+    pinnedCache = { key: pinKey, edges, home, job: new SeparationJob(padded, home, FINAL_CLEANUP_MAX_PASSES) }
+  }
+  const job = pinnedCache.job
+  if (job) {
+    const before = { ...job.stats }
+    const done = job.run(separationBudget)
+    if (done) pinnedCache.job = undefined
+    lastSeparation = { passes: job.stats.passes - before.passes, pairChecks: job.stats.pairChecks - before.pairChecks, pending: !done }
   }
   return new Map(pinnedCache.home)
 }
@@ -574,20 +616,14 @@ export function resolveAspectRatioScale(
   return { x: 1, y: 1 }
 }
 
-/** Overlap safety net, only needed when pinned nodes break the construction. */
-function separateUntilClear(nodes: readonly GalaxyLayoutNode[], pos: Map<string, { x: number; y: number }>, margin: number): void {
-  const padded: LayoutNode[] = nodes.map(n => ({ id: n.id, width: n.width + margin, height: n.height + margin, pinned: n.pinned, x: 0, y: 0 }))
-  for (let pass = 0; pass < FINAL_CLEANUP_MAX_PASSES; pass++) {
-    if (!separationPass(padded, pos)) break
-  }
-}
-
 /**
  * One live-simulation tick: recomputes every node's home (pinned/dragged nodes anchor their
  * subtrees), then moves each unpinned node `homeStrength` of the way from `prevPositions` toward
  * its home. Drive it once per animation frame, feeding back its own output; a dragged node passed
  * as `pinned` carries its system with it. With nothing pinned, it converges to galaxyLayout's
- * result.
+ * result; with pins, to galaxyLayout's result for the same pins. Resolving overlaps a moved pin
+ * causes is capped at GALAXY_LIVE_SEPARATION_BUDGET per tick and finishes over the following
+ * ticks (see galaxySimulationSettling), so a drag frame's cost stays bounded on large graphs.
  */
 export function galaxySimulationStep(
   nodes: readonly GalaxyLayoutNode[],
@@ -598,7 +634,7 @@ export function galaxySimulationStep(
   const { startAngle = Math.PI, homeStrength = 0.18 } = options
   if (nodes.length === 0) return new Map()
   const forest = buildForest(nodes, edges, options)
-  const home = computeHome(nodes, edges, forest, options, startAngle)
+  const home = computeHome(nodes, edges, forest, options, startAngle, GALAXY_LIVE_SEPARATION_BUDGET)
   const pos = new Map<string, { x: number; y: number }>()
   for (const node of nodes) {
     const h = home.get(node.id)!

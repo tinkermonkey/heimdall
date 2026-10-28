@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { galaxySimulationStep, type GalaxyLayoutNode, type GalaxyLayoutEdge, type GalaxyLayoutOptions } from '../utils/galaxyLayout'
+import { galaxySimulationStep, galaxySimulationSettling, type GalaxyLayoutNode, type GalaxyLayoutEdge, type GalaxyLayoutOptions } from '../utils/galaxyLayout'
 
 export interface UseGalaxySimulationOptions {
   /** Only ticks while true — GraphCanvas passes `liveSimulation && layout === 'galaxy'`. Flipping
@@ -86,7 +86,9 @@ export function useGalaxySimulation({
     positionsRef.current = next
     onTickRef.current(next)
 
-    idleFramesRef.current = maxDelta < SETTLE_EPSILON ? idleFramesRef.current + 1 : 0
+    // A pinned target still being separated (galaxySimulationStep spreads that work over ticks)
+    // keeps changing, so the loop isn't idle yet however little this frame moved.
+    idleFramesRef.current = maxDelta < SETTLE_EPSILON && !galaxySimulationSettling() ? idleFramesRef.current + 1 : 0
 
     if (idleFramesRef.current >= IDLE_FRAMES_THRESHOLD) {
       rafRef.current = null
