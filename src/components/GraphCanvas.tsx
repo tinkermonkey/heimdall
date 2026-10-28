@@ -34,6 +34,7 @@ import {
   type GalaxyLayoutNode,
 } from "../utils/galaxyLayout";
 import { uxNavLayout } from "../utils/uxNavLayout";
+import { yieldToPaint } from "../utils/yieldToPaint";
 import { radialTreeLayout, type RingGeometry } from "../utils/radialTreeLayout";
 import {
   buildStructuralForest,
@@ -43,7 +44,6 @@ import {
 import { visibleNavigationEdgeIds } from "../utils/uxNavEdgeVisibility";
 import { usePanZoom } from "../hooks/usePanZoom";
 import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
-import { yieldToPaint } from "../utils/yieldToPaint";
 import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
 import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
@@ -790,6 +790,24 @@ export interface GraphCanvasProps extends Omit<
    *  'bottom-right'. No effect when showToolbar is false. */
   toolbarPosition?: GraphToolbarPosition;
   /**
+   * Called when the layout's busy state changes, only on changes: "computing" while an engine
+   * layout runs (the first layout, a layout switch, or any input change that relays out),
+   * "simulating" while layout="galaxy" live simulation is moving nodes (including a drag's
+   * re-settle), "idle" otherwise. The same value is on the root as `data-layout-state`. Read
+   * through a ref, so an inline callback is fine. A layout="manual" canvas never leaves "idle".
+   * Keep `nodes` and `edges` memoized if this callback re-renders the parent: new arrays relay
+   * out, which reports "computing" again.
+   */
+  onLayoutStateChange?: (state: GraphLayoutState) => void;
+  /**
+   * Shows a small "Laying out…" status chip while the layout is computing or simulating, once
+   * that has lasted LAYOUT_INDICATOR_DELAY_MS (150 ms), so fast layouts never flash it. It sits
+   * in the top-right corner, or the bottom-right when the toolbar is along the top edge.
+   * `role="status"`, so assistive tech announces it. Default true. Set false to show your own
+   * from onLayoutStateChange.
+   */
+  showLayoutIndicator?: boolean;
+  /**
    * Ancestor element to request/exit the Fullscreen API on instead of GraphCanvas's own root —
    * pass this when GraphCanvas is composed alongside sibling overlay content (a control strip
    * above it, a `DetailDrawer` beside it, ...) that should stay visible while fullscreen too.
@@ -808,24 +826,6 @@ export interface GraphCanvasProps extends Omit<
    * when omitted.
    */
   fullscreenContainerRef?: React.RefObject<HTMLElement | null>;
-  /**
-   * Called when the layout's busy state changes, only on changes: "computing" while an engine
-   * layout runs (the first layout, a layout switch, or any input change that relays out),
-   * "simulating" while layout="galaxy" live simulation is moving nodes (including a drag's
-   * re-settle), "idle" otherwise. The same value is on the root as `data-layout-state`. Read
-   * through a ref, so an inline callback is fine. A layout="manual" canvas never leaves "idle".
-   * Keep `nodes` and `edges` memoized if this callback re-renders the parent: new arrays relay
-   * out, which reports "computing" again.
-   */
-  onLayoutStateChange?: (state: GraphLayoutState) => void;
-  /**
-   * Shows a small "Laying out…" status chip while the layout is computing or simulating, once
-   * that has lasted LAYOUT_INDICATOR_DELAY_MS (150 ms), so fast layouts never flash it. It sits
-   * in the top-right corner, or the bottom-right when the toolbar is along the top edge.
-   * `role="status"`, so assistive tech announces it. Default true. Set false to show your own
-   * from onLayoutStateChange.
-   */
-  showLayoutIndicator?: boolean;
 }
 
 type NodeDims = Map<string, { width: number; height: number }>;
@@ -867,13 +867,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onEdgeSelect,
       onEdgeHover,
       onBackgroundClick,
+      onLayoutStateChange,
+      showLayoutIndicator = true,
       draggable = true,
       onNodeDragEnd,
       showToolbar = true,
       toolbarPosition = "bottom-right",
       fullscreenContainerRef,
-      onLayoutStateChange,
-      showLayoutIndicator = true,
       className = "",
       ...props
     },
