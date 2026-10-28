@@ -4,6 +4,61 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.4]
+
+Galaxy drag performance, a layout-busy state, and viewport history for `GraphCanvas`.
+
+### Changed
+
+- **`GraphCanvas` engine layouts now apply one frame after their inputs change, not during the
+  same commit** (tinkermonkey/heimdall#307). This lets the new busy state paint before a slow
+  engine (for example `orthogonal`) blocks the main thread. **Code or tests that read node
+  positions immediately after rendering or after changing `layout`, `nodes` or `edges` must
+  now wait**: for `data-layout-state="idle"` on `.graph-canvas`, or for `onLayoutStateChange`
+  to report `'idle'`. While a new layout computes, the previous positions stay on screen. Before
+  the first layout, nodes and edges without a position are hidden rather than stacked at the
+  origin, so the first visible frame is the laid-out (and, with `fitView`, fitted) graph. If
+  inputs change again before the deferred run starts, the stale run is dropped. An engine error
+  still reaches the nearest error boundary.
+
+### Fixed
+
+- **`GraphCanvas`** (`layout="galaxy"`, live simulation) — dragging a node no longer stalls on
+  larger graphs (tinkermonkey/heimdall#287). Each drag frame re-resolved overlaps around the
+  dragged system with an all-pairs pass repeated up to 400 times: about 260 ms per frame at 252
+  nodes and 30 s at 3000. Overlaps are now found through a spatial grid, only boxes that moved
+  are re-checked, and a live frame spends a bounded amount of work on them, finishing any
+  remainder over the next frames. A drag frame now costs about 1 ms at 252 nodes and under 10 ms
+  at 3000. The settled layout, and static `galaxyLayout()` output, are unchanged.
+
+### Added
+
+- **`GraphCanvas` — layout busy state** (tinkermonkey/heimdall#307).
+  - **Reporting:** `onLayoutStateChange` and a `data-layout-state` root attribute report
+    `'computing'` while an engine layout runs, `'simulating'` while galaxy live simulation moves
+    nodes, and `'idle'` otherwise.
+  - **Indicator:** a "Laying out…" status chip (`role="status"`, `aria-live="polite"`) appears
+    once a layout has been busy for 150 ms. Turn it off with `showLayoutIndicator={false}`.
+  - **Exported type:** `GraphLayoutState`.
+  - **Not included:** running engines in a Web Worker.
+- **`GraphCanvas` — viewport history** (tinkermonkey/heimdall#309).
+  - **`onViewportDwell`** (with `dwellMs`, default 1500) fires once the viewport has been still
+    after a user pan/zoom (drag, wheel, pinch, keyboard, toolbar `+`/`-`). It never fires
+    mid-gesture or while inertia is still gliding.
+  - **`onViewportNavigate`** reports moves the canvas or the app made, with a
+    `GraphViewportCause`: `center-on-select` (with `nodeId`), `fit` (`mount`, `toolbar`,
+    `fullscreen` or `resize`; `layout` is reserved) or `imperative`.
+  - **`initialViewport`** replaces the mount fit and centring, for deep links and reloads.
+  - **`setViewport(viewport, { animate, silent })` and `getViewport()`** are on a new
+    `viewportRef` handle and on `useGraphCanvas()`. `silent` suppresses `onViewportNavigate`,
+    so restoring a history entry doesn't record a new one. `animate` is a 150 ms ease, a jump
+    under `prefers-reduced-motion`.
+  - **Snapshots** are in world coordinates (`center`, `zoom`, `bounds`).
+  - **New types:** `GraphViewportSnapshot`, `GraphViewport`, `GraphViewportCause`,
+    `GraphViewportHandle`, `GraphSetViewportOptions`.
+- **`usePanZoom`** — optional `onUserGesture('start' | 'change' | 'end')` option and a
+  `getViewport()` return value. Existing callers are unaffected.
+
 ## [0.9.3]
 
 Canvas interaction and accessibility fixes from downstream testing.
