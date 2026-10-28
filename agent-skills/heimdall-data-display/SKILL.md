@@ -699,10 +699,9 @@ function SiteMap({ pins, track, density }: { pins: MapPin[]; track: MapTrackPoin
 - The root is `width: 100%; height: 100%; min-height: 360px`. Give the parent a height.
 - The initial view is fitted once, from `bounds` or else from the data extent, after the container is first measured: the data is framed with 60px padding (less in small containers) and centred. A single point opens at zoom level 12, and the fit never zooms in past level 16; with no data and no `bounds` the whole world is shown. Later changes to `bounds` or data do not re-fit.
 - `minZoom`, `maxZoom` and the `zoom` passed to `onViewportChange` are the pan/zoom scale factor (1 = the fitted initial view), not slippy-map zoom levels. `center` is the map point under the middle of the view. The tile `z` sent to `tileUrl` is the integer slippy-map level nearest the zoom on screen, clamped to 0–28.
-- `+`/`-` keyboard zoom scales about the top-left corner of the map, not the view centre; wheel and pinch zoom anchor on the pointer.
 - A string `tileUrl` substitutes the first `{x}`, `{y}` and `{z}`. There is no default tile server; without `tileUrl` a grid pattern renders.
 - Pin popovers open only from a click on a pin. Setting `selectedPinId` from outside highlights the pin but shows no popover. Escape closes the popover and calls `onSelectPin(null)`; clicking the map background does not deselect.
 - The popover shows `label`, `timestamp` and `detail`, and traps focus while open.
-- The map is focusable (`role="application"`): `+`/`-` zoom, arrow keys pan. Passing `onKeyDown` or `onPointerDown` through the spread replaces the built-in keyboard and drag handling.
+- The map is focusable (`role="application"`): `+`/`-` zoom in or out by a factor of 1.2 about the view centre, arrow keys pan 20px. Wheel and pinch zoom anchor on the pointer. Passing `onKeyDown` or `onPointerDown` through the spread replaces the built-in keyboard and drag handling.
 - `children` are not rendered; overlay your own controls from a positioned parent instead.
 - The track line is always cyan. The heatmap draws 8–12px circles, alpha 0.12–1 by value, with a "Density" legend; the track mode shows a "Track" legend.
