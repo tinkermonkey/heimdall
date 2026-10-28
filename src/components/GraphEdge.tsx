@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useGraphCanvas } from './GraphCanvasContext'
-import { computeEdgePath, edgeLabelSize, findClearLabelPosition, type EdgeAnchor } from '../utils/graph'
+import { computeEdgePath, edgeAccessibleName, edgeLabelSize, findClearLabelPosition, type EdgeAnchor } from '../utils/graph'
 import { GraphEdgeShape } from './GraphEdgeShape'
 import './GraphEdge.css'
 
@@ -8,6 +8,12 @@ export interface GraphEdgeProps extends Omit<React.SVGAttributes<SVGGElement>, '
   id: string
   sourceId: string
   targetId: string
+  /** Source node's readable name for the interactive edge's accessible name. Falls back to
+   *  `sourceId`, so pass it whenever ids are opaque (UUIDs). */
+  sourceLabel?: string
+  /** Target node's readable name for the interactive edge's accessible name. Falls back to
+   *  `targetId`. */
+  targetLabel?: string
   label?: string
   variant?: 'default' | 'hot' | 'irrelevant'
   /** 0-100. Maps to a 1-8px stroke width via a square-root curve. Unset renders the current variant default. */
@@ -35,6 +41,8 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
       id,
       sourceId,
       targetId,
+      sourceLabel,
+      targetLabel,
       label,
       variant = 'default',
       weight,
@@ -86,7 +94,7 @@ export const GraphEdge = React.forwardRef<SVGGElement, GraphEdgeProps>(
         // SVG <text> inside GraphEdgeShape isn't reliably surfaced as this element's accessible
         // name by assistive tech, and a label-less edge has nothing at all — without this a screen
         // reader announces a bare "button". {...props} below still lets a caller override it.
-        aria-label={interactive ? (label ? `${label}: ${sourceId} to ${targetId}` : `${sourceId} to ${targetId}`) : undefined}
+        aria-label={interactive ? edgeAccessibleName(label, sourceLabel || sourceId, targetLabel || targetId) : undefined}
         tabIndex={interactive ? 0 : undefined}
         onKeyDown={interactive ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect!(id) } } : undefined}
         data-testid={`graph-edge-${id}`}

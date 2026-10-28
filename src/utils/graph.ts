@@ -13,6 +13,18 @@ export interface BezierPathResult {
   points: Point[]
 }
 
+/** Accessible name for an edge: "<label>: <source> to <target>", or "<source> to <target>"
+ *  without a label. Endpoint names are node labels, falling back to ids when there's none, so
+ *  screen readers don't announce opaque ids (UUIDs) when a readable label exists. */
+export function edgeAccessibleName(
+  label: string | undefined,
+  sourceName: string,
+  targetName: string,
+): string {
+  const endpoints = `${sourceName} to ${targetName}`
+  return label ? `${label}: ${endpoints}` : endpoints
+}
+
 export function rectEdgePoint(cx: number, cy: number, w: number, h: number, tx: number, ty: number): Point {
   const dx = tx - cx
   const dy = ty - cy

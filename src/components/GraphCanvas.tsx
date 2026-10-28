@@ -10,6 +10,7 @@ import React, {
 import {
   computeEdgePath,
   computeFitViewport,
+  edgeAccessibleName,
   extendBoundingBoxByCircles,
   edgeLabelSize,
   findClearLabelPosition,
@@ -259,6 +260,9 @@ function safeIsNavigationRoute(
 }
 
 type InternalEdgeProps = GraphEdge & {
+  /** Endpoint node labels for the accessible name; each falls back to its id. */
+  sourceLabel?: string;
+  targetLabel?: string;
   selected?: boolean;
   hovered?: boolean;
   onSelect?: (id: string) => void;
@@ -309,6 +313,8 @@ function GraphEdgeInternal({
   id,
   sourceId,
   targetId,
+  sourceLabel,
+  targetLabel,
   label,
   variant = "default",
   weight,
@@ -443,9 +449,7 @@ function GraphEdgeInternal({
       // announces a bare "button".
       aria-label={
         interactive
-          ? label
-            ? `${label}: ${sourceId} to ${targetId}`
-            : `${sourceId} to ${targetId}`
+          ? edgeAccessibleName(label, sourceLabel || sourceId, targetLabel || targetId)
           : undefined
       }
       tabIndex={interactive ? 0 : undefined}
@@ -2406,6 +2410,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       structuralEdgeCurvature,
     ]);
 
+    // Readable name for a node id in accessible names (edge buttons, popover dialogs). Ids are
+    // often opaque (UUIDs), so a screen reader should hear the label; the id is the fallback.
+    // First occurrence wins, matching visibleNodes' duplicate-id handling.
+    const nodeLabelById = useMemo(() => {
+      const labels = new Map<string, string>();
+      for (const node of nodes) {
+        if (!labels.has(node.id)) labels.set(node.id, node.label);
+      }
+      return labels;
+    }, [nodes]);
+    const nodeName = useCallback(
+      (nodeId: string) => nodeLabelById.get(nodeId) || nodeId,
+      [nodeLabelById],
+    );
+
     // World-space anchor for popover rendering — resolved from active popover state
     // (unlike tooltipTarget which uses delayed hover). Screen position is derived from this at
     // render time via the live viewport, so it tracks pan/zoom exactly like the node/edge itself.
@@ -2431,6 +2450,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               return {
                 type: "node" as const,
                 nodeId: activePopoverNodeId,
+                ariaLabel: `Details for ${node.label || node.id}`,
                 content,
                 worldX: pos.x,
                 worldY: pos.y - d.height / 2,
@@ -2466,6 +2486,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               return {
                 type: "edge" as const,
                 edgeId: activePopoverEdgeId,
+                ariaLabel: `Details for ${edgeAccessibleName(edge.label, nodeName(edge.sourceId), nodeName(edge.targetId))}`,
                 content,
                 worldX: path.mid.x,
                 worldY: path.mid.y,
@@ -2497,6 +2518,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodeRect,
       isStructuralEdge,
       structuralEdgeCurvature,
+      nodeName,
     ]);
 
     // Prevents dead state when popoverTarget callback throws — resets so the node is clickable again.
@@ -2748,6 +2770,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       id={edge.id}
                       sourceId={edge.sourceId}
                       targetId={edge.targetId}
+                      sourceLabel={nodeName(edge.sourceId)}
+                      targetLabel={nodeName(edge.targetId)}
                       label={edgeLabel}
                       variant={edge.variant}
                       weight={edge.weight}
@@ -2922,7 +2946,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   <Popover.Trigger>
                     <div style={{ width: 0, height: 0 }} />
                   </Popover.Trigger>
-                  <Popover.Panel aria-label={`Details for ${popoverTarget.nodeId || popoverTarget.edgeId}`}>
+                  <Popover.Panel aria-label={popoverTarget.ariaLabel}>
                     {popoverTarget.content}
                   </Popover.Panel>
                 </Popover>

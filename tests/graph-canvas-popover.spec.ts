@@ -295,10 +295,8 @@ test.describe("integration: GraphCanvas Popover Components", () => {
       const popoverPanel = page.locator('[role="dialog"]');
       await expect(popoverPanel).toBeVisible();
 
-      // Verify aria-label contains the node ID
-      const ariaLabel = await popoverPanel.getAttribute("aria-label");
-      expect(ariaLabel).toContain("cls_cell");
-      expect(ariaLabel).toContain("Details for");
+      // Named by the node's label, not its id (#304)
+      await expect(popoverPanel).toHaveAttribute("aria-label", "Details for Cell");
     });
 
     test("edgePopover has accessible aria-label on panel", async ({ page }) => {
@@ -308,10 +306,8 @@ test.describe("integration: GraphCanvas Popover Components", () => {
       const popoverPanel = page.locator('[role="dialog"]');
       await expect(popoverPanel).toBeVisible();
 
-      // Verify aria-label contains the edge ID
-      const ariaLabel = await popoverPanel.getAttribute("aria-label");
-      expect(ariaLabel).toContain("edge_1");
-      expect(ariaLabel).toContain("Details for");
+      // Named by the edge and endpoint node labels, not ids (#304)
+      await expect(popoverPanel).toHaveAttribute("aria-label", "Details for contains: Cell to Nucleus");
     });
   });
 
