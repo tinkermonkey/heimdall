@@ -37,7 +37,7 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `onBackgroundClick` | `() => void` | — | Click on empty canvas, not after a pan drag. Clear selection here |
 | `renderNode` | `(node, selected, hierarchy?, props?) => ReactNode` | — | Custom node content. See [Custom node renderers](#custom-node-renderers) |
 | `renderEdge` | `(edge, geometry: EdgeGeometry) => ReactNode` | — | Custom SVG for an edge. See [Custom edge renderers](#custom-edge-renderers) |
-| `fitView` | `boolean` | `false` | Fit the whole graph in view on first layout |
+| `fitView` | `boolean` | `false` | Fit the whole graph in view on first layout, including any cluster boundaries and hierarchy rings shown |
 | `fitPadding` | `number` | `40` | Padding (px) around the fitted bounding box |
 | `centerOnSelect` | `boolean` | `false` | Pan (keeping zoom) to center `selectedNodeId` when it changes. Use when selection can come from outside the canvas |
 | `minZoom` | `number` | `0.05` | Lower zoom bound |
