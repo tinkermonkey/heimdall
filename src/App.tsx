@@ -44,6 +44,7 @@ import UxNavigationTestPage from './test-pages/UxNavigationTestPage'
 import RadialTreeTestPage from './test-pages/RadialTreeTestPage'
 import LineChartDataToggleTestPage from './test-pages/LineChartDataToggleTestPage'
 import GraphA11yNamesTestPage from './test-pages/GraphA11yNamesTestPage'
+import GraphLayoutBusyTestPage from './test-pages/GraphLayoutBusyTestPage'
 // Injected by vite.config.mjs from package.json (a JSON import here would pull package.json into
 // the declaration build and move every .d.ts under dist/src/).
 declare const __HEIMDALL_VERSION__: string
@@ -180,6 +181,10 @@ export default function App() {
 
   if (exampleParam === 'graph-a11y-names') {
     return <GraphA11yNamesTestPage />
+  }
+
+  if (exampleParam === 'graph-layout-busy') {
+    return <GraphLayoutBusyTestPage />
   }
 
   if (exampleParam === 'kanban-board') {

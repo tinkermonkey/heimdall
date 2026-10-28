@@ -43,6 +43,7 @@ import {
 import { visibleNavigationEdgeIds } from "../utils/uxNavEdgeVisibility";
 import { usePanZoom } from "../hooks/usePanZoom";
 import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
+import { yieldToPaint } from "../utils/yieldToPaint";
 import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
 import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
@@ -50,6 +51,7 @@ import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
 import { GraphCollapseControl } from "./GraphCollapseControl";
 import { Tooltip } from "./Tooltip";
 import { Popover } from "./Popover";
+import { StatusBadge } from "./Badge";
 import "./GraphCanvas.css";
 import "./GraphEdge.css";
 
@@ -60,6 +62,27 @@ export { useGraphCanvas } from "./GraphCanvasContext";
 
 /** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
 const TOOLTIP_SHOW_DELAY_MS = 200;
+
+/**
+ * How long the layout must stay busy before the built-in "Laying out…" chip shows, so a fast
+ * layout never flickers it. Applied as the chip's CSS animation-delay rather than a JS timer: a
+ * synchronous layout blocks the main thread, so a timer could not fire until the layout was
+ * already done, but a compositor-driven opacity animation still runs.
+ */
+const LAYOUT_INDICATOR_DELAY_MS = 150;
+
+/** What GraphCanvas's layout is doing. See GraphCanvasProps.onLayoutStateChange. */
+export type GraphLayoutState = "idle" | "computing" | "simulating";
+
+/** Layouts whose positions come from an engine run (everything but "manual"). */
+const isEngineLayout = (layout: GraphCanvasProps["layout"]): boolean =>
+  layout === "force" ||
+  layout === "organic" ||
+  layout === "orthogonal" ||
+  layout === "galaxy" ||
+  layout === "force-clustered" ||
+  layout === "ux-navigation" ||
+  layout === "radial-tree";
 
 /** Sanitize an ID for use as an HTML id attribute. Replaces invalid characters with underscores. */
 const sanitizeId = (id: string): string =>
@@ -785,6 +808,24 @@ export interface GraphCanvasProps extends Omit<
    * when omitted.
    */
   fullscreenContainerRef?: React.RefObject<HTMLElement | null>;
+  /**
+   * Called when the layout's busy state changes, only on changes: "computing" while an engine
+   * layout runs (the first layout, a layout switch, or any input change that relays out),
+   * "simulating" while layout="galaxy" live simulation is moving nodes (including a drag's
+   * re-settle), "idle" otherwise. The same value is on the root as `data-layout-state`. Read
+   * through a ref, so an inline callback is fine. A layout="manual" canvas never leaves "idle".
+   * Keep `nodes` and `edges` memoized if this callback re-renders the parent: new arrays relay
+   * out, which reports "computing" again.
+   */
+  onLayoutStateChange?: (state: GraphLayoutState) => void;
+  /**
+   * Shows a small "Laying out…" status chip while the layout is computing or simulating, once
+   * that has lasted LAYOUT_INDICATOR_DELAY_MS (150 ms), so fast layouts never flash it. It sits
+   * in the top-right corner, or the bottom-right when the toolbar is along the top edge.
+   * `role="status"`, so assistive tech announces it. Default true. Set false to show your own
+   * from onLayoutStateChange.
+   */
+  showLayoutIndicator?: boolean;
 }
 
 type NodeDims = Map<string, { width: number; height: number }>;
@@ -831,6 +872,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       showToolbar = true,
       toolbarPosition = "bottom-right",
       fullscreenContainerRef,
+      onLayoutStateChange,
+      showLayoutIndicator = true,
       className = "",
       ...props
     },
@@ -1185,6 +1228,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // place of bezier paths via GraphEdgeInternal's preRoutedEdge (the same path navigation
     // routes take). Empty for every other layout.
     const [computedRoutes, setComputedRoutes] = useState<Map<string, RoutedEdge>>(new Map());
+    // True from the moment an engine layout run is scheduled until its result is applied (or it
+    // is superseded by a run that has nothing to do). Starts true when there is a first layout to
+    // run, so the root reports "computing" from the very first render.
+    const [layoutComputing, setLayoutComputing] = useState(
+      () => isEngineLayout(layout) && nodes.length > 0,
+    );
+    // The pending engine run, handed from the engine-layout effect to the runner effect after it
+    // (see there). Cleared by the engine effect's cleanup, so a run whose inputs changed during
+    // the yield never applies.
+    const pendingLayoutRunRef = useRef<(() => void) | null>(null);
+    const [layoutRunId, setLayoutRunId] = useState(0);
+    // An engine run throws outside React (it runs from a timer, not the effect), so it is
+    // re-thrown during render to reach the nearest error boundary, as a throw in the effect did.
+    const [layoutError, setLayoutError] = useState<unknown>(null);
+    if (layoutError) throw layoutError;
 
     const containerRef = useRef<HTMLDivElement>(null);
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -1296,210 +1354,228 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       setDims(next);
     }, [visibleNodes, renderNode, galaxyRadii]);
 
-    // Run the engine layout when dims are ready (only for layout='force' | 'organic' | 'galaxy' | 'force-clustered' | 'ux-navigation' | 'radial-tree')
+    // Run the engine layout when dims are ready (every layout but 'manual'). The run is deferred,
+    // not done here: this effect builds it as a closure and marks the layout "computing"; the
+    // runner effect below starts it once that state has committed, after yielding a frame so the
+    // busy state (data-layout-state, the indicator chip, any consumer UI) paints before a slow,
+    // synchronous engine blocks the main thread. Until the run applies, the previous positions
+    // stay on screen. When an input changes during the yield, this effect's cleanup drops the
+    // pending run and the next one replaces it, so a stale result never applies.
     useEffect(() => {
-      if (
-        (layout !== "force" &&
-          layout !== "organic" &&
-          layout !== "orthogonal" &&
-          layout !== "galaxy" &&
-          layout !== "force-clustered" &&
-          layout !== "ux-navigation" &&
-          layout !== "radial-tree") ||
-        dims.size === 0
-      )
+      if (!isEngineLayout(layout) || visibleNodes.length === 0) {
+        setLayoutComputing(false);
         return;
+      }
+      // Not measured yet: the measuring layout effect is about to set dims and re-run this.
+      if (dims.size === 0) return;
       // While live-simulation mode owns computedPositions, this effect intentionally no-ops for
       // galaxy — recomputing a fresh static layout here would immediately overwrite whatever the
       // live hook just produced. liveActiveRef, not liveActive itself, so toggling the mode
       // doesn't retrigger this effect (see liveActiveRef's own comment above) — only genuine
       // layout-input changes should, and those are already this effect's real dependencies.
-      if (layout === "galaxy" && liveActiveRef.current) return;
-      if (layout !== "orthogonal") setComputedRoutes(new Map());
-      setComputedLayout(layout);
-
-      const layoutNodes = visibleNodes.map((n, i) => ({
-        id: n.id,
-        // Nodes without explicit coords start on a circle so 'force'/'force-clustered' converge
-        // cleanly. 'galaxy' ignores this seed — its home position is computed from the hierarchy.
-        x: n.x ?? Math.cos((2 * Math.PI * i) / visibleNodes.length) * 120,
-        y: n.y ?? Math.sin((2 * Math.PI * i) / visibleNodes.length) * 120,
-        width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
-        height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
-        pinned: n.x !== undefined && n.y !== undefined,
-      }));
-      if (layout === "force") {
-        const layoutEdges = (edges ?? []).map((e) => ({
-          source: e.sourceId,
-          target: e.targetId,
-        }));
-        setComputedPositions(
-          forceLayout(layoutNodes, layoutEdges, { nodeMargin }),
-        );
-        setClusterBoundaries(new Map());
-        setRingGeometry([]);
-      } else if (layout === "organic") {
-        // Labelled edges carry their label's padded footprint so the engine keeps the label clear
-        // of both cards and of the other labels at either endpoint (a hard post-condition of the
-        // overlap stage), plus a preferred length so the stress solve already aims for room
-        // between the cards; see organicLabelHints().
-        const layoutEdges = (edges ?? []).map((e) => ({
-          source: e.sourceId,
-          target: e.targetId,
-          ...(e.label ? organicLabelHints(e.label, dims.get(e.sourceId), dims.get(e.targetId)) : {}),
-        }));
-        // organicLayout reads node x/y as a sketch only when at least 70% of nodes have
-        // coordinates and the placed nodes already honor its post-conditions; nodes without
-        // explicit coordinates get NaN (not the circle seed above) so a first render is always a
-        // cold, MDS-seeded solve, and a node the caller positioned is pinned and held exactly.
-        const organicNodes = visibleNodes.map((n) => ({
-          id: n.id,
-          x: n.x ?? NaN,
-          y: n.y ?? NaN,
-          width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
-          height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
-          pinned: n.x !== undefined && n.y !== undefined,
-        }));
-        const { positions } = organicLayout(organicNodes, layoutEdges, {
-          minimumNodeDistance: nodeMargin,
-        });
-        setComputedPositions(positions);
-        setClusterBoundaries(new Map());
-        setRingGeometry([]);
-      } else if (layout === "orthogonal") {
-        // Only edges whose endpoints are visible are laid out (a collapsed endpoint has no cell);
-        // routes come back index-aligned with this exact array and are zipped to edge ids here,
-        // never looked up by index at render time.
-        const visibleIds = new Set(visibleNodes.map((n) => n.id));
-        const engineEdges = (edges ?? []).filter(
-          (e) => visibleIds.has(e.sourceId) && visibleIds.has(e.targetId),
-        );
-        // Nodes without explicit coordinates get NaN so a first render is a cold grid placement;
-        // explicit coordinates pin the node to the cell under them. Structural / navigation-route
-        // classification flows through the same callbacks ux-navigation uses, so a page/view graph
-        // lays out as a page tree with view fans (isPageNode) and user-flow routes route last.
-        const orthogonalNodes = visibleNodes.map((n) => ({
-          id: n.id,
-          x: n.x ?? NaN,
-          y: n.y ?? NaN,
-          width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
-          height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
-          pinned: n.x !== undefined && n.y !== undefined,
-        }));
-        const nodeById = new Map(nodes.map((n) => [n.id, n]));
-        const { positions, routes } = orthogonalLayout(
-          orthogonalNodes,
-          engineEdges.map((e) => ({
-            source: e.sourceId,
-            target: e.targetId,
-            structural: isStructuralEdge ? safeIsStructuralEdge(isStructuralEdge, e, layout) : undefined,
-            navigationRoute: isNavigationRoute ? safeIsNavigationRoute(isNavigationRoute, e) : undefined,
-          })),
-          isPageNode
-            ? { isPageNode: (id) => { const full = nodeById.get(id); return full ? safeIsPageNode(isPageNode, full) : true; } }
-            : {},
-        );
-        // Labels: each route offers anchors on its straight segments (longest first); take the
-        // first that keeps this label clear of the labels already placed, so two labels on
-        // parallel tracks 16 px apart stagger along the run instead of printing over each other.
-        const routed = new Map<string, RoutedEdge>();
-        const placedLabels: Array<{ x: number; y: number; w: number; h: number }> = [];
-        const nodeBoxes = orthogonalNodes.map((n) => ({ ...positions.get(n.id)!, w: n.width, h: n.height }));
-        engineEdges.forEach((e, i) => {
-          const r = polylineToRoutedEdge(routes[i] ?? []);
-          if (!r) return;
-          if (e.label && r.labelAnchors?.length) {
-            const size = edgeLabelSize(e.label);
-            const apart = (p: { x: number; y: number }, o: { x: number; y: number; w: number; h: number }, margin: number) =>
-              Math.abs(p.x - o.x) >= (size.width + o.w) / 2 + margin || Math.abs(p.y - o.y) >= (size.height + o.h) / 2 + margin;
-            // Clear of every node by the label margin (what GraphEdgeInternal re-checks) and of
-            // every label placed so far; failing that, clear of the nodes at least.
-            const clearOfNodes = (p: { x: number; y: number }) => nodeBoxes.every((o) => apart(p, o, EDGE_LABEL_MARGIN));
-            const clear = (p: { x: number; y: number }) => clearOfNodes(p) && placedLabels.every((o) => apart(p, o, 2));
-            const pick = r.labelAnchors.find(clear) ?? r.labelAnchors.find(clearOfNodes) ?? r.labelAnchors[0];
-            r.labelAnchors = [pick, ...r.labelAnchors.filter((a) => a !== pick)];
-            placedLabels.push({ x: pick.x, y: pick.y, w: size.width, h: size.height });
-          }
-          routed.set(e.id, r);
-        });
-        setComputedPositions(positions);
-        setComputedRoutes(routed);
-        setClusterBoundaries(new Map());
-        setRingGeometry([]);
-      } else if (layout === "force-clustered") {
-        const layoutEdges = (edges ?? []).map((e) => ({
-          source: e.sourceId,
-          target: e.targetId,
-        }));
-        const { positions, clusterBoundaries: boundaries } =
-          clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin });
-        setComputedPositions(positions);
-        setClusterBoundaries(boundaries);
-        setRingGeometry([]);
-      } else if (layout === "ux-navigation") {
-        const layoutEdges = (edges ?? []).map((e) => ({
-          source: e.sourceId,
-          target: e.targetId,
-          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
-        }));
-        const nodeMap = new Map(nodes.map(n => [n.id, n]));
-        const positions = uxNavLayout(
-          layoutNodes,
-          layoutEdges,
-          dims,
-          (node) => {
-            const fullNode = nodeMap.get(node.id);
-            return fullNode ? safeIsPageNode(isPageNode, fullNode) : true;
-          },
-        );
-        setComputedPositions(positions);
-        setClusterBoundaries(new Map());
-        setRingGeometry([]);
-      } else if (layout === "radial-tree") {
-        const layoutEdges = (edges ?? []).map((e) => ({
-          source: e.sourceId,
-          target: e.targetId,
-          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
-        }));
-        const { positions, trunkBoundaries, ringGeometry: rings } = radialTreeLayout(
-          layoutNodes,
-          layoutEdges,
-          dims,
-          forest,
-        );
-        setComputedPositions(positions);
-        setClusterBoundaries(trunkBoundaries);
-        setRingGeometry(rings);
-      } else {
-        const layoutEdges = (edges ?? []).map((e) => ({
-          source: e.sourceId,
-          target: e.targetId,
-          structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
-        }));
-        const positions = galaxyLayout(
-          layoutNodes.map((n) => ({ ...n, ...galaxyNodeExtras(n.id) })),
-          layoutEdges,
-          {
-            nodeMargin,
-            aspectRatio: galaxyAspectRatioRef.current,
-          },
-        );
-        setComputedPositions(positions);
-        // galaxyLayout has no "cluster" concept of its own to return boundaries from (unlike
-        // clusteredForceLayout), so build one here from `forest`. One boundary per root would be
-        // correct but not very useful on a single-root tree (e.g. one org chart under one CEO) —
-        // it'd just be one circle around everything. Instead, a root with children delegates its
-        // group-headship down to each of ITS OWN children (a multi-root forest's roots still get
-        // one boundary each, same as before, since a childless root has nothing to delegate to);
-        // each group head's full recursive subtree is then one boundary, same as a Louvain
-        // cluster's members are for force-clustered.
-        const leafToGroup = galaxyDiscGroups(forest.roots, forest.childrenOf);
-        const radiusOf = galaxyBoundaryRadiusOf;
-        setClusterBoundaries(
-          galaxySystemCircles(positions, leafToGroup, radiusOf),
-        );
-        setRingGeometry([]);
+      if (layout === "galaxy" && liveActiveRef.current) {
+        setLayoutComputing(false);
+        return;
       }
+
+      const run = () => {
+        // Live simulation may have been switched on during the yield; it owns positions now.
+        if (layout === "galaxy" && liveActiveRef.current) {
+          setLayoutComputing(false);
+          return;
+        }
+        // Every branch below fills these; they are applied together at the end, so nothing changes
+        // on screen until the whole result is ready.
+        let positions: NodePositions;
+        let routes = new Map<string, RoutedEdge>();
+        let boundaries = new Map<string, { x: number; y: number; r: number }>();
+        let rings: RingGeometry[] = [];
+        try {
+          const layoutNodes = visibleNodes.map((n, i) => ({
+            id: n.id,
+            // Nodes without explicit coords start on a circle so 'force'/'force-clustered' converge
+            // cleanly. 'galaxy' ignores this seed — its home position is computed from the hierarchy.
+            x: n.x ?? Math.cos((2 * Math.PI * i) / visibleNodes.length) * 120,
+            y: n.y ?? Math.sin((2 * Math.PI * i) / visibleNodes.length) * 120,
+            width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+            height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+            pinned: n.x !== undefined && n.y !== undefined,
+          }));
+          if (layout === "force") {
+            const layoutEdges = (edges ?? []).map((e) => ({
+              source: e.sourceId,
+              target: e.targetId,
+            }));
+            positions = forceLayout(layoutNodes, layoutEdges, { nodeMargin });
+          } else if (layout === "organic") {
+            // Labelled edges carry their label's padded footprint so the engine keeps the label clear
+            // of both cards and of the other labels at either endpoint (a hard post-condition of the
+            // overlap stage), plus a preferred length so the stress solve already aims for room
+            // between the cards; see organicLabelHints().
+            const layoutEdges = (edges ?? []).map((e) => ({
+              source: e.sourceId,
+              target: e.targetId,
+              ...(e.label ? organicLabelHints(e.label, dims.get(e.sourceId), dims.get(e.targetId)) : {}),
+            }));
+            // organicLayout reads node x/y as a sketch only when at least 70% of nodes have
+            // coordinates and the placed nodes already honor its post-conditions; nodes without
+            // explicit coordinates get NaN (not the circle seed above) so a first render is always a
+            // cold, MDS-seeded solve, and a node the caller positioned is pinned and held exactly.
+            const organicNodes = visibleNodes.map((n) => ({
+              id: n.id,
+              x: n.x ?? NaN,
+              y: n.y ?? NaN,
+              width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+              height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+              pinned: n.x !== undefined && n.y !== undefined,
+            }));
+            positions = organicLayout(organicNodes, layoutEdges, {
+              minimumNodeDistance: nodeMargin,
+            }).positions;
+          } else if (layout === "orthogonal") {
+            // Only edges whose endpoints are visible are laid out (a collapsed endpoint has no cell);
+            // routes come back index-aligned with this exact array and are zipped to edge ids here,
+            // never looked up by index at render time.
+            const visibleIds = new Set(visibleNodes.map((n) => n.id));
+            const engineEdges = (edges ?? []).filter(
+              (e) => visibleIds.has(e.sourceId) && visibleIds.has(e.targetId),
+            );
+            // Nodes without explicit coordinates get NaN so a first render is a cold grid placement;
+            // explicit coordinates pin the node to the cell under them. Structural / navigation-route
+            // classification flows through the same callbacks ux-navigation uses, so a page/view graph
+            // lays out as a page tree with view fans (isPageNode) and user-flow routes route last.
+            const orthogonalNodes = visibleNodes.map((n) => ({
+              id: n.id,
+              x: n.x ?? NaN,
+              y: n.y ?? NaN,
+              width: dims.get(n.id)?.width ?? DEFAULT_NODE_W,
+              height: dims.get(n.id)?.height ?? DEFAULT_NODE_H,
+              pinned: n.x !== undefined && n.y !== undefined,
+            }));
+            const nodeById = new Map(nodes.map((n) => [n.id, n]));
+            const result = orthogonalLayout(
+              orthogonalNodes,
+              engineEdges.map((e) => ({
+                source: e.sourceId,
+                target: e.targetId,
+                structural: isStructuralEdge ? safeIsStructuralEdge(isStructuralEdge, e, layout) : undefined,
+                navigationRoute: isNavigationRoute ? safeIsNavigationRoute(isNavigationRoute, e) : undefined,
+              })),
+              isPageNode
+                ? { isPageNode: (id) => { const full = nodeById.get(id); return full ? safeIsPageNode(isPageNode, full) : true; } }
+                : {},
+            );
+            // Labels: each route offers anchors on its straight segments (longest first); take the
+            // first that keeps this label clear of the labels already placed, so two labels on
+            // parallel tracks 16 px apart stagger along the run instead of printing over each other.
+            const routed = new Map<string, RoutedEdge>();
+            const placedLabels: Array<{ x: number; y: number; w: number; h: number }> = [];
+            positions = result.positions;
+            const nodeBoxes = orthogonalNodes.map((n) => ({ ...result.positions.get(n.id)!, w: n.width, h: n.height }));
+            engineEdges.forEach((e, i) => {
+              const r = polylineToRoutedEdge(result.routes[i] ?? []);
+              if (!r) return;
+              if (e.label && r.labelAnchors?.length) {
+                const size = edgeLabelSize(e.label);
+                const apart = (p: { x: number; y: number }, o: { x: number; y: number; w: number; h: number }, margin: number) =>
+                  Math.abs(p.x - o.x) >= (size.width + o.w) / 2 + margin || Math.abs(p.y - o.y) >= (size.height + o.h) / 2 + margin;
+                // Clear of every node by the label margin (what GraphEdgeInternal re-checks) and of
+                // every label placed so far; failing that, clear of the nodes at least.
+                const clearOfNodes = (p: { x: number; y: number }) => nodeBoxes.every((o) => apart(p, o, EDGE_LABEL_MARGIN));
+                const clear = (p: { x: number; y: number }) => clearOfNodes(p) && placedLabels.every((o) => apart(p, o, 2));
+                const pick = r.labelAnchors.find(clear) ?? r.labelAnchors.find(clearOfNodes) ?? r.labelAnchors[0];
+                r.labelAnchors = [pick, ...r.labelAnchors.filter((a) => a !== pick)];
+                placedLabels.push({ x: pick.x, y: pick.y, w: size.width, h: size.height });
+              }
+              routed.set(e.id, r);
+            });
+            routes = routed;
+          } else if (layout === "force-clustered") {
+            const layoutEdges = (edges ?? []).map((e) => ({
+              source: e.sourceId,
+              target: e.targetId,
+            }));
+            const result = clusteredForceLayout(layoutNodes, layoutEdges, { nodeMargin });
+            positions = result.positions;
+            boundaries = result.clusterBoundaries;
+          } else if (layout === "ux-navigation") {
+            const layoutEdges = (edges ?? []).map((e) => ({
+              source: e.sourceId,
+              target: e.targetId,
+              structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
+            }));
+            const nodeMap = new Map(nodes.map(n => [n.id, n]));
+            positions = uxNavLayout(
+              layoutNodes,
+              layoutEdges,
+              dims,
+              (node) => {
+                const fullNode = nodeMap.get(node.id);
+                return fullNode ? safeIsPageNode(isPageNode, fullNode) : true;
+              },
+            );
+          } else if (layout === "radial-tree") {
+            const layoutEdges = (edges ?? []).map((e) => ({
+              source: e.sourceId,
+              target: e.targetId,
+              structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
+            }));
+            const result = radialTreeLayout(
+              layoutNodes,
+              layoutEdges,
+              dims,
+              forest,
+            );
+            positions = result.positions;
+            boundaries = result.trunkBoundaries;
+            rings = result.ringGeometry;
+          } else {
+            const layoutEdges = (edges ?? []).map((e) => ({
+              source: e.sourceId,
+              target: e.targetId,
+              structural: safeIsStructuralEdge(isStructuralEdge, e, layout),
+            }));
+            positions = galaxyLayout(
+              layoutNodes.map((n) => ({ ...n, ...galaxyNodeExtras(n.id) })),
+              layoutEdges,
+              {
+                nodeMargin,
+                aspectRatio: galaxyAspectRatioRef.current,
+              },
+            );
+            // galaxyLayout has no "cluster" concept of its own to return boundaries from (unlike
+            // clusteredForceLayout), so build one here from `forest`. One boundary per root would be
+            // correct but not very useful on a single-root tree (e.g. one org chart under one CEO) —
+            // it'd just be one circle around everything. Instead, a root with children delegates its
+            // group-headship down to each of ITS OWN children (a multi-root forest's roots still get
+            // one boundary each, same as before, since a childless root has nothing to delegate to);
+            // each group head's full recursive subtree is then one boundary, same as a Louvain
+            // cluster's members are for force-clustered.
+            const leafToGroup = galaxyDiscGroups(forest.roots, forest.childrenOf);
+            const radiusOf = galaxyBoundaryRadiusOf;
+            boundaries = galaxySystemCircles(positions, leafToGroup, radiusOf);
+          }
+        } catch (error) {
+          setLayoutComputing(false);
+          setLayoutError(error);
+          return;
+        }
+        // computedLayout goes last: the mount fit waits on it matching `layout`, so even without
+        // batching (a legacy React root) it never sees it before the positions and boundaries.
+        setComputedPositions(positions);
+        setComputedRoutes(routes);
+        setClusterBoundaries(boundaries);
+        setRingGeometry(rings);
+        setComputedLayout(layout);
+        setLayoutComputing(false);
+      };
+
+      pendingLayoutRunRef.current = run;
+      setLayoutComputing(true);
+      setLayoutRunId((id) => id + 1);
+      return () => {
+        if (pendingLayoutRunRef.current === run) pendingLayoutRunRef.current = null;
+      };
     }, [
       visibleNodes,
       edges,
@@ -1515,6 +1591,20 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       galaxyNodeExtras,
       galaxyBoundaryRadiusOf,
     ]);
+
+    // Starts the run the engine-layout effect above handed over. Keyed on layoutRunId, so it runs
+    // after the commit that rendered "computing", and yieldToPaint then waits for that frame to
+    // paint. A newer run cancels this one's yield (this effect's cleanup); a run dropped by the
+    // engine effect's cleanup is no longer pendingLayoutRunRef.current, so it never starts.
+    useEffect(() => {
+      const run = pendingLayoutRunRef.current;
+      if (!run) return;
+      return yieldToPaint(() => {
+        if (pendingLayoutRunRef.current !== run) return;
+        pendingLayoutRunRef.current = null;
+        run();
+      });
+    }, [layoutRunId]);
 
     // A node's dragPositions override doubles as its pin here, same priority getNodePosition
     // already gives dragPositions over any prop-level x/y, so a dropped node stays exactly where
@@ -1585,6 +1675,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [showClusterBoundaries, galaxyLeafToGroup, galaxyBoundaryRadiusOf],
     );
 
+    // Whether live simulation's frame loop is running (it stops once nodes settle and restarts on
+    // a wake, e.g. a drag). Drives the "simulating" layout state.
+    const [simulationRunning, setSimulationRunning] = useState(false);
     const { wake: wakeGalaxySimulation } = useGalaxySimulation({
       active: liveActive,
       nodes: liveLayoutNodes,
@@ -1597,7 +1690,44 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       },
       onTick: handleLiveTick,
       initialPositions: computedPositions,
+      onRunningChange: setSimulationRunning,
     });
+
+    const layoutState: GraphLayoutState = layoutComputing
+      ? "computing"
+      : liveActive && simulationRunning
+        ? "simulating"
+        : "idle";
+
+    // Reports layoutState changes. The callback is read through a ref (as usePanZoom does for
+    // onViewportChange), so an inline callback never re-fires it; only a real change does.
+    const onLayoutStateChangeRef = useRef(onLayoutStateChange);
+    onLayoutStateChangeRef.current = onLayoutStateChange;
+    const reportedLayoutStateRef = useRef<GraphLayoutState>("idle");
+    useEffect(() => {
+      if (reportedLayoutStateRef.current === layoutState) return;
+      reportedLayoutStateRef.current = layoutState;
+      try {
+        onLayoutStateChangeRef.current?.(layoutState);
+      } catch (error) {
+        console.error("Error in onLayoutStateChange callback:", error);
+      }
+    }, [layoutState]);
+
+    // While an engine run is pending, a node it has not placed yet (the first layout, or a node
+    // just added) is hidden, with its edges, instead of being drawn at the origin; every node
+    // that already has a position keeps it until the new result lands. Once the run applies,
+    // anything still unplaced falls back to the origin as before.
+    const unplacedNodeIds = useMemo(() => {
+      const unplaced = new Set<string>();
+      if (!layoutComputing) return unplaced;
+      for (const n of visibleNodes) {
+        if (n.x !== undefined && n.y !== undefined) continue;
+        if (dragPositions.has(n.id) || computedPositions.has(n.id)) continue;
+        unplaced.add(n.id);
+      }
+      return unplaced;
+    }, [layoutComputing, visibleNodes, dragPositions, computedPositions]);
 
     // Track the rendered container size so the auto-center effect can react to it.
     useEffect(() => {
@@ -2631,6 +2761,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         ref={handleRef}
         aria-label="Graph canvas"
         className={["graph-canvas", className].filter(Boolean).join(" ")}
+        data-layout-state={layoutState}
         onPointerDown={handlePointerDown}
         onPointerUp={handleCanvasPointerUp}
         onKeyDown={handleCanvasKeyDown}
@@ -2746,6 +2877,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   // Not rendered at all rather than dimmed to a low opacity — line, marker, and
                   // label alike disappear, and it isn't clickable while hidden either.
                   if (hidden) return null;
+                  if (unplacedNodeIds.has(edge.sourceId) || unplacedNodeIds.has(edge.targetId)) return null;
                   const isPopoverOpen = activePopoverEdgeId === edge.id;
                   const tooltipId = tooltipTarget?.type === 'edge' && tooltipTarget.edgeId === edge.id ? tooltipTarget.tooltipId : undefined;
                   const edgeCurvature = edge.curvature ?? (structural ? structuralEdgeCurvature : undefined);
@@ -2812,6 +2944,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                     <g
                       key={node.id}
                       transform={`translate(${pos.x} ${pos.y})`}
+                      visibility={unplacedNodeIds.has(node.id) ? "hidden" : undefined}
                       data-node-id={node.id}
                       data-testid={`graph-node-${node.id}`}
                       data-domain={node.domainColor}
@@ -2905,6 +3038,34 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           </svg>
 
           {showToolbar && <GraphToolbar position={toolbarPosition} />}
+
+          {/* Always mounted while enabled, so the live region exists before its text changes
+              (assistive tech skips a region inserted together with its content). The chip fades
+              in after LAYOUT_INDICATOR_DELAY_MS via CSS; see that constant. Bottom-right when the
+              toolbar is along the top edge, top-right otherwise, so the two never meet. */}
+          {showLayoutIndicator && (
+            <div
+              className={[
+                "graph-layout-indicator",
+                showToolbar && toolbarPosition.startsWith("top-") && "graph-layout-indicator--bottom",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              role="status"
+              aria-live="polite"
+            >
+              {layoutState !== "idle" && (
+                <span
+                  className="graph-layout-indicator__chip"
+                  data-testid="graph-layout-indicator"
+                  style={{ animationDelay: `${LAYOUT_INDICATOR_DELAY_MS}ms` }}
+                >
+                  <StatusBadge color="cyan" pulse aria-hidden="true" />
+                  Laying out…
+                </span>
+              )}
+            </div>
+          )}
 
           {tooltipTarget && (
             <div className="graph-tooltip-layer">

@@ -47,6 +47,8 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `showToolbar` | `boolean` | `true` | Built-in zoom / fit / lock / fullscreen toolbar |
 | `toolbarPosition` | `GraphToolbarPosition` | `'bottom-right'` | Any corner or edge center |
 | `fullscreenContainerRef` | `RefObject<HTMLElement \| null>` | — | Ancestor to fullscreen instead of the canvas root. Must contain the canvas |
+| `onLayoutStateChange` | `(state: GraphLayoutState) => void` | — | `'computing'` while an engine layout runs, `'simulating'` while galaxy live simulation moves nodes, `'idle'` otherwise. Fires on changes only; also on the root as `data-layout-state`. An inline callback is fine |
+| `showLayoutIndicator` | `boolean` | `true` | "Laying out…" status chip (`role="status"`) while computing or simulating for longer than 150 ms. Top-right, or bottom-right when the toolbar is along the top. Set `false` to show your own |
 | `...divProps` | | | Remaining props spread onto the root `<div>` (after the canvas's own handlers) |
 
 **Layout and hierarchy** (the Read by column says which layouts use each prop)
@@ -422,6 +424,8 @@ const frameRef = useRef<HTMLDivElement>(null)
 ### Gotchas
 
 - **The root fills its parent** (`width: 100%; height: 100%`). Give the parent a definite height, or pass `style={{ width: '100%', height: 500 }}`. In a zero-height parent nothing is visible.
+- Engine layouts run one frame after their inputs change, not in the same render, so the busy state and the "Laying out…" chip paint before a slow engine (`orthogonal` can take seconds) blocks the main thread. The previous positions stay on screen until the new layout lands; before the first layout, nodes are hidden rather than stacked at the origin. Wait for `data-layout-state="idle"` before measuring or screenshotting node positions. The engines still run on the main thread, so the page does not respond while one runs.
+- Keep `nodes` and `edges` memoized if `onLayoutStateChange` re-renders the parent. New arrays re-run the layout, which reports `'computing'` again, so unmemoized arrays relayout on every report.
 - `fitView` (and the default centering) runs once, after the first layout; entering fullscreen fits again. Changing `nodes`, `layout` or `nodeMargin` later does not re-fit; remount with a `key` (e.g. `` key={`${datasetId}-${layout}`} ``) to fit again.
 - Memoize `renderNode`, `renderEdge` and the classifier callbacks with `useCallback`. A new `renderNode` re-measures every node; a new classifier re-runs the layout.
 - `isStructuralEdge` also hides edges: once set, a non-structural edge is not rendered (not just dimmed) until an endpoint is hovered or selected, under every layout. Pass `showAllRelations` to keep them all visible, or leave `isStructuralEdge` unset on flat graphs.

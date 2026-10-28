@@ -312,7 +312,7 @@ export function GraphLayoutsShowcase() {
       </ShowcaseSection>
       <ShowcaseSection
         label="Interactive comparison"
-        description="Run any engine on any dataset. Nodes with a chevron have structural children; click it to collapse the subtree. Relational edges are hidden until a node touching them is hovered, unless Relations is set to All; orthogonal always draws them. Default node rendering draws galaxy nodes as round bodies sized by weight; Cards swaps in a custom renderNode. Selecting a node or edge opens a detail panel; drag its left edge to resize."
+        description="Run any engine on any dataset. Nodes with a chevron have structural children; click it to collapse the subtree. Relational edges are hidden until a node touching them is hovered, unless Relations is set to All; orthogonal always draws them. Default node rendering draws galaxy nodes as round bodies sized by weight; Cards swaps in a custom renderNode. Selecting a node or edge opens a detail panel; drag its left edge to resize. While an engine takes longer than 150 ms, such as orthogonal on a larger dataset, a Laying out… chip shows in the top-right corner (showLayoutIndicator, on by default; onLayoutStateChange reports the same state)."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>

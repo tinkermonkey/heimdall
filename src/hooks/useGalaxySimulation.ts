@@ -18,6 +18,10 @@ export interface UseGalaxySimulationOptions {
    *  from whatever's already on screen instead of an initial snap/jump. Falls back to computing a
    *  fresh settled layout itself if omitted or empty. */
   initialPositions?: Map<string, { x: number; y: number }>
+  /** Called with true when the frame loop starts (activation, or a wake after it went idle) and
+   *  false when it stops (it settled, or `active` went false). Only on changes. Read through a
+   *  ref, so an inline callback is fine. */
+  onRunningChange?: (running: boolean) => void
 }
 
 export interface UseGalaxySimulationReturn {
@@ -51,12 +55,21 @@ export function useGalaxySimulation({
   options,
   onTick,
   initialPositions,
+  onRunningChange,
 }: UseGalaxySimulationOptions): UseGalaxySimulationReturn {
   const inputsRef = useRef({ nodes, edges, options })
   const onTickRef = useRef(onTick)
   const positionsRef = useRef<Map<string, { x: number; y: number }> | undefined>(undefined)
   const rafRef = useRef<number | null>(null)
   const idleFramesRef = useRef(0)
+  const onRunningChangeRef = useRef(onRunningChange)
+  onRunningChangeRef.current = onRunningChange
+  const runningRef = useRef(false)
+  const setRunning = useCallback((running: boolean) => {
+    if (runningRef.current === running) return
+    runningRef.current = running
+    onRunningChangeRef.current?.(running)
+  }, [])
 
   useEffect(() => {
     inputsRef.current = { nodes, edges, options }
@@ -90,17 +103,19 @@ export function useGalaxySimulation({
 
     if (idleFramesRef.current >= IDLE_FRAMES_THRESHOLD) {
       rafRef.current = null
+      setRunning(false)
       return
     }
     rafRef.current = requestAnimationFrame(tick)
-  }, [])
+  }, [setRunning])
 
   const wake = useCallback(() => {
     idleFramesRef.current = 0
     if (rafRef.current === null && active) {
       rafRef.current = requestAnimationFrame(tick)
+      setRunning(true)
     }
-  }, [active, tick])
+  }, [active, tick, setRunning])
 
   // Auto-wake whenever the actual set of node ids changes — a node being added or removed while
   // the loop has already idled out (see IDLE_FRAMES_THRESHOLD) would otherwise never get a tick at
@@ -126,6 +141,7 @@ export function useGalaxySimulation({
         cancelAnimationFrame(rafRef.current)
         rafRef.current = null
       }
+      setRunning(false)
       return
     }
 
@@ -134,6 +150,7 @@ export function useGalaxySimulation({
       : undefined
     idleFramesRef.current = 0
     rafRef.current = requestAnimationFrame(tick)
+    setRunning(true)
 
     return () => {
       if (rafRef.current !== null) {
