@@ -75,6 +75,16 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `nodePopover` | `(node) => ReactNode` | — | Interactive `role="dialog"` popover on node click or Enter/Space |
 | `edgePopover` | `(edge) => ReactNode` | — | Same, anchored at the edge midpoint |
 
+**Viewport history** (see [Viewport history](#viewport-history))
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `onViewportDwell` | `(viewport: GraphViewportSnapshot) => void` | — | The viewport has been still for `dwellMs` after the last user pan/zoom (drag after its inertia stops, wheel, pinch, keyboard, toolbar zoom in/out). Once per rest, never mid-gesture |
+| `dwellMs` | `number` | `1500` | Stillness needed before `onViewportDwell` fires |
+| `onViewportNavigate` | `(viewport: GraphViewportSnapshot, cause: GraphViewportCause) => void` | — | The canvas or the app moved the viewport (mount fit, `centerOnSelect`, toolbar fit, fullscreen fit, galaxy resize re-frame, context/handle calls). Fires once the move has rendered |
+| `initialViewport` | `GraphViewport` | — | `{ center, zoom }` applied after the first layout instead of `fitView`/centring and instead of centring the node selected at mount. Read once. Reports nothing |
+| `viewportRef` | `Ref<GraphViewportHandle>` | — | Receives `{ setViewport, getViewport }` for restoring a viewport from outside the canvas. The forwarded `ref` stays the root `<div>` |
+
 ### Data types
 
 `GraphNodeData`:
@@ -105,6 +115,28 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 `EdgeGeometry` (second argument of `renderEdge`): `{ path, mid, labelPos, angle, selected, hovered }`. `path` is the SVG `d` string actually drawn (an orthogonal polyline under `layout="orthogonal"`), `mid` the path midpoint, `labelPos` the collision-cleared label center, `angle` the tangent at the midpoint in radians.
 
 `GraphNodeHierarchyMeta` (third argument of `renderNode`): `{ hasChildren, collapsed, hiddenDescendantCount, onToggleCollapse? }`.
+
+Viewport types, all in world coordinates (the space node `x`/`y` live in), so they survive a resize and fit in a URL:
+
+| Type | Shape | Description |
+| ---- | ----- | ----------- |
+| `GraphViewportSnapshot` | `{ center: { x, y }, zoom, bounds: { minX, minY, maxX, maxY } }` | `center` is the world point at the middle of the canvas, `bounds` the visible world rectangle |
+| `GraphViewport` | `{ center: { x, y }, zoom }` | What `initialViewport` and `setViewport` take. A snapshot is assignable to it |
+| `GraphViewportCause` | see below | Second argument of `onViewportNavigate` |
+| `GraphSetViewportOptions` | `{ animate?: boolean, silent?: boolean }` | `animate` eases over 150ms (a jump under `prefers-reduced-motion`; user input cancels it). `silent` skips `onViewportNavigate` |
+| `GraphViewportHandle` | `{ setViewport(viewport, options?), getViewport(): GraphViewportSnapshot \| null }` | What `viewportRef` receives. `getViewport` is `null` before the container is measured |
+
+`GraphViewportCause`:
+
+| Cause | When |
+| ----- | ---- |
+| `{ kind: 'fit', reason: 'mount' }` | The first framing after layout: the `fitView` fit, or plain centring without it (also galaxy's first aspect-ratio re-layout) |
+| `{ kind: 'fit', reason: 'toolbar' }` | The toolbar's zoom-to-fit button |
+| `{ kind: 'fit', reason: 'fullscreen' }` | The fit on entering fullscreen |
+| `{ kind: 'fit', reason: 'resize' }` | `layout="galaxy"` re-laid out and re-framed after the container's aspect ratio changed |
+| `{ kind: 'fit', reason: 'layout' }` | Reserved. Not emitted: the canvas never re-fits after a later layout change |
+| `{ kind: 'center-on-select', nodeId }` | `centerOnSelect` panned to the newly selected node |
+| `{ kind: 'imperative' }` | The app called `zoomToFit`, `zoomBy`, `setZoom`, `setPan` or `setViewport` on `useGraphCanvas()`, or `setViewport` on `viewportRef` without `silent` |
 
 ### Choosing a layout
 
@@ -419,6 +451,48 @@ const frameRef = useRef<HTMLDivElement>(null)
 </div>
 ```
 
+### Viewport history
+
+Put the viewport into browser history: replace the current entry when the user settles somewhere, push one when the canvas recentres on its own, and restore silently on back/forward.
+
+```tsx
+const viewportRef = useRef<GraphViewportHandle>(null)
+const toParam = (v: GraphViewportSnapshot) => `${v.center.x.toFixed(1)},${v.center.y.toFixed(1)},${v.zoom.toFixed(3)}`
+const fromParam = (p: string | null): GraphViewport | undefined => {
+  const [x, y, zoom] = (p ?? '').split(',').map(Number)
+  return [x, y, zoom].every(Number.isFinite) ? { center: { x, y }, zoom } : undefined
+}
+
+useEffect(() => {
+  const onPop = () => {
+    const vp = fromParam(new URLSearchParams(location.search).get('vp'))
+    if (vp) viewportRef.current?.setViewport(vp, { silent: true, animate: true })
+  }
+  window.addEventListener('popstate', onPop)
+  return () => window.removeEventListener('popstate', onPop)
+}, [])
+
+<GraphCanvas
+  nodes={nodes}
+  edges={edges}
+  fitView
+  centerOnSelect
+  selectedNodeId={selectedId}
+  initialViewport={fromParam(new URLSearchParams(location.search).get('vp'))}
+  viewportRef={viewportRef}
+  onViewportDwell={(vp) => history.replaceState(null, '', `?vp=${toParam(vp)}`)}
+  onViewportNavigate={(vp, cause) => {
+    if (cause.kind === 'center-on-select') history.pushState(null, '', `?vp=${toParam(vp)}`)
+    else history.replaceState(null, '', `?vp=${toParam(vp)}`)
+  }}
+/>
+```
+
+- `onViewportDwell` is for user moves only, `onViewportNavigate` for everything else; no move reports through both. A programmatic move cancels a dwell still waiting to fire.
+- Not reported anywhere: `initialViewport`, a `silent` `setViewport`, and the re-anchor that keeps the same world point centred when the container resizes (the snapshot's `center` and `zoom` don't change; only `bounds` does).
+- `setViewport` before the first layout has been framed replaces that framing, like `initialViewport`, instead of being overwritten by it. It works while the canvas is locked, like the other imperative calls.
+- Snapshot `center` and `zoom` round-trip exactly through `setViewport`. `zoom` is clamped to `minZoom`/`maxZoom`.
+
 ### Gotchas
 
 - **The root fills its parent** (`width: 100%; height: 100%`). Give the parent a definite height, or pass `style={{ width: '100%', height: 500 }}`. In a zero-height parent nothing is visible.
@@ -657,6 +731,7 @@ import { GraphToolbar, type GraphToolbarPosition } from '@tinkermonkey/heimdall-
 - Reads `useGraphCanvas()` and throws outside a canvas. GraphCanvas renders no `children`, so a standalone `GraphToolbar` can only appear in content the canvas renders itself; in practice use `showToolbar`/`toolbarPosition`.
 - Zoom buttons step by ×1.3 anchored at the canvas center. Fit uses `fitPadding`.
 - Lock freezes wheel zoom, drag-to-pan and keyboard pan/zoom, and pauses automatic viewport moves (`centerOnSelect`, the fit on entering fullscreen). Node dragging, background clicks and the toolbar's own zoom and fit buttons still work.
+- Zoom in/out count as user moves (`onViewportDwell` on GraphCanvas); zoom to fit reports `onViewportNavigate` with `{ kind: 'fit', reason: 'toolbar' }`.
 - Fullscreen targets `fullscreenContainerRef` (or the canvas root) and is a silent no-op where the Fullscreen API is missing (iOS Safari).
 - An open `DetailDrawer` covers the canvas's right edge, including the default bottom-right toolbar. Move it with `toolbarPosition="bottom-left"`.
 
@@ -1109,7 +1184,7 @@ import { HierarchyTree } from '@tinkermonkey/heimdall-ui'
 useGraphCanvas(): GraphCanvasContextValue
 ```
 
-Reads the enclosing `GraphCanvas`'s state and viewport controls. Throws outside a canvas.
+Reads the enclosing `GraphCanvas`'s state and viewport controls. Throws outside a canvas. Every viewport setter here reports `{ kind: 'imperative' }` to `onViewportNavigate`; the built-in toolbar's buttons don't go through these, so its zoom in/out count as user moves and its fit as `{ kind: 'fit', reason: 'toolbar' }`.
 
 | Field | Type | Description |
 | ----- | ---- | ----------- |
@@ -1120,6 +1195,7 @@ Reads the enclosing `GraphCanvas`'s state and viewport controls. Throws outside 
 | `zoomBy` | `(factor) => void` | Zoom anchored at the canvas center |
 | `setZoom` | `(zoom) => void` | Zoom without changing pan |
 | `setPan` | `(x, y) => void` | Pan without changing zoom |
+| `setViewport`, `getViewport` | see `GraphViewportHandle` | Same as the `viewportRef` handle. See [Viewport history](#viewport-history) |
 | `locked`, `setLocked` | `boolean`, state setter | Pan/zoom input lock |
 | `isFullscreen`, `toggleFullscreen` | `boolean`, `() => void` | Fullscreen state |
 | `layout` | `GraphCanvasProps['layout']` | Read-only current layout |
@@ -1148,9 +1224,9 @@ usePanZoom(options: UsePanZoomOptions): UsePanZoomReturn
 
 The pan/zoom engine behind GraphCanvas, for custom SVG or HTML surfaces. Drag to pan with inertia, wheel/pinch zoom anchored at the cursor, and when focused `+`/`-` (×1.2 or ÷1.2 about the container centre) and arrow keys (20px). Any zoom, `zoomTo`, `panTo` or `reset` stops a running inertia glide.
 
-Options: `containerRef` (required; element that receives wheel events), `minZoom` (`0.25`), `maxZoom` (`4`), `bounds?: { minX, maxX, minY, maxY }` (clamps pan), `onViewportChange?: ({ x, y, zoom }) => void`, `locked` (`false`).
+Options: `containerRef` (required; element that receives wheel events), `minZoom` (`0.25`), `maxZoom` (`4`), `bounds?: { minX, maxX, minY, maxY }` (clamps pan), `onViewportChange?: ({ x, y, zoom }) => void`, `locked` (`false`), `onUserGesture?: (phase: 'start' | 'change' | 'end') => void` (user input only, never `zoomTo`/`panTo`/`reset`: `'start'` on a pan press, `'change'` per drag frame, inertia frame, wheel event or key step, `'end'` once that input is at rest, i.e. after a release without inertia, after inertia runs out, or after each wheel/key step).
 
-Returns: `transform` (a `matrix(...)` string), `viewport: { x, y, zoom }`, `bind: { onPointerDown, onKeyDown, tabIndex: 0, role: 'region' }`, `zoomTo(zoom, cx?, cy?)` (anchored at container point when given), `panTo(x, y)`, `reset()`.
+Returns: `transform` (a `matrix(...)` string), `viewport: { x, y, zoom }`, `bind: { onPointerDown, onKeyDown, tabIndex: 0, role: 'region' }`, `zoomTo(zoom, cx?, cy?)` (anchored at container point when given), `panTo(x, y)`, `reset()`, `getViewport()` (current `{ x, y, zoom }`, up to date before the next render).
 
 ```tsx
 function FloorPlan() {

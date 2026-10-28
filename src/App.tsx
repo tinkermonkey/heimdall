@@ -43,6 +43,7 @@ import TraceViewerTestPage from './test-pages/TraceViewerTestPage'
 import UxNavigationTestPage from './test-pages/UxNavigationTestPage'
 import RadialTreeTestPage from './test-pages/RadialTreeTestPage'
 import LineChartDataToggleTestPage from './test-pages/LineChartDataToggleTestPage'
+import GraphViewportHistoryTestPage from './test-pages/GraphViewportHistoryTestPage'
 import GraphA11yNamesTestPage from './test-pages/GraphA11yNamesTestPage'
 // Injected by vite.config.mjs from package.json (a JSON import here would pull package.json into
 // the declaration build and move every .d.ts under dist/src/).
@@ -176,6 +177,10 @@ export default function App() {
 
   if (exampleParam === 'line-chart-data-toggle') {
     return <LineChartDataToggleTestPage />
+  }
+
+  if (exampleParam === 'graph-viewport-history') {
+    return <GraphViewportHistoryTestPage />
   }
 
   if (exampleParam === 'graph-a11y-names') {

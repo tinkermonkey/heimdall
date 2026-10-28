@@ -24,6 +24,16 @@ export interface UsePanZoomOptions {
    *  imperative calls (zoomTo/panTo/reset) — those are deliberate actions, not the accidental
    *  scroll/drag input this is meant to guard against. Default false. */
   locked?: boolean
+  /**
+   * Reports user-driven viewport input only — never zoomTo/panTo/reset. 'start' when a drag-pan
+   * presses down (it also stops any running inertia), 'change' for every user-driven write (each
+   * drag frame, inertia frame, wheel/pinch event, or keyboard step), and 'end' once that input is
+   * at rest: a drag released without inertia, an inertia glide that has run out, or straight after
+   * each discrete wheel/keyboard step. A drag released into inertia reports no 'end' until the
+   * glide stops. Read through a ref, so an inline arrow is fine. GraphCanvas uses this to time
+   * onViewportDwell.
+   */
+  onUserGesture?: (phase: 'start' | 'change' | 'end') => void
 }
 
 export interface UsePanZoomReturn {
@@ -38,6 +48,9 @@ export interface UsePanZoomReturn {
   zoomTo: (zoom: number, x?: number, y?: number) => void
   panTo: (x: number, y: number) => void
   reset: () => void
+  /** The current zoom and pan, read from the refs every write lands in synchronously — so it is
+   *  already up to date between a write and the render that mirrors it into `viewport`. */
+  getViewport: () => { x: number; y: number; zoom: number }
 }
 
 const DEFAULT_MIN_ZOOM = 0.25
@@ -98,6 +111,7 @@ export function usePanZoom({
   onViewportChange,
   containerRef,
   locked = false,
+  onUserGesture,
 }: UsePanZoomOptions): UsePanZoomReturn {
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
@@ -162,6 +176,12 @@ export function usePanZoom({
   // otherwise re-render, pass a new callback, and loop forever.
   const onViewportChangeRef = useRef(onViewportChange)
   onViewportChangeRef.current = onViewportChange
+  // Same ref idiom: the input handlers below call this without depending on its identity.
+  const onUserGestureRef = useRef(onUserGesture)
+  onUserGestureRef.current = onUserGesture
+  const reportGesture = useCallback((phase: 'start' | 'change' | 'end') => {
+    onUserGestureRef.current?.(phase)
+  }, [])
   useEffect(() => {
     onViewportChangeRef.current?.({ x: pan.x, y: pan.y, zoom })
   }, [pan, zoom])
@@ -233,8 +253,9 @@ export function usePanZoom({
 
       commitPan(newPan)
       dragRafRef.current = null
+      reportGesture('change')
     })
-  }, [clampPan, commitPan])
+  }, [clampPan, commitPan, reportGesture])
 
   const handlePointerUp = useCallback(() => {
     if (!dragRef.current) {
@@ -251,6 +272,7 @@ export function usePanZoom({
     detachListeners()
 
     if (shouldReduceMotion || velocity < MIN_VELOCITY) {
+      reportGesture('end')
       return
     }
 
@@ -269,18 +291,20 @@ export function usePanZoom({
       const velocity = Math.sqrt(currentVx * currentVx + currentVy * currentVy)
       if (velocity < MIN_VELOCITY) {
         inertiaRafRef.current = null
+        reportGesture('end')
         return
       }
 
       // Steps from panRef rather than a pan captured at release, so a drag frame that lands
       // after the release isn't undone.
       commitPan(clampPan(panRef.current.x + currentVx * dt, panRef.current.y + currentVy * dt))
+      reportGesture('change')
 
       inertiaRafRef.current = requestAnimationFrame(animate)
     }
 
     inertiaRafRef.current = requestAnimationFrame(animate)
-  }, [detachListeners, clampPan, commitPan])
+  }, [detachListeners, clampPan, commitPan, reportGesture])
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
     if (lockedRef.current) return
@@ -298,7 +322,8 @@ export function usePanZoom({
       time: performance.now(),
     }
     attachListeners()
-  }, [attachListeners, cancelInertia])
+    reportGesture('start')
+  }, [attachListeners, cancelInertia, reportGesture])
 
   // Keep refs in sync with the current implementations
   useEffect(() => {
@@ -345,7 +370,9 @@ export function usePanZoom({
     zoomRef.current = next
     panRef.current = clampPan(anchored.x, anchored.y)
     scheduleFlush()
-  }, [clampPan, minZoom, maxZoom, cancelInertia, scheduleFlush])
+    reportGesture('change')
+    reportGesture('end')
+  }, [clampPan, minZoom, maxZoom, cancelInertia, scheduleFlush, reportGesture])
 
   // A real, non-passive native listener — see UsePanZoomOptions.containerRef.
   useEffect(() => {
@@ -393,8 +420,10 @@ export function usePanZoom({
         panRef.current = clampPan(nextPan.x, nextPan.y)
       }
       scheduleFlush()
+      reportGesture('change')
+      reportGesture('end')
     },
-    [clampPan, minZoom, maxZoom, containerRef, cancelInertia, scheduleFlush]
+    [clampPan, minZoom, maxZoom, containerRef, cancelInertia, scheduleFlush, reportGesture]
   )
 
   const zoomTo = useCallback(
@@ -427,6 +456,11 @@ export function usePanZoom({
     commitPan({ x: 0, y: 0 })
   }, [cancelInertia, commitZoom, commitPan])
 
+  const getViewport = useCallback(
+    () => ({ x: panRef.current.x, y: panRef.current.y, zoom: zoomRef.current }),
+    []
+  )
+
   // matrix(a, b, c, d, e, f) represents:
   // | a  c  e |
   // | b  d  f |
@@ -446,5 +480,6 @@ export function usePanZoom({
     zoomTo,
     panTo,
     reset,
+    getViewport,
   }
 }
