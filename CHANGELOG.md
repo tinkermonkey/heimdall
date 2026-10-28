@@ -4,6 +4,38 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.3]
+
+Canvas interaction and accessibility fixes from downstream testing.
+
+### Fixed
+
+- **`usePanZoom`** (`GraphCanvas`, `MapCanvas`) — wheel or pinch zoom right after a drag-pan now
+  zooms around the cursor (tinkermonkey/heimdall#306). The pan inertia glide kept writing its own
+  pan every frame and overwrote the zoom's cursor-anchored pan, so the zoom pivoted around an
+  unrelated point. Wheel, keyboard, `zoomTo`, `panTo` and `reset` now stop the glide, and wheel
+  events that arrive within one frame compound instead of all but the last being dropped.
+- **`usePanZoom`** (`GraphCanvas`, `MapCanvas`) — `+`/`-` keyboard zoom now scales about the
+  view centre instead of the top-left corner (tinkermonkey/heimdall#302). Each press now
+  multiplies or divides the zoom by 1.2 instead of adding or subtracting 0.1, so it is the same
+  relative step at any zoom.
+- **`GraphCanvas`** — `fitView` and the toolbar's zoom-to-fit now frame cluster boundary circles
+  (`showClusterBoundaries`) and radial-tree hierarchy rings (`showHierarchyRings`), not just the
+  nodes (tinkermonkey/heimdall#305). Radial-tree trunk boundaries were clipped by up to ~176px
+  after fit, and force-clustered bubbles slightly. The initial fit also waits for the current
+  layout's positions and boundaries, so it never frames a previous layout's.
+- **`GraphCanvas`** — interactive edges and `nodePopover` / `edgePopover` dialogs get their
+  accessible names from node labels instead of ids, so screen readers no longer announce opaque
+  ids such as UUIDs (tinkermonkey/heimdall#304). An edge is announced as "monitors: WebSocket
+  Disconnect Alert to Connection State Gauge", a popover as "Details for <node label>" or
+  "Details for <edge name>". Each name falls back to the id when a node has no label.
+
+### Added
+
+- **`GraphEdge`** — optional `sourceLabel` / `targetLabel` props for the interactive edge's
+  accessible name, falling back to `sourceId` / `targetId`. `GraphCanvas` passes them
+  automatically; pass them yourself when rendering `GraphEdge` standalone with opaque ids.
+
 ## [0.9.2]
 
 Hotfix: the stylesheet import works again.
