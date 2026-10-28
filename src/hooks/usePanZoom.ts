@@ -42,13 +42,15 @@ export interface UsePanZoomReturn {
 
 const DEFAULT_MIN_ZOOM = 0.25
 const DEFAULT_MAX_ZOOM = 4
-const ZOOM_STEP = 0.1
+// Keyboard +/- multiply or divide the zoom by this, so each press is the same relative step at
+// any scale (an additive step shrinks to nothing at high zoom and overshoots at low zoom).
+const KEY_ZOOM_FACTOR = 1.2
 const PAN_STEP = 20
 const INERTIA_DECAY = 0.95
 const MIN_VELOCITY = 0.1
 
 // Wheel-to-zoom sensitivity, ported from d3-zoom's default wheelDelta: zoom scales
-// exponentially with deltaY (2^(-deltaY * sensitivity)) instead of jumping ZOOM_STEP per
+// exponentially with deltaY (2^(-deltaY * sensitivity)) instead of jumping a fixed step per
 // event regardless of magnitude. That's what makes a light trackpad scroll produce a light
 // zoom change — a flat per-event step blows past the target after a couple of the dozens of
 // small events one scroll gesture fires. deltaMode distinguishes pixel (0, trackpads and most
@@ -100,6 +102,10 @@ export function usePanZoom({
   const [zoom, setZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
 
+  // zoomRef/panRef are the source of truth; zoom/pan state only mirrors them for rendering.
+  // Every write lands in the ref synchronously, so input events that arrive before the next
+  // commit compound on each other instead of all reading the same stale base and dropping all
+  // but the last (tinkermonkey/heimdall#306).
   const zoomRef = useRef(1)
   const panRef = useRef({ x: 0, y: 0 })
   // Read from input handlers instead of taking `locked` as a dependency — those handlers
@@ -113,25 +119,43 @@ export function usePanZoom({
   const listenersAttachedRef = useRef(false)
   const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
   const handlePointerUpRef = useRef<() => void>()
-  // Separate per-gesture rAF refs — drag-pan, wheel-zoom, and keyboard pan/zoom can all fire in
-  // the same frame (e.g. a trackpad pinch with a hand also resting near a mouse button, or wheel
-  // input arriving just as a keyboard shortcut fires), and previously shared a single `rafRef`:
-  // whichever gesture's handler ran last would silently cancelAnimationFrame() the others'
-  // already-scheduled update before it ever committed, dropping that gesture's zoom/pan change
-  // entirely for the frame — not a rendering glitch so much as one input source stomping another.
+  // Wheel and keyboard input write zoomRef/panRef at event time and share one rAF that flushes
+  // the refs to state: whichever fires first schedules it, and the flush picks up everything
+  // written since, so no input source can cancel another's pending update. The drag rAF is
+  // separate because it computes its pan inside the frame.
   const dragRafRef = useRef<number | null>(null)
-  const wheelRafRef = useRef<number | null>(null)
-  const keyRafRef = useRef<number | null>(null)
+  const flushRafRef = useRef<number | null>(null)
   const inertiaRafRef = useRef<number | null>(null)
 
-  // Keep refs current for event handlers
-  useEffect(() => {
-    zoomRef.current = zoom
-  }, [zoom])
+  const commitZoom = useCallback((next: number) => {
+    zoomRef.current = next
+    setZoom(next)
+  }, [])
 
-  useEffect(() => {
-    panRef.current = pan
-  }, [pan])
+  const commitPan = useCallback((next: { x: number; y: number }) => {
+    panRef.current = next
+    setPan(next)
+  }, [])
+
+  // Copies zoomRef/panRef to state on the next frame, at most once per frame.
+  const scheduleFlush = useCallback(() => {
+    if (flushRafRef.current !== null) return
+    flushRafRef.current = requestAnimationFrame(() => {
+      flushRafRef.current = null
+      setZoom(zoomRef.current)
+      setPan(panRef.current)
+    })
+  }, [])
+
+  // Every viewport change except a drag stops a running inertia glide. The glide writes pan
+  // every frame, so left running it overwrites a zoom's anchored pan with one meant for the old
+  // zoom, and the zoom pivots around the wrong point (tinkermonkey/heimdall#306).
+  const cancelInertia = useCallback(() => {
+    if (inertiaRafRef.current !== null) {
+      cancelAnimationFrame(inertiaRafRef.current)
+      inertiaRafRef.current = null
+    }
+  }, [])
 
   // Notify viewport changes. The callback is read through a ref so a new function identity
   // (an inline arrow in the caller) doesn't re-fire it: a caller that sets state from it would
@@ -207,10 +231,10 @@ export function usePanZoom({
         dragRef.current.panY + (e.clientY - dragRef.current.y)
       )
 
-      setPan(newPan)
+      commitPan(newPan)
       dragRafRef.current = null
     })
-  }, [clampPan])
+  }, [clampPan, commitPan])
 
   const handlePointerUp = useCallback(() => {
     if (!dragRef.current) {
@@ -232,7 +256,6 @@ export function usePanZoom({
 
     let currentVx = vx
     let currentVy = vy
-    let currentPan = panRef.current
     let lastFrameTime = performance.now()
 
     const animate = () => {
@@ -249,21 +272,19 @@ export function usePanZoom({
         return
       }
 
-      currentPan = clampPan(currentPan.x + currentVx * dt, currentPan.y + currentVy * dt)
-      setPan(currentPan)
+      // Steps from panRef rather than a pan captured at release, so a drag frame that lands
+      // after the release isn't undone.
+      commitPan(clampPan(panRef.current.x + currentVx * dt, panRef.current.y + currentVy * dt))
 
       inertiaRafRef.current = requestAnimationFrame(animate)
     }
 
     inertiaRafRef.current = requestAnimationFrame(animate)
-  }, [detachListeners, clampPan])
+  }, [detachListeners, clampPan, commitPan])
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLElement>) => {
     if (lockedRef.current) return
-    if (inertiaRafRef.current !== null) {
-      cancelAnimationFrame(inertiaRafRef.current)
-      inertiaRafRef.current = null
-    }
+    cancelInertia()
 
     dragRef.current = {
       x: e.clientX,
@@ -277,7 +298,7 @@ export function usePanZoom({
       time: performance.now(),
     }
     attachListeners()
-  }, [attachListeners])
+  }, [attachListeners, cancelInertia])
 
   // Keep refs in sync with the current implementations
   useEffect(() => {
@@ -295,17 +316,12 @@ export function usePanZoom({
       if (dragRafRef.current !== null) {
         cancelAnimationFrame(dragRafRef.current)
       }
-      if (wheelRafRef.current !== null) {
-        cancelAnimationFrame(wheelRafRef.current)
+      if (flushRafRef.current !== null) {
+        cancelAnimationFrame(flushRafRef.current)
       }
-      if (keyRafRef.current !== null) {
-        cancelAnimationFrame(keyRafRef.current)
-      }
-      if (inertiaRafRef.current !== null) {
-        cancelAnimationFrame(inertiaRafRef.current)
-      }
+      cancelInertia()
     }
-  }, [detachListeners])
+  }, [detachListeners, cancelInertia])
 
   // Native WheelEvent, not React.WheelEvent — this is attached directly via addEventListener
   // below (with { passive: false }) rather than as a React onWheel prop, specifically so
@@ -321,21 +337,15 @@ export function usePanZoom({
 
     if (!Number.isFinite(cx) || !Number.isFinite(cy)) return
 
+    cancelInertia()
     const prev = zoomRef.current
     const next = Math.min(maxZoom, Math.max(minZoom, prev * wheelZoomFactor(e)))
     const anchored = anchoredPan(cx, cy, prev, next, panRef.current)
-    const newPan = clampPan(anchored.x, anchored.y)
-
-    if (wheelRafRef.current !== null) {
-      cancelAnimationFrame(wheelRafRef.current)
-    }
-
-    wheelRafRef.current = requestAnimationFrame(() => {
-      setZoom(next)
-      setPan(newPan)
-      wheelRafRef.current = null
-    })
-  }, [clampPan, minZoom, maxZoom])
+    // zoomRef first: clampPan scales the bounds by it, and they should be the new zoom's.
+    zoomRef.current = next
+    panRef.current = clampPan(anchored.x, anchored.y)
+    scheduleFlush()
+  }, [clampPan, minZoom, maxZoom, cancelInertia, scheduleFlush])
 
   // A real, non-passive native listener — see UsePanZoomOptions.containerRef.
   useEffect(() => {
@@ -349,75 +359,73 @@ export function usePanZoom({
     (e: React.KeyboardEvent<HTMLElement>) => {
       if (lockedRef.current) return
       const key = e.key
-      let updateZoom: number | null = null
-      let updatePan: { x: number; y: number } | null = null
+      let nextZoom: number | null = null
+      let nextPan: { x: number; y: number } | null = null
 
       if (key === '+' || key === '=') {
-        e.preventDefault()
-        updateZoom = Math.min(maxZoom, zoomRef.current + ZOOM_STEP)
+        nextZoom = Math.min(maxZoom, zoomRef.current * KEY_ZOOM_FACTOR)
       } else if (key === '-' || key === '_') {
-        e.preventDefault()
-        updateZoom = Math.max(minZoom, zoomRef.current - ZOOM_STEP)
+        nextZoom = Math.max(minZoom, zoomRef.current / KEY_ZOOM_FACTOR)
       } else if (key === 'ArrowUp') {
-        e.preventDefault()
-        updatePan = clampPan(panRef.current.x, panRef.current.y + PAN_STEP)
+        nextPan = { x: panRef.current.x, y: panRef.current.y + PAN_STEP }
       } else if (key === 'ArrowDown') {
-        e.preventDefault()
-        updatePan = clampPan(panRef.current.x, panRef.current.y - PAN_STEP)
+        nextPan = { x: panRef.current.x, y: panRef.current.y - PAN_STEP }
       } else if (key === 'ArrowLeft') {
-        e.preventDefault()
-        updatePan = clampPan(panRef.current.x + PAN_STEP, panRef.current.y)
+        nextPan = { x: panRef.current.x + PAN_STEP, y: panRef.current.y }
       } else if (key === 'ArrowRight') {
-        e.preventDefault()
-        updatePan = clampPan(panRef.current.x - PAN_STEP, panRef.current.y)
+        nextPan = { x: panRef.current.x - PAN_STEP, y: panRef.current.y }
+      } else {
+        return
       }
 
-      if (updateZoom !== null || updatePan !== null) {
-        if (keyRafRef.current !== null) {
-          cancelAnimationFrame(keyRafRef.current)
-        }
-
-        keyRafRef.current = requestAnimationFrame(() => {
-          if (updateZoom !== null) {
-            setZoom(updateZoom)
-          }
-          if (updatePan !== null) {
-            setPan(updatePan)
-          }
-          keyRafRef.current = null
-        })
+      e.preventDefault()
+      cancelInertia()
+      if (nextZoom !== null) {
+        // Anchored at the container centre, like GraphCanvas's toolbar zoom buttons, so the
+        // middle of the view stays put (tinkermonkey/heimdall#302).
+        const container = containerRef.current
+        const cx = container ? container.clientWidth / 2 : 0
+        const cy = container ? container.clientHeight / 2 : 0
+        nextPan = anchoredPan(cx, cy, zoomRef.current, nextZoom, panRef.current)
+        zoomRef.current = nextZoom
       }
+      if (nextPan !== null) {
+        panRef.current = clampPan(nextPan.x, nextPan.y)
+      }
+      scheduleFlush()
     },
-    [clampPan, minZoom, maxZoom]
+    [clampPan, minZoom, maxZoom, containerRef, cancelInertia, scheduleFlush]
   )
 
   const zoomTo = useCallback(
     (targetZoom: number, cx?: number, cy?: number) => {
+      cancelInertia()
       const clamped = Math.min(maxZoom, Math.max(minZoom, targetZoom))
       const prev = zoomRef.current
 
-      setZoom(clamped)
+      commitZoom(clamped)
 
       if (cx !== undefined && cy !== undefined) {
         const anchored = anchoredPan(cx, cy, prev, clamped, panRef.current)
-        setPan(clampPan(anchored.x, anchored.y))
+        commitPan(clampPan(anchored.x, anchored.y))
       }
     },
-    [clampPan, minZoom, maxZoom]
+    [clampPan, minZoom, maxZoom, cancelInertia, commitZoom, commitPan]
   )
 
   const panTo = useCallback(
     (x: number, y: number) => {
-      const newPan = clampPan(x, y)
-      setPan(newPan)
+      cancelInertia()
+      commitPan(clampPan(x, y))
     },
-    [clampPan]
+    [clampPan, cancelInertia, commitPan]
   )
 
   const reset = useCallback(() => {
-    setZoom(1)
-    setPan({ x: 0, y: 0 })
-  }, [])
+    cancelInertia()
+    commitZoom(1)
+    commitPan({ x: 0, y: 0 })
+  }, [cancelInertia, commitZoom, commitPan])
 
   // matrix(a, b, c, d, e, f) represents:
   // | a  c  e |

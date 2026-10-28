@@ -11,6 +11,7 @@ import {
   computeEdgePath,
   computeFitViewport,
   edgeAccessibleName,
+  extendBoundingBoxByCircles,
   edgeLabelSize,
   findClearLabelPosition,
   DEFAULT_QUADRATIC_CURVATURE,
@@ -721,7 +722,9 @@ export interface GraphCanvasProps extends Omit<
    *  toggle, or read from renderNode's GraphNodeHierarchyMeta for a custom one). Toggling is the
    *  caller's responsibility — update collapsedNodeIds in response. */
   onToggleCollapse?: (nodeId: string) => void;
-  /** Zoom out/in on first layout so the full node bounding box fits within the container. Default false. */
+  /** Zoom out/in on first layout so the full node bounding box fits within the container, including
+   *  any cluster boundary circles (showClusterBoundaries) and hierarchy rings (showHierarchyRings)
+   *  being shown. The toolbar's zoom-to-fit frames the same box. Default false. */
   fitView?: boolean;
   /** Padding in px around the fitted bounding box when fitView is enabled. Default 40. */
   fitPadding?: number;
@@ -1174,6 +1177,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // Only populated when layout='radial-tree' — per-trunk hierarchy rings,
     // one per occupied depth level, for the optional ring-visualization layer.
     const [ringGeometry, setRingGeometry] = useState<RingGeometry[]>([]);
+    // The layout that computedPositions, clusterBoundaries and ringGeometry were last computed
+    // for, set in the same batch as them. The mount fit waits until it matches `layout`, so it
+    // never frames a previous layout's positions or boundary circles.
+    const [computedLayout, setComputedLayout] = useState<GraphCanvasProps["layout"] | null>(null);
     // layout="orthogonal" only: the engine's per-edge polylines, keyed by edge id, rendered in
     // place of bezier paths via GraphEdgeInternal's preRoutedEdge (the same path navigation
     // routes take). Empty for every other layout.
@@ -1309,6 +1316,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // layout-input changes should, and those are already this effect's real dependencies.
       if (layout === "galaxy" && liveActiveRef.current) return;
       if (layout !== "orthogonal") setComputedRoutes(new Map());
+      setComputedLayout(layout);
 
       const layoutNodes = visibleNodes.map((n, i) => ({
         id: n.id,
@@ -1704,6 +1712,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return { minX, maxX, minY, maxY };
     }, [visibleNodes, dims, getNodePosition]);
 
+    // The decoration circles currently rendered (same conditions as the render layers below):
+    // cluster/trunk boundaries and radial-tree hierarchy rings. They can reach well past the
+    // nodes they enclose — a radial-tree trunk boundary especially — so fitView and zoomToFit()
+    // frame them too. Plain (non-fit) centering still uses the node box alone.
+    const renderedDecorationCircles = useMemo(() => {
+      const circles: Array<{ x: number; y: number; r: number }> = [];
+      if (showClusterBoundaries) circles.push(...clusterBoundaries.values());
+      if (showHierarchyRings)
+        for (const ring of ringGeometry) circles.push({ x: ring.cx, y: ring.cy, r: ring.r });
+      return circles;
+    }, [showClusterBoundaries, clusterBoundaries, showHierarchyRings, ringGeometry]);
+
     // Auto-center (or fit) the node bounding box once positions and dims are ready.
     // Runs once — re-centering on later prop changes would fight user pan/zoom.
     useEffect(() => {
@@ -1722,7 +1742,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           layout === "force-clustered" ||
           layout === "ux-navigation" ||
           layout === "radial-tree") &&
-        computedPositions.size === 0
+        (computedPositions.size === 0 || computedLayout !== layout)
       )
         return;
 
@@ -1734,7 +1754,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
       if (fitView) {
         const fit = computeFitViewport(
-          bbox,
+          extendBoundingBoxByCircles(bbox, renderedDecorationCircles),
           containerSize.width,
           containerSize.height,
           fitPadding,
@@ -1763,6 +1783,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       fitView,
       fitPadding,
       computeBoundingBox,
+      computedLayout,
+      renderedDecorationCircles,
     ]);
 
     // Tracks the selectedNodeId centerOnSelect last reacted to, so it only pans on a
@@ -1895,9 +1917,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // engine-layout effect's own galaxy branch already does.
       const leafToGroup = galaxyDiscGroups(forest.roots, forest.childrenOf);
       const radiusOf = galaxyBoundaryRadiusOf;
-      setClusterBoundaries(
-        galaxySystemCircles(positions, leafToGroup, radiusOf),
-      );
+      const boundaries = galaxySystemCircles(positions, leafToGroup, radiusOf);
+      setClusterBoundaries(boundaries);
 
       // Re-frame using the just-computed `positions` directly, not stale `computedPositions` state
       // (the setComputedPositions call above won't be reflected until next render) — mirrors the
@@ -1921,8 +1942,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (Number.isFinite(minX) && containerSize) {
         const bbox = { minX, maxX, minY, maxY };
         if (fitView) {
+          // Fresh `boundaries`, not renderedDecorationCircles (still last render's); galaxy has
+          // no hierarchy rings.
           const fit = computeFitViewport(
-            bbox,
+            showClusterBoundaries ? extendBoundingBoxByCircles(bbox, boundaries.values()) : bbox,
             containerSize.width,
             containerSize.height,
             fitPadding,
@@ -1948,7 +1971,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const bbox = computeBoundingBox();
         if (!bbox || !containerSize) return;
         const fit = computeFitViewport(
-          bbox,
+          extendBoundingBoxByCircles(bbox, renderedDecorationCircles),
           containerSize.width,
           containerSize.height,
           padding ?? fitPadding,
@@ -1960,6 +1983,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       },
       [
         computeBoundingBox,
+        renderedDecorationCircles,
         containerSize,
         fitPadding,
         minZoom,

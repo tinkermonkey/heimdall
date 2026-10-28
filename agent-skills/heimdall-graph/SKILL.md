@@ -37,7 +37,7 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `onBackgroundClick` | `() => void` | — | Click on empty canvas, not after a pan drag. Clear selection here |
 | `renderNode` | `(node, selected, hierarchy?, props?) => ReactNode` | — | Custom node content. See [Custom node renderers](#custom-node-renderers) |
 | `renderEdge` | `(edge, geometry: EdgeGeometry) => ReactNode` | — | Custom SVG for an edge. See [Custom edge renderers](#custom-edge-renderers) |
-| `fitView` | `boolean` | `false` | Fit the whole graph in view on first layout |
+| `fitView` | `boolean` | `false` | Fit the whole graph in view on first layout, including any cluster boundaries and hierarchy rings shown |
 | `fitPadding` | `number` | `40` | Padding (px) around the fitted bounding box |
 | `centerOnSelect` | `boolean` | `false` | Pan (keeping zoom) to center `selectedNodeId` when it changes. Use when selection can come from outside the canvas |
 | `minZoom` | `number` | `0.05` | Lower zoom bound |
@@ -432,7 +432,7 @@ const frameRef = useRef<HTMLDivElement>(null)
 - `...divProps` spread after the canvas's own `onPointerDown`, `onPointerUp`, `onKeyDown`, `tabIndex` and `role`. Passing any of these replaces the canvas handler and breaks panning, background clicks or keyboard zoom.
 - An edge whose `sourceId` or `targetId` is not in `nodes` logs a warning and is not drawn. Edges touching a collapsed-away node are hidden silently.
 - Errors thrown by `renderNode` and `renderEdge` are logged and that node or edge renders nothing. A throwing classifier is logged and falls back to its omitted-prop default.
-- Input: drag empty canvas to pan (with inertia, disabled under `prefers-reduced-motion`), wheel or pinch to zoom under the cursor. With the canvas focused (`role="region"`, `aria-label="Graph canvas"`), `+`/`-` zoom and the arrow keys pan. The toolbar's lock button freezes all three.
+- Input: drag empty canvas to pan (with inertia, disabled under `prefers-reduced-motion`), wheel or pinch to zoom under the cursor. With the canvas focused (`role="region"`, `aria-label="Graph canvas"`), `+`/`-` zoom in or out by a factor of 1.2 about the view centre and the arrow keys pan 20px. The toolbar's lock button freezes all three.
 
 ---
 
@@ -1146,7 +1146,7 @@ function FitButton() {
 usePanZoom(options: UsePanZoomOptions): UsePanZoomReturn
 ```
 
-The pan/zoom engine behind GraphCanvas, for custom SVG or HTML surfaces. Drag to pan with inertia, wheel/pinch zoom anchored at the cursor, `+`/`-` and arrow keys when focused.
+The pan/zoom engine behind GraphCanvas, for custom SVG or HTML surfaces. Drag to pan with inertia, wheel/pinch zoom anchored at the cursor, and when focused `+`/`-` (×1.2 or ÷1.2 about the container centre) and arrow keys (20px). Any zoom, `zoomTo`, `panTo` or `reset` stops a running inertia glide.
 
 Options: `containerRef` (required; element that receives wheel events), `minZoom` (`0.25`), `maxZoom` (`4`), `bounds?: { minX, maxX, minY, maxY }` (clamps pan), `onViewportChange?: ({ x, y, zoom }) => void`, `locked` (`false`).
 
