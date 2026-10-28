@@ -43,6 +43,26 @@ async function circleOverflows(canvas: Locator, selector: string) {
   }, selector)
 }
 
+/**
+ * Gaps (px) between `canvas`'s edges and the union of the nodes and of the circles matching
+ * `circleSelector`, on the tighter axis: a fit with padding P leaves P on both sides of one axis
+ * and at least P on the other.
+ */
+async function tighterAxisGap(canvas: Locator, circleSelector: string | null) {
+  return canvas.evaluate((root, sel) => {
+    const box = root.getBoundingClientRect()
+    const els = [
+      ...root.querySelectorAll('.graph-viewport [data-testid^="graph-node-"]'),
+      ...(sel ? root.querySelectorAll(sel) : []),
+    ].map((el) => el.getBoundingClientRect())
+    const left = Math.min(...els.map((r) => r.left)) - box.left
+    const right = box.right - Math.max(...els.map((r) => r.right))
+    const top = Math.min(...els.map((r) => r.top)) - box.top
+    const bottom = box.bottom - Math.max(...els.map((r) => r.bottom))
+    return Math.min(Math.max(left, right), Math.max(top, bottom))
+  }, circleSelector)
+}
+
 async function expectCirclesInFrame(canvas: Locator, selector: string) {
   const overflows = await circleOverflows(canvas, selector)
   expect(overflows.length, `expected some ${selector} circles`).toBeGreaterThan(0)
@@ -84,20 +104,9 @@ test.describe('integration: fit frames boundary circles (#305)', () => {
       const canvas = page.locator('.graph-canvas')
       await waitForSettledViewport(canvas)
       await expect(canvas.locator('.graph-cluster-boundary, .graph-hierarchy-ring')).toHaveCount(0)
-      const gaps = await canvas.evaluate((root) => {
-        const box = root.getBoundingClientRect()
-        const nodes = [...root.querySelectorAll('.graph-viewport [data-testid^="graph-node-"]')].map((n) =>
-          n.getBoundingClientRect(),
-        )
-        const left = Math.min(...nodes.map((n) => n.left)) - box.left
-        const right = box.right - Math.max(...nodes.map((n) => n.right))
-        const top = Math.min(...nodes.map((n) => n.top)) - box.top
-        const bottom = box.bottom - Math.max(...nodes.map((n) => n.bottom))
-        return { left, right, top, bottom }
-      })
-      const tighter = Math.min(Math.max(gaps.left, gaps.right), Math.max(gaps.top, gaps.bottom))
-      expect(tighter).toBeGreaterThan(38)
-      expect(tighter).toBeLessThan(42)
+      const gap = await tighterAxisGap(canvas, null)
+      expect(gap).toBeGreaterThan(38)
+      expect(gap).toBeLessThan(42)
     })
   })
 
@@ -125,19 +134,21 @@ test.describe('integration: fit frames boundary circles (#305)', () => {
       })
     }
 
-    test('gives the same viewport as the mount fit', async ({ page }) => {
+    test('re-frames a fitView canvas tightly around nodes and circles after zooming in', async ({ page }) => {
       await prepare(page, `${RADIAL}&fitView=1&boundaries=1&rings=1&view=mixed`)
       const canvas = page.locator('.graph-canvas')
-      const viewport = canvas.locator('[data-testid="graph-viewport"]')
       await waitForSettledViewport(canvas)
-      const mounted = await viewport.getAttribute('transform')
-      // Move away first so the button has something to undo.
+      await canvas.getByRole('button', { name: 'Zoom in' }).click()
       await canvas.getByRole('button', { name: 'Zoom in' }).click()
       await waitForSettledViewport(canvas)
-      expect(await viewport.getAttribute('transform')).not.toBe(mounted)
       await canvas.getByRole('button', { name: 'Zoom to fit' }).click()
       await waitForSettledViewport(canvas)
-      expect(await viewport.getAttribute('transform')).toBe(mounted)
+      await expectCirclesInFrame(canvas, '.graph-cluster-boundary')
+      await expectCirclesInFrame(canvas, '.graph-hierarchy-ring')
+      // In frame and not just zoomed out further: the circles+nodes box meets the 40px padding.
+      const gap = await tighterAxisGap(canvas, '.graph-cluster-boundary, .graph-hierarchy-ring')
+      expect(gap).toBeGreaterThan(38)
+      expect(gap).toBeLessThan(42)
     })
 
     test('frames force-clustered bubbles after zooming in', async ({ page }) => {
