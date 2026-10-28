@@ -142,6 +142,7 @@ export {
   type BaseGraphNodeComponentProps,
   type GraphNodeHierarchyMeta,
   type EdgeGeometry,
+  type GraphLayoutState,
 } from './components/GraphCanvas'
 export {
   type GraphCanvasContextValue,

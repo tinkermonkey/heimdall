@@ -122,3 +122,63 @@ body.dark-canvas .graph-canvas {
   --graph-edge: rgb(var(--canvas-border-2));
   --graph-edge-strong: rgb(var(--canvas-border-strong));
 }
+
+/* Layout busy indicator (showLayoutIndicator). The wrapper is the always-present live region;
+   the chip inside mounts only while the layout is computing or simulating. Its fade-in waits
+   LAYOUT_INDICATOR_DELAY_MS (set inline as animation-delay) so fast layouts never show it, and
+   is an opacity animation so the compositor can run it while a synchronous layout blocks the
+   main thread. Top-right by default; --bottom when the toolbar is along the top edge. */
+.graph-layout-indicator {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.graph-layout-indicator--bottom {
+  top: auto;
+  bottom: 14px;
+}
+
+.graph-layout-indicator__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 22px;
+  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  color: rgb(var(--canvas-fg-2));
+  background: rgb(var(--canvas-card));
+  border: 1px solid rgb(var(--canvas-border));
+  border-radius: var(--radius-sm);
+  animation: graph-layout-indicator-in 120ms ease both;
+}
+
+.graph-layout-indicator__chip .status-badge::after {
+  width: 6px;
+  height: 6px;
+}
+
+@keyframes graph-layout-indicator-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still waits out the delay, then appears without a fade; the dot holds still. */
+  .graph-layout-indicator__chip {
+    animation-duration: 1ms;
+  }
+
+  .graph-layout-indicator__chip .status-badge--pulse::before {
+    animation: none;
+  }
+}
