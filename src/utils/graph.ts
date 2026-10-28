@@ -39,6 +39,28 @@ export interface BoundingBox {
   maxY: number
 }
 
+/**
+ * Grows `bbox` so it also covers every circle (center `x`/`y`, radius `r`). Used to fit cluster
+ * boundaries and hierarchy rings, which can reach well past the nodes they enclose. Returns
+ * `bbox` itself when there are no circles.
+ */
+export function extendBoundingBoxByCircles(
+  bbox: BoundingBox,
+  circles: Iterable<{ x: number; y: number; r: number }>
+): BoundingBox {
+  let { minX, maxX, minY, maxY } = bbox
+  let grew = false
+  for (const c of circles) {
+    if (!Number.isFinite(c.x) || !Number.isFinite(c.y) || !Number.isFinite(c.r)) continue
+    minX = Math.min(minX, c.x - c.r)
+    maxX = Math.max(maxX, c.x + c.r)
+    minY = Math.min(minY, c.y - c.r)
+    maxY = Math.max(maxY, c.y + c.r)
+    grew = true
+  }
+  return grew ? { minX, maxX, minY, maxY } : bbox
+}
+
 export interface FitViewportResult {
   zoom: number
   panX: number

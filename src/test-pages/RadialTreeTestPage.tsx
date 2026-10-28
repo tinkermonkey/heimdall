@@ -77,11 +77,23 @@ function isStructuralEdge(edge: GraphEdge): boolean {
   return edge.variant !== 'irrelevant'
 }
 
+type View = 'single' | 'multi' | 'mixed' | 'custom'
+
+// URL seeds for fit tests (tests/graph-fit-boundaries.spec.ts): `?fitView=1` turns on fitView,
+// `?boundaries=1` shows trunk boundaries, `?view=<single|multi|mixed|custom>` and `?rings=0` set
+// the initial view and rings. GraphCanvas fits once, on mount, so a fit test seeds its view here
+// rather than switching it after load. Without params the page is unchanged.
+const params = new URLSearchParams(window.location.search)
+const INITIAL_VIEW: View = (['single', 'multi', 'mixed', 'custom'] as const).find(v => v === params.get('view')) ?? 'single'
+const FIT_VIEW = params.get('fitView') === '1'
+const SHOW_BOUNDARIES = params.get('boundaries') === '1'
+const INITIAL_SHOW_RINGS = params.get('rings') !== '0'
+
 export default function RadialTreeTestPage() {
-  const [view, setView] = useState<'single' | 'multi' | 'mixed' | 'custom'>('single')
+  const [view, setView] = useState<View>(INITIAL_VIEW)
   const [layout, setLayout] = useState<'radial-tree' | 'galaxy'>('radial-tree')
   const [collapsedNodeIds, setCollapsedNodeIds] = useState<Set<string>>(new Set())
-  const [showRings, setShowRings] = useState(true)
+  const [showRings, setShowRings] = useState(INITIAL_SHOW_RINGS)
   const [showCustomCollapseControl, setShowCustomCollapseControl] = useState(false)
   const [selectedNodeId, setSelectedNodeId] = useState<string | undefined>()
 
@@ -297,7 +309,8 @@ export default function RadialTreeTestPage() {
           onToggleCollapse={handleToggleCollapse}
           isStructuralEdge={isStructuralEdge}
           renderNode={renderNode}
-          showClusterBoundaries={false}
+          showClusterBoundaries={SHOW_BOUNDARIES}
+          fitView={FIT_VIEW}
           showHierarchyRings={layout === 'radial-tree' && showRings}
         />
       </div>
