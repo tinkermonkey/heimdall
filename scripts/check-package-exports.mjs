@@ -16,13 +16,23 @@ import path from 'node:path'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'))
 
-// --ignore-scripts: list the files as they are now instead of re-running `prepare` (the build).
+// List the files as they are now instead of re-running `prepare` (the build). npm 10 ignores the
+// --ignore-scripts flag for `pack` and prints the build log to stdout ahead of the JSON, so also
+// set the config through the environment and parse only the trailing JSON array.
 const packOutput = execFileSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], {
   cwd: root,
   encoding: 'utf8',
   stdio: ['ignore', 'pipe', 'pipe'],
+  env: { ...process.env, npm_config_ignore_scripts: 'true' },
+  maxBuffer: 64 * 1024 * 1024,
 })
-const [packInfo] = JSON.parse(packOutput)
+const jsonStart = packOutput.search(/^\[\s*$/m)
+if (jsonStart === -1) {
+  console.error('check-package-exports: no JSON in `npm pack --dry-run --json` output:')
+  console.error(packOutput.slice(0, 2000))
+  process.exit(1)
+}
+const [packInfo] = JSON.parse(packOutput.slice(jsonStart))
 const files = new Map(packInfo.files.map((f) => [f.path, f.size]))
 
 /** Every string target in an exports value, with the key path that leads to it. */
