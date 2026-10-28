@@ -1,5 +1,5 @@
-import React, { useCallback } from 'react'
-import { useGraphCanvas } from './GraphCanvasContext'
+import React, { useCallback, useContext } from 'react'
+import { GraphToolbarActionsContext, useGraphCanvas } from './GraphCanvasContext'
 import { Icon } from './Icon'
 import './GraphToolbar.css'
 
@@ -30,9 +30,14 @@ const ZOOM_BUTTON_FACTOR = 1.3
 export const GraphToolbar = React.forwardRef<HTMLDivElement, GraphToolbarProps>(
   ({ position = 'bottom-right', className = '', ...props }, ref) => {
     const {
-      zoomBy, zoomToFit, locked, setLocked, isFullscreen, toggleFullscreen,
+      zoomBy: contextZoomBy, zoomToFit: contextZoomToFit, locked, setLocked, isFullscreen, toggleFullscreen,
       layout, liveSimulation, setLiveSimulation,
     } = useGraphCanvas()
+    // GraphCanvas's toolbar-tagged versions of the zoom actions, so a toolbar click reports as a
+    // user move / toolbar fit rather than an app's imperative call (see GraphToolbarActions).
+    const toolbarActions = useContext(GraphToolbarActionsContext)
+    const zoomBy = toolbarActions?.zoomBy ?? contextZoomBy
+    const zoomToFit = toolbarActions?.zoomToFit ?? contextZoomToFit
 
     const zoomIn = useCallback(() => zoomBy(ZOOM_BUTTON_FACTOR), [zoomBy])
     const zoomOut = useCallback(() => zoomBy(1 / ZOOM_BUTTON_FACTOR), [zoomBy])

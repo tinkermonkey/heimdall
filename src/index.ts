@@ -143,7 +143,15 @@ export {
   type GraphNodeHierarchyMeta,
   type EdgeGeometry,
 } from './components/GraphCanvas'
-export { type GraphCanvasContextValue, type GraphNodeRect } from './components/GraphCanvasContext'
+export {
+  type GraphCanvasContextValue,
+  type GraphNodeRect,
+  type GraphViewport,
+  type GraphViewportSnapshot,
+  type GraphViewportCause,
+  type GraphViewportHandle,
+  type GraphSetViewportOptions,
+} from './components/GraphCanvasContext'
 export { GraphNode, type GraphNodeProps } from './components/GraphNode'
 export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
 export { GraphEdgeShape, type GraphEdgeShapeProps } from './components/GraphEdgeShape'

@@ -6,6 +6,7 @@ import React, {
   useLayoutEffect,
   useMemo,
   useId,
+  useImperativeHandle,
 } from "react";
 import {
   computeEdgePath,
@@ -43,7 +44,16 @@ import {
 import { visibleNavigationEdgeIds } from "../utils/uxNavEdgeVisibility";
 import { usePanZoom } from "../hooks/usePanZoom";
 import { useGalaxySimulation } from "../hooks/useGalaxySimulation";
-import { GraphCanvasContext, useGraphCanvas } from "./GraphCanvasContext";
+import {
+  GraphCanvasContext,
+  GraphToolbarActionsContext,
+  useGraphCanvas,
+  type GraphSetViewportOptions,
+  type GraphViewport,
+  type GraphViewportCause,
+  type GraphViewportHandle,
+  type GraphViewportSnapshot,
+} from "./GraphCanvasContext";
 import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
 import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
@@ -53,7 +63,14 @@ import { Popover } from "./Popover";
 import "./GraphCanvas.css";
 import "./GraphEdge.css";
 
-export type { GraphCanvasContextValue } from "./GraphCanvasContext";
+export type {
+  GraphCanvasContextValue,
+  GraphSetViewportOptions,
+  GraphViewport,
+  GraphViewportCause,
+  GraphViewportHandle,
+  GraphViewportSnapshot,
+} from "./GraphCanvasContext";
 export { useGraphCanvas } from "./GraphCanvasContext";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -785,6 +802,53 @@ export interface GraphCanvasProps extends Omit<
    * when omitted.
    */
   fullscreenContainerRef?: React.RefObject<HTMLElement | null>;
+  /**
+   * Called once the viewport has been still for `dwellMs` after the last user pan/zoom: drag
+   * (after any inertia glide has stopped), wheel or trackpad pinch, keyboard, or the toolbar's
+   * zoom in/out buttons. Never per frame mid-gesture, and never for a move GraphCanvas or the app
+   * made (those report through onViewportNavigate; one landing while a dwell is pending cancels
+   * it). Read through a ref, so an inline arrow is fine.
+   */
+  onViewportDwell?: (viewport: GraphViewportSnapshot) => void;
+  /** How long the viewport must stay still before onViewportDwell fires, in ms. Default 1500. */
+  dwellMs?: number;
+  /**
+   * Called after GraphCanvas moves the viewport itself, once the move has rendered, with why
+   * (see GraphViewportCause): the mount fit/centre, centerOnSelect, the toolbar's zoom-to-fit,
+   * the fit on entering fullscreen, the galaxy re-frame after a resize, or an app call through
+   * the context or viewportRef. Not called for user pan/zoom (see onViewportDwell), for
+   * initialViewport, for a `silent` setViewport, or for the resize re-anchor that keeps the same
+   * world point centred when the container changes size. Read through a ref.
+   */
+  onViewportNavigate?: (
+    viewport: GraphViewportSnapshot,
+    cause: GraphViewportCause,
+  ) => void;
+  /**
+   * Viewport to show once the first layout is ready, instead of the fitView fit (or plain
+   * centring) and instead of centerOnSelect centring the node already selected at mount. Fires
+   * no onViewportNavigate. Read once, at mount — later changes are ignored; use setViewport.
+   */
+  initialViewport?: GraphViewport;
+  /**
+   * Receives `{ setViewport, getViewport }` (see GraphViewportHandle) — the way to restore a
+   * viewport from outside the canvas, e.g. on popstate. A separate prop because the forwarded
+   * `ref` is already the root div. The same two functions are on useGraphCanvas() for code
+   * rendered inside the canvas.
+   */
+  viewportRef?: React.Ref<GraphViewportHandle>;
+}
+
+const DEFAULT_DWELL_MS = 1500;
+// The setViewport({ animate: true }) ease. Inside the design system's 80–180ms motion range.
+const VIEWPORT_EASE_MS = 150;
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }
 
 type NodeDims = Map<string, { width: number; height: number }>;
@@ -831,6 +895,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       showToolbar = true,
       toolbarPosition = "bottom-right",
       fullscreenContainerRef,
+      onViewportDwell,
+      dwellMs = DEFAULT_DWELL_MS,
+      onViewportNavigate,
+      initialViewport,
+      viewportRef,
       className = "",
       ...props
     },
@@ -1226,12 +1295,242 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       galaxyAspectRatioRef.current = galaxyAspectRatio;
     });
 
-    const { transform, viewport, bind, panTo, zoomTo } = usePanZoom({
+    // ─── Viewport history: onViewportDwell / onViewportNavigate / setViewport (#309) ───
+    // Callbacks and dwellMs are read through refs, so inline arrows never re-run anything.
+    const onViewportDwellRef = useRef(onViewportDwell);
+    onViewportDwellRef.current = onViewportDwell;
+    const onViewportNavigateRef = useRef(onViewportNavigate);
+    onViewportNavigateRef.current = onViewportNavigate;
+    const dwellMsRef = useRef(dwellMs);
+    dwellMsRef.current = dwellMs;
+    const containerSizeRef = useRef(containerSize);
+    containerSizeRef.current = containerSize;
+    // usePanZoom's getViewport, which reads the refs its writes land in synchronously. Assigned
+    // right after the hook call below; handleUserGesture is passed into that call, so it reads
+    // this at call time instead of closing over it.
+    const getPanZoomViewportRef = useRef<
+      () => { x: number; y: number; zoom: number }
+    >(() => ({ x: 0, y: 0, zoom: 1 }));
+    const dwellTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    // A user move has happened since the last dwell fired or the last programmatic move.
+    const dwellArmedRef = useRef(false);
+    const viewportEaseRafRef = useRef<number | null>(null);
+    // A programmatic move waiting for its render, so onViewportNavigate reports where it landed.
+    // `target` is the pan/zoom the move wrote; see the emit effect below.
+    const pendingNavigateRef = useRef<{
+      cause: GraphViewportCause;
+      target: { x: number; y: number; zoom: number };
+    } | null>(null);
+    // A viewport to apply instead of the mount fit: initialViewport, or a setViewport() call
+    // made before the first layout was framed. useRef reads initialViewport once, at mount.
+    const pendingMountViewportRef = useRef<{
+      viewport: GraphViewport;
+      silent: boolean;
+    } | null>(initialViewport ? { viewport: initialViewport, silent: true } : null);
+    // Whether the mount framing applied one of those instead of a fit — the galaxy aspect-ratio
+    // relayout below must not re-frame over it.
+    const mountRestoredRef = useRef(false);
+
+    const snapshotOf = useCallback(
+      (vp: { x: number; y: number; zoom: number }): GraphViewportSnapshot | null => {
+        const size = containerSizeRef.current;
+        if (!size) return null;
+        const minX = -vp.x / vp.zoom;
+        const minY = -vp.y / vp.zoom;
+        const maxX = (size.width - vp.x) / vp.zoom;
+        const maxY = (size.height - vp.y) / vp.zoom;
+        return {
+          center: { x: (minX + maxX) / 2, y: (minY + maxY) / 2 },
+          zoom: vp.zoom,
+          bounds: { minX, minY, maxX, maxY },
+        };
+      },
+      [],
+    );
+
+    const clearDwellTimer = useCallback(() => {
+      if (dwellTimerRef.current !== null) {
+        clearTimeout(dwellTimerRef.current);
+        dwellTimerRef.current = null;
+      }
+    }, []);
+
+    const cancelViewportEase = useCallback(() => {
+      if (viewportEaseRafRef.current !== null) {
+        cancelAnimationFrame(viewportEaseRafRef.current);
+        viewportEaseRafRef.current = null;
+      }
+    }, []);
+
+    // usePanZoom's onUserGesture, also called by the toolbar's zoom in/out. The dwell timer only
+    // runs once input is at rest ('end': a release without inertia, inertia running out, or
+    // after each discrete wheel/key step), and any further input restarts the wait.
+    const handleUserGesture = useCallback(
+      (phase: "start" | "change" | "end") => {
+        // User input takes over from a setViewport ease.
+        if (phase !== "end") cancelViewportEase();
+        if (!onViewportDwellRef.current) return;
+        clearDwellTimer();
+        if (phase === "change") {
+          dwellArmedRef.current = true;
+        } else if (phase === "end" && dwellArmedRef.current) {
+          dwellTimerRef.current = setTimeout(() => {
+            dwellTimerRef.current = null;
+            dwellArmedRef.current = false;
+            const snapshot = snapshotOf(getPanZoomViewportRef.current());
+            if (!snapshot) return;
+            try {
+              onViewportDwellRef.current?.(snapshot);
+            } catch (error) {
+              console.error("Error in onViewportDwell callback:", error);
+            }
+          }, dwellMsRef.current);
+        }
+      },
+      [cancelViewportEase, clearDwellTimer, snapshotOf],
+    );
+
+    const { transform, viewport, bind, panTo, zoomTo, getViewport } = usePanZoom({
       minZoom,
       maxZoom,
       containerRef,
       locked,
+      onUserGesture: handleUserGesture,
     });
+    getPanZoomViewportRef.current = getViewport;
+
+    // Called right after every move GraphCanvas or the app makes (never a user one): stops a
+    // running setViewport ease, drops a pending dwell (the user's position has been superseded),
+    // and queues onViewportNavigate for `cause` — null for a silent move.
+    const afterProgrammaticMove = useCallback(
+      (cause: GraphViewportCause | null) => {
+        cancelViewportEase();
+        clearDwellTimer();
+        dwellArmedRef.current = false;
+        pendingNavigateRef.current =
+          cause && onViewportNavigateRef.current
+            ? { cause, target: getViewport() }
+            : null;
+      },
+      [cancelViewportEase, clearDwellTimer, getViewport],
+    );
+
+    // Fires a queued onViewportNavigate once the render showing its move has committed. Runs
+    // after every render (cheap when nothing is queued) and is declared ahead of every effect
+    // that moves the viewport: a move queued by one of those effects is still unrendered when
+    // this runs in the same commit, so it waits for the next one, and a move from the render
+    // after is reported before a later effect can queue another and replace it.
+    useEffect(() => {
+      const pending = pendingNavigateRef.current;
+      if (!pending) return;
+      const { target } = pending;
+      const live = getViewport();
+      if (live.x !== target.x || live.y !== target.y || live.zoom !== target.zoom) {
+        // Something else moved the viewport before this move rendered: it was never shown.
+        pendingNavigateRef.current = null;
+        return;
+      }
+      if (viewport.x !== target.x || viewport.y !== target.y || viewport.zoom !== target.zoom)
+        return;
+      pendingNavigateRef.current = null;
+      const snapshot = snapshotOf(target);
+      if (!snapshot) return;
+      try {
+        onViewportNavigateRef.current?.(snapshot, pending.cause);
+      } catch (error) {
+        console.error("Error in onViewportNavigate callback:", error);
+      }
+    });
+
+    useEffect(
+      () => () => {
+        clearDwellTimer();
+        cancelViewportEase();
+      },
+      [clearDwellTimer, cancelViewportEase],
+    );
+
+    // Centres viewport.center at viewport.zoom (clamped). Returns false before the container
+    // has been measured, when there's no centre to put it at.
+    const applyViewport = useCallback(
+      (vp: GraphViewport): boolean => {
+        const size = containerSizeRef.current;
+        if (!size) return false;
+        const zoom = Math.min(maxZoom, Math.max(minZoom, vp.zoom));
+        zoomTo(zoom);
+        panTo(size.width / 2 - vp.center.x * zoom, size.height / 2 - vp.center.y * zoom);
+        return true;
+      },
+      [minZoom, maxZoom, zoomTo, panTo],
+    );
+
+    const setViewport = useCallback(
+      (vp: GraphViewport, options: GraphSetViewportOptions = {}) => {
+        if (
+          !Number.isFinite(vp?.center?.x) ||
+          !Number.isFinite(vp?.center?.y) ||
+          !Number.isFinite(vp?.zoom) ||
+          vp.zoom <= 0
+        ) {
+          console.warn("GraphCanvas: setViewport() ignored an invalid viewport", vp);
+          return;
+        }
+        const silent = options.silent ?? false;
+        const size = containerSizeRef.current;
+        // Before the first layout is framed, this replaces that framing (as initialViewport
+        // does) rather than being overwritten by it.
+        if (!didCenterRef.current || !size) {
+          pendingMountViewportRef.current = { viewport: vp, silent };
+          return;
+        }
+        const cause: GraphViewportCause | null = silent ? null : { kind: "imperative" };
+        if (!options.animate || prefersReducedMotion()) {
+          applyViewport(vp);
+          afterProgrammaticMove(cause);
+          return;
+        }
+        afterProgrammaticMove(null);
+        const from = getViewport();
+        const fromCenter = {
+          x: (size.width / 2 - from.x) / from.zoom,
+          y: (size.height / 2 - from.y) / from.zoom,
+        };
+        const toZoom = Math.min(maxZoom, Math.max(minZoom, vp.zoom));
+        const start = performance.now();
+        const step = (now: number) => {
+          const t = Math.min(1, (now - start) / VIEWPORT_EASE_MS);
+          if (t >= 1) {
+            viewportEaseRafRef.current = null;
+            applyViewport(vp);
+            afterProgrammaticMove(cause);
+            return;
+          }
+          const e = 1 - Math.pow(1 - t, 3); // ease-out cubic
+          applyViewport({
+            center: {
+              x: fromCenter.x + (vp.center.x - fromCenter.x) * e,
+              y: fromCenter.y + (vp.center.y - fromCenter.y) * e,
+            },
+            // Geometric, so each frame is the same relative zoom step.
+            zoom: from.zoom * Math.pow(toZoom / from.zoom, e),
+          });
+          viewportEaseRafRef.current = requestAnimationFrame(step);
+        };
+        viewportEaseRafRef.current = requestAnimationFrame(step);
+      },
+      [applyViewport, afterProgrammaticMove, getViewport, minZoom, maxZoom],
+    );
+
+    const getViewportSnapshot = useCallback(
+      () => snapshotOf(getViewport()),
+      [snapshotOf, getViewport],
+    );
+
+    useImperativeHandle(
+      viewportRef,
+      () => ({ setViewport, getViewport: getViewportSnapshot }),
+      [setViewport, getViewportSnapshot],
+    );
 
     // Start of a potential background click — recorded whenever the gesture begins on genuine
     // background (not a node, not an edge, not something opting out via data-no-drag, e.g. the
@@ -1752,7 +2051,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       didCenterRef.current = true;
       setMountCenterDone(true);
 
-      if (fitView) {
+      // initialViewport, or a setViewport() made before now, replaces the fit/centre. The node
+      // already selected counts as handled, so centerOnSelect doesn't pan straight off it.
+      const restore = pendingMountViewportRef.current;
+      pendingMountViewportRef.current = null;
+      if (restore && applyViewport(restore.viewport)) {
+        mountRestoredRef.current = true;
+        prevCenterSelectedIdRef.current = selectedNodeId;
+        afterProgrammaticMove(restore.silent ? null : { kind: "imperative" });
+      } else if (fitView) {
         const fit = computeFitViewport(
           extendBoundingBoxByCircles(bbox, renderedDecorationCircles),
           containerSize.width,
@@ -1763,6 +2070,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         );
         zoomTo(fit.zoom);
         panTo(fit.panX, fit.panY);
+        afterProgrammaticMove({ kind: "fit", reason: "mount" });
       } else {
         const centroidX = (bbox.minX + bbox.maxX) / 2;
         const centroidY = (bbox.minY + bbox.maxY) / 2;
@@ -1770,6 +2078,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           containerSize.width / 2 - centroidX * viewport.zoom,
           containerSize.height / 2 - centroidY * viewport.zoom,
         );
+        afterProgrammaticMove({ kind: "fit", reason: "mount" });
       }
     }, [
       containerSize,
@@ -1780,6 +2089,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       viewport.zoom,
       panTo,
       zoomTo,
+      applyViewport,
+      afterProgrammaticMove,
+      selectedNodeId,
       fitView,
       fitPadding,
       computeBoundingBox,
@@ -1830,6 +2142,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         containerSize.width / 2 - pos.x * viewport.zoom,
         containerSize.height / 2 - pos.y * viewport.zoom,
       );
+      afterProgrammaticMove({ kind: "center-on-select", nodeId: selectedNodeId });
     }, [
       centerOnSelect,
       mountCenterDone,
@@ -1840,6 +2153,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodePosition,
       viewport.zoom,
       panTo,
+      afterProgrammaticMove,
     ]);
 
     // Re-anchors pan whenever the container's own rendered size changes after that initial
@@ -1890,6 +2204,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // prevGalaxyAspectRatioRef.current already equals the current galaxyAspectRatio by then, so
       // the guard above would skip the relayout it was supposed to catch up on — permanently
       // leaving the galaxy shaped for whatever container it had before the resize.
+      // The first ratio this sees is part of the initial framing, not a resize (see below).
+      const firstRatio = prevGalaxyAspectRatioRef.current === undefined;
       prevGalaxyAspectRatioRef.current = galaxyAspectRatio;
 
       // Live mode already reads aspectRatio from its own options every tick and eases toward the
@@ -1939,7 +2255,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         minY = Math.min(minY, p.y - d.height / 2);
         maxY = Math.max(maxY, p.y + d.height / 2);
       }
-      if (Number.isFinite(minX) && containerSize) {
+      // Leaves a viewport restored at mount (initialViewport / an early setViewport) alone when
+      // this is that same initial framing, rather than fitting over it.
+      if (Number.isFinite(minX) && containerSize && !(firstRatio && mountRestoredRef.current)) {
         const bbox = { minX, maxX, minY, maxY };
         if (fitView) {
           // Fresh `boundaries`, not renderedDecorationCircles (still last render's); galaxy has
@@ -1962,12 +2280,20 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             containerSize.height / 2 - cy * viewport.zoom,
           );
         }
+        // Before the mount framing has run, that framing follows and reports itself.
+        afterProgrammaticMove(
+          didCenterRef.current
+            ? { kind: "fit", reason: firstRatio ? "mount" : "resize" }
+            : null,
+        );
       }
     }, [galaxyAspectRatio, layout, locked]);
 
-    // Imperative viewport controls, exposed via useGraphCanvas().
-    const zoomToFit = useCallback(
-      (padding?: number) => {
+    // Imperative viewport controls, exposed via useGraphCanvas(). fitToContent is shared by the
+    // context's zoomToFit (an app call), the toolbar's fit button, and the fullscreen-entry fit,
+    // which differ only in the cause they report to onViewportNavigate.
+    const fitToContent = useCallback(
+      (padding: number | undefined, cause: GraphViewportCause) => {
         const bbox = computeBoundingBox();
         if (!bbox || !containerSize) return;
         const fit = computeFitViewport(
@@ -1980,6 +2306,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         );
         zoomTo(fit.zoom);
         panTo(fit.panX, fit.panY);
+        afterProgrammaticMove(cause);
       },
       [
         computeBoundingBox,
@@ -1990,7 +2317,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         maxZoom,
         zoomTo,
         panTo,
+        afterProgrammaticMove,
       ],
+    );
+    const zoomToFit = useCallback(
+      (padding?: number) => fitToContent(padding, { kind: "imperative" }),
+      [fitToContent],
     );
 
     // Fulfills pendingFullscreenFitRef once the container's real, post-transition size has
@@ -2003,12 +2335,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (!pendingFullscreenFitRef.current || !containerSize) return;
       pendingFullscreenFitRef.current = false;
       if (locked) return;
-      zoomToFit();
-    }, [containerSize, zoomToFit, locked]);
+      fitToContent(undefined, { kind: "fit", reason: "fullscreen" });
+    }, [containerSize, fitToContent, locked]);
 
     // See GraphCanvasContextValue.zoomBy's own docs — anchors at the container's visual center
     // instead of setZoom's raw "wherever world (0,0) projects to" behavior.
-    const zoomBy = useCallback(
+    const zoomByCentred = useCallback(
       (factor: number) => {
         if (!containerSize) {
           zoomTo(viewport.zoom * factor);
@@ -2021,6 +2353,44 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         );
       },
       [containerSize, viewport.zoom, zoomTo],
+    );
+
+    // The context's viewport setters are app calls, so each reports { kind: 'imperative' }.
+    const zoomBy = useCallback(
+      (factor: number) => {
+        zoomByCentred(factor);
+        afterProgrammaticMove({ kind: "imperative" });
+      },
+      [zoomByCentred, afterProgrammaticMove],
+    );
+    const setZoomImperative = useCallback(
+      (zoom: number) => {
+        zoomTo(zoom);
+        afterProgrammaticMove({ kind: "imperative" });
+      },
+      [zoomTo, afterProgrammaticMove],
+    );
+    const setPanImperative = useCallback(
+      (x: number, y: number) => {
+        panTo(x, y);
+        afterProgrammaticMove({ kind: "imperative" });
+      },
+      [panTo, afterProgrammaticMove],
+    );
+
+    // The built-in GraphToolbar's versions (see GraphToolbarActionsContext): zoom in/out is a
+    // user step, like the keyboard's + and -, so it feeds onViewportDwell instead of reporting a
+    // navigation; zoom-to-fit reports { kind: 'fit', reason: 'toolbar' }.
+    const toolbarActions = useMemo(
+      () => ({
+        zoomBy: (factor: number) => {
+          zoomByCentred(factor);
+          handleUserGesture("change");
+          handleUserGesture("end");
+        },
+        zoomToFit: () => fitToContent(undefined, { kind: "fit", reason: "toolbar" }),
+      }),
+      [zoomByCentred, handleUserGesture, fitToContent],
     );
 
     const handleEdgeHoverEnd = useCallback((id: string) => {
@@ -2581,9 +2951,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         pan: { x: viewport.x, y: viewport.y },
         selectedNodeId,
         zoomToFit,
-        setZoom: zoomTo,
+        setZoom: setZoomImperative,
         zoomBy,
-        setPan: panTo,
+        setPan: setPanImperative,
+        setViewport,
+        getViewport: getViewportSnapshot,
         locked,
         setLocked,
         isFullscreen,
@@ -2600,9 +2972,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         viewport,
         selectedNodeId,
         zoomToFit,
-        zoomTo,
+        setZoomImperative,
         zoomBy,
-        panTo,
+        setPanImperative,
+        setViewport,
+        getViewportSnapshot,
         locked,
         isFullscreen,
         toggleFullscreen,
@@ -2657,6 +3031,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         </div>
 
         <GraphCanvasContext.Provider value={contextValue}>
+        {/* Tags any GraphToolbar in the tree as the toolbar — see GraphToolbarActionsContext. */}
+        <GraphToolbarActionsContext.Provider value={toolbarActions}>
           <svg
             className="graph-svg"
             width="100%"
@@ -2954,6 +3330,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             </div>
           )}
 
+        </GraphToolbarActionsContext.Provider>
         </GraphCanvasContext.Provider>
       </div>
     );

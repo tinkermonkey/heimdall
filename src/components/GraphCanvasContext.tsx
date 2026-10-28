@@ -7,6 +7,56 @@ export interface GraphNodeRect {
   height: number
 }
 
+/** A viewport in world coordinates — the same space node x/y live in — so it means the same
+ *  thing at any container size and can round-trip through a URL. */
+export interface GraphViewportSnapshot {
+  /** The world point at the middle of the canvas. */
+  center: { x: number; y: number }
+  zoom: number
+  /** The visible world rectangle. */
+  bounds: { minX: number; minY: number; maxX: number; maxY: number }
+}
+
+/** The part of a snapshot needed to restore it: `initialViewport`, `setViewport`. */
+export interface GraphViewport {
+  center: { x: number; y: number }
+  zoom: number
+}
+
+/** Why GraphCanvas moved the viewport itself (see GraphCanvasProps.onViewportNavigate).
+ *  - `center-on-select`: centerOnSelect panned to the newly selected node.
+ *  - `fit`: the canvas framed the graph. `mount` is the first-layout fit (or plain centring when
+ *    fitView is off), `toolbar` the toolbar's zoom-to-fit button, `fullscreen` the fit on entering
+ *    fullscreen, `resize` the galaxy re-layout and re-frame after an aspect-ratio change.
+ *    `layout` is reserved for a re-fit after a layout recompute; GraphCanvas doesn't currently
+ *    make one.
+ *  - `imperative`: the app moved it through the context (setZoom, setPan, zoomBy, zoomToFit,
+ *    setViewport) or the viewportRef handle (setViewport without `silent`). */
+export type GraphViewportCause =
+  | { kind: 'center-on-select'; nodeId: string }
+  | { kind: 'fit'; reason: 'mount' | 'layout' | 'resize' | 'toolbar' | 'fullscreen' }
+  | { kind: 'imperative' }
+
+export interface GraphSetViewportOptions {
+  /** Ease to the new viewport over 150ms instead of jumping. Ignored (always a jump) under
+   *  prefers-reduced-motion. Any user pan/zoom or other viewport move cancels the ease. */
+  animate?: boolean
+  /** Don't fire onViewportNavigate for this call — for restoring a history entry without
+   *  recording a new one. */
+  silent?: boolean
+}
+
+/** The imperative handle GraphCanvas writes into its `viewportRef` prop. */
+export interface GraphViewportHandle {
+  /** Centres `viewport.center` at `viewport.zoom` (clamped to minZoom/maxZoom). Called before
+   *  the first layout has been framed, it replaces that mount fit, like initialViewport. Works
+   *  while pan/zoom is locked, like every other imperative call. Fires onViewportNavigate with
+   *  `{ kind: 'imperative' }` once the move lands, unless `silent`. */
+  setViewport: (viewport: GraphViewport, options?: GraphSetViewportOptions) => void
+  /** The current viewport, or null before the container has been measured. */
+  getViewport: () => GraphViewportSnapshot | null
+}
+
 export interface GraphCanvasContextValue {
   getNodeRect: (id: string) => GraphNodeRect | null
   /** Every currently-visible node's rect — used by edges to keep their label clear of nodes
@@ -29,6 +79,10 @@ export interface GraphCanvasContextValue {
   zoomBy: (factor: number) => void
   /** Sets pan without altering zoom. */
   setPan: (x: number, y: number) => void
+  /** Same as the viewportRef handle's setViewport — see GraphViewportHandle. */
+  setViewport: GraphViewportHandle['setViewport']
+  /** Same as the viewportRef handle's getViewport — see GraphViewportHandle. */
+  getViewport: GraphViewportHandle['getViewport']
   /** Whether wheel-zoom, drag-to-pan, and the keyboard zoom/pan shortcuts are frozen. Doesn't
    *  affect setZoom/setPan/zoomToFit — those are deliberate calls, not the accidental scroll/drag
    *  input locking is meant to guard against. Read/set by GraphToolbar's lock button. */
@@ -62,6 +116,19 @@ export interface GraphCanvasContextValue {
 }
 
 export const GraphCanvasContext = createContext<GraphCanvasContextValue | null>(null)
+
+/**
+ * Not exported from the package. The built-in GraphToolbar's own zoom actions, so GraphCanvas can
+ * tell a toolbar click apart from an app calling the same thing through useGraphCanvas(): the
+ * toolbar's zoom in/out are user moves (onViewportDwell), its zoom-to-fit reports
+ * `{ kind: 'fit', reason: 'toolbar' }`, while the context's zoomBy/zoomToFit report
+ * `{ kind: 'imperative' }`. GraphToolbar falls back to the public context when this is absent.
+ */
+export interface GraphToolbarActions {
+  zoomBy: (factor: number) => void
+  zoomToFit: () => void
+}
+export const GraphToolbarActionsContext = createContext<GraphToolbarActions | null>(null)
 
 export function useGraphCanvas(): GraphCanvasContextValue {
   const ctx = useContext(GraphCanvasContext)
