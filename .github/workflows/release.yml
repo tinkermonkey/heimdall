@@ -24,6 +24,13 @@ jobs:
       - name: Check agent skill coverage
         run: npm run check:skills
 
+      # Every path package.json hands consumers (exports, main, types) must be in the tarball.
+      # 0.9.0/0.9.1 shipped a "./css" export pointing at a file the build no longer emitted (#303).
+      - name: Check package exports resolve
+        run: |
+          npm run build
+          npm run check:package
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
