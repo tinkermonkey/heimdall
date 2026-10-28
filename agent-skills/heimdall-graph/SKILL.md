@@ -218,6 +218,7 @@ On a flat graph, leave `isStructuralEdge`, `collapsedNodeIds` and `onToggleColla
 - `nodePopover` / `edgePopover`: a `role="dialog"` popover that opens on click, or on Enter/Space when focused, and moves focus to its first focusable element. It tracks pan and zoom, and closes on Escape, background click, or click outside the canvas. Only one popover is open at a time.
 - A popover and a hover tooltip can be set on the same node. A content callback that returns `null` or `undefined` opens nothing.
 - An edge becomes focusable and clickable when `onEdgeSelect`, `edgePopover`, or `edgeTooltip` with `edgeTooltipTrigger="click"` is set. A hover `edgeTooltip` alone is pointer-only.
+- Accessible names use node labels, never ids: a focusable edge is "<edge label>: <source label> to <target label>" (or "<source label> to <target label>" without an edge label), and a popover dialog is "Details for <node label>" or "Details for <edge name>". An endpoint falls back to its id only when its label is empty.
 
 ```tsx
 <GraphCanvas
@@ -517,6 +518,8 @@ import { GraphEdge } from '@tinkermonkey/heimdall-ui'
 | `id` | `string` | required | Unique edge identifier |
 | `sourceId` | `string` | required | Source node ID |
 | `targetId` | `string` | required | Target node ID |
+| `sourceLabel` | `string` | `sourceId` | Source node's name in the interactive edge's `aria-label` |
+| `targetLabel` | `string` | `targetId` | Target node's name in the interactive edge's `aria-label` |
 | `label` | `string` | — | Label pill, placed clear of nearby nodes |
 | `variant` | `'default' \| 'hot' \| 'irrelevant'` | `'default'` | Neutral gray, amber accent, or rose dashed |
 | `weight` | `number` | — | 0-100 → 1-8 px stroke; unset = variant default |
@@ -571,6 +574,7 @@ const renderEdge = useCallback<NonNullable<GraphCanvasProps['renderEdge']>>(
 - Logs a warning and returns `null` when either endpoint is not a visible node.
 - Endpoints sit on the node box edges facing each other, not at the centers.
 - Arrow marker IDs derive from `id` (`arrow-<id>`); keep edge IDs unique across every graph on the page.
+- With `onSelect`, the `aria-label` is "<label>: <source> to <target>". Pass `sourceLabel` / `targetLabel` whenever ids are opaque (UUIDs), or screen readers announce the ids.
 
 ---
 

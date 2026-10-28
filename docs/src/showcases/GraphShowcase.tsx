@@ -107,6 +107,8 @@ export function GraphEdgeShowcase() {
           <PropRow name="id" type="string" description="Unique edge identifier" />
           <PropRow name="sourceId" type="string" description="ID of the source node" />
           <PropRow name="targetId" type="string" description="ID of the target node" />
+          <PropRow name="sourceLabel" type="string" def="sourceId" description="Source node's name in the interactive edge's aria-label. Pass it when ids are opaque (UUIDs) so screen readers don't announce them." />
+          <PropRow name="targetLabel" type="string" def="targetId" description="Target node's name in the interactive edge's aria-label." />
           <PropRow name="label" type="string" description="Optional text label rendered along the edge. Automatically nudged off its default midpoint to clear nearby nodes (see findClearLabelPosition), never repositioned onto another edge or node's path." />
           <PropRow name="variant" type="'default' | 'hot' | 'irrelevant'" def="'default'" description="Visual style: default is neutral, hot highlights an active relationship in amber, irrelevant renders a dashed rose line for deprecated links" />
           <PropRow name="selected" type="boolean" def="false" description="Renders the line and label in the accent color" />
