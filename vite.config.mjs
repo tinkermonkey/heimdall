@@ -10,10 +10,25 @@ const __dirname = process.env.VITE_PROJECT_DIR || path.dirname(fileURLToPath(imp
 
 const pkg = JSON.parse(readFileSync(path.join(__dirname, 'package.json'), 'utf8'))
 
+// 0.9.0 and 0.9.1 emitted the stylesheet as dist/heimdall-ui.css (Vite 6 names it after the
+// package), which broke the published "./css" export. Consumers who worked around that by
+// pointing at the file directly keep working through this one-line forwarder.
+const legacyCssForwarder = {
+  name: 'heimdall-legacy-css-forwarder',
+  apply: 'build',
+  generateBundle() {
+    this.emitFile({
+      type: 'asset',
+      fileName: 'heimdall-ui.css',
+      source: '/* Deprecated: import "@tinkermonkey/heimdall-ui/css" (dist/style.css) instead. */\n@import "./style.css";\n',
+    })
+  },
+}
+
 export default defineConfig({
   // The dev app's shell shows the package version (see src/App.tsx).
   define: { __HEIMDALL_VERSION__: JSON.stringify(pkg.version) },
-  plugins: [react(), dts({ include: 'src', exclude: ['**/*.test.ts', '**/*.test.tsx'] })],
+  plugins: [react(), dts({ include: 'src', exclude: ['**/*.test.ts', '**/*.test.tsx'] }), legacyCssForwarder],
   cacheDir: process.env.CI ? '/tmp/.vite' : undefined,
   resolve: {
     alias: {
@@ -39,6 +54,9 @@ export default defineConfig({
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'HeimdallUI',
       fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
+      // Keep the stylesheet at dist/style.css, the path package.json's "./css" export names.
+      // Vite 6 otherwise names it after the package (dist/heimdall-ui.css).
+      cssFileName: 'style',
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],

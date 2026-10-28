@@ -4,6 +4,26 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.2]
+
+Hotfix: the stylesheet import works again.
+
+### Fixed
+
+- **Package `./css` export** — `import '@tinkermonkey/heimdall-ui/css'` failed to resolve in 0.9.0
+  and 0.9.1 (tinkermonkey/heimdall#303). The build-tool upgrade in 0.9.0 renamed the emitted
+  stylesheet from `dist/style.css` to `dist/heimdall-ui.css`, and the `exports` map still pointed
+  at the old name. The stylesheet is back at `dist/style.css`. `dist/heimdall-ui.css` remains as
+  a deprecated one-line forwarder, so apps that aliased that file directly as a workaround keep
+  building; switch back to the documented import.
+
+### Added
+
+- **`npm run check:package`** (`scripts/check-package-exports.mjs`) — fails when a path in
+  `package.json`'s `exports`, `main` or `types` is missing from the packed tarball. The release
+  workflow runs it after building, before the visual tests, so a release can't publish an export
+  consumers can't resolve.
+
 ## [0.9.1]
 
 Bug fixes for `MapCanvas`, `LineChart` and `KanbanBoard`, and agent skills regenerated to cover
