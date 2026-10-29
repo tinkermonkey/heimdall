@@ -115,6 +115,105 @@ test.describe('integration: GraphCanvas viewport history', () => {
     expectSnapshotClose(dwells[0].viewport, await renderedSnapshot(page))
   })
 
+  // tinkermonkey/heimdall#320: the glide ran on at sub-pixel speed for ~1s after it visibly
+  // stopped, so the dwell landed ~1s plus dwellMs after the view stopped moving.
+  test('dwell follows the glide visibly stopping, not its sub-pixel tail', async ({ page }) => {
+    await open(page, '&dwellMs=300')
+    await clearEvents(page)
+
+    const result = await page.locator('[data-testid="history-canvas"]').evaluate(async (el) => {
+      const vp = el.querySelector('[data-testid="graph-viewport"]')!
+      const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
+      const read = () => {
+        const m = vp.getAttribute('transform')!.match(/matrix\(([^)]+)\)/)![1].split(',').map(Number)
+        return { x: m[4], y: m[5] }
+      }
+      // Every rendered pan, with its time.
+      const trace: { t: number; x: number; y: number }[] = []
+      let watching = true
+      const watch = () => {
+        trace.push({ t: performance.now(), ...read() })
+        if (watching) requestAnimationFrame(watch)
+      }
+      requestAnimationFrame(watch)
+
+      // A quick flick: 8 moves of 16px, ~16ms apart (about 1000px/s).
+      const rect = el.getBoundingClientRect()
+      let x = rect.left + 100
+      const y = rect.top + 200
+      const pointer = (type: string) =>
+        new PointerEvent(type, { bubbles: true, clientX: x, clientY: y, pointerId: 1, isPrimary: true, button: 0 })
+      el.dispatchEvent(pointer('pointerdown'))
+      for (let i = 0; i < 8; i++) {
+        await wait(16)
+        x += 16
+        document.dispatchEvent(pointer('pointermove'))
+      }
+      document.dispatchEvent(pointer('pointerup'))
+      const release = performance.now()
+
+      const deadline = release + 8000
+      while (!(window.__viewportEvents ?? []).some((e) => e.type === 'dwell') && performance.now() < deadline) {
+        await wait(20)
+      }
+      watching = false
+      const dwell = (window.__viewportEvents ?? []).find((e) => e.type === 'dwell')
+      // When the view visibly stopped: the first frame from which it never again strays half a
+      // pixel from where it ends up.
+      const final = trace[trace.length - 1]
+      let settled = trace[trace.length - 1].t
+      for (let i = trace.length - 1; i >= 0; i--) {
+        if (Math.hypot(trace[i].x - final.x, trace[i].y - final.y) >= 0.5) break
+        settled = trace[i].t
+      }
+      return { release, settled, dwellT: dwell?.t ?? null }
+    })
+
+    expect(result.dwellT).not.toBeNull()
+    // The flick really glided.
+    expect(result.settled - result.release).toBeGreaterThan(300)
+    // The dwell came dwellMs after the view visibly stopped, give or take a few frames. Before
+    // the fix this gap was ~1.3s.
+    expect(result.dwellT! - result.settled).toBeGreaterThanOrEqual(300 - 20)
+    expect(result.dwellT! - result.settled).toBeLessThan(300 + 250)
+  })
+
+  // tinkermonkey/heimdall#321: release velocity was the last pointermove's, however long ago it
+  // was, so a drag held still and then released still flung.
+  test('a drag held still before the release does not glide', async ({ page }) => {
+    await open(page, '&dwellMs=300')
+    await clearEvents(page)
+
+    const result = await page.locator('[data-testid="history-canvas"]').evaluate(async (el) => {
+      const vp = el.querySelector('[data-testid="graph-viewport"]')!
+      const wait = (ms: number) => new Promise((r) => setTimeout(r, ms))
+      const rect = el.getBoundingClientRect()
+      let x = rect.left + 100
+      const y = rect.top + 200
+      const pointer = (type: string) =>
+        new PointerEvent(type, { bubbles: true, clientX: x, clientY: y, pointerId: 1, isPrimary: true, button: 0 })
+      // The same quick drag as a flick, then 300ms held still with the button down.
+      el.dispatchEvent(pointer('pointerdown'))
+      for (let i = 0; i < 12; i++) {
+        await wait(16)
+        x += 16
+        document.dispatchEvent(pointer('pointermove'))
+      }
+      await wait(300)
+      const atRelease = vp.getAttribute('transform')
+      document.dispatchEvent(pointer('pointerup'))
+      const release = performance.now()
+      await wait(800)
+      const dwell = (window.__viewportEvents ?? []).find((e) => e.type === 'dwell')
+      return { atRelease, after: vp.getAttribute('transform'), release, dwellT: dwell?.t ?? null }
+    })
+
+    expect(result.after).toBe(result.atRelease)
+    // No glide to wait out, so the dwell lands dwellMs after the release.
+    expect(result.dwellT).not.toBeNull()
+    expect(result.dwellT! - result.release).toBeLessThan(300 + 150)
+  })
+
   test('dwell does not fire during a continuous drag or wheel, only once after it ends', async ({ page }) => {
     await open(page, '&dwellMs=300')
     await clearEvents(page)
@@ -138,9 +237,7 @@ test.describe('integration: GraphCanvas viewport history', () => {
       }
       await wait(500)
       const duringDrag = dwellCount()
-      // A zero-distance move first, so the release velocity is 0 and there's no glide.
-      document.dispatchEvent(pointer('pointermove'))
-      await wait(50)
+      // Released after that hold, so there's no glide (#321).
       document.dispatchEvent(pointer('pointerup'))
       await wait(600)
       const afterDrag = dwellCount()

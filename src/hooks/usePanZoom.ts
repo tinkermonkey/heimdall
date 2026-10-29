@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { decayVelocity, glideHasSettled, pruneSamples, releaseVelocity, type PointerSample } from '../utils/panInertia'
 
 export interface UsePanZoomOptions {
   minZoom?: number
@@ -30,8 +31,9 @@ export interface UsePanZoomOptions {
    * drag frame, inertia frame, wheel/pinch event, or keyboard step), and 'end' once that input is
    * at rest: a drag released without inertia, an inertia glide that has run out, or straight after
    * each discrete wheel/keyboard step. A drag released into inertia reports no 'end' until the
-   * glide stops. Read through a ref, so an inline arrow is fine. GraphCanvas uses this to time
-   * onViewportDwell.
+   * glide stops, which is once under half a pixel of travel is left. A drag held still for about
+   * 100ms before the release has no inertia. Read through a ref, so an inline arrow is fine.
+   * GraphCanvas uses this to time onViewportDwell.
    */
   onUserGesture?: (phase: 'start' | 'change' | 'end') => void
 }
@@ -59,8 +61,6 @@ const DEFAULT_MAX_ZOOM = 4
 // any scale (an additive step shrinks to nothing at high zoom and overshoots at low zoom).
 const KEY_ZOOM_FACTOR = 1.2
 const PAN_STEP = 20
-const INERTIA_DECAY = 0.95
-const MIN_VELOCITY = 0.1
 
 // Wheel-to-zoom sensitivity, ported from d3-zoom's default wheelDelta: zoom scales
 // exponentially with deltaY (2^(-deltaY * sensitivity)) instead of jumping a fixed step per
@@ -129,7 +129,8 @@ export function usePanZoom({
   useEffect(() => {
     lockedRef.current = locked
   }, [locked])
-  const dragRef = useRef<{ x: number; y: number; lastX: number; lastY: number; panX: number; panY: number; vx: number; vy: number; time: number } | null>(null)
+  // `samples` holds the press and the recent pointer positions, for the release velocity.
+  const dragRef = useRef<{ x: number; y: number; panX: number; panY: number; samples: PointerSample[] } | null>(null)
   const listenersAttachedRef = useRef(false)
   const handlePointerMoveRef = useRef<(e: PointerEvent) => void>()
   const handlePointerUpRef = useRef<() => void>()
@@ -228,16 +229,10 @@ export function usePanZoom({
   const handlePointerMove = useCallback((e: PointerEvent) => {
     if (!dragRef.current) return
 
-    const dx = e.clientX - dragRef.current.lastX
-    const dy = e.clientY - dragRef.current.lastY
     const now = performance.now()
-    const dt = Math.max(1, now - dragRef.current.time) / 1000
-
-    dragRef.current.vx = dx / dt
-    dragRef.current.vy = dy / dt
-    dragRef.current.time = now
-    dragRef.current.lastX = e.clientX
-    dragRef.current.lastY = e.clientY
+    const samples = dragRef.current.samples
+    samples.push({ x: e.clientX, y: e.clientY, t: now })
+    pruneSamples(samples, now)
 
     if (dragRafRef.current !== null) {
       cancelAnimationFrame(dragRafRef.current)
@@ -264,14 +259,14 @@ export function usePanZoom({
     }
 
     const shouldReduceMotion = prefersReducedMotion()
-    const vx = dragRef.current.vx
-    const vy = dragRef.current.vy
-    const velocity = Math.sqrt(vx * vx + vy * vy)
+    // Averaged over the last moments of the drag, counting any time the pointer was held still,
+    // so a drag that came to rest before the release doesn't fling (#321).
+    const { vx, vy } = releaseVelocity(dragRef.current.samples, performance.now())
 
     dragRef.current = null
     detachListeners()
 
-    if (shouldReduceMotion || velocity < MIN_VELOCITY) {
+    if (shouldReduceMotion || glideHasSettled(vx, vy)) {
       reportGesture('end')
       return
     }
@@ -285,11 +280,12 @@ export function usePanZoom({
       const dt = (now - lastFrameTime) / 1000
       lastFrameTime = now
 
-      currentVx *= Math.pow(INERTIA_DECAY, dt * 60)
-      currentVy *= Math.pow(INERTIA_DECAY, dt * 60)
+      currentVx = decayVelocity(currentVx, dt)
+      currentVy = decayVelocity(currentVy, dt)
 
-      const velocity = Math.sqrt(currentVx * currentVx + currentVy * currentVy)
-      if (velocity < MIN_VELOCITY) {
+      // Stop once under half a pixel of travel is left rather than at a near-zero speed, so
+      // 'end' (and onViewportDwell) tracks when the view visibly stops (#320).
+      if (glideHasSettled(currentVx, currentVy)) {
         inertiaRafRef.current = null
         reportGesture('end')
         return
@@ -313,13 +309,9 @@ export function usePanZoom({
     dragRef.current = {
       x: e.clientX,
       y: e.clientY,
-      lastX: e.clientX,
-      lastY: e.clientY,
       panX: panRef.current.x,
       panY: panRef.current.y,
-      vx: 0,
-      vy: 0,
-      time: performance.now(),
+      samples: [{ x: e.clientX, y: e.clientY, t: performance.now() }],
     }
     attachListeners()
     reportGesture('start')

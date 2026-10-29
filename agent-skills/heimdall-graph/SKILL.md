@@ -510,7 +510,7 @@ useEffect(() => {
 - `...divProps` spread after the canvas's own `onPointerDown`, `onPointerUp`, `onKeyDown`, `tabIndex` and `role`. Passing any of these replaces the canvas handler and breaks panning, background clicks or keyboard zoom.
 - An edge whose `sourceId` or `targetId` is not in `nodes` logs a warning and is not drawn. Edges touching a collapsed-away node are hidden silently.
 - Errors thrown by `renderNode` and `renderEdge` are logged and that node or edge renders nothing. A throwing classifier is logged and falls back to its omitted-prop default.
-- Input: drag empty canvas to pan (with inertia, disabled under `prefers-reduced-motion`), wheel or pinch to zoom under the cursor. With the canvas focused (`role="region"`, `aria-label="Graph canvas"`), `+`/`-` zoom in or out by a factor of 1.2 about the view centre and the arrow keys pan 20px. The toolbar's lock button freezes all three.
+- Input: drag empty canvas to pan (with inertia, disabled under `prefers-reduced-motion`; a drag held still for about 100ms before the release doesn't glide), wheel or pinch to zoom under the cursor. With the canvas focused (`role="region"`, `aria-label="Graph canvas"`), `+`/`-` zoom in or out by a factor of 1.2 about the view centre and the arrow keys pan 20px. The toolbar's lock button freezes all three.
 
 ---
 
@@ -1226,7 +1226,7 @@ function FitButton() {
 usePanZoom(options: UsePanZoomOptions): UsePanZoomReturn
 ```
 
-The pan/zoom engine behind GraphCanvas, for custom SVG or HTML surfaces. Drag to pan with inertia, wheel/pinch zoom anchored at the cursor, and when focused `+`/`-` (×1.2 or ÷1.2 about the container centre) and arrow keys (20px). Any zoom, `zoomTo`, `panTo` or `reset` stops a running inertia glide.
+The pan/zoom engine behind GraphCanvas, for custom SVG or HTML surfaces. Drag to pan with inertia (none after a drag held still for about 100ms; a glide ends once under half a pixel of travel is left), wheel/pinch zoom anchored at the cursor, and when focused `+`/`-` (×1.2 or ÷1.2 about the container centre) and arrow keys (20px). Any zoom, `zoomTo`, `panTo` or `reset` stops a running inertia glide.
 
 Options: `containerRef` (required; element that receives wheel events), `minZoom` (`0.25`), `maxZoom` (`4`), `bounds?: { minX, maxX, minY, maxY }` (clamps pan), `onViewportChange?: ({ x, y, zoom }) => void`, `locked` (`false`), `onUserGesture?: (phase: 'start' | 'change' | 'end') => void` (user input only, never `zoomTo`/`panTo`/`reset`: `'start'` on a pan press, `'change'` per drag frame, inertia frame, wheel event or key step, `'end'` once that input is at rest, i.e. after a release without inertia, after inertia runs out, or after each wheel/key step).
 
