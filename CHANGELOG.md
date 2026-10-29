@@ -4,6 +4,24 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.5]
+
+Two pan inertia fixes in `usePanZoom`, so `GraphCanvas` and `MapCanvas` drags settle when they look settled.
+
+### Fixed
+
+- **`usePanZoom`** — a drag held still and then released no longer flings
+  (tinkermonkey/heimdall#321). The release velocity came from the last `pointermove`, however
+  long ago it was, so a drag that had come to rest still glided on release. It is now the
+  average over the last 100 ms before the release, counting time the pointer was held still: a
+  100 ms hold gives no glide, and a slowdown just before the release gives a gentler one.
+- **`usePanZoom`** — an inertia glide now ends when it visibly stops
+  (tinkermonkey/heimdall#320). It ran until the speed fell below 0.1 px/s, about a second of
+  sub-pixel creep after the view looked still, which delayed the `'end'` gesture phase and so
+  `GraphCanvas`'s `onViewportDwell` (about 4.6 s after a flick with `dwellMs` 1500). The glide
+  now ends once under half a pixel of travel is left; a 2000 px/s flick ends after about 2.3 s
+  instead of 3.2 s, and the view comes to rest within half a pixel of where it did before.
+
 ## [0.9.4]
 
 Galaxy drag performance, a layout-busy state, and viewport history for `GraphCanvas`.
