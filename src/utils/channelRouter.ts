@@ -65,28 +65,57 @@ export function routeNavigationEdge(
 
 /**
  * Routes multiple navigation edges at once with obstacle avoidance: each route is built
- * against the node boxes (never against other routes), then collinear overlapping segments of
- * different routes are nudged apart by `traceSpacing` without moving a port off its node side.
+ * against the node boxes and priced against the routes already drawn (crossings, shared
+ * corridors), then collinear overlapping segments of different routes are nudged apart by
+ * `traceSpacing` without moving a port off its node side.
+ *
+ * Which route claims a corridor first decides the rest, so the batch is routed in three orders
+ * (as given, shortest first, longest first — by Manhattan distance between centres) and the
+ * set with the lowest total cost wins (ties keep the earlier order).
  */
 export function routeNavigationEdges(
   edges: Array<{ id: string; source: EdgeEndpointRect; target: EdgeEndpointRect }>,
   allObstacles: readonly EdgeEndpointRect[] = [],
   traceSpacing: number = DEFAULT_TRACE_SPACING
 ): Map<string, RoutedEdge> {
-  const routes = new Map<string, RoutedEdge>()
   const endpoints = new Map<string, { source: EdgeEndpointRect; target: EdgeEndpointRect }>()
+  for (const edge of edges) endpoints.set(edge.id, { source: edge.source, target: edge.target })
 
-  const drawn: Point[][] = []
-  for (const edge of edges) {
-    const points = buildOrthogonalPath(edge.source, edge.target, withoutEndpoints(allObstacles, edge.source, edge.target), drawn)
-    drawn.push(points)
-    routes.set(edge.id, finishRoute(points))
-    endpoints.set(edge.id, { source: edge.source, target: edge.target })
+  const span = (e: (typeof edges)[number]) => Math.abs(e.target.x - e.source.x) + Math.abs(e.target.y - e.source.y)
+  const orders = [edges, [...edges].sort((a, b) => span(a) - span(b)), [...edges].sort((a, b) => span(b) - span(a))]
+
+  let best: Map<string, Point[]> | null = null
+  let bestCost = Infinity
+  for (const order of orders) {
+    const paths = new Map<string, Point[]>()
+    const drawn: Point[][] = []
+    for (const edge of order) {
+      const points = buildOrthogonalPath(edge.source, edge.target, withoutEndpoints(allObstacles, edge.source, edge.target), drawn)
+      drawn.push(points)
+      paths.set(edge.id, points)
+    }
+    const cost = batchCost(drawn, allObstacles)
+    if (cost < bestCost) {
+      best = paths
+      bestCost = cost
+    }
   }
 
+  const routes = new Map<string, RoutedEdge>()
+  for (const edge of edges) routes.set(edge.id, finishRoute(best!.get(edge.id)!))
   nudgeOverlappingSegments(routes, endpoints, allObstacles, traceSpacing)
-
   return routes
+}
+
+/** The cost buildOrthogonalPath ranks one route by, summed over a whole batch (each pair priced once). */
+function batchCost(paths: readonly Point[][], obstacles: readonly EdgeEndpointRect[]): number {
+  let cost = 0
+  paths.forEach((points, i) => {
+    const earlier = paths.slice(0, i)
+    cost += pathLength(points) + BEND_COST * (points.length - 2) + CROSSING_COST * crossingsWith(points, earlier) +
+      OVERLAP_COST * sharedLength(points, earlier) + NEAR_BOX_COST * pathHits(points, obstacles, OBSTACLE_PADDING)
+  })
+  return cost
 }
 
 function finishRoute(points: Point[]): RoutedEdge {
@@ -307,7 +336,20 @@ function dropDuplicatePoints(points: Point[]): Point[] {
 const BEND_COST = 40
 
 /** Crossing a route already drawn costs as much as this much extra route length (px). */
-const CROSSING_COST = 120
+const CROSSING_COST = 250
+
+/**
+ * Hard clearance a candidate must keep from every box. Lanes past boxes are still placed
+ * OBSTACLE_PADDING out; a lane through a gap between two boxes sits in its middle and only has
+ * to clear this, so a 30-40 px gap (common between a page's fan and the next page) is usable.
+ */
+const MIN_CLEARANCE = 10
+
+/** Each (segment, box) pair closer than OBSTACLE_PADDING (but clear of MIN_CLEARANCE) costs this. */
+const NEAR_BOX_COST = 30
+
+/** Parallel segments of different routes closer than this count as sharing a corridor. */
+const SHARED_TOLERANCE = 8
 
 /** Running along a route already drawn costs this much per px of shared length (on top of length). */
 const OVERLAP_COST = 2
@@ -387,7 +429,7 @@ function stubsLongEnough(points: Point[]): boolean {
   return leg(points[0], points[1]) >= MIN_STUB && leg(points[n - 2], points[n - 1]) >= MIN_STUB
 }
 
-/** Length a path shares with routes already drawn (collinear, overlapping segments). */
+/** Length a path shares with routes already drawn (parallel, overlapping segments within SHARED_TOLERANCE). */
 function sharedLength(points: Point[], drawn: readonly Point[][]): number {
   let total = 0
   for (let i = 0; i < points.length - 1; i++) {
@@ -397,9 +439,9 @@ function sharedLength(points: Point[], drawn: readonly Point[][]): number {
       for (let k = 0; k < other.length - 1; k++) {
         const c = other[k]
         const d = other[k + 1]
-        if (a.y === b.y && c.y === d.y && Math.abs(a.y - c.y) < 1) {
+        if (a.y === b.y && c.y === d.y && Math.abs(a.y - c.y) < SHARED_TOLERANCE) {
           total += Math.max(0, Math.min(Math.max(a.x, b.x), Math.max(c.x, d.x)) - Math.max(Math.min(a.x, b.x), Math.min(c.x, d.x)))
-        } else if (a.x === b.x && c.x === d.x && Math.abs(a.x - c.x) < 1) {
+        } else if (a.x === b.x && c.x === d.x && Math.abs(a.x - c.x) < SHARED_TOLERANCE) {
           total += Math.max(0, Math.min(Math.max(a.y, b.y), Math.max(c.y, d.y)) - Math.max(Math.min(a.y, b.y), Math.min(c.y, d.y)))
         }
       }
@@ -470,13 +512,13 @@ function gapLanes(axis: 'x' | 'y', boxes: readonly EdgeEndpointRect[], lo: numbe
  * and along) on lanes past the blocking boxes, past everything, and through the free gaps
  * between boxes; and three-bend combinations of a horizontal and a vertical lane. Every
  * candidate's ports match the direction the path leaves and arrives in, and its segments are
- * checked against the padded obstacles and against its own two endpoints.
+ * checked against the obstacles (MIN_CLEARANCE) and against its own two endpoints.
  *
  * A bent candidate whose first or last leg is shorter than MIN_STUB is dropped (it reads as
  * arriving at the box's corner). Among the clear candidates the cheapest wins: length +
  * BEND_COST per bend + CROSSING_COST per crossing with a route already drawn (`drawn`) +
- * OVERLAP_COST per px run along one. If none is clear, the one crossing the fewest
- * padded boxes. Before 2026-11-04 the first clear candidate won and lanes existed only at the
+ * OVERLAP_COST per px run along one + NEAR_BOX_COST per box passed closer than OBSTACLE_PADDING. If none is clear, the one crossing the fewest
+ * boxes. Before 2026-11-04 the first clear candidate won and lanes existed only at the
  * extremes of the obstacles, so a route whose straight run was blocked by one box in a row of
  * boxes went around the whole drawing even when a gap in that row was free (heimdall test page:
  * Dashboard → Settings, directly below it, ran out to the canvas's left edge and back).
@@ -579,9 +621,10 @@ function buildOrthogonalPath(
   for (const candidate of candidates) {
     const points = simplifyPath(candidate)
     if (points.length < 2 || !portsMatchPath(points, source, target) || !stubsLongEnough(points)) continue
-    const hits = pathHits(points, obstacles, padding) + ownEndpointHits(points, source, target)
+    const hits = pathHits(points, obstacles, MIN_CLEARANCE) + ownEndpointHits(points, source, target)
     if (hits > bestHits) continue
-    const cost = pathLength(points) + BEND_COST * (points.length - 2) + CROSSING_COST * crossingsWith(points, drawn) + OVERLAP_COST * sharedLength(points, drawn)
+    const cost = pathLength(points) + BEND_COST * (points.length - 2) + CROSSING_COST * crossingsWith(points, drawn) +
+      OVERLAP_COST * sharedLength(points, drawn) + NEAR_BOX_COST * pathHits(points, obstacles, padding)
     if (hits < bestHits || cost < bestCost) {
       best = points
       bestHits = hits
