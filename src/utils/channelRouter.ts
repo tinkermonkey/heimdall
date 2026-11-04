@@ -593,12 +593,57 @@ function buildOrthogonalPath(
   const yLo = Math.min(source.y, target.y)
   const yHi = Math.max(source.y, target.y)
   const byDistance = (centre: number) => (a: number, b: number) => Math.abs(a - centre) - Math.abs(b - centre) || a - b
-  const laneYs = [...new Set([...hLanes(onHRun), ...hLanes(obstacles), ...gapLanes('y', everything, xLo, xHi, padding)])]
+  const laneYs = [...new Set([...hLanes(onHRun), ...hLanes(obstacles), ...gapLanes('y', everything, xLo, xHi, MIN_CLEARANCE)])]
     .sort(byDistance((source.y + target.y) / 2))
-  const laneXs = [...new Set([...vLanes(onVRun), ...vLanes(obstacles), ...gapLanes('x', everything, yLo, yHi, padding)])]
+  const laneXs = [...new Set([...vLanes(onVRun), ...vLanes(obstacles), ...gapLanes('x', everything, yLo, yHi, MIN_CLEARANCE)])]
     .sort(byDistance((source.x + target.x) / 2))
   for (const laneY of laneYs) candidates.push(hLanePath(laneY))
   for (const laneX of laneXs) candidates.push(vLanePath(laneX))
+
+  // The same one-lane detours leaving / entering the top or bottom side off-centre, at a gap
+  // lane inside the box's span, so the first or last leg can drop straight through a gap of
+  // the row next to it instead of from the side's middle into a box.
+  // Also one trace spacing either side of the centre, so a second route into the same side can
+  // arrive beside the first instead of sharing its corridor.
+  const offCentre = (rect: EdgeEndpointRect) =>
+    [...new Set([...laneXs, rect.x - DEFAULT_TRACE_SPACING, rect.x + DEFAULT_TRACE_SPACING])]
+      .filter(x => x > rect.x - rect.width / 2 + MIN_STUB && x < rect.x + rect.width / 2 - MIN_STUB && x !== rect.x)
+  const sourceXs = [source.x, ...offCentre(source)]
+  const targetXs = [target.x, ...offCentre(target)]
+  for (const laneY of laneYs) {
+    const exitY = portOn(source, vSide(source, { x: source.x, y: laneY })).y
+    const entryY = portOn(target, vSide(target, { x: target.x, y: laneY })).y
+    for (const ex of sourceXs) {
+      for (const tx of targetXs) {
+        if (ex === source.x && tx === target.x) continue
+        candidates.push([{ x: ex, y: exitY }, { x: ex, y: laneY }, { x: tx, y: laneY }, { x: tx, y: entryY }])
+      }
+    }
+  }
+
+  // Straight shots off-centre: when the two boxes overlap in x (or y), a straight vertical (or
+  // horizontal) run anywhere in the shared span, through a gap of the boxes between them. The
+  // centre-to-centre run above only exists when the centres line up (heimdall test page:
+  // Dashboard and Settings overlap by 70 px, and a gap in the row between them sits inside it).
+  const sharedSpan = (lo1: number, hi1: number, lo2: number, hi2: number) => [Math.max(lo1, lo2) + MIN_STUB, Math.min(hi1, hi2) - MIN_STUB]
+  const [sxLo, sxHi] = sharedSpan(source.x - source.width / 2, source.x + source.width / 2, target.x - target.width / 2, target.x + target.width / 2)
+  if (sxLo <= sxHi && dy !== 0) {
+    const fromY = source.y + Math.sign(dy) * source.height / 2
+    const toY = target.y - Math.sign(dy) * target.height / 2
+    const between = obstacles.filter(o => o.y > Math.min(source.y, target.y) && o.y < Math.max(source.y, target.y))
+    for (const x of [...gapLanes('x', between, Math.min(fromY, toY), Math.max(fromY, toY), MIN_CLEARANCE), (sxLo + sxHi) / 2]) {
+      if (x >= sxLo && x <= sxHi) candidates.push([{ x, y: fromY }, { x, y: toY }])
+    }
+  }
+  const [syLo, syHi] = sharedSpan(source.y - source.height / 2, source.y + source.height / 2, target.y - target.height / 2, target.y + target.height / 2)
+  if (syLo <= syHi && dx !== 0) {
+    const fromX = source.x + Math.sign(dx) * source.width / 2
+    const toX = target.x - Math.sign(dx) * target.width / 2
+    const between = obstacles.filter(o => o.x > Math.min(source.x, target.x) && o.x < Math.max(source.x, target.x))
+    for (const y of [...gapLanes('y', between, Math.min(fromX, toX), Math.max(fromX, toX), MIN_CLEARANCE), (syLo + syHi) / 2]) {
+      if (y >= syLo && y <= syHi) candidates.push([{ x: fromX, y }, { x: toX, y }])
+    }
+  }
 
   // Three-bend combinations of a horizontal and a vertical lane, for the case no single lane
   // clears (e.g. a target directly below another box, reached from a source whose row is full):

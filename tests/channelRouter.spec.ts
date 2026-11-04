@@ -303,30 +303,30 @@ test.describe('channelRouter', () => {
   })
 
   test.describe('heimdall test page, rendered boxes (2026-11-04)', () => {
-    // Node boxes as GraphCanvas measured them on UxNavigationTestPage (layout px), and its 8
+    // The router's input on the test page's data in the layout-loop harness (GraphCanvas node
+    // boxes in layout px: offsetWidth sizes, centres), and its 8
     // navigation routes in page order. Before 2026-11-04 Dashboard -> Settings, directly below,
     // ran out past every box to the left edge and back (the first clear candidate won and lanes
-    // existed only at the extremes), and Trends -> Settings ended with a 0.4 px leg at the
-    // corner of Settings.
+    // existed only at the extremes).
     const box: Record<string, EdgeEndpointRect> = {
-      page1: createRect(318, 41, 113, 23),
-      page1_child1: createRect(104, 221, 103, 23),
-      page1_child2: createRect(532, 221, 95, 23),
-      view1_1: createRect(461, 41, 93, 23),
-      view1_2: createRect(572, 41, 89, 23),
-      view1_3: createRect(681, 41, 88, 23),
-      view2_1: createRect(241, 221, 90, 23),
-      view2_2: createRect(365, 221, 119, 23),
-      view3_1: createRect(657, 221, 74, 23),
-      view3_2: createRect(751, 221, 75, 23),
-      page2: createRect(290, 364, 98, 23),
-      page2_child1: createRect(97, 544, 88, 23),
-      page2_child2: createRect(484, 544, 98, 23),
-      view4_1: createRect(428, 364, 98, 23),
-      view4_2: createRect(557, 364, 119, 23),
-      view5_1: createRect(217, 544, 73, 23),
-      view5_2: createRect(324, 544, 101, 23),
-      sharedView: createRect(814, 41, 138, 23),
+      page1: createRect(265.5, 11.5, 113, 23),
+      page1_child1: createRect(51.5, 191.5, 103, 23),
+      page1_child2: createRect(479.5, 191.5, 95, 23),
+      view1_1: createRect(408.5, 11.5, 93, 23),
+      view1_2: createRect(519.5, 11.5, 89, 23),
+      view1_3: createRect(628, 11.5, 88, 23),
+      view2_1: createRect(188, 191.5, 90, 23),
+      view2_2: createRect(312.5, 191.5, 119, 23),
+      view3_1: createRect(604, 191.5, 74, 23),
+      view3_2: createRect(698.5, 191.5, 75, 23),
+      page2: createRect(237.5, 334.5, 98, 23),
+      page2_child1: createRect(44, 514.5, 88, 23),
+      page2_child2: createRect(431, 514.5, 98, 23),
+      view4_1: createRect(375.5, 334.5, 98, 23),
+      view4_2: createRect(504, 334.5, 119, 23),
+      view5_1: createRect(164.5, 514.5, 73, 23),
+      view5_2: createRect(271.5, 514.5, 101, 23),
+      sharedView: createRect(761, 11.5, 138, 23),
     }
     const pairs: Array<[string, string]> = [
       ['page1', 'page2'], ['view1_1', 'page2'], ['view1_2', 'page2_child1'], ['page1_child1', 'page2_child2'],
