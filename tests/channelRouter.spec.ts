@@ -301,4 +301,66 @@ test.describe('channelRouter', () => {
       expect(route.points.length).toBeGreaterThan(0)
     })
   })
+
+  test.describe('heimdall test page, rendered boxes (2026-11-04)', () => {
+    // Node boxes as GraphCanvas measured them on UxNavigationTestPage (layout px), and its 8
+    // navigation routes in page order. Before 2026-11-04 Dashboard -> Settings, directly below,
+    // ran out past every box to the left edge and back (the first clear candidate won and lanes
+    // existed only at the extremes), and Trends -> Settings ended with a 0.4 px leg at the
+    // corner of Settings.
+    const box: Record<string, EdgeEndpointRect> = {
+      page1: createRect(318, 41, 113, 23),
+      page1_child1: createRect(104, 221, 103, 23),
+      page1_child2: createRect(532, 221, 95, 23),
+      view1_1: createRect(461, 41, 93, 23),
+      view1_2: createRect(572, 41, 89, 23),
+      view1_3: createRect(681, 41, 88, 23),
+      view2_1: createRect(241, 221, 90, 23),
+      view2_2: createRect(365, 221, 119, 23),
+      view3_1: createRect(657, 221, 74, 23),
+      view3_2: createRect(751, 221, 75, 23),
+      page2: createRect(290, 364, 98, 23),
+      page2_child1: createRect(97, 544, 88, 23),
+      page2_child2: createRect(484, 544, 98, 23),
+      view4_1: createRect(428, 364, 98, 23),
+      view4_2: createRect(557, 364, 119, 23),
+      view5_1: createRect(217, 544, 73, 23),
+      view5_2: createRect(324, 544, 101, 23),
+      sharedView: createRect(814, 41, 138, 23),
+    }
+    const pairs: Array<[string, string]> = [
+      ['page1', 'page2'], ['view1_1', 'page2'], ['view1_2', 'page2_child1'], ['page1_child1', 'page2_child2'],
+      ['view2_1', 'page2'], ['page1_child2', 'page2_child1'], ['page2', 'page1'], ['view4_1', 'page1_child1'],
+    ]
+    const route = () =>
+      routeNavigationEdges(pairs.map(([s, t], i) => ({ id: `r${i}`, source: box[s], target: box[t] })), Object.values(box))
+    const legs = (pts: Array<{ x: number; y: number }>) =>
+      pts.slice(1).map((p, i) => Math.abs(p.x - pts[i].x) + Math.abs(p.y - pts[i].y))
+
+    test('Dashboard -> Settings stays inside the drawing instead of looping round its left edge', () => {
+      const pts = route().get('r0')!.points
+      const left = Math.min(...Object.values(box).map(b => b.x - b.width / 2))
+      expect(Math.min(...pts.map(p => p.x))).toBeGreaterThan(left)
+      const manhattan = Math.abs(pts[pts.length - 1].x - pts[0].x) + Math.abs(pts[pts.length - 1].y - pts[0].y)
+      expect(legs(pts).reduce((a, b) => a + b, 0) / manhattan).toBeLessThan(1.6)
+    })
+
+    test('every route arrives perpendicular to its target side, after a leg of at least 10 px', () => {
+      const routes = route()
+      pairs.forEach(([, t], i) => {
+        const pts = routes.get(`r${i}`)!.points
+        const l = legs(pts)
+        const end = pts[pts.length - 1]
+        const prev = pts[pts.length - 2]
+        const b = box[t]
+        // A vertical last leg lands on the top or bottom side, a horizontal one on the left or right.
+        if (prev.x === end.x) expect([b.y - b.height / 2, b.y + b.height / 2], `r${i}`).toContain(end.y)
+        else expect([b.x - b.width / 2, b.x + b.width / 2], `r${i}`).toContain(end.x)
+        if (l.length > 1) {
+          expect(l[0], `r${i}`).toBeGreaterThanOrEqual(10)
+          expect(l[l.length - 1], `r${i}`).toBeGreaterThanOrEqual(10)
+        }
+      })
+    })
+  })
 })

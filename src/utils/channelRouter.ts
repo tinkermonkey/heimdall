@@ -76,8 +76,10 @@ export function routeNavigationEdges(
   const routes = new Map<string, RoutedEdge>()
   const endpoints = new Map<string, { source: EdgeEndpointRect; target: EdgeEndpointRect }>()
 
+  const drawn: Point[][] = []
   for (const edge of edges) {
-    const points = buildOrthogonalPath(edge.source, edge.target, withoutEndpoints(allObstacles, edge.source, edge.target))
+    const points = buildOrthogonalPath(edge.source, edge.target, withoutEndpoints(allObstacles, edge.source, edge.target), drawn)
+    drawn.push(points)
     routes.set(edge.id, finishRoute(points))
     endpoints.set(edge.id, { source: edge.source, target: edge.target })
   }
@@ -301,23 +303,189 @@ function dropDuplicatePoints(points: Point[]): Point[] {
   return out
 }
 
+/** A bend costs as much as this much extra route length (px) when candidates are ranked. */
+const BEND_COST = 40
+
+/** Crossing a route already drawn costs as much as this much extra route length (px). */
+const CROSSING_COST = 120
+
+/** Running along a route already drawn costs this much per px of shared length (on top of length). */
+const OVERLAP_COST = 2
+
+/** Shortest first and last leg of a bent route: a shorter stub reads as arriving at the box's corner. */
+const MIN_STUB = 10
+
+/** Gap lanes per axis that the three-bend combinations try, nearest the route first. */
+const MAX_COMBO_LANES = 12
+
+/** Drops repeated points and the middle point of three collinear ones. */
+function simplifyPath(points: Point[]): Point[] {
+  const out: Point[] = []
+  for (const p of dropDuplicatePoints(points)) {
+    const n = out.length
+    if (n >= 2) {
+      const a = out[n - 2]
+      const b = out[n - 1]
+      if ((a.x === b.x && b.x === p.x) || (a.y === b.y && b.y === p.y)) {
+        out[n - 1] = p
+        continue
+      }
+    }
+    out.push(p)
+  }
+  return out
+}
+
+/** The side of `rect` a boundary point sits on. */
+function sideOfPort(p: Point, rect: EdgeEndpointRect): Side {
+  const dl = Math.abs(p.x - (rect.x - rect.width / 2))
+  const dr = Math.abs(p.x - (rect.x + rect.width / 2))
+  const dt = Math.abs(p.y - (rect.y - rect.height / 2))
+  const db = Math.abs(p.y - (rect.y + rect.height / 2))
+  const m = Math.min(dl, dr, dt, db)
+  return m === dl ? 'left' : m === dr ? 'right' : m === dt ? 'top' : 'bottom'
+}
+
+/** Whether the path leaves its source and enters its target perpendicular to the port's side. */
+function portsMatchPath(points: Point[], source: EdgeEndpointRect, target: EdgeEndpointRect): boolean {
+  if (points.length < 2) return false
+  const [a, b] = points
+  const outward = (side: Side, from: Point, to: Point): boolean => {
+    switch (side) {
+      case 'left': return from.y === to.y && to.x < from.x
+      case 'right': return from.y === to.y && to.x > from.x
+      case 'top': return from.x === to.x && to.y < from.y
+      case 'bottom': return from.x === to.x && to.y > from.y
+    }
+  }
+  const y = points[points.length - 2]
+  const z = points[points.length - 1]
+  // Arriving at the target = leaving it backwards along the last segment.
+  return outward(sideOfPort(a, source), a, b) && outward(sideOfPort(z, target), z, y)
+}
+
+/** Segments that run into the route's own endpoints (anything but the first leg into the source, the last into the target). */
+function ownEndpointHits(points: Point[], source: EdgeEndpointRect, target: EdgeEndpointRect): number {
+  let hits = 0
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i]
+    const b = points[i + 1]
+    const boxes = [i > 0 ? source : null, i < points.length - 2 ? target : null]
+    for (const box of boxes) {
+      if (!box) continue
+      if (a.y === b.y ? hSegmentIntersectsBox(a.x, b.x, a.y, box) : vSegmentIntersectsBox(a.x, a.y, b.y, box)) hits++
+    }
+  }
+  return hits
+}
+
+/** Whether a bent route's first and last legs are at least MIN_STUB long. */
+function stubsLongEnough(points: Point[]): boolean {
+  if (points.length <= 2) return true
+  const leg = (a: Point, b: Point) => Math.abs(b.x - a.x) + Math.abs(b.y - a.y)
+  const n = points.length
+  return leg(points[0], points[1]) >= MIN_STUB && leg(points[n - 2], points[n - 1]) >= MIN_STUB
+}
+
+/** Length a path shares with routes already drawn (collinear, overlapping segments). */
+function sharedLength(points: Point[], drawn: readonly Point[][]): number {
+  let total = 0
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i]
+    const b = points[i + 1]
+    for (const other of drawn) {
+      for (let k = 0; k < other.length - 1; k++) {
+        const c = other[k]
+        const d = other[k + 1]
+        if (a.y === b.y && c.y === d.y && Math.abs(a.y - c.y) < 1) {
+          total += Math.max(0, Math.min(Math.max(a.x, b.x), Math.max(c.x, d.x)) - Math.max(Math.min(a.x, b.x), Math.min(c.x, d.x)))
+        } else if (a.x === b.x && c.x === d.x && Math.abs(a.x - c.x) < 1) {
+          total += Math.max(0, Math.min(Math.max(a.y, b.y), Math.max(c.y, d.y)) - Math.max(Math.min(a.y, b.y), Math.min(c.y, d.y)))
+        }
+      }
+    }
+  }
+  return total
+}
+
+/** Proper crossings between an axis-parallel path and routes already drawn. */
+function crossingsWith(points: Point[], drawn: readonly Point[][]): number {
+  let count = 0
+  for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i]
+    const b = points[i + 1]
+    for (const other of drawn) {
+      for (let k = 0; k < other.length - 1; k++) {
+        const c = other[k]
+        const d = other[k + 1]
+        const h1 = a.y === b.y
+        const h2 = c.y === d.y
+        if (h1 === h2) continue
+        const [h, hEnd, v, vEnd] = h1 ? [a, b, c, d] : [c, d, a, b]
+        if (
+          v.x > Math.min(h.x, hEnd.x) && v.x < Math.max(h.x, hEnd.x) &&
+          h.y > Math.min(v.y, vEnd.y) && h.y < Math.max(v.y, vEnd.y)
+        ) count++
+      }
+    }
+  }
+  return count
+}
+
+function pathLength(points: Point[]): number {
+  let total = 0
+  for (let i = 0; i < points.length - 1; i++) total += Math.abs(points[i + 1].x - points[i].x) + Math.abs(points[i + 1].y - points[i].y)
+  return total
+}
+
 /**
- * Builds the orthogonal path between two boxes. Every candidate's ports are chosen to match the
- * direction the path actually leaves and arrives in (a vertical first segment starts on the
- * top or bottom side, a horizontal one on the left or right), and every candidate — the two
- * direct L shapes, then horizontal and vertical detour lanes past the blocking boxes, then
- * lanes past every obstacle — is checked segment by segment against the obstacles. The first
- * clear candidate wins; if none is clear, the one crossing the fewest padded boxes.
+ * Lane coordinates along `axis` through the free space between `boxes` (each padded): the
+ * middle of every gap between merged box intervals, plus just outside the outermost ones. Only
+ * boxes whose extent on the other axis overlaps [lo, hi] — the run the lane connects across —
+ * count, so the gaps of one row are not closed by the boxes of another.
+ */
+function gapLanes(axis: 'x' | 'y', boxes: readonly EdgeEndpointRect[], lo: number, hi: number, padding: number): number[] {
+  const size = (b: EdgeEndpointRect) => (axis === 'x' ? b.width : b.height)
+  const crossSize = (b: EdgeEndpointRect) => (axis === 'x' ? b.height : b.width)
+  const cross = (b: EdgeEndpointRect) => (axis === 'x' ? b.y : b.x)
+  const intervals = boxes
+    .filter(b => cross(b) + crossSize(b) / 2 > lo && cross(b) - crossSize(b) / 2 < hi)
+    .map(b => [b[axis] - size(b) / 2 - padding, b[axis] + size(b) / 2 + padding] as [number, number])
+    .sort((p, q) => p[0] - q[0])
+  if (intervals.length === 0) return []
+  const merged: Array<[number, number]> = []
+  for (const iv of intervals) {
+    const last = merged[merged.length - 1]
+    if (last && iv[0] <= last[1]) last[1] = Math.max(last[1], iv[1])
+    else merged.push([iv[0], iv[1]])
+  }
+  const lanes = [merged[0][0], merged[merged.length - 1][1]]
+  for (let i = 0; i < merged.length - 1; i++) lanes.push((merged[i][1] + merged[i + 1][0]) / 2)
+  return lanes
+}
+
+/**
+ * Builds the orthogonal path between two boxes. Candidates: the direct runs and both L shapes;
+ * one-lane detours (down/up to a horizontal lane and across, or out sideways to a vertical lane
+ * and along) on lanes past the blocking boxes, past everything, and through the free gaps
+ * between boxes; and three-bend combinations of a horizontal and a vertical lane. Every
+ * candidate's ports match the direction the path leaves and arrives in, and its segments are
+ * checked against the padded obstacles and against its own two endpoints.
  *
- * Earlier the detour's own segments were never re-checked (its lane could run through another
- * box), the ports were picked by the dominant axis regardless of the path's first move (a
- * route could leave the right side and immediately run up along that side), and a blocked
- * route fell back to a lane above or below every obstacle unconditionally.
+ * A bent candidate whose first or last leg is shorter than MIN_STUB is dropped (it reads as
+ * arriving at the box's corner). Among the clear candidates the cheapest wins: length +
+ * BEND_COST per bend + CROSSING_COST per crossing with a route already drawn (`drawn`) +
+ * OVERLAP_COST per px run along one. If none is clear, the one crossing the fewest
+ * padded boxes. Before 2026-11-04 the first clear candidate won and lanes existed only at the
+ * extremes of the obstacles, so a route whose straight run was blocked by one box in a row of
+ * boxes went around the whole drawing even when a gap in that row was free (heimdall test page:
+ * Dashboard → Settings, directly below it, ran out to the canvas's left edge and back).
  */
 function buildOrthogonalPath(
   source: EdgeEndpointRect,
   target: EdgeEndpointRect,
-  obstacles: readonly EdgeEndpointRect[]
+  obstacles: readonly EdgeEndpointRect[],
+  drawn: readonly Point[][] = []
 ): Point[] {
   const padding = OBSTACLE_PADDING
   const dx = target.x - source.x
@@ -347,18 +515,18 @@ function buildOrthogonalPath(
     candidates.push([exitV, { x: exitV.x, y: entryH.y }, entryH])
   }
 
-  // Horizontal lanes: up/down from the source, across, up/down into the target.
+  // Lanes just outside a set of boxes: above/below, left/right.
   const hLanes = (boxes: readonly EdgeEndpointRect[]): number[] => {
     if (boxes.length === 0) return []
     const above = Math.min(...boxes.map(o => o.y - o.height / 2)) - padding
     const below = Math.max(...boxes.map(o => o.y + o.height / 2)) + padding
-    return Math.abs(above - source.y) <= Math.abs(below - source.y) ? [above, below] : [below, above]
+    return [above, below]
   }
   const vLanes = (boxes: readonly EdgeEndpointRect[]): number[] => {
     if (boxes.length === 0) return []
     const left = Math.min(...boxes.map(o => o.x - o.width / 2)) - padding
     const right = Math.max(...boxes.map(o => o.x + o.width / 2)) + padding
-    return Math.abs(right - source.x) <= Math.abs(left - source.x) ? [right, left] : [left, right]
+    return [left, right]
   }
   const hLanePath = (laneY: number): Point[] => {
     const exit = portOn(source, vSide(source, { x: source.x, y: laneY }))
@@ -371,24 +539,31 @@ function buildOrthogonalPath(
     return [exit, { x: laneX, y: exit.y }, { x: laneX, y: entry.y }, entry]
   }
 
-  // Lanes past the boxes that block the direct horizontal / vertical run, then past everything.
+  // Lanes past the boxes that block the direct horizontal / vertical run, past everything, and
+  // through the gaps between the boxes the lane's own run passes (sources and targets included).
   const sourceExitH = portOn(source, hSide(source, target))
   const onHRun = obstacles.filter(o => hSegmentIntersectsBox(sourceExitH.x, target.x, source.y, o, padding))
   const sourceExitV = portOn(source, vSide(source, target))
   const onVRun = obstacles.filter(o => vSegmentIntersectsBox(source.x, sourceExitV.y, target.y, o, padding))
-  for (const laneY of hLanes(onHRun)) candidates.push(hLanePath(laneY))
-  for (const laneX of vLanes(onVRun)) candidates.push(vLanePath(laneX))
-  for (const laneY of hLanes(obstacles)) candidates.push(hLanePath(laneY))
-  for (const laneX of vLanes(obstacles)) candidates.push(vLanePath(laneX))
+  const everything = [...obstacles, source, target]
+  const xLo = Math.min(source.x, target.x)
+  const xHi = Math.max(source.x, target.x)
+  const yLo = Math.min(source.y, target.y)
+  const yHi = Math.max(source.y, target.y)
+  const byDistance = (centre: number) => (a: number, b: number) => Math.abs(a - centre) - Math.abs(b - centre) || a - b
+  const laneYs = [...new Set([...hLanes(onHRun), ...hLanes(obstacles), ...gapLanes('y', everything, xLo, xHi, padding)])]
+    .sort(byDistance((source.y + target.y) / 2))
+  const laneXs = [...new Set([...vLanes(onVRun), ...vLanes(obstacles), ...gapLanes('x', everything, yLo, yHi, padding)])]
+    .sort(byDistance((source.x + target.x) / 2))
+  for (const laneY of laneYs) candidates.push(hLanePath(laneY))
+  for (const laneX of laneXs) candidates.push(vLanePath(laneX))
 
-  // Three-bend combinations of a horizontal and a vertical lane past every obstacle, for the
-  // case neither single lane clears (e.g. a target directly below another box, reached from a
-  // source whose row is full): up/down to the lane, across to the vertical lane, down/up to
-  // the target's row, and in from the side — or the mirrored order.
-  const laneYs = [...new Set([...hLanes(onHRun), ...hLanes(obstacles)])]
-  const laneXs = [...new Set([...vLanes(onVRun), ...vLanes(obstacles)])]
-  for (const laneY of laneYs) {
-    for (const laneX of laneXs) {
+  // Three-bend combinations of a horizontal and a vertical lane, for the case no single lane
+  // clears (e.g. a target directly below another box, reached from a source whose row is full):
+  // up/down to the lane, across to the vertical lane, down/up to the target's row, and in from
+  // the side — or the mirrored order.
+  for (const laneY of laneYs.slice(0, MAX_COMBO_LANES)) {
+    for (const laneX of laneXs.slice(0, MAX_COMBO_LANES)) {
       const exitV = portOn(source, vSide(source, { x: source.x, y: laneY }))
       const entryH = portOn(target, hSide(target, { x: laneX, y: target.y }))
       candidates.push([exitV, { x: exitV.x, y: laneY }, { x: laneX, y: laneY }, { x: laneX, y: entryH.y }, entryH])
@@ -400,13 +575,17 @@ function buildOrthogonalPath(
 
   let best: Point[] | null = null
   let bestHits = Infinity
+  let bestCost = Infinity
   for (const candidate of candidates) {
-    const points = dropDuplicatePoints(candidate)
-    const hits = pathHits(points, obstacles, padding)
-    if (hits === 0) return points
-    if (hits < bestHits) {
+    const points = simplifyPath(candidate)
+    if (points.length < 2 || !portsMatchPath(points, source, target) || !stubsLongEnough(points)) continue
+    const hits = pathHits(points, obstacles, padding) + ownEndpointHits(points, source, target)
+    if (hits > bestHits) continue
+    const cost = pathLength(points) + BEND_COST * (points.length - 2) + CROSSING_COST * crossingsWith(points, drawn) + OVERLAP_COST * sharedLength(points, drawn)
+    if (hits < bestHits || cost < bestCost) {
       best = points
       bestHits = hits
+      bestCost = cost
     }
   }
   return best ?? [portOn(source, 'right'), portOn(target, 'left')]
