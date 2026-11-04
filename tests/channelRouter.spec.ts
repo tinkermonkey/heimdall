@@ -300,6 +300,35 @@ test.describe('channelRouter', () => {
 
       expect(route.points.length).toBeGreaterThan(0)
     })
+
+    test('zero-size boxes still get an orthogonal route', () => {
+      // No candidate fits a zero-size box's ports; the fallback must not be a diagonal.
+      for (const target of [createRect(200, 100, 0, 0), createRect(0, 100, 0, 0), createRect(200, 0, 0, 0)]) {
+        const pts = routeNavigationEdge(createRect(0, 0, 0, 0), target).points
+        expect(pts.length).toBeGreaterThanOrEqual(2)
+        for (let i = 1; i < pts.length; i++) expect(pts[i].x === pts[i - 1].x || pts[i].y === pts[i - 1].y, JSON.stringify(pts)).toBe(true)
+      }
+    })
+  })
+
+  test.describe('batch cost', () => {
+    // GraphCanvas reroutes on every re-measure or drag, so a batch must stay near-linear. Before
+    // the bounds in routeNavigationEdges (tinkermonkey/heimdall#324 review) this batch took 3.6 s;
+    // it takes ~130 ms now (scripts/bench-router.mjs). The bound is loose for slow CI runners.
+    test('400 boxes and 400 routes route in well under a second and a half', () => {
+      const n = 400
+      const cols = Math.ceil(Math.sqrt(n))
+      const boxes = Array.from({ length: n }, (_, i) => createRect((i % cols) * 150, Math.floor(i / cols) * 120, 100, 23))
+      let seed = 1
+      const rnd = () => ((seed = (seed * 16807) % 2147483647), seed / 2147483647)
+      const edges = Array.from({ length: n }, (_, i) => ({ id: `e${i}`, source: boxes[Math.floor(rnd() * n)], target: boxes[Math.floor(rnd() * n)] }))
+        .filter(e => e.source !== e.target)
+      routeNavigationEdges(edges.slice(0, 20), boxes) // warm up
+      const t = performance.now()
+      const routes = routeNavigationEdges(edges, boxes)
+      expect(performance.now() - t).toBeLessThan(1500)
+      expect(routes.size).toBe(edges.length)
+    })
   })
 
   test.describe('heimdall test page, rendered boxes (2026-11-04)', () => {
