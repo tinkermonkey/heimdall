@@ -1015,7 +1015,12 @@ function searchLanes(source: EdgeEndpointRect, target: EdgeEndpointRect, obstacl
   // never overestimates.
   const hw = target.width / 2 + c
   const hh = target.height / 2 + c
-  const h = (ix: number, iy: number) => Math.max(0, Math.abs(xs[ix] - target.x) - hw) + Math.max(0, Math.abs(ys[iy] - target.y) - hh)
+  // A point outside the box's span on both axes is at least one bend away as well.
+  const h = (ix: number, iy: number) => {
+    const ox = Math.max(0, Math.abs(xs[ix] - target.x) - hw)
+    const oy = Math.max(0, Math.abs(ys[iy] - target.y) - hh)
+    return ox + oy + (ox > 0 && oy > 0 ? BEND_COST : 0)
+  }
 
   // Binary min-heap of [f, state].
   const heapF: number[] = []
