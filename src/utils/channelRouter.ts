@@ -181,6 +181,39 @@ function nudgeOverlappingSegments(
     }
   }
 
+  // Lines other routes hold, kept current as segments move: a shift must not land a segment on
+  // (within SHARED_TOLERANCE of) another route's segment that it overlaps. Before 2026-11-05 a
+  // segment shifted off one shared line could land on the next one: on a 582-node sitemap two
+  // routes' slots in a row gap landed on the line a third route ran along, 1,659 px of it.
+  const lines = { y: new Map<number, Array<{ id: string; segmentIndex: number }>>(), x: new Map<number, Array<{ id: string; segmentIndex: number }>>() }
+  const hold = (axis: 'x' | 'y', at: number, id: string, segmentIndex: number) => {
+    const key = Math.round(at)
+    const list = lines[axis].get(key)
+    if (list) list.push({ id, segmentIndex })
+    else lines[axis].set(key, [{ id, segmentIndex }])
+  }
+  for (const [axis, groups] of [['y', horizontal], ['x', vertical]] as const) {
+    for (const [key, segs] of groups) for (const seg of segs) hold(axis, key, seg.id, seg.segmentIndex)
+  }
+  const lands = (axis: 'x' | 'y', id: string, a: Point, b: Point): boolean => {
+    const at = a[axis]
+    const along = axis === 'y' ? 'x' : 'y'
+    const lo = Math.min(a[along], b[along])
+    const hi = Math.max(a[along], b[along])
+    for (let key = Math.round(at) - SHARED_TOLERANCE; key <= Math.round(at) + SHARED_TOLERANCE; key++) {
+      for (const other of lines[axis].get(key) ?? []) {
+        if (other.id === id) continue
+        const pts = routes.get(other.id)!.points
+        const p = pts[other.segmentIndex]
+        const q = pts[other.segmentIndex + 1]
+        // Live position: the entry may be stale (that segment moved since).
+        if (!q || p[axis] !== q[axis] || Math.abs(p[axis] - at) >= SHARED_TOLERANCE) continue
+        if (Math.min(hi, Math.max(p[along], q[along])) - Math.max(lo, Math.min(p[along], q[along])) > 0) return true
+      }
+    }
+    return false
+  }
+
   for (const [axis, groups] of [['y', horizontal], ['x', vertical]] as const) {
     for (const segments of groups.values()) {
       // Clusters of mutually overlapping intervals (connected components along the line).
@@ -225,8 +258,10 @@ function nudgeOverlappingSegments(
             let points = route.points
             for (const seg of segs) points = shiftedPoints(points, seg.segmentIndex, axis, d)
             if (pathHits(points, own, 0) > pathHits(route.points, own, 0)) continue
+            if (segs.some(seg => lands(axis, id, points[seg.segmentIndex], points[seg.segmentIndex + 1]))) continue
             route.points = points
             updateRouteMetadata(route)
+            for (const seg of segs) hold(axis, points[seg.segmentIndex][axis], id, seg.segmentIndex)
             taken.add(d)
             break
           }
