@@ -93,6 +93,10 @@ export interface OrthogonalLayoutResult {
 // How much wider than the narrowest BFS layering a candidate root's widest layer may be. Measured
 // on the Stage 1 fixtures: 1 leaves the exemplar at 3 crossings, 2 reaches 1; wider buys nothing.
 const ROOT_WIDTH_SLACK = 2
+// Each candidate root costs a full ordering search, so on a large component (a 500-node chain
+// qualifies every node) only the MAX_ROOT_CANDIDATES narrowest, shallowest layerings are ordered.
+// Every Stage 1/2 graph has at most 27 candidates per component, so none of them is affected.
+const MAX_ROOT_CANDIDATES = 32
 
 const DIRS = [
   { dx: 1, dy: 0 }, // 0 right
@@ -427,9 +431,13 @@ function layoutComponent(
     layerings = core.map(bfs)
   }
   const narrowest = Math.min(...layerings.map(l => l.widest))
+  let candidates = layerings.filter(l => l.widest <= narrowest + ROOT_WIDTH_SLACK)
+  if (candidates.length > MAX_ROOT_CANDIDATES) {
+    const keep = new Set([...candidates].sort((a, b) => a.widest - b.widest || a.rows - b.rows || a.root - b.root).slice(0, MAX_ROOT_CANDIDATES))
+    candidates = candidates.filter(l => keep.has(l))
+  }
   let best: { crossings: number; widest: number; rows: number; root: number; layers: number[][]; depth: Map<number, number> } | null = null
-  for (const l of layerings) {
-    if (l.widest > narrowest + ROOT_WIDTH_SLACK) continue
+  for (const l of candidates) {
     const ordered = orderLayers(l.depth, l.order, l.rows, adjCore, sweeps)
     if (!best || ordered.crossings < best.crossings || (ordered.crossings === best.crossings && (l.widest < best.widest || (l.widest === best.widest && l.rows < best.rows)))) {
       best = { crossings: ordered.crossings, widest: l.widest, rows: l.rows, root: l.root, layers: ordered.layers, depth: l.depth }
@@ -572,8 +580,12 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
       const l = layers[r]
       if (l.length <= EXACT_MAX) continue
       for (let i = 0; i < l.length; i++) {
-        // Try inserting node i at every other position; keep the first strict improvement.
-        const base = current - rowTerms(r)
+        // Try inserting node i at every other position; keep the first strict improvement. A row
+        // whose terms are already 0 cannot improve (every term is a count): skip it (a star's
+        // 400 leaves cost 400^2 moves times a 400^2 re-count otherwise).
+        const terms = rowTerms(r)
+        if (terms === 0) break
+        const base = current - terms
         for (let j = 0; j < l.length; j++) {
           if (j === i) continue
           const moved = l.splice(i, 1)[0]
