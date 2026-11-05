@@ -440,6 +440,7 @@ function buildComponentSolver(
   for (let i = 0; i < m * m; i++) w[i] = d[i] > 0 ? 1 / (d[i] * d[i]) : 0
 
   const p = () => members.map(g => pos[g])
+  const xs = new Float64Array(m), ys = new Float64Array(m)
 
   return {
     initFromMds() {
@@ -452,29 +453,33 @@ function buildComponentSolver(
       }
     },
     sweep() {
-      const q = p()
+      // Flat coordinate arrays and sqrt instead of Math.hypot in the O(m^2) loop: this loop and
+      // stress() were 70% of a 1000-node layout's time (2026-11-05 profile). Same Gauss-Seidel
+      // order; the result can differ from the hypot version in the last bits only.
+      for (let i = 0; i < m; i++) { xs[i] = pos[members[i]].x; ys[i] = pos[members[i]].y }
       let maxMove = 0
       for (let i = 0; i < m; i++) {
         if (!movable[members[i]]) continue
         let nx = 0, ny = 0, den = 0
-        const xi = q[i]
+        const xix = xs[i], xiy = ys[i], row = i * m
         for (let j = 0; j < m; j++) {
-          if (j === i) continue
-          const wij = w[i * m + j]
-          if (wij === 0) continue
-          const xj = q[j]
-          let dx = xi.x - xj.x, dy = xi.y - xj.y
-          let dist = Math.hypot(dx, dy)
+          const wij = w[row + j]
+          if (wij === 0 || j === i) continue
+          const xjx = xs[j], xjy = ys[j]
+          let dx = xix - xjx, dy = xiy - xjy
+          let dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < 1e-9) { const u = unitFor(nodes[members[i]].id); dx = u.x; dy = u.y; dist = 1 }
-          const dij = d[i * m + j]
-          nx += wij * (xj.x + (dij * dx) / dist)
-          ny += wij * (xj.y + (dij * dy) / dist)
+          const f = d[row + j] / dist
+          nx += wij * (xjx + f * dx)
+          ny += wij * (xjy + f * dy)
           den += wij
         }
         if (den > 0) {
           const nxv = nx / den, nyv = ny / den
-          maxMove = Math.max(maxMove, Math.hypot(nxv - xi.x, nyv - xi.y))
-          xi.x = nxv; xi.y = nyv
+          const mx = nxv - xix, my = nyv - xiy
+          maxMove = Math.max(maxMove, Math.sqrt(mx * mx + my * my))
+          xs[i] = nxv; ys[i] = nyv
+          pos[members[i]].x = nxv; pos[members[i]].y = nyv
         }
       }
       return maxMove
@@ -503,13 +508,17 @@ function buildComponentSolver(
       return rounds
     },
     stress() {
-      const q = p()
+      for (let i = 0; i < m; i++) { xs[i] = pos[members[i]].x; ys[i] = pos[members[i]].y }
       let s = 0
-      for (let i = 0; i < m; i++) for (let j = i + 1; j < m; j++) {
-        const wij = w[i * m + j]
-        if (wij === 0) continue
-        const diff = Math.hypot(q[i].x - q[j].x, q[i].y - q[j].y) - d[i * m + j]
-        s += wij * diff * diff
+      for (let i = 0; i < m; i++) {
+        const xix = xs[i], xiy = ys[i], row = i * m
+        for (let j = i + 1; j < m; j++) {
+          const wij = w[row + j]
+          if (wij === 0) continue
+          const dx = xix - xs[j], dy = xiy - ys[j]
+          const diff = Math.sqrt(dx * dx + dy * dy) - d[row + j]
+          s += wij * diff * diff
+        }
       }
       return s
     },
