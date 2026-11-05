@@ -117,8 +117,8 @@ const NUDGE_PASSES = 25
 const HALO_OVERFLOW = 4
 // Proximity-stress polish before the overlap stage (Gansner & Hu's PRISM idea, inside the stress
 // model): each round gives every still-overlapping pair an ideal distance of its current distance
-// times its grow factor (capped at POLISH_STRETCH, so a near-coincident pair asks for a bounded
-// stretch), weighted POLISH_WEIGHT times a plain pair so the targets actually bind, then runs up to
+// times its grow factor (capped at POLISH_STRETCH). A coincident or near-coincident pair gets no
+// useful target this way (its current distance is ~0) and is left to the overlap stage. Weighted POLISH_WEIGHT times a plain pair so the targets actually bind, then runs up to
 // POLISH_SWEEPS sweeps. Measured 2026-11-05 on real/miserables (77 nodes, the densest Stage 1
 // fixture): the stress solve itself lands at scale-fitted stress 0.083-0.087 for any preferred
 // length 110-160, but the GTree overlap stage then added 0.03-0.08 more, erratically (final
@@ -358,7 +358,9 @@ interface ComponentSolver {
   /** One Gauss-Seidel sweep over the movable nodes; returns the largest displacement in px. */
   sweep(): number
   stress(): number
-  /** Proximity-stress polish (stage 4b); returns the number of rounds run. */
+  /** Proximity-stress polish (stage 4b); returns the number of rounds run. Raises the solver's own
+   *  ideal distances and weights in place, so stress() and sweep() measure the polished objective
+   *  afterwards; stressHistory is recorded before the polish runs. */
   polish(): number
 }
 
@@ -488,12 +490,12 @@ function buildComponentSolver(
       if (m > POLISH_MAX_NODES) return 0
       let rounds = 0
       for (let r = 0; r < POLISH_ROUNDS; r++) {
-        const q = p()
+        // One box per member per round (not per pair): the pair scan is O(m^2).
+        const bx = p().map((q, i) => ({ x: q.x, y: q.y, w: nodes[members[i]].width, h: nodes[members[i]].height }))
         let added = 0
         for (let i = 0; i < m; i++) for (let j = i + 1; j < m; j++) {
           if (!movable[members[i]] && !movable[members[j]]) continue
-          const na = nodes[members[i]], nb = nodes[members[j]]
-          const a = { x: q[i].x, y: q[i].y, w: na.width, h: na.height }, b = { x: q[j].x, y: q[j].y, w: nb.width, h: nb.height }
+          const a = bx[i], b = bx[j]
           if (!tooClose(a, b, gap)) continue
           const target = Math.max(Math.hypot(a.x - b.x, a.y - b.y), 1e-6) * Math.min(growFactor(a, b, gap), POLISH_STRETCH)
           if (target <= d[i * m + j]) continue
