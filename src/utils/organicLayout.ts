@@ -14,6 +14,9 @@ import type { LayoutNode, LayoutEdge } from './graphLayout'
  *   2. initial positions: classical MDS (PivotMDS above MDS_MAX_NODES) on a cold start, the
  *      supplied positions on a warm start.
  *   3. stress majorization with localized (Gauss-Seidel) updates, stress recorded per sweep.
+ *   4b. proximity-stress polish (components up to POLISH_MAX_NODES): pairs whose boxes still
+ *      overlap get a separation target in the stress model and a few more sweeps, so the overlap
+ *      stage that follows has little left to do and distorts the solved shape less.
  *   5. overlap removal: GTree-style growing tree over the Delaunay triangulation, looped until a
  *      pairwise scan finds no overlap, with a shape-preserving scale-up as the terminating
  *      fallback — so zero overlap and the minimum node distance are hard post-conditions.
@@ -78,6 +81,8 @@ export interface OrganicLayoutStats {
   overlapIterations: number
   /** Times the scale-up fallback fired because growing the tree alone did not clear overlaps. */
   scaledUp: number
+  /** Proximity-stress polish rounds run (summed over components). */
+  polishRounds: number
   components: number
   warmStart: boolean
   /** Nodes the stress solve was allowed to move. */
@@ -110,6 +115,21 @@ const NUDGE_PASSES = 25
 // spare (up to four times its capacity, the overlap stage absorbs the rest); past that the leaves form
 // a halo: grid cells around the hub, filled by elliptical distance so the halo has the view's shape.
 const HALO_OVERFLOW = 4
+// Proximity-stress polish before the overlap stage (Gansner & Hu's PRISM idea, inside the stress
+// model): each round gives every still-overlapping pair an ideal distance of its current distance
+// times its grow factor (capped at POLISH_STRETCH, so a near-coincident pair asks for a bounded
+// stretch), weighted POLISH_WEIGHT times a plain pair so the targets actually bind, then runs up to
+// POLISH_SWEEPS sweeps. Measured 2026-11-05 on real/miserables (77 nodes, the densest Stage 1
+// fixture): the stress solve itself lands at scale-fitted stress 0.083-0.087 for any preferred
+// length 110-160, but the GTree overlap stage then added 0.03-0.08 more, erratically (final
+// 0.110-0.163 across that range); with the polish the final value stays 0.103-0.127. The pair
+// scan and the sweeps are O(m^2) per round, so the polish is skipped above POLISH_MAX_NODES
+// (the Stage 3 1000-node fixture went from 1.6 s to 6.4 s with it).
+const POLISH_ROUNDS = 20
+const POLISH_SWEEPS = 10
+const POLISH_WEIGHT = 30
+const POLISH_STRETCH = 1.5
+const POLISH_MAX_NODES = 300
 
 // ─── deterministic per-id helpers ────────────────────────────────────────────
 
@@ -220,7 +240,7 @@ export function organicLayout(
   const placedLabels = labels.filter(l => positioned[l.a] && positioned[l.b])
   const valid = mostPositioned && !anyTooClose(boxes.filter((_, i) => positioned[i]), gap) && labelViolations(placedLabels, boxes, pos).length === 0
   const warm = mostPositioned && (scope === 'auto' ? valid : true)
-  const stats: OrganicLayoutStats = { iterations: 0, overlapIterations: 0, scaledUp: 0, components: components.length, warmStart: warm, solvedNodes: 0 }
+  const stats: OrganicLayoutStats = { iterations: 0, overlapIterations: 0, scaledUp: 0, polishRounds: 0, components: components.length, warmStart: warm, solvedNodes: 0 }
   const pinned = sorted.map((nd, i) => Boolean(nd.pinned) && positioned[i])
   // The input positions of the nodes that had them: the Procrustes reference for a re-solved
   // sketch and the anchors for pinned nodes. Captured before any node is placed or moved.
@@ -303,6 +323,10 @@ export function organicLayout(
     for (let i = 0; i < n; i++) if (pinned[i]) pos[i] = { ...originalPos[i] }
   }
 
+  // Stage 4b — proximity-stress polish (a separate objective from the stress history above, which
+  // stays the majorization's own, monotone record). Only movable nodes move.
+  if (stats.solvedNodes > 0) for (const s of solvers) stats.polishRounds += s.polish()
+
   // Stage 5 — overlap removal, guaranteed, per component.
   syncBoxes()
   const inComponent = new Map<number, LabelHint[]>()
@@ -334,6 +358,8 @@ interface ComponentSolver {
   /** One Gauss-Seidel sweep over the movable nodes; returns the largest displacement in px. */
   sweep(): number
   stress(): number
+  /** Proximity-stress polish (stage 4b); returns the number of rounds run. */
+  polish(): number
 }
 
 function buildComponentSolver(
@@ -452,6 +478,29 @@ function buildComponentSolver(
         }
       }
       return maxMove
+    },
+    polish() {
+      if (m > POLISH_MAX_NODES) return 0
+      let rounds = 0
+      for (let r = 0; r < POLISH_ROUNDS; r++) {
+        const q = p()
+        let added = 0
+        for (let i = 0; i < m; i++) for (let j = i + 1; j < m; j++) {
+          if (!movable[members[i]] && !movable[members[j]]) continue
+          const na = nodes[members[i]], nb = nodes[members[j]]
+          const a = { x: q[i].x, y: q[i].y, w: na.width, h: na.height }, b = { x: q[j].x, y: q[j].y, w: nb.width, h: nb.height }
+          if (!tooClose(a, b, gap)) continue
+          const target = Math.max(Math.hypot(a.x - b.x, a.y - b.y), 1e-6) * Math.min(growFactor(a, b, gap), POLISH_STRETCH)
+          if (target <= d[i * m + j]) continue
+          d[i * m + j] = d[j * m + i] = target
+          w[i * m + j] = w[j * m + i] = POLISH_WEIGHT / (target * target)
+          added++
+        }
+        if (added === 0) break
+        rounds++
+        for (let k = 0; k < POLISH_SWEEPS; k++) if (this.sweep() < 0.01) break
+      }
+      return rounds
     },
     stress() {
       const q = p()
