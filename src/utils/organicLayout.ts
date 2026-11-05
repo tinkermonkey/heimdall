@@ -59,7 +59,10 @@ export interface OrganicLayoutEdge extends LayoutEdge {
 interface LabelHint { a: number; b: number; w: number; h: number; offset: number }
 
 export interface OrganicLayoutOptions {
-  /** Ideal length of an edge in px (default 160). */
+  /** Ideal length of an edge in px. Default: 120 in a component none of whose edges carries a
+   *  `length` hint, 160 in one that does (hinted edges leave room for their labels, and a shorter
+   *  base length there only hands the label post-conditions more to do). A value given here
+   *  applies to every component. */
   preferredEdgeLength?: number
   /** Smallest box-to-box gap guaranteed between any two nodes, in px (default 24). */
   minimumNodeDistance?: number
@@ -115,6 +118,14 @@ const NUDGE_PASSES = 25
 // spare (up to four times its capacity, the overlap stage absorbs the rest); past that the leaves form
 // a halo: grid cells around the hub, filled by elliptical distance so the halo has the view's shape.
 const HALO_OVERFLOW = 4
+// Default preferred edge length (before compactness): a component with no `length` hints is drawn
+// tighter than one with them. Measured 2026-11-05 on the card sizes the harness renders (about
+// 128x23 px): at 160 px real/technology-layer fit a 1280x800 view at 16.1 px card height (vision
+// item 11 asks >= 18) with 5.8% of its bounding box covered by cards; at 120 px, 19.8 px and 9.4%.
+// The same change for labelled components (exp-015, 140 px everywhere) grew them instead: the
+// label post-conditions in the overlap stage then had more to do.
+const DEFAULT_EDGE_LENGTH_PLAIN = 120
+const DEFAULT_EDGE_LENGTH_HINTED = 160
 // Proximity-stress polish before the overlap stage (Gansner & Hu's PRISM idea, inside the stress
 // model): each round gives every still-overlapping pair an ideal distance of its current distance
 // times its grow factor (capped at POLISH_STRETCH, so a near-coincident pair asks for a bounded
@@ -172,7 +183,9 @@ export function organicLayout(
   edges: readonly OrganicLayoutEdge[],
   options: OrganicLayoutOptions = {},
 ): OrganicLayoutResult {
-  const L = (options.preferredEdgeLength ?? 160) * (1.25 - 0.5 * Math.min(1, Math.max(0, options.compactness ?? 0.5)))
+  const compactScale = 1.25 - 0.5 * Math.min(1, Math.max(0, options.compactness ?? 0.5))
+  const L = (options.preferredEdgeLength ?? DEFAULT_EDGE_LENGTH_HINTED) * compactScale
+  const plainL = (options.preferredEdgeLength ?? DEFAULT_EDGE_LENGTH_PLAIN) * compactScale
   const gap = options.minimumNodeDistance ?? 24
   const maxIterations = options.maxIterations ?? 300
   const tolerance = options.tolerance ?? 1e-4
@@ -263,7 +276,10 @@ export function organicLayout(
   // Stages 1–3 per component (lockstep sweeps so the total stress history is monotone).
   const solvers = components
     .filter(m => m.length > 1)
-    .map(m => buildComponentSolver(m, adj, sorted, pos, movable, L, gap, pairLength))
+    .map(m => {
+      const hinted = m.some(a => adj[a].some(b => pairLength.has(a < b ? `${a}|${b}` : `${b}|${a}`)))
+      return buildComponentSolver(m, adj, sorted, pos, movable, hinted ? L : plainL, gap, pairLength)
+    })
 
   if (!warm) {
     // Cold start: MDS per component, then each component's frame anchored onto its pins (or
