@@ -93,10 +93,15 @@ export interface OrthogonalLayoutResult {
 // How much wider than the narrowest BFS layering a candidate root's widest layer may be. Measured
 // on the Stage 1 fixtures: 1 leaves the exemplar at 3 crossings, 2 reaches 1; wider buys nothing.
 const ROOT_WIDTH_SLACK = 2
-// Each candidate root costs a full ordering search, so on a large component (a 500-node chain
-// qualifies every node) only the MAX_ROOT_CANDIDATES narrowest, shallowest layerings are ordered.
-// Every Stage 1/2 graph has at most 27 candidates per component, so none of them is affected.
-const MAX_ROOT_CANDIDATES = 32
+// Each candidate root costs a full ordering search, so a component with more candidates than this
+// (a sparse one: a chain qualifies every node from about 33 nodes on) orders only the first
+// MAX_ROOT_CANDIDATES by (widest layer, rows, root). That is the winner's own tie-break below, so
+// the kept set is the one an unbounded search falls back to when crossings tie; the cap changes
+// the result only when a dropped, wider layering commits to strictly fewer crossings. Measured
+// against the unbounded search on 540 seeded graphs: 32 changes 6, 48 changes 4, 64 changes 1;
+// ordering by rows first changes 49 (always shorter grids, 150 more bends in all). Every Stage 1/2
+// graph has at most 27 candidates per component, so none of them is affected.
+const MAX_ROOT_CANDIDATES = 64
 
 const DIRS = [
   { dx: 1, dy: 0 }, // 0 right
