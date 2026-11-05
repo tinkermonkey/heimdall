@@ -182,4 +182,35 @@ describe('polylineToRoutedEdge', () => {
     expect(r.d.startsWith('M')).toBe(true)
     expect(polylineToRoutedEdge([{ x: 0, y: 0 }])).toBeNull()
   })
+
+  describe('blocked routes', () => {
+    // Four full rows of 100x30 boxes 10 px apart (too narrow for a route); the two middle rows
+    // each have one wide gap, on opposite sides. No shape with three bends or fewer is clear, so
+    // the route must search: down through the row gaps, sideways at each gap (2026-11-05).
+    it('steps through staggered row gaps instead of crossing a box', () => {
+      const box = (x: number, y: number): EdgeEndpointRect => ({ x, y, width: 100, height: 30 })
+      const rects: EdgeEndpointRect[] = []
+      for (let k = -10; k <= 10; k++) {
+        rects.push(box(k * 110, 0), box(k * 110, 300))
+        if (k !== 3) rects.push(box(k * 110, 100))
+        if (k !== -3) rects.push(box(k * 110, 200))
+      }
+      const source = rects.find(r => r.x === 0 && r.y === 0)!
+      const target = rects.find(r => r.x === 0 && r.y === 300)!
+      const route = routeNavigationEdges([{ id: 'e', source, target }], rects).get('e')!
+      const hits = (a: { x: number; y: number }, b: { x: number; y: number }, r: EdgeEndpointRect) =>
+        Math.min(a.x, b.x) < r.x + r.width / 2 && Math.max(a.x, b.x) > r.x - r.width / 2 &&
+        Math.min(a.y, b.y) < r.y + r.height / 2 && Math.max(a.y, b.y) > r.y - r.height / 2
+      for (let i = 0; i < route.points.length - 1; i++) {
+        for (const r of rects) {
+          if (r === source || r === target) continue
+          expect(hits(route.points[i], route.points[i + 1], r)).toBe(false)
+        }
+      }
+      // Through the two gaps (330 px out and back, twice), not round the 2,300 px wide rows.
+      let length = 0
+      for (let i = 0; i < route.points.length - 1; i++) length += Math.abs(route.points[i + 1].x - route.points[i].x) + Math.abs(route.points[i + 1].y - route.points[i].y)
+      expect(length).toBeLessThan(2000)
+    })
+  })
 })

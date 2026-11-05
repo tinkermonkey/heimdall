@@ -621,8 +621,9 @@ function gapLanes(axis: 'x' | 'y', boxes: readonly EdgeEndpointRect[], lo: numbe
  * A bent candidate whose first or last leg is shorter than MIN_STUB is dropped (it reads as
  * arriving at the box's corner). Among the clear candidates the cheapest wins: length +
  * BEND_COST per bend + CROSSING_COST per crossing with a route already drawn (`drawn`) +
- * OVERLAP_COST per px run along one + NEAR_BOX_COST per box passed closer than OBSTACLE_PADDING. If none is clear, the one crossing the fewest
- * boxes. Before 2026-11-04 the first clear candidate won and lanes existed only at the
+ * OVERLAP_COST per px run along one + NEAR_BOX_COST per box passed closer than OBSTACLE_PADDING. If none is clear, a
+ * search through the free space (searchLanes); if that finds nothing either, the one crossing the
+ * fewest boxes. Before 2026-11-04 the first clear candidate won and lanes existed only at the
  * extremes of the obstacles, so a route whose straight run was blocked by one box in a row of
  * boxes went around the whole drawing even when a gap in that row was free (heimdall test page:
  * Dashboard → Settings, directly below it, ran out to the canvas's left edge and back).
@@ -821,11 +822,227 @@ function buildOrthogonalPath(
     consider(combos, candidates.length)
   }
 
+  // No shape above is clear: search the free space instead (searchLanes), first near the two
+  // boxes, then over the whole drawing. The shapes have at most three bends and lanes clear over
+  // the route's whole span, so in a drawing of many rows a route between rows far apart had no
+  // clear candidate and took the one crossing the fewest boxes (2026-11-05, 582-node synthetic
+  // sitemap: 26 segments through boxes, and one route sent round the drawing at 8x its Manhattan
+  // distance). Only blocked routes pay for the search.
+  if (bestHits > 0) {
+    for (const margin of [SEARCH_MARGIN, Infinity]) {
+      const found = searchLanes(source, target, obstacles, margin)
+      if (!found) continue
+      consider([found], Number.MAX_SAFE_INTEGER)
+      if (bestHits === 0) break
+    }
+  }
+
   // No candidate fits its ports (only degenerate, zero-size boxes): the first direct or L shape,
   // which is still orthogonal.
   const chosen = best as { points: Point[] } | null
   if (!chosen) return { points: simplifyPath(candidates[0]), cost: Infinity }
   return { points: chosen.points, cost: bestCost }
+}
+
+/** How far (px) past the two boxes searchLanes looks first, before searching the whole drawing. */
+const SEARCH_MARGIN = 300
+
+/**
+ * searchLanes weights its heuristic by this (a hair over 1): among the many equally short
+ * staircases between two points it then follows the one nearest the target instead of
+ * expanding all of them, at most 0.1% longer than the cheapest.
+ */
+const H_TIE = 1.001
+
+/** Largest search grid (lane coordinates x by y) searchLanes builds; a larger one gives up. */
+const SEARCH_MAX_POINTS = 400_000
+
+/**
+ * Lane coordinates along one axis for searchLanes: OBSTACLE_PADDING outside each box, the middle
+ * of the gap from each box to the next box edge beyond it, and the route's own stub coordinates.
+ */
+function searchCoordinates(axis: 'x' | 'y', boxes: readonly EdgeEndpointRect[], extra: number[], lo: number, hi: number): number[] {
+  const size = (b: EdgeEndpointRect) => (axis === 'x' ? b.width : b.height)
+  const los = boxes.map(b => b[axis] - size(b) / 2).sort((a, b) => a - b)
+  const out = [...extra]
+  for (const b of boxes) {
+    const bLo = b[axis] - size(b) / 2
+    const bHi = b[axis] + size(b) / 2
+    out.push(bLo - OBSTACLE_PADDING, bHi + OBSTACLE_PADDING)
+    // First box edge past this box's far edge (binary search).
+    let l = 0
+    let r = los.length
+    while (l < r) {
+      const m = (l + r) >> 1
+      if (los[m] <= bHi) l = m + 1
+      else r = m
+    }
+    if (l < los.length && los[l] - bHi >= 2 * MIN_CLEARANCE) out.push((bHi + los[l]) / 2)
+  }
+  return [...new Set(out.filter(v => v >= lo && v <= hi))].sort((a, b) => a - b)
+}
+
+/**
+ * Cheapest orthogonal route (length + BEND_COST per bend) from a side of `source` to a side of
+ * `target` through lanes clear of every box by MIN_CLEARANCE: A* over the grid of lane
+ * coordinates (searchCoordinates) within `margin` of the two boxes. Each route leaves and
+ * arrives perpendicular to a side, with a MIN_CLEARANCE stub. Null when there is none, or the
+ * grid would exceed SEARCH_MAX_POINTS.
+ */
+function searchLanes(source: EdgeEndpointRect, target: EdgeEndpointRect, obstacles: readonly EdgeEndpointRect[], margin: number): Point[] | null {
+  const c = MIN_CLEARANCE
+  const ends = [source, target]
+  const all = [...obstacles, ...ends]
+  const extent = (bs: readonly EdgeEndpointRect[]) => ({
+    x1: Math.min(...bs.map(b => b.x - b.width / 2)), x2: Math.max(...bs.map(b => b.x + b.width / 2)),
+    y1: Math.min(...bs.map(b => b.y - b.height / 2)), y2: Math.max(...bs.map(b => b.y + b.height / 2)),
+  })
+  const inner = extent(ends)
+  const outer = extent(all)
+  const pad = OBSTACLE_PADDING + c
+  const win = {
+    x1: Math.max(inner.x1 - margin, outer.x1 - pad), x2: Math.min(inner.x2 + margin, outer.x2 + pad),
+    y1: Math.max(inner.y1 - margin, outer.y1 - pad), y2: Math.min(inner.y2 + margin, outer.y2 + pad),
+  }
+  const boxes = all.filter(b => b.x + b.width / 2 + c > win.x1 && b.x - b.width / 2 - c < win.x2 && b.y + b.height / 2 + c > win.y1 && b.y - b.height / 2 - c < win.y2)
+
+  // Stubs: one per side, MIN_CLEARANCE out from the side's middle, with the direction (0 +x,
+  // 1 -x, 2 +y, 3 -y) a route leaves in.
+  const stubs = (r: EdgeEndpointRect) => [
+    { x: r.x + r.width / 2 + c, y: r.y, dir: 0, port: portOn(r, 'right') },
+    { x: r.x - r.width / 2 - c, y: r.y, dir: 1, port: portOn(r, 'left') },
+    { x: r.x, y: r.y + r.height / 2 + c, dir: 2, port: portOn(r, 'bottom') },
+    { x: r.x, y: r.y - r.height / 2 - c, dir: 3, port: portOn(r, 'top') },
+  ]
+  const from = stubs(source)
+  const to = stubs(target)
+  const xs = searchCoordinates('x', boxes, [...from, ...to].map(s => s.x), win.x1, win.x2)
+  const ys = searchCoordinates('y', boxes, [...from, ...to].map(s => s.y), win.y1, win.y2)
+  const nx = xs.length
+  const ny = ys.length
+  if (nx * ny > SEARCH_MAX_POINTS) return null
+  const index = (vs: number[], v: number) => vs.indexOf(v)
+
+  const grid = boxGrid(boxes)
+  // Whether the unit step from grid point i in +x (axis 0) / +y (axis 1) is clear: 0 unknown, 1 clear, 2 blocked.
+  const stepState = new Uint8Array(nx * ny * 2)
+  const stepClear = (ix: number, iy: number, axis: 0 | 1): boolean => {
+    const k = (iy * nx + ix) * 2 + axis
+    if (stepState[k] === 0) {
+      const a = { x: xs[ix], y: ys[iy] }
+      const b = axis === 0 ? { x: xs[ix + 1], y: ys[iy] } : { x: xs[ix], y: ys[iy + 1] }
+      let hit = false
+      grid.visit(Math.min(a.x, b.x) - c, Math.min(a.y, b.y) - c, Math.max(a.x, b.x) + c, Math.max(a.y, b.y) + c, box => (hit = segmentHitsBox(a, b, box, c)))
+      stepState[k] = hit ? 2 : 1
+    }
+    return stepState[k] === 1
+  }
+  const DX = [1, -1, 0, 0]
+  const DY = [0, 0, 1, -1]
+  const states = nx * ny * 4
+  const g = new Float64Array(states).fill(Infinity)
+  const parent = new Int32Array(states).fill(-1)
+  const goalDir = new Int8Array(nx * ny).fill(-1)
+  for (const s of to) goalDir[index(ys, s.y) * nx + index(xs, s.x)] = s.dir ^ 1 // arrive moving inward
+  const tx = to.map(s => s.x)
+  const ty = to.map(s => s.y)
+  const h = (ix: number, iy: number) => {
+    const x = xs[ix]
+    const y = ys[iy]
+    let best = Infinity
+    for (let k = 0; k < 4; k++) {
+      const d = Math.abs(x - tx[k]) + Math.abs(y - ty[k])
+      if (d < best) best = d
+    }
+    return best
+  }
+
+  // Binary min-heap of [f, state].
+  const heapF: number[] = []
+  const heapS: number[] = []
+  const push = (f: number, s: number) => {
+    let i = heapF.length
+    heapF.push(f)
+    heapS.push(s)
+    while (i > 0) {
+      const p = (i - 1) >> 1
+      if (heapF[p] <= f) break
+      heapF[i] = heapF[p]; heapS[i] = heapS[p]; i = p
+    }
+    heapF[i] = f; heapS[i] = s
+  }
+  const pop = (): number => {
+    const top = heapS[0]
+    const f = heapF.pop()!
+    const s = heapS.pop()!
+    if (heapF.length > 0) {
+      let i = 0
+      for (;;) {
+        const l = 2 * i + 1
+        if (l >= heapF.length) break
+        const m = l + 1 < heapF.length && heapF[l + 1] < heapF[l] ? l + 1 : l
+        if (heapF[m] >= f) break
+        heapF[i] = heapF[m]; heapS[i] = heapS[m]; i = m
+      }
+      heapF[i] = f; heapS[i] = s
+    }
+    return top
+  }
+
+  for (const s of from) {
+    const ix = index(xs, s.x)
+    const iy = index(ys, s.y)
+    if (ix < 0 || iy < 0) continue
+    const st = (iy * nx + ix) * 4 + s.dir
+    g[st] = c
+    push(c + H_TIE * h(ix, iy), st)
+  }
+  let goal = -1
+  while (heapF.length > 0) {
+    const st = pop()
+    const dir = st & 3
+    const cell = st >> 2
+    const ix = cell % nx
+    const iy = (cell - ix) / nx
+    if (goalDir[cell] === dir) { goal = st; break }
+    const gs = g[st]
+    // Straight on.
+    const jx = ix + DX[dir]
+    const jy = iy + DY[dir]
+    if (jx >= 0 && jx < nx && jy >= 0 && jy < ny) {
+      const clear = dir < 2 ? stepClear(Math.min(ix, jx), iy, 0) : stepClear(ix, Math.min(iy, jy), 1)
+      const next = (jy * nx + jx) * 4 + dir
+      const cost = gs + Math.abs(xs[jx] - xs[ix]) + Math.abs(ys[jy] - ys[iy])
+      if (clear && cost < g[next]) {
+        g[next] = cost
+        parent[next] = st
+        push(cost + H_TIE * h(jx, jy), next)
+      }
+    }
+    // Turn (never back the way the route came).
+    const turn = gs + BEND_COST
+    const hHere = h(ix, iy)
+    for (let nd = dir < 2 ? 2 : 0, end = nd + 2; nd < end; nd++) {
+      const next = cell * 4 + nd
+      if (turn < g[next]) {
+        g[next] = turn
+        parent[next] = st
+        push(turn + H_TIE * hHere, next)
+      }
+    }
+  }
+  if (goal < 0) return null
+
+  const cells: Point[] = []
+  for (let st = goal; st >= 0; st = parent[st]) {
+    const cell = st >> 2
+    const ix = cell % nx
+    cells.push({ x: xs[ix], y: ys[(cell - ix) / nx] })
+  }
+  cells.reverse()
+  const start = from.find(s => s.x === cells[0].x && s.y === cells[0].y)!
+  const end = to.find(s => s.x === cells[cells.length - 1].x && s.y === cells[cells.length - 1].y)!
+  return simplifyPath([start.port, ...cells, end.port])
 }
 
 function pointsToPathString(points: Point[]): string {
