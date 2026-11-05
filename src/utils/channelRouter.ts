@@ -827,8 +827,14 @@ function buildOrthogonalPath(
   // the route's whole span, so in a drawing of many rows a route between rows far apart had no
   // clear candidate and took the one crossing the fewest boxes (2026-11-05, 582-node synthetic
   // sitemap: 26 segments through boxes, and one route sent round the drawing at 8x its Manhattan
-  // distance). Only blocked routes pay for the search.
-  if (bestHits > 0) {
+  // distance). Also when the cheapest clear shape is more than SEARCH_DETOUR times the shortest
+  // any route between the two boxes could be: it goes out round the obstacles and back (same
+  // sitemap: a route out to the drawing's bottom and left edges at 2.9x). Other routes do not
+  // pay for the search.
+  const portGap = (d: number, a: number, b: number) => Math.max(0, Math.abs(d) - (a + b) / 2)
+  const shortest = portGap(dx, source.width, target.width) + portGap(dy, source.height, target.height)
+  const detoured = best !== null && shortest > 0 && pathLength((best as { points: Point[] }).points) > SEARCH_DETOUR * shortest
+  if (bestHits > 0 || detoured) {
     for (const margin of [SEARCH_MARGIN, Infinity]) {
       const found = searchLanes(source, target, obstacles, margin)
       if (!found) continue
@@ -853,6 +859,12 @@ const SEARCH_MARGIN = 300
  * expanding all of them, at most 0.1% longer than the cheapest.
  */
 const H_TIE = 1.001
+
+/** What an off-centre port costs searchLanes (px of length): enough to lose a tie with the side's middle. */
+const OFF_CENTRE_PORT_COST = 1
+
+/** A clear route longer than this many times the shortest possible is searched for a better one. */
+const SEARCH_DETOUR = 1.5
 
 /** Largest search grid (lane coordinates x by y) searchLanes builds; a larger one gives up. */
 const SEARCH_MAX_POINTS = 400_000
@@ -906,21 +918,35 @@ function searchLanes(source: EdgeEndpointRect, target: EdgeEndpointRect, obstacl
   }
   const boxes = all.filter(b => b.x + b.width / 2 + c > win.x1 && b.x - b.width / 2 - c < win.x2 && b.y + b.height / 2 + c > win.y1 && b.y - b.height / 2 - c < win.y2)
 
-  // Stubs: one per side, MIN_CLEARANCE out from the side's middle, with the direction (0 +x,
-  // 1 -x, 2 +y, 3 -y) a route leaves in.
-  const stubs = (r: EdgeEndpointRect) => [
-    { x: r.x + r.width / 2 + c, y: r.y, dir: 0, port: portOn(r, 'right') },
-    { x: r.x - r.width / 2 - c, y: r.y, dir: 1, port: portOn(r, 'left') },
-    { x: r.x, y: r.y + r.height / 2 + c, dir: 2, port: portOn(r, 'bottom') },
-    { x: r.x, y: r.y - r.height / 2 - c, dir: 3, port: portOn(r, 'top') },
+  // Stubs: MIN_CLEARANCE out from each side's middle, and from the top and bottom sides at every
+  // lane inside their span (MIN_STUB clear of the corners), so a route can drop straight through
+  // a gap beside its box instead of jogging over to it; with the direction (0 +x, 1 -x, 2 +y,
+  // 3 -y) a route leaves in, and a cost that makes an off-centre port lose a tie.
+  type Stub = { x: number; y: number; dir: number; port: Point; cost: number }
+  const centreStubs = (r: EdgeEndpointRect): Stub[] => [
+    { x: r.x + r.width / 2 + c, y: r.y, dir: 0, port: portOn(r, 'right'), cost: 0 },
+    { x: r.x - r.width / 2 - c, y: r.y, dir: 1, port: portOn(r, 'left'), cost: 0 },
+    { x: r.x, y: r.y + r.height / 2 + c, dir: 2, port: portOn(r, 'bottom'), cost: 0 },
+    { x: r.x, y: r.y - r.height / 2 - c, dir: 3, port: portOn(r, 'top'), cost: 0 },
   ]
-  const from = stubs(source)
-  const to = stubs(target)
-  const xs = searchCoordinates('x', boxes, [...from, ...to].map(s => s.x), win.x1, win.x2)
-  const ys = searchCoordinates('y', boxes, [...from, ...to].map(s => s.y), win.y1, win.y2)
+  const centres = [...centreStubs(source), ...centreStubs(target)]
+  const xs = searchCoordinates('x', boxes, centres.map(s => s.x), win.x1, win.x2)
+  const ys = searchCoordinates('y', boxes, centres.map(s => s.y), win.y1, win.y2)
   const nx = xs.length
   const ny = ys.length
   if (nx * ny > SEARCH_MAX_POINTS) return null
+  const stubs = (r: EdgeEndpointRect): Stub[] => {
+    const out = centreStubs(r)
+    for (const x of xs) {
+      if (x === r.x || x <= r.x - r.width / 2 + MIN_STUB || x >= r.x + r.width / 2 - MIN_STUB) continue
+      const cost = OFF_CENTRE_PORT_COST
+      out.push({ x, y: r.y + r.height / 2 + c, dir: 2, port: { x, y: r.y + r.height / 2 }, cost })
+      out.push({ x, y: r.y - r.height / 2 - c, dir: 3, port: { x, y: r.y - r.height / 2 }, cost })
+    }
+    return out
+  }
+  const from = stubs(source)
+  const to = stubs(target)
   const index = (vs: number[], v: number) => vs.indexOf(v)
 
   const grid = boxGrid(boxes)
@@ -942,20 +968,19 @@ function searchLanes(source: EdgeEndpointRect, target: EdgeEndpointRect, obstacl
   const states = nx * ny * 4
   const g = new Float64Array(states).fill(Infinity)
   const parent = new Int32Array(states).fill(-1)
+  // Per grid point: the direction a route must be moving to arrive there (-1: not a target stub), and that stub's cost.
   const goalDir = new Int8Array(nx * ny).fill(-1)
-  for (const s of to) goalDir[index(ys, s.y) * nx + index(xs, s.x)] = s.dir ^ 1 // arrive moving inward
-  const tx = to.map(s => s.x)
-  const ty = to.map(s => s.y)
-  const h = (ix: number, iy: number) => {
-    const x = xs[ix]
-    const y = ys[iy]
-    let best = Infinity
-    for (let k = 0; k < 4; k++) {
-      const d = Math.abs(x - tx[k]) + Math.abs(y - ty[k])
-      if (d < best) best = d
-    }
-    return best
+  const goalCost = new Float64Array(nx * ny)
+  for (const s of to) {
+    const cell = index(ys, s.y) * nx + index(xs, s.x)
+    goalDir[cell] = s.dir ^ 1
+    goalCost[cell] = s.cost
   }
+  // Every target stub lies on the target box grown by MIN_CLEARANCE: the distance to that box
+  // never overestimates.
+  const hw = target.width / 2 + c
+  const hh = target.height / 2 + c
+  const h = (ix: number, iy: number) => Math.max(0, Math.abs(xs[ix] - target.x) - hw) + Math.max(0, Math.abs(ys[iy] - target.y) - hh)
 
   // Binary min-heap of [f, state].
   const heapF: number[] = []
@@ -994,8 +1019,8 @@ function searchLanes(source: EdgeEndpointRect, target: EdgeEndpointRect, obstacl
     const iy = index(ys, s.y)
     if (ix < 0 || iy < 0) continue
     const st = (iy * nx + ix) * 4 + s.dir
-    g[st] = c
-    push(c + H_TIE * h(ix, iy), st)
+    g[st] = c + s.cost
+    push(g[st] + H_TIE * h(ix, iy), st)
   }
   let goal = -1
   while (heapF.length > 0) {
@@ -1012,7 +1037,8 @@ function searchLanes(source: EdgeEndpointRect, target: EdgeEndpointRect, obstacl
     if (jx >= 0 && jx < nx && jy >= 0 && jy < ny) {
       const clear = dir < 2 ? stepClear(Math.min(ix, jx), iy, 0) : stepClear(ix, Math.min(iy, jy), 1)
       const next = (jy * nx + jx) * 4 + dir
-      const cost = gs + Math.abs(xs[jx] - xs[ix]) + Math.abs(ys[jy] - ys[iy])
+      const jc = jy * nx + jx
+      const cost = gs + Math.abs(xs[jx] - xs[ix]) + Math.abs(ys[jy] - ys[iy]) + (goalDir[jc] === dir ? goalCost[jc] : 0)
       if (clear && cost < g[next]) {
         g[next] = cost
         parent[next] = st
@@ -1024,10 +1050,11 @@ function searchLanes(source: EdgeEndpointRect, target: EdgeEndpointRect, obstacl
     const hHere = h(ix, iy)
     for (let nd = dir < 2 ? 2 : 0, end = nd + 2; nd < end; nd++) {
       const next = cell * 4 + nd
-      if (turn < g[next]) {
-        g[next] = turn
+      const cost = turn + (goalDir[cell] === nd ? goalCost[cell] : 0)
+      if (cost < g[next]) {
+        g[next] = cost
         parent[next] = st
-        push(turn + H_TIE * hHere, next)
+        push(cost + H_TIE * hHere, next)
       }
     }
   }
