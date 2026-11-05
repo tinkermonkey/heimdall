@@ -514,27 +514,29 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
   // edge spans. Reordering row r changes only the terms that involve row r (rowTerms), so the
   // local searches below re-count those, not the whole layering.
   // Which edges join row r to row r+1, and which join two nodes of row r, never changes here (only
-  // the order within rows does), so both link lists are built once.
-  const downLinks: Int32Array[] = [], sameLinks: Int32Array[] = []
+  // the order within rows does), so both link lists are built once: each node's neighbors in the
+  // row below as a flat list (downFirst/downCount index downTo), same-row pairs per row.
+  const downFirst = new Int32Array(adj.length), downCount = new Int32Array(adj.length)
+  const downFlat: number[] = [], sameLinks: Int32Array[] = []
+  let widestRow = 0
   for (let r = 0; r < rows; r++) {
-    const down: number[] = [], same: number[] = []
-    for (const g of layers[r]) for (const v of adj[g]) {
-      const d = depth.get(v)
-      if (d === r + 1) down.push(g, v)
-      else if (d === r && v > g) same.push(g, v)
+    widestRow = Math.max(widestRow, layers[r].length)
+    const same: number[] = []
+    for (const g of layers[r]) {
+      downFirst[g] = downFlat.length
+      for (const v of adj[g]) {
+        const d = depth.get(v)
+        if (d === r + 1) downFlat.push(v)
+        else if (d === r && v > g) same.push(g, v)
+      }
+      downCount[g] = downFlat.length - downFirst[g]
     }
-    downLinks.push(Int32Array.from(down)); sameLinks.push(Int32Array.from(same))
+    sameLinks.push(Int32Array.from(same))
   }
-  const pairCrossings = (r: number): number => {
-    if (r < 0 || r + 1 >= rows) return 0
-    const L = downLinks[r]
-    let total = 0
-    for (let i = 0; i < L.length; i += 2) {
-      const a0 = pos[L[i]], a1 = pos[L[i + 1]]
-      for (let j = i + 2; j < L.length; j += 2) if ((a0 - pos[L[j]]) * (a1 - pos[L[j + 1]]) < 0) total++
-    }
-    return total
-  }
+  const downTo = Int32Array.from(downFlat)
+  const bit = new Int32Array(widestRow + 1)
+  const pairCrossings = (r: number): number =>
+    r < 0 || r + 1 >= rows ? 0 : rowPairCrossings(layers[r], downFirst, downCount, downTo, pos, layers[r + 1].length, bit)
   const sameRowSpan = (r: number): number => {
     const L = sameLinks[r]
     let total = 0
@@ -602,6 +604,36 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
     if (!improved) break
   }
   return { layers, crossings: current }
+}
+
+/**
+ * Crossings between two adjacent rows: pairs of edges (u, v), (u', v') with u, u' in the upper row
+ * and v, v' in the lower row whose ends strictly invert; edges sharing an end never count. Same
+ * count as testing every pair, in O(E log W): walk the upper row left to right and, per node, ask a
+ * Fenwick tree over lower-row positions how many earlier edges land strictly right of each of its
+ * edges, then add its own edges (after all its queries, so a node's own fan never counts).
+ * `upper` is the upper row in order; node g's lower neighbors are downTo[downFirst[g] ..
+ * downFirst[g] + downCount[g]); `pos` holds lower-row positions in [0, lowerSize); `bit` is scratch
+ * of at least lowerSize + 1 entries. Exported for tests.
+ */
+export function rowPairCrossings(
+  upper: readonly number[], downFirst: Int32Array, downCount: Int32Array, downTo: Int32Array,
+  pos: Int32Array, lowerSize: number, bit: Int32Array,
+): number {
+  bit.fill(0, 0, lowerSize + 1)
+  let total = 0, inserted = 0
+  for (const g of upper) {
+    const from = downFirst[g], to = from + downCount[g]
+    if (from === to) continue
+    for (let k = from; k < to; k++) {
+      let atOrLeft = 0
+      for (let x = pos[downTo[k]] + 1; x > 0; x -= x & -x) atOrLeft += bit[x]
+      total += inserted - atOrLeft
+    }
+    for (let k = from; k < to; k++) for (let x = pos[downTo[k]] + 1; x <= lowerSize; x += x & -x) bit[x]++
+    inserted += to - from
+  }
+  return total
 }
 
 /**
@@ -741,6 +773,7 @@ function routeAll(
   let fallbacks = 0
   const heap = new MinHeap()
   // Per-search state, reset by generation stamp instead of clearing the whole lattice per edge.
+  // The arrays live for one routeAll call, so `gen` counts its searches and never nears 2^32.
   const gScore = new Float64Array(W * H * 4)
   const cameFrom = new Int32Array(W * H * 4)
   const seenGen = new Uint32Array(W * H * 4), closedGen = new Uint32Array(W * H * 4)

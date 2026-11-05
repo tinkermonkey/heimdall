@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { orthogonalLayout } from '../orthogonalLayout'
+import { orthogonalLayout, rowPairCrossings } from '../orthogonalLayout'
 import type { LayoutNode, LayoutEdge } from '../graphLayout'
 import type { Point } from '../graph'
 
@@ -229,5 +229,38 @@ describe('orthogonalLayout', () => {
     expect(orthogonalLayout([], []).routes).toEqual([])
     const one = orthogonalLayout(nodesOf(['solo']), [])
     expect(one.positions.get('solo')).toEqual({ x: 0, y: 0 })
+  })
+})
+
+describe('rowPairCrossings', () => {
+  // The pairwise count it replaced: every pair of row-to-row edges, strict inversion only.
+  const pairwise = (links: Array<[number, number]>, pos: Int32Array): number => {
+    let total = 0
+    for (let i = 0; i < links.length; i++) for (let j = i + 1; j < links.length; j++) {
+      if ((pos[links[i][0]] - pos[links[j][0]]) * (pos[links[i][1]] - pos[links[j][1]]) < 0) total++
+    }
+    return total
+  }
+  it('matches the pairwise count on random rows, shared ends included', () => {
+    let seed = 11
+    const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648 }
+    for (let t = 0; t < 300; t++) {
+      const nu = 1 + Math.floor(rnd() * 12), nl = 1 + Math.floor(rnd() * 12)
+      // Upper nodes are 0..nu-1, lower nodes nu..nu+nl-1; both rows in a random order.
+      const shuffle = (a: number[]) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]] } return a }
+      const upper = shuffle([...Array(nu).keys()])
+      const lower = shuffle([...Array(nl).keys()].map(k => nu + k))
+      const pos = new Int32Array(nu + nl)
+      upper.forEach((g, i) => (pos[g] = i)); lower.forEach((g, i) => (pos[g] = i))
+      const links: Array<[number, number]> = []
+      const downFirst = new Int32Array(nu + nl), downCount = new Int32Array(nu + nl), flat: number[] = []
+      for (let u = 0; u < nu; u++) {
+        downFirst[u] = flat.length
+        for (const v of lower) if (rnd() < 0.35) { flat.push(v); links.push([u, v]) }
+        downCount[u] = flat.length - downFirst[u]
+      }
+      const bit = new Int32Array(nl + 1).fill(7) // stale scratch must not leak into the count
+      expect(rowPairCrossings(upper, downFirst, downCount, Int32Array.from(flat), pos, nl, bit)).toBe(pairwise(links, pos))
+    }
   })
 })
