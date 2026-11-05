@@ -477,18 +477,18 @@ function layoutComponent(
 function orderLayers(depth: Map<number, number>, order: number[], rows: number, adj: number[][], sweeps: number): { layers: number[][]; crossings: number } {
   const layers: number[][] = Array.from({ length: rows }, () => [])
   for (const g of order) layers[depth.get(g)!].push(g) // BFS order keeps siblings together
-  const posIn = new Map<number, number>()
-  const refresh = () => layers.forEach(l => l.forEach((g, i) => posIn.set(g, i)))
+  const pos = new Int32Array(adj.length)
+  const refresh = () => layers.forEach(l => l.forEach((g, i) => (pos[g] = i)))
   refresh()
   const bary = (g: number, otherRow: number): number => {
     const own = depth.get(g)!
     let sum = 0, weight = 0
     for (const v of adj[g]) {
       const d = depth.get(v)!
-      if (d === otherRow) { sum += posIn.get(v)!; weight += 1 }
-      else if (d === own) { sum += 0.5 * posIn.get(v)!; weight += 0.5 }
+      if (d === otherRow) { sum += pos[v]; weight += 1 }
+      else if (d === own) { sum += 0.5 * pos[v]; weight += 0.5 }
     }
-    return weight ? sum / weight : posIn.get(g)!
+    return weight ? sum / weight : pos[g]
   }
   for (let s = 0; s < sweeps; s++) {
     const down = s % 2 === 0
@@ -496,25 +496,47 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
     for (const r of seq) {
       const other = down ? r - 1 : r + 1
       if (other < 0 || other >= rows) continue
-      const keyed = layers[r].map(g => ({ g, b: bary(g, other), i: posIn.get(g)! }))
+      const keyed = layers[r].map(g => ({ g, b: bary(g, other), i: pos[g] }))
       keyed.sort((a, b) => a.b - b.b || a.i - b.i)
       layers[r] = keyed.map(k => k.g)
       refresh()
     }
   }
-  const rowCrossings = (): number => {
-    let total = 0
-    for (let r = 0; r + 1 < rows; r++) {
-      const links: Array<[number, number]> = []
-      for (const g of layers[r]) for (const v of adj[g]) if (depth.get(v) === r + 1) links.push([posIn.get(g)!, posIn.get(v)!])
-      for (let i = 0; i < links.length; i++) for (let j = i + 1; j < links.length; j++) {
-        if ((links[i][0] - links[j][0]) * (links[i][1] - links[j][1]) < 0) total++
-      }
+  // Committed crossings = inversions between each pair of adjacent rows + the cells each same-row
+  // edge spans. Reordering row r changes only the terms that involve row r (rowTerms), so the
+  // local searches below re-count those, not the whole layering.
+  // Which edges join row r to row r+1, and which join two nodes of row r, never changes here (only
+  // the order within rows does), so both link lists are built once.
+  const downLinks: Int32Array[] = [], sameLinks: Int32Array[] = []
+  for (let r = 0; r < rows; r++) {
+    const down: number[] = [], same: number[] = []
+    for (const g of layers[r]) for (const v of adj[g]) {
+      const d = depth.get(v)
+      if (d === r + 1) down.push(g, v)
+      else if (d === r && v > g) same.push(g, v)
     }
-    for (let r = 0; r < rows; r++) for (const g of layers[r]) for (const v of adj[g]) if (v > g && depth.get(v) === r) total += Math.abs(posIn.get(g)! - posIn.get(v)!) - 1
+    downLinks.push(Int32Array.from(down)); sameLinks.push(Int32Array.from(same))
+  }
+  const pairCrossings = (r: number): number => {
+    if (r < 0 || r + 1 >= rows) return 0
+    const L = downLinks[r]
+    let total = 0
+    for (let i = 0; i < L.length; i += 2) {
+      const a0 = pos[L[i]], a1 = pos[L[i + 1]]
+      for (let j = i + 2; j < L.length; j += 2) if ((a0 - pos[L[j]]) * (a1 - pos[L[j + 1]]) < 0) total++
+    }
     return total
   }
-  let current = rowCrossings()
+  const sameRowSpan = (r: number): number => {
+    const L = sameLinks[r]
+    let total = 0
+    for (let i = 0; i < L.length; i += 2) total += Math.abs(pos[L[i]] - pos[L[i + 1]]) - 1
+    return total
+  }
+  const rowTerms = (r: number): number => pairCrossings(r - 1) + pairCrossings(r) + sameRowSpan(r)
+  const refreshRow = (r: number) => layers[r].forEach((g, i) => (pos[g] = i))
+  let current = 0
+  for (let r = 0; r < rows; r++) current += pairCrossings(r) + sameRowSpan(r)
   // Rows of up to 8 nodes: exact — every permutation against the fixed neighboring rows.
   const EXACT_MAX = 8
   for (let pass = 0; pass < 4; pass++) {
@@ -527,8 +549,9 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
       const perm = original.slice()
       const c = new Array(perm.length).fill(0)
       let i = 1
+      const base = current - rowTerms(r)
       // Heap's algorithm; deterministic enumeration order.
-      const evaluate = () => { layers[r] = perm.slice(); refresh(); const sc = rowCrossings(); if (sc < bestScore) { bestScore = sc; bestPerm = perm.slice() } }
+      const evaluate = () => { layers[r] = perm.slice(); refreshRow(r); const sc = base + rowTerms(r); if (sc < bestScore) { bestScore = sc; bestPerm = perm.slice() } }
       evaluate()
       while (i < perm.length) {
         if (c[i] < i) {
@@ -538,7 +561,7 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
           c[i]++; i = 1
         } else { c[i] = 0; i++ }
       }
-      layers[r] = bestPerm; refresh()
+      layers[r] = bestPerm; refreshRow(r)
       if (bestScore < current) { current = bestScore; improved = true }
     }
     if (!improved) break
@@ -550,16 +573,17 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
       if (l.length <= EXACT_MAX) continue
       for (let i = 0; i < l.length; i++) {
         // Try inserting node i at every other position; keep the first strict improvement.
+        const base = current - rowTerms(r)
         for (let j = 0; j < l.length; j++) {
           if (j === i) continue
           const moved = l.splice(i, 1)[0]
           l.splice(j, 0, moved)
-          refresh()
-          const next = rowCrossings()
+          refreshRow(r)
+          const next = base + rowTerms(r)
           if (next < current) { current = next; improved = true; break }
           l.splice(j, 1)
           l.splice(i, 0, moved)
-          refresh()
+          refreshRow(r)
         }
       }
     }
@@ -704,9 +728,12 @@ function routeAll(
 
   let fallbacks = 0
   const heap = new MinHeap()
+  // Per-search state, reset by generation stamp instead of clearing the whole lattice per edge.
   const gScore = new Float64Array(W * H * 4)
   const cameFrom = new Int32Array(W * H * 4)
-  const closed = new Uint8Array(W * H * 4)
+  const seenGen = new Uint32Array(W * H * 4), closedGen = new Uint32Array(W * H * 4)
+  let gen = 0
+  const gOf = (st: number) => (seenGen[st] === gen ? gScore[st] : Infinity)
   // What each routed edge occupies, so it can be ripped up and re-routed.
   interface Commit { states: number[]; startSlot: Slot; endSlot: Slot; fallback: boolean }
   const commits: Array<Commit | null> = edgeEnds.map(() => null)
@@ -746,20 +773,20 @@ function routeAll(
     const tb = boxes[t]
     const heuristic = (v: number) => Math.abs(xs[v % W] - tb.x) + Math.abs(ys[Math.floor(v / W)] - tb.y) - tb.hw - tb.hh
 
-    gScore.fill(Infinity); closed.fill(0); heap.clear()
+    gen++; heap.clear()
     const startSlotOf = new Map<number, Slot>()
     for (const sl of sSlots) {
       // The stub leaves the box along the side's normal; its direction is the incoming direction.
       const dir = sl.side
       const g = Math.hypot(sl.port.x - xs[sl.vertex % W], sl.port.y - ys[Math.floor(sl.vertex / W)])
       const st = sl.vertex * 4 + dir
-      if (g < gScore[st]) { gScore[st] = g; cameFrom[st] = -1; startSlotOf.set(st, sl); heap.push(g + heuristic(sl.vertex), g, st) }
+      if (g < gOf(st)) { gScore[st] = g; seenGen[st] = gen; cameFrom[st] = -1; startSlotOf.set(st, sl); heap.push(g + heuristic(sl.vertex), g, st) }
     }
     let goal = -1
     while (heap.size) {
-      const { state } = heap.pop()
-      if (closed[state]) continue
-      closed[state] = 1
+      const state = heap.pop()
+      if (closedGen[state] === gen) continue
+      closedGen[state] = gen
       const v = Math.floor(state / 4), dir = state % 4
       const tslot = targetByVertex.get(v)
       // Arriving at a target stub vertex heading toward the box (the stub direction is the side's inward normal).
@@ -783,7 +810,7 @@ function routeAll(
         const nv = vid(nix, niy)
         const ns = nv * 4 + nd
         const g = gScore[state] + cost
-        if (g < gScore[ns]) { gScore[ns] = g; cameFrom[ns] = state; heap.push(g + heuristic(nv), g, ns) }
+        if (g < gOf(ns)) { gScore[ns] = g; seenGen[ns] = gen; cameFrom[ns] = state; heap.push(g + heuristic(nv), g, ns) }
       }
     }
     if (goal < 0) return null
@@ -883,38 +910,49 @@ function upperBound(arr: number[], v: number): number {
   return lo
 }
 
-/** Binary min-heap keyed by (f, g, state): deterministic for equal f. */
+/** Binary min-heap keyed by (f, g, state): deterministic for equal f (larger g first, then lower state). */
 class MinHeap {
-  private f: number[] = []
-  private g: number[] = []
-  private s: number[] = []
-  get size(): number { return this.f.length }
-  clear(): void { this.f.length = 0; this.g.length = 0; this.s.length = 0 }
-  private less(i: number, j: number): boolean {
-    return this.f[i] < this.f[j] || (this.f[i] === this.f[j] && (this.g[i] > this.g[j] || (this.g[i] === this.g[j] && this.s[i] < this.s[j])))
-  }
-  private swap(i: number, j: number): void {
-    [this.f[i], this.f[j]] = [this.f[j], this.f[i]]; [this.g[i], this.g[j]] = [this.g[j], this.g[i]]; [this.s[i], this.s[j]] = [this.s[j], this.s[i]]
+  private f = new Float64Array(1024)
+  private g = new Float64Array(1024)
+  private s = new Int32Array(1024)
+  private n = 0
+  get size(): number { return this.n }
+  clear(): void { this.n = 0 }
+  private before(f: number, g: number, s: number, j: number): boolean {
+    const fj = this.f[j]
+    return f < fj || (f === fj && (g > this.g[j] || (g === this.g[j] && s < this.s[j])))
   }
   push(f: number, g: number, state: number): void {
-    this.f.push(f); this.g.push(g); this.s.push(state)
-    let i = this.f.length - 1
-    while (i > 0) { const p = (i - 1) >> 1; if (this.less(i, p)) { this.swap(i, p); i = p } else break }
+    if (this.n === this.f.length) {
+      const grow = <T extends Float64Array | Int32Array>(a: T): T => { const b = new (a.constructor as new (n: number) => T)(a.length * 2); b.set(a); return b }
+      this.f = grow(this.f); this.g = grow(this.g); this.s = grow(this.s)
+    }
+    let i = this.n++
+    while (i > 0) {
+      const p = (i - 1) >> 1
+      if (!this.before(f, g, state, p)) break
+      this.f[i] = this.f[p]; this.g[i] = this.g[p]; this.s[i] = this.s[p]
+      i = p
+    }
+    this.f[i] = f; this.g[i] = g; this.s[i] = state
   }
-  pop(): { f: number; g: number; state: number } {
-    const top = { f: this.f[0], g: this.g[0], state: this.s[0] }
-    const lf = this.f.pop()!, lg = this.g.pop()!, ls = this.s.pop()!
-    if (this.f.length) {
-      this.f[0] = lf; this.g[0] = lg; this.s[0] = ls
+  /** Removes the minimum and returns its state. */
+  pop(): number {
+    const top = this.s[0]
+    const last = --this.n
+    if (last > 0) {
+      const f = this.f[last], g = this.g[last], s = this.s[last]
       let i = 0
       for (;;) {
-        const l = 2 * i + 1, r = l + 1
-        let m = i
-        if (l < this.f.length && this.less(l, m)) m = l
-        if (r < this.f.length && this.less(r, m)) m = r
-        if (m === i) break
-        this.swap(i, m); i = m
+        const l = 2 * i + 1
+        if (l >= last) break
+        const r = l + 1
+        const m = r < last && this.before(this.f[r], this.g[r], this.s[r], l) ? r : l
+        if (!(this.f[m] < f || (this.f[m] === f && (this.g[m] > g || (this.g[m] === g && this.s[m] < s))))) break
+        this.f[i] = this.f[m]; this.g[i] = this.g[m]; this.s[i] = this.s[m]
+        i = m
       }
+      this.f[i] = f; this.g[i] = g; this.s[i] = s
     }
     return top
   }
