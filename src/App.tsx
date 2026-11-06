@@ -25,6 +25,7 @@ import FormsShowcase from './test-pages/FormsShowcase'
 import GraphShowcase from './test-pages/GraphShowcase'
 import OrganicLayoutTestPage from './test-pages/OrganicLayoutTestPage'
 import OrthogonalLayoutTestPage from './test-pages/OrthogonalLayoutTestPage'
+import AdjacencyMatrixTestPage from './test-pages/AdjacencyMatrixTestPage'
 import GalaxyLayoutLab from './test-pages/GalaxyLayoutLab'
 import CenterOnSelectTestPage from './test-pages/CenterOnSelectTestPage'
 import FullscreenContainerRefTestPage from './test-pages/FullscreenContainerRefTestPage'
@@ -142,6 +143,10 @@ export default function App() {
 
   if (exampleParam === 'orthogonal-layout') {
     return <OrthogonalLayoutTestPage />
+  }
+
+  if (exampleParam === 'adjacency-matrix') {
+    return <AdjacencyMatrixTestPage />
   }
 
   if (exampleParam === 'center-on-select') {

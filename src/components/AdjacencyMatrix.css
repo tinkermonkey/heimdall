@@ -1,0 +1,118 @@
+.adjacency-matrix {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  color: rgb(var(--canvas-fg-1));
+  font-family: var(--font-mono);
+}
+
+.adjacency-matrix__scroll {
+  overflow: auto;
+  max-width: 100%;
+}
+
+.adjacency-matrix__svg {
+  display: block;
+}
+
+.adjacency-matrix__block {
+  stroke: rgb(var(--canvas-border));
+  stroke-width: 1;
+}
+
+.adjacency-matrix__block-count {
+  font-size: 10px;
+  fill: rgb(var(--canvas-fg-3));
+}
+
+.adjacency-matrix__band rect {
+  fill: rgb(var(--accent-primary));
+  pointer-events: none;
+}
+
+.adjacency-matrix__band--selected rect {
+  fill-opacity: 0.08;
+}
+
+.adjacency-matrix__band--hover rect {
+  fill-opacity: 0.05;
+}
+
+.adjacency-matrix__header {
+  cursor: pointer;
+  outline: none;
+}
+
+.adjacency-matrix__header:focus-visible .adjacency-matrix__label {
+  text-decoration: underline;
+  fill: rgb(var(--accent-primary-deep));
+}
+
+.adjacency-matrix__label {
+  fill: rgb(var(--canvas-fg-2));
+  transition: fill 0.08s;
+}
+
+.adjacency-matrix__header:hover .adjacency-matrix__label {
+  fill: rgb(var(--canvas-fg-1));
+}
+
+.adjacency-matrix__label--selected {
+  fill: rgb(var(--graph-hop-1));
+  font-weight: 600;
+}
+
+.adjacency-matrix__label--reached {
+  fill: rgb(var(--canvas-fg-1));
+}
+
+.adjacency-matrix__label--followed {
+  fill: rgb(var(--graph-hop-2));
+}
+
+.adjacency-matrix__label--dim {
+  fill: rgb(var(--canvas-fg-4));
+}
+
+.adjacency-matrix__cell {
+  cursor: pointer;
+}
+
+.adjacency-matrix__code {
+  fill: rgb(var(--canvas-bg));
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  pointer-events: none;
+}
+
+.adjacency-matrix__caption {
+  font-size: 10.5px;
+  fill: rgb(var(--canvas-fg-3));
+}
+
+.adjacency-matrix__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  font-size: 11px;
+  color: rgb(var(--canvas-fg-2));
+}
+
+.adjacency-matrix__legend-title {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--canvas-fg-3));
+}
+
+.adjacency-matrix__legend-item b {
+  color: rgb(var(--canvas-fg-1));
+  font-weight: 600;
+}
+
+body.dark-canvas .adjacency-matrix__header:focus-visible .adjacency-matrix__label {
+  fill: rgb(var(--accent-primary));
+}

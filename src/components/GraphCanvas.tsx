@@ -129,7 +129,15 @@ export interface GraphNodeData {
    * count. Not related to `GraphEdge.weight`, which is an edge's stroke width.
    */
   weight?: number;
+  /**
+   * Free-form data about the node. GraphCanvas ignores it; the layered views read one attribute
+   * as each node's layer (`layerBy`) and `description` as inspector text.
+   */
+  attributes?: Readonly<Record<string, GraphAttributeValue | readonly GraphAttributeValue[]>>;
 }
+
+/** A node or edge attribute value; arrays hold multi-valued attributes. */
+export type GraphAttributeValue = string | number | boolean | null;
 
 export interface GraphEdge {
   id: string;
@@ -149,6 +157,8 @@ export interface GraphEdge {
   targetAnchor?: EdgeAnchor;
   /** Overrides the default curve strength (0.22, used for both auto/auto and anchored endpoints). */
   curvature?: number;
+  /** Free-form data about the edge. GraphCanvas ignores it; the layered views can read a link category from it (`linkCategoryBy`). */
+  attributes?: Readonly<Record<string, GraphAttributeValue | readonly GraphAttributeValue[]>>;
 }
 
 /** Props that a custom node component receives from renderNode. */
