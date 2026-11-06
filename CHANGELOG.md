@@ -4,6 +4,91 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0]
+
+Layered graphs: a component family that shows one graph split into layers by a node attribute (3D
+layer stack, lanes, adjacency matrix and hive plot) on shared selection, link-following and
+filter state, with controls, an inspector and a ready-made explorer. Also faster organic and
+orthogonal layouts and cleaner ux-navigation routes.
+
+### Added
+
+- **Layered graph framework** (tinkermonkey/heimdall#330). Input is the `GraphCanvas` node and
+  edge model; one node attribute (`layerBy`) assigns layers, with `multiValue` (`first`, `last`,
+  `exclude`, `all`) and `missingValue` policies.
+  - **`buildLayeredIndex`** bundles parallel edges into links and derives categories, cross-layer
+    flags, layer pairs, degrees and two-letter predicate codes; bad input goes to `issues`
+    instead of throwing.
+  - **`computeReach`**: selecting a node lights its direct links, then follows cross-layer links
+    away from the clicked layer for `follow` more hops.
+  - **Shared state:** `useLayeredGraph` and `LayeredGraphContext` own selection, follow, filters,
+    predicate-label mode, layer focus and plane layout, controlled or uncontrolled, with
+    `snapshot` / `restore`. One instance can drive several views.
+  - **Helpers:** `isLinkVisible`, `linkEmphasis`, `nodeEmphasis`, `layoutLayers`,
+    `mixLayerPositions`, orderings, `placeEdgeLabels` with sampled `lineCurve` / `quadCurve` /
+    `cubicCurve`, and `arrowHeadPoints`.
+  - **Tokens:** `--graph-hop-1…3` (amber reach ramp), `--graph-link-1…6` (link categories),
+    `--graph-layer-1…12` (layer palette), `--graph-pill-bg` and `--graph-plane-fill-alpha`, for
+    light and dark canvas.
+  - `GraphNodeData` and `GraphEdge` gain an optional `attributes` bag (`GraphAttributeValue`),
+    which `GraphCanvas` ignores.
+- **`LayerStack`** (tinkermonkey/heimdall#332): layers as stacked translucent planes in an SVG
+  perspective projection, with cross-layer links between them and a drill-through column under
+  the selection.
+  - Camera presets (`stack`, `exploded`, `top`, `profile`), drag to orbit, wheel zoom once the
+    scene has focus, a turntable (off under reduced motion), layer gap, layer focus and an
+    animated independent/coupled plane layout.
+  - An imperative handle (`applyPreset`, `setCamera`, `zoomBy`, `fit`, `setTurntable`,
+    `focusLayer`, `select`).
+  - Keyboard navigation of node labels. The projection math (`createProjector`, presets, …) and
+    `useTween` are exported.
+- **`GraphCanvas layout="layer-lanes"`** (tinkermonkey/heimdall#332): one swimlane per layer,
+  nodes packed in rows ordered so linked nodes line up, arcs within a lane and curves between
+  lanes, horizontal or vertical. Keeps tooltips, popovers, `renderNode`, pan/zoom and the
+  toolbar. New props `layeredGraph`, `layering`, `layeredGraphOptions` and `laneOptions`; the
+  geometry is exported as `layoutLanes` and `laneLinkCurve`.
+- **`AdjacencyMatrix`** (tinkermonkey/heimdall#330): a directed block matrix grouped by layer,
+  with cross-layer block counts, category-coloured cells, the reach ramp, predicate codes and a
+  code legend.
+- **`HivePlot`** (tinkermonkey/heimdall#332): one axis per layer, doubled so links within a layer
+  span the gap; nodes ranked outward; keyboard navigation along and between axes. Geometry
+  exported as `hiveLayout` and `hiveLinkGeometry`.
+- **Controls and inspector** (tinkermonkey/heimdall#332): `FollowControl`,
+  `PredicateLabelControl`, `PlaneLayoutControl`, `LinkCategoryFilter`, `LayerList`,
+  `LayerPairList`, `BridgeNodeList` and `ReachInspector` (with `reachRelationships`). Each reads
+  a `graph` prop or the context.
+- **`LayeredGraphExplorer`** (tinkermonkey/heimdall#332): the views, controls, inspector and a
+  status line in one component, with `ViewSwitcher` and `CameraControls`. A `controls` prop turns
+  each piece of chrome on or off. Selection, follow and filters carry across view switches, and
+  the stack keeps its camera.
+- **`GraphInspector`**: `RelationshipLink` gains optional `hop`, `via` and `layer` fields
+  (layer swatch, `+n` hop badge, "via X · predicate" line). Existing output is unchanged.
+- **Docs**: a "Layered graphs" section with a page per component
+  (tinkermonkey/heimdall#333).
+
+### Changed
+
+- **`organicLayout`** is about 3x faster on large graphs (tinkermonkey/heimdall#326): 1000-node
+  random graph 2.1 s → 0.6 s, DR spec graph 140 ms → 62 ms. A stress polish now runs before
+  overlap removal on components of 300 nodes or fewer, so small layouts can shift slightly;
+  incremental re-solves are unchanged.
+- **`orthogonalLayout`** is several times faster on large graphs (tinkermonkey/heimdall#327):
+  DR spec graph 14.6 s → 5.2 s (39 s → 3.5 s with all predicates); a 400-node community graph
+  and a 401-node star that did not finish in 180 s now take 12 s and 0.5 s. Output is unchanged
+  except on components with more than 64 candidate roots (for example long chains), where the
+  root search is now capped.
+
+### Fixed
+
+- **`layout="ux-navigation"` navigation routes** go through free gaps between boxes and take the
+  cheapest clear path, instead of detouring round the whole drawing (tinkermonkey/heimdall#324).
+  Routes leave and arrive perpendicular to their port side, parallel routes are kept apart, and
+  routing cost is bounded (400 boxes / 400 routes: about 140 ms).
+- **Large ux-navigation sitemaps**: routes no longer pass through other nodes or take long
+  detours (tinkermonkey/heimdall#325). On a 582-node sitemap, segments through nodes go from 26
+  to 0 and the worst route-length ratio from 8.1 to 1.2. A shifted segment no longer lands on
+  another route's line.
+
 ## [0.9.5]
 
 Two pan inertia fixes in `usePanZoom`, so `GraphCanvas` and `MapCanvas` drags settle when they look settled.
