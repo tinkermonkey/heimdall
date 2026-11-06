@@ -355,3 +355,63 @@ describe('organicLayout', () => {
     expect(minGap(unseeded(ids), positions)).toBeGreaterThanOrEqual(GAP)
   })
 })
+
+// PR #326 review (2026-11-05): the proximity-stress polish and incremental stability.
+describe('organicLayout: polish and incremental stability', () => {
+  /** Seeded random connected graph (a random tree plus extra edges), rendered-size cards. */
+  function randomGraph(n: number, extra: number, seed: number) {
+    let s = seed
+    const rnd = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648
+    const nodes = Array.from({ length: n }, (_, i) => ({ id: `n${String(i).padStart(4, '0')}`, x: NaN, y: NaN, width: 128, height: 23 }))
+    const edges: LayoutEdge[] = []
+    for (let i = 1; i < n; i++) edges.push({ source: nodes[i].id, target: nodes[Math.floor(rnd() * i)].id })
+    for (let k = 0; k < extra; k++) {
+      const a = Math.floor(rnd() * n), b = Math.floor(rnd() * n)
+      if (a !== b) edges.push({ source: nodes[a].id, target: nodes[b].id })
+    }
+    return { nodes, edges }
+  }
+
+  /** A 12-node clique (it cannot be drawn at one edge length, so the stress solve leaves
+   *  overlaps for the polish) with a chain hung off it to make the component `total` nodes. */
+  function cliqueWithTail(total: number) {
+    const nodes = Array.from({ length: total }, (_, i) => ({ id: `k${String(i).padStart(3, '0')}`, x: NaN, y: NaN, width: W, height: H }))
+    const edges: LayoutEdge[] = []
+    for (let i = 0; i < 12; i++) for (let j = i + 1; j < 12; j++) edges.push({ source: nodes[i].id, target: nodes[j].id })
+    for (let i = 12; i < total; i++) edges.push({ source: nodes[i - 1].id, target: nodes[i].id })
+    return { nodes, edges }
+  }
+
+  it('runs the polish on a component of up to 300 nodes, and skips it above', () => {
+    const at = cliqueWithTail(300)
+    expect(organicLayout(at.nodes, at.edges).stats.polishRounds).toBeGreaterThan(0)
+    const over = cliqueWithTail(301)
+    expect(organicLayout(over.nodes, over.edges).stats.polishRounds).toBe(0)
+  })
+
+  it('an affectedIds re-solve with no graph change keeps the drawing: no node moves relative to the rest', () => {
+    for (const seed of [7, 11, 13, 17, 23]) {
+      const { nodes, edges } = randomGraph(40, 20, seed)
+      const first = organicLayout(nodes, edges).positions
+      const warm = nodes.map(nd => ({ ...nd, ...first.get(nd.id)! }))
+      const again = organicLayout(warm, edges, { affectedIds: [edges[0].source] }).positions
+      // A uniform shift of the whole drawing is harmless; measure each node's move relative to the
+      // mean move, so only a rearrangement counts.
+      const moves = nodes.map(nd => ({ x: again.get(nd.id)!.x - first.get(nd.id)!.x, y: again.get(nd.id)!.y - first.get(nd.id)!.y }))
+      const mx = moves.reduce((t, m) => t + m.x, 0) / moves.length, my = moves.reduce((t, m) => t + m.y, 0) / moves.length
+      const worst = Math.max(...moves.map(m => Math.hypot(m.x - mx, m.y - my)))
+      // main measures 15-63 px on these seeds; a 120 px default edge length (reverted in this PR)
+      // measured 60-198 px, the neighbourhood visibly yanked back toward the stress model.
+      expect(worst, `seed ${seed}`).toBeLessThan(80)
+    }
+  })
+
+  it('the polish never moves a pinned node', () => {
+    const { nodes, edges } = randomGraph(60, 90, 5)
+    const first = organicLayout(nodes, edges).positions
+    const pinnedId = nodes[10].id
+    const warm = nodes.map(nd => ({ ...nd, ...first.get(nd.id)!, ...(nd.id === pinnedId ? { pinned: true } : {}) }))
+    const r = organicLayout(warm, edges, { affectedIds: [pinnedId, edges[3].source], scope: 'all' })
+    expect(r.positions.get(pinnedId)).toEqual(first.get(pinnedId))
+  })
+})
