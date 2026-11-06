@@ -232,6 +232,89 @@ describe('orthogonalLayout', () => {
   })
 })
 
+// Seeded sparse graphs with hubs (the DR spec graph's shape: about 2.2 edges per node, a few hubs).
+function hubGraph(n: number, extra: number, seed: number): { nodes: LayoutNode[]; edges: LayoutEdge[] } {
+  let x = seed >>> 0
+  const rnd = () => { x = (Math.imul(x, 1664525) + 1013904223) >>> 0; return x / 2 ** 32 }
+  const ids = Array.from({ length: n }, (_, i) => `n${String(i).padStart(3, '0')}`)
+  const edges: LayoutEdge[] = ids.slice(1).map((id, i) => ({ source: ids[Math.floor(rnd() * (i + 1) * rnd())], target: id }))
+  const seen = new Set(edges.map(e => `${e.source}|${e.target}`))
+  while (edges.length < n - 1 + extra) {
+    const a = ids[Math.floor(rnd() * rnd() * n)], b = ids[Math.floor(rnd() * n)]
+    if (a === b || seen.has(`${a}|${b}`) || seen.has(`${b}|${a}`)) continue
+    seen.add(`${a}|${b}`); edges.push({ source: a, target: b })
+  }
+  return { nodes: nodesOf(ids), edges }
+}
+
+describe('orthogonalLayout channel router (graphs the lattice router cannot route)', () => {
+  it('routes a large hub graph with no edge through a node and no shared segment', () => {
+    const { nodes, edges } = hubGraph(160, 200, 7)
+    const r = orthogonalLayout(nodes, edges)
+    expect(r.stats.router).toBe('channel')
+    expect(r.stats.fallbackRoutes).toBe(0)
+    expect(r.routes.every(axisParallel)).toBe(true)
+    expect(throughNode(nodes, edges, r.positions, r.routes, 10)).toBe(0)
+    expect(sharedSegments(r.routes)).toBe(0)
+    expect(boxOverlaps(nodes, r.positions)).toBe(0)
+  })
+
+  it('widens the uniform pitch to the busiest channel and keeps every anchor on it', () => {
+    const { nodes, edges } = hubGraph(160, 200, 7)
+    const r = orthogonalLayout(nodes, edges)
+    expect(r.cell.w).toBeGreaterThanOrEqual(W + 20 + 4 * 16)
+    expect(r.cell.h).toBeGreaterThan(H + 20 + 4 * 16) // this graph needs more than 4 horizontal tracks
+    for (const p of r.positions.values()) {
+      expect(Math.abs((p.x - r.origin.x) / r.cell.w - Math.round((p.x - r.origin.x) / r.cell.w))).toBeLessThan(1e-9)
+      expect(Math.abs((p.y - r.origin.y) / r.cell.h - Math.round((p.y - r.origin.y) / r.cell.h))).toBeLessThan(1e-9)
+    }
+  })
+
+  it('is deterministic on the channel path', () => {
+    const { nodes, edges } = hubGraph(160, 200, 11)
+    const a = orthogonalLayout(nodes, edges), b = orthogonalLayout(nodes, edges)
+    expect(a.stats.router).toBe('channel')
+    expect(JSON.stringify([[...a.positions], a.routes])).toBe(JSON.stringify([[...b.positions], b.routes]))
+  })
+
+  it('gives a hub more edges than the lattice has port slots (8 px ports)', () => {
+    // A degree-24 hub whose neighbours are also linked in a ring: 20 lattice slots are not enough.
+    const ids = ['hub', ...Array.from({ length: 24 }, (_, i) => `s${String(i).padStart(2, '0')}`)]
+    const edges: LayoutEdge[] = [...ids.slice(1).map(id => ({ source: 'hub', target: id })), ...ids.slice(1).map((id, i) => ({ source: id, target: ids[1 + ((i + 1) % 24)] }))]
+    const nodes = nodesOf(ids)
+    const r = orthogonalLayout(nodes, edges)
+    expect(r.stats.fallbackRoutes).toBe(0)
+    expect(throughNode(nodes, edges, r.positions, r.routes, 10)).toBe(0)
+    expect(sharedSegments(r.routes)).toBe(0)
+  })
+
+  it('keeps the lattice result on a small graph it routes completely', () => {
+    const { nodes, edges } = tree()
+    expect(orthogonalLayout(nodes, edges).stats.router).toBe('lattice')
+  })
+
+  it('switches to the channel router on a small graph where the lattice falls back', () => {
+    // Zachary's karate club (the docs app's dataset): 78 edges, the lattice draws fallback Ls.
+    const pairs = [[2,1],[3,1],[3,2],[4,1],[4,2],[4,3],[5,1],[6,1],[7,1],[7,5],[7,6],[8,1],[8,2],[8,3],[8,4],[9,1],[9,3],[10,3],[11,1],[11,5],[11,6],[12,1],[13,1],[13,4],[14,1],[14,2],[14,3],[14,4],[17,6],[17,7],[18,1],[18,2],[20,1],[20,2],[22,1],[22,2],[26,24],[26,25],[28,3],[28,24],[28,25],[29,3],[30,24],[30,27],[31,2],[31,9],[32,1],[32,25],[32,26],[32,29],[33,3],[33,9],[33,15],[33,16],[33,19],[33,21],[33,23],[33,24],[33,30],[33,31],[33,32],[34,9],[34,10],[34,14],[34,15],[34,16],[34,19],[34,20],[34,21],[34,23],[34,24],[34,27],[34,28],[34,29],[34,30],[34,31],[34,32],[34,33]]
+    const ids = Array.from({ length: 34 }, (_, i) => `k${String(i + 1).padStart(2, '0')}`)
+    const edges: LayoutEdge[] = pairs.map(([a, b]) => ({ source: ids[a - 1], target: ids[b - 1] }))
+    const nodes = nodesOf(ids)
+    const r = orthogonalLayout(nodes, edges)
+    expect(r.stats.router).toBe('channel')
+    expect(r.stats.fallbackRoutes).toBe(0)
+    expect(throughNode(nodes, edges, r.positions, r.routes, 10)).toBe(0)
+    expect(sharedSegments(r.routes)).toBe(0)
+  })
+
+  it('lays out a 400-node component well inside the Stage 3 budget', () => {
+    const { nodes, edges } = hubGraph(400, 400, 3)
+    const t = performance.now()
+    const r = orthogonalLayout(nodes, edges)
+    expect(performance.now() - t).toBeLessThan(3000)
+    expect(r.stats.fallbackRoutes).toBe(0)
+  })
+})
+
 describe('orthogonalLayout golden output', () => {
   // FNV-1a over the serialized positions and routes: any change to placement or routing changes
   // it. The values are main's output before the speed-ups (80ba9ed), which these must keep; update

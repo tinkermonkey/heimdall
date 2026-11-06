@@ -107,6 +107,7 @@ const ROOT_WIDTH_SLACK = 2
 const MAX_ROOT_CANDIDATES = 64
 const LARGE_COMPONENT = 250
 const LARGE_SEARCH_CANDIDATES = 8
+const INSERTION_MAX = 64
 
 // Port lines for the channel router: every 8 px along a side (vision item 8's minimum spacing), so a
 // 138 x 30 card offers 17 + 17 + 3 + 3 ports. The lattice router keeps its 16 px / 3-a-side lines.
@@ -656,7 +657,10 @@ function orderLayers(depth: Map<number, number>, order: number[], rows: number, 
     let improved = false
     for (let r = 0; r < rows; r++) {
       const l = layers[r]
-      if (l.length <= EXACT_MAX) continue
+      // Rows over INSERTION_MAX nodes keep their sweep order: the insertion search is quadratic in the
+      // row length times a re-count (a hub's 150-node row of neighbours: 3 s). Stage 1/2 rows are
+      // at most 18 nodes, so none is affected.
+      if (l.length <= EXACT_MAX || l.length > INSERTION_MAX) continue
       for (let i = 0; i < l.length; i++) {
         // Try inserting node i at every other position; keep the first strict improvement. A row
         // whose terms are already 0 cannot improve (every term is a count): skip it (a star's

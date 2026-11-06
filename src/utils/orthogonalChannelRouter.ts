@@ -69,6 +69,8 @@ const DY = [0, 1, 0, -1]
 // a bend per route over the current busiest: a free neighboring channel is preferred, a bend is not
 // traded for it. 0.5 measured best of 0 / 0.5 / 1 on the Stage 1/2 and Stage 3 fixtures.
 const CONGESTION = 0.5
+// Refinement tries at most this many lines on each side of a run's current one.
+const REFINE_REACH = 8
 
 interface End { port: boolean; sign: number; node: number; pos: number }
 interface Run {
@@ -527,9 +529,14 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
       const runs = families.get(key)!.filter(r => !failedSet.has(r.edge) && inp.groups[r.edge] === undefined)
       const fixed = (key >> 1) % 2 === 1
       for (const p of runs) {
+        // A run whose neighbourhood crosses nothing has nothing to gain.
+        if (crossingsWith(neighbourhood([p])) === 0) continue
         const candidates: number[] = []
         if (fixed) { const ok = allowedLines(p); ok.forEach((v, k2) => { if (v && k2 !== p.line) candidates.push(k2) }) }
         else for (let l = p.cmin; l <= p.cmax + 1e-9; l++) if (Math.abs(l - p.line) > 1e-9) candidates.push(l)
+        // Nearest lines first, at most REFINE_REACH on each side (a 70-track channel otherwise tries 70).
+        candidates.sort((u, w) => Math.abs(u - p.line) - Math.abs(w - p.line) || u - w)
+        candidates.splice(2 * REFINE_REACH)
         for (const L of candidates) {
           // Who is on line L over p's span? At most one run, which then takes p's line.
           const on = runs.filter(r => r !== p && Math.abs(r.line - L) < 1e-9 && overlaps(r, p))
