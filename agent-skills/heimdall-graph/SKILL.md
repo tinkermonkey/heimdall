@@ -1,6 +1,6 @@
 ---
 name: heimdall-graph
-description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, LayeredGraphContext, AdjacencyMatrix, plus useGraphCanvas, usePanZoom, useLayeredGraph, the headless layout engines, the edge geometry utilities and the layered graph framework
+description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, LayeredGraphContext, LayerStack, AdjacencyMatrix, HivePlot, FollowControl, PredicateLabelControl, PlaneLayoutControl, LinkCategoryFilter, LayerList, LayerPairList, BridgeNodeList, ReachInspector, plus useGraphCanvas, usePanZoom, useLayeredGraph, the headless layout engines, the edge geometry utilities and the layered graph framework
 ---
 
 Import all components from `@tinkermonkey/heimdall-ui`. Import the CSS once at your app entry point:
@@ -27,7 +27,7 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | ---- | ---- | ------- | ----------- |
 | `nodes` | `GraphNodeData[]` | required | Nodes to render |
 | `edges` | `GraphEdgeData[]` | `[]` | Edges to render |
-| `layout` | `'manual' \| 'force' \| 'organic' \| 'orthogonal' \| 'galaxy' \| 'force-clustered' \| 'radial-tree' \| 'ux-navigation'` | `'manual'` | Layout engine. See [Choosing a layout](#choosing-a-layout) |
+| `layout` | `'manual' \| 'force' \| 'organic' \| 'orthogonal' \| 'galaxy' \| 'force-clustered' \| 'radial-tree' \| 'ux-navigation' \| 'layer-lanes'` | `'manual'` | Layout engine. See [Choosing a layout](#choosing-a-layout) |
 | `selectedNodeId` | `string` | — | Controlled selected node ID |
 | `onNodeSelect` | `(nodeId: string) => void` | — | Called when a node is clicked or activated with Enter/Space |
 | `selectedEdgeId` | `string` | — | Controlled selected edge ID; drawn in the accent color |
@@ -65,6 +65,15 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `showHierarchyRings` | `boolean` | `false` | `radial-tree` | Ring per occupied depth around each trunk. Visual only |
 | `isPageNode` | `(node) => boolean` | — | `ux-navigation`, `orthogonal` | `true` = page, `false` = view. Omitted = every node is a page |
 | `isNavigationRoute` | `(edge) => boolean` | — | `ux-navigation`, `orthogonal` | Marks user-flow route edges. Omitted = no routes |
+
+**Layered lanes** (`layout="layer-lanes"` only; see [`layer-lanes`](#layer-lanes))
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `layeredGraph` | `LayeredGraphState` | context | Shared state from `useLayeredGraph`. Unset: the enclosing `LayeredGraphContext`, else the canvas builds its own from `nodes`/`edges`/`layering` |
+| `layering` | `BuildLayeredIndexOptions` | `{ layerBy: 'kind', missingValue: 'layer' }` | Standalone layering of `nodes`; memoize it. Ignored with `layeredGraph` or a context |
+| `layeredGraphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode, in-layer layout |
+| `laneOptions` | `LaneLayoutOptions` | — | `orientation` (`'horizontal'` default, `'vertical'`), `order` (`NodeOrder`, default coupled position along the lane), `maxRowWidth` (px before a lane wraps; 1120, or 640 as column height when vertical), `intraLinks` (`'arc'` default, `'none'`) |
 
 **Interaction overlays**
 
@@ -154,6 +163,7 @@ Viewport types, all in world coordinates (the space node `x`/`y` live in), so th
 | `force-clustered` | Graphs with real community structure | — | Stable |
 | `radial-tree` | Strict trees or forests, up to about 35 nodes per trunk | `isStructuralEdge` | Stable |
 | `ux-navigation` | App screen maps: pages, views, navigation routes | `isStructuralEdge`, `isPageNode`, `isNavigationRoute` | Stable |
+| `layer-lanes` | Layered graphs (a layering attribute on every node): how layers connect | `layering` or a `LayeredGraphContext` | Proof of concept |
 
 Every engine layout pins nodes that have both `x` and `y`. Nodes without them are placed by the engine.
 
@@ -221,6 +231,32 @@ Page trees top to bottom with view fans to the side; navigation routes appear on
 - `isNavigationRoute`: route edges stay hidden until a page or view touching them is hovered. Which routes show depends on whether the hovered node is a collapsed page, an expanded page or a view (see `visibleNavigationEdgeIds`).
 - Structural and route labels show only when the edge is in focus.
 
+
+#### `layer-lanes`
+
+A layered graph as swimlanes: one lane per layer (a layer-coloured band with an uppercase title and node count), nodes as monospace boxes packed into rows in the framework's lane order (their position in the coupled in-layer solve, so linked nodes line up and cross-layer links mostly run straight). Links within a layer are arcs above their row; links between layers are curves across the gap. Links take the layered framework's emphasis (category colour and dash, the amber reach ramp around the selection, dimming), with arrowheads and predicate pills per `predicateLabels`, placed along the curves with `placeEdgeLabels` and dropped where they would overlap.
+
+- The drawn graph is the layered index: one node per node instance (`multiValue: 'all'` copies included), one link per bundled link. With shared state it comes from the state, not from `nodes`/`edges`.
+- Selection is the layered state's: clicking a node (or Enter/Space on it) selects it, again clears; the background or Escape clears. `selectedNodeId` is ignored; `onNodeSelect` still fires. Share the state with `AdjacencyMatrix`, `HivePlot` and the chrome controls through `LayeredGraphContext`.
+- Inherits tooltips, popovers, `renderNode`, `renderEdge` (the lane curve as `path`), pan and zoom, fullscreen, drag and the toolbar. Edge callbacks receive one `GraphEdgeData` per link (`label` = its predicates joined with ` · `).
+- `laneOptions.orientation: 'vertical'` puts the lanes side by side as columns, for narrow containers.
+- The geometry is exported for custom renderers: `layoutLanes(index, layout, { sizeOf, hiddenLayers, ...LaneLayoutOptions })` returns a `LaneLayout` (node centres, `LaneBand`s, bounds; `LayoutLanesInput` is its input type); `laneLinkCurve(sourceBox, targetBox, cross, orientation)` returns a `LaneLinkCurve` (an `EdgeCurve` plus arrow `tip` and `dir`) between two `LaneNodeBox`es. `LaneOrientation` is `'horizontal' | 'vertical'`.
+- Limits: dense layers (near-cliques) draw many arcs; set `laneOptions={{ intraLinks: 'none' }}` or `filters.showIntra: false` to read only the cross-layer links. Links that skip a layer cross the lane between.
+
+```tsx
+import { GraphCanvas, useLayeredGraph, LayeredGraphContext } from '@tinkermonkey/heimdall-ui'
+
+// Standalone
+const layering = useMemo(() => ({ layerBy: 'tier', linkCategoryBy: 'category' }), [])
+<GraphCanvas layout="layer-lanes" nodes={nodes} edges={edges} layering={layering} fitView />
+
+// Shared with other layered views
+const graph = useLayeredGraph({ nodes, edges, layering })
+<LayeredGraphContext.Provider value={graph}>
+  <GraphCanvas layout="layer-lanes" nodes={nodes} edges={edges} laneOptions={{ orientation: 'vertical' }} fitView />
+  <AdjacencyMatrix />
+</LayeredGraphContext.Provider>
+```
 ### Hierarchy and collapse
 
 `collapsedNodeIds` + `onToggleCollapse` work under every layout. The hierarchy comes from `isStructuralEdge` (every edge counts as structural when it is omitted, except under `ux-navigation`). Hovering a node with children shows a `GraphCollapseControl` at its right edge; the default `GraphNode` also draws its own toggle and accepts Shift+Enter.
@@ -827,6 +863,9 @@ interface RelationshipLink {
   targetDomain?: string
   predicate: string
   direction: 'in' | 'out'
+  hop?: number          // layered graphs: 1 direct, 2+ followed; >1 shows a +n badge
+  via?: { id: string; title: string; predicate: string }  // shown as "via X · predicate"
+  layer?: { id: string; label: string; color: string }    // fills the row swatch
 }
 ```
 
@@ -1490,8 +1529,84 @@ function MyFollowControl() {
 | `assignPredicateCodes` | `(predicates, catalog?)` | Unique two-letter codes for matrix cells |
 | `linkPredicateLabel` | `(link, catalog, predicates?)` | Predicates joined with ` · ` |
 | `arrowHeadPoints` | `(tip, ux, uy, length?, halfWidth?)` | SVG `points` for an arrowhead pointing along (ux, uy) |
+| `lineCurve`, `quadCurve`, `cubicCurve` | `(a, b)`, `(a, c, b)`, `(a, c1, c2, b)` | `EdgeCurve`: SVG `d` plus `pointAt(t)` and unit `tangentAt(t)`, for drawing an edge and sampling it for labels and arrowheads |
+| `placeEdgeLabels` | `(candidates: EdgeLabelCandidate[], { obstacles?, ts?, size?, gapX?, gapY? })` | `PlacedEdgeLabel[]`: greedy pill placement in priority order, each candidate trying `ts` (`DEFAULT_LABEL_TS` = .5, .36, .64, .24, .76) along its own edge; a pill with no clear spot is dropped. `LabelBox` boxes are centered. `defaultPillSize` sizes a 9.5px mono pill |
+| `edgeLabelPriority` | `(link, emphasis)` | Placement priority: reached links by hop, then the rest; cross-layer before intra-layer |
 
 Colors are tokens with light and dark canvas values: `--graph-hop-1…3` (reach ramp), `--graph-link-1…6` (categories by position), `--graph-layer-1…12` (layers by rank), `--graph-pill-bg`, `--graph-plane-fill-alpha`. Use them as `rgb(var(--graph-hop-1))`.
+
+## LayerStack
+
+The layered graph as a 3D stack: one translucent plane per layer (with a grid and a clickable title showing node and link counts), nodes as layer-coloured discs sized by degree, intra-layer links on their plane and cross-layer links between planes. Drawn as SVG with a perspective projection, so it stays crisp, accessible and snapshot-testable; comfortable at a few hundred nodes.
+
+- **Selection:** click a node (again to clear; click the background to clear). The reach lights in the amber hop ramp with arrowheads and predicate pills (`placeEdgeLabels` over the projected links), and a **drill-through column** (dashed vertical through every plane, a ring on each other plane) shows what sits above and below the node.
+- **Labels:** node labels, plane titles and pills are an HTML overlay positioned in percentages: upright and crisp at any angle. Node labels are buttons with roving focus: Left/Right move within a layer, Up/Down move to a linked node (or the first node) on the next layer, Home/End, Enter selects, Escape clears. `nodeLabels` picks which are visible; hidden ones stay focusable.
+- **Camera:** drag to orbit (pitch clamped; a 4px threshold keeps clicks as clicks), wheel zoom only while the scene has focus, presets `stack` / `exploded` / `top` (x-ray; plane titles move to a side rail) / `profile`, a turntable, and the layer gap. Moves tween 600–900 ms ease-in-out (`useTween`) and jump under `prefers-reduced-motion`, which also disables the turntable.
+- **Layer focus:** the graph's `focusedLayerId` (plane title click, `LayerList`, or `focusLayer`): planes above and below move apart, the camera tilts toward the plane and the other layers dim. Clicking the title again exits.
+- **Plane layout:** the graph's `planeLayout` tweens between the independent and coupled in-plane layouts (`mixLayerPositions`).
+- **Performance:** camera state lives in refs and only the projected geometry recomputes per frame. `onCameraChange` fires when a move settles (drag release, end of a tween, a wheel pause, turntable stop), never per frame, so chrome showing the camera doesn't re-render while it moves. Pills are skipped while dragging and placed again on release.
+
+The math is in `projection.ts`, free of React: `createProjector(camera, options)` maps a world point to screen `{ x, y, scale, depth }`; `stackPlaneY`, `planeCorners`, `planeGridLines` and `ringPoints` build the world model; `depthSort` is the painter's order; `fitZoom`, `clampCamera`, `nearestYaw`, `lerpCamera`, `wrapAngle`, `cameraFromPreset`, `projectPoint`, `svgPoints`, `leftmostPoint`, `screenBounds` and `titleRail` round it out, with the constants `CAMERA_PRESETS`, `CAMERA_PRESET_NAMES`, `PITCH_RANGE`, `ZOOM_RANGE`, `DEFAULT_CAMERA_DISTANCE` and `TOP_VIEW_PITCH`. `useTween(onFrame)` returns `{ start(from, to, { duration, easing, onDone }), cancel, isActive, reducedMotion }` and is shared by any animated view; `usePrefersReducedMotion`, `easeInOutCubic`, `interpolateValues` and `REDUCED_MOTION_QUERY` come with it.
+
+```tsx
+import { LayerStack, useLayeredGraph, LayeredGraphContext, type LayerStackHandle } from '@tinkermonkey/heimdall-ui'
+
+// Standalone:
+const layering = useMemo(() => ({ layerBy: 'tier', linkCategoryBy: 'category' }), [])
+<LayerStack nodes={nodes} edges={edges} layering={layering} />
+
+// Shared state, app-driven camera:
+const graph = useLayeredGraph({ nodes, edges, layering })
+const stack = useRef<LayerStackHandle>(null)
+const [preset, setPreset] = useState<CameraPresetName | null>('stack')
+<LayeredGraphContext.Provider value={graph}>
+  <LayerStack
+    ref={stack}
+    cameraPreset={preset}
+    onCameraPresetChange={setPreset}
+    onCameraChange={(camera, cause) => setStatus(camera)}
+    nodeLabels="reached"
+    interactions={{ zoom: false }}
+  />
+  <Button onClick={() => stack.current?.fit()}>Fit</Button>
+</LayeredGraphContext.Provider>
+```
+
+Ref handle (`LayerStackHandle`): `applyPreset(name, { animate })`, `setCamera(partial, { animate })`, `getCamera()`, `zoomBy(factor)`, `fit()`, `setTurntable(on)`, `focusLayer(id | null)`, `select(id | null)`, `setFollow(n)`, `element()`. `onCameraChange` causes (`LayerStackCameraCause`): `orbit`, `zoom`, `preset`, `focus`, `fit`, `turntable`, `api`. `LayerStackInteractions` and `LayerStackNodeLabels` type the props below; `LayerStackMoveOptions` is the `{ animate }` argument.
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`. Unset: the enclosing `LayeredGraphContext`, else its own from `nodes`/`edges`/`layering` |
+| `nodes` | `GraphNodeData[]` | — | Standalone nodes; ignored with `graph` or a context |
+| `edges` | `GraphEdgeData[]` | — | Standalone edges; ignored with `graph` or a context |
+| `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
+| `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, focus, plane layout |
+| `cameraPreset` | `'stack' \| 'exploded' \| 'top' \| 'profile' \| null` | — | Controlled preset; a new value animates to it. Becomes `null` when the camera is moved by hand |
+| `defaultCameraPreset` | `CameraPresetName` | `'stack'` | Initial preset when uncontrolled |
+| `onCameraPresetChange` | `(preset: CameraPresetName \| null) => void` | — | Preset applied or cleared |
+| `camera` | `Partial<StackCamera>` | — | Controlled `{ yaw, pitch, zoom, targetY }`; a changed value is applied at once |
+| `defaultCamera` | `Partial<StackCamera>` | — | Initial camera fields over the initial preset |
+| `onCameraChange` | `(camera: StackCamera, cause: LayerStackCameraCause) => void` | — | Called when a camera move settles, not per frame |
+| `turntable` | `boolean` | — | Controlled slow yaw. Off under reduced motion; turns off when the user orbits |
+| `defaultTurntable` | `boolean` | `false` | Initial turntable when uncontrolled |
+| `onTurntableChange` | `(on: boolean) => void` | — | Turntable toggled (including off on orbit) |
+| `turntableSpeed` | `number` | `0.27` | Turntable speed, radians per second |
+| `layerGap` | `number` | — | Controlled distance between planes, world units; applied when it changes |
+| `defaultLayerGap` | `number` | preset's | Initial gap when uncontrolled (170 for `stack`) |
+| `onLayerGapChange` | `(gap: number) => void` | — | Gap changed by a preset |
+| `nodeLabels` | `'all' \| 'reached' \| 'none'` | `'all'` | Which node labels show; the hovered or keyboard-focused node always does |
+| `interactions` | `LayerStackInteractions` | all on | `{ select, hover, orbit, zoom, focusLayer }`: turn direct manipulation off per kind |
+| `sceneWidth` | `number` | `1160` | Scene (viewBox) width; with `sceneHeight` sets the aspect ratio |
+| `sceneHeight` | `number` | `780` | Scene (viewBox) height |
+| `planeSize` | `number` | `300` | Plane half-width in world units; every plane shares it, so the stack reads square |
+
+### Gotchas
+
+- The scene keeps the `sceneWidth / sceneHeight` aspect ratio at 100% width; size it with its container's width.
+- Wheel zoom needs focus in the scene (click it, or tab to a node), so it never hijacks page scroll.
+- `camera` is applied as a jump; use the ref's `setCamera(c, { animate: true })` or a preset to animate.
 
 ## AdjacencyMatrix
 
@@ -1533,3 +1648,228 @@ const graph = useLayeredGraph({ nodes, edges, layering })
 
 Large graphs scroll inside the component (it renders at natural size, so cells stay crisp). There is no virtualization yet: past about 150 nodes, prefer filtering layers out.
 
+
+## HivePlot
+
+A hive plot of a layered graph: one radial axis per layer at evenly divided angles, nodes placed outward along their axis by rank (degree by default, busiest farthest out), and links drawn as curves between axes. Each axis is doubled (±13° by default) so links within a layer span the gap between the two copies; cross-layer links run between the facing copies of two axes. It compares how the layers connect rather than where nodes sit. Reads well for 3 to about 6 layers; beyond that, prefer `AdjacencyMatrix`.
+
+- **Link colours:** each link takes its category colour and dash. Around the selection, links take the amber reach ramp, with arrowheads and predicate pills per `predicateLabels` (pills are placed with `placeEdgeLabels` and dropped where they would overlap).
+- **Labels:** with no selection, the `axisLabels` busiest nodes per axis are labeled; with one, the selection and its reach, dropping labels that would overlap (the node's tooltip and accessible name still carry it). Hovering a node labels it.
+- **Selection:** click a node (either copy) or press Enter or Space on it to select; again clears; Escape clears. Clicking a link selects its source, or calls `onLinkSelect`.
+- **Keyboard:** the nodes are one tab stop. Arrow Up and Down move outward and inward along the axis, Home and End jump to its ends, Arrow Right and Left move to the next and previous axis at the nearest rank.
+- **Sizing:** the SVG fills its container's width at a fixed aspect ratio (viewBox fit). Node hit targets stay at least 24 px across at any scale.
+- **Without split axes** (`splitAxes={false}`), links within a layer leave the single axis as arcs: clockwise when the target sits farther out, so the side reads as direction.
+
+The geometry is exported for custom renderers: `hiveLayout(layers, rank, options)` returns `HiveLayout` (each `HiveAxis` with its angle, copy offsets and label copy, plus every node's radius); `hiveLinkGeometry(layout, source, target)` returns a link's quadratic curve as `HiveLinkGeometry` (feed it to `quadCurve`); `hivePoint`, `hiveAxisAngles`, `clampSplitAngle` and `hiveLabelSide` are the helpers they use. `HiveLayoutOptions` takes the same `innerRadius`, `axisLength`, `splitAxes`, `splitAngle` and `startAngle` as the component.
+
+```tsx
+import { HivePlot, useLayeredGraph, LayeredGraphContext } from '@tinkermonkey/heimdall-ui'
+
+// Standalone: the plot builds its own layered-graph state.
+const layering = useMemo(() => ({ layerBy: 'tier', linkCategoryBy: 'category' }), [])
+<HivePlot nodes={nodes} edges={edges} layering={layering} />
+
+// Shared with other layered views and controls:
+const graph = useLayeredGraph({ nodes, edges, layering, layout: false })
+<LayeredGraphContext.Provider value={graph}>
+  <HivePlot rank="cross-degree" axisLabels={2} interactions={{ hover: false }} />
+</LayeredGraphContext.Provider>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`. Unset: the enclosing `LayeredGraphContext`, else its own from `nodes`/`edges`/`layering` |
+| `nodes` | `GraphNodeData[]` | — | Standalone nodes; ignored with `graph` or a context |
+| `edges` | `GraphEdgeData[]` | — | Standalone edges; ignored with `graph` or a context |
+| `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
+| `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode |
+| `rank` | `NodeOrder` | `'degree'` | Placement outward along each axis (`rankWithinLayers`) |
+| `splitAxes` | `boolean` | `true` | Double each axis; off draws intra-layer links as arcs off the single axis |
+| `splitAngle` | `number` | `13` | Half the angle between an axis's copies, degrees; clamped to leave room between axes |
+| `axisLabels` | `number` | `1` | Nodes labeled per axis with no selection (busiest first) |
+| `innerRadius` | `number` | `64` | Radius of the axes' inner end, viewBox units |
+| `axisLength` | `number` | `300` | Axis length, viewBox units (the plot scales to its container) |
+| `startAngle` | `number` | `-90` | First axis angle, degrees clockwise from the right (−90 = up) |
+| `interactions` | `HivePlotInteractions` | both on | `{ select?: boolean; hover?: boolean }`: node selection (click, Enter, Space, Escape) and hover lift |
+| `onLinkSelect` | `(link: IndexedLink) => void` | — | Link click handler. Unset: selects the link's source |
+
+## FollowControl
+
+Segmented control for how far the selection's reach follows cross-layer links: Direct / +1 layer / +2 layers. Writes `follow` on the shared `useLayeredGraph` state. Like every layered chrome control, it reads the `graph` prop, else the enclosing `LayeredGraphContext`, and throws a clear error with neither (`useLayeredGraphProp(graph, name)` is the same lookup for your own chrome). `followOptionLabel(n)` gives the default segment text.
+
+```tsx
+import { FollowControl, LayeredGraphContext, useLayeredGraph } from '@tinkermonkey/heimdall-ui'
+
+const graph = useLayeredGraph({ nodes, edges, layering })
+<LayeredGraphContext.Provider value={graph}>
+  <FollowControl options={[0, 1, 2, 3]} />
+</LayeredGraphContext.Provider>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `options` | `readonly number[]` | `[0, 1, 2]` | Follow depths offered (hops past the direct links) |
+| `formatOption` | `(follow: number) => ReactNode` | `followOptionLabel` | Segment text per depth: `Direct`, `+1 layer`, `+2 layers` |
+| `label` | `ReactNode` | `'Follow'` | Mono eyebrow before the control; `null` hides it |
+| `disabled` | `boolean` | `false` | Disables every segment |
+
+## PredicateLabelControl
+
+Segmented control for which links show predicate labels: Off / Highlighted (reached links and the active layer pair) / All. Writes `predicateLabels`.
+
+```tsx
+<PredicateLabelControl optionLabels={{ highlighted: 'Reached' }} />
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `options` | `readonly PredicateLabelMode[]` | `['off', 'highlighted', 'all']` | Modes offered, in order |
+| `optionLabels` | `Partial<Record<PredicateLabelMode, ReactNode>>` | — | Segment text per mode; default `Off`, `Highlighted`, `All` |
+| `label` | `ReactNode` | `'Predicates'` | Mono eyebrow before the control; `null` hides it |
+| `disabled` | `boolean` | `false` | Disables every segment |
+
+## PlaneLayoutControl
+
+Segmented control for Independent (each layer laid out on its own) or Coupled (cross-layer neighbours aligned). Writes `planeLayout`; views that position nodes per layer read it.
+
+```tsx
+<PlaneLayoutControl />
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `optionLabels` | `Partial<Record<PlaneLayoutMode, ReactNode>>` | — | Segment text per mode; default `Independent`, `Coupled` |
+| `label` | `ReactNode` | `'Plane layout'` | Mono eyebrow before the control; `null` hides it |
+| `disabled` | `boolean` | `false` | Disables both segments |
+
+## LinkCategoryFilter
+
+The link bar: one toggle button per link category, each with its dash sample (from `linkCategoryStyle`) and link count, then optional intra-layer and node-label toggles. Category and intra toggles write `filters`. Node labels are view state, so that toggle is controlled here. `children` render after a divider at the end of the bar. `categoryDisplayLabel(c)` gives the default label (sentence case).
+
+```tsx
+<LinkCategoryFilter
+  categoryLabels={{ structural: 'Structure' }}
+  nodeLabels={nodeLabels}
+  onNodeLabelsChange={setNodeLabels}
+>
+  <PredicateLabelControl />
+</LinkCategoryFilter>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `categories` | `readonly string[]` | all in the index | Categories offered, in order |
+| `categoryLabels` | `Readonly<Record<string, ReactNode>>` | — | Display text per category; unset uses `categoryDisplayLabel` |
+| `showCounts` | `boolean` | `true` | Link count per category (bundled links by primary category) |
+| `label` | `ReactNode` | `'Links'` | Mono eyebrow before the toggles; `null` hides it |
+| `showIntraToggle` | `boolean` | `true` | Toggle for `filters.showIntra` |
+| `intraLabel` | `ReactNode` | `'Intra-layer links'` | Intra toggle text |
+| `showLabelToggle` | `boolean` | set when `onNodeLabelsChange` is | Toggle for node labels |
+| `nodeLabels` | `boolean` | `true` | Node labels on or off (controlled) |
+| `onNodeLabelsChange` | `(on: boolean) => void` | — | Called by the node-label toggle |
+| `labelToggleLabel` | `ReactNode` | `'Labels'` | Node-label toggle text |
+| `children` | `ReactNode` | — | Rendered after a divider at the end of the bar |
+
+## LayerList
+
+One row per layer: colour swatch, name, and `nodes · links within` counts. The row is a button that focuses the layer (again to clear); the eye button hides or shows it.
+
+```tsx
+<LayerList hideable={false} />
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `label` | `ReactNode` | `'Layers'` | Eyebrow; `null` hides it |
+| `focusable` | `boolean` | `true` | Rows are buttons that focus the layer; false renders plain rows |
+| `hideable` | `boolean` | `true` | Eye button per row that hides or shows the layer |
+| `showCounts` | `boolean` | `true` | Node and intra-layer link counts per row |
+
+## LayerPairList
+
+One row per layer pair with cross-layer links: both swatches, the names and the link count. A row toggles layer-pair focus (only that pair's cross-layer links show) and by default clears the selection.
+
+```tsx
+<LayerPairList sort="count" limit={8} />
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `label` | `ReactNode` | `'Cross-layer links'` | Eyebrow; `null` hides it |
+| `showEmptyPairs` | `boolean` | `false` | List pairs with no cross-layer links |
+| `sort` | `'rank' \| 'count'` | `'rank'` | Row order: layer rank, or link count (most first) |
+| `limit` | `number` | — | At most this many rows |
+| `clearSelection` | `boolean` | `true` | Picking a pair clears the selection |
+| `emptyText` | `ReactNode` | `'No cross-layer links.'` | Shown when no pair qualifies |
+
+## BridgeNodeList
+
+The nodes with the most cross-layer links (ties by total degree), skipping hidden layers. A row selects the node.
+
+```tsx
+<BridgeNodeList limit={10} />
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `label` | `ReactNode` | `'Bridge nodes · most cross-layer links'` | Eyebrow; `null` hides it |
+| `limit` | `number` | `6` | Number of nodes listed |
+| `emptyText` | `ReactNode` | `'No cross-layer links.'` | Shown when no node has a cross-layer link |
+
+## ReachInspector
+
+Inspector for the layered views' selection:
+
+- **Head:** layer eyebrow in the layer colour, clear button, name, identifier and description.
+- **Stats:** `StatTile`s for cross-layer and within-layer link counts.
+- **Across layers / Within layer:** the direct relationships, each with a direction icon, predicate and (across) the other node's layer dot, then a mono reach line (`reach 13 nodes across 3 layers · follow +1 layer`).
+- **Followed across layers:** nodes at hop 2+, with the node and predicate they were reached through and a `+n` hop badge.
+
+Rows are buttons that select their node. Only links the filters leave traversable are listed. `reachRelationships(graph)` returns the same data as `RelationshipLink`s (with `hop`, `via`, `layer`), usable with `GraphInspector`; `reachSummaryText(rels, follow)` gives the reach line.
+
+```tsx
+<ReachInspector
+  empty={<><LayerList /><LayerPairList /><BridgeNodeList /></>}
+/>
+
+// Or feed GraphInspector from the same state:
+const rels = reachRelationships(graph)
+<GraphInspector node={…} relationships={rels ? [...rels.cross, ...rels.intra, ...rels.followed] : []} />
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`; unset uses the enclosing `LayeredGraphContext` |
+| `emptyText` | `ReactNode` | `'No node selected.'` | Shown with no selection |
+| `empty` | `ReactNode` | — | Replaces the empty text with no selection |
+| `showClear` | `boolean` | `true` | Clear-selection button beside the layer eyebrow |
+| `showDescription` | `boolean` | `true` | The node's description |
+| `showStats` | `boolean` | `true` | Across-layers and within-layer stat tiles |
+| `showFollowed` | `boolean` | `true` | The "Followed across layers" list |
+| `showReachSummary` | `boolean` | `true` | The mono reach line |
+| `onNodeSelect` | `(nodeId: string) => void` | — | Row handler; unset selects the row's node |

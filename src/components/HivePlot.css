@@ -1,0 +1,128 @@
+.hive-plot {
+  display: block;
+  min-width: 0;
+  color: rgb(var(--canvas-fg-1));
+  font-family: var(--font-mono);
+}
+
+.hive-plot__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  overflow: visible;
+}
+
+.hive-plot__axis line {
+  stroke-opacity: 0.55;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.hive-plot__axis-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.hive-plot__link-line {
+  fill: none;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.hive-plot__link-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 8;
+  pointer-events: none;
+}
+
+.hive-plot__link--clickable {
+  cursor: pointer;
+}
+
+.hive-plot__link--clickable .hive-plot__link-hit {
+  pointer-events: stroke;
+}
+
+.hive-plot__arrow {
+  pointer-events: none;
+}
+
+.hive-plot__node {
+  cursor: pointer;
+  outline: none;
+  transition: opacity 0.12s ease;
+}
+
+.hive-plot__hit {
+  fill: transparent;
+  stroke: none;
+}
+
+.hive-plot__dot {
+  stroke: rgb(var(--canvas-bg));
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+
+.hive-plot__ring {
+  fill: none;
+  pointer-events: none;
+}
+
+/* hover lifts a neutral step, never a color tint */
+.hive-plot__hover {
+  fill: rgb(var(--canvas-fg-1));
+  fill-opacity: 0.1;
+  pointer-events: none;
+}
+
+.hive-plot__focus {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 3;
+  pointer-events: none;
+}
+
+/* The house focus ring (--focus-ring: 3px amber-400 at 18%), drawn as an SVG stroke since box-shadow doesn't apply to SVG. */
+.hive-plot__node:focus-visible .hive-plot__focus {
+  stroke: rgba(251, 191, 36, 0.18);
+}
+
+.hive-plot__label {
+  font-size: 10.5px;
+  font-weight: 500;
+  fill: rgb(var(--canvas-fg-1));
+  /* A canvas-colored halo keeps labels legible over links. */
+  stroke: rgb(var(--canvas-bg));
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  pointer-events: none;
+}
+
+.hive-plot__label--selected {
+  fill: rgb(var(--graph-hop-1));
+  font-weight: 600;
+}
+
+.hive-plot__label--followed {
+  fill: rgb(var(--graph-hop-2));
+}
+
+.hive-plot__pill {
+  pointer-events: none;
+}
+
+.hive-plot__pill rect {
+  fill: var(--graph-pill-bg);
+  stroke-opacity: 0.33;
+  stroke-width: 1;
+}
+
+.hive-plot__pill text {
+  font-size: 9.5px;
+  font-weight: 500;
+}

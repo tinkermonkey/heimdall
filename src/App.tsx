@@ -26,6 +26,10 @@ import GraphShowcase from './test-pages/GraphShowcase'
 import OrganicLayoutTestPage from './test-pages/OrganicLayoutTestPage'
 import OrthogonalLayoutTestPage from './test-pages/OrthogonalLayoutTestPage'
 import AdjacencyMatrixTestPage from './test-pages/AdjacencyMatrixTestPage'
+import LayerLanesTestPage from './test-pages/LayerLanesTestPage'
+import LayerStackTestPage from './test-pages/LayerStackTestPage'
+import LayeredGraphChromeTestPage from './test-pages/LayeredGraphChromeTestPage'
+import HivePlotTestPage from './test-pages/HivePlotTestPage'
 import GalaxyLayoutLab from './test-pages/GalaxyLayoutLab'
 import CenterOnSelectTestPage from './test-pages/CenterOnSelectTestPage'
 import FullscreenContainerRefTestPage from './test-pages/FullscreenContainerRefTestPage'
@@ -147,6 +151,22 @@ export default function App() {
 
   if (exampleParam === 'adjacency-matrix') {
     return <AdjacencyMatrixTestPage />
+  }
+
+  if (exampleParam === 'layer-lanes') {
+    return <LayerLanesTestPage />
+  }
+
+  if (exampleParam === 'layer-stack') {
+    return <LayerStackTestPage />
+  }
+
+  if (exampleParam === 'layered-graph-chrome') {
+    return <LayeredGraphChromeTestPage />
+  }
+
+  if (exampleParam === 'hive-plot') {
+    return <HivePlotTestPage />
   }
 
   if (exampleParam === 'center-on-select') {

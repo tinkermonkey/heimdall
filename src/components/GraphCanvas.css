@@ -182,3 +182,118 @@ body.dark-canvas .graph-canvas {
     animation: none;
   }
 }
+
+/* ─── layout="layer-lanes" ───────────────────────────────────────────────────── */
+
+/* Lane bands: the layer color as a faint tint (the shared plane alpha token) with a hairline
+   border and a solid 3px bar on the leading edge. */
+.graph-lane__band {
+  fill-opacity: var(--graph-plane-fill-alpha);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+}
+
+.graph-lane__title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+.graph-lane-link__line {
+  fill: none;
+  stroke-linecap: round;
+  pointer-events: none;
+  transition:
+    stroke-width 0.12s,
+    stroke-opacity 0.12s;
+}
+
+.graph-lane-link__arrow {
+  pointer-events: none;
+}
+
+.graph-lane-link[role='button']:focus-visible .graph-lane-link__line {
+  stroke: rgb(var(--accent-primary)) !important;
+  stroke-opacity: 1 !important;
+}
+
+/* Predicate pill: monospace text in the link's color on a translucent canvas background, with a
+   hairline border tinted with the same color. */
+.graph-lane-pill {
+  pointer-events: none;
+}
+
+.graph-lane-pill__bg {
+  fill: var(--graph-pill-bg);
+  stroke-opacity: 0.33;
+  stroke-width: 1;
+}
+
+.graph-lane-pill__text {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* Default node: a monospace box with its layer's color bar. */
+.graph-lane-node {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 24px;
+  padding: 0 10px 0 11px;
+  border: 1px solid rgb(var(--canvas-border-strong));
+  border-radius: 4px;
+  background: rgb(var(--canvas-surface));
+  box-shadow: inset 3px 0 0 var(--graph-lane-color);
+  color: rgb(var(--canvas-fg-1));
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background 0.08s,
+    border-color 0.08s;
+}
+
+/* Hover lifts one neutral step, never a tint. */
+.graph-lane-node:hover {
+  background: rgb(var(--canvas-surface-2));
+}
+
+.graph-lane-node:focus-visible {
+  box-shadow:
+    inset 3px 0 0 var(--graph-lane-color),
+    var(--focus-ring);
+}
+
+.graph-lane-node--selected {
+  border-color: rgb(var(--graph-hop-1));
+  box-shadow:
+    inset 3px 0 0 var(--graph-lane-color),
+    0 0 0 0.5px rgb(var(--graph-hop-1));
+  color: rgb(var(--graph-hop-1));
+}
+
+.graph-lane-node--followed {
+  border-color: rgb(var(--graph-hop-2));
+  color: rgb(var(--graph-hop-2));
+}
+
+.graph-lane-node--selected:focus-visible {
+  box-shadow:
+    inset 3px 0 0 var(--graph-lane-color),
+    0 0 0 0.5px rgb(var(--graph-hop-1)),
+    var(--focus-ring);
+}
+
+.graph-lane-node__label {
+  pointer-events: none;
+}

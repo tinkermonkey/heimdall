@@ -1,0 +1,148 @@
+import { test, expect, type Page } from '@playwright/test'
+
+// Layered-graph chrome (FollowControl, PredicateLabelControl, PlaneLayoutControl,
+// LinkCategoryFilter, LayerList, LayerPairList, BridgeNodeList, ReachInspector) around an
+// AdjacencyMatrix, all on one useLayeredGraph (src/test-pages/LayeredGraphChromeTestPage.tsx).
+// Each control must change the shared state, and the matrix must reflect it.
+
+const BASE = 'http://localhost:5173/?example=layered-graph-chrome'
+const ORIGIN = 'application.applicationcomponent'
+
+async function open(page: Page, query = '') {
+  const errors: string[] = []
+  page.on('console', (msg) => { if (msg.type() === 'error') errors.push(msg.text()) })
+  page.on('pageerror', (err) => errors.push(String(err)))
+  await page.goto(BASE + query)
+  await page.waitForLoadState('networkidle')
+  await expect(page.getByTestId('adjacency-matrix')).toBeVisible()
+  return errors
+}
+
+const state = (page: Page) => page.getByTestId('chrome-state')
+const cells = (page: Page) => page.locator('.adjacency-matrix__cell')
+const inspector = (page: Page) => page.getByTestId('reach-inspector')
+
+test.describe('Layered graph chrome', () => {
+  test('renders every control and an empty inspector', async ({ page }) => {
+    const errors = await open(page)
+    await expect(inspector(page)).toHaveText('No node selected.')
+    await expect(page.getByTestId('layer-list').locator('li')).toHaveCount(3)
+    await expect(page.getByTestId('layer-pair-list').locator('li')).toHaveCount(3)
+    await expect(page.getByTestId('bridge-node-list').locator('li')).toHaveCount(6)
+    await expect(page.getByTestId('link-bar').locator('[data-category]')).toHaveCount(6)
+    await expect(cells(page)).toHaveCount(162)
+    expect(errors).toEqual([])
+  })
+
+  test('FollowControl sets follow; the reach and the inspector follow it', async ({ page }) => {
+    await open(page, `&select=${ORIGIN}`)
+    await expect(state(page)).toContainText(`selected ${ORIGIN} · reach 13 · follow 1`)
+    await expect(inspector(page)).toContainText('Followed across layers · 3')
+    await expect(inspector(page)).toContainText('reach 13 nodes across 3 layers · follow +1 layer')
+
+    await page.getByRole('radio', { name: 'Direct' }).click()
+    await expect(state(page)).toContainText('reach 10 · follow 0')
+    await expect(inspector(page)).not.toContainText('Followed across layers')
+    await expect(inspector(page)).toContainText('follow direct only')
+
+    // keyboard: arrows move along the radio group
+    await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('ArrowRight')
+    await expect(state(page)).toContainText('reach 14 · follow 2')
+    await expect(inspector(page)).toContainText('Followed across layers · 4')
+  })
+
+  test('PredicateLabelControl sets the label mode; the matrix codes follow it', async ({ page }) => {
+    await open(page)
+    await expect(page.locator('.adjacency-matrix__legend')).toHaveCount(0)
+    await page.getByRole('radio', { name: 'All' }).click()
+    await expect(state(page)).toContainText('labels all')
+    await expect(page.locator('.adjacency-matrix__legend')).toBeVisible()
+    await page.getByRole('radio', { name: 'Off' }).click()
+    await expect(state(page)).toContainText('labels off')
+    await expect(page.locator('.adjacency-matrix__legend')).toHaveCount(0)
+  })
+
+  test('PlaneLayoutControl sets the plane layout', async ({ page }) => {
+    await open(page)
+    await page.getByRole('radio', { name: 'Coupled' }).click()
+    await expect(state(page)).toContainText('plane coupled')
+    await expect(page.getByRole('radio', { name: 'Coupled' })).toHaveAttribute('aria-checked', 'true')
+  })
+
+  test('LinkCategoryFilter toggles categories, intra-layer links and node labels', async ({ page }) => {
+    await open(page)
+    const bar = page.getByTestId('link-bar')
+    const structural = bar.locator('[data-category="structural"]')
+    await expect(structural).toHaveAttribute('aria-pressed', 'true')
+    await structural.click()
+    await expect(structural).toHaveAttribute('aria-pressed', 'false')
+    await expect(state(page)).toContainText('off structural')
+    expect(await cells(page).count()).toBeLessThan(162)
+    await structural.click()
+    await expect(cells(page)).toHaveCount(162)
+
+    await bar.getByRole('button', { name: 'Intra-layer links' }).click()
+    await expect(state(page)).toContainText('intra off')
+    await expect(cells(page)).toHaveCount(22)
+
+    await bar.getByRole('button', { name: 'Labels' }).click()
+    await expect(state(page)).toContainText('node-labels off')
+  })
+
+  test('LayerList focuses and hides layers', async ({ page }) => {
+    await open(page)
+    const list = page.getByTestId('layer-list')
+    const business = list.getByRole('button', { name: /^Business layer/ })
+    await business.click()
+    await expect(state(page)).toContainText('focus business')
+    await expect(business).toHaveAttribute('aria-pressed', 'true')
+    await business.click()
+    await expect(state(page)).toContainText('focus none')
+
+    await list.getByRole('button', { name: 'Hide Business' }).click()
+    await expect(state(page)).toContainText('hidden business')
+    await expect(page.locator('.adjacency-matrix [role="button"]')).toHaveCount(22)
+    await expect(page.getByTestId('layer-pair-list').locator('li')).toHaveCount(1)
+    await list.getByRole('button', { name: 'Show Business' }).click()
+    await expect(page.locator('.adjacency-matrix [role="button"]')).toHaveCount(36)
+  })
+
+  test('LayerPairList toggles layer-pair focus', async ({ page }) => {
+    await open(page, `&select=${ORIGIN}`)
+    const pair = page.getByTestId('layer-pair-list').getByRole('button', { name: 'Business and Application, 8 cross-layer links' })
+    await pair.click()
+    await expect(state(page)).toContainText('no selection')
+    await expect(state(page)).toContainText('pair ["business","application"]')
+    await expect(cells(page)).toHaveCount(8)
+    await pair.click()
+    await expect(state(page)).toContainText('pair none')
+    await expect(cells(page)).toHaveCount(162)
+  })
+
+  test('BridgeNodeList selects; inspector rows navigate and clear', async ({ page }) => {
+    await open(page)
+    await page.getByTestId('bridge-node-list').getByRole('button', { name: /^BusinessProcess,/ }).click()
+    await expect(state(page)).toContainText('selected business.businessprocess')
+    await expect(inspector(page).getByRole('heading', { level: 2 })).toHaveText('BusinessProcess')
+    await expect(inspector(page)).toContainText('Business layer')
+
+    // keyboard: Enter on an inspector row selects its node
+    await inspector(page).getByRole('button', { name: /^ApplicationService, (incoming|outgoing)/ }).first().focus()
+    await page.keyboard.press('Enter')
+    await expect(state(page)).toContainText('selected application.applicationservice')
+
+    await inspector(page).getByRole('button', { name: 'Clear selection' }).click()
+    await expect(state(page)).toContainText('no selection')
+    await expect(inspector(page)).toHaveText('No node selected.')
+  })
+
+  for (const theme of ['light', 'dark'] as const) {
+    test(`visual: controls and inspector with a selection, ${theme}`, async ({ page }) => {
+      await open(page, `&select=${ORIGIN}${theme === 'dark' ? '&dark=1' : ''}`)
+      await expect(page.getByTestId('chrome-header')).toHaveScreenshot(`layered-graph-chrome-header-${theme}.png`)
+      await expect(page.getByTestId('link-bar')).toHaveScreenshot(`layered-graph-chrome-link-bar-${theme}.png`)
+      await expect(page.getByTestId('chrome-aside')).toHaveScreenshot(`layered-graph-chrome-aside-${theme}.png`)
+    })
+  }
+})

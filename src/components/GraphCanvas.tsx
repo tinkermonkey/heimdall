@@ -7,6 +7,7 @@ import React, {
   useMemo,
   useId,
   useImperativeHandle,
+  useContext,
 } from "react";
 import {
   computeEdgePath,
@@ -62,6 +63,13 @@ import { GraphCollapseControl } from "./GraphCollapseControl";
 import { Tooltip } from "./Tooltip";
 import { Popover } from "./Popover";
 import { StatusBadge } from "./Badge";
+import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from "../hooks/useLayeredGraph";
+import { isLinkVisible } from "../utils/layered/filters";
+import { arrowHeadPoints, linkPredicateLabel } from "../utils/layered/labels";
+import { edgeLabelPriority, placeEdgeLabels, defaultPillSize } from "../utils/layered/edgeLabels";
+import type { BuildLayeredIndexOptions, IndexedLink } from "../utils/layered/types";
+import type { LinkEmphasis } from "../utils/layered/emphasis";
+import { layoutLanes, laneLinkCurve, type LaneLayoutOptions, type LaneLinkCurve } from "../utils/laneLayout";
 import "./GraphCanvas.css";
 import "./GraphEdge.css";
 
@@ -557,6 +565,75 @@ function GraphEdgeInternal({
   );
 }
 
+// ─── layout="layer-lanes" helpers ─────────────────────────────────────────────
+
+// Inputs for the internal useLayeredGraph when GraphCanvas isn't drawing lanes from its own data:
+// stable constants, so the idle hook builds one empty index and never recomputes.
+const NO_LAYERED_GRAPH: UseLayeredGraphOptions = { nodes: [], edges: [], layering: { layerBy: "" }, layout: false };
+const DEFAULT_LANE_LAYERING: BuildLayeredIndexOptions = { layerBy: "kind", missingValue: "layer" };
+
+/** A lane link as drawn: the bundled link, its framework emphasis and its curve. */
+interface LaneLinkItem {
+  link: IndexedLink;
+  em: LinkEmphasis;
+  curve: LaneLinkCurve;
+}
+
+interface LaneNodeProps {
+  id: string;
+  label: string;
+  /** Accessible name. */
+  ariaLabel: string;
+  /** Layer color (any CSS color). */
+  color: string;
+  tint: "selected" | "followed" | "reached" | "none";
+  selected: boolean;
+  onSelect?: (id: string) => void;
+  onPopoverOpen?: (triggeringElement: HTMLElement) => void;
+  popoverOpen?: boolean;
+  popoverPanelId?: string;
+  tooltipId?: string;
+}
+
+/** layout="layer-lanes" default node: a monospace box with its layer's color bar. */
+function LaneNode({ id, label, ariaLabel, color, tint, selected, onSelect, onPopoverOpen, popoverOpen, popoverPanelId, tooltipId }: LaneNodeProps) {
+  const activate = (el: HTMLElement) => {
+    try { onSelect?.(id); } catch (err) { console.error("onSelect failed:", err); }
+    try { onPopoverOpen?.(el); } catch (err) { console.error("onPopoverOpen failed:", err); }
+  };
+  const interactive = !!onSelect || !!onPopoverOpen;
+  return (
+    <div
+      className={["graph-lane-node", tint !== "none" && `graph-lane-node--${tint}`].filter(Boolean).join(" ")}
+      style={{ "--graph-lane-color": color } as React.CSSProperties}
+      data-no-drag
+      title={label}
+      role={interactive ? "button" : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      aria-label={ariaLabel}
+      aria-pressed={onSelect ? selected : undefined}
+      aria-haspopup={onPopoverOpen ? "dialog" : undefined}
+      {...(onPopoverOpen && { "aria-expanded": !!popoverOpen })}
+      {...(onPopoverOpen && popoverPanelId && { "aria-controls": popoverPanelId })}
+      {...(tooltipId && { "aria-describedby": tooltipId })}
+      onClick={(e) => {
+        e.stopPropagation();
+        activate(e.currentTarget);
+      }}
+      onKeyDown={(e) => {
+        if (e.target !== e.currentTarget) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          e.stopPropagation();
+          activate(e.currentTarget);
+        }
+      }}
+    >
+      <span className="graph-lane-node__label">{label}</span>
+    </div>
+  );
+}
+
 // ─── GraphCanvas ──────────────────────────────────────────────────────────────
 
 export interface GraphCanvasProps extends Omit<
@@ -689,8 +766,40 @@ export interface GraphCanvasProps extends Omit<
    *  independent top-to-bottom trees with view nodes positioned as horizontal fans attached to
    *  their parent pages (see isPageNode). 'radial-tree' arranges each structural tree as a
    *  centered radial hierarchy with descendants on depth rings, and multiple trunks packed without
-   *  overlap. */
-  layout?: "manual" | "force" | "organic" | "orthogonal" | "galaxy" | "force-clustered" | "ux-navigation" | "radial-tree";
+   *  overlap. 'layer-lanes' draws a layered graph as swimlanes, one lane per layer (see
+   *  layering / layeredGraph and laneOptions): nodes packed into rows in the framework's lane
+   *  order, links within a layer as arcs, links between layers as curves across the gap, with
+   *  the layered framework's emphasis (reach hop ramp, dimming, category dash), arrowheads and
+   *  predicate pills. Under it the drawn nodes and links are the layered index's node instances
+   *  and bundled links, and selection is the layered state's (see layeredGraph). */
+  layout?: "manual" | "force" | "organic" | "orthogonal" | "galaxy" | "force-clustered" | "ux-navigation" | "radial-tree" | "layer-lanes";
+  /**
+   * layout="layer-lanes" only. Shared layered state from `useLayeredGraph`, so selection,
+   * follow, filters and predicate-label mode are shared with other views (AdjacencyMatrix,
+   * HivePlot, chrome). Unset: the enclosing `LayeredGraphContext`, else GraphCanvas builds its
+   * own from `nodes`, `edges` and `layering`. With shared state, the drawn graph is the state's
+   * index, not `nodes`/`edges`; `selectedNodeId` is ignored and a node click calls the state's
+   * `select` (clicking the selection again, the background, or Escape clears it).
+   */
+  layeredGraph?: LayeredGraphState;
+  /**
+   * layout="layer-lanes" only, standalone (no `layeredGraph` and no `LayeredGraphContext`): the
+   * layering of `nodes` (`layerBy`, multi/missing-value policies, layer order, categories).
+   * Memoize it. Default `{ layerBy: 'kind', missingValue: 'layer' }`.
+   */
+  layering?: BuildLayeredIndexOptions;
+  /**
+   * layout="layer-lanes" only, standalone: options passed to the internal `useLayeredGraph`
+   * (`defaultSelectedId`, `follow`, `filters`, `predicateLabels`, `layout`, …). Memoize nested
+   * objects.
+   */
+  layeredGraphOptions?: Omit<UseLayeredGraphOptions, "nodes" | "edges" | "layering">;
+  /**
+   * layout="layer-lanes" only: `orientation` ('horizontal' default, 'vertical'), `order`
+   * (lane order, default 'coupled-x'), `maxRowWidth` (px before a lane wraps, default 1120;
+   * a column's height when vertical, default 640) and `intraLinks` ('arc' default, 'none').
+   */
+  laneOptions?: LaneLayoutOptions;
   /**
    * layout="force" | "organic" | "galaxy". Extra breathing room kept clear around each node's own footprint,
    * on top of what's needed to just avoid overlap — this is what leaves room for an edge to be
@@ -908,10 +1017,10 @@ type NodePositions = Map<string, { x: number; y: number }>;
 export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
   (
     {
-      nodes = [],
-      edges = [],
-      selectedNodeId,
-      onNodeSelect,
+      nodes: nodesProp = [],
+      edges: edgesProp = [],
+      selectedNodeId: selectedNodeIdProp,
+      onNodeSelect: onNodeSelectProp,
       onNodeHover,
       nodeTooltip,
       nodeTooltipTrigger = 'hover',
@@ -940,7 +1049,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       selectedEdgeId,
       onEdgeSelect,
       onEdgeHover,
-      onBackgroundClick,
+      onBackgroundClick: onBackgroundClickProp,
       onLayoutStateChange,
       showLayoutIndicator = true,
       draggable = true,
@@ -953,11 +1062,74 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       onViewportNavigate,
       initialViewport,
       viewportRef,
+      layeredGraph,
+      layering,
+      layeredGraphOptions,
+      laneOptions,
       className = "",
       ...props
     },
     ref,
   ) => {
+    // layout="layer-lanes": the layered state (shared via prop or context, else built here from
+    // nodes/edges/layering). Its index's node instances and visible bundled links become the
+    // nodes and edges everything below measures, positions, hovers and tooltips; its selection
+    // replaces selectedNodeId. Every other layout keeps nodesProp/edgesProp untouched.
+    const lanesMode = layout === "layer-lanes";
+    const layeredContext = useContext(LayeredGraphContext);
+    const externalLayered = lanesMode ? (layeredGraph ?? layeredContext) : null;
+    const ownLayered = useLayeredGraph(
+      lanesMode && !externalLayered
+        ? { ...layeredGraphOptions, nodes: nodesProp, edges: edgesProp, layering: layering ?? DEFAULT_LANE_LAYERING }
+        : NO_LAYERED_GRAPH,
+    );
+    const lanesGraph: LayeredGraphState | null = lanesMode ? (externalLayered ?? ownLayered) : null;
+    const lanesIndex = lanesGraph?.index;
+    const lanesFilters = lanesGraph?.filters;
+    const lanesIntra = laneOptions?.intraLinks !== "none";
+    const laneData = useMemo(() => {
+      if (!lanesIndex || !lanesFilters) return null;
+      const hiddenLayers = new Set(lanesFilters.hiddenLayers);
+      const laneNodes: GraphNodeData[] = lanesIndex.nodes
+        .filter((n) => !hiddenLayers.has(n.layerId))
+        .map((n) => ({ ...n.source, id: n.id, x: undefined, y: undefined }));
+      const sourceEdges = new Map(edgesProp.map((e) => [e.id, e]));
+      const links = lanesIndex.links.filter((l) => isLinkVisible(l, lanesIndex, lanesFilters) && (l.cross || lanesIntra));
+      const laneEdges: GraphEdge[] = links.map((l) => ({
+        ...sourceEdges.get(l.edgeIds[0]),
+        id: l.id,
+        sourceId: l.sourceId,
+        targetId: l.targetId,
+        label: linkPredicateLabel(l, lanesIndex.catalog) || undefined,
+      }));
+      return { nodes: laneNodes, edges: laneEdges, links };
+    }, [lanesIndex, lanesFilters, edgesProp, lanesIntra]);
+    const nodes = laneData?.nodes ?? nodesProp;
+    const edges = laneData?.edges ?? edgesProp;
+    const lanesSelect = lanesGraph?.select;
+    const lanesSelectedId = lanesGraph?.selectedId ?? null;
+    const selectedNodeId = lanesGraph ? (lanesSelectedId ?? undefined) : selectedNodeIdProp;
+    const onNodeSelect = useMemo(
+      () =>
+        lanesSelect
+          ? (id: string) => {
+              lanesSelect(lanesSelectedId === id ? null : id);
+              onNodeSelectProp?.(id);
+            }
+          : onNodeSelectProp,
+      [lanesSelect, lanesSelectedId, onNodeSelectProp],
+    );
+    const onBackgroundClick = useMemo(
+      () =>
+        lanesSelect
+          ? () => {
+              lanesSelect(null);
+              onBackgroundClickProp?.();
+            }
+          : onBackgroundClickProp,
+      [lanesSelect, onBackgroundClickProp],
+    );
+
     // Galaxy draws no boundary discs unless asked: grouping reads from orbits and per-galaxy colour,
     // as in the original galaxy charts, and discs around lopsided systems covered half the view.
     // Every other layout keeps the existing default (on).
@@ -995,6 +1167,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         console.error("Error in onNodeHover callback:", error);
       }
     }, [hoveredNodeId, onNodeHover]);
+    // layout="layer-lanes": share node hover with the layered state (other views' hover previews).
+    const lanesHover = lanesGraph?.hover;
+    useEffect(() => {
+      lanesHover?.(hoveredNodeId ?? null);
+    }, [hoveredNodeId, lanesHover]);
     useEffect(() => {
       try {
         onEdgeHover?.(hoveredEdgeId);
@@ -2116,15 +2293,36 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
     }, [fullscreenContainerRef]);
 
+    // layout="layer-lanes": lane positions and bands from the measured node sizes. Synchronous
+    // (no engine run): it is cheap, and recomputes only when the index, layout, hidden layers,
+    // lane options or measurements change.
+    const lanesLayoutResult = lanesGraph?.layout ?? null;
+    const lanesHiddenLayers = lanesFilters?.hiddenLayers;
+    const laneOrientation = laneOptions?.orientation;
+    const laneOrder = laneOptions?.order;
+    const laneMaxRowWidth = laneOptions?.maxRowWidth;
+    const laneLayout = useMemo(() => {
+      if (!lanesIndex || dims.size === 0) return null;
+      return layoutLanes(lanesIndex, lanesLayoutResult, {
+        orientation: laneOrientation,
+        order: laneOrder,
+        maxRowWidth: laneMaxRowWidth,
+        hiddenLayers: lanesHiddenLayers,
+        sizeOf: (id) => dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H },
+      });
+    }, [lanesIndex, lanesLayoutResult, lanesHiddenLayers, laneOrientation, laneOrder, laneMaxRowWidth, dims]);
+
     const getNodePosition = useCallback(
       (node: GraphNodeData): { x: number; y: number } => {
         const dragged = dragPositions.get(node.id);
         if (dragged) return dragged;
+        const lanePos = laneLayout?.positions.get(node.id);
+        if (lanePos) return lanePos;
         if (node.x !== undefined && node.y !== undefined)
           return { x: node.x, y: node.y };
         return computedPositions.get(node.id) ?? { x: 0, y: 0 };
       },
-      [dragPositions, computedPositions],
+      [dragPositions, computedPositions, laneLayout],
     );
 
     // Computes the current node bounding box in graph space (world coordinates).
@@ -2148,8 +2346,15 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         maxY = Math.max(maxY, pos.y + d.height / 2);
       }
       if (!Number.isFinite(minX)) return null;
+      // layout="layer-lanes": frame the lane bands too, not just the nodes inside them.
+      if (laneLayout && laneLayout.bands.length > 0) {
+        minX = Math.min(minX, laneLayout.bounds.minX);
+        maxX = Math.max(maxX, laneLayout.bounds.maxX);
+        minY = Math.min(minY, laneLayout.bounds.minY);
+        maxY = Math.max(maxY, laneLayout.bounds.maxY);
+      }
       return { minX, maxX, minY, maxY };
-    }, [visibleNodes, dims, getNodePosition]);
+    }, [visibleNodes, dims, getNodePosition, laneLayout]);
 
     // The decoration circles currently rendered (same conditions as the render layers below):
     // cluster/trunk boundaries and radial-tree hierarchy rings. They can reach well past the
@@ -2709,6 +2914,36 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [visibleNodes, getNodeRect],
     );
 
+    // layout="layer-lanes": every drawn link's emphasis and curve (from live positions, so a
+    // dragged node keeps its links), in draw order, plus the predicate pills placed along the
+    // curves clear of each other and of every node box.
+    const lanesLinkEmphasis = lanesGraph?.linkEmphasis;
+    const laneLinks = useMemo(() => {
+      if (!laneData || !laneLayout || !lanesIndex || !lanesLinkEmphasis) return null;
+      const boxes = new Map(visibleNodes.map((n) => [n.id, getNodeRect(n.id)]));
+      const items: LaneLinkItem[] = [];
+      for (const link of laneData.links) {
+        const a = boxes.get(link.sourceId);
+        const b = boxes.get(link.targetId);
+        if (!a || !b) continue;
+        items.push({ link, em: lanesLinkEmphasis(link), curve: laneLinkCurve(a, b, link.cross, laneLayout.orientation) });
+      }
+      items.sort((p, q) => p.em.z - q.em.z);
+      const byId = new Map(items.map((i) => [i.link.id, i]));
+      const pills = placeEdgeLabels(
+        items
+          .filter((i) => i.em.label && i.link.predicates.length > 0)
+          .map((i) => ({
+            id: i.link.id,
+            text: linkPredicateLabel(i.link, lanesIndex.catalog),
+            pointAt: i.curve.pointAt,
+            priority: edgeLabelPriority(i.link, i.em),
+          })),
+        { obstacles: nodeRects, size: defaultPillSize },
+      );
+      return { items, byId, pills };
+    }, [laneData, laneLayout, lanesIndex, lanesLinkEmphasis, nodeRects, visibleNodes, getNodeRect]);
+
     // Batch-route all navigation edges together with overlapping-segment nudging
     // Orthogonal routes to render: none unless layout="orthogonal", and never for an edge whose
     // endpoint is being dragged (that edge falls back to a live bezier until the next layout).
@@ -2833,6 +3068,26 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         };
         if (renderNode)
           return safeRenderNodeCallback(renderNode, node, selected, hierarchy, nodeProps);
+        const laneNode = lanesGraph?.index.nodeById.get(node.id);
+        if (laneNode) {
+          const em = lanesGraph!.nodeEmphasis(laneNode);
+          const layer = lanesGraph!.index.layerById.get(laneNode.layerId);
+          return (
+            <LaneNode
+              id={node.id}
+              label={laneNode.displayLabel}
+              ariaLabel={`${laneNode.label}, ${layer?.label ?? laneNode.layerId} layer${em.selected ? ", selected" : ""}`}
+              color={layer?.color ?? "rgb(var(--canvas-fg-3))"}
+              tint={em.selected ? "selected" : em.followed ? "followed" : em.hop !== null ? "reached" : "none"}
+              selected={em.selected}
+              onSelect={onNodeSelect}
+              onPopoverOpen={nodeProps.onPopoverOpen}
+              popoverOpen={isPopoverOpen}
+              popoverPanelId={isPopoverOpen ? `popover-node-${node.id}` : undefined}
+              tooltipId={tooltipId}
+            />
+          );
+        }
         return (
           <GraphNode
             bodyRadius={galaxyRadii?.get(node.id)}
@@ -2853,7 +3108,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph],
     );
 
     // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
@@ -2887,11 +3142,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const tgt = edge && getNodeRect(edge.targetId);
         if (edge && src && tgt) {
           const edgeCurvature = edge.curvature ?? (safeIsStructuralEdge(isStructuralEdge, edge) ? structuralEdgeCurvature : undefined);
-          const path = computeEdgePath(src, tgt, {
-            sourceAnchor: edge.sourceAnchor,
-            targetAnchor: edge.targetAnchor,
-            curvature: edgeCurvature,
-          });
+          const laneCurve = laneLinks?.byId.get(edge.id)?.curve;
+          const path = laneCurve
+            ? { mid: laneCurve.pointAt(0.5) }
+            : computeEdgePath(src, tgt, {
+                sourceAnchor: edge.sourceAnchor,
+                targetAnchor: edge.targetAnchor,
+                curvature: edgeCurvature,
+              });
           try {
             const content = edgeTooltip(edge);
             return { type: "edge" as const, edgeId: delayedHoveredEdgeId, tooltipId: edgeTooltipId(delayedHoveredEdgeId), content, worldX: path.mid.x, worldY: path.mid.y };
@@ -2918,6 +3176,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       getNodeRect,
       isStructuralEdge,
       structuralEdgeCurvature,
+      laneLinks,
     ]);
 
     // Readable name for a node id in accessible names (edge buttons, popover dialogs). Ids are
@@ -2981,11 +3240,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const tgt = edge && getNodeRect(edge.targetId);
         if (edge && src && tgt) {
           const edgeCurvature = edge.curvature ?? (safeIsStructuralEdge(isStructuralEdge, edge) ? structuralEdgeCurvature : undefined);
-          const path = computeEdgePath(src, tgt, {
-            sourceAnchor: edge.sourceAnchor,
-            targetAnchor: edge.targetAnchor,
-            curvature: edgeCurvature,
-          });
+          const laneCurve = laneLinks?.byId.get(edge.id)?.curve;
+          const path = laneCurve
+            ? { mid: laneCurve.pointAt(0.5) }
+            : computeEdgePath(src, tgt, {
+                sourceAnchor: edge.sourceAnchor,
+                targetAnchor: edge.targetAnchor,
+                curvature: edgeCurvature,
+              });
           try {
             // Prefer edgePopover, fall back to click-triggered edgeTooltip
             const content = edgePopover
@@ -3029,6 +3291,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       isStructuralEdge,
       structuralEdgeCurvature,
       nodeName,
+      laneLinks,
     ]);
 
     // Prevents dead state when popoverTarget callback throws — resets so the node is clickable again.
@@ -3062,9 +3325,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           closePopover();
           return;
         }
+        if (e.key === "Escape" && lanesSelect && lanesSelectedId) {
+          e.preventDefault();
+          lanesSelect(null);
+          return;
+        }
         bind.onKeyDown(e);
       },
-      [popoverTarget, closePopover, bind],
+      [popoverTarget, closePopover, bind, lanesSelect, lanesSelectedId],
     );
 
     // Document-level mousedown listener to dismiss popover when clicking outside the GraphCanvas container.
@@ -3240,6 +3508,101 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                 </g>
               )}
 
+              {laneLayout && (
+                <g className="graph-lanes" aria-hidden="true">
+                  {laneLayout.bands.map((b) => (
+                    <g key={b.layerId} className="graph-lane" data-layer-id={b.layerId}>
+                      <rect className="graph-lane__band" x={b.x} y={b.y} width={b.width} height={b.height} rx={8} style={{ fill: b.color, stroke: b.color }} />
+                      <rect className="graph-lane__bar" x={b.x} y={b.y} width={3} height={b.height} style={{ fill: b.color }} />
+                      <text className="graph-lane__title" x={b.titleX} y={b.titleY} style={{ fill: b.color }}>
+                        {b.label.toUpperCase()}
+                        <tspan dx={9}>{b.count}</tspan>
+                      </text>
+                    </g>
+                  ))}
+                </g>
+              )}
+
+              {laneLinks && (
+                <g className="graph-edges graph-lane-links">
+                  {laneLinks.items.map(({ link, em, curve }) => {
+                    const edgeData = edges.find((e) => e.id === link.id);
+                    if (!edgeData) return null;
+                    const selected = link.id === selectedEdgeId;
+                    const hovered = link.id === hoveredEdgeId;
+                    const hasPopover = !!edgePopover || (edgeTooltipTrigger === "click" && !!edgeTooltip);
+                    const interactive = !!onEdgeSelect || hasPopover;
+                    const tooltipId = tooltipTarget?.type === "edge" && tooltipTarget.edgeId === link.id ? tooltipTarget.tooltipId : undefined;
+                    const isPopoverOpen = activePopoverEdgeId === link.id;
+                    const color = selected ? "rgb(var(--accent-primary))" : em.color;
+                    const activate = (el: SVGElement) => {
+                      if (hasPopover) handleEdgePopoverOpen(edgeData, el);
+                      onEdgeSelect?.(link.id);
+                    };
+                    return (
+                      <g
+                        key={link.id}
+                        className={["graph-edge", "graph-lane-link", selected && "selected"].filter(Boolean).join(" ")}
+                        data-testid={`graph-edge-${link.id}`}
+                        data-link-id={link.id}
+                        data-hop={em.hop || undefined}
+                        role={interactive ? "button" : "presentation"}
+                        aria-hidden={interactive ? undefined : true}
+                        aria-pressed={interactive ? selected : undefined}
+                        aria-haspopup={hasPopover ? "dialog" : undefined}
+                        {...(hasPopover && { "aria-expanded": isPopoverOpen })}
+                        {...(hasPopover && isPopoverOpen && { "aria-controls": `popover-edge-${link.id}` })}
+                        {...(interactive && tooltipId && { "aria-describedby": tooltipId })}
+                        aria-label={interactive ? edgeAccessibleName(edgeData.label, nodeName(link.sourceId), nodeName(link.targetId)) : undefined}
+                        tabIndex={interactive ? 0 : undefined}
+                        onClick={interactive ? (e) => { e.stopPropagation(); activate(e.currentTarget); } : undefined}
+                        onKeyDown={interactive ? (e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            activate(e.currentTarget);
+                          }
+                        } : undefined}
+                        onPointerEnter={() => handleEdgeHoverStart(link.id)}
+                        onPointerLeave={() => handleEdgeHoverEndWithDelay(link.id)}
+                      >
+                        {renderEdge ? (
+                          safeRenderEdgeCallback(renderEdge, edgeData, {
+                            path: curve.d,
+                            mid: curve.pointAt(0.5),
+                            labelPos: laneLinks.pills.find((p) => p.id === link.id) ?? curve.pointAt(0.5),
+                            angle: (Math.atan2(curve.tangentAt(0.5).y, curve.tangentAt(0.5).x) * 180) / Math.PI,
+                            selected,
+                            hovered,
+                          })
+                        ) : (
+                          <>
+                            <path
+                              className="graph-lane-link__line"
+                              d={curve.d}
+                              style={{
+                                stroke: color,
+                                strokeWidth: em.width + (selected || hovered ? 0.6 : 0),
+                                strokeOpacity: selected || hovered ? 1 : em.opacity,
+                                strokeDasharray: em.dash || undefined,
+                              }}
+                            />
+                            {(em.arrow || selected) && (
+                              <polygon
+                                className="graph-lane-link__arrow"
+                                points={arrowHeadPoints(curve.tip, curve.dir.x, curve.dir.y)}
+                                style={{ fill: color, fillOpacity: em.highlighted || selected ? 1 : 0.8 }}
+                              />
+                            )}
+                          </>
+                        )}
+                        {(interactive || !!edgeTooltip || !!onEdgeHover) && <path className="graph-edge__hit" d={curve.d} />}
+                      </g>
+                    );
+                  })}
+                </g>
+              )}
+
+              {!lanesMode && (
               <g className="graph-edges">
                 {edges?.map((edge) => {
                   // Only isStructuralEdge callers opt into hiding — without it every edge
@@ -3315,6 +3678,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   );
                 })}
               </g>
+              )}
 
               <g className="graph-nodes">
                 {visibleNodes.map((node) => {
@@ -3326,10 +3690,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   const selected = node.id === selectedNodeId;
                   const tooltipId = tooltipTarget?.type === 'node' && tooltipTarget.nodeId === node.id ? tooltipTarget.tooltipId : undefined;
                   const hierarchy = hierarchyMetaFor(node.id);
+                  const laneNode = lanesGraph?.index.nodeById.get(node.id);
+                  const laneOpacity = laneNode ? lanesGraph!.nodeEmphasis(laneNode).opacity : 1;
                   return (
                     <g
                       key={node.id}
                       transform={`translate(${pos.x} ${pos.y})`}
+                      opacity={laneOpacity < 1 ? laneOpacity : undefined}
                       visibility={unplacedNodeIds.has(node.id) ? "hidden" : undefined}
                       data-node-id={node.id}
                       data-testid={`graph-node-${node.id}`}
@@ -3396,6 +3763,28 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                   );
                 })}
               </g>
+
+              {laneLinks && laneLinks.pills.length > 0 && (
+                <g className="graph-lane-pills" aria-hidden="true">
+                  {laneLinks.pills.map((p) => {
+                    const item = laneLinks.byId.get(p.id)!;
+                    return (
+                      <g
+                        key={p.id}
+                        className="graph-lane-pill"
+                        data-link-id={p.id}
+                        transform={`translate(${Math.round((p.x - p.width / 2) * 10) / 10} ${Math.round((p.y - p.height / 2) * 10) / 10})`}
+                        opacity={item.em.highlighted ? 1 : 0.9}
+                      >
+                        <rect className="graph-lane-pill__bg" width={p.width} height={p.height} rx={3} style={{ stroke: item.em.color }} />
+                        <text className="graph-lane-pill__text" x={p.width / 2} y={p.height / 2} style={{ fill: item.em.color }}>
+                          {p.text}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+              )}
 
               {hoveredNodeId && (
                 <g className="graph-collapse-controls">

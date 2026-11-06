@@ -219,6 +219,32 @@
   background: rgb(var(--dom-software));
 }
 
+.graph-inspector__rel:has(.graph-inspector__rel-via) {
+  flex-wrap: wrap;
+}
+
+.graph-inspector__rel-via {
+  flex: 1 0 100%;
+  padding-left: 22px;
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  color: rgb(var(--canvas-fg-3));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.graph-inspector__rel-hop {
+  flex: none;
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  color: rgb(var(--graph-hop-1));
+}
+
+body.dark-canvas .graph-inspector__rel-hop {
+  color: rgb(var(--graph-hop-2));
+}
+
 .graph-inspector__empty-mini {
   padding: 18px;
   text-align: center;
