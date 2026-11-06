@@ -341,6 +341,42 @@ describe('orthogonalLayout channel router (graphs the lattice router cannot rout
     for (const id of pins) expect(again.positions.get(id)).toEqual(first.positions.get(id))
   })
 
+  it('survives a one-node drag with every node pinned (GraphCanvas): nothing else moves, nothing overlaps', () => {
+    const { nodes, edges } = hubGraph(160, 200, 7)
+    const first = orthogonalLayout(nodes, edges)
+    for (const [dx, dy] of [[37, 23], [5, 0], [140, 60], [300, -200]]) {
+      const fed = nodes.map(nd => ({ ...nd, ...first.positions.get(nd.id)!, pinned: true }))
+      fed[10] = { ...fed[10], x: fed[10].x + dx, y: fed[10].y + dy }
+      const r = orthogonalLayout(fed, edges)
+      expect(boxOverlaps(nodes, r.positions)).toBe(0)
+      expect(throughNode(nodes, edges, r.positions, r.routes, 10)).toBe(0)
+      // Only the dragged node, and at most one node whose cell it landed on, may move.
+      const moved = nodes.filter(nd => nd.id !== fed[10].id && (r.positions.get(nd.id)!.x !== first.positions.get(nd.id)!.x || r.positions.get(nd.id)!.y !== first.positions.get(nd.id)!.y))
+      expect(moved.length).toBeLessThanOrEqual(1)
+    }
+  })
+
+  it('never puts two pinned nodes on one cell, and holds every uncontested pin within half a cell', () => {
+    const { nodes, edges } = hubGraph(160, 200, 7)
+    let x = 17
+    const rnd = () => { x = (Math.imul(x, 1664525) + 1013904223) >>> 0; return x / 2 ** 32 }
+    for (const count of [2, 6, 20, 40]) {
+      const pins = new Map<string, Point>()
+      while (pins.size < count) pins.set(nodes[Math.floor(rnd() * nodes.length)].id, { x: Math.round(rnd() * 12000), y: Math.round(rnd() * 9000) })
+      const r = orthogonalLayout(nodes.map(nd => (pins.has(nd.id) ? { ...nd, ...pins.get(nd.id)!, pinned: true } : { ...nd, x: NaN, y: NaN })), edges)
+      expect(boxOverlaps(nodes, r.positions)).toBe(0)
+      const cellOf = (p: Point) => `${Math.round((p.x - r.origin.x) / r.cell.w)},${Math.round((p.y - r.origin.y) / r.cell.h)}`
+      const wanted = new Map<string, number>()
+      for (const p of pins.values()) wanted.set(cellOf(p), (wanted.get(cellOf(p)) ?? 0) + 1)
+      for (const [id, p] of pins) {
+        if (wanted.get(cellOf(p))! > 1) continue // contested: one of them must take a neighbour
+        const q = r.positions.get(id)!
+        expect(Math.abs(q.x - p.x)).toBeLessThanOrEqual(r.cell.w / 2 + 0.5)
+        expect(Math.abs(q.y - p.y)).toBeLessThanOrEqual(r.cell.h / 2 + 0.5)
+      }
+    }
+  }, 30_000)
+
   it('lets bus members share only with each other on the channel path', () => {
     const { nodes, edges } = hubGraph(60, 120, 9)
     const structural = edges.map((e, i) => ({ ...e, structural: i < 59 }))

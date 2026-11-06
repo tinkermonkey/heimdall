@@ -114,6 +114,8 @@ const INSERTION_MAX = 64
 const PORT_PITCH = 8
 // The lattice router routes graphs up to this many edges (see the routing section of orthogonalLayout).
 const EXACT_ROUTE_MAX_EDGES = 150
+// Placement + routing rounds for pinned or sketched input whose pitch widens (see the routing section).
+const MAX_SNAP_ROUNDS = 8
 
 const DIRS = [
   { dx: 1, dy: 0 }, // 0 right
@@ -187,8 +189,13 @@ export function orthogonalLayout(
   // grid, and reading their spacing as one blows the pitch up.
   const sketchLike = scope !== 'cold' && n > 0 && positionedCount >= 2 && positionedCount >= 0.7 * n
   const posOf = (k: 'x' | 'y') => sorted.filter((_, i) => positioned[i]).map(nd => nd[k])
-  let snapW = Math.max(cw, (sketchLike ? uniformPitch(posOf('x')) : null) ?? 0)
-  let snapH = Math.max(ch, (sketchLike ? uniformPitch(posOf('y')) : null) ?? 0)
+  const inferredW = Math.max(cw, (sketchLike ? uniformPitch(posOf('x')) : null) ?? 0)
+  const inferredH = Math.max(ch, (sketchLike ? uniformPitch(posOf('y')) : null) ?? 0)
+  // Round 0 snaps at the base pitch whenever the lattice router may take the graph (it only routes
+  // at the base pitch, as on main); the inferred grid is used when it cannot.
+  const latticeFirst = routable <= EXACT_ROUTE_MAX_EDGES && (inferredW > cw || inferredH > ch)
+  let snapW = latticeFirst ? cw : inferredW
+  let snapH = latticeFirst ? ch : inferredH
 
   let cold: { col: Int32Array; row: Int32Array; components: number; isolates: number } | null = null
   let components = 0, isolates = 0, sketch = false
@@ -198,7 +205,7 @@ export function orthogonalLayout(
   // At most three rounds: a channel-routed layout with pins or a sketch whose pitch widened past the
   // snap pitch is snapped again at the wider pitch, so pins land on their nearest cell of the grid
   // they are drawn on (the first pin exactly), not on a cell of a narrower grid scaled up.
-  for (let round = 0; round < 3; round++) {
+  for (let round = 0; round < MAX_SNAP_ROUNDS; round++) {
     // Origin: the first pinned node sits exactly on its pin; otherwise (0, 0).
     const origin: Point = firstPin >= 0
       ? { x: sorted[firstPin].x - Math.round(sorted[firstPin].x / snapW) * snapW, y: sorted[firstPin].y - Math.round(sorted[firstPin].y / snapH) * snapH }
@@ -225,15 +232,24 @@ export function orthogonalLayout(
       // Pins override cold placement: move each pinned node to its own cell, evicting whatever the
       // layering put there to the nearest free cell (deterministic, in id order).
       const occupied = new Map<string, number>()
+      const pinnedPlaced = new Set<number>()
       for (let i = 0; i < n; i++) occupied.set(`${col[i]},${row[i]}`, i)
-      for (let i = 0; i < n; i++) {
-        if (!pinned[i]) continue
-        const [c, r] = snap(i)
-        const key = `${c},${r}`
+      // Pins whose cell no other pin wants claim it first; contested ones then take theirs or the
+      // nearest free cell, so a displaced pin never takes an uncontested pin's cell.
+      const wants = new Map<string, number>()
+      for (let i = 0; i < n; i++) if (pinned[i]) { const k = snap(i).join(','); wants.set(k, (wants.get(k) ?? 0) + 1) }
+      const pinOrder = [...Array(n).keys()].filter(i => pinned[i]).sort((a, b) => (wants.get(snap(a).join(','))! > 1 ? 1 : 0) - (wants.get(snap(b).join(','))! > 1 ? 1 : 0) || a - b)
+      for (const i of pinOrder) {
+        let [c, r] = snap(i)
         occupied.delete(`${col[i]},${row[i]}`)
+        // Two pins on one cell: the later pin (by id) takes the nearest free cell; two nodes never
+        // share a cell (hard requirement 1).
+        const holder = occupied.get(`${c},${r}`)
+        if (holder !== undefined && pinnedPlaced.has(holder)) [c, r] = nearestFreeCell(c, r, occupied)
+        const key = `${c},${r}`
         const other = occupied.get(key)
-        col[i] = c; row[i] = r; occupied.set(key, i)
-        if (other !== undefined && other !== i && !pinned[other]) {
+        col[i] = c; row[i] = r; occupied.set(key, i); pinnedPlaced.add(i)
+        if (other !== undefined && other !== i) {
           const free = nearestFreeCell(c, r, occupied)
           col[other] = free[0]; row[other] = free[1]; occupied.set(`${free[0]},${free[1]}`, other)
         }
@@ -309,7 +325,12 @@ export function orthogonalLayout(
     const channel: Routed = { pitch: { w: pw, h: ph }, origin: o2, positions, points, fallbacks: routing.failed.length, router: 'channel' }
     result = lattice && lattice.fallbacks <= channel.fallbacks ? lattice : channel
     const anchored = firstPin >= 0 || sketch
-    if (result.router === 'lattice' || !anchored || round === 2) break
+    if (result.router === 'lattice' || !anchored || round === MAX_SNAP_ROUNDS - 1) break
+    if (latticeFirst && round === 0) {
+      // The lattice could not route it at the base pitch: snap at the input's own grid.
+      snapW = inferredW; snapH = inferredH
+      continue
+    }
     if (round === 0 && !sketch && cold) {
       // Pins on a cold layout: snap them at the pitch the layout gets without them, so a pin taken
       // from that layout (GraphCanvas pins every node it has coordinates for) lands on its own
@@ -327,7 +348,10 @@ export function orthogonalLayout(
       continue
     }
     if (pw <= snapW && ph <= snapH) break
-    snapW = pw; snapH = ph
+    // The snap pitch only grows, and from the third round on geometrically (a quarter a round), so
+    // the rounds converge: the pitch a layout needs is bounded, the snap pitch is not.
+    const grow = round >= 2 ? 1.25 : 1
+    snapW = Math.max(snapW, Math.ceil(pw * grow)); snapH = Math.max(snapH, Math.ceil(ph * grow))
   }
   result = result!
   const { positions, points } = result
@@ -350,17 +374,27 @@ export function orthogonalLayout(
 }
 
 /**
- * The pitch of a uniform grid the values sit on (every value a whole multiple of the smallest gap
- * between distinct values, within 0.5 px), or null when they do not, or fewer than two distinct.
+ * The pitch of a uniform grid at least 90% of the values sit on (within 0.5 px), or null. Candidate
+ * pitches are the 8 smallest gaps between neighbouring distinct values; a dragged node or two off the
+ * grid does not hide it.
  */
 function uniformPitch(values: number[]): number | null {
   const u = [...new Set(values.map(v => Math.round(v * 2) / 2))].sort((a, b) => a - b)
   if (u.length < 2) return null
-  let g = Infinity
-  for (let i = 1; i < u.length; i++) g = Math.min(g, u[i] - u[i - 1])
-  if (!(g > 1)) return null
-  for (const v of u) { const k = (v - u[0]) / g; if (Math.abs(k - Math.round(k)) * g > 0.5) return null }
-  return g
+  const gaps = [...new Set(u.slice(1).map((v, i) => Math.round((v - u[i]) * 2) / 2))].filter(g => g > 1).sort((a, b) => a - b)
+  // The largest candidate that fits: a divisor of the pitch fits as well (506 = 22 x 23), a multiple
+  // of it does not (half the rows are off it).
+  let found: number | null = null
+  for (const g of gaps.slice(0, 8)) {
+    // The grid's phase: the most common residue.
+    const res = new Map<number, number>()
+    for (const v of values) { const r = Math.round((((v % g) + g) % g) * 2) / 2; res.set(r, (res.get(r) ?? 0) + 1) }
+    let phase = 0, best = -1
+    for (const [r, k] of res) if (k > best || (k === best && r < phase)) { best = k; phase = r }
+    const on = values.filter(v => { const d = Math.abs((((v - phase) % g) + g) % g); return Math.min(d, g - d) <= 0.5 }).length
+    if (on >= 0.9 * values.length) found = g
+  }
+  return found
 }
 
 /** Port-line offsets from a cell centre: 0, then +-step, +-2step ... up to `max` each side, 3 px inside `half`. */
@@ -392,7 +426,12 @@ function placeSketch(
 ): { components: number; isolates: number } {
   const occupied = new Map<string, number>()
   // Pins first, then the rest of the sketch in id order; a collision goes to the nearest free cell.
-  const order = [...Array(n).keys()].filter(i => positioned[i]).sort((a, b) => (pinned[b] ? 1 : 0) - (pinned[a] ? 1 : 0) || a - b)
+  // Pins first, uncontested pins (no other pin wants their cell) before contested ones, then the
+  // rest of the sketch in id order; a collision goes to the nearest free cell.
+  const wants = new Map<string, number>()
+  for (let i = 0; i < n; i++) if (pinned[i]) { const k = snap(i).join(','); wants.set(k, (wants.get(k) ?? 0) + 1) }
+  const contested = (i: number) => (pinned[i] && wants.get(snap(i).join(','))! > 1 ? 1 : 0)
+  const order = [...Array(n).keys()].filter(i => positioned[i]).sort((a, b) => (pinned[b] ? 1 : 0) - (pinned[a] ? 1 : 0) || contested(a) - contested(b) || a - b)
   for (const i of order) {
     let [c, r] = snap(i)
     if (occupied.has(`${c},${r}`)) [c, r] = nearestFreeCell(c, r, occupied)

@@ -195,6 +195,7 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
     const [src, dst] = inp.edgeEnds[ei]!
     const g = inp.groups[ei]
     const sT = tileOf[src], tT = tileOf[dst]
+    if (sT === tT) return null // two nodes on one cell: never routed (the caller keeps cells distinct)
     const crossPen = inp.edgeClass[ei] === 2 ? 2 * inp.crossingPenalty : inp.crossingPenalty
     const ttx = tT % TX, tty = (tT / TX) | 0
     const h = (t: number) => Math.abs(cx[t % TX] - cx[ttx]) + Math.abs(cy[(t / TX) | 0] - cy[tty])
