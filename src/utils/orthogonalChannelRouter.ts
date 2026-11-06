@@ -71,6 +71,12 @@ const DY = [0, 1, 0, -1]
 const CONGESTION = 0.5
 // Refinement tries at most this many lines on each side of a run's current one.
 const REFINE_REACH = 8
+// Refinement evaluates at most this many moves per run in all.
+const REFINE_BUDGET = 60
+// Vision item 2's bar on bends per edge, and the extra cost (in bends) of each bend past it.
+const MAX_BENDS = 4
+const EXCESS_BEND = 3
+const BEND_BUCKETS = MAX_BENDS + 2
 
 interface End { port: boolean; sign: number; node: number; pos: number }
 interface Run {
@@ -90,6 +96,10 @@ interface Run {
   /** Channel runs: the overlap cluster's lowest and highest line (refinement stays inside). */
   cmin: number
   cmax: number
+  /** Refinement caches: the line's coordinate, and the port coordinate at either end (NaN: a turn). */
+  c: number
+  p0: number
+  p1: number
 }
 
 export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
@@ -134,8 +144,24 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
 
   // Along a cell row (odd tile row) a route uses a row port line; along a cell column, a column
   // port line. Elsewhere it is in a channel.
-  const capH = (t: number) => (((t / TX) | 0) % 2 === 1 ? nY : Infinity)
-  const capV = (t: number) => ((t % TX) % 2 === 1 ? nX : Infinity)
+  // A gap between two vertically stacked nodes (or two side by side) carries only those two nodes'
+  // facing stubs, which share the lines of the wider side: its capacity is that side's lines.
+  const capHArr = new Float64Array(NT).fill(Infinity), capVArr = new Float64Array(NT).fill(Infinity)
+  for (let t = 0; t < NT; t++) {
+    const tx = t % TX, ty = (t / TX) | 0
+    if (ty % 2 === 1) capHArr[t] = nY
+    if (tx % 2 === 1) capVArr[t] = nX
+    if (tx % 2 === 1 && ty % 2 === 0 && ty > 0 && ty < TY - 1) {
+      const up = occ[t - TX], down = occ[t + TX]
+      if (up >= 0 && down >= 0) capVArr[t] = Math.max(sideCap[up * 4 + 1], sideCap[down * 4 + 3])
+    }
+    if (tx % 2 === 0 && ty % 2 === 1 && tx > 0 && tx < TX - 1) {
+      const left = occ[t - 1], right = occ[t + 1]
+      if (left >= 0 && right >= 0) capHArr[t] = Math.max(sideCap[left * 4 + 0], sideCap[right * 4 + 2])
+    }
+  }
+  const capH = (t: number) => capHArr[t]
+  const capV = (t: number) => capVArr[t]
   const useH = new Int32Array(NT), useV = new Int32Array(NT)
   const thruH = new Int32Array(NT), thruV = new Int32Array(NT)
   const groupTiles = new Map<number, Set<number>>()
@@ -153,7 +179,8 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
   }
 
   // ─── path search ───────────────────────────────────────────────────────────
-  const NS = NT * 4
+  // Search states are (tile, direction, bends so far capped at BEND_BUCKETS - 1); paths keep (tile, direction).
+  const NS = NT * 4 * BEND_BUCKETS
   const gScore = new Float64Array(NS)
   const cameFrom = new Int32Array(NS)
   const seen = new Int32Array(NS) // stamp: gScore valid
@@ -175,7 +202,7 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
     heap.clear()
     for (let d = 0; d < 4; d++) {
       if (!sideFree(src, d, g)) continue
-      const st = sT * 4 + d
+      const st = (sT * 4 + d) * BEND_BUCKETS
       seen[st] = stamp; gScore[st] = 0; cameFrom[st] = -1
       heap.push(h(sT), 0, st)
     }
@@ -184,7 +211,8 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
       const st = heap.pop()
       if (done[st] === stamp) continue
       done[st] = stamp
-      const v = st >> 2, dir = st & 3
+      const td = (st / BEND_BUCKETS) | 0, bends = st % BEND_BUCKETS
+      const v = td >> 2, dir = td & 3
       if (v === tT) { goal = st; break }
       const tx = v % TX, ty = (v / TX) | 0
       for (let nd = 0; nd < 4; nd++) {
@@ -201,7 +229,8 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
         // Crossings: passing straight through a tile crosses every route that passes straight
         // through it the other way. Routes that turn in it cross or not by line order, which the
         // assignment below decides (pricing them here measured worse: more detours and bends).
-        if (turn && v !== sT) cost += inp.bendPenalty
+        // A bend past MAX_BENDS (vision item 2: at most 4 on any edge) costs EXCESS_BEND bends more.
+        if (turn && v !== sT) cost += inp.bendPenalty * (bends >= MAX_BENDS ? 1 + EXCESS_BEND : 1)
         else if (v !== sT) cost += crossPen * (horizontal ? thruV[v] : thruH[v])
         // Congestion past `lanes` in a channel (port-line capacity is hard, above).
         if (nv !== tT && (horizontal ? capH(nv) : capV(nv)) === Infinity && !(g !== undefined && groupTiles.get(g)?.has(nv * 2 + (horizontal ? 0 : 1)))) {
@@ -211,7 +240,8 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
           const cap = Math.max(inp.lanes, horizontal ? busiestH : busiestV)
           if (u >= cap) cost += CONGESTION * inp.bendPenalty * (u - cap + 1)
         }
-        const ns = nv * 4 + nd
+        const nb = turn && v !== sT ? Math.min(BEND_BUCKETS - 1, bends + 1) : bends
+        const ns = (nv * 4 + nd) * BEND_BUCKETS + nb
         const ng = gScore[st] + cost
         if (seen[ns] !== stamp || ng < gScore[ns]) {
           seen[ns] = stamp; gScore[ns] = ng; cameFrom[ns] = st
@@ -221,7 +251,7 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
     }
     if (goal < 0) return null
     const states: number[] = []
-    for (let st = goal; st >= 0; st = cameFrom[st]) states.push(st)
+    for (let st = goal; st >= 0; st = cameFrom[st]) states.push((st / BEND_BUCKETS) | 0)
     states.reverse()
     return { states }
   }
@@ -261,11 +291,10 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
   }
 
   const failed: number[] = []
-  const searchFailed: number[] = []
   for (const ei of inp.order) {
     if (!inp.edgeEnds[ei]) continue
     const p = search(ei)
-    if (!p) { failed.push(ei); searchFailed.push(ei); continue }
+    if (!p) { failed.push(ei); continue }
     paths[ei] = p
     apply(ei, p, 1)
   }
@@ -321,7 +350,7 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
       const startEnd: End = { port: k === 1, sign: startSign, node: k === 1 ? src : -1, pos: from }
       const finishEnd: End = { port: j === st.length - 1, sign: finishSign, node: j === st.length - 1 ? dst : -1, pos: to }
       const [lo, hi, a, b] = from <= to ? [from, to, startEnd, finishEnd] : [to, from, finishEnd, startEnd]
-      const run: Run = { edge: ei, horizontal, fam, lo, hi, a, b, line: 0, k: runs.length, cmin: 0, cmax: 0 }
+      const run: Run = { edge: ei, horizontal, fam, lo, hi, a, b, line: 0, k: runs.length, cmin: 0, cmax: 0, c: 0, p0: NaN, p1: NaN }
       runs.push(run)
       const key = famKey(horizontal, fam)
       ;(families.get(key) ?? families.set(key, []).get(key)!).push(run)
@@ -397,22 +426,26 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
         for (const [, d, cl] of evs) { cur[cl] += d; density[cl] = Math.max(density[cl], cur[cl]) }
       }
       const freeAt: number[][] = Array.from({ length: c + 1 }, (_, cl) => new Array<number>(density[cl]).fill(-Infinity)) // track -> span end
+      const ownerAt: number[][] = Array.from({ length: c + 1 }, (_, cl) => new Array<number>(density[cl]).fill(-1)) // track -> bus group of its last run, or -1
       const mates = new Map<number, number>() // bus group -> track, per cluster key
       for (let i = 0; i < runs.length; i++) {
         const cl = cluster[i], r = runs[i]
         const g = inp.groups[r.edge]
         const mateKey = g !== undefined ? g * (c + 1) + cl : -1
+        // A bus member shares its group's track only while no other route holds it over this span.
         if (mateKey >= 0 && mates.has(mateKey)) {
           const t = mates.get(mateKey)!
-          lineOfRun[i] = t; freeAt[cl][t] = Math.max(freeAt[cl][t], r.hi)
-          continue
+          if (freeAt[cl][t] < r.lo || ownerAt[cl][t] === g) {
+            lineOfRun[i] = t; freeAt[cl][t] = Math.max(freeAt[cl][t], r.hi); ownerAt[cl][t] = g!
+            continue
+          }
         }
         const want01 = clusterSize[cl] > 1 ? rankInCluster[i] / (clusterSize[cl] - 1) : 0.5
         const target = want01 * (density[cl] - 1)
         let best = -1
         for (let t = 0; t < density[cl]; t++) if (freeAt[cl][t] < r.lo && (best < 0 || Math.abs(t - target) < Math.abs(best - target))) best = t
-        if (best < 0) { best = freeAt[cl].length; freeAt[cl].push(-Infinity) } // a bus mate's extended span
-        lineOfRun[i] = best; freeAt[cl][best] = r.hi
+        if (best < 0) { best = freeAt[cl].length; freeAt[cl].push(-Infinity); ownerAt[cl].push(-1) } // a bus mate's extended span
+        lineOfRun[i] = best; freeAt[cl][best] = r.hi; ownerAt[cl][best] = g ?? -1
         if (mateKey >= 0) mates.set(mateKey, best)
       }
       // Centre each cluster: lines are track indices relative to the channel middle.
@@ -427,30 +460,36 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
       for (let k2 = 0; k2 <= c; k2++) need = Math.max(need, hi[k2] - lo[k2] + 1)
       if (horizontal) tracksH = Math.max(tracksH, need); else tracksV = Math.max(tracksV, need)
     } else {
-      // Port lines: fixed set; a run ending on a node side may use only that side's lines.
+      // Port lines: a fixed set, and a run ending on a node side may use only that side's lines,
+      // which are the band of lines around the centre that fits the side. The bands are nested, so
+      // the assignment is the left-edge sweep with the most constrained run first at each span
+      // start, each run taking the OUTERMOST free line its band allows: the central lines stay free
+      // for the narrow sides that can use nothing else. (Ranking by crossings here failed lines that
+      // were there: a through route took a central line a narrow card needed.) Crossing order is
+      // left to the exact refinement below.
       const lines = horizontal ? nY : nX
       const centre = (lines - 1) / 2
-      for (const i of idx) {
+      const allowedOf = runs.map(r => allowedLines(r))
+      const width = allowedOf.map(ok => ok.filter(Boolean).length)
+      const sweep = runs.map((_, i) => i).sort((p, q) => runs[p].lo - runs[q].lo || width[p] - width[q] || runs[p].edge - runs[q].edge)
+      for (const i of sweep) {
         const r = runs[i]
-        const ok = allowedLines(r)
+        const ok = allowedOf[i]
         const taken = new Array<boolean>(lines).fill(false)
-        let floor = -1
         let mateLine = -1
         for (const j of placed) {
-          if (!overlaps(r, runs[j])) continue
+          if (!overlaps(r, runs[j]) || runs[j].line < 0) continue
           if (sameBus(r, runs[j])) { mateLine = runs[j].line; continue }
           taken[runs[j].line] = true
-          floor = Math.max(floor, runs[j].line)
         }
-        const ideal = centre - (clusterSize[cluster[i]] - 1) / 2 + rankInCluster[i]
         let best = -1
-        if (mateLine >= 0 && ok[mateLine]) best = mateLine
-        // Below every overlapping run ranked above it when possible, else any free allowed line.
-        for (const strict of [true, false]) {
-          if (best >= 0) break
+        if (mateLine >= 0 && ok[mateLine] && !taken[mateLine]) best = mateLine
+        if (best < 0) {
+          const towardLow = r.a.sign + r.b.sign < 0
           for (let k2 = 0; k2 < lines; k2++) {
-            if (!ok[k2] || taken[k2] || (strict && k2 <= floor)) continue
-            if (best < 0 || Math.abs(k2 - ideal) < Math.abs(best - ideal)) best = k2
+            if (!ok[k2] || taken[k2]) continue
+            const d = Math.abs(k2 - centre), bd = best < 0 ? -1 : Math.abs(best - centre)
+            if (best < 0 || d > bd + 1e-9 || (Math.abs(d - bd) < 1e-9 && (towardLow ? k2 < best : k2 > best))) best = k2
           }
         }
         if (best < 0) { failed.push(r.edge); r.line = -1 } else r.line = best
@@ -475,18 +514,27 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
     return (minCol + (r.fam - 1) / 2) * pw + (odd ? inp.portX[r.line] : r.line * s)
   }
   // Along-axis coordinate where a run starts / finishes: the neighbouring run's line, or the port.
-  const endAlong = (r: Run, start: boolean): number => {
-    const runs = runsOf[r.edge]!
+  const portAlong = (r: Run, start: boolean): number => {
     const st = paths[r.edge]!.states
     const [src, dst] = inp.edgeEnds[r.edge]!
-    const atStart = start ? r.k === 0 : r.k === runs.length - 1
-    if (!atStart) return coordOf(runs[r.k + (start ? -1 : 1)])
     if (start) {
       const d0 = st[0] & 3
       return r.horizontal ? inp.col[src] * pw + (d0 === 0 ? inp.hw[src] : -inp.hw[src]) : inp.row[src] * ph + (d0 === 1 ? inp.hh[src] : -inp.hh[src])
     }
     const dl = st[st.length - 1] & 3
     return r.horizontal ? inp.col[dst] * pw + (dl === 0 ? -inp.hw[dst] : inp.hw[dst]) : inp.row[dst] * ph + (dl === 1 ? -inp.hh[dst] : inp.hh[dst])
+  }
+  for (const runs of runsOf) {
+    if (!runs) continue
+    for (const r of runs) {
+      r.c = coordOf(r)
+      r.p0 = r.k === 0 ? portAlong(r, true) : NaN
+      r.p1 = r.k === runs.length - 1 ? portAlong(r, false) : NaN
+    }
+  }
+  const endAlong = (r: Run, start: boolean): number => {
+    const v = start ? r.p0 : r.p1
+    return Number.isNaN(v) ? runsOf[r.edge]![r.k + (start ? -1 : 1)].c : v
   }
   const hAt = new Map<number, Run[]>(), vAt = new Map<number, Run[]>()
   const tilesOf = (r: Run): number[] => {
@@ -499,13 +547,14 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
     for (const r of runs) for (const t of tilesOf(r)) { const m = r.horizontal ? hAt : vAt; (m.get(t) ?? m.set(t, []).get(t)!).push(r) }
   }
   const crosses = (h: Run, v: Run): boolean => {
-    const x = coordOf(v), y = coordOf(h)
+    const x = v.c, y = h.c
     const h0 = endAlong(h, true), h1 = endAlong(h, false), v0 = endAlong(v, true), v1 = endAlong(v, false)
     return x > Math.min(h0, h1) + 1e-6 && x < Math.max(h0, h1) - 1e-6 && y > Math.min(v0, v1) + 1e-6 && y < Math.max(v0, v1) - 1e-6
   }
   const crossingsWith = (set: Set<Run>): number => {
     let total = 0
-    for (const a of set) for (const t of tilesOf(a)) {
+    for (const a of set) for (let q = a.lo; q <= a.hi; q++) {
+      const t = a.horizontal ? a.fam * TX + q : q * TX + a.fam
       for (const b of (a.horizontal ? vAt : hAt).get(t) ?? []) {
         if (b.edge === a.edge || (set.has(b) && !a.horizontal)) continue
         if (a.horizontal ? crosses(a, b) : crosses(b, a)) total++
@@ -523,10 +572,16 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
     }
     return set
   }
-  for (let pass = 0; pass < 3; pass++) {
+  // Work bound: at most REFINE_BUDGET evaluated moves per run, counted (not timed), so the result
+  // stays deterministic; spec/all's 1,393 edges otherwise spend seconds here.
+  let work = 0
+  const totalRuns = runsOf.reduce((a, r) => a + (r?.length ?? 0), 0)
+  refine: for (let pass = 0; pass < 3; pass++) {
     let improved = false
     for (const key of famKeys) {
-      const runs = families.get(key)!.filter(r => !failedSet.has(r.edge) && inp.groups[r.edge] === undefined)
+      // Every drawn run occupies its line; bus members stay where they are (their mates share them).
+      const occupants = families.get(key)!.filter(r => !failedSet.has(r.edge))
+      const runs = occupants.filter(r => inp.groups[r.edge] === undefined)
       const fixed = (key >> 1) % 2 === 1
       for (const p of runs) {
         // A run whose neighbourhood crosses nothing has nothing to gain.
@@ -539,22 +594,24 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
         candidates.splice(2 * REFINE_REACH)
         for (const L of candidates) {
           // Who is on line L over p's span? At most one run, which then takes p's line.
-          const on = runs.filter(r => r !== p && Math.abs(r.line - L) < 1e-9 && overlaps(r, p))
-          if (on.length > 1) continue
+          const on = occupants.filter(r => r !== p && Math.abs(r.line - L) < 1e-9 && overlaps(r, p))
+          if (on.length > 1 || (on[0] && inp.groups[on[0].edge] !== undefined)) continue
           const q = on[0]
           if (q) {
             if (fixed && !allowedLines(q)[p.line]) continue
-            if (runs.some(r => r !== q && r !== p && Math.abs(r.line - p.line) < 1e-9 && overlaps(r, q))) continue
+            if (occupants.some(r => r !== q && r !== p && Math.abs(r.line - p.line) < 1e-9 && overlaps(r, q))) continue
             if (!fixed && (p.line < q.cmin - 1e-9 || p.line > q.cmax + 1e-9)) continue
           }
           const moved = q ? [p, q] : [p]
           const set = neighbourhood(moved)
           const before = crossingsWith(set)
           const pl = p.line
-          p.line = L; if (q) q.line = pl
+          p.line = L; p.c = coordOf(p); if (q) { q.line = pl; q.c = coordOf(q) }
           const after = crossingsWith(set)
-          if (after < before) { improved = true; break }
-          p.line = pl; if (q) q.line = L
+          const kept = after < before
+          if (!kept) { p.line = pl; p.c = coordOf(p); if (q) { q.line = L; q.c = coordOf(q) } }
+          if (++work > REFINE_BUDGET * totalRuns) break refine
+          if (kept) { improved = true; break }
         }
       }
     }
@@ -594,8 +651,6 @@ export function routeChannels(inp: ChannelRouteInput): ChannelRouting {
       return pts
     })
   }
-  const dbg = (globalThis as { __orthoDebug?: unknown[] }).__orthoDebug
-  if (dbg) dbg.push({ TX, TY, minCol, minRow, paths: paths.map(p => p?.states ?? null), runsOf, tracksV, tracksH, failed: [...failedSet], searchFailed, sideUse: Array.from(sideUse), sideCap: Array.from(sideCap), tileOf: Array.from(tileOf), useH: Array.from(useH), useV: Array.from(useV) })
   return { tracksV, tracksH, failed: [...failedSet].sort((p, q) => p - q), geometry }
 }
 

@@ -167,108 +167,133 @@ export function orthogonalLayout(
   const isPage = options.isPageNode
   const pageOf = (i: number) => (isPage ? safeBool(isPage, sorted[i].id) : true)
 
-  // ─── placement ─────────────────────────────────────────────────────────────
+  // ─── placement + routing ───────────────────────────────────────────────────
   const col = new Int32Array(n), row = new Int32Array(n)
   const pinned = sorted.map(nd => Boolean(nd.pinned) && Number.isFinite(nd.x) && Number.isFinite(nd.y))
   const positioned = sorted.map(nd => Number.isFinite(nd.x) && Number.isFinite(nd.y))
-  // Origin: the first pinned node sits exactly on its pin; otherwise (0, 0).
   const firstPin = pinned.findIndex(Boolean)
-  const origin: Point = firstPin >= 0
-    ? { x: sorted[firstPin].x - Math.round(sorted[firstPin].x / cw) * cw, y: sorted[firstPin].y - Math.round(sorted[firstPin].y / ch) * ch }
-    : { x: 0, y: 0 }
-  const snap = (i: number): [number, number] => [Math.round((sorted[i].x - origin.x) / cw), Math.round((sorted[i].y - origin.y) / ch)]
-
   const scope = options.scope ?? 'auto'
   const positionedCount = positioned.filter(Boolean).length
-  let sketch = scope === 'sketch'
-  if (scope === 'auto' && n > 0 && positionedCount >= 2 && positionedCount >= 0.7 * n) {
-    const cells = new Set<string>()
-    let distinct = true
-    for (let i = 0; i < n && distinct; i++) if (positioned[i]) { const k = snap(i).join(','); if (cells.has(k)) distinct = false; cells.add(k) }
-    sketch = distinct
-  }
-
-  let components: number
-  let isolates: number
-  if (sketch) {
-    ;({ components, isolates } = placeSketch(n, adj, sorted, positioned, pinned, snap, col, row))
-  } else {
-    ;({ components, isolates } = placeComponents(n, adj, col, row, componentGap, sweeps, forest, index, pageOf, sorted))
-    // Pins override cold placement: move each pinned node to its own cell, evicting whatever the
-    // layering put there to the nearest free cell (deterministic, in id order).
-    const occupied = new Map<string, number>()
-    for (let i = 0; i < n; i++) occupied.set(`${col[i]},${row[i]}`, i)
-    for (let i = 0; i < n; i++) {
-      if (!pinned[i]) continue
-      const [c, r] = snap(i)
-      const key = `${c},${r}`
-      occupied.delete(`${col[i]},${row[i]}`)
-      const other = occupied.get(key)
-      col[i] = c; row[i] = r; occupied.set(key, i)
-      if (other !== undefined && other !== i && !pinned[other]) {
-        const free = nearestFreeCell(c, r, occupied)
-        col[other] = free[0]; row[other] = free[1]; occupied.set(`${free[0]},${free[1]}`, other)
-      }
-    }
-  }
-
-  // ─── routing ───────────────────────────────────────────────────────────────
   const edgeClass = edges.map(e => (e.navigationRoute ? 2 : e.structural ? 0 : 1))
-  // Bus groups: a parent's structural edges to children in the row directly below.
-  const groups: Array<number | undefined> = edges.map(() => undefined)
-  if (options.busTreeEdges) {
-    const byParent = new Map<number, number[]>()
-    edges.forEach((e, i) => {
-      const ends = edgeEnds[i]
-      if (!ends || !e.structural) return
-      const [a, b] = ends
-      if (row[b] === row[a] + 1) byParent.set(a, [...(byParent.get(a) ?? []), i])
-    })
-    let g = 0
-    for (const [, members] of [...byParent.entries()].sort((x, y) => x[0] - y[0])) {
-      if (members.length < 2) continue
-      for (const i of members) groups[i] = g
-      g++
-    }
-  }
-  // Route order: structural edges, then relational, then navigation routes; longest first within a
-  // class (Manhattan distance at the base pitch), ties by edge index. Bus members route together.
-  const order = edgeEnds.map((e, i) => ({ i, cls: edgeClass[i], d: e ? Math.abs(col[e[0]] - col[e[1]]) * cw + Math.abs(row[e[0]] - row[e[1]]) * ch : -1 }))
-    .filter(x => x.d >= 0)
-    .sort((a, b) => a.cls - b.cls || (groups[a.i] ?? -1) - (groups[b.i] ?? -1) || b.d - a.d || a.i - b.i)
-    .map(x => x.i)
   const bendPenalty = options.bendPenalty ?? Math.max(cw, ch)
   const crossingPenalty = options.crossingPenalty ?? 3 * Math.max(cw, ch)
   const routable = edgeEnds.filter(Boolean).length
-  // Two routers. Up to EXACT_ROUTE_MAX_EDGES edges, the lattice router: edges one at a time by A*
-  // over exact lane and port lines at the base pitch, each seeing every route before it, so it
-  // trades bends against real crossings. It has `lanes` lanes per channel and no more, so on a
-  // larger or denser graph it runs out, searches the whole lattice before giving up, and draws a
-  // direct L through whatever is in the way. Its result is kept only when every edge routed;
-  // otherwise, and above the bound, the channel router (orthogonalChannelRouter.ts) routes the
-  // graph, widening the pitch to the tracks its busiest channel needs.
-  let result: { pitch: { w: number; h: number }; origin: Point; positions: Map<string, Point>; points: Point[][]; fallbacks: number; router: 'lattice' | 'channel' } | null = null
-  if (routable <= EXACT_ROUTE_MAX_EDGES) {
-    const positions = new Map<string, Point>()
-    const center: Point[] = sorted.map((nd, i) => {
-      const p = { x: origin.x + col[i] * cw, y: origin.y + row[i] * ch }
-      positions.set(nd.id, p)
-      return p
-    })
-    const lattice = routeAll(sorted, center, edgeEnds, col, row, cw, ch, origin, edgeClass, groups, { clearance, laneSpacing, lanes, bendPenalty, crossingPenalty })
-    if (lattice.fallbacks === 0) result = { pitch: { w: cw, h: ch }, origin, positions, points: lattice.points, fallbacks: 0, router: 'lattice' }
-  }
-  if (!result) {
+
+  // The pitch input positions are snapped at. Normally the base pitch; when the positioned nodes
+  // already sit on a coarser uniform grid (this engine's own output after the channel router
+  // widened it), that grid's pitch, so a re-run on the output keeps every cell and the drawing
+  // does not grow each time (vision item 16, hard requirement 3).
+  // Only for a sketch (most nodes positioned, the rule below): a few user pins say nothing about a
+  // grid, and reading their spacing as one blows the pitch up.
+  const sketchLike = scope !== 'cold' && n > 0 && positionedCount >= 2 && positionedCount >= 0.7 * n
+  const posOf = (k: 'x' | 'y') => sorted.filter((_, i) => positioned[i]).map(nd => nd[k])
+  let snapW = Math.max(cw, (sketchLike ? uniformPitch(posOf('x')) : null) ?? 0)
+  let snapH = Math.max(ch, (sketchLike ? uniformPitch(posOf('y')) : null) ?? 0)
+
+  let cold: { col: Int32Array; row: Int32Array; components: number; isolates: number } | null = null
+  let components = 0, isolates = 0, sketch = false
+  let groups: Array<number | undefined> = edges.map(() => undefined)
+  type Routed = { pitch: { w: number; h: number }; origin: Point; positions: Map<string, Point>; points: Point[][]; fallbacks: number; router: 'lattice' | 'channel' }
+  let result: Routed | null = null
+  // At most three rounds: a channel-routed layout with pins or a sketch whose pitch widened past the
+  // snap pitch is snapped again at the wider pitch, so pins land on their nearest cell of the grid
+  // they are drawn on (the first pin exactly), not on a cell of a narrower grid scaled up.
+  for (let round = 0; round < 3; round++) {
+    // Origin: the first pinned node sits exactly on its pin; otherwise (0, 0).
+    const origin: Point = firstPin >= 0
+      ? { x: sorted[firstPin].x - Math.round(sorted[firstPin].x / snapW) * snapW, y: sorted[firstPin].y - Math.round(sorted[firstPin].y / snapH) * snapH }
+      : { x: 0, y: 0 }
+    const snap = (i: number): [number, number] => [Math.round((sorted[i].x - origin.x) / snapW), Math.round((sorted[i].y - origin.y) / snapH)]
+    sketch = scope === 'sketch'
+    if (scope === 'auto' && n > 0 && positionedCount >= 2 && positionedCount >= 0.7 * n) {
+      const cells = new Set<string>()
+      let distinct = true
+      for (let i = 0; i < n && distinct; i++) if (positioned[i]) { const k = snap(i).join(','); if (cells.has(k)) distinct = false; cells.add(k) }
+      sketch = distinct
+    }
+    if (sketch) {
+      ;({ components, isolates } = placeSketch(n, adj, sorted, positioned, pinned, snap, col, row))
+    } else {
+      // Cold placement does not depend on the pitch: computed once, pins re-applied each round.
+      if (!cold) {
+        const c0 = new Int32Array(n), r0 = new Int32Array(n)
+        const st = placeComponents(n, adj, c0, r0, componentGap, sweeps, forest, index, pageOf, sorted)
+        cold = { col: c0, row: r0, ...st }
+      }
+      col.set(cold.col); row.set(cold.row)
+      components = cold.components; isolates = cold.isolates
+      // Pins override cold placement: move each pinned node to its own cell, evicting whatever the
+      // layering put there to the nearest free cell (deterministic, in id order).
+      const occupied = new Map<string, number>()
+      for (let i = 0; i < n; i++) occupied.set(`${col[i]},${row[i]}`, i)
+      for (let i = 0; i < n; i++) {
+        if (!pinned[i]) continue
+        const [c, r] = snap(i)
+        const key = `${c},${r}`
+        occupied.delete(`${col[i]},${row[i]}`)
+        const other = occupied.get(key)
+        col[i] = c; row[i] = r; occupied.set(key, i)
+        if (other !== undefined && other !== i && !pinned[other]) {
+          const free = nearestFreeCell(c, r, occupied)
+          col[other] = free[0]; row[other] = free[1]; occupied.set(`${free[0]},${free[1]}`, other)
+        }
+      }
+    }
+
+    // Bus groups: a parent's structural edges to children in the row directly below.
+    groups = edges.map(() => undefined)
+    if (options.busTreeEdges) {
+      const byParent = new Map<number, number[]>()
+      edges.forEach((e, i) => {
+        const ends = edgeEnds[i]
+        if (!ends || !e.structural) return
+        const [a, b] = ends
+        if (row[b] === row[a] + 1) byParent.set(a, [...(byParent.get(a) ?? []), i])
+      })
+      let g = 0
+      for (const [, members] of [...byParent.entries()].sort((x, y) => x[0] - y[0])) {
+        if (members.length < 2) continue
+        for (const i of members) groups[i] = g
+        g++
+      }
+    }
+    // Route order: structural edges, then relational, then navigation routes; longest first within
+    // a class (Manhattan distance at the base pitch), ties by edge index. Bus members route together.
+    const order = edgeEnds.map((e, i) => ({ i, cls: edgeClass[i], d: e ? Math.abs(col[e[0]] - col[e[1]]) * cw + Math.abs(row[e[0]] - row[e[1]]) * ch : -1 }))
+      .filter(x => x.d >= 0)
+      .sort((a, b) => a.cls - b.cls || (groups[a.i] ?? -1) - (groups[b.i] ?? -1) || b.d - a.d || a.i - b.i)
+      .map(x => x.i)
+
+    // Two routers. Up to EXACT_ROUTE_MAX_EDGES edges, on the base pitch, the lattice router: edges
+    // one at a time by A* over exact lane and port lines, each seeing every route before it, so it
+    // trades bends against real crossings. It has `lanes` lanes per channel and no more, so on a
+    // larger or denser graph it runs out, searches the whole lattice before giving up, and draws a
+    // direct L through whatever is in the way. When it leaves any edge on such a fallback, and above
+    // the bound, the channel router (orthogonalChannelRouter.ts) routes the graph, widening the pitch
+    // to the tracks its busiest channel needs; the result with fewer fallbacks is kept, the lattice's
+    // on a tie (fallbacks are what break the hard checks; crossings are a quality bar).
+    let lattice: Routed | null = null
+    if (routable <= EXACT_ROUTE_MAX_EDGES && snapW === cw && snapH === ch) {
+      const positions = new Map<string, Point>()
+      const center: Point[] = sorted.map((nd, i) => {
+        const p = { x: origin.x + col[i] * cw, y: origin.y + row[i] * ch }
+        positions.set(nd.id, p)
+        return p
+      })
+      const lr = routeAll(sorted, center, edgeEnds, col, row, cw, ch, origin, edgeClass, groups, { clearance, laneSpacing, lanes, bendPenalty, crossingPenalty })
+      lattice = { pitch: { w: cw, h: ch }, origin, positions, points: lr.points, fallbacks: lr.fallbacks, router: 'lattice' as const }
+    }
+    if (lattice && lattice.fallbacks === 0) { result = lattice; break }
     const routing = routeChannels({
       col, row, hw: sorted.map(nd => nd.width / 2), hh: sorted.map(nd => nd.height / 2),
       edgeEnds, order, edgeClass, groups, maxW, maxH, clearance, laneSpacing, lanes,
       portX: portOffsets(maxW / 2, PORT_PITCH, Infinity), portY: portOffsets(maxH / 2, PORT_PITCH, Infinity),
       bendPenalty, crossingPenalty,
     })
-    // The pitch: the base pitch, widened when a channel needs more than `lanes` tracks. Uniform, so
-    // every anchor stays on one grid (D3); the first pin still sits exactly on its pin.
-    const pw = maxW + 2 * clearance + Math.max(lanes, routing.tracksV) * laneSpacing
-    const ph = maxH + 2 * clearance + Math.max(lanes, routing.tracksH) * laneSpacing
+    // The pitch: the snap pitch, widened when a channel needs more tracks than it leaves room for.
+    // Uniform, so every anchor stays on one grid (D3); the first pin still sits exactly on its pin.
+    const pw = Math.max(snapW, maxW + 2 * clearance + Math.max(lanes, routing.tracksV) * laneSpacing)
+    const ph = Math.max(snapH, maxH + 2 * clearance + Math.max(lanes, routing.tracksH) * laneSpacing)
     const o2: Point = firstPin >= 0 ? { x: sorted[firstPin].x - col[firstPin] * pw, y: sorted[firstPin].y - row[firstPin] * ph } : { x: 0, y: 0 }
     const positions = new Map<string, Point>()
     const boxes: Box[] = sorted.map((nd, i) => {
@@ -281,8 +306,30 @@ export function orthogonalLayout(
     for (const ei of routing.failed) { const [s0, t0] = edgeEnds[ei]!; points[ei] = fallbackRoute(boxes[s0], boxes[t0]) }
     // Dropped edges (self-loops, unknown endpoints) get a degenerate but finite two-point route.
     edgeEnds.forEach((e, i) => { if (!e) points[i] = [{ x: 0, y: 0 }, { x: 0, y: 0 }] })
-    result = { pitch: { w: pw, h: ph }, origin: o2, positions, points, fallbacks: routing.failed.length, router: 'channel' }
+    const channel: Routed = { pitch: { w: pw, h: ph }, origin: o2, positions, points, fallbacks: routing.failed.length, router: 'channel' }
+    result = lattice && lattice.fallbacks <= channel.fallbacks ? lattice : channel
+    const anchored = firstPin >= 0 || sketch
+    if (result.router === 'lattice' || !anchored || round === 2) break
+    if (round === 0 && !sketch && cold) {
+      // Pins on a cold layout: snap them at the pitch the layout gets without them, so a pin taken
+      // from that layout (GraphCanvas pins every node it has coordinates for) lands on its own
+      // cell, and any other pin within half a cell of it.
+      const free = routeChannels({
+        col: cold.col, row: cold.row, hw: sorted.map(nd => nd.width / 2), hh: sorted.map(nd => nd.height / 2),
+        edgeEnds, order, edgeClass, groups, maxW, maxH, clearance, laneSpacing, lanes,
+        portX: portOffsets(maxW / 2, PORT_PITCH, Infinity), portY: portOffsets(maxH / 2, PORT_PITCH, Infinity),
+        bendPenalty, crossingPenalty,
+      })
+      const fw = Math.max(snapW, maxW + 2 * clearance + Math.max(lanes, free.tracksV) * laneSpacing)
+      const fh = Math.max(snapH, maxH + 2 * clearance + Math.max(lanes, free.tracksH) * laneSpacing)
+      if (fw === snapW && fh === snapH && pw <= snapW && ph <= snapH) break
+      snapW = fw; snapH = fh
+      continue
+    }
+    if (pw <= snapW && ph <= snapH) break
+    snapW = pw; snapH = ph
   }
+  result = result!
   const { positions, points } = result
   const routes = { points, fallbacks: result.fallbacks }
 
@@ -300,6 +347,20 @@ export function orthogonalLayout(
       sketch, pinnedNodes: pinned.filter(Boolean).length, busEdges: groups.filter(g => g !== undefined).length, router: result.router,
     },
   }
+}
+
+/**
+ * The pitch of a uniform grid the values sit on (every value a whole multiple of the smallest gap
+ * between distinct values, within 0.5 px), or null when they do not, or fewer than two distinct.
+ */
+function uniformPitch(values: number[]): number | null {
+  const u = [...new Set(values.map(v => Math.round(v * 2) / 2))].sort((a, b) => a - b)
+  if (u.length < 2) return null
+  let g = Infinity
+  for (let i = 1; i < u.length; i++) g = Math.min(g, u[i] - u[i - 1])
+  if (!(g > 1)) return null
+  for (const v of u) { const k = (v - u[0]) / g; if (Math.abs(k - Math.round(k)) * g > 0.5) return null }
+  return g
 }
 
 /** Port-line offsets from a cell centre: 0, then +-step, +-2step ... up to `max` each side, 3 px inside `half`. */
