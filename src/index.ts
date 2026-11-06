@@ -204,6 +204,18 @@ export type {
 } from './components/LayeredGraphControls'
 export { ReachInspector, reachRelationships, reachSummaryText } from './components/ReachInspector'
 export type { ReachInspectorProps, ReachRelationships } from './components/ReachInspector'
+export {
+  LayeredGraphExplorer,
+  ViewSwitcher,
+  CameraControls,
+  LAYERED_GRAPH_VIEWS,
+  LAYERED_GRAPH_VIEW_LABELS,
+  type LayeredGraphView,
+  type LayeredGraphExplorerProps,
+  type LayeredGraphExplorerControls,
+  type ViewSwitcherProps,
+  type CameraControlsProps,
+} from './components/LayeredGraphExplorer'
 export { DetailDrawer, type DetailDrawerProps } from './components/DetailDrawer'
 export {
   forceLayout,

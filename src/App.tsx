@@ -29,6 +29,7 @@ import AdjacencyMatrixTestPage from './test-pages/AdjacencyMatrixTestPage'
 import LayerLanesTestPage from './test-pages/LayerLanesTestPage'
 import LayerStackTestPage from './test-pages/LayerStackTestPage'
 import LayeredGraphChromeTestPage from './test-pages/LayeredGraphChromeTestPage'
+import LayeredGraphExplorerTestPage from './test-pages/LayeredGraphExplorerTestPage'
 import HivePlotTestPage from './test-pages/HivePlotTestPage'
 import GalaxyLayoutLab from './test-pages/GalaxyLayoutLab'
 import CenterOnSelectTestPage from './test-pages/CenterOnSelectTestPage'
@@ -163,6 +164,10 @@ export default function App() {
 
   if (exampleParam === 'layered-graph-chrome') {
     return <LayeredGraphChromeTestPage />
+  }
+
+  if (exampleParam === 'layered-graph-explorer') {
+    return <LayeredGraphExplorerTestPage />
   }
 
   if (exampleParam === 'hive-plot') {

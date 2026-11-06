@@ -1,6 +1,6 @@
 ---
 name: heimdall-graph
-description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, LayeredGraphContext, LayerStack, AdjacencyMatrix, HivePlot, FollowControl, PredicateLabelControl, PlaneLayoutControl, LinkCategoryFilter, LayerList, LayerPairList, BridgeNodeList, ReachInspector, plus useGraphCanvas, usePanZoom, useLayeredGraph, the headless layout engines, the edge geometry utilities and the layered graph framework
+description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, LayeredGraphContext, LayerStack, AdjacencyMatrix, HivePlot, FollowControl, PredicateLabelControl, PlaneLayoutControl, LinkCategoryFilter, LayerList, LayerPairList, BridgeNodeList, ReachInspector, LayeredGraphExplorer, ViewSwitcher, CameraControls, plus useGraphCanvas, usePanZoom, useLayeredGraph, the headless layout engines, the edge geometry utilities and the layered graph framework
 ---
 
 Import all components from `@tinkermonkey/heimdall-ui`. Import the CSS once at your app entry point:
@@ -1873,3 +1873,108 @@ const rels = reachRelationships(graph)
 | `showFollowed` | `boolean` | `true` | The "Followed across layers" list |
 | `showReachSummary` | `boolean` | `true` | The mono reach line |
 | `onNodeSelect` | `(nodeId: string) => void` | — | Row handler; unset selects the row's node |
+
+## LayeredGraphExplorer
+
+The ready-made layered graph explorer: every layered view and its chrome in one component.
+
+- **Header** (shell surface): optional `eyebrow` and `title`, a `ViewSwitcher` (3D stack / Lanes / Matrix / Hive, hidden with one view) and `FollowControl`.
+- **Scene:** the chosen view: `LayerStack`, `GraphCanvas layout="layer-lanes"`, `AdjacencyMatrix` or `HivePlot`. Above the stack: `CameraControls` and `PlaneLayoutControl`.
+- **Link bar:** `LinkCategoryFilter` with `PredicateLabelControl` inside, and a node-label toggle for the stack (`all` / `reached` labels) and the hive (busiest-node labels on / off).
+- **Inspector panel:** `ReachInspector`, showing `LayerList`, `LayerPairList` and `BridgeNodeList` with no selection. It sits on the right and stacks below the scene when the explorer is narrower than `stackBelow`.
+- **Status line** (mono, shell surface): `statusLabel`, node / link / cross-layer / layer counts, the view and follow depth, and for the stack the camera (`stack · yaw -36° pitch 29° zoom 1.00 · gap 170`).
+
+Selection, follow, filters, label mode, layer focus and plane layout are one `useLayeredGraph` state shared by every view, so they survive view switches; the explorer provides it as `LayeredGraphContext` to everything inside. The 3D camera (preset, yaw / pitch / zoom, gap, turntable) is remembered when you switch away and restored when you switch back. Turn chrome on or off with `controls`; every field defaults to true (`LayeredGraphExplorerControls`: `viewSwitcher`, `follow`, `predicateLabels`, `linkFilter`, `nodeLabels`, `camera`, `planeLayout`, `inspector`, `layers`, `layerPairs`, `bridgeNodes`, `status`).
+
+`ViewSwitcher` and `CameraControls` are exported for custom layouts. `ViewSwitcher` is a plain controlled segmented control over `LayeredGraphView` values (`LAYERED_GRAPH_VIEWS` lists them; `LAYERED_GRAPH_VIEW_LABELS` gives the default text). `CameraControls` drives a `LayerStack` through its ref: preset segmented control, zoom out / in, optional fit and a turntable toggle.
+
+```tsx
+import { LayeredGraphExplorer, CameraControls, ViewSwitcher, LayerStack, type LayerStackHandle, type CameraPresetName } from '@tinkermonkey/heimdall-ui'
+
+const layering = useMemo(() => ({ layerBy: 'tier', linkCategoryBy: 'category' }), [])
+<LayeredGraphExplorer
+  nodes={nodes}
+  edges={edges}
+  layering={layering}
+  views={['stack', 'matrix']}
+  controls={{ bridgeNodes: false, status: false }}
+  title="Architecture model"
+  statusLabel="arch model v3"
+  height={720}
+/>
+
+// The pieces in your own layout:
+const stack = useRef<LayerStackHandle>(null)
+const [preset, setPreset] = useState<CameraPresetName | null>('stack')
+const [turntable, setTurntable] = useState(false)
+<CameraControls stack={stack} preset={preset} turntable={turntable} onTurntableChange={setTurntable} showFit />
+<LayerStack ref={stack} cameraPreset={preset} onCameraPresetChange={setPreset} turntable={turntable} onTurntableChange={setTurntable} />
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | External state from `useLayeredGraph`. Unset: the enclosing `LayeredGraphContext`, else its own from `nodes`/`edges`/`layering` |
+| `nodes` | `GraphNodeData[]` | — | Standalone nodes; also passed to the lanes canvas |
+| `edges` | `GraphEdgeData[]` | — | Standalone edges; also passed to the lanes canvas |
+| `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
+| `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode, focus, plane layout (controlled or default) |
+| `views` | `readonly LayeredGraphView[]` | all four | Views offered, in switcher order (`'stack' \| 'lanes' \| 'matrix' \| 'hive'`); one view hides the switcher |
+| `viewLabels` | `Partial<Record<LayeredGraphView, ReactNode>>` | — | Switcher text per view; default `3D stack`, `Lanes`, `Matrix`, `Hive` |
+| `view` | `LayeredGraphView` | — | Controlled view |
+| `defaultView` | `LayeredGraphView` | first of `views` | Initial view when uncontrolled |
+| `onViewChange` | `(view: LayeredGraphView) => void` | — | Called by the switcher |
+| `controls` | `LayeredGraphExplorerControls` | all on | Which chrome renders: `{ viewSwitcher, follow, predicateLabels, linkFilter, nodeLabels, camera, planeLayout, inspector, layers, layerPairs, bridgeNodes, status }` |
+| `followOptions` | `readonly number[]` | `[0, 1, 2]` | Follow depths offered by `FollowControl` |
+| `title` | `ReactNode` | — | Heading in the header |
+| `eyebrow` | `ReactNode` | — | Mono eyebrow above the title |
+| `statusLabel` | `ReactNode` | — | Dataset label at the start of the status line |
+| `chromeSurface` | `'shell' \| 'canvas'` | `'shell'` | Header and status line on the shell surface or the canvas |
+| `nodeLabels` | `boolean` | — | Controlled node-label toggle (stack and hive) |
+| `defaultNodeLabels` | `boolean` | `true` | Initial node-label toggle when uncontrolled |
+| `onNodeLabelsChange` | `(on: boolean) => void` | — | Called by the node-label toggle |
+| `stackProps` | `Partial<LayerStackProps>` | — | Passed to `LayerStack`; camera callbacks are chained, preset and turntable are explorer-owned |
+| `lanesProps` | `Partial<GraphCanvasProps>` | — | Passed to the lanes `GraphCanvas` (`laneOptions`, `style`, …) |
+| `matrixProps` | `Partial<AdjacencyMatrixProps>` | — | Passed to `AdjacencyMatrix` |
+| `hiveProps` | `Partial<HivePlotProps>` | — | Passed to `HivePlot` |
+| `height` | `number \| string` | — | Fixed height: the scene fills the room left and the panels scroll. Unset: grows with its content |
+| `stackBelow` | `number` | `960` | Below this width (px) the inspector panel stacks under the scene |
+| `asideWidth` | `number` | `340` | Inspector panel width in px |
+
+## ViewSwitcher
+
+Segmented control for the explorer's view (3D stack, Lanes, Matrix, Hive). Use it to build your own explorer layout; `LAYERED_GRAPH_VIEWS` and `LAYERED_GRAPH_VIEW_LABELS` list the views and their default labels.
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `views` | `readonly LayeredGraphView[]` | `LAYERED_GRAPH_VIEWS` | Views offered, in order |
+| `value` | `LayeredGraphView` | — | The active view |
+| `onChange` | `(view: LayeredGraphView) => void` | — | Called with the picked view |
+| `viewLabels` | `Partial<Record<LayeredGraphView, ReactNode>>` | — | Segment text per view; default from `LAYERED_GRAPH_VIEW_LABELS` |
+| `label` | `ReactNode` | `'View'` | Mono eyebrow; `null` hides it |
+| `disabled` | `boolean` | `false` | Disables every segment |
+
+## CameraControls
+
+Camera chrome for `LayerStack`: preset segmented control, zoom in and out, fit and the turntable toggle, driven by a LayerStack ref or controlled props.
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `stack` | `RefObject<LayerStackHandle \| null>` | — | The `LayerStack` to drive (presets, zoom, fit, turntable) |
+| `preset` | `CameraPresetName \| null` | `null` | Preset shown as active; wire to the stack's `cameraPreset` / `onCameraPresetChange` |
+| `onPresetChange` | `(preset: CameraPresetName) => void` | — | Called with a picked preset (the handle applies it as well) |
+| `presets` | `readonly CameraPresetName[]` | all four | Presets offered; empty hides the control |
+| `presetLabels` | `Partial<Record<CameraPresetName, ReactNode>>` | — | Segment text per preset; default `Stack`, `Exploded`, `Top`, `Profile` |
+| `turntable` | `boolean` | `false` | Turntable state shown on the toggle |
+| `onTurntableChange` | `(on: boolean) => void` | — | Called by the toggle; unset calls the handle's `setTurntable` |
+| `showZoom` | `boolean` | `true` | Zoom out / in buttons |
+| `showFit` | `boolean` | `false` | Fit button |
+| `showTurntable` | `boolean` | `true` | Turntable toggle |
+| `zoomStep` | `number` | `1.2` | Zoom factor per press |
+| `label` | `ReactNode` | `null` | Mono eyebrow before the presets |
+| `disabled` | `boolean` | `false` | Disables every control |
