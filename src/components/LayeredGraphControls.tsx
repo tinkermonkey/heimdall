@@ -358,7 +358,7 @@ export const LayerList = React.forwardRef<HTMLDivElement, LayerListProps>(
               ) : (
                 <div className="layered-row layered-row--static">
                   {content}
-                  <span className="sr-only">{`, ${counts}${hidden ? ', hidden' : ''}`}</span>
+                  <span className="layered-visually-hidden">{`, ${counts}${hidden ? ', hidden' : ''}`}</span>
                 </div>
               )}
               {hideable && (

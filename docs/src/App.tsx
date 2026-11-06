@@ -17,6 +17,12 @@ import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, Rela
 import { GraphNodeShowcase, GraphCanvasShowcase, GraphInspectorShowcase, GraphEdgeInspectorShowcase, TopologyNodeShowcase, GraphEdgeShowcase } from './showcases/GraphShowcase'
 import { GraphLayoutsShowcase } from './showcases/GraphLayoutsShowcase'
 import { LayeredGraphsShowcase } from './showcases/LayeredGraphsShowcase'
+import { LayerStackShowcase } from './showcases/layered/LayerStackShowcase'
+import { LayerLanesShowcase } from './showcases/layered/LayerLanesShowcase'
+import { HivePlotShowcase } from './showcases/layered/HivePlotShowcase'
+import { AdjacencyMatrixShowcase } from './showcases/layered/AdjacencyMatrixShowcase'
+import { LayeredControlsShowcase } from './showcases/layered/LayeredControlsShowcase'
+import { ReachInspectorShowcase } from './showcases/layered/ReachInspectorShowcase'
 import { FilterDropdownShowcase } from './showcases/FilterDropdownShowcase'
 import { InspectorPanelShowcase } from './showcases/InspectorPanelShowcase'
 import { QuickAccessTileShowcase } from './showcases/QuickAccessTileShowcase'
@@ -179,6 +185,12 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   // Graph
   'graph-layouts': GraphLayoutsShowcase,
   'layered-graphs': LayeredGraphsShowcase,
+  'layer-stack': LayerStackShowcase,
+  'layer-lanes': LayerLanesShowcase,
+  'hive-plot': HivePlotShowcase,
+  'adjacency-matrix': AdjacencyMatrixShowcase,
+  'layered-controls': LayeredControlsShowcase,
+  'reach-inspector': ReachInspectorShowcase,
   'graph-edge': GraphEdgeShowcase,
   'graph-node': GraphNodeShowcase,
   'graph-canvas': GraphCanvasShowcase,
@@ -337,13 +349,24 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Graph',
     items: [
       { id: 'graph-layouts', label: 'Layouts', icon: 'graph' },
-      { id: 'layered-graphs', label: 'Layered graphs', icon: 'layout' },
       { id: 'graph-edge', label: 'GraphEdge', icon: 'arrowRight' },
       { id: 'graph-node', label: 'GraphNode', icon: 'component' },
       { id: 'graph-canvas', label: 'GraphCanvas', icon: 'schema' },
       { id: 'graph-inspector', label: 'GraphInspector', icon: 'info' },
       { id: 'graph-edge-inspector', label: 'GraphEdgeInspector', icon: 'info' },
       { id: 'topology-node', label: 'TopologyNode', icon: 'data' },
+    ],
+  },
+  {
+    title: 'Layered graphs',
+    items: [
+      { id: 'layered-graphs', label: 'Overview & explorer', icon: 'layout' },
+      { id: 'layer-stack', label: 'LayerStack', icon: 'orbit' },
+      { id: 'layer-lanes', label: 'Layer lanes', icon: 'menu' },
+      { id: 'adjacency-matrix', label: 'AdjacencyMatrix', icon: 'table' },
+      { id: 'hive-plot', label: 'HivePlot', icon: 'share' },
+      { id: 'layered-controls', label: 'Layered controls', icon: 'settings' },
+      { id: 'reach-inspector', label: 'ReachInspector', icon: 'info' },
     ],
   },
   {

@@ -9,7 +9,6 @@ import {
   LayerPairList,
   LayerStack,
   LayeredGraphContext,
-  LayeredGraphExplorer,
   LinkCategoryFilter,
   PlaneLayoutControl,
   PredicateLabelControl,
@@ -29,6 +28,7 @@ import {
   heimdallUxNodes,
 } from '@/test-pages/fixtures/layeredGraphFixtures'
 import { PageHeader, ShowcaseSection, DemoCard } from '../components/ShowcaseSection'
+import { ExplorerPlayground } from './layered/ExplorerPlayground'
 
 const fg1 = 'rgb(var(--canvas-fg-1, 17 24 39))'
 const fg2 = 'rgb(var(--canvas-fg-2, 75 85 99))'
@@ -61,16 +61,6 @@ const DATASETS = {
 } as const
 
 // Shared by both datasets: the fixtures carry a `layer` attribute and an edge `category`.
-const EXPLORER_GRAPH_OPTIONS = { defaultSelectedId: 'application.applicationcomponent', defaultFollow: 1, layout: { layoutCategories: ['structural'] } }
-
-const EXPLORER_CODE = `<LayeredGraphExplorer
-  nodes={nodes}
-  edges={edges}
-  layering={layering}
-  views={['stack', 'lanes', 'matrix', 'hive']}
-  controls={{ camera: true, bridgeNodes: false }}
-/>`
-
 const LAYERING: BuildLayeredIndexOptions = {
   layerBy: 'layer',
   layers: drLayers,
@@ -168,16 +158,7 @@ export function LayeredGraphsShowcase() {
         label="LayeredGraphExplorer"
         description="The ready-made composite: view switcher, follow and camera controls, the scene, the link bar, the reach inspector and a status line, over one shared state. Selection, follow and filters carry across view switches; the stack keeps its camera. The controls prop turns each piece of chrome on or off."
       >
-        <DemoCard>
-          <LayeredGraphExplorer
-            nodes={drSpecNodes}
-            edges={drSpecEdges}
-            layering={LAYERING}
-            graphOptions={EXPLORER_GRAPH_OPTIONS}
-            statusLabel="dr spec meta-model"
-          />
-        </DemoCard>
-        <Code>{EXPLORER_CODE}</Code>
+        <ExplorerPlayground />
       </ShowcaseSection>
 
       <ShowcaseSection label="Shared state" description="One useLayeredGraph result in a LayeredGraphContext drives every view and control on this page.">
