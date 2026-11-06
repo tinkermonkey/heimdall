@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { orthogonalLayout } from '../orthogonalLayout'
+import { orthogonalLayout, rowPairCrossings } from '../orthogonalLayout'
 import type { LayoutNode, LayoutEdge } from '../graphLayout'
 import type { Point } from '../graph'
 
@@ -229,5 +229,70 @@ describe('orthogonalLayout', () => {
     expect(orthogonalLayout([], []).routes).toEqual([])
     const one = orthogonalLayout(nodesOf(['solo']), [])
     expect(one.positions.get('solo')).toEqual({ x: 0, y: 0 })
+  })
+})
+
+describe('orthogonalLayout golden output', () => {
+  // FNV-1a over the serialized positions and routes: any change to placement or routing changes
+  // it. The values are main's output before the speed-ups (80ba9ed), which these must keep; update
+  // them only for an intended layout change, and say so in the commit.
+  const fingerprint = (r: { positions: Map<string, Point>; routes: Point[][] }) => {
+    const s = JSON.stringify([[...r.positions], r.routes])
+    let h = 0x811c9dc5
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0 }
+    return h.toString(16).padStart(8, '0')
+  }
+  it('keeps the tree layout', () => {
+    const { nodes, edges } = tree()
+    const r = orthogonalLayout(nodes, edges)
+    expect(fingerprint(r)).toBe('5fc510dc')
+    expect([r.stats.rows, r.stats.cols]).toEqual([4, 5])
+  })
+  it('keeps a layout whose rows are longer than 8 (the insertion search changes this one)', () => {
+    const top = Array.from({ length: 13 }, (_, i) => `t${i}`), bot = Array.from({ length: 11 }, (_, i) => `b${i}`)
+    const links = [[0, 7], [0, 5], [1, 3], [1, 9], [2, 0], [2, 10], [3, 6], [4, 9], [5, 4], [5, 0], [6, 10], [6, 5], [7, 1], [7, 9], [8, 7], [8, 0], [9, 0], [10, 5], [10, 3], [11, 5], [11, 4], [12, 10]]
+    const edges: LayoutEdge[] = [...top.map(t => ({ source: 'hub', target: t })), ...links.map(([a, b]) => ({ source: top[a], target: bot[b] }))]
+    const r = orthogonalLayout(nodesOf(['hub', ...top, ...bot]), edges)
+    expect(fingerprint(r)).toBe('8ba7cb03')
+    expect([r.stats.rows, r.stats.cols]).toEqual([6, 9])
+  })
+  it('keeps a layout with more than 64 root candidates (the cap decides which are ordered)', () => {
+    const ids = Array.from({ length: 82 }, (_, i) => `c${String(i).padStart(2, '0')}`)
+    const r = orthogonalLayout(nodesOf(ids), [...chain(ids), { source: 'c47', target: 'c33' }])
+    expect(fingerprint(r)).toBe('1a285006')
+    expect([r.stats.rows, r.stats.cols]).toEqual([42, 2])
+  })
+})
+
+describe('rowPairCrossings', () => {
+  // The pairwise count it replaced: every pair of row-to-row edges, strict inversion only.
+  const pairwise = (links: Array<[number, number]>, pos: Int32Array): number => {
+    let total = 0
+    for (let i = 0; i < links.length; i++) for (let j = i + 1; j < links.length; j++) {
+      if ((pos[links[i][0]] - pos[links[j][0]]) * (pos[links[i][1]] - pos[links[j][1]]) < 0) total++
+    }
+    return total
+  }
+  it('matches the pairwise count on random rows, shared ends included', () => {
+    let seed = 11
+    const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648 }
+    for (let t = 0; t < 300; t++) {
+      const nu = 1 + Math.floor(rnd() * 12), nl = 1 + Math.floor(rnd() * 12)
+      // Upper nodes are 0..nu-1, lower nodes nu..nu+nl-1; both rows in a random order.
+      const shuffle = (a: number[]) => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]] } return a }
+      const upper = shuffle([...Array(nu).keys()])
+      const lower = shuffle([...Array(nl).keys()].map(k => nu + k))
+      const pos = new Int32Array(nu + nl)
+      upper.forEach((g, i) => (pos[g] = i)); lower.forEach((g, i) => (pos[g] = i))
+      const links: Array<[number, number]> = []
+      const downFirst = new Int32Array(nu + nl), downCount = new Int32Array(nu + nl), flat: number[] = []
+      for (let u = 0; u < nu; u++) {
+        downFirst[u] = flat.length
+        for (const v of lower) if (rnd() < 0.35) { flat.push(v); links.push([u, v]) }
+        downCount[u] = flat.length - downFirst[u]
+      }
+      const bit = new Int32Array(nl + 1).fill(7) // stale scratch must not leak into the count
+      expect(rowPairCrossings(upper, downFirst, downCount, Int32Array.from(flat), pos, nl, bit)).toBe(pairwise(links, pos))
+    }
   })
 })
