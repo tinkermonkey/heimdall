@@ -236,6 +236,38 @@
     --dom-climate: 245 158 11;          /* #f59e0b — amber */
     --dom-software: 129 140 248;        /* #818cf8 — indigo */
 
+    /* ---- Layered graph views (stack, lanes, matrix, hive) ----
+       Reach ramp: direct links, then followed hops, each lighter. */
+    --graph-hop-1: 180 83 9;            /* #b45309 — amber-700 */
+    --graph-hop-2: 217 119 6;           /* #d97706 — amber-600 */
+    --graph-hop-3: 245 158 11;          /* #f59e0b — amber-500 */
+    /* Link colors by category position (dashes are set in code: solid, dashed, dotted, sparse,
+       dash-dot, short dash). */
+    --graph-link-1: 100 116 139;        /* #64748b — slate-500 */
+    --graph-link-2: 219 39 119;         /* #db2777 — pink-600 */
+    --graph-link-3: 234 88 12;          /* #ea580c — orange-600 */
+    --graph-link-4: 148 163 184;        /* #94a3b8 — slate-400 */
+    --graph-link-5: 37 99 235;          /* #2563eb — blue-600 */
+    --graph-link-6: 147 51 234;         /* #9333ea — purple-600 */
+    /* Layer palette, used by rank when a layer sets no color. Design-system hues (emerald,
+       indigo, cyan, rose, violet, teal) in two shades; the second six are the deeper semantic
+       foreground shades, so neighbouring ranks differ in lightness as well as hue. Amber stays
+       reserved for selection. */
+    --graph-layer-1: 5 150 105;         /* #059669 — emerald-600 */
+    --graph-layer-2: 79 70 229;         /* #4f46e5 — indigo-600 */
+    --graph-layer-3: 8 145 178;         /* #0891b2 — cyan-600 */
+    --graph-layer-4: 225 29 72;         /* #e11d48 — rose-600 */
+    --graph-layer-5: 124 58 237;        /* #7c3aed — violet-600 */
+    --graph-layer-6: 13 148 136;        /* #0d9488 — teal-600 */
+    --graph-layer-7: 6 95 70;           /* #065f46 — emerald-800 (semantic-emerald-fg) */
+    --graph-layer-8: 55 48 163;         /* #3730a3 — indigo-800 */
+    --graph-layer-9: 14 116 144;        /* #0e7490 — cyan-700 (semantic-cyan-fg) */
+    --graph-layer-10: 159 18 57;        /* #9f1239 — rose-800 (semantic-rose-fg) */
+    --graph-layer-11: 91 33 182;        /* #5b21b6 — violet-800 (semantic-violet-fg) */
+    --graph-layer-12: 71 85 105;        /* #475569 — slate-600 */
+    --graph-pill-bg: rgba(255, 255, 255, 0.9);
+    --graph-plane-fill-alpha: 0.06;
+
     /* ---- Focus Ring (amber accent — amber-400 to match --accent-primary) ---- */
     --focus-ring: 0 0 0 3px rgba(251, 191, 36, 0.18);
   }
@@ -254,6 +286,31 @@
     --canvas-border: 36 55 99;      /* #243763 */
     --canvas-border-2: 42 58 92;    /* #2a3a5c — secondary border */
     --canvas-border-strong: 53 73 115; /* #354973 */
+
+    /* ---- Layered graph views (dark canvas: lighter as hops deepen) ---- */
+    --graph-hop-1: 251 191 36;          /* #fbbf24 — amber-400 */
+    --graph-hop-2: 253 230 138;         /* #fde68a — amber-200 */
+    --graph-hop-3: 254 243 199;         /* #fef3c7 — amber-100 */
+    --graph-link-1: 203 213 225;        /* #cbd5e1 — slate-300 */
+    --graph-link-2: 244 114 182;        /* #f472b6 — pink-400 */
+    --graph-link-3: 253 186 116;        /* #fdba74 — orange-300 */
+    --graph-link-4: 100 116 139;        /* #64748b — slate-500 */
+    --graph-link-5: 147 197 253;        /* #93c5fd — blue-300 */
+    --graph-link-6: 216 180 254;        /* #d8b4fe — purple-300 */
+    --graph-layer-1: 16 185 129;        /* #10b981 — emerald-500 (dom-life) */
+    --graph-layer-2: 129 140 248;       /* #818cf8 — indigo-400 (dom-software) */
+    --graph-layer-3: 34 211 238;        /* #22d3ee — cyan-400 (status-cyan) */
+    --graph-layer-4: 251 113 133;       /* #fb7185 — rose-400 */
+    --graph-layer-5: 167 139 250;       /* #a78bfa — violet-400 */
+    --graph-layer-6: 14 180 160;        /* #0eb4a0 — status-cyan-deep (teal) */
+    --graph-layer-7: 110 231 183;       /* #6ee7b7 — emerald-300 */
+    --graph-layer-8: 165 180 252;       /* #a5b4fc — indigo-300 */
+    --graph-layer-9: 165 243 252;       /* #a5f3fc — cyan-200 */
+    --graph-layer-10: 253 164 175;      /* #fda4af — rose-300 */
+    --graph-layer-11: 196 181 253;      /* #c4b5fd — violet-300 */
+    --graph-layer-12: 148 163 184;      /* #94a3b8 — slate-400 */
+    --graph-pill-bg: rgba(11, 20, 38, 0.86);
+    --graph-plane-fill-alpha: 0.05;
   }
 
   /* ---- Base Element Styles ---- */

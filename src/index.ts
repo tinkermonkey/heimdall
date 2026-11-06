@@ -143,6 +143,7 @@ export {
   type GraphNodeHierarchyMeta,
   type EdgeGeometry,
   type GraphLayoutState,
+  type GraphAttributeValue,
 } from './components/GraphCanvas'
 export {
   type GraphCanvasContextValue,
@@ -158,6 +159,7 @@ export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
 export { GraphEdgeShape, type GraphEdgeShapeProps } from './components/GraphEdgeShape'
 export { GraphToolbar, type GraphToolbarProps, type GraphToolbarPosition } from './components/GraphToolbar'
 export { GraphCollapseControl, type GraphCollapseControlProps } from './components/GraphCollapseControl'
+export { AdjacencyMatrix, type AdjacencyMatrixProps } from './components/AdjacencyMatrix'
 export { DetailDrawer, type DetailDrawerProps } from './components/DetailDrawer'
 export {
   forceLayout,
@@ -204,6 +206,72 @@ export { HierarchyRow, type HierarchyRowProps, type HierarchyKind, type Hierarch
 export { HierarchyTree, type HierarchyTreeProps } from './components/HierarchyTree'
 export { LineageRail, type LineageRailProps, type LineageNode } from './components/LineageRail'
 export { usePanZoom, type UsePanZoomOptions, type UsePanZoomReturn } from './hooks/usePanZoom'
+// Layered graphs: the shared framework behind the layered views (layer stack, lanes, matrix, hive)
+export {
+  useLayeredGraph,
+  useLayeredGraphContext,
+  LayeredGraphContext,
+  type UseLayeredGraphOptions,
+  type LayeredGraphState,
+} from './hooks/useLayeredGraph'
+export {
+  buildLayeredIndex,
+  readLayerValues,
+  layerPairKey,
+  layerPaletteColor,
+  LAYER_PALETTE_SIZE,
+  assignPredicateCodes,
+  DEFAULT_LINK_FILTERS,
+  isNodeVisible,
+  isLinkVisible,
+  isLinkTraversable,
+  visiblePredicates,
+  layerPairNodeIds,
+  computeReach,
+  reachPath,
+  linkEmphasis,
+  nodeEmphasis,
+  linkCategoryStyle,
+  linkCategoryStyleAt,
+  LINK_CATEGORY_PALETTE_SIZE,
+  HOP_COLORS,
+  layoutLayers,
+  mixLayerPositions,
+  orderWithinLayers,
+  orderAcrossLayers,
+  rankWithinLayers,
+  linkPredicateLabel,
+  arrowHeadPoints,
+  type LayerDef,
+  type LayerAccessor,
+  type MultiValuePolicy,
+  type MissingValuePolicy,
+  type LinkCategoryInfo,
+  type PredicateCatalog,
+  type BuildLayeredIndexOptions,
+  type IndexedLayer,
+  type IndexedNode,
+  type IndexedLink,
+  type IndexedAdjacency,
+  type LayerPairSummary,
+  type LayeredIndex,
+  type LayeredIndexIssue,
+  type LayeredIndexIssueKind,
+  type LinkFilterState,
+  type ReachOptions,
+  type ReachResult,
+  type ReachVia,
+  type PredicateLabelMode,
+  type PlaneLayoutMode,
+  type LayeredGraphSnapshot,
+  type EmphasisContext,
+  type LinkEmphasis,
+  type NodeEmphasis,
+  type LinkCategoryStyle,
+  type LayerLayoutOptions,
+  type LayerLayoutResult,
+  type NodeOrder,
+} from './utils/layered'
 export { useMediaQuery } from './hooks/useMediaQuery'
 export { AssetCard, type AssetCardProps, type AssetThumb } from './components/AssetCard'
 export { AssetGrid, type AssetGridProps } from './components/AssetGrid'

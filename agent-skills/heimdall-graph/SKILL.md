@@ -1,6 +1,6 @@
 ---
 name: heimdall-graph
-description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, plus useGraphCanvas, usePanZoom, the headless layout engines and the edge geometry utilities
+description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, LayeredGraphContext, AdjacencyMatrix, plus useGraphCanvas, usePanZoom, useLayeredGraph, the headless layout engines, the edge geometry utilities and the layered graph framework
 ---
 
 Import all components from `@tinkermonkey/heimdall-ui`. Import the CSS once at your app entry point:
@@ -99,6 +99,7 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `domainColor` | `string` | Domain color key (`'life'`, `'climate'`, `'software'`, `'default'`) |
 | `x`, `y` | `number` | Required for `layout="manual"`. Pins the node under every other layout |
 | `weight` | `number` | `layout="galaxy"` only: body area grows with weight. Ignored elsewhere |
+| `attributes` | `Record<string, GraphAttributeValue \| GraphAttributeValue[]>` | Free-form data. GraphCanvas ignores it; the layered graph framework reads one attribute as the node's layer (`layerBy`) and `description` as inspector text |
 
 `GraphEdgeData`:
 
@@ -113,6 +114,7 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `strokeDash` | `number \| [number, number]` | `4` → `"4 4"`, `[6, 2]` → `"6 2"`. Overrides variant dashing |
 | `sourceAnchor`, `targetAnchor` | `'auto' \| 'left' \| 'right' \| 'top' \| 'bottom'` | Pin an endpoint to a side. Any fixed side switches to a cubic curve |
 | `curvature` | `number` | Overrides the 0.22 default (and `structuralEdgeCurvature`) |
+| `attributes` | `Record<string, GraphAttributeValue \| GraphAttributeValue[]>` | Free-form data. GraphCanvas ignores it; the layered graph framework can read a link category from it (`linkCategoryBy`) |
 
 `EdgeGeometry` (second argument of `renderEdge`): `{ path, mid, labelPos, angle, selected, hovered }`. `path` is the SVG `d` string actually drawn (an orthogonal polyline under `layout="orthogonal"`), `mid` the path midpoint, `labelPos` the collision-cleared label center, `angle` the tangent at the midpoint in radians.
 
@@ -1387,3 +1389,147 @@ const boxes = nodes.map(n => ({ ...positions.get(n.id)!, width: w, height: h }))
   </g>
 </svg>
 ```
+
+## Layered graph framework
+
+The shared layer behind the layered views (3D layer stack, lanes, block matrix, hive). It takes the same `GraphNodeData` / `GraphEdgeData` as GraphCanvas and turns one node attribute into layers. Use it to drive the layered views or to build your own view or controls on the same state. Nothing in it is specific to any data source.
+
+```tsx
+import {
+  useLayeredGraph,
+  LayeredGraphContext,
+  useLayeredGraphContext,
+  buildLayeredIndex,
+  computeReach,
+  linkEmphasis,
+} from '@tinkermonkey/heimdall-ui'
+
+// Memoize `layering`: a new object rebuilds the index.
+const layering = useMemo(() => ({
+  layerBy: 'tier',                     // attributes.tier, or 'kind' / 'domainColor', or (node) => value
+  multiValue: 'first',                 // 'first' | 'last' | 'exclude' | 'all' (one instance per value)
+  missingValue: 'exclude',             // or 'layer': collect them on an "Unassigned" layer
+  layers: [{ id: 'business', label: 'Business' }, { id: 'application' }],  // order, labels, colors
+  linkCategoryBy: 'category',          // edge.attributes.category; falls back to `catalog`, then 'other'
+  categoryOrder: ['structural', 'behavioral'],
+}), [])
+
+const graph = useLayeredGraph({ nodes, edges, layering, defaultFollow: 1 })
+
+<LayeredGraphContext.Provider value={graph}>
+  {/* views and controls read it with useLayeredGraphContext() */}
+</LayeredGraphContext.Provider>
+```
+
+### Vocabulary
+
+- **Layer**: a distinct value of the `layerBy` attribute, as a string. `layers` sets order, label and color for known values; unlisted values follow in first-appearance order. Colors default to the `--graph-layer-1…12` palette by rank (`layerPaletteColor`, `LAYER_PALETTE_SIZE`).
+- **Link**: every edge between the same two node instances in the same direction, bundled. An edge's `label` is its predicate, read source to target. A→B and B→A stay separate links.
+- **Cross-layer link**: ends on different layers. `pairKey` names the unordered layer pair (`layerPairKey`).
+- **Reach**: what a selection lights up. Hop 1 is every link of the selected node; with `follow` > 0 it continues from nodes reached over cross-layer links, along cross-layer links, into any layer but the selected node's own ("away from the clicked layer").
+
+### useLayeredGraph
+
+`useLayeredGraph(options): LayeredGraphState`. Every piece of state is controlled when its prop is set (with an `on…Change` callback) and otherwise held by the hook, seeded from its `default…` prop.
+
+| Option | Type | Description |
+| ------ | ---- | ----------- |
+| `nodes`, `edges` | `GraphNodeData[]`, `GraphEdgeData[]` | Same data as GraphCanvas |
+| `layering` | `BuildLayeredIndexOptions` | `layerBy` (required), `multiValue`, `missingValue`, `missingLayerLabel`, `layers`, `linkCategoryBy`, `catalog`, `fallbackCategory`, `categoryOrder`, `maxLabelLength` |
+| `layout` | `LayerLayoutOptions \| false` | In-layer layout options; `false` skips layout |
+| `selectedId` / `defaultSelectedId` / `onSelect` | `string \| null` | Selected node instance |
+| `follow` / `defaultFollow` / `onFollowChange` | `number` | Followed hops past the direct links. Default 1 |
+| `followCategories` | `string[] \| null` | Follow only links in these categories |
+| `filters` / `defaultFilters` / `onFiltersChange` | `LinkFilterState` | Hidden layers, categories, predicates; intra-layer links; layer pair |
+| `predicateLabels` / `defaultPredicateLabels` / `onPredicateLabelsChange` | `'off' \| 'highlighted' \| 'all'` | Default `'highlighted'` |
+| `focusedLayerId` / `defaultFocusedLayerId` / `onFocusLayer` | `string \| null` | Emphasized layer |
+| `planeLayout` / `defaultPlaneLayout` / `onPlaneLayoutChange` | `'independent' \| 'coupled'` | Which in-layer layout the views show |
+| `linkStyles` | `Record<string, LinkCategoryStyle>` | Per-category color and dash overrides. Memoize it: a new object recomputes every link's emphasis |
+
+A selection on a hidden layer reads as no selection, and hiding the selected node's layer clears it. Filter actions compose when called together in one handler. It returns `index`, `layout`, `reach`, `hoverReach` (direct links of the hovered node), `pairNodeIds`, the current state values, actions (`select`, `hover`, `setFollow`, `setFilters`, `toggleCategory`, `togglePredicate`, `toggleLayer`, `setShowIntra`, `setLayerPair`, `setPredicateLabels`, `focusLayer`, `setPlaneLayout`), `linkEmphasis(link)` and `nodeEmphasis(node)` bound to the current state, and a serializable `snapshot` with `restore(snapshot)`.
+
+## LayeredGraphContext
+
+A React context that shares one `useLayeredGraph` result with every layered view and control below it, so they show the same selection, filters and follow depth.
+
+```tsx
+const graph = useLayeredGraph({ nodes, edges, layering })
+
+<LayeredGraphContext.Provider value={graph}>
+  <MyFollowControl />
+</LayeredGraphContext.Provider>
+
+function MyFollowControl() {
+  const { follow, setFollow } = useLayeredGraphContext() // throws outside a provider
+  return <SegmentedControl value={follow} onChange={(v) => setFollow(Number(v))} options={[{ value: 0, label: 'Direct' }, { value: 1, label: '+1 layer' }]} />
+}
+```
+
+| Prop | Type | Description |
+| ---- | ---- | ----------- |
+| `value` | `LayeredGraphState` | The `useLayeredGraph` result to share |
+
+### Headless functions
+
+| Function | Signature | Returns |
+| -------- | --------- | ------- |
+| `buildLayeredIndex` | `(nodes, edges, options: BuildLayeredIndexOptions)` | `LayeredIndex`: layers, node instances, bundled links, lookups, `layerPairs`, `categoryCounts`, `categories`, `predicateCodes`, `issues` |
+| `readLayerValues` | `(node, layerBy)` | The node's layer values as strings |
+| `computeReach` | `(index, originId, { follow?, followCategories?, filters? })` | `ReachResult`: `hopOf`, `linkHop`, `via`, `maxHop` |
+| `reachPath` | `(reach, nodeId)` | `{ nodeIds, linkIds }` from the origin to the node |
+| `isLinkVisible` | `(link, index, filters)` | Whether a view draws the link |
+| `isLinkTraversable` | `(link, index, filters)` | Whether reach may cross it (ignores `showIntra` and `layerPair`) |
+| `isNodeVisible`, `visiblePredicates`, `layerPairNodeIds` | | Filter helpers. `DEFAULT_LINK_FILTERS` hides nothing |
+| `linkEmphasis` | `(link, ctx: EmphasisContext)` | `{ visible, hop, highlighted, color, dash, width, opacity, z, arrow, label }` |
+| `nodeEmphasis` | `(node, ctx)` | `{ hop, selected, followed, opacity, tint }` |
+| `linkCategoryStyle`, `linkCategoryStyleAt` | `(category, ctx)`, `(i)` | Category color token `--graph-link-<n>` and dash. `LINK_CATEGORY_PALETTE_SIZE` = 6. `HOP_COLORS` holds the reach ramp |
+| `layoutLayers` | `(index, { engine?, layoutCategories?, nodeSize?, organic? })` | `{ independent, coupled, scale }`: positions in [-1, 1] per layer (independent) and with cross-layer links pulling linked nodes into line (coupled) |
+| `mixLayerPositions` | `(layout, mix: 0..1)` | Positions tweened between independent and coupled |
+| `orderWithinLayers`, `orderAcrossLayers` | `(index, layout, order?: 'coupled-x' \| 'degree' \| 'cross-degree' \| 'label' \| comparator)` | Node order per layer (lanes) or across layers (matrix rows) |
+| `rankWithinLayers` | `(index, by?)` | Position along a layer axis in [0, 1) (hive); busiest last by default |
+| `assignPredicateCodes` | `(predicates, catalog?)` | Unique two-letter codes for matrix cells |
+| `linkPredicateLabel` | `(link, catalog, predicates?)` | Predicates joined with ` · ` |
+| `arrowHeadPoints` | `(tip, ux, uy, length?, halfWidth?)` | SVG `points` for an arrowhead pointing along (ux, uy) |
+
+Colors are tokens with light and dark canvas values: `--graph-hop-1…3` (reach ramp), `--graph-link-1…6` (categories by position), `--graph-layer-1…12` (layers by rank), `--graph-pill-bg`, `--graph-plane-fill-alpha`. Use them as `rgb(var(--graph-hop-1))`.
+
+## AdjacencyMatrix
+
+A directed block adjacency matrix of a layered graph. There is one row and one column per node, grouped by layer, and one cell per link (row = source, column = target). Diagonal blocks hold links within a layer; off-diagonal blocks hold links between two layers, with a count in the corner. Every link is visible and nothing crosses, so it stays readable on dense graphs where node-link drawings tangle.
+
+- **Cell colours:** each cell takes its link's category colour. Around the selection, cells take the amber reach ramp instead, including followed hops.
+- **Codes:** cells show two-letter predicate codes per `predicateLabels`, with a legend of the codes in view.
+- **Selection:** a row header (a focusable button, Enter or Space) or the matching column header selects a node; selecting it again clears it. Clicking a cell selects the link's source, or calls `onLinkSelect`.
+
+```tsx
+import { AdjacencyMatrix, useLayeredGraph, LayeredGraphContext } from '@tinkermonkey/heimdall-ui'
+
+// Standalone: the matrix builds its own layered-graph state.
+const layering = useMemo(() => ({ layerBy: 'tier', linkCategoryBy: 'category' }), [])
+<AdjacencyMatrix nodes={nodes} edges={edges} layering={layering} />
+
+// Shared with other layered views and controls:
+const graph = useLayeredGraph({ nodes, edges, layering })
+<LayeredGraphContext.Provider value={graph}>
+  <AdjacencyMatrix order="degree" />
+</LayeredGraphContext.Provider>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `graph` | `LayeredGraphState` | context | State from `useLayeredGraph`. Unset: the enclosing `LayeredGraphContext`, else its own from `nodes`/`edges`/`layering` |
+| `nodes` | `GraphNodeData[]` | — | Standalone nodes; ignored with `graph` or a context |
+| `edges` | `GraphEdgeData[]` | — | Standalone edges; ignored with `graph` or a context |
+| `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
+| `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode |
+| `order` | `NodeOrder` | `'coupled-x'` | Row and column order within each layer (`'degree'` when there is no layout) |
+| `cellSize` | `number \| 'auto'` | `'auto'` | Cell size in px; `auto` fits about 820px, clamped to 10–18 |
+| `labelWidth` | `number` | `210` | Row-label column width in px |
+| `showBlockCounts` | `boolean` | `true` | Link count in each cross-layer block |
+| `showCodeLegend` | `boolean` | `true` | Legend of the predicate codes shown |
+| `onLinkSelect` | `(link: IndexedLink) => void` | — | Cell click handler. Unset: selects the link's source |
+
+Large graphs scroll inside the component (it renders at natural size, so cells stay crisp). There is no virtualization yet: past about 150 nodes, prefer filtering layers out.
+
