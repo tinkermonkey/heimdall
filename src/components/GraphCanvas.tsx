@@ -2941,8 +2941,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           })),
         { obstacles: nodeRects, size: defaultPillSize },
       );
-      return { items, byId, pills };
+      const pillById = new Map(pills.map((p) => [p.id, p]));
+      return { items, byId, pills, pillById };
     }, [laneData, laneLayout, lanesIndex, lanesLinkEmphasis, nodeRects, visibleNodes, getNodeRect]);
+    // Edge data by id for the lane link loop (one lookup per link instead of a scan).
+    const laneEdgeById = useMemo(
+      () => (laneLinks ? new Map(edges.map((e) => [e.id, e])) : null),
+      [laneLinks, edges],
+    );
 
     // Batch-route all navigation edges together with overlapping-segment nudging
     // Orthogonal routes to render: none unless layout="orthogonal", and never for an edge whose
@@ -3526,7 +3532,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               {laneLinks && (
                 <g className="graph-edges graph-lane-links">
                   {laneLinks.items.map(({ link, em, curve }) => {
-                    const edgeData = edges.find((e) => e.id === link.id);
+                    const edgeData = laneEdgeById?.get(link.id);
                     if (!edgeData) return null;
                     const selected = link.id === selectedEdgeId;
                     const hovered = link.id === hoveredEdgeId;
@@ -3569,7 +3575,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                           safeRenderEdgeCallback(renderEdge, edgeData, {
                             path: curve.d,
                             mid: curve.pointAt(0.5),
-                            labelPos: laneLinks.pills.find((p) => p.id === link.id) ?? curve.pointAt(0.5),
+                            labelPos: laneLinks.pillById.get(link.id) ?? curve.pointAt(0.5),
                             angle: (Math.atan2(curve.tangentAt(0.5).y, curve.tangentAt(0.5).x) * 180) / Math.PI,
                             selected,
                             hovered,

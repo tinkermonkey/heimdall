@@ -386,6 +386,19 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
                 className={['hive-plot__link', clickable ? 'hive-plot__link--clickable' : ''].filter(Boolean).join(' ')}
                 data-link-id={link.id}
                 onClick={clickable ? () => (onLinkSelect ? onLinkSelect(link) : g.select(link.sourceId)) : undefined}
+                {...(onLinkSelect
+                  ? {
+                      role: 'button',
+                      tabIndex: 0,
+                      'aria-label': `${s.label} ${predicate} ${t.label}`,
+                      onKeyDown: (e: React.KeyboardEvent) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          onLinkSelect(link)
+                        }
+                      },
+                    }
+                  : {})}
               >
                 <title>{`${s.label} ${predicate} ${t.label}`}</title>
                 <path className="hive-plot__link-hit" d={curve.d} />

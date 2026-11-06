@@ -356,8 +356,9 @@ export const LayerList = React.forwardRef<HTMLDivElement, LayerListProps>(
                   {content}
                 </button>
               ) : (
-                <div className="layered-row layered-row--static" aria-label={`${layer.label} layer, ${counts}${hidden ? ', hidden' : ''}`}>
+                <div className="layered-row layered-row--static">
                   {content}
+                  <span className="sr-only">{`, ${counts}${hidden ? ', hidden' : ''}`}</span>
                 </div>
               )}
               {hideable && (

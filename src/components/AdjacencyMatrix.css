@@ -54,7 +54,7 @@
 
 /* The house focus ring (--focus-ring: 3px amber-400 at 18%), drawn as an SVG stroke since box-shadow doesn't apply to SVG. */
 .adjacency-matrix__header:focus-visible .adjacency-matrix__header-box {
-  stroke: rgba(251, 191, 36, 0.18);
+  stroke: rgb(var(--accent-primary) / 0.18);
 }
 
 .adjacency-matrix__header:focus-visible .adjacency-matrix__label {

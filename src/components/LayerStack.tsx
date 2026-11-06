@@ -319,6 +319,16 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       writeView(values)
       repaintNow()
     })
+    // Layer focus and layer gap run on their own tweens, which orbit and zoom never cancel: a drag
+    // part-way through a focus exit or a preset still lets the planes settle (and the gap report).
+    const focusTween = useTween<Record<string, number>>((values) => {
+      writeView(values)
+      repaintNow()
+    })
+    const gapTween = useTween<Record<string, number>>((values) => {
+      writeView(values)
+      repaintNow()
+    })
     const reducedMotion = cameraTween.reducedMotion
 
     /** Tweens the given view fields from where they are now (or jumps when `animate` is false). */
@@ -350,34 +360,48 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [setPreset])
 
     // ── layer focus ───────────────────────────────────────────────────────
-    const skipFocusTween = useRef(false)
+    /**
+     * Set by `applyPreset` when it exits focus itself (the commit count at that moment), so the
+     * focus effect skips its own exit tween. Dropped after the next commit whatever happened, so a
+     * controlled parent that ignores the exit does not leave it armed for a later focus change.
+     */
+    const skipFocusExit = useRef<number | null>(null)
+    const commits = useRef(0)
     const prevFocus = useRef(focusedLayerId)
     useEffect(() => {
       if (prevFocus.current === focusedLayerId) return
       prevFocus.current = focusedLayerId
-      if (skipFocusTween.current) {
-        skipFocusTween.current = false
-        return
-      }
+      const skip = skipFocusExit.current !== null && focusedLayerId == null
+      skipFocusExit.current = null
+      if (skip) return
+      const v = view.current!
       if (focusedLayerId != null && index.layerById.has(focusedLayerId)) {
-        const wasOpen = focusLayerRef.current !== null && view.current!.focusAmt > 0
-        if (wasOpen && focusLayerRef.current !== focusedLayerId) view.current!.focusAmt = 0
+        const wasOpen = focusLayerRef.current !== null && v.focusAmt > 0
+        if (wasOpen && focusLayerRef.current !== focusedLayerId) v.focusAmt = 0
         focusLayerRef.current = focusedLayerId
         clearPreset()
-        moveView({ focusAmt: 1, pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM }, { onDone: () => emitCamera('focus') })
+        focusTween.start({ focusAmt: v.focusAmt }, { focusAmt: 1 }, { duration: CAMERA_MS })
+        moveView({ pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM }, { onDone: () => emitCamera('focus') })
       } else {
         const s = CAMERA_PRESETS.stack
-        moveView(
-          { focusAmt: 0, pitch: s.pitch, zoom: s.zoom },
+        focusTween.start(
+          { focusAmt: v.focusAmt },
+          { focusAmt: 0 },
           {
+            duration: CAMERA_MS,
             onDone: () => {
               focusLayerRef.current = null
-              emitCamera('focus')
             },
           },
         )
+        moveView({ pitch: s.pitch, zoom: s.zoom }, { onDone: () => emitCamera('focus') })
       }
-    }, [focusedLayerId, index, moveView, clearPreset, emitCamera])
+    }, [focusedLayerId, index, moveView, focusTween, clearPreset, emitCamera])
+    // Declared after the focus effect, so it sees the commit after `applyPreset` once that has run.
+    useEffect(() => {
+      commits.current += 1
+      if (skipFocusExit.current !== null && commits.current > skipFocusExit.current) skipFocusExit.current = null
+    })
 
     // ── presets ───────────────────────────────────────────────────────────
     const applyPreset = useCallback(
@@ -386,23 +410,26 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         appliedPresetRef.current = name
         if (presetRef.current !== name) setPreset(name)
         if (focusedLayerId != null) {
-          skipFocusTween.current = true
+          skipFocusExit.current = commits.current
           g.focusLayer(null)
         }
         setTurntableRef.current(false)
-        moveView(
-          { yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: 0, gap: p.layerGap, focusAmt: 0 },
+        const v = view.current!
+        const duration = opts.animate === false ? 0 : CAMERA_MS
+        focusTween.start(
+          { focusAmt: v.focusAmt },
+          { focusAmt: 0 },
           {
-            animate: opts.animate,
+            duration,
             onDone: () => {
               focusLayerRef.current = null
-              onLayerGapChangeRef.current?.(p.layerGap)
-              emitCamera('preset')
             },
           },
         )
+        gapTween.start({ gap: v.gap }, { gap: p.layerGap }, { duration, onDone: () => onLayerGapChangeRef.current?.(p.layerGap) })
+        moveView({ yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: 0 }, { animate: opts.animate, onDone: () => emitCamera('preset') })
       },
-      [focusedLayerId, g, moveView, setPreset, emitCamera],
+      [focusedLayerId, g, moveView, focusTween, gapTween, setPreset, emitCamera],
     )
     // Only a change of the prop applies a preset (not a re-render with the same value).
     const prevPresetProp = useRef(cameraPreset)
@@ -427,9 +454,10 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [camKey])
     useEffect(() => {
       if (layerGap === undefined || Math.abs(layerGap - view.current!.gap) < 1e-6) return
+      gapTween.cancel()
       view.current!.gap = layerGap
       repaint()
-    }, [layerGap, repaint])
+    }, [layerGap, repaint, gapTween])
 
     // ── plane layout mix ──────────────────────────────────────────────────
     useEffect(() => {
@@ -517,6 +545,11 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       if (!d?.moved) return
       if (e.currentTarget.hasPointerCapture?.(d.pointerId)) e.currentTarget.releasePointerCapture(d.pointerId)
       dragging.current = false
+      // The click that follows this pointerup is swallowed; anything after it (a later keyboard
+      // activation included) goes through.
+      setTimeout(() => {
+        suppressClick.current = false
+      }, 0)
       repaint() // places predicate pills again
       emitCamera('orbit')
     }
@@ -687,9 +720,12 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     const segsSorted = depthSort(segs, (s) => s.key)
     const arrowsSorted = depthSort(arrows, (s) => s.key)
 
-    // Pills: skipped while dragging, placed again on release.
+    // Pills: skipped while the camera or the planes move (drag, turntable, any tween) and placed
+    // once motion settles; placing them is far too costly per frame, and they would jump.
+    const moving =
+      dragging.current || spinning || cameraTween.isActive() || focusTween.isActive() || gapTween.isActive() || mixTween.isActive()
     const pills = (() => {
-      if (dragging.current || candidates.length === 0) return []
+      if (moving || candidates.length === 0) return []
       const obstacles: LabelBox[] = visibleNodes.map((n) => {
         const p = P.get(n.id)!
         const r = radius(n)
@@ -752,16 +788,18 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         }
       }
     }
-    const toggleSelect = (id: string) => {
-      if (!can.select || suppressClick.current) return
+    /** The click that ends an orbit drag; keyboard activations (`detail` 0) are never swallowed. */
+    const isDragClick = (e: React.MouseEvent) => suppressClick.current && e.detail !== 0
+    const toggleSelect = (e: React.MouseEvent, id: string) => {
+      if (!can.select || isDragClick(e)) return
       g.select(selectedId === id ? null : id)
     }
-    const onBackgroundClick = () => {
-      if (!can.select || suppressClick.current) return
+    const onBackgroundClick = (e: React.MouseEvent) => {
+      if (!can.select || isDragClick(e)) return
       if (selectedId) g.select(null)
     }
-    const onTitleClick = (layerId: string) => {
-      if (!can.focusLayer || suppressClick.current) return
+    const onTitleClick = (e: React.MouseEvent, layerId: string) => {
+      if (!can.focusLayer || isDragClick(e)) return
       g.focusLayer(focusedLayerId === layerId ? null : layerId)
     }
 
@@ -880,7 +918,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
                 className="layer-stack__node"
                 data-node-id={n.id}
                 opacity={r2(em.opacity)}
-                onClick={() => toggleSelect(n.id)}
+                onClick={(e) => toggleSelect(e, n.id)}
                 onPointerEnter={() => can.hover && !drag.current?.moved && g.hover(n.id)}
                 onPointerLeave={() => can.hover && hoveredId === n.id && g.hover(null)}
               >
@@ -934,7 +972,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
                       opacity: r2(Math.max(em.opacity, 0.35)),
                       zIndex: zOf.get(n.id),
                     }}
-                    onClick={() => toggleSelect(n.id)}
+                    onClick={(e) => toggleSelect(e, n.id)}
                     onFocus={() => {
                       setRovingId(n.id)
                       setFocusedNodeId(n.id)
@@ -973,7 +1011,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
                 {...common}
                 aria-pressed={focused}
                 aria-label={`${focused ? 'Exit focus on' : 'Focus'} ${layer.label} layer: ${layer.nodeIds.length} nodes, ${layer.intraLinkCount} links`}
-                onClick={() => onTitleClick(layer.id)}
+                onClick={(e) => onTitleClick(e, layer.id)}
               >
                 {body}
               </button>

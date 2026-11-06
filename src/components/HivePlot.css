@@ -88,7 +88,7 @@
 
 /* The house focus ring (--focus-ring: 3px amber-400 at 18%), drawn as an SVG stroke since box-shadow doesn't apply to SVG. */
 .hive-plot__node:focus-visible .hive-plot__focus {
-  stroke: rgba(251, 191, 36, 0.18);
+  stroke: rgb(var(--accent-primary) / 0.18);
 }
 
 .hive-plot__label {
@@ -125,4 +125,13 @@
 .hive-plot__pill text {
   font-size: 9.5px;
   font-weight: 500;
+}
+
+/* Links are focusable when onLinkSelect is set: the house ring as a wide translucent stroke. */
+.hive-plot__link:focus {
+  outline: none;
+}
+
+.hive-plot__link:focus-visible .hive-plot__link-hit {
+  stroke: rgb(var(--accent-primary) / 0.18);
 }

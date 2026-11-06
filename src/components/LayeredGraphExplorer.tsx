@@ -393,8 +393,6 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
         turntable: stackProps?.turntable ?? stackProps?.defaultTurntable ?? false,
       }
     })
-    /** The camera the stack mounts with: the one it had when it was last switched away from. */
-    const [stackMount, setStackMount] = useState<StackMemory>(stackMem)
 
     const changeView = useCallback(
       (next: LayeredGraphView) => {
@@ -402,7 +400,6 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
         if (view === 'stack' && stackRef.current) {
           const remembered = { ...stackMem, camera: stackRef.current.getCamera() }
           setStackMem(remembered)
-          setStackMount(remembered)
         }
         if (viewProp === undefined) setInnerView(next)
         onViewChange?.(next)
@@ -448,8 +445,8 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           ref={stackRef}
           graph={g}
           cameraPreset={stackMem.preset}
-          defaultCamera={stackMount.camera}
-          defaultLayerGap={stackMount.gap}
+          defaultCamera={stackMem.camera}
+          defaultLayerGap={stackMem.gap}
           turntable={stackMem.turntable}
           onCameraPresetChange={(preset) => {
             setStackMem((m) => ({ ...m, preset }))
@@ -543,7 +540,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
               {(title != null || eyebrow != null) && (
                 <div className="layered-graph-explorer__heading">
                   {eyebrow != null && <span className="layered-control__eyebrow">{eyebrow}</span>}
-                  {title != null && <h1 className="layered-graph-explorer__title">{title}</h1>}
+                  {title != null && <h2 className="layered-graph-explorer__title">{title}</h2>}
                 </div>
               )}
               {headerControls && (
@@ -555,7 +552,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
             </header>
           )}
           <div className="layered-graph-explorer__body">
-            <main className="layered-graph-explorer__main">
+            <div className="layered-graph-explorer__main">
               {sceneTools && (
                 <div className="layered-graph-explorer__tools">
                   {show.camera && (
@@ -585,7 +582,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
                   <PredicateLabelControl />
                 </div>
               )}
-            </main>
+            </div>
             {showAside && (
               <aside className="layered-graph-explorer__aside" aria-label="Inspector">
                 {show.inspector ? <ReachInspector empty={lists ?? undefined} /> : lists}

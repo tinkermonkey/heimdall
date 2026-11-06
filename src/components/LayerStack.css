@@ -6,7 +6,8 @@
   color: rgb(var(--canvas-fg-1));
   font-family: var(--font-mono);
   user-select: none;
-  touch-action: none;
+  /* Vertical swipes scroll the page on touch; horizontal ones orbit. A mouse orbits both ways. */
+  touch-action: pan-y;
   outline: none;
 }
 

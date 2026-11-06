@@ -22,6 +22,32 @@ async function open(page: Page, query = '') {
 const selection = (page: Page) => page.getByTestId('layer-stack-selection')
 const cameraStatus = (page: Page) => page.getByTestId('layer-stack-camera')
 
+/** A short mouse orbit from the lower right of the stage (clear of nodes and titles). */
+async function orbit(page: Page) {
+  const box = (await page.getByTestId('layer-stack').boundingBox())!
+  await page.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.9)
+  await page.mouse.down()
+  await page.mouse.move(box.x + box.width * 0.6, box.y + box.height * 0.85, { steps: 8 })
+  await page.mouse.up()
+}
+
+/**
+ * Ratio of the screen gaps between the three plane centres, top pair over bottom pair: near 1 for
+ * evenly spaced planes, far from it while a layer focus pushes the planes apart.
+ */
+async function planeSpacing(page: Page): Promise<number> {
+  const ys = await page.evaluate(() =>
+    ['business', 'application', 'technology'].map((id) => {
+      const pts = document.querySelector(`.layer-stack__plane[data-layer-id="${id}"] polygon`)!.getAttribute('points')!
+      const nums = pts.trim().split(/[\s,]+/).map(Number)
+      let sum = 0
+      for (let i = 1; i < nums.length; i += 2) sum += nums[i]
+      return sum / (nums.length / 2)
+    }),
+  )
+  return (ys[1] - ys[0]) / (ys[2] - ys[1])
+}
+
 test.describe('LayerStack', () => {
   test('draws a plane per layer, a disc and a label button per node', async ({ page }) => {
     const errors = await open(page)
@@ -96,6 +122,36 @@ test.describe('LayerStack', () => {
     await expect(selection(page)).toContainText(`selected ${below}`)
     await page.keyboard.press('Escape')
     await expect(selection(page)).toHaveText('no selection')
+  })
+
+  test('a drag right after exiting focus still lets the planes close', async ({ page }) => {
+    await open(page)
+    const rest = await planeSpacing(page)
+    expect(rest).toBeGreaterThan(0.8)
+    expect(rest).toBeLessThan(1.25)
+    await page.getByRole('button', { name: /^Focus Technology layer/ }).click()
+    await expect(cameraStatus(page)).toContainText('focus · ')
+    expect(Math.abs((await planeSpacing(page)) - rest)).toBeGreaterThan(0.3)
+    await page.getByRole('button', { name: /^Exit focus on Technology layer/ }).click()
+    // Within the 750 ms exit tween: the orbit cancels the camera move, not the planes closing.
+    await orbit(page)
+    await expect(cameraStatus(page)).toContainText('orbit · ')
+    await expect(page.getByTestId('layer-stack-focus')).toHaveText('no focus')
+    await expect.poll(async () => Math.abs((await planeSpacing(page)) - rest), { timeout: 3000 }).toBeLessThan(0.12)
+  })
+
+  test('after an orbit, Enter on a node label still selects it', async ({ page }) => {
+    await open(page)
+    await orbit(page)
+    await expect(cameraStatus(page)).toContainText('orbit · ')
+    const first = page.locator('button.layer-stack__label[tabindex="0"]')
+    await first.focus()
+    const id = await first.getAttribute('data-node-id')
+    await page.keyboard.press('Enter')
+    await expect(selection(page)).toContainText(`selected ${id}`)
+    await page.getByRole('button', { name: /^Focus Technology layer/ }).focus()
+    await page.keyboard.press('Enter')
+    await expect(page.getByTestId('layer-stack-focus')).toHaveText('focus technology')
   })
 
   test.describe('visual', () => {
