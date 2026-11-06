@@ -105,7 +105,7 @@ export interface IndexedAdjacency {
 
 /** One node instance: a node, or one of its copies under `multiValue: 'all'`. */
 export interface IndexedNode {
-  /** Instance id: the node's id, or `<nodeId>@<layerId>` for a multi-layer copy. */
+  /** Instance id: the node's id, or `<nodeId>@<layerId>` for a multi-layer copy (suffixed `#2`, `#3`, … if that collides with another id). */
   id: string
   /** The `GraphNodeData.id` this instance came from. */
   nodeId: string
@@ -128,7 +128,7 @@ export interface IndexedNode {
 }
 
 export interface IndexedLink {
-  /** The first bundled edge's id, suffixed with `@<source>><target>` instance ids when an edge spans several instances. */
+  /** The first bundled edge's id, suffixed with `@<source>><target>` instance ids when an edge spans several instances (then `#2`, … on a collision). */
   id: string
   sourceId: string
   targetId: string

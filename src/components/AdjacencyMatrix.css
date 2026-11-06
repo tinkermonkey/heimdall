@@ -36,6 +36,8 @@
 }
 
 .adjacency-matrix__band--hover rect {
+  /* hover lifts a neutral step, never a color tint */
+  fill: rgb(var(--canvas-fg-1));
   fill-opacity: 0.05;
 }
 
@@ -44,9 +46,19 @@
   outline: none;
 }
 
+.adjacency-matrix__header-box {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 3;
+}
+
+/* The house focus ring (--focus-ring: 3px amber-400 at 18%), drawn as an SVG stroke since box-shadow doesn't apply to SVG. */
+.adjacency-matrix__header:focus-visible .adjacency-matrix__header-box {
+  stroke: rgba(251, 191, 36, 0.18);
+}
+
 .adjacency-matrix__header:focus-visible .adjacency-matrix__label {
-  text-decoration: underline;
-  fill: rgb(var(--accent-primary-deep));
+  fill: rgb(var(--canvas-fg-1));
 }
 
 .adjacency-matrix__label {
@@ -80,7 +92,13 @@
 }
 
 .adjacency-matrix__code {
+  /* A halo in the opposite tone keeps codes legible on every cell fill (light and dark category
+     colors, faded cells, the amber hop ramp). */
   fill: rgb(var(--canvas-bg));
+  stroke: rgb(var(--canvas-fg-1));
+  stroke-width: 1.6px;
+  stroke-linejoin: round;
+  paint-order: stroke;
   font-weight: 700;
   letter-spacing: -0.02em;
   pointer-events: none;
@@ -113,6 +131,3 @@
   font-weight: 600;
 }
 
-body.dark-canvas .adjacency-matrix__header:focus-visible .adjacency-matrix__label {
-  fill: rgb(var(--accent-primary));
-}

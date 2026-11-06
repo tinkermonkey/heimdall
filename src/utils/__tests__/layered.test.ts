@@ -81,6 +81,15 @@ describe('buildLayeredIndex', () => {
     expect(all.links.map((l) => l.sourceId)).toEqual(['m@L1', 'm@L2'])
   })
 
+  it('keeps derived instance and link ids unique when input ids already use them', () => {
+    const nodes: GraphNodeData[] = [{ id: 'm', label: 'm', attributes: { layer: ['L1', 'L2'] } }, node('m@L1', 'L3'), node('x', 'L3')]
+    const ix = buildLayeredIndex(nodes, [edge('e', 'm', 'x', 'uses'), edge('e@m@L2>x', 'm@L1', 'x', 'uses')], { layerBy: 'layer', multiValue: 'all' })
+    expect(ix.nodes.map((n) => n.id)).toEqual(['m@L1#2', 'm@L2', 'm@L1', 'x'])
+    expect(ix.nodeById.get('m@L1')!.nodeId).toBe('m@L1')
+    expect(new Set(ix.links.map((l) => l.id)).size).toBe(ix.links.length)
+    expect(ix.links).toHaveLength(3)
+  })
+
   it('excludes or collects nodes with no layer value', () => {
     const nodes = [node('a', 'L1'), { id: 'b', label: 'b' }]
     const ex = buildLayeredIndex(nodes, [edge('e', 'a', 'b')], { layerBy: 'layer' })
@@ -268,6 +277,17 @@ describe('useLayeredGraph', () => {
     expect(g.reach.hopOf.size - 1).toBe(14)
     expect(g.snapshot).toMatchObject({ selectedId: origin, follow: 2, predicateLabels: 'highlighted', planeLayout: 'independent' })
     expect(g.linkEmphasis(g.index.links[0]).visible).toBe(true)
+  })
+
+  it('treats a selection on a hidden layer as no selection', () => {
+    const g = render({
+      nodes: drSpecNodes, edges: drSpecEdges, layering, layout: false,
+      selectedId: 'application.applicationcomponent',
+      filters: { ...DEFAULT_LINK_FILTERS, hiddenLayers: ['application'] },
+    })
+    expect(g.selectedId).toBeNull()
+    expect(g.reach.originId).toBeNull()
+    expect(g.snapshot.selectedId).toBeNull()
   })
 
   it('drops a selection that is not in the graph and uses defaults when uncontrolled', () => {

@@ -156,6 +156,9 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       }
     }
     const selIndex = selectedId != null ? at.get(selectedId) : undefined
+    // The hovered cell's row and column, if both are still drawn (a filter may have hidden them since).
+    const hoverRow = hover ? at.get(hover.row) : undefined
+    const hoverCol = hover ? at.get(hover.col) : undefined
 
     return (
       <div ref={ref} className={['adjacency-matrix', className].filter(Boolean).join(' ')} {...props}>
@@ -202,10 +205,10 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
                 <rect x={LW + selIndex * cs} y={TH} width={cs} height={n * cs} />
               </g>
             )}
-            {hover && (
+            {hoverRow !== undefined && hoverCol !== undefined && (
               <g className="adjacency-matrix__band adjacency-matrix__band--hover">
-                <rect x={LW} y={TH + at.get(hover.row)! * cs} width={n * cs} height={cs} />
-                <rect x={LW + at.get(hover.col)! * cs} y={TH} width={cs} height={n * cs} />
+                <rect x={LW} y={TH + hoverRow * cs} width={n * cs} height={cs} />
+                <rect x={LW + hoverCol * cs} y={TH} width={cs} height={n * cs} />
               </g>
             )}
 
@@ -228,6 +231,8 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
                     onKeyDown={(e) => onHeaderKey(e, id)}
                   >
                     <title>{node.label}</title>
+                    {/* hit area and focus ring for the whole label cell */}
+                    <rect className="adjacency-matrix__header-box" x={2} y={TH + i * cs} width={LW - 10} height={cs} rx={4} />
                     <text className={cls} x={LW - 10} y={TH + i * cs + cs / 2} textAnchor="end" dominantBaseline="central" style={{ fontSize: fs }}>
                       {node.displayLabel}
                     </text>

@@ -1444,9 +1444,9 @@ const graph = useLayeredGraph({ nodes, edges, layering, defaultFollow: 1 })
 | `predicateLabels` / `defaultPredicateLabels` / `onPredicateLabelsChange` | `'off' \| 'highlighted' \| 'all'` | Default `'highlighted'` |
 | `focusedLayerId` / `defaultFocusedLayerId` / `onFocusLayer` | `string \| null` | Emphasized layer |
 | `planeLayout` / `defaultPlaneLayout` / `onPlaneLayoutChange` | `'independent' \| 'coupled'` | Which in-layer layout the views show |
-| `linkStyles` | `Record<string, LinkCategoryStyle>` | Per-category color and dash overrides |
+| `linkStyles` | `Record<string, LinkCategoryStyle>` | Per-category color and dash overrides. Memoize it: a new object recomputes every link's emphasis |
 
-It returns `index`, `layout`, `reach`, `hoverReach` (direct links of the hovered node), `pairNodeIds`, the current state values, actions (`select`, `hover`, `setFollow`, `setFilters`, `toggleCategory`, `togglePredicate`, `toggleLayer`, `setShowIntra`, `setLayerPair`, `setPredicateLabels`, `focusLayer`, `setPlaneLayout`), `linkEmphasis(link)` and `nodeEmphasis(node)` bound to the current state, and a serializable `snapshot` with `restore(snapshot)`.
+A selection on a hidden layer reads as no selection, and hiding the selected node's layer clears it. Filter actions compose when called together in one handler. It returns `index`, `layout`, `reach`, `hoverReach` (direct links of the hovered node), `pairNodeIds`, the current state values, actions (`select`, `hover`, `setFollow`, `setFilters`, `toggleCategory`, `togglePredicate`, `toggleLayer`, `setShowIntra`, `setLayerPair`, `setPredicateLabels`, `focusLayer`, `setPlaneLayout`), `linkEmphasis(link)` and `nodeEmphasis(node)` bound to the current state, and a serializable `snapshot` with `restore(snapshot)`.
 
 ## LayeredGraphContext
 

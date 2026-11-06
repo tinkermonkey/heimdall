@@ -24,6 +24,14 @@ export function layerPairKey(a: { id: string; rank: number }, b: { id: string; r
   return JSON.stringify(a.rank <= b.rank ? [a.id, b.id] : [b.id, a.id])
 }
 
+/** `base`, or `base#2`, `base#3`, … — the first not in `taken`; added to `taken`. */
+function uniqueId(base: string, taken: Set<string>): string {
+  let id = base
+  for (let k = 2; taken.has(id); k++) id = `${base}#${k}`
+  taken.add(id)
+  return id
+}
+
 function truncate(label: string, max: number): string {
   return label.length > max ? label.slice(0, Math.max(1, max - 1)) + '…' : label
 }
@@ -121,7 +129,9 @@ export function buildLayeredIndex(
   })
   const layerById = new Map(layers.map((l) => [l.id, l]))
 
-  // 3. node instances
+  // 3. node instances. Derived ids (multi-layer copies, spanning links) must not collide with input ids.
+  const takenNodeIds = new Set(placements.map((p) => p.node.id))
+  const takenLinkIds = new Set(edgeDefs.map((e) => e.id))
   const nodes: IndexedNode[] = []
   const nodeById = new Map<string, IndexedNode>()
   const instancesOf = new Map<string, string[]>()
@@ -129,7 +139,7 @@ export function buildLayeredIndex(
     const ids: string[] = []
     for (const layerId of layerIds) {
       const layer = layerById.get(layerId)!
-      const id = layerIds.length > 1 ? `${node.id}@${layerId}` : node.id
+      const id = layerIds.length > 1 ? uniqueId(`${node.id}@${layerId}`, takenNodeIds) : node.id
       const desc = node.attributes?.description
       const inst: IndexedNode = {
         id,
@@ -182,7 +192,7 @@ export function buildLayeredIndex(
           const s = nodeById.get(sId)!
           const t = nodeById.get(tId)!
           link = {
-            id: spans ? `${e.id}@${sId}>${tId}` : e.id,
+            id: spans ? uniqueId(`${e.id}@${sId}>${tId}`, takenLinkIds) : e.id,
             sourceId: sId,
             targetId: tId,
             predicates: [],

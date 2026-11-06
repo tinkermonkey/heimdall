@@ -72,7 +72,7 @@ export interface UseLayeredGraphOptions {
   defaultPlaneLayout?: PlaneLayoutMode
   onPlaneLayoutChange?: (mode: PlaneLayoutMode) => void
 
-  /** Category colors and dashes for `linkEmphasis`. Default `DEFAULT_LINK_CATEGORY_STYLES`. */
+  /** Per-category color and dash overrides for `linkEmphasis`; others use the `--graph-link-*` ramp. Memoize it: a new object recomputes every link's emphasis. */
   linkStyles?: Readonly<Record<string, LinkCategoryStyle>>
 }
 
@@ -136,7 +136,9 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const [planeLayout, setPlaneLayout] = useControllable(options.planeLayout, options.defaultPlaneLayout ?? 'independent', options.onPlaneLayoutChange)
   const [hoveredId, hover] = useState<string | null>(null)
 
-  const selectedId = rawSelected != null && index.nodeById.has(rawSelected) ? rawSelected : null
+  // A selection that isn't in the graph, or sits on a hidden layer, reads as no selection.
+  const selectedNode = rawSelected != null ? index.nodeById.get(rawSelected) : undefined
+  const selectedId = selectedNode && !filters.hiddenLayers.includes(selectedNode.layerId) ? selectedNode.id : null
 
   const reach = useMemo(
     () => computeReach(index, selectedId, { follow, followCategories, filters }),
@@ -146,30 +148,44 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const pairNodeIds = useMemo(() => layerPairNodeIds(index, filters.layerPair), [index, filters.layerPair])
 
   const setFollow = useCallback((n: number) => setFollowRaw(Math.max(0, Math.floor(n))), [setFollowRaw])
+
+  // Filter actions build on the latest filters, including ones emitted earlier in the same tick,
+  // so several actions in one handler compose instead of overwriting each other.
+  const filtersRef = useRef(filters)
+  filtersRef.current = filters
+  const updateFilters = useCallback(
+    (fn: (f: LinkFilterState) => LinkFilterState) => {
+      const next = fn(filtersRef.current)
+      filtersRef.current = next
+      setFilters(next)
+    },
+    [setFilters],
+  )
   const toggleCategory = useCallback(
-    (c: string) => setFilters({ ...filters, categories: { ...filters.categories, [c]: filters.categories[c] === false } }),
-    [filters, setFilters],
+    (c: string) => updateFilters((f) => ({ ...f, categories: { ...f.categories, [c]: f.categories[c] === false } })),
+    [updateFilters],
   )
   const togglePredicate = useCallback(
     (p: string) =>
-      setFilters({
-        ...filters,
-        hiddenPredicates: filters.hiddenPredicates.includes(p) ? filters.hiddenPredicates.filter((x) => x !== p) : [...filters.hiddenPredicates, p],
-      }),
-    [filters, setFilters],
+      updateFilters((f) => ({
+        ...f,
+        hiddenPredicates: f.hiddenPredicates.includes(p) ? f.hiddenPredicates.filter((x) => x !== p) : [...f.hiddenPredicates, p],
+      })),
+    [updateFilters],
   )
   const toggleLayer = useCallback(
     (id: string) => {
-      const hidden = filters.hiddenLayers.includes(id)
-      setFilters({ ...filters, hiddenLayers: hidden ? filters.hiddenLayers.filter((x) => x !== id) : [...filters.hiddenLayers, id] })
-      if (!hidden && focusedLayerId === id) focusLayer(null)
+      const hiding = !filtersRef.current.hiddenLayers.includes(id)
+      updateFilters((f) => ({ ...f, hiddenLayers: hiding ? [...f.hiddenLayers, id] : f.hiddenLayers.filter((x) => x !== id) }))
+      if (hiding && focusedLayerId === id) focusLayer(null)
+      if (hiding && selectedNode?.layerId === id) select(null)
     },
-    [filters, setFilters, focusedLayerId, focusLayer],
+    [updateFilters, focusedLayerId, focusLayer, selectedNode, select],
   )
-  const setShowIntra = useCallback((show: boolean) => setFilters({ ...filters, showIntra: show }), [filters, setFilters])
+  const setShowIntra = useCallback((show: boolean) => updateFilters((f) => ({ ...f, showIntra: show })), [updateFilters])
   const setLayerPair = useCallback(
-    (key: string | null) => setFilters({ ...filters, layerPair: key === filters.layerPair ? null : key }),
-    [filters, setFilters],
+    (key: string | null) => updateFilters((f) => ({ ...f, layerPair: key === f.layerPair ? null : key })),
+    [updateFilters],
   )
 
   const emphasisContext = useMemo<EmphasisContext>(

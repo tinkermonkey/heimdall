@@ -1,7 +1,6 @@
 import { organicLayout, type OrganicLayoutOptions } from '../organicLayout'
+import type { Point } from '../graph'
 import type { IndexedLink, IndexedNode, LayeredIndex } from './types'
-
-export type Point = { x: number; y: number }
 
 export interface LayerLayoutOptions {
   /**
