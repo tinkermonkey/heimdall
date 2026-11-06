@@ -667,7 +667,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     const titles = (() => {
       const ranked = [...planes].sort((a, b) => a.layer.rank - b.layer.rank)
       if (topView && ranked.length > 0) {
-        const x = Math.min(...ranked.map((p) => p.anchor.x)) - 16
+        // Kept inside the scene, like the titles below: about 150px wide, right-aligned at x.
+        const x = Math.max(-W / 2 + 150 * unitsPerPx, Math.min(...ranked.map((p) => p.anchor.x)) - 16)
         const cy = ranked.reduce((s, p) => s + p.center.y, 0) / ranked.length
         const rail = titleRail(ranked.length, x, cy, titleSpacing)
         return ranked.map((p, i) => ({ p, x: rail[i].x, y: rail[i].y }))

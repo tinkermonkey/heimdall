@@ -453,8 +453,8 @@ Why A was chosen:
 
 **Not yet:**
 
-- Lanes: `skipLayerRouting: 'gutter'`, bundled intra-layer links, a node-label mode, Up/Down focus between lanes.
-- Stack: pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
-- Hive: the generic `axes` option (axis by any attribute).
-- Matrix: `symmetric` and `aggregate` modes, link inspection, virtualization.
-- Framework: shared `nodeLabels` state in `useLayeredGraph`, a view and camera snapshot for the explorer, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
+- Lanes (#334): `skipLayerRouting: 'gutter'`, bundled intra-layer links, a node-label mode, Up/Down focus between lanes.
+- Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
+- Hive (#337): the generic `axes` option (axis by any attribute).
+- Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
+- Framework (#338, #339): shared `nodeLabels` state in `useLayeredGraph`, a view and camera snapshot for the explorer, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).

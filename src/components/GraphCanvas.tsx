@@ -584,6 +584,8 @@ interface LaneNodeProps {
   label: string;
   /** Accessible name. */
   ariaLabel: string;
+  /** Hover title: the full, untruncated label. */
+  fullLabel: string;
   /** Layer color (any CSS color). */
   color: string;
   tint: "selected" | "followed" | "reached" | "none";
@@ -596,7 +598,7 @@ interface LaneNodeProps {
 }
 
 /** layout="layer-lanes" default node: a monospace box with its layer's color bar. */
-function LaneNode({ id, label, ariaLabel, color, tint, selected, onSelect, onPopoverOpen, popoverOpen, popoverPanelId, tooltipId }: LaneNodeProps) {
+function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, onSelect, onPopoverOpen, popoverOpen, popoverPanelId, tooltipId }: LaneNodeProps) {
   const activate = (el: HTMLElement) => {
     try { onSelect?.(id); } catch (err) { console.error("onSelect failed:", err); }
     try { onPopoverOpen?.(el); } catch (err) { console.error("onPopoverOpen failed:", err); }
@@ -607,7 +609,7 @@ function LaneNode({ id, label, ariaLabel, color, tint, selected, onSelect, onPop
       className={["graph-lane-node", tint !== "none" && `graph-lane-node--${tint}`].filter(Boolean).join(" ")}
       style={{ "--graph-lane-color": color } as React.CSSProperties}
       data-no-drag
-      title={label}
+      title={fullLabel}
       role={interactive ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
       aria-label={ariaLabel}
@@ -3082,6 +3084,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             <LaneNode
               id={node.id}
               label={laneNode.displayLabel}
+              fullLabel={laneNode.label}
               ariaLabel={`${laneNode.label}, ${layer?.label ?? laneNode.layerId} layer${em.selected ? ", selected" : ""}`}
               color={layer?.color ?? "rgb(var(--canvas-fg-3))"}
               tint={em.selected ? "selected" : em.followed ? "followed" : em.hop !== null ? "reached" : "none"}
