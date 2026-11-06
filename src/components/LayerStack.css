@@ -1,0 +1,250 @@
+.layer-stack {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  color: rgb(var(--canvas-fg-1));
+  font-family: var(--font-mono);
+  user-select: none;
+  /* Vertical swipes scroll the page on touch; horizontal ones orbit. A mouse orbits both ways. */
+  touch-action: pan-y;
+  outline: none;
+}
+
+.layer-stack--orbit {
+  cursor: grab;
+}
+
+.layer-stack--orbit:active {
+  cursor: grabbing;
+}
+
+.layer-stack__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.layer-stack__bg {
+  fill: transparent;
+}
+
+.layer-stack__plane-fill {
+  fill-opacity: var(--graph-plane-fill-alpha);
+  stroke-opacity: 0.5;
+  stroke-width: 1;
+  transition: fill-opacity 0.18s ease;
+}
+
+.layer-stack__plane-fill--focused {
+  fill-opacity: calc(var(--graph-plane-fill-alpha) * 2.2);
+}
+
+.layer-stack__grid {
+  fill: none;
+  stroke-opacity: 0.1;
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.layer-stack__link {
+  fill: none;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.layer-stack__arrow {
+  pointer-events: none;
+}
+
+.layer-stack__drill polyline {
+  fill: none;
+  stroke: rgb(var(--graph-hop-1));
+  stroke-width: 1.2;
+  pointer-events: none;
+}
+
+.layer-stack__drill-column {
+  stroke-opacity: 0.45;
+  stroke-dasharray: 3 4;
+}
+
+.layer-stack__drill-ring {
+  stroke-opacity: 0.8;
+}
+
+.layer-stack__node {
+  cursor: pointer;
+}
+
+.layer-stack__disc {
+  stroke: rgb(var(--canvas-bg));
+  stroke-width: 1.5;
+}
+
+.layer-stack__ring {
+  fill: none;
+}
+
+.layer-stack__ring--selected {
+  stroke: rgb(var(--graph-hop-1));
+  stroke-width: 2;
+}
+
+.layer-stack__ring--followed {
+  stroke: rgb(var(--graph-hop-2));
+  stroke-width: 1.2;
+}
+
+/* hover lifts a neutral step, never a color tint */
+.layer-stack__ring--hover {
+  stroke: rgb(var(--canvas-fg-3));
+  stroke-width: 1;
+}
+
+/* ── HTML overlay: billboard labels, plane titles, predicate pills ───── */
+
+.layer-stack__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.layer-stack__nodes {
+  display: contents;
+}
+
+.layer-stack__pill {
+  position: absolute;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  background: var(--graph-pill-bg);
+  pointer-events: none;
+}
+
+.layer-stack__label {
+  position: absolute;
+  transform: translate(0, -50%);
+  margin: 0;
+  padding: 1px 3px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  line-height: 1.15;
+  color: rgb(var(--canvas-fg-1));
+  /* a halo in the canvas tone keeps labels legible over links and planes */
+  text-shadow:
+    0 0 3px rgb(var(--canvas-bg)),
+    0 0 3px rgb(var(--canvas-bg)),
+    0 0 2px rgb(var(--canvas-bg));
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color 0.08s;
+}
+
+.layer-stack__label:hover {
+  color: rgb(var(--canvas-fg-1));
+  background: rgb(var(--canvas-bg) / 0.6);
+}
+
+.layer-stack__label:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  background: rgb(var(--canvas-bg) / 0.85);
+  z-index: 1000 !important;
+}
+
+.layer-stack__label--selected {
+  color: rgb(var(--graph-hop-1));
+  font-weight: 600;
+}
+
+.layer-stack__label--followed {
+  color: rgb(var(--graph-hop-2));
+}
+
+/* Hidden labels stay in the tab order; focusing one shows it. */
+.layer-stack__label--hidden {
+  color: transparent;
+  text-shadow: none;
+  pointer-events: none;
+}
+
+.layer-stack__title {
+  position: absolute;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  margin: 0;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  font-family: var(--font-mono);
+  text-align: right;
+  white-space: nowrap;
+  transform: translate(-100%, -50%);
+  pointer-events: auto;
+  transition: background 0.08s, opacity 0.18s ease;
+}
+
+button.layer-stack__title {
+  cursor: pointer;
+}
+
+button.layer-stack__title:hover {
+  background: rgb(var(--canvas-fg-1) / 0.05);
+}
+
+button.layer-stack__title:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.layer-stack__title--focused {
+  background: rgb(var(--canvas-fg-1) / 0.04);
+}
+
+.layer-stack__title-name {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.layer-stack__title-sub {
+  font-size: 10.5px;
+  color: rgb(var(--canvas-fg-2));
+}
+
+.layer-stack__empty {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: rgb(var(--canvas-fg-3));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer-stack__plane-fill,
+  .layer-stack__label,
+  .layer-stack__title {
+    transition: none;
+  }
+}

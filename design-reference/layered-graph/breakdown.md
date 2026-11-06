@@ -1,7 +1,7 @@
 # Layered graph components: functional breakdown
 
-Status: decisions recorded 2026-11-06 (see [Decisions](#decisions)); step 1, the shared framework,
-is implemented (see [Implementation status](#implementation-status)). Source prototypes: the Claude Design canvas
+Status: decisions recorded 2026-11-06 (see [Decisions](#decisions)); steps 1–6 are implemented
+(see [Implementation status](#implementation-status)). Source prototypes: the Claude Design canvas
 [Layered graph concepts](https://claude.ai/artifact/TxKdLSuLqm4PU9fFEohNcj)
 (artboards `3D layer stack` and `2D multi-layer counterpoint`).
 
@@ -411,7 +411,7 @@ Why A was chosen:
 
 ## Implementation status
 
-**Step 1, shared framework: implemented (uncommitted).**
+**Step 1, shared framework: implemented (merged in #330).**
 
 - `src/utils/layered/`: `types`, `buildLayeredIndex`, `predicates` (codes), `filters`, `reach`, `emphasis`, `layout`, `labels` and an `index` barrel.
 - `src/hooks/useLayeredGraph.ts`: the hook plus `LayeredGraphContext` / `useLayeredGraphContext`.
@@ -427,7 +427,7 @@ Why A was chosen:
 - The camera, tween and label-overlay helpers (step 4).
 - Async layout for large graphs: `layoutLayers` is synchronous and fast at fixture scale.
 
-**Step 2, `AdjacencyMatrix`: implemented (uncommitted).**
+**Step 2, `AdjacencyMatrix`: implemented (merged in #330).**
 
 - `src/components/AdjacencyMatrix.tsx` / `.css`, exported from `src/index.ts`.
 - **Data:** reads state from a `graph` prop, the `LayeredGraphContext`, or its own `useLayeredGraph` (standalone `nodes` / `edges` / `layering`).
@@ -442,3 +442,19 @@ Why A was chosen:
 - **Spec:** `tests/adjacency-matrix.spec.ts` (4 behaviour tests, 2 screenshots). Darwin baselines are generated (not yet committed); **linux baselines are still to generate** with the Update Visual Snapshots workflow after pushing.
 - **Docs:** documented in the `heimdall-graph` skill. The docs-app showcase waits for step 6, alongside the other views.
 - **Not yet:** `symmetric` and `aggregate` modes, `onCellSelect` link inspection through `GraphEdgeInspector`, and virtualization past about 150 nodes.
+
+**Steps 3–6: implemented.**
+
+- **Step 3:** `placeEdgeLabels` and the sampled curve builders (`lineCurve`, `quadCurve`, `cubicCurve`) in `src/utils/layered/edgeLabels.ts`. Lanes is `GraphCanvas layout="layer-lanes"` (`src/utils/laneLayout.ts`), with `layeredGraph`, `layering`, `layeredGraphOptions` and `laneOptions` props; horizontal and vertical orientation.
+- **Step 4:** `LayerStack` on SVG projection (`src/utils/layered/projection.ts`, `src/hooks/useTween.ts`): presets, orbit, wheel zoom, turntable, layer gap, layer focus, plane-layout tween, drill-through column, a side title rail in top view and a common plane extent, plus an imperative handle.
+- **Step 5:** `HivePlot` with split axes (`src/utils/layered/hive.ts`).
+- **Step 6:** `FollowControl`, `PredicateLabelControl`, `PlaneLayoutControl`, `LinkCategoryFilter`, `LayerList`, `LayerPairList`, `BridgeNodeList`, `ReachInspector`; `LayeredGraphExplorer` with `ViewSwitcher`, `CameraControls` and a `controls` prop that switches each piece of chrome on or off; a "Layered graphs" docs page. `GraphInspector`'s `RelationshipLink` gained optional `hop`, `via` and `layer`.
+- **Tests:** unit tests for label placement, lanes, projection and hive geometry; a Playwright spec per view and for the chrome and the explorer, with darwin and linux baselines.
+
+**Not yet:**
+
+- Lanes: `skipLayerRouting: 'gutter'`, bundled intra-layer links, a node-label mode, Up/Down focus between lanes.
+- Stack: pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
+- Hive: the generic `axes` option (axis by any attribute).
+- Matrix: `symmetric` and `aggregate` modes, link inspection, virtualization.
+- Framework: shared `nodeLabels` state in `useLayeredGraph`, a view and camera snapshot for the explorer, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).

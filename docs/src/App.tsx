@@ -16,6 +16,7 @@ import { ChatMessageShowcase, ToolBlockShowcase, ThinkingBlockShowcase, ChatDivi
 import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, RelationshipBuilderShowcase, RowMenuShowcase, PipelineCardShowcase, FormCalloutShowcase } from './showcases/FormsComplexShowcase'
 import { GraphNodeShowcase, GraphCanvasShowcase, GraphInspectorShowcase, GraphEdgeInspectorShowcase, TopologyNodeShowcase, GraphEdgeShowcase } from './showcases/GraphShowcase'
 import { GraphLayoutsShowcase } from './showcases/GraphLayoutsShowcase'
+import { LayeredGraphsShowcase } from './showcases/LayeredGraphsShowcase'
 import { FilterDropdownShowcase } from './showcases/FilterDropdownShowcase'
 import { InspectorPanelShowcase } from './showcases/InspectorPanelShowcase'
 import { QuickAccessTileShowcase } from './showcases/QuickAccessTileShowcase'
@@ -177,6 +178,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   forms: FormsShowcase,
   // Graph
   'graph-layouts': GraphLayoutsShowcase,
+  'layered-graphs': LayeredGraphsShowcase,
   'graph-edge': GraphEdgeShowcase,
   'graph-node': GraphNodeShowcase,
   'graph-canvas': GraphCanvasShowcase,
@@ -335,6 +337,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Graph',
     items: [
       { id: 'graph-layouts', label: 'Layouts', icon: 'graph' },
+      { id: 'layered-graphs', label: 'Layered graphs', icon: 'layout' },
       { id: 'graph-edge', label: 'GraphEdge', icon: 'arrowRight' },
       { id: 'graph-node', label: 'GraphNode', icon: 'component' },
       { id: 'graph-canvas', label: 'GraphCanvas', icon: 'schema' },

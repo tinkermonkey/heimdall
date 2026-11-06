@@ -17,6 +17,12 @@ export interface RelationshipLink {
   targetDomain?: string
   predicate: string
   direction: 'in' | 'out'
+  /** Layered graphs: reach hop of the target (1 = direct, 2+ = followed). Hops past 1 show a `+n` badge. */
+  hop?: number
+  /** Layered graphs: the node and predicate the target was reached through, shown under the row. */
+  via?: { id: string; title: string; predicate: string }
+  /** Layered graphs: the target's layer. Its color fills the row swatch. */
+  layer?: { id: string; label: string; color: string }
 }
 
 export interface GraphInspectorProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -105,12 +111,23 @@ export const GraphInspector = React.forwardRef<HTMLDivElement, GraphInspectorPro
                       className="graph-inspector__rel-target"
                       data-domain={rel.targetDomain}
                       onClick={() => onNodeSelect?.(rel.target)}
-                      aria-label={`Navigate to ${rel.targetTitle}`}
+                      aria-label={`Navigate to ${rel.targetTitle}${rel.layer ? `, ${rel.layer.label} layer` : ''}`}
                       data-testid={`inspector-rel-${rel.id}`}
                     >
-                      <span className="graph-inspector__rel-swatch"></span>
+                      <span
+                        className="graph-inspector__rel-swatch"
+                        style={rel.layer ? { background: rel.layer.color } : undefined}
+                      ></span>
                       <span>{rel.targetTitle}</span>
                     </button>
+                    {rel.hop !== undefined && rel.hop > 1 && (
+                      <span className="graph-inspector__rel-hop">+{rel.hop - 1}</span>
+                    )}
+                    {rel.via && (
+                      <span className="graph-inspector__rel-via">
+                        via {rel.via.title} · {rel.via.predicate}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -132,12 +149,23 @@ export const GraphInspector = React.forwardRef<HTMLDivElement, GraphInspectorPro
                       className="graph-inspector__rel-target"
                       data-domain={rel.targetDomain}
                       onClick={() => onNodeSelect?.(rel.target)}
-                      aria-label={`Navigate to ${rel.targetTitle}`}
+                      aria-label={`Navigate to ${rel.targetTitle}${rel.layer ? `, ${rel.layer.label} layer` : ''}`}
                       data-testid={`inspector-rel-${rel.id}`}
                     >
-                      <span className="graph-inspector__rel-swatch"></span>
+                      <span
+                        className="graph-inspector__rel-swatch"
+                        style={rel.layer ? { background: rel.layer.color } : undefined}
+                      ></span>
                       <span>{rel.targetTitle}</span>
                     </button>
+                    {rel.hop !== undefined && rel.hop > 1 && (
+                      <span className="graph-inspector__rel-hop">+{rel.hop - 1}</span>
+                    )}
+                    {rel.via && (
+                      <span className="graph-inspector__rel-via">
+                        via {rel.via.title} · {rel.via.predicate}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
