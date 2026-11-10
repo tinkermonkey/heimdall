@@ -64,6 +64,18 @@ for (const { where, target } of targets) {
   }
 }
 
+// Components rely on rules that must live in the shipped stylesheet, not only in the dev app's
+// Tailwind build (src/index.css). The docs/test apps load that Tailwind build, so a missing rule
+// is invisible everywhere but a real consumer (tinkermonkey/heimdall#340).
+const REQUIRED_CSS_RULES = [{ selector: '.sr-only', pattern: /(^|[},\s])\.sr-only\s*[{,]/ }]
+const cssTarget = pkg.exports?.['./css']
+if (typeof cssTarget === 'string' && files.has(cssTarget.replace(/^\.\//, ''))) {
+  const css = readFileSync(path.join(root, cssTarget), 'utf8')
+  for (const { selector, pattern } of REQUIRED_CSS_RULES) {
+    if (!pattern.test(css)) problems.push(`exports > ./css: ${cssTarget} has no ${selector} rule`)
+  }
+}
+
 if (problems.length > 0) {
   console.error(`check-package-exports: ${problems.length} problem(s) in ${packInfo.name}@${packInfo.version}:`)
   for (const p of problems) console.error(`  - ${p}`)

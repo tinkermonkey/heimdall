@@ -1,0 +1,17 @@
+/* =========================================================================
+  Heimdall Design System — shared utility classes shipped in dist/style.css
+  ========================================================================= */
+
+/* Text for assistive technology only. Same declarations as Tailwind's `sr-only`, so an app that
+   also generates Tailwind's utility gets an identical rule, whichever loads last. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

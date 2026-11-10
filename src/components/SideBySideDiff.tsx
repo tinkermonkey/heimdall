@@ -1,6 +1,7 @@
 import React from 'react'
 import { useVirtualList } from '../hooks/useVirtualList'
 import { VersionPill } from './VersionPill'
+import '../styles/utilities.css'
 import './SideBySideDiff.css'
 
 export type DiffLineType = 'context' | 'added' | 'removed' | 'hunk'
