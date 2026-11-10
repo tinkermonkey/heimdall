@@ -36,6 +36,7 @@ import CenterOnSelectTestPage from './test-pages/CenterOnSelectTestPage'
 import FullscreenContainerRefTestPage from './test-pages/FullscreenContainerRefTestPage'
 import InspectorPanelTestPage from './test-pages/InspectorPanelTestPage'
 import FilterDropdownTestPage from './test-pages/FilterDropdownTestPage'
+import DropdownPortalTestPage from './test-pages/DropdownPortalTestPage'
 import TabBarTestPage from './test-pages/TabBarTestPage'
 import AvatarTestPage from './test-pages/AvatarTestPage'
 import CardsAndListsTestPage from './test-pages/CardsAndListsTestPage'
@@ -189,6 +190,10 @@ export default function App() {
 
   if (exampleParam === 'filter-dropdown') {
     return <FilterDropdownTestPage />
+  }
+
+  if (exampleParam === 'dropdown-portal') {
+    return <DropdownPortalTestPage />
   }
 
   if (exampleParam === 'tab-bar') {

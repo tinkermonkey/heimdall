@@ -4,7 +4,8 @@ import { Icon } from './Icon'
 import { Chip } from './Chip'
 import type { StatusColor } from './statusColors'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
-import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
+import { useDropdownPortal } from '../hooks/useDropdownPortal'
+import type { DropdownPlacement } from './dropdownPlacement'
 
 export interface EntityPickerResult {
   id: string
@@ -28,6 +29,10 @@ export interface EntityPickerProps
   inputId?: string
   /** Where the results panel opens relative to the input. */
   placement?: DropdownPlacement
+  /** Render the results panel in a portal on `document.body`
+   *  (`position: fixed`), so scrolling / overflow-hidden ancestors can't clip
+   *  it. Default `true`; `false` renders it in place. */
+  portal?: boolean
 }
 
 export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
@@ -42,6 +47,7 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
       disabled = false,
       inputId,
       placement = 'bottom-start',
+      portal = true,
       className,
       ...props
     },
@@ -117,6 +123,13 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
     }
 
     const panelOpen = isOpen && results.length > 0
+    const floating = useDropdownPortal({
+      anchorRef: containerRef,
+      panelRef,
+      isOpen: panelOpen,
+      placement,
+      portal,
+    })
     const activeId =
       panelOpen && focusedValue ? getOptionId(focusedValue) : undefined
 
@@ -157,13 +170,14 @@ export const EntityPicker = React.forwardRef<HTMLDivElement, EntityPickerProps>(
           )}
         </div>
 
-        {panelOpen && (
+        {panelOpen && floating.renderPanel(
           <div
             ref={panelRef}
             id={listboxId}
             role="listbox"
-            className={`dropdown-panel ${dropdownPlacementClass(placement)} entity-picker__dropdown`}
+            className={`dropdown-panel ${floating.className} entity-picker__dropdown`}
             data-testid="entity-picker-dropdown"
+            {...floating.panelProps}
           >
             {results.map((result) => {
               const isFocused = result.id === focusedValue

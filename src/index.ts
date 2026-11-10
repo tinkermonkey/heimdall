@@ -97,6 +97,7 @@ export {
 } from './components/StatusTimeline'
 export type { StatusColor } from './components/statusColors'
 export type { DropdownPlacement } from './components/dropdownPlacement'
+export { containsAcrossPortals } from './hooks/useDropdownPortal'
 export { ProgressBar, type ProgressBarColor, type ProgressBarProps } from './components/ProgressBar'
 export { MetricRow, type MetricRowProps } from './components/MetricRow'
 export { PageHeader, type PageHeaderProps } from './components/PageHeader'

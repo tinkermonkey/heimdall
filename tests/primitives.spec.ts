@@ -184,8 +184,10 @@ test.describe('integration: Primitive Components', () => {
     const trigger = firstSelect.locator('.select__trigger')
 
     await trigger.click()
-    // Panel should open and expose options.
-    const option3 = firstSelect.locator('[role="option"]', { hasText: 'Option 3' })
+    // Panel should open and expose options. It renders in a portal on
+    // document.body, so find it through the trigger's aria-controls.
+    const panelId = await trigger.getAttribute('aria-controls')
+    const option3 = page.locator(`[id="${panelId}"] [role="option"]`, { hasText: 'Option 3' })
     await option3.click()
 
     // Trigger label should now reflect the new selection.

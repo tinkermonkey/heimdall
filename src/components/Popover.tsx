@@ -9,6 +9,7 @@ import React, {
   useCallback,
 } from 'react'
 import { useFocusTrap } from '../hooks/useFocusTrap'
+import { containsAcrossPortals } from '../hooks/useDropdownPortal'
 import './Popover.css'
 
 export type PopoverPlacement = 'top' | 'bottom' | 'left' | 'right'
@@ -198,9 +199,11 @@ const PopoverComponent = React.forwardRef<
 
       const handleMouseDown = (e: MouseEvent) => {
         const target = e.target as Node
+        // A click inside a portalled dropdown (e.g. a Select in this popover)
+        // counts as inside.
         if (
           wrapperRef.current &&
-          !wrapperRef.current.contains(target)
+          !containsAcrossPortals(wrapperRef.current, target)
         ) {
           handleOpenChange(false)
         }

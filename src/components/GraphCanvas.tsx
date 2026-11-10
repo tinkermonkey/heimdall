@@ -70,6 +70,7 @@ import { edgeLabelPriority, placeEdgeLabels, defaultPillSize } from "../utils/la
 import type { BuildLayeredIndexOptions, IndexedLink } from "../utils/layered/types";
 import type { LinkEmphasis } from "../utils/layered/emphasis";
 import { layoutLanes, laneLinkCurve, type LaneLayoutOptions, type LaneLinkCurve } from "../utils/laneLayout";
+import { containsAcrossPortals } from "../hooks/useDropdownPortal";
 import "./GraphCanvas.css";
 import "./GraphEdge.css";
 
@@ -3399,7 +3400,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (!popoverTarget) return;
       const handleMouseDown = (e: MouseEvent) => {
         const container = containerRef.current;
-        if (container && !container.contains(e.target as Node)) {
+        if (container && !containsAcrossPortals(container, e.target as Node)) {
           setActivePopoverNodeId(undefined);
           setActivePopoverEdgeId(undefined);
         }
