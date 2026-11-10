@@ -18,8 +18,10 @@
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "src",
     "agent-skills"
+  ],
+  "sideEffects": [
+    "**/*.css"
   ],
   "exports": {
     ".": {
