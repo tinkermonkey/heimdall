@@ -253,7 +253,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     const g = external ?? own
     const { index, layout, filters, selectedId, hoveredId, focusedLayerId, planeLayout } = g
     const can = { ...ALL_INTERACTIONS, ...interactions }
-    const nodeLabels: LayerStackNodeLabels = nodeLabelsProp ?? (g.nodeLabels ? 'all' : 'reached')
+    const nodeLabels: LayerStackNodeLabels = nodeLabelsProp ?? (g.nodeLabels !== false ? 'all' : 'reached')
 
     // ── controllable state ────────────────────────────────────────────────
     const [preset, setPreset] = useControllable<CameraPresetName | null>(cameraPreset, defaultCameraPreset, onCameraPresetChange)

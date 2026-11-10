@@ -229,7 +229,7 @@ export const LinkCategoryFilter = React.forwardRef<HTMLDivElement, LinkCategoryF
     const { index, filters, emphasisContext } = g
     const cats = categories ?? index.categories
     const labelToggle = showLabelToggle ?? onNodeLabelsChange !== undefined
-    const nodeLabels = nodeLabelsProp ?? g.nodeLabels
+    const nodeLabels = nodeLabelsProp ?? (g.nodeLabels !== false)
     const toggleNodeLabels = () => {
       if (nodeLabelsProp === undefined) g.setNodeLabels(!nodeLabels)
       onNodeLabelsChange?.(!nodeLabels)

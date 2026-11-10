@@ -2,6 +2,7 @@
 // labels and the exported useControllable (tinkermonkey/heimdall#338).
 import { describe, it, expect, vi } from 'vitest'
 import { createElement } from 'react'
+import { act, create, type ReactTestRenderer } from 'react-test-renderer'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { buildLayeredIndex, computeReach, reachPath, DEFAULT_LINK_FILTERS } from '../layered'
 import { useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from '../../hooks/useLayeredGraph'
@@ -138,11 +139,46 @@ describe('useLayeredGraph selection', () => {
     expect(onSelect).toHaveBeenLastCalledWith(APP)
   })
 
-  it('restore prefers selectedIds over selectedId', () => {
+  it('restore: a changed selectedId over a carried-along selectedIds wins, and onSelect fires', () => {
+    const onSelect = vi.fn()
+    const onSelectedIdsChange = vi.fn()
+    const g = render({ selectedIds: [APP], onSelect, onSelectedIdsChange })
+    g.restore({ ...g.snapshot, selectedId: PROCESS }) // the 0.10.0 pattern
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([PROCESS])
+    expect(onSelect).toHaveBeenLastCalledWith(PROCESS)
+    g.restore({ ...g.snapshot }) // agreeing ids: re-applied, onSelect still fires
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([APP])
+    expect(onSelect).toHaveBeenLastCalledWith(APP)
+  })
+
+  it('onSelect reports the visible primary, skipping ids hidden or not in the graph', () => {
+    const hideBusiness = { ...DEFAULT_LINK_FILTERS, hiddenLayers: ['business'] }
+    const TECH = 'technology.device'
+    // ['gone', A] then toggleSelected(A): the visible primary goes from A to none.
+    const a = { onSelect: vi.fn() }
+    render({ selectedIds: ['gone', APP], ...a }).toggleSelected(APP)
+    expect(a.onSelect).toHaveBeenLastCalledWith(null)
+    // Hidden H1 first: [H1, A] → [H1, B] changes the visible primary from A to B.
+    const b = { onSelect: vi.fn() }
+    render({ selectedIds: [PROCESS, APP], filters: hideBusiness, ...b }).setSelectedIds([PROCESS, TECH])
+    expect(b.onSelect).toHaveBeenLastCalledWith(TECH)
+    // [H1, A] → toggleSelected(A) leaves only the hidden H1: no visible primary.
+    const c = { onSelect: vi.fn() }
+    render({ selectedIds: [PROCESS, APP], filters: hideBusiness, ...c }).toggleSelected(APP)
+    expect(c.onSelect).toHaveBeenLastCalledWith(null)
+    // An unchanged visible primary is not reported.
+    const d = { onSelect: vi.fn() }
+    render({ selectedIds: [PROCESS, APP], filters: hideBusiness, ...d }).setSelectedIds([APP, PROCESS])
+    expect(d.onSelect).not.toHaveBeenCalled()
+  })
+
+  it('restore uses selectedIds when it agrees with selectedId or that is left out', () => {
     const onSelectedIdsChange = vi.fn()
     const g = render({ selectedIds: [], onSelectedIdsChange })
-    g.restore({ selectedId: APP, selectedIds: [PROCESS, APP] })
+    g.restore({ selectedIds: [PROCESS, APP] })
     expect(onSelectedIdsChange).toHaveBeenLastCalledWith([PROCESS, APP])
+    g.restore({ selectedId: APP, selectedIds: [APP, PROCESS] })
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([APP, PROCESS])
     g.restore({ selectedId: APP })
     expect(onSelectedIdsChange).toHaveBeenLastCalledWith([APP])
   })
@@ -175,5 +211,71 @@ describe('useControllable', () => {
   it('holds its own state, seeded from the default, when uncontrolled', () => {
     const [value] = renderHook(() => useControllable<number>(undefined, 3))
     expect(value).toBe(3)
+  })
+})
+
+// Re-render tests: react-test-renderer drives state updates through the hook.
+describe('useLayeredGraph selection, rendered', () => {
+  ;(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true
+
+  function mount<T>(hook: () => T) {
+    const out: T[] = []
+    const Probe = () => { out.push(hook()); return null }
+    let r!: ReactTestRenderer
+    act(() => { r = create(createElement(Probe)) })
+    return { last: () => out[out.length - 1], rerender: () => act(() => r.update(createElement(Probe))), unmount: () => act(() => r.unmount()) }
+  }
+
+  it('toggleSelected and setSelectedIds update selectedIds and the union reach', () => {
+    const m = mount(() => useLayeredGraph({ nodes: drSpecNodes, edges: drSpecEdges, layering, layout: false, defaultFollow: 1 }))
+    act(() => m.last().select(APP))
+    expect(m.last().selectedIds).toEqual([APP])
+    const single = m.last().reach.hopOf.size
+    act(() => m.last().toggleSelected(PROCESS))
+    expect(m.last().selectedIds).toEqual([APP, PROCESS])
+    expect(m.last().selectedId).toBe(APP)
+    expect(m.last().reach.hopOf.size).toBe(computeReach(spec(), [APP, PROCESS], { follow: 1 }).hopOf.size)
+    expect(m.last().reach.hopOf.size).toBeGreaterThan(single)
+    act(() => m.last().setSelectedIds([PROCESS]))
+    expect(m.last().selectedId).toBe(PROCESS)
+    expect(m.last().reach.originIds).toEqual([PROCESS])
+    act(() => { m.last().toggleSelected(APP); m.last().toggleSelected(PROCESS) }) // compose in one handler
+    expect(m.last().selectedIds).toEqual([APP])
+    act(() => m.last().toggleLayer('application'))
+    expect(m.last().selectedIds).toEqual([])
+    m.unmount()
+  })
+
+  it('setNodeLabels updates the shared state', () => {
+    const m = mount(() => useLayeredGraph({ nodes: drSpecNodes, edges: drSpecEdges, layering, layout: false }))
+    act(() => m.last().setNodeLabels(false))
+    expect(m.last().nodeLabels).toBe(false)
+    expect(m.last().snapshot.nodeLabels).toBe(false)
+    m.unmount()
+  })
+
+  it('useControllable: uncontrolled updates, setter identity, and switching modes', () => {
+    let value: number | undefined
+    const onChange = vi.fn()
+    const m = mount(() => useControllable<number>(value, 1, onChange))
+    const setter = m.last()[1]
+    act(() => m.last()[1](5))
+    expect(m.last()[0]).toBe(5)
+    expect(onChange).toHaveBeenLastCalledWith(5)
+    expect(m.last()[1]).toBe(setter) // stable while uncontrolled
+    value = 9
+    m.rerender()
+    expect(m.last()[0]).toBe(9) // controlled: the prop wins
+    const controlledSetter = m.last()[1]
+    expect(controlledSetter).not.toBe(setter)
+    act(() => controlledSetter(2))
+    expect(m.last()[0]).toBe(9) // only reports
+    expect(onChange).toHaveBeenLastCalledWith(2)
+    m.rerender()
+    expect(m.last()[1]).toBe(controlledSetter) // stable while controlled
+    value = undefined
+    m.rerender()
+    expect(m.last()[0]).toBe(5) // back to its own state
+    m.unmount()
   })
 })

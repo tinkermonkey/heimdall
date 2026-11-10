@@ -385,7 +385,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     // ── node labels: the graph's state, unless controlled here ─────────────
     // `defaultNodeLabels` with external state is kept here, as it was before the graph held labels.
     const [localLabels, setLocalLabels] = useState<boolean | undefined>(external ? defaultNodeLabels : undefined)
-    const nodeLabels = nodeLabelsProp ?? localLabels ?? g.nodeLabels
+    const nodeLabels = nodeLabelsProp ?? localLabels ?? (g.nodeLabels !== false)
     const setNodeLabels = useCallback(
       (on: boolean) => {
         if (nodeLabelsProp === undefined) {

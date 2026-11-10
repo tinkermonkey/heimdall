@@ -161,17 +161,35 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   onSelectRef.current = options.onSelect
   const onSelectedIdsChangeRef = useRef(options.onSelectedIdsChange)
   onSelectedIdsChangeRef.current = options.onSelectedIdsChange
-  /** `notifyPrimary`: call `onSelect` even when the primary is unchanged (as `select` always has). */
+  // The visible primary: the first id in the graph and not on a hidden layer (what `selectedId` reads).
+  const indexRef = useRef(index)
+  indexRef.current = index
+  const primaryOf = useCallback((ids: readonly string[], hiddenLayers: readonly string[]): string | null => {
+    for (const id of ids) {
+      const n = indexRef.current.nodeById.get(id)
+      if (n && !hiddenLayers.includes(n.layerId)) return id
+    }
+    return null
+  }, [])
+  /**
+   * Writes the ids. `onSelect` reports the visible primary when it changes; with `always` it is
+   * called with `ids[0]` whatever changed, as `select` always has. `prevPrimary` overrides the
+   * primary compared against (when the filters changed in the same action).
+   */
   const writeSelection = useCallback(
-    (ids: string[], notifyPrimary: boolean) => {
-      const prevPrimary = rawIdsRef.current[0] ?? null
+    (ids: string[], always: boolean, prevPrimary?: string | null) => {
+      const hidden = filtersRef.current.hiddenLayers
+      const prev = prevPrimary !== undefined ? prevPrimary : primaryOf(rawIdsRef.current, hidden)
       rawIdsRef.current = ids
       if (selectionMode === 'inner') setInnerIds(ids)
       onSelectedIdsChangeRef.current?.(ids)
-      const primary = ids[0] ?? null
-      if (notifyPrimary || primary !== prevPrimary) onSelectRef.current?.(primary)
+      if (always) onSelectRef.current?.(ids[0] ?? null)
+      else {
+        const next = primaryOf(ids, hidden)
+        if (next !== prev) onSelectRef.current?.(next)
+      }
     },
-    [selectionMode],
+    [selectionMode, primaryOf],
   )
   const select = useCallback((id: string | null) => writeSelection(id != null ? [id] : [], true), [writeSelection])
   const setSelectedIds = useCallback((ids: readonly string[]) => writeSelection([...new Set(ids)], false), [writeSelection])
@@ -186,6 +204,10 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const [follow, setFollowRaw] = useControllable(options.follow, options.defaultFollow ?? 1, options.onFollowChange)
   const [filters, setFilters] = useControllable(options.filters, options.defaultFilters ?? DEFAULT_LINK_FILTERS, options.onFiltersChange)
   const [predicateLabels, setPredicateLabels] = useControllable(options.predicateLabels, options.defaultPredicateLabels ?? 'highlighted', options.onPredicateLabelsChange)
+  // Filter and selection actions build on the latest filters, including ones emitted earlier in
+  // the same tick, so several actions in one handler compose instead of overwriting each other.
+  const filtersRef = useRef(filters)
+  filtersRef.current = filters
   const [focusedLayerId, focusLayer] = useControllable(options.focusedLayerId, options.defaultFocusedLayerId ?? null, options.onFocusLayer)
   const [planeLayout, setPlaneLayout] = useControllable(options.planeLayout, options.defaultPlaneLayout ?? 'independent', options.onPlaneLayoutChange)
   const [nodeLabels, setNodeLabels] = useControllable(options.nodeLabels, options.defaultNodeLabels ?? true, options.onNodeLabelsChange)
@@ -213,10 +235,6 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
 
   const setFollow = useCallback((n: number) => setFollowRaw(Math.max(0, Math.floor(n))), [setFollowRaw])
 
-  // Filter actions build on the latest filters, including ones emitted earlier in the same tick,
-  // so several actions in one handler compose instead of overwriting each other.
-  const filtersRef = useRef(filters)
-  filtersRef.current = filters
   const updateFilters = useCallback(
     (fn: (f: LinkFilterState) => LinkFilterState) => {
       const next = fn(filtersRef.current)
@@ -240,15 +258,16 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const toggleLayer = useCallback(
     (id: string) => {
       const hiding = !filtersRef.current.hiddenLayers.includes(id)
+      const prevPrimary = primaryOf(rawIdsRef.current, filtersRef.current.hiddenLayers)
       updateFilters((f) => ({ ...f, hiddenLayers: hiding ? [...f.hiddenLayers, id] : f.hiddenLayers.filter((x) => x !== id) }))
       if (hiding && focusedLayerId === id) focusLayer(null)
       if (hiding) {
         const cur = rawIdsRef.current
         const kept = cur.filter((x) => index.nodeById.get(x)?.layerId !== id)
-        if (kept.length < cur.length) writeSelection(kept, kept.length === 0)
+        if (kept.length < cur.length) writeSelection(kept, false, prevPrimary)
       }
     },
-    [updateFilters, focusedLayerId, focusLayer, index, writeSelection],
+    [updateFilters, focusedLayerId, focusLayer, index, writeSelection, primaryOf],
   )
   const setShowIntra = useCallback((show: boolean) => updateFilters((f) => ({ ...f, showIntra: show })), [updateFilters])
   const setLayerPair = useCallback(
@@ -269,16 +288,24 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   )
   const restore = useCallback(
     (s: Partial<LayeredGraphSnapshot>) => {
-      if (s.selectedIds !== undefined) setSelectedIds(s.selectedIds)
+      // Filters first, so the selection is reported against the restored layers.
+      if (s.filters !== undefined) {
+        const f = s.filters
+        updateFilters(() => f)
+      }
+      // `selectedIds` applies when it agrees with `selectedId` (or that is left out); a changed
+      // `selectedId` over a carried-along `selectedIds` (`{ ...snapshot, selectedId }`) wins.
+      // Either way `onSelect` is called, as `restore` always has.
+      const ids = s.selectedIds
+      if (ids !== undefined && (s.selectedId === undefined || (ids[0] ?? null) === s.selectedId)) writeSelection([...new Set(ids)], true)
       else if (s.selectedId !== undefined) select(s.selectedId)
       if (s.follow !== undefined) setFollow(s.follow)
-      if (s.filters !== undefined) setFilters(s.filters)
       if (s.predicateLabels !== undefined) setPredicateLabels(s.predicateLabels)
       if (s.focusedLayerId !== undefined) focusLayer(s.focusedLayerId)
       if (s.planeLayout !== undefined) setPlaneLayout(s.planeLayout)
       if (s.nodeLabels !== undefined) setNodeLabels(s.nodeLabels)
     },
-    [select, setSelectedIds, setFollow, setFilters, setPredicateLabels, focusLayer, setPlaneLayout, setNodeLabels],
+    [select, writeSelection, updateFilters, setFollow, setPredicateLabels, focusLayer, setPlaneLayout, setNodeLabels],
   )
 
   return {

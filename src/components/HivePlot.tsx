@@ -114,7 +114,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
     )
     const g = external ?? own
     const { index, filters, reach, selectedId, linkEmphasis, nodeEmphasis } = g
-    const axisLabels = axisLabelsProp ?? (g.nodeLabels ? 1 : 0)
+    const axisLabels = axisLabelsProp ?? (g.nodeLabels !== false ? 1 : 0)
     const canSelect = interactions?.select !== false
     const canHover = interactions?.hover !== false
 

@@ -22,6 +22,8 @@ const EMPTY: ReachResult = Object.freeze({
  * origin is hop 0, any other node keeps the lowest hop any origin reached it at (with that
  * origin's `via`), and each link its lowest hop. `originId` is the first origin in the graph, and
  * `originIds` lists them all. Origins missing from the graph or on a hidden layer are skipped.
+ * Cost is one single-origin reach per origin (O(k · reach)): fine for a handful of nodes; a
+ * select-all over a large graph should use a single multi-source pass instead.
  */
 export function computeReach(
   index: LayeredIndex,
