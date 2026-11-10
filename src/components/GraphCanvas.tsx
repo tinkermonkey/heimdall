@@ -2471,6 +2471,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // (no engine run): it is cheap, and recomputes only when the index, layout, hidden layers,
     // lane options or measurements change.
     const lanesLayoutResult = lanesGraph?.layout ?? null;
+    const lanesLayoutPending = lanesGraph?.layoutPending === true;
     const lanesHiddenLayers = lanesFilters?.hiddenLayers;
     const laneOrientation = laneOptions?.orientation;
     const laneOrder = laneOptions?.order;
@@ -2563,6 +2564,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         (computedPositions.size === 0 || computedLayout !== layout)
       )
         return;
+      // layer-lanes: wait for an asynchronous in-layer layout (large graphs), whose order
+      // replaces the fallback one, so the fit frames the lanes as they settle.
+      if (layout === "layer-lanes" && lanesLayoutPending) return;
 
       const bbox = computeBoundingBox();
       if (!bbox) return;
@@ -2616,6 +2620,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       computeBoundingBox,
       computedLayout,
       renderedDecorationCircles,
+      lanesLayoutPending,
     ]);
 
     // Tracks the selectedNodeId centerOnSelect last reacted to, so it only pans on a

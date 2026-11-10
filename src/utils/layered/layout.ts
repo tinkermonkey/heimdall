@@ -177,6 +177,44 @@ export function layoutLayersAsync(
   })
 }
 
+/**
+ * A content key for everything `layoutLayers` reads from the index with the default node size:
+ * layers and their node order, each node's layer, display label and position sketch, and each
+ * link's ends, cross flag and categories. Two indexes with the same key lay out the same.
+ */
+export function layoutInputKey(index: LayeredIndex): string {
+  const parts: string[] = []
+  for (const l of index.layers) parts.push(`L${l.id}\u0001${l.nodeIds.join('\u0001')}`)
+  for (const n of index.nodes) parts.push(`N${n.id}\u0001${n.layerId}\u0001${n.displayLabel}\u0001${n.position?.x ?? ''},${n.position?.y ?? ''}`)
+  for (const k of index.links) parts.push(`E${k.sourceId}\u0001${k.targetId}\u0001${k.cross ? 1 : 0}\u0001${k.categories.join(',')}`)
+  return parts.join('\n')
+}
+
+function sameList(a: readonly string[] | null | undefined, b: readonly string[] | null | undefined): boolean {
+  if (a == null || b == null) return (a == null) === (b == null)
+  return a.length === b.length && a.every((x, i) => x === b[i])
+}
+
+function sameShallow(a: object | undefined, b: object | undefined): boolean {
+  if (a === b) return true
+  if (!a || !b) return false
+  const ka = Object.keys(a)
+  const ra = a as Record<string, unknown>
+  const rb = b as Record<string, unknown>
+  return ka.length === Object.keys(b).length && ka.every((k) => Object.is(ra[k], rb[k]))
+}
+
+/** Layout options equal field by field (`nodeSize` by identity, `organic` shallowly). */
+export function sameLayoutOptions(a: LayerLayoutOptions, b: LayerLayoutOptions): boolean {
+  return (
+    a === b ||
+    ((a.engine ?? 'organic') === (b.engine ?? 'organic') &&
+      sameList(a.layoutCategories, b.layoutCategories) &&
+      a.nodeSize === b.nodeSize &&
+      sameShallow(a.organic, b.organic))
+  )
+}
+
 /** Positions between `independent` (mix 0) and `coupled` (mix 1). */
 export function mixLayerPositions(layout: LayerLayoutResult, mix: number): Map<string, Point> {
   const t = Math.max(0, Math.min(1, mix))

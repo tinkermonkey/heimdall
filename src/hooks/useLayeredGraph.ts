@@ -1,9 +1,10 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { useControllable } from './useControllable'
+import { useAsyncLayerLayout } from './useAsyncLayerLayout'
 import { buildLayeredIndex } from '../utils/layered/buildLayeredIndex'
 import { linkEmphasis as computeLinkEmphasis, nodeEmphasis as computeNodeEmphasis, type EmphasisContext, type LinkCategoryStyle, type LinkEmphasis, type NodeEmphasis } from '../utils/layered/emphasis'
 import { DEFAULT_LINK_FILTERS, layerPairNodeIds } from '../utils/layered/filters'
-import { layoutLayers, layoutLayersAsync, type LayerLayoutOptions, type LayerLayoutResult } from '../utils/layered/layout'
+import { layoutLayers, type LayerLayoutOptions, type LayerLayoutResult } from '../utils/layered/layout'
 import { computeReach } from '../utils/layered/reach'
 import { sanitizeLayeredGraphSnapshot } from '../utils/layered/snapshot'
 import type { GraphEdge, GraphNodeData } from '../components/GraphCanvas'
@@ -24,7 +25,6 @@ const DEFAULT_LAYOUT_OPTIONS: LayerLayoutOptions = {}
 /** Node count from which the layout runs asynchronously by default (about 100 ms of solves). */
 export const ASYNC_LAYOUT_MIN_NODES = 200
 
-type AsyncLayoutRun = { index: LayeredIndex; options: LayerLayoutOptions } & ({ result: LayerLayoutResult } | { error: unknown })
 
 export interface UseLayeredGraphOptions {
   /** The same node and edge data GraphCanvas takes. */
@@ -35,9 +35,11 @@ export interface UseLayeredGraphOptions {
   /** In-layer layout options, or `false` to skip layout (views that don't need positions). Memoize it. */
   layout?: LayerLayoutOptions | false
   /**
-   * Node count from which the layout runs asynchronously (`layoutLayersAsync`): `layout` is null
-   * and `layoutPending` true until it lands, and the views draw without positions meanwhile.
-   * Default `ASYNC_LAYOUT_MIN_NODES` (200); `0` always, `false` never.
+   * Node count from which the layout runs asynchronously (`layoutLayersAsync`). `layoutPending` is
+   * true while a run is in flight; `layout` is null until the first run lands (the views draw
+   * without positions meanwhile) and then keeps the last landed result while a newer run is
+   * pending. An index or `layout` rebuilt with the same content reuses the landed result. Default
+   * `ASYNC_LAYOUT_MIN_NODES` (200); `0` always, `false` never.
    */
   asyncLayoutMinNodes?: number | false
 
@@ -97,7 +99,7 @@ export interface UseLayeredGraphOptions {
 
 export interface LayeredGraphState {
   index: LayeredIndex
-  /** null when `layout: false`, and while an asynchronous layout runs. */
+  /** null when `layout: false`, and until the first asynchronous layout lands (then the last landed one while a newer run is pending). */
   layout: LayerLayoutResult | null
   /** True while an asynchronous layout runs (see `asyncLayoutMinNodes`). */
   layoutPending: boolean
@@ -168,23 +170,9 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
     () => (layoutOptions === false || runAsync ? null : layoutLayers(index, layoutOptions)),
     [index, layoutOptions, runAsync],
   )
-  const [asyncRun, setAsyncRun] = useState<AsyncLayoutRun | null>(null)
-  useEffect(() => {
-    if (!runAsync) return
-    const ctrl = new AbortController()
-    layoutLayersAsync(index, layoutOptions, { signal: ctrl.signal }).then(
-      (result) => setAsyncRun({ index, options: layoutOptions, result }),
-      (error: unknown) => {
-        if (!ctrl.signal.aborted) setAsyncRun({ index, options: layoutOptions, error })
-      },
-    )
-    return () => ctrl.abort()
-  }, [index, layoutOptions, runAsync])
-  const run = runAsync && asyncRun?.index === index && asyncRun.options === layoutOptions ? asyncRun : null
-  // A failed asynchronous layout throws here, as a synchronous one would, for an error boundary.
-  if (run && 'error' in run) throw run.error
-  const layout = runAsync ? (run?.result ?? null) : syncLayout
-  const layoutPending = runAsync && !run
+  const asyncLayout = useAsyncLayerLayout(index, layoutOptions === false ? DEFAULT_LAYOUT_OPTIONS : layoutOptions, runAsync)
+  const layout = runAsync ? asyncLayout.layout : syncLayout
+  const layoutPending = asyncLayout.pending
 
   // ── selection: one ordered list of ids, the primary first ───────────────
   // Controlled by `selectedIds`, else by `selectedId` (a list of at most one), else held here.
