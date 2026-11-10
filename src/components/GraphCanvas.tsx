@@ -60,7 +60,7 @@ import GraphNode from "./GraphNode";
 import { GraphEdgeShape } from "./GraphEdgeShape";
 import { GraphToolbar, type GraphToolbarPosition } from "./GraphToolbar";
 import { GraphCollapseControl } from "./GraphCollapseControl";
-import { Tooltip } from "./Tooltip";
+import { computeTooltipPosition, type TooltipPosition, type TooltipRect } from "./tooltipPlacement";
 import { Popover } from "./Popover";
 import { StatusBadge } from "./Badge";
 import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from "../hooks/useLayeredGraph";
@@ -71,6 +71,7 @@ import type { BuildLayeredIndexOptions, IndexedLink } from "../utils/layered/typ
 import type { LinkEmphasis } from "../utils/layered/emphasis";
 import { layoutLanes, laneLinkCurve, type LaneLayoutOptions, type LaneLinkCurve } from "../utils/laneLayout";
 import { containsAcrossPortals } from "../hooks/useDropdownPortal";
+import "./Tooltip.css";
 import "./GraphCanvas.css";
 import "./GraphEdge.css";
 
@@ -86,8 +87,9 @@ export { useGraphCanvas } from "./GraphCanvasContext";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-/** Tooltip show delay in milliseconds. Matches the Tooltip component's default. */
-const TOOLTIP_SHOW_DELAY_MS = 200;
+/** Default nodeTooltip/edgeTooltip hover show delay in milliseconds (see GraphCanvasProps.tooltipDelay).
+ *  Matches the Tooltip component's own default `delay`. */
+const DEFAULT_TOOLTIP_DELAY_MS = 200;
 
 /**
  * How long the layout must stay busy before the built-in "Laying out…" chip shows, so a fast
@@ -531,6 +533,7 @@ function GraphEdgeInternal({
       onPointerEnter={onHoverStart ? () => onHoverStart(id) : undefined}
       onPointerLeave={onHoverEnd ? () => onHoverEnd(id) : undefined}
       data-testid={`graph-edge-${id}`}
+      data-edge-id={id}
     >
       {renderEdge ? (
         <>
@@ -637,6 +640,112 @@ function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, onSe
   );
 }
 
+// ─── Hover tooltip overlay ────────────────────────────────────────────────────
+
+/** Gap between a hover tooltip card and the box it explains, in px (Tooltip's default offset). */
+const GRAPH_TOOLTIP_OFFSET = 6;
+/** Minimum gap between a hover tooltip card and the edge of the visible canvas, in px. */
+const GRAPH_TOOLTIP_MARGIN = 4;
+
+/** The drawn label box for an edge: the default edge's label background, or a layer-lanes pill. */
+const edgeLabelSelector = (edgeId: string): string => {
+  const id = typeof CSS !== "undefined" && CSS.escape ? CSS.escape(edgeId) : edgeId.replace(/["\\]/g, "\\$&");
+  return `[data-edge-id="${id}"] .graph-edge__label-bg, .graph-lane-pill[data-link-id="${id}"] .graph-lane-pill__bg`;
+};
+
+interface GraphTooltipOverlayProps {
+  tooltipId: string;
+  content: React.ReactNode;
+  /** Set for an edge tooltip: anchors to that edge's drawn label when it has one. */
+  edgeId?: string;
+  /** Fallback anchor box, in canvas-local px (the node box, or the edge midpoint as a point). */
+  anchor: TooltipRect;
+}
+
+/**
+ * The nodeTooltip/edgeTooltip hover card. Positioned beside its anchor with computeTooltipPosition
+ * (above, else below, right, left; clamped to the visible canvas). An edge's anchor is its label's
+ * box as actually drawn, measured from the DOM so it matches whatever label placement chose. Runs
+ * every render (GraphCanvas re-renders on pan/zoom/drag), before paint, so it follows the graph.
+ * Measures through its own layer element rather than GraphCanvas's containerRef: GraphCanvas's
+ * root ref callback is re-attached on every commit, after this child's layout effect has run.
+ */
+function GraphTooltipOverlay({ tooltipId, content, edgeId, anchor }: GraphTooltipOverlayProps) {
+  const layerRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<TooltipPosition | null>(null);
+
+  useLayoutEffect(() => {
+    const layer = layerRef.current;
+    const card = cardRef.current;
+    if (!layer || !card) return;
+
+    // Screen px -> the layer's own px (it fills the canvas's padding box), dividing out any CSS
+    // scale a host ancestor applies.
+    const lr = layer.getBoundingClientRect();
+    const sx = layer.offsetWidth > 0 ? lr.width / layer.offsetWidth : 1;
+    const sy = layer.offsetHeight > 0 ? lr.height / layer.offsetHeight : 1;
+    const toLocalX = (x: number) => (x - lr.left) / sx;
+    const toLocalY = (y: number) => (y - lr.top) / sy;
+
+    let box = anchor;
+    const canvas = layer.closest(".graph-canvas");
+    if (edgeId && canvas) {
+      const label = canvas.querySelector(edgeLabelSelector(edgeId));
+      if (label) {
+        const r = label.getBoundingClientRect();
+        if (r.width > 0 || r.height > 0) {
+          box = { left: toLocalX(r.left), right: toLocalX(r.right), top: toLocalY(r.top), bottom: toLocalY(r.bottom) };
+        }
+      }
+    }
+
+    // The visible part of the canvas: its own box, cut to the browser viewport.
+    const visible: TooltipRect = {
+      left: Math.max(0, toLocalX(0)),
+      top: Math.max(0, toLocalY(0)),
+      right: Math.min(layer.offsetWidth, toLocalX(window.innerWidth)),
+      bottom: Math.min(layer.offsetHeight, toLocalY(window.innerHeight)),
+    };
+    // Once the anchor is panned out of view, the card goes with it (clipped like any other canvas
+    // content) instead of being clamped in, explaining something that can't be seen.
+    const anchorVisible =
+      box.right >= visible.left && box.left <= visible.right && box.bottom >= visible.top && box.top <= visible.bottom;
+    const bounds: TooltipRect = anchorVisible
+      ? visible
+      : { left: -Infinity, top: -Infinity, right: Infinity, bottom: Infinity };
+
+    // Unrounded size (offsetWidth/offsetHeight round), in local px.
+    const cardRect = card.getBoundingClientRect();
+    const next = computeTooltipPosition({
+      anchor: box,
+      card: { width: cardRect.width / sx, height: cardRect.height / sy },
+      bounds,
+      placement: "top",
+      offset: GRAPH_TOOLTIP_OFFSET,
+      margin: GRAPH_TOOLTIP_MARGIN,
+    });
+    setPos((prev) =>
+      prev && prev.left === next.left && prev.top === next.top && prev.placement === next.placement ? prev : next,
+    );
+  });
+
+  return (
+    <div ref={layerRef} className="graph-tooltip-layer">
+      <div
+        ref={cardRef}
+        role="tooltip"
+        id={tooltipId}
+        className={["tooltip", "graph-tooltip", pos && `graph-tooltip--${pos.placement}`].filter(Boolean).join(" ")}
+        data-placement={pos?.placement}
+        style={{ left: pos?.left ?? 0, top: pos?.top ?? 0, visibility: pos ? undefined : "hidden" }}
+      >
+        {content}
+      </div>
+    </div>
+  );
+}
+
 // ─── GraphCanvas ──────────────────────────────────────────────────────────────
 
 export interface GraphCanvasProps extends Omit<
@@ -679,13 +788,26 @@ export interface GraphCanvasProps extends Omit<
    * in your tooltip.
    */
   nodeTooltipTrigger?: 'hover' | 'click';
-  /** Same as nodeTooltip, for a hovered or clicked edge instead — positioned at the edge path's midpoint. */
+  /**
+   * Same as nodeTooltip, for a hovered or clicked edge instead. A hover tooltip sits beside the
+   * edge's drawn label (wherever label placement put it) so it never covers the label it explains,
+   * or beside the path midpoint when the edge has no visible label. Like nodeTooltip, it tries
+   * above first, then below, then right, then left, taking the first side with room inside the
+   * visible canvas, and is clamped into it.
+   */
   edgeTooltip?: (edge: GraphEdge) => React.ReactNode;
   /**
    * Specifies whether edgeTooltip should be triggered by hover or click. Default: 'hover'.
    * See nodeTooltipTrigger for behavior details.
    */
   edgeTooltipTrigger?: 'hover' | 'click';
+  /**
+   * How long, in ms, the pointer must rest on a node or edge before its hover nodeTooltip/
+   * edgeTooltip shows. Default 200 (the Tooltip component's own default `delay`). Lengthen it when
+   * nodes or edges are also click targets (onNodeSelect/onEdgeSelect), so the tooltip doesn't
+   * pop up over what the user is aiming at. Has no effect on 'click'-triggered tooltips.
+   */
+  tooltipDelay?: number;
   /**
    * Pan (preserving the current zoom level — never re-fits/re-zooms) to keep
    * `selectedNodeId` centered whenever it changes to a resolvable node. Off by
@@ -1033,6 +1155,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       nodeTooltipTrigger = 'hover',
       edgeTooltip,
       edgeTooltipTrigger = 'hover',
+      tooltipDelay = DEFAULT_TOOLTIP_DELAY_MS,
       nodePopover,
       edgePopover,
       centerOnSelect = false,
@@ -2800,9 +2923,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           clearTimeout(tooltipDelayRef.current.edgeTimer);
         tooltipDelayRef.current.edgeTimer = setTimeout(() => {
           setDelayedHoveredEdgeId(id);
-        }, TOOLTIP_SHOW_DELAY_MS);
+        }, tooltipDelay);
       }
-    }, [edgeTooltip]);
+    }, [edgeTooltip, tooltipDelay]);
 
     const handleEdgeHoverEndWithDelay = useCallback((id: string) => {
       handleEdgeHoverEnd(id);
@@ -2818,9 +2941,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           clearTimeout(tooltipDelayRef.current.nodeTimer);
         tooltipDelayRef.current.nodeTimer = setTimeout(() => {
           setDelayedHoveredNodeId(id);
-        }, TOOLTIP_SHOW_DELAY_MS);
+        }, tooltipDelay);
       }
-    }, [nodeTooltip]);
+    }, [nodeTooltip, tooltipDelay]);
 
     const handleNodeHoverEndWithDelay = useCallback((id: string) => {
       setHoveredNodeId((current) =>
@@ -3169,12 +3292,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph],
     );
 
-    // World-space anchor (node's top-center, or an edge path's midpoint) for the nodeTooltip/
-    // edgeTooltip overlay below, resolved from current hover state. Screen position is derived
-    // from this at render time via the live viewport (see the overlay JSX), so it tracks pan/zoom
-    // exactly like the hovered node/edge itself does — no separate "reposition on pan" handling
-    // needed. Uses delayed hover states to apply the same 200ms anti-flicker delay as the
-    // standalone Tooltip component. Suppressed when a popover is open for the same node/edge.
+    // World-space anchor box (the node's box, or an edge path's midpoint as a point) for the
+    // nodeTooltip/edgeTooltip overlay below, resolved from current hover state. Screen position is
+    // derived from this at render time via the live viewport (see GraphTooltipOverlay), so it
+    // tracks pan/zoom exactly like the hovered node/edge itself does. For an edge with a drawn
+    // label, the overlay anchors to the label's box instead and the midpoint is only the fallback.
+    // Uses delayed hover states (tooltipDelay anti-flicker delay). Suppressed when a popover is
+    // open for the same node/edge.
     // Only used for 'hover' trigger mode; 'click' trigger mode uses popoverTarget instead.
     const tooltipTarget = useMemo(() => {
       if (nodeTooltip && nodeTooltipTrigger === 'hover' && delayedHoveredNodeId && delayedHoveredNodeId !== activePopoverNodeId) {
@@ -3187,7 +3311,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           };
           try {
             const content = nodeTooltip(node);
-            return { type: "node" as const, nodeId: delayedHoveredNodeId, tooltipId: nodeTooltipId(delayedHoveredNodeId), content, worldX: pos.x, worldY: pos.y - d.height / 2 };
+            return {
+              type: "node" as const,
+              nodeId: delayedHoveredNodeId,
+              tooltipId: nodeTooltipId(delayedHoveredNodeId),
+              content,
+              world: { left: pos.x - d.width / 2, right: pos.x + d.width / 2, top: pos.y - d.height / 2, bottom: pos.y + d.height / 2 },
+            };
           } catch (error) {
             console.error("Error in nodeTooltip callback:", error);
             return null;
@@ -3210,7 +3340,13 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               });
           try {
             const content = edgeTooltip(edge);
-            return { type: "edge" as const, edgeId: delayedHoveredEdgeId, tooltipId: edgeTooltipId(delayedHoveredEdgeId), content, worldX: path.mid.x, worldY: path.mid.y };
+            return {
+              type: "edge" as const,
+              edgeId: delayedHoveredEdgeId,
+              tooltipId: edgeTooltipId(delayedHoveredEdgeId),
+              content,
+              world: { left: path.mid.x, right: path.mid.x, top: path.mid.y, bottom: path.mid.y },
+            };
           } catch (error) {
             console.error("Error in edgeTooltip callback:", error);
             return null;
@@ -3903,19 +4039,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           )}
 
           {tooltipTarget && (
-            <div className="graph-tooltip-layer">
-              <div
-                className="graph-tooltip-anchor"
-                style={{
-                  left: tooltipTarget.worldX * viewport.zoom + viewport.x,
-                  top: tooltipTarget.worldY * viewport.zoom + viewport.y,
-                }}
-              >
-                <Tooltip open content={tooltipTarget.content} placement="top" id={tooltipTarget.tooltipId}>
-                  <span />
-                </Tooltip>
-              </div>
-            </div>
+            <GraphTooltipOverlay
+              key={tooltipTarget.tooltipId}
+              tooltipId={tooltipTarget.tooltipId}
+              content={tooltipTarget.content}
+              edgeId={tooltipTarget.type === "edge" ? tooltipTarget.edgeId : undefined}
+              anchor={{
+                left: tooltipTarget.world.left * viewport.zoom + viewport.x,
+                right: tooltipTarget.world.right * viewport.zoom + viewport.x,
+                top: tooltipTarget.world.top * viewport.zoom + viewport.y,
+                bottom: tooltipTarget.world.bottom * viewport.zoom + viewport.y,
+              }}
+            />
           )}
 
           {popoverTarget && (

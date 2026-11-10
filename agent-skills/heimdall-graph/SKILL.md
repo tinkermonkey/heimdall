@@ -81,8 +81,9 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | ---- | ---- | ------- | ----------- |
 | `nodeTooltip` | `(node) => ReactNode` | — | Content shown near a hovered (or clicked) node |
 | `nodeTooltipTrigger` | `'hover' \| 'click'` | `'hover'` | `'click'` renders the content in a `Popover` (`role="dialog"`), so it can hold buttons and links |
-| `edgeTooltip` | `(edge) => ReactNode` | — | Same, at the edge path's midpoint |
+| `edgeTooltip` | `(edge) => ReactNode` | — | Same, for a hovered (or clicked) edge. A hover tooltip sits beside the edge's label, or its path midpoint if it has no label |
 | `edgeTooltipTrigger` | `'hover' \| 'click'` | `'hover'` | Same as `nodeTooltipTrigger`, for edges |
+| `tooltipDelay` | `number` | `200` | Hover delay in ms before a `'hover'` `nodeTooltip`/`edgeTooltip` shows |
 | `nodePopover` | `(node) => ReactNode` | — | Interactive `role="dialog"` popover on node click or Enter/Space |
 | `edgePopover` | `(edge) => ReactNode` | — | Same, anchored at the edge midpoint |
 
@@ -285,7 +286,8 @@ On a flat graph, leave `isStructuralEdge`, `collapsedNodeIds` and `onToggleColla
 
 ### Tooltips and popovers
 
-- `nodeTooltip` / `edgeTooltip` with the default `'hover'` trigger: a non-interactive `role="tooltip"` overlay after a 200 ms hover delay, linked to its target with `aria-describedby`.
+- `nodeTooltip` / `edgeTooltip` with the default `'hover'` trigger: a non-interactive `role="tooltip"` overlay after a hover delay (`tooltipDelay`, default 200 ms), linked to its target with `aria-describedby`. Lengthen `tooltipDelay` when nodes or edges are also click targets, so the card doesn't appear over what the user is aiming at.
+- Hover tooltip placement: the card sits 6 px beside its anchor and never covers it. The anchor is the node's box; for an edge, the edge's drawn label (wherever label placement put it), or the path midpoint when the edge has no visible label. It tries above, then below, then right, then left, takes the first side with room inside the visible canvas, and is clamped into it. It follows pan, zoom and drag. Don't measure the edge label yourself to position your own card; pass `edgeTooltip`.
 - `nodeTooltipTrigger="click"` / `edgeTooltipTrigger="click"`: the same content opens in a `Popover` on click, so it can hold buttons and links.
 - `nodePopover` / `edgePopover`: a `role="dialog"` popover that opens on click, or on Enter/Space when focused, and moves focus to its first focusable element. It tracks pan and zoom, and closes on Escape, background click, or click outside the canvas. Only one popover is open at a time.
 - A popover and a hover tooltip can be set on the same node. A content callback that returns `null` or `undefined` opens nothing.

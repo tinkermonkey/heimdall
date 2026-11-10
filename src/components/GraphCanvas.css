@@ -58,10 +58,11 @@
   pointer-events: none;
 }
 
-.graph-tooltip-anchor {
-  position: absolute;
-  width: 0;
-  height: 0;
+/* The hover card itself (.tooltip styles it). GraphTooltipOverlay sets left/top inline; the
+   width is its natural width up to .tooltip's max-width, independent of how close to the canvas
+   edge it lands, so the measured size stays stable as it moves. */
+.graph-tooltip {
+  width: max-content;
 }
 
 /* nodePopover/edgePopover overlay (see GraphCanvas's own props) — sits above the SVG in screen
