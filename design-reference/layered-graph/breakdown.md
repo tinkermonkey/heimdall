@@ -425,7 +425,7 @@ Why A was chosen:
 
 - `placeEdgeLabels` (step 3).
 - The camera, tween and label-overlay helpers (step 4).
-- Async layout for large graphs: `layoutLayers` is synchronous and fast at fixture scale.
+- Async layout for large graphs: `layoutLayers` is synchronous and fast at fixture scale. (Done in #338, see below.)
 
 **Step 2, `AdjacencyMatrix`: implemented (merged in #330).**
 
@@ -475,3 +475,8 @@ Why A was chosen:
 - `LayerStackHandle.getLayerGap()`: the live gap, mid-tween included.
 - Snapshots are untrusted input (URLs): `sanitizeLayeredGraphSnapshot` and `sanitizeLayeredGraphExplorerSnapshot` drop malformed fields and complete partial filters, at every entry point. A preset is active exactly when the stored camera and gap are its own (picked presets are stored at once; overrides drop the preset), so a preset click reports once, settled, and restoring that snapshot mid-tween does not remount. A changed camera remounts the stack and stops the turntable; an unchanged one leaves the stack alone. Reports from a stack being replaced are ignored.
 - **Tests:** the explorer test page's `sync=1` mode writes the snapshot to the URL. The explorer spec reloads from that URL (view, selection, follow, filter, labels, preset and gap come back) and saves and restores through the handle (plane spacing matches the saved gap). Further tests cover layer focus through the URL, a malformed `state`, a restore with an unchanged camera (no remount) and a restore over a running turntable. Unit tests in `src/utils/__tests__/layeredSnapshot.test.ts` (sanitizers included).
+
+**#338 async layout: implemented.**
+- `layoutLayersAsync(index, options, { signal })` in `src/utils/layered/layout.ts`: the same deterministic result as `layoutLayers` (both run one step generator), one solve at a time with `yieldToPaint` before each: each layer, then the coupled solve. `signal` aborts between solves. The coupled solve is still one block (about half the time on a large graph); splitting it would mean making `organicLayout` incremental.
+- `useLayeredGraph` lays out asynchronously from `asyncLayoutMinNodes` nodes (default `ASYNC_LAYOUT_MIN_NODES` = 200, measured at about 100 ms of solves; `0` always, `false` never). Until the layout lands, `layout` is null and `layoutPending` is true, and the views use their no-layout fallbacks. A newer index or options aborts the older run, and a failed run throws from the hook, as a synchronous one would.
+- **Tests:** `src/utils/__tests__/layeredAsyncLayout.test.ts`; the LayerStack test page's `asyncLayout=1` mode, where the spec checks that every node lands where the synchronous layout puts it.

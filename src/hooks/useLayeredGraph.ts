@@ -1,9 +1,9 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useControllable } from './useControllable'
 import { buildLayeredIndex } from '../utils/layered/buildLayeredIndex'
 import { linkEmphasis as computeLinkEmphasis, nodeEmphasis as computeNodeEmphasis, type EmphasisContext, type LinkCategoryStyle, type LinkEmphasis, type NodeEmphasis } from '../utils/layered/emphasis'
 import { DEFAULT_LINK_FILTERS, layerPairNodeIds } from '../utils/layered/filters'
-import { layoutLayers, type LayerLayoutOptions, type LayerLayoutResult } from '../utils/layered/layout'
+import { layoutLayers, layoutLayersAsync, type LayerLayoutOptions, type LayerLayoutResult } from '../utils/layered/layout'
 import { computeReach } from '../utils/layered/reach'
 import { sanitizeLayeredGraphSnapshot } from '../utils/layered/snapshot'
 import type { GraphEdge, GraphNodeData } from '../components/GraphCanvas'
@@ -21,6 +21,10 @@ import type {
 
 // A stable default: a fresh `{}` per render would re-run the layout every render.
 const DEFAULT_LAYOUT_OPTIONS: LayerLayoutOptions = {}
+/** Node count from which the layout runs asynchronously by default (about 100 ms of solves). */
+export const ASYNC_LAYOUT_MIN_NODES = 200
+
+type AsyncLayoutRun = { index: LayeredIndex; options: LayerLayoutOptions } & ({ result: LayerLayoutResult } | { error: unknown })
 
 export interface UseLayeredGraphOptions {
   /** The same node and edge data GraphCanvas takes. */
@@ -30,6 +34,12 @@ export interface UseLayeredGraphOptions {
   layering: BuildLayeredIndexOptions
   /** In-layer layout options, or `false` to skip layout (views that don't need positions). Memoize it. */
   layout?: LayerLayoutOptions | false
+  /**
+   * Node count from which the layout runs asynchronously (`layoutLayersAsync`): `layout` is null
+   * and `layoutPending` true until it lands, and the views draw without positions meanwhile.
+   * Default `ASYNC_LAYOUT_MIN_NODES` (200); `0` always, `false` never.
+   */
+  asyncLayoutMinNodes?: number | false
 
   /**
    * The selected node instance (controlled). The simple, single-select path: controlling only
@@ -87,8 +97,10 @@ export interface UseLayeredGraphOptions {
 
 export interface LayeredGraphState {
   index: LayeredIndex
-  /** null when `layout: false`. */
+  /** null when `layout: false`, and while an asynchronous layout runs. */
   layout: LayerLayoutResult | null
+  /** True while an asynchronous layout runs (see `asyncLayoutMinNodes`). */
+  layoutPending: boolean
   /** The selection's reach at the current `follow`. */
   reach: ReachResult
   /** The hovered node's direct links only (follow 0), for cheap hover previews. */
@@ -150,7 +162,29 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const { nodes, edges, layering, layout: layoutOptions = DEFAULT_LAYOUT_OPTIONS, followCategories, linkStyles } = options
 
   const index = useMemo(() => buildLayeredIndex(nodes, edges, layering), [nodes, edges, layering])
-  const layout = useMemo(() => (layoutOptions === false ? null : layoutLayers(index, layoutOptions)), [index, layoutOptions])
+  const asyncMin = options.asyncLayoutMinNodes ?? ASYNC_LAYOUT_MIN_NODES
+  const runAsync = layoutOptions !== false && asyncMin !== false && index.nodes.length >= asyncMin
+  const syncLayout = useMemo(
+    () => (layoutOptions === false || runAsync ? null : layoutLayers(index, layoutOptions)),
+    [index, layoutOptions, runAsync],
+  )
+  const [asyncRun, setAsyncRun] = useState<AsyncLayoutRun | null>(null)
+  useEffect(() => {
+    if (!runAsync) return
+    const ctrl = new AbortController()
+    layoutLayersAsync(index, layoutOptions, { signal: ctrl.signal }).then(
+      (result) => setAsyncRun({ index, options: layoutOptions, result }),
+      (error: unknown) => {
+        if (!ctrl.signal.aborted) setAsyncRun({ index, options: layoutOptions, error })
+      },
+    )
+    return () => ctrl.abort()
+  }, [index, layoutOptions, runAsync])
+  const run = runAsync && asyncRun?.index === index && asyncRun.options === layoutOptions ? asyncRun : null
+  // A failed asynchronous layout throws here, as a synchronous one would, for an error boundary.
+  if (run && 'error' in run) throw run.error
+  const layout = runAsync ? (run?.result ?? null) : syncLayout
+  const layoutPending = runAsync && !run
 
   // ── selection: one ordered list of ids, the primary first ───────────────
   // Controlled by `selectedIds`, else by `selectedId` (a list of at most one), else held here.
@@ -339,7 +373,7 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   )
 
   return {
-    index, layout, reach, hoverReach, pairNodeIds,
+    index, layout, layoutPending, reach, hoverReach, pairNodeIds,
     selectedId, selectedIds, hoveredId, follow, filters, predicateLabels, focusedLayerId, planeLayout, nodeLabels,
     select, setSelectedIds, toggleSelected, hover, setFollow, setFilters: setFiltersAction, toggleCategory, togglePredicate, toggleLayer,
     setShowIntra, setLayerPair, setPredicateLabels, focusLayer, setPlaneLayout, setNodeLabels,

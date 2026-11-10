@@ -48,7 +48,29 @@ async function planeSpacing(page: Page): Promise<number> {
   return (ys[1] - ys[0]) / (ys[2] - ys[1])
 }
 
+/** Every node disc's center, by node id. */
+async function nodeCenters(page: Page): Promise<Record<string, [number, number]>> {
+  return page.evaluate(() =>
+    Object.fromEntries(
+      [...document.querySelectorAll('.layer-stack__node')].map((el) => {
+        const c = el.querySelector('.layer-stack__disc')!
+        return [el.getAttribute('data-node-id') ?? '', [Number(c.getAttribute('cx')), Number(c.getAttribute('cy'))]]
+      }),
+    ),
+  )
+}
+
 test.describe('LayerStack', () => {
+  test('an asynchronous layout lands on the same positions as the synchronous one', async ({ page }) => {
+    await open(page)
+    const sync = await nodeCenters(page)
+    const errors = await open(page, '&asyncLayout=1')
+    await expect(page.getByTestId('layer-stack-caption')).toContainText('layout ready')
+    await expect(page.locator('.layer-stack__node')).toHaveCount(36)
+    await expect.poll(() => nodeCenters(page)).toEqual(sync)
+    expect(errors).toEqual([])
+  })
+
   test('draws a plane per layer, a disc and a label button per node', async ({ page }) => {
     const errors = await open(page)
     await expect(page.getByTestId('layer-stack-caption')).toContainText('36 nodes · 162 links · 22 cross-layer')
