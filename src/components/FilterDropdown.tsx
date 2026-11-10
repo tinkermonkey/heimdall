@@ -10,7 +10,8 @@ import React, {
 import './FilterDropdown.css'
 import { Icon } from './Icon'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
-import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
+import { useDropdownPortal, type UseDropdownPortalReturn } from '../hooks/useDropdownPortal'
+import type { DropdownPlacement } from './dropdownPlacement'
 
 interface FilterDropdownContextValue {
   isOpen: boolean
@@ -22,7 +23,7 @@ interface FilterDropdownContextValue {
   setFocusedValue: (value: string | null) => void
   triggerRef: React.RefObject<HTMLButtonElement>
   panelRef: React.RefObject<HTMLDivElement>
-  placement: DropdownPlacement
+  floating: UseDropdownPortalReturn
 }
 
 const FilterDropdownContext = createContext<FilterDropdownContextValue | undefined>(undefined)
@@ -44,10 +45,14 @@ export interface FilterDropdownProps {
   value?: string[]
   /** Where the dropdown panel opens relative to the trigger. */
   placement?: DropdownPlacement
+  /** Render the panel in a portal on `document.body` (`position: fixed`), so
+   *  scrolling / overflow-hidden ancestors can't clip it. The panel flips when
+   *  there's no room. Default `true`; `false` renders it in place. */
+  portal?: boolean
 }
 
 const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownProps>(
-  ({ mode = 'checkbox', children, onChange, className = '', defaultValue, value, placement = 'bottom-start' }, ref) => {
+  ({ mode = 'checkbox', children, onChange, className = '', defaultValue, value, placement = 'bottom-start', portal = true }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const isControlled = value !== undefined
     const [internalValues, setInternalValues] = useState<Set<string>>(new Set(defaultValue ?? []))
@@ -64,6 +69,8 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       isOpen,
       onClose: handleClose,
     })
+
+    const floating = useDropdownPortal({ anchorRef: rootRef, panelRef, isOpen, placement, portal })
 
     const handleOpenChange = useCallback((open: boolean) => {
       setIsOpen(open)
@@ -98,7 +105,7 @@ const FilterDropdownComponent = React.forwardRef<HTMLDivElement, FilterDropdownP
       setFocusedValue,
       triggerRef,
       panelRef,
-      placement,
+      floating,
     }
 
     return (
@@ -154,17 +161,18 @@ export interface FilterDropdownPanelProps extends React.HTMLAttributes<HTMLDivEl
 }
 
 function FilterDropdownPanel({ children, className = '', style, ...restProps }: FilterDropdownPanelProps) {
-  const { isOpen, mode, panelRef, placement } = useFilterDropdown()
+  const { isOpen, mode, panelRef, floating } = useFilterDropdown()
 
-  return (
+  return floating.renderPanel(
     <div
       ref={panelRef}
-      className={`dropdown-panel ${dropdownPlacementClass(placement)} filter-dropdown__panel ${className}`.trim()}
+      className={`dropdown-panel ${floating.className} filter-dropdown__panel ${className}`.trim()}
       role={mode === 'checkbox' ? 'listbox' : 'radiogroup'}
       aria-multiselectable={mode === 'checkbox' ? true : undefined}
       hidden={!isOpen}
       style={isOpen ? style : undefined}
       {...restProps}
+      {...floating.panelProps}
     >
       {children}
     </div>

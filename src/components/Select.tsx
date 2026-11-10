@@ -11,7 +11,8 @@ import React, {
 import './Select.css'
 import { Icon, type IconName } from './Icon'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
-import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
+import { useDropdownPortal } from '../hooks/useDropdownPortal'
+import type { DropdownPlacement } from './dropdownPlacement'
 
 type Mode = 'single' | 'multi'
 
@@ -69,6 +70,10 @@ type SelectBaseProps = {
   'data-testid'?: string
   /** Where the dropdown panel opens relative to the trigger. */
   placement?: DropdownPlacement
+  /** Render the panel in a portal on `document.body` (`position: fixed`), so
+   *  scrolling / overflow-hidden ancestors can't clip it. The panel flips when
+   *  there's no room. Default `true`; `false` renders it in place. */
+  portal?: boolean
 }
 
 export type SelectProps = (SelectSingleProps | SelectMultiProps) & SelectBaseProps
@@ -85,6 +90,7 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectProps>(
       ariaLabel,
       children,
       placement = 'bottom-start',
+      portal = true,
     } = props
     const dataTestId = props['data-testid']
 
@@ -112,6 +118,8 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectProps>(
     const triggerRef = useRef<HTMLButtonElement>(null)
     const panelRef = useRef<HTMLDivElement>(null)
     const rootRef = useRef<HTMLDivElement>(null)
+    // Links trigger and panel; the panel is portalled out of the root.
+    const panelId = React.useId()
 
     // Item registry: tracks value -> label so the trigger can render the label.
     const [items, setItems] = useState<Map<string, ReactNode>>(new Map())
@@ -148,6 +156,8 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectProps>(
       isOpen,
       onClose: handleClose,
     })
+
+    const floating = useDropdownPortal({ anchorRef: rootRef, panelRef, isOpen, placement, portal })
 
     // Seed the focused row to the currently selected value when opening.
     useEffect(() => {
@@ -243,6 +253,7 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectProps>(
             className="select__trigger"
             aria-haspopup="listbox"
             aria-expanded={isOpen}
+            aria-controls={panelId}
             aria-invalid={error || undefined}
             aria-label={ariaLabel}
             disabled={disabled}
@@ -257,15 +268,19 @@ const SelectComponent = React.forwardRef<HTMLButtonElement, SelectProps>(
             />
           </button>
           {hiddenInputs}
-          <div
-            ref={panelRef}
-            role="listbox"
-            aria-multiselectable={mode === 'multi' ? true : undefined}
-            className={`dropdown-panel ${dropdownPlacementClass(placement)} select__panel`}
-            hidden={!isOpen}
-          >
-            {children}
-          </div>
+          {floating.renderPanel(
+            <div
+              ref={panelRef}
+              id={panelId}
+              role="listbox"
+              aria-multiselectable={mode === 'multi' ? true : undefined}
+              className={`dropdown-panel ${floating.className} select__panel`}
+              hidden={!isOpen}
+              {...floating.panelProps}
+            >
+              {children}
+            </div>
+          )}
         </div>
       </SelectContext.Provider>
     )

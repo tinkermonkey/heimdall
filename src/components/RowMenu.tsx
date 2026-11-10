@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } 
 import './RowMenu.css'
 import { Icon, type IconName } from './Icon'
 import { useDropdownMenu } from '../hooks/useDropdownMenu'
-import { dropdownPlacementClass, type DropdownPlacement } from './dropdownPlacement'
+import { useDropdownPortal } from '../hooks/useDropdownPortal'
+import type { DropdownPlacement } from './dropdownPlacement'
 
 export type RowMenuAction =
   | {
@@ -27,6 +28,10 @@ export interface RowMenuProps
    *  `bottom-start` (panel hangs below, left-aligned with trigger). Use
    *  `bottom-end` for the classic kebab-at-row-right pattern. */
   placement?: DropdownPlacement
+  /** Render the panel in a portal on `document.body` (`position: fixed`), so
+   *  scrolling / overflow-hidden ancestors can't clip it. The panel flips when
+   *  there's no room. Default `true`; `false` renders it in place. */
+  portal?: boolean
 }
 
 const isSeparator = (action: RowMenuAction): action is { type: 'separator' } =>
@@ -41,6 +46,7 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
       triggerIcon = 'moreVertical',
       triggerLabel = 'Menu',
       placement = 'bottom-start',
+      portal = true,
       className,
       ...props
     },
@@ -58,6 +64,14 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
       panelRef,
       isOpen,
       onClose: handleClose,
+    })
+
+    const floating = useDropdownPortal({
+      anchorRef: containerRef,
+      panelRef,
+      isOpen,
+      placement,
+      portal,
     })
 
     useImperativeHandle(ref, () => containerRef.current as HTMLDivElement)
@@ -90,13 +104,14 @@ export const RowMenu = React.forwardRef<HTMLDivElement, RowMenuProps>(
           {trigger || <Icon name={triggerIcon} size={16} />}
         </button>
 
-        {isOpen && (
+        {isOpen && floating.renderPanel(
           <div
             ref={panelRef}
             role="menu"
             aria-label={triggerLabel}
-            className={`dropdown-panel ${dropdownPlacementClass(placement)} row-menu__dropdown`}
+            className={`dropdown-panel ${floating.className} row-menu__dropdown`}
             data-testid="row-menu-dropdown"
+            {...floating.panelProps}
           >
             {actions.map((action, index) =>
               isSeparator(action) ? (

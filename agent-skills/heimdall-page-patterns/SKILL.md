@@ -628,6 +628,7 @@ import { RowMenu } from '@tinkermonkey/heimdall-ui'
 | `triggerIcon` | `IconName` | `'moreVertical'` | Icon for the default trigger |
 | `triggerLabel` | `string` | `'Menu'` | `aria-label` for trigger and menu |
 | `placement` | `DropdownPlacement` | `'bottom-start'` | Panel side and edge alignment |
+| `portal` | `boolean` | `true` | Render the panel in a portal on `document.body` (`position: fixed`); `false` renders it in place |
 | `...divProps` | | | Remaining props (except `onChange`) spread onto the root `<div>` |
 
 ### Data types
@@ -671,8 +672,10 @@ type DropdownPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'
 
 ### Gotchas
 
-- Use `placement="bottom-end"` for a kebab in the last table column so the panel opens leftward into the table instead of past the right edge.
-- The panel is absolutely positioned inside the RowMenu root (`z-index: 1000`, max height 320px, scrolls beyond). Ancestors with `overflow: hidden` or a scroll container clip it; use `top-*` placements near the bottom of a scroll area.
+- By default the panel renders in a portal on `document.body` with `position: fixed` (`z-index: 1000`, max height 320px, scrolls beyond), so a scrolling table frame or `overflow: hidden` ancestor doesn't clip it. It flips above the trigger, or to the other edge, when `placement` doesn't fit the viewport, and follows the trigger when any ancestor scrolls.
+- Because the panel is not inside `.row-menu`, CSS like `.row-menu .dropdown-panel` doesn't match it. Target `.row-menu__dropdown`, or pass `portal={false}` to render it in place (absolutely positioned inside the root, clipped by `overflow: hidden` ancestors, no flip).
+- Use `placement="bottom-end"` for a kebab in the last table column so the panel opens leftward into the table.
+- React events from the panel still bubble through the portal to React ancestors. Your own document-level outside-click handlers see the panel as outside: test with `containsAcrossPortals(container, target)` instead of `container.contains(target)`.
 - `trigger` is rendered inside the component's own `<button>`; pass an icon or text, never a `Button` (nested buttons are invalid). `triggerLabel` stays the accessible name even with a custom trigger.
 - The menu closes after any selection, on outside mousedown, and on Escape; focus returns to the trigger on close.
 - Opening focuses the first enabled item. ArrowUp/ArrowDown wrap, Tab/Shift+Tab cycle items, Home/End jump; Enter/Space activates the focused item. Disabled items are skipped by keys and hover, and cannot be clicked.
