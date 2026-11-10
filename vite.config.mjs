@@ -25,10 +25,23 @@ const legacyCssForwarder = {
   },
 }
 
+// Bare-specifier packages the library build leaves as imports: peer dependencies plus every
+// runtime dependency.
+const EXTERNAL_PACKAGES = [...Object.keys(pkg.peerDependencies ?? {}), ...Object.keys(pkg.dependencies ?? {})]
+
 export default defineConfig({
   // The dev app's shell shows the package version (see src/App.tsx).
   define: { __HEIMDALL_VERSION__: JSON.stringify(pkg.version) },
-  plugins: [react(), dts({ include: 'src', exclude: ['**/*.test.ts', '**/*.test.tsx'] }), legacyCssForwarder],
+  plugins: [
+    react(),
+    dts({
+      include: 'src',
+      // Declarations for the public API only: not the dev app's entry points, the Playwright test
+      // pages or the unit tests (tinkermonkey/heimdall#343).
+      exclude: ['**/*.test.ts', '**/*.test.tsx', '**/__tests__/**', 'src/test-pages/**', 'src/App.tsx', 'src/main.tsx'],
+    }),
+    legacyCssForwarder,
+  ],
   cacheDir: process.env.CI ? '/tmp/.vite' : undefined,
   // Vitest unit tests are the *.test.ts files under src/. Without this, Vitest's
   // default include also picks up the Playwright specs in tests/*.spec.ts.
@@ -57,20 +70,21 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'HeimdallUI',
-      fileName: (format) => `index.${format === 'es' ? 'js' : 'cjs'}`,
+      // ESM only: the package is "type": "module" and `exports` has no `require` condition, so a
+      // CJS build was unreachable (tinkermonkey/heimdall#343).
+      formats: ['es'],
+      fileName: () => 'index.js',
       // Keep the stylesheet at dist/style.css, the path package.json's "./css" export names.
       // Vite 6 otherwise names it after the package (dist/heimdall-ui.css).
       cssFileName: 'style',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
-      output: {
-        globals: {
-          react: 'React',
-          'react-dom': 'ReactDOM',
-        },
-      },
+      // React is a peer dependency; everything in `dependencies` is installed next to the package,
+      // so leave it to the consumer's bundler, which dedupes it with the app's own copies
+      // (tinkermonkey/heimdall#343). Subpath imports (`react/jsx-runtime`, `react-dom/client`,
+      // `react-markdown/...`) are external too. `npm run check:package` fails if any of them ends up
+      // bundled.
+      external: (id) => EXTERNAL_PACKAGES.some((name) => id === name || id.startsWith(`${name}/`)),
     },
   },
 })
