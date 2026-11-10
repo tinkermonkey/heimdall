@@ -180,8 +180,9 @@ export interface LinkCategoryFilterProps extends React.HTMLAttributes<HTMLDivEle
   intraLabel?: React.ReactNode
   /** Toggle for node labels. Default: shown when `onNodeLabelsChange` is set. */
   showLabelToggle?: boolean
-  /** Node labels on or off: view state the framework does not hold, so it is controlled here. */
+  /** Node labels on or off (controlled). Unset: the graph's `nodeLabels` state, which the toggle then writes. */
   nodeLabels?: boolean
+  /** Called by the toggle, with the graph state or a controlled `nodeLabels`. */
   onNodeLabelsChange?: (on: boolean) => void
   labelToggleLabel?: React.ReactNode
   /** Rendered after a divider at the end of the bar, e.g. a `PredicateLabelControl`. */
@@ -215,7 +216,7 @@ export const LinkCategoryFilter = React.forwardRef<HTMLDivElement, LinkCategoryF
       showIntraToggle = true,
       intraLabel = 'Intra-layer links',
       showLabelToggle,
-      nodeLabels = true,
+      nodeLabels: nodeLabelsProp,
       onNodeLabelsChange,
       labelToggleLabel = 'Labels',
       children,
@@ -228,6 +229,11 @@ export const LinkCategoryFilter = React.forwardRef<HTMLDivElement, LinkCategoryF
     const { index, filters, emphasisContext } = g
     const cats = categories ?? index.categories
     const labelToggle = showLabelToggle ?? onNodeLabelsChange !== undefined
+    const nodeLabels = nodeLabelsProp ?? g.nodeLabels
+    const toggleNodeLabels = () => {
+      if (nodeLabelsProp === undefined) g.setNodeLabels(!nodeLabels)
+      onNodeLabelsChange?.(!nodeLabels)
+    }
     const id = useId()
     return (
       <div
@@ -265,7 +271,7 @@ export const LinkCategoryFilter = React.forwardRef<HTMLDivElement, LinkCategoryF
           </ChromeToggle>
         )}
         {labelToggle && (
-          <ChromeToggle pressed={nodeLabels} onClick={() => onNodeLabelsChange?.(!nodeLabels)}>
+          <ChromeToggle pressed={nodeLabels} onClick={toggleNodeLabels}>
             {labelToggleLabel}
           </ChromeToggle>
         )}

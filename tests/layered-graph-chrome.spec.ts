@@ -86,8 +86,24 @@ test.describe('Layered graph chrome', () => {
     await expect(state(page)).toContainText('intra off')
     await expect(cells(page)).toHaveCount(22)
 
-    await bar.getByRole('button', { name: 'Labels' }).click()
+    // The label toggle writes the graph's shared nodeLabels state (no props on the bar).
+    const labels = bar.getByRole('button', { name: 'Labels' })
+    await expect(labels).toHaveAttribute('aria-pressed', 'true')
+    await labels.click()
     await expect(state(page)).toContainText('node-labels off')
+    await expect(labels).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  test('a multi-selection reaches the union, and the inspector shows the primary', async ({ page }) => {
+    const errors = await open(page, `&select=business.businessprocess,${ORIGIN}`)
+    // reach 19 = the union of BusinessProcess's and ApplicationComponent's reach at follow 1, both origins excluded
+    await expect(state(page)).toContainText(`selected business.businessprocess,${ORIGIN} · reach 19 · follow 1`)
+    await expect(page.locator('.reach-inspector__title')).toHaveText('BusinessProcess')
+    // Hiding the business layer drops the primary; the other node becomes the primary (its reach, less the hidden layer).
+    await page.getByTestId('layer-list').getByRole('button', { name: /^Hide Business/ }).click()
+    await expect(state(page)).toContainText(`selected ${ORIGIN} · reach 10 · follow 1`)
+    await expect(page.locator('.reach-inspector__title')).toHaveText('ApplicationComponent')
+    expect(errors).toEqual([])
   })
 
   test('LayerList focuses and hides layers', async ({ page }) => {
