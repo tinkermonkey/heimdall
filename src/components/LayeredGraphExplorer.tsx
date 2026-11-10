@@ -273,9 +273,14 @@ export interface LayeredGraphExplorerProps extends Omit<React.HTMLAttributes<HTM
   /** Header and status line on the shell surface (default) or the canvas. */
   chromeSurface?: 'shell' | 'canvas'
 
-  /** Node labels on (default) or off; controlled when set. */
+  /**
+   * Node labels on or off (controlled), over the graph's `nodeLabels` state. Unset: the graph
+   * state, which the label toggle writes (the same as `graphOptions.nodeLabels`).
+   */
   nodeLabels?: boolean
+  /** Initial node labels. Seeds the explorer's own graph state; with a `graph` prop or a context, the explorer keeps it apart from that state. Default true. */
   defaultNodeLabels?: boolean
+  /** Called by the label toggle. */
   onNodeLabelsChange?: (on: boolean) => void
 
   /** Per-view passthrough. Explorer-owned props (state, camera wiring) are composed with these. */
@@ -340,7 +345,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
       statusLabel,
       chromeSurface = 'shell',
       nodeLabels: nodeLabelsProp,
-      defaultNodeLabels = true,
+      defaultNodeLabels,
       onNodeLabelsChange,
       stackProps,
       lanesProps,
@@ -360,7 +365,13 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     const own = useLayeredGraph(
       external
         ? { nodes: EMPTY_NODES, edges: EMPTY_EDGES, layering: EMPTY_LAYERING, layout: false }
-        : { ...graphOptions, nodes: nodes ?? EMPTY_NODES, edges: edges ?? EMPTY_EDGES, layering: layering ?? EMPTY_LAYERING },
+        : {
+            ...graphOptions,
+            defaultNodeLabels: graphOptions?.defaultNodeLabels ?? defaultNodeLabels,
+            nodes: nodes ?? EMPTY_NODES,
+            edges: edges ?? EMPTY_EDGES,
+            layering: layering ?? EMPTY_LAYERING,
+          },
     )
     const g = external ?? own
     const show = { ...ALL_CONTROLS, ...controls }
@@ -371,15 +382,19 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     const requested = viewProp ?? innerView
     const view = views.includes(requested) ? requested : views[0]
 
-    // ── node labels ───────────────────────────────────────────────────────
-    const [innerLabels, setInnerLabels] = useState(defaultNodeLabels)
-    const nodeLabels = nodeLabelsProp ?? innerLabels
+    // ── node labels: the graph's state, unless controlled here ─────────────
+    // `defaultNodeLabels` with external state is kept here, as it was before the graph held labels.
+    const [localLabels, setLocalLabels] = useState<boolean | undefined>(external ? defaultNodeLabels : undefined)
+    const nodeLabels = nodeLabelsProp ?? localLabels ?? (g.nodeLabels !== false)
     const setNodeLabels = useCallback(
       (on: boolean) => {
-        if (nodeLabelsProp === undefined) setInnerLabels(on)
+        if (nodeLabelsProp === undefined) {
+          if (localLabels !== undefined) setLocalLabels(on)
+          else g.setNodeLabels(on)
+        }
         onNodeLabelsChange?.(on)
       },
-      [nodeLabelsProp, onNodeLabelsChange],
+      [nodeLabelsProp, localLabels, g, onNodeLabelsChange],
     )
 
     // ── 3D camera, remembered across view switches ────────────────────────

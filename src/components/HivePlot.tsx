@@ -32,7 +32,7 @@ export interface HivePlotProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   splitAxes?: boolean
   /** Half the angle between an axis's two copies, degrees. Clamped to leave room between axes. Default 13. */
   splitAngle?: number
-  /** Labeled nodes per axis with no selection: the k busiest (highest degree). The selection and its reach are always labeled. Default 1. */
+  /** Labeled nodes per axis with no selection: the k busiest (highest degree). The selection and its reach are always labeled. Default: 1 while the graph's `nodeLabels` is on, 0 when off. */
   axisLabels?: number
   /** Radius of the axes' inner end, in viewBox units. Default 64. */
   innerRadius?: number
@@ -94,7 +94,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       rank = 'degree',
       splitAxes = true,
       splitAngle = 13,
-      axisLabels = 1,
+      axisLabels: axisLabelsProp,
       innerRadius = 64,
       axisLength = 300,
       startAngle = -90,
@@ -114,6 +114,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
     )
     const g = external ?? own
     const { index, filters, reach, selectedId, linkEmphasis, nodeEmphasis } = g
+    const axisLabels = axisLabelsProp ?? (g.nodeLabels !== false ? 1 : 0)
     const canSelect = interactions?.select !== false
     const canHover = interactions?.hover !== false
 

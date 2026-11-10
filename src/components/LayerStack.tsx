@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { GraphEdge, GraphNodeData } from './GraphCanvas'
 import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from '../hooks/useLayeredGraph'
+import { useControllable } from '../hooks/useControllable'
 import { useTween } from '../hooks/useTween'
 import { lineCurve, placeEdgeLabels, edgeLabelPriority, type EdgeLabelCandidate, type LabelBox } from '../utils/layered/edgeLabels'
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
@@ -118,7 +119,7 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   defaultLayerGap?: number
   onLayerGapChange?: (gap: number) => void
 
-  /** Which node labels to show. Default `all`. */
+  /** Which node labels to show. Default: the graph's `nodeLabels` state, `all` when on and `reached` when off. */
   nodeLabels?: LayerStackNodeLabels
   /** Turn direct manipulation off per kind. */
   interactions?: LayerStackInteractions
@@ -184,22 +185,6 @@ function pick(v: ViewState, keys: readonly ViewKey[]): Record<string, number> {
   return out
 }
 
-/** Controlled when `value` is defined; otherwise holds its own state seeded from `defaultValue`. */
-function useControllable<T>(value: T | undefined, defaultValue: T, onChange?: (v: T) => void): [T, (v: T) => void] {
-  const [inner, setInner] = useState(defaultValue)
-  const controlled = value !== undefined
-  const onChangeRef = useRef(onChange)
-  onChangeRef.current = onChange
-  const set = useCallback(
-    (v: T) => {
-      if (!controlled) setInner(v)
-      onChangeRef.current?.(v)
-    },
-    [controlled],
-  )
-  return [controlled ? value : inner, set]
-}
-
 /** Positions for a graph built without layout: each layer's nodes on a circle. */
 function circlePositions(nodesByLayer: ReadonlyMap<string, readonly IndexedNode[]>): Map<string, Point> {
   const out = new Map<string, Point>()
@@ -246,7 +231,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       layerGap,
       defaultLayerGap,
       onLayerGapChange,
-      nodeLabels = 'all',
+      nodeLabels: nodeLabelsProp,
       interactions,
       sceneWidth = 1160,
       sceneHeight = 780,
@@ -268,6 +253,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     const g = external ?? own
     const { index, layout, filters, selectedId, hoveredId, focusedLayerId, planeLayout } = g
     const can = { ...ALL_INTERACTIONS, ...interactions }
+    const nodeLabels: LayerStackNodeLabels = nodeLabelsProp ?? (g.nodeLabels !== false ? 'all' : 'reached')
 
     // ── controllable state ────────────────────────────────────────────────
     const [preset, setPreset] = useControllable<CameraPresetName | null>(cameraPreset, defaultCameraPreset, onCameraPresetChange)

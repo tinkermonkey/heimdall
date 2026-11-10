@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { AdjacencyMatrix } from '../components/AdjacencyMatrix'
 import {
   BridgeNodeList,
@@ -16,7 +16,8 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 
 // The layered-graph chrome (controls and ReachInspector) around an AdjacencyMatrix, all wired
 // through one useLayeredGraph + LayeredGraphContext. URL params make screenshots deterministic:
-//   ?example=layered-graph-chrome&data=spec|ux&select=<node id>&follow=0|1|2&dark=1
+//   ?example=layered-graph-chrome&data=spec|ux&select=<node id>[,<node id>…]&follow=0|1|2&dark=1
+// Several ids in `select` make a multi-selection (`defaultSelectedIds`), primary first.
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 
@@ -38,10 +39,9 @@ export default function LayeredGraphChromeTestPage() {
     edges: DATA === 'spec' ? drSpecEdges : heimdallUxEdges,
     layering,
     layout,
-    defaultSelectedId: params.get('select'),
+    defaultSelectedIds: params.get('select')?.split(',').filter(Boolean),
     defaultFollow: params.has('follow') ? Number(params.get('follow')) : 1,
   })
-  const [nodeLabels, setNodeLabels] = useState(true)
   const { filters } = graph
 
   return (
@@ -56,7 +56,7 @@ export default function LayeredGraphChromeTestPage() {
           <main style={{ flex: '999 1 640px', minWidth: 0, padding: '12px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
             <span data-testid="chrome-state" style={mono}>
               {[
-                graph.selectedId ? `selected ${graph.selectedId} · reach ${graph.reach.hopOf.size - 1}` : 'no selection',
+                graph.selectedId ? `selected ${graph.selectedIds.join(',')} · reach ${graph.reach.hopOf.size - graph.selectedIds.length}` : 'no selection',
                 `follow ${graph.follow}`,
                 `labels ${graph.predicateLabels}`,
                 `plane ${graph.planeLayout}`,
@@ -65,11 +65,12 @@ export default function LayeredGraphChromeTestPage() {
                 `hidden ${filters.hiddenLayers.join(',') || 'none'}`,
                 `off ${Object.keys(filters.categories).filter((c) => filters.categories[c] === false).join(',') || 'none'}`,
                 `intra ${filters.showIntra ? 'on' : 'off'}`,
-                `node-labels ${nodeLabels ? 'on' : 'off'}`,
+                `node-labels ${graph.nodeLabels ? 'on' : 'off'}`,
               ].join(' · ')}
             </span>
             <AdjacencyMatrix data-testid="adjacency-matrix" cellSize={12} labelWidth={170} />
-            <LinkCategoryFilter data-testid="link-bar" nodeLabels={nodeLabels} onNodeLabelsChange={setNodeLabels} />
+            {/* Node labels are the graph's shared state: the toggle writes `graph.nodeLabels`. */}
+            <LinkCategoryFilter data-testid="link-bar" showLabelToggle />
           </main>
           <aside
             data-testid="chrome-aside"

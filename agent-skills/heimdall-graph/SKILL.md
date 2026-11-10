@@ -1479,16 +1479,22 @@ const graph = useLayeredGraph({ nodes, edges, layering, defaultFollow: 1 })
 | `nodes`, `edges` | `GraphNodeData[]`, `GraphEdgeData[]` | Same data as GraphCanvas |
 | `layering` | `BuildLayeredIndexOptions` | `layerBy` (required), `multiValue`, `missingValue`, `missingLayerLabel`, `layers`, `linkCategoryBy`, `catalog`, `fallbackCategory`, `categoryOrder`, `maxLabelLength` |
 | `layout` | `LayerLayoutOptions \| false` | In-layer layout options; `false` skips layout |
-| `selectedId` / `defaultSelectedId` / `onSelect` | `string \| null` | Selected node instance |
+| `selectedId` / `defaultSelectedId` / `onSelect` | `string \| null` | Selected node instance: the single-select path. With several selected, the primary (first of `selectedIds`); `onSelect` fires on every `select` and `restore`. The other selection and filter actions (`setSelectedIds`, `toggleSelected`, `toggleLayer`, `setFilters`, …) fire it when they change the visible primary (the first selected node in the graph and not on a hidden layer), with that node. A parent changing a controlled `filters` or `selectedIds` prop is not reported back |
+| `selectedIds` / `defaultSelectedIds` / `onSelectedIdsChange` | `string[]` | Multi-select: every selected node, primary first. Wins over `selectedId`. Controlling only `selectedId` keeps the selection to one node |
 | `follow` / `defaultFollow` / `onFollowChange` | `number` | Followed hops past the direct links. Default 1 |
 | `followCategories` | `string[] \| null` | Follow only links in these categories |
 | `filters` / `defaultFilters` / `onFiltersChange` | `LinkFilterState` | Hidden layers, categories, predicates; intra-layer links; layer pair |
 | `predicateLabels` / `defaultPredicateLabels` / `onPredicateLabelsChange` | `'off' \| 'highlighted' \| 'all'` | Default `'highlighted'` |
 | `focusedLayerId` / `defaultFocusedLayerId` / `onFocusLayer` | `string \| null` | Emphasized layer |
 | `planeLayout` / `defaultPlaneLayout` / `onPlaneLayoutChange` | `'independent' \| 'coupled'` | Which in-layer layout the views show |
+| `nodeLabels` / `defaultNodeLabels` / `onNodeLabelsChange` | `boolean` | Node labels on (default) or off. `LayerStack` (`all` / `reached`) and `HivePlot` (`axisLabels` 1 / 0) default to it, and `LinkCategoryFilter`'s label toggle writes it |
 | `linkStyles` | `Record<string, LinkCategoryStyle>` | Per-category color and dash overrides. Memoize it: a new object recomputes every link's emphasis |
 
-A selection on a hidden layer reads as no selection, and hiding the selected node's layer clears it. Filter actions compose when called together in one handler. It returns `index`, `layout`, `reach`, `hoverReach` (direct links of the hovered node), `pairNodeIds`, the current state values, actions (`select`, `hover`, `setFollow`, `setFilters`, `toggleCategory`, `togglePredicate`, `toggleLayer`, `setShowIntra`, `setLayerPair`, `setPredicateLabels`, `focusLayer`, `setPlaneLayout`), `linkEmphasis(link)` and `nodeEmphasis(node)` bound to the current state, and a serializable `snapshot` with `restore(snapshot)`.
+A selected node on a hidden layer (or missing from the graph) reads as not selected, and hiding a layer drops the selected nodes on it. Filter and selection actions compose when called together in one handler. It returns `index`, `layout`, `reach`, `hoverReach` (direct links of the hovered node), `pairNodeIds`, the current state values (`selectedId`, `selectedIds`, `nodeLabels`, …), actions (`select`, `setSelectedIds`, `toggleSelected`, `hover`, `setFollow`, `setFilters`, `toggleCategory`, `togglePredicate`, `toggleLayer`, `setShowIntra`, `setLayerPair`, `setPredicateLabels`, `focusLayer`, `setPlaneLayout`, `setNodeLabels`), `linkEmphasis(link)` and `nodeEmphasis(node)` bound to the current state, and a serializable `snapshot` (`LayeredGraphSnapshot`, with `selectedIds` and `nodeLabels`) with `restore(snapshot)`. `restore` applies whichever of `selectedId` / `selectedIds` the caller changed against the current state, so `restore({ ...snapshot, selectedId })` and `restore({ ...snapshot, selectedIds })` both work; if both changed and disagree, `selectedId` wins. It restores filters before the selection and always calls `onSelect` (the given id, or the visible primary of the given ids). The public `setFilters` composes with the other actions in one handler.
+
+**Multi-select is reserved, not finished.** The state, actions and reach are in place: `select(id)` replaces the selection, `toggleSelected(id)` adds or removes one node, `setSelectedIds(ids)` sets them all, and the reach is the union of each node's reach (every selected node is hop 0; others keep their lowest hop). The views still select one node per click (no shift-click yet) and draw the primary's drill-through and inspector; nodes in the selection beyond the primary light up through the reach. Single-select code needs no change: `selectedId` / `onSelect` work as before.
+
+`useControllable(value, defaultValue, onChange)` is the hook's `value` / `default…` / `on…Change` pattern, exported for custom views and chrome: it returns `[current, set]`, controlled when `value` is defined (`null` counts as a value).
 
 ## LayeredGraphContext
 
@@ -1517,7 +1523,7 @@ function MyFollowControl() {
 | -------- | --------- | ------- |
 | `buildLayeredIndex` | `(nodes, edges, options: BuildLayeredIndexOptions)` | `LayeredIndex`: layers, node instances, bundled links, lookups, `layerPairs`, `categoryCounts`, `categories`, `predicateCodes`, `issues` |
 | `readLayerValues` | `(node, layerBy)` | The node's layer values as strings |
-| `computeReach` | `(index, originId, { follow?, followCategories?, filters? })` | `ReachResult`: `hopOf`, `linkHop`, `via`, `maxHop` |
+| `computeReach` | `(index, origin: string \| string[] \| null, { follow?, followCategories?, filters? })` | `ReachResult`: `originId`, `originIds`, `hopOf`, `linkHop`, `via`, `maxHop`. Several origins reach the union, each node at its lowest hop; one reach per origin, so O(k · reach) |
 | `reachPath` | `(reach, nodeId)` | `{ nodeIds, linkIds }` from the origin to the node |
 | `isLinkVisible` | `(link, index, filters)` | Whether a view draws the link |
 | `isLinkTraversable` | `(link, index, filters)` | Whether reach may cross it (ignores `showIntra` and `layerPair`) |
@@ -1599,7 +1605,7 @@ Ref handle (`LayerStackHandle`): `applyPreset(name, { animate })`, `setCamera(pa
 | `layerGap` | `number` | — | Controlled distance between planes, world units; applied when it changes |
 | `defaultLayerGap` | `number` | preset's | Initial gap when uncontrolled (170 for `stack`) |
 | `onLayerGapChange` | `(gap: number) => void` | — | Gap changed by a preset |
-| `nodeLabels` | `'all' \| 'reached' \| 'none'` | `'all'` | Which node labels show; the hovered or keyboard-focused node always does |
+| `nodeLabels` | `'all' \| 'reached' \| 'none'` | graph state | Which node labels show; the hovered or keyboard-focused node always does. Unset: `all` while the graph's `nodeLabels` is on, `reached` when off |
 | `interactions` | `LayerStackInteractions` | all on | `{ select, hover, orbit, zoom, focusLayer }`: turn direct manipulation off per kind |
 | `sceneWidth` | `number` | `1160` | Scene (viewBox) width; with `sceneHeight` sets the aspect ratio |
 | `sceneHeight` | `number` | `780` | Scene (viewBox) height |
@@ -1691,7 +1697,7 @@ const graph = useLayeredGraph({ nodes, edges, layering, layout: false })
 | `rank` | `NodeOrder` | `'degree'` | Placement outward along each axis (`rankWithinLayers`) |
 | `splitAxes` | `boolean` | `true` | Double each axis; off draws intra-layer links as arcs off the single axis |
 | `splitAngle` | `number` | `13` | Half the angle between an axis's copies, degrees; clamped to leave room between axes |
-| `axisLabels` | `number` | `1` | Nodes labeled per axis with no selection (busiest first) |
+| `axisLabels` | `number` | graph state | Nodes labeled per axis with no selection (busiest first). Unset: 1 while the graph's `nodeLabels` is on, 0 when off |
 | `innerRadius` | `number` | `64` | Radius of the axes' inner end, viewBox units |
 | `axisLength` | `number` | `300` | Axis length, viewBox units (the plot scales to its container) |
 | `startAngle` | `number` | `-90` | First axis angle, degrees clockwise from the right (−90 = up) |
@@ -1758,14 +1764,10 @@ Segmented control for Independent (each layer laid out on its own) or Coupled (c
 
 ## LinkCategoryFilter
 
-The link bar: one toggle button per link category, each with its dash sample (from `linkCategoryStyle`) and link count, then optional intra-layer and node-label toggles. Category and intra toggles write `filters`. Node labels are view state, so that toggle is controlled here. `children` render after a divider at the end of the bar. `categoryDisplayLabel(c)` gives the default label (sentence case).
+The link bar: one toggle button per link category, each with its dash sample (from `linkCategoryStyle`) and link count, then optional intra-layer and node-label toggles. Category and intra toggles write `filters`; the node-label toggle writes the graph's `nodeLabels` (or calls `onNodeLabelsChange` with a controlled `nodeLabels`). `children` render after a divider at the end of the bar. `categoryDisplayLabel(c)` gives the default label (sentence case).
 
 ```tsx
-<LinkCategoryFilter
-  categoryLabels={{ structural: 'Structure' }}
-  nodeLabels={nodeLabels}
-  onNodeLabelsChange={setNodeLabels}
->
+<LinkCategoryFilter categoryLabels={{ structural: 'Structure' }} showLabelToggle>
   <PredicateLabelControl />
 </LinkCategoryFilter>
 ```
@@ -1782,7 +1784,7 @@ The link bar: one toggle button per link category, each with its dash sample (fr
 | `showIntraToggle` | `boolean` | `true` | Toggle for `filters.showIntra` |
 | `intraLabel` | `ReactNode` | `'Intra-layer links'` | Intra toggle text |
 | `showLabelToggle` | `boolean` | set when `onNodeLabelsChange` is | Toggle for node labels |
-| `nodeLabels` | `boolean` | `true` | Node labels on or off (controlled) |
+| `nodeLabels` | `boolean` | graph state | Node labels on or off (controlled). Unset: the graph's `nodeLabels`, which the toggle writes |
 | `onNodeLabelsChange` | `(on: boolean) => void` | — | Called by the node-label toggle |
 | `labelToggleLabel` | `ReactNode` | `'Labels'` | Node-label toggle text |
 | `children` | `ReactNode` | — | Rendered after a divider at the end of the bar |
@@ -1934,8 +1936,8 @@ const [turntable, setTurntable] = useState(false)
 | `eyebrow` | `ReactNode` | — | Mono eyebrow above the title |
 | `statusLabel` | `ReactNode` | — | Dataset label at the start of the status line |
 | `chromeSurface` | `'shell' \| 'canvas'` | `'shell'` | Header and status line on the shell surface or the canvas |
-| `nodeLabels` | `boolean` | — | Controlled node-label toggle (stack and hive) |
-| `defaultNodeLabels` | `boolean` | `true` | Initial node-label toggle when uncontrolled |
+| `nodeLabels` | `boolean` | graph state | Controlled node labels (stack and hive), over the graph's `nodeLabels` |
+| `defaultNodeLabels` | `boolean` | `true` | Initial node labels: seeds the explorer's own graph state (kept apart from a `graph` prop or context) |
 | `onNodeLabelsChange` | `(on: boolean) => void` | — | Called by the node-label toggle |
 | `stackProps` | `Partial<LayerStackProps>` | — | Passed to `LayerStack`; camera callbacks are chained, preset and turntable are explorer-owned |
 | `lanesProps` | `Partial<GraphCanvasProps>` | — | Passed to the lanes `GraphCanvas` (`laneOptions`, `style`, …) |

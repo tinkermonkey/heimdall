@@ -216,7 +216,10 @@ export interface ReachVia {
 }
 
 export interface ReachResult {
+  /** The origin; with several (a multi-selection), the first one in the graph. */
   originId: string | null
+  /** Every origin, `originId` first. Set by `computeReach` (empty with no origin). */
+  originIds?: readonly string[]
   /** 0 = origin, 1 = direct neighbour, 2+ = followed hops. */
   hopOf: ReadonlyMap<string, number>
   /** Hop at which each traversed link was first used. */
@@ -232,10 +235,15 @@ export type PlaneLayoutMode = 'independent' | 'coupled'
 
 /** Serializable view-independent state; views extend it with camera or viewport fields. */
 export interface LayeredGraphSnapshot {
+  /** The primary selection. */
   selectedId: string | null
+  /** Every selected node, primary first. `useLayeredGraph` always sets it; on `restore` it wins over `selectedId`. */
+  selectedIds?: string[]
   follow: number
   filters: LinkFilterState
   predicateLabels: PredicateLabelMode
   focusedLayerId: string | null
   planeLayout: PlaneLayoutMode
+  /** Node labels on or off. `useLayeredGraph` always sets it. */
+  nodeLabels?: boolean
 }

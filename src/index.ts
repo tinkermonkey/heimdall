@@ -383,6 +383,7 @@ export {
   type NodeOrder,
 } from './utils/layered'
 export { useMediaQuery } from './hooks/useMediaQuery'
+export { useControllable } from './hooks/useControllable'
 export { AssetCard, type AssetCardProps, type AssetThumb } from './components/AssetCard'
 export { AssetGrid, type AssetGridProps } from './components/AssetGrid'
 export {

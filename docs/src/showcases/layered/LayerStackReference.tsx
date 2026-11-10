@@ -27,7 +27,7 @@ export function LayerStackPropsTable() {
       <PropRow name="layerGap" type="number" description="Controlled distance between planes, world units; applied at once when it changes." />
       <PropRow name="defaultLayerGap" type="number" def="preset's" description="Initial gap when uncontrolled (170 for stack, 300 for exploded, 210 for profile)." />
       <PropRow name="onLayerGapChange" type="(gap: number) => void" description="Gap changed by a preset, when its tween ends." />
-      <PropRow name="nodeLabels" type="'all' | 'reached' | 'none'" def="'all'" description="Which node labels show. The hovered or keyboard-focused node always shows; hidden labels stay focusable." />
+      <PropRow name="nodeLabels" type="'all' | 'reached' | 'none'" def="graph state" description="Which node labels show: unset follows the graph's nodeLabels (all when on, reached when off). The hovered or keyboard-focused node always shows; hidden labels stay focusable." />
       <PropRow name="interactions" type="LayerStackInteractions" def="all on" description="{ select, hover, orbit, zoom, focusLayer }: turn direct manipulation off per kind. The ref handle still works." />
       <PropRow name="sceneWidth" type="number" def="1160" description="Scene (viewBox) width; with sceneHeight sets the aspect ratio. The scene renders at 100% of its container's width." />
       <PropRow name="sceneHeight" type="number" def="780" description="Scene (viewBox) height." />
