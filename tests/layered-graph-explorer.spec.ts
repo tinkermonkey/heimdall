@@ -26,6 +26,12 @@ const status = (page: Page) => page.locator('.layered-graph-explorer__status')
 const viewSwitcher = (page: Page) => page.getByRole('radiogroup', { name: 'View' })
 const pickView = (page: Page, name: string) => viewSwitcher(page).getByRole('radio', { name, exact: true }).click()
 const inspectorTitle = (page: Page) => page.locator('.reach-inspector__title')
+/** Screen distance between the centers of the first two planes, px. */
+async function planeSpacing(page: Page) {
+  const fills = page.locator('.layer-stack__plane-fill')
+  const [a, b] = [await fills.nth(0).boundingBox(), await fills.nth(1).boundingBox()]
+  return Math.abs(a!.y + a!.height / 2 - (b!.y + b!.height / 2))
+}
 
 test.describe('LayeredGraphExplorer', () => {
   test('renders the header, stack, link bar, inspector and status line', async ({ page }) => {
@@ -162,6 +168,68 @@ test.describe('LayeredGraphExplorer', () => {
     expect(main && aside).toBeTruthy()
     expect(aside!.y).toBeGreaterThanOrEqual(main!.y + main!.height - 1)
     expect(Math.abs(aside!.width - main!.width)).toBeLessThan(2)
+  })
+
+  test('the snapshot round-trips the whole explorer through the URL', async ({ page }) => {
+    const errors = await open(page, '&sync=1')
+    // Change the selection, follow, a filter, node labels, the camera and the view.
+    await page.getByRole('button', { name: /^BusinessProcess, Business layer, 6 cross-layer links/ }).click()
+    await page.getByRole('radiogroup', { name: 'Follow links from the selection' }).getByRole('radio', { name: '+2 layers' }).click()
+    await page.locator('.layered-link-filter [data-category="structural"]').click()
+    await page.getByRole('button', { name: 'Labels', exact: true }).click()
+    await page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { name: 'Exploded' }).click()
+    await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
+    await pickView(page, 'Matrix')
+    await expect.poll(() => new URL(page.url()).searchParams.get('state')).toContain('"view":"matrix"')
+    const snapshot = JSON.parse(new URL(page.url()).searchParams.get('state')!)
+    expect(snapshot).toMatchObject({
+      view: 'matrix',
+      selectedId: 'business.businessprocess',
+      follow: 2,
+      nodeLabels: false,
+      filters: { categories: { structural: false } },
+      stack: { preset: 'exploded', layerGap: 300 },
+    })
+
+    // A fresh load from that URL comes back in the same state.
+    await page.goto(page.url())
+    await page.waitForLoadState('networkidle')
+    await expect(explorer(page)).toHaveAttribute('data-view', 'matrix')
+    await expect(state(page)).toHaveText('view matrix · selected business.businessprocess · follow 2')
+    await expect(inspectorTitle(page)).toHaveText('BusinessProcess')
+    await expect(page.locator('.layered-link-filter [data-category="structural"]')).toHaveAttribute('aria-pressed', 'false')
+    await pickView(page, '3D stack')
+    await expect(page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { name: 'Exploded' })).toHaveAttribute('aria-checked', 'true')
+    await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
+    await expect(page.getByRole('button', { name: 'Labels', exact: true })).toHaveAttribute('aria-pressed', 'false')
+    expect(errors).toEqual([])
+  })
+
+  test('the handle saves a snapshot, with the live camera and gap, and restores it', async ({ page }) => {
+    const errors = await open(page, '&sync=1')
+    const presets = page.getByRole('radiogroup', { name: 'Camera preset' })
+    await presets.getByRole('radio', { name: 'Exploded' }).click()
+    await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
+    const explodedSpacing = await planeSpacing(page)
+    await page.getByRole('button', { name: 'Save snapshot' }).click()
+    await expect(page.getByTestId('saved-snapshot')).toHaveText('stack · exploded · gap 300')
+
+    await presets.getByRole('radio', { name: 'Top' }).click()
+    await expect(status(page)).toContainText('top · yaw 0° pitch 86° zoom 1.05 · gap 170')
+    expect(Math.abs((await planeSpacing(page)) - explodedSpacing)).toBeGreaterThan(5)
+    await page.getByRole('button', { name: /^BusinessProcess, Business layer, 6 cross-layer links/ }).click()
+    await pickView(page, 'Hive')
+    await expect(state(page)).toHaveText('view hive · selected business.businessprocess · follow 1')
+
+    await page.getByRole('button', { name: 'Restore snapshot' }).click()
+    await expect(explorer(page)).toHaveAttribute('data-view', 'stack')
+    await expect(state(page)).toHaveText('view stack · no selection · follow 1')
+    await expect(presets.getByRole('radio', { name: 'Exploded' })).toHaveAttribute('aria-checked', 'true')
+    await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
+    // The stack draws the restored camera and gap: the planes sit where they did when saved.
+    await expect.poll(() => planeSpacing(page)).toBeCloseTo(explodedSpacing, 0)
+    await expect(page.locator('.layer-stack__title--rail')).toHaveCount(0)
+    expect(errors).toEqual([])
   })
 
   test.describe('screenshots', () => {

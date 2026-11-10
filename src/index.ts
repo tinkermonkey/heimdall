@@ -215,6 +215,10 @@ export {
   type LayeredGraphView,
   type LayeredGraphExplorerProps,
   type LayeredGraphExplorerControls,
+  type LayeredGraphExplorerSnapshot,
+  type LayeredGraphExplorerSnapshotInput,
+  type LayeredGraphExplorerCamera,
+  type LayeredGraphExplorerHandle,
   type ViewSwitcherProps,
   type CameraControlsProps,
 } from './components/LayeredGraphExplorer'
@@ -268,6 +272,7 @@ export { usePanZoom, type UsePanZoomOptions, type UsePanZoomReturn } from './hoo
 export {
   useLayeredGraph,
   useLayeredGraphContext,
+  layeredGraphSnapshotDefaults,
   LayeredGraphContext,
   type UseLayeredGraphOptions,
   type LayeredGraphState,

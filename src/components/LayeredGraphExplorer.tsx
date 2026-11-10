@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { AdjacencyMatrix, type AdjacencyMatrixProps } from './AdjacencyMatrix'
 import { Button } from './Button'
 import { GraphCanvas, type GraphCanvasProps, type GraphEdge, type GraphNodeData } from './GraphCanvas'
@@ -17,9 +17,15 @@ import {
 import { LayerStack, type LayerStackHandle, type LayerStackProps } from './LayerStack'
 import { ReachInspector } from './ReachInspector'
 import { SegmentedControl } from './SegmentedControl'
-import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from '../hooks/useLayeredGraph'
+import {
+  LayeredGraphContext,
+  layeredGraphSnapshotDefaults,
+  useLayeredGraph,
+  type LayeredGraphState,
+  type UseLayeredGraphOptions,
+} from '../hooks/useLayeredGraph'
 import { CAMERA_PRESET_NAMES, CAMERA_PRESETS, cameraFromPreset, type CameraPresetName, type StackCamera } from '../utils/layered/projection'
-import type { BuildLayeredIndexOptions } from '../utils/layered/types'
+import type { BuildLayeredIndexOptions, LayeredGraphSnapshot } from '../utils/layered/types'
 import './LayeredGraphControls.css'
 import './LayeredGraphExplorer.css'
 
@@ -239,6 +245,42 @@ const ALL_CONTROLS: Required<LayeredGraphExplorerControls> = {
 
 type Passthrough<P> = Omit<P, 'graph' | 'nodes' | 'edges' | 'layering' | 'graphOptions'>
 
+/** The 3D stack's camera in an explorer snapshot. */
+export interface LayeredGraphExplorerCamera {
+  /** The active preset; null once the camera has been moved by hand. */
+  preset: CameraPresetName | null
+  camera: StackCamera
+  /** Distance between planes, world units. */
+  layerGap: number
+}
+
+/**
+ * The whole explorer as plain, JSON-serializable data: the shared graph state
+ * (`LayeredGraphSnapshot`), the view, node labels and the 3D stack's camera (kept while another
+ * view shows). Round-trip it through a URL or history entry with `defaultSnapshot`,
+ * `onSnapshotChange` and the `explorerRef` handle's `restore`.
+ */
+export interface LayeredGraphExplorerSnapshot extends LayeredGraphSnapshot {
+  view: LayeredGraphView
+  nodeLabels: boolean
+  stack: LayeredGraphExplorerCamera
+}
+
+/** A snapshot to restore: any field may be left out, `stack` fields included. */
+export type LayeredGraphExplorerSnapshotInput = Partial<Omit<LayeredGraphExplorerSnapshot, 'stack'>> & {
+  stack?: Partial<LayeredGraphExplorerCamera>
+}
+
+/** The explorer's imperative handle (`explorerRef`). */
+export interface LayeredGraphExplorerHandle {
+  /** The snapshot as it is now; the 3D camera is read live when the stack shows (mid-tween included). */
+  getSnapshot: () => LayeredGraphExplorerSnapshot
+  /** Applies the fields given; the rest stay. A `stack` camera jumps (no tween). */
+  restore: (snapshot: LayeredGraphExplorerSnapshotInput) => void
+  /** The 3D stack's handle while it shows, else null. */
+  stack: () => LayerStackHandle | null
+}
+
 export interface LayeredGraphExplorerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect' | 'title'> {
   /** External state from `useLayeredGraph`. Unset: the enclosing `LayeredGraphContext`, else its own from `nodes` / `edges` / `layering`. */
   graph?: LayeredGraphState
@@ -258,6 +300,17 @@ export interface LayeredGraphExplorerProps extends Omit<React.HTMLAttributes<HTM
   /** Initial view when uncontrolled. Default the first of `views`. */
   defaultView?: LayeredGraphView
   onViewChange?: (view: LayeredGraphView) => void
+
+  /** Imperative handle: `getSnapshot()`, `restore(snapshot)`, `stack()`. (`ref` is the root element.) */
+  explorerRef?: React.Ref<LayeredGraphExplorerHandle>
+  /**
+   * Initial state, e.g. a snapshot parsed from the URL. Read once, on mount. Seeds the view, node
+   * labels, 3D camera and the explorer's own graph state. With a `graph` prop or a context, seed
+   * that state yourself (`layeredGraphSnapshotDefaults`); the rest still applies.
+   */
+  defaultSnapshot?: LayeredGraphExplorerSnapshotInput
+  /** Called when the snapshot changes (not on mount). A camera move reports once it settles. */
+  onSnapshotChange?: (snapshot: LayeredGraphExplorerSnapshot) => void
 
   /** Which chrome to render; every field defaults to true. */
   controls?: LayeredGraphExplorerControls
@@ -318,6 +371,18 @@ interface StackMemory {
   turntable: boolean
 }
 
+/** The remembered stack camera with a snapshot's fields applied; a preset fills what the snapshot leaves out. */
+function withCamera(m: StackMemory, s: Partial<LayeredGraphExplorerCamera>): StackMemory {
+  const preset = s.preset !== undefined ? s.preset : m.preset
+  const fromPreset = s.preset ? cameraFromPreset(s.preset) : null
+  return {
+    ...m,
+    preset,
+    camera: { ...m.camera, ...fromPreset, ...s.camera },
+    gap: s.layerGap ?? (s.preset ? CAMERA_PRESETS[s.preset].layerGap : m.gap),
+  }
+}
+
 /**
  * The ready-made layered graph explorer: a header with the view switcher and follow control, the
  * chosen view's scene with its own controls (camera for the 3D stack), the link bar, the reach
@@ -338,6 +403,9 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
       view: viewProp,
       defaultView,
       onViewChange,
+      explorerRef,
+      defaultSnapshot,
+      onSnapshotChange,
       controls,
       followOptions,
       title,
@@ -368,6 +436,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
         : {
             ...graphOptions,
             defaultNodeLabels: graphOptions?.defaultNodeLabels ?? defaultNodeLabels,
+            ...layeredGraphSnapshotDefaults(defaultSnapshot),
             nodes: nodes ?? EMPTY_NODES,
             edges: edges ?? EMPTY_EDGES,
             layering: layering ?? EMPTY_LAYERING,
@@ -378,13 +447,13 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
 
     // ── view ──────────────────────────────────────────────────────────────
     const views = viewsProp.length > 0 ? viewsProp : LAYERED_GRAPH_VIEWS
-    const [innerView, setInnerView] = useState<LayeredGraphView>(defaultView ?? views[0])
+    const [innerView, setInnerView] = useState<LayeredGraphView>(defaultSnapshot?.view ?? defaultView ?? views[0])
     const requested = viewProp ?? innerView
     const view = views.includes(requested) ? requested : views[0]
 
     // ── node labels: the graph's state, unless controlled here ─────────────
     // `defaultNodeLabels` with external state is kept here, as it was before the graph held labels.
-    const [localLabels, setLocalLabels] = useState<boolean | undefined>(external ? defaultNodeLabels : undefined)
+    const [localLabels, setLocalLabels] = useState<boolean | undefined>(external ? (defaultSnapshot?.nodeLabels ?? defaultNodeLabels) : undefined)
     const nodeLabels = nodeLabelsProp ?? localLabels ?? (g.nodeLabels !== false)
     const setNodeLabels = useCallback(
       (on: boolean) => {
@@ -401,25 +470,28 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     const stackRef = useRef<LayerStackHandle | null>(null)
     const [stackMem, setStackMem] = useState<StackMemory>(() => {
       const preset = stackProps?.cameraPreset ?? stackProps?.defaultCameraPreset ?? 'stack'
-      return {
+      const initial: StackMemory = {
         camera: { ...cameraFromPreset(preset ?? 'stack'), ...stackProps?.defaultCamera },
         preset,
         gap: stackProps?.layerGap ?? stackProps?.defaultLayerGap ?? CAMERA_PRESETS[preset ?? 'stack'].layerGap,
         turntable: stackProps?.turntable ?? stackProps?.defaultTurntable ?? false,
       }
+      return defaultSnapshot?.stack ? withCamera(initial, defaultSnapshot.stack) : initial
     })
+    // Bumped by `restore` to remount the stack, which then starts from the restored camera.
+    const [stackEpoch, setStackEpoch] = useState(0)
 
     const changeView = useCallback(
-      (next: LayeredGraphView) => {
+      (next: LayeredGraphView, rememberCamera = true) => {
         if (next === view) return
-        if (view === 'stack' && stackRef.current) {
-          const remembered = { ...stackMem, camera: stackRef.current.getCamera() }
-          setStackMem(remembered)
+        if (rememberCamera && view === 'stack' && stackRef.current) {
+          const camera = stackRef.current.getCamera()
+          setStackMem((m) => ({ ...m, camera }))
         }
         if (viewProp === undefined) setInnerView(next)
         onViewChange?.(next)
       },
-      [view, viewProp, onViewChange, stackMem],
+      [view, viewProp, onViewChange],
     )
 
     // ── narrow layout (inspector below the scene) ─────────────────────────
@@ -449,12 +521,57 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
 
     const fixed = height !== undefined
 
+    // ── snapshot ──────────────────────────────────────────────────────────
+    const snapshot = useMemo<LayeredGraphExplorerSnapshot>(
+      () => ({ ...g.snapshot, view, nodeLabels, stack: { preset: stackMem.preset, camera: stackMem.camera, layerGap: stackMem.gap } }),
+      [g.snapshot, view, nodeLabels, stackMem],
+    )
+    const snapshotRef = useRef(snapshot)
+    snapshotRef.current = snapshot
+    const onSnapshotChangeRef = useRef(onSnapshotChange)
+    onSnapshotChangeRef.current = onSnapshotChange
+    const lastSnapshotKey = useRef<string | null>(null)
+    useEffect(() => {
+      const key = JSON.stringify(snapshot)
+      const first = lastSnapshotKey.current === null
+      if (key === lastSnapshotKey.current) return
+      lastSnapshotKey.current = key
+      if (!first) onSnapshotChangeRef.current?.(snapshot)
+    }, [snapshot])
+
+    const restore = useCallback(
+      (s: LayeredGraphExplorerSnapshotInput) => {
+        g.restore(s)
+        if (s.nodeLabels !== undefined) setNodeLabels(s.nodeLabels)
+        if (s.stack) {
+          const cam = s.stack
+          setStackMem((m) => withCamera(m, cam))
+          setStackEpoch((e) => e + 1)
+        }
+        if (s.view !== undefined) changeView(s.view, !s.stack)
+      },
+      [g, setNodeLabels, changeView],
+    )
+    useImperativeHandle(
+      explorerRef,
+      () => ({
+        getSnapshot: () => {
+          const snap = snapshotRef.current
+          const live = snap.view === 'stack' ? stackRef.current : null
+          return live ? { ...snap, stack: { ...snap.stack, camera: live.getCamera(), layerGap: live.getLayerGap() } } : snap
+        },
+        restore,
+        stack: () => stackRef.current,
+      }),
+      [restore],
+    )
+
     // ── scene ─────────────────────────────────────────────────────────────
     let scene: React.ReactNode = null
     if (view === 'stack') {
       scene = (
         <LayerStack
-          key="stack"
+          key={`stack-${stackEpoch}`}
           nodeLabels={nodeLabels ? 'all' : 'reached'}
           {...stackProps}
           ref={stackRef}
