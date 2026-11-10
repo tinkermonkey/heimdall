@@ -216,6 +216,28 @@ test.describe('Layered graph chrome', () => {
     expect(hidden).toBeGreaterThan(0)
   })
 
+  // Re-renders that leave every width alone (here: follow changes) do not re-measure the bar.
+  test('LinkCategoryFilter: a re-render with unchanged widths leaves the dividers alone', async ({ page }) => {
+    await page.goto(BASE + '&shell=1')
+    await page.waitForLoadState('networkidle')
+    const bar = page.getByTestId('chrome-shell-bar')
+    await expect(bar.locator('.layered-link-filter__section[data-line-start]')).toHaveCount(1)
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))
+    await bar.evaluate((el) => {
+      const w = window as unknown as { __barWrites: number }
+      w.__barWrites = 0
+      new MutationObserver((records) => { w.__barWrites += records.length }).observe(el, { attributes: true, subtree: true, attributeFilter: ['data-line-start', 'style'] })
+    })
+    const strip = page.getByTestId('chrome-shell')
+    for (const name of ['Direct', '+2 layers', '+1 layer', 'Direct']) {
+      await strip.getByRole('radio', { name }).click()
+      await expect(strip.getByRole('radio', { name })).toHaveAttribute('aria-checked', 'true')
+    }
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))))
+    expect(await page.evaluate(() => (window as unknown as { __barWrites: number }).__barWrites)).toBe(0)
+    await expect(bar.locator('.layered-link-filter__section[data-line-start]')).toHaveCount(1)
+  })
+
   for (const theme of ['light', 'dark'] as const) {
     test(`visual: shell surface controls, ${theme} canvas`, async ({ page }) => {
       await page.goto(BASE + `&shell=1&select=${ORIGIN}${theme === 'dark' ? '&dark=1' : ''}`)

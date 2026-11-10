@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useId, useLayoutEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useId, useLayoutEffect, useMemo, useRef } from 'react'
 import { Button } from './Button'
 import { Icon } from './Icon'
 import { SegmentedControl, type ChromeSurface } from './SegmentedControl'
@@ -25,6 +25,8 @@ export function useLayeredGraphProp(graph: LayeredGraphState | undefined, compon
   if (!g) throw new Error(`${component} needs a \`graph\` prop or an enclosing <LayeredGraphContext.Provider>`)
   return g
 }
+
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 function cx(...names: (string | false | null | undefined)[]): string {
   return names.filter(Boolean).join(' ')
@@ -224,55 +226,75 @@ function ChromeToggle({ pressed, className, ...props }: React.ButtonHTMLAttribut
  * section that sits on one line keeps the divider's room and is shifted left over it
  * (`data-line-start="shift"`: position only, layout unchanged). A section wider than the bar
  * wraps inside itself and cannot move up, so its divider is removed (`"drop"`). Sections are
- * measured in order, each after the decisions before it. Runs after each render, and a frame
- * after any resize of the bar or its items (fonts loading, labels changing).
+ * measured in order, each after the decisions before it. Checked after each render and a frame
+ * after any resize of the bar or its items (fonts loading, labels changing); re-measured only
+ * when the bar's or an item's width changed.
  */
 function useLineStartDividers(bar: React.RefObject<HTMLDivElement | null>) {
+  // The bar's width and its items' widths when last measured (after the decisions applied).
+  // Unchanged means unchanged wrapping, so a re-render of the bar (the graph context changes on
+  // every hover) costs one layout read and no writes.
+  const lastLayout = useRef('')
+
   const measure = useCallback(() => {
     const el = bar.current
     if (!el) return
+    const layoutKey = () =>
+      [el.clientWidth, ...Array.from(el.children, (c) => Math.round(c.getBoundingClientRect().width * 10))].join(',')
+    if (layoutKey() === lastLayout.current) return
     const sections = Array.from(el.children).filter((c): c is HTMLElement => c.classList.contains('layered-link-filter__section'))
     for (const s of sections) {
       s.removeAttribute('data-line-start')
       s.style.removeProperty('--layered-divider-shift')
     }
-    if (sections.length === 0) return
-    const cs = getComputedStyle(el)
-    const contentWidth = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
-    for (const s of sections) {
-      const prev = s.previousElementSibling
-      const r = s.getBoundingClientRect()
-      if (prev && r.left >= prev.getBoundingClientRect().right) continue
-      if (r.width >= contentWidth - 0.5) {
-        s.setAttribute('data-line-start', 'drop')
-        continue
+    if (sections.length > 0) {
+      const cs = getComputedStyle(el)
+      const contentWidth = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+      for (const s of sections) {
+        const prev = s.previousElementSibling
+        const r = s.getBoundingClientRect()
+        if (prev && r.left >= prev.getBoundingClientRect().right) continue
+        if (r.width >= contentWidth - 0.5) {
+          s.setAttribute('data-line-start', 'drop')
+          continue
+        }
+        const content = s.children[1]
+        const shift = content ? content.getBoundingClientRect().left - r.left : 0
+        s.setAttribute('data-line-start', 'shift')
+        s.style.setProperty('--layered-divider-shift', `${-shift}px`)
       }
-      const content = s.children[1]
-      const shift = content ? content.getBoundingClientRect().left - r.left : 0
-      s.setAttribute('data-line-start', 'shift')
-      s.style.setProperty('--layered-divider-shift', `${-shift}px`)
     }
+    lastLayout.current = layoutKey()
   }, [bar])
 
-  useLayoutEffect(measure)
+  // After every render: content (labels, counts, children) can change the items' widths.
+  useIsomorphicLayoutEffect(measure)
 
-  useLayoutEffect(() => {
+  // One observer for the bar's lifetime: a resize of the bar or any item re-measures a frame later
+  // (inside the callback, measuring would be a ResizeObserver loop). Items added or removed are
+  // observed as they come and go.
+  useIsomorphicLayoutEffect(() => {
     const el = bar.current
     if (!el || typeof ResizeObserver === 'undefined') return
     let frame = 0
-    // Deferred a frame: measuring can change the items' sizes, which inside the callback would
-    // be a ResizeObserver loop.
     const ro = new ResizeObserver(() => {
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(measure)
     })
-    ro.observe(el)
-    for (const c of Array.from(el.children)) ro.observe(c)
+    const observeAll = () => {
+      ro.disconnect()
+      ro.observe(el)
+      for (const c of Array.from(el.children)) ro.observe(c)
+    }
+    observeAll()
+    const mo = typeof MutationObserver === 'undefined' ? null : new MutationObserver(observeAll)
+    mo?.observe(el, { childList: true })
     return () => {
       cancelAnimationFrame(frame)
+      mo?.disconnect()
       ro.disconnect()
     }
-  })
+  }, [bar, measure])
 }
 
 /**
