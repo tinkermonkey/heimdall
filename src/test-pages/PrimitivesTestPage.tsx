@@ -340,6 +340,33 @@ export default function PrimitivesTestPage() {
               { value: 'week', label: 'This Week' },
             ]}
           />
+          <div
+            data-testid="segmented-control-shell"
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '12px', padding: '14px', background: 'rgb(var(--shell-bg))', borderRadius: 'var(--radius-md)' }}
+          >
+            <SegmentedControl
+              surface="shell"
+              aria-label="Shell scope"
+              value={segmentedValue}
+              onChange={setSegmentedValue}
+              options={[
+                { value: 'all', label: 'All' },
+                { value: 'active', label: 'Active' },
+                { value: 'archived', label: 'Archived', disabled: true },
+              ]}
+            />
+            <SegmentedControl
+              surface="shell"
+              disabled
+              aria-label="Shell disabled"
+              value="all"
+              onChange={() => {}}
+              options={[
+                { value: 'all', label: 'All' },
+                { value: 'active', label: 'Active' },
+              ]}
+            />
+          </div>
         </div>
       </section>
 

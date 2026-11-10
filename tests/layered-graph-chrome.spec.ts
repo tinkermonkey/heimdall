@@ -153,6 +153,82 @@ test.describe('Layered graph chrome', () => {
     await expect(inspector(page)).toHaveText('No node selected.')
   })
 
+  test('shell surface: the controls read the shell tokens and still drive the graph', async ({ page }) => {
+    await page.goto(BASE + '&shell=1')
+    await page.waitForLoadState('networkidle')
+    const strip = page.getByTestId('chrome-shell')
+    await expect(strip.locator('.segmented-control--shell')).toHaveCount(3)
+    await expect(strip.locator('.layered-link-filter--shell')).toHaveCount(1)
+    await strip.getByRole('radio', { name: 'All' }).click()
+    await expect(strip.getByRole('radio', { name: 'All' })).toHaveAttribute('aria-checked', 'true')
+    await expect(strip.getByRole('radio', { name: 'Coupled' })).toBeDisabled()
+  })
+
+  // At every bar width, no line of the wrapped link bar starts or ends with a divider.
+  test('LinkCategoryFilter: a wrapped line never starts or ends with a divider', async ({ page }) => {
+    await page.goto(BASE + '&shell=1')
+    await page.waitForLoadState('networkidle')
+    const bar = page.getByTestId('chrome-shell-bar')
+    await expect(bar.locator('.layered-link-filter__divider')).toHaveCount(2)
+
+    /** The bar's visible items (sections flattened), grouped into lines by vertical overlap. */
+    const lines = () =>
+      bar.evaluate((el) => {
+        const items: { divider: boolean; top: number; bottom: number; left: number }[] = []
+        for (const child of Array.from(el.children) as HTMLElement[]) {
+          const parts = child.classList.contains('layered-link-filter__section') ? (Array.from(child.children) as HTMLElement[]) : [child]
+          for (const p of parts) {
+            const r = p.getBoundingClientRect()
+            if ((r.width === 0 && r.height === 0) || getComputedStyle(p).visibility === 'hidden') continue
+            items.push({ divider: p.classList.contains('layered-link-filter__divider'), top: r.top, bottom: r.bottom, left: r.left })
+          }
+        }
+        const out: { divider: boolean; left: number }[][] = []
+        let line: typeof items = []
+        for (const it of items) {
+          const prev = line[line.length - 1]
+          if (prev && (it.top >= prev.bottom || it.left < prev.left)) {
+            out.push(line)
+            line = []
+          }
+          line.push(it)
+        }
+        if (line.length) out.push(line)
+        // Every line starts flush with the bar's content box: a hidden divider leaves no indent.
+        const contentLeft = el.getBoundingClientRect().left + el.clientLeft + parseFloat(getComputedStyle(el).paddingLeft)
+        return out.map((l) => (Math.abs(l[0].left - contentLeft) > 1 ? 'indent:' : '') + l.map((it) => (it.divider ? '|' : 'x')).join(''))
+      })
+
+    let wrapped = 0
+    let hidden = 0
+    for (let width = 1100; width >= 300; width -= 20) {
+      await bar.evaluate((el, w) => { el.style.width = `${w}px` }, width)
+      // The bar re-measures a frame after it resizes.
+      await expect
+        .poll(async () => (await lines()).filter((l) => l.startsWith('indent:') || l.startsWith('|') || l.endsWith('|')), { message: `width ${width}` })
+        .toEqual([])
+      const ls = await lines()
+      if (ls.length > 1) wrapped++
+      hidden += 2 - ls.join('').split('|').length + 1
+    }
+    expect(wrapped).toBeGreaterThan(0)
+    // Some widths start a line with a section, whose divider is then hidden.
+    expect(hidden).toBeGreaterThan(0)
+  })
+
+  for (const theme of ['light', 'dark'] as const) {
+    test(`visual: shell surface controls, ${theme} canvas`, async ({ page }) => {
+      await page.goto(BASE + `&shell=1&select=${ORIGIN}${theme === 'dark' ? '&dark=1' : ''}`)
+      await page.waitForLoadState('networkidle')
+      await page.setViewportSize({ width: 900, height: 600 })
+      // One unpressed category, to show both toggle states.
+      await page.getByTestId('chrome-shell-bar').locator('[data-category="security"]').click()
+      await page.mouse.move(0, 0)
+      await page.locator('body').evaluate(() => (document.activeElement as HTMLElement | null)?.blur())
+      await expect(page.getByTestId('chrome-shell')).toHaveScreenshot(`layered-graph-chrome-shell-${theme}.png`)
+    })
+  }
+
   for (const theme of ['light', 'dark'] as const) {
     test(`visual: controls and inspector with a selection, ${theme}`, async ({ page }) => {
       await open(page, `&select=${ORIGIN}${theme === 'dark' ? '&dark=1' : ''}`)

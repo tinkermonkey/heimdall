@@ -1,7 +1,7 @@
 /* LayeredGraphExplorer (LayeredGraphExplorer.tsx): header, scene, link bar, inspector panel and
-   status line. Canvas tokens throughout; the header and status line sit on the shell surface by
-   remapping the canvas tokens the chrome controls read to their shell values, so the same
-   controls render shell-dark in both canvas themes. */
+   status line. Canvas tokens throughout, except the header and status line with
+   chromeSurface="shell" (the default): they read the shell tokens, and the header's controls get
+   surface="shell", so they render shell-dark in both canvas themes. */
 
 .layered-graph-explorer {
   display: flex;
@@ -15,26 +15,6 @@
   color: rgb(var(--canvas-fg-1));
   font-family: var(--font-sans);
   font-size: 14px;
-}
-
-/* ---- Shell chrome (header, status line) ---- */
-
-.layered-graph-explorer--shell-chrome > .layered-graph-explorer__header,
-.layered-graph-explorer--shell-chrome > .layered-graph-explorer__status {
-  --canvas-bg: var(--shell-bg);
-  --canvas-bg-2: var(--shell-bg-2);
-  --canvas-surface: var(--shell-surface);
-  --canvas-surface-2: var(--shell-surface-2);
-  --canvas-card: var(--shell-surface);
-  --canvas-border: var(--shell-border-2);
-  --canvas-border-2: var(--shell-border-2);
-  --canvas-border-strong: var(--shell-surface-2);
-  --canvas-fg-1: var(--shell-fg-1);
-  --canvas-fg-2: var(--shell-fg-2);
-  --canvas-fg-3: var(--shell-fg-3);
-  --canvas-fg-4: var(--shell-fg-4);
-  background: rgb(var(--shell-bg));
-  border-color: rgb(var(--shell-border));
 }
 
 /* ---- Header ---- */
@@ -181,6 +161,24 @@
 
 .layered-graph-explorer__status-camera {
   margin-left: auto;
+}
+
+/* ---- Shell chrome (chromeSurface="shell"): header and status line ---- */
+
+.layered-graph-explorer--shell-chrome > .layered-graph-explorer__header,
+.layered-graph-explorer--shell-chrome > .layered-graph-explorer__status {
+  background: rgb(var(--shell-bg));
+  border-color: rgb(var(--shell-border));
+}
+
+.layered-graph-explorer--shell-chrome > .layered-graph-explorer__header,
+.layered-graph-explorer--shell-chrome .layered-graph-explorer__title {
+  color: rgb(var(--shell-fg-1));
+}
+
+.layered-graph-explorer--shell-chrome .layered-graph-explorer__eyebrow,
+.layered-graph-explorer--shell-chrome > .layered-graph-explorer__status {
+  color: rgb(var(--shell-fg-3));
 }
 
 /* ---- Fixed height: the scene fills the room left; main and panel scroll ---- */

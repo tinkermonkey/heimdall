@@ -18,6 +18,8 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 // through one useLayeredGraph + LayeredGraphContext. URL params make screenshots deterministic:
 //   ?example=layered-graph-chrome&data=spec|ux&select=<node id>[,<node id>…]&follow=0|1|2&dark=1
 // Several ids in `select` make a multi-selection (`defaultSelectedIds`), primary first.
+// `shell=1` renders the controls with surface="shell" on a shell strip instead (data-testid
+// chrome-shell; the link bar is chrome-shell-bar, with a PredicateLabelControl after its divider).
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 
@@ -43,6 +45,27 @@ export default function LayeredGraphChromeTestPage() {
     defaultFollow: params.has('follow') ? Number(params.get('follow')) : 1,
   })
   const { filters } = graph
+
+  if (params.get('shell') === '1') {
+    return (
+      <LayeredGraphContext.Provider value={graph}>
+        <div style={{ minHeight: '100vh', background: 'rgb(var(--canvas-bg))', padding: 20, boxSizing: 'border-box' }}>
+          <div
+            data-testid="chrome-shell"
+            style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '12px 20px', background: 'rgb(var(--shell-bg))', border: '1px solid rgb(var(--shell-border))', borderRadius: 'var(--radius-md)' }}
+          >
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '10px 22px' }}>
+              <FollowControl surface="shell" />
+              <PlaneLayoutControl surface="shell" disabled />
+            </div>
+            <LinkCategoryFilter data-testid="chrome-shell-bar" surface="shell" showLabelToggle>
+              <PredicateLabelControl surface="shell" />
+            </LinkCategoryFilter>
+          </div>
+        </div>
+      </LayeredGraphContext.Provider>
+    )
+  }
 
   return (
     <LayeredGraphContext.Provider value={graph}>

@@ -28,6 +28,7 @@ export {
   SegmentedControl,
   type SegmentedControlProps,
   type SegmentedControlOption,
+  type ChromeSurface,
 } from './components/SegmentedControl'
 export { Table, type Column, type TableProps } from './components/Table'
 export { NavItem, type NavItemProps } from './components/NavItem'

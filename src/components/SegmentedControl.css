@@ -50,3 +50,24 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* ---- Shell surface (surface="shell"): --shell-* tokens, dark in both canvas themes ---- */
+
+.segmented-control--shell {
+  background: rgb(var(--shell-bg-2));
+  border-color: rgb(var(--shell-border-2));
+}
+
+.segmented-control--shell .segmented-control__segment {
+  color: rgb(var(--shell-fg-2));
+}
+
+.segmented-control--shell .segmented-control__segment:hover:not(.segmented-control__segment--active):not(:disabled) {
+  color: rgb(var(--shell-fg-1));
+}
+
+.segmented-control--shell .segmented-control__segment--active {
+  background: rgb(var(--shell-surface));
+  border-color: rgb(var(--shell-border-2));
+  color: rgb(var(--shell-fg-1));
+}
