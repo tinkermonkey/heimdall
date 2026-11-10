@@ -274,6 +274,7 @@ export {
   useLayeredGraph,
   useLayeredGraphContext,
   layeredGraphSnapshotDefaults,
+  ASYNC_LAYOUT_MIN_NODES,
   LayeredGraphContext,
   type UseLayeredGraphOptions,
   type LayeredGraphState,
@@ -302,6 +303,7 @@ export {
   LINK_CATEGORY_PALETTE_SIZE,
   HOP_COLORS,
   layoutLayers,
+  layoutLayersAsync,
   mixLayerPositions,
   orderWithinLayers,
   orderAcrossLayers,
@@ -388,6 +390,7 @@ export {
   type LinkCategoryStyle,
   type LayerLayoutOptions,
   type LayerLayoutResult,
+  type LayoutLayersAsyncOptions,
   type NodeOrder,
 } from './utils/layered'
 export { useMediaQuery } from './hooks/useMediaQuery'

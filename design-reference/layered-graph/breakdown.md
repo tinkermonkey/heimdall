@@ -425,7 +425,7 @@ Why A was chosen:
 
 - `placeEdgeLabels` (step 3).
 - The camera, tween and label-overlay helpers (step 4).
-- Async layout for large graphs: `layoutLayers` is synchronous and fast at fixture scale.
+- Async layout for large graphs: `layoutLayers` is synchronous and fast at fixture scale. (Done in #338, see below.)
 
 **Step 2, `AdjacencyMatrix`: implemented (merged in #330).**
 
@@ -458,7 +458,7 @@ Why A was chosen:
 - Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
 - Hive (#337): the generic `axes` option (axis by any attribute).
 - Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
-- Framework (#338, #339): async `layoutLayers`, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
+- Framework (#338, #339): a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 
 **#338 state API: implemented.**
@@ -475,3 +475,8 @@ Why A was chosen:
 - `LayerStackHandle.getLayerGap()`: the live gap, mid-tween included.
 - Snapshots are untrusted input (URLs): `sanitizeLayeredGraphSnapshot` and `sanitizeLayeredGraphExplorerSnapshot` drop malformed fields and complete partial filters, at every entry point. A preset is active exactly when the stored camera and gap are its own (picked presets are stored at once; overrides drop the preset), so a preset click reports once, settled, and restoring that snapshot mid-tween does not remount. A changed camera remounts the stack and stops the turntable; an unchanged one leaves the stack alone. Reports from a stack being replaced are ignored.
 - **Tests:** the explorer test page's `sync=1` mode writes the snapshot to the URL. The explorer spec reloads from that URL (view, selection, follow, filter, labels, preset and gap come back) and saves and restores through the handle (plane spacing matches the saved gap). Further tests cover layer focus through the URL, a malformed `state`, a restore with an unchanged camera (no remount) and a restore over a running turntable. Unit tests in `src/utils/__tests__/layeredSnapshot.test.ts` (sanitizers included).
+
+**#338 async layout: implemented.**
+- `layoutLayersAsync(index, options, { signal })` in `src/utils/layered/layout.ts`: the same deterministic result as `layoutLayers` (both run one step generator), one solve at a time with `yieldToPaint` before each: each layer, then the coupled solve. `signal` aborts between solves. The coupled solve is still one block (about half the time on a large graph); splitting it would mean making `organicLayout` incremental.
+- `useLayeredGraph` lays out asynchronously when opted in with `asyncLayoutMinNodes` (default `false`, synchronous as before; the recommended `ASYNC_LAYOUT_MIN_NODES` = 200 was measured at about 100 ms of solves). Opting in requires memoized inputs, including any `nodeSize`; content-key reuse applies only without a custom `nodeSize`. `layoutPending` is true while a run is in flight; `layout` is null until the first run lands (the views use their no-layout fallbacks and reorder once it lands) and then keeps the last landed result while a newer run is pending. Requests are compared by content (`layoutInputKey`, `sameLayoutOptions`), so unmemoized `nodes` / `edges` / `layout` reuse a landed result instead of restarting, with a one-time dev warning. A newer request aborts the older run, and a failed run throws from the hook, as a synchronous one would. `GraphCanvas` lanes waits for the pending layout before its mount fit.
+- **Tests:** `src/utils/__tests__/layeredAsyncLayout.test.ts`, including re-render tests with `react-test-renderer` (landing, unmemoized inputs converge, supersede, unmount, StrictMode, error boundary); the LayerStack test page's `asyncLayout=1` mode, where the spec checks that every node lands where the synchronous layout puts it.

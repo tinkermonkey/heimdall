@@ -24,12 +24,14 @@ export {
 } from './emphasis'
 export {
   layoutLayers,
+  layoutLayersAsync,
   mixLayerPositions,
   orderWithinLayers,
   orderAcrossLayers,
   rankWithinLayers,
   type LayerLayoutOptions,
   type LayerLayoutResult,
+  type LayoutLayersAsyncOptions,
   type NodeOrder,
 } from './layout'
 export { linkPredicateLabel, arrowHeadPoints } from './labels'

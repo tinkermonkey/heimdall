@@ -581,8 +581,13 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       }
       return m
     }, [visibleLayers, index])
+    // Without a layout, or with one that lacks some nodes (a stale layout while a newer
+    // asynchronous one is pending), nodes without a position sit on their layer's circle.
     const fallbackPositions = useMemo(
-      () => (layout ? null : circlePositions(new Map(index.layers.map((l) => [l.id, l.nodeIds.map((id) => index.nodeById.get(id)!)])))),
+      () =>
+        layout && index.nodes.every((n) => layout.independent.has(n.id))
+          ? null
+          : circlePositions(new Map(index.layers.map((l) => [l.id, l.nodeIds.map((id) => index.nodeById.get(id)!)]))),
       [layout, index],
     )
     const { nodeEmphasis, linkEmphasis } = g
@@ -625,7 +630,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     const world = new Map<string, Vec3>()
     const P = new Map<string, ProjectedPoint>()
     for (const n of visibleNodes) {
-      const p = positions.get(n.id) ?? { x: 0, y: 0 }
+      const p = positions.get(n.id) ?? fallbackPositions?.get(n.id) ?? { x: 0, y: 0 }
       const w = { x: p.x * extent * NODE_PLANE_INSET, y: planeYOf(n.layerRank), z: p.y * extent * NODE_PLANE_INSET }
       world.set(n.id, w)
       P.set(n.id, proj(w))

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
 import { useControllable } from './useControllable'
+import { useAsyncLayerLayout } from './useAsyncLayerLayout'
 import { buildLayeredIndex } from '../utils/layered/buildLayeredIndex'
 import { linkEmphasis as computeLinkEmphasis, nodeEmphasis as computeNodeEmphasis, type EmphasisContext, type LinkCategoryStyle, type LinkEmphasis, type NodeEmphasis } from '../utils/layered/emphasis'
 import { DEFAULT_LINK_FILTERS, layerPairNodeIds } from '../utils/layered/filters'
@@ -21,6 +22,9 @@ import type {
 
 // A stable default: a fresh `{}` per render would re-run the layout every render.
 const DEFAULT_LAYOUT_OPTIONS: LayerLayoutOptions = {}
+/** The recommended `asyncLayoutMinNodes` (about 100 ms of solves). Async layout is opt-in. */
+export const ASYNC_LAYOUT_MIN_NODES = 200
+
 
 export interface UseLayeredGraphOptions {
   /** The same node and edge data GraphCanvas takes. */
@@ -30,6 +34,20 @@ export interface UseLayeredGraphOptions {
   layering: BuildLayeredIndexOptions
   /** In-layer layout options, or `false` to skip layout (views that don't need positions). Memoize it. */
   layout?: LayerLayoutOptions | false
+  /**
+   * Opt-in asynchronous layout (`layoutLayersAsync`) from this many nodes; `ASYNC_LAYOUT_MIN_NODES`
+   * (200) is the recommended value, `0` means always. Default `false`: synchronous, as before.
+   *
+   * When it runs, `layoutPending` is true while a run is in flight; `layout` is null until the
+   * first run lands (the views draw their fallbacks meanwhile) and then keeps the last landed
+   * result while a newer run is pending.
+   *
+   * Opting in requires memoized `nodes`, `edges`, `layering` and `layout` (including any `nodeSize`
+   * function). Without a custom `nodeSize`, an index rebuilt with the same content reuses the
+   * landed result (with a dev warning). Otherwise every new object restarts the run: a `layout`
+   * or `nodeSize` rebuilt on every render never lets it land (a dev warning names it).
+   */
+  asyncLayoutMinNodes?: number | false
 
   /**
    * The selected node instance (controlled). The simple, single-select path: controlling only
@@ -87,8 +105,10 @@ export interface UseLayeredGraphOptions {
 
 export interface LayeredGraphState {
   index: LayeredIndex
-  /** null when `layout: false`. */
+  /** null when `layout: false`, and until the first asynchronous layout lands (then the last landed one while a newer run is pending). */
   layout: LayerLayoutResult | null
+  /** True while an asynchronous layout runs (see `asyncLayoutMinNodes`). */
+  layoutPending: boolean
   /** The selection's reach at the current `follow`. */
   reach: ReachResult
   /** The hovered node's direct links only (follow 0), for cheap hover previews. */
@@ -150,7 +170,15 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const { nodes, edges, layering, layout: layoutOptions = DEFAULT_LAYOUT_OPTIONS, followCategories, linkStyles } = options
 
   const index = useMemo(() => buildLayeredIndex(nodes, edges, layering), [nodes, edges, layering])
-  const layout = useMemo(() => (layoutOptions === false ? null : layoutLayers(index, layoutOptions)), [index, layoutOptions])
+  const asyncMin = options.asyncLayoutMinNodes ?? false
+  const runAsync = layoutOptions !== false && asyncMin !== false && index.nodes.length >= asyncMin
+  const syncLayout = useMemo(
+    () => (layoutOptions === false || runAsync ? null : layoutLayers(index, layoutOptions)),
+    [index, layoutOptions, runAsync],
+  )
+  const asyncLayout = useAsyncLayerLayout(index, layoutOptions === false ? DEFAULT_LAYOUT_OPTIONS : layoutOptions, runAsync)
+  const layout = runAsync ? asyncLayout.layout : syncLayout
+  const layoutPending = asyncLayout.pending
 
   // ── selection: one ordered list of ids, the primary first ───────────────
   // Controlled by `selectedIds`, else by `selectedId` (a list of at most one), else held here.
@@ -339,7 +367,7 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   )
 
   return {
-    index, layout, reach, hoverReach, pairNodeIds,
+    index, layout, layoutPending, reach, hoverReach, pairNodeIds,
     selectedId, selectedIds, hoveredId, follow, filters, predicateLabels, focusedLayerId, planeLayout, nodeLabels,
     select, setSelectedIds, toggleSelected, hover, setFollow, setFilters: setFiltersAction, toggleCategory, togglePredicate, toggleLayer,
     setShowIntra, setLayerPair, setPredicateLabels, focusLayer, setPlaneLayout, setNodeLabels,

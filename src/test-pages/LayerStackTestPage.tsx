@@ -11,6 +11,7 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 // screenshots deterministic:
 //   ?example=layer-stack&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all
 //     &nodeLabels=all|reached|none&preset=stack|exploded|top|profile&focus=<layer id>&layout=coupled&dark=1
+//     &asyncLayout=1 (lay out asynchronously at any size; the caption shows `layout pending|ready`)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const PRESET = (CAMERA_PRESET_NAMES as readonly string[]).includes(params.get('preset') ?? '') ? (params.get('preset') as CameraPresetName) : 'stack'
@@ -39,6 +40,7 @@ export default function LayerStackTestPage() {
     defaultPredicateLabels: (params.get('labels') as PredicateLabelMode | null) ?? 'highlighted',
     defaultFocusedLayerId: params.get('focus'),
     defaultPlaneLayout: (params.get('layout') as PlaneLayoutMode | null) ?? 'independent',
+    asyncLayoutMinNodes: params.get('asyncLayout') === '1' ? 0 : undefined,
   })
 
   const stack = useRef<LayerStackHandle>(null)
@@ -53,6 +55,7 @@ export default function LayerStackTestPage() {
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 12, marginBottom: 12, fontSize: 12 }}>
           <span data-testid="layer-stack-caption" style={{ fontFamily: 'var(--font-mono)' }}>
             LayerStack · {DATA} · {graph.index.nodes.length} nodes · {graph.index.links.length} links · {graph.index.links.filter((l) => l.cross).length} cross-layer
+            {params.get('asyncLayout') === '1' && ` · layout ${graph.layoutPending ? 'pending' : 'ready'}`}
           </span>
           <SegmentedControl
             aria-label="Camera preset"

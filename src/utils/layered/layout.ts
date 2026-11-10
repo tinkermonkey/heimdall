@@ -1,4 +1,5 @@
 import { organicLayout, type OrganicLayoutOptions } from '../organicLayout'
+import { yieldToPaint } from '../yieldToPaint'
 import type { Point } from '../graph'
 import type { IndexedLink, IndexedNode, LayeredIndex } from './types'
 
@@ -84,30 +85,136 @@ function normalize(
 }
 
 /**
- * In-plane positions for every node, both ways the layered views use them: `independent` (each
- * layer solved alone, so each reads best on its own) and `coupled` (one solve with cross-layer
- * links, so nodes linked across layers line up). Deterministic. Views tween between the two with
- * `mixLayerPositions`.
+ * The layout as steps: one solve per layer, then the coupled solve. Yields before each solve, so
+ * a caller can stop between them; returns the result.
  */
-export function layoutLayers(index: LayeredIndex, options: LayerLayoutOptions = {}): LayerLayoutResult {
+function* layoutSteps(index: LayeredIndex, options: LayerLayoutOptions): Generator<void, LayerLayoutResult, void> {
   const size = options.nodeSize ?? defaultSize
   const keep = layoutLinkFilter(options.layoutCategories)
 
   const independent = new Map<string, Point>()
   const indepScale = new Map<string, number>()
   for (const layer of index.layers) {
+    yield
     const nodes = layer.nodeIds.map((id) => index.nodeById.get(id)!)
     const links = index.links.filter((l) => !l.cross && keep(l) && index.nodeById.get(l.sourceId)!.layerId === layer.id)
     const pos = solve(nodes, links, options, size)
     indepScale.set(layer.id, normalize(nodes, pos, size, independent))
   }
 
+  yield
   const coupledLinks = index.links.filter((l) => l.cross || keep(l))
   const coupledRaw = solve(index.nodes, coupledLinks, options, size)
   const coupled = new Map<string, Point>()
   const coupledScale = normalize(index.nodes, coupledRaw, size, coupled)
 
   return { independent, coupled, scale: { independent: indepScale, coupled: coupledScale } }
+}
+
+/**
+ * In-plane positions for every node, both ways the layered views use them: `independent` (each
+ * layer solved alone, so each reads best on its own) and `coupled` (one solve with cross-layer
+ * links, so nodes linked across layers line up). Deterministic. Views tween between the two with
+ * `mixLayerPositions`. For large graphs, `layoutLayersAsync` gives the same result without
+ * blocking the main thread for the whole run.
+ */
+export function layoutLayers(index: LayeredIndex, options: LayerLayoutOptions = {}): LayerLayoutResult {
+  const steps = layoutSteps(index, options)
+  for (;;) {
+    const step = steps.next()
+    if (step.done) return step.value
+  }
+}
+
+export interface LayoutLayersAsyncOptions {
+  /** Stops the run between solves; the promise then rejects with an `AbortError`. */
+  signal?: AbortSignal
+}
+
+function abortError(): Error {
+  const err = new Error('layoutLayersAsync was aborted')
+  err.name = 'AbortError'
+  return err
+}
+
+/**
+ * `layoutLayers` without blocking for the whole run: the same deterministic result, computed one
+ * solve at a time (each layer, then the coupled solve) with `yieldToPaint` before each, so the
+ * browser can paint and handle input in between. A single solve still runs in one go, so the
+ * coupled solve over a large graph is the longest block. Abort with `signal`.
+ */
+export function layoutLayersAsync(
+  index: LayeredIndex,
+  options: LayerLayoutOptions = {},
+  { signal }: LayoutLayersAsyncOptions = {},
+): Promise<LayerLayoutResult> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) return reject(abortError())
+    const steps = layoutSteps(index, options)
+    let cancelYield: (() => void) | null = null
+    const onAbort = () => {
+      cancelYield?.()
+      reject(abortError())
+    }
+    signal?.addEventListener('abort', onAbort, { once: true })
+    const run = () => {
+      cancelYield = null
+      let step: IteratorResult<void, LayerLayoutResult>
+      try {
+        step = steps.next()
+      } catch (err) {
+        signal?.removeEventListener('abort', onAbort)
+        return reject(err)
+      }
+      if (step.done) {
+        signal?.removeEventListener('abort', onAbort)
+        return resolve(step.value)
+      }
+      cancelYield = yieldToPaint(run)
+    }
+    // The first step yields at once, so the solves start after a paint.
+    run()
+  })
+}
+
+/**
+ * A content key for everything `layoutLayers` reads from the index with the default node size:
+ * layers and their node order, each node's layer, display label and position sketch, and each
+ * link's ends, cross flag and categories. Two indexes with the same key lay out the same.
+ */
+export function layoutInputKey(index: LayeredIndex): string {
+  const parts: string[] = []
+  for (const l of index.layers) parts.push(`L${l.id}\u0001${l.nodeIds.join('\u0001')}`)
+  for (const n of index.nodes) parts.push(`N${n.id}\u0001${n.layerId}\u0001${n.displayLabel}\u0001${n.position?.x ?? ''},${n.position?.y ?? ''}`)
+  for (const k of index.links) parts.push(`E${k.sourceId}\u0001${k.targetId}\u0001${k.cross ? 1 : 0}\u0001${k.categories.join(',')}`)
+  return parts.join('\n')
+}
+
+function sameList(a: readonly string[] | null | undefined, b: readonly string[] | null | undefined): boolean {
+  if (a == null || b == null) return (a == null) === (b == null)
+  return a.length === b.length && a.every((x, i) => x === b[i])
+}
+
+function sameShallow(a: object | undefined, b: object | undefined): boolean {
+  if (a === b) return true
+  if (!a || !b) return false
+  const ka = Object.keys(a)
+  const ra = a as Record<string, unknown>
+  const rb = b as Record<string, unknown>
+  const same = (x: unknown, y: unknown) =>
+    Object.is(x, y) || (Array.isArray(x) && Array.isArray(y) && x.length === y.length && x.every((v, i) => Object.is(v, y[i])))
+  return ka.length === Object.keys(b).length && ka.every((k) => same(ra[k], rb[k]))
+}
+
+/** Layout options equal field by field (`nodeSize` by identity; `organic` shallowly, its arrays such as `affectedIds` by contents). */
+export function sameLayoutOptions(a: LayerLayoutOptions, b: LayerLayoutOptions): boolean {
+  return (
+    a === b ||
+    ((a.engine ?? 'organic') === (b.engine ?? 'organic') &&
+      sameList(a.layoutCategories, b.layoutCategories) &&
+      a.nodeSize === b.nodeSize &&
+      sameShallow(a.organic, b.organic))
+  )
 }
 
 /** Positions between `independent` (mix 0) and `coupled` (mix 1). */
