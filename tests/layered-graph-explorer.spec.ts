@@ -172,12 +172,20 @@ test.describe('LayeredGraphExplorer', () => {
 
   test('the snapshot round-trips the whole explorer through the URL', async ({ page }) => {
     const errors = await open(page, '&sync=1')
-    // Change the selection, follow, a filter, node labels, the camera and the view.
+    // No onSnapshotChange on mount.
+    await page.waitForTimeout(300)
+    expect(new URL(page.url()).searchParams.get('state')).toBeNull()
+    // Change the selection, follow, a filter, node labels, predicate labels, plane layout, the camera and the view.
     await page.getByRole('button', { name: /^BusinessProcess, Business layer, 6 cross-layer links/ }).click()
     await page.getByRole('radiogroup', { name: 'Follow links from the selection' }).getByRole('radio', { name: '+2 layers' }).click()
     await page.locator('.layered-link-filter [data-category="structural"]').click()
     await page.getByRole('button', { name: 'Labels', exact: true }).click()
+    await page.getByRole('radiogroup', { name: 'Predicate labels' }).getByRole('radio', { name: 'All' }).click()
+    await page.getByRole('radiogroup', { name: 'Plane layout' }).getByRole('radio', { name: 'Coupled' }).click()
     await page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { name: 'Exploded' }).click()
+    // A preset reports its destination at once: the first URL write already has its camera and gap.
+    await expect.poll(() => new URL(page.url()).searchParams.get('state')).toContain('"preset":"exploded"')
+    expect(JSON.parse(new URL(page.url()).searchParams.get('state')!).stack).toMatchObject({ layerGap: 300, camera: { zoom: 0.86 } })
     await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
     await pickView(page, 'Matrix')
     await expect.poll(() => new URL(page.url()).searchParams.get('state')).toContain('"view":"matrix"')
@@ -187,6 +195,8 @@ test.describe('LayeredGraphExplorer', () => {
       selectedId: 'business.businessprocess',
       follow: 2,
       nodeLabels: false,
+      predicateLabels: 'all',
+      planeLayout: 'coupled',
       filters: { categories: { structural: false } },
       stack: { preset: 'exploded', layerGap: 300 },
     })
@@ -195,13 +205,79 @@ test.describe('LayeredGraphExplorer', () => {
     await page.goto(page.url())
     await page.waitForLoadState('networkidle')
     await expect(explorer(page)).toHaveAttribute('data-view', 'matrix')
-    await expect(state(page)).toHaveText('view matrix · selected business.businessprocess · follow 2')
+    // The explorer's own state, not the test page's.
+    await expect(status(page)).toContainText('matrix · follow +2 layers')
     await expect(inspectorTitle(page)).toHaveText('BusinessProcess')
     await expect(page.locator('.layered-link-filter [data-category="structural"]')).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.getByRole('radiogroup', { name: 'Predicate labels' }).getByRole('radio', { name: 'All' })).toHaveAttribute('aria-checked', 'true')
     await pickView(page, '3D stack')
+    await expect(page.getByRole('radiogroup', { name: 'Plane layout' }).getByRole('radio', { name: 'Coupled' })).toHaveAttribute('aria-checked', 'true')
     await expect(page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { name: 'Exploded' })).toHaveAttribute('aria-checked', 'true')
     await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
     await expect(page.getByRole('button', { name: 'Labels', exact: true })).toHaveAttribute('aria-pressed', 'false')
+    expect(errors).toEqual([])
+  })
+
+  test('layer focus round-trips through the URL', async ({ page }) => {
+    const errors = await open(page, '&sync=1&view=matrix')
+    const business = page.locator('.layered-graph-explorer__aside').getByRole('button', { name: /^Business layer/ })
+    await business.click()
+    await expect(business).toHaveAttribute('aria-pressed', 'true')
+    await expect.poll(() => new URL(page.url()).searchParams.get('state')).toContain('"focusedLayerId":"business"')
+    await page.goto(page.url())
+    await page.waitForLoadState('networkidle')
+    await expect(page.locator('.layered-graph-explorer__aside').getByRole('button', { name: /^Business layer/ })).toHaveAttribute('aria-pressed', 'true')
+    expect(errors).toEqual([])
+  })
+
+  test('a malformed snapshot in the URL loads with sane defaults', async ({ page }) => {
+    const bad = {
+      view: 'bogus',
+      follow: 'two',
+      nodeLabels: 'yes',
+      filters: { categories: { structural: false } },
+      predicateLabels: 'loud',
+      selectedId: 42,
+      stack: { preset: 'bogus', camera: { zoom: null, yaw: 'x', pitch: 99 }, layerGap: -1 },
+    }
+    const errors = await open(page, `&sync=1&state=${encodeURIComponent(JSON.stringify(bad))}`)
+    await expect(explorer(page)).toHaveAttribute('data-view', 'stack')
+    await expect(status(page)).toContainText('3d stack · follow +1 layer')
+    // The partial filters are completed: structural off, everything else as default.
+    await expect(page.locator('.layered-link-filter [data-category="structural"]')).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.getByRole('button', { name: 'Intra-layer links' })).toHaveAttribute('aria-pressed', 'true')
+    // The bogus preset and non-finite fields are dropped; the hand-set pitch is clamped as the
+    // stack draws it, and clears the preset; the bad gap falls back to the default.
+    await expect(status(page)).toContainText('yaw -36° pitch 87° zoom 1.00 · gap 170')
+    await expect(status(page)).not.toContainText('stack · yaw')
+    await expect(page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { checked: true })).toHaveCount(0)
+    await expect(page.locator('.layer-stack')).toBeVisible()
+    expect(errors).toEqual([])
+  })
+
+  test('restore keeps the stack when the camera is unchanged, and wins over a running turntable', async ({ page }) => {
+    const errors = await open(page, '&sync=1')
+    const presets = page.getByRole('radiogroup', { name: 'Camera preset' })
+    await presets.getByRole('radio', { name: 'Top' }).click()
+    await expect(status(page)).toContainText('top · yaw 0° pitch 86° zoom 1.05 · gap 170')
+    await page.getByRole('button', { name: 'Save snapshot' }).click()
+    await expect(page.getByTestId('saved-snapshot')).toHaveText('stack · top · gap 170')
+
+    // Same camera: the stack element survives the restore (no remount).
+    await page.evaluate(() => { (document.querySelector('.layer-stack') as HTMLElement & { __mark?: number }).__mark = 1 })
+    await page.getByRole('button', { name: 'Restore snapshot' }).click()
+    expect(await page.evaluate(() => (document.querySelector('.layer-stack') as HTMLElement & { __mark?: number }).__mark)).toBe(1)
+
+    // With the turntable running, the restored camera holds and the turntable stops.
+    const turntable = page.getByRole('button', { name: 'Turntable' })
+    await turntable.click()
+    await expect(turntable).toHaveAttribute('aria-pressed', 'true')
+    await page.waitForTimeout(400)
+    await page.getByRole('button', { name: 'Restore snapshot' }).click()
+    await expect(turntable).toHaveAttribute('aria-pressed', 'false')
+    await expect(presets.getByRole('radio', { name: 'Top' })).toHaveAttribute('aria-checked', 'true')
+    await page.waitForTimeout(300)
+    await expect(status(page)).toContainText('top · yaw 0° pitch 86° zoom 1.05 · gap 170')
     expect(errors).toEqual([])
   })
 

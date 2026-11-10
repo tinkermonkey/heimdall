@@ -33,6 +33,7 @@ export {
   type NodeOrder,
 } from './layout'
 export { linkPredicateLabel, arrowHeadPoints } from './labels'
+export { sanitizeLayeredGraphSnapshot, type LayeredGraphSnapshotFields } from './snapshot'
 export {
   placeEdgeLabels,
   edgeLabelPriority,
