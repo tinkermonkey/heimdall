@@ -54,6 +54,7 @@ import LineChartDataToggleTestPage from './test-pages/LineChartDataToggleTestPag
 import GraphViewportHistoryTestPage from './test-pages/GraphViewportHistoryTestPage'
 import GraphA11yNamesTestPage from './test-pages/GraphA11yNamesTestPage'
 import GraphNodeMeasureTestPage from './test-pages/GraphNodeMeasureTestPage'
+import GraphTooltipPlacementTestPage from './test-pages/GraphTooltipPlacementTestPage'
 import GraphLayoutBusyTestPage from './test-pages/GraphLayoutBusyTestPage'
 // Injected by vite.config.mjs from package.json (a JSON import here would pull package.json into
 // the declaration build and move every .d.ts under dist/src/).
@@ -223,6 +224,9 @@ export default function App() {
 
   if (exampleParam === 'graph-node-measure') {
     return <GraphNodeMeasureTestPage />
+  }
+  if (exampleParam === 'graph-tooltip-placement') {
+    return <GraphTooltipPlacementTestPage />
   }
   if (exampleParam === 'graph-a11y-names') {
     return <GraphA11yNamesTestPage />

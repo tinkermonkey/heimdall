@@ -8,12 +8,14 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 
 // GraphCanvas layout="layer-lanes" on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=layer-lanes&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&orientation=vertical&intra=none&dark=1
+// &tooltip=1 adds a hover edgeTooltip (tests/graph-tooltip-placement.spec.ts, #323).
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
 const EDGES = DATA === 'spec' ? drSpecEdges : heimdallUxEdges
 const ORIENTATION: LaneOrientation = params.get('orientation') === 'vertical' ? 'vertical' : 'horizontal'
 const INTRA = params.get('intra') === 'none' ? 'none' : 'arc'
+const EDGE_TOOLTIP = params.get('tooltip') === '1'
 
 export default function LayerLanesTestPage() {
   useEffect(() => {
@@ -69,6 +71,7 @@ export default function LayerLanesTestPage() {
             laneOptions={laneOptions}
             fitView
             fitPadding={24}
+            edgeTooltip={EDGE_TOOLTIP ? (edge) => <span>{edge.label ?? edge.id}</span> : undefined}
             style={{ width: '100%', height: '100%' }}
           />
         </div>
