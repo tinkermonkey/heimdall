@@ -458,7 +458,7 @@ Why A was chosen:
 - Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
 - Hive (#337): the generic `axes` option (axis by any attribute).
 - Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
-- Framework (#338, #339): a view and camera snapshot for the explorer, async `layoutLayers`, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
+- Framework (#338, #339): async `layoutLayers`, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 
 **#338 state API: implemented.**
