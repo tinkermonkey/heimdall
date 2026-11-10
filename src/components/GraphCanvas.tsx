@@ -708,6 +708,10 @@ export interface GraphCanvasProps extends Omit<
    * Additional props passed: nodeId (string), tooltipId (optional), onSelect (optional), onPopoverOpen (optional).
    *
    * Tip: memoize with useCallback to avoid unnecessary re-measurements.
+   *
+   * The node's box is the measured margin box of what this returns. Keep it in flow: CSS such as
+   * `position: absolute` on it collapses the measurement to 0x0 and the node falls back to the
+   * default box (a development build warns once per node).
    */
   renderNode?: (
     node: GraphNodeData,
@@ -1504,6 +1508,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const measureRefs = useRef<Record<string, HTMLDivElement | null>>({});
+    const measureProbeRef = useRef<HTMLDivElement>(null);
+    // Node ids already warned about measuring 0x0 (dev only), so each warns once, not per pass.
+    const zeroSizeWarnedRef = useRef<Set<string>>(new Set());
     // Tracks whether we've applied the initial canvas-center offset
     const didCenterRef = useRef(false);
     // State mirror of didCenterRef, set in the same effect right alongside it — exists only so
@@ -1830,13 +1837,54 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // bigger custom card) — a *memoized* renderNode (see the prop's JSDoc) keeps a stable
     // identity across re-renders that don't change its output, so this doesn't cause the
     // thrashing an unmemoized inline function would.
+    //
+    // The box is the node's own border box, unrounded, from getBoundingClientRect (#331):
+    // - A single element child is measured (its margin box) rather than its inline-block wrapper,
+    //   whose line box adds the host's line-height strut (a 20px .graph-node in a 16px/1.5 host measured 24px,
+    //   so edges arriving from below stopped ~4px short of the outline).
+    // - offsetWidth/offsetHeight round to whole pixels, so an 82.2px node got an 82px box and its
+    //   label ellipsized. The width is rounded *up* instead; the height is kept exact, since
+    //   nothing truncates on a fractional height and edges then land on the outline.
+    // - getBoundingClientRect is in screen pixels, so a scale transform on a host ancestor is
+    //   divided out using the fixed-width probe.
     useLayoutEffect(() => {
+      const probe = measureProbeRef.current;
+      const scale = probe && probe.offsetWidth > 0 ? probe.getBoundingClientRect().width / probe.offsetWidth : 1;
       const next: NodeDims = new Map();
       for (const node of visibleNodes) {
-        const el = measureRefs.current[node.id];
+        const wrapper = measureRefs.current[node.id];
+        const only = wrapper?.childNodes.length === 1 ? wrapper.firstElementChild : null;
+        const rect = (only ?? wrapper)?.getBoundingClientRect();
+        let width = rect ? rect.width / scale : 0;
+        let height = rect ? rect.height / scale : 0;
+        if (only && (width > 0 || height > 0)) {
+          // The child still renders offset by its margins inside the foreignObject (the wrapper's
+          // box used to include them), so add them back or a custom card with a margin is clipped.
+          // Computed margins are layout px, already unscaled.
+          const cs = getComputedStyle(only);
+          width = Math.max(0, width + (parseFloat(cs.marginLeft) || 0) + (parseFloat(cs.marginRight) || 0));
+          height = Math.max(0, height + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0));
+        }
+        // A renderNode that renders nothing for the measurement pass (see the measure layer below)
+        // leaves the wrapper empty and takes the defaults on purpose; content that measures 0x0 is
+        // a host-CSS problem (e.g. `.graph-node { position: absolute }` takes it out of flow), and
+        // the silent fallback would put every edge tens of px off the real node.
+        if (
+          process.env.NODE_ENV === "development" &&
+          wrapper?.hasChildNodes() &&
+          (width === 0 || height === 0) &&
+          !zeroSizeWarnedRef.current.has(node.id)
+        ) {
+          zeroSizeWarnedRef.current.add(node.id);
+          console.warn(
+            `GraphCanvas: node "${node.id}" measured ${width}x${height}; using the default ${DEFAULT_NODE_W}x${DEFAULT_NODE_H} box. ` +
+              "Host CSS that takes the node out of flow (e.g. position: absolute on .graph-node) collapses its measurement.",
+          );
+        }
         next.set(node.id, {
-          width: el?.offsetWidth || DEFAULT_NODE_W,
-          height: el?.offsetHeight || DEFAULT_NODE_H,
+          // Layout units are 1/64px; the epsilon keeps float noise from adding a whole pixel.
+          width: width > 0 ? Math.ceil(width - 1e-3) : DEFAULT_NODE_W,
+          height: height > 0 ? height : DEFAULT_NODE_H,
         });
       }
       setDims(next);
@@ -3435,6 +3483,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             custom renderNode (e.g. one embedding viewport controls) can tell this measurement
             pass apart from the real one and opt out of rendering anything for it. */}
         <div className="graph-measure" aria-hidden="true">
+          {/* Fixed 100px wide: its on-screen width gives any scale a host ancestor applies. */}
+          <div ref={measureProbeRef} className="graph-measure__probe" />
           {visibleNodes.map((node) => (
             <div
               key={node.id}

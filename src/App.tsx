@@ -51,6 +51,7 @@ import RadialTreeTestPage from './test-pages/RadialTreeTestPage'
 import LineChartDataToggleTestPage from './test-pages/LineChartDataToggleTestPage'
 import GraphViewportHistoryTestPage from './test-pages/GraphViewportHistoryTestPage'
 import GraphA11yNamesTestPage from './test-pages/GraphA11yNamesTestPage'
+import GraphNodeMeasureTestPage from './test-pages/GraphNodeMeasureTestPage'
 import GraphLayoutBusyTestPage from './test-pages/GraphLayoutBusyTestPage'
 // Injected by vite.config.mjs from package.json (a JSON import here would pull package.json into
 // the declaration build and move every .d.ts under dist/src/).
@@ -214,6 +215,9 @@ export default function App() {
     return <GraphViewportHistoryTestPage />
   }
 
+  if (exampleParam === 'graph-node-measure') {
+    return <GraphNodeMeasureTestPage />
+  }
   if (exampleParam === 'graph-a11y-names') {
     return <GraphA11yNamesTestPage />
   }
