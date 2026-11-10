@@ -143,3 +143,82 @@ test.describe('GraphCanvas hover tooltip placement (#323)', () => {
     expect(intersects(card, label)).toBe(false)
   })
 })
+
+// layout="layer-lanes": links are hovered by their lane link id, which is also the predicate
+// pill's data-link-id, so a link with a pill anchors to the pill; with pills off, to the curve.
+test.describe('GraphCanvas hover tooltip placement, layer-lanes (#323)', () => {
+  const LANES = '[data-testid="layer-lanes"]'
+  const open = async (page: Page, labels: 'all' | 'off') => {
+    await page.goto(`http://localhost:5173/?example=layer-lanes&labels=${labels}&tooltip=1`)
+    await expect(page.locator(LANES)).toHaveAttribute('data-layout-state', 'idle')
+    await expect(page.locator(`${LANES} g.graph-lane-link`).first()).toBeAttached()
+    await page.evaluate(() => document.fonts.ready)
+  }
+  const shown = async (page: Page) => {
+    const tooltip = page.locator(`${LANES} [role="tooltip"]`)
+    await expect(tooltip).toBeVisible()
+    await expect(tooltip).toHaveAttribute('data-placement', /.+/)
+    return tooltip
+  }
+
+  test('link with a predicate pill: tooltip sits beside the pill without covering it', async ({ page }) => {
+    await open(page, 'all')
+    const pills = page.locator(`${LANES} .graph-lane-pill`)
+    expect(await pills.count()).toBeGreaterThan(0)
+    // A pill well inside the canvas, so the card has room on its preferred side.
+    const canvas = await box(page, LANES)
+    const ids = await pills.evaluateAll(
+      (els, c) =>
+        els
+          .map((el) => ({ id: el.getAttribute('data-link-id')!, r: el.getBoundingClientRect() }))
+          .filter(({ r }) => r.top > c.y + 120 && r.bottom < c.y + c.height - 120 && r.left > c.x + 160 && r.right < c.x + c.width - 160)
+          .map(({ id }) => id),
+      canvas,
+    )
+    expect(ids.length).toBeGreaterThan(0)
+    const id = ids[0]
+    await page.locator(`${LANES} g.graph-lane-link[data-link-id="${id}"]`).dispatchEvent('pointerover')
+    const tooltip = await shown(page)
+    await expect(tooltip).toHaveAttribute('data-placement', 'top')
+    const card = (await tooltip.boundingBox())!
+    const pill = await box(page, `${LANES} .graph-lane-pill[data-link-id="${id}"] .graph-lane-pill__bg`)
+    expect(intersects(card, pill)).toBe(false)
+    expectGap(pill.y - (card.y + card.height))
+  })
+
+  test('link without a pill: tooltip anchors on the link curve', async ({ page }) => {
+    await open(page, 'off')
+    await expect(page.locator(`${LANES} .graph-lane-pill`)).toHaveCount(0)
+    const canvas = await box(page, LANES)
+    // A link whose curve is well inside the canvas.
+    const id = await page.locator(`${LANES} g.graph-lane-link`).evaluateAll((els, c) => {
+      const inner = els.find((el) => {
+        const r = el.querySelector('.graph-lane-link__line')!.getBoundingClientRect()
+        return r.top > c.y + 120 && r.bottom < c.y + c.height - 40 && r.left > c.x + 160 && r.right < c.x + c.width - 160
+      })
+      return inner?.getAttribute('data-link-id') ?? null
+    }, canvas)
+    expect(id).not.toBeNull()
+    const link = page.locator(`${LANES} g.graph-lane-link[data-link-id="${id}"]`)
+    await link.dispatchEvent('pointerover')
+    const tooltip = await shown(page)
+    await expect(tooltip).toHaveAttribute('data-placement', 'top')
+    const card = (await tooltip.boundingBox())!
+    // The anchor point: centred under the card, one gap below it. It must lie on the curve.
+    const anchor = { x: card.x + card.width / 2, y: card.y + card.height + GAP }
+    const distance = await link.locator('.graph-lane-link__line').evaluate((el, a) => {
+      const path = el as SVGPathElement
+      const m = path.getScreenCTM()!
+      const total = path.getTotalLength()
+      let best = Infinity
+      for (let i = 0; i <= 400; i++) {
+        const p = path.getPointAtLength((total * i) / 400)
+        const x = m.a * p.x + m.c * p.y + m.e
+        const y = m.b * p.x + m.d * p.y + m.f
+        best = Math.min(best, Math.hypot(x - a.x, y - a.y))
+      }
+      return best
+    }, anchor)
+    expect(distance).toBeLessThanOrEqual(3)
+  })
+})
