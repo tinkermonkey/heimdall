@@ -37,7 +37,12 @@ export interface UseLayeredGraphOptions {
    */
   selectedId?: string | null
   defaultSelectedId?: string | null
-  /** Called with the primary selection whenever `select` runs, and when another action changes the primary. */
+  /**
+   * Called with the primary selection on every `select` and `restore`. The other selection and
+   * filter actions (`setSelectedIds`, `toggleSelected`, `toggleLayer`, `setFilters`, …) call it
+   * when they change the visible primary. A parent changing a controlled `filters` or
+   * `selectedIds` prop is not reported back.
+   */
   onSelect?: (id: string | null) => void
   /**
    * Multi-select (controlled): every selected node instance, primary first. Takes precedence over
@@ -172,31 +177,32 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
     return null
   }, [])
   /**
-   * Writes the ids. `onSelect` reports the visible primary when it changes; with `always` it is
-   * called with `ids[0]` whatever changed, as `select` always has. `prevPrimary` overrides the
-   * primary compared against (when the filters changed in the same action).
+   * Writes the ids and reports to `onSelect`:
+   * - `raw`: always, with `ids[0]` as given (what `select` has always done);
+   * - `visible`: always, with the visible primary (`restore`);
+   * - `changed`: the visible primary, only when it changes.
    */
   const writeSelection = useCallback(
-    (ids: string[], always: boolean, prevPrimary?: string | null) => {
+    (ids: string[], report: 'raw' | 'visible' | 'changed') => {
       const hidden = filtersRef.current.hiddenLayers
-      const prev = prevPrimary !== undefined ? prevPrimary : primaryOf(rawIdsRef.current, hidden)
+      const prev = primaryOf(rawIdsRef.current, hidden)
       rawIdsRef.current = ids
       if (selectionMode === 'inner') setInnerIds(ids)
       onSelectedIdsChangeRef.current?.(ids)
-      if (always) onSelectRef.current?.(ids[0] ?? null)
+      if (report === 'raw') onSelectRef.current?.(ids[0] ?? null)
       else {
         const next = primaryOf(ids, hidden)
-        if (next !== prev) onSelectRef.current?.(next)
+        if (report === 'visible' || next !== prev) onSelectRef.current?.(next)
       }
     },
     [selectionMode, primaryOf],
   )
-  const select = useCallback((id: string | null) => writeSelection(id != null ? [id] : [], true), [writeSelection])
-  const setSelectedIds = useCallback((ids: readonly string[]) => writeSelection([...new Set(ids)], false), [writeSelection])
+  const select = useCallback((id: string | null) => writeSelection(id != null ? [id] : [], 'raw'), [writeSelection])
+  const setSelectedIds = useCallback((ids: readonly string[]) => writeSelection([...new Set(ids)], 'changed'), [writeSelection])
   const toggleSelected = useCallback(
     (id: string) => {
       const cur = rawIdsRef.current
-      writeSelection(cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id], false)
+      writeSelection(cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id], 'changed')
     },
     [writeSelection],
   )
@@ -225,6 +231,10 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
     [idsKey, index, filters.hiddenLayers],
   )
   const selectedId = selectedIds[0] ?? null
+  const selectedIdRef = useRef(selectedId)
+  selectedIdRef.current = selectedId
+  const selectedIdsRef = useRef<readonly string[]>(selectedIds)
+  selectedIdsRef.current = selectedIds
 
   const reach = useMemo(
     () => computeReach(index, selectedIds.length > 1 ? selectedIds : selectedId, { follow, followCategories, filters }),
@@ -235,14 +245,23 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
 
   const setFollow = useCallback((n: number) => setFollowRaw(Math.max(0, Math.floor(n))), [setFollowRaw])
 
+  // Every filter change goes through here (the public `setFilters` too), so actions in one handler
+  // compose, and a change of hidden layers that changes the visible primary reports it to `onSelect`.
   const updateFilters = useCallback(
     (fn: (f: LinkFilterState) => LinkFilterState) => {
-      const next = fn(filtersRef.current)
+      const prev = filtersRef.current
+      const next = fn(prev)
       filtersRef.current = next
       setFilters(next)
+      if (next.hiddenLayers !== prev.hiddenLayers) {
+        const before = primaryOf(rawIdsRef.current, prev.hiddenLayers)
+        const after = primaryOf(rawIdsRef.current, next.hiddenLayers)
+        if (after !== before) onSelectRef.current?.(after)
+      }
     },
-    [setFilters],
+    [setFilters, primaryOf],
   )
+  const setFiltersAction = useCallback((f: LinkFilterState) => updateFilters(() => f), [updateFilters])
   const toggleCategory = useCallback(
     (c: string) => updateFilters((f) => ({ ...f, categories: { ...f.categories, [c]: f.categories[c] === false } })),
     [updateFilters],
@@ -258,16 +277,16 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const toggleLayer = useCallback(
     (id: string) => {
       const hiding = !filtersRef.current.hiddenLayers.includes(id)
-      const prevPrimary = primaryOf(rawIdsRef.current, filtersRef.current.hiddenLayers)
       updateFilters((f) => ({ ...f, hiddenLayers: hiding ? [...f.hiddenLayers, id] : f.hiddenLayers.filter((x) => x !== id) }))
       if (hiding && focusedLayerId === id) focusLayer(null)
       if (hiding) {
         const cur = rawIdsRef.current
         const kept = cur.filter((x) => index.nodeById.get(x)?.layerId !== id)
-        if (kept.length < cur.length) writeSelection(kept, false, prevPrimary)
+        // updateFilters has reported the primary change; this only drops the hidden ids.
+        if (kept.length < cur.length) writeSelection(kept, 'changed')
       }
     },
-    [updateFilters, focusedLayerId, focusLayer, index, writeSelection, primaryOf],
+    [updateFilters, focusedLayerId, focusLayer, index, writeSelection],
   )
   const setShowIntra = useCallback((show: boolean) => updateFilters((f) => ({ ...f, showIntra: show })), [updateFilters])
   const setLayerPair = useCallback(
@@ -293,11 +312,17 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
         const f = s.filters
         updateFilters(() => f)
       }
-      // `selectedIds` applies when it agrees with `selectedId` (or that is left out); a changed
-      // `selectedId` over a carried-along `selectedIds` (`{ ...snapshot, selectedId }`) wins.
-      // Either way `onSelect` is called, as `restore` always has.
+      // Whichever of `selectedId` / `selectedIds` the caller changed (against the current state)
+      // applies, so `{ ...snapshot, selectedId }` and `{ ...snapshot, selectedIds }` both work.
+      // Both changed and disagreeing: `selectedId` wins (0.10.0). Either way `onSelect` is called,
+      // as `restore` always has: with the given id, or the visible primary of the given ids.
       const ids = s.selectedIds
-      if (ids !== undefined && (s.selectedId === undefined || (ids[0] ?? null) === s.selectedId)) writeSelection([...new Set(ids)], true)
+      const idChanged = s.selectedId !== undefined && s.selectedId !== selectedIdRef.current
+      const idsChanged = ids !== undefined && !sameIds(ids, selectedIdsRef.current)
+      const useIds =
+        ids !== undefined &&
+        (s.selectedId === undefined || (ids[0] ?? null) === s.selectedId || (idsChanged && !idChanged))
+      if (useIds) writeSelection([...new Set(ids)], 'visible')
       else if (s.selectedId !== undefined) select(s.selectedId)
       if (s.follow !== undefined) setFollow(s.follow)
       if (s.predicateLabels !== undefined) setPredicateLabels(s.predicateLabels)
@@ -311,10 +336,14 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   return {
     index, layout, reach, hoverReach, pairNodeIds,
     selectedId, selectedIds, hoveredId, follow, filters, predicateLabels, focusedLayerId, planeLayout, nodeLabels,
-    select, setSelectedIds, toggleSelected, hover, setFollow, setFilters, toggleCategory, togglePredicate, toggleLayer,
+    select, setSelectedIds, toggleSelected, hover, setFollow, setFilters: setFiltersAction, toggleCategory, togglePredicate, toggleLayer,
     setShowIntra, setLayerPair, setPredicateLabels, focusLayer, setPlaneLayout, setNodeLabels,
     emphasisContext, linkEmphasis, nodeEmphasis, snapshot, restore,
   }
+}
+
+function sameIds(a: readonly string[], b: readonly string[]): boolean {
+  return a.length === b.length && a.every((x, i) => x === b[i])
 }
 
 /** Shares one `useLayeredGraph` result with views and chrome below it: `<LayeredGraphContext.Provider value={graph}>`. */

@@ -214,6 +214,66 @@ describe('useControllable', () => {
   })
 })
 
+describe('useLayeredGraph restore and setFilters (review cycle 2)', () => {
+  const hideBusiness = { ...DEFAULT_LINK_FILTERS, hiddenLayers: ['business'] }
+  const TECH = 'technology.device'
+
+  it('applies whichever selection field the caller changed', () => {
+    const onSelectedIdsChange = vi.fn()
+    const onSelect = vi.fn()
+    const g = render({ selectedIds: [APP], onSelect, onSelectedIdsChange })
+    g.restore({ ...g.snapshot, selectedIds: [PROCESS, APP] }) // changed ids, unchanged id
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([PROCESS, APP])
+    expect(onSelect).toHaveBeenLastCalledWith(PROCESS)
+    g.restore({ ...g.snapshot, selectedId: PROCESS }) // changed id, unchanged ids
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([PROCESS])
+    // Both changed and disagreeing: selectedId wins, as in 0.10.0.
+    g.restore({ selectedId: TECH, selectedIds: [PROCESS, APP] })
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([TECH])
+    expect(onSelect).toHaveBeenLastCalledWith(TECH)
+  })
+
+  it('restore({}) changes nothing; restore({ selectedId: null }) clears and reports', () => {
+    const onSelect = vi.fn()
+    const onSelectedIdsChange = vi.fn()
+    const onFiltersChange = vi.fn()
+    const g = render({ selectedIds: [APP], onSelect, onSelectedIdsChange, onFiltersChange })
+    g.restore({})
+    expect(onSelect).not.toHaveBeenCalled()
+    expect(onSelectedIdsChange).not.toHaveBeenCalled()
+    expect(onFiltersChange).not.toHaveBeenCalled()
+    g.restore({ selectedId: null })
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([])
+    expect(onSelect).toHaveBeenLastCalledWith(null)
+  })
+
+  it('restore with filters and a selection reports the visible primary of the restored state', () => {
+    const onSelect = vi.fn()
+    const onFiltersChange = vi.fn()
+    const g = render({ selectedIds: [], onSelect, onFiltersChange })
+    g.restore({ filters: hideBusiness, selectedIds: [PROCESS, APP] })
+    expect(onFiltersChange).toHaveBeenLastCalledWith(hideBusiness)
+    expect(onSelect).toHaveBeenLastCalledWith(APP) // PROCESS is on the hidden layer
+  })
+
+  it('setFilters reports a visible-primary change, and composes with selection actions', () => {
+    const onSelect = vi.fn()
+    const onSelectedIdsChange = vi.fn()
+    const g = render({ selectedIds: [PROCESS, APP], onSelect, onSelectedIdsChange })
+    g.setFilters(hideBusiness)
+    expect(onSelect).toHaveBeenLastCalledWith(APP)
+    // In the same handler, toggleSelected reads the filters just set: dropping APP leaves only the hidden PROCESS.
+    g.toggleSelected(APP)
+    expect(onSelectedIdsChange).toHaveBeenLastCalledWith([PROCESS])
+    expect(onSelect).toHaveBeenLastCalledWith(null)
+    g.setFilters(DEFAULT_LINK_FILTERS) // unhiding makes PROCESS visible again
+    expect(onSelect).toHaveBeenLastCalledWith(PROCESS)
+    onSelect.mockClear()
+    g.setFilters({ ...DEFAULT_LINK_FILTERS, showIntra: false }) // no layer change, no report
+    expect(onSelect).not.toHaveBeenCalled()
+  })
+})
+
 // Re-render tests: react-test-renderer drives state updates through the hook.
 describe('useLayeredGraph selection, rendered', () => {
   ;(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true
@@ -243,6 +303,21 @@ describe('useLayeredGraph selection, rendered', () => {
     expect(m.last().selectedIds).toEqual([APP])
     act(() => m.last().toggleLayer('application'))
     expect(m.last().selectedIds).toEqual([])
+    m.unmount()
+  })
+
+  it('toggleLayer reports the primary change once, rendered', () => {
+    const onSelect = vi.fn()
+    const m = mount(() => useLayeredGraph({ nodes: drSpecNodes, edges: drSpecEdges, layering, layout: false, defaultSelectedIds: [PROCESS, APP], onSelect }))
+    act(() => m.last().toggleLayer('business'))
+    expect(m.last().selectedIds).toEqual([APP])
+    expect(m.last().selectedId).toBe(APP)
+    expect(onSelect).toHaveBeenCalledTimes(1)
+    expect(onSelect).toHaveBeenLastCalledWith(APP)
+    act(() => m.last().toggleLayer('application'))
+    expect(m.last().selectedId).toBeNull()
+    expect(onSelect).toHaveBeenCalledTimes(2)
+    expect(onSelect).toHaveBeenLastCalledWith(null)
     m.unmount()
   })
 
