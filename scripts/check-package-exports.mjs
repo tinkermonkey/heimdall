@@ -5,7 +5,8 @@
 // against the file list `npm pack` would publish. Run after `npm run build`: dist/ must exist.
 // Also checks that the tarball holds only dist/ and agent-skills/ (no source, tests or CJS build),
 // that declarations don't import unpublished source, that the JS entry leaves its dependencies
-// external, and that every font the fonts stylesheet names ships (tinkermonkey/heimdall#343).
+// external, and that the fonts stylesheet names its fonts by relative URLs that resolve to published
+// files (tinkermonkey/heimdall#343).
 //
 // Why: 0.9.0 and 0.9.1 shipped with "./css" -> ./dist/style.css while the build emitted
 // dist/heimdall-ui.css (tinkermonkey/heimdall#303). The docs app, test app and tests all alias the
@@ -90,6 +91,8 @@ const UNSHIPPABLE = [
   { re: /\.(test|spec)\.(d\.)?[cm]?[jt]sx?$/, what: 'a test' },
   { re: /(^|\/)fixtures?\//, what: 'a test fixture' },
   { re: /\.cjs$/, what: 'a CommonJS build (the package is ESM-only)' },
+  // public/fonts/ is copied to dist/fonts/ wholesale; only the stylesheet and the fonts serve a consumer.
+  { re: /^dist\/fonts\/(?!.*\.(css|woff2)$)/, what: 'neither the fonts stylesheet nor a font file' },
 ]
 for (const file of files.keys()) {
   if (!SHIPPED_ROOTS.some((r) => (r.endsWith('/') ? file.startsWith(r) : file === r))) {
@@ -143,16 +146,24 @@ for (const target of new Set(targets.map((t) => t.target))) {
   }
 }
 
-// Every font the fonts stylesheet names must ship. Root-relative URLs (`/fonts/...`) resolve
-// against dist/, where the build copies the Vite public directory.
+// The fonts stylesheet must name its fonts by URLs relative to itself, and each must resolve to a
+// published file. A consumer's bundler resolves relative URLs and emits the fonts; a root-absolute
+// `/fonts/...` URL is left for the browser, so it only loads when the app serves /fonts/ itself
+// (Vite warns it "didn't resolve at build time").
 const fontsTarget = pkg.exports?.['./fonts']
 const fontsCss = typeof fontsTarget === 'string' ? fontsTarget : fontsTarget?.default
 if (typeof fontsCss === 'string' && files.has(fontsCss.replace(/^\.\//, ''))) {
   const rel = fontsCss.replace(/^\.\//, '')
   const css = readFileSync(path.join(root, rel), 'utf8')
-  for (const [, url] of css.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)) {
-    if (/^(data:|https?:)/.test(url)) continue
-    const resolved = url.startsWith('/') ? path.posix.join('dist', url) : path.posix.join(path.posix.dirname(rel), url)
+  const urls = [...css.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)].map((m) => m[1].trim())
+  if (urls.length === 0) problems.push(`exports > ./fonts: ${rel} names no font files`)
+  for (const url of urls) {
+    if (url.startsWith('data:')) continue
+    if (!url.startsWith('./') && !url.startsWith('../')) {
+      problems.push(`exports > ./fonts: ${rel} references ${url}; use a URL relative to the stylesheet (./...)`)
+      continue
+    }
+    const resolved = path.posix.normalize(path.posix.join(path.posix.dirname(rel), url.replace(/[?#].*$/, '')))
     if (!files.has(resolved)) problems.push(`exports > ./fonts: ${rel} references ${url}, but ${resolved} is not published`)
   }
 }
