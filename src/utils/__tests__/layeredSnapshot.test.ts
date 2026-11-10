@@ -81,5 +81,6 @@ describe('sanitizeLayeredGraphExplorerSnapshot', () => {
     // A view the explorer doesn't offer is dropped.
     expect(sanitizeLayeredGraphExplorerSnapshot({ view: 'hive' }, ['stack', 'matrix'])).toEqual({})
     expect(sanitizeLayeredGraphExplorerSnapshot({ stack: { preset: 'top' } })).toEqual({ stack: { preset: 'top' } })
+    expect(sanitizeLayeredGraphExplorerSnapshot({ stack: { layerGap: 1e9 } })).toEqual({ stack: {} }) // capped
   })
 })

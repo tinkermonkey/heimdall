@@ -132,6 +132,10 @@ export interface LayeredGraphState {
   nodeEmphasis: (node: IndexedNode) => NodeEmphasis
 
   snapshot: LayeredGraphSnapshot
+  /**
+   * Applies the snapshot fields given; the rest stay. Fields are not checked: pass untrusted input
+   * (a URL, storage, a message) through `sanitizeLayeredGraphSnapshot` first.
+   */
   restore: (snapshot: Partial<LayeredGraphSnapshot>) => void
 }
 

@@ -32,6 +32,16 @@ async function planeSpacing(page: Page) {
   const [a, b] = [await fills.nth(0).boundingBox(), await fills.nth(1).boundingBox()]
   return Math.abs(a!.y + a!.height / 2 - (b!.y + b!.height / 2))
 }
+/** The plane spacing once the camera has stopped moving (two reads 150 ms apart agree). */
+async function settledSpacing(page: Page) {
+  let prev = await planeSpacing(page)
+  for (;;) {
+    await page.waitForTimeout(150)
+    const cur = await planeSpacing(page)
+    if (Math.abs(cur - prev) < 0.01) return cur
+    prev = cur
+  }
+}
 
 test.describe('LayeredGraphExplorer', () => {
   test('renders the header, stack, link bar, inspector and status line', async ({ page }) => {
@@ -281,18 +291,67 @@ test.describe('LayeredGraphExplorer', () => {
     expect(errors).toEqual([])
   })
 
+  test('each preset click reports exactly one snapshot, already settled', async ({ page }) => {
+    const errors = await open(page, '&sync=1')
+    const count = page.getByTestId('snapshot-count')
+    const presets = page.getByRole('radiogroup', { name: 'Camera preset' })
+    await expect(count).toHaveText('snapshots 0')
+    for (const [name, n] of [['Exploded', 1], ['Top', 2], ['Profile', 3]] as const) {
+      await presets.getByRole('radio', { name }).click()
+      await expect(count).toHaveText(`snapshots ${n}`)
+      await page.waitForTimeout(1000) // past the tween: its end reports nothing new
+      await expect(count).toHaveText(`snapshots ${n}`)
+    }
+    expect(JSON.parse(new URL(page.url()).searchParams.get('state')!).stack).toMatchObject({ preset: 'profile', layerGap: 210 })
+    // Restoring the URL's own snapshot right after a click (the router pattern) keeps the stack.
+    await presets.getByRole('radio', { name: 'Exploded' }).click()
+    await page.evaluate(() => { (document.querySelector('.layer-stack') as HTMLElement & { __mark?: number }).__mark = 1 })
+    await page.getByRole('button', { name: 'Save snapshot' }).click()
+    await page.getByRole('button', { name: 'Restore snapshot' }).click()
+    expect(await page.evaluate(() => (document.querySelector('.layer-stack') as HTMLElement & { __mark?: number }).__mark)).toBe(1)
+    await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
+    expect(errors).toEqual([])
+  })
+
+  test('a stackProps gap override is what the snapshot reports, and round-trips', async ({ page }) => {
+    const errors = await open(page, '&sync=1&gap=240')
+    // The stack draws gap 240, so no preset is active.
+    await expect(status(page)).toContainText('yaw -36° pitch 29° zoom 1.00 · gap 240')
+    await expect(page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { checked: true })).toHaveCount(0)
+    await pickView(page, 'Matrix')
+    await expect.poll(() => new URL(page.url()).searchParams.get('state')).toContain('"view":"matrix"')
+    expect(JSON.parse(new URL(page.url()).searchParams.get('state')!).stack).toMatchObject({ preset: null, layerGap: 240 })
+    // Reload without the override: the URL alone brings gap 240 back.
+    const url = new URL(page.url())
+    url.searchParams.delete('gap')
+    await page.goto(url.toString())
+    await page.waitForLoadState('networkidle')
+    await pickView(page, '3D stack')
+    await expect(status(page)).toContainText('gap 240')
+    expect(errors).toEqual([])
+  })
+
+  test('a preset with other camera fields restores the camera and drops the preset', async ({ page }) => {
+    const state = { stack: { preset: 'exploded', camera: { yaw: 1 } } }
+    const errors = await open(page, `&sync=1&state=${encodeURIComponent(JSON.stringify(state))}`)
+    await expect(status(page)).toContainText('yaw 57° pitch 19° zoom 0.86 · gap 300')
+    await expect(status(page)).not.toContainText('exploded ·')
+    await expect(page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { checked: true })).toHaveCount(0)
+    expect(errors).toEqual([])
+  })
+
   test('the handle saves a snapshot, with the live camera and gap, and restores it', async ({ page }) => {
     const errors = await open(page, '&sync=1')
     const presets = page.getByRole('radiogroup', { name: 'Camera preset' })
     await presets.getByRole('radio', { name: 'Exploded' }).click()
     await expect(status(page)).toContainText('exploded · yaw -29° pitch 19° zoom 0.86 · gap 300')
-    const explodedSpacing = await planeSpacing(page)
+    const explodedSpacing = await settledSpacing(page)
     await page.getByRole('button', { name: 'Save snapshot' }).click()
     await expect(page.getByTestId('saved-snapshot')).toHaveText('stack · exploded · gap 300')
 
     await presets.getByRole('radio', { name: 'Top' }).click()
     await expect(status(page)).toContainText('top · yaw 0° pitch 86° zoom 1.05 · gap 170')
-    expect(Math.abs((await planeSpacing(page)) - explodedSpacing)).toBeGreaterThan(5)
+    expect(Math.abs((await settledSpacing(page)) - explodedSpacing)).toBeGreaterThan(5)
     await page.getByRole('button', { name: /^BusinessProcess, Business layer, 6 cross-layer links/ }).click()
     await pickView(page, 'Hive')
     await expect(state(page)).toHaveText('view hive · selected business.businessprocess · follow 1')

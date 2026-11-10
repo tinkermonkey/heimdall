@@ -18,7 +18,8 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 //     &follow=0|1|2&dark=1&views=stack,matrix&hide=follow,camera,…&height=720&mode=external
 // `mode=external` drives the explorer from the page's own useLayeredGraph through the `graph` prop.
 // `sync=1` round-trips the explorer through the URL: `state` (JSON) is its `defaultSnapshot`, and
-// every `onSnapshotChange` writes it back. Save / Restore buttons drive the `explorerRef` handle.
+// every `onSnapshotChange` writes it back (`snapshot-count` counts them). Save / Restore buttons
+// drive the `explorerRef` handle. `gap=<n>` passes `stackProps={{ defaultLayerGap: n }}`.
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
@@ -40,6 +41,7 @@ function parseSnapshot(): LayeredGraphExplorerSnapshotInput | undefined {
   }
 }
 const SNAPSHOT = SYNC ? parseSnapshot() : undefined
+const STACK_PROPS = params.has('gap') ? { defaultLayerGap: Number(params.get('gap')) } : undefined
 const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : 'heimdall ux model'
 
 const mono = { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgb(var(--canvas-fg-3))' } as const
@@ -60,7 +62,9 @@ export default function LayeredGraphExplorerTestPage() {
   const [view, setView] = useState<LayeredGraphView>(SNAPSHOT?.view ?? VIEW)
   const explorerRef = useRef<LayeredGraphExplorerHandle>(null)
   const [saved, setSaved] = useState<LayeredGraphExplorerSnapshot | null>(null)
+  const [snapshotCount, setSnapshotCount] = useState(0)
   const writeUrl = (snapshot: LayeredGraphExplorerSnapshot) => {
+    setSnapshotCount((n) => n + 1)
     const url = new URL(window.location.href)
     url.searchParams.set('state', JSON.stringify(snapshot))
     window.history.replaceState(null, '', url)
@@ -87,6 +91,7 @@ export default function LayeredGraphExplorerTestPage() {
       explorerRef={explorerRef}
       defaultSnapshot={SNAPSHOT}
       onSnapshotChange={SYNC ? writeUrl : undefined}
+      stackProps={STACK_PROPS}
       eyebrow="Layered graph"
       title={DATA === 'spec' ? 'Documentation robotics spec' : 'Heimdall UX model'}
       statusLabel={DATA_LABEL}
@@ -107,6 +112,7 @@ export default function LayeredGraphExplorerTestPage() {
           <button type="button" disabled={!saved} onClick={() => saved && explorerRef.current?.restore(saved)}>
             Restore snapshot
           </button>
+          <span data-testid="snapshot-count" style={mono}>{`snapshots ${snapshotCount}`}</span>
           <span data-testid="saved-snapshot" style={mono}>
             {saved ? `${saved.view} · ${saved.stack.preset ?? 'custom'} · gap ${Math.round(saved.stack.layerGap)}` : 'none saved'}
           </span>

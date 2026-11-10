@@ -378,6 +378,8 @@ interface StackMemory {
 }
 
 const CAMERA_FIELDS = ['yaw', 'pitch', 'zoom', 'targetY'] as const
+/** Largest layer gap a snapshot may restore, world units (the presets use 170–300). */
+const MAX_LAYER_GAP = 5000
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
 
@@ -410,44 +412,56 @@ export function sanitizeLayeredGraphExplorerSnapshot(
       }
       stack.camera = camera as StackCamera
     }
-    if (typeof s.layerGap === 'number' && Number.isFinite(s.layerGap) && s.layerGap > 0) stack.layerGap = s.layerGap
+    if (typeof s.layerGap === 'number' && Number.isFinite(s.layerGap) && s.layerGap > 0 && s.layerGap <= MAX_LAYER_GAP) stack.layerGap = s.layerGap
     out.stack = stack
   }
   return out
 }
 
+const near = (a: number, b: number) => Math.abs(a - b) < 1e-6
+
 /**
- * The remembered stack camera with a (sanitized) snapshot's fields applied; a preset fills what the
- * snapshot leaves out, and pitch and zoom are clamped to the ranges the stack draws; camera fields
- * with no preset clear the active one. A restored
- * camera stops the turntable, which would otherwise move it at once.
+ * The stack memory's invariant: a preset is active exactly when the stored camera and gap are the
+ * preset's own. Memory that names a preset but holds another camera or gap (a `stackProps`
+ * override, or a snapshot with both) keeps the camera and gap and drops the preset.
  */
-function withCamera(m: StackMemory, s: Partial<LayeredGraphExplorerCamera>): StackMemory {
-  // Camera fields without a preset are a hand-set camera: no preset is active.
-  const handSet = s.camera !== undefined && Object.keys(s.camera).length > 0
-  const preset = s.preset !== undefined ? s.preset : handSet ? null : m.preset
-  const fromPreset = s.preset ? cameraFromPreset(s.preset) : null
-  return {
-    preset,
-    camera: clampCamera({ ...m.camera, ...fromPreset, ...s.camera }),
-    gap: s.layerGap ?? (s.preset ? CAMERA_PRESETS[s.preset].layerGap : m.gap),
-    turntable: false,
-  }
+function withPresetInvariant(m: StackMemory): StackMemory {
+  if (!m.preset) return m
+  const p = cameraFromPreset(m.preset)
+  const matches = near(m.gap, CAMERA_PRESETS[m.preset].layerGap) && CAMERA_FIELDS.every((k) => near(m.camera[k], p[k]))
+  return matches ? m : { ...m, preset: null }
 }
 
-const near = (a: number, b: number) => Math.abs(a - b) < 1e-6
+/** The memory after a preset is picked: the preset's camera and gap, written at once (the stack tweens to them). */
+function presetMemory(m: StackMemory, preset: CameraPresetName): StackMemory {
+  return { ...m, preset, camera: cameraFromPreset(preset), gap: CAMERA_PRESETS[preset].layerGap }
+}
+
+/**
+ * The remembered stack camera with a (sanitized) snapshot's fields applied: a preset fills what the
+ * snapshot leaves out, pitch and zoom are clamped to the ranges the stack draws, and a camera or
+ * gap other than the preset's drops the preset (`withPresetInvariant`). A restored camera stops the
+ * turntable, which would otherwise move it at once.
+ */
+function withCamera(m: StackMemory, s: Partial<LayeredGraphExplorerCamera>): StackMemory {
+  const base = s.preset ? presetMemory(m, s.preset) : s.preset === null ? { ...m, preset: null } : m
+  return withPresetInvariant({
+    preset: base.preset,
+    camera: clampCamera({ ...base.camera, ...s.camera }),
+    gap: s.layerGap ?? base.gap,
+    turntable: false,
+  })
+}
 function sameStackMemory(a: StackMemory, b: StackMemory): boolean {
   return a.preset === b.preset && near(a.gap, b.gap) && a.turntable === b.turntable && CAMERA_FIELDS.every((k) => near(a.camera[k], b.camera[k]))
 }
 
 /**
- * The stack camera as a snapshot reports it. With a preset active, the preset's own camera and gap:
- * a preset move reports its destination at once, so a snapshot taken mid-tween is already the
- * settled one (and the later tween-end reports change nothing).
+ * The stack camera as a snapshot reports it: the memory as is. A picked preset writes its camera and
+ * gap at once, so a preset move reports its destination once (the tween-end reports change nothing).
  */
 function stackSnapshot(m: StackMemory): LayeredGraphExplorerCamera {
-  if (m.preset) return { preset: m.preset, camera: cameraFromPreset(m.preset), layerGap: CAMERA_PRESETS[m.preset].layerGap }
-  return { preset: null, camera: m.camera, layerGap: m.gap }
+  return { preset: m.preset, camera: m.camera, layerGap: m.gap }
 }
 
 /**
@@ -545,7 +559,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
         gap: stackProps?.layerGap ?? stackProps?.defaultLayerGap ?? CAMERA_PRESETS[preset ?? 'stack'].layerGap,
         turntable: stackProps?.turntable ?? stackProps?.defaultTurntable ?? false,
       }
-      return initialSnapshot.stack ? withCamera(initial, initialSnapshot.stack) : initial
+      return initialSnapshot.stack ? withCamera(initial, initialSnapshot.stack) : withPresetInvariant(initial)
     })
     const stackMemRef = useRef(stackMem)
     stackMemRef.current = stackMem
@@ -557,9 +571,10 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     const changeView = useCallback(
       (next: LayeredGraphView, rememberCamera = true) => {
         if (next === view) return
-        if (rememberCamera && view === 'stack' && stackRef.current) {
+        // With a preset active the memory already holds its camera (even mid-tween); otherwise keep the live one.
+        if (rememberCamera && view === 'stack' && stackRef.current && !stackMemRef.current.preset) {
           const camera = stackRef.current.getCamera()
-          setStackMem((m) => ({ ...m, camera }))
+          setStackMem((m) => (m.preset ? m : { ...m, camera }))
         }
         if (viewProp === undefined) setInnerView(next)
         onViewChange?.(next)
@@ -664,7 +679,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           turntable={stackMem.turntable}
           onCameraPresetChange={(preset) => {
             if (epoch !== stackEpochRef.current) return
-            setStackMem((m) => ({ ...m, preset }))
+            setStackMem((m) => (preset ? presetMemory(m, preset) : { ...m, preset: null }))
             stackProps?.onCameraPresetChange?.(preset)
           }}
           onTurntableChange={(on) => {
@@ -674,12 +689,12 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           }}
           onLayerGapChange={(gap) => {
             if (epoch !== stackEpochRef.current) return
-            setStackMem((m) => ({ ...m, gap }))
+            setStackMem((m) => (m.preset ? m : { ...m, gap }))
             stackProps?.onLayerGapChange?.(gap)
           }}
           onCameraChange={(camera, cause) => {
             if (epoch !== stackEpochRef.current) return
-            setStackMem((m) => ({ ...m, camera }))
+            setStackMem((m) => (m.preset ? m : { ...m, camera }))
             stackProps?.onCameraChange?.(camera, cause)
           }}
           className={cx('layered-graph-explorer__stack', stackProps?.className)}
