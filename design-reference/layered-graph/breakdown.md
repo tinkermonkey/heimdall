@@ -450,6 +450,7 @@ Why A was chosen:
 - **Step 5:** `HivePlot` with split axes (`src/utils/layered/hive.ts`).
 - **Step 6:** `FollowControl`, `PredicateLabelControl`, `PlaneLayoutControl`, `LinkCategoryFilter`, `LayerList`, `LayerPairList`, `BridgeNodeList`, `ReachInspector`; `LayeredGraphExplorer` with `ViewSwitcher`, `CameraControls` and a `controls` prop that switches each piece of chrome on or off; a "Layered graphs" docs page. `GraphInspector`'s `RelationshipLink` gained optional `hop`, `via` and `layer`.
 - **Tests:** unit tests for label placement, lanes, projection and hive geometry; a Playwright spec per view and for the chrome and the explorer, with darwin and linux baselines.
+- **`ReachInspector` tests (#338):** `src/components/__tests__/ReachInspector.test.ts` covers `reachRelationships` (cross and intra rows, followed nodes with `via`, filters, bundled predicates, ordering), `reachSummaryText`, and the error thrown without a `graph` prop or provider.
 
 **Not yet:**
 
