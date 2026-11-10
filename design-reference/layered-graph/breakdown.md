@@ -458,7 +458,7 @@ Why A was chosen:
 - Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
 - Hive (#337): the generic `axes` option (axis by any attribute).
 - Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
-- Framework (#338, #339): a view and camera snapshot for the explorer, async `layoutLayers`, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
+- Framework (#338, #339): async `layoutLayers`, a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 
 **#338 state API: implemented.**
@@ -467,3 +467,11 @@ Why A was chosen:
 - **Multi-select reserved:** `selectedIds` (controlled, wins over `selectedId`), `defaultSelectedIds`, `onSelectedIdsChange`; `setSelectedIds` and `toggleSelected`; `selectedIds` in the state and snapshot. `selectedId` is the first id. `onSelect` fires on every `select` and `restore`, and whenever another action changes the visible primary, so single-select code is unchanged. `restore` applies whichever selection field the caller changed (`selectedId` wins a disagreement), and `setFilters` composes with the selection actions and reports a visible-primary change. Multi-origin reach costs one reach per origin (O(k · reach)); a select-all would want a single multi-source pass. `computeReach(index, ids)` returns the union with `originIds`; the views pick it up through `reach`. Not yet: a multi-select gesture in the views, and per-node drill-through and inspector.
 - **`useControllable`** moved to `src/hooks/useControllable.ts` and exported (it was duplicated in `useLayeredGraph` and `LayerStack`).
 - **Tests:** `src/utils/__tests__/layeredSelection.test.ts` (multi-origin reach, selection model, node labels, `useControllable`); the chrome Playwright spec drives the label toggle through the graph state and a two-node selection.
+
+**#338 explorer snapshot: implemented.**
+- `LayeredGraphExplorerSnapshot` (1.8): `LayeredGraphSnapshot` plus `view`, `nodeLabels` and `stack` (`preset`, `camera`, `layerGap`). Plain JSON, so it round-trips through a URL or history entry.
+- On the explorer: `defaultSnapshot` (read on mount), `onSnapshotChange` (on change, camera once settled), and an `explorerRef` handle (`LayeredGraphExplorerHandle`: `getSnapshot`, `restore`, `stack`). `restore` remounts the stack so a restored camera jumps.
+- `layeredGraphSnapshotDefaults(snapshot)` turns a snapshot into `useLayeredGraph` `default…` options, for apps that own the graph state.
+- `LayerStackHandle.getLayerGap()`: the live gap, mid-tween included.
+- Snapshots are untrusted input (URLs): `sanitizeLayeredGraphSnapshot` and `sanitizeLayeredGraphExplorerSnapshot` drop malformed fields and complete partial filters, at every entry point. A preset is active exactly when the stored camera and gap are its own (picked presets are stored at once; overrides drop the preset), so a preset click reports once, settled, and restoring that snapshot mid-tween does not remount. A changed camera remounts the stack and stops the turntable; an unchanged one leaves the stack alone. Reports from a stack being replaced are ignored.
+- **Tests:** the explorer test page's `sync=1` mode writes the snapshot to the URL. The explorer spec reloads from that URL (view, selection, follow, filter, labels, preset and gap come back) and saves and restores through the handle (plane spacing matches the saved gap). Further tests cover layer focus through the URL, a malformed `state`, a restore with an unchanged camera (no remount) and a restore over a running turntable. Unit tests in `src/utils/__tests__/layeredSnapshot.test.ts` (sanitizers included).

@@ -1581,7 +1581,7 @@ const [preset, setPreset] = useState<CameraPresetName | null>('stack')
 </LayeredGraphContext.Provider>
 ```
 
-Ref handle (`LayerStackHandle`): `applyPreset(name, { animate })`, `setCamera(partial, { animate })`, `getCamera()`, `zoomBy(factor)`, `fit()`, `setTurntable(on)`, `focusLayer(id | null)`, `select(id | null)`, `setFollow(n)`, `element()`. `onCameraChange` causes (`LayerStackCameraCause`): `orbit`, `zoom`, `preset`, `focus`, `fit`, `turntable`, `api`. `LayerStackInteractions` and `LayerStackNodeLabels` type the props below; `LayerStackMoveOptions` is the `{ animate }` argument.
+Ref handle (`LayerStackHandle`): `applyPreset(name, { animate })`, `setCamera(partial, { animate })`, `getCamera()`, `getLayerGap()`, `zoomBy(factor)`, `fit()`, `setTurntable(on)`, `focusLayer(id | null)`, `select(id | null)`, `setFollow(n)`, `element()`. `onCameraChange` causes (`LayerStackCameraCause`): `orbit`, `zoom`, `preset`, `focus`, `fit`, `turntable`, `api`. `LayerStackInteractions` and `LayerStackNodeLabels` type the props below; `LayerStackMoveOptions` is the `{ animate }` argument.
 
 ### Props
 
@@ -1891,6 +1891,27 @@ The ready-made layered graph explorer: every layered view and its chrome in one 
 
 Selection, follow, filters, label mode, layer focus and plane layout are one `useLayeredGraph` state shared by every view, so they survive view switches; the explorer provides it as `LayeredGraphContext` to everything inside. The 3D camera (preset, yaw / pitch / zoom, gap, turntable) is remembered when you switch away and restored when you switch back. Turn chrome on or off with `controls`; every field defaults to true (`LayeredGraphExplorerControls`: `viewSwitcher`, `follow`, `predicateLabels`, `linkFilter`, `nodeLabels`, `camera`, `planeLayout`, `inspector`, `layers`, `layerPairs`, `bridgeNodes`, `status`).
 
+**Snapshot (URL and history round-trip).** `LayeredGraphExplorerSnapshot` is the whole explorer as plain JSON: the graph state (`LayeredGraphSnapshot`: selection, follow, filters, predicate labels, layer focus, plane layout) plus `view`, `nodeLabels` and `stack` (`LayeredGraphExplorerCamera`: `preset`, `camera`, `layerGap`, kept while another view shows). `defaultSnapshot` seeds a fresh explorer from one (read once, on mount), `onSnapshotChange` reports every change (not on mount; a camera move once it settles), and the `explorerRef` handle (`LayeredGraphExplorerHandle`) has `getSnapshot()` (live camera and gap when the stack shows), `restore(snapshot)` (any subset, `LayeredGraphExplorerSnapshotInput`; a camera jumps) and `stack()`. With a `graph` prop or context, seed that state with `layeredGraphSnapshotDefaults(snapshot)`, which turns snapshot fields into `useLayeredGraph` `default…` options.
+
+Snapshots from a URL are untrusted, so every entry point sanitizes them: `sanitizeLayeredGraphExplorerSnapshot(input, views?)` (used by `defaultSnapshot` and `restore`) and `sanitizeLayeredGraphSnapshot(input)` (the graph fields, `LayeredGraphSnapshotFields`; used by `layeredGraphSnapshotDefaults`) drop malformed fields. That covers an unknown preset or view, non-finite camera numbers, a non-positive gap, wrong types and ids that are not strings. They also merge a partial `filters` onto `DEFAULT_LINK_FILTERS`. A restored camera is clamped like the stack's own and stops the turntable. A preset is active exactly when the stored camera and gap are the preset's own: picking one stores its camera and gap at once, so a preset click reports once, already settled. A `stackProps` camera or gap override, or a snapshot with a preset plus other camera fields, keeps that camera and gap with no preset. `useLayeredGraph`'s own `restore` does not check its input: pass a URL snapshot through `sanitizeLayeredGraphSnapshot` first. `restore` remounts the stack only when the camera actually changes; re-read `stack()` after one that does.
+
+```tsx
+const saved = useMemo(() => {
+  const raw = new URLSearchParams(location.search).get('state')
+  return raw ? (JSON.parse(raw) as LayeredGraphExplorerSnapshotInput) : undefined
+}, [])
+const explorer = useRef<LayeredGraphExplorerHandle>(null)
+<LayeredGraphExplorer
+  nodes={nodes}
+  edges={edges}
+  layering={layering}
+  defaultSnapshot={saved}
+  onSnapshotChange={(s) => history.replaceState(null, '', `?state=${encodeURIComponent(JSON.stringify(s))}`)}
+  explorerRef={explorer}
+/>
+// later, e.g. on popstate: explorer.current?.restore(previous)
+```
+
 `ViewSwitcher` and `CameraControls` are exported for custom layouts. `ViewSwitcher` is a plain controlled segmented control over `LayeredGraphView` values (`LAYERED_GRAPH_VIEWS` lists them; `LAYERED_GRAPH_VIEW_LABELS` gives the default text). `CameraControls` drives a `LayerStack` through its ref: preset segmented control, zoom out / in, optional fit and a turntable toggle.
 
 ```tsx
@@ -1930,6 +1951,9 @@ const [turntable, setTurntable] = useState(false)
 | `view` | `LayeredGraphView` | — | Controlled view |
 | `defaultView` | `LayeredGraphView` | first of `views` | Initial view when uncontrolled |
 | `onViewChange` | `(view: LayeredGraphView) => void` | — | Called by the switcher |
+| `explorerRef` | `Ref<LayeredGraphExplorerHandle>` | — | Handle: `getSnapshot()`, `restore(snapshot)`, `stack()` (`ref` is the root element) |
+| `defaultSnapshot` | `LayeredGraphExplorerSnapshotInput` | — | Initial state from a snapshot (view, node labels, 3D camera, and the explorer's own graph state); read once |
+| `onSnapshotChange` | `(snapshot: LayeredGraphExplorerSnapshot) => void` | — | Called when the snapshot changes, not on mount; camera moves report once settled |
 | `controls` | `LayeredGraphExplorerControls` | all on | Which chrome renders: `{ viewSwitcher, follow, predicateLabels, linkFilter, nodeLabels, camera, planeLayout, inspector, layers, layerPairs, bridgeNodes, status }` |
 | `followOptions` | `readonly number[]` | `[0, 1, 2]` | Follow depths offered by `FollowControl` |
 | `title` | `ReactNode` | — | Heading in the header |

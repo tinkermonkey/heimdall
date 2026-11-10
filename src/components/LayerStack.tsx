@@ -65,6 +65,8 @@ export interface LayerStackHandle {
   setCamera: (camera: Partial<StackCamera>, options?: LayerStackMoveOptions) => void
   /** The camera as it is now (mid-tween included). */
   getCamera: () => StackCamera
+  /** The layer gap as it is now (mid-tween included), world units. */
+  getLayerGap: () => number
   /** Multiplies the zoom (clamped to 0.4–3), animated. */
   zoomBy: (factor: number) => void
   /** Zooms and re-centers so every visible plane fits the scene. */
@@ -810,6 +812,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           moveView(c, { animate: opts.animate, onDone: () => emitCamera('api') })
         },
         getCamera: () => cameraOf(view.current!),
+        getLayerGap: () => view.current!.gap,
         zoomBy: (f) => {
           clearPreset()
           moveView({ zoom: view.current!.zoom * f }, { duration: ZOOM_MS, onDone: () => emitCamera('zoom') })

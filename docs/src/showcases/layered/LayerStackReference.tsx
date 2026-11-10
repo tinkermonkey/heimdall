@@ -42,6 +42,7 @@ const METHODS: { name: string; signature: string; description: string }[] = [
   { name: 'applyPreset', signature: '(name: CameraPresetName, options?: { animate?: boolean }) => void', description: 'Moves to a preset (angles, zoom and layer gap), animated by default, stops the turntable and exits layer focus.' },
   { name: 'setCamera', signature: '(camera: Partial<StackCamera>, options?: { animate?: boolean }) => void', description: 'Sets any camera fields; the rest stay. Clears the preset.' },
   { name: 'getCamera', signature: '() => StackCamera', description: 'The camera as it is now, mid-tween included.' },
+  { name: 'getLayerGap', signature: '() => number', description: 'The layer gap as it is now, mid-tween included.' },
   { name: 'zoomBy', signature: '(factor: number) => void', description: 'Multiplies the zoom, clamped to 0.4–3, animated.' },
   { name: 'fit', signature: '() => void', description: 'Zooms and re-centers so every visible plane fits the scene.' },
   { name: 'setTurntable', signature: '(on: boolean) => void', description: 'Starts or stops the turntable (reports through onTurntableChange).' },

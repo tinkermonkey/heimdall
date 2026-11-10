@@ -5,6 +5,7 @@ import { linkEmphasis as computeLinkEmphasis, nodeEmphasis as computeNodeEmphasi
 import { DEFAULT_LINK_FILTERS, layerPairNodeIds } from '../utils/layered/filters'
 import { layoutLayers, type LayerLayoutOptions, type LayerLayoutResult } from '../utils/layered/layout'
 import { computeReach } from '../utils/layered/reach'
+import { sanitizeLayeredGraphSnapshot } from '../utils/layered/snapshot'
 import type { GraphEdge, GraphNodeData } from '../components/GraphCanvas'
 import type {
   BuildLayeredIndexOptions,
@@ -131,6 +132,10 @@ export interface LayeredGraphState {
   nodeEmphasis: (node: IndexedNode) => NodeEmphasis
 
   snapshot: LayeredGraphSnapshot
+  /**
+   * Applies the snapshot fields given; the rest stay. Fields are not checked: pass untrusted input
+   * (a URL, storage, a message) through `sanitizeLayeredGraphSnapshot` first.
+   */
   restore: (snapshot: Partial<LayeredGraphSnapshot>) => void
 }
 
@@ -344,6 +349,20 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
 
 function sameIds(a: readonly string[], b: readonly string[]): boolean {
   return a.length === b.length && a.every((x, i) => x === b[i])
+}
+
+/**
+ * The `default…` options that seed `useLayeredGraph` from a (partial) snapshot, e.g. one parsed
+ * from a URL: `useLayeredGraph({ nodes, edges, layering, ...layeredGraphSnapshotDefaults(saved) })`.
+ * The snapshot goes through `sanitizeLayeredGraphSnapshot`: fields it leaves out, or that are
+ * malformed, are left out.
+ */
+export function layeredGraphSnapshotDefaults(snapshot: Partial<LayeredGraphSnapshot> | null | undefined): Partial<UseLayeredGraphOptions> {
+  // Untrusted input (a URL): malformed fields are dropped and filters completed.
+  const fields = sanitizeLayeredGraphSnapshot(snapshot) as Record<string, unknown>
+  const out: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(fields)) out[`default${key[0].toUpperCase()}${key.slice(1)}`] = value
+  return out as Partial<UseLayeredGraphOptions>
 }
 
 /** Shares one `useLayeredGraph` result with views and chrome below it: `<LayeredGraphContext.Provider value={graph}>`. */

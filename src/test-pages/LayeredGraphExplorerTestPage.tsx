@@ -1,5 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
-import { LayeredGraphExplorer, LAYERED_GRAPH_VIEWS, type LayeredGraphExplorerControls, type LayeredGraphView } from '../components/LayeredGraphExplorer'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  LayeredGraphExplorer,
+  LAYERED_GRAPH_VIEWS,
+  type LayeredGraphExplorerControls,
+  type LayeredGraphExplorerHandle,
+  type LayeredGraphExplorerSnapshot,
+  type LayeredGraphExplorerSnapshotInput,
+  type LayeredGraphView,
+} from '../components/LayeredGraphExplorer'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import type { BuildLayeredIndexOptions } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
@@ -9,6 +17,9 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 //   ?example=layered-graph-explorer&data=spec|ux&view=stack|lanes|matrix|hive&select=<node id>
 //     &follow=0|1|2&dark=1&views=stack,matrix&hide=follow,camera,…&height=720&mode=external
 // `mode=external` drives the explorer from the page's own useLayeredGraph through the `graph` prop.
+// `sync=1` round-trips the explorer through the URL: `state` (JSON) is its `defaultSnapshot`, and
+// every `onSnapshotChange` writes it back (`snapshot-count` counts them). Save / Restore buttons
+// drive the `explorerRef` handle. `gap=<n>` passes `stackProps={{ defaultLayerGap: n }}`.
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
@@ -20,6 +31,17 @@ const CONTROLS: LayeredGraphExplorerControls = Object.fromEntries((params.get('h
 const HEIGHT = params.has('height') ? Number(params.get('height')) : undefined
 const EXTERNAL = params.get('mode') === 'external'
 const FOLLOW = params.has('follow') ? Number(params.get('follow')) : 1
+const SYNC = params.get('sync') === '1'
+function parseSnapshot(): LayeredGraphExplorerSnapshotInput | undefined {
+  try {
+    const raw = params.get('state')
+    return raw ? (JSON.parse(raw) as LayeredGraphExplorerSnapshotInput) : undefined
+  } catch {
+    return undefined
+  }
+}
+const SNAPSHOT = SYNC ? parseSnapshot() : undefined
+const STACK_PROPS = params.has('gap') ? { defaultLayerGap: Number(params.get('gap')) } : undefined
 const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : 'heimdall ux model'
 
 const mono = { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgb(var(--canvas-fg-3))' } as const
@@ -35,9 +57,18 @@ export default function LayeredGraphExplorerTestPage() {
     [],
   )
   const layout = useMemo(() => ({ layoutCategories: DATA === 'spec' ? ['structural'] : null }), [])
-  const [selected, setSelected] = useState<string | null>(params.get('select'))
-  const [follow, setFollow] = useState(FOLLOW)
-  const [view, setView] = useState<LayeredGraphView>(VIEW)
+  const [selected, setSelected] = useState<string | null>(SNAPSHOT?.selectedId ?? params.get('select'))
+  const [follow, setFollow] = useState(SNAPSHOT?.follow ?? FOLLOW)
+  const [view, setView] = useState<LayeredGraphView>(SNAPSHOT?.view ?? VIEW)
+  const explorerRef = useRef<LayeredGraphExplorerHandle>(null)
+  const [saved, setSaved] = useState<LayeredGraphExplorerSnapshot | null>(null)
+  const [snapshotCount, setSnapshotCount] = useState(0)
+  const writeUrl = (snapshot: LayeredGraphExplorerSnapshot) => {
+    setSnapshotCount((n) => n + 1)
+    const url = new URL(window.location.href)
+    url.searchParams.set('state', JSON.stringify(snapshot))
+    window.history.replaceState(null, '', url)
+  }
   const graphOptions = useMemo(
     () => ({ layout, defaultSelectedId: params.get('select'), defaultFollow: FOLLOW, onSelect: setSelected, onFollowChange: setFollow }),
     [layout],
@@ -57,6 +88,10 @@ export default function LayeredGraphExplorerTestPage() {
       defaultView={VIEW}
       onViewChange={setView}
       controls={CONTROLS}
+      explorerRef={explorerRef}
+      defaultSnapshot={SNAPSHOT}
+      onSnapshotChange={SYNC ? writeUrl : undefined}
+      stackProps={STACK_PROPS}
       eyebrow="Layered graph"
       title={DATA === 'spec' ? 'Documentation robotics spec' : 'Heimdall UX model'}
       statusLabel={DATA_LABEL}
@@ -69,6 +104,20 @@ export default function LayeredGraphExplorerTestPage() {
       <span data-testid="explorer-state" style={{ ...mono, display: 'block', marginBottom: 8 }}>
         {[`view ${view}`, selected ? `selected ${selected}` : 'no selection', `follow ${follow}`].join(' · ')}
       </span>
+      {SYNC && (
+        <div style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
+          <button type="button" onClick={() => setSaved(explorerRef.current?.getSnapshot() ?? null)}>
+            Save snapshot
+          </button>
+          <button type="button" disabled={!saved} onClick={() => saved && explorerRef.current?.restore(saved)}>
+            Restore snapshot
+          </button>
+          <span data-testid="snapshot-count" style={mono}>{`snapshots ${snapshotCount}`}</span>
+          <span data-testid="saved-snapshot" style={mono}>
+            {saved ? `${saved.view} · ${saved.stack.preset ?? 'custom'} · gap ${Math.round(saved.stack.layerGap)}` : 'none saved'}
+          </span>
+        </div>
+      )}
       {EXTERNAL ? <LayeredGraphContext.Provider value={externalGraph}>{explorer}</LayeredGraphContext.Provider> : explorer}
     </div>
   )
