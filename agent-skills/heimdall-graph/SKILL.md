@@ -1728,6 +1728,7 @@ const graph = useLayeredGraph({ nodes, edges, layering })
 | `formatOption` | `(follow: number) => ReactNode` | `followOptionLabel` | Segment text per depth: `Direct`, `+1 layer`, `+2 layers` |
 | `label` | `ReactNode` | `'Follow'` | Mono eyebrow before the control; `null` hides it |
 | `disabled` | `boolean` | `false` | Disables every segment |
+| `surface` | `ChromeSurface` | `'canvas'` | `'shell'` reads the `--shell-*` tokens: dark in both canvas themes, for a shell bar |
 
 ## PredicateLabelControl
 
@@ -1746,6 +1747,7 @@ Segmented control for which links show predicate labels: Off / Highlighted (reac
 | `optionLabels` | `Partial<Record<PredicateLabelMode, ReactNode>>` | — | Segment text per mode; default `Off`, `Highlighted`, `All` |
 | `label` | `ReactNode` | `'Predicates'` | Mono eyebrow before the control; `null` hides it |
 | `disabled` | `boolean` | `false` | Disables every segment |
+| `surface` | `ChromeSurface` | `'canvas'` | `'shell'` reads the `--shell-*` tokens: dark in both canvas themes, for a shell bar |
 
 ## PlaneLayoutControl
 
@@ -1763,14 +1765,20 @@ Segmented control for Independent (each layer laid out on its own) or Coupled (c
 | `optionLabels` | `Partial<Record<PlaneLayoutMode, ReactNode>>` | — | Segment text per mode; default `Independent`, `Coupled` |
 | `label` | `ReactNode` | `'Plane layout'` | Mono eyebrow before the control; `null` hides it |
 | `disabled` | `boolean` | `false` | Disables both segments |
+| `surface` | `ChromeSurface` | `'canvas'` | `'shell'` reads the `--shell-*` tokens: dark in both canvas themes, for a shell bar |
 
 ## LinkCategoryFilter
 
-The link bar: one toggle button per link category, each with its dash sample (from `linkCategoryStyle`) and link count, then optional intra-layer and node-label toggles. Category and intra toggles write `filters`; the node-label toggle writes the graph's `nodeLabels` (or calls `onNodeLabelsChange` with a controlled `nodeLabels`). `children` render after a divider at the end of the bar. `categoryDisplayLabel(c)` gives the default label (sentence case).
+The link bar: one toggle button per link category, each with its dash sample (from `linkCategoryStyle`) and link count, then optional intra-layer and node-label toggles. Category and intra toggles write `filters`; the node-label toggle writes the graph's `nodeLabels` (or calls `onNodeLabelsChange` with a controlled `nodeLabels`). `children` render after a divider at the end of the bar. Each divider is glued to what follows it and hidden when that starts a wrapped line, so no line of the bar starts or ends with a divider (the bar measures itself after render and on resize). `categoryDisplayLabel(c)` gives the default label (sentence case).
 
 ```tsx
 <LinkCategoryFilter categoryLabels={{ structural: 'Structure' }} showLabelToggle>
   <PredicateLabelControl />
+</LinkCategoryFilter>
+
+// On a shell strip: pass the same surface to the children
+<LinkCategoryFilter surface="shell" showLabelToggle>
+  <PredicateLabelControl surface="shell" />
 </LinkCategoryFilter>
 ```
 
@@ -1789,7 +1797,8 @@ The link bar: one toggle button per link category, each with its dash sample (fr
 | `nodeLabels` | `boolean` | graph state | Node labels on or off (controlled). Unset: the graph's `nodeLabels`, which the toggle writes |
 | `onNodeLabelsChange` | `(on: boolean) => void` | — | Called by the node-label toggle |
 | `labelToggleLabel` | `ReactNode` | `'Labels'` | Node-label toggle text |
-| `children` | `ReactNode` | — | Rendered after a divider at the end of the bar |
+| `surface` | `ChromeSurface` | `'canvas'` | `'shell'` reads the `--shell-*` tokens (eyebrow, toggles, divider): dark in both canvas themes. Unpressed toggles use shell-fg-2 for contrast; pressed ones sit on shell-surface |
+| `children` | `ReactNode` | — | Rendered after a divider at the end of the bar; empty children (`false`, `null`) render no divider |
 
 ## LayerList
 
@@ -1961,7 +1970,7 @@ const [turntable, setTurntable] = useState(false)
 | `title` | `ReactNode` | — | Heading in the header |
 | `eyebrow` | `ReactNode` | — | Mono eyebrow above the title |
 | `statusLabel` | `ReactNode` | — | Dataset label at the start of the status line |
-| `chromeSurface` | `'shell' \| 'canvas'` | `'shell'` | Header and status line on the shell surface or the canvas |
+| `chromeSurface` | `ChromeSurface` | `'shell'` | Header and status line on the shell surface or the canvas. On `'shell'` they read the `--shell-*` tokens and the header's `ViewSwitcher` and `FollowControl` get `surface="shell"` |
 | `nodeLabels` | `boolean` | graph state | Controlled node labels (stack and hive), over the graph's `nodeLabels` |
 | `defaultNodeLabels` | `boolean` | `true` | Initial node labels: seeds the explorer's own graph state (kept apart from a `graph` prop or context) |
 | `onNodeLabelsChange` | `(on: boolean) => void` | — | Called by the node-label toggle |
@@ -1987,6 +1996,7 @@ Segmented control for the explorer's view (3D stack, Lanes, Matrix, Hive). Use i
 | `viewLabels` | `Partial<Record<LayeredGraphView, ReactNode>>` | — | Segment text per view; default from `LAYERED_GRAPH_VIEW_LABELS` |
 | `label` | `ReactNode` | `'View'` | Mono eyebrow; `null` hides it |
 | `disabled` | `boolean` | `false` | Disables every segment |
+| `surface` | `ChromeSurface` | `'canvas'` | `'shell'` reads the `--shell-*` tokens: dark in both canvas themes, for a shell bar |
 
 ## CameraControls
 

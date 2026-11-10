@@ -1,7 +1,7 @@
-import React, { useContext, useId, useMemo } from 'react'
+import React, { useCallback, useContext, useEffect, useId, useLayoutEffect, useMemo, useRef } from 'react'
 import { Button } from './Button'
 import { Icon } from './Icon'
-import { SegmentedControl } from './SegmentedControl'
+import { SegmentedControl, type ChromeSurface } from './SegmentedControl'
 import { LayeredGraphContext, type LayeredGraphState } from '../hooks/useLayeredGraph'
 import { linkCategoryStyle } from '../utils/layered/emphasis'
 import type { PlaneLayoutMode, PredicateLabelMode } from '../utils/layered/types'
@@ -26,6 +26,8 @@ export function useLayeredGraphProp(graph: LayeredGraphState | undefined, compon
   return g
 }
 
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
+
 function cx(...names: (string | false | null | undefined)[]): string {
   return names.filter(Boolean).join(' ')
 }
@@ -46,6 +48,8 @@ interface SegmentedChromeProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   /** Mono eyebrow before the control; `null` hides it (the control keeps its `aria-label`). */
   label?: React.ReactNode
   disabled?: boolean
+  /** The surface the control sits on: `shell` for a dark chrome bar in either canvas theme. Default `canvas`. */
+  surface?: ChromeSurface
 }
 
 interface SegmentedChromeInnerProps extends Omit<SegmentedChromeProps, 'graph'> {
@@ -56,14 +60,21 @@ interface SegmentedChromeInnerProps extends Omit<SegmentedChromeProps, 'graph'> 
 }
 
 const SegmentedChrome = React.forwardRef<HTMLDivElement, SegmentedChromeInnerProps>(
-  ({ label, ariaLabel, value, options, onChange, disabled, className, ...props }, ref) => (
-    <div ref={ref} className={cx('layered-control', className)} {...props}>
+  ({ label, ariaLabel, value, options, onChange, disabled, surface = 'canvas', className, ...props }, ref) => (
+    <div ref={ref} className={cx('layered-control', surface === 'shell' && 'layered-control--shell', className)} {...props}>
       {label != null && (
         <span className="layered-control__eyebrow" aria-hidden="true">
           {label}
         </span>
       )}
-      <SegmentedControl aria-label={ariaLabel} value={value} options={options} onChange={onChange} disabled={disabled} />
+      <SegmentedControl
+        aria-label={ariaLabel}
+        value={value}
+        options={options}
+        onChange={onChange}
+        disabled={disabled}
+        surface={surface}
+      />
     </div>
   ),
 )
@@ -185,7 +196,13 @@ export interface LinkCategoryFilterProps extends React.HTMLAttributes<HTMLDivEle
   /** Called by the toggle, with the graph state or a controlled `nodeLabels`. */
   onNodeLabelsChange?: (on: boolean) => void
   labelToggleLabel?: React.ReactNode
-  /** Rendered after a divider at the end of the bar, e.g. a `PredicateLabelControl`. */
+  /** The surface the bar sits on: `shell` for a dark chrome bar in either canvas theme. Default `canvas`. */
+  surface?: ChromeSurface
+  /**
+   * Rendered after a divider at the end of the bar, e.g. a `PredicateLabelControl` (pass it the
+   * same `surface`). Each divider is glued to the start of what follows it and hidden when that
+   * starts a wrapped line, so no line of the bar starts or ends with a divider.
+   */
   children?: React.ReactNode
 }
 
@@ -199,6 +216,85 @@ function ChromeToggle({ pressed, className, ...props }: React.ButtonHTMLAttribut
       {...props}
     />
   )
+}
+
+/**
+ * Hides the divider of each `.layered-link-filter__section` (a divider glued to what follows it)
+ * that starts a line of the wrapped bar, so no line starts or ends with a divider.
+ *
+ * Hiding must not move the section back up a line (it fit there only without its divider), so a
+ * section that sits on one line keeps the divider's room and is shifted left over it
+ * (`data-line-start="shift"`: position only, layout unchanged). A section wider than the bar
+ * wraps inside itself and cannot move up, so its divider is removed (`"drop"`). Sections are
+ * measured in order, each after the decisions before it. Checked after each render and a frame
+ * after any resize of the bar or its items (fonts loading, labels changing); re-measured only
+ * when the bar's or an item's width changed.
+ */
+function useLineStartDividers(bar: React.RefObject<HTMLDivElement | null>) {
+  // The bar's width and its items' widths when last measured (after the decisions applied).
+  // Unchanged means unchanged wrapping, so a re-render of the bar (the graph context changes on
+  // every hover) costs one layout read and no writes.
+  const lastLayout = useRef('')
+
+  const measure = useCallback(() => {
+    const el = bar.current
+    if (!el) return
+    const layoutKey = () =>
+      [el.clientWidth, ...Array.from(el.children, (c) => Math.round(c.getBoundingClientRect().width * 10))].join(',')
+    if (layoutKey() === lastLayout.current) return
+    const sections = Array.from(el.children).filter((c): c is HTMLElement => c.classList.contains('layered-link-filter__section'))
+    for (const s of sections) {
+      s.removeAttribute('data-line-start')
+      s.style.removeProperty('--layered-divider-shift')
+    }
+    if (sections.length > 0) {
+      const cs = getComputedStyle(el)
+      const contentWidth = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+      for (const s of sections) {
+        const prev = s.previousElementSibling
+        const r = s.getBoundingClientRect()
+        if (prev && r.left >= prev.getBoundingClientRect().right) continue
+        if (r.width >= contentWidth - 0.5) {
+          s.setAttribute('data-line-start', 'drop')
+          continue
+        }
+        const content = s.children[1]
+        const shift = content ? content.getBoundingClientRect().left - r.left : 0
+        s.setAttribute('data-line-start', 'shift')
+        s.style.setProperty('--layered-divider-shift', `${-shift}px`)
+      }
+    }
+    lastLayout.current = layoutKey()
+  }, [bar])
+
+  // After every render: content (labels, counts, children) can change the items' widths.
+  useIsomorphicLayoutEffect(measure)
+
+  // One observer for the bar's lifetime: a resize of the bar or any item re-measures a frame later
+  // (inside the callback, measuring would be a ResizeObserver loop). Items added or removed are
+  // observed as they come and go.
+  useIsomorphicLayoutEffect(() => {
+    const el = bar.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    let frame = 0
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(measure)
+    })
+    const observeAll = () => {
+      ro.disconnect()
+      ro.observe(el)
+      for (const c of Array.from(el.children)) ro.observe(c)
+    }
+    observeAll()
+    const mo = typeof MutationObserver === 'undefined' ? null : new MutationObserver(observeAll)
+    mo?.observe(el, { childList: true })
+    return () => {
+      cancelAnimationFrame(frame)
+      mo?.disconnect()
+      ro.disconnect()
+    }
+  }, [bar, measure])
 }
 
 /**
@@ -219,12 +315,23 @@ export const LinkCategoryFilter = React.forwardRef<HTMLDivElement, LinkCategoryF
       nodeLabels: nodeLabelsProp,
       onNodeLabelsChange,
       labelToggleLabel = 'Labels',
+      surface = 'canvas',
       children,
       className,
       ...props
     },
     ref,
   ) => {
+    const barRef = useRef<HTMLDivElement | null>(null)
+    const setBarRef = useCallback(
+      (el: HTMLDivElement | null) => {
+        barRef.current = el
+        if (typeof ref === 'function') ref(el)
+        else if (ref) ref.current = el
+      },
+      [ref],
+    )
+    useLineStartDividers(barRef)
     const g = useLayeredGraphProp(graph, 'LinkCategoryFilter')
     const { index, filters, emphasisContext } = g
     const cats = categories ?? index.categories
@@ -237,11 +344,11 @@ export const LinkCategoryFilter = React.forwardRef<HTMLDivElement, LinkCategoryF
     const id = useId()
     return (
       <div
-        ref={ref}
+        ref={setBarRef}
         role="group"
         aria-labelledby={label != null ? id : undefined}
         aria-label={label == null ? 'Links' : undefined}
-        className={cx('layered-link-filter', className)}
+        className={cx('layered-link-filter', surface === 'shell' && 'layered-link-filter--shell', className)}
         {...props}
       >
         {label != null && (
@@ -264,22 +371,26 @@ export const LinkCategoryFilter = React.forwardRef<HTMLDivElement, LinkCategoryF
             </ChromeToggle>
           )
         })}
-        {(showIntraToggle || labelToggle) && <span className="layered-link-filter__divider" aria-hidden="true" />}
-        {showIntraToggle && (
-          <ChromeToggle pressed={filters.showIntra} onClick={() => g.setShowIntra(!filters.showIntra)}>
-            {intraLabel}
-          </ChromeToggle>
+        {(showIntraToggle || labelToggle) && (
+          <span className="layered-link-filter__section">
+            <span className="layered-link-filter__divider" aria-hidden="true" />
+            {showIntraToggle && (
+              <ChromeToggle pressed={filters.showIntra} onClick={() => g.setShowIntra(!filters.showIntra)}>
+                {intraLabel}
+              </ChromeToggle>
+            )}
+            {labelToggle && (
+              <ChromeToggle pressed={nodeLabels} onClick={toggleNodeLabels}>
+                {labelToggleLabel}
+              </ChromeToggle>
+            )}
+          </span>
         )}
-        {labelToggle && (
-          <ChromeToggle pressed={nodeLabels} onClick={toggleNodeLabels}>
-            {labelToggleLabel}
-          </ChromeToggle>
-        )}
-        {children != null && (
-          <>
+        {React.Children.toArray(children).length > 0 && (
+          <span className="layered-link-filter__section">
             <span className="layered-link-filter__divider" aria-hidden="true" />
             {children}
-          </>
+          </span>
         )}
       </div>
     )

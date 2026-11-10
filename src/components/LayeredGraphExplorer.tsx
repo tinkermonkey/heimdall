@@ -16,7 +16,7 @@ import {
 } from './LayeredGraphControls'
 import { LayerStack, type LayerStackHandle, type LayerStackProps } from './LayerStack'
 import { ReachInspector } from './ReachInspector'
-import { SegmentedControl } from './SegmentedControl'
+import { SegmentedControl, type ChromeSurface } from './SegmentedControl'
 import {
   LayeredGraphContext,
   layeredGraphSnapshotDefaults,
@@ -60,17 +60,20 @@ export interface ViewSwitcherProps extends Omit<React.HTMLAttributes<HTMLDivElem
   /** Mono eyebrow before the control; `null` hides it. */
   label?: React.ReactNode
   disabled?: boolean
+  /** The surface the control sits on: `shell` for a dark chrome bar in either canvas theme. Default `canvas`. */
+  surface?: ChromeSurface
 }
 
 /** Segmented control that picks a layered view. Plain props: it holds no state. */
 export const ViewSwitcher = React.forwardRef<HTMLDivElement, ViewSwitcherProps>(
-  ({ views = LAYERED_GRAPH_VIEWS, value, onChange, viewLabels, label = 'View', disabled, className, ...props }, ref) => (
-    <div ref={ref} className={cx('layered-control', className)} {...props}>
+  ({ views = LAYERED_GRAPH_VIEWS, value, onChange, viewLabels, label = 'View', disabled, surface = 'canvas', className, ...props }, ref) => (
+    <div ref={ref} className={cx('layered-control', surface === 'shell' && 'layered-control--shell', className)} {...props}>
       {label != null && <span className="layered-control__eyebrow">{label}</span>}
       <SegmentedControl
         aria-label="View"
         value={value}
         disabled={disabled}
+        surface={surface}
         onChange={(v) => onChange(v as LayeredGraphView)}
         options={views.map((v) => ({ value: v, label: viewLabels?.[v] ?? LAYERED_GRAPH_VIEW_LABELS[v] }))}
       />
@@ -329,8 +332,11 @@ export interface LayeredGraphExplorerProps extends Omit<React.HTMLAttributes<HTM
   eyebrow?: React.ReactNode
   /** Dataset label at the start of the status line. */
   statusLabel?: React.ReactNode
-  /** Header and status line on the shell surface (default) or the canvas. */
-  chromeSurface?: 'shell' | 'canvas'
+  /**
+   * Header and status line on the shell surface (default) or the canvas. On `shell` the header's
+   * `ViewSwitcher` and `FollowControl` get `surface="shell"`.
+   */
+  chromeSurface?: ChromeSurface
 
   /**
    * Node labels on or off (controlled), over the graph's `nodeLabels` state. Unset: the graph
@@ -772,14 +778,16 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
             <header className="layered-graph-explorer__header">
               {(title != null || eyebrow != null) && (
                 <div className="layered-graph-explorer__heading">
-                  {eyebrow != null && <span className="layered-control__eyebrow">{eyebrow}</span>}
+                  {eyebrow != null && <span className="layered-control__eyebrow layered-graph-explorer__eyebrow">{eyebrow}</span>}
                   {title != null && <h2 className="layered-graph-explorer__title">{title}</h2>}
                 </div>
               )}
               {headerControls && (
                 <div className="layered-graph-explorer__header-controls">
-                  {showSwitcher && <ViewSwitcher views={views} value={view} onChange={changeView} viewLabels={viewLabels} />}
-                  {show.follow && <FollowControl options={followOptions} />}
+                  {showSwitcher && (
+                    <ViewSwitcher views={views} value={view} onChange={changeView} viewLabels={viewLabels} surface={chromeSurface} />
+                  )}
+                  {show.follow && <FollowControl options={followOptions} surface={chromeSurface} />}
                 </div>
               )}
             </header>

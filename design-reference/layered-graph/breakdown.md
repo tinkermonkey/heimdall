@@ -458,7 +458,6 @@ Why A was chosen:
 - Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
 - Hive (#337): the generic `axes` option (axis by any attribute).
 - Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
-- Framework (#338, #339): a shell variant of `SegmentedControl` (the explorer remaps canvas tokens to shell tokens on its header and status line).
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 
 **#338 state API: implemented.**
@@ -475,6 +474,11 @@ Why A was chosen:
 - `LayerStackHandle.getLayerGap()`: the live gap, mid-tween included.
 - Snapshots are untrusted input (URLs): `sanitizeLayeredGraphSnapshot` and `sanitizeLayeredGraphExplorerSnapshot` drop malformed fields and complete partial filters, at every entry point. A preset is active exactly when the stored camera and gap are its own (picked presets are stored at once; overrides drop the preset), so a preset click reports once, settled, and restoring that snapshot mid-tween does not remount. A changed camera remounts the stack and stops the turntable; an unchanged one leaves the stack alone. Reports from a stack being replaced are ignored.
 - **Tests:** the explorer test page's `sync=1` mode writes the snapshot to the URL. The explorer spec reloads from that URL (view, selection, follow, filter, labels, preset and gap come back) and saves and restores through the handle (plane spacing matches the saved gap). Further tests cover layer focus through the URL, a malformed `state`, a restore with an unchanged camera (no remount) and a restore over a running turntable. Unit tests in `src/utils/__tests__/layeredSnapshot.test.ts` (sanitizers included).
+
+**#339 shell surface: implemented.**
+- `surface?: ChromeSurface` (`'canvas' | 'shell'`, default `'canvas'`, exported) on `SegmentedControl`, `ViewSwitcher`, `FollowControl`, `PredicateLabelControl`, `PlaneLayoutControl` and `LinkCategoryFilter`. `'shell'` reads the `--shell-*` tokens, so it is dark in both canvas themes. The explorer's header and status line now use the shell tokens directly and pass `surface` to the header controls; the `--canvas-*` → `--shell-*` remap is gone, and the explorer renders pixel-identically.
+- `LinkCategoryFilter`: each divider is glued to what follows it, and the bar hides one that starts a wrapped line, so no line starts or ends with a divider. A one-line section keeps the divider's room and shifts left over it, so it cannot jump back up a line. A section wider than the bar drops the divider. Empty `children` no longer render a trailing divider.
+- **Tests:** shell `SegmentedControl` screenshots (default, hover, focus, disabled; light and dark canvas) in the primitives spec; a shell chrome strip (`?example=layered-graph-chrome&shell=1`) with screenshots and a wrap test that sweeps the bar from 1100 to 300px and asserts no line starts or ends with a divider and every line starts flush.
 
 **#338 async layout: implemented.**
 - `layoutLayersAsync(index, options, { signal })` in `src/utils/layered/layout.ts`: the same deterministic result as `layoutLayers` (both run one step generator), one solve at a time with `yieldToPaint` before each: each layer, then the coupled solve. `signal` aborts between solves. The coupled solve is still one block (about half the time on a large graph); splitting it would mean making `organicLayout` incremental.

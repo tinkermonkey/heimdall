@@ -1,6 +1,7 @@
-/* Chrome for the layered graph views (LayeredGraphControls.tsx). Canvas tokens only, so every
-   control follows body.dark-canvas. Hover lifts a neutral step; active rows get the amber
-   outline; focus is the house ring. */
+/* Chrome for the layered graph views (LayeredGraphControls.tsx). Canvas tokens by default, so
+   every control follows body.dark-canvas; `surface="shell"` (the --shell modifiers at the end)
+   reads the shell tokens instead and stays dark in both canvas themes. Hover lifts a neutral
+   step; active rows get the amber outline; focus is the house ring. */
 
 .layered-control {
   display: inline-flex;
@@ -32,6 +33,31 @@
 
 .layered-link-filter > .layered-control__eyebrow {
   margin-right: 4px;
+}
+
+/* A divider and what follows it: the divider never ends a line. When the section starts a wrapped
+   line the component sets data-line-start: "shift" keeps the divider's room (so the section stays
+   on its line) and moves the section left over it; "drop" (a section wider than the bar) removes
+   the divider. */
+.layered-link-filter__section {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  min-width: 0;
+}
+
+.layered-link-filter__section[data-line-start='shift'] {
+  position: relative;
+  left: var(--layered-divider-shift, 0px);
+}
+
+.layered-link-filter__section[data-line-start='shift'] > .layered-link-filter__divider {
+  visibility: hidden;
+}
+
+.layered-link-filter__section[data-line-start='drop'] > .layered-link-filter__divider {
+  display: none;
 }
 
 .layered-link-filter__divider {
@@ -220,4 +246,40 @@
   display: flex;
   gap: 3px;
   flex: none;
+}
+
+/* ---- Shell surface (surface="shell") ---- */
+
+.layered-control--shell .layered-control__eyebrow,
+.layered-link-filter--shell .layered-control__eyebrow {
+  color: rgb(var(--shell-fg-3));
+}
+
+.layered-link-filter--shell {
+  color: rgb(var(--shell-fg-1));
+}
+
+.layered-link-filter--shell .layered-link-filter__divider {
+  background: rgb(var(--shell-border-2));
+}
+
+/* Unpressed text is shell-fg-2, not fg-3: fg-3 on the shell backgrounds is under 4.5:1. Pressed
+   toggles sit on shell-surface, like the active segment of a shell SegmentedControl. */
+.layered-link-filter--shell .layered-toggle {
+  border-color: rgb(var(--shell-border-2));
+  color: rgb(var(--shell-fg-2));
+}
+
+.layered-link-filter--shell .layered-toggle:hover:not(.layered-toggle--on) {
+  background: rgb(var(--shell-fg-1) / 0.05);
+  color: rgb(var(--shell-fg-1));
+}
+
+.layered-link-filter--shell .layered-toggle--on {
+  background: rgb(var(--shell-surface));
+  color: rgb(var(--shell-fg-1));
+}
+
+.layered-link-filter--shell .layered-toggle__count {
+  color: rgb(var(--shell-fg-3));
 }

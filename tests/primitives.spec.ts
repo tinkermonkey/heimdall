@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnimations } from './utils/test-helpers'
 
 test.describe('integration: Primitive Components', () => {
@@ -279,6 +279,53 @@ test.describe('integration: Primitive Components', () => {
     test('SegmentedControl dark snapshot', async ({ page }) => {
       const segmentedControl = page.locator('[class*="segmented-control"]').first()
       await expect(segmentedControl).toHaveScreenshot('segmented-control-dark.png')
+    })
+  })
+
+  test.describe('SegmentedControl surface="shell"', () => {
+    const shell = (page: Page) => page.getByTestId('segmented-control-shell')
+
+    test('reads the shell tokens in both canvas themes', async ({ page }) => {
+      const colors = async () =>
+        shell(page).locator('.segmented-control').first().evaluate((el) => {
+          const active = el.querySelector('.segmented-control__segment--active') as HTMLElement
+          const idle = el.querySelector('.segmented-control__segment:not(.segmented-control__segment--active)') as HTMLElement
+          return [getComputedStyle(el).backgroundColor, getComputedStyle(active).backgroundColor, getComputedStyle(idle).color]
+        })
+      const light = await colors()
+      // --shell-bg-2, --shell-surface, --shell-fg-2
+      expect(light).toEqual(['rgb(19, 32, 58)', 'rgb(27, 41, 73)', 'rgb(166, 177, 189)'])
+      await applyDarkCanvasMode(page)
+      expect(await colors()).toEqual(light)
+    })
+
+    for (const theme of ['light', 'dark'] as const) {
+      test(`states, ${theme} canvas`, async ({ page }) => {
+        if (theme === 'dark') await applyDarkCanvasMode(page)
+        await freezeAnimations(page)
+        await expect(shell(page)).toHaveScreenshot(`segmented-control-shell-${theme}.png`)
+
+        const group = shell(page).getByRole('radiogroup', { name: 'Shell scope' })
+        await group.getByRole('radio', { name: 'Active' }).hover()
+        await expect(shell(page)).toHaveScreenshot(`segmented-control-shell-hover-${theme}.png`)
+
+        // Keyboard focus lands on the checked segment and shows the focus ring.
+        await page.mouse.move(0, 0)
+        await group.getByRole('radio', { name: 'All' }).focus()
+        await expect(group.getByRole('radio', { name: 'All' })).toBeFocused()
+        await expect(shell(page)).toHaveScreenshot(`segmented-control-shell-focus-${theme}.png`)
+      })
+    }
+
+    test('arrow keys skip a disabled segment; a disabled control does not change', async ({ page }) => {
+      const group = shell(page).getByRole('radiogroup', { name: 'Shell scope' })
+      await group.getByRole('radio', { name: 'All' }).focus()
+      await page.keyboard.press('ArrowRight')
+      await expect(group.getByRole('radio', { name: 'Active' })).toHaveAttribute('aria-checked', 'true')
+      await page.keyboard.press('ArrowRight')
+      await expect(group.getByRole('radio', { name: 'All' })).toHaveAttribute('aria-checked', 'true')
+      const disabled = shell(page).getByRole('radiogroup', { name: 'Shell disabled' })
+      await expect(disabled.getByRole('radio', { name: 'Active' })).toBeDisabled()
     })
   })
 

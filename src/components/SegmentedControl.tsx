@@ -7,16 +7,30 @@ export interface SegmentedControlOption {
   disabled?: boolean
 }
 
+/**
+ * Which of the two surfaces a control sits on. `canvas` (the default) reads the `--canvas-*`
+ * tokens and follows `body.dark-canvas`; `shell` reads the `--shell-*` tokens and is dark in
+ * both canvas themes.
+ */
+export type ChromeSurface = 'canvas' | 'shell'
+
 export interface SegmentedControlProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   value: string | number
   onChange: (value: string | number) => void
   options: SegmentedControlOption[]
   disabled?: boolean
+  /** The surface the control sits on. Default `canvas`. */
+  surface?: ChromeSurface
 }
 
 export const SegmentedControl = React.forwardRef<HTMLDivElement, SegmentedControlProps>(
-  ({ value, onChange, options, disabled = false, className = '', ...props }, ref) => {
-    const classNames = ['segmented-control', disabled ? 'segmented-control--disabled' : '', className]
+  ({ value, onChange, options, disabled = false, surface = 'canvas', className = '', ...props }, ref) => {
+    const classNames = [
+      'segmented-control',
+      surface === 'shell' ? 'segmented-control--shell' : '',
+      disabled ? 'segmented-control--disabled' : '',
+      className,
+    ]
       .filter(Boolean)
       .join(' ')
 
