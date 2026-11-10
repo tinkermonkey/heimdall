@@ -41,14 +41,14 @@ test.describe('integration: DiffViewer Components', () => {
     expect(rowsAfterExpand).toBeGreaterThan(10)
   })
 
-  // The gutter's "added" / "removed" text is for screen readers only (#340). The shipped
-  // stylesheet's presence of `.sr-only` is checked by `npm run check:package`; this checks the
-  // rendered result: a 1px clipped box, not visible text.
+  // The gutter's "added" / "removed" text is for screen readers only (#340). The test app's
+  // Tailwind build has no rule by this name, so this exercises the library stylesheet itself
+  // (`npm run check:package` also checks dist/style.css ships the rule).
   test('SideBySideDiff gutter labels are visually hidden', async ({ page }) => {
     await page.goto('http://localhost:5173/?example=diff-viewer')
     await page.waitForLoadState('networkidle')
 
-    const label = page.locator('.side-by-side-diff__gutter--added .sr-only').first()
+    const label = page.locator('.side-by-side-diff__gutter--added .heimdall-visually-hidden').first()
     await expect(label).toHaveText('added')
     const box = await label.evaluate((el) => {
       const r = el.getBoundingClientRect()

@@ -110,7 +110,7 @@ export const SideBySideDiff = React.forwardRef<HTMLDivElement, SideBySideDiffPro
                           .join(' ')}
                         role="cell"
                       >
-                        <span className="sr-only">{isAdded ? 'added' : isRemoved ? 'removed' : ''}</span>
+                        <span className="heimdall-visually-hidden">{isAdded ? 'added' : isRemoved ? 'removed' : ''}</span>
                       </div>
                       <div
                         className={[

@@ -64,10 +64,12 @@ for (const { where, target } of targets) {
   }
 }
 
-// Components rely on rules that must live in the shipped stylesheet, not only in the dev app's
-// Tailwind build (src/index.css). The docs/test apps load that Tailwind build, so a missing rule
-// is invisible everywhere but a real consumer (tinkermonkey/heimdall#340).
-const REQUIRED_CSS_RULES = [{ selector: '.sr-only', pattern: /(^|[},\s])\.sr-only\s*[{,]/ }]
+// Shared rules components rely on must be in the shipped stylesheet. 0.10.0 used Tailwind's
+// `.sr-only`, which only the dev app's Tailwind build defined, so consumers saw hidden text
+// (tinkermonkey/heimdall#340).
+const REQUIRED_CSS_RULES = [
+  { selector: '.heimdall-visually-hidden', pattern: /(^|[},\s])\.heimdall-visually-hidden\s*[{,]/ },
+]
 const cssTarget = pkg.exports?.['./css']
 if (typeof cssTarget === 'string' && files.has(cssTarget.replace(/^\.\//, ''))) {
   const css = readFileSync(path.join(root, cssTarget), 'utf8')
