@@ -1,0 +1,149 @@
+name: CI
+
+# Runs on every PR to main (and on pushes to main) so changes are checked
+# before merge, not only when release.yml's Test job runs on a tag.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A new push to a PR cancels the run for the push before it.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test:unit -- --run
+
+      - name: Check agent skill coverage
+        run: npm run check:skills
+
+      # Same as release.yml: every path package.json hands consumers must be in the tarball (#303).
+      - name: Build and check package exports
+        run: |
+          npm run build
+          npm run check:package
+
+  # Decides whether the PR can change anything the Playwright suite renders.
+  # Only changes confined to docs/, design-reference/, agent-skills/, .claude/
+  # or Markdown files skip it; anything else runs the full suite. The suite is
+  # not narrowed to "specs for changed components": test pages import shared
+  # components (and src/index.ts), so a per-spec selection would miss
+  # transitive changes and report a false pass.
+  changes:
+    name: Detect visual changes
+    runs-on: ubuntu-latest
+    outputs:
+      visual: ${{ steps.diff.outputs.visual }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Diff against base
+        id: diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            echo "visual=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git diff --name-only "$BASE_SHA...HEAD" > /tmp/changed.txt
+          echo "Changed files:"; cat /tmp/changed.txt
+          if grep -Ev '^(docs/|design-reference/|agent-skills/|\.claude/)|\.md$' /tmp/changed.txt > /dev/null; then
+            echo "visual=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No changes the visual suite renders; skipping it."
+            echo "visual=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Full Playwright suite, split across 4 runners. Each shard runs with
+  # CI=true, so playwright.config.ts gives it 1 worker and 2 retries, the same
+  # settings release.yml's Test job uses; sharding only spreads the tests
+  # across machines. Baselines checked here are the -linux.png ones.
+  visual-shard:
+    name: Visual regression (${{ matrix.shard }}/4)
+    needs: changes
+    if: needs.changes.outputs.visual == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    env:
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run visual regression tests
+        run: npx playwright test --shard=${{ matrix.shard }}/4
+
+      # playwright.config.ts writes these to /tmp when CI is set.
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-shard-${{ matrix.shard }}
+          path: |
+            /tmp/playwright-report
+            /tmp/test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # One stable check name for branch protection: passes when every shard
+  # passed or the suite was skipped, fails otherwise.
+  visual:
+    name: Visual regression
+    needs: [changes, visual-shard]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summarize shard results
+        run: |
+          echo "changes=${{ needs.changes.result }} visual=${{ needs.changes.outputs.visual }} shards=${{ needs.visual-shard.result }}"
+          if [ "${{ needs.changes.result }}" != "success" ]; then exit 1; fi
+          case "${{ needs.visual-shard.result }}" in
+            success|skipped) exit 0 ;;
+            *) exit 1 ;;
+          esac

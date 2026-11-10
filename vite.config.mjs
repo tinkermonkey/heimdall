@@ -30,6 +30,11 @@ export default defineConfig({
   define: { __HEIMDALL_VERSION__: JSON.stringify(pkg.version) },
   plugins: [react(), dts({ include: 'src', exclude: ['**/*.test.ts', '**/*.test.tsx'] }), legacyCssForwarder],
   cacheDir: process.env.CI ? '/tmp/.vite' : undefined,
+  // Vitest unit tests are the *.test.ts files under src/. Without this, Vitest's
+  // default include also picks up the Playwright specs in tests/*.spec.ts.
+  test: {
+    include: ['src/**/*.test.{ts,tsx}'],
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

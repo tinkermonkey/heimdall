@@ -28,6 +28,8 @@ npm run build
 npm test
 ```
 
+**PR CI** (`.github/workflows/ci.yml`, on PRs to `main` and pushes to `main`): `Checks` runs `tsc --noEmit`, `npm run lint`, `npm run test:unit -- --run` (Vitest, `src/**/*.test.ts` only), `check:skills`, `build` + `check:package`. `Visual regression` runs the full Playwright suite with `CI=true` sharded across 4 runners (each still 1 worker, 2 retries, checking `-linux.png` baselines); it is skipped only when every changed file is under `docs/`, `design-reference/`, `agent-skills/`, `.claude/` or is Markdown. On failure, download the `playwright-report-shard-N` artifact. A newer push to the PR cancels the older run.
+
 **Before starting any dev server**, check whether one is already running to avoid accumulating orphaned processes:
 
 ```bash
