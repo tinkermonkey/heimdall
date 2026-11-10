@@ -1,0 +1,17 @@
+/* =========================================================================
+  Heimdall Design System — shared utility classes shipped in dist/style.css
+  ========================================================================= */
+
+/* Text for assistive technology only (the standard clip / 1px pattern). Library-namespaced rather
+   than `.sr-only`, so it never competes with a consumer's Tailwind `sr-only` / `md:not-sr-only`. */
+.heimdall-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

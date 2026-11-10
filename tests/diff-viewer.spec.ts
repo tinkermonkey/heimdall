@@ -40,4 +40,20 @@ test.describe('integration: DiffViewer Components', () => {
     const rowsAfterExpand = await page.locator('.hash-set-diff__row').count()
     expect(rowsAfterExpand).toBeGreaterThan(10)
   })
+
+  // The gutter's "added" / "removed" text is for screen readers only (#340). The test app's
+  // Tailwind build has no rule by this name, so this exercises the library stylesheet itself
+  // (`npm run check:package` also checks dist/style.css ships the rule).
+  test('SideBySideDiff gutter labels are visually hidden', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=diff-viewer')
+    await page.waitForLoadState('networkidle')
+
+    const label = page.locator('.side-by-side-diff__gutter--added .heimdall-visually-hidden').first()
+    await expect(label).toHaveText('added')
+    const box = await label.evaluate((el) => {
+      const r = el.getBoundingClientRect()
+      return { width: r.width, height: r.height, position: getComputedStyle(el).position }
+    })
+    expect(box).toEqual({ width: 1, height: 1, position: 'absolute' })
+  })
 })

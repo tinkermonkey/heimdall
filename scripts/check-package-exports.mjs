@@ -64,6 +64,20 @@ for (const { where, target } of targets) {
   }
 }
 
+// Shared rules components rely on must be in the shipped stylesheet. 0.10.0 used Tailwind's
+// `.sr-only`, which only the dev app's Tailwind build defined, so consumers saw hidden text
+// (tinkermonkey/heimdall#340).
+const REQUIRED_CSS_RULES = [
+  { selector: '.heimdall-visually-hidden', pattern: /(^|[},\s])\.heimdall-visually-hidden\s*[{,]/ },
+]
+const cssTarget = pkg.exports?.['./css']
+if (typeof cssTarget === 'string' && files.has(cssTarget.replace(/^\.\//, ''))) {
+  const css = readFileSync(path.join(root, cssTarget), 'utf8')
+  for (const { selector, pattern } of REQUIRED_CSS_RULES) {
+    if (!pattern.test(css)) problems.push(`exports > ./css: ${cssTarget} has no ${selector} rule`)
+  }
+}
+
 if (problems.length > 0) {
   console.error(`check-package-exports: ${problems.length} problem(s) in ${packInfo.name}@${packInfo.version}:`)
   for (const p of problems) console.error(`  - ${p}`)

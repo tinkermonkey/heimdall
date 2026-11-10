@@ -473,6 +473,7 @@ const lines: DiffLine[] = [
 
 - Despite the name there are no left/right panes. Interleave `removed` and `added` lines yourself, as in a unified diff.
 - The header pills are hard-coded and cannot be relabeled. Use `DiffViewer.SideBySide` for custom labels.
+- Each added or removed row's gutter announces "added" / "removed" to screen readers through the library-owned `heimdall-visually-hidden` class. It ships only in `@tinkermonkey/heimdall-ui/css` (an app's own Tailwind `sr-only` does not cover it), so that import is required or the words render as visible text.
 - Rows are a fixed 24px for virtualization; the body scrolls between 200px and 500px tall.
 - `lineNumber` is not displayed.
 - An empty `lines` array renders "No changes between these versions".

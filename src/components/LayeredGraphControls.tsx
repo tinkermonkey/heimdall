@@ -5,6 +5,7 @@ import { SegmentedControl } from './SegmentedControl'
 import { LayeredGraphContext, type LayeredGraphState } from '../hooks/useLayeredGraph'
 import { linkCategoryStyle } from '../utils/layered/emphasis'
 import type { PlaneLayoutMode, PredicateLabelMode } from '../utils/layered/types'
+import '../styles/utilities.css'
 import './LayeredGraphControls.css'
 
 /*
@@ -358,7 +359,7 @@ export const LayerList = React.forwardRef<HTMLDivElement, LayerListProps>(
               ) : (
                 <div className="layered-row layered-row--static">
                   {content}
-                  <span className="layered-visually-hidden">{`, ${counts}${hidden ? ', hidden' : ''}`}</span>
+                  <span className="heimdall-visually-hidden">{`, ${counts}${hidden ? ', hidden' : ''}`}</span>
                 </div>
               )}
               {hideable && (
