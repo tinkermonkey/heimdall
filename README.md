@@ -75,16 +75,17 @@ src/
 │   ├── Modal.tsx             # Modal dialog
 │   └── [24 more components]
 ├── test-pages/               # Test page implementations
-├── fonts/
-│   ├── fonts.css              # @font-face declarations
-│   ├── inter/                 # Inter font files (self-hosted)
-│   └── jetbrains-mono/        # JetBrains Mono files (self-hosted)
 ├── tokens/
 │   └── tokens.css             # Design tokens as CSS custom properties
 ├── index.css                  # Main stylesheet (tokens + Tailwind)
 ├── index.ts                   # Barrel export (28 components)
 ├── main.tsx                   # Vite entry point
 └── App.tsx                    # Root component
+
+public/fonts/                  # Self-hosted fonts, copied to dist/fonts/ by the build
+├── fonts.css                  # @font-face declarations ("@tinkermonkey/heimdall-ui/fonts")
+├── inter/                     # Inter .woff2 files
+└── jetbrains-mono/            # JetBrains Mono .woff2 files
 
 tests/
 ├── foundation.spec.ts         # Token system validation tests
@@ -135,12 +136,16 @@ Token variables automatically resolve based on surface context. No component-lev
 
 ### Font Files
 
-Font files are declared but not yet self-hosted. Download from:
+Inter (300–900) and JetBrains Mono (400–600) ship with the package as `.woff2` files. Import the stylesheet once at the app entry, next to the main one:
 
-- **Inter**: https://github.com/rsms/inter/releases (weights: 300–900)
-- **JetBrains Mono**: https://github.com/JetBrains/JetBrainsMono/releases (weights: 400, 500, 600)
+```tsx
+import '@tinkermonkey/heimdall-ui/css'
+import '@tinkermonkey/heimdall-ui/fonts'
+```
 
-Place `.woff2` files in `src/fonts/{inter,jetbrains-mono}/` directories.
+Its `url()`s are relative to the stylesheet, so the app's bundler (Vite, webpack) resolves them and emits the font files with the rest of the build. Nothing has to serve `/fonts/`.
+
+In this repo the files live in `public/fonts/`: the dev server serves them at `/fonts/` (the Playwright helpers load them from there) and the build copies the directory to `dist/fonts/`. `npm run setup` refetches them from `@fontsource` if they go missing.
 
 ### Build Output
 

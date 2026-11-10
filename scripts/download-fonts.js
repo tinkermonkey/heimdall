@@ -10,23 +10,10 @@ const fsPromises = fs.promises;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.join(__dirname, '..');
 
-// Each entry: { dest: relative-to-rootDir, url }
+// Each entry: { dest: relative-to-rootDir, url }. public/fonts/ is the only copy: the dev server
+// serves it at /fonts/ and the build copies it to dist/fonts/, next to fonts.css.
 const FONTS = [
   // Inter — via @fontsource/inter on jsdelivr
-  { dest: 'src/fonts/inter/Inter-Light.woff2',     url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-300-normal.woff2' },
-  { dest: 'src/fonts/inter/Inter-Regular.woff2',   url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-400-normal.woff2' },
-  { dest: 'src/fonts/inter/Inter-Medium.woff2',    url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-500-normal.woff2' },
-  { dest: 'src/fonts/inter/Inter-SemiBold.woff2',  url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-600-normal.woff2' },
-  { dest: 'src/fonts/inter/Inter-Bold.woff2',      url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-700-normal.woff2' },
-  { dest: 'src/fonts/inter/Inter-ExtraBold.woff2', url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-800-normal.woff2' },
-  { dest: 'src/fonts/inter/Inter-Black.woff2',     url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-900-normal.woff2' },
-
-  // JetBrains Mono — via @fontsource/jetbrains-mono on jsdelivr
-  { dest: 'src/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2',  url: 'https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/files/jetbrains-mono-latin-400-normal.woff2' },
-  { dest: 'src/fonts/jetbrains-mono/JetBrainsMono-Medium.woff2',   url: 'https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/files/jetbrains-mono-latin-500-normal.woff2' },
-  { dest: 'src/fonts/jetbrains-mono/JetBrainsMono-SemiBold.woff2', url: 'https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/files/jetbrains-mono-latin-600-normal.woff2' },
-
-  // public/fonts — same files served as static assets by the dev server
   { dest: 'public/fonts/inter/Inter-Light.woff2',     url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-300-normal.woff2' },
   { dest: 'public/fonts/inter/Inter-Regular.woff2',   url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-400-normal.woff2' },
   { dest: 'public/fonts/inter/Inter-Medium.woff2',    url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-500-normal.woff2' },
@@ -35,6 +22,7 @@ const FONTS = [
   { dest: 'public/fonts/inter/Inter-ExtraBold.woff2', url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-800-normal.woff2' },
   { dest: 'public/fonts/inter/Inter-Black.woff2',     url: 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5/files/inter-latin-900-normal.woff2' },
 
+  // JetBrains Mono — via @fontsource/jetbrains-mono on jsdelivr
   { dest: 'public/fonts/jetbrains-mono/JetBrainsMono-Regular.woff2',  url: 'https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/files/jetbrains-mono-latin-400-normal.woff2' },
   { dest: 'public/fonts/jetbrains-mono/JetBrainsMono-Medium.woff2',   url: 'https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/files/jetbrains-mono-latin-500-normal.woff2' },
   { dest: 'public/fonts/jetbrains-mono/JetBrainsMono-SemiBold.woff2', url: 'https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono@5/files/jetbrains-mono-latin-600-normal.woff2' },
