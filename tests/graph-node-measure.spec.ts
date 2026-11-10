@@ -22,6 +22,7 @@ test.describe('GraphCanvas node measurement (#331)', () => {
     await page.goto(URL)
     await expect(page.locator(CANVAS)).toHaveAttribute('data-layout-state', 'idle')
     await expect(page.locator(`${CANVAS} g.graph-canvas-node`)).toHaveCount(6)
+    await expect(page.locator('[data-testid="node-measure-margin-canvas"] g.graph-canvas-node')).toHaveCount(6)
     await page.evaluate(() => document.fonts.ready)
   })
 
@@ -46,6 +47,39 @@ test.describe('GraphCanvas node measurement (#331)', () => {
       // The box is the node's width rounded up, never down.
       expect(s.foW - s.nodeW, `node ${s.id} width: fo ${s.foW} vs node ${s.nodeW}`).toBeGreaterThanOrEqual(-0.01)
       expect(s.foW - s.nodeW, `node ${s.id} width: fo ${s.foW} vs node ${s.nodeW}`).toBeLessThan(1)
+    }
+  })
+
+  test("a custom node's margins stay inside its foreignObject", async ({ page }) => {
+    const MARGIN_CANVAS = '[data-testid="node-measure-margin-canvas"]'
+    const CARD_MARGIN = 6 // GraphNodeMeasureTestPage's CARD_MARGIN
+    await expect(page.locator(MARGIN_CANVAS)).toHaveAttribute('data-layout-state', 'idle')
+    const boxes = await page.locator(`${MARGIN_CANVAS} g.graph-canvas-node`).evaluateAll((gs) =>
+      gs.map((g) => {
+        const fo = g.querySelector('foreignObject')!
+        const card = fo.querySelector('.measure-margin-card') as HTMLElement
+        const scale = (g as SVGGraphicsElement).getScreenCTM()!.a
+        const f = fo.getBoundingClientRect()
+        const c = card.getBoundingClientRect()
+        return {
+          id: g.getAttribute('data-node-id'),
+          foW: Number(fo.getAttribute('width')),
+          foH: Number(fo.getAttribute('height')),
+          cardW: c.width / scale,
+          cardH: c.height / scale,
+          // How far the card's border box reaches past the foreignObject on the right and bottom.
+          overRight: (c.right - f.right) / scale,
+          overBottom: (c.bottom - f.bottom) / scale,
+        }
+      }),
+    )
+    expect(boxes).toHaveLength(6)
+    for (const b of boxes) {
+      expect(Math.abs(b.foH - (b.cardH + 2 * CARD_MARGIN)), `node ${b.id} height`).toBeLessThanOrEqual(0.5)
+      expect(b.foW - (b.cardW + 2 * CARD_MARGIN), `node ${b.id} width`).toBeGreaterThanOrEqual(-0.01)
+      expect(b.foW - (b.cardW + 2 * CARD_MARGIN), `node ${b.id} width`).toBeLessThan(1)
+      expect(b.overRight, `node ${b.id} card clipped on the right`).toBeLessThanOrEqual(-CARD_MARGIN + 1)
+      expect(b.overBottom, `node ${b.id} card clipped at the bottom`).toBeLessThanOrEqual(-CARD_MARGIN + 0.5)
     }
   })
 

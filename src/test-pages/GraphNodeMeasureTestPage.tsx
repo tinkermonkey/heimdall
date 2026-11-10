@@ -22,6 +22,27 @@ const EDGES: GraphEdge[] = [
   { id: 'e6', sourceId: 'd', targetId: 'f' },
 ]
 
+// A custom card whose root has a margin: the measured box must keep the margin, since the card
+// still renders offset by it inside its foreignObject.
+const CARD_MARGIN = 6 // tests/graph-node-measure.spec.ts expects this value
+
+const renderMarginCard = (node: GraphNodeData) => (
+  <div
+    className="measure-margin-card"
+    style={{
+      margin: CARD_MARGIN,
+      padding: '2px 8px',
+      border: '1px solid rgb(var(--canvas-border-strong))',
+      borderRadius: 4,
+      background: 'rgb(var(--canvas-card))',
+      fontSize: 12,
+      whiteSpace: 'nowrap',
+    }}
+  >
+    {node.label}
+  </div>
+)
+
 export default function GraphNodeMeasureTestPage() {
   return (
     <div style={{ padding: 24, fontSize: 16, lineHeight: 1.5 }}>
@@ -32,6 +53,15 @@ export default function GraphNodeMeasureTestPage() {
         nodes={NODES}
         edges={EDGES}
         style={{ height: 480 }}
+      />
+      <GraphCanvas
+        data-testid="node-measure-margin-canvas"
+        layout="organic"
+        fitView
+        nodes={NODES}
+        edges={EDGES}
+        renderNode={renderMarginCard}
+        style={{ height: 360, marginTop: 16 }}
       />
     </div>
   )

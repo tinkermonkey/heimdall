@@ -709,7 +709,7 @@ export interface GraphCanvasProps extends Omit<
    *
    * Tip: memoize with useCallback to avoid unnecessary re-measurements.
    *
-   * The node's box is the measured border box of what this returns. Keep it in flow: CSS such as
+   * The node's box is the measured margin box of what this returns. Keep it in flow: CSS such as
    * `position: absolute` on it collapses the measurement to 0x0 and the node falls back to the
    * default box (a development build warns once per node).
    */
@@ -1839,8 +1839,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // thrashing an unmemoized inline function would.
     //
     // The box is the node's own border box, unrounded, from getBoundingClientRect (#331):
-    // - A single element child is measured rather than its inline-block wrapper, whose line box
-    //   adds the host's line-height strut (a 20px .graph-node in a 16px/1.5 host measured 24px,
+    // - A single element child is measured (its margin box) rather than its inline-block wrapper,
+    //   whose line box adds the host's line-height strut (a 20px .graph-node in a 16px/1.5 host measured 24px,
     //   so edges arriving from below stopped ~4px short of the outline).
     // - offsetWidth/offsetHeight round to whole pixels, so an 82.2px node got an 82px box and its
     //   label ellipsized. The width is rounded *up* instead; the height is kept exact, since
@@ -1855,8 +1855,16 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         const wrapper = measureRefs.current[node.id];
         const only = wrapper?.childNodes.length === 1 ? wrapper.firstElementChild : null;
         const rect = (only ?? wrapper)?.getBoundingClientRect();
-        const width = rect ? rect.width / scale : 0;
-        const height = rect ? rect.height / scale : 0;
+        let width = rect ? rect.width / scale : 0;
+        let height = rect ? rect.height / scale : 0;
+        if (only && (width > 0 || height > 0)) {
+          // The child still renders offset by its margins inside the foreignObject (the wrapper's
+          // box used to include them), so add them back or a custom card with a margin is clipped.
+          // Computed margins are layout px, already unscaled.
+          const cs = getComputedStyle(only);
+          width = Math.max(0, width + (parseFloat(cs.marginLeft) || 0) + (parseFloat(cs.marginRight) || 0));
+          height = Math.max(0, height + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0));
+        }
         // A renderNode that renders nothing for the measurement pass (see the measure layer below)
         // leaves the wrapper empty and takes the defaults on purpose; content that measures 0x0 is
         // a host-CSS problem (e.g. `.graph-node { position: absolute }` takes it out of flow), and
