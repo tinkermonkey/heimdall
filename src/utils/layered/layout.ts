@@ -201,10 +201,12 @@ function sameShallow(a: object | undefined, b: object | undefined): boolean {
   const ka = Object.keys(a)
   const ra = a as Record<string, unknown>
   const rb = b as Record<string, unknown>
-  return ka.length === Object.keys(b).length && ka.every((k) => Object.is(ra[k], rb[k]))
+  const same = (x: unknown, y: unknown) =>
+    Object.is(x, y) || (Array.isArray(x) && Array.isArray(y) && x.length === y.length && x.every((v, i) => Object.is(v, y[i])))
+  return ka.length === Object.keys(b).length && ka.every((k) => same(ra[k], rb[k]))
 }
 
-/** Layout options equal field by field (`nodeSize` by identity, `organic` shallowly). */
+/** Layout options equal field by field (`nodeSize` by identity; `organic` shallowly, its arrays such as `affectedIds` by contents). */
 export function sameLayoutOptions(a: LayerLayoutOptions, b: LayerLayoutOptions): boolean {
   return (
     a === b ||

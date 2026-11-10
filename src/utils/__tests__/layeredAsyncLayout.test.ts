@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { Component, StrictMode, createElement } from 'react'
 import { act, create, type ReactTestRenderer } from 'react-test-renderer'
 import type { GraphNodeData } from '../../components/GraphCanvas'
+import type { IndexedNode } from '../layered/types'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { buildLayeredIndex, layoutLayers, layoutLayersAsync } from '../layered'
 import { layoutInputKey, sameLayoutOptions } from '../layered/layout'
@@ -80,15 +81,16 @@ describe('useLayeredGraph asynchronous layout', () => {
     return out!
   }
 
-  it('lays out synchronously below the threshold', () => {
+  it('is opt-in: synchronous by default, as before', () => {
     expect(ASYNC_LAYOUT_MIN_NODES).toBe(200)
     const g = render({})
     expect(g.layout).not.toBeNull()
     expect(g.layoutPending).toBe(false)
     expect(render({ asyncLayoutMinNodes: false }).layout).not.toBeNull()
+    expect(render({ asyncLayoutMinNodes: ASYNC_LAYOUT_MIN_NODES }).layout).not.toBeNull() // 36 nodes, below it
   })
 
-  it('is pending, with no layout, from the threshold up until the run lands', () => {
+  it('opted in, is pending with no layout from the threshold up until the run lands', () => {
     const g = render({ asyncLayoutMinNodes: 36 })
     expect(g.layout).toBeNull()
     expect(g.layoutPending).toBe(true)
@@ -100,10 +102,12 @@ describe('useLayeredGraph asynchronous layout', () => {
 // Re-render tests: react-test-renderer drives the hook through effects, landings and unmounts.
 describe('useLayeredGraph asynchronous layout, rendered', () => {
   ;(globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true
-  const wait = (ms: number) => act(() => new Promise<void>((r) => setTimeout(r, ms)))
+  const settle = (ms = 30) => act(() => new Promise<void>((r) => setTimeout(r, ms)))
+  /** Lets timers run (inside act) until `check` passes. */
+  const until = (check: () => void) => vi.waitFor(async () => { await settle(5); check() }, { timeout: 3000, interval: 5 })
   const memoLayering = layering
 
-  /** Mounts a probe that records every render's state; `opts()` is read on each render. */
+  /** Mounts a probe that records every render's state; `opts()` is read on each render. Opted in at any size. */
   function mount(opts: () => Partial<UseLayeredGraphOptions>, wrap: (el: React.ReactElement) => React.ReactElement = (el) => el) {
     const states: LayeredGraphState[] = []
     const Probe = () => {
@@ -112,49 +116,61 @@ describe('useLayeredGraph asynchronous layout, rendered', () => {
     }
     let renderer!: ReactTestRenderer
     act(() => { renderer = create(wrap(createElement(Probe))) })
-    return { states, last: () => states[states.length - 1], renderer, Probe }
+    return { states, last: () => states[states.length - 1], renderer, rerender: () => act(() => renderer.update(wrap(createElement(Probe)))) }
   }
+  const landed = (m: ReturnType<typeof mount>) => until(() => expect(m.last().layoutPending).toBe(false))
 
   it('lands: pending with no layout first, then the same layout as the synchronous run', async () => {
     const m = mount(() => ({}))
     expect(m.states[0].layout).toBeNull()
     expect(m.states[0].layoutPending).toBe(true)
-    await wait(80)
-    expect(m.last().layoutPending).toBe(false)
+    await landed(m)
     expect([...m.last().layout!.coupled]).toEqual([...layoutLayers(spec(), layout).coupled])
     act(() => m.renderer.unmount())
   })
 
-  it('converges with unmemoized nodes, edges and layout options (no restart loop)', async () => {
-    let solves = 0
-    const nodeSize = () => (solves++, { width: 60, height: 24 })
-    const m = mount(() => ({ nodes: [...drSpecNodes], edges: [...drSpecEdges], layout: { layoutCategories: ['structural'], nodeSize } }))
-    await wait(150)
-    expect(m.last().layoutPending).toBe(false)
+  it('converges with unmemoized nodes, edges and layout options without nodeSize (no restart loop)', async () => {
+    const m = mount(() => ({ nodes: [...drSpecNodes], edges: [...drSpecEdges], layout: { layoutCategories: ['structural'], organic: { affectedIds: ['x'] } } }))
+    await landed(m)
     expect(m.last().layout).not.toBeNull()
-    const settled = solves
     const renders = m.states.length
-    await wait(100)
-    expect(solves).toBe(settled) // no new run
+    await settle(60)
     expect(m.states.length).toBe(renders) // no render loop
     // A re-render with rebuilt but equal inputs keeps the landed layout.
-    act(() => m.renderer.update(createElement(m.Probe)))
+    m.rerender()
     expect(m.last().layoutPending).toBe(false)
     expect(m.last().layout).toBe(m.states[renders - 1].layout)
+    act(() => m.renderer.unmount())
+  })
+
+  it('with a custom nodeSize, rebuilt data with an equal key lays out again', async () => {
+    // A stable nodeSize that reads a node attribute the content key does not cover.
+    const nodeSize = (n: IndexedNode) => ({ width: Number(n.source.attributes?.w ?? 60), height: 24 })
+    let nodes: GraphNodeData[] = drSpecNodes.map((n) => ({ ...n, attributes: { ...n.attributes, w: 60 } }))
+    const opts = { layout: { ...layout, nodeSize } }
+    const m = mount(() => ({ ...opts, nodes }))
+    await landed(m)
+    const first = m.last().layout!
+    nodes = drSpecNodes.map((n) => ({ ...n, attributes: { ...n.attributes, w: 400 } }))
+    expect(layoutInputKey(buildLayeredIndex(nodes, drSpecEdges, layering))).toBe(layoutInputKey(m.last().index))
+    m.rerender()
+    expect(m.last().layoutPending).toBe(true)
+    await landed(m)
+    expect(m.last().layout).not.toBe(first)
+    expect([...m.last().layout!.coupled]).toEqual([...layoutLayers(m.last().index, opts.layout).coupled])
     act(() => m.renderer.unmount())
   })
 
   it('a newer index supersedes the older one, keeping the old layout while pending', async () => {
     let nodes: GraphNodeData[] = drSpecNodes
     const m = mount(() => ({ nodes }))
-    await wait(80)
+    await landed(m)
     const first = m.last().layout!
     nodes = drSpecNodes.filter((n) => n.attributes?.layer !== 'technology')
-    act(() => m.renderer.update(createElement(m.Probe)))
+    m.rerender()
     expect(m.last().layoutPending).toBe(true)
     expect(m.last().layout).toBe(first) // stale while pending
-    await wait(80)
-    expect(m.last().layoutPending).toBe(false)
+    await landed(m)
     expect(m.last().layout!.coupled.size).toBe(m.last().index.nodes.length)
     expect(m.last().layout!.coupled.size).toBeLessThan(first.coupled.size)
     act(() => m.renderer.unmount())
@@ -165,14 +181,13 @@ describe('useLayeredGraph asynchronous layout, rendered', () => {
     const opts = { layout: { ...layout, nodeSize: () => (solves++, { width: 60, height: 24 }) } }
     const m = mount(() => opts)
     act(() => m.renderer.unmount())
-    await wait(80)
+    await settle(60)
     expect(solves).toBe(0)
   })
 
   it('lands under StrictMode (double effects)', async () => {
     const m = mount(() => ({}), (el) => createElement(StrictMode, null, el))
-    await wait(120)
-    expect(m.last().layoutPending).toBe(false)
+    await landed(m)
     expect(m.last().layout).not.toBeNull()
     act(() => m.renderer.unmount())
   })
@@ -186,9 +201,24 @@ describe('useLayeredGraph asynchronous layout, rendered', () => {
     const errors = vi.spyOn(console, 'error').mockImplementation(() => {})
     const opts = { layout: { ...layout, nodeSize: () => { throw new Error('boom') } } }
     const m = mount(() => opts, (el) => createElement(Boundary, null, el))
-    await wait(80)
-    expect(m.renderer.toJSON()).toMatchObject({ type: 'span', children: ['failed: boom'] })
+    await until(() => expect(m.renderer.toJSON()).toMatchObject({ type: 'span', children: ['failed: boom'] }))
     errors.mockRestore()
     act(() => m.renderer.unmount())
+  })
+
+  it('warns in development when the layout options change on every render', async () => {
+    const env = process.env.NODE_ENV
+    process.env.NODE_ENV = 'development'
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    try {
+      const m = mount(() => ({ layout: { ...layout, nodeSize: () => ({ width: 60, height: 24 }) } }))
+      m.rerender()
+      m.rerender()
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('`layout` options change on every render'))
+      act(() => m.renderer.unmount())
+    } finally {
+      warn.mockRestore()
+      process.env.NODE_ENV = env
+    }
   })
 })

@@ -22,7 +22,7 @@ import type {
 
 // A stable default: a fresh `{}` per render would re-run the layout every render.
 const DEFAULT_LAYOUT_OPTIONS: LayerLayoutOptions = {}
-/** Node count from which the layout runs asynchronously by default (about 100 ms of solves). */
+/** The recommended `asyncLayoutMinNodes` (about 100 ms of solves). Async layout is opt-in. */
 export const ASYNC_LAYOUT_MIN_NODES = 200
 
 
@@ -35,11 +35,17 @@ export interface UseLayeredGraphOptions {
   /** In-layer layout options, or `false` to skip layout (views that don't need positions). Memoize it. */
   layout?: LayerLayoutOptions | false
   /**
-   * Node count from which the layout runs asynchronously (`layoutLayersAsync`). `layoutPending` is
-   * true while a run is in flight; `layout` is null until the first run lands (the views draw
-   * without positions meanwhile) and then keeps the last landed result while a newer run is
-   * pending. An index or `layout` rebuilt with the same content reuses the landed result. Default
-   * `ASYNC_LAYOUT_MIN_NODES` (200); `0` always, `false` never.
+   * Opt-in asynchronous layout (`layoutLayersAsync`) from this many nodes; `ASYNC_LAYOUT_MIN_NODES`
+   * (200) is the recommended value, `0` means always. Default `false`: synchronous, as before.
+   *
+   * When it runs, `layoutPending` is true while a run is in flight; `layout` is null until the
+   * first run lands (the views draw their fallbacks meanwhile) and then keeps the last landed
+   * result while a newer run is pending.
+   *
+   * Opting in requires memoized `nodes`, `edges`, `layering` and `layout` (including any `nodeSize`
+   * function). Without a custom `nodeSize`, an index rebuilt with the same content reuses the
+   * landed result (with a dev warning). Otherwise every new object restarts the run: a `layout`
+   * or `nodeSize` rebuilt on every render never lets it land (a dev warning names it).
    */
   asyncLayoutMinNodes?: number | false
 
@@ -164,7 +170,7 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const { nodes, edges, layering, layout: layoutOptions = DEFAULT_LAYOUT_OPTIONS, followCategories, linkStyles } = options
 
   const index = useMemo(() => buildLayeredIndex(nodes, edges, layering), [nodes, edges, layering])
-  const asyncMin = options.asyncLayoutMinNodes ?? ASYNC_LAYOUT_MIN_NODES
+  const asyncMin = options.asyncLayoutMinNodes ?? false
   const runAsync = layoutOptions !== false && asyncMin !== false && index.nodes.length >= asyncMin
   const syncLayout = useMemo(
     () => (layoutOptions === false || runAsync ? null : layoutLayers(index, layoutOptions)),

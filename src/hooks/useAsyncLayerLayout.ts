@@ -12,6 +12,9 @@ interface LayoutRequest {
 type Landed = { request: LayoutRequest } & ({ result: LayerLayoutResult } | { error: unknown })
 
 let warnedUnstableIndex = false
+let warnedUnstableOptions = false
+
+const isDev = () => typeof process !== 'undefined' && process.env.NODE_ENV === 'development'
 
 /**
  * `useLayeredGraph`'s asynchronous layout. A rebuilt index or options object equal by content to
@@ -25,22 +28,33 @@ export function useAsyncLayerLayout(
   enabled: boolean,
 ): { layout: LayerLayoutResult | null; pending: boolean } {
   const requestRef = useRef<LayoutRequest | null>(null)
+  /** Whether the previous render restarted the run for new options over the same index. */
+  const optionsRestartRef = useRef(false)
   let request = requestRef.current
   if (enabled) {
-    const reuse = request !== null && (request.index === index || request.key === layoutInputKey(index)) && sameLayoutOptions(request.options, options)
-    if (
-      reuse &&
-      request!.index !== index &&
-      !warnedUnstableIndex &&
-      typeof process !== 'undefined' &&
-      process.env.NODE_ENV === 'development'
-    ) {
+    const prev = request
+    const sameOptions = prev !== null && sameLayoutOptions(prev.options, options)
+    // The content key covers what the default node size reads; a custom `nodeSize` may read
+    // anything, so with one only the same index (by identity) reuses a result.
+    let key: string | null = null
+    const keyOf = () => (key ??= layoutInputKey(index))
+    const sameInput = prev !== null && (prev.index === index || (options.nodeSize === undefined && prev.key === keyOf()))
+    const reuse = sameOptions && sameInput
+    if (reuse && prev!.index !== index && !warnedUnstableIndex && isDev()) {
       warnedUnstableIndex = true
       console.warn(
         'useLayeredGraph: the layered index was rebuilt with the same content. Memoize `nodes`, `edges` and `layering` (useMemo) so large graphs are not re-indexed on every render.',
       )
     }
-    if (!reuse) request = { index, options, key: layoutInputKey(index) }
+    const optionsRestart = prev !== null && prev.index === index && !sameOptions
+    if (optionsRestart && optionsRestartRef.current && !warnedUnstableOptions && isDev()) {
+      warnedUnstableOptions = true
+      console.warn(
+        'useLayeredGraph: the `layout` options change on every render, which restarts the asynchronous layout each time. Memoize `layout` (useMemo) and any `nodeSize` function (useCallback).',
+      )
+    }
+    optionsRestartRef.current = optionsRestart
+    if (!reuse) request = { index, options, key: keyOf() }
     requestRef.current = request
   }
 
