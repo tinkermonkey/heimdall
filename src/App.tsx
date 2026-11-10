@@ -47,6 +47,7 @@ import LineageRailTestPage from './test-pages/LineageRailTestPage'
 import DiffViewerTestPage from './test-pages/DiffViewerTestPage'
 import VersionTimelineTestPage from './test-pages/VersionTimelineTestPage'
 import TraceViewerTestPage from './test-pages/TraceViewerTestPage'
+import SemanticTokensTestPage from './test-pages/SemanticTokensTestPage'
 import UxNavigationTestPage from './test-pages/UxNavigationTestPage'
 import RadialTreeTestPage from './test-pages/RadialTreeTestPage'
 import LineChartDataToggleTestPage from './test-pages/LineChartDataToggleTestPage'
@@ -253,6 +254,10 @@ export default function App() {
 
   if (exampleParam === 'trace-viewer') {
     return <TraceViewerTestPage />
+  }
+
+  if (exampleParam === 'semantic-tokens') {
+    return <SemanticTokensTestPage />
   }
 
   if (exampleParam === 'ux-navigation') {

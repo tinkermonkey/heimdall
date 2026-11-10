@@ -276,3 +276,5 @@ body.dark-canvas .my-component {
 ```
 
 Components that use only `--canvas-*` variables often need no override — the variable values change automatically. Only hardcoded hex colors, pastel light-mode tints (`.chip.cyan`, `.chip.emerald`, etc.), and hover `box-shadow` values need explicit dark overrides.
+
+The `--semantic-{cyan,amber,violet,emerald,rose,neutral,id-tag}-{fg,bg,border}`, `--semantic-version-fg` and `--status-{ok,warn,error}-{bg,fg}` tokens also flip under `body.dark-canvas` (deep tint bg, light -300 fg, mid-tone border), so `rgb(var(--semantic-…))` consumers need no override. Any new canvas-facing color token in `:root` must get a matching `body.dark-canvas` value. For a color that must stay the same in both modes (a gradient stop, a filled danger button), use a non-flipping token such as `--status-*-deep` or `--status-error-solid` rather than a `-fg` token.

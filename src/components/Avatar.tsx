@@ -26,11 +26,11 @@ function getInitials(name: string): string {
 
 const COLOR_GRADIENTS: Record<StatusColor, string> = {
   amber: 'linear-gradient(135deg, rgb(var(--accent-primary)), rgb(var(--accent-primary-deep)))',
-  emerald: 'linear-gradient(135deg, rgb(var(--status-emerald)), rgb(var(--semantic-emerald-fg)))',
+  emerald: 'linear-gradient(135deg, rgb(var(--status-emerald)), rgb(var(--status-emerald-deep)))',
   rose: 'linear-gradient(135deg, rgb(var(--status-rose)), rgb(var(--status-rose-deep)))',
   cyan: 'linear-gradient(135deg, rgb(var(--status-cyan)), rgb(var(--status-cyan-deep)))',
-  violet: 'linear-gradient(135deg, rgb(var(--status-violet)), rgb(var(--semantic-violet-fg)))',
-  neutral: 'linear-gradient(135deg, rgb(var(--status-neutral)), rgb(var(--semantic-neutral-fg)))',
+  violet: 'linear-gradient(135deg, rgb(var(--status-violet)), rgb(var(--status-violet-deep)))',
+  neutral: 'linear-gradient(135deg, rgb(var(--status-neutral)), rgb(var(--status-neutral-deep)))',
 }
 
 const COLOR_KEYS = Object.keys(COLOR_GRADIENTS) as StatusColor[]

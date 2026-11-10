@@ -46,15 +46,19 @@
     --status-error-bg: 254 226 226;
     --status-error-fg: 185 28 28;
     --status-error: 239 68 68;
+    --status-error-solid: 185 28 28;   /* #b91c1c — filled danger surfaces; same in both canvas modes */
     --status-cyan: 34 211 238;
     --status-cyan-deep: 14 180 160;
     --status-emerald: 16 185 129;
+    --status-emerald-deep: 6 95 70;     /* #065f46 — emerald-800; gradient stop, same in both canvas modes */
     --status-amber: 245 158 11;
     --status-rose: 244 63 94;
     --status-rose-deep: 159 18 57;
     --status-rose-pressed: 120 10 40;
     --status-violet: 139 92 246;
+    --status-violet-deep: 91 33 182;    /* #5b21b6 — violet-800; gradient stop, same in both canvas modes */
     --status-neutral: 107 114 128;
+    --status-neutral-deep: 71 85 105;   /* #475569 — slate-600; gradient stop, same in both canvas modes */
 
     /* ---- Semantic Color Variants (light backgrounds, borders, text) ---- */
     /* Cyan */
@@ -286,6 +290,48 @@
     --canvas-border: 36 55 99;      /* #243763 */
     --canvas-border-2: 42 58 92;    /* #2a3a5c — secondary border */
     --canvas-border-strong: 53 73 115; /* #354973 */
+
+    /* ---- Status tints (dark canvas) ----
+       bg = 16% of the status hue over --canvas-bg, border = 35%, fg = the -300 shade.
+       Contrast (fg on bg): ok 10.1:1, warn 10.5:1, error 8.4:1. */
+    --status-ok-bg: 15 48 47;
+    --status-ok-fg: 134 239 172;       /* #86efac — green-300 */
+    --status-warn-bg: 47 45 33;
+    --status-warn-fg: 253 224 71;      /* #fde047 — yellow-300 */
+    --status-error-bg: 47 28 43;
+    --status-error-fg: 252 165 165;    /* #fca5a5 — red-300 */
+
+    /* ---- Semantic color variants (dark canvas: deep tint bg, light tint fg, mid-tone border) ----
+       Same recipe as the status tints. Contrast (fg on bg) noted per hue. */
+    --semantic-cyan-fg: 103 232 249;      /* #67e8f9 — cyan-300, 9.2:1 */
+    --semantic-cyan-bg: 15 51 70;
+    --semantic-cyan-border: 19 87 108;
+
+    --semantic-amber-fg: 252 211 77;      /* #fcd34d — amber-300, 9.8:1 */
+    --semantic-amber-bg: 48 42 34;
+    --semantic-amber-border: 93 68 29;
+
+    --semantic-violet-fg: 196 181 253;    /* #c4b5fd — violet-300, 8.4:1 */
+    --semantic-violet-bg: 31 32 71;
+    --semantic-violet-border: 56 45 111;
+
+    --semantic-emerald-fg: 110 231 183;   /* #6ee7b7 — emerald-300, 9.5:1 */
+    --semantic-emerald-bg: 12 46 53;
+    --semantic-emerald-border: 13 78 70;
+
+    --semantic-rose-fg: 253 164 175;      /* #fda4af — rose-300, 8.4:1 */
+    --semantic-rose-bg: 48 27 47;
+    --semantic-rose-border: 93 35 58;
+
+    --semantic-neutral-fg: 203 213 225;   /* #cbd5e1 — slate-300, 9.9:1 */
+    --semantic-neutral-bg: 30 41 59;      /* #1e293b — slate-800 */
+    --semantic-neutral-border: 51 65 85;  /* #334155 — slate-700 */
+
+    --semantic-id-tag-fg: 148 163 184;    /* #94a3b8 — slate-400, 5.7:1 */
+    --semantic-id-tag-bg: 30 41 59;       /* #1e293b — slate-800 */
+    --semantic-id-tag-border: 51 65 85;   /* #334155 — slate-700 */
+
+    --semantic-version-fg: 251 191 36;    /* #fbbf24 — amber-400 (accent-primary), 9.9:1 on its alpha tint */
 
     /* ---- Layered graph views (dark canvas: lighter as hops deepen) ---- */
     --graph-hop-1: 251 191 36;          /* #fbbf24 — amber-400 */
