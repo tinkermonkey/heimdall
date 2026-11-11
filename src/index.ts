@@ -162,7 +162,7 @@ export { GraphEdge, type GraphEdgeProps } from './components/GraphEdge'
 export { GraphEdgeShape, type GraphEdgeShapeProps } from './components/GraphEdgeShape'
 export { GraphToolbar, type GraphToolbarProps, type GraphToolbarPosition } from './components/GraphToolbar'
 export { GraphCollapseControl, type GraphCollapseControlProps } from './components/GraphCollapseControl'
-export { AdjacencyMatrix, type AdjacencyMatrixProps } from './components/AdjacencyMatrix'
+export { AdjacencyMatrix, type AdjacencyMatrixProps, type LayerMatrixCell } from './components/AdjacencyMatrix'
 export { HivePlot, type HivePlotProps, type HivePlotInteractions } from './components/HivePlot'
 export {
   LayerStack,

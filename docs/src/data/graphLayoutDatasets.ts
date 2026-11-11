@@ -341,7 +341,7 @@ export const LAYOUT_INFO: Record<LayoutKey, LayoutInfo> = {
   galaxy: {
     label: 'Galaxy',
     summary: 'Weighted hierarchy as orbits: body area grows with weight, children orbit their parent heaviest first, nothing overlaps.',
-    caveat: 'Needs structural edges; relational edges can cross bodies. Without a weight, size comes from subtree leaf counts.',
+    caveat: 'Needs structural edges; relational edges can cross bodies. Without a weight, size comes from subtree leaf counts. Orbits stay evenly spaced, so a parent with many satellites or one dominant branch comes out elongated rather than round (up to about 8:1 on large taxonomies).',
     recommended: 'budget',
   },
   organic: {

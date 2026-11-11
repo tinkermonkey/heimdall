@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AdjacencyMatrix } from '../components/AdjacencyMatrix'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
@@ -7,14 +7,17 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 
 // AdjacencyMatrix on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=adjacency-matrix&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&dark=1
+//   &symmetric=1&aggregate=layer&report=1 (report: onLinkSelect / onLayerCellSelect write to a status line)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
+const REPORT = params.get('report') === '1'
 
 export default function AdjacencyMatrixTestPage() {
   useEffect(() => {
     document.body.classList.toggle('dark-canvas', params.get('dark') === '1')
     return () => document.body.classList.remove('dark-canvas')
   }, [])
+  const [report, setReport] = useState('none')
 
   const layering = useMemo<BuildLayeredIndexOptions>(
     () => ({ layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
@@ -53,8 +56,15 @@ export default function AdjacencyMatrixTestPage() {
           <span data-testid="adjacency-matrix-selection" style={{ fontFamily: 'var(--font-mono)', color: 'rgb(var(--canvas-fg-3))' }}>
             {graph.selectedId ? `selected ${graph.selectedId} · reach ${graph.reach.hopOf.size - 1}` : 'no selection'}
           </span>
+          {REPORT && <span data-testid="adjacency-matrix-report" style={{ fontFamily: 'var(--font-mono)' }}>{report}</span>}
+          <span data-testid="adjacency-matrix-layer-state" style={{ fontFamily: 'var(--font-mono)', color: 'rgb(var(--canvas-fg-3))' }}>
+            {`pair ${graph.filters.layerPair ?? 'none'} · focus ${graph.focusedLayerId ?? 'none'}`}
+          </span>
         </div>
-        <AdjacencyMatrix data-testid="adjacency-matrix" />
+        <AdjacencyMatrix data-testid="adjacency-matrix" symmetric={params.get('symmetric') === '1'} aggregate={params.get('aggregate') === 'layer' ? 'layer' : 'none'}
+          onLinkSelect={REPORT ? (link, links) => setReport(`link ${link.sourceId} -> ${link.targetId} · ${links.length} in cell`) : undefined}
+          onLayerCellSelect={REPORT ? (c) => setReport(`layers ${c.rowLayerId} -> ${c.colLayerId} · ${c.linkCount} · pair ${c.pairKey ?? 'none'}`) : undefined}
+        />
       </div>
     </LayeredGraphContext.Provider>
   )
