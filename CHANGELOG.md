@@ -196,7 +196,14 @@ without React commits per frame, explorer snapshots for URL sync, and opt-in asy
   bulge so arrowheads no longer cover them; labels avoid loop ends, arrowheads, rings and dots,
   taking the clear side or dropping (the selection is always labeled); hovering never moves
   another label (tinkermonkey/heimdall#362, tinkermonkey/heimdall#366).
-- **TODO before tagging:** LayerStack plane titles on tall stacks (tinkermonkey/heimdall#376, branch fix/335-stack-title-fit) is not merged yet. Add it here under Fixed if it merges before tagging.
+- **`LayerStack` plane titles on tall stacks** stay inside the scene: a title column that runs off
+  the bottom moves up, and one taller than the scene closes up evenly over its height
+  (tinkermonkey/heimdall#335, tinkermonkey/heimdall#376). Before, the last titles of a 13-layer
+  stack fell outside the scene at docs width.
+- **Skill and JSDoc corrections** (tinkermonkey/heimdall#376): the explorer's matrix link panel
+  returns focus to the clicked cell, not the row header; the `linkFilter` control description
+  matches the code; `sanitizeLayeredGraphExplorerSnapshot` drops a `layerGap` above
+  `MAX_LAYER_GAP` (5000).
 
 ### Docs
 
