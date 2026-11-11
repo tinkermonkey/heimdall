@@ -849,9 +849,10 @@ export function laneNavIndex(layout: LaneLayout, layerOf: (id: string) => string
 /**
  * Where a keyboard move from `from` lands, or null when there's nowhere to go. Along a lane:
  * the neighbour in row order, or the lane's first or last node. Across lanes: the nearest
- * non-empty lane that way; in it, the linked node nearest along the lane (`linked`, usually
- * the node's cross-layer links), else the nearest node. Nearest compares the position along
- * the lane first, then across it. `posOf` gives live positions (a dragged node moves).
+ * non-empty lane that way; in it, the nearest linked node (`linked`, usually the node's
+ * cross-layer links), else the nearest node. Nearest prefers the row nearest across (in a
+ * wrapped lane, the row next to the gap), then the position along the lane. `posOf` gives live
+ * positions (a dragged node moves).
  */
 export function laneNavTarget(
   nav: LaneNavIndex,
@@ -886,7 +887,7 @@ export function laneNavTarget(
       if (!q) continue
       const a = along(q)
       const c = across(q)
-      if (a < bestA - 0.5 || (Math.abs(a - bestA) <= 0.5 && c < bestC)) [best, bestA, bestC] = [id, a, c]
+      if (c < bestC - 0.5 || (Math.abs(c - bestC) <= 0.5 && a < bestA)) [best, bestA, bestC] = [id, a, c]
     }
     return best
   }

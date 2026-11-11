@@ -597,6 +597,82 @@ test.describe('GraphCanvas layer-lanes', () => {
     expect((await fanned()).some((id) => id.includes(ORIGIN) && !id.includes(now))).toBe(false)
   })
 
+  test('keyboard: the hint is visually hidden (a 1px box) but names Space and Escape', async ({ page }) => {
+    await open(page)
+    const hint = page.locator('[id$="-lane-keys"]')
+    await expect(hint).toContainText('Enter or Space selects, Escape clears the selection')
+    const box = await hint.evaluate((el) => {
+      const r = el.getBoundingClientRect()
+      return { width: r.width, height: r.height, position: getComputedStyle(el).position }
+    })
+    expect(box).toEqual({ width: 1, height: 1, position: 'absolute' })
+  })
+
+  test('keyboard: Space selects; Shift+Tab comes back to the selection', async ({ page }) => {
+    await open(page)
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('Space')
+    await expect(status(page)).toContainText(`selected ${ORIGIN}`)
+    await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).toBeNull()
+    await page.keyboard.press('Shift+Tab')
+    expect(await focused(page)).not.toBeNull()
+    // Leaving and entering again from before the graph lands on the selection.
+    await page.getByTestId('layer-lanes').focus()
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).toBe(ORIGIN)
+  })
+
+  test('keyboard: Home and End in vertical lanes', async ({ page }) => {
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, '&orientation=vertical')
+    const app = await laneOrder(page, 'application', true)
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('End')
+    expect(await focused(page)).toBe(app[app.length - 1])
+    await page.keyboard.press('Home')
+    expect(await focused(page)).toBe(app[0])
+  })
+
+  test('keyboard: focus pans an off-screen node into view, without scrolling the canvas', async ({ page }) => {
+    await open(page)
+    const canvas = page.getByTestId('layer-lanes')
+    for (let i = 0; i < 5; i++) await page.getByRole('button', { name: 'Zoom in' }).click()
+    const inside = async () => {
+      const id = (await focused(page))!
+      const [n, c] = [(await page.locator(`.graph-nodes [data-node-id="${id}"] .graph-lane-node`).boundingBox())!, (await canvas.boundingBox())!]
+      return n.x >= c.x && n.y >= c.y && n.x + n.width <= c.x + c.width && n.y + n.height <= c.y + c.height
+    }
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('End')
+    await expect.poll(inside).toBe(true)
+    await page.keyboard.press('Home')
+    await expect.poll(inside).toBe(true)
+    await page.keyboard.press('ArrowUp')
+    await expect.poll(inside).toBe(true)
+    // Tab entry at an off-screen selection: panned into view, the canvas itself not scrolled.
+    await page.keyboard.press('Enter')
+    for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('Tab')
+    await page.getByRole('button', { name: 'Zoom to fit' }).click()
+    for (let i = 0; i < 5; i++) await page.getByRole('button', { name: 'Zoom in' }).click()
+    await canvas.focus()
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).not.toBeNull()
+    await expect.poll(inside).toBe(true)
+    expect(await canvas.evaluate((el) => [el.scrollLeft, el.scrollTop])).toEqual([0, 0])
+  })
+
+  test('keyboard: other layouts keep one Tab stop per node', async ({ page }) => {
+    await page.goto('/?example=layer-lanes&layout=force')
+    await page.waitForLoadState('networkidle')
+    const nodes = page.locator('.graph-nodes .graph-node')
+    await expect(nodes).toHaveCount(36)
+    await expect(page.locator('.graph-nodes .graph-node[tabindex="0"]')).toHaveCount(36)
+    await expect(page.locator('[id$="-lane-keys"]')).toHaveCount(0)
+  })
+
   test('visual: dark canvas with a followed selection', async ({ page }) => {
     await open(page, `&select=${ORIGIN}&dark=1`)
     await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-selection-dark.png')

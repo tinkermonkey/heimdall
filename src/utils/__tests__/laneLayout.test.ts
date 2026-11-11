@@ -528,17 +528,29 @@ describe('lane keyboard navigation', () => {
     expect(laneNavTarget(nav, app[2], 'first', posOf)).toBe(app[0])
   })
 
-  it('crosses lanes to the nearest linked node, else the nearest node', () => {
+  // Nearest: the row nearest across first (next to the gap, in a wrapped lane), then along it.
+  const rank = (from: string, id: string) => {
+    const [p, q] = [posOf(from)!, posOf(id)!]
+    return [Math.round(Math.abs(q.y - p.y)), Math.abs(q.x - p.x)]
+  }
+  const best = (from: string, ids: string[]) =>
+    ids.reduce((a, b) => {
+      const [ra, rb] = [rank(from, a), rank(from, b)]
+      return rb[0] < ra[0] || (rb[0] === ra[0] && rb[1] < ra[1]) ? b : a
+    })
+
+  it('crosses lanes to the nearest linked node, else the nearest node, preferring the row next to the gap', () => {
     const from = 'application.applicationcomponent'
     const down = laneNavTarget(nav, from, 'next-lane', posOf, linked)!
     expect(layerOf(down)).toBe('technology')
     expect(linked(from)).toContain(down)
-    const p = posOf(from)!
-    for (const id of linked(from).filter((id) => layerOf(id) === 'technology')) expect(Math.abs(posOf(id)!.x - p.x)).toBeGreaterThanOrEqual(Math.abs(posOf(down)!.x - p.x) - 0.5)
-    // No links: the node nearest along the lane.
+    expect(down).toBe(best(from, linked(from).filter((id) => layerOf(id) === 'technology')))
+    // No links: the nearest node, in the business lane's bottom row (the row next to the gap).
     const near = laneNavTarget(nav, from, 'prev-lane', posOf)!
-    const xs = nav.lanes[0].map((id) => Math.abs(posOf(id)!.x - p.x))
-    expect(Math.abs(posOf(near)!.x - p.x)).toBe(Math.min(...xs))
+    expect(near).toBe(best(from, nav.lanes[0]))
+    const rows = [...new Set(nav.lanes[0].map((id) => Math.round(posOf(id)!.y)))]
+    expect(rows.length).toBeGreaterThan(1)
+    expect(Math.round(posOf(near)!.y)).toBe(Math.max(...rows))
     expect(laneNavTarget(nav, nav.lanes[0][0], 'prev-lane', posOf)).toBeNull()
   })
 

@@ -603,7 +603,7 @@ export function LayerLanesShowcase() {
           The lane nodes are one Tab stop, entering at the selection (or the last focused node, or the first). Arrow keys follow the screen:
           in horizontal lanes Up and Down move to the linked node in the next lane (else the nearest one) and Left and Right move along the
           lane; in vertical lanes Left and Right cross lanes and Up and Down move along one. Home and End go to the lane&apos;s ends, Enter
-          or Space selects, Escape clears. Hiding the focused node&apos;s layer moves focus to the nearest remaining node.
+          or Space selects, Escape clears. A focused node is panned into view. Hiding the focused node&apos;s layer moves focus to the nearest remaining node.
         </Note>
       </ShowcaseSection>
 

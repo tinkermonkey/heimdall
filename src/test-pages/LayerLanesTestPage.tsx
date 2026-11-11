@@ -25,6 +25,10 @@ const ROW_WIDTH = params.has('rowWidth') ? Number(params.get('rowWidth')) : unde
 const SKIP_ROUTING = params.get('gutter') === '1' ? 'gutter' : 'direct'
 const EDGE_TOOLTIP = params.get('tooltip') === '1'
 const NO_DATA = params.get('nodata') === '1'
+// &layout=force: the same graph under layout="force", with node selection (other layouts keep a
+// Tab stop per node).
+const LAYOUT = params.get('layout') === 'force' ? 'force' : 'layer-lanes'
+const noop = () => {}
 // &render=1: a custom renderNode, which nodeLabels 'reached' leaves alone.
 const renderCustomNode = params.get('render') === '1' ? (node: GraphNodeData) => <div className="custom-lane-node" style={{ padding: '4px 8px', border: '1px solid rgb(var(--canvas-border-strong))', fontSize: 11 }}>{node.label}</div> : undefined
 
@@ -94,7 +98,8 @@ export default function LayerLanesTestPage() {
           <GraphCanvas
             data-testid="layer-lanes"
             {...(NO_DATA ? {} : { nodes: NODES, edges: EDGES })}
-            layout="layer-lanes"
+            layout={LAYOUT}
+            onNodeSelect={LAYOUT === 'force' ? noop : undefined}
             laneOptions={laneOptions}
             fitView
             fitPadding={24}

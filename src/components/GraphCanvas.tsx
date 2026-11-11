@@ -73,6 +73,7 @@ import { curveEndBoxes, laneBundleCurve, laneBundler, laneNavIndex, laneNavMove,
 import { containsAcrossPortals } from "../hooks/useDropdownPortal";
 import "./Tooltip.css";
 import "./GraphCanvas.css";
+import "../styles/utilities.css";
 import "./GraphEdge.css";
 
 export type {
@@ -3023,10 +3024,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // layout="layer-lanes" keyboard: arrow keys move between lane nodes (laneNavTarget), with one
     // Tab stop for them all (roving focus). Only the default lane node takes part.
     const laneKeys = lanesMode && !renderNode;
-    const laneNav = useMemo(
-      () => (laneKeys && laneLayout && lanesIndex ? laneNavIndex(laneLayout, (id) => lanesIndex.nodeById.get(id)?.layerId) : null),
-      [laneKeys, laneLayout, lanesIndex],
-    );
+    // Reading order from live positions, so a dragged node is read where it now sits.
+    const laneNav = useMemo(() => {
+      if (!laneKeys || !laneLayout || !lanesIndex) return null;
+      const positions = dragPositions.size
+        ? new Map([...laneLayout.positions].map(([id, p]) => [id, dragPositions.get(id) ?? p]))
+        : laneLayout.positions;
+      return laneNavIndex({ ...laneLayout, positions }, (id) => lanesIndex.nodeById.get(id)?.layerId);
+    }, [laneKeys, laneLayout, lanesIndex, dragPositions]);
     const laneLinked = useMemo(() => {
       if (!laneKeys || !laneData) return null;
       const m = new Map<string, string[]>();
@@ -3043,14 +3048,41 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const esc = typeof CSS !== "undefined" && CSS.escape ? CSS.escape(id) : id.replace(/["\\]/g, "\\$&");
       containerRef.current?.querySelector<HTMLElement>(`.graph-nodes [data-node-id="${esc}"] .graph-lane-node`)?.focus({ preventScroll: true });
     }, []);
+    // Brings a focused lane node into view: the smallest pan that puts its box inside the canvas,
+    // with a margin. Covers arrow moves, Tab entry and the hidden-layer hand-off. Not when locked.
+    const revealLaneNode = useCallback(
+      (id: string) => {
+        const container = containerRef.current;
+        if (!container) return;
+        // Tab focus scrolls the overflow-hidden canvas to show the node; undo that, pan instead.
+        if (container.scrollLeft || container.scrollTop) container.scrollTo(0, 0);
+        const p = dragPositions.get(id) ?? laneLayout?.positions.get(id);
+        if (locked || !p) return;
+        const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H };
+        const vp = getViewport();
+        const M = 24;
+        const left = vp.x + (p.x - d.width / 2) * vp.zoom;
+        const right = vp.x + (p.x + d.width / 2) * vp.zoom;
+        const top = vp.y + (p.y - d.height / 2) * vp.zoom;
+        const bottom = vp.y + (p.y + d.height / 2) * vp.zoom;
+        const shift = (lo: number, hi: number, size: number) => (lo < M ? M - lo : hi > size - M ? Math.max(M - lo, size - M - hi) : 0);
+        const dx = shift(left, right, container.clientWidth);
+        const dy = shift(top, bottom, container.clientHeight);
+        if (!dx && !dy) return;
+        panTo(vp.x + dx, vp.y + dy);
+        afterProgrammaticMove(null);
+      },
+      [dragPositions, laneLayout, locked, dims, getViewport, panTo, afterProgrammaticMove],
+    );
     const onLaneFocusChange = useCallback(
       (id: string | null) => {
         setLaneFocusId(id);
         if (!id) return;
         setLaneLastFocusId(id);
-        laneFocusPosRef.current = laneLayout?.positions.get(id) ?? null;
+        laneFocusPosRef.current = dragPositions.get(id) ?? laneLayout?.positions.get(id) ?? null;
+        revealLaneNode(id);
       },
-      [laneLayout],
+      [laneLayout, dragPositions, revealLaneNode],
     );
     const handleLaneNavigate = useCallback(
       (id: string, key: string) => {
@@ -3974,17 +4006,18 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         role={bind.role}
         {...props}
       >
+        {/* layout="layer-lanes": the keyboard hint each lane node's aria-describedby points at. */}
+        {lanesMode && !renderNode && (
+          <div id={laneHintId} className="heimdall-visually-hidden">
+            {laneLayout?.orientation === "vertical"
+              ? "Left and Right arrows move to the linked node in the next lane, Up and Down move within the lane, Home and End go to its ends. Enter or Space selects, Escape clears the selection."
+              : "Up and Down arrows move to the linked node in the next lane, Left and Right move within the lane, Home and End go to its ends. Enter or Space selects, Escape clears the selection."}
+          </div>
+        )}
         {/* Hidden off-screen div — renders node HTML at natural size for measurement. Deliberately
             OUTSIDE the context provider below: useGraphCanvas() being unavailable here is how a
             custom renderNode (e.g. one embedding viewport controls) can tell this measurement
             pass apart from the real one and opt out of rendering anything for it. */}
-        {lanesMode && !renderNode && (
-          <div id={laneHintId} className="sr-only">
-            {laneLayout?.orientation === "vertical"
-              ? "Left and Right arrows move to the linked node in the next lane, Up and Down move within the lane, Home and End go to its ends, Enter selects."
-              : "Up and Down arrows move to the linked node in the next lane, Left and Right move within the lane, Home and End go to its ends, Enter selects."}
-          </div>
-        )}
         <div className="graph-measure" aria-hidden="true">
           {/* Fixed 100px wide: its on-screen width gives any scale a host ancestor applies. */}
           <div ref={measureProbeRef} className="graph-measure__probe" />
