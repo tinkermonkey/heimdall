@@ -57,6 +57,18 @@ export const DEFAULT_CAMERA_DISTANCE = 1600
 /** Above this pitch the planes overlap on screen, and plane titles move to a side rail. */
 export const TOP_VIEW_PITCH = 1.2
 
+/** Up to this many layers a preset keeps its own gap; a taller stack closes up to the same height. */
+export const PRESET_GAP_FULL_LAYERS = 5
+
+/**
+ * A preset's layer gap for a stack of `layerCount` layers: the preset's own (`CAMERA_PRESETS`) up
+ * to `PRESET_GAP_FULL_LAYERS` layers, and closer together beyond, so the stack keeps the height of
+ * five layers and a 13-layer stack still frames.
+ */
+export function presetLayerGap(name: CameraPresetName, layerCount: number): number {
+  return CAMERA_PRESETS[name].layerGap * Math.min(1, (PRESET_GAP_FULL_LAYERS - 1) / Math.max(1, layerCount - 1))
+}
+
 export function cameraFromPreset(name: CameraPresetName): StackCamera {
   const p = CAMERA_PRESETS[name]
   return { yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: 0 }

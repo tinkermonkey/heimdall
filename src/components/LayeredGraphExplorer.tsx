@@ -24,7 +24,7 @@ import {
   type LayeredGraphState,
   type UseLayeredGraphOptions,
 } from '../hooks/useLayeredGraph'
-import { CAMERA_PRESET_NAMES, CAMERA_PRESETS, cameraFromPreset, clampCamera, type CameraPresetName, type StackCamera } from '../utils/layered/projection'
+import { CAMERA_PRESET_NAMES, cameraFromPreset, presetLayerGap, clampCamera, type CameraPresetName, type StackCamera } from '../utils/layered/projection'
 import { sanitizeLayeredGraphSnapshot } from '../utils/layered/snapshot'
 import type { BuildLayeredIndexOptions, LayeredGraphSnapshot } from '../utils/layered/types'
 import './LayeredGraphControls.css'
@@ -431,16 +431,16 @@ const near = (a: number, b: number) => Math.abs(a - b) < 1e-6
  * preset's own. Memory that names a preset but holds another camera or gap (a `stackProps`
  * override, or a snapshot with both) keeps the camera and gap and drops the preset.
  */
-function withPresetInvariant(m: StackMemory): StackMemory {
+function withPresetInvariant(m: StackMemory, layerCount: number): StackMemory {
   if (!m.preset) return m
   const p = cameraFromPreset(m.preset)
-  const matches = near(m.gap, CAMERA_PRESETS[m.preset].layerGap) && CAMERA_FIELDS.every((k) => near(m.camera[k], p[k]))
+  const matches = near(m.gap, presetLayerGap(m.preset, layerCount)) && CAMERA_FIELDS.every((k) => near(m.camera[k], p[k]))
   return matches ? m : { ...m, preset: null }
 }
 
 /** The memory after a preset is picked: the preset's camera and gap, written at once (the stack tweens to them). */
-function presetMemory(m: StackMemory, preset: CameraPresetName): StackMemory {
-  return { ...m, preset, camera: cameraFromPreset(preset), gap: CAMERA_PRESETS[preset].layerGap }
+function presetMemory(m: StackMemory, preset: CameraPresetName, layerCount: number): StackMemory {
+  return { ...m, preset, camera: cameraFromPreset(preset), gap: presetLayerGap(preset, layerCount) }
 }
 
 /**
@@ -449,14 +449,17 @@ function presetMemory(m: StackMemory, preset: CameraPresetName): StackMemory {
  * gap other than the preset's drops the preset (`withPresetInvariant`). A restored camera stops the
  * turntable, which would otherwise move it at once.
  */
-function withCamera(m: StackMemory, s: Partial<LayeredGraphExplorerCamera>): StackMemory {
-  const base = s.preset ? presetMemory(m, s.preset) : s.preset === null ? { ...m, preset: null } : m
-  return withPresetInvariant({
+function withCamera(m: StackMemory, s: Partial<LayeredGraphExplorerCamera>, layerCount: number): StackMemory {
+  const base = s.preset ? presetMemory(m, s.preset, layerCount) : s.preset === null ? { ...m, preset: null } : m
+  return withPresetInvariant(
+    {
     preset: base.preset,
     camera: clampCamera({ ...base.camera, ...s.camera }),
     gap: s.layerGap ?? base.gap,
     turntable: false,
-  })
+    },
+    layerCount,
+  )
 }
 function sameStackMemory(a: StackMemory, b: StackMemory): boolean {
   return a.preset === b.preset && near(a.gap, b.gap) && a.turntable === b.turntable && CAMERA_FIELDS.every((k) => near(a.camera[k], b.camera[k]))
@@ -562,15 +565,19 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
 
     // ── 3D camera, remembered across view switches ────────────────────────
     const stackRef = useRef<LayerStackHandle | null>(null)
+    // Preset gaps close up on tall stacks (`presetLayerGap`), so the memory needs the layer count.
+    const layerCount = g.index.layers.length
+    const layerCountRef = useRef(layerCount)
+    layerCountRef.current = layerCount
     const [stackMem, setStackMem] = useState<StackMemory>(() => {
       const preset = stackProps?.cameraPreset ?? stackProps?.defaultCameraPreset ?? 'stack'
       const initial: StackMemory = {
         camera: { ...cameraFromPreset(preset ?? 'stack'), ...stackProps?.defaultCamera },
         preset,
-        gap: stackProps?.layerGap ?? stackProps?.defaultLayerGap ?? CAMERA_PRESETS[preset ?? 'stack'].layerGap,
+        gap: stackProps?.layerGap ?? stackProps?.defaultLayerGap ?? presetLayerGap(preset ?? 'stack', layerCount),
         turntable: stackProps?.turntable ?? stackProps?.defaultTurntable ?? false,
       }
-      return initialSnapshot.stack ? withCamera(initial, initialSnapshot.stack) : withPresetInvariant(initial)
+      return initialSnapshot.stack ? withCamera(initial, initialSnapshot.stack, layerCount) : withPresetInvariant(initial, layerCount)
     })
     const stackMemRef = useRef(stackMem)
     stackMemRef.current = stackMem
@@ -645,7 +652,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
         if (s.nodeLabels !== undefined) setNodeLabels(s.nodeLabels)
         let stackChanged = false
         if (s.stack) {
-          const next = withCamera(stackMemRef.current, s.stack)
+          const next = withCamera(stackMemRef.current, s.stack, layerCountRef.current)
           stackChanged = !sameStackMemory(next, stackMemRef.current)
           if (stackChanged) {
             stackMemRef.current = next
@@ -690,7 +697,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           turntable={stackMem.turntable}
           onCameraPresetChange={(preset) => {
             if (epoch !== stackEpochRef.current) return
-            setStackMem((m) => (preset ? presetMemory(m, preset) : { ...m, preset: null }))
+            setStackMem((m) => (preset ? presetMemory(m, preset, layerCountRef.current) : { ...m, preset: null }))
             stackProps?.onCameraPresetChange?.(preset)
           }}
           onTurntableChange={(on) => {

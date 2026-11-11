@@ -6,11 +6,13 @@ import { useTweenChannels } from '../hooks/useTween'
 import { lineCurve, placeEdgeLabels, edgeLabelPriority, type EdgeLabelCandidate, type LabelBox } from '../utils/layered/edgeLabels'
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
 import { mixLayerPositions } from '../utils/layered/layout'
+import { reorder } from '../utils/layered/domOrder'
 import { visiblePredicates } from '../utils/layered/filters'
 import {
   CAMERA_PRESETS,
   TOP_VIEW_PITCH,
   cameraFromPreset,
+  presetLayerGap,
   clampCamera,
   createProjector,
   depthSort,
@@ -131,7 +133,7 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
    * Pass the reported gap back unchanged, as with `camera`.
    */
   layerGap?: number
-  /** Initial gap when uncontrolled. Default: the initial preset's (170 for `stack`). */
+  /** Initial gap when uncontrolled. Default: the initial preset's (170 for `stack`), closer past five layers (`presetLayerGap`). */
   defaultLayerGap?: number
   /** Called when a preset's gap move ends; with `layerGap` set, also on every frame of it. */
   onLayerGapChange?: (gap: number) => void
@@ -226,6 +228,11 @@ function remember<T>(list: T[], value: T) {
   if (list.length > RECENT_PROPOSALS) list.shift()
 }
 
+/** The view fields that move the picture, as one comparable string. */
+function viewKey(v: ViewState): string {
+  return [v.yaw, v.pitch, v.zoom, v.targetY, v.gap, v.mix, ...Object.entries(v.focus).flat()].join('|')
+}
+
 function capturePointer(el: Element, id: number) {
   try {
     el.setPointerCapture?.(id)
@@ -283,48 +290,6 @@ function collectElements(root: HTMLElement): SceneElements | null {
     drillColumn: group('layer-stack__drill-column'),
     drillRings: byAttr('.layer-stack__drill-ring', 'data-layer-id'),
   }
-}
-
-/**
- * Puts the elements in `ids` order (painter's order) inside `parent`, moving as few as possible:
- * the longest run already in order stays, the rest are inserted around it. Skipped when the
- * order is unchanged since the last call.
- */
-function reorder(parent: Element, els: ReadonlyMap<string, Element>, ids: readonly string[], last: Record<string, string>, key: string) {
-  const sig = ids.join('\n')
-  if (last[key] === sig) return
-  last[key] = sig
-  const want = ids.map((id) => els.get(id)).filter((el): el is Element => el !== undefined && el.parentNode === parent)
-  const pos = new Map<Element, number>()
-  Array.from(parent.children).forEach((el, i) => pos.set(el, i))
-  const keep = new Set(longestIncreasing(want.map((el) => pos.get(el)!)).map((i) => want[i]))
-  // Backwards: each moved element goes right before the one that follows it in the wanted order.
-  let next: Element | null = null
-  for (let i = want.length - 1; i >= 0; i--) {
-    const el = want[i]
-    if (!keep.has(el)) parent.insertBefore(el, next)
-    next = el
-  }
-}
-
-/** Indices of a longest strictly increasing subsequence of `seq` (patience sorting, O(n log n)). */
-export function longestIncreasing(seq: readonly number[]): number[] {
-  const tails: number[] = []
-  const prev: number[] = new Array(seq.length)
-  for (let i = 0; i < seq.length; i++) {
-    let lo = 0
-    let hi = tails.length
-    while (lo < hi) {
-      const mid = (lo + hi) >> 1
-      if (seq[tails[mid]] < seq[i]) lo = mid + 1
-      else hi = mid
-    }
-    prev[i] = lo > 0 ? tails[lo - 1] : -1
-    tails[lo] = i
-  }
-  const out: number[] = []
-  for (let k = tails.length ? tails[tails.length - 1] : -1; k >= 0; k = prev[k]) out.push(k)
-  return out.reverse()
 }
 
 function setAttr(el: Element, name: string, value: string) {
@@ -418,7 +383,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       view.current = {
         ...base,
         ...(focused ? { pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM } : null),
-        gap: layerGap ?? defaultLayerGap ?? CAMERA_PRESETS[cameraPreset ?? defaultCameraPreset].layerGap,
+        gap: layerGap ?? defaultLayerGap ?? presetLayerGap(cameraPreset ?? defaultCameraPreset, index.layers.length),
         mix: planeLayout === 'coupled' ? 1 : 0,
         focus: focused ? { [focusedLayerId]: 1 } : {},
       }
@@ -452,6 +417,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [])
     useEffect(() => () => {
       if (pendingRaf.current !== null) cancelAnimationFrame(pendingRaf.current)
+      pendingRaf.current = null
     }, [])
 
     const onCameraChangeRef = useRef(onCameraChange)
@@ -490,11 +456,14 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [])
     /** A new gesture starts without a proposal, so its settle report never repeats an older one. */
     const zoomEmitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+    /** A wheel zoom is under way (until its 160 ms settle); pills stay hidden meanwhile. */
+    const wheeling = useRef(false)
     const startGesture = () => {
       // A wheel zoom still waiting to settle settles now, before this gesture's proposals.
       if (zoomEmitTimer.current) {
         clearTimeout(zoomEmitTimer.current)
         zoomEmitTimer.current = null
+        wheeling.current = false
         emitCamera('zoom')
       }
       proposed.current.camera = null
@@ -621,6 +590,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     const applyPreset = useCallback(
       (name: CameraPresetName, opts: LayerStackMoveOptions = {}) => {
         const p = CAMERA_PRESETS[name]
+        const gap = presetLayerGap(name, index.layers.length)
         appliedPresetRef.current = name
         if (presetRef.current !== name) setPreset(name)
         if (focusedLayerId != null) {
@@ -630,10 +600,10 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         setTurntableRef.current(false)
         const duration = opts.animate === false ? 0 : CAMERA_MS
         movePlaneFocus(null, duration)
-        tween.start({ gap: view.current!.gap }, { gap: p.layerGap }, { duration, onDone: () => onLayerGapChangeRef.current?.(p.layerGap) })
+        tween.start({ gap: view.current!.gap }, { gap }, { duration, onDone: () => onLayerGapChangeRef.current?.(gap) })
         moveView({ yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: 0 }, 'preset', { animate: opts.animate })
       },
-      [focusedLayerId, g, moveView, movePlaneFocus, tween, setPreset],
+      [focusedLayerId, g, index, moveView, movePlaneFocus, tween, setPreset],
     )
     // Only a change of the prop applies a preset (not a re-render with the same value).
     const prevPresetProp = useRef(cameraPreset)
@@ -828,10 +798,13 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         const v = view.current!
         v.zoom = clampCamera({ ...cameraOf(v), zoom: v.zoom * Math.exp(-e.deltaY * 0.0015) }).zoom
         proposeCamera('zoom')
+        wheeling.current = true
         repaint()
         if (zoomEmitTimer.current) clearTimeout(zoomEmitTimer.current)
         zoomEmitTimer.current = setTimeout(() => {
           zoomEmitTimer.current = null
+          wheeling.current = false
+          repaint() // places the pills again
           emitCamera('zoom')
         }, 160)
       }
@@ -1030,7 +1003,6 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       }
     }
     const projectRef = useRef(project)
-    projectRef.current = project
     const selNode = selectedId != null ? index.nodeById.get(selectedId) : undefined
     const scene = project()
     const planeOpacity = (layerId: string) => (focusedLayerId && layerId !== focusedLayerId ? 0.2 : 1)
@@ -1039,10 +1011,14 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     // once motion settles; placing them is far too costly per frame, and they would jump.
     const spinningRef = useRef(spinning)
     spinningRef.current = spinning
-    const isMoving = useCallback(() => dragging.current || pinch.current !== null || spinningRef.current || tween.isActive(), [tween])
+    const isMoving = useCallback(
+      () => dragging.current || pinch.current !== null || wheeling.current || spinningRef.current || tween.isActive(),
+      [tween],
+    )
     const moving = isMoving()
+    /** Motion and view as of the last commit: pills are placed for that view. */
     const renderedMoving = useRef(moving)
-    renderedMoving.current = moving
+    const renderedView = useRef('')
     const pills = (() => {
       if (moving || scene.candidates.length === 0) return []
       const { P, radius, candidates } = scene
@@ -1065,8 +1041,10 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       const e = els.current
       if (!e) return
       applyHeld()
-      // Motion starting or settling re-renders once: pills hide, then are placed again.
-      if (isMoving() !== renderedMoving.current) repaintNow()
+      // Motion starting or settling re-renders once: pills hide, then are placed again. So does a
+      // view that changed without motion (a jump: reduced motion, `animate: false`, a held prop).
+      const nowMoving = isMoving()
+      if (nowMoving !== renderedMoving.current || (!nowMoving && viewKey(view.current!) !== renderedView.current)) repaintNow()
       const s = projectRef.current()
       reorder(e.planeGroup, e.planes, s.planes.map((p) => p.layer.id), order.current, 'planes')
       for (const p of s.planes) {
@@ -1126,11 +1104,17 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         el.classList.toggle('layer-stack__title--rail', s.topView)
       }
     }, [applyHeld, isMoving, repaintNow])
-    paintRef.current = paint
     const pcxRef = useRef(pcx)
-    pcxRef.current = pcx
     const pcyRef = useRef(pcy)
-    pcyRef.current = pcy
+    // What a frame reads, as of this commit (before the paint below).
+    useLayoutEffect(() => {
+      projectRef.current = project
+      paintRef.current = paint
+      pcxRef.current = pcx
+      pcyRef.current = pcy
+      renderedMoving.current = moving
+      renderedView.current = viewKey(view.current!)
+    })
     // After every commit: find the elements React rendered, then draw them.
     useLayoutEffect(() => {
       els.current = stageRef.current ? collectElements(stageRef.current) : null
@@ -1324,6 +1308,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           {pills.map((pl) => (
             <span
               key={pl.id}
+              data-link-id={pl.id}
               className="layer-stack__pill"
               style={{
                 left: `${pcx(pl.x)}%`,

@@ -18,6 +18,7 @@
 //                                           [--layers business,application,technology] [--full]
 // --spec defaults to ../documentation_robotics/spec next to the repo root.
 
+import { existsSync } from 'node:fs'
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -31,6 +32,11 @@ const specDir = path.resolve(arg('--spec', path.join(ROOT, '..', 'documentation_
 const layers = arg('--layers', 'business,application,technology').split(',')
 const modelDir = path.join(ROOT, 'documentation-robotics', 'model')
 const OUT = path.join(ROOT, 'src', 'test-pages', 'fixtures', 'layeredGraphFixtures.ts')
+
+if (!existsSync(path.join(specDir, 'dist', 'base.json'))) {
+  console.error(`No DR spec at ${specDir} (expected dist/base.json). Pass --spec <documentation_robotics/spec dir>.`)
+  process.exit(1)
+}
 
 const readJson = async (p) => JSON.parse(await readFile(p, 'utf8'))
 const firstSentence = (s = '', max = 170) => {
@@ -52,6 +58,7 @@ const categoryOf = Object.fromEntries(Object.entries(base.predicates).map(([p, v
 
 // ---- --full: every layer of the spec, compact
 if (process.argv.includes('--full')) {
+  if (process.argv.includes('--layers')) console.warn('--full takes every layer in the spec manifest; --layers is ignored.')
   const manifest = await readJson(path.join(specDir, 'dist', 'manifest.json'))
   const fullLayers = manifest.layers.map((l) => ({ id: l.id, label: l.name.replace(/ Layer$/, '') }))
   const nodes = [] // [layer index, type, title]
@@ -65,6 +72,7 @@ if (process.argv.includes('--full')) {
   }
   const predicates = []
   const edges = [] // [source index, target index, predicate index]
+  let dropped = 0
   for (const l of fullLayers) {
     const dist = await readJson(path.join(specDir, 'dist', `${l.id}.json`))
     for (const rel of Object.values(dist.relationshipSchemas)) {
@@ -72,7 +80,10 @@ if (process.argv.includes('--full')) {
       const s = index.get(p.source_spec_node_id?.const ?? rel.source_spec_node_id)
       const t = index.get(p.destination_spec_node_id?.const ?? rel.destination_spec_node_id)
       const predicate = p.predicate?.const ?? rel.predicate
-      if (s === undefined || t === undefined) continue
+      if (s === undefined || t === undefined) {
+        dropped++
+        continue
+      }
       if (!predicates.includes(predicate)) predicates.push(predicate)
       edges.push([s, t, predicates.indexOf(predicate)])
     }
@@ -116,6 +127,7 @@ export const drFullEdges: GraphEdge[] = E.map(([s, t, p], i) => ({
 `,
   )
   console.log(`wrote ${path.relative(ROOT, FULL_OUT)}: ${fullLayers.length} layers, ${nodes.length} nodes / ${edges.length} edges`)
+  if (dropped > 0) console.warn(`dropped ${dropped} relationship schemas whose source or destination node type is not in the spec`)
   process.exit(0)
 }
 

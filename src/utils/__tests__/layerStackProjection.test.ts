@@ -12,6 +12,7 @@ import {
   leftmostPoint,
   lerpCamera,
   nearestYaw,
+  presetLayerGap,
   planeCorners,
   planeGridLines,
   ringPoints,
@@ -126,6 +127,13 @@ describe('stack geometry', () => {
     const start = [{ rank: 0, amount: 1 }, { rank: 2, amount: 0 }]
     expect([0, 1, 2].map((r) => stackPlaneY(r, 3, 170, start, 150))).toEqual([0, 1, 2].map((r) => stackPlaneY(r, 3, 170, { rank: 0, amount: 1 }, 150)))
     expect(stackPlaneY(1, 3, 170, [], 150)).toBe(0)
+  })
+
+  it('presetLayerGap keeps the preset gap up to five layers and the five-layer height beyond', () => {
+    expect(presetLayerGap('stack', 3)).toBe(CAMERA_PRESETS.stack.layerGap)
+    expect(presetLayerGap('exploded', 5)).toBe(CAMERA_PRESETS.exploded.layerGap)
+    expect(presetLayerGap('stack', 13) * 12).toBeCloseTo(CAMERA_PRESETS.stack.layerGap * 4)
+    expect(presetLayerGap('top', 1)).toBe(CAMERA_PRESETS.top.layerGap)
   })
 
   it('planes share one square extent', () => {

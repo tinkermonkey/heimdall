@@ -16,6 +16,7 @@ import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphF
 //     &camera=controlled|lagged|held (camera and layer gap as controlled props: `controlled` takes
 //       every change the stack reports, `lagged` takes each two frames late, `held` none; a counter
 //       shows the reports and the page's camera)
+//     &quiet=1 (no onCameraChange: the page never re-renders on a camera move)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' || params.get('data') === 'full' ? (params.get('data') as 'ux' | 'full') : 'spec'
 const FIXTURE = {
@@ -23,6 +24,7 @@ const FIXTURE = {
   ux: { nodes: heimdallUxNodes, edges: heimdallUxEdges, layers: drLayers },
   full: { nodes: drFullNodes, edges: drFullEdges, layers: drFullLayers },
 }[DATA]
+const QUIET = params.get('quiet') === '1'
 const CAMERA_MODE = ['controlled', 'lagged', 'held'].includes(params.get('camera') ?? '') ? params.get('camera') : null
 /** Applies a reported value: at once, two frames late (a slow parent), or never. */
 function follow<T>(set: (v: T) => void, v: T) {
@@ -132,11 +134,15 @@ export default function LayerStackTestPage() {
             camera={CAMERA_MODE ? camera : undefined}
             layerGap={CAMERA_MODE ? gap : undefined}
             onLayerGapChange={(g) => follow(setGap, g)}
-            onCameraChange={(c, cause) => {
-              setCameraText(`${cause} · ${describe(c)}`)
-              setReports((n) => n + 1)
-              follow(setCamera, c)
-            }}
+            onCameraChange={
+              QUIET
+                ? undefined
+                : (c, cause) => {
+                    setCameraText(`${cause} · ${describe(c)}`)
+                    setReports((n) => n + 1)
+                    follow(setCamera, c)
+                  }
+            }
           />
           </Profiler>
         </div>
