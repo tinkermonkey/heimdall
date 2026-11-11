@@ -131,3 +131,51 @@
   font-weight: 600;
 }
 
+/* symmetric: a cell holding both directions */
+.adjacency-matrix__both {
+  fill: rgb(var(--canvas-bg));
+  pointer-events: none;
+}
+
+/* aggregate="layer": a neutral ink ramp, so amber stays for focus, selection and reach */
+.adjacency-matrix__heat-empty {
+  fill: none;
+  stroke: rgb(var(--canvas-border));
+  stroke-width: 1;
+}
+
+.adjacency-matrix__heat-cell {
+  cursor: pointer;
+  outline: none;
+}
+
+.adjacency-matrix__heat {
+  fill: rgb(var(--canvas-fg-1));
+}
+
+.adjacency-matrix__heat-cell--active .adjacency-matrix__heat {
+  stroke: rgb(var(--graph-hop-1));
+  stroke-width: 2;
+}
+
+.adjacency-matrix__heat-cell:focus-visible .adjacency-matrix__header-box {
+  stroke: rgb(var(--accent-primary) / 0.18);
+}
+
+.adjacency-matrix__heat-count {
+  /* A halo in the opposite tone keeps every ramp level above 4.5:1 in both themes (a flip point
+     alone leaves a mid band below it). */
+  fill: rgb(var(--canvas-fg-1));
+  stroke: rgb(var(--canvas-bg));
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.adjacency-matrix__heat-count--inverse {
+  fill: rgb(var(--canvas-bg));
+  stroke: rgb(var(--canvas-fg-1));
+}
+
