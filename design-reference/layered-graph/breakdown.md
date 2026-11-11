@@ -456,7 +456,7 @@ Why A was chosen:
 
 - Lanes (#334): `skipLayerRouting: 'gutter'`, bundled intra-layer links, Up/Down focus between lanes. Done: `laneOptions.nodeLabels` (`'all'` / `'reached'`, defaulting to the state's `nodeLabels`, so the explorer's toggle applies), optional `nodes`/`edges` with shared state, and pills held during a node drag.
 - Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
-- Hive (#337): the generic `axes` option (axis by any attribute).
+- Hive (#337): the generic `axes` option (axis by any attribute). Done: hiding a layer keeps the other axes' angles (a gap is left), and unsplit loops between near neighbours keep room for their arrowheads.
 - Matrix (#336): link inspection (`onCellSelect` → `GraphEdgeInspector`), `order: 'cluster'`, virtualization. `symmetric` and `aggregate="layer"` are in (cells built by `src/utils/layered/matrix.ts`; the heat map toggles the layer-pair filter and layer focus).
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 

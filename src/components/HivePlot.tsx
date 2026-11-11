@@ -4,7 +4,7 @@ import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseL
 import { rankWithinLayers, type NodeOrder } from '../utils/layered/layout'
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
 import { edgeLabelPriority, placeEdgeLabels, quadCurve, type EdgeCurve, type LabelBox } from '../utils/layered/edgeLabels'
-import { hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint } from '../utils/layered/hive'
+import { hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint, type HiveAxis } from '../utils/layered/hive'
 import type { LinkEmphasis } from '../utils/layered/emphasis'
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode } from '../utils/layered/types'
 import './HivePlot.css'
@@ -55,7 +55,18 @@ const TITLE_FS = 11
 // JetBrains Mono advance width, in em.
 const MONO_CHAR_EM = 0.6
 const PAD = 14
+// arrowHeadPoints' default half-width.
+const ARROW_HALF_W = 3.2
 const MIN_HIT_PX = 12
+
+interface PlacedLabel extends LabelBox {
+  side: 1 | -1
+  tx: number
+  ty: number
+}
+
+const labelsOverlap = (q: LabelBox, b: LabelBox) =>
+  Math.abs(q.x - b.x) <= (q.width + b.width) / 2 + 2 && Math.abs(q.y - b.y) <= (q.height + b.height) / 2
 
 const r1 = (v: number) => Math.round(v * 10) / 10
 const dotRadius = (n: IndexedNode) => 2.6 + Math.sqrt(n.degree) * 0.9
@@ -134,9 +145,10 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
 
     const visibleLayers = useMemo(() => index.layers.filter((l) => !filters.hiddenLayers.includes(l.id)), [index, filters.hiddenLayers])
     const ranks = useMemo(() => rankWithinLayers(index, rank), [index, rank])
+    // Angles are divided among every layer, so hiding one leaves a gap and the other axes stay put.
     const hive = useMemo(
-      () => hiveLayout(visibleLayers, ranks, { innerRadius, axisLength, splitAxes, splitAngle, startAngle }),
-      [visibleLayers, ranks, innerRadius, axisLength, splitAxes, splitAngle, startAngle],
+      () => hiveLayout(index.layers, ranks, { innerRadius, axisLength, splitAxes, splitAngle, startAngle, hiddenLayers: filters.hiddenLayers }),
+      [index, ranks, innerRadius, axisLength, splitAxes, splitAngle, startAngle, filters.hiddenLayers],
     )
 
     // Nodes along each axis, inner to outer: the keyboard's arrow-key order.
@@ -163,16 +175,20 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       return out
     }, [hive, index])
 
-    const labelBox = (node: IndexedNode): LabelBox & { side: 1 | -1; tx: number; ty: number } => {
-      const ax = hive.axisOf.get(node.layerId)!
-      const p = hivePoint(ax.angle + ax.offsets[ax.labelCopy], hive.radiusOf.get(node.id)!)
-      const side = hiveLabelSide(ax)
+    const labelBox = (
+      node: IndexedNode,
+      ax: HiveAxis = hive.axisOf.get(node.layerId)!,
+      radius: number = hive.radiusOf.get(node.id)!,
+      side: 1 | -1 = hiveLabelSide(ax),
+    ): PlacedLabel => {
+      const p = hivePoint(ax.angle + ax.offsets[ax.labelCopy], radius)
       const w = node.displayLabel.length * LABEL_FS * MONO_CHAR_EM
       const tx = p.x + side * (dotRadius(node) + 5)
       return { x: tx + (side * w) / 2, y: p.y, width: w, height: LABEL_FS * 1.2, side, tx, ty: p.y }
     }
 
-    // A stable viewBox: every axis, title and potential node label, independent of the selection.
+    // A stable viewBox: every axis slot (hidden layers too), title and potential node label,
+    // independent of the selection and of which layers are hidden.
     const viewBox = useMemo(() => {
       let minX = Infinity
       let minY = Infinity
@@ -185,22 +201,26 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         maxY = Math.max(maxY, y + hh)
       }
       add(0, 0, innerRadius, innerRadius)
-      for (const ax of hive.axes) {
+      for (const ax of hive.slots) {
         for (const off of ax.offsets) {
           const p = hivePoint(ax.angle + off, innerRadius + axisLength + 8)
           add(p.x, p.y)
         }
+        const layer = index.layerById.get(ax.layerId)!
         const t = hivePoint(ax.angle, innerRadius + axisLength + 30)
-        const label = index.layerById.get(ax.layerId)!.label
-        add(t.x, t.y, (label.length * TITLE_FS * 0.7) / 2, TITLE_FS)
-      }
-      for (const n of visibleLayers.flatMap((l) => l.nodeIds)) {
-        const b = labelBox(index.nodeById.get(n)!)
-        add(b.x, b.y, b.width / 2, b.height / 2)
+        add(t.x, t.y, (layer.label.length * TITLE_FS * 0.7) / 2, TITLE_FS)
+        for (const id of layer.nodeIds) {
+          const r = innerRadius + axisLength * (ranks.get(id) ?? 0.5)
+          // Unsplit labels may flip sides to dodge loops (below), so fit both.
+          for (const side of hive.split > 0 ? [hiveLabelSide(ax)] : ([1, -1] as const)) {
+            const b = labelBox(index.nodeById.get(id)!, ax, r, side)
+            add(b.x, b.y, b.width / 2, b.height / 2)
+          }
+        }
       }
       if (!Number.isFinite(minX)) return { x: -200, y: -200, w: 400, h: 400 }
       return { x: Math.floor(minX - PAD), y: Math.floor(minY - PAD), w: Math.ceil(maxX - minX + 2 * PAD), h: Math.ceil(maxY - minY + 2 * PAD) }
-    }, [hive, index, visibleLayers, innerRadius, axisLength])
+    }, [hive, index, ranks, innerRadius, axisLength])
 
     // viewBox units per CSS px, so hit circles stay at least 24px across at any size.
     const unitsPerPx = pxWidth > 0 ? viewBox.w / pxWidth : 1
@@ -244,35 +264,66 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       return set
     }, [reach, axisLabels, visibleLayers, index])
 
-    // Labels that fit: the selection and the hovered node always; then reached nodes by hop, then
-    // the rest, busiest first, each dropped if it would overlap one already placed. A dropped label
-    // is still the node's tooltip and accessible name.
-    const labelIds = useMemo(() => {
-      const ids = [...labeled].filter((id) => hive.radiusOf.has(id))
-      if (hoverId && hive.radiusOf.has(hoverId) && !labeled.has(hoverId)) ids.push(hoverId)
-      const prio = (id: string) => (id === selectedId || id === hoverId ? -1 : (reach.hopOf.get(id) ?? 99))
-      ids.sort((a, b) => prio(a) - prio(b) || index.nodeById.get(b)!.degree - index.nodeById.get(a)!.degree || a.localeCompare(b))
-      const placed: LabelBox[] = []
-      return ids.filter((id) => {
-        const b = labelBox(index.nodeById.get(id)!)
-        const clear = placed.every((q) => Math.abs(q.x - b.x) > (q.width + b.width) / 2 + 2 || Math.abs(q.y - b.y) > (q.height + b.height) / 2)
-        if (!clear && prio(id) >= 0) return false
-        placed.push(b)
-        return true
+    // Unsplit, highlighted loops run beside the axis on both sides: sample them so labels can dodge them.
+    const loopPts = useMemo(
+      () =>
+        hive.split > 0
+          ? []
+          : drawn
+              .filter((d) => d.em.highlighted && index.nodeById.get(d.link.sourceId)!.layerId === index.nodeById.get(d.link.targetId)!.layerId)
+              .flatMap((d) => Array.from({ length: 25 }, (_, i) => d.curve.pointAt(i / 24))),
+      [drawn, hive, index],
+    )
+
+    // A label's side: the one loops cross least (unsplit only). It is blocked when loop ends cover
+    // its first 3 characters (where arrowheads land, padded by an arrowhead's half-width) or it
+    // overlaps a label already placed.
+    const bestLabel = (id: string, placed: readonly LabelBox[]) => {
+      const node = index.nodeById.get(id)!
+      const ax = hive.axisOf.get(node.layerId)!
+      const hits = (b: PlacedLabel, w: number, padY: number) => {
+        const cx = b.tx + (b.side * w) / 2
+        return loopPts.filter((p) => Math.abs(p.x - cx) <= w / 2 + 1 && Math.abs(p.y - b.ty) <= b.height / 2 + 1 + padY).length
+      }
+      const sides = hive.split > 0 ? [hiveLabelSide(ax)] : [hiveLabelSide(ax), -hiveLabelSide(ax) as 1 | -1]
+      const options = sides.map((side) => {
+        const b = labelBox(node, ax, hive.radiusOf.get(id)!, side)
+        const start = hits(b, 3 * LABEL_FS * MONO_CHAR_EM, ARROW_HALF_W)
+        return { b: { ...b, id }, blocked: start > 0 || placed.some((q) => labelsOverlap(q, b)), score: start * 100 + hits(b, b.width, 0) }
       })
-    }, [labeled, hoverId, hive, selectedId, reach, index])
+      return options.reduce((m, o) => (Number(o.blocked) * 1e4 + o.score < Number(m.blocked) * 1e4 + m.score ? o : m))
+    }
+
+    // Labels that fit: the selection always; then reached nodes by hop, then the rest, busiest first,
+    // each dropped if blocked. A dropped label is still the node's tooltip and accessible name.
+    // Independent of hover, so hovering never moves or drops another label.
+    const baseLabels = useMemo(() => {
+      const ids = [...labeled].filter((id) => hive.radiusOf.has(id))
+      const prio = (id: string) => (id === selectedId ? -2 : (reach.hopOf.get(id) ?? 99))
+      ids.sort((a, b) => prio(a) - prio(b) || index.nodeById.get(b)!.degree - index.nodeById.get(a)!.degree || a.localeCompare(b))
+      const placed: (PlacedLabel & { id: string })[] = []
+      for (const id of ids) {
+        const best = bestLabel(id, placed)
+        if (best.blocked && prio(id) >= 0) continue
+        placed.push(best.b)
+      }
+      return placed
+    }, [labeled, hive, selectedId, reach, index, loopPts])
+
+    // The hovered node, when not already labeled, goes on top on its clearer side.
+    const labels = useMemo(() => {
+      if (!hoverId || !hive.radiusOf.has(hoverId) || baseLabels.some((b) => b.id === hoverId)) return baseLabels
+      return [...baseLabels, bestLabel(hoverId, baseLabels).b]
+    }, [baseLabels, hoverId, hive, index, loopPts])
 
     const pills = useMemo(() => {
-      const obstacles = labelIds.map((id) => {
-        const b = labelBox(index.nodeById.get(id)!)
-        return { x: b.x, y: b.y, width: b.width, height: b.height }
-      })
+      const obstacles = labels.map((b) => ({ x: b.x, y: b.y, width: b.width, height: b.height }))
       const candidates = drawn
         .filter((d) => d.em.label && d.link.predicates.length > 0)
         .map((d) => ({ id: d.link.id, text: linkPredicateLabel(d.link, index.catalog), pointAt: d.curve.pointAt, priority: edgeLabelPriority(d.link, d.em) }))
       const byId = new Map(drawn.map((d) => [d.link.id, d]))
       return placeEdgeLabels(candidates, { obstacles }).map((p) => ({ ...p, em: byId.get(p.id)!.em }))
-    }, [drawn, labelIds, index, hive])
+    }, [drawn, labels, index])
 
     const toggle = (id: string) => {
       if (canSelect) g.select(selectedId === id ? null : id)
@@ -483,10 +534,10 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
           })}
 
           {/* node labels */}
-          {labelIds.map((id) => {
+          {labels.map((b) => {
+            const id = b.id
             const node = index.nodeById.get(id)!
             const em = nodeEmphasis(node)
-            const b = labelBox(node)
             const tint = em.selected ? 'hive-plot__label--selected' : em.followed ? 'hive-plot__label--followed' : ''
             return (
               <text
