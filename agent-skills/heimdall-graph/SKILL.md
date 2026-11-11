@@ -1621,7 +1621,7 @@ Ref handle (`LayerStackHandle`): `applyPreset(name, { animate })`, `setCamera(pa
 - A changed `camera` prop is a jump; use the ref's `setCamera(c, { animate: true })` or a preset to animate (with `camera` set, pass each reported frame back).
 - A controlled `camera` or `layerGap` whose parent ignores `onCameraChange` / `onLayerGapChange` freezes those fields: that is the hold, not a bug.
 - Pass reports back unchanged and in the callback; rounding or deferring the value reads as a change from outside and stops the stack's move.
-- Touch: one-finger vertical swipes still scroll the page (`touch-action: pan-y`); with two fingers down the scene cancels `touchmove`, so a pinch is not taken as a scroll.
+- Touch: one-finger vertical swipes still scroll the page (`touch-action: pan-y`); with two fingers down on the scene it cancels `touchmove`, so a pinch is not taken as a scroll. Place both fingers together: a second finger added after a one-finger scroll has started cannot pinch, because the browser already owns that touch.
 
 ## AdjacencyMatrix
 

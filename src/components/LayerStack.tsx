@@ -372,7 +372,14 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       onCameraChangeRef.current?.(c, cause)
     }, [])
     /** A new gesture starts without a proposal, so its settle report never repeats an older one. */
+    const zoomEmitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const startGesture = () => {
+      // A wheel zoom still waiting to settle settles now, before this gesture's proposals.
+      if (zoomEmitTimer.current) {
+        clearTimeout(zoomEmitTimer.current)
+        zoomEmitTimer.current = null
+        emitCamera('zoom')
+      }
       proposed.current.camera = null
     }
 
@@ -691,7 +698,6 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }
 
     // ── zoom (wheel, only while the scene has focus) ──────────────────────
-    const zoomEmitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const canZoomRef = useRef(can.zoom)
     canZoomRef.current = can.zoom
     useEffect(() => {
@@ -707,11 +713,14 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         proposeCamera('zoom')
         repaint()
         if (zoomEmitTimer.current) clearTimeout(zoomEmitTimer.current)
-        zoomEmitTimer.current = setTimeout(() => emitCamera('zoom'), 160)
+        zoomEmitTimer.current = setTimeout(() => {
+          zoomEmitTimer.current = null
+          emitCamera('zoom')
+        }, 160)
       }
       // One finger scrolls the page vertically (touch-action: pan-y); two are a pinch, never a scroll.
       const onTouchMove = (e: TouchEvent) => {
-        if (canZoomRef.current && e.touches.length >= 2 && e.cancelable) e.preventDefault()
+        if (canZoomRef.current && e.targetTouches.length >= 2 && e.cancelable) e.preventDefault()
       }
       el.addEventListener('wheel', onWheel, { passive: false })
       el.addEventListener('touchmove', onTouchMove, { passive: false })
