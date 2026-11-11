@@ -14,10 +14,11 @@ import { buildStructuralForest, type HierarchyEdge } from './graphHierarchy'
  *
  *   1. Bottom-up, every node gets a SYSTEM radius: a leaf's is its body radius; a parent's is the
  *      farthest extent of its satellites' systems around it.
- *   2. Top-down, a parent's k satellites take k equal angular slots (heaviest at the parent's
+ *   2. Top-down, a parent's k satellites each take an angular slot θ proportional to their system
+ *      radius, clamped to SLOT_EVENNESS_BAND × 2π/k so orbits stay even (heaviest at the parent's
  *      outward heading). Each sits at the smallest distance where its whole system fits inside its
- *      own slot's wedge and clears the parent's body:
- *        d = max(r(parent) + gap + R(sat),  (R(sat) + gap/2) / sin(π/k))
+ *      own slot's wedge and clears the parent's body, at most:
+ *        d = max(r(parent) + gap + R(sat),  (R(sat) + gap/2) / sin(θ/2))
  *      Adjacent wedges are disjoint and every system lies inside its wedge, so no two systems
  *      anywhere in the tree overlap — by construction, with no relaxation pass.
  *   3. Independent trees (galaxies, including one-node orphans) are packed together by their
@@ -224,13 +225,14 @@ function buildForest(nodes: readonly GalaxyLayoutNode[], edges: readonly GalaxyL
  * clamp every slot into [0.5, 1.5] × 2π/k, redistributing the excess among the unclamped slots
  * (water-filling). Equal slots (Risacher's) waste space on deep trees: a big system in a narrow
  * slot must sit far out, compounding level by level.
+ *
+ * Trade-off (heimdall#288): the band keeps orbits even (vision item 3) at the cost of round systems
+ * (vision item 5). With many satellites the cap is narrow (k = 102 gives about 5.3°), so a large
+ * satellite system has to sit far out to fit its wedge, and one dominant branch sticks out on one
+ * side. Measured as bounding-box aspect: GBIF Rodentia root 8.1:1 (102 satellites), Vespertilionidae
+ * 5.6:1 (78 satellites, one carrying 155). Accepted: even orbits win for these parents. Widening the
+ * band would round them but break the evenness guarantee.
  */
-// Trade-off (heimdall#288): the band keeps orbits even (vision item 3) at the cost of round systems
-// (vision item 5). With many satellites the cap is narrow (k = 102 gives about 5.3°), so a large
-// satellite system has to sit far out to fit its wedge, and one dominant branch sticks out on one
-// side. Measured as bounding-box aspect: GBIF Rodentia root 8.1:1 (102 satellites), Vespertilionidae
-// 5.6:1 (78 satellites, one carrying 155). Accepted: even orbits win for these parents. Widening the
-// band would round them but break the evenness guarantee.
 const SLOT_EVENNESS_BAND: readonly [number, number] = [0.5, 1.5]
 /** Extra clearance between a satellite and its parent body, as a fraction of the satellite's own
  *  radius. Without it a 60px planet sat 5px from its parent and read as overlapping. */
