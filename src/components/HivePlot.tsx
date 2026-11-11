@@ -4,7 +4,7 @@ import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseL
 import { rankWithinLayers, type NodeOrder } from '../utils/layered/layout'
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
 import { edgeLabelPriority, placeEdgeLabels, quadCurve, type EdgeCurve, type LabelBox } from '../utils/layered/edgeLabels'
-import { hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint } from '../utils/layered/hive'
+import { hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint, type HiveAxis } from '../utils/layered/hive'
 import type { LinkEmphasis } from '../utils/layered/emphasis'
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode } from '../utils/layered/types'
 import './HivePlot.css'
@@ -134,9 +134,10 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
 
     const visibleLayers = useMemo(() => index.layers.filter((l) => !filters.hiddenLayers.includes(l.id)), [index, filters.hiddenLayers])
     const ranks = useMemo(() => rankWithinLayers(index, rank), [index, rank])
+    // Angles are divided among every layer, so hiding one leaves a gap and the other axes stay put.
     const hive = useMemo(
-      () => hiveLayout(visibleLayers, ranks, { innerRadius, axisLength, splitAxes, splitAngle, startAngle }),
-      [visibleLayers, ranks, innerRadius, axisLength, splitAxes, splitAngle, startAngle],
+      () => hiveLayout(index.layers, ranks, { innerRadius, axisLength, splitAxes, splitAngle, startAngle, hiddenLayers: filters.hiddenLayers }),
+      [index, ranks, innerRadius, axisLength, splitAxes, splitAngle, startAngle, filters.hiddenLayers],
     )
 
     // Nodes along each axis, inner to outer: the keyboard's arrow-key order.
@@ -163,16 +164,20 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       return out
     }, [hive, index])
 
-    const labelBox = (node: IndexedNode): LabelBox & { side: 1 | -1; tx: number; ty: number } => {
-      const ax = hive.axisOf.get(node.layerId)!
-      const p = hivePoint(ax.angle + ax.offsets[ax.labelCopy], hive.radiusOf.get(node.id)!)
+    const labelBox = (
+      node: IndexedNode,
+      ax: HiveAxis = hive.axisOf.get(node.layerId)!,
+      radius: number = hive.radiusOf.get(node.id)!,
+    ): LabelBox & { side: 1 | -1; tx: number; ty: number } => {
+      const p = hivePoint(ax.angle + ax.offsets[ax.labelCopy], radius)
       const side = hiveLabelSide(ax)
       const w = node.displayLabel.length * LABEL_FS * MONO_CHAR_EM
       const tx = p.x + side * (dotRadius(node) + 5)
       return { x: tx + (side * w) / 2, y: p.y, width: w, height: LABEL_FS * 1.2, side, tx, ty: p.y }
     }
 
-    // A stable viewBox: every axis, title and potential node label, independent of the selection.
+    // A stable viewBox: every axis slot (hidden layers too), title and potential node label,
+    // independent of the selection and of which layers are hidden.
     const viewBox = useMemo(() => {
       let minX = Infinity
       let minY = Infinity
@@ -185,22 +190,22 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         maxY = Math.max(maxY, y + hh)
       }
       add(0, 0, innerRadius, innerRadius)
-      for (const ax of hive.axes) {
+      for (const ax of hive.slots) {
         for (const off of ax.offsets) {
           const p = hivePoint(ax.angle + off, innerRadius + axisLength + 8)
           add(p.x, p.y)
         }
+        const layer = index.layerById.get(ax.layerId)!
         const t = hivePoint(ax.angle, innerRadius + axisLength + 30)
-        const label = index.layerById.get(ax.layerId)!.label
-        add(t.x, t.y, (label.length * TITLE_FS * 0.7) / 2, TITLE_FS)
-      }
-      for (const n of visibleLayers.flatMap((l) => l.nodeIds)) {
-        const b = labelBox(index.nodeById.get(n)!)
-        add(b.x, b.y, b.width / 2, b.height / 2)
+        add(t.x, t.y, (layer.label.length * TITLE_FS * 0.7) / 2, TITLE_FS)
+        for (const id of layer.nodeIds) {
+          const b = labelBox(index.nodeById.get(id)!, ax, innerRadius + axisLength * (ranks.get(id) ?? 0.5))
+          add(b.x, b.y, b.width / 2, b.height / 2)
+        }
       }
       if (!Number.isFinite(minX)) return { x: -200, y: -200, w: 400, h: 400 }
       return { x: Math.floor(minX - PAD), y: Math.floor(minY - PAD), w: Math.ceil(maxX - minX + 2 * PAD), h: Math.ceil(maxY - minY + 2 * PAD) }
-    }, [hive, index, visibleLayers, innerRadius, axisLength])
+    }, [hive, index, ranks, innerRadius, axisLength])
 
     // viewBox units per CSS px, so hit circles stay at least 24px across at any size.
     const unitsPerPx = pxWidth > 0 ? viewBox.w / pxWidth : 1

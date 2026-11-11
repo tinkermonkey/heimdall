@@ -456,7 +456,7 @@ Why A was chosen:
 
 - Lanes (#334): `skipLayerRouting: 'gutter'`, bundled intra-layer links, a node-label mode, Up/Down focus between lanes.
 - Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
-- Hive (#337): the generic `axes` option (axis by any attribute).
+- Hive (#337): the generic `axes` option (axis by any attribute). Done: hiding a layer keeps the other axes' angles (a gap is left), and unsplit loops between near neighbours keep room for their arrowheads.
 - Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { clampSplitAngle, hiveAxisAngles, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint } from '../layered/hive'
+import { HIVE_MIN_LOOP_BULGE, clampSplitAngle, hiveAxisAngles, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint } from '../layered/hive'
 
 const close = (a: number, b: number) => expect(Math.abs(a - b)).toBeLessThan(1e-6)
 const angleOf = (p: { x: number; y: number }) => (Math.atan2(p.y, p.x) * 180) / Math.PI
@@ -67,6 +67,36 @@ describe('hive geometry', () => {
     close(out.a.x, 0)
     expect(out.c.x).toBeGreaterThan(0)
     expect(inn.c.x).toBeLessThan(0)
+  })
+
+  it('keeps a loop between near neighbours wide enough for its arrowhead', () => {
+    const h = hiveLayout(layers3, rank, { splitAxes: false })
+    // Neighbours 12 apart on the vertical axis: the apex clears the axis by half the minimum bulge.
+    const short = hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'a', radius: 112 })!
+    close(short.c.x, HIVE_MIN_LOOP_BULGE)
+    // The end tangent (control to target) arrives close to square on the axis, clear of the next dot.
+    const along = Math.abs(short.b.y - short.c.y)
+    const across = Math.abs(short.b.x - short.c.x)
+    expect((Math.atan2(across, along) * 180) / Math.PI).toBeGreaterThan(70)
+    // Long loops keep their span-proportional bulge.
+    const long = hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'a', radius: 200 })!
+    close(long.c.x, 100 * 0.6 + 10)
+  })
+
+  it('keeps angles stable when a layer is hidden', () => {
+    const all = hiveLayout(layers3, rank)
+    const h = hiveLayout(layers3, rank, { hiddenLayers: ['b'] })
+    expect(h.axes.map((a) => a.layerId)).toEqual(['a', 'c'])
+    expect(h.axes.map((a) => a.angle)).toEqual([-90, 150])
+    expect(h.axes.map((a) => a.position)).toEqual([0, 2])
+    expect(h.slots).toEqual(all.slots)
+    expect(h.split).toBe(all.split)
+    expect(h.axisOf.has('b')).toBe(false)
+    expect(h.radiusOf.has('b1')).toBe(false)
+    expect(h.radiusOf.get('c1')).toBe(all.radiusOf.get('c1'))
+    expect(hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'b', radius: 100 })).toBeNull()
+    const g = hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'c', radius: 100 })!
+    expect(g).toEqual(hiveLinkGeometry(all, { layerId: 'a', radius: 100 }, { layerId: 'c', radius: 100 }))
   })
 
   it('returns null for a layer without an axis', () => {

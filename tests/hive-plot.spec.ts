@@ -39,6 +39,22 @@ test.describe('HivePlot', () => {
     await expect(page.locator('.hive-plot__node')).toHaveCount(36)
   })
 
+  test('hiding a layer leaves a gap: the other axes and the frame stay put', async ({ page }) => {
+    await open(page)
+    const axisLines = (id: string) =>
+      page.locator(`.hive-plot__axis[data-layer-id="${id}"] line`).evaluateAll((ls) => ls.map((l) => ['x1', 'y1', 'x2', 'y2'].map((a) => l.getAttribute(a)).join(',')))
+    const viewBox = () => page.locator('.hive-plot__svg').getAttribute('viewBox')
+    const before = { business: await axisLines('business'), technology: await axisLines('technology'), viewBox: await viewBox() }
+    await page.getByTestId('hive-plot-toggle-application').click()
+    await expect(page.locator('.hive-plot__axis')).toHaveCount(2)
+    await expect(page.locator('.hive-plot__axis[data-layer-id="application"]')).toHaveCount(0)
+    expect(await axisLines('business')).toEqual(before.business)
+    expect(await axisLines('technology')).toEqual(before.technology)
+    expect(await viewBox()).toBe(before.viewBox)
+    await page.getByTestId('hive-plot-toggle-application').click()
+    await expect(page.locator('.hive-plot__axis')).toHaveCount(3)
+  })
+
   test('click selects, clicking again and Escape clear', async ({ page }) => {
     await open(page)
     const node = page.getByRole('button', { name: 'BusinessProcess, Business layer' })
@@ -78,6 +94,12 @@ test.describe('HivePlot', () => {
     await open(page)
     await page.locator('.hive-plot__link').first().dispatchEvent('click')
     await expect(status(page)).toContainText('selected ')
+  })
+
+  // Unsplit loops between neighbours on one axis, each with an arrowhead, and a hidden layer's gap.
+  test('visual: unsplit loops with a hidden layer', async ({ page }) => {
+    await open(page, '&split=0&labels=off&hide=technology&select=business.businessservice')
+    await expect(page.getByTestId('hive-plot')).toHaveScreenshot('hive-plot-unsplit-hidden-light.png')
   })
 
   for (const dark of [false, true]) {
