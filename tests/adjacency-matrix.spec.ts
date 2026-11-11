@@ -267,15 +267,17 @@ test.describe('LayeredGraphExplorer matrix link inspector', () => {
     expect(errors).toEqual([])
   })
 
-  test('Escape closes the panel and returns focus to the source row header', async ({ page }) => {
+  test('Escape closes the panel and returns focus to the clicked cell, the Tab stop', async ({ page }) => {
     await openExplorer(page)
-    const cell = page.locator('.adjacency-matrix__cell').first()
-    const source = await cell.getAttribute('data-source-id')
+    const cell = page.locator('.adjacency-matrix__cell').nth(3)
+    const key = await cell.getAttribute('data-cell-key')
     await cell.click()
     await panel(page).getByRole('button', { name: 'Close link details' }).focus()
     await page.keyboard.press('Escape')
     await expect(panel(page)).toHaveCount(0)
-    await expect(page.locator(`.adjacency-matrix__header[data-node-id="${source}"]`)).toBeFocused()
+    const stop = page.locator('.adjacency-matrix__cell[tabindex="0"]')
+    await expect(stop).toHaveAttribute('data-cell-key', key!)
+    await expect(stop).toBeFocused()
   })
 
   test('hiding the link’s category drops the panel and the outline', async ({ page }) => {
@@ -374,8 +376,21 @@ test.describe('AdjacencyMatrix virtualization', () => {
     await expect(page.locator('.adjacency-matrix__header[data-row="200"]')).toHaveCount(1)
     const box = (await scroll.boundingBox())!
 
-    // a drawn cell well inside the view, and its row and column labels
-    const cell = page.locator('.adjacency-matrix__cell').filter({ has: page.locator('rect') }).nth(40)
+    // the drawn cell nearest the middle of the view (not an overscan cell under the sticky labels)
+    const middle = await scroll.evaluate((el) => {
+      const b = el.getBoundingClientRect()
+      const cx = b.x + b.width / 2
+      const cy = b.y + b.height / 2
+      let best: Element | null = null
+      let bestD = Infinity
+      for (const c of el.querySelectorAll('.adjacency-matrix__cell')) {
+        const r = c.querySelector('rect')!.getBoundingClientRect()
+        const d = Math.hypot(r.x + r.width / 2 - cx, r.y + r.height / 2 - cy)
+        if (d < bestD) [best, bestD] = [c, d]
+      }
+      return best!.getAttribute('data-cell-key')
+    })
+    const cell = page.locator(`.adjacency-matrix__cell[data-cell-key="${middle}"]`)
     const r = await cell.getAttribute('data-row')
     const c = await cell.getAttribute('data-col')
     const cellBox = (await cell.locator('rect').first().boundingBox())!
@@ -397,6 +412,35 @@ test.describe('AdjacencyMatrix virtualization', () => {
     const colBand = (await band.nth(1).boundingBox())!
     expect(Math.abs(rowBand.y + rowBand.height / 2 - (hovered.y + hovered.height / 2))).toBeLessThan(1)
     expect(Math.abs(colBand.x + colBand.width / 2 - (hovered.x + hovered.width / 2))).toBeLessThan(1)
+  })
+
+  test('a cell in the last visible column renders', async ({ page }) => {
+    await open(page, LARGE)
+    const scroll = page.locator('.adjacency-matrix__scroll')
+    // after a scroll right, take the drawn cell furthest right (in the overscan past the view), then
+    // scroll so its column is the last one in view and its row is visible
+    await scroll.evaluate((el) => el.scrollTo(2000, 0))
+    await expect(page.locator('.adjacency-matrix__header[data-col="250"]')).toHaveCount(1)
+    const [key, r, c] = await scroll.evaluate((el) => {
+      const cells = [...el.querySelectorAll('.adjacency-matrix__cell')]
+      const far = cells.reduce((a, b) => (Number(b.getAttribute('data-col')) > Number(a.getAttribute('data-col')) ? b : a))
+      return [far.getAttribute('data-cell-key')!, Number(far.getAttribute('data-row')), Number(far.getAttribute('data-col'))] as const
+    })
+    await scroll.evaluate(
+      (el, [row, col]) => {
+        const lw = el.querySelector('.adjacency-matrix__rows')!.getBoundingClientRect().width
+        el.scrollTo(lw + (col + 1) * 10 - el.clientWidth, Math.max(0, row * 10 - 40))
+      },
+      [r, c],
+    )
+    await expect.poll(() => scroll.evaluate((el) => el.scrollLeft)).toBeGreaterThan(2000)
+    const cell = page.locator(`.adjacency-matrix__cell[data-cell-key="${key}"]`)
+    await expect(cell).toHaveCount(1)
+    const box = (await scroll.boundingBox())!
+    const cellBox = (await cell.locator('rect').first().boundingBox())!
+    // its right edge sits at the right edge of the view
+    expect(box.x + box.width - (cellBox.x + cellBox.width)).toBeLessThan(10)
+    expect(box.x + box.width - (cellBox.x + cellBox.width)).toBeGreaterThanOrEqual(0)
   })
 
   test('a selectedLinkId set from outside scrolls its cell into view', async ({ page }) => {
@@ -439,5 +483,55 @@ test.describe('AdjacencyMatrix virtualization', () => {
     await expect(page.locator('.adjacency-matrix__header[data-row="100"]')).toHaveCount(1)
     await page.mouse.move(0, 0)
     await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-virtual-light.png')
+  })
+
+  test('visual: dark canvas, virtualized and scrolled', async ({ page }) => {
+    await open(page, LARGE + '&dark=1')
+    await page.locator('.adjacency-matrix__scroll').evaluate((el) => el.scrollTo(1200, 900))
+    await expect(page.locator('.adjacency-matrix__header[data-row="100"]')).toHaveCount(1)
+    await page.mouse.move(0, 0)
+    await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-virtual-dark.png')
+  })
+
+  test('in a fixed-height explorer the matrix is the only scroll area and keeps its labels in view', async ({ page }) => {
+    await page.goto('http://localhost:5173/?example=layered-graph-explorer&data=large&views=matrix&height=640')
+    await page.waitForLoadState('networkidle')
+    await expect(page.locator('.adjacency-matrix[data-virtual]')).toHaveCount(1)
+    const scrollables = await page.evaluate(() =>
+      // the scene side (the inspector panel scrolls on its own)
+      [...document.querySelectorAll('.layered-graph-explorer__main, .layered-graph-explorer__main *')]
+        .filter((el) => {
+          const s = getComputedStyle(el)
+          return /(auto|scroll)/.test(s.overflowY + s.overflowX) && (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1)
+        })
+        .map((el) => el.className),
+    )
+    expect(scrollables).toEqual(['adjacency-matrix__scroll adjacency-matrix__scroll--virtual'])
+
+    const scroll = page.locator('.adjacency-matrix__scroll')
+    const scene = (await page.locator('.layered-graph-explorer__scene').boundingBox())!
+    const box = (await scroll.boundingBox())!
+    expect(box.y + box.height).toBeLessThanOrEqual(scene.y + scene.height + 1)
+
+    // deep scroll: the column labels stay at the top of the scene's view
+    await scroll.evaluate((el) => el.scrollTo(0, 3000))
+    await expect(page.locator('.adjacency-matrix__header[data-row="300"]')).toHaveCount(1)
+    const cols = (await page.locator('.adjacency-matrix__cols').boundingBox())!
+    expect(Math.abs(cols.y - box.y)).toBeLessThan(1)
+
+    // a keyboard step lands the focused cell fully in view, clear of the sticky labels
+    await page.locator('.adjacency-matrix__cell[tabindex="0"]').focus()
+    for (let i = 0; i < 30; i++) await page.keyboard.press('ArrowDown')
+    for (let i = 0; i < 30; i++) await page.keyboard.press('ArrowRight')
+    const focused = await page.evaluate(() => {
+      const r = document.activeElement!.querySelector('rect')!.getBoundingClientRect()
+      return { x: r.x, y: r.y, w: r.width, h: r.height }
+    })
+    const rows = (await page.locator('.adjacency-matrix__rows').boundingBox())!
+    const colsNow = (await page.locator('.adjacency-matrix__cols').boundingBox())!
+    expect(focused.y).toBeGreaterThanOrEqual(colsNow.y + colsNow.height - 1)
+    expect(focused.x).toBeGreaterThanOrEqual(rows.x + rows.width - 1)
+    expect(focused.y + focused.h).toBeLessThanOrEqual(box.y + box.height + 1)
+    expect(focused.x + focused.w).toBeLessThanOrEqual(box.x + box.width + 1)
   })
 })

@@ -298,7 +298,7 @@ that layout mode.
 | Symmetric mode | `symmetric: boolean` | Merges `A→B` and `B→A` into the upper triangle for an undirected reading. |
 | Aggregate mode | `aggregate: 'none' \| 'layer'` | Collapses to a layers-by-layers heat map: the overview for 13 layers. |
 | Cell click | `onCellSelect(edge)` | The prototype selects the source node. Production should select the link and show it in a link inspector (`GraphEdgeInspector`). |
-| Large N | virtualized rows and columns | Reuse `useVirtualList` patterns above about 80 nodes. |
+| Large N | `virtualizeAbove` (default 150) | Windowed rows and columns with sticky labels (#336); `useVirtualList` is one-dimensional, so the matrix has its own 2D window. |
 
 ### 2.4 `LayerHive` [V]
 
@@ -441,7 +441,7 @@ Why A was chosen:
 - **Test page:** `?example=adjacency-matrix`. URL params `data` (`spec`, `ux`, or `large` with `n`, a seeded synthetic graph past the virtualization threshold), `link` (a `selectedLinkId`), `select`, `follow`, `labels`, `dark`, `symmetric`, `aggregate`, `order` and `report` (`1` records `onCellSelect` and `onLayerCellSelect`, `legacy` records `onLinkSelect`) make it deterministic. The explorer test page adds `matrix=symmetric|report`.
 - **Spec:** `tests/adjacency-matrix.spec.ts` (behaviour tests for the directed, symmetric and layer heat-map modes, cluster order, the explorer's link panel, keyboard cells and virtualization; 8 screenshots), with darwin and linux baselines. Cell building, cluster order, link metadata, the virtual window and keyboard steps are unit-tested in `src/utils/__tests__/layeredMatrix.test.ts`.
 - **Docs:** documented in the `heimdall-graph` skill. The docs-app showcase waits for step 6, alongside the other views.
-- **Virtualization:** past `virtualizeAbove` nodes (default 150) only the rows and columns in view (plus 8 either side) render, in four SVGs on a grid: a sticky corner, sticky column labels, sticky row labels and the scrolling body, each keeping the full drawing's coordinates through its viewBox. The scroll area is capped at `--adjacency-matrix-max-height` (80vh). The Tab-stop cell, a focused row header and the `selectedLinkId` cell stay rendered; `selectedLinkId` set from outside scrolls its cell into view. Below the threshold the single SVG is unchanged.
+- **Virtualization:** past `virtualizeAbove` nodes (default 150) only the rows and columns in view render, plus a 16-row and 16-column margin that moves only when the view gets within 8 of its edge (so most scroll frames don't re-render; cells are memoized). They are drawn in four SVGs on a grid: a sticky corner, sticky column labels, sticky row labels and the scrolling body, each keeping the full drawing's coordinates through its viewBox. The scroll area is capped at `--adjacency-matrix-max-height` (80vh); in a fixed-height explorer the matrix fills the scene instead. Windowing follows only the matrix's own scroll area: with `--adjacency-matrix-max-height: none` (or when the page scrolls instead) every row renders. The Tab-stop cell and a focused row header always render; for a `selectedLinkId` cell outside the window only its outline is drawn, and setting it from outside scrolls the cell into view. Below the threshold the single SVG is unchanged.
 - `symmetric`, `aggregate="layer"`, `onCellSelect` with the explorer's link inspector, `order="cluster"`, keyboard cells and virtualization are in (#336).
 
 **Steps 3–6: implemented.**

@@ -206,3 +206,17 @@ export function matrixCellStep<T extends { r: number; c: number }>(sorted: reado
   if (target === undefined) return null
   return row(target).reduce<T | null>((best, x) => (!best || Math.abs(x.c - from.c) < Math.abs(best.c - from.c) ? x : best), null)
 }
+
+/**
+ * The window to render next, given the one rendered (`prev`) and the rows and columns in view
+ * (`view`, no overscan). Keeps `prev` while the view stays more than `overscan / 2` inside its
+ * edges (hysteresis); otherwise recentres with `overscan` either side.
+ */
+export function nextMatrixWindow(prev: MatrixWindow, view: MatrixWindow, n: number, overscan = 16): MatrixWindow {
+  const margin = overscan / 2
+  const tight = (lo: number, hi: number, vlo: number, vhi: number) =>
+    vlo < lo || vhi > hi || (lo > 0 && vlo - lo < margin) || (hi < n && hi - vhi < margin)
+  if (!tight(prev.r0, prev.r1, view.r0, view.r1) && !tight(prev.c0, prev.c1, view.c0, view.c1)) return prev
+  const clamp = (v: number) => Math.max(0, Math.min(n, v))
+  return { r0: clamp(view.r0 - overscan), r1: clamp(view.r1 + overscan), c0: clamp(view.c0 - overscan), c1: clamp(view.c1 + overscan) }
+}

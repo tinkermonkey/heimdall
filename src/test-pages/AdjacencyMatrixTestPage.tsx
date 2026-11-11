@@ -2,39 +2,23 @@ import { useEffect, useMemo, useState } from 'react'
 import { AdjacencyMatrix } from '../components/AdjacencyMatrix'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
-import type { GraphEdge, GraphNodeData } from '../components/GraphCanvas'
 import type { BuildLayeredIndexOptions, IndexedLink, PredicateLabelMode } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
+import { largeLayeredGraph } from './fixtures/largeLayeredGraph'
 
 // AdjacencyMatrix on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=adjacency-matrix&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&dark=1
 //   &symmetric=1&aggregate=layer&order=cluster|degree|label
 //   &report=1|legacy (onCellSelect, or the deprecated onLinkSelect, and onLayerCellSelect write to a status line)
 //   data=large&n=600: a synthetic graph past the virtualization threshold (6 layers, seeded links)
-//   &link=<index>|last: pass that link's id as selectedLinkId, as an inspector would
+//   &dark=1 works with it; &link=<index>|last: pass that link's id as selectedLinkId, as an inspector would
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : params.get('data') === 'large' ? 'large' : 'spec'
 const REPORT = params.get('report') === '1' || params.get('report') === 'legacy'
 const LEGACY = params.get('report') === 'legacy'
 const ORDER = (['cluster', 'degree', 'label'] as const).find((o) => o === params.get('order'))
 
-/** A deterministic large layered graph: `n` nodes in 6 layers, about 3 links per node. */
-function largeGraph(n: number): { nodes: GraphNodeData[]; edges: GraphEdge[] } {
-  let seed = 7
-  const rand = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648
-  const nodes = Array.from({ length: n }, (_, i) => ({ id: `n${i}`, label: `Node ${i}`, attributes: { layer: `layer${i % 6}` } }))
-  const edges: GraphEdge[] = []
-  for (let i = 0; i < n; i++) {
-    for (let k = 0; k < 3; k++) {
-      // mostly within the layer, some across
-      const j = rand() < 0.7 ? ((i + 6 * (1 + Math.floor(rand() * 20))) % n) : Math.floor(rand() * n)
-      if (j === i) continue
-      edges.push({ id: `e${i}-${k}`, sourceId: `n${i}`, targetId: `n${j}`, label: 'uses', attributes: { category: drCategoryOrder[(i + k) % 3] } })
-    }
-  }
-  return { nodes, edges }
-}
-const LARGE = DATA === 'large' ? largeGraph(Number(params.get('n') ?? 600)) : null
+const LARGE = DATA === 'large' ? largeLayeredGraph(Number(params.get('n') ?? 600)) : null
 
 export default function AdjacencyMatrixTestPage() {
   useEffect(() => {

@@ -209,7 +209,7 @@ export function AdjacencyMatrixShowcase() {
           <PropRow name="...divProps" type="HTMLAttributes<HTMLDivElement>" description="Remaining props spread onto the root div." />
         </PropsTable>
         <p style={{ fontSize: 12, color: fg2, margin: '12px 0 0', lineHeight: 1.65 }}>
-          Large graphs scroll inside the component; it renders at natural size so cells stay crisp. Past virtualizeAbove nodes (default 150) only the rows and columns in view render and the labels stick to the edges; the scroll area is capped at --adjacency-matrix-max-height (80vh), and the sticky labels paint --adjacency-matrix-bg. Cells are one Tab stop: arrow keys move between them, Enter acts as a click.
+          Large graphs scroll inside the component; it renders at natural size so cells stay crisp. Past virtualizeAbove nodes (default 150) only the rows and columns in view render and the labels stick to the edges; the scroll area is capped at --adjacency-matrix-max-height (80vh), and the sticky labels paint --adjacency-matrix-bg. Windowing follows the matrix's own scroll area, so with --adjacency-matrix-max-height: none every row renders. Cells are one Tab stop: arrow keys move between them, Enter acts as a click; screen readers browse them as buttons.
         </p>
       </ShowcaseSection>
     </div>

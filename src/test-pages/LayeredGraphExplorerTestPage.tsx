@@ -11,6 +11,7 @@ import {
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import type { BuildLayeredIndexOptions, IndexedLink } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
+import { largeLayeredGraph } from './fixtures/largeLayeredGraph'
 
 // LayeredGraphExplorer on the layered-graph fixtures. Turntable off and a fixed camera; URL params
 // make screenshots deterministic:
@@ -21,9 +22,11 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 // every `onSnapshotChange` writes it back (`snapshot-count` counts them). Save / Restore buttons
 // drive the `explorerRef` handle. `gap=<n>` passes `stackProps={{ defaultLayerGap: n }}`.
 const params = new URLSearchParams(window.location.search)
-const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
-const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
-const EDGES = DATA === 'spec' ? drSpecEdges : heimdallUxEdges
+// `data=large&n=600` is a seeded synthetic graph past the matrix's virtualization threshold.
+const DATA = params.get('data') === 'ux' ? 'ux' : params.get('data') === 'large' ? 'large' : 'spec'
+const LARGE = DATA === 'large' ? largeLayeredGraph(Number(params.get('n') ?? 600)) : null
+const NODES = LARGE ? LARGE.nodes : DATA === 'spec' ? drSpecNodes : heimdallUxNodes
+const EDGES = LARGE ? LARGE.edges : DATA === 'spec' ? drSpecEdges : heimdallUxEdges
 const isView = (v: string): v is LayeredGraphView => (LAYERED_GRAPH_VIEWS as readonly string[]).includes(v)
 const VIEWS = (params.get('views')?.split(',').filter(isView) ?? LAYERED_GRAPH_VIEWS) as LayeredGraphView[]
 const VIEW = isView(params.get('view') ?? '') ? (params.get('view') as LayeredGraphView) : VIEWS[0]
@@ -45,7 +48,7 @@ const STACK_PROPS = params.has('gap') ? { defaultLayerGap: Number(params.get('ga
 // `matrix=symmetric` passes `matrixProps={{ symmetric: true }}`; `matrix=report` passes an
 // `onCellSelect` that writes the link id to `cell-report` (a consumer handler, so no link panel).
 const MATRIX = params.get('matrix')
-const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : 'heimdall ux model'
+const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : DATA === 'ux' ? 'heimdall ux model' : 'synthetic large graph'
 
 const mono = { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgb(var(--canvas-fg-3))' } as const
 
@@ -56,10 +59,13 @@ export default function LayeredGraphExplorerTestPage() {
   }, [])
 
   const layering = useMemo<BuildLayeredIndexOptions>(
-    () => ({ layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
+    () =>
+      LARGE
+        ? { layerBy: 'layer', categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }
+        : { layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' },
     [],
   )
-  const layout = useMemo(() => ({ layoutCategories: DATA === 'spec' ? ['structural'] : null }), [])
+  const layout = useMemo(() => (LARGE ? (false as const) : { layoutCategories: DATA === 'spec' ? ['structural'] : null }), [])
   const [selected, setSelected] = useState<string | null>(SNAPSHOT?.selectedId ?? params.get('select'))
   const [follow, setFollow] = useState(SNAPSHOT?.follow ?? FOLLOW)
   const [view, setView] = useState<LayeredGraphView>(SNAPSHOT?.view ?? VIEW)
