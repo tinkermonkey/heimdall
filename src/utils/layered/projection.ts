@@ -308,3 +308,22 @@ export function insidePolygon(p: Point, poly: readonly Point[]): boolean {
   }
   return inside
 }
+
+/**
+ * Title centres for a column of plane titles, top to bottom (`ys` ascending): at least `spacing`
+ * apart, pushed down from their anchors, and kept inside [minY, maxY]: moved back up when the
+ * column runs off the bottom, and evenly spaced over the whole range when it is taller than the
+ * scene (a tall stack in a short scene). A column that fits comes back as the push-down alone.
+ */
+export function fitTitleColumn(ys: readonly number[], spacing: number, minY: number, maxY: number): number[] {
+  const n = ys.length
+  if (n === 0) return []
+  const gap = n > 1 ? Math.min(spacing, (maxY - minY) / (n - 1)) : spacing
+  const out = ys.map((y) => clamp(y, minY, maxY))
+  for (let k = 1; k < n; k++) if (out[k] - out[k - 1] < gap) out[k] = out[k - 1] + gap
+  if (out[n - 1] > maxY) {
+    out[n - 1] = maxY
+    for (let k = n - 2; k >= 0; k--) if (out[k + 1] - out[k] < gap) out[k] = out[k + 1] - gap
+  }
+  return out
+}

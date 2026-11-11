@@ -470,6 +470,24 @@ test.describe('LayerStack', () => {
       }
     })
 
+    for (const preset of ['stack', 'exploded', 'top', 'profile']) {
+      test(`at docs width (870px), every plane title of the 13 sits inside the scene at ${preset}`, async ({ page }) => {
+        await open(page, `&data=full&preset=${preset}&width=870`)
+        await expect(page.locator('.layer-stack__title')).toHaveCount(13)
+        const out = await page.evaluate(() => {
+          const stage = document.querySelector('[data-testid="layer-stack"]')!.getBoundingClientRect()
+          return [...document.querySelectorAll<HTMLElement>('.layer-stack__title')]
+            .filter((t) => {
+              const r = t.getBoundingClientRect()
+              return r.top < stage.top - 0.5 || r.bottom > stage.bottom + 0.5 || r.left < stage.left - 0.5 || r.right > stage.right + 0.5
+            })
+            .map((t) => t.dataset.layerId)
+        })
+        expect(out).toEqual([])
+        expect(await cornersOutside(page)).toBe(0)
+      })
+    }
+
     test('a defaultCamera zoom over the preset is kept: no fit', async ({ page }) => {
       await open(page, '&data=full&zoom=1.6')
       await expect(page.locator('.layer-stack__plane')).toHaveCount(13)

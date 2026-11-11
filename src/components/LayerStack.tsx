@@ -28,6 +28,7 @@ import {
   stackPlaneY,
   svgPoints,
   titleRail,
+  fitTitleColumn,
   type CameraPresetName,
   type ProjectedPoint,
   type StackCamera,
@@ -1060,27 +1061,23 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       )
 
       // Plane titles: at each plane's left corner; on a side rail when the planes overlap (top view).
+      // Titles are about 150px wide (right-aligned at x) and 36px tall (centred on y); every
+      // one stays inside the scene, closer than 46px apart only when the column would not fit.
       const titleSpacing = 46 * unitsPerPx
+      const minY = -H / 2 + 22 * unitsPerPx
+      const maxY = H / 2 - 22 * unitsPerPx
       const titles = (() => {
         const ranked = [...planes].sort((a, b) => a.layer.rank - b.layer.rank)
         if (topView && ranked.length > 0) {
-          // Kept inside the scene, like the titles below: about 150px wide, right-aligned at x.
           const x = Math.max(-W / 2 + 150 * unitsPerPx, Math.min(...ranked.map((p) => p.anchor.x)) - 16)
           const cy = ranked.reduce((s, p) => s + p.center.y, 0) / ranked.length
-          const rail = titleRail(ranked.length, x, cy, titleSpacing)
-          return ranked.map((p, i) => ({ id: p.layer.id, x: rail[i].x, y: rail[i].y }))
+          const ys = fitTitleColumn(titleRail(ranked.length, x, cy, titleSpacing).map((r) => r.y), titleSpacing, minY, maxY)
+          return ranked.map((p, i) => ({ id: p.layer.id, x, y: ys[i] }))
         }
-        // Kept inside the scene: a title is about 150px wide, right-aligned at x.
         const minX = -W / 2 + 150 * unitsPerPx
-        const minY = -H / 2 + 22 * unitsPerPx
-        const maxY = H / 2 - 22 * unitsPerPx
-        const placed = ranked
-          .map((p) => ({ id: p.layer.id, x: Math.max(minX, p.anchor.x - 8), y: clamp(p.anchor.y, minY, maxY) }))
-          .sort((a, b) => a.y - b.y)
-        for (let k = 1; k < placed.length; k++) {
-          if (placed[k].y - placed[k - 1].y < titleSpacing) placed[k].y = placed[k - 1].y + titleSpacing
-        }
-        return placed
+        const placed = ranked.map((p) => ({ id: p.layer.id, x: Math.max(minX, p.anchor.x - 8), y: p.anchor.y })).sort((a, b) => a.y - b.y)
+        const ys = fitTitleColumn(placed.map((t) => t.y), titleSpacing, minY, maxY)
+        return placed.map((t, i) => ({ ...t, y: ys[i] }))
       })()
 
       // Links, arrowheads and pill candidates.
