@@ -18,6 +18,7 @@ import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphF
 //       shows the reports and the page's camera)
 //     &quiet=1 (no onCameraChange: the page never re-renders on a camera move)
 //     &late=1 (mount with no data; the Load data button brings the fixture in)
+//     &zoom=<n> (defaultCamera={{ zoom: n }}, an override of the preset's zoom)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' || params.get('data') === 'full' ? (params.get('data') as 'ux' | 'full') : 'spec'
 const FIXTURE = {
@@ -27,6 +28,7 @@ const FIXTURE = {
 }[DATA]
 const QUIET = params.get('quiet') === '1'
 const LATE = params.get('late') === '1'
+const DEFAULT_CAMERA = params.has('zoom') ? { zoom: Number(params.get('zoom')) } : undefined
 const EMPTY: never[] = []
 const CAMERA_MODE = ['controlled', 'lagged', 'held'].includes(params.get('camera') ?? '') ? params.get('camera') : null
 /** Applies a reported value: at once, two frames late (a slow parent), or never. */
@@ -137,6 +139,7 @@ export default function LayerStackTestPage() {
             turntable={turntable}
             onTurntableChange={setTurntable}
             nodeLabels={nodeLabels}
+            defaultCamera={DEFAULT_CAMERA}
             camera={CAMERA_MODE ? camera : undefined}
             layerGap={CAMERA_MODE ? gap : undefined}
             onLayerGapChange={(g) => follow(setGap, g)}

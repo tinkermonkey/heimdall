@@ -291,6 +291,89 @@ test.describe('LayerStack', () => {
     await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 0.40')
   })
 
+  test.describe('labels behind planes', () => {
+    test.use({ reducedMotion: 'reduce' })
+
+    /** Ids of the node labels with the occluded state, by layer. */
+    const occluded = (page: Page) =>
+      page.evaluate(() => {
+        const out: Record<string, { occluded: string[]; clear: string[] }> = {}
+        for (const el of document.querySelectorAll<HTMLElement>('button.layer-stack__label')) {
+          const id = el.dataset.nodeId!
+          const layer = id.split('.')[0]
+          out[layer] ??= { occluded: [], clear: [] }
+          out[layer][el.classList.contains('layer-stack__label--occluded') ? 'occluded' : 'clear'].push(id)
+        }
+        return out
+      })
+
+    test('stack preset: labels under a nearer plane fade, the top layer stays clear', async ({ page }) => {
+      await open(page)
+      const o = await occluded(page)
+      expect(o.business.occluded).toEqual([])
+      expect(o.application.occluded.length).toBeGreaterThan(0)
+      expect(o.technology.occluded.length).toBeGreaterThan(0)
+      // Faded, not hidden: still drawn, at under half its opacity.
+      const label = page.locator(`button.layer-stack__label[data-node-id="${o.technology.occluded[0]}"]`)
+      await expect(label).toBeVisible()
+      expect(Number(await label.evaluate((el) => getComputedStyle(el).opacity))).toBeLessThan(0.5)
+    })
+
+    test('top view is the x-ray: no label fades', async ({ page }) => {
+      await open(page, '&preset=top')
+      const o = await occluded(page)
+      expect([...o.business.occluded, ...o.application.occluded, ...o.technology.occluded]).toEqual([])
+    })
+
+    test('the selection, its reach and the hovered node are never faded', async ({ page }) => {
+      await open(page, `&select=${ORIGIN}`)
+      const reach = await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('button.layer-stack__label--selected, button.layer-stack__label--followed')].map((el) => el.dataset.nodeId!))
+      expect(reach).toContain(ORIGIN)
+      const o = await occluded(page)
+      const faded = [...o.application.occluded, ...o.technology.occluded]
+      for (const id of reach) expect(faded).not.toContain(id)
+      // Others under the business plane are still faded.
+      expect(faded.length).toBeGreaterThan(0)
+      // Hovering its disc (React's pointer-enter listens for pointerover; the disc may sit under
+      // another node, so the event goes straight to it).
+      await page.locator(`.layer-stack__node[data-node-id="${faded[0]}"] .layer-stack__disc`).dispatchEvent('pointerover')
+      await expect(page.locator(`button.layer-stack__label[data-node-id="${faded[0]}"]`)).not.toHaveClass(/layer-stack__label--occluded/)
+    })
+
+    test('a focused layer reads clearly: the planes dimmed around it fade no label', async ({ page }) => {
+      await open(page, '&focus=application')
+      const o = await occluded(page)
+      expect(o.application.occluded).toEqual([])
+    })
+
+    test('profile view: almost side-on, nothing sits behind a plane', async ({ page }) => {
+      await open(page, '&preset=profile')
+      const o = await occluded(page)
+      expect([...o.business.occluded, ...o.application.occluded, ...o.technology.occluded].length).toBeLessThan(3)
+    })
+  })
+
+  test('an orbit fades and clears labels frame by frame without a React commit', async ({ page }) => {
+    await open(page)
+    const r = await page.evaluate(async () => {
+      const w = window as unknown as { __layerStackCommits: number }
+      const frame = () => new Promise((r) => requestAnimationFrame(r))
+      const faded = () => [...document.querySelectorAll('button.layer-stack__label--occluded')].map((el) => (el as HTMLElement).dataset.nodeId).join(',')
+      ;[...document.querySelectorAll<HTMLElement>('button')].find((b) => b.textContent === 'Turntable')!.click()
+      for (let i = 0; i < 3; i++) await frame()
+      const c0 = w.__layerStackCommits
+      const seen = new Set<string>()
+      for (const t0 = performance.now(); performance.now() - t0 < 1500; ) {
+        await frame()
+        seen.add(faded())
+      }
+      return { states: seen.size, commits: w.__layerStackCommits - c0 }
+    })
+    // The faded set changed as the stack turned, and no frame committed.
+    expect(r.states).toBeGreaterThan(1)
+    expect(r.commits).toBe(0)
+  })
+
   test.describe('full DR spec', () => {
     test('draws every layer, node and link of the 13-layer spec', async ({ page }) => {
       const errors = await open(page, '&data=full')
@@ -346,7 +429,7 @@ test.describe('LayerStack', () => {
       const r = await motion(page, 'Exploded', 600)
       expect(r.painted).toBeGreaterThan(3)
       expect(r.commits).toBe(0)
-      await expect(cameraStatus(page)).toHaveText('preset · yaw -29° pitch 19° zoom 0.86')
+      await expect(cameraStatus(page)).toContainText('preset · yaw -29° pitch 19° zoom ')
     })
 
     test('an orbit drag re-renders a fixed few times, not once per move', async ({ page }) => {
@@ -387,15 +470,48 @@ test.describe('LayerStack', () => {
       }
     })
 
-    test('data that loads after mount takes the preset gap for its layers and frames after Fit', async ({ page }) => {
+    test('a defaultCamera zoom over the preset is kept: no fit', async ({ page }) => {
+      await open(page, '&data=full&zoom=1.6')
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+      // At zoom 1.6 the 13 planes leave the scene, and no fit was reported.
+      expect(await cornersOutside(page)).toBeGreaterThan(0)
+      await expect(cameraStatus(page)).toHaveText('')
+    })
+
+    test('a controlled camera is never fitted', async ({ page }) => {
+      await open(page, '&data=full&camera=controlled')
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+      expect(await cornersOutside(page)).toBeGreaterThan(0)
+      await expect(page.getByTestId('layer-stack-reports')).toContainText('0 reports')
+    })
+
+    test('picking a preset on 13 layers frames it', async ({ page }) => {
+      await open(page, '&data=full')
+      await page.getByRole('radio', { name: 'Exploded' }).click()
+      await expect(cameraStatus(page)).toContainText('preset · yaw -29° pitch 19° zoom ')
+      expect(await cornersOutside(page)).toBe(0)
+    })
+
+    test('data that loads after mount takes the preset gap and is fitted, with no Fit click', async ({ page }) => {
       await open(page, '&data=full&late=1')
       await expect(page.locator('.layer-stack__plane')).toHaveCount(0)
       await page.getByRole('button', { name: 'Load data' }).click()
       await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
-      await page.getByRole('button', { name: 'Fit', exact: true }).click()
       await expect(cameraStatus(page)).toContainText('fit · ')
       expect(await cornersOutside(page)).toBe(0)
+      // The preset stays: the fit is how it frames a tall stack.
+      await expect(page.getByTestId('layer-stack-preset')).toHaveText('preset stack')
     })
+
+    for (const preset of ['stack', 'exploded', 'top', 'profile']) {
+      test(`mounting at ${preset} fits the 13-layer stack, and reports it`, async ({ page }) => {
+        await open(page, `&data=full&preset=${preset}`)
+        await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+        expect(await cornersOutside(page)).toBe(0)
+        await expect(cameraStatus(page)).toContainText('fit · ')
+        await expect(page.getByTestId('layer-stack-preset')).toHaveText(`preset ${preset}`)
+      })
+    }
   })
 
   test.describe('pills follow the camera', () => {
@@ -504,6 +620,10 @@ test.describe('LayerStack', () => {
       test(`stack preset with a followed selection, ${theme}`, async ({ page }) => {
         await open(page, `&select=${ORIGIN}${dark}`)
         await expect(page.getByTestId('layer-stack')).toHaveScreenshot(`layer-stack-selection-${theme}.png`)
+      })
+      test(`stack preset, labels behind planes faded, ${theme}`, async ({ page }) => {
+        await open(page, dark)
+        await expect(page.getByTestId('layer-stack')).toHaveScreenshot(`layer-stack-occlusion-${theme}.png`)
       })
       test(`top preset, ${theme}`, async ({ page }) => {
         await open(page, `&preset=top${dark}`)

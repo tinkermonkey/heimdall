@@ -153,7 +153,11 @@
     0 0 2px rgb(var(--canvas-bg));
   cursor: pointer;
   pointer-events: auto;
-  transition: color 0.08s;
+  /* --label-opacity: the node's emphasis; occlusion multiplies it */
+  opacity: var(--label-opacity, 1);
+  transition:
+    color 0.08s,
+    opacity 0.12s ease;
 }
 
 .layer-stack__label:hover {
@@ -175,6 +179,11 @@
 
 .layer-stack__label--followed {
   color: rgb(var(--graph-hop-2));
+}
+
+/* Behind a nearer plane: faded to 30% of its emphasis opacity, not hidden, so it does not pop during an orbit. */
+.layer-stack__label--occluded {
+  opacity: calc(var(--label-opacity, 1) * 0.3);
 }
 
 /* Hidden labels stay in the tab order; focusing one shows it. */
