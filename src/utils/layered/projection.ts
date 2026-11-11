@@ -297,3 +297,14 @@ export function titleRail(count: number, x: number, centerY: number, spacing = 4
   const top = centerY - ((count - 1) * spacing) / 2
   return Array.from({ length: count }, (_, i) => ({ x, y: top + i * spacing }))
 }
+
+/** Whether a screen point lies inside a polygon (even-odd ray cast); for projected plane quads. */
+export function insidePolygon(p: Point, poly: readonly Point[]): boolean {
+  let inside = false
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const a = poly[i]
+    const b = poly[j]
+    if (a.y > p.y !== b.y > p.y && p.x < ((b.x - a.x) * (p.y - a.y)) / (b.y - a.y) + a.x) inside = !inside
+  }
+  return inside
+}

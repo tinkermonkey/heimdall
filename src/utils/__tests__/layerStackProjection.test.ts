@@ -12,6 +12,7 @@ import {
   leftmostPoint,
   lerpCamera,
   nearestYaw,
+  insidePolygon,
   presetLayerGap,
   planeCorners,
   planeGridLines,
@@ -134,6 +135,14 @@ describe('stack geometry', () => {
     expect(presetLayerGap('exploded', 5)).toBe(CAMERA_PRESETS.exploded.layerGap)
     expect(presetLayerGap('stack', 13) * 12).toBeCloseTo(CAMERA_PRESETS.stack.layerGap * 4)
     expect(presetLayerGap('top', 1)).toBe(CAMERA_PRESETS.top.layerGap)
+  })
+
+  it('insidePolygon: inside, outside and on a projected quad', () => {
+    const quad = [{ x: 0, y: 0 }, { x: 10, y: 2 }, { x: 8, y: 12 }, { x: -2, y: 9 }]
+    expect(insidePolygon({ x: 4, y: 5 }, quad)).toBe(true)
+    expect(insidePolygon({ x: 12, y: 5 }, quad)).toBe(false)
+    expect(insidePolygon({ x: -3, y: 1 }, quad)).toBe(false)
+    expect(insidePolygon({ x: 4, y: 5 }, [])).toBe(false)
   })
 
   it('planes share one square extent', () => {

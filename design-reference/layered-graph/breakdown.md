@@ -250,7 +250,7 @@ Decision: v1 ships on SVG projection behind a small scene model (projected nodes
 **View-specific gaps from the prototype**
 
 - Top view: plane titles collide. The prototype nudges them; production should pin titles to a side rail in top view.
-- Occlusion of labels behind planes.
+- Occlusion of labels behind planes. (Done in #335: labels behind a nearer plane fade.)
 - Planes scale with layout extent per layer, but should share a common extent so the stack reads square.
 
 ### 2.2 Lanes (`GraphCanvas` layout) [V]
@@ -457,9 +457,15 @@ Why A was chosen:
 **Not yet:**
 
 - Lanes (#334): bundled intra-layer links, Up/Down focus between lanes. Done: `laneOptions.skipLayerRouting: 'gutter'` (`routeLaneGutters`, a dedicated track router; `routeNavigationEdges` searches a lattice per route, while lane gutters are a fixed corridor where only track order matters), `laneOptions.nodeLabels` (`'all'` / `'reached'`, defaulting to the state's `nodeLabels`, so the explorer's toggle applies), optional `nodes`/`edges` with shared state, and pills held during a node drag.
-- Stack (#335): label occlusion behind planes. Done in the second slice: the full DR spec fixture (`--full`, 13 layers, 193 types, 987 schemas), frames painted imperatively (no React commit per frame), and preset gaps that close up past five layers (`presetLayerGap`), so every preset frames the 13-layer stack after `fit()`. Done in the first slice: pinch zoom; independent tween channels (`useTweenChannels`), so a focus after a preset keeps its yaw and a focus switch eases from the current planes; controlled `camera` / `layerGap` held, reporting every frame.
 - Matrix (#336): virtualization. In: `symmetric` and `aggregate="layer"` (the heat map toggles the layer-pair filter and layer focus); `onCellSelect(link, links)` (`onLinkSelect` deprecated), with the explorer showing the link in a `GraphEdgeInspector` (`linkEdgeMetadata`) and a Reverse button for merged cells; `order="cluster"` (per-layer Louvain, deterministic). Helpers in `src/utils/layered/matrix.ts`.
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
+
+**#335 LayerStack camera, scale and occlusion: implemented.**
+
+- **Camera:** pinch zoom; independent tween channels (`useTweenChannels`), so a focus after a preset keeps its yaw and a focus switch eases from the current planes; controlled `camera` / `layerGap` held, reporting every frame (late echoes of recent proposals count as the stack's own).
+- **Scale:** the full DR spec fixture (`scripts/build-layered-fixtures.mjs --full`: 13 layers, 193 types, 987 schemas); frames painted imperatively (no React commit per frame, checked by commit-count tests); preset gaps that close up past five layers (`presetLayerGap`); a stack of more than five layers that overflows its preset's framing is fitted on mount, and when its data arrives later.
+- **Label occlusion:** a node label whose node lies behind another layer's plane (the plane between the node and the camera height, the node inside the plane's projected quad) fades to 30% of its opacity, computed in `paint()`. The selection, its reach, the hovered and the keyboard-focused node never fade, and planes dimmed by a layer focus fade nothing.
+- **Not yet:** link batching to cut style recalculation (now the larger per-frame cost on the full spec).
 
 **#338 state API: implemented.**
 

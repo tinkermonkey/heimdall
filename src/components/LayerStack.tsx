@@ -13,10 +13,13 @@ import {
   TOP_VIEW_PITCH,
   cameraFromPreset,
   presetLayerGap,
+  PRESET_GAP_FULL_LAYERS,
   clampCamera,
   createProjector,
+  DEFAULT_CAMERA_DISTANCE,
   depthSort,
   fitZoom,
+  insidePolygon,
   leftmostPoint,
   nearestYaw,
   planeCorners,
@@ -228,6 +231,54 @@ function remember<T>(list: T[], value: T) {
   if (list.length > RECENT_PROPOSALS) list.shift()
 }
 
+/**
+ * Whether a node's label sits behind another layer's plane: the plane lies between the node and
+ * the camera height, and the node's screen point falls inside the plane's projected quad. Planes
+ * dimmed by a layer focus do not count.
+ */
+function behindPlane(
+  n: IndexedNode,
+  p: Point,
+  s: {
+    world: ReadonlyMap<string, Vec3>
+    cameraY: number
+    planes: readonly { layer: { id: string }; y: number; corners: readonly Point[]; occludes: boolean }[]
+  },
+): boolean {
+  const y = s.world.get(n.id)?.y
+  if (y === undefined) return false
+  return s.planes.some((pl) => pl.occludes && pl.layer.id !== n.layerId && (pl.y - y) * (pl.y - s.cameraY) < 0 && insidePolygon(p, pl.corners))
+}
+
+/** The layers a stack draws (hidden ones filtered out). */
+function shownLayers(index: { layers: readonly { id: string; rank: number }[] }, filters: { hiddenLayers: readonly string[] }) {
+  return index.layers.filter((l) => !filters.hiddenLayers.includes(l.id))
+}
+
+/**
+ * The zoom that frames the planes (as `fit` does), or null when every plane corner is already
+ * inside the scene at the camera's own zoom.
+ */
+function overflowFitZoom(
+  layers: readonly { rank: number }[],
+  layerCount: number,
+  gap: number,
+  extent: number,
+  camera: StackCamera,
+  width: number,
+  height: number,
+): number | null {
+  const pts = layers.flatMap((l) => planeCorners(stackPlaneY(l.rank, layerCount, gap), extent))
+  const cam = { ...camera, targetY: 0 }
+  const offset = axisOffset(cam.pitch, 0)
+  const proj = createProjector(cam, offset)
+  const overflows = pts.some((p) => {
+    const q = proj(p)
+    return Math.abs(q.x) > width / 2 || Math.abs(q.y) > height / 2
+  })
+  return overflows ? fitZoom(pts, cam, { width, height, margin: 40 }, offset) : null
+}
+
 /** The view fields that move the picture, as one comparable string. */
 function viewKey(v: ViewState): string {
   return [v.yaw, v.pitch, v.zoom, v.targetY, v.gap, v.mix, ...Object.entries(v.focus).flat()].join('|')
@@ -380,10 +431,18 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     if (view.current === null) {
       const base = clampCamera({ ...cameraFromPreset(cameraPreset ?? defaultCameraPreset), ...defaultCamera, ...definedCamera(camera) })
       const focused = focusedLayerId != null && index.layerById.has(focusedLayerId)
+      const gap = layerGap ?? defaultLayerGap ?? presetLayerGap(cameraPreset ?? defaultCameraPreset, index.layers.length)
+      // Presets frame up to five layers. A taller stack that overflows its preset's framing starts
+      // fitted (a preset, an uncontrolled camera, no focus); otherwise the preset's own zoom.
+      const fitted =
+        cameraPreset !== null && camera === undefined && !focused && index.layers.length > PRESET_GAP_FULL_LAYERS
+          ? overflowFitZoom(shownLayers(index, filters), index.layers.length, gap, planeSize, base, sceneWidth, sceneHeight)
+          : null
       view.current = {
         ...base,
+        ...(fitted !== null ? { zoom: fitted, targetY: 0 } : null),
         ...(focused ? { pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM } : null),
-        gap: layerGap ?? defaultLayerGap ?? presetLayerGap(cameraPreset ?? defaultCameraPreset, index.layers.length),
+        gap,
         mix: planeLayout === 'coupled' ? 1 : 0,
         focus: focused ? { [focusedLayerId]: 1 } : {},
       }
@@ -639,17 +698,24 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
 
     // ── layer count ───────────────────────────────────────────────────────
     // A graph that arrives (or changes its layer count) after mount takes the active preset's gap
-    // for that many layers (`presetLayerGap`), unless the gap is controlled.
+    // for that many layers (`presetLayerGap`), unless the gap is controlled. A tall one (more than
+    // five layers) is fitted once if it then overflows, as on mount.
     const prevLayerCount = useRef(index.layers.length)
     useEffect(() => {
       const n = index.layers.length
       if (prevLayerCount.current === n) return
       prevLayerCount.current = n
       const name = presetRef.current
-      if (!name || layerGap !== undefined) return
-      const gap = presetLayerGap(name, n)
-      if (near(view.current!.gap, gap)) return
-      tween.start({ gap: view.current!.gap }, { gap }, { duration: CAMERA_MS, onDone: () => onLayerGapChangeRef.current?.(gap) })
+      if (!name) return
+      const v = view.current!
+      let gap = v.gap
+      if (layerGap === undefined) {
+        gap = presetLayerGap(name, n)
+        if (!near(v.gap, gap)) tween.start({ gap: v.gap }, { gap }, { duration: CAMERA_MS, onDone: () => onLayerGapChangeRef.current?.(gap) })
+      }
+      if (Object.keys(held.current.camera).length > 0 || focusedLayerId != null || n <= PRESET_GAP_FULL_LAYERS) return
+      const zoom = overflowFitZoom(shownLayers(index, filters), n, gap, planeSize, cameraOf(v), sceneWidth, sceneHeight)
+      if (zoom !== null) moveView({ targetY: 0, zoom }, 'fit')
     }, [index, layerGap, tween])
 
     // ── plane layout mix ──────────────────────────────────────────────────
@@ -934,6 +1000,10 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           const center = proj({ x: 0, y, z: 0 })
           return {
             layer,
+            y,
+            corners,
+            // A plane dimmed by a layer focus is see-through: it fades no label.
+            occludes: focusedLayerId == null || layer.id === focusedLayerId,
             depth: center.depth,
             points: svgPoints(corners),
             grid: planeGridLines(y, extent).map(([a, b]) => svgPoints([proj(a), proj(b)])),
@@ -1010,6 +1080,9 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       const nodeDraw = depthSort(visibleNodes, (n) => P.get(n.id)!.depth - (n.id === selectedId ? 1e6 : 0))
       return {
         P,
+        world,
+        // World height of the camera: a plane between it and a node lies in front of the node.
+        cameraY: renderCam.targetY + DEFAULT_CAMERA_DISTANCE * Math.sin(renderCam.pitch),
         radius,
         topView,
         planes,
@@ -1114,6 +1187,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           setStyle(label, 'top', `${pcyRef.current(p.y)}%`)
           setStyle(label, 'fontSize', `${r1(clamp(10.5 * p.scale, 8, 14))}px`)
           setStyle(label, 'zIndex', String(i + 1))
+          label.classList.toggle('layer-stack__label--occluded', !keepLabels.current.has(n.id) && behindPlane(n, p, s))
         }
       })
       for (const t of s.titles) {
@@ -1126,6 +1200,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [applyHeld, isMoving, repaintNow])
     const pcxRef = useRef(pcx)
     const pcyRef = useRef(pcy)
+    const keepLabels = useRef<ReadonlySet<string>>(new Set())
     // What a frame reads, as of this commit (before the paint below).
     useLayoutEffect(() => {
       projectRef.current = project
@@ -1134,6 +1209,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       pcyRef.current = pcy
       renderedMoving.current = moving
       renderedView.current = viewNow
+      // Never faded behind a plane: the selection and its reach, the hovered and the focused node.
+      keepLabels.current = new Set(visibleNodes.filter((n) => n.id === hoveredId || n.id === focusedNodeId || nodeEm.get(n.id)!.hop !== null).map((n) => n.id))
     })
     // After every commit: find the elements React rendered, then draw them.
     useLayoutEffect(() => {
@@ -1360,7 +1437,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
                     tabIndex={n.id === tabStop ? 0 : -1}
                     aria-pressed={em.selected}
                     aria-label={`${n.label}, ${l.label} layer${em.selected ? ', selected' : ''}`}
-                    style={{ opacity: r2(Math.max(em.opacity, 0.35)) }}
+                    style={{ '--label-opacity': r2(Math.max(em.opacity, 0.35)) } as React.CSSProperties}
                     onClick={(e) => toggleSelect(e, n.id)}
                     onFocus={() => {
                       setRovingId(n.id)
