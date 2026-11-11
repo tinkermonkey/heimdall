@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useId, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Button } from './Button'
 import type { GraphEdge, GraphNodeData } from './GraphCanvas'
 import { GraphEdgeInspector } from './GraphEdgeInspector'
@@ -7,8 +7,19 @@ import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseL
 import { orderAcrossLayers, type NodeOrder } from '../utils/layered/layout'
 import { linkPredicateLabel } from '../utils/layered/labels'
 import { isLinkVisible } from '../utils/layered/filters'
-import { clusterOrder, layerMatrixCells, linkEdgeMetadata, matrixCells, type LayerMatrixCell } from '../utils/layered/matrix'
-import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode } from '../utils/layered/types'
+import {
+  clusterOrder,
+  layerMatrixCells,
+  linkEdgeMetadata,
+  matrixCellStep,
+  matrixCells,
+  matrixWindow,
+  type LayerMatrixCell,
+  nextMatrixWindow,
+  type MatrixWindow,
+} from '../utils/layered/matrix'
+import type { LinkEmphasis } from '../utils/layered/emphasis'
+import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode, LayeredIndex } from '../utils/layered/types'
 import './AdjacencyMatrix.css'
 
 export interface AdjacencyMatrixProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onSelect'> {
@@ -58,6 +69,12 @@ export interface AdjacencyMatrixProps extends Omit<React.HTMLAttributes<HTMLDivE
    * the layer-pair filter and a diagonal cell toggles the layer focus.
    */
   onLayerCellSelect?: (cell: LayerMatrixCell) => void
+  /**
+   * Above this many nodes, only the rows and columns in view render, and the row and column labels
+   * stick to the edges while the cells scroll. The scroll area is capped at
+   * `--adjacency-matrix-max-height` (default 80vh). Default 150.
+   */
+  virtualizeAbove?: number
 }
 
 export type { LayerMatrixCell }
@@ -122,6 +139,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       symmetric = false,
       aggregate = 'none',
       onLayerCellSelect,
+      virtualizeAbove = 150,
       className = '',
       ...props
     },
@@ -219,6 +237,61 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
     const hoverRow = hover ? at.get(hover.row) : undefined
     const hoverCol = hover ? at.get(hover.col) : undefined
 
+    // ── virtualization: past `virtualizeAbove` nodes only the rows and columns in view render ──
+    const virtual = !isAggregate && n > virtualizeAbove
+    const scrollRef = useRef<HTMLDivElement | null>(null)
+    const win = useMatrixWindow(scrollRef, virtual, n, cs, LW, TH)
+    // a focused row header stays rendered while scrolled away; by id, so a reorder keeps the right one
+    const [focusedRowId, setFocusedRowId] = useState<string | null>(null)
+
+    // ── roving focus: one Tab stop for the cells, arrow keys move between them ──
+    const sorted = useMemo(() => [...cells].sort((a, b) => a.r - b.r || a.c - b.c), [cells])
+    const [activeKey, setActiveKey] = useState<string | null>(null)
+    const activeCell = sorted.find((cell) => cell.links[0].id === activeKey) ?? sorted[0]
+    const pendingFocus = useRef<string | null>(null)
+    const cellActions = useRef<CellActions>(null!)
+    const rootRef = useRef<HTMLDivElement | null>(null)
+    const setRoot = useCallback(
+      (el: HTMLDivElement | null) => {
+        rootRef.current = el
+        if (typeof ref === 'function') ref(el)
+        else if (ref) ref.current = el
+      },
+      [ref],
+    )
+    /**
+     * Scroll the cell at (r, c) into view, clear of the sticky labels when virtual: by the least
+     * amount, or centred on an axis where it is out of view (`center`).
+     */
+    const reveal = (r: number, c: number, center = false) => {
+      const el = scrollRef.current
+      if (!el) return
+      const fit = (pos: number, scroll: number, sticky: number, size: number) => {
+        if (pos >= scroll + sticky && pos + cs <= scroll + size) return scroll
+        if (center) return pos - sticky - (size - sticky - cs) / 2
+        return pos < scroll + sticky ? pos - sticky : pos + cs - size
+      }
+      el.scrollLeft = fit(LW + c * cs, el.scrollLeft, virtual ? LW : 0, el.clientWidth)
+      el.scrollTop = fit(TH + r * cs, el.scrollTop, virtual ? TH : 0, el.clientHeight)
+    }
+    // Layout effect: focus moves in the same commit, so no key lands on <body> in between.
+    useLayoutEffect(() => {
+      const key = pendingFocus.current
+      if (!key) return
+      pendingFocus.current = null
+      rootRef.current?.querySelector<SVGGElement>(`.adjacency-matrix__cell[data-cell-key="${CSS.escape(key)}"]`)?.focus()
+    })
+    // `selectedLinkId` set from outside: bring its cell into view, once per id.
+    const revealed = useRef<string | null>(null)
+    useEffect(() => {
+      if (!selectedLinkId || !selectedCell || revealed.current === selectedLinkId) return
+      revealed.current = selectedLinkId
+      reveal(selectedCell.r, selectedCell.c, true)
+    })
+    useEffect(() => {
+      if (!selectedLinkId) revealed.current = null
+    }, [selectedLinkId])
+
     if (isAggregate) {
       return (
         <div ref={ref} className={['adjacency-matrix', className].filter(Boolean).join(' ')} {...props}>
@@ -227,193 +300,392 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       )
     }
 
+    // what to draw: everything, or the window plus the Tab stop, a focused header and the selected cell
+    const inRows = (r: number) => !virtual || (r >= win.r0 && r < win.r1) || ids[r] === focusedRowId
+    // rotated column labels lean right, so labels from columns left of the window still show
+    const colLead = Math.ceil((maxChars * fs * MONO_CHAR_EM * 0.5) / cs)
+    const inCols = (c: number) => !virtual || (c >= win.c0 - colLead && c < win.c1)
+    const drawn = virtual
+      ? sorted.filter((cell) => (cell.r >= win.r0 && cell.r < win.r1 && cell.c >= win.c0 && cell.c < win.c1) || cell === activeCell)
+      : cells
+
+    const pick = (link: IndexedLink, links: readonly IndexedLink[]) => {
+      const handler = onCellSelect ?? onLinkSelect
+      if (handler) handler(link, links)
+      else g.select(link.sourceId)
+    }
+    const onCellKey = (e: React.KeyboardEvent, cell: DrawnCell) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        pick(cell.link, cell.links)
+        return
+      }
+      // Step from the newest target: keys pressed before focus lands still count.
+      const from = (pendingFocus.current && sorted.find((x) => x.links[0].id === pendingFocus.current)) || cell
+      const next = matrixCellStep(sorted, from, e.key)
+      if (!next) return
+      e.preventDefault()
+      setActiveKey(next.links[0].id)
+      pendingFocus.current = next.links[0].id
+      reveal(next.r, next.c)
+    }
+    cellActions.current = {
+      click: (cell) => {
+        setActiveKey(cell.links[0].id)
+        pick(cell.link, cell.links)
+      },
+      key: onCellKey,
+      hover: (cell) => setHover(cell ? { row: ids[cell.r], col: ids[cell.c] } : null),
+    }
+
+    const blocks = spans.map((rs) =>
+      spans.map((csn) => {
+        const diag = rs.layerId === csn.layerId
+        // Symmetric: the blocks below the diagonal are empty, so they are left out.
+        if (symmetric && rs.start > csn.start) return null
+        const layer = index.layerById.get(rs.layerId)!
+        const count =
+          (blockCounts.get(rs.layerId + '\u0000' + csn.layerId) ?? 0) +
+          (symmetric && !diag ? (blockCounts.get(csn.layerId + '\u0000' + rs.layerId) ?? 0) : 0)
+        return (
+          <g key={rs.layerId + '|' + csn.layerId}>
+            <rect
+              className="adjacency-matrix__block"
+              x={LW + csn.start * cs}
+              y={TH + rs.start * cs}
+              width={(csn.end - csn.start) * cs}
+              height={(rs.end - rs.start) * cs}
+              style={{ fill: diag ? layer.color : 'rgb(var(--accent-primary))', fillOpacity: diag ? 0.08 : 0.03 }}
+            />
+            {showBlockCounts && !diag && (
+              <text className="adjacency-matrix__block-count" x={LW + csn.end * cs - 4} y={TH + rs.end * cs - 5} textAnchor="end">
+                {count}
+              </text>
+            )}
+          </g>
+        )
+      }),
+    )
+
+    const bands = (
+      <>
+        {selIndex !== undefined && (
+          <g className="adjacency-matrix__band adjacency-matrix__band--selected">
+            <rect x={LW} y={TH + selIndex * cs} width={n * cs} height={cs} />
+            <rect x={LW + selIndex * cs} y={TH} width={cs} height={n * cs} />
+          </g>
+        )}
+        {hoverRow !== undefined && hoverCol !== undefined && (
+          <g className="adjacency-matrix__band adjacency-matrix__band--hover">
+            <rect x={LW} y={TH + hoverRow * cs} width={n * cs} height={cs} />
+            <rect x={LW + hoverCol * cs} y={TH} width={cs} height={n * cs} />
+          </g>
+        )}
+      </>
+    )
+
+    const headerBits = (id: string) => {
+      const node = index.nodeById.get(id)!
+      const layer = index.layerById.get(node.layerId)!
+      const cls = ['adjacency-matrix__label', nodeLabelClass(node)].filter(Boolean).join(' ')
+      const select = () => g.select(selectedId === id ? null : id)
+      return { node, layer, cls, select }
+    }
+    const rowHeader = (id: string, i: number) => {
+      const { node, layer, cls, select } = headerBits(id)
+      return {
+        strip: <rect x={LW - 6} y={TH + i * cs + 1} width={3} height={cs - 2} style={{ fill: layer.color }} />,
+        button: (
+          <g
+            className="adjacency-matrix__header"
+            data-node-id={id}
+            data-row={virtual ? i : undefined}
+            role="button"
+            tabIndex={0}
+            aria-label={`${node.label}, ${layer.label} layer${selectedId === id ? ', selected' : ''}`}
+            onClick={select}
+            onKeyDown={(e) => activateOnKey(e, select)}
+            onFocus={virtual ? () => setFocusedRowId(id) : undefined}
+            onBlur={virtual ? () => setFocusedRowId(null) : undefined}
+          >
+            <title>{node.label}</title>
+            {/* hit area and focus ring for the whole label cell */}
+            <rect className="adjacency-matrix__header-box" x={2} y={TH + i * cs} width={LW - 10} height={cs} rx={4} />
+            <text className={cls} x={LW - 10} y={TH + i * cs + cs / 2} textAnchor="end" dominantBaseline="central" style={{ fontSize: fs }}>
+              {node.displayLabel}
+            </text>
+          </g>
+        ),
+      }
+    }
+    const colHeader = (id: string, i: number) => {
+      const { node, layer, cls, select } = headerBits(id)
+      return {
+        strip: <rect x={LW + i * cs + 1} y={TH - 6} width={cs - 2} height={3} style={{ fill: layer.color }} />,
+        label: (
+          <g className="adjacency-matrix__header" data-col={virtual ? i : undefined} aria-hidden="true" onClick={select}>
+            <text
+              className={cls}
+              transform={`translate(${LW + i * cs + cs * 0.65} ${TH - 10}) rotate(-60)`}
+              dominantBaseline="central"
+              style={{ fontSize: fs }}
+            >
+              {node.displayLabel}
+            </text>
+          </g>
+        ),
+      }
+    }
+
+    const cellNodes = drawn.map((cell) => (
+      <MatrixCellView key={cell.links[0].id} cell={cell} active={cell === activeCell} index={index} LW={LW} TH={TH} cs={cs} actions={cellActions} />
+    ))
+
+    const selectedOutline = selectedCell && (
+      <rect
+        className="adjacency-matrix__cell-selected"
+        data-testid="adjacency-matrix-selected-cell"
+        x={LW + selectedCell.c * cs}
+        y={TH + selectedCell.r * cs}
+        width={cs}
+        height={cs}
+        rx={3}
+      />
+    )
+    const captionNode = (
+      <text className="adjacency-matrix__caption" x={LW} y={TH + n * cs + 20}>
+        {caption}
+      </text>
+    )
+    const groupLabel = symmetric
+      ? `Adjacency matrix, ${n} by ${n}, undirected: each linked pair is one cell above the diagonal`
+      : `Adjacency matrix, ${n} by ${n}: rows are link sources, columns link targets`
+    const legend = showCodeLegend && usedCodes.length > 0 && (
+      <div className="adjacency-matrix__legend">
+        <span className="adjacency-matrix__legend-title">Cell codes</span>
+        {usedCodes.map(([p, code]) => (
+          <span key={p} className="adjacency-matrix__legend-item">
+            <b>{code}</b> {index.catalog[p]?.label ?? p}
+          </span>
+        ))}
+      </div>
+    )
+    const rootClass = ['adjacency-matrix', className].filter(Boolean).join(' ')
+
+    if (virtual) {
+      // Four SVGs in a grid: sticky corner, sticky column labels, sticky row labels, and the body.
+      // Each keeps the full drawing's coordinates through its viewBox.
+      const bodyW = width - LW
+      const bodyH = height - TH
+      return (
+        <div ref={setRoot} className={rootClass} data-virtual="" {...props}>
+          <div ref={scrollRef} className="adjacency-matrix__scroll adjacency-matrix__scroll--virtual">
+            <div className="adjacency-matrix__grid" style={{ gridTemplateColumns: `${LW}px ${bodyW}px`, gridTemplateRows: `${TH}px ${bodyH}px` }}>
+              <div className="adjacency-matrix__corner" />
+              <svg className="adjacency-matrix__cols" width={bodyW} height={TH} viewBox={`${LW} 0 ${bodyW} ${TH}`} aria-hidden="true">
+                {ids.map((id, i) => {
+                  if (!inCols(i)) return null
+                  const h = colHeader(id, i)
+                  return (
+                    <g key={id}>
+                      {h.strip}
+                      {h.label}
+                    </g>
+                  )
+                })}
+              </svg>
+              <svg className="adjacency-matrix__rows" width={LW} height={bodyH} viewBox={`0 ${TH} ${LW} ${bodyH}`} role="group" aria-label="Rows">
+                {ids.map((id, i) => {
+                  if (!inRows(i)) return null
+                  const h = rowHeader(id, i)
+                  return (
+                    <g key={id}>
+                      {h.strip}
+                      {h.button}
+                    </g>
+                  )
+                })}
+              </svg>
+              <svg
+                className="adjacency-matrix__svg adjacency-matrix__body"
+                width={bodyW}
+                height={bodyH}
+                viewBox={`${LW} ${TH} ${bodyW} ${bodyH}`}
+                role="group"
+                aria-label={groupLabel}
+                onMouseLeave={() => setHover(null)}
+              >
+                {blocks}
+                {bands}
+                {cellNodes}
+                {selectedOutline}
+                {captionNode}
+              </svg>
+            </div>
+          </div>
+          {legend}
+        </div>
+      )
+    }
+
     return (
-      <div ref={ref} className={['adjacency-matrix', className].filter(Boolean).join(' ')} {...props}>
-        <div className="adjacency-matrix__scroll">
+      <div ref={setRoot} className={rootClass} {...props}>
+        <div ref={scrollRef} className="adjacency-matrix__scroll">
           <svg
             className="adjacency-matrix__svg"
             width={width}
             height={height}
             viewBox={`0 0 ${width} ${height}`}
             role="group"
-            aria-label={
-              symmetric
-                ? `Adjacency matrix, ${n} by ${n}, undirected: each linked pair is one cell above the diagonal`
-                : `Adjacency matrix, ${n} by ${n}: rows are link sources, columns link targets`
-            }
+            aria-label={groupLabel}
             onMouseLeave={() => setHover(null)}
           >
             {/* blocks */}
-            {spans.map((rs) =>
-              spans.map((csn) => {
-                const diag = rs.layerId === csn.layerId
-                // Symmetric: the blocks below the diagonal are empty, so they are left out.
-                if (symmetric && rs.start > csn.start) return null
-                const layer = index.layerById.get(rs.layerId)!
-                const count =
-                  (blockCounts.get(rs.layerId + '\u0000' + csn.layerId) ?? 0) +
-                  (symmetric && !diag ? (blockCounts.get(csn.layerId + '\u0000' + rs.layerId) ?? 0) : 0)
-                return (
-                  <g key={rs.layerId + '|' + csn.layerId}>
-                    <rect
-                      className="adjacency-matrix__block"
-                      x={LW + csn.start * cs}
-                      y={TH + rs.start * cs}
-                      width={(csn.end - csn.start) * cs}
-                      height={(rs.end - rs.start) * cs}
-                      style={{ fill: diag ? layer.color : 'rgb(var(--accent-primary))', fillOpacity: diag ? 0.08 : 0.03 }}
-                    />
-                    {showBlockCounts && !diag && (
-                      <text className="adjacency-matrix__block-count" x={LW + csn.end * cs - 4} y={TH + rs.end * cs - 5} textAnchor="end">
-                        {count}
-                      </text>
-                    )}
-                  </g>
-                )
-              }),
-            )}
+            {blocks}
 
             {/* selection and hover bands */}
-            {selIndex !== undefined && (
-              <g className="adjacency-matrix__band adjacency-matrix__band--selected">
-                <rect x={LW} y={TH + selIndex * cs} width={n * cs} height={cs} />
-                <rect x={LW + selIndex * cs} y={TH} width={cs} height={n * cs} />
-              </g>
-            )}
-            {hoverRow !== undefined && hoverCol !== undefined && (
-              <g className="adjacency-matrix__band adjacency-matrix__band--hover">
-                <rect x={LW} y={TH + hoverRow * cs} width={n * cs} height={cs} />
-                <rect x={LW + hoverCol * cs} y={TH} width={cs} height={n * cs} />
-              </g>
-            )}
+            {bands}
 
             {/* headers: row labels on the left, column labels rotated above */}
             {ids.map((id, i) => {
-              const node = index.nodeById.get(id)!
-              const layer = index.layerById.get(node.layerId)!
-              const cls = ['adjacency-matrix__label', nodeLabelClass(node)].filter(Boolean).join(' ')
-              const select = () => g.select(selectedId === id ? null : id)
+              const row = rowHeader(id, i)
+              const col = colHeader(id, i)
               return (
                 <g key={id}>
-                  <rect x={LW - 6} y={TH + i * cs + 1} width={3} height={cs - 2} style={{ fill: layer.color }} />
-                  <rect x={LW + i * cs + 1} y={TH - 6} width={cs - 2} height={3} style={{ fill: layer.color }} />
-                  <g
-                    className="adjacency-matrix__header"
-                    data-node-id={id}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`${node.label}, ${layer.label} layer${selectedId === id ? ', selected' : ''}`}
-                    onClick={select}
-                    onKeyDown={(e) => activateOnKey(e, select)}
-                  >
-                    <title>{node.label}</title>
-                    {/* hit area and focus ring for the whole label cell */}
-                    <rect className="adjacency-matrix__header-box" x={2} y={TH + i * cs} width={LW - 10} height={cs} rx={4} />
-                    <text className={cls} x={LW - 10} y={TH + i * cs + cs / 2} textAnchor="end" dominantBaseline="central" style={{ fontSize: fs }}>
-                      {node.displayLabel}
-                    </text>
-                  </g>
-                  <g className="adjacency-matrix__header" aria-hidden="true" onClick={select}>
-                    <text
-                      className={cls}
-                      transform={`translate(${LW + i * cs + cs * 0.65} ${TH - 10}) rotate(-60)`}
-                      dominantBaseline="central"
-                      style={{ fontSize: fs }}
-                    >
-                      {node.displayLabel}
-                    </text>
-                  </g>
+                  {row.strip}
+                  {col.strip}
+                  {row.button}
+                  {col.label}
                 </g>
               )
             })}
 
             {/* cells */}
-            {cells.map(({ link, links, r, c, em, opacity, code }) => {
-              const title = links
-                .map((l) => {
-                  const predicate = l.predicates.length ? linkPredicateLabel(l, index.catalog) : l.primaryCategory
-                  return `${index.nodeById.get(l.sourceId)!.label} ${predicate} ${index.nodeById.get(l.targetId)!.label}`
-                })
-                .join('\n')
-              const both = links.length > 1
-              return (
-                <g
-                  key={link.id}
-                  className={both ? 'adjacency-matrix__cell adjacency-matrix__cell--both' : 'adjacency-matrix__cell'}
-                  data-link-id={link.id}
-                  data-row={r}
-                  data-col={c}
-                  data-source-id={link.sourceId}
-                  onClick={() => {
-                    const pick = onCellSelect ?? onLinkSelect
-                    if (pick) pick(link, links)
-                    else g.select(link.sourceId)
-                  }}
-                  onMouseEnter={() => setHover({ row: ids[r], col: ids[c] })}
-                >
-                  <title>{title}</title>
-                  <rect
-                    x={LW + c * cs + 1}
-                    y={TH + r * cs + 1}
-                    width={cs - 2}
-                    height={cs - 2}
-                    rx={2}
-                    style={{ fill: em.color, fillOpacity: opacity, stroke: em.highlighted ? em.color : 'none', strokeWidth: 1.5 }}
-                  />
-                  {/* both directions: a notch in the lower-left corner */}
-                  {both && (
-                    <path
-                      className="adjacency-matrix__both"
-                      d={`M${LW + c * cs + 1} ${TH + (r + 1) * cs - 1}v${-cs * 0.4}l${cs * 0.4} ${cs * 0.4}z`}
-                    />
-                  )}
-                  {code && (
-                    <text
-                      className="adjacency-matrix__code"
-                      x={LW + c * cs + cs / 2}
-                      y={TH + r * cs + cs / 2}
-                      textAnchor="middle"
-                      dominantBaseline="central"
-                      style={{ fontSize: Math.min(8.5, cs * 0.48) }}
-                    >
-                      {code}
-                    </text>
-                  )}
-                </g>
-              )
-            })}
+            {cellNodes}
 
-            {selectedCell && (
-              <rect
-                className="adjacency-matrix__cell-selected"
-                data-testid="adjacency-matrix-selected-cell"
-                x={LW + selectedCell.c * cs}
-                y={TH + selectedCell.r * cs}
-                width={cs}
-                height={cs}
-                rx={3}
-              />
-            )}
+            {selectedOutline}
 
-            <text className="adjacency-matrix__caption" x={LW} y={TH + n * cs + 20}>
-              {caption}
-            </text>
+            {captionNode}
           </svg>
         </div>
-        {showCodeLegend && usedCodes.length > 0 && (
-          <div className="adjacency-matrix__legend">
-            <span className="adjacency-matrix__legend-title">Cell codes</span>
-            {usedCodes.map(([p, code]) => (
-              <span key={p} className="adjacency-matrix__legend-item">
-                <b>{code}</b> {index.catalog[p]?.label ?? p}
-              </span>
-            ))}
-          </div>
-        )}
+        {legend}
       </div>
     )
   },
 )
+
+interface DrawnCell {
+  link: IndexedLink
+  links: IndexedLink[]
+  r: number
+  c: number
+  em: LinkEmphasis
+  opacity: number
+  code: string
+}
+
+interface CellActions {
+  click: (cell: DrawnCell) => void
+  key: (e: React.KeyboardEvent, cell: DrawnCell) => void
+  hover: (cell: DrawnCell | null) => void
+}
+
+/**
+ * One cell. Memoized on the cell (stable while only the scroll position changes), so scrolling a
+ * virtualized matrix re-renders only the cells entering the window. Handlers go through `actions`,
+ * a ref the matrix refreshes every render.
+ */
+const MatrixCellView = React.memo(function MatrixCellView({
+  cell,
+  active,
+  index,
+  LW,
+  TH,
+  cs,
+  actions,
+}: {
+  cell: DrawnCell
+  active: boolean
+  index: LayeredIndex
+  LW: number
+  TH: number
+  cs: number
+  actions: React.MutableRefObject<CellActions>
+}) {
+  const { link, links, r, c, em, opacity, code } = cell
+  // The <title> is the cell's accessible name and its tooltip, one sentence per link.
+  const sentences = links.map((l) => {
+    const predicate = l.predicates.length ? linkPredicateLabel(l, index.catalog) : l.primaryCategory
+    return `${index.nodeById.get(l.sourceId)!.label} ${predicate} ${index.nodeById.get(l.targetId)!.label}`
+  })
+  const both = links.length > 1
+  return (
+    <g
+      className={both ? 'adjacency-matrix__cell adjacency-matrix__cell--both' : 'adjacency-matrix__cell'}
+      data-link-id={link.id}
+      data-cell-key={links[0].id}
+      data-row={r}
+      data-col={c}
+      data-source-id={link.sourceId}
+      role="button"
+      tabIndex={active ? 0 : -1}
+      onClick={() => actions.current.click(cell)}
+      onKeyDown={(e) => actions.current.key(e, cell)}
+      onFocus={() => actions.current.hover(cell)}
+      onBlur={() => actions.current.hover(null)}
+      onMouseEnter={() => actions.current.hover(cell)}
+    >
+      <title>{sentences.join('\n')}</title>
+      <rect
+        x={LW + c * cs + 1}
+        y={TH + r * cs + 1}
+        width={cs - 2}
+        height={cs - 2}
+        rx={2}
+        style={{ fill: em.color, fillOpacity: opacity, stroke: em.highlighted ? em.color : 'none', strokeWidth: 1.5 }}
+      />
+      {/* both directions: a notch in the lower-left corner */}
+      {both && <path className="adjacency-matrix__both" d={`M${LW + c * cs + 1} ${TH + (r + 1) * cs - 1}v${-cs * 0.4}l${cs * 0.4} ${cs * 0.4}z`} />}
+      {code && (
+        <text
+          className="adjacency-matrix__code"
+          x={LW + c * cs + cs / 2}
+          y={TH + r * cs + cs / 2}
+          textAnchor="middle"
+          dominantBaseline="central"
+          style={{ fontSize: Math.min(8.5, cs * 0.48) }}
+        >
+          {code}
+        </text>
+      )}
+      {active && <rect className="adjacency-matrix__cell-focus" x={LW + c * cs - 1} y={TH + r * cs - 1} width={cs + 2} height={cs + 2} rx={3} />}
+    </g>
+  )
+})
+
+/** Tracks the scroll position of a virtualized matrix and returns the rows and columns to draw. */
+function useMatrixWindow(ref: React.RefObject<HTMLDivElement | null>, enabled: boolean, n: number, cs: number, labelWidth: number, headerHeight: number) {
+  const [win, setWin] = useState<MatrixWindow>({ r0: 0, r1: Math.min(n, 60), c0: 0, c1: Math.min(n, 120) })
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!enabled || !el) return
+    const update = () => {
+      // Only the rows and columns in view; the window keeps an overscan margin and moves only when
+      // the view gets within half of it (hysteresis), so most scroll frames don't re-render.
+      const view = matrixWindow({ left: el.scrollLeft, top: el.scrollTop, width: el.clientWidth, height: el.clientHeight }, n, cs, labelWidth, headerHeight, 0)
+      setWin((prev) => nextMatrixWindow(prev, view, n))
+    }
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(update)
+    ro?.observe(el)
+    return () => {
+      el.removeEventListener('scroll', update)
+      ro?.disconnect()
+    }
+  }, [ref, enabled, n, cs, labelWidth, headerHeight])
+  return win
+}
 
 AdjacencyMatrix.displayName = 'AdjacencyMatrix'
 
@@ -608,7 +880,7 @@ export function useMatrixLinkPanel(g: LayeredGraphState, enabled: boolean, reset
 /**
  * @internal The explorer's link panel: one link of a matrix cell in a `GraphEdgeInspector`, with a
  * button to step to the other direction when a symmetric cell holds both. Escape or the close
- * button closes it and returns focus to the source's row header.
+ * button closes it and returns focus to the matrix's Tab-stop cell (the one clicked).
  */
 export function MatrixLinkInspector({
   graph,
@@ -634,10 +906,11 @@ export function MatrixLinkInspector({
     ref.current?.scrollIntoView?.({ block: 'nearest' })
   }, [cellKey])
   const close = () => {
+    // the matrix's Tab-stop cell (the one clicked) is always rendered, unlike a virtualized row header
     const scope = ref.current?.closest('.layered-graph-explorer') ?? document
-    const header = scope.querySelector<HTMLElement>(`.adjacency-matrix__header[data-node-id="${CSS.escape(link.sourceId)}"]`)
+    const stop = scope.querySelector<SVGGElement>('.adjacency-matrix__cell[tabindex="0"]')
     onClose()
-    header?.focus()
+    stop?.focus()
   }
   return (
     <section

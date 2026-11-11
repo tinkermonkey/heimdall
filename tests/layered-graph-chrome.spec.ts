@@ -118,10 +118,10 @@ test.describe('Layered graph chrome', () => {
 
     await list.getByRole('button', { name: 'Hide Business' }).click()
     await expect(state(page)).toContainText('hidden business')
-    await expect(page.locator('.adjacency-matrix [role="button"]')).toHaveCount(22)
+    await expect(page.locator('.adjacency-matrix__header[role="button"]')).toHaveCount(22)
     await expect(page.getByTestId('layer-pair-list').locator('li')).toHaveCount(1)
     await list.getByRole('button', { name: 'Show Business' }).click()
-    await expect(page.locator('.adjacency-matrix [role="button"]')).toHaveCount(36)
+    await expect(page.locator('.adjacency-matrix__header[role="button"]')).toHaveCount(36)
   })
 
   test('LayerPairList toggles layer-pair focus', async ({ page }) => {

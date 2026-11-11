@@ -4,16 +4,21 @@ import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import type { BuildLayeredIndexOptions, IndexedLink, PredicateLabelMode } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
+import { largeLayeredGraph } from './fixtures/largeLayeredGraph'
 
 // AdjacencyMatrix on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=adjacency-matrix&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&dark=1
 //   &symmetric=1&aggregate=layer&order=cluster|degree|label
 //   &report=1|legacy (onCellSelect, or the deprecated onLinkSelect, and onLayerCellSelect write to a status line)
+//   data=large&n=600: a synthetic graph past the virtualization threshold (6 layers, seeded links)
+//   &dark=1 works with it; &link=<index>|last: pass that link's id as selectedLinkId, as an inspector would
 const params = new URLSearchParams(window.location.search)
-const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
+const DATA = params.get('data') === 'ux' ? 'ux' : params.get('data') === 'large' ? 'large' : 'spec'
 const REPORT = params.get('report') === '1' || params.get('report') === 'legacy'
 const LEGACY = params.get('report') === 'legacy'
 const ORDER = (['cluster', 'degree', 'label'] as const).find((o) => o === params.get('order'))
+
+const LARGE = DATA === 'large' ? largeLayeredGraph(Number(params.get('n') ?? 600)) : null
 
 export default function AdjacencyMatrixTestPage() {
   useEffect(() => {
@@ -23,13 +28,16 @@ export default function AdjacencyMatrixTestPage() {
   const [report, setReport] = useState('none')
 
   const layering = useMemo<BuildLayeredIndexOptions>(
-    () => ({ layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
+    () =>
+      LARGE
+        ? { layerBy: 'layer', categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }
+        : { layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' },
     [],
   )
-  const layout = useMemo(() => ({ layoutCategories: DATA === 'spec' ? ['structural'] : null }), [])
+  const layout = useMemo(() => (LARGE ? (false as const) : { layoutCategories: DATA === 'spec' ? ['structural'] : null }), [])
   const graph = useLayeredGraph({
-    nodes: DATA === 'spec' ? drSpecNodes : heimdallUxNodes,
-    edges: DATA === 'spec' ? drSpecEdges : heimdallUxEdges,
+    nodes: LARGE ? LARGE.nodes : DATA === 'spec' ? drSpecNodes : heimdallUxNodes,
+    edges: LARGE ? LARGE.edges : DATA === 'spec' ? drSpecEdges : heimdallUxEdges,
     layering,
     layout,
     defaultSelectedId: params.get('select'),
@@ -66,6 +74,11 @@ export default function AdjacencyMatrixTestPage() {
         </div>
         <AdjacencyMatrix data-testid="adjacency-matrix" symmetric={params.get('symmetric') === '1'} aggregate={params.get('aggregate') === 'layer' ? 'layer' : 'none'}
           order={ORDER}
+          selectedLinkId={
+            params.has('link')
+              ? graph.index.links[params.get('link') === 'last' ? graph.index.links.length - 1 : Number(params.get('link'))]?.id
+              : undefined
+          }
           {...{ [LEGACY ? 'onLinkSelect' : 'onCellSelect']: REPORT ? (link: IndexedLink, links: readonly IndexedLink[]) => setReport(`link ${link.sourceId} -> ${link.targetId} · ${links.length} in cell`) : undefined }}
           onLayerCellSelect={REPORT ? (c) => setReport(`layers ${c.rowLayerId} -> ${c.colLayerId} · ${c.linkCount} · pair ${c.pairKey ?? 'none'}`) : undefined}
         />
