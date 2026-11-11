@@ -297,6 +297,22 @@ test.describe('LayeredGraphExplorer', () => {
     expect(errors).toEqual([])
   })
 
+  test('a graph that loads after mount keeps its preset at the 13-layer gap, and its snapshot round-trips', async ({ page }) => {
+    const errors = await open(page, '&data=full&late=1&sync=1&view=stack')
+    await page.getByRole('button', { name: 'Load data' }).click()
+    await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+    // stack's 170 at 13 layers: 170 × 4 / 12.
+    await expect(status(page)).toContainText('stack · yaw -36° pitch 29° zoom 1.00 · gap 57')
+    await page.getByRole('button', { name: 'Save snapshot' }).click()
+    await expect(page.getByTestId('saved-snapshot')).toHaveText('stack · stack · gap 57')
+    // The restored camera and gap are the preset's own: the preset holds and the stack stays.
+    await page.evaluate(() => { (document.querySelector('.layer-stack') as HTMLElement & { __mark?: number }).__mark = 1 })
+    await page.getByRole('button', { name: 'Restore snapshot' }).click()
+    expect(await page.evaluate(() => (document.querySelector('.layer-stack') as HTMLElement & { __mark?: number }).__mark)).toBe(1)
+    await expect(page.getByRole('radiogroup', { name: 'Camera preset' }).getByRole('radio', { name: 'Stack' })).toHaveAttribute('aria-checked', 'true')
+    expect(errors).toEqual([])
+  })
+
   test('each preset click reports exactly one snapshot, already settled', async ({ page }) => {
     const errors = await open(page, '&sync=1')
     const count = page.getByTestId('snapshot-count')

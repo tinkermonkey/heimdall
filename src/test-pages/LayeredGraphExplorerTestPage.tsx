@@ -11,6 +11,7 @@ import {
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import type { BuildLayeredIndexOptions, IndexedLink } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
+import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphFullSpec'
 import { largeLayeredGraph } from './fixtures/largeLayeredGraph'
 
 // LayeredGraphExplorer on the layered-graph fixtures. Turntable off and a fixed camera; URL params
@@ -21,12 +22,17 @@ import { largeLayeredGraph } from './fixtures/largeLayeredGraph'
 // `sync=1` round-trips the explorer through the URL: `state` (JSON) is its `defaultSnapshot`, and
 // every `onSnapshotChange` writes it back (`snapshot-count` counts them). Save / Restore buttons
 // drive the `explorerRef` handle. `gap=<n>` passes `stackProps={{ defaultLayerGap: n }}`.
+// `data=full` is the whole DR spec (13 layers); `late=1` mounts with no data until Load data.
 const params = new URLSearchParams(window.location.search)
 // `data=large&n=600` is a seeded synthetic graph past the matrix's virtualization threshold.
-const DATA = params.get('data') === 'ux' ? 'ux' : params.get('data') === 'large' ? 'large' : 'spec'
+const DATA_PARAM = params.get('data')
+const DATA = DATA_PARAM === 'ux' || DATA_PARAM === 'full' || DATA_PARAM === 'large' ? DATA_PARAM : 'spec'
 const LARGE = DATA === 'large' ? largeLayeredGraph(Number(params.get('n') ?? 600)) : null
-const NODES = LARGE ? LARGE.nodes : DATA === 'spec' ? drSpecNodes : heimdallUxNodes
-const EDGES = LARGE ? LARGE.edges : DATA === 'spec' ? drSpecEdges : heimdallUxEdges
+const NODES = LARGE ? LARGE.nodes : DATA === 'spec' ? drSpecNodes : DATA === 'full' ? drFullNodes : heimdallUxNodes
+const EDGES = LARGE ? LARGE.edges : DATA === 'spec' ? drSpecEdges : DATA === 'full' ? drFullEdges : heimdallUxEdges
+const LAYERS = DATA === 'full' ? drFullLayers : drLayers
+const LATE = params.get('late') === '1'
+const EMPTY: never[] = []
 const isView = (v: string): v is LayeredGraphView => (LAYERED_GRAPH_VIEWS as readonly string[]).includes(v)
 const VIEWS = (params.get('views')?.split(',').filter(isView) ?? LAYERED_GRAPH_VIEWS) as LayeredGraphView[]
 const VIEW = isView(params.get('view') ?? '') ? (params.get('view') as LayeredGraphView) : VIEWS[0]
@@ -48,7 +54,14 @@ const STACK_PROPS = params.has('gap') ? { defaultLayerGap: Number(params.get('ga
 // `matrix=symmetric` passes `matrixProps={{ symmetric: true }}`; `matrix=report` passes an
 // `onCellSelect` that writes the link id to `cell-report` (a consumer handler, so no link panel).
 const MATRIX = params.get('matrix')
-const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : DATA === 'ux' ? 'heimdall ux model' : 'synthetic large graph'
+const DATA_LABEL =
+  DATA === 'spec'
+    ? 'documentation robotics spec 0.10.0'
+    : DATA === 'full'
+      ? 'documentation robotics spec 0.11.0'
+      : DATA === 'large'
+        ? 'synthetic large graph'
+        : 'heimdall ux model'
 
 const mono = { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgb(var(--canvas-fg-3))' } as const
 
@@ -58,14 +71,17 @@ export default function LayeredGraphExplorerTestPage() {
     return () => document.body.classList.remove('dark-canvas')
   }, [])
 
+  const [loaded, setLoaded] = useState(!LATE)
   const layering = useMemo<BuildLayeredIndexOptions>(
     () =>
       LARGE
         ? { layerBy: 'layer', categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }
-        : { layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' },
-    [],
+        : { layerBy: 'layer', layers: loaded ? LAYERS : EMPTY, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' },
+    [loaded],
   )
-  const layout = useMemo(() => (LARGE ? (false as const) : { layoutCategories: DATA === 'spec' ? ['structural'] : null }), [])
+  const nodes = loaded ? NODES : EMPTY
+  const edges = loaded ? EDGES : EMPTY
+  const layout = useMemo(() => (LARGE ? (false as const) : { layoutCategories: DATA === 'ux' ? null : ['structural'] }), [])
   const [selected, setSelected] = useState<string | null>(SNAPSHOT?.selectedId ?? params.get('select'))
   const [follow, setFollow] = useState(SNAPSHOT?.follow ?? FOLLOW)
   const [view, setView] = useState<LayeredGraphView>(SNAPSHOT?.view ?? VIEW)
@@ -88,13 +104,13 @@ export default function LayeredGraphExplorerTestPage() {
     [layout],
   )
   // Only used with mode=external.
-  const externalGraph = useLayeredGraph({ nodes: NODES, edges: EDGES, layering, ...graphOptions })
+  const externalGraph = useLayeredGraph({ nodes, edges, layering, ...graphOptions })
 
   const explorer = (
     <LayeredGraphExplorer
       data-testid="explorer"
-      nodes={NODES}
-      edges={EDGES}
+      nodes={nodes}
+      edges={edges}
       layering={layering}
       graphOptions={graphOptions}
       graph={EXTERNAL ? externalGraph : undefined}
@@ -108,7 +124,7 @@ export default function LayeredGraphExplorerTestPage() {
       stackProps={STACK_PROPS}
       matrixProps={matrixProps}
       eyebrow="Layered graph"
-      title={DATA === 'spec' ? 'Documentation robotics spec' : 'Heimdall UX model'}
+      title={DATA === 'ux' ? 'Heimdall UX model' : 'Documentation robotics spec'}
       statusLabel={DATA_LABEL}
       height={HEIGHT}
     />
@@ -128,6 +144,11 @@ export default function LayeredGraphExplorerTestPage() {
           <button type="button" disabled={!saved} onClick={() => saved && explorerRef.current?.restore(saved)}>
             Restore snapshot
           </button>
+          {LATE && (
+            <button type="button" onClick={() => setLoaded(true)}>
+              Load data
+            </button>
+          )}
           <span data-testid="snapshot-count" style={mono}>{`snapshots ${snapshotCount}`}</span>
           <span data-testid="saved-snapshot" style={mono}>
             {saved ? `${saved.view} · ${saved.stack.preset ?? 'custom'} · gap ${Math.round(saved.stack.layerGap)}` : 'none saved'}
