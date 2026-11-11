@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ShellLayout, Icon, type IconName } from '@tinkermonkey/heimdall-ui'
 
-import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase } from './showcases/FoundationShowcase'
+import { ColorsShowcase, TypographyShowcase, SpacingShowcase, RadiusShowcase, UtilitiesShowcase } from './showcases/FoundationShowcase'
 import { IconShowcase, ButtonShowcase, ChipShowcase, BadgeShowcase, VersionPillShowcase, SegmentedControlShowcase } from './showcases/PrimitivesShowcase'
 import { AvatarShowcase } from './showcases/AvatarShowcase'
 import { TextInputShowcase, TextAreaShowcase, NumberInputShowcase, SelectShowcase, TriStateShowcase, FieldShowcase } from './showcases/InputsShowcase'
@@ -73,6 +73,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   typography: TypographyShowcase,
   spacing: SpacingShowcase,
   radius: RadiusShowcase,
+  utilities: UtilitiesShowcase,
   foundation: FoundationTestPage,
   // Primitives
   icon: IconShowcase,
@@ -211,6 +212,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'typography', label: 'Typography', icon: 'edit' },
       { id: 'spacing', label: 'Spacing', icon: 'layout' },
       { id: 'radius', label: 'Radius', icon: 'component' },
+      { id: 'utilities', label: 'Utilities', icon: 'eyeOff' },
     ],
   },
   {

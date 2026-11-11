@@ -365,6 +365,7 @@ function ControlsDemo({ dataset, onDatasetChange }: { dataset: DatasetKey; onDat
             <PropRow name="formatOption" type="(follow: number) => ReactNode" def="followOptionLabel" description="Segment text per depth: Direct, +1 layer, +2 layers." />
             <PropRow name="label" type="ReactNode" def="'Follow'" description="Mono eyebrow before the control; null hides it." />
             <PropRow name="disabled" type="boolean" def="false" description="Disables every segment." />
+            <PropRow name="surface" type="ChromeSurface" def="'canvas'" description="'shell' for a dark chrome bar in either canvas theme; same prop as SegmentedControl." />
           </PropsTable>
         </div>
       </ShowcaseSection>
@@ -390,6 +391,7 @@ function ControlsDemo({ dataset, onDatasetChange }: { dataset: DatasetKey; onDat
             <PropRow name="optionLabels" type="Partial<Record<PredicateLabelMode, ReactNode>>" description="Segment text per mode; default Off, Highlighted, All." />
             <PropRow name="label" type="ReactNode" def="'Predicates'" description="Mono eyebrow before the control; null hides it." />
             <PropRow name="disabled" type="boolean" def="false" description="Disables every segment." />
+            <PropRow name="surface" type="ChromeSurface" def="'canvas'" description="'shell' for a dark chrome bar in either canvas theme; same prop as SegmentedControl." />
           </PropsTable>
         </div>
       </ShowcaseSection>
@@ -414,6 +416,7 @@ function ControlsDemo({ dataset, onDatasetChange }: { dataset: DatasetKey; onDat
             <PropRow name="optionLabels" type="Partial<Record<PlaneLayoutMode, ReactNode>>" description="Segment text per mode; default Independent, Coupled." />
             <PropRow name="label" type="ReactNode" def="'Plane layout'" description="Mono eyebrow before the control; null hides it." />
             <PropRow name="disabled" type="boolean" def="false" description="Disables both segments." />
+            <PropRow name="surface" type="ChromeSurface" def="'canvas'" description="'shell' for a dark chrome bar in either canvas theme; same prop as SegmentedControl." />
           </PropsTable>
         </div>
       </ShowcaseSection>
@@ -447,6 +450,7 @@ function ControlsDemo({ dataset, onDatasetChange }: { dataset: DatasetKey; onDat
             <PropRow name="onNodeLabelsChange" type="(on: boolean) => void" description="Called by the node-label toggle." />
             <PropRow name="labelToggleLabel" type="ReactNode" def="'Labels'" description="Node-label toggle text." />
             <PropRow name="children" type="ReactNode" description="Rendered after a divider at the end of the bar." />
+            <PropRow name="surface" type="ChromeSurface" def="'canvas'" description="'shell' for a dark chrome bar in either canvas theme; same prop as SegmentedControl." />
           </PropsTable>
         </div>
       </ShowcaseSection>
@@ -578,6 +582,7 @@ function ControlsDemo({ dataset, onDatasetChange }: { dataset: DatasetKey; onDat
             <PropRow name="viewLabels" type="Partial<Record<LayeredGraphView, ReactNode>>" description="Segment text per view; default 3D stack, Lanes, Matrix, Hive." />
             <PropRow name="label" type="ReactNode" def="'View'" description="Mono eyebrow; null hides it." />
             <PropRow name="disabled" type="boolean" def="false" description="Disables every segment." />
+            <PropRow name="surface" type="ChromeSurface" def="'canvas'" description="'shell' for a dark chrome bar in either canvas theme; same prop as SegmentedControl." />
           </PropsTable>
         </div>
       </ShowcaseSection>

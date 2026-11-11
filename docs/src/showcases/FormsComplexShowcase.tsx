@@ -16,6 +16,26 @@ import { PageHeader, ShowcaseSection, PropsTable, PropRow } from '../components/
 
 const fg2 = 'rgb(var(--canvas-fg-2, 55 65 81))'
 
+/** Portal section shared by the dropdown pages (behaviour change in 0.11). */
+function DropdownPortalSection({ panelClass, example }: { panelClass: string; example: string }) {
+  return (
+    <ShowcaseSection
+      label="Portal"
+      description={`Changed in 0.11: the panel renders in a portal on document.body, positioned from the trigger with position: fixed, so a scrolling or overflow: hidden ancestor can't clip it; it flips to the other side when there's no room, follows the trigger on scroll and resize, and keeps focus handling and keyboard navigation. The panel is no longer a DOM descendant of the component, so CSS that reached it by position stops matching: target ${panelClass} directly, or pass portal={false} to render it in place as before. Document-level outside-click handlers see a click in the panel as outside their container; containsAcrossPortals(container, target) counts it as inside the trigger's container.`}
+    >
+      <pre style={{ margin: 0, padding: '10px 12px', background: 'rgb(var(--canvas-bg-2))', border: '1px solid rgb(var(--canvas-border))', borderRadius: 6, fontFamily: 'var(--font-mono, monospace)', fontSize: 11.5, lineHeight: 1.6, color: fg2, overflowX: 'auto' }}>
+        {`// Render the panel in place, as before 0.11
+${example}
+
+// Outside-click handler that ignores clicks in a portalled panel
+import { containsAcrossPortals } from '@tinkermonkey/heimdall-ui'
+
+if (!containsAcrossPortals(containerRef.current, event.target as Node)) close()`}
+      </pre>
+    </ShowcaseSection>
+  )
+}
+
 const ALL_ENTITIES: EntityPickerResult[] = [
   { id: '1', label: 'users', domain: 'identity', domainColor: 'cyan' },
   { id: '2', label: 'accounts', domain: 'identity', domainColor: 'cyan' },
@@ -65,6 +85,7 @@ export function EntityPickerShowcase() {
           />
         </div>
       </ShowcaseSection>
+      <DropdownPortalSection panelClass=".entity-picker__dropdown" example="<EntityPicker portal={false} … />" />
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="query" type="string" description="Controlled search input value" />
@@ -74,6 +95,7 @@ export function EntityPickerShowcase() {
           <PropRow name="onClear" type="() => void" description="Called when the × clear button is clicked" />
           <PropRow name="placeholder" type="string" description="Input placeholder text" />
           <PropRow name="disabled" type="boolean" def="false" description="Prevents all interaction and dims the control" />
+          <PropRow name="portal" type="boolean" def="true" description="Render the results panel in a portal on document.body (position: fixed) so scrolling or overflow: hidden ancestors can't clip it. false renders it in place." />
         </PropsTable>
       </ShowcaseSection>
     </div>
@@ -285,6 +307,29 @@ export function RowMenuShowcase() {
           triggerLabel="Row actions"
         />
       </ShowcaseSection>
+      <ShowcaseSection
+        label="Inside a clipping container"
+        description="Both frames are overflow: hidden with the menu in the last row. With the default portal the panel escapes the frame; with portal={false} the frame clips it."
+      >
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          {([true, false] as const).map(portal => (
+            <div key={String(portal)} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgb(var(--canvas-fg-3))' }}>
+                {portal ? 'portal (default)' : 'portal={false}'}
+              </span>
+              <div style={{ width: 240, height: 84, overflow: 'hidden', border: '1px solid rgb(var(--canvas-border, 229 231 235))', borderRadius: 6 }}>
+                {['record_12344', 'record_12345'].map(id => (
+                  <div key={id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 10px', borderBottom: '1px solid rgb(var(--canvas-border, 229 231 235))' }}>
+                    <span style={{ flex: 1, fontSize: 13, color: fg2, fontFamily: 'var(--font-mono)' }}>{id}</span>
+                    <RowMenu actions={actions} onAction={setLastAction} placement="bottom-end" portal={portal} triggerLabel={`Actions for ${id}`} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </ShowcaseSection>
+      <DropdownPortalSection panelClass=".row-menu__dropdown" example="<RowMenu portal={false} actions={actions} onAction={run} />" />
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="actions" type="RowMenuAction[]" description="Array of action items. Each item is {id, label, icon?, danger?, disabled?} or {type: 'separator'}." />
@@ -292,6 +337,7 @@ export function RowMenuShowcase() {
           <PropRow name="trigger" type="ReactNode" description="Custom trigger element. Replaces the default icon." />
           <PropRow name="triggerIcon" type="IconName" def="moreVertical" description="Icon used for the default trigger button." />
           <PropRow name="triggerLabel" type="string" def='"Menu"' description="Accessible label for the trigger button and menu. Announced by screen readers." />
+          <PropRow name="portal" type="boolean" def="true" description="Render the panel in a portal on document.body (position: fixed) so scrolling or overflow: hidden ancestors can't clip it. false renders it in place." />
         </PropsTable>
       </ShowcaseSection>
     </div>

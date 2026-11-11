@@ -2,6 +2,26 @@ import { useState } from 'react'
 import { TextInput, TextArea, NumberInput, Select, TriState, Field } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, DemoGrid, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
 
+/** Portal section shared by the dropdown pages (behaviour change in 0.11). */
+function DropdownPortalSection({ panelClass, example }: { panelClass: string; example: string }) {
+  return (
+    <ShowcaseSection
+      label="Portal"
+      description={`Changed in 0.11: the panel renders in a portal on document.body, positioned from the trigger with position: fixed, so a scrolling or overflow: hidden ancestor can't clip it; it flips to the other side when there's no room, follows the trigger on scroll and resize, and keeps focus handling and keyboard navigation. The panel is no longer a DOM descendant of the component, so CSS that reached it by position stops matching: target ${panelClass} directly, or pass portal={false} to render it in place as before. Document-level outside-click handlers see a click in the panel as outside their container; containsAcrossPortals(container, target) counts it as inside the trigger's container.`}
+    >
+      <pre style={{ margin: 0, padding: '10px 12px', background: 'rgb(var(--canvas-bg-2))', border: '1px solid rgb(var(--canvas-border))', borderRadius: 6, fontFamily: 'var(--font-mono, monospace)', fontSize: 11.5, lineHeight: 1.6, color: 'rgb(var(--canvas-fg-2))', overflowX: 'auto' }}>
+        {`// Render the panel in place, as before 0.11
+${example}
+
+// Outside-click handler that ignores clicks in a portalled panel
+import { containsAcrossPortals } from '@tinkermonkey/heimdall-ui'
+
+if (!containsAcrossPortals(containerRef.current, event.target as Node)) close()`}
+      </pre>
+    </ShowcaseSection>
+  )
+}
+
 export function TextInputShowcase() {
   return (
     <div>
@@ -190,6 +210,7 @@ export function SelectShowcase() {
           </DemoCard>
         </DemoGrid>
       </ShowcaseSection>
+      <DropdownPortalSection panelClass=".select__panel" example="<Select portal={false}>…</Select>" />
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="value" type="string" description="Controlled single value" />
@@ -202,6 +223,7 @@ export function SelectShowcase() {
           <PropRow name="placeholder" type="string" def='"Select…"' description="Trigger text when no value" />
           <PropRow name="error" type="boolean" def="false" description="Error state — rose border + aria-invalid" />
           <PropRow name="disabled" type="boolean" def="false" description="Disable the trigger" />
+          <PropRow name="portal" type="boolean" def="true" description="Render the panel in a portal on document.body (position: fixed) so scrolling or overflow: hidden ancestors can't clip it. false renders it in place." />
         </PropsTable>
       </ShowcaseSection>
     </div>

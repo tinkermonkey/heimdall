@@ -234,6 +234,7 @@ export function VersionPillShowcase() {
 
 export function SegmentedControlShowcase() {
   const [value, setValue] = useState<string | number>('all')
+  const [shellValue, setShellValue] = useState<string | number>('lanes')
 
   return (
     <div>
@@ -275,12 +276,37 @@ export function SegmentedControlShowcase() {
           ]}
         />
       </ShowcaseSection>
+      <ShowcaseSection
+        label="Shell surface"
+        description="surface='shell' styles the control for the dark shell chrome: it reads the --shell-* tokens instead of --canvas-*, so it looks the same on a light or dark canvas. Focus ring and disabled opacity match the canvas variant. The layered chrome controls (ViewSwitcher, FollowControl, PredicateLabelControl, PlaneLayoutControl, LinkCategoryFilter) take the same prop."
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', padding: '10px 14px', background: 'rgb(var(--shell-bg))', borderRadius: 6 }}>
+          <span style={{ fontFamily: mono, fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgb(var(--shell-fg-3))' }}>View</span>
+          <SegmentedControl
+            surface="shell"
+            value={shellValue}
+            onChange={setShellValue}
+            options={[
+              { value: 'stack', label: '3D stack' },
+              { value: 'lanes', label: 'Lanes' },
+              { value: 'matrix', label: 'Matrix' },
+              { value: 'hive', label: 'Hive', disabled: true },
+            ]}
+          />
+        </div>
+        <pre style={{ margin: '10px 0 0', padding: '10px 12px', background: 'rgb(var(--canvas-bg-2))', border: `1px solid ${border}`, borderRadius: 6, fontFamily: mono, fontSize: 11.5, lineHeight: 1.6, color: fg2, overflowX: 'auto' }}>
+          {`import { SegmentedControl, type ChromeSurface } from '@tinkermonkey/heimdall-ui'
+
+<SegmentedControl surface="shell" value={view} onChange={setView} options={options} />`}
+        </pre>
+      </ShowcaseSection>
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="value" type="string | number" description="Currently selected option value" />
           <PropRow name="onChange" type="(v: string | number) => void" description="Called when a new option is selected" />
           <PropRow name="options" type="Array<{value, label, disabled?}>" description="Available options; each may be individually disabled" />
           <PropRow name="disabled" type="boolean" def="false" description="Disables the entire control" />
+          <PropRow name="surface" type="ChromeSurface" def="'canvas'" description="The surface the control sits on. ChromeSurface is 'canvas' | 'shell', exported from the package. 'canvas' reads the --canvas-* tokens and follows body.dark-canvas; 'shell' reads the --shell-* tokens and is dark in both canvas themes." />
           <PropRow name="className" type="string" description="Additional CSS class names applied to the container" />
         </PropsTable>
       </ShowcaseSection>
