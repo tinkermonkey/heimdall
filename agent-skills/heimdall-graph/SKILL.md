@@ -1633,6 +1633,7 @@ A directed block adjacency matrix of a layered graph. There is one row and one c
 - **Cell colours:** each cell takes its link's category colour. Around the selection, cells take the amber reach ramp instead, including followed hops.
 - **Codes:** cells show two-letter predicate codes per `predicateLabels`, with a legend of the codes in view.
 - **Selection:** a row header (a focusable button, Enter or Space) or the matching column header selects a node; selecting it again clears it. Clicking a cell selects the link's source, or calls `onCellSelect(link, links)` instead.
+- **Keyboard:** the cells are one Tab stop (roving focus). Arrow Left and Right walk every cell in reading order; Up and Down go to the nearest row above or below with a cell, at the closest column; Home and End go to the row's first and last cell; Enter or Space acts as a click. The focused cell shows the hover crosshair.
 - **Link inspection:** show a clicked cell with `GraphEdgeInspector` and `linkEdgeMetadata(index, link)` (title = predicates; layers, category and edge count as rows), and pass `selectedLinkId` to outline the cell. `LayeredGraphExplorer` does this for you.
 - **Cluster order:** `order="cluster"` runs Louvain (`louvainCluster`) within each layer on that layer's own links, and keeps each community, and each nested community, together; bigger first. It is deterministic: it starts from the `degree` order with edges sorted the same way, so input order never changes it, and filters don't either. Over every link at once the communities would just be the layers, hence per layer.
 - **Symmetric:** `symmetric` merges `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. A cell holding both directions has a notch in its lower-left corner (the caption says so), its tooltip lists both links, and `onCellSelect` receives both as its second argument. Block counts add both directions.
@@ -1668,12 +1669,13 @@ const graph = useLayeredGraph({ nodes, edges, layering })
 | `showCodeLegend` | `boolean` | `true` | Legend of the predicate codes shown |
 | `onCellSelect` | `(link: IndexedLink, links: readonly IndexedLink[]) => void` | — | Cell click handler. Unset: selects the link's source. `link` is the drawn link: in a symmetric cell holding both directions, the reached one, else row → column. `links` holds every link in the cell, row → column first |
 | `onLinkSelect` | `(link: IndexedLink, links: readonly IndexedLink[]) => void` | — | **Deprecated:** use `onCellSelect` (same arguments). Ignored when `onCellSelect` is set |
-| `selectedLinkId` | `string \| null` | — | Outline the cell holding this link, e.g. the one shown in an inspector |
+| `selectedLinkId` | `string \| null` | — | Outline the cell holding this link, e.g. the one shown in an inspector. Set from outside, its cell scrolls into view |
+| `virtualizeAbove` | `number` | `150` | Above this many nodes, only the rows and columns in view render and the labels stick to the edges |
 | `symmetric` | `boolean` | `false` | Merge both directions into one cell above the diagonal |
 | `aggregate` | `'none' \| 'layer'` | `'none'` | `layer`: a layers-by-layers heat map of link counts |
 | `onLayerCellSelect` | `(cell: LayerMatrixCell) => void` | — | Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell the layer focus |
 
-Large graphs scroll inside the component (it renders at natural size, so cells stay crisp). There is no virtualization yet: past about 150 nodes, prefer filtering layers out.
+Large graphs scroll inside the component (it renders at natural size, so cells stay crisp). Past `virtualizeAbove` nodes (default 150) the matrix virtualizes: only the rows and columns in view (plus a margin) render, the row and column labels stick to the left and top while the cells scroll, and the scroll area is capped at `--adjacency-matrix-max-height` (default `80vh`). The sticky labels paint `--adjacency-matrix-bg` (default the canvas background); set it when the matrix sits on another surface. Below the threshold it draws one SVG as before.
 
 
 ## HivePlot

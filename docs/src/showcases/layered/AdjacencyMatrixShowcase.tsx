@@ -201,14 +201,15 @@ export function AdjacencyMatrixShowcase() {
           <PropRow name="showCodeLegend" type="boolean" def="true" description="Legend of the predicate codes shown." />
           <PropRow name="onCellSelect" type="(link: IndexedLink, links: readonly IndexedLink[]) => void" description="Cell click handler. Unset: selects the link's source. link is the drawn link (in a symmetric cell holding both directions, the reached one, else row → column); links holds every link in the cell, row → column first. Show it with GraphEdgeInspector and linkEdgeMetadata(index, link)." />
           <PropRow name="onLinkSelect" type="(link: IndexedLink, links: readonly IndexedLink[]) => void" description="Deprecated: use onCellSelect (same arguments). Ignored when onCellSelect is set." />
-          <PropRow name="selectedLinkId" type="string | null" description="Outline the cell holding this link, e.g. the one shown in an inspector." />
+          <PropRow name="selectedLinkId" type="string | null" description="Outline the cell holding this link, e.g. the one shown in an inspector. Set from outside, its cell scrolls into view." />
+          <PropRow name="virtualizeAbove" type="number" def="150" description="Above this many nodes, only the rows and columns in view render and the labels stick to the edges." />
           <PropRow name="symmetric" type="boolean" def="false" description="Merge A→B and B→A into one cell above the diagonal, for an undirected reading. A notch marks a cell holding both directions." />
           <PropRow name="aggregate" type="'none' | 'layer'" def="'none'" description="layer: a layers-by-layers heat map of link counts, the overview for many layers. Counts ignore the layer-pair filter; the active pair is outlined." />
           <PropRow name="onLayerCellSelect" type="(cell: LayerMatrixCell) => void" description="Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell (or a layer header) the layer focus." />
           <PropRow name="...divProps" type="HTMLAttributes<HTMLDivElement>" description="Remaining props spread onto the root div." />
         </PropsTable>
         <p style={{ fontSize: 12, color: fg2, margin: '12px 0 0', lineHeight: 1.65 }}>
-          Large graphs scroll inside the component; it renders at natural size so cells stay crisp. There is no virtualization: past about 150 nodes, hide layers.
+          Large graphs scroll inside the component; it renders at natural size so cells stay crisp. Past virtualizeAbove nodes (default 150) only the rows and columns in view render and the labels stick to the edges; the scroll area is capped at --adjacency-matrix-max-height (80vh), and the sticky labels paint --adjacency-matrix-bg. Cells are one Tab stop: arrow keys move between them, Enter acts as a click.
         </p>
       </ShowcaseSection>
     </div>

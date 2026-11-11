@@ -154,3 +154,55 @@ export function layerMatrixCells(
   const cells = [...byKey.values()].sort((a, b) => a.r - b.r || a.c - b.c)
   return { cells, max }
 }
+
+/** Rows `[r0, r1)` and columns `[c0, c1)` of a virtualized matrix to render. */
+export interface MatrixWindow {
+  r0: number
+  r1: number
+  c0: number
+  c1: number
+}
+
+/**
+ * The rows and columns in view, plus `overscan` either side, for a matrix of `n` cells of `cs` px
+ * whose sticky row labels take `labelWidth` px and sticky column labels `headerHeight` px.
+ */
+export function matrixWindow(
+  scroll: { left: number; top: number; width: number; height: number },
+  n: number,
+  cs: number,
+  labelWidth: number,
+  headerHeight: number,
+  overscan = 8,
+): MatrixWindow {
+  const clamp = (v: number) => Math.max(0, Math.min(n, v))
+  return {
+    r0: clamp(Math.floor(scroll.top / cs) - overscan),
+    r1: clamp(Math.ceil((scroll.top + scroll.height - headerHeight) / cs) + overscan),
+    c0: clamp(Math.floor(scroll.left / cs) - overscan),
+    c1: clamp(Math.ceil((scroll.left + scroll.width - labelWidth) / cs) + overscan),
+  }
+}
+
+/**
+ * Keyboard move between drawn cells (sorted row-major). Left and Right step through every cell in
+ * reading order; Up and Down go to the nearest row above or below that has a cell, at the closest
+ * column (the left one on a tie); Home and End go to the row's first and last cell. Null: no move.
+ */
+export function matrixCellStep<T extends { r: number; c: number }>(sorted: readonly T[], from: T, key: string): T | null {
+  const i = sorted.indexOf(from)
+  if (i < 0) return null
+  if (key === 'ArrowRight') return sorted[i + 1] ?? null
+  if (key === 'ArrowLeft') return sorted[i - 1] ?? null
+  const row = (r: number) => sorted.filter((x) => x.r === r)
+  if (key === 'Home') return row(from.r)[0] ?? null
+  if (key === 'End') return row(from.r).at(-1) ?? null
+  if (key !== 'ArrowDown' && key !== 'ArrowUp') return null
+  const down = key === 'ArrowDown'
+  let target: number | undefined
+  for (const x of sorted) {
+    if (down ? x.r > from.r : x.r < from.r) target = down ? (target === undefined ? x.r : Math.min(target, x.r)) : Math.max(target ?? -1, x.r)
+  }
+  if (target === undefined) return null
+  return row(target).reduce<T | null>((best, x) => (!best || Math.abs(x.c - from.c) < Math.abs(best.c - from.c) ? x : best), null)
+}
