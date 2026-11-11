@@ -55,6 +55,8 @@ const TITLE_FS = 11
 // JetBrains Mono advance width, in em.
 const MONO_CHAR_EM = 0.6
 const PAD = 14
+// arrowHeadPoints' default half-width.
+const ARROW_HALF_W = 3.2
 const MIN_HIT_PX = 12
 
 interface PlacedLabel extends LabelBox {
@@ -62,6 +64,9 @@ interface PlacedLabel extends LabelBox {
   tx: number
   ty: number
 }
+
+const labelsOverlap = (q: LabelBox, b: LabelBox) =>
+  Math.abs(q.x - b.x) <= (q.width + b.width) / 2 + 2 && Math.abs(q.y - b.y) <= (q.height + b.height) / 2
 
 const r1 = (v: number) => Math.round(v * 10) / 10
 const dotRadius = (n: IndexedNode) => 2.6 + Math.sqrt(n.degree) * 0.9
@@ -259,44 +264,57 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       return set
     }, [reach, axisLabels, visibleLayers, index])
 
-    // Labels that fit: the selection and the hovered node always; then reached nodes by hop, then
-    // the rest, busiest first, each dropped if it would overlap one already placed. A dropped label
-    // is still the node's tooltip and accessible name. Unsplit, highlighted loops run beside the
-    // axis on both sides, so each label takes the side they cross least, and is dropped when loop
-    // ends (arrowheads) cover its start on both sides.
-    const labels = useMemo(() => {
-      const ids = [...labeled].filter((id) => hive.radiusOf.has(id))
-      if (hoverId && hive.radiusOf.has(hoverId) && !labeled.has(hoverId)) ids.push(hoverId)
-      const prio = (id: string) => (id === selectedId || id === hoverId ? -1 : (reach.hopOf.get(id) ?? 99))
-      ids.sort((a, b) => prio(a) - prio(b) || index.nodeById.get(b)!.degree - index.nodeById.get(a)!.degree || a.localeCompare(b))
-      const loopPts =
+    // Unsplit, highlighted loops run beside the axis on both sides: sample them so labels can dodge them.
+    const loopPts = useMemo(
+      () =>
         hive.split > 0
           ? []
           : drawn
               .filter((d) => d.em.highlighted && index.nodeById.get(d.link.sourceId)!.layerId === index.nodeById.get(d.link.targetId)!.layerId)
-              .flatMap((d) => Array.from({ length: 25 }, (_, i) => d.curve.pointAt(i / 24)))
-      const overlaps = (q: LabelBox, b: LabelBox) => Math.abs(q.x - b.x) <= (q.width + b.width) / 2 + 2 && Math.abs(q.y - b.y) <= (q.height + b.height) / 2
-      const hits = (b: PlacedLabel, w: number) => {
+              .flatMap((d) => Array.from({ length: 25 }, (_, i) => d.curve.pointAt(i / 24))),
+      [drawn, hive, index],
+    )
+
+    // A label's side: the one loops cross least (unsplit only). It is blocked when loop ends cover
+    // its first 3 characters (where arrowheads land, padded by an arrowhead's half-width) or it
+    // overlaps a label already placed.
+    const bestLabel = (id: string, placed: readonly LabelBox[]) => {
+      const node = index.nodeById.get(id)!
+      const ax = hive.axisOf.get(node.layerId)!
+      const hits = (b: PlacedLabel, w: number, padY: number) => {
         const cx = b.tx + (b.side * w) / 2
-        return loopPts.filter((p) => Math.abs(p.x - cx) <= w / 2 + 1 && Math.abs(p.y - b.ty) <= b.height / 2 + 1).length
+        return loopPts.filter((p) => Math.abs(p.x - cx) <= w / 2 + 1 && Math.abs(p.y - b.ty) <= b.height / 2 + 1 + padY).length
       }
+      const sides = hive.split > 0 ? [hiveLabelSide(ax)] : [hiveLabelSide(ax), -hiveLabelSide(ax) as 1 | -1]
+      const options = sides.map((side) => {
+        const b = labelBox(node, ax, hive.radiusOf.get(id)!, side)
+        const start = hits(b, 3 * LABEL_FS * MONO_CHAR_EM, ARROW_HALF_W)
+        return { b: { ...b, id }, blocked: start > 0 || placed.some((q) => labelsOverlap(q, b)), score: start * 100 + hits(b, b.width, 0) }
+      })
+      return options.reduce((m, o) => (Number(o.blocked) * 1e4 + o.score < Number(m.blocked) * 1e4 + m.score ? o : m))
+    }
+
+    // Labels that fit: the selection always; then reached nodes by hop, then the rest, busiest first,
+    // each dropped if blocked. A dropped label is still the node's tooltip and accessible name.
+    // Independent of hover, so hovering never moves or drops another label.
+    const baseLabels = useMemo(() => {
+      const ids = [...labeled].filter((id) => hive.radiusOf.has(id))
+      const prio = (id: string) => (id === selectedId ? -2 : (reach.hopOf.get(id) ?? 99))
+      ids.sort((a, b) => prio(a) - prio(b) || index.nodeById.get(b)!.degree - index.nodeById.get(a)!.degree || a.localeCompare(b))
       const placed: (PlacedLabel & { id: string })[] = []
       for (const id of ids) {
-        const node = index.nodeById.get(id)!
-        const ax = hive.axisOf.get(node.layerId)!
-        const sides = hive.split > 0 ? [hiveLabelSide(ax)] : [hiveLabelSide(ax), -hiveLabelSide(ax) as 1 | -1]
-        const options = sides.map((side) => {
-          const b = labelBox(node, ax, hive.radiusOf.get(id)!, side)
-          // The first 3 characters are where arrowheads land.
-          const start = hits(b, 3 * LABEL_FS * MONO_CHAR_EM)
-          return { b, blocked: start > 0 || placed.some((q) => overlaps(q, b)), score: start * 100 + hits(b, b.width) }
-        })
-        const best = options.reduce((m, o) => (Number(o.blocked) * 1e4 + o.score < Number(m.blocked) * 1e4 + m.score ? o : m))
+        const best = bestLabel(id, placed)
         if (best.blocked && prio(id) >= 0) continue
-        placed.push({ ...best.b, id })
+        placed.push(best.b)
       }
       return placed
-    }, [labeled, hoverId, hive, selectedId, reach, index, drawn])
+    }, [labeled, hive, selectedId, reach, index, loopPts])
+
+    // The hovered node, when not already labeled, goes on top on its clearer side.
+    const labels = useMemo(() => {
+      if (!hoverId || !hive.radiusOf.has(hoverId) || baseLabels.some((b) => b.id === hoverId)) return baseLabels
+      return [...baseLabels, bestLabel(hoverId, baseLabels).b]
+    }, [baseLabels, hoverId, hive, index, loopPts])
 
     const pills = useMemo(() => {
       const obstacles = labels.map((b) => ({ x: b.x, y: b.y, width: b.width, height: b.height }))
