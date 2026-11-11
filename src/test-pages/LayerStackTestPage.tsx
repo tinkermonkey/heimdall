@@ -12,11 +12,17 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 //   ?example=layer-stack&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all
 //     &nodeLabels=all|reached|none&preset=stack|exploded|top|profile&focus=<layer id>&layout=coupled&dark=1
 //     &asyncLayout=1 (lay out asynchronously at any size; the caption shows `layout pending|ready`)
-//     &camera=controlled|held (camera and layer gap as controlled props: `controlled` takes every
-//       change the stack reports, `held` none; a counter shows the reports)
+//     &camera=controlled|lagged|held (camera and layer gap as controlled props: `controlled` takes
+//       every change the stack reports, `lagged` takes each two frames late, `held` none; a counter
+//       shows the reports and the page's camera)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
-const CAMERA_MODE = params.get('camera') === 'controlled' || params.get('camera') === 'held' ? params.get('camera') : null
+const CAMERA_MODE = ['controlled', 'lagged', 'held'].includes(params.get('camera') ?? '') ? params.get('camera') : null
+/** Applies a reported value: at once, two frames late (a slow parent), or never. */
+function follow<T>(set: (v: T) => void, v: T) {
+  if (CAMERA_MODE === 'controlled') set(v)
+  else if (CAMERA_MODE === 'lagged') requestAnimationFrame(() => requestAnimationFrame(() => set(v)))
+}
 const PRESET = (CAMERA_PRESET_NAMES as readonly string[]).includes(params.get('preset') ?? '') ? (params.get('preset') as CameraPresetName) : 'stack'
 
 const deg = (a: number) => Math.round((a * 180) / Math.PI)
@@ -99,7 +105,7 @@ export default function LayerStackTestPage() {
           <span data-testid="layer-stack-focus">{graph.focusedLayerId ? `focus ${graph.focusedLayerId}` : 'no focus'}</span>
           <span data-testid="layer-stack-preset">{preset ? `preset ${preset}` : 'preset none'}</span>
           <span data-testid="layer-stack-camera">{cameraText}</span>
-          {CAMERA_MODE && <span data-testid="layer-stack-reports">{`${CAMERA_MODE} · ${reports} reports · gap ${Math.round(gap)}`}</span>}
+          {CAMERA_MODE && <span data-testid="layer-stack-reports">{`${CAMERA_MODE} · ${reports} reports · gap ${Math.round(gap)} · ${describe(camera)}`}</span>}
         </div>
         <div style={{ width: 1160, maxWidth: '100%' }}>
           <LayerStack
@@ -112,11 +118,11 @@ export default function LayerStackTestPage() {
             nodeLabels={nodeLabels}
             camera={CAMERA_MODE ? camera : undefined}
             layerGap={CAMERA_MODE ? gap : undefined}
-            onLayerGapChange={(g) => CAMERA_MODE === 'controlled' && setGap(g)}
+            onLayerGapChange={(g) => follow(setGap, g)}
             onCameraChange={(c, cause) => {
               setCameraText(`${cause} · ${describe(c)}`)
               setReports((n) => n + 1)
-              if (CAMERA_MODE === 'controlled') setCamera(c)
+              follow(setCamera, c)
             }}
           />
         </div>

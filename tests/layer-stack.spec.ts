@@ -251,6 +251,17 @@ test.describe('LayerStack', () => {
     expect(reports).toBeGreaterThan(10)
   })
 
+  test('a controlled parent that echoes reports late still lets a preset finish', async ({ page }) => {
+    // The page passes each report back two frames late, as a slow device's React commit would.
+    // Before the fix, the late echo read as an outside change and stopped the preset part-way.
+    await open(page, '&camera=lagged')
+    await orbit(page)
+    await expect(cameraStatus(page)).toContainText('orbit · ')
+    await page.getByRole('radio', { name: 'Exploded' }).click()
+    await expect(cameraStatus(page)).toHaveText('preset · yaw -29° pitch 19° zoom 0.86')
+    await expect(page.getByTestId('layer-stack-reports')).toContainText('gap 300 · yaw -29° pitch 19° zoom 0.86')
+  })
+
   test('pinch zooms, clamped like the wheel', async ({ page }) => {
     await open(page)
     const pinch = (from: number, to: number) =>

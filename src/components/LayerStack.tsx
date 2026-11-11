@@ -102,10 +102,9 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   /**
    * Camera (controlled). The fields set are held: the view shows them and nothing else, and a move
    * (orbit, zoom, a preset, focus, turntable) only reports through `onCameraChange` until the prop
-   * changes. Pass each reported camera back unchanged and synchronously (in the callback): a
-   * value that differs from the stack's last report (rounded, normalized, or set later) counts as a
-   * change from outside, which jumps and stops the stack's own move on those fields. Fields left
-   * out stay uncontrolled.
+   * changes. Pass each reported camera back unchanged: a value the stack never reported (rounded
+   * or normalized) counts as a change from outside, which jumps and stops the stack's own move on
+   * that field. An echo that lands a frame or more late is fine. Fields left out stay uncontrolled.
    */
   camera?: Partial<StackCamera>
   /** Initial camera fields when uncontrolled, over the initial preset. */
@@ -129,7 +128,7 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   /**
    * Vertical distance between planes, world units (controlled). Held like `camera`: a preset's gap
    * move reports each frame through `onLayerGapChange`, and the planes move only with the prop.
-   * Pass the reported gap back unchanged and synchronously, as with `camera`.
+   * Pass the reported gap back unchanged, as with `camera`.
    */
   layerGap?: number
   /** Initial gap when uncontrolled. Default: the initial preset's (170 for `stack`). */
@@ -217,6 +216,14 @@ function definedCamera(camera: Partial<StackCamera> | undefined): Partial<StackC
   const out: Partial<StackCamera> = {}
   if (camera) for (const k of CAMERA_KEYS) if (camera[k] !== undefined) out[k] = camera[k]
   return out
+}
+
+const near = (a: number, b: number) => Math.abs(a - b) < 1e-6
+/** Proposals kept to recognise a late echo: about a second of frames. */
+const RECENT_PROPOSALS = 64
+function remember<T>(list: T[], value: T) {
+  list.push(value)
+  if (list.length > RECENT_PROPOSALS) list.shift()
 }
 
 function capturePointer(el: Element, id: number) {
@@ -347,20 +354,25 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     const onLayerGapChangeRef = useRef(onLayerGapChange)
     onLayerGapChangeRef.current = onLayerGapChange
     // A controlled camera or gap reports every frame of a move (the view moves only when the prop
-    // does), as well as when the move settles. The last proposal tells an outside change apart.
+    // does), as well as when the move settles. Recent proposals tell an outside change apart from
+    // the parent's own echo, which may land a frame or more late.
     const controlledRef = useRef({ camera: false, gap: false })
     controlledRef.current = { camera: camera !== undefined, gap: layerGap !== undefined }
     const proposed = useRef<{ camera: StackCamera | null; gap: number | null }>({ camera: null, gap: null })
+    const recent = useRef<{ camera: StackCamera[]; gap: number[] }>({ camera: [], gap: [] })
     const proposeCamera = useCallback((cause: LayerStackCameraCause) => {
       if (!controlledRef.current.camera) return
       const c = cameraOf(view.current!)
       proposed.current.camera = c
+      remember(recent.current.camera, c)
       onCameraChangeRef.current?.(c, cause)
     }, [])
     const proposeGap = useCallback(() => {
       if (!controlledRef.current.gap) return
-      proposed.current.gap = view.current!.gap
-      onLayerGapChangeRef.current?.(view.current!.gap)
+      const gap = view.current!.gap
+      proposed.current.gap = gap
+      remember(recent.current.gap, gap)
+      onLayerGapChangeRef.current?.(gap)
     }, [])
     /**
      * Reports a settled camera. Controlled, that is the move's latest proposal: the hold has already
@@ -528,13 +540,14 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [cameraPreset, applyPreset])
 
     // ── controlled camera and gap props ───────────────────────────────────
-    // The view already shows the props (held above). A change other than the stack's own last
-    // proposal comes from outside, and stops the stack's move on those fields.
+    // The view already shows the props (held above). A value the stack never proposed comes from
+    // outside, and stops the stack's move on that field; an echo of a recent proposal, however
+    // late, is the parent following along.
     const camKey = camera ? CAMERA_KEYS.map((k) => camera[k]).join('|') : ''
     useEffect(() => {
       if (!camera) return
-      const p = proposed.current.camera
-      const outside = CAMERA_KEYS.filter((k) => camera[k] !== undefined && (!p || Math.abs(camera[k]! - p[k]) > 1e-6))
+      const own = recent.current.camera
+      const outside = CAMERA_KEYS.filter((k) => camera[k] !== undefined && !own.some((p) => near(p[k], camera[k]!)))
       if (outside.length === 0) return
       tween.cancel(outside)
       // A stopped camera move must not settle later, from a gap, focus or layout frame.
@@ -542,8 +555,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [camKey])
     useEffect(() => {
       if (layerGap === undefined) return
-      const p = proposed.current.gap
-      if (p === null || Math.abs(layerGap - p) > 1e-6) tween.cancel(['gap'])
+      if (!recent.current.gap.some((p) => near(p, layerGap))) tween.cancel(['gap'])
     }, [layerGap, tween])
 
     // ── plane layout mix ──────────────────────────────────────────────────
