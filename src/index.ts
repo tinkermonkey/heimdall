@@ -163,6 +163,7 @@ export { GraphEdgeShape, type GraphEdgeShapeProps } from './components/GraphEdge
 export { GraphToolbar, type GraphToolbarProps, type GraphToolbarPosition } from './components/GraphToolbar'
 export { GraphCollapseControl, type GraphCollapseControlProps } from './components/GraphCollapseControl'
 export { AdjacencyMatrix, type AdjacencyMatrixProps, type LayerMatrixCell } from './components/AdjacencyMatrix'
+export { linkEdgeMetadata } from './utils/layered/matrix'
 export { HivePlot, type HivePlotProps, type HivePlotInteractions } from './components/HivePlot'
 export {
   LayerStack,

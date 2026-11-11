@@ -1,7 +1,8 @@
-// AdjacencyMatrix cell building: symmetric node cells and the layer heat map (tinkermonkey/heimdall#336).
+// AdjacencyMatrix cell building: symmetric node cells, the layer heat map, the cluster order and
+// link inspector metadata (tinkermonkey/heimdall#336).
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, DEFAULT_LINK_FILTERS, isLinkVisible, orderAcrossLayers } from '../layered'
-import { layerMatrixCells, matrixCells } from '../layered/matrix'
+import { clusterOrder, layerMatrixCells, linkEdgeMetadata, matrixCells } from '../layered/matrix'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
 const layering = { layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }
@@ -94,5 +95,76 @@ describe('layerMatrixCells', () => {
     const { cells } = layerMatrixCells(ix, ['business', 'application'], visible, false)
     expect(cells.every((c) => c.rowLayerId !== 'technology' && c.colLayerId !== 'technology')).toBe(true)
     expect(cells.reduce((n, c) => n + c.linkCount, 0)).toBe(visible.length)
+  })
+})
+
+describe('clusterOrder', () => {
+  // Two cliques in one layer whose labels interleave, so label and degree orders mix them.
+  const cliques = (reverse = false) => {
+    const nodes = ['a1', 'b1', 'a2', 'b2', 'a3', 'b3', 'z'].map((id) => ({ id, label: id, attributes: { layer: id === 'z' ? 'y' : 'x' } }))
+    const pairs = [['a1', 'a2'], ['a2', 'a3'], ['a1', 'a3'], ['b1', 'b2'], ['b2', 'b3'], ['b1', 'b3'], ['a1', 'z']]
+    const edges = pairs.map(([s, t]) => ({ id: s + t, sourceId: s, targetId: t, attributes: { category: 'k' } }))
+    return buildLayeredIndex(reverse ? [...nodes].reverse() : nodes, reverse ? [...edges].reverse() : edges, {
+      layerBy: 'layer',
+      linkCategoryBy: 'category',
+      layers: [{ id: 'x' }, { id: 'y' }],
+    })
+  }
+
+  it('keeps each community together within its layer, layers in rank order', () => {
+    const ids = clusterOrder(cliques())
+    expect(ids).toHaveLength(7)
+    expect(ids[6]).toBe('z')
+    const x = ids.slice(0, 6)
+    const groupOf = (id: string) => id[0]
+    // one change of group across the layer: a-block then b-block (or the reverse)
+    const changes = x.slice(1).filter((id, i) => groupOf(id) !== groupOf(x[i])).length
+    expect(changes).toBe(1)
+  })
+
+  it('is deterministic: same result on every run and for any input order', () => {
+    const first = clusterOrder(cliques())
+    expect(clusterOrder(cliques())).toEqual(first)
+    expect(clusterOrder(cliques(true))).toEqual(first)
+    const a = clusterOrder(spec())
+    const shuffled = buildLayeredIndex([...drSpecNodes].reverse(), [...drSpecEdges].reverse(), layering)
+    expect(clusterOrder(shuffled)).toEqual(a)
+    expect(clusterOrder(spec())).toEqual(a)
+  })
+
+  it('breaks degree and label ties by id, not input order', () => {
+    // two triangles whose nodes all share one label and one degree
+    const dup = (reverse: boolean) => {
+      const nodes = ['p', 'a', 'b', 'q', 'c', 'd'].map((id) => ({ id, label: 'Dup', attributes: { layer: 'x' } }))
+      const pairs = [['p', 'a'], ['a', 'b'], ['b', 'p'], ['q', 'c'], ['c', 'd'], ['d', 'q']]
+      const edges = pairs.map(([s, t]) => ({ id: s + t, sourceId: s, targetId: t, attributes: { category: 'k' } }))
+      return buildLayeredIndex(reverse ? [...nodes].reverse() : nodes, reverse ? [...edges].reverse() : edges, { layerBy: 'layer', linkCategoryBy: 'category' })
+    }
+    const forward = clusterOrder(dup(false))
+    expect(clusterOrder(dup(true))).toEqual(forward)
+    expect(forward).toEqual(['a', 'b', 'p', 'c', 'd', 'q'])
+  })
+
+  it('is a permutation of every node, grouped by layer', () => {
+    const ix = spec()
+    const ids = clusterOrder(ix)
+    expect([...ids].sort()).toEqual(ix.nodes.map((n) => n.id).sort())
+    const ranks = ids.map((id) => ix.nodeById.get(id)!.layerRank)
+    expect(ranks).toEqual([...ranks].sort((p, q) => p - q))
+  })
+})
+
+describe('linkEdgeMetadata', () => {
+  it('maps a link to GraphEdgeInspector metadata', () => {
+    const ix = tiny()
+    const ca = ix.links.find((l) => l.sourceId === 'c')!
+    expect(linkEdgeMetadata(ix, ca)).toMatchObject({
+      id: ca.id,
+      sourceId: 'c',
+      sourceTitle: 'C',
+      targetId: 'a',
+      targetTitle: 'A',
+      metadata: { layers: 'y → x', category: 'k', edges: 1 },
+    })
   })
 })

@@ -1632,8 +1632,10 @@ A directed block adjacency matrix of a layered graph. There is one row and one c
 
 - **Cell colours:** each cell takes its link's category colour. Around the selection, cells take the amber reach ramp instead, including followed hops.
 - **Codes:** cells show two-letter predicate codes per `predicateLabels`, with a legend of the codes in view.
-- **Selection:** a row header (a focusable button, Enter or Space) or the matching column header selects a node; selecting it again clears it. Clicking a cell selects the link's source, or calls `onLinkSelect`.
-- **Symmetric:** `symmetric` merges `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. A cell holding both directions has a notch in its lower-left corner (the caption says so), its tooltip lists both links, and `onLinkSelect` receives both as its second argument. Block counts add both directions.
+- **Selection:** a row header (a focusable button, Enter or Space) or the matching column header selects a node; selecting it again clears it. Clicking a cell selects the link's source, or calls `onCellSelect(link, links)` instead.
+- **Link inspection:** show a clicked cell with `GraphEdgeInspector` and `linkEdgeMetadata(index, link)` (title = predicates; layers, category and edge count as rows), and pass `selectedLinkId` to outline the cell. `LayeredGraphExplorer` does this for you.
+- **Cluster order:** `order="cluster"` runs Louvain (`louvainCluster`) within each layer on that layer's own links, and keeps each community, and each nested community, together; bigger first. It is deterministic: it starts from the `degree` order with edges sorted the same way, so input order never changes it, and filters don't either. Over every link at once the communities would just be the layers, hence per layer.
+- **Symmetric:** `symmetric` merges `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. A cell holding both directions has a notch in its lower-left corner (the caption says so), its tooltip lists both links, and `onCellSelect` receives both as its second argument. Block counts add both directions.
 - **Layer heat map:** `aggregate="layer"` collapses the matrix to one row and column per visible layer, each cell the count of visible links between the two layers, shaded on a neutral ramp. It is the overview when there are many layers. Clicking a cross-layer cell toggles the layer-pair filter (`setLayerPair`), so the other views narrow to that pair; clicking a diagonal cell or a layer header toggles the layer focus (`focusLayer`). Counts ignore the pair filter, so the overview stays whole and the active pair is outlined. Set `onLayerCellSelect` to handle the click yourself; it receives a `LayerMatrixCell` (`rowLayerId`, `colLayerId`, `linkCount`, `pairKey`, which is null on the diagonal). With `symmetric`, both directions add into the upper triangle.
 
 ```tsx
@@ -1659,12 +1661,14 @@ const graph = useLayeredGraph({ nodes, edges, layering })
 | `edges` | `GraphEdgeData[]` | — | Standalone edges; ignored with `graph` or a context |
 | `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
 | `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode |
-| `order` | `NodeOrder` | `'coupled-x'` | Row and column order within each layer (`'degree'` when there is no layout) |
+| `order` | `NodeOrder \| 'cluster'` | `'coupled-x'` | Row and column order within each layer (`'degree'` when there is no layout). `cluster`: Louvain communities within each layer |
 | `cellSize` | `number \| 'auto'` | `'auto'` | Cell size in px; `auto` fits about 820px, clamped to 10–18. With `aggregate="layer"`, `auto` fits about 560px, clamped to 40–72, and a number is at least 24 |
 | `labelWidth` | `number` | `210` | Row-label column width in px |
 | `showBlockCounts` | `boolean` | `true` | Link count in each cross-layer block |
 | `showCodeLegend` | `boolean` | `true` | Legend of the predicate codes shown |
-| `onLinkSelect` | `(link: IndexedLink, links: readonly IndexedLink[]) => void` | — | Cell click handler. Unset: selects the link's source. `link` is the drawn link: in a symmetric cell holding both directions, the reached one, else row → column. `links` holds every link in the cell, row → column first |
+| `onCellSelect` | `(link: IndexedLink, links: readonly IndexedLink[]) => void` | — | Cell click handler. Unset: selects the link's source. `link` is the drawn link: in a symmetric cell holding both directions, the reached one, else row → column. `links` holds every link in the cell, row → column first |
+| `onLinkSelect` | `(link: IndexedLink, links: readonly IndexedLink[]) => void` | — | **Deprecated:** use `onCellSelect` (same arguments). Ignored when `onCellSelect` is set |
+| `selectedLinkId` | `string \| null` | — | Outline the cell holding this link, e.g. the one shown in an inspector |
 | `symmetric` | `boolean` | `false` | Merge both directions into one cell above the diagonal |
 | `aggregate` | `'none' \| 'layer'` | `'none'` | `layer`: a layers-by-layers heat map of link counts |
 | `onLayerCellSelect` | `(cell: LayerMatrixCell) => void` | — | Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell the layer focus |
@@ -1730,7 +1734,7 @@ const graph = useLayeredGraph({ nodes, edges, layering, layout: false })
 | `axisLength` | `number` | `300` | Axis length, viewBox units (the plot scales to its container) |
 | `startAngle` | `number` | `-90` | First axis angle, degrees clockwise from the right (−90 = up) |
 | `interactions` | `HivePlotInteractions` | both on | `{ select?: boolean; hover?: boolean }`: node selection (click, Enter, Space, Escape) and hover lift |
-| `onLinkSelect` | `(link: IndexedLink) => void` | — | Link click handler. Unset: selects the link's source |
+| `onLinkSelect` | `(link: IndexedLink) => void` | — | Link click handler. Unset: selects the link's source. Unchanged for now; only `AdjacencyMatrix.onLinkSelect` is deprecated (for `onCellSelect`) |
 
 ## FollowControl
 
@@ -1923,7 +1927,7 @@ The ready-made layered graph explorer: every layered view and its chrome in one 
 - **Header** (shell surface): optional `eyebrow` and `title`, a `ViewSwitcher` (3D stack / Lanes / Matrix / Hive, hidden with one view) and `FollowControl`.
 - **Scene:** the chosen view: `LayerStack`, `GraphCanvas layout="layer-lanes"`, `AdjacencyMatrix` or `HivePlot`. Above the stack: `CameraControls` and `PlaneLayoutControl`.
 - **Link bar:** `LinkCategoryFilter` with `PredicateLabelControl` inside, and a node-label toggle for the stack (`all` / `reached` labels) and the hive (busiest-node labels on / off).
-- **Inspector panel:** `ReachInspector`, showing `LayerList`, `LayerPairList` and `BridgeNodeList` with no selection. It sits on the right and stacks below the scene when the explorer is narrower than `stackBelow`.
+- **Inspector panel:** `ReachInspector`, showing `LayerList`, `LayerPairList` and `BridgeNodeList` with no selection. In the matrix view, a cell click shows its link above it in a "Link details" panel (`GraphEdgeInspector`) and outlines the cell, instead of selecting the source. Endpoints select their node; a symmetric cell holding both directions has a Reverse button; the close button or Escape closes it and returns focus to the source's row header. The panel drops itself when a filter hides its links or the view changes. If `matrixProps` passes `onCellSelect` (or the deprecated `onLinkSelect`), that handler runs instead of the panel, as in 0.10.0; with `controls.inspector` off, a cell click selects the source. It sits on the right and stacks below the scene when the explorer is narrower than `stackBelow`.
 - **Status line** (mono, shell surface): `statusLabel`, node / link / cross-layer / layer counts, the view and follow depth, and for the stack the camera (`stack · yaw -36° pitch 29° zoom 1.00 · gap 170`).
 
 Selection, follow, filters, label mode, layer focus and plane layout are one `useLayeredGraph` state shared by every view, so they survive view switches; the explorer provides it as `LayeredGraphContext` to everything inside. The 3D camera (preset, yaw / pitch / zoom, gap, turntable) is remembered when you switch away and restored when you switch back. Turn chrome on or off with `controls`; every field defaults to true (`LayeredGraphExplorerControls`: `viewSwitcher`, `follow`, `predicateLabels`, `linkFilter`, `nodeLabels`, `camera`, `planeLayout`, `inspector`, `layers`, `layerPairs`, `bridgeNodes`, `status`).
