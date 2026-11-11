@@ -4,6 +4,227 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0]
+
+A smaller, ESM-only package and the second wave of layered graphs. The tarball drops `src/`, the
+CJS build and bundled copies of four dependencies (1.43 MB → 0.69 MB packed), and the fonts load
+in consumer builds. Dropdown panels render in a portal, and the semantic and status tokens have
+dark-canvas values. Layered graphs gain a symmetric, clustered, virtualized adjacency matrix with
+a link inspector, hive axes by any attribute, gutter-routed and bundled lanes with keyboard
+navigation, a LayerStack that holds a controlled camera and draws the full 13-layer DR spec
+without React commits per frame, explorer snapshots for URL sync, and opt-in async layout.
+
+### Breaking
+
+- **ESM only; `src/` no longer ships** (tinkermonkey/heimdall#343, tinkermonkey/heimdall#352).
+  `dist/index.cjs` is no longer built, `files` is `["dist", "agent-skills"]`, `d3-delaunay`,
+  `d3-hierarchy`, `react-markdown` and `remark-gfm` are imported from `node_modules` instead of
+  being bundled (they stay in `dependencies` and dedupe with the app's copies), and `sideEffects`
+  is `["**/*.css"]`. Declarations no longer include test-page, `App` or `main` types. Packed size
+  1.43 MB → 0.69 MB, unpacked 5.19 MB → 1.95 MB, 578 → 188 files, `dist/index.js` 963 kB → 750 kB.
+  **Migration:** import only from the package entry, `/css` and `/fonts`; deep imports of
+  `dist/index.cjs` or `src/...` no longer resolve, and loaders without node resolution (a CDN
+  import with no import map) must supply the four dependencies.
+- **Dropdown panels render in a portal by default** (tinkermonkey/heimdall#328,
+  tinkermonkey/heimdall#349). `RowMenu`, `Select`, `FilterDropdown` and `EntityPicker` panels
+  mount on `document.body` with `position: fixed`, positioned from the trigger, flipping when
+  there is no room and following scroll and resize, so scroll containers no longer clip them. The
+  panel is no longer a DOM descendant of the component root, so CSS such as
+  `.row-menu .dropdown-panel`, root-scoped DOM queries and document-level outside-click checks
+  stop matching it. **Migration:** target the panel's own class (`.row-menu__dropdown`,
+  `.select__panel`, `.filter-dropdown__panel`, `.entity-picker__dropdown`), query from `document`,
+  use `containsAcrossPortals` in outside-click handlers, or pass `portal={false}` to keep in-place
+  rendering.
+- **`LayerStack` controlled `camera` and `layerGap` are strictly held** (tinkermonkey/heimdall#335,
+  tinkermonkey/heimdall#361). The view shows only the props; an orbit, wheel, pinch, preset, focus
+  or turntable only proposes values. With `camera` set, `onCameraChange` fires every frame of a
+  move plus a settle call carrying the move's last proposal; with `layerGap` set,
+  `onLayerGapChange` fires every frame of a preset's gap move. Uncontrolled behaviour is
+  unchanged. **Migration:** a stack given `camera` without `onCameraChange` is now frozen on those
+  fields; use `defaultCamera`, or pass each report back unchanged and synchronously.
+- **`GraphCanvasProps.nodes` is optional** (tinkermonkey/heimdall#334,
+  tinkermonkey/heimdall#363). Lanes can draw from a `layeredGraph` or context alone; every other
+  layout still needs `nodes` and warns in development without it. **Migration:** wrappers that
+  read `props.nodes` under strict null checks need a default (`props.nodes ?? []`).
+
+### Changed
+
+- **Fonts use relative URLs** (tinkermonkey/heimdall#353). `@tinkermonkey/heimdall-ui/fonts`
+  references `./inter/...` and `./jetbrains-mono/...`, so a consumer's bundler emits the `.woff2`
+  files; before, the root-absolute `/fonts/...` URLs only loaded if the app served `/fonts/`
+  itself. The stale `dist/fonts/README.md` files no longer ship. **Migration:** drop any
+  workaround that copied the fonts to the app's `/fonts/`.
+- **Semantic and status tokens have dark-canvas values** (tinkermonkey/heimdall#329,
+  tinkermonkey/heimdall#350). Every `--semantic-*` triplet, `--semantic-version-fg` and
+  `--status-{ok,warn,error}-{fg,bg}` is redefined under `body.dark-canvas` (16% tint background,
+  35% border, -300 foreground, each at least 8.4:1 except id-tag at 5.7:1), so ActivityTimeline,
+  TraceViewer, KanbanBoard, VersionTimeline and version chips no longer show light pastels on the
+  dark canvas. **Migration:** code that reads one of these as a fixed deep colour in both modes
+  should use the new non-flipping `--status-error-solid` or `--status-{emerald,violet,neutral}-deep`.
+- **Library components use `.heimdall-visually-hidden` instead of `.sr-only`**
+  (tinkermonkey/heimdall#340, tinkermonkey/heimdall#347). The class ships in
+  `@tinkermonkey/heimdall-ui/css`; `.sr-only` was never in the library stylesheet, so
+  SideBySideDiff's gutter labels showed as visible text in consuming apps. `LayeredGraphControls`
+  drops its `.layered-visually-hidden` copy. **Migration:** CSS that targeted `.sr-only` or
+  `.layered-visually-hidden` inside library components should target `.heimdall-visually-hidden`.
+- **An explorer matrix cell click opens the link panel** (tinkermonkey/heimdall#336,
+  tinkermonkey/heimdall#365). In `LayeredGraphExplorer`'s matrix view a click shows the link in a
+  "Link details" panel instead of selecting the source. **Migration:** pass
+  `matrixProps.onCellSelect` (or the deprecated `onLinkSelect`) to replace the panel with your own
+  handler, or turn `controls.inspector` off to keep selecting the source.
+- **Deprecated: `AdjacencyMatrix.onLinkSelect`** (tinkermonkey/heimdall#365). **Migration:**
+  rename it to `onCellSelect`, which takes the same `(link, links)` arguments; `onLinkSelect` is
+  ignored when both are set. `HivePlot.onLinkSelect` is unchanged.
+- **Small adjacency matrices widen to fit their caption** (tinkermonkey/heimdall#359). Matrices of
+  about nine nodes or fewer at 18px cells are wider than before, so the caption is no longer
+  clipped. **Migration:** none, unless a layout relied on the old width.
+- **Lanes on a shared state with `nodeLabels: false` draw chips** (tinkermonkey/heimdall#363). An
+  unset `laneOptions.nodeLabels` follows the layered state, so `false` gives `'reached'` (24px
+  chips with name tags for the selection, its reach, hover and focus) instead of labeled boxes.
+  **Migration:** set `laneOptions.nodeLabels: 'all'` to keep labeled boxes.
+- **Node labels are shared layered-graph state** (tinkermonkey/heimdall#338,
+  tinkermonkey/heimdall#354). An uncontrolled `LinkCategoryFilter` label toggle, and the
+  explorer's, now write `useLayeredGraph`'s `nodeLabels`, which `LayerStack`, `HivePlot` and lanes
+  read by default. **Migration:** pass `nodeLabels` to the filter, or `nodeLabels` / `axisLabels`
+  to the views, to keep them independent.
+- **Tall stacks close up and frame on mount** (tinkermonkey/heimdall#368,
+  tinkermonkey/heimdall#371). Past five layers a preset's gap scales by 4 / (layers − 1)
+  (`presetLayerGap`), and a stack whose planes overflow the scene fits its zoom on mount, on a
+  layer-count change and on `applyPreset`, reporting `onCameraChange(camera, 'fit')`. Stacks of
+  five layers or fewer are unchanged; the fit is skipped for a controlled camera, a layer focus or
+  a `defaultCamera` zoom or target of its own.
+- **`HivePlot` keeps its angles when a layer is hidden** (tinkermonkey/heimdall#337,
+  tinkermonkey/heimdall#362). Hidden layers keep their slot, leaving a gap; the other axes and the
+  viewBox don't move. Adding or removing a layer in the data still re-divides the angles.
+  `HiveAxis.position` is now the slot among all layers.
+- **`AdjacencyMatrix` cells are focusable** (tinkermonkey/heimdall#369): cells get
+  `role="button"`, a roving `tabIndex` and an `aria-label`. Queries that counted
+  `.adjacency-matrix [role="button"]` as headers should use `.adjacency-matrix__header[role="button"]`.
+- **`LayerStack` paints frames without React commits** (tinkermonkey/heimdall#368). Tween, orbit,
+  wheel, pinch and turntable frames write SVG attributes directly; on the full DR spec (13 layers,
+  193 nodes, 897 links) a turntable second goes from 36 commits to 0 and script time per frame
+  roughly halves (preset tween 8.1 → 3.5 ms). Rendering is unchanged.
+- **`useLayeredGraph` compares `followCategories` by content**, so an inline array no longer
+  recomputes reach on every render (tinkermonkey/heimdall#363).
+
+### Added
+
+- **AdjacencyMatrix**
+  - `symmetric`: `A→B` and `B→A` share one cell above the diagonal, with a notch when it holds both
+    directions (tinkermonkey/heimdall#359).
+  - `aggregate="layer"`: a layers-by-layers heat map; a cross-layer cell toggles the layer-pair
+    filter, a diagonal cell or header toggles layer focus, and `onLayerCellSelect` replaces both.
+    Type `LayerMatrixCell` (tinkermonkey/heimdall#359).
+  - `onCellSelect(link, links)`, `selectedLinkId` (outlined, and scrolled into view when set from
+    outside), `order="cluster"` (deterministic Louvain within each layer) and
+    `linkEdgeMetadata(index, link)` for feeding a `GraphEdgeInspector` (tinkermonkey/heimdall#365).
+  - `virtualizeAbove` (default 150): past that many nodes only the rows and columns in view render,
+    with sticky labels. `--adjacency-matrix-max-height` (default `80vh`) and
+    `--adjacency-matrix-bg` style the scroll area (tinkermonkey/heimdall#369).
+  - Roving keyboard focus over cells: one Tab stop, arrows, Home/End, Enter/Space
+    (tinkermonkey/heimdall#369).
+- **HivePlot**
+  - `axes: 'layer' | (node) => axisId`, `axisOrder` (list or comparator) and `axisLabel`; non-layer
+    axes take `--graph-layer-<n>` colours by order, and nodes without an axis are not drawn, with
+    a development warning. `hiveAxisGroups` is exported and `rankWithinLayers` takes optional
+    groups (tinkermonkey/heimdall#366).
+  - `hiveLayout` takes `hiddenLayers` and returns every layer's `slots`; `HIVE_MIN_LOOP_BULGE` is
+    exported (tinkermonkey/heimdall#362).
+- **LayerStack**
+  - Pinch zoom on touch (0.4–3, gated by `interactions.zoom`); two-finger `touchmove` no longer
+    scrolls the page (tinkermonkey/heimdall#361).
+  - Labels behind a nearer plane fade to 30% of their emphasis opacity, recomputed every frame;
+    the selection, its reach, hover, focus and the top view never fade (tinkermonkey/heimdall#371).
+  - `LayerStackHandle.getLayerGap()` (tinkermonkey/heimdall#356), `presetLayerGap` and
+    `PRESET_GAP_FULL_LAYERS` (tinkermonkey/heimdall#368), and the `StackFocus` type; `stackPlaneY`
+    accepts several focus entries (tinkermonkey/heimdall#361).
+- **Lanes** (`GraphCanvas layout="layer-lanes"`, tinkermonkey/heimdall#334)
+  - `laneOptions.nodeLabels: 'all' | 'reached'` (type `LaneNodeLabels`), with `laneTagSize` and
+    `laneTagRoom`; pills hold their place while a node is dragged (tinkermonkey/heimdall#363).
+  - `laneOptions.skipLayerRouting: 'gutter'` routes links two or more lanes apart down a side
+    gutter, each route on its own track, with one shared stub per node and side in each gap.
+    Exports `routeLaneGutters`, `retraceLaneGutters` and `laneGutterGapTracks`; `layoutLanes`
+    takes `gutterLinks` (tinkermonkey/heimdall#367, tinkermonkey/heimdall#370).
+  - `laneOptions.intraLinks: 'bundled'` runs a row's links along one shared trunk; the selection's
+    reach and the hovered or focused node's links fan out as arcs. Exports `laneBundler` and
+    `laneBundleCurve` (tinkermonkey/heimdall#372).
+  - Keyboard focus between lanes: one Tab stop, arrows across and along lanes following the
+    orientation, Home/End, and a hint linked by `aria-describedby` (tinkermonkey/heimdall#373).
+- **LayeredGraphExplorer / useLayeredGraph** (tinkermonkey/heimdall#338)
+  - Shared `nodeLabels` state; multi-select reserved through `selectedIds`, `defaultSelectedIds`,
+    `onSelectedIdsChange`, `setSelectedIds` and `toggleSelected` (the views still select one node
+    per click); `computeReach` accepts several origins; `useControllable` is exported
+    (tinkermonkey/heimdall#354).
+  - Serializable explorer snapshots: `explorerRef` (`getSnapshot`, `restore`, `stack`),
+    `defaultSnapshot`, `onSnapshotChange`, `layeredGraphSnapshotDefaults`, and the sanitizers
+    `sanitizeLayeredGraphExplorerSnapshot` and `sanitizeLayeredGraphSnapshot` for untrusted input
+    such as URLs (tinkermonkey/heimdall#356).
+  - Opt-in async layout: `asyncLayoutMinNodes` (recommended `ASYNC_LAYOUT_MIN_NODES` = 200),
+    `layoutPending` and `layoutLayersAsync` with an abort signal. Default behaviour stays
+    synchronous (tinkermonkey/heimdall#357).
+  - The matrix view's "Link details" panel (`GraphEdgeInspector`) with Reverse for symmetric cells
+    (tinkermonkey/heimdall#365), and the label toggle on the Lanes view (tinkermonkey/heimdall#363).
+- **GraphCanvas**: `tooltipDelay` (ms, default 200) for hover `nodeTooltip` and `edgeTooltip`
+  (tinkermonkey/heimdall#323, tinkermonkey/heimdall#351).
+- **SegmentedControl**: `surface: 'canvas' | 'shell'` (type `ChromeSurface`), also on
+  `ViewSwitcher`, `FollowControl`, `PredicateLabelControl`, `PlaneLayoutControl` and
+  `LinkCategoryFilter`. The explorer's shell chrome uses it instead of remapping canvas tokens
+  (tinkermonkey/heimdall#339, tinkermonkey/heimdall#358).
+- **Dropdowns**: `portal` prop (default `true`) on `RowMenu`, `Select`, `FilterDropdown` and
+  `EntityPicker`, and `containsAcrossPortals(container, target)`; `Select`'s trigger gets
+  `aria-controls` (tinkermonkey/heimdall#349).
+- **Tokens**: `--status-error-solid` and `--status-{emerald,violet,neutral}-deep`, fixed in both
+  canvas modes (tinkermonkey/heimdall#350); the `.heimdall-visually-hidden` utility
+  (tinkermonkey/heimdall#347).
+
+### Fixed
+
+- **`GraphCanvas` node measurement** (tinkermonkey/heimdall#331, tinkermonkey/heimdall#348): nodes
+  are measured without the host's line-height strut and widths round up, so edges end on the node
+  outline and labels held to their box no longer ellipsize. Node boxes can be 1–3px shorter than
+  before. Development builds warn once per node that measures 0×0.
+- **`GraphCanvas` hover tooltips** sit 6px beside the node box or the edge's drawn label, trying
+  top, bottom, right, then left, instead of covering the label, and follow pan, zoom and drag
+  (tinkermonkey/heimdall#323, tinkermonkey/heimdall#351).
+- **`LinkCategoryFilter`** no longer leaves a divider at the start or end of a wrapped line, and
+  empty children render no trailing divider (tinkermonkey/heimdall#339,
+  tinkermonkey/heimdall#358).
+- **`LayerStack` focus and preset moves** run on independent tween channels: switching focus from
+  one layer to another eases instead of snapping shut and reopening, and a `focusLayer` right
+  after `applyPreset` keeps the preset's yaw turning (tinkermonkey/heimdall#361).
+- **`HivePlot` labels and loops**: loops between near neighbours on an unsplit axis keep a minimum
+  bulge so arrowheads no longer cover them; labels avoid loop ends, arrowheads, rings and dots,
+  taking the clear side or dropping (the selection is always labeled); hovering never moves
+  another label (tinkermonkey/heimdall#362, tinkermonkey/heimdall#366).
+- **TODO before tagging:** LayerStack plane titles on tall stacks (tinkermonkey/heimdall#376, branch fix/335-stack-title-fit) is not merged yet. Add it here under Fixed if it merges before tagging.
+
+### Docs
+
+- Galaxy: the even-orbits versus round-systems trade-off for many-satellite and dominant-branch
+  systems, in `galaxyLayout.ts`, the Graph Layouts page and the skill (tinkermonkey/heimdall#288,
+  tinkermonkey/heimdall#360).
+- Props and tokens from this release: `surface`, `portal`, the GraphCanvas tooltip props, the
+  semantic and status token table, and a Utilities page for `.heimdall-visually-hidden`
+  (tinkermonkey/heimdall#374).
+- Layered graphs reference: `LayeredGraphExplorer` props and `controls`, the matrix link panel,
+  snapshots and URL sync, `useLayeredGraph` options and state, multi-select, async layout, the
+  LayerStack 0.11 camera contract, occlusion, fit on load and the full DR spec demo, and lanes
+  props on the GraphCanvas page (tinkermonkey/heimdall#375).
+
+### Internal
+
+- CI runs type, lint, unit, skill and package checks and the visual suite in four shards on every
+  pull request (tinkermonkey/heimdall#341, tinkermonkey/heimdall#346). When apt can't reach the
+  Ubuntu mirrors, CI installs the Playwright browser alone (tinkermonkey/heimdall#364).
+- `npm run check:package` also fails on files outside `dist/` and `agent-skills/`, bundled copies
+  of dependencies, unresolvable imports, non-relative font URLs and a missing
+  `.heimdall-visually-hidden` rule (tinkermonkey/heimdall#347, tinkermonkey/heimdall#352,
+  tinkermonkey/heimdall#353).
+- The heimdall-layout-loop `systems-round` gate is relaxed for many-satellite and dominant-branch
+  galaxy systems (tinkermonkey/heimdall-layout-loop#16).
+- Unit tests for `reachRelationships` and `ReachInspector` (tinkermonkey/heimdall#355); a stale
+  GraphEdge darwin baseline regenerated (tinkermonkey/heimdall#345).
+
 ## [0.10.0]
 
 Layered graphs: a component family that shows one graph split into layers by a node attribute (3D
