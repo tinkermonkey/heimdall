@@ -1539,7 +1539,7 @@ function MyFollowControl() {
 | `layoutLayersAsync` | `(index, options?, { signal? }: LayoutLayersAsyncOptions)` | `Promise<LayerLayoutResult>`: the same result as `layoutLayers`, one solve at a time with `yieldToPaint` before each (each layer, then the coupled solve), so large graphs don't block for the whole run. `signal` aborts between solves (rejects with an `AbortError`) |
 | `mixLayerPositions` | `(layout, mix: 0..1)` | Positions tweened between independent and coupled |
 | `orderWithinLayers`, `orderAcrossLayers` | `(index, layout, order?: 'coupled-x' \| 'degree' \| 'cross-degree' \| 'label' \| comparator)` | Node order per layer (lanes) or across layers (matrix rows) |
-| `rankWithinLayers` | `(index, by?)` | Position along a layer axis in [0, 1) (hive); busiest last by default |
+| `rankWithinLayers` | `(index, by?, groups?)` | Position along a layer axis in [0, 1) (hive); busiest last by default; `groups` ranks within other node groups (hive axes by attribute) |
 | `assignPredicateCodes` | `(predicates, catalog?)` | Unique two-letter codes for matrix cells |
 | `linkPredicateLabel` | `(link, catalog, predicates?)` | Predicates joined with ` · ` |
 | `arrowHeadPoints` | `(tip, ux, uy, length?, halfWidth?)` | SVG `points` for an arrowhead pointing along (ux, uy) |
@@ -1681,6 +1681,13 @@ A hive plot of a layered graph: one radial axis per layer at evenly divided angl
 - **Selection:** click a node (either copy) or press Enter or Space on it to select; again clears; Escape clears. Clicking a link selects its source, or calls `onLinkSelect`.
 - **Keyboard:** the nodes are one tab stop. Arrow Up and Down move outward and inward along the axis, Home and End jump to its ends, Arrow Right and Left move to the next and previous axis at the nearest rank.
 - **Sizing:** the SVG fills its container's width at a fixed aspect ratio (viewBox fit). Node hit targets stay at least 24 px across at any scale.
+- **Axes by any attribute** (`axes={(node) => axisId}`, memoized): one axis per distinct value over every node, so the set of axes doesn't change with filters. The default `'layer'` is one axis per layer.
+  - **Order:** layer order, else axis ids sorted by code point; `axisOrder` lists ids to put first (the rest follow) or takes a comparator. Angles run clockwise from `startAngle` in that order.
+  - **Colour:** layer colour by layer; otherwise `layerPaletteColor(i)` (the `--graph-layer-<n>` tokens, light and dark) by axis order. Node dots take their axis colour.
+  - **Titles:** the layer label, else the axis id; `axisLabel(axisId)` overrides.
+  - **Filters and emphasis:** layer filters still hide nodes. An axis left with no visible node leaves a gap, and no angle moves. Selection, reach and link styles are unchanged; links within one axis are drawn like intra-layer links (across the split gap, or as loops).
+  - **No axis:** a node the function returns `null` or `undefined` for is not drawn, nor are its links; a dev-mode warning names one.
+  - `hiveAxisGroups(index, axes, axisOrder)` returns the groups (`HiveAxisGroups`: `axes`, `axisOf`, `unassigned`); feed `axes` to `rankWithinLayers(index, by, groups)` and `hiveLayout` (each `HiveAxis.layerId` is then the axis id).
 - **Hidden layers** (the graph's `filters.hiddenLayers`, e.g. from `LayerList`): angles are divided among every layer, hidden ones included, so hiding a layer leaves a gap and the other axes and the frame don't move. Adding or removing a layer from the data re-divides the angles.
 - **Without split axes** (`splitAxes={false}`), links within a layer leave the single axis as arcs: clockwise when the target sits farther out, so the side reads as direction. Arcs between near neighbours keep a minimum bulge (`HIVE_MIN_LOOP_BULGE`, 36 units) so each arrowhead sits clear of its own loop's start and of the next dot. Node labels take the side of the axis that highlighted loops cross least, and a label is dropped when loop ends cover its start on both sides.
 
@@ -1709,6 +1716,9 @@ const graph = useLayeredGraph({ nodes, edges, layering, layout: false })
 | `edges` | `GraphEdgeData[]` | — | Standalone edges; ignored with `graph` or a context |
 | `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
 | `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode |
+| `axes` | `'layer' \| (node: IndexedNode) => string \| null \| undefined` | `'layer'` | Axis per layer, or per value of any attribute; null or undefined: not drawn. Memoize it |
+| `axisOrder` | `readonly string[] \| (a: string, b: string) => number` | layer order / code point | Axis ids to put first (the rest follow), or a comparator |
+| `axisLabel` | `(axisId: string) => string` | layer label / axis id | Axis title |
 | `rank` | `NodeOrder` | `'degree'` | Placement outward along each axis (`rankWithinLayers`) |
 | `splitAxes` | `boolean` | `true` | Double each axis; off draws intra-layer links as arcs off the single axis |
 | `splitAngle` | `number` | `13` | Half the angle between an axis's copies, degrees; clamped to leave room between axes |

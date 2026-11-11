@@ -12,6 +12,7 @@ import {
   rankWithinLayers,
   useLayeredGraph,
   type IndexedLink,
+  type IndexedNode,
   type NodeOrder,
 } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoCard, PropsTable, PropRow } from '../../components/ShowcaseSection'
@@ -217,6 +218,37 @@ function SplitVariants() {
 const VARIANTS_CODE = `<HivePlot nodes={nodes} edges={edges} layering={layering} />
 <HivePlot nodes={nodes} edges={edges} layering={layering} splitAxes={false} />`
 
+// ─── Axes by attribute ─────────────────────────────────────────────────────
+
+// ArchiMate aspect from the element kind: a categorical attribute that cuts across the layers.
+const aspect = (n: IndexedNode) => {
+  const k = n.kind ?? ''
+  if (/service$/.test(k)) return 'service'
+  if (/(process|function|interaction|event)$/.test(k)) return 'behavior'
+  if (/(object|contract|product|representation|artifact)$/.test(k)) return 'passive'
+  return 'active'
+}
+const ASPECT_ORDER = ['active', 'behavior', 'service', 'passive']
+
+function AttributeAxes() {
+  const data = DATASETS.spec
+  return (
+    <DemoCard label="axes={aspect} axisOrder={['active', 'behavior', 'service', 'passive']}">
+      <HivePlot nodes={data.nodes} edges={data.edges} layering={LAYERING} graphOptions={VARIANT_OPTIONS} axisLabels={1} axes={aspect} axisOrder={ASPECT_ORDER} />
+    </DemoCard>
+  )
+}
+
+const ATTRIBUTE_CODE = `// Module scope (or useCallback / useMemo): a new function or array recomputes the axes.
+const aspect = (n: IndexedNode) =>
+  /service$/.test(n.kind ?? '') ? 'service'
+  : /(process|function|interaction|event)$/.test(n.kind ?? '') ? 'behavior'
+  : /(object|contract|product|representation|artifact)$/.test(n.kind ?? '') ? 'passive'
+  : 'active'
+const order = ['active', 'behavior', 'service', 'passive']
+
+<HivePlot nodes={nodes} edges={edges} layering={layering} axes={aspect} axisOrder={order} />`
+
 // ─── Geometry ──────────────────────────────────────────────────────────────
 
 function HiveGeometryDemo() {
@@ -327,6 +359,14 @@ export function HivePlotShowcase() {
         <Code>{VARIANTS_CODE}</Code>
       </ShowcaseSection>
 
+      <ShowcaseSection
+        label="Axes by any attribute"
+        description="axes takes a function of the node: one axis per distinct value over every node, in code-point order unless axisOrder lists ids to put first or gives a comparator. Axes are coloured from the --graph-layer-<n> palette by axis order (layer colour when axes are layers), and titled with the axis id unless axisLabel says otherwise. Layer filters still hide nodes; an axis with no visible node leaves a gap and no angle moves. Selection, reach and link styles are unchanged, and links within one axis are drawn like intra-layer links. A node the function returns null or undefined for is not drawn, with a warning in development."
+      >
+        <AttributeAxes />
+        <Code>{ATTRIBUTE_CODE}</Code>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Labels and colours">
         <Note>
           With no selection, the axisLabels busiest nodes on each axis are labeled; with one, the selection and its reach are, dropping labels
@@ -364,6 +404,9 @@ export function HivePlotShowcase() {
           <PropRow name="edges" type="GraphEdgeData[]" description="Standalone edges; ignored with graph or a context." />
           <PropRow name="layering" type="BuildLayeredIndexOptions" description="Standalone layering (layerBy, …); memoize it." />
           <PropRow name="graphOptions" type="Omit<UseLayeredGraphOptions, 'nodes' | 'edges' | 'layering'>" description="Standalone selection, follow, filters and label mode." />
+          <PropRow name="axes" type="'layer' | ((node: IndexedNode) => string | null | undefined)" def="'layer'" description="Axis per layer, or per value of any attribute; null or undefined: not drawn. Memoize it." />
+          <PropRow name="axisOrder" type="readonly string[] | ((a: string, b: string) => number)" def="layer order / code point" description="Axis ids to put first (the rest follow), or a comparator. Memoize it." />
+          <PropRow name="axisLabel" type="(axisId: string) => string" def="layer label / axis id" description="Axis title." />
           <PropRow name="rank" type="NodeOrder" def="'degree'" description="Placement outward along each axis (rankWithinLayers): 'degree', 'cross-degree', 'label', 'coupled-x' or a comparator." />
           <PropRow name="splitAxes" type="boolean" def="true" description="Double each axis; off draws intra-layer links as arcs off the single axis." />
           <PropRow name="splitAngle" type="number" def="13" description="Half the angle between an axis's copies, degrees; clamped to leave room between axes." />
@@ -392,7 +435,8 @@ export function HivePlotShowcase() {
           <PropRow name="hiveAxisAngles" type="(count, start?) => number[]" def="start -90" description="count evenly divided axis angles, degrees, clockwise from start." />
           <PropRow name="clampSplitAngle" type="(split, count) => number" description="The split half-angle, kept below half the gap between neighbouring axes, minus 6° of air." />
           <PropRow name="hiveLabelSide" type="(axis, copy?) => 1 | -1" description="Horizontal side a label sits on at a dot on that axis copy: 1 = right (text-anchor start), -1 = left." />
-          <PropRow name="rankWithinLayers" type="(index, by?) => Map<string, number>" description="Position along a layer axis in (0, 1): (i + 0.5) / n. degree and cross-degree put the busiest last." />
+          <PropRow name="hiveAxisGroups" type="(index, axes?, axisOrder?) => HiveAxisGroups" description="The axes in angle order with their node instances (filters not applied), each node's axis id, and the nodes left without an axis." />
+          <PropRow name="rankWithinLayers" type="(index, by?, groups?) => Map<string, number>" description="Position along a layer axis in (0, 1): (i + 0.5) / n. degree and cross-degree put the busiest last." />
         </PropsTable>
       </ShowcaseSection>
     </div>

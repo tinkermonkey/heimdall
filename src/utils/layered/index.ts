@@ -62,6 +62,10 @@ export {
   type HiveLayoutOptions,
   type HiveAxis,
   type HiveLinkGeometry,
+  hiveAxisGroups,
+  type HiveAxisBy,
+  type HiveAxisOrder,
+  type HiveAxisGroups,
 } from './hive'
 export {
   CAMERA_PRESETS,

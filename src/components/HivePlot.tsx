@@ -4,7 +4,8 @@ import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseL
 import { rankWithinLayers, type NodeOrder } from '../utils/layered/layout'
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
 import { edgeLabelPriority, placeEdgeLabels, quadCurve, type EdgeCurve, type LabelBox } from '../utils/layered/edgeLabels'
-import { hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint, type HiveAxis } from '../utils/layered/hive'
+import { hiveAxisGroups, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint, type HiveAxis, type HiveAxisBy, type HiveAxisOrder } from '../utils/layered/hive'
+import { layerPaletteColor } from '../utils/layered/buildLayeredIndex'
 import type { LinkEmphasis } from '../utils/layered/emphasis'
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode } from '../utils/layered/types'
 import './HivePlot.css'
@@ -26,6 +27,17 @@ export interface HivePlotProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   layering?: BuildLayeredIndexOptions
   /** Standalone options passed to `useLayeredGraph` (selection, follow, filters, label mode). */
   graphOptions?: Omit<UseLayeredGraphOptions, 'nodes' | 'edges' | 'layering'>
+  /**
+   * How nodes are assigned to axes. `'layer'` (default): one axis per layer, in layer colour.
+   * A function: one axis per distinct value it returns (any categorical attribute), coloured from
+   * the `--graph-layer-<n>` palette by axis order. A node it returns null or undefined for is not
+   * drawn. Memoize it.
+   */
+  axes?: HiveAxisBy
+  /** Axis order around the plot from `startAngle`: ids listed first (the rest follow), or a comparator. Default: layer order, else axis ids sorted by code point. Memoize it. */
+  axisOrder?: HiveAxisOrder
+  /** Axis title. Default: the layer label, else the axis id. */
+  axisLabel?: (axisId: string) => string
   /** How nodes are placed outward along their axis (`rankWithinLayers`). Default `degree`: the busiest node farthest out. */
   rank?: NodeOrder
   /** Double every axis so links within a layer span the gap between the two copies. Off draws them as arcs off the single axis. Default true. */
@@ -102,6 +114,9 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       edges,
       layering,
       graphOptions,
+      axes = 'layer',
+      axisOrder: axisOrderProp,
+      axisLabel,
       rank = 'degree',
       splitAxes = true,
       splitAngle = 13,
@@ -143,27 +158,48 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       return () => ro.disconnect()
     }, [])
 
-    const visibleLayers = useMemo(() => index.layers.filter((l) => !filters.hiddenLayers.includes(l.id)), [index, filters.hiddenLayers])
-    const ranks = useMemo(() => rankWithinLayers(index, rank), [index, rank])
-    // Angles are divided among every layer, so hiding one leaves a gap and the other axes stay put.
-    const hive = useMemo(
-      () => hiveLayout(index.layers, ranks, { innerRadius, axisLength, splitAxes, splitAngle, startAngle, hiddenLayers: filters.hiddenLayers }),
-      [index, ranks, innerRadius, axisLength, splitAxes, splitAngle, startAngle, filters.hiddenLayers],
+    const byLayer = axes === 'layer'
+    const groups = useMemo(() => hiveAxisGroups(index, axes, axisOrderProp), [index, axes, axisOrderProp])
+    useEffect(() => {
+      if (process.env.NODE_ENV !== 'production' && groups.unassigned.length > 0) {
+        console.warn(`HivePlot: ${groups.unassigned.length} node(s) have no axis (axes returned null or undefined) and are not drawn, e.g. "${groups.unassigned[0]}".`)
+      }
+    }, [groups])
+    const axisMeta = useMemo(
+      () =>
+        new Map(
+          groups.axes.map((a, i) => {
+            const layer = byLayer ? index.layerById.get(a.id) : undefined
+            return [a.id, { title: axisLabel?.(a.id) ?? layer?.label ?? a.id, color: layer?.color ?? layerPaletteColor(i) }]
+          }),
+        ),
+      [groups, byLayer, index, axisLabel],
     )
+    const axisIdOf = (nodeId: string) => groups.axisOf.get(nodeId)
+    // Nodes left visible by the layer filters, per axis. Axes keep their slot whatever is hidden.
+    const visibleAxes = useMemo(
+      () => groups.axes.map((a) => ({ id: a.id, nodeIds: a.nodeIds.filter((id) => !filters.hiddenLayers.includes(index.nodeById.get(id)!.layerId)) })),
+      [groups, filters.hiddenLayers, index],
+    )
+    const ranks = useMemo(() => rankWithinLayers(index, rank, groups.axes), [index, rank, groups])
+    // Angles are divided among every axis, so hiding a layer leaves a gap and the other axes stay
+    // put: by layer, a hidden layer's axis; otherwise an axis with no visible nodes.
+    const hive = useMemo(() => {
+      const hiddenLayers = byLayer ? filters.hiddenLayers : visibleAxes.filter((a) => a.nodeIds.length === 0).map((a) => a.id)
+      return hiveLayout(visibleAxes, ranks, { innerRadius, axisLength, splitAxes, splitAngle, startAngle, hiddenLayers })
+    }, [byLayer, visibleAxes, ranks, innerRadius, axisLength, splitAxes, splitAngle, startAngle, filters.hiddenLayers])
+    const nodesOnAxis = useMemo(() => new Map(visibleAxes.map((a) => [a.id, a.nodeIds])), [visibleAxes])
 
     // Nodes along each axis, inner to outer: the keyboard's arrow-key order.
     const axisOrder = useMemo(
-      () =>
-        hive.axes.map((ax) =>
-          [...index.layerById.get(ax.layerId)!.nodeIds].sort((a, b) => hive.radiusOf.get(a)! - hive.radiusOf.get(b)! || a.localeCompare(b)),
-        ),
-      [hive, index],
+      () => hive.axes.map((ax) => [...nodesOnAxis.get(ax.layerId)!].sort((a, b) => hive.radiusOf.get(a)! - hive.radiusOf.get(b)! || a.localeCompare(b))),
+      [hive, nodesOnAxis],
     )
 
     const dots = useMemo(() => {
       const out: Dot[] = []
       for (const ax of hive.axes) {
-        for (const id of index.layerById.get(ax.layerId)!.nodeIds) {
+        for (const id of nodesOnAxis.get(ax.layerId)!) {
           const node = index.nodeById.get(id)!
           const radius = hive.radiusOf.get(id)!
           ax.offsets.forEach((off, copy) => {
@@ -173,11 +209,11 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         }
       }
       return out
-    }, [hive, index])
+    }, [hive, index, nodesOnAxis])
 
     const labelBox = (
       node: IndexedNode,
-      ax: HiveAxis = hive.axisOf.get(node.layerId)!,
+      ax: HiveAxis = hive.axisOf.get(axisIdOf(node.id)!)!,
       radius: number = hive.radiusOf.get(node.id)!,
       side: 1 | -1 = hiveLabelSide(ax),
     ): PlacedLabel => {
@@ -206,10 +242,9 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
           const p = hivePoint(ax.angle + off, innerRadius + axisLength + 8)
           add(p.x, p.y)
         }
-        const layer = index.layerById.get(ax.layerId)!
         const t = hivePoint(ax.angle, innerRadius + axisLength + 30)
-        add(t.x, t.y, (layer.label.length * TITLE_FS * 0.7) / 2, TITLE_FS)
-        for (const id of layer.nodeIds) {
+        add(t.x, t.y, (axisMeta.get(ax.layerId)!.title.length * TITLE_FS * 0.7) / 2, TITLE_FS)
+        for (const id of groups.axes[ax.position].nodeIds) {
           const r = innerRadius + axisLength * (ranks.get(id) ?? 0.5)
           // Unsplit labels may flip sides to dodge loops (below), so fit both.
           for (const side of hive.split > 0 ? [hiveLabelSide(ax)] : ([1, -1] as const)) {
@@ -220,7 +255,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       }
       if (!Number.isFinite(minX)) return { x: -200, y: -200, w: 400, h: 400 }
       return { x: Math.floor(minX - PAD), y: Math.floor(minY - PAD), w: Math.ceil(maxX - minX + 2 * PAD), h: Math.ceil(maxY - minY + 2 * PAD) }
-    }, [hive, index, ranks, innerRadius, axisLength])
+    }, [hive, index, ranks, innerRadius, axisLength, groups, axisMeta])
 
     // viewBox units per CSS px, so hit circles stay at least 24px across at any size.
     const unitsPerPx = pxWidth > 0 ? viewBox.w / pxWidth : 1
@@ -233,7 +268,10 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         if (!em.visible) continue
         const s = index.nodeById.get(link.sourceId)!
         const t = index.nodeById.get(link.targetId)!
-        const geo = hiveLinkGeometry(hive, { layerId: s.layerId, radius: hive.radiusOf.get(s.id)! }, { layerId: t.layerId, radius: hive.radiusOf.get(t.id)! })
+        const sa = axisIdOf(s.id)
+        const ta = axisIdOf(t.id)
+        if (!hive.radiusOf.has(s.id) || !hive.radiusOf.has(t.id) || sa === undefined || ta === undefined) continue
+        const geo = hiveLinkGeometry(hive, { layerId: sa, radius: hive.radiusOf.get(s.id)! }, { layerId: ta, radius: hive.radiusOf.get(t.id)! })
         if (!geo) continue
         const curve = quadCurve(geo.a, geo.c, geo.b)
         let arrow: string | null = null
@@ -253,7 +291,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       if (reach.originId) {
         for (const id of reach.hopOf.keys()) set.add(id)
       } else if (axisLabels > 0) {
-        for (const l of visibleLayers) {
+        for (const l of visibleAxes) {
           l.nodeIds
             .map((id) => index.nodeById.get(id)!)
             .sort((a, b) => b.degree - a.degree || a.label.localeCompare(b.label))
@@ -262,7 +300,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         }
       }
       return set
-    }, [reach, axisLabels, visibleLayers, index])
+    }, [reach, axisLabels, visibleAxes, index])
 
     // Unsplit, highlighted loops run beside the axis on both sides: sample them so labels can dodge them.
     const loopPts = useMemo(
@@ -270,7 +308,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         hive.split > 0
           ? []
           : drawn
-              .filter((d) => d.em.highlighted && index.nodeById.get(d.link.sourceId)!.layerId === index.nodeById.get(d.link.targetId)!.layerId)
+              .filter((d) => d.em.highlighted && axisIdOf(d.link.sourceId) === axisIdOf(d.link.targetId))
               .flatMap((d) => Array.from({ length: 25 }, (_, i) => d.curve.pointAt(i / 24))),
       [drawn, hive, index],
     )
@@ -280,7 +318,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
     // overlaps a label already placed.
     const bestLabel = (id: string, placed: readonly LabelBox[]) => {
       const node = index.nodeById.get(id)!
-      const ax = hive.axisOf.get(node.layerId)!
+      const ax = hive.axisOf.get(axisIdOf(id)!)!
       const hits = (b: PlacedLabel, w: number, padY: number) => {
         const cx = b.tx + (b.side * w) / 2
         return loopPts.filter((p) => Math.abs(p.x - cx) <= w / 2 + 1 && Math.abs(p.y - b.ty) <= b.height / 2 + 1 + padY).length
@@ -339,7 +377,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       nodeRefs.current.get(id)?.focus()
     }
     const onNodeKey = (e: React.KeyboardEvent, node: IndexedNode) => {
-      const ai = hive.axes.findIndex((a) => a.layerId === node.layerId)
+      const ai = hive.axes.findIndex((a) => a.layerId === axisIdOf(node.id))
       const list = axisOrder[ai] ?? []
       const i = list.indexOf(node.id)
       switch (e.key) {
@@ -404,23 +442,23 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
           viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
           preserveAspectRatio="xMidYMid meet"
           role="group"
-          aria-label={`Hive plot, ${hive.axes.length} layer axes, ${visibleLayers.reduce((n, l) => n + l.nodeIds.length, 0)} nodes; arrow keys move between nodes`}
+          aria-label={`Hive plot, ${hive.axes.length} ${byLayer ? 'layer ' : ''}axes, ${hive.radiusOf.size} nodes; arrow keys move between nodes`}
           onKeyDown={onSvgKey}
           onMouseLeave={() => setHover(null)}
         >
           {/* axes and titles */}
           {hive.axes.map((ax) => {
-            const layer = index.layerById.get(ax.layerId)!
+            const meta = axisMeta.get(ax.layerId)!
             const t = hivePoint(ax.angle, R + 30)
             return (
-              <g key={ax.layerId} className="hive-plot__axis" data-layer-id={ax.layerId}>
+              <g key={ax.layerId} className="hive-plot__axis" data-axis-id={ax.layerId} data-layer-id={byLayer ? ax.layerId : undefined}>
                 {ax.offsets.map((off) => {
                   const p0 = hivePoint(ax.angle + off, innerRadius * 0.8)
                   const p1 = hivePoint(ax.angle + off, R + 8)
-                  return <line key={off} x1={r1(p0.x)} y1={r1(p0.y)} x2={r1(p1.x)} y2={r1(p1.y)} style={{ stroke: layer.color }} />
+                  return <line key={off} x1={r1(p0.x)} y1={r1(p0.y)} x2={r1(p1.x)} y2={r1(p1.y)} style={{ stroke: meta.color }} />
                 })}
-                <text className="hive-plot__axis-title" x={r1(t.x)} y={r1(t.y)} textAnchor="middle" dominantBaseline="central" style={{ fill: layer.color }}>
-                  {layer.label.toUpperCase()}
+                <text className="hive-plot__axis-title" x={r1(t.x)} y={r1(t.y)} textAnchor="middle" dominantBaseline="central" style={{ fill: meta.color }}>
+                  {meta.title.toUpperCase()}
                 </text>
               </g>
             )
@@ -469,8 +507,9 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
           {/* nodes: a dot per axis copy; the label-copy dot carries the hit target and focus */}
           {dots.map(({ node, x, y, r, copy }) => {
             const em = nodeEmphasis(node)
-            const ax = hive.axisOf.get(node.layerId)!
+            const ax = hive.axisOf.get(axisIdOf(node.id)!)!
             const layer = index.layerById.get(node.layerId)!
+            const meta = axisMeta.get(ax.layerId)!
             const primary = copy === ax.labelCopy
             const ringW = em.selected ? 2 : em.followed ? 1.2 : 0
             const hovered = hoverId === node.id
@@ -486,7 +525,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
                     style={{ stroke: em.selected ? 'rgb(var(--graph-hop-1))' : 'rgb(var(--graph-hop-2))', strokeWidth: ringW }}
                   />
                 )}
-                <circle className="hive-plot__dot" cx={r1(x)} cy={r1(y)} r={r1(r)} style={{ fill: layer.color }} />
+                <circle className="hive-plot__dot" cx={r1(x)} cy={r1(y)} r={r1(r)} style={{ fill: meta.color }} />
               </>
             )
             if (!primary) {
@@ -518,7 +557,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
                 role="button"
                 tabIndex={tabStop === node.id ? 0 : -1}
                 aria-pressed={em.selected}
-                aria-label={`${node.label}, ${layer.label} layer${em.selected ? ', selected' : ''}`}
+                aria-label={`${node.label}, ${layer.label} layer${byLayer ? '' : `, ${meta.title} axis`}${em.selected ? ', selected' : ''}`}
                 onClick={() => toggle(node.id)}
                 onFocus={() => setFocusId(node.id)}
                 onKeyDown={(e) => onNodeKey(e, node)}

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { HIVE_MIN_LOOP_BULGE, clampSplitAngle, hiveAxisAngles, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint } from '../layered/hive'
+import { HIVE_MIN_LOOP_BULGE, clampSplitAngle, hiveAxisAngles, hiveAxisGroups, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint } from '../layered/hive'
+import { buildLayeredIndex } from '../layered/buildLayeredIndex'
+import { rankWithinLayers } from '../layered/layout'
 
 const close = (a: number, b: number) => expect(Math.abs(a - b)).toBeLessThan(1e-6)
 const angleOf = (p: { x: number; y: number }) => (Math.atan2(p.y, p.x) * 180) / Math.PI
@@ -130,3 +132,66 @@ describe('hive geometry', () => {
     close(p.y, 10)
   })
 })
+
+describe('hive axis groups', () => {
+  // Two layers; `kind` cuts across them.
+  const index = buildLayeredIndex(
+    [
+      { id: 'p1', label: 'p1', kind: 'svc', attributes: { tier: 'top' } },
+      { id: 'p2', label: 'p2', kind: 'data', attributes: { tier: 'top' } },
+      { id: 'q1', label: 'q1', kind: 'svc', attributes: { tier: 'bottom' } },
+      { id: 'q2', label: 'q2', kind: 'actor', attributes: { tier: 'bottom' } },
+      { id: 'q3', label: 'q3', attributes: { tier: 'bottom' } },
+    ],
+    [
+      { id: 'e1', sourceId: 'p1', targetId: 'q1' },
+      { id: 'e2', sourceId: 'q1', targetId: 'q2' },
+      { id: 'e3', sourceId: 'p1', targetId: 'q2' },
+    ],
+    { layerBy: 'tier', layers: [{ id: 'top' }, { id: 'bottom' }] },
+  )
+  const byKind = (n: { kind?: string }) => n.kind
+
+  it("defaults to one axis per layer, in layer order", () => {
+    const g = hiveAxisGroups(index)
+    expect(g.axes).toEqual([{ id: 'top', nodeIds: ['p1', 'p2'] }, { id: 'bottom', nodeIds: ['q1', 'q2', 'q3'] }])
+    expect(g.axisOf.get('q3')).toBe('bottom')
+    expect(g.unassigned).toEqual([])
+  })
+
+  it('groups by any value, sorted by code point, and leaves null or undefined unassigned', () => {
+    const g = hiveAxisGroups(index, byKind)
+    expect(g.axes).toEqual([
+      { id: 'actor', nodeIds: ['q2'] },
+      { id: 'data', nodeIds: ['p2'] },
+      { id: 'svc', nodeIds: ['p1', 'q1'] },
+    ])
+    expect(g.axisOf.get('q1')).toBe('svc')
+    expect(g.unassigned).toEqual(['q3'])
+    expect(g.axisOf.has('q3')).toBe(false)
+  })
+
+  it('orders axes by a list (the rest follow) or a comparator', () => {
+    expect(hiveAxisGroups(index, byKind, ['svc', 'missing', 'svc']).axes.map((a) => a.id)).toEqual(['svc', 'actor', 'data'])
+    expect(hiveAxisGroups(index, byKind, (a, b) => b.localeCompare(a)).axes.map((a) => a.id)).toEqual(['svc', 'data', 'actor'])
+    expect(hiveAxisGroups(index, 'layer', ['bottom']).axes.map((a) => a.id)).toEqual(['bottom', 'top'])
+  })
+
+  it('ranks within the axis groups', () => {
+    const g = hiveAxisGroups(index, byKind)
+    const r = rankWithinLayers(index, 'degree', g.axes)
+    // svc: p1 (degree 2) and q1 (degree 2) tie, then by label; actor and data alone sit mid-axis.
+    expect([r.get('p1'), r.get('q1')].sort()).toEqual([0.25, 0.75])
+    expect(r.get('q2')).toBe(0.5)
+    expect(r.get('p2')).toBe(0.5)
+    expect(r.has('q3')).toBe(false)
+  })
+
+  it('lays the groups out like layers, with stable slots', () => {
+    const g = hiveAxisGroups(index, byKind)
+    const h = hiveLayout(g.axes, rankWithinLayers(index, 'degree', g.axes), { hiddenLayers: ['data'] })
+    expect(h.axes.map((a) => [a.layerId, a.angle])).toEqual([['actor', -90], ['svc', 150]])
+    expect(hiveLinkGeometry(h, { layerId: 'svc', radius: 100 }, { layerId: 'svc', radius: 200 })).not.toBeNull()
+  })
+})
+

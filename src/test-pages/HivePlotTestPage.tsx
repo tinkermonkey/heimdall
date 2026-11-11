@@ -3,14 +3,28 @@ import { HivePlot } from '../components/HivePlot'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import { DEFAULT_LINK_FILTERS } from '../utils/layered/filters'
-import type { BuildLayeredIndexOptions, PredicateLabelMode } from '../utils/layered/types'
+import type { HiveAxisBy } from '../utils/layered/hive'
+import type { BuildLayeredIndexOptions, IndexedNode, PredicateLabelMode } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
 
 // HivePlot on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=hive-plot&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&split=0&hide=<layer id>,…&dark=1
+//   &axes=aspect|partial (axes by ArchiMate aspect; partial leaves passive nodes without an axis)&axisOrder=<axis id>,…
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const HIDDEN = params.get('hide')?.split(',').filter(Boolean) ?? []
+
+// ArchiMate aspect from the element kind: a categorical attribute that cuts across the layers.
+const aspect = (n: IndexedNode) => {
+  const k = n.kind ?? ''
+  if (/service$/.test(k)) return 'service'
+  if (/(process|function|interaction|event)$/.test(k)) return 'behavior'
+  if (/(object|contract|product|representation|artifact)$/.test(k)) return 'passive'
+  return 'active'
+}
+const AXES: HiveAxisBy =
+  params.get('axes') === 'aspect' ? aspect : params.get('axes') === 'partial' ? (n) => (aspect(n) === 'passive' ? null : aspect(n)) : 'layer'
+const AXIS_ORDER = params.get('axisOrder')?.split(',').filter(Boolean)
 
 export default function HivePlotTestPage() {
   useEffect(() => {
@@ -68,7 +82,7 @@ export default function HivePlotTestPage() {
             {graph.selectedId ? `selected ${graph.selectedId} · reach ${graph.reach.hopOf.size - 1}` : 'no selection'}
           </span>
         </div>
-        <HivePlot data-testid="hive-plot" splitAxes={params.get('split') !== '0'} style={{ maxWidth: 1100 }} />
+        <HivePlot data-testid="hive-plot" axes={AXES} axisOrder={AXIS_ORDER} splitAxes={params.get('split') !== '0'} style={{ maxWidth: 1100 }} />
       </div>
     </LayeredGraphContext.Provider>
   )

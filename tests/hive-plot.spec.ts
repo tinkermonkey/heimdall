@@ -118,6 +118,52 @@ test.describe('HivePlot', () => {
     await expect(status(page)).toContainText('selected ')
   })
 
+  const axisIds = (page: Page) => page.locator('.hive-plot__axis').evaluateAll((gs) => gs.map((g) => g.getAttribute('data-axis-id')))
+
+  test('axes by any attribute: one axis per value, sorted, titled by id', async ({ page }) => {
+    const errors = await open(page, '&axes=aspect')
+    expect(await axisIds(page)).toEqual(['active', 'behavior', 'passive', 'service'])
+    await expect(page.locator('.hive-plot__axis-title')).toHaveText(['ACTIVE', 'BEHAVIOR', 'PASSIVE', 'SERVICE'])
+    await expect(page.locator('.hive-plot__axis[data-layer-id]')).toHaveCount(0)
+    await expect(page.locator('.hive-plot [role="button"]')).toHaveCount(36)
+    await expect(page.getByRole('button', { name: 'BusinessProcess, Business layer, behavior axis' })).toHaveCount(1)
+    // Selection and reach work across axes as across layers.
+    await page.getByRole('button', { name: 'ApplicationComponent, Application layer, active axis' }).click()
+    await expect(status(page)).toContainText('selected application.applicationcomponent · reach 13')
+    expect(errors).toEqual([])
+  })
+
+  test('axisOrder puts the listed axes first', async ({ page }) => {
+    await open(page, '&axes=aspect&axisOrder=service,behavior')
+    expect(await axisIds(page)).toEqual(['service', 'behavior', 'active', 'passive'])
+  })
+
+  test('nodes without an axis are not drawn, with a dev warning', async ({ page }) => {
+    const warnings: string[] = []
+    page.on('console', (msg) => { if (msg.type() === 'warning') warnings.push(msg.text()) })
+    await open(page, '&axes=partial')
+    expect(await axisIds(page)).toEqual(['active', 'behavior', 'service'])
+    await expect(page.locator('.hive-plot [role="button"]')).toHaveCount(30)
+    expect(warnings.some((w) => w.includes('HivePlot: 6 node(s) have no axis'))).toBe(true)
+  })
+
+  test('axes by attribute: hiding a layer hides its nodes, and every axis stays put', async ({ page }) => {
+    await open(page, '&axes=aspect')
+    const lines = () => page.locator('.hive-plot__axis line').evaluateAll((ls) => ls.map((l) => ['x1', 'y1', 'x2', 'y2'].map((a) => l.getAttribute(a)).join(',')))
+    const before = await lines()
+    await page.getByTestId('hive-plot-toggle-technology').click()
+    await expect(page.locator('.hive-plot [role="button"]')).toHaveCount(23)
+    expect(await lines()).toEqual(before)
+  })
+
+  for (const dark of [false, true]) {
+    const theme = dark ? 'dark' : 'light'
+    test(`visual: ${theme} canvas, axes by attribute with a selection`, async ({ page }) => {
+      await open(page, `&axes=aspect&select=${ORIGIN}${dark ? '&dark=1' : ''}`)
+      await expect(page.getByTestId('hive-plot')).toHaveScreenshot(`hive-plot-axes-attribute-${theme}.png`)
+    })
+  }
+
   // Unsplit loops between neighbours on one axis, each with an arrowhead, and a hidden layer's gap.
   test('visual: unsplit loops with a hidden layer', async ({ page }) => {
     await open(page, '&split=0&labels=off&hide=technology&select=business.businessservice')

@@ -5,6 +5,62 @@
  * in degrees, measured clockwise from +x in SVG coordinates (y down), so -90 is straight up.
  */
 import type { Point } from '../graph'
+import type { IndexedNode, LayeredIndex } from './types'
+
+/** How nodes are assigned to hive axes: by layer, or by any categorical value (null or undefined: not drawn). */
+export type HiveAxisBy = 'layer' | ((node: IndexedNode) => string | null | undefined)
+
+/** Axis order: ids listed first in that order (the rest follow in default order), or a comparator of axis ids. */
+export type HiveAxisOrder = readonly string[] | ((a: string, b: string) => number)
+
+export interface HiveAxisGroups {
+  /** Every axis in angle order, with all its node instances (filters not applied). */
+  axes: { id: string; nodeIds: string[] }[]
+  /** Axis id of each node instance that has one. */
+  axisOf: ReadonlyMap<string, string>
+  /** Node instances the axis function left without an axis (null or undefined). */
+  unassigned: string[]
+}
+
+const byCodePoint = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
+
+/**
+ * Groups node instances into hive axes. `'layer'`: one axis per layer, in layer order. A function:
+ * one axis per distinct value it returns over every node (hidden layers included, so the set of
+ * axes doesn't change with filters), sorted by code point. `order` then reorders the axes.
+ */
+export function hiveAxisGroups(index: LayeredIndex, by: HiveAxisBy = 'layer', order?: HiveAxisOrder): HiveAxisGroups {
+  const members = new Map<string, string[]>()
+  const axisOf = new Map<string, string>()
+  const unassigned: string[] = []
+  if (by === 'layer') {
+    for (const l of index.layers) {
+      members.set(l.id, [...l.nodeIds])
+      for (const id of l.nodeIds) axisOf.set(id, l.id)
+    }
+  } else {
+    for (const n of index.nodes) {
+      const v = by(n)
+      if (v === null || v === undefined) {
+        unassigned.push(n.id)
+        continue
+      }
+      const id = String(v)
+      axisOf.set(n.id, id)
+      const list = members.get(id)
+      if (list) list.push(n.id)
+      else members.set(id, [n.id])
+    }
+  }
+  let ids = [...members.keys()]
+  if (by !== 'layer') ids.sort(byCodePoint)
+  if (typeof order === 'function') ids = [...ids].sort(order)
+  else if (order) {
+    const listed = order.filter((id, i) => members.has(id) && order.indexOf(id) === i)
+    ids = [...listed, ...ids.filter((id) => !listed.includes(id))]
+  }
+  return { axes: ids.map((id) => ({ id, nodeIds: members.get(id)! })), axisOf, unassigned }
+}
 
 export interface HiveLayoutOptions {
   /** Radius where the rank-0 end of every axis sits. Default 64. */
@@ -25,6 +81,7 @@ export interface HiveLayoutOptions {
 }
 
 export interface HiveAxis {
+  /** The axis id: the layer id by default, else the value `axes` returned. */
   layerId: string
   /** Slot among all the layers (hidden ones included), clockwise from `startAngle`. */
   position: number
