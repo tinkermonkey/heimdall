@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { curveEndBoxes, laneLinkCurve, laneTagRoom, polylineCurve, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -313,6 +313,126 @@ describe('routeLaneGutters', () => {
   it('routes nothing with fewer than three lanes', () => {
     const lanes = layoutLanes(index, layout, { sizeOf, hiddenLayers: ['application'] })
     const boxOf = (id: string) => (lanes.positions.has(id) ? { ...lanes.positions.get(id)!, ...sizeOf(id) } : null)
-    expect(routeLaneGutters(cross, boxOf, layerOf, lanes)).toEqual({ curves: new Map(), bounds: null })
+    expect(routeLaneGutters(cross, boxOf, layerOf, lanes)).toEqual({ curves: new Map(), bounds: null, tracks: new Map() })
+  })
+})
+
+// A seeded layered graph at DR spec scale: 13 layers, 183 nodes, 1,600 links.
+function synthGraph(seed = 7, layerCount = 13, nodeCount = 183, linkCount = 1600) {
+  let s = seed
+  const rand = () => ((s = (s * 1103515245 + 12345) % 2147483648) / 2147483648)
+  const layers = Array.from({ length: layerCount }, (_, i) => ({ id: `l${i}`, label: `Layer ${i}` }))
+  const nodes = Array.from({ length: nodeCount }, (_, i) => ({ id: `n${i}`, label: `node_${i}_${'x'.repeat(i % 9)}`, attributes: { layer: `l${i % layerCount}` } }))
+  const edges: { id: string; sourceId: string; targetId: string; label: string }[] = []
+  const seen = new Set<string>()
+  while (edges.length < linkCount) {
+    const a = Math.floor(rand() * nodeCount)
+    const b = Math.floor(rand() * nodeCount)
+    if (a === b || seen.has(`${a}>${b}`)) continue
+    seen.add(`${a}>${b}`)
+    edges.push({ id: `e${edges.length}`, sourceId: `n${a}`, targetId: `n${b}`, label: 'serves' })
+  }
+  return { index: buildLayeredIndex(nodes, edges, { layerBy: 'layer', layers }) }
+}
+
+describe('routeLaneGutters at DR scale (synthetic, 13 lanes)', () => {
+  const { index: big } = synthGraph()
+  const bigSize = (id: string) => ({ width: Math.round(big.nodeById.get(id)!.displayLabel.length * 6.6 + 24), height: 24 })
+  const layerOf = (id: string) => big.nodeById.get(id)?.layerId
+  const cross = big.links.filter((l) => l.cross)
+
+  for (const orientation of ['horizontal', 'vertical'] as const) {
+    describe(orientation, () => {
+      const lanes = layoutLanes(big, null, { sizeOf: bigSize, orientation, skipLayerRouting: 'gutter', gutterLinks: cross })
+      const boxOf = (id: string) => ({ ...lanes.positions.get(id)!, ...bigSize(id) })
+      const res = routeLaneGutters(cross, boxOf, layerOf, lanes)
+      // Runs in the routing frame (vertical lanes transposed): gap runs are horizontal, gutter runs vertical.
+      const T = (p: { x: number; y: number }) => (orientation === 'vertical' ? { x: p.y, y: p.x } : p)
+      const runs = [...res.tracks.values()].map((t) => {
+        const [up, low] = (t.reversed ? [t.targetId, t.sourceId] : [t.sourceId, t.targetId]).map((id) => T(lanes.positions.get(id)!))
+        return { h: [[t.top, up.x, t.gx], [t.bot, low.x, t.gx]], v: [t.gx, t.top, t.bot] as const, t }
+      })
+
+      it('routes every skip link', () => {
+        expect(res.tracks.size).toBeGreaterThan(500)
+      })
+
+      it('no two routes share a gap or gutter run', () => {
+        const overlap = (a0: number, a1: number, b0: number, b1: number) =>
+          Math.min(Math.max(a0, a1), Math.max(b0, b1)) - Math.max(Math.min(a0, a1), Math.min(b0, b1)) > 1
+        let collinear = 0
+        for (let i = 0; i < runs.length; i++)
+          for (let j = i + 1; j < runs.length; j++) {
+            const [p, q] = [runs[i], runs[j]]
+            for (const a of p.h) for (const b of q.h) if (Math.abs(a[0] - b[0]) < 0.5 && overlap(a[1], a[2], b[1], b[2])) collinear++
+            if (Math.abs(p.v[0] - q.v[0]) < 0.5 && overlap(p.v[1], p.v[2], q.v[1], q.v[2])) collinear++
+          }
+        expect(collinear).toBe(0)
+      })
+
+      it('keeps gap tracks at least 3px apart', () => {
+        const byGap = new Map<number, number[]>()
+        for (const { t } of runs) for (const y of [t.top, t.bot]) {
+          const g = lanes.bands.findIndex((b) => (orientation === 'vertical' ? b.x + b.width : b.y + b.height) > y) - 1
+          byGap.set(g, [...(byGap.get(g) ?? []), y])
+        }
+        let min = Infinity
+        for (const ys of byGap.values()) {
+          ys.sort((a, b) => a - b)
+          for (let k = 1; k < ys.length; k++) min = Math.min(min, ys[k] - ys[k - 1])
+        }
+        expect(min).toBeGreaterThanOrEqual(3 - 1e-6)
+      })
+
+      it('uses about as many gutter tracks as routes overlap at once', () => {
+        const mid = (() => {
+          const bs = lanes.bands.map((b) => (orientation === 'vertical' ? [b.y, b.y + b.height] : [b.x, b.x + b.width]))
+          return (Math.min(...bs.map((b) => b[0])) + Math.max(...bs.map((b) => b[1]))) / 2
+        })()
+        for (const right of [false, true]) {
+          const side = runs.filter((r) => r.v[0] > mid === right)
+          const trackCount = new Set(side.map((r) => r.v[0])).size
+          let concurrent = 0
+          for (const y of side.flatMap((r) => [r.v[1], r.v[2]])) concurrent = Math.max(concurrent, side.filter((r) => r.v[1] <= y && y <= r.v[2]).length)
+          expect(trackCount).toBeLessThanOrEqual(Math.ceil(concurrent * 1.25))
+        }
+      })
+    })
+  }
+
+  it('widens a gap for its tracks, only under gutter routing', () => {
+    const direct = layoutLanes(big, null, { sizeOf: bigSize })
+    const gutter = layoutLanes(big, null, { sizeOf: bigSize, skipLayerRouting: 'gutter', gutterLinks: cross })
+    const tracks = laneGutterGapTracks(cross, layerOf, gutter.bands.map((b) => b.layerId))
+    for (let g = 0; g < gutter.bands.length - 1; g++) {
+      const gap = gutter.bands[g + 1].y - (gutter.bands[g].y + gutter.bands[g].height)
+      expect(gap).toBeGreaterThanOrEqual(Math.max(70, 20 + (tracks[g] - 1) * 3) - 1e-6)
+      expect(direct.bands[g + 1].y - (direct.bands[g].y + direct.bands[g].height)).toBe(70)
+    }
+  })
+
+  it('a drag keeps every other route where it was', () => {
+    const lanes = layoutLanes(big, null, { sizeOf: bigSize, skipLayerRouting: 'gutter', gutterLinks: cross })
+    const boxOf = (id: string) => ({ ...lanes.positions.get(id)!, ...bigSize(id) })
+    const res = routeLaneGutters(cross, boxOf, layerOf, lanes)
+    const moved = 'n20'
+    const live = (id: string) => (id === moved ? { ...boxOf(id), x: boxOf(id).x + 300, y: boxOf(id).y + 40 } : boxOf(id))
+    const held = retraceLaneGutters(res.tracks, live, 'horizontal')
+    for (const [id, t] of res.tracks) {
+      const touches = t.sourceId === moved || t.targetId === moved
+      if (!touches) expect(held.curves.get(id)!.d).toBe(res.curves.get(id)!.d)
+      else expect(held.curves.get(id)!.d).not.toBe(res.curves.get(id)!.d)
+    }
+  })
+})
+
+describe('curveEndBoxes', () => {
+  it('covers the first px of a long route, not one t step of it', () => {
+    const long = polylineCurve([{ x: 0, y: 0 }, { x: 0, y: 30 }, { x: 2000, y: 30 }, { x: 2000, y: 600 }])
+    const boxes = curveEndBoxes(long, 0)
+    expect(boxes.length).toBeGreaterThan(4)
+    const far = Math.max(...boxes.map((b) => Math.hypot(b.x, b.y)))
+    expect(far).toBeGreaterThan(14)
+    expect(far).toBeLessThanOrEqual(18.5)
   })
 })

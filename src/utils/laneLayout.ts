@@ -92,7 +92,17 @@ export interface LayoutLanesInput extends LaneLayoutOptions {
   hiddenLayers?: readonly string[]
   /** Vertical lanes: room kept right of a node, px (a name tag beside a compact chip, see `laneTagRoom`). */
   sideRoomOf?: (id: string) => number
+  /**
+   * With `skipLayerRouting: 'gutter'`: the drawn cross-layer links, so each gap between lanes
+   * is wide enough for its gutter routes' tracks (see `laneGutterGapTracks`).
+   */
+  gutterLinks?: readonly LaneGutterLink[]
 }
+
+// Gutter routing gaps (see routeLaneGutters), px.
+const GAP_EDGE = 10 // lane edge to the nearest gap track
+const GAP_TRACK = 6 // widest spacing between gap tracks
+const MIN_GAP_STEP = 3 // narrowest; layoutLanes widens a gap rather than go under it
 
 // Horizontal geometry (from the concept prototype, in px).
 const LANE_X = 20 // band left edge
@@ -126,6 +136,12 @@ export function layoutLanes(index: LayeredIndex, layout: LayerLayoutResult | nul
   const layers = index.layers.filter((l) => !hidden.has(l.id))
   const positions = new Map<string, Point>()
   const bands: LaneBand[] = []
+  // Gutter routing: widen a gap that couldn't fit its tracks MIN_GAP_STEP apart.
+  const gapTracks =
+    input.skipLayerRouting === 'gutter' && input.gutterLinks
+      ? laneGutterGapTracks(input.gutterLinks, (id) => index.nodeById.get(id)?.layerId, layers.map((l) => l.id))
+      : null
+  const gapAfter = (i: number, base: number) => (gapTracks ? Math.max(base, laneGapFor(gapTracks[i])) : base)
 
   if (orientation === 'horizontal') {
     const W = Math.max(80, input.maxRowWidth ?? 1120)
@@ -162,7 +178,7 @@ export function layoutLanes(index: LayeredIndex, layout: LayerLayoutResult | nul
         layerId: layer.id, label: layer.label, color: layer.color, count: ids.length,
         x: LANE_X, y, width: W + 2 * (ROW_INSET - LANE_X), height, titleX: LANE_X + 14, titleY: y + 19,
       })
-      y += height + LANE_GAP
+      y += height + gapAfter(bands.length - 1, LANE_GAP)
     }
   } else {
     const H = Math.max(80, input.maxRowWidth ?? 640)
@@ -203,7 +219,7 @@ export function layoutLanes(index: LayeredIndex, layout: LayerLayoutResult | nul
         layerId: layer.id, label: layer.label, color: layer.color, count: ids.length,
         x, y: TOP, width, height, titleX: x + 14, titleY: TOP + 19,
       })
-      x += width + V_LANE_GAP
+      x += width + gapAfter(bands.length - 1, V_LANE_GAP)
     }
     for (const b of bands) b.height = tallest
   }
@@ -323,22 +339,33 @@ export interface LaneGutterLink {
   targetId: string
 }
 
+/** A gutter route's held tracks, in the horizontal frame (vertical lanes are transposed). */
+export interface LaneGutterTrack {
+  sourceId: string
+  targetId: string
+  /** The source is on the lower lane. */
+  reversed: boolean
+  /** Gap track next to the upper lane, gutter track, gap track next to the lower lane. */
+  top: number
+  gx: number
+  bot: number
+}
+
 export interface LaneGutterRoutes {
   /** Curves for the links that skip a lane, by link id. The rest are absent: draw them with `laneLinkCurve`. */
   curves: Map<string, LaneLinkCurve>
   /** Bounding box of every gutter route, or null when there are none. */
   bounds: { minX: number; minY: number; maxX: number; maxY: number } | null
+  /** Each route's tracks, for `retraceLaneGutters` (a drag keeps them). */
+  tracks: Map<string, LaneGutterTrack>
 }
 
-// Gutter geometry, px.
-const GAP_EDGE = 10 // lane edge to the nearest gap track
-const GAP_TRACK = 6 // between tracks in the gap between two lanes
 const GUTTER_INSET = 16 // band edge to the first gutter track
 const GUTTER_TRACK = 8 // between gutter tracks
+const GUTTER_SPAN = 200 // gutter width past which its tracks tighten
 
-interface GutterRoute {
+interface GutterRoute extends LaneGutterTrack {
   id: string
-  reversed: boolean
   /** Ends in the horizontal frame: `up` on the lane nearer the top. */
   up: LaneNodeBox
   low: LaneNodeBox
@@ -346,9 +373,70 @@ interface GutterRoute {
   il: number
   /** On the right (bottom, vertical) gutter. */
   end: boolean
-  top: number
-  bot: number
-  gx: number
+}
+
+/** Lane ranks of a skip link's ends (upper, lower), or null when they are under two lanes apart. */
+function skipSpan(l: LaneGutterLink, rank: ReadonlyMap<string, number>, layerOf: (id: string) => string | undefined): [number, number] | null {
+  const ia = rank.get(layerOf(l.sourceId) ?? '')
+  const ib = rank.get(layerOf(l.targetId) ?? '')
+  if (ia === undefined || ib === undefined || Math.abs(ia - ib) < 2) return null
+  return ia < ib ? [ia, ib] : [ib, ia]
+}
+
+/**
+ * Gap tracks each gap between drawn lanes needs under gutter routing (index g: the gap after
+ * lane g): one per route leaving the lane above it, one per route entering the lane below.
+ */
+export function laneGutterGapTracks(links: readonly LaneGutterLink[], layerOf: (id: string) => string | undefined, layerIds: readonly string[]): number[] {
+  const rank = new Map(layerIds.map((id, i) => [id, i]))
+  const counts = layerIds.map(() => 0)
+  for (const l of links) {
+    const span = skipSpan(l, rank, layerOf)
+    if (!span) continue
+    counts[span[0]]++
+    counts[span[1] - 1]++
+  }
+  return counts
+}
+
+/** The px a gap needs for `tracks` gap tracks at least `MIN_GAP_STEP` apart. */
+export const laneGapFor = (tracks: number) => 2 * GAP_EDGE + Math.max(0, tracks - 1) * MIN_GAP_STEP
+
+function gutterPoints(r: LaneGutterTrack, up: LaneNodeBox, low: LaneNodeBox): Point[] {
+  const pts = [
+    { x: up.x, y: up.y + up.height / 2 },
+    { x: up.x, y: r.top },
+    { x: r.gx, y: r.top },
+    { x: r.gx, y: r.bot },
+    { x: low.x, y: r.bot },
+    { x: low.x, y: low.y - low.height / 2 },
+  ]
+  return r.reversed ? pts.reverse() : pts
+}
+
+function frame(vertical: boolean) {
+  return {
+    T: (p: Point): Point => (vertical ? { x: p.y, y: p.x } : p),
+    TB: (b: LaneNodeBox): LaneNodeBox => (vertical ? { x: b.y, y: b.x, width: b.height, height: b.width } : b),
+  }
+}
+
+function curvesOf(entries: Iterable<[string, Point[]]>): Pick<LaneGutterRoutes, 'curves' | 'bounds'> {
+  const curves = new Map<string, LaneLinkCurve>()
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
+  for (const [id, pts] of entries) {
+    for (const q of pts) {
+      minX = Math.min(minX, q.x)
+      minY = Math.min(minY, q.y)
+      maxX = Math.max(maxX, q.x)
+      maxY = Math.max(maxY, q.y)
+    }
+    curves.set(id, polylineCurve(pts))
+  }
+  return { curves, bounds: curves.size ? { minX, minY, maxX, maxY } : null }
 }
 
 /**
@@ -358,14 +446,21 @@ interface GutterRoute {
  * target lane. Each link takes the nearer gutter (left or right of horizontal lanes, top or
  * bottom of vertical ones).
  *
- * Tracks, so routes run parallel without overlapping: in each gap, the end nearest the gutter
- * takes the track nearest its lane, so no stub crosses another route's run to the gutter. In a
- * gutter, a route that starts higher and ends lower runs outside the ones it spans, so it wraps
- * them; routes whose spans don't overlap share a track.
+ * Tracks, so no two routes share a line:
+ * - Gaps: every route crossing a gap gets its own track, spread over the whole gap (exits from
+ *   the lane above, entries to the lane below), at most `GAP_TRACK` apart. `layoutLanes` widens
+ *   a gap that would put them under `MIN_GAP_STEP` apart (see `laneGutterGapTracks`). Per
+ *   gutter side, the end nearest the gutter takes the track nearest its lane, so no stub crosses
+ *   a run of its own side to the gutter.
+ * - Gutters: interval colouring that respects containment. Shortest spans first, each route
+ *   takes the lowest track above every route it spans and free of every route it overlaps, so
+ *   an outer route wraps the inner ones and routes whose spans don't overlap share a track.
+ *   Tracks are `GUTTER_TRACK` apart until a gutter passes `GUTTER_SPAN`, then tighten down to
+ *   `MIN_GAP_STEP`.
  *
  * A dedicated router rather than `routeNavigationEdges`: that one searches a lattice around
  * obstacles per route, while lane gutters are a fixed corridor where only track order matters.
- * Pure: routes come from the node boxes, so a view can re-route from live (dragged) positions.
+ * Pure. To re-route a drag without moving other routes' tracks, use `retraceLaneGutters`.
  */
 export function routeLaneGutters(
   links: readonly LaneGutterLink[],
@@ -374,98 +469,107 @@ export function routeLaneGutters(
   layout: LaneLayout,
 ): LaneGutterRoutes {
   const vertical = layout.orientation === 'vertical'
-  // Vertical lanes are routed transposed, as if horizontal.
-  const T = (p: Point): Point => (vertical ? { x: p.y, y: p.x } : p)
-  const TB = (b: LaneNodeBox): LaneNodeBox => (vertical ? { x: b.y, y: b.x, width: b.height, height: b.width } : b)
+  const { T, TB } = frame(vertical)
   const bands = layout.bands.map((b) =>
     vertical ? { top: b.x, bottom: b.x + b.width, left: b.y, right: b.y + b.height } : { top: b.y, bottom: b.y + b.height, left: b.x, right: b.x + b.width },
   )
+  const empty: LaneGutterRoutes = { curves: new Map(), bounds: null, tracks: new Map() }
+  if (bands.length < 3) return empty
   const rank = new Map(layout.bands.map((b, i) => [b.layerId, i]))
-  const routes: GutterRoute[] = []
-  if (bands.length < 3) return { curves: new Map(), bounds: null }
   const L = Math.min(...bands.map((b) => b.left))
   const R = Math.max(...bands.map((b) => b.right))
+  const routes: GutterRoute[] = []
   for (const l of links) {
-    const ia = rank.get(layerOf(l.sourceId) ?? '')
-    const ib = rank.get(layerOf(l.targetId) ?? '')
-    if (ia === undefined || ib === undefined || Math.abs(ia - ib) < 2) continue
-    const a = boxOf(l.sourceId)
-    const b = boxOf(l.targetId)
-    if (!a || !b) continue
-    const reversed = ia > ib
+    const span = skipSpan(l, rank, layerOf)
+    const a = span && boxOf(l.sourceId)
+    const b = span && boxOf(l.targetId)
+    if (!span || !a || !b) continue
+    const reversed = rank.get(layerOf(l.sourceId)!)! > rank.get(layerOf(l.targetId)!)!
     const [up, low] = reversed ? [TB(b), TB(a)] : [TB(a), TB(b)]
-    const [iu, il] = reversed ? [ib, ia] : [ia, ib]
-    routes.push({ id: l.id, reversed, up, low, iu, il, end: (up.x + low.x) / 2 >= (L + R) / 2, top: 0, bot: 0, gx: 0 })
+    routes.push({
+      id: l.id, sourceId: l.sourceId, targetId: l.targetId, reversed, up, low, iu: span[0], il: span[1],
+      end: (up.x + low.x) / 2 >= (L + R) / 2, top: 0, bot: 0, gx: 0,
+    })
   }
-  if (!routes.length) return { curves: new Map(), bounds: null }
+  if (!routes.length) return empty
   const byId = (p: GutterRoute, q: GutterRoute) => (p.id < q.id ? -1 : p.id > q.id ? 1 : 0)
   const toGutter = (r: GutterRoute, x: number) => (r.end ? R - x : x - L)
 
-  // Gap tracks: exits use the half of the gap next to the upper lane, entries the half next to the lower.
-  const exits = new Map<number, GutterRoute[]>()
-  const entries = new Map<number, GutterRoute[]>()
+  // Gap tracks, exits and entries together across the whole gap.
+  const gaps = new Map<number, { exits: GutterRoute[]; entries: GutterRoute[] }>()
+  const gap = (g: number) => {
+    let v = gaps.get(g)
+    if (!v) gaps.set(g, (v = { exits: [], entries: [] }))
+    return v
+  }
   for (const r of routes) {
-    exits.set(r.iu, [...(exits.get(r.iu) ?? []), r])
-    entries.set(r.il - 1, [...(entries.get(r.il - 1) ?? []), r])
+    gap(r.iu).exits.push(r)
+    gap(r.il - 1).entries.push(r)
   }
-  const gapTracks = (byGap: Map<number, GutterRoute[]>, exit: boolean) => {
-    for (const [g, rs] of byGap) {
-      const top = bands[g].bottom
-      const bottom = bands[g + 1].top
-      const room = Math.max(0, (bottom - top) / 2 - GAP_EDGE)
-      const step = rs.length > 1 ? Math.min(GAP_TRACK, room / (rs.length - 1)) : 0
-      const x = (r: GutterRoute) => (exit ? r.up.x : r.low.x)
-      rs.sort((p, q) => toGutter(p, x(p)) - toGutter(q, x(q)) || byId(p, q))
-      rs.forEach((r, k) => {
-        if (exit) r.top = top + GAP_EDGE + k * step
-        else r.bot = bottom - GAP_EDGE - k * step
-      })
-    }
+  // Each gutter side ordered on its own (nearest the gutter first), then interleaved.
+  const order = (rs: GutterRoute[], x: (r: GutterRoute) => number) => {
+    const sides = [false, true].map((end) => rs.filter((r) => r.end === end).sort((p, q) => toGutter(p, x(p)) - toGutter(q, x(q)) || byId(p, q)))
+    const out: GutterRoute[] = []
+    for (let i = 0; i < Math.max(sides[0].length, sides[1].length); i++) for (const sd of sides) if (sd[i]) out.push(sd[i])
+    return out
   }
-  gapTracks(exits, true)
-  gapTracks(entries, false)
+  for (const [g, { exits, entries }] of gaps) {
+    const top = bands[g].bottom
+    const bottom = bands[g + 1].top
+    const n = exits.length + entries.length
+    const step = n > 1 ? Math.max(0, Math.min(GAP_TRACK, (bottom - top - 2 * GAP_EDGE) / (n - 1))) : 0
+    order(exits, (r) => r.up.x).forEach((r, k) => (r.top = top + GAP_EDGE + k * step))
+    order(entries, (r) => r.low.x).forEach((r, k) => (r.bot = bottom - GAP_EDGE - k * step))
+  }
 
-  // Gutter tracks, outermost first: starts higher, then ends lower.
+  // Gutter tracks: containment-respecting interval colouring, shortest spans first.
   for (const end of [false, true]) {
-    const side = routes.filter((r) => r.end === end).sort((p, q) => p.top - q.top || q.bot - p.bot || byId(p, q))
+    const side = routes.filter((r) => r.end === end).sort((p, q) => p.bot - p.top - (q.bot - q.top) || p.top - q.top || byId(p, q))
     const track = new Map<GutterRoute, number>()
-    for (let i = side.length - 1; i >= 0; i--) {
+    for (let i = 0; i < side.length; i++) {
       const r = side[i]
-      let t = 0
-      for (let j = i + 1; j < side.length; j++) {
+      let min = 0
+      const used = new Set<number>()
+      for (let j = 0; j < i; j++) {
         const o = side[j]
-        if (o.top <= r.bot + GAP_TRACK && r.top <= o.bot + GAP_TRACK) t = Math.max(t, track.get(o)! + 1)
+        if (o.top >= r.top && o.bot <= r.bot) min = Math.max(min, track.get(o)! + 1)
+        else if (o.top < r.bot && r.top < o.bot) used.add(track.get(o)!)
       }
+      let t = min
+      while (used.has(t)) t++
       track.set(r, t)
-      r.gx = end ? R + GUTTER_INSET + t * GUTTER_TRACK : L - GUTTER_INSET - t * GUTTER_TRACK
     }
+    // Spacing tightens past GUTTER_SPAN of tracks, down to MIN_GAP_STEP, so a dense graph's
+    // gutter stays a bundle rather than growing 8px per track.
+    const count = Math.max(0, ...track.values()) + 1
+    const step = Math.max(MIN_GAP_STEP, Math.min(GUTTER_TRACK, GUTTER_SPAN / count))
+    for (const [r, t] of track) r.gx = end ? R + GUTTER_INSET + t * step : L - GUTTER_INSET - t * step
   }
 
-  const curves = new Map<string, LaneLinkCurve>()
-  let minX = Infinity
-  let minY = Infinity
-  let maxX = -Infinity
-  let maxY = -Infinity
-  for (const r of routes) {
-    const pts = [
-      { x: r.up.x, y: r.up.y + r.up.height / 2 },
-      { x: r.up.x, y: r.top },
-      { x: r.gx, y: r.top },
-      { x: r.gx, y: r.bot },
-      { x: r.low.x, y: r.bot },
-      { x: r.low.x, y: r.low.y - r.low.height / 2 },
-    ]
-    if (r.reversed) pts.reverse()
-    const out = pts.map(T)
-    for (const q of out) {
-      minX = Math.min(minX, q.x)
-      minY = Math.min(minY, q.y)
-      maxX = Math.max(maxX, q.x)
-      maxY = Math.max(maxY, q.y)
-    }
-    curves.set(r.id, polylineCurve(out))
+  const tracks = new Map<string, LaneGutterTrack>()
+  for (const r of routes) tracks.set(r.id, { sourceId: r.sourceId, targetId: r.targetId, reversed: r.reversed, top: r.top, gx: r.gx, bot: r.bot })
+  return { ...curvesOf(routes.map((r): [string, Point[]] => [r.id, gutterPoints(r, r.up, r.low).map(T)])), tracks }
+}
+
+/**
+ * Gutter routes rebuilt from held tracks and live node boxes: only the stubs of a moved node
+ * change, so a drag doesn't reshuffle other routes. Routes whose ends are gone are dropped.
+ */
+export function retraceLaneGutters(
+  tracks: ReadonlyMap<string, LaneGutterTrack>,
+  boxOf: (id: string) => LaneNodeBox | null | undefined,
+  orientation: LaneOrientation,
+): LaneGutterRoutes {
+  const { T, TB } = frame(orientation === 'vertical')
+  const out: [string, Point[]][] = []
+  for (const [id, r] of tracks) {
+    const a = boxOf(r.sourceId)
+    const b = boxOf(r.targetId)
+    if (!a || !b) continue
+    const [up, low] = r.reversed ? [TB(b), TB(a)] : [TB(a), TB(b)]
+    out.push([id, gutterPoints(r, up, low).map(T)])
   }
-  return { curves, bounds: { minX, minY, maxX, maxY } }
+  return { ...curvesOf(out), tracks: new Map(tracks) }
 }
 
 /**
@@ -519,11 +623,26 @@ const PAST_LINK_ENDS = LINK_END_LENGTH + 6
  */
 export function curveEndBoxes(curve: EdgeCurve, end: 0 | 1, length = LINK_END_LENGTH, size = 4): LabelBox[] {
   const a = curve.pointAt(end)
+  const at = (s: number) => curve.pointAt(end === 0 ? s : 1 - s)
+  const away = (s: number) => {
+    const p = at(s)
+    return Math.hypot(p.x - a.x, p.y - a.y)
+  }
+  // The parameter where the curve is `length` from its end, by bisection (a long route's first
+  // px are a tiny slice of t), at most halfway along.
+  let lo = 0
+  let hi = 0.5
+  if (away(hi) <= length) lo = hi
+  else {
+    for (let i = 0; i < 30; i++) {
+      const m = (lo + hi) / 2
+      if (away(m) < length) lo = m
+      else hi = m
+    }
+  }
   const out: LabelBox[] = []
-  for (let i = 0; i <= 15; i++) {
-    const t = end === 0 ? i * 0.02 : 1 - i * 0.02
-    const p = curve.pointAt(t)
-    if (Math.hypot(p.x - a.x, p.y - a.y) > length) break
+  for (let k = 0; k <= 8; k++) {
+    const p = at((lo * k) / 8)
     out.push({ x: p.x, y: p.y, width: size, height: size })
   }
   return out

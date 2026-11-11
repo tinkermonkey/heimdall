@@ -240,15 +240,21 @@ test.describe('GraphCanvas layer-lanes', () => {
   test('gutter routes follow a dragged node, with the pill placement held', async ({ page }) => {
     await open(page, `&gutter=1&select=${SKIP_ORIGIN}`)
     const placement = () => page.locator('.graph-lane-pills').getAttribute('data-placement')
-    const routed = (await outsideLanes(page)).filter((id) => id.startsWith(SKIP_ORIGIN))
+    const all = await outsideLanes(page)
+    const routed = all.filter((id) => id.startsWith(SKIP_ORIGIN))
+    const other = all.find((id) => !id.includes(SKIP_ORIGIN))!
     const line = page.locator(`.graph-lane-link[data-link-id="${routed[0]}"] .graph-lane-link__line`)
+    const otherLine = page.locator(`.graph-lane-link[data-link-id="${other}"] .graph-lane-link__line`)
     const d0 = await line.getAttribute('d')
+    const o0 = await otherLine.getAttribute('d')
     const p0 = await placement()
     const node = (await page.locator(`[data-node-id="${SKIP_ORIGIN}"]`).boundingBox())!
     await page.mouse.move(node.x + node.width / 2, node.y + node.height / 2)
     await page.mouse.down()
     for (let i = 1; i <= 5; i++) await page.mouse.move(node.x + node.width / 2 + i * 15, node.y + node.height / 2 + i * 2)
+    // The dragged node's routes follow it; every other route keeps its tracks.
     expect(await line.getAttribute('d')).not.toBe(d0)
+    expect(await otherLine.getAttribute('d')).toBe(o0)
     expect(await placement()).toBe(p0)
     await page.mouse.up()
     await expect.poll(placement).not.toBe(p0)

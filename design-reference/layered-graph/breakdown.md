@@ -274,9 +274,11 @@ Decision: v1 ships on SVG projection behind a small scene model (projected nodes
 Decided 2026-11-06: lanes are a **`GraphCanvas` layout**, starting with a new layout mode that
 replicates the concept design (lane bands, packed rows ordered by coupled x, intra-layer arcs,
 cross-layer curves). It inherits tooltips, `renderNode`, pan and zoom, fullscreen and the toolbar,
-and reads selection, follow and filters from the framework. The skip-layer gutter routing can
-later move onto `orthogonalLayout`'s channel router. The options table above becomes props of
-that layout mode.
+and reads selection, follow and filters from the framework. The options table above becomes
+props of that layout mode. The skip-layer gutter routing was first planned for
+`orthogonalLayout`'s channel router; it shipped as a dedicated track router instead
+(`routeLaneGutters`, see Implementation status), since lane gutters are a fixed corridor where
+only track order matters.
 
 ### 2.3 `LayerMatrix` [V]
 

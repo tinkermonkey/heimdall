@@ -69,7 +69,7 @@ import { arrowHeadPoints, linkPredicateLabel } from "../utils/layered/labels";
 import { edgeLabelPriority, placeEdgeLabels, defaultPillSize, type LabelBox, type PlacedEdgeLabel } from "../utils/layered/edgeLabels";
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode, LayeredIndex } from "../utils/layered/types";
 import type { LinkEmphasis, NodeEmphasis } from "../utils/layered/emphasis";
-import { curveEndBoxes, layoutLanes, laneLinkCurve, routeLaneGutters, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
+import { curveEndBoxes, layoutLanes, laneLinkCurve, retraceLaneGutters, routeLaneGutters, type LaneGutterTrack, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
 import { containsAcrossPortals } from "../hooks/useDropdownPortal";
 import "./Tooltip.css";
 import "./GraphCanvas.css";
@@ -2572,6 +2572,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const laneOrientation = laneOptions?.orientation;
     const laneOrder = laneOptions?.order;
     const laneMaxRowWidth = laneOptions?.maxRowWidth;
+    const laneGutter = laneOptions?.skipLayerRouting === "gutter";
+    const laneCrossLinks = useMemo(() => (laneGutter && laneData ? laneData.links.filter((l) => l.cross) : null), [laneGutter, laneData]);
     const laneLayout = useMemo(() => {
       if (!lanesIndex || dims.size === 0) return null;
       return layoutLanes(lanesIndex, lanesLayoutResult, {
@@ -2582,20 +2584,21 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         // Vertical chips: keep room beside each column for the name tags.
         sideRoomOf: laneCompact && laneOrientation === "vertical" ? (id) => laneTagRoom(lanesIndex.nodeById.get(id)?.displayLabel ?? "") : undefined,
         sizeOf: (id) => dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H },
+        // Gutter routing: gaps wide enough for their tracks.
+        skipLayerRouting: laneGutter ? "gutter" : "direct",
+        gutterLinks: laneCrossLinks ?? undefined,
       });
-    }, [lanesIndex, lanesLayoutResult, lanesHiddenLayers, laneOrientation, laneOrder, laneMaxRowWidth, dims, laneCompact]);
+    }, [lanesIndex, lanesLayoutResult, lanesHiddenLayers, laneOrientation, laneOrder, laneMaxRowWidth, dims, laneCompact, laneGutter, laneCrossLinks]);
     // skipLayerRouting 'gutter': the gutters' extent at the laid-out positions, so the fit frames them.
-    const laneGutter = laneOptions?.skipLayerRouting === "gutter";
     const laneGutterBounds = useMemo(() => {
-      if (!laneGutter || !laneLayout || !laneData || !lanesIndex) return null;
+      if (!laneCrossLinks || !laneLayout || !lanesIndex) return null;
       const boxOf = (id: string) => {
         const p = laneLayout.positions.get(id);
         const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H };
         return p ? { ...p, ...d } : null;
       };
-      const cross = laneData.links.filter((l) => l.cross);
-      return routeLaneGutters(cross, boxOf, (id) => lanesIndex.nodeById.get(id)?.layerId, laneLayout).bounds;
-    }, [laneGutter, laneLayout, laneData, lanesIndex, dims]);
+      return routeLaneGutters(laneCrossLinks, boxOf, (id) => lanesIndex.nodeById.get(id)?.layerId, laneLayout).bounds;
+    }, [laneCrossLinks, laneLayout, lanesIndex, dims]);
 
     const getNodePosition = useCallback(
       (node: GraphNodeData): { x: number; y: number } => {
@@ -3239,13 +3242,23 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // hover, pan or zoom doesn't redo any of this.
     const lanesLinkEmphasis = lanesGraph?.linkEmphasis;
     const lanesNodeEmphasis = lanesGraph?.nodeEmphasis;
+    const laneGutterTracksRef = useRef<Map<string, LaneGutterTrack> | null>(null);
     const laneLinkItems = useMemo(() => {
       if (!laneData || !laneLayout || !lanesLinkEmphasis) return null;
       const boxes = new Map(visibleNodes.map((n) => [n.id, getNodeRect(n.id)]));
       // skipLayerRouting 'gutter': links that skip a lane take the gutter route instead.
-      const gutter = laneGutter && lanesIndex
-        ? routeLaneGutters(laneData.links.filter((l) => l.cross), (id) => boxes.get(id), (id) => lanesIndex.nodeById.get(id)?.layerId, laneLayout).curves
-        : null;
+      // Mid-drag the routes keep their sides and tracks and only the moved node's stubs follow it;
+      // routed afresh on release.
+      let gutter: Map<string, LaneLinkCurve> | null = null;
+      if (laneCrossLinks && lanesIndex) {
+        const boxOf = (id: string) => boxes.get(id);
+        const held = laneGutterTracksRef.current;
+        const routes = nodeDragging && held
+          ? retraceLaneGutters(held, boxOf, laneLayout.orientation)
+          : routeLaneGutters(laneCrossLinks, boxOf, (id) => lanesIndex.nodeById.get(id)?.layerId, laneLayout);
+        laneGutterTracksRef.current = routes.tracks;
+        gutter = routes.curves;
+      }
       const items: LaneLinkItem[] = [];
       for (const link of laneData.links) {
         const a = boxes.get(link.sourceId);
@@ -3256,7 +3269,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
       items.sort((p, q) => p.em.z - q.em.z);
       return { items, byId: new Map(items.map((i) => [i.link.id, i])) };
-    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneGutter, lanesIndex]);
+    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneCrossLinks, lanesIndex, nodeDragging]);
 
     // layout="layer-lanes", nodeLabels 'reached': name tags for the selection and its reach,
     // beside their chips and off their link ends, placed before the pills so the pills keep
