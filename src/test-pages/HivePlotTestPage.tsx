@@ -3,14 +3,34 @@ import { HivePlot } from '../components/HivePlot'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import { DEFAULT_LINK_FILTERS } from '../utils/layered/filters'
-import type { BuildLayeredIndexOptions, PredicateLabelMode } from '../utils/layered/types'
+import type { HiveAxisBy } from '../utils/layered/hive'
+import type { BuildLayeredIndexOptions, IndexedNode, PredicateLabelMode } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
 
 // HivePlot on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=hive-plot&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&split=0&hide=<layer id>,…&dark=1
+//   &axes=aspect|partial|mixed (axes by ArchiMate aspect; partial leaves passive nodes without an axis;
+//   mixed puts technology nodes on their own axis)&axisOrder=<axis id>,…&unmemoized=1 (axes as an inline function)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const HIDDEN = params.get('hide')?.split(',').filter(Boolean) ?? []
+
+// ArchiMate aspect from the element kind: a categorical attribute that cuts across the layers.
+const aspect = (n: IndexedNode) => {
+  const k = n.kind ?? ''
+  if (/service$/.test(k)) return 'service'
+  if (/(process|function|interaction|event)$/.test(k)) return 'behavior'
+  if (/(object|contract|product|representation|artifact)$/.test(k)) return 'passive'
+  return 'active'
+}
+const AXES_BY: Record<string, HiveAxisBy> = {
+  aspect,
+  partial: (n) => (aspect(n) === 'passive' ? null : aspect(n)),
+  mixed: (n) => (n.layerId === 'technology' ? 'technology' : aspect(n)),
+}
+const AXES: HiveAxisBy = AXES_BY[params.get('axes') ?? ''] ?? 'layer'
+const INLINE = params.get('unmemoized') === '1'
+const AXIS_ORDER = params.get('axisOrder')?.split(',').filter(Boolean)
 
 export default function HivePlotTestPage() {
   useEffect(() => {
@@ -68,7 +88,14 @@ export default function HivePlotTestPage() {
             {graph.selectedId ? `selected ${graph.selectedId} · reach ${graph.reach.hopOf.size - 1}` : 'no selection'}
           </span>
         </div>
-        <HivePlot data-testid="hive-plot" splitAxes={params.get('split') !== '0'} style={{ maxWidth: 1100 }} />
+        <HivePlot
+          data-testid="hive-plot"
+          // unmemoized=1: a new axes function every render, as an unmemoized caller would pass.
+          axes={INLINE && typeof AXES === 'function' ? (n) => AXES(n) : AXES}
+          axisOrder={AXIS_ORDER}
+          splitAxes={params.get('split') !== '0'}
+          style={{ maxWidth: 1100 }}
+        />
       </div>
     </LayeredGraphContext.Provider>
   )
