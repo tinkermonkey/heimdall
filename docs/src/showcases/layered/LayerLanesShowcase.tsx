@@ -63,6 +63,7 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
   const [orientation, setOrientation] = useState<LaneOrientation>('horizontal')
   const [order, setOrder] = useState<OrderKey>('default')
   const [intraLinks, setIntraLinks] = useState<'arc' | 'none'>('arc')
+  const [skipRouting, setSkipRouting] = useState<'direct' | 'gutter'>('direct')
   const [nodeLabels, setNodeLabels] = useState<LaneNodeLabels>('all')
   const [rowWidth, setRowWidth] = useState<RowWidthKey>('default')
 
@@ -71,10 +72,11 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
       orientation,
       order: order === 'default' ? undefined : (order as NodeOrder),
       intraLinks,
+      skipLayerRouting: skipRouting,
       nodeLabels,
       maxRowWidth: rowWidth === 'default' ? undefined : Number(rowWidth),
     }),
-    [orientation, order, intraLinks, nodeLabels, rowWidth],
+    [orientation, order, intraLinks, skipRouting, nodeLabels, rowWidth],
   )
 
   const code = useMemo(() => {
@@ -83,6 +85,7 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
     if (order !== 'default') opts.push(`order: '${order}'`)
     if (rowWidth !== 'default') opts.push(`maxRowWidth: ${rowWidth}`)
     if (intraLinks !== 'arc') opts.push(`intraLinks: '${intraLinks}'`)
+    if (skipRouting !== 'direct') opts.push(`skipLayerRouting: '${skipRouting}'`)
     if (nodeLabels !== 'all') opts.push(`nodeLabels: '${nodeLabels}'`)
     const lines = [
       'const graph = useLayeredGraph({',
@@ -99,12 +102,12 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
     lines.push('    fitView', '  />', '</LayeredGraphContext.Provider>')
     if (!graph.filters.showIntra) lines.push('', '// filters.showIntra: false', 'graph.setShowIntra(false)')
     return lines.join('\n')
-  }, [orientation, order, rowWidth, intraLinks, nodeLabels, graph.follow, graph.predicateLabels, graph.filters.showIntra])
+  }, [orientation, order, rowWidth, intraLinks, skipRouting, nodeLabels, graph.follow, graph.predicateLabels, graph.filters.showIntra])
 
   const selected = graph.selectedId ? graph.index.nodeById.get(graph.selectedId) : undefined
   const cross = graph.index.links.filter((l) => l.cross).length
   // Remount on layout changes so fitView frames the new lanes.
-  const canvasKey = `${orientation}|${order}|${rowWidth}|${intraLinks}|${nodeLabels}`
+  const canvasKey = `${orientation}|${order}|${rowWidth}|${intraLinks}|${skipRouting}|${nodeLabels}`
 
   return (
     <LayeredGraphContext.Provider value={graph}>
@@ -131,6 +134,17 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
               options={[
                 { value: 'arc', label: 'arc' },
                 { value: 'none', label: 'none' },
+              ]}
+            />
+          </Control>
+          <Control label="skipLayerRouting">
+            <SegmentedControl
+              aria-label="Skip-layer routing"
+              value={skipRouting}
+              onChange={(v) => setSkipRouting(v as 'direct' | 'gutter')}
+              options={[
+                { value: 'direct', label: 'direct' },
+                { value: 'gutter', label: 'gutter' },
               ]}
             />
           </Control>
@@ -568,6 +582,7 @@ export function LayerLanesShowcase() {
           <PropRow name="order" type="NodeOrder" def="coupled position" description="Node order within each lane: 'coupled-x', 'degree', 'cross-degree', 'label' or a comparator. Default: position along the lane in the coupled in-layer solve (x for rows, y for columns), so cross-layer links run mostly straight; 'degree' with no in-layer layout." />
           <PropRow name="maxRowWidth" type="number" def="1120 / 640" description="Row length in px before a lane wraps to another row; a column's height when vertical (default 640)." />
           <PropRow name="intraLinks" type="'arc' | 'none'" def="'arc'" description="Links within a layer: arc draws them beside their row; none leaves them out. filters.showIntra on the state hides them in every view instead." />
+          <PropRow name="skipLayerRouting" type="'direct' | 'gutter'" def="'direct'" description="Links that skip a lane: direct crosses the lanes between; gutter runs them along the gap next to their lane to a side gutter outside the lanes (left/right, or top/bottom when vertical), along it, and back in, in parallel tracks." />
           <PropRow name="nodeLabels" type="'all' | 'reached'" def="state's nodeLabels" description="all: every node is a labeled box. reached: 24px chips, with name tags only for the selection, its reach and the hovered or focused node, placed clear of chips, titles, link ends and pills (dropped where none fits). Unset: the layered state's nodeLabels (all when on), so the label toggle applies; with fitView the canvas fits again after a switch. A custom renderNode is unaffected." />
         </PropsTable>
       </ShowcaseSection>

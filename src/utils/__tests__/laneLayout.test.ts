@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { curveEndBoxes, laneLinkCurve, laneTagRoom, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneLinkCurve, laneTagRoom, polylineCurve, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -210,5 +210,109 @@ describe('placeLaneTags', () => {
     const tags = placeLaneTags([blocked, chip('other', 140, 100)], [wall])
     expect(tags.map((t) => t.id)).toEqual(['selected'])
     expect(tags[0]).toMatchObject({ x: 100, t: 0 })
+  })
+})
+
+describe('polylineCurve', () => {
+  it('walks the straight segments by length and rounds the corners in the path', () => {
+    const c = polylineCurve([{ x: 0, y: 0 }, { x: 0, y: 30 }, { x: 40, y: 30 }])
+    expect(c.pointAt(0)).toEqual({ x: 0, y: 0 })
+    expect(c.pointAt(1)).toEqual({ x: 40, y: 30 })
+    expect(c.pointAt(30 / 70)).toEqual({ x: 0, y: 30 })
+    expect(c.tangentAt(0.1)).toEqual({ x: 0, y: 1 })
+    expect(c.tangentAt(0.9)).toEqual({ x: 1, y: 0 })
+    expect(c.tip).toEqual({ x: 40, y: 30 })
+    expect(c.dir).toEqual({ x: 1, y: 0 })
+    expect(c.d).toBe('M0,0 L0,22 Q0,30 8,30 L40,30')
+  })
+})
+
+describe('routeLaneGutters', () => {
+  const rank = new Map(index.layers.map((l, i) => [l.id, i]))
+  const layerOf = (id: string) => index.nodeById.get(id)?.layerId
+  const cross = index.links.filter((l) => l.cross)
+  const skips = cross.filter((l) => Math.abs(rank.get(layerOf(l.sourceId)!)! - rank.get(layerOf(l.targetId)!)!) >= 2)
+  const route = (orientation: 'horizontal' | 'vertical') => {
+    const lanes = layoutLanes(index, layout, { sizeOf, orientation })
+    const boxOf = (id: string) => ({ ...lanes.positions.get(id)!, ...sizeOf(id) })
+    return { lanes, boxOf, res: routeLaneGutters(cross, boxOf, layerOf, lanes) }
+  }
+  // A route's corner points, from samples along it.
+  const corners = (c: { pointAt: (t: number) => { x: number; y: number } }) => {
+    const pts: { x: number; y: number }[] = []
+    for (let i = 0; i <= 400; i++) {
+      const p = c.pointAt(i / 400)
+      const q = pts[pts.length - 1]
+      if (!q || Math.hypot(p.x - q.x, p.y - q.y) > 1e-6) pts.push({ x: Math.round(p.x * 10) / 10, y: Math.round(p.y * 10) / 10 })
+    }
+    return pts
+  }
+
+  it('routes exactly the links that skip a lane', () => {
+    expect(skips.length).toBe(7)
+    const { res } = route('horizontal')
+    expect([...res.curves.keys()].sort()).toEqual(skips.map((l) => l.id).sort())
+  })
+
+  it('horizontal: leaves the source toward the next lane, runs outside the bands, arrives at the target edge', () => {
+    const { lanes, boxOf, res } = route('horizontal')
+    const L = Math.min(...lanes.bands.map((b) => b.x))
+    const R = Math.max(...lanes.bands.map((b) => b.x + b.width))
+    for (const l of skips) {
+      const c = res.curves.get(l.id)!
+      const a = boxOf(l.sourceId)
+      const b = boxOf(l.targetId)
+      const up = a.y > b.y
+      expect(c.pointAt(0)).toEqual({ x: a.x, y: up ? a.y - a.height / 2 : a.y + a.height / 2 })
+      expect(c.tip).toEqual({ x: b.x, y: up ? b.y + b.height / 2 : b.y - b.height / 2 })
+      expect(c.dir).toEqual({ x: 0, y: up ? -1 : 1 })
+      const xs = corners(c).map((p) => p.x)
+      expect(Math.min(...xs) < L || Math.max(...xs) > R).toBe(true)
+    }
+    expect(res.bounds!.minX < L || res.bounds!.maxX > R).toBe(true)
+  })
+
+  it('gives overlapping routes their own gutter and gap tracks, an outer route wrapping the inner', () => {
+    const { lanes, res } = route('horizontal')
+    const L = Math.min(...lanes.bands.map((b) => b.x))
+    const R = Math.max(...lanes.bands.map((b) => b.x + b.width))
+    const legs = skips.map((l) => {
+      const p = corners(res.curves.get(l.id)!)
+      const gx = p.find((q) => q.x < L || q.x > R)!.x
+      const ys = p.filter((q) => q.x === gx).map((q) => q.y)
+      return { gx, top: Math.min(...ys), bot: Math.max(...ys), right: gx > R }
+    })
+    for (let i = 0; i < legs.length; i++)
+      for (let j = i + 1; j < legs.length; j++) {
+        const [p, q] = [legs[i], legs[j]]
+        // Gap runs at distinct heights at both ends.
+        expect(p.top).not.toBe(q.top)
+        expect(p.bot).not.toBe(q.bot)
+        if (p.right !== q.right || !(p.top < q.bot && q.top < p.bot)) continue
+        expect(p.gx).not.toBe(q.gx)
+        const edge = p.right ? R : L
+        const [outer, inner] = Math.abs(p.gx - edge) > Math.abs(q.gx - edge) ? [p, q] : [q, p]
+        expect(outer.top).toBeLessThanOrEqual(inner.top)
+      }
+  })
+
+  it('vertical: the gutter runs above or below the lanes', () => {
+    const { lanes, boxOf, res } = route('vertical')
+    const top = Math.min(...lanes.bands.map((b) => b.y))
+    const bottom = Math.max(...lanes.bands.map((b) => b.y + b.height))
+    expect(res.curves.size).toBe(7)
+    for (const l of skips) {
+      const c = res.curves.get(l.id)!
+      const ys = corners(c).map((p) => p.y)
+      expect(Math.min(...ys) < top || Math.max(...ys) > bottom).toBe(true)
+      expect(c.tip.y).toBe(boxOf(l.targetId).y)
+      expect(Math.abs(c.dir.x)).toBe(1)
+    }
+  })
+
+  it('routes nothing with fewer than three lanes', () => {
+    const lanes = layoutLanes(index, layout, { sizeOf, hiddenLayers: ['application'] })
+    const boxOf = (id: string) => (lanes.positions.has(id) ? { ...lanes.positions.get(id)!, ...sizeOf(id) } : null)
+    expect(routeLaneGutters(cross, boxOf, layerOf, lanes)).toEqual({ curves: new Map(), bounds: null })
   })
 })

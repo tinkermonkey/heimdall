@@ -454,7 +454,7 @@ Why A was chosen:
 
 **Not yet:**
 
-- Lanes (#334): `skipLayerRouting: 'gutter'`, bundled intra-layer links, Up/Down focus between lanes. Done: `laneOptions.nodeLabels` (`'all'` / `'reached'`, defaulting to the state's `nodeLabels`, so the explorer's toggle applies), optional `nodes`/`edges` with shared state, and pills held during a node drag.
+- Lanes (#334): bundled intra-layer links, Up/Down focus between lanes. Done: `laneOptions.skipLayerRouting: 'gutter'` (`routeLaneGutters`, a dedicated track router; `routeNavigationEdges` searches a lattice per route, while lane gutters are a fixed corridor where only track order matters), `laneOptions.nodeLabels` (`'all'` / `'reached'`, defaulting to the state's `nodeLabels`, so the explorer's toggle applies), optional `nodes`/`edges` with shared state, and pills held during a node drag.
 - Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
 - Hive (#337): the generic `axes` option (axis by any attribute). Done: hiding a layer keeps the other axes' angles (a gap is left), and unsplit loops between near neighbours keep room for their arrowheads.
 - Matrix (#336): link inspection (`onCellSelect` → `GraphEdgeInspector`), `order: 'cluster'`, virtualization. `symmetric` and `aggregate="layer"` are in (cells built by `src/utils/layered/matrix.ts`; the heat map toggles the layer-pair filter and layer focus).
