@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { curveEndBoxes, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -434,5 +434,55 @@ describe('curveEndBoxes', () => {
     const far = Math.max(...boxes.map((b) => Math.hypot(b.x, b.y)))
     expect(far).toBeGreaterThan(14)
     expect(far).toBeLessThanOrEqual(18.5)
+  })
+})
+
+describe('routeLaneGutters track order', () => {
+  // Four synthetic lanes, one node per position, all routes on the left gutter.
+  const bandsOf = (n: number): LaneLayout => ({
+    orientation: 'horizontal',
+    positions: new Map(),
+    bands: Array.from({ length: n }, (_, i) => ({ layerId: `l${i}`, label: `L${i}`, color: 'red', count: 1, x: 20, y: 16 + i * 150, width: 1000, height: 80, titleX: 34, titleY: 35 })),
+    bounds: { minX: 20, minY: 16, maxX: 1020, maxY: 16 + n * 150 },
+  })
+  const lanes = bandsOf(5)
+  const box = (lane: number, x: number) => ({ x, y: 16 + lane * 150 + 40, width: 60, height: 24 })
+  const nodes = new Map<string, { lane: number; x: number }>()
+  const node = (id: string, lane: number, x: number) => (nodes.set(id, { lane, x }), id)
+  const boxOf = (id: string) => box(nodes.get(id)!.lane, nodes.get(id)!.x)
+  const layerOf = (id: string) => `l${nodes.get(id)!.lane}`
+  const links = [
+    { id: 'outer', sourceId: node('a0', 0, 100), targetId: node('a4', 4, 100) }, // lanes 0 → 4
+    { id: 'inner', sourceId: node('b1', 1, 120), targetId: node('b3', 3, 120) }, // lanes 1 → 3, inside it
+    { id: 'early', sourceId: node('c0', 0, 140), targetId: node('c2', 2, 140) }, // lanes 0 → 2
+    { id: 'late', sourceId: node('d2', 2, 160), targetId: node('d4', 4, 160) }, // lanes 2 → 4, after it
+  ]
+
+  it('puts a route that contains another further out, and lets disjoint spans share a track', () => {
+    const { tracks } = routeLaneGutters(links, boxOf, layerOf, lanes)
+    const gx = (id: string) => tracks.get(id)!.gx
+    expect(gx('outer')).toBeLessThan(gx('inner')) // left gutter: further out is smaller x
+    expect(gx('outer')).toBeLessThan(gx('early'))
+    expect(gx('outer')).toBeLessThan(gx('late'))
+    // 'early' (lanes 0–2) and 'late' (2–4) meet in gap 1 and 2 but their gutter spans don't overlap.
+    const [e, l] = [tracks.get('early')!, tracks.get('late')!]
+    expect(e.bot <= l.top || l.bot <= e.top).toBe(true)
+    expect(gx('early')).toBe(gx('late'))
+  })
+
+  it('gives the same routes whatever order the links come in', () => {
+    const forward = routeLaneGutters(links, boxOf, layerOf, lanes)
+    const reversed = routeLaneGutters([...links].reverse(), boxOf, layerOf, lanes)
+    expect([...reversed.tracks.entries()].sort()).toEqual([...forward.tracks.entries()].sort())
+    for (const [id, c] of forward.curves) expect(reversed.curves.get(id)!.d).toBe(c.d)
+    const { index: big } = synthGraph(11)
+    const size = () => ({ width: 80, height: 24 })
+    const cross = big.links.filter((l) => l.cross)
+    const bigLanes = layoutLanes(big, null, { sizeOf: size, skipLayerRouting: 'gutter', gutterLinks: cross })
+    const bigBox = (id: string) => ({ ...bigLanes.positions.get(id)!, ...size() })
+    const bigLayer = (id: string) => big.nodeById.get(id)?.layerId
+    const a = routeLaneGutters(cross, bigBox, bigLayer, bigLanes)
+    const b = routeLaneGutters([...cross].reverse(), bigBox, bigLayer, bigLanes)
+    for (const [id, c] of a.curves) expect(b.curves.get(id)!.d).toBe(c.d)
   })
 })

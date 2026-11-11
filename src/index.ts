@@ -183,8 +183,8 @@ export {
   type TweenOptions,
   type TweenControls,
 } from './hooks/useTween'
-export { layoutLanes, laneLinkCurve, laneTagRoom, laneTagSize, routeLaneGutters } from './utils/laneLayout'
-export type { LaneLayoutOptions, LaneLayout, LaneBand, LaneNodeBox, LaneLinkCurve, LaneOrientation, LaneNodeLabels, LayoutLanesInput, LaneGutterLink, LaneGutterRoutes } from './utils/laneLayout'
+export { layoutLanes, laneLinkCurve, laneTagRoom, laneTagSize, routeLaneGutters, retraceLaneGutters, laneGutterGapTracks } from './utils/laneLayout'
+export type { LaneLayoutOptions, LaneLayout, LaneBand, LaneNodeBox, LaneLinkCurve, LaneOrientation, LaneNodeLabels, LayoutLanesInput, LaneGutterLink, LaneGutterRoutes, LaneGutterTrack } from './utils/laneLayout'
 export {
   FollowControl,
   PredicateLabelControl,

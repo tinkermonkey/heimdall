@@ -18,7 +18,7 @@ const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
 const EDGES = DATA === 'spec' ? drSpecEdges : heimdallUxEdges
 const ORIENTATION: LaneOrientation = params.get('orientation') === 'vertical' ? 'vertical' : 'horizontal'
 const INTRA = params.get('intra') === 'none' ? 'none' : 'arc'
-// &gutter=1: skipLayerRouting 'gutter'.
+// &gutter=1: skipLayerRouting 'gutter'. &categoryToggle=1 adds a button that toggles the structural category.
 const SKIP_ROUTING = params.get('gutter') === '1' ? 'gutter' : 'direct'
 const EDGE_TOOLTIP = params.get('tooltip') === '1'
 const NO_DATA = params.get('nodata') === '1'
@@ -67,6 +67,11 @@ export default function LayerLanesTestPage() {
             onChange={(v) => graph.setPredicateLabels(v as PredicateLabelMode)}
             options={[{ value: 'off', label: 'Off' }, { value: 'highlighted', label: 'Highlighted' }, { value: 'all', label: 'All' }]}
           />
+          {params.has('categoryToggle') && (
+            <button type="button" aria-pressed={graph.filters.categories.structural !== false} onClick={() => graph.toggleCategory('structural')}>
+              Structural links
+            </button>
+          )}
           {params.has('nodeLabels') && (
             <button type="button" aria-pressed={graph.nodeLabels} onClick={() => graph.setNodeLabels(!graph.nodeLabels)}>
               Node labels

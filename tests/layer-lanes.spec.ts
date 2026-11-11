@@ -237,6 +237,19 @@ test.describe('GraphCanvas layer-lanes', () => {
     expect(errors).toEqual([])
   })
 
+  test('gutter mode: a category filter leaves the lanes where they are', async ({ page }) => {
+    await open(page, `&gutter=1&categoryToggle=1&select=${SKIP_ORIGIN}`)
+    const bands = () => page.locator('.graph-lane__band').evaluateAll((els) => els.map((e) => ['x', 'y', 'width', 'height'].map((k) => e.getAttribute(k)).join(',')))
+    const before = await bands()
+    const links = await page.locator('.graph-lane-link').count()
+    await page.getByRole('button', { name: 'Structural links' }).click()
+    await expect(page.locator('.graph-lane-link')).not.toHaveCount(links)
+    expect(await bands()).toEqual(before)
+    await page.getByRole('button', { name: 'Structural links' }).click()
+    await expect(page.locator('.graph-lane-link')).toHaveCount(links)
+    expect(await bands()).toEqual(before)
+  })
+
   test('gutter routes follow a dragged node, with the pill placement held', async ({ page }) => {
     await open(page, `&gutter=1&select=${SKIP_ORIGIN}`)
     const placement = () => page.locator('.graph-lane-pills').getAttribute('data-placement')

@@ -2574,6 +2574,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const laneMaxRowWidth = laneOptions?.maxRowWidth;
     const laneGutter = laneOptions?.skipLayerRouting === "gutter";
     const laneCrossLinks = useMemo(() => (laneGutter && laneData ? laneData.links.filter((l) => l.cross) : null), [laneGutter, laneData]);
+    // Gap sizes come from the cross links on drawn layers, before the category, pair and intra
+    // filters, so a filter change never re-lays out the lanes (filtering only removes tracks).
+    const laneGapLinks = useMemo(() => {
+      if (!laneGutter || !lanesIndex) return null;
+      const hidden = new Set(lanesHiddenLayers);
+      const shown = (id: string) => {
+        const layerId = lanesIndex.nodeById.get(id)?.layerId;
+        return layerId !== undefined && !hidden.has(layerId);
+      };
+      return lanesIndex.links.filter((l) => l.cross && shown(l.sourceId) && shown(l.targetId));
+    }, [laneGutter, lanesIndex, lanesHiddenLayers]);
     const laneLayout = useMemo(() => {
       if (!lanesIndex || dims.size === 0) return null;
       return layoutLanes(lanesIndex, lanesLayoutResult, {
@@ -2586,19 +2597,29 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         sizeOf: (id) => dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H },
         // Gutter routing: gaps wide enough for their tracks.
         skipLayerRouting: laneGutter ? "gutter" : "direct",
-        gutterLinks: laneCrossLinks ?? undefined,
+        gutterLinks: laneGapLinks ?? undefined,
       });
-    }, [lanesIndex, lanesLayoutResult, lanesHiddenLayers, laneOrientation, laneOrder, laneMaxRowWidth, dims, laneCompact, laneGutter, laneCrossLinks]);
-    // skipLayerRouting 'gutter': the gutters' extent at the laid-out positions, so the fit frames them.
-    const laneGutterBounds = useMemo(() => {
+    }, [lanesIndex, lanesLayoutResult, lanesHiddenLayers, laneOrientation, laneOrder, laneMaxRowWidth, dims, laneCompact, laneGutter, laneGapLinks]);
+
+    // skipLayerRouting 'gutter': the routes, from live node boxes. Their own memo, so a selection
+    // only restyles them. Mid-drag they keep their sides and tracks and only the moved node's
+    // stubs follow it; routed afresh on release. Their bounds go into the fit.
+    const laneGutterTracksRef = useRef<Map<string, LaneGutterTrack> | null>(null);
+    const laneGutterRoutes = useMemo(() => {
       if (!laneCrossLinks || !laneLayout || !lanesIndex) return null;
       const boxOf = (id: string) => {
-        const p = laneLayout.positions.get(id);
+        const p = dragPositions.get(id) ?? laneLayout.positions.get(id);
         const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H };
         return p ? { ...p, ...d } : null;
       };
-      return routeLaneGutters(laneCrossLinks, boxOf, (id) => lanesIndex.nodeById.get(id)?.layerId, laneLayout).bounds;
-    }, [laneCrossLinks, laneLayout, lanesIndex, dims]);
+      const held = laneGutterTracksRef.current;
+      const routes = nodeDragging && held
+        ? retraceLaneGutters(held, boxOf, laneLayout.orientation)
+        : routeLaneGutters(laneCrossLinks, boxOf, (id) => lanesIndex.nodeById.get(id)?.layerId, laneLayout);
+      laneGutterTracksRef.current = routes.tracks;
+      return routes;
+    }, [laneCrossLinks, laneLayout, lanesIndex, dragPositions, dims, nodeDragging]);
+    const laneGutterBounds = laneGutterRoutes?.bounds ?? null;
 
     const getNodePosition = useCallback(
       (node: GraphNodeData): { x: number; y: number } => {
@@ -3242,23 +3263,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // hover, pan or zoom doesn't redo any of this.
     const lanesLinkEmphasis = lanesGraph?.linkEmphasis;
     const lanesNodeEmphasis = lanesGraph?.nodeEmphasis;
-    const laneGutterTracksRef = useRef<Map<string, LaneGutterTrack> | null>(null);
     const laneLinkItems = useMemo(() => {
       if (!laneData || !laneLayout || !lanesLinkEmphasis) return null;
       const boxes = new Map(visibleNodes.map((n) => [n.id, getNodeRect(n.id)]));
-      // skipLayerRouting 'gutter': links that skip a lane take the gutter route instead.
-      // Mid-drag the routes keep their sides and tracks and only the moved node's stubs follow it;
-      // routed afresh on release.
-      let gutter: Map<string, LaneLinkCurve> | null = null;
-      if (laneCrossLinks && lanesIndex) {
-        const boxOf = (id: string) => boxes.get(id);
-        const held = laneGutterTracksRef.current;
-        const routes = nodeDragging && held
-          ? retraceLaneGutters(held, boxOf, laneLayout.orientation)
-          : routeLaneGutters(laneCrossLinks, boxOf, (id) => lanesIndex.nodeById.get(id)?.layerId, laneLayout);
-        laneGutterTracksRef.current = routes.tracks;
-        gutter = routes.curves;
-      }
+      // skipLayerRouting 'gutter': links that skip a lane take their gutter route.
+      const gutter = laneGutterRoutes?.curves;
       const items: LaneLinkItem[] = [];
       for (const link of laneData.links) {
         const a = boxes.get(link.sourceId);
@@ -3269,7 +3278,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
       items.sort((p, q) => p.em.z - q.em.z);
       return { items, byId: new Map(items.map((i) => [i.link.id, i])) };
-    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneCrossLinks, lanesIndex, nodeDragging]);
+    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneGutterRoutes]);
 
     // layout="layer-lanes", nodeLabels 'reached': name tags for the selection and its reach,
     // beside their chips and off their link ends, placed before the pills so the pills keep
