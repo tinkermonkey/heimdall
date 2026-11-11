@@ -17,16 +17,16 @@ export function LayerStackPropsTable() {
       <PropRow name="cameraPreset" type="'stack' | 'exploded' | 'top' | 'profile' | null" description="Controlled preset; a new value animates to it. Becomes null when the camera is moved by hand." />
       <PropRow name="defaultCameraPreset" type="CameraPresetName" def="'stack'" description="Initial preset when uncontrolled." />
       <PropRow name="onCameraPresetChange" type="(preset: CameraPresetName | null) => void" description="Preset applied, or cleared by a hand move, a turntable or a layer focus." />
-      <PropRow name="camera" type="Partial<StackCamera>" description="Controlled { yaw, pitch, zoom, targetY }. A changed value is applied at once (a jump); fields left out keep their value." />
+      <PropRow name="camera" type="Partial<StackCamera>" description="Controlled { yaw, pitch, zoom, targetY }. The fields set are held: a move only reports through onCameraChange until the prop changes. A change from outside jumps; fields left out stay uncontrolled." />
       <PropRow name="defaultCamera" type="Partial<StackCamera>" description="Initial camera fields over the initial preset." />
-      <PropRow name="onCameraChange" type="(camera: StackCamera, cause: LayerStackCameraCause) => void" description="Called when a camera move settles (drag release, end of a tween, a wheel pause, turntable stop), never per frame." />
+      <PropRow name="onCameraChange" type="(camera: StackCamera, cause: LayerStackCameraCause) => void" description="Called when a camera move settles (drag release, end of a tween, a wheel pause, pinch release, turntable stop). With camera set, also on every frame of a move, with the proposed camera." />
       <PropRow name="turntable" type="boolean" description="Controlled slow yaw. Off under reduced motion; turns off when the user orbits or a preset applies." />
       <PropRow name="defaultTurntable" type="boolean" def="false" description="Initial turntable when uncontrolled." />
       <PropRow name="onTurntableChange" type="(on: boolean) => void" description="Turntable toggled, including off on orbit." />
       <PropRow name="turntableSpeed" type="number" def="0.27" description="Turntable speed, radians per second." />
-      <PropRow name="layerGap" type="number" description="Controlled distance between planes, world units; applied at once when it changes." />
+      <PropRow name="layerGap" type="number" description="Controlled distance between planes, world units. Held like camera: a preset's gap move only reports through onLayerGapChange." />
       <PropRow name="defaultLayerGap" type="number" def="preset's" description="Initial gap when uncontrolled (170 for stack, 300 for exploded, 210 for profile)." />
-      <PropRow name="onLayerGapChange" type="(gap: number) => void" description="Gap changed by a preset, when its tween ends." />
+      <PropRow name="onLayerGapChange" type="(gap: number) => void" description="Gap changed by a preset, when its tween ends; with layerGap set, also on every frame of it." />
       <PropRow name="nodeLabels" type="'all' | 'reached' | 'none'" def="graph state" description="Which node labels show: unset follows the graph's nodeLabels (all when on, reached when off). The hovered or keyboard-focused node always shows; hidden labels stay focusable." />
       <PropRow name="interactions" type="LayerStackInteractions" def="all on" description="{ select, hover, orbit, zoom, focusLayer }: turn direct manipulation off per kind. The ref handle still works." />
       <PropRow name="sceneWidth" type="number" def="1160" description="Scene (viewBox) width; with sceneHeight sets the aspect ratio. The scene renders at 100% of its container's width." />

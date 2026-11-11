@@ -94,4 +94,5 @@ export {
   type ProjectionOptions,
   type ProjectedPoint,
   type ScreenBounds,
+  type StackFocus,
 } from './projection'

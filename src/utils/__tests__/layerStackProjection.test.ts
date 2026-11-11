@@ -22,7 +22,7 @@ import {
   wrapAngle,
   type StackCamera,
 } from '../layered/projection'
-import { easeInOutCubic, interpolateValues } from '../../hooks/useTween'
+import { createTweenChannels, easeInOutCubic, interpolateValues, type TweenScheduler } from '../../hooks/useTween'
 
 const cam = (c: Partial<StackCamera> = {}): StackCamera => ({ yaw: 0, pitch: 0, zoom: 1, targetY: 0, ...c })
 
@@ -118,6 +118,16 @@ describe('stack geometry', () => {
     expect(stackPlaneY(0, 3, 170, { rank: 0, amount: 1 }, 150)).toBe(170)
   })
 
+  it('several focus entries add up, so a switch between layers blends', () => {
+    // Rank 0 closing while rank 2 opens: half way, the middle plane is back at rest.
+    const half = [{ rank: 0, amount: 0.5 }, { rank: 2, amount: 0.5 }]
+    expect([0, 1, 2].map((r) => stackPlaneY(r, 3, 170, half, 150))).toEqual([245, 0, -245])
+    // The ends match a single focus.
+    const start = [{ rank: 0, amount: 1 }, { rank: 2, amount: 0 }]
+    expect([0, 1, 2].map((r) => stackPlaneY(r, 3, 170, start, 150))).toEqual([0, 1, 2].map((r) => stackPlaneY(r, 3, 170, { rank: 0, amount: 1 }, 150)))
+    expect(stackPlaneY(1, 3, 170, [], 150)).toBe(0)
+  })
+
   it('planes share one square extent', () => {
     const c = planeCorners(-20, 300)
     expect(c).toHaveLength(4)
@@ -170,5 +180,119 @@ describe('tween math', () => {
 
   it('interpolateValues moves only the keys in `to`', () => {
     expect(interpolateValues({ a: 0, b: 10 }, { a: 4 }, 0.5)).toEqual({ a: 2, b: 10 })
+  })
+})
+
+/** A manual frame clock: `frame(ms)` advances time and runs the pending frame. */
+function fakeClock() {
+  let now = 0
+  let next: ((now: number) => void) | null = null
+  const scheduler: TweenScheduler = {
+    request: (cb) => {
+      next = cb
+      return 1
+    },
+    cancel: () => {
+      next = null
+    },
+  }
+  return {
+    scheduler,
+    pending: () => next !== null,
+    frame: (ms = 16) => {
+      now += ms
+      const cb = next
+      next = null
+      cb?.(now)
+    },
+  }
+}
+
+describe('createTweenChannels', () => {
+  const setup = (reduced = false) => {
+    const clock = fakeClock()
+    const state: Record<string, number> = {}
+    const frames: { values: Record<string, number>; idle: boolean }[] = []
+    const engine = createTweenChannels(
+      (values, idle) => {
+        Object.assign(state, values)
+        frames.push({ values, idle })
+      },
+      { scheduler: clock.scheduler, reducedMotion: () => reduced },
+    )
+    return { clock, state, frames, engine }
+  }
+
+  it('runs a move to its target and reports idle on the last frame', () => {
+    const { clock, state, frames, engine } = setup()
+    const done: string[] = []
+    engine.start({ a: 0 }, { a: 10 }, { duration: 100, onDone: () => done.push('a') })
+    clock.frame() // first frame: t0
+    expect(state.a).toBe(0)
+    clock.frame(50)
+    expect(state.a).toBeCloseTo(5)
+    clock.frame(60)
+    expect(state.a).toBe(10)
+    expect(frames[frames.length - 1].idle).toBe(true)
+    expect(done).toEqual(['a'])
+    expect(clock.pending()).toBe(false)
+    expect(engine.isActive()).toBe(false)
+  })
+
+  it('a later move replaces only the channels it names; the others keep running', () => {
+    const { clock, state, engine } = setup()
+    const done: string[] = []
+    engine.start({ yaw: 0, pitch: 0 }, { yaw: 1, pitch: 1 }, { duration: 100, onDone: () => done.push('preset') })
+    clock.frame()
+    clock.frame(50)
+    engine.start({ pitch: state.pitch }, { pitch: -1 }, { duration: 100, onDone: () => done.push('focus') })
+    expect(engine.isActive(['yaw'])).toBe(true)
+    clock.frame(60) // yaw finishes; pitch's new move starts its clock
+    expect(state.yaw).toBe(1)
+    expect(engine.isActive(['yaw'])).toBe(false)
+    expect(engine.isActive(['pitch'])).toBe(true)
+    clock.frame(100)
+    expect(state.pitch).toBe(-1)
+    // The first move lost a channel, so only the second reports done.
+    expect(done).toEqual(['focus'])
+  })
+
+  it('a replaced channel continues from the value it was given, without a jump', () => {
+    const { clock, state, engine } = setup()
+    engine.start({ f: 0 }, { f: 1 }, { duration: 100 })
+    clock.frame()
+    clock.frame(50)
+    const mid = state.f
+    engine.start({ f: mid }, { f: 0 }, { duration: 100 })
+    clock.frame(16) // the new move's first frame
+    expect(state.f).toBeCloseTo(mid)
+  })
+
+  it('cancel stops the named channels where they are and drops their onDone', () => {
+    const { clock, state, engine } = setup()
+    const done: string[] = []
+    engine.start({ a: 0, b: 0 }, { a: 10, b: 10 }, { duration: 100, onDone: () => done.push('ab') })
+    clock.frame()
+    clock.frame(50)
+    engine.cancel(['a'])
+    const a = state.a
+    clock.frame(100)
+    expect(state.a).toBe(a)
+    expect(state.b).toBe(10)
+    expect(done).toEqual([])
+    engine.start({ c: 0 }, { c: 1 }, { duration: 100 })
+    engine.cancel()
+    expect(engine.isActive()).toBe(false)
+    expect(clock.pending()).toBe(false)
+  })
+
+  it('jumps under reduced motion, in one synchronous frame', () => {
+    const { clock, state, frames, engine } = setup(true)
+    const done: string[] = []
+    engine.start({ a: 0 }, { a: 3 }, { duration: 100, onDone: () => done.push('a') })
+    expect(state.a).toBe(3)
+    expect(frames).toEqual([{ values: { a: 3 }, idle: true }])
+    expect(done).toEqual(['a'])
+    expect(clock.pending()).toBe(false)
   })
 })
