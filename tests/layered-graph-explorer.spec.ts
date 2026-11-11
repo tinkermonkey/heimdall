@@ -122,7 +122,7 @@ test.describe('LayeredGraphExplorer', () => {
     await expect(page.locator('.layer-stack__title--rail')).toHaveCount(3)
   })
 
-  test('the node-label toggle drives the stack labels and only shows for stack and hive', async ({ page }) => {
+  test('the node-label toggle drives the stack and lane labels and only shows for stack, lanes and hive', async ({ page }) => {
     await open(page)
     const labels = page.getByRole('button', { name: 'Labels', exact: true })
     await expect(labels).toHaveAttribute('aria-pressed', 'true')
@@ -130,6 +130,12 @@ test.describe('LayeredGraphExplorer', () => {
     await labels.click()
     await expect(labels).toHaveAttribute('aria-pressed', 'false')
     await expect(page.locator('.layer-stack__label--hidden')).toHaveCount(36)
+    await pickView(page, 'Lanes')
+    await expect(page.getByRole('button', { name: 'Labels', exact: true })).toHaveAttribute('aria-pressed', 'false')
+    await expect(page.locator('.graph-nodes .graph-lane-node--compact')).toHaveCount(36)
+    await page.getByRole('button', { name: 'Labels', exact: true }).click()
+    await expect(page.locator('.graph-nodes .graph-lane-node--compact')).toHaveCount(0)
+    await page.getByRole('button', { name: 'Labels', exact: true }).click()
     await pickView(page, 'Matrix')
     await expect(page.getByRole('button', { name: 'Labels', exact: true })).toHaveCount(0)
     await pickView(page, 'Hive')

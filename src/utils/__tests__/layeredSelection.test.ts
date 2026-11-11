@@ -286,6 +286,15 @@ describe('useLayeredGraph selection, rendered', () => {
     return { last: () => out[out.length - 1], rerender: () => act(() => r.update(createElement(Probe))), unmount: () => act(() => r.unmount()) }
   }
 
+  it('an inline followCategories array keeps reach and emphasis stable across renders', () => {
+    const m = mount(() => useLayeredGraph({ nodes: drSpecNodes, edges: drSpecEdges, layering, layout: false, defaultSelectedId: APP, followCategories: ['structural'] }))
+    const { reach, nodeEmphasis } = m.last()
+    m.rerender()
+    expect(m.last().reach).toBe(reach)
+    expect(m.last().nodeEmphasis).toBe(nodeEmphasis)
+    m.unmount()
+  })
+
   it('toggleSelected and setSelectedIds update selectedIds and the union reach', () => {
     const m = mount(() => useLayeredGraph({ nodes: drSpecNodes, edges: drSpecEdges, layering, layout: false, defaultFollow: 1 }))
     act(() => m.last().select(APP))

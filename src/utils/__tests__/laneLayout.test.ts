@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { laneLinkCurve, layoutLanes } from '../laneLayout'
+import { curveEndBoxes, laneLinkCurve, laneTagRoom, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
+import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
 const index = buildLayeredIndex(drSpecNodes, drSpecEdges, { layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' })
@@ -69,6 +70,17 @@ describe('layoutLanes', () => {
     for (let i = 0; i < ids.length; i++)
       for (let j = i + 1; j < ids.length; j++) expect(overlap(boxOf(res.positions, ids[i]), boxOf(res.positions, ids[j]))).toBe(false)
   })
+
+  it('vertical chips: sideRoomOf keeps room for each node\'s tag inside its band', () => {
+    const chipOf = () => ({ width: 24, height: 24 })
+    const label = (id: string) => index.nodeById.get(id)!.displayLabel
+    const res = layoutLanes(index, layout, { sizeOf: chipOf, orientation: 'vertical', sideRoomOf: (id) => laneTagRoom(label(id)) })
+    for (const n of index.nodes) {
+      const band = res.bands.find((b) => b.layerId === n.layerId)!
+      const p = res.positions.get(n.id)!
+      expect(p.x + 12 + laneTagRoom(label(n.id))).toBeLessThanOrEqual(band.x + band.width)
+    }
+  })
 })
 
 describe('laneLinkCurve', () => {
@@ -102,5 +114,101 @@ describe('laneLinkCurve', () => {
     expect(c.dir).toEqual({ x: 1, y: 0 })
     const arc = laneLinkCurve(a, { ...a, y: 150 }, false, 'vertical')
     expect(arc.pointAt(0.5).x).toBeLessThan(60)
+  })
+})
+
+describe('retraceLabels', () => {
+  const a = { x: 100, y: 50, width: 80, height: 24 }
+  const b = { x: 300, y: 250, width: 60, height: 24 }
+  it('keeps each pill at its t on the live curve and drops pills whose link is gone', () => {
+    const before = laneLinkCurve(a, b, true)
+    const [pill] = placeEdgeLabels([{ id: 'l1', text: 'serves', pointAt: before.pointAt, priority: 0 }])
+    const moved = laneLinkCurve({ ...a, x: 160 }, b, true)
+    const out = retraceLabels([pill, { ...pill, id: 'gone' }], (id) => (id === 'l1' ? moved : undefined))
+    expect(out).toHaveLength(1)
+    expect(out[0]).toMatchObject({ id: 'l1', t: pill.t, width: pill.width, height: pill.height, ...moved.pointAt(pill.t) })
+  })
+})
+
+describe('placeLaneTags', () => {
+  const chip = (id: string, x: number, y: number, priority = 1, forced = false): LaneTagCandidate => ({
+    id, text: id, box: { x, y, width: 24, height: 24 }, priority, forced,
+  })
+  const apart = (p: { x: number; y: number; width: number; height: number }, q: typeof p) =>
+    Math.abs(p.x - q.x) >= (p.width + q.width) / 2 || Math.abs(p.y - q.y) >= (p.height + q.height) / 2
+
+  it('horizontal: puts a tag above its chip, clear of the chips', () => {
+    const cands = [chip('alpha', 100, 100)]
+    const [tag] = placeLaneTags(cands, cands.map((c) => c.box))
+    expect(tag.x).toBe(100)
+    expect(tag.y + tag.height / 2).toBeLessThan(100 - 12)
+    expect(tag).toMatchObject(laneTagSize('alpha'))
+  })
+
+  it('vertical: puts a tag right of its chip', () => {
+    const [tag] = placeLaneTags([chip('alpha', 100, 100)], [], 'vertical')
+    expect(tag.y).toBe(100)
+    expect(tag.x - tag.width / 2).toBeGreaterThan(100 + 12)
+  })
+
+  it('places tags clear of each other and the obstacles, dropping unforced ones with no room', () => {
+    // A dense row under another row: tags only fit below, and 38px apart only some of them do.
+    const cands = Array.from({ length: 8 }, (_, i) => chip(`node_${i}`, 100 + i * 38, 100, 1 + i))
+    const obstacles = [...cands.map((c) => c.box), ...cands.map((c) => ({ ...c.box, y: 64 }))]
+    const tags = placeLaneTags(cands, obstacles)
+    expect(tags.length).toBeGreaterThan(1)
+    expect(tags.length).toBeLessThan(cands.length)
+    for (let i = 0; i < tags.length; i++) {
+      for (const o of obstacles) expect(apart(tags[i], o)).toBe(true)
+      for (let j = i + 1; j < tags.length; j++) expect(apart(tags[i], tags[j])).toBe(true)
+    }
+  })
+
+  it('keeps an unforced tag inside its lane band', () => {
+    const within = { x: 80, y: 60, width: 140, height: 400 }
+    // Vertical: the right spot would leave the band, so the tag goes left; with no room either side it is dropped.
+    const [tag] = placeLaneTags([{ ...chip('DataObject', 190, 100), within }], [], 'vertical')
+    expect(tag.x + tag.width / 2).toBeLessThanOrEqual(within.x + within.width)
+    expect(tag.x - tag.width / 2).toBeGreaterThanOrEqual(within.x)
+    expect(placeLaneTags([{ ...chip('ApplicationCollaboration', 150, 100), within: { ...within, height: 40, y: 80 } }], [], 'vertical')).toEqual([])
+  })
+
+  it('places forced tags first, so the others keep clear of them and of each other', () => {
+    // Two forced chips side by side: their tags must not overlap, and an unforced one placed
+    // between them (higher priority) must not land on either.
+    const tags = placeLaneTags([chip('earlier_node', 100, 100, 0), chip('hovered_one', 110, 100, 5, true), chip('focused_one', 160, 100, 5, true)], [])
+    const forced = tags.filter((t) => t.id !== 'earlier_node')
+    expect(forced).toHaveLength(2)
+    for (let i = 0; i < tags.length; i++) for (let j = i + 1; j < tags.length; j++) expect(apart(tags[i], tags[j])).toBe(true)
+  })
+
+  it('takes the side its link ends leave free', () => {
+    const a = { x: 100, y: 100, width: 24, height: 24 }
+    const up = laneLinkCurve(a, { x: 100, y: -100, width: 24, height: 24 }, true)
+    const ends = curveEndBoxes(up, 0)
+    expect(ends.length).toBeGreaterThan(2)
+    for (const e of ends) expect(Math.hypot(e.x - up.pointAt(0).x, e.y - up.pointAt(0).y)).toBeLessThanOrEqual(18)
+    const [tag] = placeLaneTags([chip('alpha', 100, 100)], ends)
+    expect(tag.y).toBeGreaterThan(100) // below: the link leaves upward
+  })
+
+  it('vertical: a tag whose links leave on the right sits past their ends, inside the reserved room', () => {
+    const a = { x: 100, y: 100, width: 24, height: 24 }
+    const out = laneLinkCurve(a, { x: 400, y: 160, width: 24, height: 24 }, true, 'vertical')
+    const ends = curveEndBoxes(out, 0)
+    const within = { x: 80, y: 60, width: 32 + laneTagRoom('BusinessProcess') + 20, height: 400 }
+    const [tag] = placeLaneTags([{ ...chip('BusinessProcess', 100, 100), within }], ends, 'vertical')
+    expect(tag).toBeDefined()
+    expect(tag.y).toBe(100)
+    for (const e of ends) expect(apart(tag, e)).toBe(true)
+    expect(tag.x + tag.width / 2).toBeLessThanOrEqual(112 + laneTagRoom('BusinessProcess'))
+  })
+
+  it('always places a forced tag, at its first spot when nothing is clear', () => {
+    const blocked = chip('selected', 100, 100, 0, true)
+    const wall = { x: 100, y: 100, width: 600, height: 200 }
+    const tags = placeLaneTags([blocked, chip('other', 140, 100)], [wall])
+    expect(tags.map((t) => t.id)).toEqual(['selected'])
+    expect(tags[0]).toMatchObject({ x: 100, t: 0 })
   })
 })

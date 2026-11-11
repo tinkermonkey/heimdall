@@ -717,6 +717,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           {...lanesProps}
           layout="layer-lanes"
           layeredGraph={g}
+          laneOptions={{ nodeLabels: nodeLabels ? 'all' : 'reached', ...lanesProps?.laneOptions }}
           className={cx('layered-graph-explorer__lanes', lanesProps?.className)}
           style={{ width: '100%', height: fixed && !narrow ? '100%' : LANES_HEIGHT, ...lanesProps?.style }}
         />
@@ -739,7 +740,9 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     const showSwitcher = show.viewSwitcher && views.length > 1
     const headerControls = showSwitcher || show.follow
     const showHeader = headerControls || title != null || eyebrow != null
-    const labelsApply = view === 'stack' || view === 'hive'
+    // On lanes the toggle can't apply over a fixed laneOptions.nodeLabels or a custom renderNode.
+    const lanesLabelsApply = lanesProps?.laneOptions?.nodeLabels === undefined && !lanesProps?.renderNode
+    const labelsApply = view === 'stack' || view === 'hive' || (view === 'lanes' && lanesLabelsApply)
     const sceneTools = view === 'stack' && (show.camera || show.planeLayout)
     const listsShown = show.layers || show.layerPairs || show.bridgeNodes
     const lists = listsShown ? (

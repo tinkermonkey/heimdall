@@ -25,8 +25,8 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
-| `nodes` | `GraphNodeData[]` | required | Nodes to render |
-| `edges` | `GraphEdgeData[]` | `[]` | Edges to render |
+| `nodes` | `GraphNodeData[]` | required | Nodes to render. Optional under `layout="layer-lanes"` with a `layeredGraph` prop or a `LayeredGraphContext` |
+| `edges` | `GraphEdgeData[]` | `[]` | Edges to render. Under `layer-lanes` with shared state, only adds each link's source edge fields (for `edgeTooltip`, `renderEdge`) |
 | `layout` | `'manual' \| 'force' \| 'organic' \| 'orthogonal' \| 'galaxy' \| 'force-clustered' \| 'radial-tree' \| 'ux-navigation' \| 'layer-lanes'` | `'manual'` | Layout engine. See [Choosing a layout](#choosing-a-layout) |
 | `selectedNodeId` | `string` | — | Controlled selected node ID |
 | `onNodeSelect` | `(nodeId: string) => void` | — | Called when a node is clicked or activated with Enter/Space |
@@ -73,7 +73,7 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `layeredGraph` | `LayeredGraphState` | context | Shared state from `useLayeredGraph`. Unset: the enclosing `LayeredGraphContext`, else the canvas builds its own from `nodes`/`edges`/`layering` |
 | `layering` | `BuildLayeredIndexOptions` | `{ layerBy: 'kind', missingValue: 'layer' }` | Standalone layering of `nodes`; memoize it. Ignored with `layeredGraph` or a context |
 | `layeredGraphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode, in-layer layout |
-| `laneOptions` | `LaneLayoutOptions` | — | `orientation` (`'horizontal'` default, `'vertical'`), `order` (`NodeOrder`, default coupled position along the lane), `maxRowWidth` (px before a lane wraps; 1120, or 640 as column height when vertical), `intraLinks` (`'arc'` default, `'none'`) |
+| `laneOptions` | `LaneLayoutOptions` | — | `orientation` (`'horizontal'` default, `'vertical'`), `order` (`NodeOrder`, default coupled position along the lane), `maxRowWidth` (px before a lane wraps; 1120, or 640 as column height when vertical), `intraLinks` (`'arc'` default, `'none'`), `nodeLabels` (`LaneNodeLabels`: `'all'` or `'reached'`; default from the layered state's `nodeLabels`, `'all'` when on) |
 
 **Interaction overlays**
 
@@ -241,7 +241,10 @@ A layered graph as swimlanes: one lane per layer (a layer-coloured band with an 
 - Selection is the layered state's: clicking a node (or Enter/Space on it) selects it, again clears; the background or Escape clears. `selectedNodeId` is ignored; `onNodeSelect` still fires. Share the state with `AdjacencyMatrix`, `HivePlot` and the chrome controls through `LayeredGraphContext`.
 - Inherits tooltips, popovers, `renderNode`, `renderEdge` (the lane curve as `path`), pan and zoom, fullscreen, drag and the toolbar. Edge callbacks receive one `GraphEdgeData` per link (`label` = its predicates joined with ` · `).
 - `laneOptions.orientation: 'vertical'` puts the lanes side by side as columns, for narrow containers.
-- The geometry is exported for custom renderers: `layoutLanes(index, layout, { sizeOf, hiddenLayers, ...LaneLayoutOptions })` returns a `LaneLayout` (node centres, `LaneBand`s, bounds; `LayoutLanesInput` is its input type); `laneLinkCurve(sourceBox, targetBox, cross, orientation)` returns a `LaneLinkCurve` (an `EdgeCurve` plus arrow `tip` and `dir`) between two `LaneNodeBox`es. `LaneOrientation` is `'horizontal' | 'vertical'`.
+- `laneOptions.nodeLabels: 'reached'` draws the default node as a 24px chip (compact horizontal lanes) and names only the selection and its reach, in tags beside their chips placed clear of chips, titles, link ends and pills (dropped where none fits), plus the hovered and keyboard-focused node. Unset, it follows the layered state's `nodeLabels`, so `LinkCategoryFilter`'s label toggle and the explorer's apply to lanes; with `fitView` the canvas fits again after a switch. A custom `renderNode` is unaffected (and the explorer hides its toggle on Lanes when `lanesProps` sets `renderNode` or `laneOptions.nodeLabels`).
+- With a `layeredGraph` prop or a `LayeredGraphContext`, `nodes` and `edges` can be left out.
+- While a node is dragged, pills keep their placement and ride their links; they are placed again on release.
+- The geometry is exported for custom renderers: `layoutLanes(index, layout, { sizeOf, hiddenLayers, ...LaneLayoutOptions })` returns a `LaneLayout` (node centres, `LaneBand`s, bounds; `LayoutLanesInput` is its input type); `laneLinkCurve(sourceBox, targetBox, cross, orientation)` returns a `LaneLinkCurve` (an `EdgeCurve` plus arrow `tip` and `dir`) between two `LaneNodeBox`es. `LaneOrientation` is `'horizontal' | 'vertical'`. For `nodeLabels: 'reached'` chips, `laneTagSize(text)` is a name tag's box and `laneTagRoom(text)` the room it takes beside its chip (pass it as `sideRoomOf` for vertical lanes).
 - Limits: dense layers (near-cliques) draw many arcs; set `laneOptions={{ intraLinks: 'none' }}` or `filters.showIntra: false` to read only the cross-layer links. Links that skip a layer cross the lane between.
 
 ```tsx
@@ -254,7 +257,7 @@ const layering = useMemo(() => ({ layerBy: 'tier', linkCategoryBy: 'category' })
 // Shared with other layered views
 const graph = useLayeredGraph({ nodes, edges, layering })
 <LayeredGraphContext.Provider value={graph}>
-  <GraphCanvas layout="layer-lanes" nodes={nodes} edges={edges} laneOptions={{ orientation: 'vertical' }} fitView />
+  <GraphCanvas layout="layer-lanes" laneOptions={{ orientation: 'vertical' }} fitView />
   <AdjacencyMatrix />
 </LayeredGraphContext.Provider>
 ```
