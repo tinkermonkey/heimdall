@@ -267,7 +267,7 @@ Decision: v1 ships on SVG projection behind a small scene model (projected nodes
 | Orientation | `orientation: 'horizontal' \| 'vertical'` | Vertical lanes suit narrow containers. |
 | Ordering | `laneOrder` | Framework orderings (1.2). |
 | Row packing | `maxRowWidth`, `nodeWidth: 'label' \| number` | Lanes grow in height with row count. |
-| Intra-link style | `intraLinkStyle: 'arc' \| 'none' \| 'bundled'` | Arcs are honest but noisy on near-clique layers; bundled is future work. |
+| Intra-link style | `intraLinks: 'arc' \| 'bundled' \| 'none'` | Arcs are honest but noisy on near-clique layers; `bundled` runs each row's links along a shared trunk (implemented, #334). |
 | Skip-layer links | `skipLayerRouting: 'direct' \| 'gutter'` | Direct crosses intermediate lanes (prototype); gutter routes down the side. |
 | Pan and zoom | inherits `usePanZoom` | Needed beyond about 60 nodes per lane. |
 
@@ -457,7 +457,7 @@ Why A was chosen:
 
 **Not yet:**
 
-- Lanes (#334): bundled intra-layer links, Up/Down focus between lanes. Done: `laneOptions.skipLayerRouting: 'gutter'` (`routeLaneGutters`, a dedicated track router with a shared stub per node and gutter side in each gap; `routeNavigationEdges` searches a lattice per route, while lane gutters are a fixed corridor where only track order matters), `laneOptions.nodeLabels` (`'all'` / `'reached'`, defaulting to the state's `nodeLabels`, so the explorer's toggle applies), optional `nodes`/`edges` with shared state, and pills held during a node drag.
+- Lanes (#334): Up/Down focus between lanes. Done: `laneOptions.intraLinks: 'bundled'` (row trunks via `laneBundleTrunks` / `laneBundleCurve`; the reach and a hovered node's links draw as arcs), `laneOptions.skipLayerRouting: 'gutter'` (`routeLaneGutters`, a dedicated track router with a shared stub per node and gutter side in each gap; `routeNavigationEdges` searches a lattice per route, while lane gutters are a fixed corridor where only track order matters), `laneOptions.nodeLabels` (`'all'` / `'reached'`, defaulting to the state's `nodeLabels`, so the explorer's toggle applies), optional `nodes`/`edges` with shared state, and pills held during a node drag.
 - Stack (#335): label occlusion behind planes. Done in the second slice: the full DR spec fixture (`--full`, 13 layers, 193 types, 987 schemas), frames painted imperatively (no React commit per frame), and preset gaps that close up past five layers (`presetLayerGap`), so every preset frames the 13-layer stack after `fit()`. Done in the first slice: pinch zoom; independent tween channels (`useTweenChannels`), so a focus after a preset keeps its yaw and a focus switch eases from the current planes; controlled `camera` / `layerGap` held, reporting every frame.
 - Matrix (#336): done. In: virtualization past `virtualizeAbove` (sticky labels, windowed rows and columns), roving keyboard focus over cells, `symmetric` and `aggregate="layer"` (the heat map toggles the layer-pair filter and layer focus); `onCellSelect(link, links)` (`onLinkSelect` deprecated), with the explorer showing the link in a `GraphEdgeInspector` (`linkEdgeMetadata`) and a Reverse button for merged cells; `order="cluster"` (per-layer Louvain, deterministic). Helpers in `src/utils/layered/matrix.ts`.
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
