@@ -262,13 +262,18 @@ export function orderAcrossLayers(index: LayeredIndex, layout: LayerLayoutResult
 /**
  * Each node's position along its layer's axis, (i + 0.5) / n for the i-th node. `degree` and
  * `cross-degree` put the busiest node last (farthest out on a hive axis); `label` and a custom
- * comparator run in their own ascending order. Hive default: `degree`.
+ * comparator run in their own ascending order. Hive default: `degree`. `groups` ranks within other
+ * node groups instead of the layers (hive axes by another attribute).
  */
-export function rankWithinLayers(index: LayeredIndex, by: NodeOrder = 'degree'): Map<string, number> {
+export function rankWithinLayers(
+  index: LayeredIndex,
+  by: NodeOrder = 'degree',
+  groups: readonly { nodeIds: readonly string[] }[] = index.layers,
+): Map<string, number> {
   const cmp = comparator(by, null)
   const busiestLast = by === 'degree' || by === 'cross-degree'
   const out = new Map<string, number>()
-  for (const l of index.layers) {
+  for (const l of groups) {
     const ids = l.nodeIds.map((id) => index.nodeById.get(id)!).sort(cmp)
     if (busiestLast) ids.reverse()
     ids.forEach((n, i) => out.set(n.id, (i + 0.5) / ids.length))
