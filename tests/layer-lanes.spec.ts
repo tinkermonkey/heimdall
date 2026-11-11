@@ -201,6 +201,89 @@ test.describe('GraphCanvas layer-lanes', () => {
     expect(errors).toEqual([])
   })
 
+  // Links whose drawn path runs past the ends of the lanes (left/right, or top/bottom when
+  // vertical): gutter routes. Intra-layer arcs bulge the other way, so they never count.
+  const outsideLanes = (page: Page, vertical = false) =>
+    page.evaluate((vertical) => {
+      const lanes = (document.querySelector('.graph-lanes') as SVGGraphicsElement).getBBox()
+      return [...document.querySelectorAll<SVGPathElement>('.graph-lane-link__line')]
+        .filter((p) => {
+          const b = p.getBBox()
+          return vertical ? b.y < lanes.y - 1 || b.y + b.height > lanes.y + lanes.height + 1 : b.x < lanes.x - 1 || b.x + b.width > lanes.x + lanes.width + 1
+        })
+        .map((p) => p.closest('[data-link-id]')!.getAttribute('data-link-id')!)
+        .sort()
+    }, vertical)
+  const SKIP_ORIGIN = 'technology.technologyservice'
+
+  test('skipLayerRouting gutter routes the links that skip a lane outside the lanes, with pills and arrows', async ({ page }) => {
+    const errors = await open(page, `&select=${SKIP_ORIGIN}`)
+    expect(await outsideLanes(page)).toEqual([])
+    await open(page, `&gutter=1&select=${SKIP_ORIGIN}`)
+    const routed = await outsideLanes(page)
+    expect(routed).toHaveLength(7)
+    await expect(page.locator('.graph-lane-link')).toHaveCount(162)
+    // The selection's routed links carry arrowheads, and pills sit on some of them.
+    const reached = routed.filter((id) => id.startsWith(SKIP_ORIGIN))
+    expect(reached.length).toBeGreaterThan(0)
+    for (const id of reached) await expect(page.locator(`.graph-lane-link[data-link-id="${id}"] .graph-lane-link__arrow`)).toHaveCount(1)
+    const pills = await page.locator('.graph-lane-pill').evaluateAll((els) => els.map((e) => e.getAttribute('data-link-id')))
+    expect(pills.some((id) => reached.includes(id!))).toBe(true)
+    // Vertical lanes route them too.
+    await open(page, `&orientation=vertical&select=${SKIP_ORIGIN}`)
+    expect(await outsideLanes(page, true)).toEqual([])
+    await open(page, `&gutter=1&orientation=vertical&select=${SKIP_ORIGIN}`)
+    expect(await outsideLanes(page, true)).toHaveLength(7)
+    expect(errors).toEqual([])
+  })
+
+  test('gutter mode: a category filter leaves the lanes where they are', async ({ page }) => {
+    await open(page, `&gutter=1&categoryToggle=1&select=${SKIP_ORIGIN}`)
+    const bands = () => page.locator('.graph-lane__band').evaluateAll((els) => els.map((e) => ['x', 'y', 'width', 'height'].map((k) => e.getAttribute(k)).join(',')))
+    const before = await bands()
+    const links = await page.locator('.graph-lane-link').count()
+    await page.getByRole('button', { name: 'Structural links' }).click()
+    await expect(page.locator('.graph-lane-link')).not.toHaveCount(links)
+    expect(await bands()).toEqual(before)
+    await page.getByRole('button', { name: 'Structural links' }).click()
+    await expect(page.locator('.graph-lane-link')).toHaveCount(links)
+    expect(await bands()).toEqual(before)
+  })
+
+  test('gutter routes follow a dragged node, with the pill placement held', async ({ page }) => {
+    await open(page, `&gutter=1&select=${SKIP_ORIGIN}`)
+    const placement = () => page.locator('.graph-lane-pills').getAttribute('data-placement')
+    const all = await outsideLanes(page)
+    const routed = all.filter((id) => id.startsWith(SKIP_ORIGIN))
+    const other = all.find((id) => !id.includes(SKIP_ORIGIN))!
+    const line = page.locator(`.graph-lane-link[data-link-id="${routed[0]}"] .graph-lane-link__line`)
+    const otherLine = page.locator(`.graph-lane-link[data-link-id="${other}"] .graph-lane-link__line`)
+    const d0 = await line.getAttribute('d')
+    const o0 = await otherLine.getAttribute('d')
+    const p0 = await placement()
+    const node = (await page.locator(`[data-node-id="${SKIP_ORIGIN}"]`).boundingBox())!
+    await page.mouse.move(node.x + node.width / 2, node.y + node.height / 2)
+    await page.mouse.down()
+    for (let i = 1; i <= 5; i++) await page.mouse.move(node.x + node.width / 2 + i * 15, node.y + node.height / 2 + i * 2)
+    // The dragged node's routes follow it; every other route keeps its tracks.
+    expect(await line.getAttribute('d')).not.toBe(d0)
+    expect(await otherLine.getAttribute('d')).toBe(o0)
+    expect(await placement()).toBe(p0)
+    await page.mouse.up()
+    await expect.poll(placement).not.toBe(p0)
+  })
+
+  test('visual: gutter routes with a selection, light canvas', async ({ page }) => {
+    await open(page, `&gutter=1&select=${SKIP_ORIGIN}`)
+    await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-gutter-light.png')
+  })
+
+  test('visual: vertical gutter routes with reached chips, dark canvas', async ({ page }) => {
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, `&gutter=1&orientation=vertical&nodeLabels=off&select=${SKIP_ORIGIN}&dark=1`)
+    await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-gutter-vertical-dark.png')
+  })
+
   test('visual: reached chips with a selection, light canvas', async ({ page }) => {
     await open(page, `&nodeLabels=off&select=${ORIGIN}`)
     await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-reached-light.png')
