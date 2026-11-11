@@ -62,7 +62,7 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
   })
   const [orientation, setOrientation] = useState<LaneOrientation>('horizontal')
   const [order, setOrder] = useState<OrderKey>('default')
-  const [intraLinks, setIntraLinks] = useState<'arc' | 'none'>('arc')
+  const [intraLinks, setIntraLinks] = useState<'arc' | 'bundled' | 'none'>('arc')
   const [skipRouting, setSkipRouting] = useState<'direct' | 'gutter'>('direct')
   const [nodeLabels, setNodeLabels] = useState<LaneNodeLabels>('all')
   const [rowWidth, setRowWidth] = useState<RowWidthKey>('default')
@@ -130,9 +130,10 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
             <SegmentedControl
               aria-label="Intra-layer links"
               value={intraLinks}
-              onChange={(v) => setIntraLinks(v as 'arc' | 'none')}
+              onChange={(v) => setIntraLinks(v as 'arc' | 'bundled' | 'none')}
               options={[
                 { value: 'arc', label: 'arc' },
+                { value: 'bundled', label: 'bundled' },
                 { value: 'none', label: 'none' },
               ]}
             />
@@ -581,7 +582,7 @@ export function LayerLanesShowcase() {
           <PropRow name="orientation" type="'horizontal' | 'vertical'" def="'horizontal'" description="horizontal: lanes stacked top to bottom, nodes packed into rows. vertical: lanes side by side as columns, for narrow, tall containers." />
           <PropRow name="order" type="NodeOrder" def="coupled position" description="Node order within each lane: 'coupled-x', 'degree', 'cross-degree', 'label' or a comparator. Default: position along the lane in the coupled in-layer solve (x for rows, y for columns), so cross-layer links run mostly straight; 'degree' with no in-layer layout." />
           <PropRow name="maxRowWidth" type="number" def="1120 / 640" description="Row length in px before a lane wraps to another row; a column's height when vertical (default 640)." />
-          <PropRow name="intraLinks" type="'arc' | 'none'" def="'arc'" description="Links within a layer: arc draws them beside their row; none leaves them out. filters.showIntra on the state hides them in every view instead." />
+          <PropRow name="intraLinks" type="'arc' | 'bundled' | 'none'" def="'arc'" description="Links within a layer: arc draws them beside their row; bundled runs a row's links along one shared trunk that fans out at each node (the selection's reach and a hovered node's links draw as arcs); none leaves them out. filters.showIntra on the state hides them in every view instead." />
           <PropRow name="skipLayerRouting" type="'direct' | 'gutter'" def="'direct'" description="Links that skip a lane: direct crosses the lanes between; gutter runs them along the gap next to their lane to a side gutter outside the lanes (left/right, or top/bottom when vertical), along it, and back in, in parallel tracks. A node's routes to one gutter share a stub that fans out into their tracks. Gaps widen to keep stubs 3px apart, so on a dense graph the lanes get taller and the gutters wider." />
           <PropRow name="nodeLabels" type="'all' | 'reached'" def="state's nodeLabels" description="all: every node is a labeled box. reached: 24px chips, with name tags only for the selection, its reach and the hovered or focused node, placed clear of chips, titles, link ends and pills (dropped where none fits). Unset: the layered state's nodeLabels (all when on), so the label toggle applies; with fitView the canvas fits again after a switch. A custom renderNode is unaffected." />
         </PropsTable>
@@ -608,8 +609,8 @@ export function LayerLanesShowcase() {
 
       <ShowcaseSection label="Limits">
         <Note>
-          Dense layers (near-cliques) draw many arcs; set laneOptions intraLinks to none, or filters.showIntra to false, to read only the
-          cross-layer links. Links that skip a layer cross the lane between. The default lane node truncates long labels; the full label is
+          Dense layers (near-cliques) draw many arcs; set laneOptions intraLinks to bundled to merge them into row trunks (hover, focus or
+          select a node to see its own links; links on a trunk have no hit target, and links three or more rows apart stay arcs), or to none, or filters.showIntra to false, to read only the cross-layer links. Links that skip a layer cross the lane between. The default lane node truncates long labels; the full label is
           its accessible name.
         </Note>
       </ShowcaseSection>

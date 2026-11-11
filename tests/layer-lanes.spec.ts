@@ -416,6 +416,187 @@ test.describe('GraphCanvas layer-lanes', () => {
     expect((await focused(page))!.startsWith('technology.')).toBe(true)
   })
 
+  // Intra-layer link paths: id, d and the top of their box (the trunk, when bundled).
+  const intraPaths = (page: Page) =>
+    page.locator('.graph-lane-link[data-intra]').evaluateAll((els) =>
+      els.map((g) => {
+        const line = g.querySelector('.graph-lane-link__line') as SVGPathElement
+        return { id: g.getAttribute('data-link-id')!, hop: g.getAttribute('data-hop'), d: line.getAttribute('d')!, top: Math.round(line.getBBox().y) }
+      }),
+    )
+  const isArc = (d: string) => /^M[\d.,-]+ Q/.test(d)
+  // The straight horizontal runs (trunks, in horizontal lanes) of the bundled intra links, in px.
+  const trunkRuns = (page: Page) =>
+    page.evaluate(() => {
+      const runs: { y: number; x0: number; x1: number }[] = []
+      for (const line of document.querySelectorAll<SVGPathElement>('.graph-lane-link[data-intra]:not([data-hop]) .graph-lane-link__line')) {
+        const m = line.getScreenCTM()!
+        const len = line.getTotalLength()
+        let start: DOMPoint | null = null
+        let prev: DOMPoint | null = null
+        for (let s = 0; s <= len; s += 2) {
+          const q = line.getPointAtLength(s).matrixTransform(m)
+          if (prev && Math.abs(q.y - prev.y) < 0.05) start ??= prev
+          else {
+            if (start && prev && Math.abs(prev.x - start.x) > 8) runs.push({ y: Math.round(start.y * 10) / 10, x0: Math.min(start.x, prev.x), x1: Math.max(start.x, prev.x) })
+            start = null
+          }
+          prev = q
+        }
+        if (start && prev && Math.abs(prev.x - start.x) > 8) runs.push({ y: Math.round(start.y * 10) / 10, x0: Math.min(start.x, prev.x), x1: Math.max(start.x, prev.x) })
+      }
+      return runs
+    })
+
+  test('intraLinks bundled: each row shares one trunk; the reach and a hovered node draw unbundled', async ({ page }) => {
+    const errors = await open(page, '&intra=bundled')
+    await expect(page.locator('.graph-lane-link')).toHaveCount(162)
+    const bundled = await intraPaths(page)
+    expect(bundled).toHaveLength(140)
+    expect(bundled.every((p) => !isArc(p.d))).toBe(true)
+    // Three lanes of two rows: at most six trunk heights, against a different height per arc.
+    expect(new Set((await trunkRuns(page)).map((r) => Math.round(r.y))).size).toBeLessThanOrEqual(6)
+    await open(page)
+    expect(new Set((await intraPaths(page)).map((p) => p.top)).size).toBeGreaterThan(20)
+
+    // Hovering a node fans its own links out as arcs, and only those.
+    await open(page, '&intra=bundled')
+    await page.locator('.graph-nodes').getByRole('button', { name: 'BusinessProcess, Business layer' }).hover()
+    await expect.poll(async () => (await intraPaths(page)).filter((p) => isArc(p.d)).length).toBeGreaterThan(0)
+    for (const p of await intraPaths(page)) expect(isArc(p.d)).toBe(p.id.includes('business.businessprocess'))
+
+    // The selection's reach draws unbundled; the rest stays on the trunks.
+    await open(page, `&intra=bundled&select=${ORIGIN}`)
+    const withSelection = await intraPaths(page)
+    expect(withSelection.some((p) => p.hop)).toBe(true)
+    for (const p of withSelection) expect(isArc(p.d)).toBe(!!p.hop)
+    expect(errors).toEqual([])
+  })
+
+  test('intraLinks bundled: a drag keeps links bundled and holds the pill placement', async ({ page }) => {
+    await open(page, '&intra=bundled&labels=all')
+    const placement = () => page.locator('.graph-lane-pills').getAttribute('data-placement')
+    const p0 = await placement()
+    const id = (await intraPaths(page)).find((p) => p.id.startsWith('business.businessprocess'))!.id
+    const line = page.locator(`.graph-lane-link[data-link-id="${id}"] .graph-lane-link__line`)
+    const d0 = await line.getAttribute('d')
+    const node = (await page.locator('[data-node-id="business.businessprocess"]').boundingBox())!
+    await page.mouse.move(node.x + node.width / 2, node.y + node.height / 2)
+    await page.mouse.down()
+    for (let i = 1; i <= 5; i++) await page.mouse.move(node.x + node.width / 2 + i * 12, node.y + node.height / 2 + i * 4)
+    const d1 = (await line.getAttribute('d'))!
+    expect(d1).not.toBe(d0)
+    expect(isArc(d1)).toBe(false) // the dragged node stays hovered, but nothing fans out mid-drag
+    expect(await placement()).toBe(p0)
+    await page.mouse.up()
+    await expect.poll(placement).not.toBe(p0)
+  })
+
+  test('intraLinks bundled: keyboard focus fans a node out; trunk links get no hit path; pills ride a fanned link', async ({ page }) => {
+    // Vertical lanes leave room for pills on some bundled links.
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, '&intra=bundled&orientation=vertical&tooltip=1&labels=all')
+    // Only links drawn as arcs (here: none of the intra links) carry a hit path.
+    const intraHits = () => page.locator('.graph-lane-link[data-intra] .graph-edge__hit').count()
+    expect(await intraHits()).toBe(0)
+    await expect(page.locator('.graph-lane-link:not([data-intra]) .graph-edge__hit')).toHaveCount(22)
+    // A node with a pill on one of its bundled links (fixture link ids start with the source id).
+    const bp = await page.evaluate(() => {
+      const nodes = [...document.querySelectorAll('.graph-nodes [data-node-id]')].map((g) => g.getAttribute('data-node-id')!)
+      for (const pill of document.querySelectorAll('.graph-lane-pill')) {
+        const id = pill.getAttribute('data-link-id')!
+        if (!document.querySelector(`.graph-lane-link[data-intra][data-link-id="${id}"]`)) continue
+        const src = nodes.filter((n) => id.startsWith(`${n}.`)).sort((a, b) => b.length - a.length)[0]
+        if (src) return src
+      }
+      return null
+    })
+    expect(bp).not.toBeNull()
+    await page.locator(`.graph-nodes [data-node-id="${bp}"] .graph-lane-node`).focus()
+    await expect.poll(async () => (await intraPaths(page)).filter((p) => isArc(p.d)).length).toBeGreaterThan(0)
+    const fanned = (await intraPaths(page)).filter((p) => isArc(p.d))
+    for (const p of fanned) expect(p.id.includes(bp!)).toBe(true)
+    expect(await intraHits()).toBe(fanned.length)
+    // A pill on a fanned link sits on its drawn arc.
+    const onArc = await page.evaluate((ids) => {
+      const out: boolean[] = []
+      for (const id of ids) {
+        const pill = document.querySelector(`.graph-lane-pill[data-link-id="${id}"]`) as SVGGElement | null
+        const line = document.querySelector(`.graph-lane-link[data-link-id="${id}"] .graph-lane-link__line`) as SVGPathElement
+        if (!pill) continue
+        const r = (pill.querySelector('rect') as SVGRectElement).getBBox()
+        const [tx, ty] = pill.getAttribute('transform')!.match(/-?[\d.]+/g)!.map(Number)
+        const c = { x: tx + r.width / 2, y: ty + r.height / 2 }
+        let best = Infinity
+        const len = line.getTotalLength()
+        for (let s = 0; s <= len; s += 1) {
+          const q = line.getPointAtLength(s)
+          best = Math.min(best, Math.hypot(q.x - c.x, q.y - c.y))
+        }
+        out.push(best < 2)
+      }
+      return out
+    }, fanned.map((p) => p.id))
+    expect(onArc.length).toBeGreaterThan(0)
+    expect(onArc.every(Boolean)).toBe(true)
+  })
+
+  test('intraLinks bundled works with gutter routing and with reached chips (tags keep off the trunks)', async ({ page }) => {
+    await open(page, `&intra=bundled&gutter=1&select=${SKIP_ORIGIN}`)
+    expect(await outsideLanes(page)).toHaveLength(7)
+    for (const p of await intraPaths(page)) expect(isArc(p.d)).toBe(!!p.hop)
+
+    await open(page, `&intra=bundled&nodeLabels=off&select=${ORIGIN}`)
+    await expect(page.locator('.graph-lane-tag').first()).toBeVisible()
+    const runs = await trunkRuns(page)
+    expect(runs.length).toBeGreaterThan(0)
+    const tags = await page.locator('.graph-lane-tag:not(.graph-lane-tag--selected) .graph-lane-tag__bg').evaluateAll((els) => els.map((e) => {
+      const r = e.getBoundingClientRect()
+      return { left: r.left, right: r.right, top: r.top, bottom: r.bottom }
+    }))
+    expect(tags.length).toBeGreaterThan(0)
+    const clashes = tags.filter((t) => runs.some((r) => t.left < r.x1 && t.right > r.x0 && t.top < r.y && t.bottom > r.y))
+    expect(clashes).toEqual([])
+  })
+
+  test('visual: vertical bundled intra links over several columns, dark canvas', async ({ page }) => {
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, '&intra=bundled&orientation=vertical&rowWidth=300&dark=1')
+    await expect(page.locator('.graph-lane')).toHaveCount(3)
+    await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-bundled-columns-dark.png')
+  })
+
+  test('visual: bundled intra links, light canvas', async ({ page }) => {
+    await open(page, '&intra=bundled')
+    await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-bundled-light.png')
+  })
+
+  test('visual: vertical bundled intra links with a selection, dark canvas', async ({ page }) => {
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, `&intra=bundled&orientation=vertical&select=${ORIGIN}&dark=1`)
+    await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-bundled-vertical-dark.png')
+  })
+
+  test('keyboard in bundled mode: arrows fan out the focused node and fold the one it left', async ({ page }) => {
+    await open(page, '&intra=bundled')
+    const fanned = async () => (await intraPaths(page)).filter((p) => isArc(p.d)).map((p) => p.id)
+    await focusNode(page, ORIGIN)
+    await expect.poll(async () => (await fanned()).length).toBeGreaterThan(0)
+    for (const id of await fanned()) expect(id.includes(ORIGIN)).toBe(true)
+    // Move along the lane to the next node that has links in the lane.
+    let now = ORIGIN
+    for (let i = 0; i < 6 && now === ORIGIN; i++) {
+      await page.keyboard.press('ArrowRight')
+      const f = (await focused(page))!
+      await expect.poll(async () => (await fanned()).every((id) => id.includes(f))).toBe(true)
+      if ((await fanned()).length > 0) now = f
+    }
+    expect(now).not.toBe(ORIGIN)
+    // Only the new node's links are fanned; the node it left folded back (unless linked to it).
+    for (const id of await fanned()) expect(id.includes(now)).toBe(true)
+    expect((await fanned()).some((id) => id.includes(ORIGIN) && !id.includes(now))).toBe(false)
+  })
+
   test('visual: dark canvas with a followed selection', async ({ page }) => {
     await open(page, `&select=${ORIGIN}&dark=1`)
     await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-selection-dark.png')

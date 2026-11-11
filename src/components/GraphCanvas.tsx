@@ -69,7 +69,7 @@ import { arrowHeadPoints, linkPredicateLabel } from "../utils/layered/labels";
 import { edgeLabelPriority, placeEdgeLabels, defaultPillSize, type LabelBox, type PlacedEdgeLabel } from "../utils/layered/edgeLabels";
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode, LayeredIndex } from "../utils/layered/types";
 import type { LinkEmphasis, NodeEmphasis } from "../utils/layered/emphasis";
-import { curveEndBoxes, laneNavIndex, laneNavMove, laneNavTarget, layoutLanes, laneLinkCurve, retraceLaneGutters, routeLaneGutters, type LaneGutterTrack, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
+import { curveEndBoxes, laneBundleCurve, laneBundler, laneNavIndex, laneNavMove, laneNavTarget, layoutLanes, laneLinkCurve, retraceLaneGutters, routeLaneGutters, type LaneGutterTrack, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
 import { containsAcrossPortals } from "../hooks/useDropdownPortal";
 import "./Tooltip.css";
 import "./GraphCanvas.css";
@@ -584,6 +584,8 @@ interface LaneLinkItem {
   link: IndexedLink;
   em: LinkEmphasis;
   curve: LaneLinkCurve;
+  /** Drawn on a shared trunk (intraLinks 'bundled'). */
+  bundled?: boolean;
 }
 
 interface LaneNodeProps {
@@ -1002,7 +1004,9 @@ export interface GraphCanvasProps extends Omit<
   /**
    * layout="layer-lanes" only: `orientation` ('horizontal' default, 'vertical'), `order`
    * (lane order, default 'coupled-x'), `maxRowWidth` (px before a lane wraps, default 1120;
-   * a column's height when vertical, default 640), `intraLinks` ('arc' default, 'none'),
+   * a column's height when vertical, default 640), `intraLinks` ('arc' default; 'bundled' runs
+   * a row's links along one shared trunk, with the selection's reach and a hovered node's links
+   * drawn as arcs; 'none'),
    * `skipLayerRouting` ('direct' default; 'gutter' routes links that skip a lane down a side
    * gutter outside the lanes) and `nodeLabels` ('all' or 'reached'; default from the layered state's `nodeLabels`: 'all' when
    * on). 'reached' draws the default node as a 24px chip and names only the selection, its
@@ -1310,6 +1314,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const lanesIndex = lanesGraph?.index;
     const lanesFilters = lanesGraph?.filters;
     const lanesIntra = laneOptions?.intraLinks !== "none";
+    const laneBundled = laneOptions?.intraLinks === "bundled";
     const laneData = useMemo(() => {
       if (!lanesIndex || !lanesFilters) return null;
       const hiddenLayers = new Set(lanesFilters.hiddenLayers);
@@ -3355,17 +3360,24 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const boxes = new Map(visibleNodes.map((n) => [n.id, getNodeRect(n.id)]));
       // skipLayerRouting 'gutter': links that skip a lane take their gutter route.
       const gutter = laneGutterRoutes?.curves;
+      // intraLinks 'bundled': links within a layer share their row's trunk, except the selection's
+      // reach, which draws unbundled (as arcs) on top.
+      // Links two or more rows apart have no clear trunk and stay arcs.
+      const bundler = laneBundled ? laneBundler([...boxes.values()].filter((b): b is NonNullable<typeof b> => !!b), laneLayout.orientation) : null;
       const items: LaneLinkItem[] = [];
       for (const link of laneData.links) {
         const a = boxes.get(link.sourceId);
         const b = boxes.get(link.targetId);
         if (!a || !b) continue;
-        const curve = gutter?.get(link.id) ?? laneLinkCurve(a, b, link.cross, laneLayout.orientation);
-        items.push({ link, em: lanesLinkEmphasis(link), curve });
+        const em = lanesLinkEmphasis(link);
+        const gutterCurve = gutter?.get(link.id);
+        const trunk = !gutterCurve && bundler && !link.cross && !em.highlighted ? bundler.trunkFor(a, b) : null;
+        const curve = gutterCurve ?? (trunk !== null ? laneBundleCurve(a, b, trunk, laneLayout.orientation) : laneLinkCurve(a, b, link.cross, laneLayout.orientation));
+        items.push({ link, em, curve, bundled: trunk !== null });
       }
       items.sort((p, q) => p.em.z - q.em.z);
-      return { items, byId: new Map(items.map((i) => [i.link.id, i])) };
-    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneGutterRoutes]);
+      return { items, byId: new Map(items.map((i) => [i.link.id, i])), trunkBoxes: bundler?.trunkBoxes ?? [] };
+    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneGutterRoutes, laneBundled]);
 
     // layout="layer-lanes", nodeLabels 'reached': name tags for the selection and its reach,
     // beside their chips and off their link ends, placed before the pills so the pills keep
@@ -3385,7 +3397,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         return ln && lanesNodeEmphasis(ln).hop !== null;
       }).map((n) => n.id);
       const candidates = laneTagCandidates(lanesIndex, lanesNodeEmphasis, laneLayout, getNodeRect, ids, false);
-      const obstacles = [...nodeRects, ...laneLayout.bands.map(laneTitleBox), ...laneLinkEnds(laneLinkItems.items, ids)];
+      // Bundled trunks run just above (beside) the chips, so tags keep off them too.
+      const obstacles = [...nodeRects, ...laneLayout.bands.map(laneTitleBox), ...laneLinkEnds(laneLinkItems.items, ids), ...laneLinkItems.trunkBoxes];
       const tags = decorateLaneTags(lanesIndex, lanesNodeEmphasis, placeLaneTags(candidates, obstacles, laneLayout.orientation));
       const at = tags.map((t) => getNodeRect(t.id)!);
       laneTagsRef.current = { tags, dx: tags.map((t, i) => t.x - at[i].x), dy: tags.map((t, i) => t.y - at[i].y) };
@@ -3423,6 +3436,23 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return { items, byId, pills, pillById: new Map(pills.map((p) => [p.id, p])), placement: lanePlacementRef.current };
     }, [laneLinkItems, lanesIndex, nodeRects, nodeDragging, laneReachTags]);
 
+    // intraLinks 'bundled': the hovered or keyboard-focused node's bundled links fan out as arcs,
+    // so each is traceable. Drawn only (links, their pills and tags follow; placement doesn't
+    // re-run), and never mid-drag, when the dragged node stays hovered.
+    const laneFanned = useMemo(() => {
+      if (!laneBundled || nodeDragging || !laneLinkItems || !laneLayout) return null;
+      const ids = [hoveredNodeId, laneFocusId].filter((id): id is string => !!id);
+      if (!ids.length) return null;
+      const out = new Map<string, LaneLinkCurve>();
+      for (const i of laneLinkItems.items) {
+        if (!i.bundled || !(ids.includes(i.link.sourceId) || ids.includes(i.link.targetId))) continue;
+        const a = getNodeRect(i.link.sourceId);
+        const b = getNodeRect(i.link.targetId);
+        if (a && b) out.set(i.link.id, laneLinkCurve(a, b, false, laneLayout.orientation));
+      }
+      return out.size ? out : null;
+    }, [laneBundled, nodeDragging, laneLinkItems, laneLayout, hoveredNodeId, laneFocusId, getNodeRect]);
+
     // layout="layer-lanes", nodeLabels 'reached': hovered and focused chips get a tag too, placed
     // last (forced) so hovering never moves the pills.
     const laneTags = useMemo(() => {
@@ -3435,10 +3465,12 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         ...laneLayout.bands.map(laneTitleBox),
         ...(laneLinks?.pills ?? []),
         ...laneReachTags,
-        ...laneLinkEnds(laneLinkItems.items, pinned),
+        // Their link ends as drawn (fanned out when bundled).
+        ...laneLinkEnds(laneFanned ? laneLinkItems.items.map((i) => (laneFanned.has(i.link.id) ? { ...i, curve: laneFanned.get(i.link.id)! } : i)) : laneLinkItems.items, pinned),
+        ...laneLinkItems.trunkBoxes,
       ];
       return [...laneReachTags, ...decorateLaneTags(lanesIndex, lanesNodeEmphasis, placeLaneTags(candidates, obstacles, laneLayout.orientation))];
-    }, [laneReachTags, lanesIndex, lanesNodeEmphasis, laneLayout, laneLinkItems, hoveredNodeId, laneFocusId, getNodeRect, nodeRects, laneLinks]);
+    }, [laneReachTags, lanesIndex, lanesNodeEmphasis, laneLayout, laneLinkItems, hoveredNodeId, laneFocusId, getNodeRect, nodeRects, laneLinks, laneFanned]);
 
     // Edge data by id for the lane link loop (one lookup per link instead of a scan).
     const laneEdgeById = useMemo(
@@ -3584,7 +3616,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               tint={em.selected ? "selected" : em.followed ? "followed" : em.hop !== null ? "reached" : "none"}
               selected={em.selected}
               compact={laneCompact}
-              onFocusChange={laneKeys ? onLaneFocusChange : laneCompact ? setLaneFocusId : undefined}
+              onFocusChange={laneKeys ? onLaneFocusChange : laneCompact || laneBundled ? setLaneFocusId : undefined}
               tabStop={!laneTabStop || laneTabStop === node.id}
               onNavigate={laneKeys ? handleLaneNavigate : undefined}
               hintId={laneKeys ? laneHintId : undefined}
@@ -3616,7 +3648,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph, laneCompact, laneKeys, onLaneFocusChange, laneTabStop, handleLaneNavigate, laneHintId],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph, laneCompact, laneBundled, laneKeys, onLaneFocusChange, laneTabStop, handleLaneNavigate, laneHintId],
     );
 
     // World-space anchor box (the node's box, or an edge path's midpoint as a point) for the
@@ -4055,9 +4087,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
               {laneLinks && (
                 <g className="graph-edges graph-lane-links">
-                  {laneLinks.items.map(({ link, em, curve }) => {
+                  {laneLinks.items.map(({ link, em, curve: itemCurve, bundled }) => {
                     const edgeData = laneEdgeById?.get(link.id);
                     if (!edgeData) return null;
+                    const fanned = laneFanned?.get(link.id);
+                    const curve = fanned ?? itemCurve;
+                    // A link drawn on a shared trunk gets no hit path: on the trunk only the topmost
+                    // would answer. Reach them through selection (reach links are arcs) or a hover.
+                    const onTrunk = !!bundled && !fanned;
                     const selected = link.id === selectedEdgeId;
                     const hovered = link.id === hoveredEdgeId;
                     const hasPopover = !!edgePopover || (edgeTooltipTrigger === "click" && !!edgeTooltip);
@@ -4075,6 +4112,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                         className={["graph-edge", "graph-lane-link", selected && "selected"].filter(Boolean).join(" ")}
                         data-testid={`graph-edge-${link.id}`}
                         data-link-id={link.id}
+                        data-intra={link.cross ? undefined : ""}
                         data-hop={em.hop || undefined}
                         role={interactive ? "button" : "presentation"}
                         aria-hidden={interactive ? undefined : true}
@@ -4125,7 +4163,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                             )}
                           </>
                         )}
-                        {(interactive || !!edgeTooltip || !!onEdgeHover) && <path className="graph-edge__hit" d={curve.d} />}
+                        {(interactive || !!edgeTooltip || !!onEdgeHover) && !onTrunk && <path className="graph-edge__hit" d={curve.d} />}
                       </g>
                     );
                   })}
@@ -4296,8 +4334,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
               {laneLinks && laneLinks.pills.length > 0 && (
                 <g className="graph-lane-pills" aria-hidden="true" data-placement={laneLinks.placement}>
-                  {laneLinks.pills.map((p) => {
-                    const item = laneLinks.byId.get(p.id)!;
+                  {laneLinks.pills.map((placed) => {
+                    const item = laneLinks.byId.get(placed.id)!;
+                    const fanned = laneFanned?.get(placed.id);
+                    const p = fanned ? { ...placed, ...fanned.pointAt(placed.t) } : placed;
                     return (
                       <g
                         key={p.id}

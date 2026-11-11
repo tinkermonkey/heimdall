@@ -7,7 +7,7 @@ import type { BuildLayeredIndexOptions, PredicateLabelMode } from '../utils/laye
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
 
 // GraphCanvas layout="layer-lanes" on the layered-graph fixtures. URL params make screenshots deterministic:
-//   ?example=layer-lanes&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&orientation=vertical&intra=none&dark=1
+//   ?example=layer-lanes&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&orientation=vertical&intra=none|bundled&dark=1
 // &tooltip=1 adds a hover edgeTooltip (tests/graph-tooltip-placement.spec.ts, #323).
 // &nodeLabels=off starts the layered state's label toggle off (lanes draw 'reached' chips);
 // &nodata=1 leaves out GraphCanvas's nodes/edges, so lanes draw from the context alone.
@@ -17,9 +17,11 @@ const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
 const EDGES = DATA === 'spec' ? drSpecEdges : heimdallUxEdges
 const ORIENTATION: LaneOrientation = params.get('orientation') === 'vertical' ? 'vertical' : 'horizontal'
-const INTRA = params.get('intra') === 'none' ? 'none' : 'arc'
+const INTRA = params.get('intra') === 'none' ? 'none' : params.get('intra') === 'bundled' ? 'bundled' : 'arc'
+// &rowWidth=<px>: laneOptions.maxRowWidth (several rows or columns per lane).
 // &gutter=1: skipLayerRouting 'gutter'. &categoryToggle=1 adds a button that toggles the structural category.
 // &layerToggle=1 adds a button that hides the technology layer without taking focus.
+const ROW_WIDTH = params.has('rowWidth') ? Number(params.get('rowWidth')) : undefined
 const SKIP_ROUTING = params.get('gutter') === '1' ? 'gutter' : 'direct'
 const EDGE_TOOLTIP = params.get('tooltip') === '1'
 const NO_DATA = params.get('nodata') === '1'
@@ -47,7 +49,7 @@ export default function LayerLanesTestPage() {
     defaultPredicateLabels: (params.get('labels') as PredicateLabelMode | null) ?? 'highlighted',
     defaultNodeLabels: params.get('nodeLabels') !== 'off',
   })
-  const laneOptions = useMemo(() => ({ orientation: ORIENTATION, intraLinks: INTRA, skipLayerRouting: SKIP_ROUTING } as const), [])
+  const laneOptions = useMemo(() => ({ orientation: ORIENTATION, intraLinks: INTRA, skipLayerRouting: SKIP_ROUTING, maxRowWidth: ROW_WIDTH } as const), [])
 
   return (
     <LayeredGraphContext.Provider value={graph}>
