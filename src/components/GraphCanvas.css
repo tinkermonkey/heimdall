@@ -303,3 +303,41 @@ body.dark-canvas .graph-canvas {
 .graph-lane-node__label {
   pointer-events: none;
 }
+
+/* nodeLabels 'reached': a label-less 24px chip; the name goes in a tag beside it. */
+.graph-lane-node--compact {
+  justify-content: center;
+  width: 24px;
+  padding: 0;
+}
+
+.graph-lane-tags {
+  pointer-events: none;
+}
+
+.graph-lane-tag__bg {
+  fill: var(--graph-pill-bg);
+  stroke: rgb(var(--canvas-border-strong));
+  stroke-width: 1;
+}
+
+.graph-lane-tag__text {
+  fill: rgb(var(--canvas-fg-1));
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.graph-lane-tag--selected .graph-lane-tag__bg {
+  stroke: rgb(var(--graph-hop-1));
+}
+
+.graph-lane-tag--selected .graph-lane-tag__text {
+  fill: rgb(var(--graph-hop-1));
+}
+
+.graph-lane-tag--followed .graph-lane-tag__text {
+  fill: rgb(var(--graph-hop-2));
+}

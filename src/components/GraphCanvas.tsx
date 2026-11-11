@@ -66,10 +66,10 @@ import { StatusBadge } from "./Badge";
 import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from "../hooks/useLayeredGraph";
 import { isLinkVisible } from "../utils/layered/filters";
 import { arrowHeadPoints, linkPredicateLabel } from "../utils/layered/labels";
-import { edgeLabelPriority, placeEdgeLabels, defaultPillSize } from "../utils/layered/edgeLabels";
+import { edgeLabelPriority, placeEdgeLabels, defaultPillSize, type LabelBox, type PlacedEdgeLabel } from "../utils/layered/edgeLabels";
 import type { BuildLayeredIndexOptions, IndexedLink } from "../utils/layered/types";
 import type { LinkEmphasis } from "../utils/layered/emphasis";
-import { layoutLanes, laneLinkCurve, type LaneLayoutOptions, type LaneLinkCurve } from "../utils/laneLayout";
+import { layoutLanes, laneLinkCurve, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
 import { containsAcrossPortals } from "../hooks/useDropdownPortal";
 import "./Tooltip.css";
 import "./GraphCanvas.css";
@@ -571,6 +571,9 @@ function GraphEdgeInternal({
 
 // ─── layout="layer-lanes" helpers ─────────────────────────────────────────────
 
+// Stable empty defaults for `nodes` / `edges`, so an omitted prop doesn't re-run every memo.
+const NO_NODES: GraphNodeData[] = [];
+const NO_EDGES: GraphEdge[] = [];
 // Inputs for the internal useLayeredGraph when GraphCanvas isn't drawing lanes from its own data:
 // stable constants, so the idle hook builds one empty index and never recomputes.
 const NO_LAYERED_GRAPH: UseLayeredGraphOptions = { nodes: [], edges: [], layering: { layerBy: "" }, layout: false };
@@ -594,6 +597,10 @@ interface LaneNodeProps {
   color: string;
   tint: "selected" | "followed" | "reached" | "none";
   selected: boolean;
+  /** nodeLabels 'reached': a compact chip without its label (a name tag is drawn beside it). */
+  compact?: boolean;
+  /** Reports keyboard focus (the node's id) and blur (null). */
+  onFocusChange?: (id: string | null) => void;
   onSelect?: (id: string) => void;
   onPopoverOpen?: (triggeringElement: HTMLElement) => void;
   popoverOpen?: boolean;
@@ -601,8 +608,42 @@ interface LaneNodeProps {
   tooltipId?: string;
 }
 
+/** Tag candidates for lane nodes: the selection first, then by hop; `pinned` ones are forced. */
+function laneTagCandidates(
+  g: LayeredGraphState,
+  lanes: LaneLayout,
+  rectOf: (id: string) => LabelBox | null,
+  ids: readonly string[],
+  pinned: boolean,
+): LaneTagCandidate[] {
+  const bandOf = new Map(lanes.bands.map((b) => [b.layerId, b]));
+  const out: LaneTagCandidate[] = [];
+  for (const id of ids) {
+    const ln = g.index.nodeById.get(id);
+    const box = rectOf(id);
+    if (!ln || !box) continue;
+    const em = g.nodeEmphasis(ln);
+    const forced = pinned || em.selected;
+    out.push({ id, text: ln.displayLabel, box, priority: forced ? 0 : 1 + (em.hop ?? 0), forced, within: bandOf.get(ln.layerId) });
+  }
+  return out;
+}
+
+/** A placed lane tag plus what it's drawn with: tint and layer color. */
+function decorateLaneTags(g: LayeredGraphState, tags: PlacedEdgeLabel[]) {
+  return tags.map((t) => {
+    const ln = g.index.nodeById.get(t.id)!;
+    const em = g.nodeEmphasis(ln);
+    return {
+      ...t,
+      tint: em.selected ? "selected" : em.followed ? "followed" : "none",
+      color: g.index.layerById.get(ln.layerId)?.color ?? "rgb(var(--canvas-fg-3))",
+    };
+  });
+}
+
 /** layout="layer-lanes" default node: a monospace box with its layer's color bar. */
-function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, onSelect, onPopoverOpen, popoverOpen, popoverPanelId, tooltipId }: LaneNodeProps) {
+function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, compact, onFocusChange, onSelect, onPopoverOpen, popoverOpen, popoverPanelId, tooltipId }: LaneNodeProps) {
   const activate = (el: HTMLElement) => {
     try { onSelect?.(id); } catch (err) { console.error("onSelect failed:", err); }
     try { onPopoverOpen?.(el); } catch (err) { console.error("onPopoverOpen failed:", err); }
@@ -610,7 +651,7 @@ function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, onSe
   const interactive = !!onSelect || !!onPopoverOpen;
   return (
     <div
-      className={["graph-lane-node", tint !== "none" && `graph-lane-node--${tint}`].filter(Boolean).join(" ")}
+      className={["graph-lane-node", compact && "graph-lane-node--compact", tint !== "none" && `graph-lane-node--${tint}`].filter(Boolean).join(" ")}
       style={{ "--graph-lane-color": color } as React.CSSProperties}
       data-no-drag
       title={fullLabel}
@@ -634,8 +675,10 @@ function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, onSe
           activate(e.currentTarget);
         }
       }}
+      onFocus={onFocusChange && ((e) => e.target === e.currentTarget && onFocusChange(id))}
+      onBlur={onFocusChange && ((e) => e.target === e.currentTarget && onFocusChange(null))}
     >
-      <span className="graph-lane-node__label">{label}</span>
+      {!compact && <span className="graph-lane-node__label">{label}</span>}
     </div>
   );
 }
@@ -752,7 +795,15 @@ export interface GraphCanvasProps extends Omit<
   React.HTMLAttributes<HTMLDivElement>,
   "onSelect"
 > {
-  nodes: GraphNodeData[];
+  /**
+   * The nodes to draw. Required for every layout except `layout="layer-lanes"` with a
+   * `layeredGraph` prop or an enclosing `LayeredGraphContext`, which supply the drawn graph.
+   */
+  nodes?: GraphNodeData[];
+  /**
+   * The edges to draw. Optional in the same cases as `nodes`; there, each drawn link copies its
+   * first source edge's fields from here when given (for `edgeTooltip`, `renderEdge`).
+   */
   edges?: GraphEdge[];
   selectedNodeId?: string;
   onNodeSelect?: (nodeId: string) => void;
@@ -926,7 +977,11 @@ export interface GraphCanvasProps extends Omit<
   /**
    * layout="layer-lanes" only: `orientation` ('horizontal' default, 'vertical'), `order`
    * (lane order, default 'coupled-x'), `maxRowWidth` (px before a lane wraps, default 1120;
-   * a column's height when vertical, default 640) and `intraLinks` ('arc' default, 'none').
+   * a column's height when vertical, default 640), `intraLinks` ('arc' default, 'none') and
+   * `nodeLabels` ('all' or 'reached'; default from the layered state's `nodeLabels`: 'all' when
+   * on). 'reached' draws the default node as a 24px chip and names only the selection, its
+   * reach, and the hovered and focused nodes, in tags beside their chips; a custom `renderNode`
+   * is unaffected.
    */
   laneOptions?: LaneLayoutOptions;
   /**
@@ -1146,8 +1201,8 @@ type NodePositions = Map<string, { x: number; y: number }>;
 export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
   (
     {
-      nodes: nodesProp = [],
-      edges: edgesProp = [],
+      nodes: nodesPropRaw,
+      edges: edgesProp = NO_EDGES,
       selectedNodeId: selectedNodeIdProp,
       onNodeSelect: onNodeSelectProp,
       onNodeHover,
@@ -1205,6 +1260,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     // nodes/edges/layering). Its index's node instances and visible bundled links become the
     // nodes and edges everything below measures, positions, hovers and tooltips; its selection
     // replaces selectedNodeId. Every other layout keeps nodesProp/edgesProp untouched.
+    const nodesProp = nodesPropRaw ?? NO_NODES;
     const lanesMode = layout === "layer-lanes";
     const layeredContext = useContext(LayeredGraphContext);
     const externalLayered = lanesMode ? (layeredGraph ?? layeredContext) : null;
@@ -1214,6 +1270,17 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         : NO_LAYERED_GRAPH,
     );
     const lanesGraph: LayeredGraphState | null = lanesMode ? (externalLayered ?? ownLayered) : null;
+    const nodesMissing = nodesPropRaw === undefined && !externalLayered;
+    const missingWarnedRef = useRef(false);
+    useEffect(() => {
+      if (process.env.NODE_ENV !== "development" || !nodesMissing || missingWarnedRef.current) return;
+      missingWarnedRef.current = true;
+      console.warn(
+        lanesMode
+          ? 'GraphCanvas: layout="layer-lanes" has no `nodes` and no `layeredGraph` or LayeredGraphContext to draw from.'
+          : "GraphCanvas: `nodes` is required unless layout=\"layer-lanes\" gets its graph from `layeredGraph` or LayeredGraphContext.",
+      );
+    }, [nodesMissing, lanesMode]);
     const lanesIndex = lanesGraph?.index;
     const lanesFilters = lanesGraph?.filters;
     const lanesIntra = laneOptions?.intraLinks !== "none";
@@ -1234,6 +1301,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }));
       return { nodes: laneNodes, edges: laneEdges, links };
     }, [lanesIndex, lanesFilters, edgesProp, lanesIntra]);
+    // Lane node labels: the laneOptions mode, else the layered state's label toggle.
+    const laneNodeLabels: LaneNodeLabels = laneOptions?.nodeLabels ?? (lanesGraph?.nodeLabels !== false ? "all" : "reached");
+    const laneCompact = lanesMode && laneNodeLabels === "reached";
+    const [laneFocusId, setLaneFocusId] = useState<string | null>(null);
     const nodes = laneData?.nodes ?? nodesProp;
     const edges = laneData?.edges ?? edgesProp;
     const lanesSelect = lanesGraph?.select;
@@ -1352,6 +1423,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       // not just from the pointerup/pointercancel that started it.
       target: SVGGElement;
     } | null>(null);
+    // True while a node drag is past the threshold. layout="layer-lanes" holds its pill placement
+    // meanwhile (pills ride their curves) and places again on release.
+    const [nodeDragging, setNodeDragging] = useState(false);
 
     // Shared by a real pointerup/pointercancel, by the draggable-toggled-off effect, and by the
     // node-id-set-changed effect below — any of the three needs the same finalization for a drag
@@ -1386,6 +1460,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           }
         } finally {
           dragStateRef.current = null;
+          setNodeDragging(false);
         }
       },
       [dragPositions, onNodeDragEnd],
@@ -2012,7 +2087,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         });
       }
       setDims(next);
-    }, [visibleNodes, renderNode, galaxyRadii]);
+    }, [visibleNodes, renderNode, galaxyRadii, laneCompact]);
 
     // Run the engine layout when dims are ready (every layout but 'manual'). The run is deferred,
     // not done here: this effect builds it as a closure and marks the layout "computing"; the
@@ -2483,9 +2558,11 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         order: laneOrder,
         maxRowWidth: laneMaxRowWidth,
         hiddenLayers: lanesHiddenLayers,
+        // Vertical chips: keep room beside each column for the name tags.
+        sideRoomOf: laneCompact && laneOrientation === "vertical" ? (id) => laneTagRoom(lanesIndex.nodeById.get(id)?.displayLabel ?? "") : undefined,
         sizeOf: (id) => dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H },
       });
-    }, [lanesIndex, lanesLayoutResult, lanesHiddenLayers, laneOrientation, laneOrder, laneMaxRowWidth, dims]);
+    }, [lanesIndex, lanesLayoutResult, lanesHiddenLayers, laneOrientation, laneOrder, laneMaxRowWidth, dims, laneCompact]);
 
     const getNodePosition = useCallback(
       (node: GraphNodeData): { x: number; y: number } => {
@@ -3031,7 +3108,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           return;
         const dx = screenDx / viewport.zoom;
         const dy = screenDy / viewport.zoom;
-        if (!state.dragging) e.currentTarget.setPointerCapture(e.pointerId);
+        if (!state.dragging) {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          setNodeDragging(true);
+        }
         state.dragging = true;
         const next = { x: state.startX + dx, y: state.startY + dy };
         setDragPositions((prev) => {
@@ -3093,10 +3173,35 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       [visibleNodes, getNodeRect],
     );
 
+    // layout="layer-lanes", nodeLabels 'reached': name tags for the selection and its reach,
+    // beside their chips, placed before the pills so the pills keep clear of them. Mid-drag, the
+    // last placement keeps each tag's offset from its node.
+    const laneTagsRef = useRef<{ tags: ReturnType<typeof decorateLaneTags>; dx: number[]; dy: number[] } | null>(null);
+    const laneReachTags = useMemo(() => {
+      if (!laneCompact || !lanesGraph || !laneLayout) return null;
+      const last = laneTagsRef.current;
+      if (nodeDragging && last) {
+        return last.tags.flatMap((t, i) => {
+          const r = getNodeRect(t.id);
+          return r ? [{ ...t, x: r.x + last.dx[i], y: r.y + last.dy[i] }] : [];
+        });
+      }
+      const ids = visibleNodes.filter((n) => {
+        const ln = lanesGraph.index.nodeById.get(n.id);
+        return ln && lanesGraph.nodeEmphasis(ln).hop !== null;
+      }).map((n) => n.id);
+      const candidates = laneTagCandidates(lanesGraph, laneLayout, getNodeRect, ids, false);
+      const obstacles = [...nodeRects, ...laneLayout.bands.map(laneTitleBox)];
+      const tags = decorateLaneTags(lanesGraph, placeLaneTags(candidates, obstacles, laneLayout.orientation));
+      const at = tags.map((t) => getNodeRect(t.id)!);
+      laneTagsRef.current = { tags, dx: tags.map((t, i) => t.x - at[i].x), dy: tags.map((t, i) => t.y - at[i].y) };
+      return tags;
+    }, [laneCompact, lanesGraph, laneLayout, visibleNodes, getNodeRect, nodeRects, nodeDragging]);
     // layout="layer-lanes": every drawn link's emphasis and curve (from live positions, so a
     // dragged node keeps its links), in draw order, plus the predicate pills placed along the
     // curves clear of each other and of every node box.
     const lanesLinkEmphasis = lanesGraph?.linkEmphasis;
+    const lanePillsRef = useRef<PlacedEdgeLabel[] | null>(null);
     const laneLinks = useMemo(() => {
       if (!laneData || !laneLayout || !lanesIndex || !lanesLinkEmphasis) return null;
       const boxes = new Map(visibleNodes.map((n) => [n.id, getNodeRect(n.id)]));
@@ -3109,6 +3214,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       }
       items.sort((p, q) => p.em.z - q.em.z);
       const byId = new Map(items.map((i) => [i.link.id, i]));
+      // Mid-drag: keep the last placement, moved onto the live curves; place again on release.
+      if (nodeDragging && lanePillsRef.current) {
+        const pills = retraceLabels(lanePillsRef.current, (id) => {
+          const item = byId.get(id);
+          return item?.em.label ? item.curve : undefined;
+        });
+        return { items, byId, pills, pillById: new Map(pills.map((p) => [p.id, p])) };
+      }
       const pills = placeEdgeLabels(
         items
           .filter((i) => i.em.label && i.link.predicates.length > 0)
@@ -3118,11 +3231,23 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
             pointAt: i.curve.pointAt,
             priority: edgeLabelPriority(i.link, i.em),
           })),
-        { obstacles: nodeRects, size: defaultPillSize },
+        { obstacles: laneReachTags ? [...nodeRects, ...laneReachTags] : nodeRects, size: defaultPillSize },
       );
+      lanePillsRef.current = pills;
       const pillById = new Map(pills.map((p) => [p.id, p]));
       return { items, byId, pills, pillById };
-    }, [laneData, laneLayout, lanesIndex, lanesLinkEmphasis, nodeRects, visibleNodes, getNodeRect]);
+    }, [laneData, laneLayout, lanesIndex, lanesLinkEmphasis, nodeRects, visibleNodes, getNodeRect, nodeDragging, laneReachTags]);
+    // layout="layer-lanes", nodeLabels 'reached': hovered and focused chips get a tag too, placed
+    // last (forced) so hovering never moves the pills.
+    const laneTags = useMemo(() => {
+      if (!laneReachTags || !lanesGraph || !laneLayout) return null;
+      const pinned = [hoveredNodeId, laneFocusId].filter((id): id is string => !!id && !laneReachTags.some((t) => t.id === id));
+      if (pinned.length === 0) return laneReachTags;
+      const candidates = laneTagCandidates(lanesGraph, laneLayout, getNodeRect, pinned, true);
+      const obstacles = [...nodeRects, ...laneLayout.bands.map(laneTitleBox), ...(laneLinks?.pills ?? []), ...laneReachTags];
+      return [...laneReachTags, ...decorateLaneTags(lanesGraph, placeLaneTags(candidates, obstacles, laneLayout.orientation))];
+    }, [laneReachTags, lanesGraph, laneLayout, hoveredNodeId, laneFocusId, getNodeRect, nodeRects, laneLinks]);
+
     // Edge data by id for the lane link loop (one lookup per link instead of a scan).
     const laneEdgeById = useMemo(
       () => (laneLinks ? new Map(edges.map((e) => [e.id, e])) : null),
@@ -3266,6 +3391,8 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               color={layer?.color ?? "rgb(var(--canvas-fg-3))"}
               tint={em.selected ? "selected" : em.followed ? "followed" : em.hop !== null ? "reached" : "none"}
               selected={em.selected}
+              compact={laneCompact}
+              onFocusChange={laneCompact ? setLaneFocusId : undefined}
               onSelect={onNodeSelect}
               onPopoverOpen={nodeProps.onPopoverOpen}
               popoverOpen={isPopoverOpen}
@@ -3294,7 +3421,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph, laneCompact],
     );
 
     // World-space anchor box (the node's box, or an edge path's midpoint as a point) for the
@@ -3984,6 +4111,25 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       </g>
                     );
                   })}
+                </g>
+              )}
+
+              {laneTags && laneTags.length > 0 && (
+                <g className="graph-lane-tags" aria-hidden="true">
+                  {laneTags.map((t) => (
+                    <g
+                      key={t.id}
+                      className={["graph-lane-tag", t.tint !== "none" && `graph-lane-tag--${t.tint}`].filter(Boolean).join(" ")}
+                      data-tag-for={t.id}
+                      transform={`translate(${Math.round((t.x - t.width / 2) * 10) / 10} ${Math.round((t.y - t.height / 2) * 10) / 10})`}
+                    >
+                      <rect className="graph-lane-tag__bg" width={t.width} height={t.height} rx={3} />
+                      <rect className="graph-lane-tag__bar" width={2} height={t.height - 6} x={3} y={3} style={{ fill: t.color }} />
+                      <text className="graph-lane-tag__text" x={t.width / 2 + 2} y={t.height / 2}>
+                        {t.text}
+                      </text>
+                    </g>
+                  ))}
                 </g>
               )}
 

@@ -14,6 +14,7 @@ import {
   type GraphEdgeData,
   type GraphNodeData,
   type LaneLayoutOptions,
+  type LaneNodeLabels,
   type LaneOrientation,
   type NodeOrder,
 } from '@tinkermonkey/heimdall-ui'
@@ -62,6 +63,7 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
   const [orientation, setOrientation] = useState<LaneOrientation>('horizontal')
   const [order, setOrder] = useState<OrderKey>('default')
   const [intraLinks, setIntraLinks] = useState<'arc' | 'none'>('arc')
+  const [nodeLabels, setNodeLabels] = useState<LaneNodeLabels>('all')
   const [rowWidth, setRowWidth] = useState<RowWidthKey>('default')
 
   const laneOptions = useMemo<LaneLayoutOptions>(
@@ -69,9 +71,10 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
       orientation,
       order: order === 'default' ? undefined : (order as NodeOrder),
       intraLinks,
+      nodeLabels,
       maxRowWidth: rowWidth === 'default' ? undefined : Number(rowWidth),
     }),
-    [orientation, order, intraLinks, rowWidth],
+    [orientation, order, intraLinks, nodeLabels, rowWidth],
   )
 
   const code = useMemo(() => {
@@ -80,6 +83,7 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
     if (order !== 'default') opts.push(`order: '${order}'`)
     if (rowWidth !== 'default') opts.push(`maxRowWidth: ${rowWidth}`)
     if (intraLinks !== 'arc') opts.push(`intraLinks: '${intraLinks}'`)
+    if (nodeLabels !== 'all') opts.push(`nodeLabels: '${nodeLabels}'`)
     const lines = [
       'const graph = useLayeredGraph({',
       '  nodes, edges, layering,',
@@ -90,19 +94,17 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
       '<LayeredGraphContext.Provider value={graph}>',
       '  <GraphCanvas',
       '    layout="layer-lanes"',
-      '    nodes={nodes}',
-      '    edges={edges}',
     ]
     if (opts.length) lines.push(`    laneOptions={{ ${opts.join(', ')} }}`)
     lines.push('    fitView', '  />', '</LayeredGraphContext.Provider>')
     if (!graph.filters.showIntra) lines.push('', '// filters.showIntra: false', 'graph.setShowIntra(false)')
     return lines.join('\n')
-  }, [orientation, order, rowWidth, intraLinks, graph.follow, graph.predicateLabels, graph.filters.showIntra])
+  }, [orientation, order, rowWidth, intraLinks, nodeLabels, graph.follow, graph.predicateLabels, graph.filters.showIntra])
 
   const selected = graph.selectedId ? graph.index.nodeById.get(graph.selectedId) : undefined
   const cross = graph.index.links.filter((l) => l.cross).length
   // Remount on layout changes so fitView frames the new lanes.
-  const canvasKey = `${orientation}|${order}|${rowWidth}|${intraLinks}`
+  const canvasKey = `${orientation}|${order}|${rowWidth}|${intraLinks}|${nodeLabels}`
 
   return (
     <LayeredGraphContext.Provider value={graph}>
@@ -129,6 +131,17 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
               options={[
                 { value: 'arc', label: 'arc' },
                 { value: 'none', label: 'none' },
+              ]}
+            />
+          </Control>
+          <Control label="nodeLabels">
+            <SegmentedControl
+              aria-label="Node labels"
+              value={nodeLabels}
+              onChange={(v) => setNodeLabels(v as LaneNodeLabels)}
+              options={[
+                { value: 'all', label: 'all' },
+                { value: 'reached', label: 'reached' },
               ]}
             />
           </Control>
@@ -173,8 +186,6 @@ function LanesPlaygroundBody({ dataset, onDatasetChange }: { dataset: DatasetKey
         <div style={{ ...canvasFrame, height: orientation === 'vertical' ? 600 : 540 }}>
           <GraphCanvas
             key={canvasKey}
-            nodes={data.nodes}
-            edges={data.edges}
             layout="layer-lanes"
             laneOptions={laneOptions}
             fitView
@@ -547,7 +558,8 @@ export function LayerLanesShowcase() {
           <PropRow name="layeredGraph" type="LayeredGraphState" def="context" description="Shared state from useLayeredGraph. Unset: the enclosing LayeredGraphContext, else the canvas builds its own from nodes, edges and layering." />
           <PropRow name="layering" type="BuildLayeredIndexOptions" def="{ layerBy: 'kind', missingValue: 'layer' }" description="Standalone layering of nodes; memoize it. Ignored with layeredGraph or a context." />
           <PropRow name="layeredGraphOptions" type="Omit<UseLayeredGraphOptions, 'nodes' | 'edges' | 'layering'>" description="Standalone selection, follow, filters, label mode and in-layer layout." />
-          <PropRow name="laneOptions" type="LaneLayoutOptions" description="Orientation, node order, row width and intra-layer links; fields below." />
+          <PropRow name="laneOptions" type="LaneLayoutOptions" description="Orientation, node order, row width, intra-layer links and node labels; fields below." />
+          <PropRow name="nodes / edges" type="GraphNodeData[] / GraphEdgeData[]" description="Optional with layeredGraph or a context, which supply the drawn graph; edges then only add each link's source edge fields (for edgeTooltip, renderEdge)." />
         </PropsTable>
         <div style={{ height: 16 }} />
         <div style={{ fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: fg3, marginBottom: 10 }}>LaneLayoutOptions</div>
@@ -556,6 +568,7 @@ export function LayerLanesShowcase() {
           <PropRow name="order" type="NodeOrder" def="coupled position" description="Node order within each lane: 'coupled-x', 'degree', 'cross-degree', 'label' or a comparator. Default: position along the lane in the coupled in-layer solve (x for rows, y for columns), so cross-layer links run mostly straight; 'degree' with no in-layer layout." />
           <PropRow name="maxRowWidth" type="number" def="1120 / 640" description="Row length in px before a lane wraps to another row; a column's height when vertical (default 640)." />
           <PropRow name="intraLinks" type="'arc' | 'none'" def="'arc'" description="Links within a layer: arc draws them beside their row; none leaves them out. filters.showIntra on the state hides them in every view instead." />
+          <PropRow name="nodeLabels" type="'all' | 'reached'" def="state's nodeLabels" description="all: every node is a labeled box. reached: 24px chips, with name tags only for the selection, its reach and the hovered or focused node, placed clear of chips, titles and pills (dropped where none fits). Unset: the layered state's nodeLabels (all when on), so the label toggle applies. A custom renderNode is unaffected." />
         </PropsTable>
       </ShowcaseSection>
 

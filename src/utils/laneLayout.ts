@@ -8,11 +8,17 @@
  * See design-reference/layered-graph/breakdown.md, 2.2.
  */
 import type { Point } from './graph'
-import { cubicCurve, quadCurve, type EdgeCurve } from './layered/edgeLabels'
+import { cubicCurve, placeEdgeLabels, quadCurve, type EdgeCurve, type LabelBox, type PlacedEdgeLabel } from './layered/edgeLabels'
 import { orderWithinLayers, type LayerLayoutResult, type NodeOrder } from './layered/layout'
 import type { LayeredIndex } from './layered/types'
 
 export type LaneOrientation = 'horizontal' | 'vertical'
+
+/**
+ * Which nodes show their label. `all`: every node is a labeled box. `reached`: nodes are compact
+ * chips, and only the selection, its reach, the hovered node and the focused node get a name tag.
+ */
+export type LaneNodeLabels = 'all' | 'reached'
 
 export interface LaneLayoutOptions {
   /**
@@ -31,6 +37,11 @@ export interface LaneLayoutOptions {
   maxRowWidth?: number
   /** Links within a layer: `arc` (default) draws them as arcs beside their row; `none` leaves them out. */
   intraLinks?: 'arc' | 'none'
+  /**
+   * `all` or `reached` (see `LaneNodeLabels`). Default: the layered state's `nodeLabels`, `all`
+   * when on and `reached` when off, so the explorer's label toggle applies to lanes.
+   */
+  nodeLabels?: LaneNodeLabels
 }
 
 /** A lane's band, top-left anchored. */
@@ -73,6 +84,8 @@ export interface LayoutLanesInput extends LaneLayoutOptions {
   sizeOf: (id: string) => { width: number; height: number }
   /** Layers to leave out (`LinkFilterState.hiddenLayers`). */
   hiddenLayers?: readonly string[]
+  /** Vertical lanes: room kept right of a node, px (a name tag beside a compact chip, see `laneTagRoom`). */
+  sideRoomOf?: (id: string) => number
 }
 
 // Horizontal geometry (from the concept prototype, in px).
@@ -167,6 +180,7 @@ export function layoutLanes(index: LayeredIndex, layout: LayerLayoutResult | nul
       let laneBottom = colTop
       for (const col of cols) {
         const colW = col.reduce((m, id) => Math.max(m, input.sizeOf(id).width), 0)
+        const room = input.sideRoomOf ? col.reduce((m, id) => Math.max(m, input.sideRoomOf!(id)), 0) : 0
         let cy = colTop
         for (const id of col) {
           const s = input.sizeOf(id)
@@ -174,7 +188,7 @@ export function layoutLanes(index: LayeredIndex, layout: LayerLayoutResult | nul
           cy += s.height + ROW_GAP
         }
         laneBottom = Math.max(laneBottom, cy)
-        cx += colW + COL_GAP
+        cx += colW + room + COL_GAP
       }
       const width = Math.max(140, cx - COL_GAP - x + V_INSET)
       const height = laneBottom - TOP + LANE_BOTTOM
@@ -250,4 +264,91 @@ export function laneLinkCurve(a: LaneNodeBox, b: LaneNodeBox, cross: boolean, or
   const ctrl = { x: Math.min(al, bl) - lift, y: (a.y + b.y) / 2 }
   const q = quadCurve({ x: al, y: a.y }, ctrl, { x: bl, y: b.y })
   return { ...q, tip: { x: bl, y: b.y }, dir: unit(bl - ctrl.x, b.y - ctrl.y) }
+}
+
+/**
+ * Pills from an earlier placement, moved onto the live curves at the same t. Used while a node is
+ * dragged, so pills follow their links without re-running the placement every frame. Pills whose
+ * link is gone are dropped.
+ */
+export function retraceLabels(placed: readonly PlacedEdgeLabel[], curveOf: (id: string) => EdgeCurve | undefined): PlacedEdgeLabel[] {
+  const out: PlacedEdgeLabel[] = []
+  for (const p of placed) {
+    const curve = curveOf(p.id)
+    if (!curve) continue
+    const at = curve.pointAt(p.t)
+    out.push({ ...p, x: at.x, y: at.y })
+  }
+  return out
+}
+
+/** A node that wants a name tag under `nodeLabels: 'reached'`. */
+export interface LaneTagCandidate {
+  id: string
+  text: string
+  /** The node's chip, centered. */
+  box: LabelBox
+  /** Lower places first. */
+  priority: number
+  /** Placed even when no position is clear (the selection, hover and focus). */
+  forced?: boolean
+  /** The node's lane band: a tag must fit inside it unless forced. */
+  within?: { x: number; y: number; width: number; height: number }
+}
+
+/** A lane title's box (11px mono, 0.1em tracking), centered, for tags and pills to keep clear of. */
+export function laneTitleBox(band: LaneBand): LabelBox {
+  const width = (band.label.length + String(band.count).length) * 7.7 + 9
+  return { x: band.titleX + width / 2, y: band.titleY - 4, width, height: 14 }
+}
+
+/** Name tag size: 10px mono at about 6px per character, plus padding. */
+export const laneTagSize = (text: string) => ({ width: Math.round(text.length * 6 + 12), height: 16 })
+
+const TAG_GAP = 3
+
+/** Room a name tag takes beside its chip: pass as `sideRoomOf` for vertical lanes of chips. */
+export const laneTagRoom = (text: string) => TAG_GAP + laneTagSize(text).width
+
+/**
+ * Name tags beside node chips, clear of each other and of `obstacles` (node chips, pills,
+ * titles) and inside the candidate's lane band. Horizontal lanes try above, below, right, then
+ * left of the chip; vertical lanes try right, left, above, then below. A tag with no clear spot
+ * is dropped unless forced, which takes its first spot regardless.
+ */
+export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles: readonly LabelBox[], orientation: LaneOrientation = 'horizontal'): PlacedEdgeLabel[] {
+  const spots = (c: LaneTagCandidate) => {
+    const { width, height } = laneTagSize(c.text)
+    const b = c.box
+    const above = { x: b.x, y: b.y - b.height / 2 - TAG_GAP - height / 2 }
+    const below = { x: b.x, y: b.y + b.height / 2 + TAG_GAP + height / 2 }
+    const right = { x: b.x + b.width / 2 + TAG_GAP + width / 2, y: b.y }
+    const left = { x: b.x - b.width / 2 - TAG_GAP - width / 2, y: b.y }
+    return orientation === 'horizontal' ? [above, below, right, left] : [right, left, above, below]
+  }
+  const inside = (c: LaneTagCandidate, p: Point) => {
+    const w = c.within
+    if (!w) return true
+    const { width, height } = laneTagSize(c.text)
+    return p.x - width / 2 >= w.x && p.x + width / 2 <= w.x + w.width && p.y - height / 2 >= w.y && p.y + height / 2 <= w.y + w.height
+  }
+  const ts = [0, 1, 2, 3]
+  const byId = new Map(candidates.map((c) => [c.id, spots(c)]))
+  const NOWHERE = { x: NaN, y: NaN } // placeEdgeLabels skips non-finite spots
+  const placed = placeEdgeLabels(
+    candidates.map((c) => ({
+      id: c.id,
+      text: c.text,
+      priority: c.priority,
+      pointAt: (t: number) => (inside(c, byId.get(c.id)![t]) ? byId.get(c.id)![t] : NOWHERE),
+    })),
+    { obstacles, ts, size: laneTagSize },
+  )
+  const done = new Set(placed.map((p) => p.id))
+  for (const c of candidates) {
+    if (!c.forced || done.has(c.id)) continue
+    const at = byId.get(c.id)![0]
+    placed.push({ id: c.id, text: c.text, t: 0, ...laneTagSize(c.text), ...at })
+  }
+  return placed
 }
