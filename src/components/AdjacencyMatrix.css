@@ -131,6 +131,14 @@
   font-weight: 600;
 }
 
+/* the cell shown in an inspector (selectedLinkId) */
+.adjacency-matrix__cell-selected {
+  fill: none;
+  stroke: rgb(var(--graph-hop-1));
+  stroke-width: 2;
+  pointer-events: none;
+}
+
 /* symmetric: a cell holding both directions */
 .adjacency-matrix__both {
   fill: rgb(var(--canvas-bg));
@@ -179,3 +187,34 @@
   stroke: rgb(var(--canvas-fg-1));
 }
 
+/* MatrixLinkInspector (LayeredGraphExplorer aside) */
+.adjacency-matrix-link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.adjacency-matrix-link__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-height: 28px;
+}
+
+.adjacency-matrix-link__close {
+  margin-left: auto;
+}
+
+.adjacency-matrix-link__step {
+  align-self: flex-start;
+  max-width: 100%;
+}
+
+.adjacency-matrix-link__step-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
