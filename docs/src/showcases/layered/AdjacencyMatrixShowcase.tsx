@@ -194,12 +194,14 @@ export function AdjacencyMatrixShowcase() {
           <PropRow name="edges" type="GraphEdgeData[]" description="Standalone edges; ignored with graph or a context." />
           <PropRow name="layering" type="BuildLayeredIndexOptions" description="Standalone layering (layerBy, catalog, …); memoize it." />
           <PropRow name="graphOptions" type="Omit<UseLayeredGraphOptions, …>" description="Standalone selection, follow, filters, label mode." />
-          <PropRow name="order" type="NodeOrder" def="'coupled-x'" description="Row and column order within each layer: 'coupled-x' | 'degree' | 'cross-degree' | 'label' | comparator. 'degree' when there is no layout." />
+          <PropRow name="order" type="NodeOrder | 'cluster'" def="'coupled-x'" description="Row and column order within each layer: 'coupled-x' | 'degree' | 'cross-degree' | 'label' | 'cluster' | comparator. 'degree' when there is no layout. cluster: Louvain communities within each layer, deterministic." />
           <PropRow name="cellSize" type="number | 'auto'" def="'auto'" description="Cell size in px; auto fits about 820px, clamped to 10–18." />
           <PropRow name="labelWidth" type="number" def="210" description="Row-label column width in px." />
           <PropRow name="showBlockCounts" type="boolean" def="true" description="Link count in each cross-layer block." />
           <PropRow name="showCodeLegend" type="boolean" def="true" description="Legend of the predicate codes shown." />
-          <PropRow name="onLinkSelect" type="(link: IndexedLink, links: readonly IndexedLink[]) => void" description="Cell click handler. Unset: selects the link's source. link is the drawn link (in a symmetric cell holding both directions, the reached one, else row → column); links holds every link in the cell, row → column first." />
+          <PropRow name="onCellSelect" type="(link: IndexedLink, links: readonly IndexedLink[]) => void" description="Cell click handler. Unset: selects the link's source. link is the drawn link (in a symmetric cell holding both directions, the reached one, else row → column); links holds every link in the cell, row → column first. Show it with GraphEdgeInspector and linkEdgeMetadata(index, link)." />
+          <PropRow name="onLinkSelect" type="(link: IndexedLink, links: readonly IndexedLink[]) => void" description="Deprecated: use onCellSelect (same arguments). Ignored when onCellSelect is set." />
+          <PropRow name="selectedLinkId" type="string | null" description="Outline the cell holding this link, e.g. the one shown in an inspector." />
           <PropRow name="symmetric" type="boolean" def="false" description="Merge A→B and B→A into one cell above the diagonal, for an undirected reading. A notch marks a cell holding both directions." />
           <PropRow name="aggregate" type="'none' | 'layer'" def="'none'" description="layer: a layers-by-layers heat map of link counts, the overview for many layers. Counts ignore the layer-pair filter; the active pair is outlined." />
           <PropRow name="onLayerCellSelect" type="(cell: LayerMatrixCell) => void" description="Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell (or a layer header) the layer focus." />
@@ -227,7 +229,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
     defaultFollow: 1,
     defaultPredicateLabels: 'highlighted',
   })
-  const [order, setOrder] = useState<Exclude<NodeOrder, (...args: never[]) => number>>('coupled-x')
+  const [order, setOrder] = useState<Exclude<NodeOrder, (...args: never[]) => number> | 'cluster'>('coupled-x')
   const [cellSize, setCellSize] = useState<CellSizeKey>('auto')
   const [labelWidth, setLabelWidth] = useState(210)
   const [blockCounts, setBlockCounts] = useState(true)
@@ -247,7 +249,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
     !legend && 'showCodeLegend={false}',
     symmetric && 'symmetric',
     aggregate === 'layer' && 'aggregate="layer"',
-    cellClick === 'report' && (aggregate === 'layer' ? 'onLayerCellSelect={setPickedLayers}' : 'onLinkSelect={setPicked}'),
+    cellClick === 'report' && (aggregate === 'layer' ? 'onLayerCellSelect={setPickedLayers}' : 'onCellSelect={setPicked} selectedLinkId={picked?.id}'),
   ].filter(Boolean)
   const jsx = `<AdjacencyMatrix${jsxProps.length ? ' ' + jsxProps.join(' ') : ''} />`
 
@@ -258,7 +260,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
     <LayeredGraphContext.Provider value={graph}>
       <ShowcaseSection
         label="Playground"
-        description="Click a row or column header to select a node; its cells and every reached cell take the amber reach ramp, including followed hops. Predicate labels decide which cells show their two-letter code: none, the highlighted ones, or all. With cell click set to Report, onLinkSelect receives the link instead of the matrix selecting its source. Symmetric folds both directions above the diagonal; Aggregate: Layer collapses to a layer heat map, where a cross-layer cell toggles the layer-pair filter and a diagonal cell the layer focus."
+        description="Click a row or column header to select a node; its cells and every reached cell take the amber reach ramp, including followed hops. Predicate labels decide which cells show their two-letter code: none, the highlighted ones, or all. With cell click set to Report, onCellSelect receives the link instead of the matrix selecting its source, and selectedLinkId outlines it. Order: Cluster groups Louvain communities within each layer. Symmetric folds both directions above the diagonal; Aggregate: Layer collapses to a layer heat map, where a cross-layer cell toggles the layer-pair filter and a diagonal cell the layer focus."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -281,6 +283,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
                     { value: 'degree', label: 'Degree' },
                     { value: 'cross-degree', label: 'Cross degree' },
                     { value: 'label', label: 'Label' },
+                    { value: 'cluster', label: 'Cluster' },
                   ]}
                 />
               </Control>
@@ -349,7 +352,8 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
                 labelWidth={labelWidth}
                 showBlockCounts={blockCounts}
                 showCodeLegend={legend}
-                onLinkSelect={cellClick === 'report' ? setPicked : undefined}
+                onCellSelect={cellClick === 'report' ? setPicked : undefined}
+                selectedLinkId={cellClick === 'report' ? picked?.id : undefined}
                 symmetric={symmetric}
                 aggregate={aggregate}
                 onLayerCellSelect={cellClick === 'report' ? setPickedLayers : undefined}
@@ -371,7 +375,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
                 ) : picked && pickedSource && pickedTarget ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     <span style={{ fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: fg3 }}>
-                      onLinkSelect · {picked.cross ? 'cross-layer' : 'within layer'} · {picked.edgeIds.length} edge{picked.edgeIds.length === 1 ? '' : 's'}
+                      onCellSelect · {picked.cross ? 'cross-layer' : 'within layer'} · {picked.edgeIds.length} edge{picked.edgeIds.length === 1 ? '' : 's'}
                     </span>
                     <span style={{ color: fg1 }}>
                       {pickedSource.label} → {pickedTarget.label}

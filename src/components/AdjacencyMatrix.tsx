@@ -1,10 +1,13 @@
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { Button } from './Button'
 import type { GraphEdge, GraphNodeData } from './GraphCanvas'
+import { GraphEdgeInspector } from './GraphEdgeInspector'
+import { Icon } from './Icon'
 import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from '../hooks/useLayeredGraph'
 import { orderAcrossLayers, type NodeOrder } from '../utils/layered/layout'
 import { linkPredicateLabel } from '../utils/layered/labels'
 import { isLinkVisible } from '../utils/layered/filters'
-import { layerMatrixCells, matrixCells, type LayerMatrixCell } from '../utils/layered/matrix'
+import { clusterOrder, layerMatrixCells, linkEdgeMetadata, matrixCells, type LayerMatrixCell } from '../utils/layered/matrix'
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode } from '../utils/layered/types'
 import './AdjacencyMatrix.css'
 
@@ -21,8 +24,9 @@ export interface AdjacencyMatrixProps extends Omit<React.HTMLAttributes<HTMLDivE
   /**
    * Node order within each layer, for rows and columns alike. Default `coupled-x` (nodes linked
    * across layers sit at similar positions in every block); `degree` when the graph has no layout.
+   * `cluster`: within each layer, Louvain communities over its own links, together (deterministic).
    */
-  order?: NodeOrder
+  order?: NodeOrder | 'cluster'
   /** Cell size in px, or `auto` (fits about 820px of cells, clamped to 10–18). Default `auto`. */
   cellSize?: number | 'auto'
   /** Width of the row-label column in px. Default 210. */
@@ -32,11 +36,16 @@ export interface AdjacencyMatrixProps extends Omit<React.HTMLAttributes<HTMLDivE
   /** Legend of the predicate codes shown in cells. Default true. */
   showCodeLegend?: boolean
   /**
-   * Called when a cell is clicked. Unset: a click selects the link's source node. `link` is the
-   * cell's drawn link: in a symmetric cell holding both directions, the reached one, else row →
-   * column. `links` holds every link in the cell, row → column first.
+   * Called when a cell is clicked; replaces the default, which selects the link's source node.
+   * `link` is the cell's drawn link: in a symmetric cell holding both directions, the reached one,
+   * else row → column. `links` holds every link in the cell, row → column first. Show it with
+   * `GraphEdgeInspector` and `linkEdgeMetadata(index, link)`.
    */
+  onCellSelect?: (link: IndexedLink, links: readonly IndexedLink[]) => void
+  /** @deprecated Use `onCellSelect` (same arguments). Ignored when `onCellSelect` is set. */
   onLinkSelect?: (link: IndexedLink, links: readonly IndexedLink[]) => void
+  /** Outline the cell holding this link, e.g. the one shown in an inspector. */
+  selectedLinkId?: string | null
   /**
    * Merge `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. With
    * `aggregate="layer"`, both directions add into the upper triangle. Default false.
@@ -107,7 +116,9 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       labelWidth = 210,
       showBlockCounts = true,
       showCodeLegend = true,
+      onCellSelect,
       onLinkSelect,
+      selectedLinkId,
       symmetric = false,
       aggregate = 'none',
       onLayerCellSelect,
@@ -128,9 +139,15 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
     const [hover, setHover] = useState<{ row: string; col: string } | null>(null)
 
     const effectiveOrder = order ?? (layout ? 'coupled-x' : 'degree')
+    // Louvain runs once per index, not on every layer toggle or layout update.
+    const clustered = useMemo(() => (effectiveOrder === 'cluster' ? clusterOrder(index) : null), [index, effectiveOrder])
+    const ordered = useMemo(
+      () => clustered ?? orderAcrossLayers(index, layout, effectiveOrder as NodeOrder),
+      [clustered, index, layout, effectiveOrder],
+    )
     const ids = useMemo(
-      () => orderAcrossLayers(index, layout, effectiveOrder).filter((id) => !filters.hiddenLayers.includes(index.nodeById.get(id)!.layerId)),
-      [index, layout, effectiveOrder, filters.hiddenLayers],
+      () => ordered.filter((id) => !filters.hiddenLayers.includes(index.nodeById.get(id)!.layerId)),
+      [ordered, index, filters.hiddenLayers],
     )
     const at = useMemo(() => new Map(ids.map((id, i) => [id, i])), [ids])
     const n = ids.length
@@ -197,6 +214,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       return reach.originId ? 'adjacency-matrix__label--dim' : ''
     }
     const selIndex = selectedId != null ? at.get(selectedId) : undefined
+    const selectedCell = selectedLinkId ? cells.find((cell) => cell.links.some((l) => l.id === selectedLinkId)) : undefined
     // The hovered cell's row and column, if both are still drawn (a filter may have hidden them since).
     const hoverRow = hover ? at.get(hover.row) : undefined
     const hoverCol = hover ? at.get(hover.col) : undefined
@@ -281,6 +299,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
                   <rect x={LW + i * cs + 1} y={TH - 6} width={cs - 2} height={3} style={{ fill: layer.color }} />
                   <g
                     className="adjacency-matrix__header"
+                    data-node-id={id}
                     role="button"
                     tabIndex={0}
                     aria-label={`${node.label}, ${layer.label} layer${selectedId === id ? ', selected' : ''}`}
@@ -325,7 +344,11 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
                   data-row={r}
                   data-col={c}
                   data-source-id={link.sourceId}
-                  onClick={() => (onLinkSelect ? onLinkSelect(link, links) : g.select(link.sourceId))}
+                  onClick={() => {
+                    const pick = onCellSelect ?? onLinkSelect
+                    if (pick) pick(link, links)
+                    else g.select(link.sourceId)
+                  }}
                   onMouseEnter={() => setHover({ row: ids[r], col: ids[c] })}
                 >
                   <title>{title}</title>
@@ -359,6 +382,18 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
                 </g>
               )
             })}
+
+            {selectedCell && (
+              <rect
+                className="adjacency-matrix__cell-selected"
+                data-testid="adjacency-matrix-selected-cell"
+                x={LW + selectedCell.c * cs}
+                y={TH + selectedCell.r * cs}
+                width={cs}
+                height={cs}
+                rx={3}
+              />
+            )}
 
             <text className="adjacency-matrix__caption" x={LW} y={TH + n * cs + 20}>
               {caption}
@@ -540,5 +575,104 @@ function LayerHeatMap({ g, cellSize, labelWidth, symmetric, onLayerCellSelect }:
         </text>
       </svg>
     </div>
+  )
+}
+
+/**
+ * @internal The explorer's link-panel state. Stores the clicked cell's link ids and re-reads them
+ * from the index, keeping only links still drawn (a filter can hide them); the cell is dropped
+ * when none are left, when `enabled` turns off, and when `resetKey` (the view) changes.
+ */
+export function useMatrixLinkPanel(g: LayeredGraphState, enabled: boolean, resetKey: unknown) {
+  const [cell, setCell] = useState<{ ids: readonly string[]; at: number } | null>(null)
+  useEffect(() => {
+    setCell(null)
+  }, [resetKey])
+  const { index, linkEmphasis } = g
+  const shown = useMemo(() => {
+    if (!enabled || !cell) return null
+    const links = cell.ids.map((id) => index.linkById.get(id)).filter((l): l is IndexedLink => !!l && linkEmphasis(l).visible)
+    if (links.length === 0) return null
+    const at = links.findIndex((l) => l.id === cell.ids[cell.at])
+    return { links, at: at >= 0 ? at : Math.min(cell.at, links.length - 1) }
+  }, [enabled, cell, index, linkEmphasis])
+  return {
+    enabled,
+    shown,
+    open: (link: IndexedLink, links: readonly IndexedLink[]) => setCell({ ids: links.map((l) => l.id), at: links.indexOf(link) }),
+    step: (at: number) => setCell((c) => (c && shown ? { ids: c.ids, at: c.ids.indexOf(shown.links[at].id) } : c)),
+    close: () => setCell(null),
+  }
+}
+
+/**
+ * @internal The explorer's link panel: one link of a matrix cell in a `GraphEdgeInspector`, with a
+ * button to step to the other direction when a symmetric cell holds both. Escape or the close
+ * button closes it and returns focus to the source's row header.
+ */
+export function MatrixLinkInspector({
+  graph,
+  links,
+  at,
+  onStep,
+  onClose,
+}: {
+  graph: LayeredGraphState
+  links: readonly IndexedLink[]
+  at: number
+  onStep: (at: number) => void
+  onClose: () => void
+}) {
+  const ref = useRef<HTMLElement | null>(null)
+  const link = links[at]
+  const next = links[(at + 1) % links.length]
+  const label = (id: string) => graph.index.nodeById.get(id)?.label ?? id
+  const titleId = useId()
+  const cellKey = links.map((l) => l.id).join(' ')
+  // It can open below the fold when the panel stacks under the scene.
+  useEffect(() => {
+    ref.current?.scrollIntoView?.({ block: 'nearest' })
+  }, [cellKey])
+  const close = () => {
+    const scope = ref.current?.closest('.layered-graph-explorer') ?? document
+    const header = scope.querySelector<HTMLElement>(`.adjacency-matrix__header[data-node-id="${CSS.escape(link.sourceId)}"]`)
+    onClose()
+    header?.focus()
+  }
+  return (
+    <section
+      ref={ref}
+      className="adjacency-matrix-link"
+      aria-labelledby={titleId}
+      data-testid="matrix-link-inspector"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') {
+          e.stopPropagation()
+          close()
+        }
+      }}
+    >
+      <div className="adjacency-matrix-link__bar">
+        <span id={titleId} className="layered-control__eyebrow">
+          {links.length > 1 ? `Link details, ${at + 1} of ${links.length}` : 'Link details'}
+        </span>
+        <Button variant="ghost" size="sm" icon aria-label="Close link details" className="adjacency-matrix-link__close" onClick={close}>
+          <Icon name="x" size={14} />
+        </Button>
+      </div>
+      {links.length > 1 && (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="adjacency-matrix-link__step"
+          title={`${label(next.sourceId)} → ${label(next.targetId)}`}
+          onClick={() => onStep((at + 1) % links.length)}
+        >
+          <Icon name="reload" size={14} />
+          <span className="adjacency-matrix-link__step-label">{`Reverse: ${label(next.sourceId)} → ${label(next.targetId)}`}</span>
+        </Button>
+      )}
+      <GraphEdgeInspector edge={linkEdgeMetadata(graph.index, link)} onNodeSelect={(id) => graph.select(id)} />
+    </section>
   )
 }
