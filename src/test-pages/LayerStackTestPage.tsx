@@ -19,6 +19,7 @@ import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphF
 //     &quiet=1 (no onCameraChange: the page never re-renders on a camera move)
 //     &late=1 (mount with no data; the Load data button brings the fixture in)
 //     &zoom=<n> (defaultCamera={{ zoom: n }}, an override of the preset's zoom)
+//     &width=<px> (the stage width; default 1160)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' || params.get('data') === 'full' ? (params.get('data') as 'ux' | 'full') : 'spec'
 const FIXTURE = {
@@ -28,6 +29,7 @@ const FIXTURE = {
 }[DATA]
 const QUIET = params.get('quiet') === '1'
 const LATE = params.get('late') === '1'
+const WIDTH = params.has('width') ? Number(params.get('width')) : 1160
 const DEFAULT_CAMERA = params.has('zoom') ? { zoom: Number(params.get('zoom')) } : undefined
 const EMPTY: never[] = []
 const CAMERA_MODE = ['controlled', 'lagged', 'held'].includes(params.get('camera') ?? '') ? params.get('camera') : null
@@ -129,7 +131,7 @@ export default function LayerStackTestPage() {
           <span data-testid="layer-stack-camera">{cameraText}</span>
           {CAMERA_MODE && <span data-testid="layer-stack-reports">{`${CAMERA_MODE} · ${reports} reports · gap ${Math.round(gap)} · ${describe(camera)}`}</span>}
         </div>
-        <div style={{ width: 1160, maxWidth: '100%' }}>
+        <div style={{ width: WIDTH, maxWidth: '100%' }}>
           <Profiler id="layer-stack" onRender={countCommit}>
           <LayerStack
             ref={stack}

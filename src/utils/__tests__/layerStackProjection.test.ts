@@ -13,6 +13,7 @@ import {
   lerpCamera,
   nearestYaw,
   insidePolygon,
+  fitTitleColumn,
   presetLayerGap,
   planeCorners,
   planeGridLines,
@@ -135,6 +136,17 @@ describe('stack geometry', () => {
     expect(presetLayerGap('exploded', 5)).toBe(CAMERA_PRESETS.exploded.layerGap)
     expect(presetLayerGap('stack', 13) * 12).toBeCloseTo(CAMERA_PRESETS.stack.layerGap * 4)
     expect(presetLayerGap('top', 1)).toBe(CAMERA_PRESETS.top.layerGap)
+  })
+
+  it('fitTitleColumn: a column that fits is only pushed apart', () => {
+    expect(fitTitleColumn([0, 10, 100], 46, -300, 300)).toEqual([0, 46, 100])
+  })
+
+  it('fitTitleColumn: a column off the bottom moves back up, a taller one spreads evenly', () => {
+    expect(fitTitleColumn([200, 210, 220], 46, -300, 250)).toEqual([158, 204, 250])
+    const ys = fitTitleColumn([0, 0, 0, 0, 0], 46, -90, 90)
+    expect(ys).toEqual([-90, -45, 0, 45, 90])
+    expect(fitTitleColumn([], 46, 0, 10)).toEqual([])
   })
 
   it('insidePolygon: inside, outside and on a projected quad', () => {
