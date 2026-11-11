@@ -627,11 +627,30 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       tween.cancel(outside)
       // A stopped camera move must not settle later, from a gap, focus or layout frame.
       if (!tween.isActive(CAMERA_KEYS)) cameraDirty.current = false
+      // The cancelled move never runs its last frame: paint, so pills come back once it stops.
+      repaint()
     }, [camKey])
     useEffect(() => {
       if (layerGap === undefined) return
-      if (!recent.current.gap.some((p) => near(p, layerGap))) tween.cancel(['gap'])
-    }, [layerGap, tween])
+      if (recent.current.gap.some((p) => near(p, layerGap))) return
+      tween.cancel(['gap'])
+      repaint()
+    }, [layerGap, tween, repaint])
+
+    // ── layer count ───────────────────────────────────────────────────────
+    // A graph that arrives (or changes its layer count) after mount takes the active preset's gap
+    // for that many layers (`presetLayerGap`), unless the gap is controlled.
+    const prevLayerCount = useRef(index.layers.length)
+    useEffect(() => {
+      const n = index.layers.length
+      if (prevLayerCount.current === n) return
+      prevLayerCount.current = n
+      const name = presetRef.current
+      if (!name || layerGap !== undefined) return
+      const gap = presetLayerGap(name, n)
+      if (near(view.current!.gap, gap)) return
+      tween.start({ gap: view.current!.gap }, { gap }, { duration: CAMERA_MS, onDone: () => onLayerGapChangeRef.current?.(gap) })
+    }, [index, layerGap, tween])
 
     // ── plane layout mix ──────────────────────────────────────────────────
     useEffect(() => {
@@ -1019,6 +1038,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     /** Motion and view as of the last commit: pills are placed for that view. */
     const renderedMoving = useRef(moving)
     const renderedView = useRef('')
+    const viewNow = viewKey(view.current!)
     const pills = (() => {
       if (moving || scene.candidates.length === 0) return []
       const { P, radius, candidates } = scene
@@ -1113,7 +1133,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       pcxRef.current = pcx
       pcyRef.current = pcy
       renderedMoving.current = moving
-      renderedView.current = viewKey(view.current!)
+      renderedView.current = viewNow
     })
     // After every commit: find the elements React rendered, then draw them.
     useLayoutEffect(() => {

@@ -369,20 +369,32 @@ test.describe('LayerStack', () => {
   test.describe('13 layers frame', () => {
     test.use({ reducedMotion: 'reduce' })
 
+    /** Plane corners outside the scene's viewBox. */
+    const cornersOutside = (page: Page) =>
+      page.evaluate(() => {
+        const [x0, y0, w, h] = document.querySelector('.layer-stack__svg')!.getAttribute('viewBox')!.split(' ').map(Number)
+        const pts = [...document.querySelectorAll('.layer-stack__plane polygon')].flatMap((p) => p.getAttribute('points')!.trim().split(/\s+/).map((xy) => xy.split(',').map(Number)))
+        return pts.filter(([x, y]) => x < x0 || x > x0 + w || y < y0 || y > y0 + h).length
+      })
+
     test('every preset, then Fit, keeps all 13 planes inside the scene', async ({ page }) => {
       await open(page, '&data=full')
       for (const name of ['Stack', 'Exploded', 'Top', 'Profile']) {
         await page.getByRole('radio', { name }).click()
         await page.getByRole('button', { name: 'Fit', exact: true }).click()
         await expect(cameraStatus(page)).toContainText('fit · ')
-        const out = await page.evaluate(() => {
-          const vb = document.querySelector('.layer-stack__svg')!.getAttribute('viewBox')!.split(' ').map(Number)
-          const [x0, y0, w, h] = vb
-          const pts = [...document.querySelectorAll('.layer-stack__plane polygon')].flatMap((p) => p.getAttribute('points')!.trim().split(/\s+/).map((xy) => xy.split(',').map(Number)))
-          return pts.filter(([x, y]) => x < x0 || x > x0 + w || y < y0 || y > y0 + h).length
-        })
-        expect(out, `${name}: plane corners outside the scene`).toBe(0)
+        expect(await cornersOutside(page), `${name}: plane corners outside the scene`).toBe(0)
       }
+    })
+
+    test('data that loads after mount takes the preset gap for its layers and frames after Fit', async ({ page }) => {
+      await open(page, '&data=full&late=1')
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(0)
+      await page.getByRole('button', { name: 'Load data' }).click()
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+      await page.getByRole('button', { name: 'Fit', exact: true }).click()
+      await expect(cameraStatus(page)).toContainText('fit · ')
+      expect(await cornersOutside(page)).toBe(0)
     })
   })
 
@@ -419,6 +431,26 @@ test.describe('LayerStack', () => {
       const before = await nodeCenters(page)
       await page.mouse.wheel(0, -240)
       await expect.poll(async () => JSON.stringify(await nodeCenters(page)) !== JSON.stringify(before)).toBe(true)
+      await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+    })
+
+    test('an outside camera change during a zoom stops it and brings the pills back', async ({ page }) => {
+      await open(page, `&select=${ORIGIN}&camera=controlled`)
+      await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+      // Mid-tween (pills hidden), the parent sets the zoom itself: the stack's move stops. The click
+      // waits out the page's pending render of the last tween frame, so nothing else re-renders the
+      // stack afterwards.
+      await page.evaluate(async () => {
+        const button = (name: string) => [...document.querySelectorAll<HTMLElement>('button')].find((b) => b.textContent === name)!
+        const task = () => new Promise((r) => setTimeout(r, 0))
+        button('Zoom in').click()
+        await new Promise((r) => requestAnimationFrame(r))
+        await new Promise((r) => requestAnimationFrame(r))
+        await task()
+        await task()
+        button('Outside zoom').click()
+      })
+      await expect(page.getByTestId('layer-stack-reports')).toContainText('zoom 1.50')
       await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
     })
 

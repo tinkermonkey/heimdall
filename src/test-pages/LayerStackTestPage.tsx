@@ -17,6 +17,7 @@ import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphF
 //       every change the stack reports, `lagged` takes each two frames late, `held` none; a counter
 //       shows the reports and the page's camera)
 //     &quiet=1 (no onCameraChange: the page never re-renders on a camera move)
+//     &late=1 (mount with no data; the Load data button brings the fixture in)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' || params.get('data') === 'full' ? (params.get('data') as 'ux' | 'full') : 'spec'
 const FIXTURE = {
@@ -25,6 +26,8 @@ const FIXTURE = {
   full: { nodes: drFullNodes, edges: drFullEdges, layers: drFullLayers },
 }[DATA]
 const QUIET = params.get('quiet') === '1'
+const LATE = params.get('late') === '1'
+const EMPTY: never[] = []
 const CAMERA_MODE = ['controlled', 'lagged', 'held'].includes(params.get('camera') ?? '') ? params.get('camera') : null
 /** Applies a reported value: at once, two frames late (a slow parent), or never. */
 function follow<T>(set: (v: T) => void, v: T) {
@@ -48,14 +51,15 @@ export default function LayerStackTestPage() {
     return () => document.body.classList.remove('dark-canvas')
   }, [])
 
+  const [loaded, setLoaded] = useState(!LATE)
   const layering = useMemo<BuildLayeredIndexOptions>(
-    () => ({ layerBy: 'layer', layers: FIXTURE.layers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
-    [],
+    () => ({ layerBy: 'layer', layers: loaded ? FIXTURE.layers : EMPTY, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
+    [loaded],
   )
   const layout = useMemo(() => ({ layoutCategories: DATA === 'ux' ? null : ['structural'] }), [])
   const graph = useLayeredGraph({
-    nodes: FIXTURE.nodes,
-    edges: FIXTURE.edges,
+    nodes: loaded ? FIXTURE.nodes : EMPTY,
+    edges: loaded ? FIXTURE.edges : EMPTY,
     layering,
     layout,
     defaultSelectedId: params.get('select'),
@@ -111,6 +115,8 @@ export default function LayerStackTestPage() {
           <Button variant="ghost" size="sm" onClick={() => stack.current?.zoomBy(1.2)}>Zoom in</Button>
           <Button variant="ghost" size="sm" onClick={() => stack.current?.fit()}>Fit</Button>
           <Button variant={turntable ? 'accent' : 'ghost'} size="sm" aria-pressed={turntable} onClick={() => setTurntable(!turntable)}>Turntable</Button>
+          {LATE && <Button variant="ghost" size="sm" onClick={() => setLoaded(true)}>Load data</Button>}
+          {CAMERA_MODE && <Button variant="ghost" size="sm" onClick={() => setCamera((c) => ({ ...c, zoom: 1.5 }))}>Outside zoom</Button>}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, marginBottom: 8, fontSize: 11, fontFamily: 'var(--font-mono)', color: 'rgb(var(--canvas-fg-3))' }}>
           <span data-testid="layer-stack-selection">

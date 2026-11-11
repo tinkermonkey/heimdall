@@ -581,6 +581,13 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     })
     const stackMemRef = useRef(stackMem)
     stackMemRef.current = stackMem
+    // A graph that arrives (or changes its layer count) after mount: an active preset takes its gap
+    // for that many layers, as the stack does, so the memory keeps the preset invariant.
+    const controlledGap = stackProps?.layerGap !== undefined
+    useEffect(() => {
+      if (controlledGap) return
+      setStackMem((m) => (m.preset && !near(m.gap, presetLayerGap(m.preset, layerCount)) ? presetMemory(m, m.preset, layerCount) : m))
+    }, [layerCount, controlledGap])
     // Bumped by `restore` to remount the stack, which then starts from the restored camera. Camera
     // reports from a stack of an older epoch (its unmount reports the turntable stopping) are ignored.
     const [stackEpoch, setStackEpoch] = useState(0)
