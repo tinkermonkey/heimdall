@@ -2,7 +2,7 @@
 // link inspector metadata (tinkermonkey/heimdall#336).
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, DEFAULT_LINK_FILTERS, isLinkVisible, orderAcrossLayers } from '../layered'
-import { clusterOrder, layerMatrixCells, linkEdgeMetadata, matrixCells } from '../layered/matrix'
+import { clusterOrder, layerMatrixCells, linkEdgeMetadata, matrixCellStep, matrixCells, matrixWindow, nextMatrixWindow } from '../layered/matrix'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
 const layering = { layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }
@@ -166,5 +166,68 @@ describe('linkEdgeMetadata', () => {
       targetTitle: 'A',
       metadata: { layers: 'y → x', category: 'k', edges: 1 },
     })
+  })
+})
+
+describe('matrixWindow', () => {
+  it('covers the rows and columns in view plus overscan, clear of the sticky labels', () => {
+    // 600 cells of 10px; labels 200px wide and 60px tall; a 1000 × 560 view scrolled to (3000, 2000)
+    expect(matrixWindow({ left: 3000, top: 2000, width: 1000, height: 560 }, 600, 10, 200, 60, 8)).toEqual({ r0: 192, r1: 258, c0: 292, c1: 388 })
+  })
+
+  it('with no overscan, ends exactly at the last row and column in view', () => {
+    // view x 3000..4000 minus 200px of labels: columns 300..379 (379 ends at 3800 + 10 > 3790)
+    expect(matrixWindow({ left: 3000, top: 2000, width: 1000, height: 560 }, 600, 10, 200, 60, 0)).toEqual({ r0: 200, r1: 250, c0: 300, c1: 380 })
+    expect(matrixWindow({ left: 3005, top: 2000, width: 1000, height: 560 }, 600, 10, 200, 60, 0).c1).toBe(381)
+  })
+
+  it('clamps to the matrix', () => {
+    expect(matrixWindow({ left: 0, top: 0, width: 1000, height: 560 }, 50, 10, 200, 60, 8)).toEqual({ r0: 0, r1: 50, c0: 0, c1: 50 })
+    expect(matrixWindow({ left: 99999, top: 99999, width: 1000, height: 560 }, 600, 10, 200, 60).r0).toBe(600)
+  })
+})
+
+describe('matrixCellStep', () => {
+  const cells = [
+    { r: 0, c: 1 }, { r: 0, c: 5 },
+    { r: 2, c: 0 }, { r: 2, c: 4 }, { r: 2, c: 9 },
+    { r: 5, c: 6 },
+  ]
+  it('Left and Right walk every cell in reading order', () => {
+    expect(matrixCellStep(cells, cells[1], 'ArrowRight')).toBe(cells[2])
+    expect(matrixCellStep(cells, cells[2], 'ArrowLeft')).toBe(cells[1])
+    expect(matrixCellStep(cells, cells[5], 'ArrowRight')).toBeNull()
+  })
+
+  it('Up and Down skip empty rows and keep the closest column, the left one on a tie', () => {
+    expect(matrixCellStep(cells, cells[1], 'ArrowDown')).toBe(cells[3]) // c 5 -> 4
+    expect(matrixCellStep(cells, cells[3], 'ArrowDown')).toBe(cells[5])
+    expect(matrixCellStep(cells, cells[5], 'ArrowUp')).toBe(cells[3]) // from c 6: c 4 is 2 away, c 9 is 3
+    expect(matrixCellStep([{ r: 0, c: 4 }, { r: 1, c: 2 }, { r: 1, c: 6 }], { r: 0, c: 4 }, 'ArrowDown')).toBeNull() // not in list
+    const tie = [{ r: 0, c: 4 }, { r: 1, c: 2 }, { r: 1, c: 6 }]
+    expect(matrixCellStep(tie, tie[0], 'ArrowDown')).toBe(tie[1])
+    expect(matrixCellStep(cells, cells[0], 'ArrowUp')).toBeNull()
+  })
+
+  it('Home and End go to the ends of the row; other keys do nothing', () => {
+    expect(matrixCellStep(cells, cells[3], 'Home')).toBe(cells[2])
+    expect(matrixCellStep(cells, cells[3], 'End')).toBe(cells[4])
+    expect(matrixCellStep(cells, cells[3], 'a')).toBeNull()
+  })
+})
+
+describe('nextMatrixWindow', () => {
+  const view = (r0: number, c0: number) => ({ r0, r1: r0 + 50, c0, c1: c0 + 80 })
+  it('keeps the window while the view stays more than half the overscan inside it', () => {
+    const win = nextMatrixWindow({ r0: 0, r1: 0, c0: 0, c1: 0 }, view(100, 100), 600, 16)
+    expect(win).toEqual({ r0: 84, r1: 166, c0: 84, c1: 196 })
+    expect(nextMatrixWindow(win, view(107, 92), 600, 16)).toBe(win)
+    expect(nextMatrixWindow(win, view(109, 100), 600, 16)).toEqual({ r0: 93, r1: 175, c0: 84, c1: 196 })
+  })
+
+  it('does not move at the ends of the matrix', () => {
+    const win = nextMatrixWindow({ r0: 0, r1: 0, c0: 0, c1: 0 }, view(0, 0), 600, 16)
+    expect(win).toEqual({ r0: 0, r1: 66, c0: 0, c1: 96 })
+    expect(nextMatrixWindow(win, view(2, 3), 600, 16)).toBe(win)
   })
 })

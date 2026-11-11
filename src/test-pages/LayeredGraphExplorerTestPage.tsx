@@ -12,6 +12,7 @@ import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import type { BuildLayeredIndexOptions, IndexedLink } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
 import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphFullSpec'
+import { largeLayeredGraph } from './fixtures/largeLayeredGraph'
 
 // LayeredGraphExplorer on the layered-graph fixtures. Turntable off and a fixed camera; URL params
 // make screenshots deterministic:
@@ -23,9 +24,12 @@ import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphF
 // drive the `explorerRef` handle. `gap=<n>` passes `stackProps={{ defaultLayerGap: n }}`.
 // `data=full` is the whole DR spec (13 layers); `late=1` mounts with no data until Load data.
 const params = new URLSearchParams(window.location.search)
-const DATA = params.get('data') === 'ux' || params.get('data') === 'full' ? (params.get('data') as 'ux' | 'full') : 'spec'
-const NODES = DATA === 'spec' ? drSpecNodes : DATA === 'full' ? drFullNodes : heimdallUxNodes
-const EDGES = DATA === 'spec' ? drSpecEdges : DATA === 'full' ? drFullEdges : heimdallUxEdges
+// `data=large&n=600` is a seeded synthetic graph past the matrix's virtualization threshold.
+const DATA_PARAM = params.get('data')
+const DATA = DATA_PARAM === 'ux' || DATA_PARAM === 'full' || DATA_PARAM === 'large' ? DATA_PARAM : 'spec'
+const LARGE = DATA === 'large' ? largeLayeredGraph(Number(params.get('n') ?? 600)) : null
+const NODES = LARGE ? LARGE.nodes : DATA === 'spec' ? drSpecNodes : DATA === 'full' ? drFullNodes : heimdallUxNodes
+const EDGES = LARGE ? LARGE.edges : DATA === 'spec' ? drSpecEdges : DATA === 'full' ? drFullEdges : heimdallUxEdges
 const LAYERS = DATA === 'full' ? drFullLayers : drLayers
 const LATE = params.get('late') === '1'
 const EMPTY: never[] = []
@@ -50,7 +54,14 @@ const STACK_PROPS = params.has('gap') ? { defaultLayerGap: Number(params.get('ga
 // `matrix=symmetric` passes `matrixProps={{ symmetric: true }}`; `matrix=report` passes an
 // `onCellSelect` that writes the link id to `cell-report` (a consumer handler, so no link panel).
 const MATRIX = params.get('matrix')
-const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : DATA === 'full' ? 'documentation robotics spec 0.11.0' : 'heimdall ux model'
+const DATA_LABEL =
+  DATA === 'spec'
+    ? 'documentation robotics spec 0.10.0'
+    : DATA === 'full'
+      ? 'documentation robotics spec 0.11.0'
+      : DATA === 'large'
+        ? 'synthetic large graph'
+        : 'heimdall ux model'
 
 const mono = { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgb(var(--canvas-fg-3))' } as const
 
@@ -62,12 +73,15 @@ export default function LayeredGraphExplorerTestPage() {
 
   const [loaded, setLoaded] = useState(!LATE)
   const layering = useMemo<BuildLayeredIndexOptions>(
-    () => ({ layerBy: 'layer', layers: loaded ? LAYERS : EMPTY, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
+    () =>
+      LARGE
+        ? { layerBy: 'layer', categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }
+        : { layerBy: 'layer', layers: loaded ? LAYERS : EMPTY, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' },
     [loaded],
   )
   const nodes = loaded ? NODES : EMPTY
   const edges = loaded ? EDGES : EMPTY
-  const layout = useMemo(() => ({ layoutCategories: DATA === 'ux' ? null : ['structural'] }), [])
+  const layout = useMemo(() => (LARGE ? (false as const) : { layoutCategories: DATA === 'ux' ? null : ['structural'] }), [])
   const [selected, setSelected] = useState<string | null>(SNAPSHOT?.selectedId ?? params.get('select'))
   const [follow, setFollow] = useState(SNAPSHOT?.follow ?? FOLLOW)
   const [view, setView] = useState<LayeredGraphView>(SNAPSHOT?.view ?? VIEW)
