@@ -4,7 +4,8 @@ import { test, expect, type Page } from '@playwright/test'
 // unit-tested in src/utils/__tests__/hivePlot.test.ts and reach in layered.test.ts; this checks the
 // rendering, selection and keyboard wiring, and the two themes.
 
-const BASE = 'http://localhost:5173/?example=hive-plot'
+// Relative to the config's baseURL.
+const BASE = '/?example=hive-plot'
 const ORIGIN = 'application.applicationcomponent'
 
 async function open(page: Page, query = '') {
@@ -141,10 +142,34 @@ test.describe('HivePlot', () => {
   test('nodes without an axis are not drawn, with a dev warning', async ({ page }) => {
     const warnings: string[] = []
     page.on('console', (msg) => { if (msg.type() === 'warning') warnings.push(msg.text()) })
-    await open(page, '&axes=partial')
+    await open(page, '&axes=partial&unmemoized=1')
     expect(await axisIds(page)).toEqual(['active', 'behavior', 'service'])
     await expect(page.locator('.hive-plot [role="button"]')).toHaveCount(30)
-    expect(warnings.some((w) => w.includes('HivePlot: 6 node(s) have no axis'))).toBe(true)
+    // Hovering re-renders the page, passing a new inline axes function each time; the warning fires once.
+    await page.locator('.hive-plot__node[data-node-id="technology.systemsoftware"]').hover()
+    await page.locator('.hive-plot__node[data-node-id="business.businessprocess"]').hover()
+    expect(warnings.filter((w) => w.includes('HivePlot: 6 node(s) have no axis'))).toHaveLength(1)
+  })
+
+  test('a selection on a node without an axis is named as not shown', async ({ page }) => {
+    await open(page, '&axes=partial&select=business.businessobject')
+    await expect(status(page)).toContainText('selected business.businessobject')
+    await expect(page.locator('.hive-plot__svg')).toHaveAttribute('aria-label', /selection not shown/)
+    await expect(page.locator('.hive-plot__label--selected')).toHaveCount(0)
+  })
+
+  test('axes by attribute: a layer filter that empties an axis leaves a gap; the rest and the frame stay put', async ({ page }) => {
+    await open(page, '&axes=mixed')
+    const linesOf = (id: string) =>
+      page.locator(`.hive-plot__axis[data-axis-id="${id}"] line`).evaluateAll((ls) => ls.map((l) => ['x1', 'y1', 'x2', 'y2'].map((a) => l.getAttribute(a)).join(',')))
+    const others = ['active', 'behavior', 'passive', 'service']
+    expect(await axisIds(page)).toEqual([...others, 'technology'])
+    const before = await Promise.all(others.map(linesOf))
+    const viewBox = await page.locator('.hive-plot__svg').getAttribute('viewBox')
+    await page.getByTestId('hive-plot-toggle-technology').click()
+    expect(await axisIds(page)).toEqual(others)
+    expect(await Promise.all(others.map(linesOf))).toEqual(before)
+    await expect(page.locator('.hive-plot__svg')).toHaveAttribute('viewBox', viewBox!)
   })
 
   test('axes by attribute: hiding a layer hides its nodes, and every axis stays put', async ({ page }) => {

@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphEdge, GraphNodeData } from './GraphCanvas'
+import type { Point } from '../utils/graph'
 import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from '../hooks/useLayeredGraph'
 import { rankWithinLayers, type NodeOrder } from '../utils/layered/layout'
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
 import { edgeLabelPriority, placeEdgeLabels, quadCurve, type EdgeCurve, type LabelBox } from '../utils/layered/edgeLabels'
-import { hiveAxisGroups, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint, type HiveAxis, type HiveAxisBy, type HiveAxisOrder } from '../utils/layered/hive'
+import { hiveAxisGroups, sameHiveAxisGroups, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint, type HiveAxis, type HiveAxisBy, type HiveAxisGroups, type HiveAxisOrder } from '../utils/layered/hive'
 import { layerPaletteColor } from '../utils/layered/buildLayeredIndex'
 import type { LinkEmphasis } from '../utils/layered/emphasis'
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode } from '../utils/layered/types'
@@ -30,15 +31,16 @@ export interface HivePlotProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   /**
    * How nodes are assigned to axes. `'layer'` (default): one axis per layer, in layer colour.
    * A function: one axis per distinct value it returns (any categorical attribute), coloured from
-   * the `--graph-layer-<n>` palette by axis order. A node it returns null or undefined for is not
-   * drawn. Memoize it.
+   * the `--graph-layer-<n>` palette by axis order. A node it returns null, undefined or '' for is
+   * not drawn. It receives node instances: a node on several layers has one per layer (`id@layer`),
+   * each placed on its own axis, so use `node.nodeId` for the source node. Memoize it.
    */
   axes?: HiveAxisBy
-  /** Axis order around the plot from `startAngle`: ids listed first (the rest follow), or a comparator. Default: layer order, else axis ids sorted by code point. Memoize it. */
+  /** Axis order around the plot from `startAngle`: ids listed first (the rest follow), or a comparator. Default: layer order, else axis ids sorted by code point ('10' before '9': use a comparator for numbers). Memoize it. */
   axisOrder?: HiveAxisOrder
-  /** Axis title. Default: the layer label, else the axis id. */
+  /** Axis title. Default: the layer label, else the axis id. Memoize it. */
   axisLabel?: (axisId: string) => string
-  /** How nodes are placed outward along their axis (`rankWithinLayers`). Default `degree`: the busiest node farthest out. */
+  /** How nodes are placed outward along their axis (`rankWithinLayers`). Default `degree`: the busiest node farthest out. `cross-degree` counts cross-layer links, not cross-axis ones. */
   rank?: NodeOrder
   /** Double every axis so links within a layer span the gap between the two copies. Off draws them as arcs off the single axis. Default true. */
   splitAxes?: boolean
@@ -80,6 +82,15 @@ interface PlacedLabel extends LabelBox {
 const labelsOverlap = (q: LabelBox, b: LabelBox) =>
   Math.abs(q.x - b.x) <= (q.width + b.width) / 2 + 2 && Math.abs(q.y - b.y) <= (q.height + b.height) / 2
 
+// Bundlers replace `process.env.NODE_ENV` but often leave `process` undefined, so read it guarded.
+const isDevBuild = () => {
+  try {
+    return process.env.NODE_ENV !== 'production'
+  } catch {
+    return false
+  }
+}
+
 const r1 = (v: number) => Math.round(v * 10) / 10
 const dotRadius = (n: IndexedNode) => 2.6 + Math.sqrt(n.degree) * 0.9
 
@@ -96,6 +107,22 @@ interface DrawnLink {
   em: LinkEmphasis
   curve: EdgeCurve
   arrow: string | null
+  /** Arrowhead tip and base, for labels to keep clear of. */
+  arrowPts: Point[]
+}
+
+interface Obstacle extends Point {
+  r: number
+  /** The dot's node and axis copy, so a label skips its own anchor dot. */
+  nodeId?: string
+  copy?: number
+}
+
+// Whether a circle overlaps a label box.
+const circleHitsBox = (o: Obstacle, b: LabelBox) => {
+  const dx = Math.max(Math.abs(o.x - b.x) - b.width / 2, 0)
+  const dy = Math.max(Math.abs(o.y - b.y) - b.height / 2, 0)
+  return dx * dx + dy * dy < o.r * o.r
 }
 
 /**
@@ -159,11 +186,24 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
     }, [])
 
     const byLayer = axes === 'layer'
-    const groups = useMemo(() => hiveAxisGroups(index, axes, axisOrderProp), [index, axes, axisOrderProp])
+    // An inline `axes` or `axisOrder` is a new function each render: keep the previous grouping when
+    // it comes out the same, so the rest of the plot doesn't recompute.
+    const prevGroups = useRef<HiveAxisGroups | null>(null)
+    const groups = useMemo(() => {
+      const next = hiveAxisGroups(index, axes, axisOrderProp)
+      return prevGroups.current && sameHiveAxisGroups(prevGroups.current, next) ? prevGroups.current : next
+    }, [index, axes, axisOrderProp])
     useEffect(() => {
-      if (process.env.NODE_ENV !== 'production' && groups.unassigned.length > 0) {
-        console.warn(`HivePlot: ${groups.unassigned.length} node(s) have no axis (axes returned null or undefined) and are not drawn, e.g. "${groups.unassigned[0]}".`)
-      }
+      prevGroups.current = groups
+    }, [groups])
+    const warnedUnassigned = useRef('')
+    useEffect(() => {
+      const n = groups.unassigned.length
+      if (n === 0 || !isDevBuild()) return
+      const key = `${n}:${groups.unassigned[0]}`
+      if (warnedUnassigned.current === key) return
+      warnedUnassigned.current = key
+      console.warn(`HivePlot: ${n} node(s) have no axis (axes returned null, undefined or '') and are not drawn, e.g. "${groups.unassigned[0]}".`)
     }, [groups])
     const axisMeta = useMemo(
       () =>
@@ -275,15 +315,19 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         if (!geo) continue
         const curve = quadCurve(geo.a, geo.c, geo.b)
         let arrow: string | null = null
+        const arrowPts: Point[] = []
         if (em.arrow) {
           const u = curve.tangentAt(1)
           const back = dotRadius(t) + 2
-          arrow = arrowHeadPoints({ x: geo.b.x - u.x * back, y: geo.b.y - u.y * back }, u.x, u.y)
+          const tip = { x: geo.b.x - u.x * back, y: geo.b.y - u.y * back }
+          arrow = arrowHeadPoints(tip, u.x, u.y)
+          // Tip, middle and base of the 7-unit head.
+          for (const k of [0, 3.5, 7]) arrowPts.push({ x: tip.x - u.x * k, y: tip.y - u.y * k })
         }
-        out.push({ link, em, curve, arrow })
+        out.push({ link, em, curve, arrow, arrowPts })
       }
       return out.sort((p, q) => p.em.z - q.em.z)
-    }, [index, hive, linkEmphasis])
+    }, [index, hive, linkEmphasis, groups])
 
     // Default labels: the top-k busiest per axis with no selection; the selection and its reach; the hovered node.
     const labeled = useMemo(() => {
@@ -310,12 +354,26 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
           : drawn
               .filter((d) => d.em.highlighted && axisIdOf(d.link.sourceId) === axisIdOf(d.link.targetId))
               .flatMap((d) => Array.from({ length: 25 }, (_, i) => d.curve.pointAt(i / 24))),
-      [drawn, hive, index],
+      [drawn, hive, groups],
     )
 
-    // A label's side: the one loops cross least (unsplit only). It is blocked when loop ends cover
-    // its first 3 characters (where arrowheads land, padded by an arrowhead's half-width) or it
-    // overlaps a label already placed.
+    // Dots that aren't faded (with room for a ring) and arrowheads: labels keep clear of them. Faded
+    // dots, outside the selection's reach, may sit under a label.
+    const marks = useMemo(() => {
+      const out: Obstacle[] = []
+      for (const d of dots) {
+        const em = nodeEmphasis(d.node)
+        if (em.opacity < 0.5) continue
+        // A ring (selection or reach) reaches r + 3 plus its stroke; a plain dot, r plus its 1.5 stroke.
+        out.push({ x: d.x, y: d.y, r: d.r + (em.selected || em.followed ? 4 : 1), nodeId: d.node.id, copy: d.copy })
+      }
+      for (const d of drawn) for (const p of d.arrowPts) out.push({ ...p, r: ARROW_HALF_W })
+      return out
+    }, [dots, drawn, nodeEmphasis])
+
+    // A label's side: the one loops cross least (unsplit only). It is blocked when it covers a dot or
+    // ring that isn't faded (its own twin copy included) or any arrowhead, when loop ends cover its first 3 characters (padded by an
+    // arrowhead's half-width), or when it overlaps a label already placed.
     const bestLabel = (id: string, placed: readonly LabelBox[]) => {
       const node = index.nodeById.get(id)!
       const ax = hive.axisOf.get(axisIdOf(id)!)!
@@ -327,7 +385,8 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
       const options = sides.map((side) => {
         const b = labelBox(node, ax, hive.radiusOf.get(id)!, side)
         const start = hits(b, 3 * LABEL_FS * MONO_CHAR_EM, ARROW_HALF_W)
-        return { b: { ...b, id }, blocked: start > 0 || placed.some((q) => labelsOverlap(q, b)), score: start * 100 + hits(b, b.width, 0) }
+        const covers = marks.some((o) => !(o.nodeId === id && o.copy === ax.labelCopy) && circleHitsBox(o, b))
+        return { b: { ...b, id }, blocked: covers || start > 0 || placed.some((q) => labelsOverlap(q, b)), score: start * 100 + hits(b, b.width, 0) }
       })
       return options.reduce((m, o) => (Number(o.blocked) * 1e4 + o.score < Number(m.blocked) * 1e4 + m.score ? o : m))
     }
@@ -346,13 +405,13 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
         placed.push(best.b)
       }
       return placed
-    }, [labeled, hive, selectedId, reach, index, loopPts])
+    }, [labeled, hive, selectedId, reach, index, loopPts, marks])
 
     // The hovered node, when not already labeled, goes on top on its clearer side.
     const labels = useMemo(() => {
       if (!hoverId || !hive.radiusOf.has(hoverId) || baseLabels.some((b) => b.id === hoverId)) return baseLabels
       return [...baseLabels, bestLabel(hoverId, baseLabels).b]
-    }, [baseLabels, hoverId, hive, index, loopPts])
+    }, [baseLabels, hoverId, hive, index, loopPts, marks])
 
     const pills = useMemo(() => {
       const obstacles = labels.map((b) => ({ x: b.x, y: b.y, width: b.width, height: b.height }))
@@ -442,7 +501,7 @@ export const HivePlot = React.forwardRef<HTMLDivElement, HivePlotProps>(
           viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
           preserveAspectRatio="xMidYMid meet"
           role="group"
-          aria-label={`Hive plot, ${hive.axes.length} ${byLayer ? 'layer ' : ''}axes, ${hive.radiusOf.size} nodes; arrow keys move between nodes`}
+          aria-label={`Hive plot, ${hive.axes.length} ${byLayer ? 'layer ' : ''}axes, ${hive.radiusOf.size} nodes${selectedId && !hive.radiusOf.has(selectedId) ? ', selection not shown' : ''}; arrow keys move between nodes`}
           onKeyDown={onSvgKey}
           onMouseLeave={() => setHover(null)}
         >

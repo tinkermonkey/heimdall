@@ -1677,16 +1677,19 @@ Large graphs scroll inside the component (it renders at natural size, so cells s
 A hive plot of a layered graph: one radial axis per layer at evenly divided angles, nodes placed outward along their axis by rank (degree by default, busiest farthest out), and links drawn as curves between axes. Each axis is doubled (±13° by default) so links within a layer span the gap between the two copies; cross-layer links run between the facing copies of two axes. It compares how the layers connect rather than where nodes sit. Reads well for 3 to about 6 layers; beyond that, prefer `AdjacencyMatrix`.
 
 - **Link colours:** each link takes its category colour and dash. Around the selection, links take the amber reach ramp, with arrowheads and predicate pills per `predicateLabels` (pills are placed with `placeEdgeLabels` and dropped where they would overlap).
-- **Labels:** with no selection, the `axisLabels` busiest nodes per axis are labeled; with one, the selection and its reach, dropping labels that would overlap (the node's tooltip and accessible name still carry it). Hovering a node labels it.
+- **Labels:** with no selection, the `axisLabels` busiest nodes per axis are labeled; with one, the selection and its reach. A label is dropped when it would overlap another label, a dot or ring that isn't faded, or an arrowhead (the node's tooltip and accessible name still carry it); the selection is always labeled. Hovering a node labels it, on top, without moving other labels.
 - **Selection:** click a node (either copy) or press Enter or Space on it to select; again clears; Escape clears. Clicking a link selects its source, or calls `onLinkSelect`.
 - **Keyboard:** the nodes are one tab stop. Arrow Up and Down move outward and inward along the axis, Home and End jump to its ends, Arrow Right and Left move to the next and previous axis at the nearest rank.
 - **Sizing:** the SVG fills its container's width at a fixed aspect ratio (viewBox fit). Node hit targets stay at least 24 px across at any scale.
-- **Axes by any attribute** (`axes={(node) => axisId}`, memoized): one axis per distinct value over every node, so the set of axes doesn't change with filters. The default `'layer'` is one axis per layer.
-  - **Order:** layer order, else axis ids sorted by code point; `axisOrder` lists ids to put first (the rest follow) or takes a comparator. Angles run clockwise from `startAngle` in that order.
+- **Axes by any attribute** (`axes={(node) => axisId}`): one axis per distinct value over every node, so the set of axes doesn't change with filters. The default `'layer'` is one axis per layer.
+  - **Node instances:** the function receives `IndexedNode` instances. A node on several layers has one instance per layer (`id@layer`), each placed on its own axis, so two can land on one axis; read `node.nodeId` for the source node (`(n) => kindOf.get(n.nodeId)`).
+  - **Memoize** `axes`, `axisOrder` and `axisLabel`. An inline function still works: a grouping that comes out the same is reused, so the rest of the plot doesn't recompute.
+  - **Order:** layer order, else axis ids sorted by code point (`'10'` sorts before `'9'`; pass a comparator such as `(a, b) => Number(a) - Number(b)` for numbers); `axisOrder` lists ids to put first (the rest follow) or takes a comparator. Angles run clockwise from `startAngle` in that order.
   - **Colour:** layer colour by layer; otherwise `layerPaletteColor(i)` (the `--graph-layer-<n>` tokens, light and dark) by axis order. Node dots take their axis colour.
   - **Titles:** the layer label, else the axis id; `axisLabel(axisId)` overrides.
   - **Filters and emphasis:** layer filters still hide nodes. An axis left with no visible node leaves a gap, and no angle moves. Selection, reach and link styles are unchanged; links within one axis are drawn like intra-layer links (across the split gap, or as loops).
-  - **No axis:** a node the function returns `null` or `undefined` for is not drawn, nor are its links; a dev-mode warning names one.
+  - **No axis:** a node the function returns `null`, `undefined` or `''` for is not drawn, nor are its links; a dev-mode warning (once per change) names one. A selection on such a node isn't drawn either: its reach is still labeled, without links to it, and the plot's accessible name adds "selection not shown".
+  - **Rank:** `rank="cross-degree"` still counts cross-layer links, not cross-axis ones.
   - `hiveAxisGroups(index, axes, axisOrder)` returns the groups (`HiveAxisGroups`: `axes`, `axisOf`, `unassigned`); feed `axes` to `rankWithinLayers(index, by, groups)` and `hiveLayout` (each `HiveAxis.layerId` is then the axis id).
 - **Hidden layers** (the graph's `filters.hiddenLayers`, e.g. from `LayerList`): angles are divided among every layer, hidden ones included, so hiding a layer leaves a gap and the other axes and the frame don't move. Adding or removing a layer from the data re-divides the angles.
 - **Without split axes** (`splitAxes={false}`), links within a layer leave the single axis as arcs: clockwise when the target sits farther out, so the side reads as direction. Arcs between near neighbours keep a minimum bulge (`HIVE_MIN_LOOP_BULGE`, 36 units) so each arrowhead sits clear of its own loop's start and of the next dot. Node labels take the side of the axis that highlighted loops cross least, and a label is dropped when loop ends cover its start on both sides.
@@ -1716,9 +1719,9 @@ const graph = useLayeredGraph({ nodes, edges, layering, layout: false })
 | `edges` | `GraphEdgeData[]` | — | Standalone edges; ignored with `graph` or a context |
 | `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
 | `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode |
-| `axes` | `'layer' \| (node: IndexedNode) => string \| null \| undefined` | `'layer'` | Axis per layer, or per value of any attribute; null or undefined: not drawn. Memoize it |
-| `axisOrder` | `readonly string[] \| (a: string, b: string) => number` | layer order / code point | Axis ids to put first (the rest follow), or a comparator |
-| `axisLabel` | `(axisId: string) => string` | layer label / axis id | Axis title |
+| `axes` | `'layer' \| (node: IndexedNode) => string \| null \| undefined` | `'layer'` | Axis per layer, or per value of any attribute of a node instance (`node.nodeId` is the source node); null, undefined or `''`: not drawn. Memoize it |
+| `axisOrder` | `readonly string[] \| (a: string, b: string) => number` | layer order / code point | Axis ids to put first (the rest follow), or a comparator (numbers need one). Memoize it |
+| `axisLabel` | `(axisId: string) => string` | layer label / axis id | Axis title. Memoize it |
 | `rank` | `NodeOrder` | `'degree'` | Placement outward along each axis (`rankWithinLayers`) |
 | `splitAxes` | `boolean` | `true` | Double each axis; off draws intra-layer links as arcs off the single axis |
 | `splitAngle` | `number` | `13` | Half the angle between an axis's copies, degrees; clamped to leave room between axes |

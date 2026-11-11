@@ -7,10 +7,17 @@
 import type { Point } from '../graph'
 import type { IndexedNode, LayeredIndex } from './types'
 
-/** How nodes are assigned to hive axes: by layer, or by any categorical value (null or undefined: not drawn). */
+/**
+ * How nodes are assigned to hive axes: by layer, or by any categorical value of a node instance
+ * (null, undefined or '': not drawn). A node on several layers has one instance per layer
+ * (`id@layer`); each goes through the function, so read `node.nodeId` for the source node.
+ */
 export type HiveAxisBy = 'layer' | ((node: IndexedNode) => string | null | undefined)
 
-/** Axis order: ids listed first in that order (the rest follow in default order), or a comparator of axis ids. */
+/**
+ * Axis order: ids listed first in that order (the rest follow in default order), or a comparator of
+ * axis ids. The default sorts by code point, so numeric ids need a comparator ('10' sorts before '9').
+ */
 export type HiveAxisOrder = readonly string[] | ((a: string, b: string) => number)
 
 export interface HiveAxisGroups {
@@ -18,7 +25,7 @@ export interface HiveAxisGroups {
   axes: { id: string; nodeIds: string[] }[]
   /** Axis id of each node instance that has one. */
   axisOf: ReadonlyMap<string, string>
-  /** Node instances the axis function left without an axis (null or undefined). */
+  /** Node instances the axis function left without an axis (null, undefined or ''). */
   unassigned: string[]
 }
 
@@ -27,7 +34,8 @@ const byCodePoint = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
 /**
  * Groups node instances into hive axes. `'layer'`: one axis per layer, in layer order. A function:
  * one axis per distinct value it returns over every node (hidden layers included, so the set of
- * axes doesn't change with filters), sorted by code point. `order` then reorders the axes.
+ * axes doesn't change with filters), sorted by code point; null, undefined and '' leave a node
+ * unassigned. `order` then reorders the axes.
  */
 export function hiveAxisGroups(index: LayeredIndex, by: HiveAxisBy = 'layer', order?: HiveAxisOrder): HiveAxisGroups {
   const members = new Map<string, string[]>()
@@ -41,7 +49,7 @@ export function hiveAxisGroups(index: LayeredIndex, by: HiveAxisBy = 'layer', or
   } else {
     for (const n of index.nodes) {
       const v = by(n)
-      if (v === null || v === undefined) {
+      if (v === null || v === undefined || v === '') {
         unassigned.push(n.id)
         continue
       }
@@ -62,6 +70,16 @@ export function hiveAxisGroups(index: LayeredIndex, by: HiveAxisBy = 'layer', or
   return { axes: ids.map((id) => ({ id, nodeIds: members.get(id)! })), axisOf, unassigned }
 }
 
+/** Whether two groupings put the same nodes on the same axes in the same order. */
+export function sameHiveAxisGroups(a: HiveAxisGroups, b: HiveAxisGroups): boolean {
+  const sameList = (x: readonly string[], y: readonly string[]) => x.length === y.length && x.every((v, i) => v === y[i])
+  return (
+    a.axes.length === b.axes.length &&
+    a.axes.every((ax, i) => ax.id === b.axes[i].id && sameList(ax.nodeIds, b.axes[i].nodeIds)) &&
+    sameList(a.unassigned, b.unassigned)
+  )
+}
+
 export interface HiveLayoutOptions {
   /** Radius where the rank-0 end of every axis sits. Default 64. */
   innerRadius?: number
@@ -74,8 +92,9 @@ export interface HiveLayoutOptions {
   /** Angle of the first axis, degrees. Default -90 (up). */
   startAngle?: number
   /**
-   * Layers to leave out. Their axes keep their angle slot, so hiding a layer leaves a gap and the
-   * other axes don't move. Their nodes get no radius and their links no geometry.
+   * Axis ids to leave out (layer ids when axes are layers). They keep their angle slot, so hiding
+   * one leaves a gap and the other axes don't move. Their nodes get no radius and their links no
+   * geometry.
    */
   hiddenLayers?: readonly string[]
 }
@@ -83,7 +102,7 @@ export interface HiveLayoutOptions {
 export interface HiveAxis {
   /** The axis id: the layer id by default, else the value `axes` returned. */
   layerId: string
-  /** Slot among all the layers (hidden ones included), clockwise from `startAngle`. */
+  /** Slot among all the axes (hidden ones included), clockwise from `startAngle`. */
   position: number
   /** Axis angle, degrees. */
   angle: number
@@ -94,13 +113,13 @@ export interface HiveAxis {
 }
 
 export interface HiveLayout {
-  /** The drawn axes: every layer not hidden, in draw order. */
+  /** The drawn axes: every axis not hidden, in draw order. */
   axes: HiveAxis[]
-  /** Every layer's axis slot, hidden ones included, so a renderer can fit its frame to all of them. */
+  /** Every axis slot, hidden ones included, so a renderer can fit its frame to all of them. */
   slots: HiveAxis[]
-  /** The drawn axes by layer id. */
+  /** The drawn axes by axis id (the layer id when axes are layers). */
   axisOf: ReadonlyMap<string, HiveAxis>
-  /** Radius of every placed node (nodes of hidden layers are not placed). */
+  /** Radius of every placed node (nodes on hidden axes are not placed). */
   radiusOf: ReadonlyMap<string, number>
   /** The split half-angle actually used (0 when not split), degrees. */
   split: number

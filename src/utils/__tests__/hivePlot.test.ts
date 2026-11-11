@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { HIVE_MIN_LOOP_BULGE, clampSplitAngle, hiveAxisAngles, hiveAxisGroups, hiveLabelSide, hiveLayout, hiveLinkGeometry, hivePoint } from '../layered/hive'
+import {
+  HIVE_MIN_LOOP_BULGE,
+  clampSplitAngle,
+  hiveAxisAngles,
+  hiveAxisGroups,
+  hiveLabelSide,
+  hiveLayout,
+  hiveLinkGeometry,
+  hivePoint,
+  sameHiveAxisGroups,
+} from '../layered/hive'
 import { buildLayeredIndex } from '../layered/buildLayeredIndex'
 import { rankWithinLayers } from '../layered/layout'
 
@@ -169,6 +179,16 @@ describe('hive axis groups', () => {
     expect(g.axisOf.get('q1')).toBe('svc')
     expect(g.unassigned).toEqual(['q3'])
     expect(g.axisOf.has('q3')).toBe(false)
+    // '' is unassigned too; numeric ids sort as code points.
+    expect(hiveAxisGroups(index, (n) => (n.id === 'p2' ? '' : n.kind ?? null)).unassigned).toEqual(['p2', 'q3'])
+    expect(hiveAxisGroups(index, (n) => (n.id.startsWith('p') ? '10' : '9')).axes.map((a) => a.id)).toEqual(['10', '9'])
+  })
+
+  it('tells structurally equal groupings apart from changed ones', () => {
+    const a = hiveAxisGroups(index, byKind)
+    expect(sameHiveAxisGroups(a, hiveAxisGroups(index, (n) => n.kind))).toBe(true)
+    expect(sameHiveAxisGroups(a, hiveAxisGroups(index, byKind, ['svc']))).toBe(false)
+    expect(sameHiveAxisGroups(a, hiveAxisGroups(index, (n) => n.kind ?? 'none'))).toBe(false)
   })
 
   it('orders axes by a list (the rest follow) or a comparator', () => {

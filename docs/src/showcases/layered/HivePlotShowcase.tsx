@@ -361,7 +361,7 @@ export function HivePlotShowcase() {
 
       <ShowcaseSection
         label="Axes by any attribute"
-        description="axes takes a function of the node: one axis per distinct value over every node, in code-point order unless axisOrder lists ids to put first or gives a comparator. Axes are coloured from the --graph-layer-<n> palette by axis order (layer colour when axes are layers), and titled with the axis id unless axisLabel says otherwise. Layer filters still hide nodes; an axis with no visible node leaves a gap and no angle moves. Selection, reach and link styles are unchanged, and links within one axis are drawn like intra-layer links. A node the function returns null or undefined for is not drawn, with a warning in development."
+        description="axes takes a function of the node: one axis per distinct value over every node, in code-point order unless axisOrder lists ids to put first or gives a comparator. Axes are coloured from the --graph-layer-<n> palette by axis order (layer colour when axes are layers), and titled with the axis id unless axisLabel says otherwise. Layer filters still hide nodes; an axis with no visible node leaves a gap and no angle moves. Selection, reach and link styles are unchanged, and links within one axis are drawn like intra-layer links. The function receives node instances: a node on several layers has one per layer (id@layer), each on its own axis, so read node.nodeId for the source node. A node it returns null, undefined or '' for is not drawn, with a warning in development; a selection on one isn't drawn either, and its reach shows without links to it. Ids sort as code points ('10' before '9'): pass a comparator for numbers."
       >
         <AttributeAxes />
         <Code>{ATTRIBUTE_CODE}</Code>
@@ -370,7 +370,8 @@ export function HivePlotShowcase() {
       <ShowcaseSection label="Labels and colours">
         <Note>
           With no selection, the axisLabels busiest nodes on each axis are labeled; with one, the selection and its reach are, dropping labels
-          that would overlap (the tooltip and accessible name still carry them). Hovering a node labels it. Links take their category colour and
+          that would overlap another label, a dot or ring that isn't faded, or an arrowhead (the tooltip and accessible name still carry them).
+          Hovering a node labels it, on top, without moving other labels. Links take their category colour and
           dash; around the selection they take the amber reach ramp, with arrowheads and predicate pills per predicateLabels.
         </Note>
         <Note>
@@ -404,9 +405,9 @@ export function HivePlotShowcase() {
           <PropRow name="edges" type="GraphEdgeData[]" description="Standalone edges; ignored with graph or a context." />
           <PropRow name="layering" type="BuildLayeredIndexOptions" description="Standalone layering (layerBy, …); memoize it." />
           <PropRow name="graphOptions" type="Omit<UseLayeredGraphOptions, 'nodes' | 'edges' | 'layering'>" description="Standalone selection, follow, filters and label mode." />
-          <PropRow name="axes" type="'layer' | ((node: IndexedNode) => string | null | undefined)" def="'layer'" description="Axis per layer, or per value of any attribute; null or undefined: not drawn. Memoize it." />
-          <PropRow name="axisOrder" type="readonly string[] | ((a: string, b: string) => number)" def="layer order / code point" description="Axis ids to put first (the rest follow), or a comparator. Memoize it." />
-          <PropRow name="axisLabel" type="(axisId: string) => string" def="layer label / axis id" description="Axis title." />
+          <PropRow name="axes" type="'layer' | ((node: IndexedNode) => string | null | undefined)" def="'layer'" description="Axis per layer, or per value of any attribute of a node instance (node.nodeId is the source node); null, undefined or '': not drawn. Memoize it." />
+          <PropRow name="axisOrder" type="readonly string[] | ((a: string, b: string) => number)" def="layer order / code point" description="Axis ids to put first (the rest follow), or a comparator (numbers need one). Memoize it." />
+          <PropRow name="axisLabel" type="(axisId: string) => string" def="layer label / axis id" description="Axis title. Memoize it." />
           <PropRow name="rank" type="NodeOrder" def="'degree'" description="Placement outward along each axis (rankWithinLayers): 'degree', 'cross-degree', 'label', 'coupled-x' or a comparator." />
           <PropRow name="splitAxes" type="boolean" def="true" description="Double each axis; off draws intra-layer links as arcs off the single axis." />
           <PropRow name="splitAngle" type="number" def="13" description="Half the angle between an axis's copies, degrees; clamped to leave room between axes." />
