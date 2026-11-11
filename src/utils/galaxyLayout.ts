@@ -225,6 +225,12 @@ function buildForest(nodes: readonly GalaxyLayoutNode[], edges: readonly GalaxyL
  * (water-filling). Equal slots (Risacher's) waste space on deep trees: a big system in a narrow
  * slot must sit far out, compounding level by level.
  */
+// Trade-off (heimdall#288): the band keeps orbits even (vision item 3) at the cost of round systems
+// (vision item 5). With many satellites the cap is narrow (k = 102 gives about 5.3°), so a large
+// satellite system has to sit far out to fit its wedge, and one dominant branch sticks out on one
+// side. Measured as bounding-box aspect: GBIF Rodentia root 8.1:1 (102 satellites), Vespertilionidae
+// 5.6:1 (78 satellites, one carrying 155). Accepted: even orbits win for these parents. Widening the
+// band would round them but break the evenness guarantee.
 const SLOT_EVENNESS_BAND: readonly [number, number] = [0.5, 1.5]
 /** Extra clearance between a satellite and its parent body, as a fraction of the satellite's own
  *  radius. Without it a 60px planet sat 5px from its parent and read as overlapping. */
