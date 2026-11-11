@@ -291,6 +291,186 @@ test.describe('LayerStack', () => {
     await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 0.40')
   })
 
+  test.describe('full DR spec', () => {
+    test('draws every layer, node and link of the 13-layer spec', async ({ page }) => {
+      const errors = await open(page, '&data=full')
+      await expect(page.getByTestId('layer-stack-caption')).toContainText('full · 193 nodes · 897 links')
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+      await expect(page.locator('.layer-stack__node')).toHaveCount(193)
+      await expect(page.locator('button.layer-stack__label')).toHaveCount(193)
+      await expect(page.locator('.layer-stack__link')).toHaveCount(897)
+      expect(errors).toEqual([])
+    })
+
+    /**
+     * Frames paint into the DOM without React: over a stretch of motion the scene changes every
+     * frame while the LayerStack subtree does not commit. Counted with the test page's React
+     * Profiler, so it does not depend on machine speed. The window ends after `ms`, or at the last
+     * frame before the camera's settle report (a tween that ends early on a slow machine), so the
+     * commits that settle the motion are never counted.
+     */
+    const motion = (page: Page, start: string, ms: number) =>
+      page.evaluate(
+        async ([start, ms]) => {
+          const w = window as unknown as { __layerStackCommits: number }
+          const frame = () => new Promise((r) => requestAnimationFrame(r))
+          const plane = () => document.querySelector('.layer-stack__plane[data-layer-id="motivation"] polygon')!.getAttribute('points')
+          const status = () => document.querySelector('[data-testid="layer-stack-camera"]')!.textContent
+          ;[...document.querySelectorAll<HTMLElement>('button, [role="radio"]')].find((b) => b.textContent === start)!.click()
+          // Past the commits that start the motion (the prop change, pills hidden).
+          for (let i = 0; i < 3; i++) await frame()
+          const s0 = status()
+          const c0 = w.__layerStackCommits
+          let commits = 0
+          const seen = new Set<string | null>()
+          for (const t0 = performance.now(); performance.now() - t0 < ms; ) {
+            await frame()
+            if (status() !== s0) break
+            commits = w.__layerStackCommits - c0
+            seen.add(plane())
+          }
+          return { painted: seen.size, commits }
+        },
+        [start, ms] as const,
+      )
+
+    test('turntable frames paint without re-rendering the React tree', async ({ page }) => {
+      await open(page, '&data=full')
+      const r = await motion(page, 'Turntable', 1000)
+      expect(r.painted).toBeGreaterThan(5)
+      expect(r.commits).toBe(0)
+    })
+
+    test('preset tween frames paint without re-rendering the React tree', async ({ page }) => {
+      await open(page, '&data=full')
+      const r = await motion(page, 'Exploded', 600)
+      expect(r.painted).toBeGreaterThan(3)
+      expect(r.commits).toBe(0)
+      await expect(cameraStatus(page)).toHaveText('preset · yaw -29° pitch 19° zoom 0.86')
+    })
+
+    test('an orbit drag re-renders a fixed few times, not once per move', async ({ page }) => {
+      await open(page, '&data=full')
+      const before = await nodeCenters(page)
+      const box = (await page.getByTestId('layer-stack').boundingBox())!
+      await page.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.95)
+      await page.mouse.down()
+      const c0 = await page.evaluate(() => (window as unknown as { __layerStackCommits: number }).__layerStackCommits)
+      await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.9, { steps: 30 })
+      const during = await page.evaluate(() => (window as unknown as { __layerStackCommits: number }).__layerStackCommits)
+      expect(await nodeCenters(page)).not.toEqual(before)
+      await page.mouse.up()
+      await expect(cameraStatus(page)).toContainText('orbit · ')
+      // When the drag starts (pills hide) and a hover that ends under the pointer; none per move.
+      expect(during - c0).toBeLessThanOrEqual(3)
+    })
+  })
+
+  test.describe('13 layers frame', () => {
+    test.use({ reducedMotion: 'reduce' })
+
+    /** Plane corners outside the scene's viewBox. */
+    const cornersOutside = (page: Page) =>
+      page.evaluate(() => {
+        const [x0, y0, w, h] = document.querySelector('.layer-stack__svg')!.getAttribute('viewBox')!.split(' ').map(Number)
+        const pts = [...document.querySelectorAll('.layer-stack__plane polygon')].flatMap((p) => p.getAttribute('points')!.trim().split(/\s+/).map((xy) => xy.split(',').map(Number)))
+        return pts.filter(([x, y]) => x < x0 || x > x0 + w || y < y0 || y > y0 + h).length
+      })
+
+    test('every preset, then Fit, keeps all 13 planes inside the scene', async ({ page }) => {
+      await open(page, '&data=full')
+      for (const name of ['Stack', 'Exploded', 'Top', 'Profile']) {
+        await page.getByRole('radio', { name }).click()
+        await page.getByRole('button', { name: 'Fit', exact: true }).click()
+        await expect(cameraStatus(page)).toContainText('fit · ')
+        expect(await cornersOutside(page), `${name}: plane corners outside the scene`).toBe(0)
+      }
+    })
+
+    test('data that loads after mount takes the preset gap for its layers and frames after Fit', async ({ page }) => {
+      await open(page, '&data=full&late=1')
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(0)
+      await page.getByRole('button', { name: 'Load data' }).click()
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+      await page.getByRole('button', { name: 'Fit', exact: true }).click()
+      await expect(cameraStatus(page)).toContainText('fit · ')
+      expect(await cornersOutside(page)).toBe(0)
+    })
+  })
+
+  test.describe('pills follow the camera', () => {
+    /** Largest distance (scene units) from a pill's centre to its link's line. */
+    const worstPill = (page: Page) =>
+      page.evaluate(() => {
+        const stage = document.querySelector('[data-testid="layer-stack"]')!
+        const [x0, y0, w, h] = stage.querySelector('.layer-stack__svg')!.getAttribute('viewBox')!.split(' ').map(Number)
+        const pills = [...stage.querySelectorAll<HTMLElement>('.layer-stack__pill')]
+        if (pills.length === 0) return null
+        return Math.max(
+          ...pills.map((pill) => {
+            const px = x0 + (parseFloat(pill.style.left) / 100) * w
+            const py = y0 + (parseFloat(pill.style.top) / 100) * h
+            const d = stage.querySelector(`.layer-stack__link[data-link-id="${pill.dataset.linkId}"]`)!.getAttribute('d')!
+            const [ax, ay, bx, by] = d.match(/-?[\d.]+/g)!.map(Number)
+            const t = Math.max(0, Math.min(1, ((px - ax) * (bx - ax) + (py - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2 || 1)))
+            return Math.hypot(px - (ax + t * (bx - ax)), py - (ay + t * (by - ay)))
+          }),
+        )
+      })
+
+    test('a wheel zoom places the pills again, with no parent re-render', async ({ page }) => {
+      // quiet=1: no onCameraChange, so only the stack itself can re-render.
+      await open(page, `&select=${ORIGIN}&quiet=1`)
+      await page.locator('button.layer-stack__label[tabindex="0"]').focus()
+      const box = (await page.getByTestId('layer-stack').boundingBox())!
+      await page.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.9)
+      // The first zoom clears the preset, which re-renders the page; the second is the test.
+      await page.mouse.wheel(0, -120)
+      await expect(page.getByTestId('layer-stack-preset')).toHaveText('preset none')
+      await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+      const before = await nodeCenters(page)
+      await page.mouse.wheel(0, -240)
+      await expect.poll(async () => JSON.stringify(await nodeCenters(page)) !== JSON.stringify(before)).toBe(true)
+      await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+    })
+
+    test('an outside camera change during a zoom stops it and brings the pills back', async ({ page }) => {
+      await open(page, `&select=${ORIGIN}&camera=controlled`)
+      await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+      // Mid-tween (pills hidden), the parent sets the zoom itself: the stack's move stops. The click
+      // waits out the page's pending render of the last tween frame, so nothing else re-renders the
+      // stack afterwards.
+      await page.evaluate(async () => {
+        const button = (name: string) => [...document.querySelectorAll<HTMLElement>('button')].find((b) => b.textContent === name)!
+        const task = () => new Promise((r) => setTimeout(r, 0))
+        button('Zoom in').click()
+        await new Promise((r) => requestAnimationFrame(r))
+        await new Promise((r) => requestAnimationFrame(r))
+        await task()
+        await task()
+        button('Outside zoom').click()
+      })
+      await expect(page.getByTestId('layer-stack-reports')).toContainText('zoom 1.50')
+      await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+    })
+
+    test.describe('reduced motion', () => {
+      test.use({ reducedMotion: 'reduce' })
+
+      test('a jump (zoomBy) places the pills again, with no parent re-render', async ({ page }) => {
+        await open(page, `&select=${ORIGIN}&quiet=1`)
+        // The first zoom clears the preset, which re-renders the page; the second is the test.
+        await page.getByRole('button', { name: 'Zoom in' }).click()
+        await expect(page.getByTestId('layer-stack-preset')).toHaveText('preset none')
+        await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+        const before = await nodeCenters(page)
+        await page.getByRole('button', { name: 'Zoom in' }).click()
+        await expect.poll(async () => JSON.stringify(await nodeCenters(page)) !== JSON.stringify(before)).toBe(true)
+        await expect.poll(() => worstPill(page)).toBeLessThan(1.5)
+      })
+    })
+  })
+
   test.describe('touch', () => {
     test.use({ hasTouch: true })
 

@@ -25,7 +25,7 @@ export function LayerStackPropsTable() {
       <PropRow name="onTurntableChange" type="(on: boolean) => void" description="Turntable toggled, including off on orbit." />
       <PropRow name="turntableSpeed" type="number" def="0.27" description="Turntable speed, radians per second." />
       <PropRow name="layerGap" type="number" description="Controlled distance between planes, world units. Held like camera: a preset's gap move only reports through onLayerGapChange." />
-      <PropRow name="defaultLayerGap" type="number" def="preset's" description="Initial gap when uncontrolled (170 for stack, 300 for exploded, 210 for profile)." />
+      <PropRow name="defaultLayerGap" type="number" def="preset's" description="Initial gap when uncontrolled (170 for stack, 300 for exploded, 210 for profile), closer together past five layers so a tall stack still frames (presetLayerGap)." />
       <PropRow name="onLayerGapChange" type="(gap: number) => void" description="Gap changed by a preset, when its tween ends; with layerGap set, also on every frame of it." />
       <PropRow name="nodeLabels" type="'all' | 'reached' | 'none'" def="graph state" description="Which node labels show: unset follows the graph's nodeLabels (all when on, reached when off). The hovered or keyboard-focused node always shows; hidden labels stay focusable." />
       <PropRow name="interactions" type="LayerStackInteractions" def="all on" description="{ select, hover, orbit, zoom, focusLayer }: turn direct manipulation off per kind. The ref handle still works." />

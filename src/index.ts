@@ -346,6 +346,8 @@ export {
   DEFAULT_CAMERA_DISTANCE,
   TOP_VIEW_PITCH,
   cameraFromPreset,
+  presetLayerGap,
+  PRESET_GAP_FULL_LAYERS,
   clampCamera,
   wrapAngle,
   nearestYaw,
