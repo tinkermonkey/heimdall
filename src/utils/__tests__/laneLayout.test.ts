@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { curveEndBoxes, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneBundleCurve, laneBundleTrunks, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -493,5 +493,45 @@ describe('routeLaneGutters track order', () => {
     const a = routeLaneGutters(cross, bigBox, bigLayer, bigLanes)
     const b = routeLaneGutters([...cross].reverse(), bigBox, bigLayer, bigLanes)
     for (const [id, c] of a.curves) expect(b.curves.get(id)!.d).toBe(c.d)
+  })
+})
+
+describe('bundled intra links', () => {
+  const row = [
+    { x: 100, y: 50, width: 80, height: 24 },
+    { x: 220, y: 50, width: 60, height: 20 },
+    { x: 330, y: 50, width: 90, height: 24 },
+  ]
+  const below = { x: 160, y: 90, width: 70, height: 24 }
+
+  it('gives every node in a row the same trunk, just above its top edge', () => {
+    const trunkOf = laneBundleTrunks([...row, below])
+    expect(new Set(row.map(trunkOf))).toEqual(new Set([50 - 12 - 7]))
+    expect(trunkOf(below)).toBe(90 - 12 - 7)
+    const left = laneBundleTrunks([{ x: 100, y: 50, width: 80, height: 24 }, { x: 100, y: 90, width: 120, height: 24 }], 'vertical')
+    expect(left({ x: 100, y: 50, width: 80, height: 24 })).toBe(100 - 60 - 7)
+  })
+
+  it('runs up to the trunk, along it and down into the target, arrow pointing in', () => {
+    const [a, , b] = row
+    const c = laneBundleCurve(a, b, 31)
+    expect(c.pointAt(0)).toEqual({ x: 100, y: 38 })
+    expect(c.tip).toEqual({ x: 330, y: 38 })
+    expect(c.dir).toEqual({ x: 0, y: 1 })
+    expect(c.pointAt(0.5).y).toBe(31)
+    expect(c.d.startsWith('M100,38 L')).toBe(true)
+    // Two links in the row share the trunk between their ends.
+    const d = laneBundleCurve(row[1], b, 31)
+    expect(d.pointAt(0.5).y).toBe(c.pointAt(0.5).y)
+  })
+
+  it('vertical: leaves the left edge to a trunk left of the column', () => {
+    const a = { x: 100, y: 50, width: 80, height: 24 }
+    const b = { x: 100, y: 120, width: 60, height: 24 }
+    const c = laneBundleCurve(a, b, 53, 'vertical')
+    expect(c.pointAt(0)).toEqual({ x: 60, y: 50 })
+    expect(c.tip).toEqual({ x: 70, y: 120 })
+    expect(c.dir).toEqual({ x: 1, y: 0 })
+    expect(c.pointAt(0.5).x).toBe(53)
   })
 })

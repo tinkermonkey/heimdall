@@ -69,7 +69,7 @@ import { arrowHeadPoints, linkPredicateLabel } from "../utils/layered/labels";
 import { edgeLabelPriority, placeEdgeLabels, defaultPillSize, type LabelBox, type PlacedEdgeLabel } from "../utils/layered/edgeLabels";
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode, LayeredIndex } from "../utils/layered/types";
 import type { LinkEmphasis, NodeEmphasis } from "../utils/layered/emphasis";
-import { curveEndBoxes, layoutLanes, laneLinkCurve, retraceLaneGutters, routeLaneGutters, type LaneGutterTrack, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
+import { curveEndBoxes, layoutLanes, laneBundleCurve, laneBundleTrunks, laneLinkCurve, retraceLaneGutters, routeLaneGutters, type LaneGutterTrack, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
 import { containsAcrossPortals } from "../hooks/useDropdownPortal";
 import "./Tooltip.css";
 import "./GraphCanvas.css";
@@ -993,7 +993,9 @@ export interface GraphCanvasProps extends Omit<
   /**
    * layout="layer-lanes" only: `orientation` ('horizontal' default, 'vertical'), `order`
    * (lane order, default 'coupled-x'), `maxRowWidth` (px before a lane wraps, default 1120;
-   * a column's height when vertical, default 640), `intraLinks` ('arc' default, 'none'),
+   * a column's height when vertical, default 640), `intraLinks` ('arc' default; 'bundled' runs
+   * a row's links along one shared trunk, with the selection's reach and a hovered node's links
+   * drawn as arcs; 'none'),
    * `skipLayerRouting` ('direct' default; 'gutter' routes links that skip a lane down a side
    * gutter outside the lanes) and `nodeLabels` ('all' or 'reached'; default from the layered state's `nodeLabels`: 'all' when
    * on). 'reached' draws the default node as a 24px chip and names only the selection, its
@@ -1301,6 +1303,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
     const lanesIndex = lanesGraph?.index;
     const lanesFilters = lanesGraph?.filters;
     const lanesIntra = laneOptions?.intraLinks !== "none";
+    const laneBundled = laneOptions?.intraLinks === "bundled";
     const laneData = useMemo(() => {
       if (!lanesIndex || !lanesFilters) return null;
       const hiddenLayers = new Set(lanesFilters.hiddenLayers);
@@ -3268,17 +3271,25 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       const boxes = new Map(visibleNodes.map((n) => [n.id, getNodeRect(n.id)]));
       // skipLayerRouting 'gutter': links that skip a lane take their gutter route.
       const gutter = laneGutterRoutes?.curves;
+      // intraLinks 'bundled': links within a layer share their row's trunk, except the selection's
+      // reach, which draws unbundled (as arcs) on top.
+      const trunkOf = laneBundled ? laneBundleTrunks([...boxes.values()].filter((b): b is NonNullable<typeof b> => !!b), laneLayout.orientation) : null;
       const items: LaneLinkItem[] = [];
       for (const link of laneData.links) {
         const a = boxes.get(link.sourceId);
         const b = boxes.get(link.targetId);
         if (!a || !b) continue;
-        const curve = gutter?.get(link.id) ?? laneLinkCurve(a, b, link.cross, laneLayout.orientation);
-        items.push({ link, em: lanesLinkEmphasis(link), curve });
+        const em = lanesLinkEmphasis(link);
+        const curve =
+          gutter?.get(link.id) ??
+          (trunkOf && !link.cross && !em.highlighted
+            ? laneBundleCurve(a, b, Math.min(trunkOf(a), trunkOf(b)), laneLayout.orientation)
+            : laneLinkCurve(a, b, link.cross, laneLayout.orientation));
+        items.push({ link, em, curve });
       }
       items.sort((p, q) => p.em.z - q.em.z);
       return { items, byId: new Map(items.map((i) => [i.link.id, i])) };
-    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneGutterRoutes]);
+    }, [laneData, laneLayout, lanesLinkEmphasis, visibleNodes, getNodeRect, laneGutterRoutes, laneBundled]);
 
     // layout="layer-lanes", nodeLabels 'reached': name tags for the selection and its reach,
     // beside their chips and off their link ends, placed before the pills so the pills keep
@@ -3958,9 +3969,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
 
               {laneLinks && (
                 <g className="graph-edges graph-lane-links">
-                  {laneLinks.items.map(({ link, em, curve }) => {
+                  {laneLinks.items.map(({ link, em, curve: itemCurve }) => {
                     const edgeData = laneEdgeById?.get(link.id);
                     if (!edgeData) return null;
+                    // intraLinks 'bundled': a hovered node's links fan out as arcs, so each is traceable.
+                    // Drawn here only, so hovering never moves a pill.
+                    const unbundle = laneBundled && !link.cross && !em.highlighted && !!hoveredNodeId && (link.sourceId === hoveredNodeId || link.targetId === hoveredNodeId);
+                    const ends = unbundle ? [getNodeRect(link.sourceId), getNodeRect(link.targetId)] : null;
+                    const curve = ends?.[0] && ends[1] ? laneLinkCurve(ends[0], ends[1], false, laneLayout?.orientation) : itemCurve;
                     const selected = link.id === selectedEdgeId;
                     const hovered = link.id === hoveredEdgeId;
                     const hasPopover = !!edgePopover || (edgeTooltipTrigger === "click" && !!edgeTooltip);
@@ -3978,6 +3994,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                         className={["graph-edge", "graph-lane-link", selected && "selected"].filter(Boolean).join(" ")}
                         data-testid={`graph-edge-${link.id}`}
                         data-link-id={link.id}
+                        data-intra={link.cross ? undefined : ""}
                         data-hop={em.hop || undefined}
                         role={interactive ? "button" : "presentation"}
                         aria-hidden={interactive ? undefined : true}

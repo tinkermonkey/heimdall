@@ -35,8 +35,12 @@ export interface LaneLayoutOptions {
   order?: NodeOrder
   /** Row length in px before a lane wraps to another row (a column's height, vertical). Default 1120 horizontal, 640 vertical. */
   maxRowWidth?: number
-  /** Links within a layer: `arc` (default) draws them as arcs beside their row; `none` leaves them out. */
-  intraLinks?: 'arc' | 'none'
+  /**
+   * Links within a layer: `arc` (default) draws them as arcs beside their row; `bundled` runs
+   * them along a shared trunk beside their row (see `laneBundleCurve`), so a near-clique layer
+   * reads as one line with fans instead of a mesh of arcs; `none` leaves them out.
+   */
+  intraLinks?: 'arc' | 'bundled' | 'none'
   /**
    * Cross-layer links that skip one or more lanes: `direct` (default) draws them straight across
    * the lanes between; `gutter` routes them down a side gutter outside the lanes (left or right
@@ -330,6 +334,40 @@ export function polylineCurve(points: readonly Point[], radius = 8): LaneLinkCur
     tip,
     dir: dirs[dirs.length - 1] ?? { x: 0, y: 1 },
   }
+}
+
+/** Trunk distance from a row's node edges, px (`intraLinks: 'bundled'`). */
+const TRUNK_LIFT = 7
+
+/**
+ * Trunk lines for `intraLinks: 'bundled'`, one per row (per column in vertical lanes): just
+ * above the row's top node edge (left of the column's left edge, vertical). Rows are told apart
+ * by node centers, which every node in a packed row shares. Returns the trunk for a node box.
+ */
+export function laneBundleTrunks(boxes: Iterable<LaneNodeBox>, orientation: LaneOrientation = 'horizontal'): (box: LaneNodeBox) => number {
+  const v = orientation === 'vertical'
+  const key = (b: LaneNodeBox) => Math.round(v ? b.x : b.y)
+  const edge = (b: LaneNodeBox) => (v ? b.x - b.width / 2 : b.y - b.height / 2)
+  const trunks = new Map<number, number>()
+  for (const b of boxes) trunks.set(key(b), Math.min(trunks.get(key(b)) ?? Infinity, edge(b) - TRUNK_LIFT))
+  return (b) => trunks.get(key(b)) ?? edge(b) - TRUNK_LIFT
+}
+
+/**
+ * A link within a layer, bundled: up from the source's top edge (left edge, vertical) to the
+ * `trunk` line, along it, and down into the target, with rounded corners. Every link in a row
+ * shares the trunk, so the row's links merge into one line that fans out at each node. For two
+ * rows, pass the upper row's trunk.
+ */
+export function laneBundleCurve(a: LaneNodeBox, b: LaneNodeBox, trunk: number, orientation: LaneOrientation = 'horizontal'): LaneLinkCurve {
+  if (orientation === 'vertical') {
+    const al = a.x - a.width / 2
+    const bl = b.x - b.width / 2
+    return polylineCurve([{ x: al, y: a.y }, { x: trunk, y: a.y }, { x: trunk, y: b.y }, { x: bl, y: b.y }])
+  }
+  const at = a.y - a.height / 2
+  const bt = b.y - b.height / 2
+  return polylineCurve([{ x: a.x, y: at }, { x: a.x, y: trunk }, { x: b.x, y: trunk }, { x: b.x, y: bt }])
 }
 
 /** A cross-layer link for `routeLaneGutters`. */

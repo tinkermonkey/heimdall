@@ -5,7 +5,7 @@ import { test, expect, type Page } from '@playwright/test'
 // src/utils/__tests__/layered.test.ts; this checks the rendering, the shared-state selection
 // wiring and both themes.
 
-const BASE = 'http://localhost:5173/?example=layer-lanes'
+const BASE = '/?example=layer-lanes'
 const ORIGIN = 'application.applicationcomponent'
 
 async function open(page: Page, query = '') {
@@ -293,6 +293,69 @@ test.describe('GraphCanvas layer-lanes', () => {
     await page.setViewportSize({ width: 760, height: 1000 })
     await open(page, `&orientation=vertical&nodeLabels=off&select=${ORIGIN}&dark=1`)
     await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-reached-vertical-dark.png')
+  })
+
+  // Intra-layer link paths: id, d and the top of their box (the trunk, when bundled).
+  const intraPaths = (page: Page) =>
+    page.locator('.graph-lane-link[data-intra]').evaluateAll((els) =>
+      els.map((g) => {
+        const line = g.querySelector('.graph-lane-link__line') as SVGPathElement
+        return { id: g.getAttribute('data-link-id')!, hop: g.getAttribute('data-hop'), d: line.getAttribute('d')!, top: Math.round(line.getBBox().y) }
+      }),
+    )
+  const isArc = (d: string) => /^M[\d.,-]+ Q/.test(d)
+
+  test('intraLinks bundled: each row shares one trunk; the reach and a hovered node draw unbundled', async ({ page }) => {
+    const errors = await open(page, '&intra=bundled')
+    await expect(page.locator('.graph-lane-link')).toHaveCount(162)
+    const bundled = await intraPaths(page)
+    expect(bundled).toHaveLength(140)
+    expect(bundled.every((p) => !isArc(p.d))).toBe(true)
+    // Three lanes of two rows: at most six trunks, against a different height per arc.
+    expect(new Set(bundled.map((p) => p.top)).size).toBeLessThanOrEqual(6)
+    await open(page)
+    expect(new Set((await intraPaths(page)).map((p) => p.top)).size).toBeGreaterThan(20)
+
+    // Hovering a node fans its own links out as arcs, and only those.
+    await open(page, '&intra=bundled')
+    await page.locator('.graph-nodes').getByRole('button', { name: 'BusinessProcess, Business layer' }).hover()
+    await expect.poll(async () => (await intraPaths(page)).filter((p) => isArc(p.d)).length).toBeGreaterThan(0)
+    for (const p of await intraPaths(page)) expect(isArc(p.d)).toBe(p.id.includes('business.businessprocess'))
+
+    // The selection's reach draws unbundled; the rest stays on the trunks.
+    await open(page, `&intra=bundled&select=${ORIGIN}`)
+    const withSelection = await intraPaths(page)
+    expect(withSelection.some((p) => p.hop)).toBe(true)
+    for (const p of withSelection) expect(isArc(p.d)).toBe(!!p.hop)
+    expect(errors).toEqual([])
+  })
+
+  test('intraLinks bundled: a drag holds the pill placement, bundled links follow the node', async ({ page }) => {
+    await open(page, '&intra=bundled&labels=all')
+    const placement = () => page.locator('.graph-lane-pills').getAttribute('data-placement')
+    const p0 = await placement()
+    const id = (await intraPaths(page)).find((p) => p.id.startsWith('business.businessprocess'))!.id
+    const line = page.locator(`.graph-lane-link[data-link-id="${id}"] .graph-lane-link__line`)
+    const d0 = await line.getAttribute('d')
+    const node = (await page.locator('[data-node-id="business.businessprocess"]').boundingBox())!
+    await page.mouse.move(node.x + node.width / 2, node.y + node.height / 2)
+    await page.mouse.down()
+    for (let i = 1; i <= 5; i++) await page.mouse.move(node.x + node.width / 2 + i * 12, node.y + node.height / 2 + i * 4)
+    expect(await line.getAttribute('d')).not.toBe(d0)
+    expect(await placement()).toBe(p0)
+    await page.mouse.up()
+    await expect.poll(placement).not.toBe(p0)
+  })
+
+  test('visual: bundled intra links, light canvas', async ({ page }) => {
+    await open(page, '&intra=bundled')
+    await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-bundled-light.png')
+  })
+
+  test('visual: vertical bundled intra links with a selection, dark canvas', async ({ page }) => {
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, `&intra=bundled&orientation=vertical&select=${ORIGIN}&dark=1`)
+    await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-bundled-vertical-dark.png')
   })
 
   test('visual: dark canvas with a followed selection', async ({ page }) => {
