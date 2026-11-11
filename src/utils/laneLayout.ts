@@ -384,19 +384,23 @@ function skipSpan(l: LaneGutterLink, rank: ReadonlyMap<string, number>, layerOf:
 }
 
 /**
- * Gap tracks each gap between drawn lanes needs under gutter routing (index g: the gap after
- * lane g): one per route leaving the lane above it, one per route entering the lane below.
+ * Gap tracks each gap between drawn lanes can need under gutter routing (index g: the gap after
+ * lane g). Routes share a stub per node and gutter side, so a node with routes through a gap
+ * needs one track, or two when its routes could go to both gutters. Positions aren't known
+ * yet (they pick the side), so this is an upper bound.
  */
 export function laneGutterGapTracks(links: readonly LaneGutterLink[], layerOf: (id: string) => string | undefined, layerIds: readonly string[]): number[] {
   const rank = new Map(layerIds.map((id, i) => [id, i]))
-  const counts = layerIds.map(() => 0)
+  const perGap = layerIds.map(() => new Map<string, number>())
+  const add = (g: number, id: string) => perGap[g].set(id, (perGap[g].get(id) ?? 0) + 1)
   for (const l of links) {
     const span = skipSpan(l, rank, layerOf)
     if (!span) continue
-    counts[span[0]]++
-    counts[span[1] - 1]++
+    const upper = rank.get(layerOf(l.sourceId)!) === span[0] ? l.sourceId : l.targetId
+    add(span[0], upper)
+    add(span[1] - 1, upper === l.sourceId ? l.targetId : l.sourceId)
   }
-  return counts
+  return perGap.map((m) => [...m.values()].reduce((sum, n) => sum + Math.min(n, 2), 0))
 }
 
 /** The px a gap needs for `tracks` gap tracks at least `MIN_GAP_STEP` apart. */
@@ -446,12 +450,12 @@ function curvesOf(entries: Iterable<[string, Point[]]>): Pick<LaneGutterRoutes, 
  * target lane. Each link takes the nearer gutter (left or right of horizontal lanes, top or
  * bottom of vertical ones).
  *
- * Tracks, so no two routes share a line:
- * - Gaps: every route crossing a gap gets its own track, spread over the whole gap (exits from
- *   the lane above, entries to the lane below), at most `GAP_TRACK` apart. `layoutLanes` widens
- *   a gap that would put them under `MIN_GAP_STEP` apart (see `laneGutterGapTracks`). Per
- *   gutter side, the end nearest the gutter takes the track nearest its lane, so no stub crosses
- *   a run of its own side to the gutter.
+ * Tracks, so routes share a line only in their own node's stub:
+ * - Gaps: a node's routes to one gutter share a stub, one track that fans out into their gutter
+ *   tracks. Stubs are spread over the whole gap (exits from the lane above, entries to the lane
+ *   below), at most `GAP_TRACK` apart. `layoutLanes` widens a gap that would put them under
+ *   `MIN_GAP_STEP` apart (see `laneGutterGapTracks`). Per gutter side, the stub nearest the
+ *   gutter takes the track nearest its lane, so no stub crosses a run of its own side.
  * - Gutters: interval colouring that respects containment. Shortest spans first, each route
  *   takes the lowest track above every route it spans and free of every route it overlaps, so
  *   an outer route wraps the inner ones and routes whose spans don't overlap share a track.
@@ -493,33 +497,43 @@ export function routeLaneGutters(
   }
   if (!routes.length) return empty
   const byId = (p: GutterRoute, q: GutterRoute) => (p.id < q.id ? -1 : p.id > q.id ? 1 : 0)
-  const toGutter = (r: GutterRoute, x: number) => (r.end ? R - x : x - L)
 
-  // Gap tracks, exits and entries together across the whole gap.
-  const gaps = new Map<number, { exits: GutterRoute[]; entries: GutterRoute[] }>()
-  const gap = (g: number) => {
+  // Gap tracks, exits and entries together across the whole gap. A node's routes to one gutter
+  // share a stub: one track, which fans out into their own gutter tracks.
+  interface Stub { key: string; x: number; end: boolean; routes: GutterRoute[] }
+  const gaps = new Map<number, { exits: Map<string, Stub>; entries: Map<string, Stub> }>()
+  const stubOf = (g: number, exit: boolean, r: GutterRoute) => {
     let v = gaps.get(g)
-    if (!v) gaps.set(g, (v = { exits: [], entries: [] }))
-    return v
+    if (!v) gaps.set(g, (v = { exits: new Map(), entries: new Map() }))
+    const nodeId = exit === r.reversed ? r.targetId : r.sourceId
+    const key = `${nodeId}|${r.end}`
+    const m = exit ? v.exits : v.entries
+    let st = m.get(key)
+    if (!st) m.set(key, (st = { key, x: exit ? r.up.x : r.low.x, end: r.end, routes: [] }))
+    st.routes.push(r)
   }
   for (const r of routes) {
-    gap(r.iu).exits.push(r)
-    gap(r.il - 1).entries.push(r)
+    stubOf(r.iu, true, r)
+    stubOf(r.il - 1, false, r)
   }
   // Each gutter side ordered on its own (nearest the gutter first), then interleaved.
-  const order = (rs: GutterRoute[], x: (r: GutterRoute) => number) => {
-    const sides = [false, true].map((end) => rs.filter((r) => r.end === end).sort((p, q) => toGutter(p, x(p)) - toGutter(q, x(q)) || byId(p, q)))
-    const out: GutterRoute[] = []
+  const toGutterX = (end: boolean, x: number) => (end ? R - x : x - L)
+  const order = (stubs: Iterable<Stub>) => {
+    const all = [...stubs]
+    const sides = [false, true].map((end) =>
+      all.filter((st) => st.end === end).sort((p, q) => toGutterX(end, p.x) - toGutterX(end, q.x) || (p.key < q.key ? -1 : p.key > q.key ? 1 : 0)),
+    )
+    const out: Stub[] = []
     for (let i = 0; i < Math.max(sides[0].length, sides[1].length); i++) for (const sd of sides) if (sd[i]) out.push(sd[i])
     return out
   }
   for (const [g, { exits, entries }] of gaps) {
     const top = bands[g].bottom
     const bottom = bands[g + 1].top
-    const n = exits.length + entries.length
+    const n = exits.size + entries.size
     const step = n > 1 ? Math.max(0, Math.min(GAP_TRACK, (bottom - top - 2 * GAP_EDGE) / (n - 1))) : 0
-    order(exits, (r) => r.up.x).forEach((r, k) => (r.top = top + GAP_EDGE + k * step))
-    order(entries, (r) => r.low.x).forEach((r, k) => (r.bot = bottom - GAP_EDGE - k * step))
+    order(exits.values()).forEach((st, k) => st.routes.forEach((r) => (r.top = top + GAP_EDGE + k * step)))
+    order(entries.values()).forEach((st, k) => st.routes.forEach((r) => (r.bot = bottom - GAP_EDGE - k * step)))
   }
 
   // Gutter tracks: containment-respecting interval colouring, shortest spans first.
