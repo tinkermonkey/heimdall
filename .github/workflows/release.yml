@@ -32,7 +32,13 @@ jobs:
           npm run check:package
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: |
+          # The runner image already has most Chromium libraries. If the Ubuntu
+          # mirrors are unreachable, apt fails; install the browser alone then.
+          timeout 300 npx playwright install --with-deps chromium || {
+            echo "::warning::apt dependencies failed to install; installing the browser only"
+            npx playwright install chromium
+          }
 
       - name: Run visual regression tests
         run: npm test
