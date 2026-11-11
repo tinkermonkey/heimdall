@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useImperativeHandle, useLayo
 import type { GraphEdge, GraphNodeData } from './GraphCanvas'
 import { LayeredGraphContext, useLayeredGraph, type LayeredGraphState, type UseLayeredGraphOptions } from '../hooks/useLayeredGraph'
 import { useControllable } from '../hooks/useControllable'
-import { useTween } from '../hooks/useTween'
+import { useTweenChannels } from '../hooks/useTween'
 import { lineCurve, placeEdgeLabels, edgeLabelPriority, type EdgeLabelCandidate, type LabelBox } from '../utils/layered/edgeLabels'
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
 import { mixLayerPositions } from '../utils/layered/layout'
@@ -26,6 +26,7 @@ import {
   type CameraPresetName,
   type ProjectedPoint,
   type StackCamera,
+  type StackFocus,
   type Vec3,
 } from '../utils/layered/projection'
 import type { Point } from '../utils/graph'
@@ -40,7 +41,7 @@ export interface LayerStackInteractions {
   hover?: boolean
   /** Drag to orbit. */
   orbit?: boolean
-  /** Wheel zoom while the scene has focus. */
+  /** Wheel zoom while the scene has focus, and two-finger pinch. */
   zoom?: boolean
   /** Click a plane title to focus its layer (again to exit). */
   focusLayer?: boolean
@@ -98,13 +99,22 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   defaultCameraPreset?: CameraPresetName
   onCameraPresetChange?: (preset: CameraPresetName | null) => void
 
-  /** Camera (controlled). A changed value is applied at once. Fields left out keep their value. */
+  /**
+   * Camera (controlled). The fields set are held: the view shows them and nothing else, and a move
+   * (orbit, zoom, a preset, focus, turntable) only reports through `onCameraChange` until the prop
+   * changes. Pass each reported camera back unchanged: a value the stack never reported (rounded
+   * or normalized) counts as a change from outside, which jumps and stops the stack's own move on
+   * that field. An echo that lands a frame or more late is fine. Fields left out stay uncontrolled.
+   */
   camera?: Partial<StackCamera>
   /** Initial camera fields when uncontrolled, over the initial preset. */
   defaultCamera?: Partial<StackCamera>
   /**
-   * Called when a camera move settles (drag release, end of a tween, a wheel pause, turntable
-   * stop), not on every frame, so chrome that shows the camera doesn't re-render while it moves.
+   * Called when a camera move settles (drag release, end of a tween, a wheel pause, pinch release,
+   * turntable stop), not on every frame, so chrome that shows the camera doesn't re-render while
+   * it moves. With `camera` set it is also called on every frame of a move, with the camera the
+   * stack proposes, since the view only moves when the prop does; the settle call then carries
+   * the move's last proposal. Chrome that only shows the camera should leave it uncontrolled.
    */
   onCameraChange?: (camera: StackCamera, cause: LayerStackCameraCause) => void
 
@@ -115,10 +125,15 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   /** Turntable speed, radians per second. Default 0.27. */
   turntableSpeed?: number
 
-  /** Vertical distance between planes, world units (controlled). A changed value is applied at once. */
+  /**
+   * Vertical distance between planes, world units (controlled). Held like `camera`: a preset's gap
+   * move reports each frame through `onLayerGapChange`, and the planes move only with the prop.
+   * Pass the reported gap back unchanged, as with `camera`.
+   */
   layerGap?: number
   /** Initial gap when uncontrolled. Default: the initial preset's (170 for `stack`). */
   defaultLayerGap?: number
+  /** Called when a preset's gap move ends; with `layerGap` set, also on every frame of it. */
   onLayerGapChange?: (gap: number) => void
 
   /** Which node labels to show. Default: the graph's `nodeLabels` state, `all` when on and `reached` when off. */
@@ -165,12 +180,18 @@ interface ViewState {
   zoom: number
   targetY: number
   gap: number
-  /** 0..1: how far planes around the focused layer are pushed apart. */
-  focusAmt: number
   /** 0 = independent layout, 1 = coupled. */
   mix: number
+  /**
+   * Per layer id, 0..1: how far the planes open around it. More than one is open while focus
+   * moves from one layer to another (one closes as the other opens).
+   */
+  focus: Record<string, number>
 }
-type ViewKey = keyof ViewState
+type ViewKey = Exclude<keyof ViewState, 'focus'>
+const CAMERA_KEYS: readonly (keyof StackCamera)[] = ['yaw', 'pitch', 'zoom', 'targetY']
+/** Tween channel prefix for a layer's focus amount. */
+const FOCUS_KEY = 'focus:'
 
 const r1 = (v: number) => Math.round(v * 10) / 10
 const r2 = (v: number) => Math.round(v * 100) / 100
@@ -181,10 +202,44 @@ function cameraOf(v: ViewState): StackCamera {
   return { yaw: v.yaw, pitch: v.pitch, zoom: v.zoom, targetY: v.targetY }
 }
 
-function pick(v: ViewState, keys: readonly ViewKey[]): Record<string, number> {
+function pickCamera(c: Partial<StackCamera>, keys: readonly string[]): Record<string, number> {
   const out: Record<string, number> = {}
-  for (const k of keys) out[k] = v[k]
+  for (const k of keys) {
+    const val = c[k as keyof StackCamera]
+    if (val !== undefined) out[k] = val
+  }
   return out
+}
+
+/** The camera fields a (partial) camera prop sets. */
+function definedCamera(camera: Partial<StackCamera> | undefined): Partial<StackCamera> {
+  const out: Partial<StackCamera> = {}
+  if (camera) for (const k of CAMERA_KEYS) if (camera[k] !== undefined) out[k] = camera[k]
+  return out
+}
+
+const near = (a: number, b: number) => Math.abs(a - b) < 1e-6
+/** Proposals kept to recognise a late echo: about a second of frames. */
+const RECENT_PROPOSALS = 64
+function remember<T>(list: T[], value: T) {
+  list.push(value)
+  if (list.length > RECENT_PROPOSALS) list.shift()
+}
+
+function capturePointer(el: Element, id: number) {
+  try {
+    el.setPointerCapture?.(id)
+  } catch {
+    // Not an active pointer (a synthetic event): nothing to capture.
+  }
+}
+
+function releasePointer(el: Element, id: number) {
+  try {
+    if (el.hasPointerCapture?.(id)) el.releasePointerCapture(id)
+  } catch {
+    // Already released.
+  }
 }
 
 /** Positions for a graph built without layout: each layer's nodes on a circle. */
@@ -264,18 +319,22 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     // ── view state (refs) and repaint ─────────────────────────────────────
     const view = useRef<ViewState | null>(null)
     if (view.current === null) {
-      const base = clampCamera({ ...cameraFromPreset(cameraPreset ?? defaultCameraPreset), ...defaultCamera, ...camera })
+      const base = clampCamera({ ...cameraFromPreset(cameraPreset ?? defaultCameraPreset), ...defaultCamera, ...definedCamera(camera) })
       const focused = focusedLayerId != null && index.layerById.has(focusedLayerId)
       view.current = {
         ...base,
         ...(focused ? { pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM } : null),
         gap: layerGap ?? defaultLayerGap ?? CAMERA_PRESETS[cameraPreset ?? defaultCameraPreset].layerGap,
-        focusAmt: focused ? 1 : 0,
         mix: planeLayout === 'coupled' ? 1 : 0,
+        focus: focused ? { [focusedLayerId]: 1 } : {},
       }
     }
-    /** The layer the planes open around; kept through the exit tween so planes close eased. */
-    const focusLayerRef = useRef<string | null>(focusedLayerId ?? null)
+    // Controlled fields are held: every render shows the props, and a move only proposes new
+    // values through the change callbacks (see `propose…`).
+    const heldCamera = definedCamera(camera)
+    if (camera) Object.assign(view.current, pickCamera(clampCamera({ ...cameraOf(view.current), ...heldCamera }), Object.keys(heldCamera)))
+    if (layerGap !== undefined) view.current.gap = layerGap
+
     const [, setFrame] = useState(0)
     const repaintNow = useCallback(() => setFrame((f) => (f + 1) % 1e9), [])
     const pendingRaf = useRef<number | null>(null)
@@ -294,49 +353,124 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     onCameraChangeRef.current = onCameraChange
     const onLayerGapChangeRef = useRef(onLayerGapChange)
     onLayerGapChangeRef.current = onLayerGapChange
-    const emitCamera = useCallback((cause: LayerStackCameraCause) => onCameraChangeRef.current?.(cameraOf(view.current!), cause), [])
+    // A controlled camera or gap reports every frame of a move (the view moves only when the prop
+    // does), as well as when the move settles. Recent proposals tell an outside change apart from
+    // the parent's own echo, which may land a frame or more late.
+    const controlledRef = useRef({ camera: false, gap: false })
+    controlledRef.current = { camera: camera !== undefined, gap: layerGap !== undefined }
+    const proposed = useRef<{ camera: StackCamera | null; gap: number | null }>({ camera: null, gap: null })
+    const recent = useRef<{ camera: StackCamera[]; gap: number[] }>({ camera: [], gap: [] })
+    const proposeCamera = useCallback((cause: LayerStackCameraCause) => {
+      if (!controlledRef.current.camera) return
+      const c = cameraOf(view.current!)
+      proposed.current.camera = c
+      remember(recent.current.camera, c)
+      onCameraChangeRef.current?.(c, cause)
+    }, [])
+    const proposeGap = useCallback(() => {
+      if (!controlledRef.current.gap) return
+      const gap = view.current!.gap
+      proposed.current.gap = gap
+      remember(recent.current.gap, gap)
+      onLayerGapChangeRef.current?.(gap)
+    }, [])
+    /**
+     * Reports a settled camera. Controlled, that is the move's latest proposal: the hold has already
+     * put the prop back into the view, and a parent that commits only the settled report must still
+     * get the gesture's result.
+     */
+    const emitCamera = useCallback((cause: LayerStackCameraCause) => {
+      const c = controlledRef.current.camera && proposed.current.camera ? proposed.current.camera : cameraOf(view.current!)
+      onCameraChangeRef.current?.(c, cause)
+    }, [])
+    /** A new gesture starts without a proposal, so its settle report never repeats an older one. */
+    const zoomEmitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+    const startGesture = () => {
+      // A wheel zoom still waiting to settle settles now, before this gesture's proposals.
+      if (zoomEmitTimer.current) {
+        clearTimeout(zoomEmitTimer.current)
+        zoomEmitTimer.current = null
+        emitCamera('zoom')
+      }
+      proposed.current.camera = null
+    }
 
     const writeView = useCallback((values: Record<string, number>) => {
-      Object.assign(view.current!, values)
+      const v = view.current!
+      for (const k in values) {
+        if (k.startsWith(FOCUS_KEY)) v.focus[k.slice(FOCUS_KEY.length)] = values[k]
+        else v[k as ViewKey] = values[k]
+      }
     }, [])
-    const cameraTween = useTween<Record<string, number>>((values) => {
+    /** What started the latest camera move; reported when it settles. */
+    const moveCause = useRef<LayerStackCameraCause>('api')
+    /** A tween wrote camera fields that have not been reported settled yet. */
+    const cameraDirty = useRef(false)
+    // Every move (camera fields, layer gap, layer focus, plane layout) runs on its own channels, so
+    // a later move replaces only the fields it names: a focus right after a preset keeps the
+    // preset's yaw move, and an orbit stops the camera but lets the planes settle.
+    const tween = useTweenChannels((values) => {
       writeView(values)
+      if (CAMERA_KEYS.some((k) => k in values)) {
+        cameraDirty.current = true
+        proposeCamera(moveCause.current)
+      }
+      if ('gap' in values) proposeGap()
       repaintNow()
+      if (cameraDirty.current && !tween.isActive(CAMERA_KEYS)) {
+        cameraDirty.current = false
+        emitCamera(moveCause.current)
+      }
     })
-    const mixTween = useTween<Record<string, number>>((values) => {
-      writeView(values)
-      repaintNow()
-    })
-    // Layer focus and layer gap run on their own tweens, which orbit and zoom never cancel: a drag
-    // part-way through a focus exit or a preset still lets the planes settle (and the gap report).
-    const focusTween = useTween<Record<string, number>>((values) => {
-      writeView(values)
-      repaintNow()
-    })
-    const gapTween = useTween<Record<string, number>>((values) => {
-      writeView(values)
-      repaintNow()
-    })
-    const reducedMotion = cameraTween.reducedMotion
+    const reducedMotion = tween.reducedMotion
+    /** Stops a camera move where it is (orbit, wheel, pinch); planes and gap keep settling. */
+    const stopCameraMove = useCallback(() => {
+      tween.cancel(CAMERA_KEYS)
+      cameraDirty.current = false
+    }, [tween])
 
-    /** Tweens the given view fields from where they are now (or jumps when `animate` is false). */
+    /** Tweens the given camera fields from where they are now (or jumps when `animate` is false). */
     const moveView = useCallback(
-      (to: Partial<ViewState>, opts: { animate?: boolean; duration?: number; onDone?: () => void } = {}) => {
+      (to: Partial<StackCamera>, cause: LayerStackCameraCause, opts: { animate?: boolean; duration?: number } = {}) => {
         const v = view.current!
-        const target: Partial<ViewState> = { ...to }
+        const target: Partial<StackCamera> = { ...to }
         if (target.yaw !== undefined) target.yaw = nearestYaw(v.yaw, target.yaw)
         if (target.pitch !== undefined || target.zoom !== undefined) {
           const c = clampCamera({ ...cameraOf(v), ...target } as StackCamera)
           if (target.pitch !== undefined) target.pitch = c.pitch
           if (target.zoom !== undefined) target.zoom = c.zoom
         }
-        const keys = Object.keys(target) as ViewKey[]
-        cameraTween.start(pick(v, keys), target as Record<string, number>, {
+        const keys = Object.keys(target)
+        moveCause.current = cause
+        tween.start(pickCamera(cameraOf(v), keys), pickCamera(target, keys), {
           duration: opts.animate === false ? 0 : opts.duration ?? CAMERA_MS,
-          onDone: opts.onDone,
         })
       },
-      [cameraTween],
+      [tween],
+    )
+
+    /** Opens the planes around `layerId` (null closes them), easing from wherever they are. */
+    const movePlaneFocus = useCallback(
+      (layerId: string | null, duration = CAMERA_MS) => {
+        const v = view.current!
+        const from: Record<string, number> = {}
+        const to: Record<string, number> = {}
+        for (const [id, amount] of Object.entries(v.focus)) {
+          if (amount <= 0 && id !== layerId && !tween.isActive([FOCUS_KEY + id])) {
+            delete v.focus[id]
+            continue
+          }
+          from[FOCUS_KEY + id] = amount
+          to[FOCUS_KEY + id] = id === layerId ? 1 : 0
+        }
+        if (layerId != null && !(FOCUS_KEY + layerId in to)) {
+          v.focus[layerId] = 0
+          from[FOCUS_KEY + layerId] = 0
+          to[FOCUS_KEY + layerId] = 1
+        }
+        tween.start(from, to, { duration })
+      },
+      [tween],
     )
 
     const presetRef = useRef(preset)
@@ -362,29 +496,16 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       const skip = skipFocusExit.current !== null && focusedLayerId == null
       skipFocusExit.current = null
       if (skip) return
-      const v = view.current!
       if (focusedLayerId != null && index.layerById.has(focusedLayerId)) {
-        const wasOpen = focusLayerRef.current !== null && v.focusAmt > 0
-        if (wasOpen && focusLayerRef.current !== focusedLayerId) v.focusAmt = 0
-        focusLayerRef.current = focusedLayerId
         clearPreset()
-        focusTween.start({ focusAmt: v.focusAmt }, { focusAmt: 1 }, { duration: CAMERA_MS })
-        moveView({ pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM }, { onDone: () => emitCamera('focus') })
+        movePlaneFocus(focusedLayerId)
+        moveView({ pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM }, 'focus')
       } else {
         const s = CAMERA_PRESETS.stack
-        focusTween.start(
-          { focusAmt: v.focusAmt },
-          { focusAmt: 0 },
-          {
-            duration: CAMERA_MS,
-            onDone: () => {
-              focusLayerRef.current = null
-            },
-          },
-        )
-        moveView({ pitch: s.pitch, zoom: s.zoom }, { onDone: () => emitCamera('focus') })
+        movePlaneFocus(null)
+        moveView({ pitch: s.pitch, zoom: s.zoom }, 'focus')
       }
-    }, [focusedLayerId, index, moveView, focusTween, clearPreset, emitCamera])
+    }, [focusedLayerId, index, moveView, movePlaneFocus, clearPreset])
     // Declared after the focus effect, so it sees the commit after `applyPreset` once that has run.
     useEffect(() => {
       commits.current += 1
@@ -402,22 +523,12 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           g.focusLayer(null)
         }
         setTurntableRef.current(false)
-        const v = view.current!
         const duration = opts.animate === false ? 0 : CAMERA_MS
-        focusTween.start(
-          { focusAmt: v.focusAmt },
-          { focusAmt: 0 },
-          {
-            duration,
-            onDone: () => {
-              focusLayerRef.current = null
-            },
-          },
-        )
-        gapTween.start({ gap: v.gap }, { gap: p.layerGap }, { duration, onDone: () => onLayerGapChangeRef.current?.(p.layerGap) })
-        moveView({ yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: 0 }, { animate: opts.animate, onDone: () => emitCamera('preset') })
+        movePlaneFocus(null, duration)
+        tween.start({ gap: view.current!.gap }, { gap: p.layerGap }, { duration, onDone: () => onLayerGapChangeRef.current?.(p.layerGap) })
+        moveView({ yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: 0 }, 'preset', { animate: opts.animate })
       },
-      [focusedLayerId, g, moveView, focusTween, gapTween, setPreset, emitCamera],
+      [focusedLayerId, g, moveView, movePlaneFocus, tween, setPreset],
     )
     // Only a change of the prop applies a preset (not a re-render with the same value).
     const prevPresetProp = useRef(cameraPreset)
@@ -429,30 +540,30 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }, [cameraPreset, applyPreset])
 
     // ── controlled camera and gap props ───────────────────────────────────
-    const camKey = camera ? [camera.yaw, camera.pitch, camera.zoom, camera.targetY].join('|') : ''
+    // The view already shows the props (held above). A value the stack never proposed comes from
+    // outside, and stops the stack's move on that field; an echo of a recent proposal, however
+    // late, is the parent following along.
+    const camKey = camera ? CAMERA_KEYS.map((k) => camera[k]).join('|') : ''
     useEffect(() => {
       if (!camera) return
-      const v = view.current!
-      const next = clampCamera({ ...cameraOf(v), ...camera })
-      const same = (Object.keys(next) as (keyof StackCamera)[]).every((k) => Math.abs(next[k] - v[k]) < 1e-6)
-      if (same) return
-      cameraTween.cancel()
-      writeView({ ...next })
-      repaint()
+      const own = recent.current.camera
+      const outside = CAMERA_KEYS.filter((k) => camera[k] !== undefined && !own.some((p) => near(p[k], camera[k]!)))
+      if (outside.length === 0) return
+      tween.cancel(outside)
+      // A stopped camera move must not settle later, from a gap, focus or layout frame.
+      if (!tween.isActive(CAMERA_KEYS)) cameraDirty.current = false
     }, [camKey])
     useEffect(() => {
-      if (layerGap === undefined || Math.abs(layerGap - view.current!.gap) < 1e-6) return
-      gapTween.cancel()
-      view.current!.gap = layerGap
-      repaint()
-    }, [layerGap, repaint, gapTween])
+      if (layerGap === undefined) return
+      if (!recent.current.gap.some((p) => near(p, layerGap))) tween.cancel(['gap'])
+    }, [layerGap, tween])
 
     // ── plane layout mix ──────────────────────────────────────────────────
     useEffect(() => {
       const to = planeLayout === 'coupled' ? 1 : 0
       if (Math.abs(view.current!.mix - to) < 1e-6) return
-      mixTween.start({ mix: view.current!.mix }, { mix: to }, { duration: LAYOUT_MS })
-    }, [planeLayout, mixTween])
+      tween.start({ mix: view.current!.mix }, { mix: to }, { duration: LAYOUT_MS })
+    }, [planeLayout, tween])
 
     // ── turntable ─────────────────────────────────────────────────────────
     const setTurntableRef = useRef(setTurntable)
@@ -463,10 +574,14 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     useEffect(() => {
       if (!spinning) return
       clearPreset()
+      startGesture()
       let raf = 0
       let last: number | null = null
       const step = (now: number) => {
-        if (last !== null) view.current!.yaw += (turntableSpeed * Math.min(100, now - last)) / 1000
+        if (last !== null) {
+          view.current!.yaw += (turntableSpeed * Math.min(100, now - last)) / 1000
+          proposeCamera('turntable')
+        }
         last = now
         repaintNow()
         raf = requestAnimationFrame(step)
@@ -476,7 +591,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         cancelAnimationFrame(raf)
         emitCamera('turntable')
       }
-    }, [spinning, turntableSpeed, repaintNow, clearPreset, emitCamera])
+    }, [spinning, turntableSpeed, repaintNow, clearPreset, emitCamera, proposeCamera])
 
     // ── stage size (px per scene unit, for pill and title sizes) ──────────
     const stageRef = useRef<HTMLDivElement | null>(null)
@@ -495,20 +610,57 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       return () => ro.disconnect()
     }, [sceneWidth])
 
-    // ── orbit (drag) ──────────────────────────────────────────────────────
+    // ── orbit (drag) and pinch zoom ───────────────────────────────────────
     const drag = useRef<{ x: number; y: number; yaw: number; pitch: number; pointerId: number; moved: boolean } | null>(null)
     const suppressClick = useRef(false)
     const dragging = useRef(false)
+    /** Pointers down on the scene; two make a pinch. */
+    const pointers = useRef(new Map<number, { x: number; y: number }>())
+    const pinch = useRef<{ dist: number; zoom: number } | null>(null)
+    const pointerDistance = () => {
+      const [a, b] = [...pointers.current.values()]
+      return Math.max(1, Math.hypot(b.x - a.x, b.y - a.y))
+    }
+    const releaseClickSoon = () =>
+      setTimeout(() => {
+        suppressClick.current = false
+      }, 0)
 
     const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
       if (e.button !== 0) return
+      pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (pointers.current.size === 2 && can.zoom) {
+        // A second finger turns the gesture into a pinch; the orbit (if any) ends where it is.
+        const d = drag.current
+        drag.current = null
+        dragging.current = false
+        if (d?.moved) emitCamera('orbit')
+        suppressClick.current = true
+        stopCameraMove()
+        clearPreset()
+        startGesture()
+        pinch.current = { dist: pointerDistance(), zoom: view.current!.zoom }
+        for (const id of pointers.current.keys()) capturePointer(e.currentTarget, id)
+        return
+      }
+      if (pointers.current.size > 1) return
       suppressClick.current = false
       const v = view.current!
       drag.current = { x: e.clientX, y: e.clientY, yaw: v.yaw, pitch: v.pitch, pointerId: e.pointerId, moved: false }
     }
     const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+      if (pointers.current.has(e.pointerId)) pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const pz = pinch.current
+      if (pz) {
+        if (pointers.current.size < 2) return
+        const v = view.current!
+        v.zoom = clampCamera({ ...cameraOf(v), zoom: pz.zoom * (pointerDistance() / pz.dist) }).zoom
+        proposeCamera('zoom')
+        repaint()
+        return
+      }
       const d = drag.current
-      if (!d || !can.orbit) return
+      if (!d || d.pointerId !== e.pointerId || !can.orbit) return
       const dx = e.clientX - d.x
       const dy = e.clientY - d.y
       if (!d.moved) {
@@ -517,33 +669,47 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         dragging.current = true
         suppressClick.current = true
         // Capture only once it is a drag, so a plain click still reaches the node under it.
-        e.currentTarget.setPointerCapture?.(d.pointerId)
-        cameraTween.cancel()
+        capturePointer(e.currentTarget, d.pointerId)
+        stopCameraMove()
+        startGesture()
         if (turntableRef.current) setTurntable(false)
         clearPreset()
       }
       const v = view.current!
       v.yaw = d.yaw + dx * ORBIT_YAW_PER_PX
       v.pitch = clampCamera({ ...cameraOf(v), pitch: d.pitch + dy * ORBIT_PITCH_PER_PX }).pitch
+      proposeCamera('orbit')
       repaint()
     }
-    const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const endPointer = (e: React.PointerEvent<HTMLDivElement>) => {
+      pointers.current.delete(e.pointerId)
+      releasePointer(e.currentTarget, e.pointerId)
+      if (pinch.current) {
+        if (pointers.current.size >= 2) {
+          // The pinching pair changed: measure from here so the zoom doesn't jump.
+          pinch.current = { dist: pointerDistance(), zoom: view.current!.zoom }
+          return
+        }
+        // The finger left down does not start an orbit.
+        pinch.current = null
+        releaseClickSoon()
+        repaint()
+        emitCamera('zoom')
+        return
+      }
       const d = drag.current
+      if (d && d.pointerId !== e.pointerId) return // another finger (pinch zoom off)
       drag.current = null
       if (!d?.moved) return
-      if (e.currentTarget.hasPointerCapture?.(d.pointerId)) e.currentTarget.releasePointerCapture(d.pointerId)
       dragging.current = false
       // The click that follows this pointerup is swallowed; anything after it (a later keyboard
       // activation included) goes through.
-      setTimeout(() => {
-        suppressClick.current = false
-      }, 0)
+      releaseClickSoon()
       repaint() // places predicate pills again
       emitCamera('orbit')
     }
 
     // ── zoom (wheel, only while the scene has focus) ──────────────────────
-    const zoomEmitTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
     const canZoomRef = useRef(can.zoom)
     canZoomRef.current = can.zoom
     useEffect(() => {
@@ -552,20 +718,30 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       const onWheel = (e: WheelEvent) => {
         if (!canZoomRef.current || !el.contains(document.activeElement)) return
         e.preventDefault()
-        cameraTween.cancel()
+        stopCameraMove()
         clearPreset()
         const v = view.current!
         v.zoom = clampCamera({ ...cameraOf(v), zoom: v.zoom * Math.exp(-e.deltaY * 0.0015) }).zoom
+        proposeCamera('zoom')
         repaint()
         if (zoomEmitTimer.current) clearTimeout(zoomEmitTimer.current)
-        zoomEmitTimer.current = setTimeout(() => emitCamera('zoom'), 160)
+        zoomEmitTimer.current = setTimeout(() => {
+          zoomEmitTimer.current = null
+          emitCamera('zoom')
+        }, 160)
+      }
+      // One finger scrolls the page vertically (touch-action: pan-y); two are a pinch, never a scroll.
+      const onTouchMove = (e: TouchEvent) => {
+        if (canZoomRef.current && e.targetTouches.length >= 2 && e.cancelable) e.preventDefault()
       }
       el.addEventListener('wheel', onWheel, { passive: false })
+      el.addEventListener('touchmove', onTouchMove, { passive: false })
       return () => {
         el.removeEventListener('wheel', onWheel)
+        el.removeEventListener('touchmove', onTouchMove)
         if (zoomEmitTimer.current) clearTimeout(zoomEmitTimer.current)
       }
-    }, [cameraTween, clearPreset, repaint, emitCamera])
+    }, [stopCameraMove, clearPreset, repaint, emitCamera, proposeCamera])
 
     // ── derived data (changes with the graph, not the camera) ─────────────
     const visibleLayers = useMemo(() => index.layers.filter((l) => !filters.hiddenLayers.includes(l.id)), [index, filters.hiddenLayers])
@@ -612,15 +788,20 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
 
     // ── per-frame projection ──────────────────────────────────────────────
     const layerCount = index.layers.length
-    const focusLayer = focusLayerRef.current != null ? index.layerById.get(focusLayerRef.current) : undefined
-    const focus = focusLayer ? { rank: focusLayer.rank, amount: v.focusAmt } : null
+    const focus: StackFocus[] = []
+    for (const [id, amount] of Object.entries(v.focus)) {
+      const l = index.layerById.get(id)
+      if (l && amount > 0) focus.push({ rank: l.rank, amount })
+    }
+    const focusAmt = Math.min(1, focus.reduce((s, f) => s + f.amount, 0))
     const planeYOf = (rank: number) => stackPlaneY(rank, layerCount, v.gap, focus, FOCUS_PUSH)
-    // The camera follows the focused plane; `targetY` stays a free offset on top of that.
+    // The camera follows the open plane (a blend of two while focus moves between layers);
+    // `targetY` stays a free offset on top of that.
     const renderCam = clampCamera({
       ...cameraOf(v),
-      targetY: v.targetY + (focusLayer ? v.focusAmt * stackPlaneY(focusLayer.rank, layerCount, v.gap) : 0),
+      targetY: v.targetY + focus.reduce((s, f) => s + f.amount * stackPlaneY(f.rank, layerCount, v.gap), 0),
     })
-    const proj = createProjector(renderCam, axisOffset(renderCam.pitch, focusLayer ? v.focusAmt : 0))
+    const proj = createProjector(renderCam, axisOffset(renderCam.pitch, focusAmt))
     const W = sceneWidth
     const H = sceneHeight
     const pcx = (x: number) => r2(((x + W / 2) / W) * 100)
@@ -717,7 +898,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     // Pills: skipped while the camera or the planes move (drag, turntable, any tween) and placed
     // once motion settles; placing them is far too costly per frame, and they would jump.
     const moving =
-      dragging.current || spinning || cameraTween.isActive() || focusTween.isActive() || gapTween.isActive() || mixTween.isActive()
+      dragging.current || pinch.current !== null || spinning || tween.isActive()
     const pills = (() => {
       if (moving || candidates.length === 0) return []
       const obstacles: LabelBox[] = visibleNodes.map((n) => {
@@ -803,24 +984,21 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       const pts = visibleLayers.flatMap((l) => planeCorners(stackPlaneY(l.rank, layerCount, vv.gap), extent))
       const cam = { ...cameraOf(vv), targetY: 0 }
       clearPreset()
-      moveView(
-        { targetY: 0, zoom: fitZoom(pts, cam, { width: W, height: H, margin: 40 }, axisOffset(cam.pitch, 0)) },
-        { onDone: () => emitCamera('fit') },
-      )
-    }, [visibleLayers, layerCount, extent, W, H, moveView, clearPreset, emitCamera])
+      moveView({ targetY: 0, zoom: fitZoom(pts, cam, { width: W, height: H, margin: 40 }, axisOffset(cam.pitch, 0)) }, 'fit')
+    }, [visibleLayers, layerCount, extent, W, H, moveView, clearPreset])
     useImperativeHandle(
       ref,
       () => ({
         applyPreset,
         setCamera: (c, opts = {}) => {
           clearPreset()
-          moveView(c, { animate: opts.animate, onDone: () => emitCamera('api') })
+          moveView(c, 'api', { animate: opts.animate })
         },
         getCamera: () => cameraOf(view.current!),
         getLayerGap: () => view.current!.gap,
         zoomBy: (f) => {
           clearPreset()
-          moveView({ zoom: view.current!.zoom * f }, { duration: ZOOM_MS, onDone: () => emitCamera('zoom') })
+          moveView({ zoom: view.current!.zoom * f }, 'zoom', { duration: ZOOM_MS })
         },
         fit,
         setTurntable: (on) => setTurntableRef.current(on),
@@ -829,7 +1007,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         setFollow: (n) => g.setFollow(n),
         element: () => stageRef.current,
       }),
-      [applyPreset, clearPreset, moveView, emitCamera, fit, g],
+      [applyPreset, clearPreset, moveView, fit, g],
     )
 
     // ── render ────────────────────────────────────────────────────────────
@@ -858,8 +1036,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         data-focused-layer={focusedLayerId ?? ''}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
+        onPointerUp={endPointer}
+        onPointerCancel={endPointer}
         onKeyDown={(e) => {
           if (e.key === 'Escape' && selectedId && can.select) g.select(null)
         }}

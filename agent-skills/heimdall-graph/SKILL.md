@@ -1555,12 +1555,13 @@ The layered graph as a 3D stack: one translucent plane per layer (with a grid an
 
 - **Selection:** click a node (again to clear; click the background to clear). The reach lights in the amber hop ramp with arrowheads and predicate pills (`placeEdgeLabels` over the projected links), and a **drill-through column** (dashed vertical through every plane, a ring on each other plane) shows what sits above and below the node.
 - **Labels:** node labels, plane titles and pills are an HTML overlay positioned in percentages: upright and crisp at any angle. Node labels are buttons with roving focus: Left/Right move within a layer, Up/Down move to a linked node (or the first node) on the next layer, Home/End, Enter selects, Escape clears. `nodeLabels` picks which are visible; hidden ones stay focusable.
-- **Camera:** drag to orbit (pitch clamped; a 4px threshold keeps clicks as clicks), wheel zoom only while the scene has focus, presets `stack` / `exploded` / `top` (x-ray; plane titles move to a side rail) / `profile`, a turntable, and the layer gap. Moves tween 600–900 ms ease-in-out (`useTween`) and jump under `prefers-reduced-motion`, which also disables the turntable.
-- **Layer focus:** the graph's `focusedLayerId` (plane title click, `LayerList`, or `focusLayer`): planes above and below move apart, the camera tilts toward the plane and the other layers dim. Clicking the title again exits.
+- **Camera:** drag to orbit (pitch clamped; a 4px threshold keeps clicks as clicks), wheel zoom only while the scene has focus, two-finger pinch zoom (same 0.4–3 clamp), presets `stack` / `exploded` / `top` (x-ray; plane titles move to a side rail) / `profile`, a turntable, and the layer gap. Moves tween 600–900 ms ease-in-out and jump under `prefers-reduced-motion`, which also disables the turntable. Each camera field, the gap, each layer's focus and the plane layout tween on their own channels, so a later move replaces only what it names: a focus right after a preset keeps the preset's yaw turning. An orbit, wheel or pinch stops the camera move; the planes still settle.
+- **Layer focus:** the graph's `focusedLayerId` (plane title click, `LayerList`, or `focusLayer`): planes above and below move apart, the camera tilts toward the plane and the other layers dim. Clicking the title again exits. Switching straight to another layer eases from where the planes are (one layer closes as the other opens).
+- **Controlled camera and gap:** `camera` fields and `layerGap` are held. The view shows the props only; an orbit, zoom, preset, focus or turntable reports every frame through `onCameraChange` / `onLayerGapChange` and moves the view only when the parent passes the value back (like `SplitPane`'s `splitPercent`). Pass each report back unchanged: a value the stack never reported (rounded or normalized) counts as a change from outside, which jumps and stops the stack's move on that field. An echo that lands a frame or more late (React batching on a slow device) still counts as the stack's own. The settle report carries the move's last proposal, so a parent that commits only settled reports still gets the gesture.
 - **Plane layout:** the graph's `planeLayout` tweens between the independent and coupled in-plane layouts (`mixLayerPositions`).
-- **Performance:** camera state lives in refs and only the projected geometry recomputes per frame. `onCameraChange` fires when a move settles (drag release, end of a tween, a wheel pause, turntable stop), never per frame, so chrome showing the camera doesn't re-render while it moves. Pills are skipped while dragging and placed again on release.
+- **Performance:** camera state lives in refs and only the projected geometry recomputes per frame. Uncontrolled, `onCameraChange` fires only when a move settles (drag release, end of a tween, a wheel pause, pinch release, turntable stop). A controlled `camera` reports every frame, so its parent re-renders while the camera moves. For chrome that only shows or remembers the camera, leave `camera` and `layerGap` uncontrolled (`defaultCamera`, `defaultLayerGap`) and listen to the settle callbacks, so the chrome doesn't re-render on orbit. Pills are skipped while dragging and placed again on release.
 
-The math is in `projection.ts`, free of React: `createProjector(camera, options)` maps a world point to screen `{ x, y, scale, depth }`; `stackPlaneY`, `planeCorners`, `planeGridLines` and `ringPoints` build the world model; `depthSort` is the painter's order; `fitZoom`, `clampCamera`, `nearestYaw`, `lerpCamera`, `wrapAngle`, `cameraFromPreset`, `projectPoint`, `svgPoints`, `leftmostPoint`, `screenBounds` and `titleRail` round it out, with the constants `CAMERA_PRESETS`, `CAMERA_PRESET_NAMES`, `PITCH_RANGE`, `ZOOM_RANGE`, `DEFAULT_CAMERA_DISTANCE` and `TOP_VIEW_PITCH`. `useTween(onFrame)` returns `{ start(from, to, { duration, easing, onDone }), cancel, isActive, reducedMotion }` and is shared by any animated view; `usePrefersReducedMotion`, `easeInOutCubic`, `interpolateValues` and `REDUCED_MOTION_QUERY` come with it.
+The math is in `projection.ts`, free of React: `createProjector(camera, options)` maps a world point to screen `{ x, y, scale, depth }`; `stackPlaneY`, `planeCorners`, `planeGridLines` and `ringPoints` build the world model; `depthSort` is the painter's order; `fitZoom`, `clampCamera`, `nearestYaw`, `lerpCamera`, `wrapAngle`, `cameraFromPreset`, `projectPoint`, `svgPoints`, `leftmostPoint`, `screenBounds` and `titleRail` round it out, with the constants `CAMERA_PRESETS`, `CAMERA_PRESET_NAMES`, `PITCH_RANGE`, `ZOOM_RANGE`, `DEFAULT_CAMERA_DISTANCE` and `TOP_VIEW_PITCH`. `useTween(onFrame)` returns `{ start(from, to, { duration, easing, onDone }), cancel, isActive, reducedMotion }` and is shared by any animated view (a new start replaces the whole running tween); `usePrefersReducedMotion`, `easeInOutCubic`, `interpolateValues` and `REDUCED_MOTION_QUERY` come with it.
 
 ```tsx
 import { LayerStack, useLayeredGraph, LayeredGraphContext, type LayerStackHandle } from '@tinkermonkey/heimdall-ui'
@@ -1600,18 +1601,18 @@ Ref handle (`LayerStackHandle`): `applyPreset(name, { animate })`, `setCamera(pa
 | `cameraPreset` | `'stack' \| 'exploded' \| 'top' \| 'profile' \| null` | — | Controlled preset; a new value animates to it. Becomes `null` when the camera is moved by hand |
 | `defaultCameraPreset` | `CameraPresetName` | `'stack'` | Initial preset when uncontrolled |
 | `onCameraPresetChange` | `(preset: CameraPresetName \| null) => void` | — | Preset applied or cleared |
-| `camera` | `Partial<StackCamera>` | — | Controlled `{ yaw, pitch, zoom, targetY }`; a changed value is applied at once |
+| `camera` | `Partial<StackCamera>` | — | Controlled `{ yaw, pitch, zoom, targetY }`. The fields set are held: moves only report through `onCameraChange` until the prop changes; a change from outside jumps. Fields left out stay uncontrolled |
 | `defaultCamera` | `Partial<StackCamera>` | — | Initial camera fields over the initial preset |
-| `onCameraChange` | `(camera: StackCamera, cause: LayerStackCameraCause) => void` | — | Called when a camera move settles, not per frame |
+| `onCameraChange` | `(camera: StackCamera, cause: LayerStackCameraCause) => void` | — | Called when a camera move settles, not per frame. With `camera` set, also every frame of a move (the proposed camera) |
 | `turntable` | `boolean` | — | Controlled slow yaw. Off under reduced motion; turns off when the user orbits |
 | `defaultTurntable` | `boolean` | `false` | Initial turntable when uncontrolled |
 | `onTurntableChange` | `(on: boolean) => void` | — | Turntable toggled (including off on orbit) |
 | `turntableSpeed` | `number` | `0.27` | Turntable speed, radians per second |
-| `layerGap` | `number` | — | Controlled distance between planes, world units; applied when it changes |
+| `layerGap` | `number` | — | Controlled distance between planes, world units; held like `camera` (a preset's gap move only reports) |
 | `defaultLayerGap` | `number` | preset's | Initial gap when uncontrolled (170 for `stack`) |
-| `onLayerGapChange` | `(gap: number) => void` | — | Gap changed by a preset |
+| `onLayerGapChange` | `(gap: number) => void` | — | Gap changed by a preset, when its move ends; with `layerGap` set, also every frame |
 | `nodeLabels` | `'all' \| 'reached' \| 'none'` | graph state | Which node labels show; the hovered or keyboard-focused node always does. Unset: `all` while the graph's `nodeLabels` is on, `reached` when off |
-| `interactions` | `LayerStackInteractions` | all on | `{ select, hover, orbit, zoom, focusLayer }`: turn direct manipulation off per kind |
+| `interactions` | `LayerStackInteractions` | all on | `{ select, hover, orbit, zoom, focusLayer }`: turn direct manipulation off per kind (`zoom` covers wheel and pinch) |
 | `sceneWidth` | `number` | `1160` | Scene (viewBox) width; with `sceneHeight` sets the aspect ratio |
 | `sceneHeight` | `number` | `780` | Scene (viewBox) height |
 | `planeSize` | `number` | `300` | Plane half-width in world units; every plane shares it, so the stack reads square |
@@ -1620,7 +1621,10 @@ Ref handle (`LayerStackHandle`): `applyPreset(name, { animate })`, `setCamera(pa
 
 - The scene keeps the `sceneWidth / sceneHeight` aspect ratio at 100% width; size it with its container's width.
 - Wheel zoom needs focus in the scene (click it, or tab to a node), so it never hijacks page scroll.
-- `camera` is applied as a jump; use the ref's `setCamera(c, { animate: true })` or a preset to animate.
+- A changed `camera` prop is a jump; use the ref's `setCamera(c, { animate: true })` or a preset to animate (with `camera` set, pass each reported frame back).
+- A controlled `camera` or `layerGap` whose parent ignores `onCameraChange` / `onLayerGapChange` freezes those fields: that is the hold, not a bug.
+- Pass reports back unchanged; rounding or normalizing the value reads as a change from outside and stops the stack's move.
+- Touch: one-finger vertical swipes still scroll the page (`touch-action: pan-y`); with two fingers down on the scene it cancels `touchmove`, so a pinch is not taken as a scroll. Place both fingers together: a second finger added after a one-finger scroll has started cannot pinch, because the browser already owns that touch.
 
 ## AdjacencyMatrix
 
