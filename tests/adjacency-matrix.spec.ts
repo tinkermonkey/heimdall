@@ -174,3 +174,80 @@ test.describe('AdjacencyMatrix aggregate="layer"', () => {
     await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-aggregate-symmetric-light.png')
   })
 })
+
+test.describe('AdjacencyMatrix onCellSelect and order', () => {
+  test('onCellSelect gets the drawn link and every link in the cell; the deprecated onLinkSelect still works', async ({ page }) => {
+    for (const report of ['1', 'legacy']) {
+      await open(page, `&symmetric=1&report=${report}`)
+      const cell = page.locator('.adjacency-matrix__cell--both').first()
+      const source = await cell.getAttribute('data-source-id')
+      await cell.click()
+      await expect(page.getByTestId('adjacency-matrix-report')).toContainText(`link ${source} -> `)
+      await expect(page.getByTestId('adjacency-matrix-report')).toContainText('· 2 in cell')
+      await expect(page.getByTestId('adjacency-matrix-selection')).toHaveText('no selection')
+    }
+  })
+
+  test('order="cluster" is stable across loads and keeps rows grouped by layer', async ({ page }) => {
+    const rows = async () => page.locator('.adjacency-matrix [role="button"]').evaluateAll((els) => els.map((el) => el.getAttribute('aria-label')))
+    await open(page, '&order=cluster')
+    const first = await rows()
+    expect(first).toHaveLength(36)
+    await open(page, '&order=cluster')
+    expect(await rows()).toEqual(first)
+    await open(page, '&order=degree')
+    expect(await rows()).not.toEqual(first)
+    // layers stay contiguous: Business, then Application, then Technology
+    const layers = first.map((l) => l!.split(', ')[1])
+    expect(layers.filter((l, i) => i === 0 || l !== layers[i - 1])).toEqual(['Business layer', 'Application layer', 'Technology layer'])
+  })
+
+  test('visual: light canvas, cluster order', async ({ page }) => {
+    await open(page, '&order=cluster')
+    await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-cluster-light.png')
+  })
+})
+
+test.describe('LayeredGraphExplorer matrix link inspector', () => {
+  const EXPLORER = 'http://localhost:5173/?example=layered-graph-explorer&view=matrix'
+
+  test('a cell click shows the link; a merged cell steps through both directions', async ({ page }) => {
+    const errors: string[] = []
+    page.on('pageerror', (err) => errors.push(String(err)))
+    await page.goto(EXPLORER + '&matrix=symmetric')
+    await page.waitForLoadState('networkidle')
+    const panel = page.getByTestId('matrix-link-inspector')
+    await expect(panel).toHaveCount(0)
+
+    await page.locator('.adjacency-matrix__cell--both').first().click()
+    await expect(panel).toBeVisible()
+    await expect(panel).toContainText('Link 1 of 2')
+    await expect(page.getByTestId('adjacency-matrix-selected-cell')).toHaveCount(1)
+    const firstSource = await panel.getByTestId('edge-inspector-source').innerText()
+    const firstTarget = await panel.getByTestId('edge-inspector-target').innerText()
+
+    // the other direction swaps the endpoints
+    await panel.getByRole('button', { name: `${firstTarget} → ${firstSource}` }).click()
+    await expect(panel).toContainText('Link 2 of 2')
+    await expect(panel.getByTestId('edge-inspector-source')).toHaveText(firstTarget)
+    await expect(panel.getByTestId('edge-inspector-target')).toHaveText(firstSource)
+
+    // an endpoint selects its node; the panel stays
+    await panel.getByTestId('edge-inspector-source').click()
+    await expect(page.locator('.reach-inspector')).toContainText(firstTarget)
+    await expect(panel).toBeVisible()
+
+    await panel.getByRole('button', { name: 'Close link' }).click()
+    await expect(panel).toHaveCount(0)
+    await expect(page.getByTestId('adjacency-matrix-selected-cell')).toHaveCount(0)
+    expect(errors).toEqual([])
+  })
+
+  test('visual: link inspector panel', async ({ page }) => {
+    await page.goto(EXPLORER + '&matrix=symmetric')
+    await page.waitForLoadState('networkidle')
+    await page.locator('.adjacency-matrix__cell--both').first().click()
+    await page.mouse.move(0, 0)
+    await expect(page.getByTestId('matrix-link-inspector')).toHaveScreenshot('adjacency-matrix-explorer-link-inspector.png')
+  })
+})

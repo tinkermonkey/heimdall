@@ -1,5 +1,80 @@
-// Cell building for AdjacencyMatrix: node cells (directed or symmetric) and the layer heat map.
+// Cell building for AdjacencyMatrix: node cells (directed or symmetric), the layer heat map, the
+// cluster order, and a link's GraphEdgeInspector metadata.
+import type { GraphEdgeMetadata } from '../../components/GraphEdgeInspector'
+import { louvainCluster, type ClusterTreeNode } from '../graphClustering'
+import { linkPredicateLabel } from './labels'
+import { orderAcrossLayers } from './layout'
 import type { IndexedLink, LayeredIndex } from './types'
+
+/**
+ * Row and column order for `order="cluster"`: within each layer, Louvain communities over that
+ * layer's own links (either direction), bigger communities first and nested communities kept
+ * together. (Over every link, the communities are simply the layers.) Deterministic: Louvain runs
+ * on the `degree` order (degree, then label) with edges sorted the same way, never on input order,
+ * and ties go to the earlier node. Filters do not change it.
+ */
+export function clusterOrder(index: LayeredIndex): string[] {
+  const base = orderAcrossLayers(index, null, 'degree')
+  const pos = new Map(base.map((id, i) => [id, i]))
+  const layerOf = (id: string) => index.nodeById.get(id)!.layerId
+
+  const size = new Map<ClusterTreeNode, { n: number; first: number }>()
+  const measure = (t: ClusterTreeNode): { n: number; first: number } => {
+    let m = { n: 1, first: pos.get(t.id) ?? Infinity }
+    if (t.children?.length) {
+      m = { n: 0, first: Infinity }
+      for (const c of t.children) {
+        const cm = measure(c)
+        m.n += cm.n
+        m.first = Math.min(m.first, cm.first)
+      }
+    }
+    size.set(t, m)
+    return m
+  }
+  const walk = (t: ClusterTreeNode, out: string[]) => {
+    if (!t.children?.length) {
+      if (pos.has(t.id)) out.push(t.id)
+      return
+    }
+    const kids = [...t.children].sort((a, b) => size.get(b)!.n - size.get(a)!.n || size.get(a)!.first - size.get(b)!.first)
+    for (const k of kids) walk(k, out)
+  }
+
+  return index.layers.flatMap((layer) => {
+    const ids = base.filter((id) => layerOf(id) === layer.id)
+    const edges = index.links
+      .filter((l) => !l.cross && layerOf(l.sourceId) === layer.id)
+      .map((l) => ({ source: l.sourceId, target: l.targetId, s: pos.get(l.sourceId)!, t: pos.get(l.targetId)! }))
+      .sort((a, b) => a.s - b.s || a.t - b.t)
+    const tree = louvainCluster(ids, edges)
+    measure(tree)
+    const out: string[] = []
+    walk(tree, out)
+    return out
+  })
+}
+
+/** A link as `GraphEdgeInspector` metadata: predicates as the title, layers and category as rows. */
+export function linkEdgeMetadata(index: LayeredIndex, link: IndexedLink): GraphEdgeMetadata {
+  const s = index.nodeById.get(link.sourceId)!
+  const t = index.nodeById.get(link.targetId)!
+  const sl = index.layerById.get(s.layerId)?.label ?? s.layerId
+  const tl = index.layerById.get(t.layerId)?.label ?? t.layerId
+  return {
+    id: link.id,
+    predicate: link.predicates.length ? linkPredicateLabel(link, index.catalog) : link.primaryCategory,
+    sourceId: s.id,
+    sourceTitle: s.label,
+    targetId: t.id,
+    targetTitle: t.label,
+    metadata: {
+      layers: link.cross ? `${sl} → ${tl}` : `within ${sl}`,
+      category: link.primaryCategory,
+      edges: link.edgeIds.length,
+    },
+  }
+}
 
 /** One node-matrix cell. */
 export interface MatrixCell {

@@ -42,6 +42,8 @@ function parseSnapshot(): LayeredGraphExplorerSnapshotInput | undefined {
 }
 const SNAPSHOT = SYNC ? parseSnapshot() : undefined
 const STACK_PROPS = params.has('gap') ? { defaultLayerGap: Number(params.get('gap')) } : undefined
+// `matrix=symmetric` passes `matrixProps={{ symmetric: true }}`.
+const MATRIX_PROPS = params.get('matrix') === 'symmetric' ? { symmetric: true } : undefined
 const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : 'heimdall ux model'
 
 const mono = { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgb(var(--canvas-fg-3))' } as const
@@ -92,6 +94,7 @@ export default function LayeredGraphExplorerTestPage() {
       defaultSnapshot={SNAPSHOT}
       onSnapshotChange={SYNC ? writeUrl : undefined}
       stackProps={STACK_PROPS}
+      matrixProps={MATRIX_PROPS}
       eyebrow="Layered graph"
       title={DATA === 'spec' ? 'Documentation robotics spec' : 'Heimdall UX model'}
       statusLabel={DATA_LABEL}
