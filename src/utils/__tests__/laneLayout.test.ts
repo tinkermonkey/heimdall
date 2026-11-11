@@ -272,27 +272,30 @@ describe('routeLaneGutters', () => {
     expect(res.bounds!.minX < L || res.bounds!.maxX > R).toBe(true)
   })
 
-  it('gives overlapping routes their own gutter and gap tracks, an outer route wrapping the inner', () => {
+  it('gives each stub its own gap track and overlapping routes their own gutter tracks, an outer route wrapping the inner', () => {
     const { lanes, res } = route('horizontal')
     const L = Math.min(...lanes.bands.map((b) => b.x))
     const R = Math.max(...lanes.bands.map((b) => b.x + b.width))
     const legs = skips.map((l) => {
-      const p = corners(res.curves.get(l.id)!)
-      const gx = p.find((q) => q.x < L || q.x > R)!.x
-      const ys = p.filter((q) => q.x === gx).map((q) => q.y)
-      return { gx, top: Math.min(...ys), bot: Math.max(...ys), right: gx > R }
+      // Exact tracks (sampled corners round off where a gutter run starts).
+      const { gx, top, bot } = res.tracks.get(l.id)!
+      const up = rank.get(layerOf(l.sourceId)!)! < rank.get(layerOf(l.targetId)!)! ? l.sourceId : l.targetId
+      const low = up === l.sourceId ? l.targetId : l.sourceId
+      return { gx, top, bot, right: gx > R, up, low }
     })
     for (let i = 0; i < legs.length; i++)
       for (let j = i + 1; j < legs.length; j++) {
         const [p, q] = [legs[i], legs[j]]
-        // Gap runs at distinct heights at both ends.
-        expect(p.top).not.toBe(q.top)
-        expect(p.bot).not.toBe(q.bot)
+        // Gap runs at distinct heights at both ends, unless they share their node's stub.
+        expect(p.top === q.top).toBe(p.up === q.up && p.right === q.right)
+        expect(p.bot === q.bot).toBe(p.low === q.low && p.right === q.right)
         if (p.right !== q.right || !(p.top < q.bot && q.top < p.bot)) continue
         expect(p.gx).not.toBe(q.gx)
+        // A route that spans another runs outside it.
         const edge = p.right ? R : L
-        const [outer, inner] = Math.abs(p.gx - edge) > Math.abs(q.gx - edge) ? [p, q] : [q, p]
-        expect(outer.top).toBeLessThanOrEqual(inner.top)
+        const out = (r: typeof p) => Math.abs(r.gx - edge)
+        if (p.top <= q.top && p.bot >= q.bot) expect(out(p)).toBeGreaterThan(out(q))
+        if (q.top <= p.top && q.bot >= p.bot) expect(out(q)).toBeGreaterThan(out(p))
       }
   })
 
@@ -350,21 +353,27 @@ describe('routeLaneGutters at DR scale (synthetic, 13 lanes)', () => {
       const T = (p: { x: number; y: number }) => (orientation === 'vertical' ? { x: p.y, y: p.x } : p)
       const runs = [...res.tracks.values()].map((t) => {
         const [up, low] = (t.reversed ? [t.targetId, t.sourceId] : [t.sourceId, t.targetId]).map((id) => T(lanes.positions.get(id)!))
-        return { h: [[t.top, up.x, t.gx], [t.bot, low.x, t.gx]], v: [t.gx, t.top, t.bot] as const, t }
+        const ids = t.reversed ? [t.targetId, t.sourceId] : [t.sourceId, t.targetId]
+        // A gap run's stub: its node and gutter side. Runs in one stub share a line on purpose.
+        const right = t.gx > Math.max(up.x, low.x)
+        return { h: [[t.top, up.x, t.gx], [t.bot, low.x, t.gx]], stubs: [`${ids[0]}|${right}`, `${ids[1]}|${right}`], v: [t.gx, t.top, t.bot] as const, t }
       })
 
       it('routes every skip link', () => {
         expect(res.tracks.size).toBeGreaterThan(500)
       })
 
-      it('no two routes share a gap or gutter run', () => {
+      it('no two routes share a gap or gutter run, except within one stub', () => {
         const overlap = (a0: number, a1: number, b0: number, b1: number) =>
           Math.min(Math.max(a0, a1), Math.max(b0, b1)) - Math.max(Math.min(a0, a1), Math.min(b0, b1)) > 1
         let collinear = 0
         for (let i = 0; i < runs.length; i++)
           for (let j = i + 1; j < runs.length; j++) {
             const [p, q] = [runs[i], runs[j]]
-            for (const a of p.h) for (const b of q.h) if (Math.abs(a[0] - b[0]) < 0.5 && overlap(a[1], a[2], b[1], b[2])) collinear++
+            p.h.forEach((a, ai) => q.h.forEach((b, bi) => {
+              if (p.stubs[ai] === q.stubs[bi]) return
+              if (Math.abs(a[0] - b[0]) < 0.5 && overlap(a[1], a[2], b[1], b[2])) collinear++
+            }))
             if (Math.abs(p.v[0] - q.v[0]) < 0.5 && overlap(p.v[1], p.v[2], q.v[1], q.v[2])) collinear++
           }
         expect(collinear).toBe(0)
@@ -377,8 +386,8 @@ describe('routeLaneGutters at DR scale (synthetic, 13 lanes)', () => {
           byGap.set(g, [...(byGap.get(g) ?? []), y])
         }
         let min = Infinity
-        for (const ys of byGap.values()) {
-          ys.sort((a, b) => a - b)
+        for (const all of byGap.values()) {
+          const ys = [...new Set(all)].sort((a, b) => a - b) // shared stubs repeat a track
           for (let k = 1; k < ys.length; k++) min = Math.min(min, ys[k] - ys[k - 1])
         }
         expect(min).toBeGreaterThanOrEqual(3 - 1e-6)
