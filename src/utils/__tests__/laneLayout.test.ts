@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { curveEndBoxes, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneBundleCurve, laneBundler, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -272,27 +272,30 @@ describe('routeLaneGutters', () => {
     expect(res.bounds!.minX < L || res.bounds!.maxX > R).toBe(true)
   })
 
-  it('gives overlapping routes their own gutter and gap tracks, an outer route wrapping the inner', () => {
+  it('gives each stub its own gap track and overlapping routes their own gutter tracks, an outer route wrapping the inner', () => {
     const { lanes, res } = route('horizontal')
     const L = Math.min(...lanes.bands.map((b) => b.x))
     const R = Math.max(...lanes.bands.map((b) => b.x + b.width))
     const legs = skips.map((l) => {
-      const p = corners(res.curves.get(l.id)!)
-      const gx = p.find((q) => q.x < L || q.x > R)!.x
-      const ys = p.filter((q) => q.x === gx).map((q) => q.y)
-      return { gx, top: Math.min(...ys), bot: Math.max(...ys), right: gx > R }
+      // Exact tracks (sampled corners round off where a gutter run starts).
+      const { gx, top, bot } = res.tracks.get(l.id)!
+      const up = rank.get(layerOf(l.sourceId)!)! < rank.get(layerOf(l.targetId)!)! ? l.sourceId : l.targetId
+      const low = up === l.sourceId ? l.targetId : l.sourceId
+      return { gx, top, bot, right: gx > R, up, low }
     })
     for (let i = 0; i < legs.length; i++)
       for (let j = i + 1; j < legs.length; j++) {
         const [p, q] = [legs[i], legs[j]]
-        // Gap runs at distinct heights at both ends.
-        expect(p.top).not.toBe(q.top)
-        expect(p.bot).not.toBe(q.bot)
+        // Gap runs at distinct heights at both ends, unless they share their node's stub.
+        expect(p.top === q.top).toBe(p.up === q.up && p.right === q.right)
+        expect(p.bot === q.bot).toBe(p.low === q.low && p.right === q.right)
         if (p.right !== q.right || !(p.top < q.bot && q.top < p.bot)) continue
         expect(p.gx).not.toBe(q.gx)
+        // A route that spans another runs outside it.
         const edge = p.right ? R : L
-        const [outer, inner] = Math.abs(p.gx - edge) > Math.abs(q.gx - edge) ? [p, q] : [q, p]
-        expect(outer.top).toBeLessThanOrEqual(inner.top)
+        const out = (r: typeof p) => Math.abs(r.gx - edge)
+        if (p.top <= q.top && p.bot >= q.bot) expect(out(p)).toBeGreaterThan(out(q))
+        if (q.top <= p.top && q.bot >= p.bot) expect(out(q)).toBeGreaterThan(out(p))
       }
   })
 
@@ -350,21 +353,27 @@ describe('routeLaneGutters at DR scale (synthetic, 13 lanes)', () => {
       const T = (p: { x: number; y: number }) => (orientation === 'vertical' ? { x: p.y, y: p.x } : p)
       const runs = [...res.tracks.values()].map((t) => {
         const [up, low] = (t.reversed ? [t.targetId, t.sourceId] : [t.sourceId, t.targetId]).map((id) => T(lanes.positions.get(id)!))
-        return { h: [[t.top, up.x, t.gx], [t.bot, low.x, t.gx]], v: [t.gx, t.top, t.bot] as const, t }
+        const ids = t.reversed ? [t.targetId, t.sourceId] : [t.sourceId, t.targetId]
+        // A gap run's stub: its node and gutter side. Runs in one stub share a line on purpose.
+        const right = t.gx > Math.max(up.x, low.x)
+        return { h: [[t.top, up.x, t.gx], [t.bot, low.x, t.gx]], stubs: [`${ids[0]}|${right}`, `${ids[1]}|${right}`], v: [t.gx, t.top, t.bot] as const, t }
       })
 
       it('routes every skip link', () => {
         expect(res.tracks.size).toBeGreaterThan(500)
       })
 
-      it('no two routes share a gap or gutter run', () => {
+      it('no two routes share a gap or gutter run, except within one stub', () => {
         const overlap = (a0: number, a1: number, b0: number, b1: number) =>
           Math.min(Math.max(a0, a1), Math.max(b0, b1)) - Math.max(Math.min(a0, a1), Math.min(b0, b1)) > 1
         let collinear = 0
         for (let i = 0; i < runs.length; i++)
           for (let j = i + 1; j < runs.length; j++) {
             const [p, q] = [runs[i], runs[j]]
-            for (const a of p.h) for (const b of q.h) if (Math.abs(a[0] - b[0]) < 0.5 && overlap(a[1], a[2], b[1], b[2])) collinear++
+            p.h.forEach((a, ai) => q.h.forEach((b, bi) => {
+              if (p.stubs[ai] === q.stubs[bi]) return
+              if (Math.abs(a[0] - b[0]) < 0.5 && overlap(a[1], a[2], b[1], b[2])) collinear++
+            }))
             if (Math.abs(p.v[0] - q.v[0]) < 0.5 && overlap(p.v[1], p.v[2], q.v[1], q.v[2])) collinear++
           }
         expect(collinear).toBe(0)
@@ -377,8 +386,8 @@ describe('routeLaneGutters at DR scale (synthetic, 13 lanes)', () => {
           byGap.set(g, [...(byGap.get(g) ?? []), y])
         }
         let min = Infinity
-        for (const ys of byGap.values()) {
-          ys.sort((a, b) => a - b)
+        for (const all of byGap.values()) {
+          const ys = [...new Set(all)].sort((a, b) => a - b) // shared stubs repeat a track
           for (let k = 1; k < ys.length; k++) min = Math.min(min, ys[k] - ys[k - 1])
         }
         expect(min).toBeGreaterThanOrEqual(3 - 1e-6)
@@ -484,5 +493,109 @@ describe('routeLaneGutters track order', () => {
     const a = routeLaneGutters(cross, bigBox, bigLayer, bigLanes)
     const b = routeLaneGutters([...cross].reverse(), bigBox, bigLayer, bigLanes)
     for (const [id, c] of a.curves) expect(b.curves.get(id)!.d).toBe(c.d)
+  })
+})
+
+describe('bundled intra links', () => {
+  const row = [
+    { x: 100, y: 50, width: 80, height: 24 },
+    { x: 220, y: 50, width: 60, height: 20 },
+    { x: 330, y: 50, width: 90, height: 24 },
+  ]
+  const below = { x: 160, y: 86, width: 70, height: 24 }
+  const third = { x: 300, y: 122, width: 70, height: 24 }
+
+  it('gives a row one trunk above it; neighbouring rows share the lower trunk; rows further apart get none', () => {
+    const { trunkFor, trunkBoxes } = laneBundler([...row, below, third])
+    expect(trunkFor(row[0], row[2])).toBe(50 - 12 - 7)
+    expect(trunkFor(row[1], row[0])).toBe(50 - 12 - 7)
+    expect(trunkFor(row[0], below)).toBe(86 - 12 - 7)
+    expect(trunkFor(below, row[2])).toBe(86 - 12 - 7)
+    expect(trunkFor(row[0], third)).toBeNull()
+    expect(trunkBoxes).toHaveLength(3)
+    const left = laneBundler([{ x: 100, y: 50, width: 80, height: 24 }, { x: 100, y: 90, width: 120, height: 24 }], 'vertical')
+    expect(left.trunkFor({ x: 100, y: 50, width: 80, height: 24 }, { x: 100, y: 90, width: 120, height: 24 })).toBe(100 - 60 - 7)
+  })
+
+  it('runs up to the trunk, along it and down into the target, arrow pointing in', () => {
+    const [a, , b] = row
+    const c = laneBundleCurve(a, b, 31)
+    expect(c.pointAt(0)).toEqual({ x: 100, y: 38 })
+    expect(c.tip).toEqual({ x: 330, y: 38 })
+    expect(c.dir).toEqual({ x: 0, y: 1 })
+    expect(c.pointAt(0.5).y).toBe(31)
+    expect(c.d.startsWith('M100,38 L')).toBe(true)
+    // Two links in the row share the trunk between their ends.
+    expect(laneBundleCurve(row[1], b, 31).pointAt(0.5).y).toBe(31)
+  })
+
+  it('between neighbouring rows, leaves the upper node from its bottom edge into the gap', () => {
+    const trunk = laneBundler([...row, below]).trunkFor(row[0], below)!
+    const down = laneBundleCurve(row[0], below, trunk)
+    expect(down.pointAt(0)).toEqual({ x: 100, y: 62 })
+    expect(down.tip).toEqual({ x: 160, y: 74 })
+    expect(down.dir).toEqual({ x: 0, y: 1 })
+    const up = laneBundleCurve(below, row[0], trunk)
+    expect(up.pointAt(0)).toEqual({ x: 160, y: 74 })
+    expect(up.tip).toEqual({ x: 100, y: 62 })
+    expect(up.dir).toEqual({ x: 0, y: -1 })
+    // Same x: a straight drop, not a hairpin through the node.
+    const straight = laneBundleCurve(row[0], { ...below, x: 100 }, trunk)
+    expect(straight.d).toBe('M100,62 L100,74')
+  })
+
+  it('vertical: leaves the left edge to a trunk left of the column', () => {
+    const a = { x: 100, y: 50, width: 80, height: 24 }
+    const b = { x: 100, y: 120, width: 60, height: 24 }
+    const c = laneBundleCurve(a, b, 53, 'vertical')
+    expect(c.pointAt(0)).toEqual({ x: 60, y: 50 })
+    expect(c.tip).toEqual({ x: 70, y: 120 })
+    expect(c.dir).toEqual({ x: 1, y: 0 })
+    expect(c.pointAt(0.5).x).toBe(53)
+  })
+
+  // Every bundled path on the fixture, packed into several rows (columns): no straight run
+  // crosses a node box other than its own two ends.
+  const crossesNoNode = (orientation: 'horizontal' | 'vertical', maxRowWidth: number) => {
+    const lanes = layoutLanes(index, layout, { sizeOf, orientation, maxRowWidth })
+    const boxOf = (id: string) => ({ ...lanes.positions.get(id)!, ...sizeOf(id) })
+    const { trunkFor } = laneBundler([...lanes.positions.keys()].map(boxOf), orientation)
+    const hits = (seg: [{ x: number; y: number }, { x: number; y: number }], b: { x: number; y: number; width: number; height: number }) => {
+      const [p, q] = seg
+      const [x0, x1, y0, y1] = [Math.min(p.x, q.x), Math.max(p.x, q.x), Math.min(p.y, q.y), Math.max(p.y, q.y)]
+      return x0 < b.x + b.width / 2 - 0.5 && x1 > b.x - b.width / 2 + 0.5 && y0 < b.y + b.height / 2 - 0.5 && y1 > b.y - b.height / 2 + 0.5
+    }
+    let bundled = 0
+    let crossRow = 0
+    for (const l of index.links.filter((l) => !l.cross)) {
+      const [a, b] = [boxOf(l.sourceId), boxOf(l.targetId)]
+      const trunk = trunkFor(a, b)
+      if (trunk === null) continue
+      bundled++
+      if (Math.round(orientation === 'vertical' ? a.x : a.y) !== Math.round(orientation === 'vertical' ? b.x : b.y)) crossRow++
+      // The path's straight runs: its ends, and where it meets the trunk (corners only round inward).
+      const c = laneBundleCurve(a, b, trunk, orientation)
+      const v = orientation === 'vertical'
+      const pts = [c.pointAt(0), v ? { x: trunk, y: a.y } : { x: a.x, y: trunk }, v ? { x: trunk, y: b.y } : { x: b.x, y: trunk }, c.tip]
+      const crossed: string[] = []
+      for (const id of lanes.positions.keys()) {
+        if (id === l.sourceId || id === l.targetId) continue
+        for (let i = 1; i < pts.length; i++) if (hits([pts[i - 1], pts[i]], boxOf(id))) crossed.push(id)
+      }
+      expect(crossed, l.id).toEqual([])
+    }
+    return { bundled, crossRow }
+  }
+
+  it('horizontal, wrapped rows: no bundled path crosses a node, including links between rows', () => {
+    const { bundled, crossRow } = crossesNoNode('horizontal', 500)
+    expect(bundled).toBeGreaterThan(50)
+    expect(crossRow).toBeGreaterThan(5)
+  })
+
+  it('vertical, several columns per lane: no bundled path crosses a node', () => {
+    const { bundled, crossRow } = crossesNoNode('vertical', 200)
+    expect(bundled).toBeGreaterThan(50)
+    expect(crossRow).toBeGreaterThan(5)
   })
 })
