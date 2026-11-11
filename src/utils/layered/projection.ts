@@ -145,18 +145,28 @@ export function depthSort<T>(items: readonly T[], depthOf: (item: T) => number):
 /**
  * Height of a layer's plane: ranks spread evenly about y = 0 (rank 0 on top), `gap` apart. With a
  * focused layer, planes above it move up and planes below it move down by `push * amount`, opening
- * room around it.
+ * room around it. Several focus entries add up, so a switch from one focused layer to another
+ * blends (one amount falls while the other rises) instead of closing the stack first.
  */
 export function stackPlaneY(
   rank: number,
   layerCount: number,
   gap: number,
-  focus?: { rank: number; amount: number } | null,
+  focus?: StackFocus | readonly StackFocus[] | null,
   push = 150,
 ): number {
   let y = ((layerCount - 1) / 2 - rank) * gap
-  if (focus && focus.amount > 0 && rank !== focus.rank) y += (rank < focus.rank ? 1 : -1) * push * focus.amount
+  const list: readonly StackFocus[] = focus == null ? [] : Array.isArray(focus) ? focus : [focus as StackFocus]
+  for (const f of list) {
+    if (f.amount > 0 && rank !== f.rank) y += (rank < f.rank ? 1 : -1) * push * f.amount
+  }
   return y
+}
+
+/** A layer the stack opens around: its rank and how far open (0..1). */
+export interface StackFocus {
+  rank: number
+  amount: number
 }
 
 /** The four corners of a square plane at height y, half-width `extent`, in winding order. */

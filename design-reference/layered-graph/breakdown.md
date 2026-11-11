@@ -455,7 +455,7 @@ Why A was chosen:
 **Not yet:**
 
 - Lanes (#334): `skipLayerRouting: 'gutter'`, bundled intra-layer links, a node-label mode, Up/Down focus between lanes.
-- Stack (#335): pinch zoom, label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested).
+- Stack (#335): label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested). Done in the first slice: pinch zoom; independent tween channels (`useTweenChannels`), so a focus after a preset keeps its yaw and a focus switch eases from the current planes; controlled `camera` / `layerGap` held, reporting every frame.
 - Hive (#337): the generic `axes` option (axis by any attribute).
 - Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).

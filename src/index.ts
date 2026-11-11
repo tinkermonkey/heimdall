@@ -363,6 +363,7 @@ export {
   type ProjectionOptions,
   type ProjectedPoint,
   type ScreenBounds,
+  type StackFocus,
   type LayerDef,
   type LayerAccessor,
   type MultiValuePolicy,

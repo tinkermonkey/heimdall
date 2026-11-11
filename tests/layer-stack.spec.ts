@@ -176,6 +176,108 @@ test.describe('LayerStack', () => {
     await expect(page.getByTestId('layer-stack-focus')).toHaveText('focus technology')
   })
 
+  test('switching focus straight to another layer eases the planes from where they are', async ({ page }) => {
+    await open(page)
+    const rest = await planeSpacing(page)
+    await page.getByRole('button', { name: /^Focus Technology layer/ }).click()
+    await expect(cameraStatus(page)).toContainText('focus · ')
+    const technology = await planeSpacing(page)
+    // Titles move every frame of the switch, so click and sample in the page.
+    const samples = await page.evaluate(async () => {
+      const spacing = () => {
+        const ys = ['business', 'application', 'technology'].map((id) => {
+          const nums = document.querySelector(`.layer-stack__plane[data-layer-id="${id}"] polygon`)!.getAttribute('points')!.trim().split(/[\s,]+/).map(Number)
+          let sum = 0
+          for (let i = 1; i < nums.length; i += 2) sum += nums[i]
+          return sum / (nums.length / 2)
+        })
+        return (ys[1] - ys[0]) / (ys[2] - ys[1])
+      }
+      ;(document.querySelector('button.layer-stack__title[data-layer-id="business"]') as HTMLButtonElement).click()
+      const out: number[] = []
+      for (let i = 0; i < 3; i++) {
+        await new Promise((r) => requestAnimationFrame(r))
+        out.push(spacing())
+      }
+      return out
+    })
+    // Before the fix the planes snapped shut (back to rest) and then opened around the new layer.
+    for (const s of samples) expect(Math.abs(s - technology)).toBeLessThan(Math.abs(s - rest))
+    await expect(page.getByTestId('layer-stack-focus')).toHaveText('focus business')
+    // Open around Business: the top gap is now the wide one.
+    await expect.poll(() => planeSpacing(page), { timeout: 3000 }).toBeGreaterThan(rest + 0.3)
+  })
+
+  test('a layer focus right after a preset keeps the preset turning', async ({ page }) => {
+    await open(page)
+    await page.evaluate(async () => {
+      const radio = [...document.querySelectorAll<HTMLElement>('[role="radio"]')].find((r) => r.textContent === 'Profile')!
+      radio.click()
+      await new Promise((r) => requestAnimationFrame(r))
+      await new Promise((r) => requestAnimationFrame(r))
+      ;(document.querySelector('button.layer-stack__title[data-layer-id="technology"]') as HTMLButtonElement).click()
+    })
+    await expect(page.getByTestId('layer-stack-focus')).toHaveText('focus technology')
+    // Profile's yaw (0°) with the focus pitch and zoom.
+    await expect(cameraStatus(page)).toHaveText('focus · yaw 0° pitch 54° zoom 1.12')
+    await expect(page.getByTestId('layer-stack-preset')).toHaveText('preset none')
+  })
+
+  test('a controlled camera and gap are held: interactions only report', async ({ page }) => {
+    await open(page, '&camera=held')
+    const before = await nodeCenters(page)
+    await orbit(page)
+    await expect(cameraStatus(page)).toContainText('orbit · ')
+    expect(await nodeCenters(page)).toEqual(before)
+    await page.getByRole('radio', { name: 'Exploded' }).click()
+    await expect(cameraStatus(page)).toHaveText('preset · yaw -29° pitch 19° zoom 0.86')
+    expect(await nodeCenters(page)).toEqual(before)
+    await expect(page.getByTestId('layer-stack-reports')).toContainText('gap 170')
+  })
+
+  test('a controlled camera and gap that take every report follow each frame', async ({ page }) => {
+    await open(page, '&camera=controlled')
+    const before = await nodeCenters(page)
+    await orbit(page)
+    await expect(cameraStatus(page)).toContainText('orbit · ')
+    expect(await nodeCenters(page)).not.toEqual(before)
+    await page.getByRole('radio', { name: 'Exploded' }).click()
+    await expect(cameraStatus(page)).toHaveText('preset · yaw -29° pitch 19° zoom 0.86')
+    await expect(page.getByTestId('layer-stack-reports')).toContainText('gap 300')
+    // Reported per frame, not only on settle: orbit moves and preset frames add up to many.
+    const reports = Number((await page.getByTestId('layer-stack-reports').textContent())!.match(/(\d+) reports/)![1])
+    expect(reports).toBeGreaterThan(10)
+  })
+
+  test('pinch zooms, clamped like the wheel', async ({ page }) => {
+    await open(page)
+    const pinch = (from: number, to: number) =>
+      page.evaluate(
+        ([from, to]) => {
+          const el = document.querySelector('[data-testid="layer-stack"]')!
+          const r = el.getBoundingClientRect()
+          const x = r.left + r.width * 0.3
+          const y = r.top + r.height * 0.9
+          const fire = (type: string, pointerId: number, cx: number) =>
+            el.dispatchEvent(new PointerEvent(type, { pointerId, pointerType: 'touch', isPrimary: pointerId === 1, clientX: cx, clientY: y, button: 0, buttons: type === 'pointerup' ? 0 : 1, bubbles: true }))
+          fire('pointerdown', 1, x)
+          fire('pointerdown', 2, x + from)
+          for (let i = 1; i <= 4; i++) fire('pointermove', 2, x + from + ((to - from) * i) / 4)
+          fire('pointerup', 2, x + to)
+          fire('pointerup', 1, x)
+        },
+        [from, to],
+      )
+    await pinch(100, 200)
+    await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 2.00')
+    await expect(page.getByTestId('layer-stack-preset')).toHaveText('preset none')
+    await expect(selection(page)).toHaveText('no selection')
+    await pinch(100, 400)
+    await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 3.00')
+    await pinch(300, 30)
+    await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 0.40')
+  })
+
   test.describe('visual', () => {
     test.use({ reducedMotion: 'reduce' })
     for (const theme of ['dark', 'light'] as const) {

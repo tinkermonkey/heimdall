@@ -103,3 +103,128 @@ export function useTween<T extends Record<string, number>>(onFrame: (values: T, 
 
   return useMemo(() => ({ start, cancel, isActive, reducedMotion }), [start, cancel, isActive, reducedMotion])
 }
+
+export interface TweenChannelControls {
+  /**
+   * Tweens each key of `to` from its value in `from`. Only those channels are replaced: channels
+   * started earlier for other keys keep running, so moves on different keys compose. A start's
+   * `onDone` runs once all of its channels finish, and is dropped when any of them is replaced or
+   * cancelled. Jumps (one synchronous frame) under reduced motion or `duration <= 0`.
+   */
+  start: (from: Record<string, number>, to: Record<string, number>, options?: TweenOptions) => void
+  /** Stops the given channels (every channel when unset) where they are. */
+  cancel: (keys?: readonly string[]) => void
+  /** Whether any of the given channels (any channel when unset) is running. */
+  isActive: (keys?: readonly string[]) => boolean
+}
+
+export interface TweenScheduler {
+  request: (cb: (now: number) => void) => number
+  cancel: (handle: number) => void
+}
+
+interface TweenMove {
+  t0: number | null
+  duration: number
+  ease: (t: number) => number
+  onDone?: () => void
+  /** Channels this move still owns. */
+  keys: Set<string>
+  /** False once one of its channels was replaced or cancelled. */
+  intact: boolean
+}
+
+/**
+ * The engine behind `useTweenChannels`, free of React: one frame loop over independent channels.
+ * `onFrame` gets the channels that moved this frame; `idle` is true once none is running.
+ */
+export function createTweenChannels(
+  onFrame: (values: Record<string, number>, idle: boolean) => void,
+  options: { reducedMotion?: () => boolean; scheduler?: TweenScheduler } = {},
+): TweenChannelControls & { dispose: () => void } {
+  const scheduler: TweenScheduler = options.scheduler ?? {
+    request: (cb) => requestAnimationFrame(cb),
+    cancel: (h) => cancelAnimationFrame(h),
+  }
+  const channels = new Map<string, { from: number; to: number; move: TweenMove }>()
+  let handle: number | null = null
+
+  const release = (key: string) => {
+    const ch = channels.get(key)
+    if (!ch) return
+    ch.move.keys.delete(key)
+    ch.move.intact = false
+    channels.delete(key)
+  }
+  const stopLoop = () => {
+    if (handle !== null) scheduler.cancel(handle)
+    handle = null
+  }
+
+  const step = (now: number) => {
+    handle = null
+    const values: Record<string, number> = {}
+    const finished = new Set<TweenMove>()
+    for (const [key, ch] of channels) {
+      const m = ch.move
+      if (m.t0 === null) m.t0 = now
+      const t = Math.min(1, (now - m.t0) / m.duration)
+      values[key] = t >= 1 ? ch.to : ch.from + (ch.to - ch.from) * m.ease(t)
+      if (t >= 1) finished.add(m)
+    }
+    for (const m of finished) {
+      for (const key of m.keys) channels.delete(key)
+      m.keys.clear()
+    }
+    if (channels.size > 0) handle = scheduler.request(step)
+    onFrame(values, channels.size === 0)
+    for (const m of finished) if (m.intact) m.onDone?.()
+  }
+
+  const start = (from: Record<string, number>, to: Record<string, number>, opts: TweenOptions = {}) => {
+    const keys = Object.keys(to)
+    for (const k of keys) release(k)
+    const duration = opts.duration ?? 750
+    if (options.reducedMotion?.() || duration <= 0) {
+      if (channels.size === 0) stopLoop()
+      onFrame({ ...to }, channels.size === 0)
+      opts.onDone?.()
+      return
+    }
+    if (keys.length === 0) return
+    const move: TweenMove = { t0: null, duration, ease: opts.easing ?? easeInOutCubic, onDone: opts.onDone, keys: new Set(keys), intact: true }
+    for (const k of keys) channels.set(k, { from: from[k] ?? to[k], to: to[k], move })
+    if (handle === null) handle = scheduler.request(step)
+  }
+
+  const cancel = (keys?: readonly string[]) => {
+    for (const k of keys ?? [...channels.keys()]) release(k)
+    if (channels.size === 0) stopLoop()
+  }
+
+  const isActive = (keys?: readonly string[]) => (keys ? keys.some((k) => channels.has(k)) : channels.size > 0)
+
+  return { start, cancel, isActive, dispose: () => cancel() }
+}
+
+/**
+ * Independent tweens over named channels in one frame loop: a move replaces only the channels it
+ * names, so a yaw move and a pitch move (or a camera move and a layer push) run side by side.
+ * Ease-in-out by default; a jump under reduced motion.
+ */
+export function useTweenChannels(
+  onFrame: (values: Record<string, number>, idle: boolean) => void,
+): TweenChannelControls & { reducedMotion: boolean } {
+  const reducedMotion = usePrefersReducedMotion()
+  const reducedRef = useRef(reducedMotion)
+  reducedRef.current = reducedMotion
+  const onFrameRef = useRef(onFrame)
+  onFrameRef.current = onFrame
+  const engineRef = useRef<ReturnType<typeof createTweenChannels> | null>(null)
+  if (engineRef.current === null) {
+    engineRef.current = createTweenChannels((values, idle) => onFrameRef.current(values, idle), { reducedMotion: () => reducedRef.current })
+  }
+  const engine = engineRef.current
+  useEffect(() => () => engine.dispose(), [engine])
+  return useMemo(() => ({ start: engine.start, cancel: engine.cancel, isActive: engine.isActive, reducedMotion }), [engine, reducedMotion])
+}
