@@ -72,6 +72,9 @@
   color: rgb(var(--canvas-fg-3));
   margin-top: 4px;
   font-family: var(--font-mono, monospace);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .graph-edge-inspector__body {
@@ -118,6 +121,13 @@
   min-width: 0;
   flex: 1;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* the label span is the flex child that truncates */
+.graph-edge-inspector__endpoint > span:last-child {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }

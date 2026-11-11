@@ -2,15 +2,18 @@ import { useEffect, useMemo, useState } from 'react'
 import { AdjacencyMatrix } from '../components/AdjacencyMatrix'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
-import type { BuildLayeredIndexOptions, PredicateLabelMode } from '../utils/layered/types'
+import type { BuildLayeredIndexOptions, IndexedLink, PredicateLabelMode } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
 
 // AdjacencyMatrix on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=adjacency-matrix&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&dark=1
-//   &symmetric=1&aggregate=layer&report=1 (report: onLinkSelect / onLayerCellSelect write to a status line)
+//   &symmetric=1&aggregate=layer&order=cluster|degree|label
+//   &report=1|legacy (onCellSelect, or the deprecated onLinkSelect, and onLayerCellSelect write to a status line)
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
-const REPORT = params.get('report') === '1'
+const REPORT = params.get('report') === '1' || params.get('report') === 'legacy'
+const LEGACY = params.get('report') === 'legacy'
+const ORDER = (['cluster', 'degree', 'label'] as const).find((o) => o === params.get('order'))
 
 export default function AdjacencyMatrixTestPage() {
   useEffect(() => {
@@ -62,7 +65,8 @@ export default function AdjacencyMatrixTestPage() {
           </span>
         </div>
         <AdjacencyMatrix data-testid="adjacency-matrix" symmetric={params.get('symmetric') === '1'} aggregate={params.get('aggregate') === 'layer' ? 'layer' : 'none'}
-          onLinkSelect={REPORT ? (link, links) => setReport(`link ${link.sourceId} -> ${link.targetId} · ${links.length} in cell`) : undefined}
+          order={ORDER}
+          {...{ [LEGACY ? 'onLinkSelect' : 'onCellSelect']: REPORT ? (link: IndexedLink, links: readonly IndexedLink[]) => setReport(`link ${link.sourceId} -> ${link.targetId} · ${links.length} in cell`) : undefined }}
           onLayerCellSelect={REPORT ? (c) => setReport(`layers ${c.rowLayerId} -> ${c.colLayerId} · ${c.linkCount} · pair ${c.pairKey ?? 'none'}`) : undefined}
         />
       </div>

@@ -437,11 +437,11 @@ Why A was chosen:
   - category-coloured cells, with the amber hop ramp around the selection
   - predicate codes per `predicateLabels`, plus a code legend
   - selection and hover crosshair bands
-- **Interaction:** row headers are focusable buttons (Enter or Space selects, selecting again clears). A cell click selects the source, or calls `onLinkSelect`.
-- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels`, `dark`, `symmetric`, `aggregate` and `report` (records `onLinkSelect` / `onLayerCellSelect`) make it deterministic.
-- **Spec:** `tests/adjacency-matrix.spec.ts` (behaviour tests for the directed, symmetric and layer heat-map modes, 5 screenshots), with darwin and linux baselines. Cell building is unit-tested in `src/utils/__tests__/layeredMatrix.test.ts`.
+- **Interaction:** row headers are focusable buttons (Enter or Space selects, selecting again clears). A cell click selects the source, or calls `onCellSelect(link, links)` (`onLinkSelect` is its deprecated alias). In `LayeredGraphExplorer` a cell click opens the link panel (`GraphEdgeInspector`) instead, unless `matrixProps` has its own cell handler or the inspector is off.
+- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels`, `dark`, `symmetric`, `aggregate`, `order` and `report` (`1` records `onCellSelect` and `onLayerCellSelect`, `legacy` records `onLinkSelect`) make it deterministic. The explorer test page adds `matrix=symmetric|report`.
+- **Spec:** `tests/adjacency-matrix.spec.ts` (behaviour tests for the directed, symmetric and layer heat-map modes, cluster order, and the explorer's link panel; 7 screenshots), with darwin and linux baselines. Cell building, cluster order and link metadata are unit-tested in `src/utils/__tests__/layeredMatrix.test.ts`.
 - **Docs:** documented in the `heimdall-graph` skill. The docs-app showcase waits for step 6, alongside the other views.
-- **Not yet:** `onCellSelect` link inspection through `GraphEdgeInspector`, and virtualization past about 150 nodes. `symmetric` and `aggregate="layer"` are in (#336).
+- **Not yet:** virtualization past about 150 nodes. `symmetric`, `aggregate="layer"`, `onCellSelect` with the explorer's link inspector, and `order="cluster"` are in (#336).
 
 **Steps 3–6: implemented.**
 
@@ -457,7 +457,7 @@ Why A was chosen:
 - Lanes (#334): `skipLayerRouting: 'gutter'`, bundled intra-layer links, Up/Down focus between lanes. Done: `laneOptions.nodeLabels` (`'all'` / `'reached'`, defaulting to the state's `nodeLabels`, so the explorer's toggle applies), optional `nodes`/`edges` with shared state, and pills held during a node drag.
 - Stack (#335): label occlusion behind planes; at 13 layers the default gap and zoom overflow the frame (a layer-count-aware default or a fit on mount). Done in the second slice: the full DR spec fixture (`--full`, 13 layers, 193 types, 987 schemas), frames painted imperatively (no React commit per frame). Done in the first slice: pinch zoom; independent tween channels (`useTweenChannels`), so a focus after a preset keeps its yaw and a focus switch eases from the current planes; controlled `camera` / `layerGap` held, reporting every frame.
 - Hive (#337): the generic `axes` option (axis by any attribute). Done: hiding a layer keeps the other axes' angles (a gap is left), and unsplit loops between near neighbours keep room for their arrowheads.
-- Matrix (#336): link inspection (`onCellSelect` → `GraphEdgeInspector`), `order: 'cluster'`, virtualization. `symmetric` and `aggregate="layer"` are in (cells built by `src/utils/layered/matrix.ts`; the heat map toggles the layer-pair filter and layer focus).
+- Matrix (#336): virtualization. In: `symmetric` and `aggregate="layer"` (the heat map toggles the layer-pair filter and layer focus); `onCellSelect(link, links)` (`onLinkSelect` deprecated), with the explorer showing the link in a `GraphEdgeInspector` (`linkEdgeMetadata`) and a Reverse button for merged cells; `order="cluster"` (per-layer Louvain, deterministic). Helpers in `src/utils/layered/matrix.ts`.
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 
 **#338 state API: implemented.**
