@@ -573,13 +573,16 @@ describe('bundled intra links', () => {
       if (trunk === null) continue
       bundled++
       if (Math.round(orientation === 'vertical' ? a.x : a.y) !== Math.round(orientation === 'vertical' ? b.x : b.y)) crossRow++
+      // The path's straight runs: its ends, and where it meets the trunk (corners only round inward).
       const c = laneBundleCurve(a, b, trunk, orientation)
-      const pts: { x: number; y: number }[] = []
-      for (let i = 0; i <= 200; i++) pts.push(c.pointAt(i / 200))
+      const v = orientation === 'vertical'
+      const pts = [c.pointAt(0), v ? { x: trunk, y: a.y } : { x: a.x, y: trunk }, v ? { x: trunk, y: b.y } : { x: b.x, y: trunk }, c.tip]
+      const crossed: string[] = []
       for (const id of lanes.positions.keys()) {
         if (id === l.sourceId || id === l.targetId) continue
-        for (let i = 1; i < pts.length; i++) expect(hits([pts[i - 1], pts[i]], boxOf(id)), `${l.id} crosses ${id}`).toBe(false)
+        for (let i = 1; i < pts.length; i++) if (hits([pts[i - 1], pts[i]], boxOf(id))) crossed.push(id)
       }
+      expect(crossed, l.id).toEqual([])
     }
     return { bundled, crossRow }
   }
