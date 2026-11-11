@@ -1,19 +1,22 @@
 import { PageHeader, ShowcaseSection, DemoGrid } from '../components/ShowcaseSection'
 
 const mono = 'var(--font-mono, monospace)'
-const fg1 = 'rgb(var(--canvas-fg-1, 17 24 39))'
-const fg2 = 'rgb(var(--canvas-fg-2, 55 65 81))'
-const fg3 = 'rgb(var(--canvas-fg-3, 107 114 128))'
-const border = 'rgb(var(--canvas-border, 229 231 235))'
+const fg1 = 'rgb(var(--canvas-fg-1, 11 18 32))'
+const fg2 = 'rgb(var(--canvas-fg-2, 71 85 105))'
+const fg3 = 'rgb(var(--canvas-fg-3, 100 116 139))'
+const border = 'rgb(var(--canvas-border, 229 233 238))'
 
-type SwatchProps = { name: string; value: string; token?: string; textDark?: boolean }
+type SwatchProps = { name: string; value: string; token?: string; dark?: string }
 
-function Swatch({ name, value, token }: SwatchProps) {
+/** With `dark`, the left half shows the :root value and the right half the body.dark-canvas value. */
+function Swatch({ name, value, token, dark }: SwatchProps) {
+  const background = dark ? `linear-gradient(90deg, ${value} 50%, ${dark} 50%)` : value
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <div style={{ width: '100%', height: 48, background: value, borderRadius: 6, border: `1px solid ${border}` }} />
+      <div style={{ width: '100%', height: 48, background, borderRadius: 6, border: `1px solid ${border}` }} />
       <div style={{ fontFamily: mono, fontSize: 11, color: fg1, fontWeight: 600 }}>{name}</div>
-      <div style={{ fontFamily: mono, fontSize: 10, color: fg3 }}>{value}</div>
+      <div style={{ fontFamily: mono, fontSize: 10, color: fg3 }}>{dark ? `light ${value}` : value}</div>
+      {dark && <div style={{ fontFamily: mono, fontSize: 10, color: fg3 }}>dark {dark}</div>}
       {token && <div style={{ fontFamily: mono, fontSize: 10, color: fg3 }}>{token}</div>}
     </div>
   )
@@ -46,7 +49,7 @@ function TintSample({ values, mode, tint }: { values: Triplet; mode: 'light' | '
       <span style={{ fontFamily: mono, fontSize: 11, padding: '2px 7px', borderRadius: 4, color: `rgb(${fgV})`, background: bg, border: `1px solid ${bd}` }}>
         sample
       </span>
-      <span style={{ fontFamily: mono, fontSize: 10, color: mode === 'light' ? 'rgb(107 114 128)' : 'rgb(148 163 184)', whiteSpace: 'nowrap' }}>
+      <span style={{ fontFamily: mono, fontSize: 10, color: mode === 'light' ? 'rgb(100 116 139)' : 'rgb(148 163 184)', whiteSpace: 'nowrap' }}>
         {values.filter(Boolean).join(' / ')}
       </span>
     </div>
@@ -98,8 +101,8 @@ export function ColorsShowcase() {
       <PageHeader name="Colors" description="Semantic token system. Two surface layers (shell + canvas) and five accent colors. Never use raw hex — always reference tokens." />
       <ShowcaseSection label="Primary accent (amber)">
         <DemoGrid cols={3} gap={12}>
-          <Swatch name="Amber" value="#F59E0B" token="--accent-primary" />
-          <Swatch name="Amber hover" value="#D97706" token="--accent-primary-hover" />
+          <Swatch name="Amber" value="#FBBF24" token="--accent-primary" />
+          <Swatch name="Amber hover" value="#F59E0B" token="--accent-primary-hover" />
           <Swatch name="Amber deep" value="#B45309" token="--accent-primary-deep" />
         </DemoGrid>
       </ShowcaseSection>
@@ -107,33 +110,35 @@ export function ColorsShowcase() {
         <DemoGrid cols={5} gap={12}>
           <Swatch name="Emerald" value="#10B981" token="--status-emerald" />
           <Swatch name="Cyan" value="#22D3EE" token="--status-cyan" />
-          <Swatch name="Violet" value="#A78BFA" token="--status-violet" />
+          <Swatch name="Violet" value="#8B5CF6" token="--status-violet" />
           <Swatch name="Rose" value="#F43F5E" token="--status-rose" />
           <Swatch name="Neutral" value="#6B7280" token="--status-neutral" />
         </DemoGrid>
       </ShowcaseSection>
-      <ShowcaseSection label="Canvas surface (light)">
+      <ShowcaseSection label="Canvas surface" description="Left half: light canvas (:root). Right half: dark canvas (body.dark-canvas).">
         <DemoGrid cols={4} gap={12}>
-          <Swatch name="Canvas bg" value="rgb(255 255 255)" token="--canvas-bg" />
-          <Swatch name="Canvas bg-2" value="rgb(249 250 251)" token="--canvas-bg-2" />
-          <Swatch name="Canvas card" value="rgb(255 255 255)" token="--canvas-card" />
-          <Swatch name="Border" value="rgb(229 231 235)" token="--canvas-border" />
+          <Swatch name="Canvas bg" value="rgb(255 255 255)" dark="rgb(11 20 38)" token="--canvas-bg" />
+          <Swatch name="Canvas bg-2" value="rgb(247 249 251)" dark="rgb(19 32 58)" token="--canvas-bg-2" />
+          <Swatch name="Canvas card" value="rgb(255 255 255)" dark="rgb(27 41 73)" token="--canvas-card" />
+          <Swatch name="Border" value="rgb(229 233 238)" dark="rgb(36 55 99)" token="--canvas-border" />
         </DemoGrid>
       </ShowcaseSection>
-      <ShowcaseSection label="Canvas foreground">
+      <ShowcaseSection label="Canvas foreground" description="Left half: light canvas. Right half: dark canvas.">
         <DemoGrid cols={4} gap={12}>
-          <Swatch name="FG-1" value="rgb(17 24 39)" token="--canvas-fg-1" />
-          <Swatch name="FG-2" value="rgb(55 65 81)" token="--canvas-fg-2" />
-          <Swatch name="FG-3" value="rgb(107 114 128)" token="--canvas-fg-3" />
-          <Swatch name="FG-4" value="rgb(156 163 175)" token="--canvas-fg-4" />
+          <Swatch name="FG-1" value="rgb(11 18 32)" dark="rgb(226 232 240)" token="--canvas-fg-1" />
+          <Swatch name="FG-2" value="rgb(71 85 105)" dark="rgb(148 163 184)" token="--canvas-fg-2" />
+          <Swatch name="FG-3" value="rgb(100 116 139)" dark="rgb(100 116 139)" token="--canvas-fg-3" />
+          <Swatch name="FG-4" value="rgb(148 163 184)" dark="rgb(71 85 105)" token="--canvas-fg-4" />
         </DemoGrid>
       </ShowcaseSection>
       <ShowcaseSection label="Shell surface (always dark)">
-        <DemoGrid cols={4} gap={12}>
-          <Swatch name="Shell bg" value="#0B0F14" token="--shell-bg" />
-          <Swatch name="Shell bg-2" value="#0F141B" token="--shell-bg-2" />
-          <Swatch name="Shell surface" value="#131A23" token="--shell-surface" />
-          <Swatch name="Shell surface-2" value="#1A2230" token="--shell-surface-2" />
+        <DemoGrid cols={6} gap={12} minWidth={110}>
+          <Swatch name="Shell bg" value="#0F1729" token="--shell-bg" />
+          <Swatch name="Shell bg-2" value="#13203A" token="--shell-bg-2" />
+          <Swatch name="Shell surface" value="#1B2949" token="--shell-surface" />
+          <Swatch name="Shell surface-2" value="#243763" token="--shell-surface-2" />
+          <Swatch name="Shell border" value="#1E2A44" token="--shell-border" />
+          <Swatch name="Shell border-2" value="#2A3A5C" token="--shell-border-2" />
         </DemoGrid>
       </ShowcaseSection>
       <ShowcaseSection
@@ -157,11 +162,11 @@ export function ColorsShowcase() {
       </ShowcaseSection>
       <ShowcaseSection label="Status semantic mapping">
         <div style={{ fontFamily: mono, fontSize: 12, color: fg2, lineHeight: 2 }}>
-          <div><span style={{ color: '#F59E0B' }}>Amber</span> — primary accent / highlight</div>
+          <div><span style={{ color: '#FBBF24' }}>Amber</span> — primary accent / highlight</div>
           <div><span style={{ color: '#10B981' }}>Emerald</span> — ok / running / success</div>
           <div><span style={{ color: '#F43F5E' }}>Rose</span> — error / failed</div>
           <div><span style={{ color: '#22D3EE' }}>Cyan</span> — updating / pulling / active</div>
-          <div><span style={{ color: '#A78BFA' }}>Violet</span> — secondary accent</div>
+          <div><span style={{ color: '#8B5CF6' }}>Violet</span> — secondary accent</div>
           <div><span style={{ color: fg3 }}>Neutral</span> — stopped / idle</div>
         </div>
       </ShowcaseSection>
@@ -252,7 +257,7 @@ export function RadiusShowcase() {
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
           {radii.map(r => (
             <div key={r.name} style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-start' }}>
-              <div style={{ width: 80, height: 48, background: 'rgb(var(--canvas-bg-2, 249 250 251))', border: `1px solid ${border}`, borderRadius: Math.min(r.px, 12) }} />
+              <div style={{ width: 80, height: 48, background: 'rgb(var(--canvas-bg-2, 247 249 251))', border: `1px solid ${border}`, borderRadius: Math.min(r.px, 12) }} />
               <div style={{ fontFamily: mono, fontSize: 11, color: fg1, fontWeight: 500 }}>{r.value}</div>
               <div style={{ fontSize: 12, color: fg3, maxWidth: 120 }}>{r.name}</div>
             </div>
