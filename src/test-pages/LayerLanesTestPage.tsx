@@ -18,7 +18,9 @@ const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
 const EDGES = DATA === 'spec' ? drSpecEdges : heimdallUxEdges
 const ORIENTATION: LaneOrientation = params.get('orientation') === 'vertical' ? 'vertical' : 'horizontal'
 const INTRA = params.get('intra') === 'none' ? 'none' : params.get('intra') === 'bundled' ? 'bundled' : 'arc'
+// &rowWidth=<px>: laneOptions.maxRowWidth (several rows or columns per lane).
 // &gutter=1: skipLayerRouting 'gutter'. &categoryToggle=1 adds a button that toggles the structural category.
+const ROW_WIDTH = params.has('rowWidth') ? Number(params.get('rowWidth')) : undefined
 const SKIP_ROUTING = params.get('gutter') === '1' ? 'gutter' : 'direct'
 const EDGE_TOOLTIP = params.get('tooltip') === '1'
 const NO_DATA = params.get('nodata') === '1'
@@ -46,7 +48,7 @@ export default function LayerLanesTestPage() {
     defaultPredicateLabels: (params.get('labels') as PredicateLabelMode | null) ?? 'highlighted',
     defaultNodeLabels: params.get('nodeLabels') !== 'off',
   })
-  const laneOptions = useMemo(() => ({ orientation: ORIENTATION, intraLinks: INTRA, skipLayerRouting: SKIP_ROUTING } as const), [])
+  const laneOptions = useMemo(() => ({ orientation: ORIENTATION, intraLinks: INTRA, skipLayerRouting: SKIP_ROUTING, maxRowWidth: ROW_WIDTH } as const), [])
 
   return (
     <LayeredGraphContext.Provider value={graph}>

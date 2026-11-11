@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { curveEndBoxes, laneBundleCurve, laneBundleTrunks, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneBundleCurve, laneBundler, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -502,14 +502,19 @@ describe('bundled intra links', () => {
     { x: 220, y: 50, width: 60, height: 20 },
     { x: 330, y: 50, width: 90, height: 24 },
   ]
-  const below = { x: 160, y: 90, width: 70, height: 24 }
+  const below = { x: 160, y: 86, width: 70, height: 24 }
+  const third = { x: 300, y: 122, width: 70, height: 24 }
 
-  it('gives every node in a row the same trunk, just above its top edge', () => {
-    const trunkOf = laneBundleTrunks([...row, below])
-    expect(new Set(row.map(trunkOf))).toEqual(new Set([50 - 12 - 7]))
-    expect(trunkOf(below)).toBe(90 - 12 - 7)
-    const left = laneBundleTrunks([{ x: 100, y: 50, width: 80, height: 24 }, { x: 100, y: 90, width: 120, height: 24 }], 'vertical')
-    expect(left({ x: 100, y: 50, width: 80, height: 24 })).toBe(100 - 60 - 7)
+  it('gives a row one trunk above it; neighbouring rows share the lower trunk; rows further apart get none', () => {
+    const { trunkFor, trunkBoxes } = laneBundler([...row, below, third])
+    expect(trunkFor(row[0], row[2])).toBe(50 - 12 - 7)
+    expect(trunkFor(row[1], row[0])).toBe(50 - 12 - 7)
+    expect(trunkFor(row[0], below)).toBe(86 - 12 - 7)
+    expect(trunkFor(below, row[2])).toBe(86 - 12 - 7)
+    expect(trunkFor(row[0], third)).toBeNull()
+    expect(trunkBoxes).toHaveLength(3)
+    const left = laneBundler([{ x: 100, y: 50, width: 80, height: 24 }, { x: 100, y: 90, width: 120, height: 24 }], 'vertical')
+    expect(left.trunkFor({ x: 100, y: 50, width: 80, height: 24 }, { x: 100, y: 90, width: 120, height: 24 })).toBe(100 - 60 - 7)
   })
 
   it('runs up to the trunk, along it and down into the target, arrow pointing in', () => {
@@ -521,8 +526,22 @@ describe('bundled intra links', () => {
     expect(c.pointAt(0.5).y).toBe(31)
     expect(c.d.startsWith('M100,38 L')).toBe(true)
     // Two links in the row share the trunk between their ends.
-    const d = laneBundleCurve(row[1], b, 31)
-    expect(d.pointAt(0.5).y).toBe(c.pointAt(0.5).y)
+    expect(laneBundleCurve(row[1], b, 31).pointAt(0.5).y).toBe(31)
+  })
+
+  it('between neighbouring rows, leaves the upper node from its bottom edge into the gap', () => {
+    const trunk = laneBundler([...row, below]).trunkFor(row[0], below)!
+    const down = laneBundleCurve(row[0], below, trunk)
+    expect(down.pointAt(0)).toEqual({ x: 100, y: 62 })
+    expect(down.tip).toEqual({ x: 160, y: 74 })
+    expect(down.dir).toEqual({ x: 0, y: 1 })
+    const up = laneBundleCurve(below, row[0], trunk)
+    expect(up.pointAt(0)).toEqual({ x: 160, y: 74 })
+    expect(up.tip).toEqual({ x: 100, y: 62 })
+    expect(up.dir).toEqual({ x: 0, y: -1 })
+    // Same x: a straight drop, not a hairpin through the node.
+    const straight = laneBundleCurve(row[0], { ...below, x: 100 }, trunk)
+    expect(straight.d).toBe('M100,62 L100,74')
   })
 
   it('vertical: leaves the left edge to a trunk left of the column', () => {
@@ -533,5 +552,47 @@ describe('bundled intra links', () => {
     expect(c.tip).toEqual({ x: 70, y: 120 })
     expect(c.dir).toEqual({ x: 1, y: 0 })
     expect(c.pointAt(0.5).x).toBe(53)
+  })
+
+  // Every bundled path on the fixture, packed into several rows (columns): no straight run
+  // crosses a node box other than its own two ends.
+  const crossesNoNode = (orientation: 'horizontal' | 'vertical', maxRowWidth: number) => {
+    const lanes = layoutLanes(index, layout, { sizeOf, orientation, maxRowWidth })
+    const boxOf = (id: string) => ({ ...lanes.positions.get(id)!, ...sizeOf(id) })
+    const { trunkFor } = laneBundler([...lanes.positions.keys()].map(boxOf), orientation)
+    const hits = (seg: [{ x: number; y: number }, { x: number; y: number }], b: { x: number; y: number; width: number; height: number }) => {
+      const [p, q] = seg
+      const [x0, x1, y0, y1] = [Math.min(p.x, q.x), Math.max(p.x, q.x), Math.min(p.y, q.y), Math.max(p.y, q.y)]
+      return x0 < b.x + b.width / 2 - 0.5 && x1 > b.x - b.width / 2 + 0.5 && y0 < b.y + b.height / 2 - 0.5 && y1 > b.y - b.height / 2 + 0.5
+    }
+    let bundled = 0
+    let crossRow = 0
+    for (const l of index.links.filter((l) => !l.cross)) {
+      const [a, b] = [boxOf(l.sourceId), boxOf(l.targetId)]
+      const trunk = trunkFor(a, b)
+      if (trunk === null) continue
+      bundled++
+      if (Math.round(orientation === 'vertical' ? a.x : a.y) !== Math.round(orientation === 'vertical' ? b.x : b.y)) crossRow++
+      const c = laneBundleCurve(a, b, trunk, orientation)
+      const pts: { x: number; y: number }[] = []
+      for (let i = 0; i <= 200; i++) pts.push(c.pointAt(i / 200))
+      for (const id of lanes.positions.keys()) {
+        if (id === l.sourceId || id === l.targetId) continue
+        for (let i = 1; i < pts.length; i++) expect(hits([pts[i - 1], pts[i]], boxOf(id)), `${l.id} crosses ${id}`).toBe(false)
+      }
+    }
+    return { bundled, crossRow }
+  }
+
+  it('horizontal, wrapped rows: no bundled path crosses a node, including links between rows', () => {
+    const { bundled, crossRow } = crossesNoNode('horizontal', 500)
+    expect(bundled).toBeGreaterThan(50)
+    expect(crossRow).toBeGreaterThan(5)
+  })
+
+  it('vertical, several columns per lane: no bundled path crosses a node', () => {
+    const { bundled, crossRow } = crossesNoNode('vertical', 200)
+    expect(bundled).toBeGreaterThan(50)
+    expect(crossRow).toBeGreaterThan(5)
   })
 })

@@ -600,8 +600,8 @@ export function LayerLanesShowcase() {
 
       <ShowcaseSection label="Limits">
         <Note>
-          Dense layers (near-cliques) draw many arcs; set laneOptions intraLinks to bundled to merge them into row trunks (hover or select a
-          node to see its own links), or to none, or filters.showIntra to false, to read only the cross-layer links. Links that skip a layer cross the lane between. The default lane node truncates long labels; the full label is
+          Dense layers (near-cliques) draw many arcs; set laneOptions intraLinks to bundled to merge them into row trunks (hover, focus or
+          select a node to see its own links; links on a trunk have no hit target, and links three or more rows apart stay arcs), or to none, or filters.showIntra to false, to read only the cross-layer links. Links that skip a layer cross the lane between. The default lane node truncates long labels; the full label is
           its accessible name.
         </Note>
       </ShowcaseSection>
