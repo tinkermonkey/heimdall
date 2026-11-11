@@ -242,6 +242,100 @@ function releasePointer(el: Element, id: number) {
   }
 }
 
+const GRID_LINES = planeGridLines(0, 1).map((_, i) => i)
+
+/** The elements `paint` writes to, found after each commit. */
+interface SceneElements {
+  planeGroup: Element
+  planes: Map<string, Element>
+  linkGroup: Element
+  links: Map<string, Element>
+  arrowGroup: Element
+  arrows: Map<string, Element>
+  nodeGroup: Element
+  nodes: Map<string, Element>
+  labels: Map<string, HTMLElement>
+  titles: Map<string, HTMLElement>
+  drillColumn: Element | null
+  drillRings: Map<string, Element>
+}
+
+function collectElements(root: HTMLElement): SceneElements | null {
+  const group = (cls: string) => root.querySelector(`.${cls}`)
+  const byAttr = <T extends Element>(selector: string, attr: string) =>
+    new Map([...root.querySelectorAll<T>(selector)].map((el) => [el.getAttribute(attr) ?? '', el]))
+  const planeGroup = group('layer-stack__planes')
+  const linkGroup = group('layer-stack__links')
+  const arrowGroup = group('layer-stack__arrows')
+  const nodeGroup = group('layer-stack__discs')
+  if (!planeGroup || !linkGroup || !arrowGroup || !nodeGroup) return null
+  return {
+    planeGroup,
+    planes: byAttr('.layer-stack__plane', 'data-layer-id'),
+    linkGroup,
+    links: byAttr('.layer-stack__link', 'data-link-id'),
+    arrowGroup,
+    arrows: byAttr('.layer-stack__arrow', 'data-link-id'),
+    nodeGroup,
+    nodes: byAttr('.layer-stack__node', 'data-node-id'),
+    labels: byAttr<HTMLElement>('.layer-stack__label', 'data-node-id'),
+    titles: byAttr<HTMLElement>('.layer-stack__title', 'data-layer-id'),
+    drillColumn: group('layer-stack__drill-column'),
+    drillRings: byAttr('.layer-stack__drill-ring', 'data-layer-id'),
+  }
+}
+
+/**
+ * Puts the elements in `ids` order (painter's order) inside `parent`, moving as few as possible:
+ * the longest run already in order stays, the rest are inserted around it. Skipped when the
+ * order is unchanged since the last call.
+ */
+function reorder(parent: Element, els: ReadonlyMap<string, Element>, ids: readonly string[], last: Record<string, string>, key: string) {
+  const sig = ids.join('\n')
+  if (last[key] === sig) return
+  last[key] = sig
+  const want = ids.map((id) => els.get(id)).filter((el): el is Element => el !== undefined && el.parentNode === parent)
+  const pos = new Map<Element, number>()
+  Array.from(parent.children).forEach((el, i) => pos.set(el, i))
+  const keep = new Set(longestIncreasing(want.map((el) => pos.get(el)!)).map((i) => want[i]))
+  // Backwards: each moved element goes right before the one that follows it in the wanted order.
+  let next: Element | null = null
+  for (let i = want.length - 1; i >= 0; i--) {
+    const el = want[i]
+    if (!keep.has(el)) parent.insertBefore(el, next)
+    next = el
+  }
+}
+
+/** Indices of a longest strictly increasing subsequence of `seq` (patience sorting, O(n log n)). */
+export function longestIncreasing(seq: readonly number[]): number[] {
+  const tails: number[] = []
+  const prev: number[] = new Array(seq.length)
+  for (let i = 0; i < seq.length; i++) {
+    let lo = 0
+    let hi = tails.length
+    while (lo < hi) {
+      const mid = (lo + hi) >> 1
+      if (seq[tails[mid]] < seq[i]) lo = mid + 1
+      else hi = mid
+    }
+    prev[i] = lo > 0 ? tails[lo - 1] : -1
+    tails[lo] = i
+  }
+  const out: number[] = []
+  for (let k = tails.length ? tails[tails.length - 1] : -1; k >= 0; k = prev[k]) out.push(k)
+  return out.reverse()
+}
+
+function setAttr(el: Element, name: string, value: string) {
+  if (el.getAttribute(name) !== value) el.setAttribute(name, value)
+}
+
+function setStyle(el: Element, name: 'left' | 'top' | 'fontSize' | 'zIndex' | 'strokeWidth' | 'display', value: string) {
+  const style = (el as HTMLElement | SVGElement).style
+  if (style[name] !== value) style[name] = value
+}
+
 /** Positions for a graph built without layout: each layer's nodes on a circle. */
 function circlePositions(nodesByLayer: ReadonlyMap<string, readonly IndexedNode[]>): Map<string, Point> {
   const out = new Map<string, Point>()
@@ -331,20 +425,31 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     }
     // Controlled fields are held: every render shows the props, and a move only proposes new
     // values through the change callbacks (see `propose…`).
-    const heldCamera = definedCamera(camera)
-    if (camera) Object.assign(view.current, pickCamera(clampCamera({ ...cameraOf(view.current), ...heldCamera }), Object.keys(heldCamera)))
-    if (layerGap !== undefined) view.current.gap = layerGap
+    const held = useRef<{ camera: Partial<StackCamera>; gap: number | undefined }>({ camera: {}, gap: undefined })
+    held.current = { camera: definedCamera(camera), gap: layerGap }
+    /** Puts the held (controlled) fields back into the view; every render and paint starts here. */
+    const applyHeld = useCallback(() => {
+      const v = view.current!
+      const c = held.current.camera
+      if (Object.keys(c).length > 0) Object.assign(v, pickCamera(clampCamera({ ...cameraOf(v), ...c }), Object.keys(c)))
+      if (held.current.gap !== undefined) v.gap = held.current.gap
+    }, [])
+    applyHeld()
 
+    // Frames (tweens, orbit, zoom, turntable) only paint: `paint` writes the projected geometry
+    // straight into the elements React rendered, so the React tree re-renders only when the graph,
+    // the selection or the emphasis change, and once when motion starts and settles (pills).
     const [, setFrame] = useState(0)
     const repaintNow = useCallback(() => setFrame((f) => (f + 1) % 1e9), [])
+    const paintRef = useRef<() => void>(() => {})
     const pendingRaf = useRef<number | null>(null)
     const repaint = useCallback(() => {
       if (pendingRaf.current !== null) return
       pendingRaf.current = requestAnimationFrame(() => {
         pendingRaf.current = null
-        repaintNow()
+        paintRef.current()
       })
-    }, [repaintNow])
+    }, [])
     useEffect(() => () => {
       if (pendingRaf.current !== null) cancelAnimationFrame(pendingRaf.current)
     }, [])
@@ -416,7 +521,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         proposeCamera(moveCause.current)
       }
       if ('gap' in values) proposeGap()
-      repaintNow()
+      paintRef.current()
       if (cameraDirty.current && !tween.isActive(CAMERA_KEYS)) {
         cameraDirty.current = false
         emitCamera(moveCause.current)
@@ -583,7 +688,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           proposeCamera('turntable')
         }
         last = now
-        repaintNow()
+        paintRef.current()
         raf = requestAnimationFrame(step)
       }
       raf = requestAnimationFrame(step)
@@ -591,7 +696,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         cancelAnimationFrame(raf)
         emitCamera('turntable')
       }
-    }, [spinning, turntableSpeed, repaintNow, clearPreset, emitCamera, proposeCamera])
+    }, [spinning, turntableSpeed, clearPreset, emitCamera, proposeCamera])
 
     // ── stage size (px per scene unit, for pill and title sizes) ──────────
     const stageRef = useRef<HTMLDivElement | null>(null)
@@ -779,128 +884,168 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       [index, linkEmphasis, filters],
     )
 
-    const v = view.current!
-    const mix = v.mix
-    const positions = useMemo(
-      () => (layout ? mixLayerPositions(layout, mix) : fallbackPositions!),
-      [layout, mix, fallbackPositions],
+    const visibleIds = useMemo(() => new Set(visibleNodes.map((n) => n.id)), [visibleNodes])
+    /** Links with both ends shown, in a stable order (paint sorts the elements by depth). */
+    const drawnLinks = useMemo(
+      () => linkEm.filter(({ link }) => visibleIds.has(link.sourceId) && visibleIds.has(link.targetId)),
+      [linkEm, visibleIds],
     )
 
-    // ── per-frame projection ──────────────────────────────────────────────
+    // ── projection ────────────────────────────────────────────────────────
+    // A closure over this render's data. `paint` calls the latest one through `projectRef` on every
+    // frame, so a frame reads the live view (refs) against the structure React last rendered.
     const layerCount = index.layers.length
-    const focus: StackFocus[] = []
-    for (const [id, amount] of Object.entries(v.focus)) {
-      const l = index.layerById.get(id)
-      if (l && amount > 0) focus.push({ rank: l.rank, amount })
-    }
-    const focusAmt = Math.min(1, focus.reduce((s, f) => s + f.amount, 0))
-    const planeYOf = (rank: number) => stackPlaneY(rank, layerCount, v.gap, focus, FOCUS_PUSH)
-    // The camera follows the open plane (a blend of two while focus moves between layers);
-    // `targetY` stays a free offset on top of that.
-    const renderCam = clampCamera({
-      ...cameraOf(v),
-      targetY: v.targetY + focus.reduce((s, f) => s + f.amount * stackPlaneY(f.rank, layerCount, v.gap), 0),
-    })
-    const proj = createProjector(renderCam, axisOffset(renderCam.pitch, focusAmt))
     const W = sceneWidth
     const H = sceneHeight
     const pcx = (x: number) => r2(((x + W / 2) / W) * 100)
     const pcy = (y: number) => r2(((y + H / 2) / H) * 100)
     const extent = planeSize
+    const mixCache = useRef<{ layout: unknown; mix: number; positions: ReadonlyMap<string, Point> } | null>(null)
+    const project = () => {
+      const v = view.current!
+      let positions: ReadonlyMap<string, Point> = fallbackPositions ?? new Map()
+      if (layout) {
+        const c = mixCache.current
+        if (!c || c.layout !== layout || c.mix !== v.mix) mixCache.current = { layout, mix: v.mix, positions: mixLayerPositions(layout, v.mix) }
+        positions = mixCache.current!.positions
+      }
+      const focus: StackFocus[] = []
+      for (const [id, amount] of Object.entries(v.focus)) {
+        const l = index.layerById.get(id)
+        if (l && amount > 0) focus.push({ rank: l.rank, amount })
+      }
+      const focusAmt = Math.min(1, focus.reduce((s, f) => s + f.amount, 0))
+      const planeYOf = (rank: number) => stackPlaneY(rank, layerCount, v.gap, focus, FOCUS_PUSH)
+      // The camera follows the open plane (a blend of two while focus moves between layers);
+      // `targetY` stays a free offset on top of that.
+      const renderCam = clampCamera({
+        ...cameraOf(v),
+        targetY: v.targetY + focus.reduce((s, f) => s + f.amount * stackPlaneY(f.rank, layerCount, v.gap), 0),
+      })
+      const proj = createProjector(renderCam, axisOffset(renderCam.pitch, focusAmt))
 
-    const world = new Map<string, Vec3>()
-    const P = new Map<string, ProjectedPoint>()
-    for (const n of visibleNodes) {
-      const p = positions.get(n.id) ?? fallbackPositions?.get(n.id) ?? { x: 0, y: 0 }
-      const w = { x: p.x * extent * NODE_PLANE_INSET, y: planeYOf(n.layerRank), z: p.y * extent * NODE_PLANE_INSET }
-      world.set(n.id, w)
-      P.set(n.id, proj(w))
-    }
-    const radius = (n: IndexedNode) => nodeRadius(n) * P.get(n.id)!.scale
+      const world = new Map<string, Vec3>()
+      const P = new Map<string, ProjectedPoint>()
+      for (const n of visibleNodes) {
+        const p = positions.get(n.id) ?? fallbackPositions?.get(n.id) ?? { x: 0, y: 0 }
+        const w = { x: p.x * extent * NODE_PLANE_INSET, y: planeYOf(n.layerRank), z: p.y * extent * NODE_PLANE_INSET }
+        world.set(n.id, w)
+        P.set(n.id, proj(w))
+      }
+      const radius = (n: IndexedNode) => nodeRadius(n) * P.get(n.id)!.scale
 
-    const topView = renderCam.pitch >= TOP_VIEW_PITCH
-    const planes = depthSort(
-      visibleLayers.map((layer) => {
-        const y = planeYOf(layer.rank)
-        const corners = planeCorners(y, extent).map(proj)
-        return {
-          layer,
-          depth: proj({ x: 0, y, z: 0 }).depth,
-          points: svgPoints(corners),
-          grid: planeGridLines(y, extent).map(([a, b]) => svgPoints([proj(a), proj(b)])),
-          anchor: leftmostPoint(corners),
-          center: proj({ x: 0, y, z: 0 }),
+      const topView = renderCam.pitch >= TOP_VIEW_PITCH
+      const planes = depthSort(
+        visibleLayers.map((layer) => {
+          const y = planeYOf(layer.rank)
+          const corners = planeCorners(y, extent).map(proj)
+          const center = proj({ x: 0, y, z: 0 })
+          return {
+            layer,
+            depth: center.depth,
+            points: svgPoints(corners),
+            grid: planeGridLines(y, extent).map(([a, b]) => svgPoints([proj(a), proj(b)])),
+            anchor: leftmostPoint(corners),
+            center,
+          }
+        }),
+        (p) => p.depth,
+      )
+
+      // Plane titles: at each plane's left corner; on a side rail when the planes overlap (top view).
+      const titleSpacing = 46 * unitsPerPx
+      const titles = (() => {
+        const ranked = [...planes].sort((a, b) => a.layer.rank - b.layer.rank)
+        if (topView && ranked.length > 0) {
+          // Kept inside the scene, like the titles below: about 150px wide, right-aligned at x.
+          const x = Math.max(-W / 2 + 150 * unitsPerPx, Math.min(...ranked.map((p) => p.anchor.x)) - 16)
+          const cy = ranked.reduce((s, p) => s + p.center.y, 0) / ranked.length
+          const rail = titleRail(ranked.length, x, cy, titleSpacing)
+          return ranked.map((p, i) => ({ id: p.layer.id, x: rail[i].x, y: rail[i].y }))
         }
-      }),
-      (p) => p.depth,
-    )
-    const planeOpacity = (layerId: string) => (focusedLayerId && layerId !== focusedLayerId ? 0.2 : 1)
+        // Kept inside the scene: a title is about 150px wide, right-aligned at x.
+        const minX = -W / 2 + 150 * unitsPerPx
+        const minY = -H / 2 + 22 * unitsPerPx
+        const maxY = H / 2 - 22 * unitsPerPx
+        const placed = ranked
+          .map((p) => ({ id: p.layer.id, x: Math.max(minX, p.anchor.x - 8), y: clamp(p.anchor.y, minY, maxY) }))
+          .sort((a, b) => a.y - b.y)
+        for (let k = 1; k < placed.length; k++) {
+          if (placed[k].y - placed[k - 1].y < titleSpacing) placed[k].y = placed[k - 1].y + titleSpacing
+        }
+        return placed
+      })()
 
-    // Plane titles: at each plane's left corner; on a side rail when the planes overlap (top view).
-    const titleSpacing = 46 * unitsPerPx
-    const titles = (() => {
-      const ranked = [...planes].sort((a, b) => a.layer.rank - b.layer.rank)
-      if (topView && ranked.length > 0) {
-        // Kept inside the scene, like the titles below: about 150px wide, right-aligned at x.
-        const x = Math.max(-W / 2 + 150 * unitsPerPx, Math.min(...ranked.map((p) => p.anchor.x)) - 16)
-        const cy = ranked.reduce((s, p) => s + p.center.y, 0) / ranked.length
-        const rail = titleRail(ranked.length, x, cy, titleSpacing)
-        return ranked.map((p, i) => ({ p, x: rail[i].x, y: rail[i].y }))
-      }
-      // Kept inside the scene: a title is about 150px wide, right-aligned at x.
-      const minX = -W / 2 + 150 * unitsPerPx
-      const minY = -H / 2 + 22 * unitsPerPx
-      const maxY = H / 2 - 22 * unitsPerPx
-      const placed = ranked
-        .map((p) => ({ p, x: Math.max(minX, p.anchor.x - 8), y: clamp(p.anchor.y, minY, maxY) }))
-        .sort((a, b) => a.y - b.y)
-      for (let k = 1; k < placed.length; k++) {
-        if (placed[k].y - placed[k - 1].y < titleSpacing) placed[k].y = placed[k - 1].y + titleSpacing
-      }
-      return placed.sort((a, b) => a.p.layer.rank - b.p.layer.rank)
-    })()
-
-    // Links, arrowheads and pill candidates.
-    const segs: { id: string; d: string; color: string; width: number; opacity: number; dash: string; key: number }[] = []
-    const arrows: { id: string; points: string; color: string; opacity: number; key: number }[] = []
-    const candidates: (EdgeLabelCandidate & { color: string; opacity: number })[] = []
-    for (const { link, em, text } of linkEm) {
-      const a = P.get(link.sourceId)
-      const b = P.get(link.targetId)
-      if (!a || !b) continue
-      const curve = lineCurve(a, b)
-      const key = (a.depth + b.depth) / 2 - em.z * 1e4
-      segs.push({ id: link.id, d: curve.d, color: em.color, width: r2(em.width * Math.min(a.scale, b.scale)), opacity: em.opacity, dash: em.dash, key })
-      if (em.arrow) {
-        const dx = b.x - a.x
-        const dy = b.y - a.y
-        const len = Math.hypot(dx, dy) || 1
-        const rb = radius(index.nodeById.get(link.targetId)!) + 2
-        if (len > rb + 14) {
+      // Links, arrowheads and pill candidates.
+      const segs: { id: string; d: string; width: number; key: number }[] = []
+      const arrows: { id: string; points: string | null; key: number }[] = []
+      const candidates: (EdgeLabelCandidate & { color: string; opacity: number })[] = []
+      for (const { link, em, text } of drawnLinks) {
+        const a = P.get(link.sourceId)!
+        const b = P.get(link.targetId)!
+        const curve = lineCurve(a, b)
+        const key = (a.depth + b.depth) / 2 - em.z * 1e4
+        segs.push({ id: link.id, d: curve.d, width: r2(em.width * Math.min(a.scale, b.scale)), key })
+        if (em.arrow) {
+          const dx = b.x - a.x
+          const dy = b.y - a.y
+          const len = Math.hypot(dx, dy) || 1
+          const rb = radius(index.nodeById.get(link.targetId)!) + 2
           const ux = dx / len
           const uy = dy / len
-          arrows.push({
-            id: link.id,
-            points: arrowHeadPoints({ x: b.x - ux * rb, y: b.y - uy * rb }, ux, uy, 8 * b.scale, 3.6 * b.scale),
-            color: em.color,
-            opacity: em.highlighted ? 1 : 0.8,
-            key,
-          })
+          // Too short to carry a head: hidden.
+          const points = len > rb + 14 ? arrowHeadPoints({ x: b.x - ux * rb, y: b.y - uy * rb }, ux, uy, 8 * b.scale, 3.6 * b.scale) : null
+          arrows.push({ id: link.id, points, key })
+        }
+        if (text && em.opacity >= 0.2) {
+          candidates.push({ id: link.id, text, pointAt: curve.pointAt, priority: edgeLabelPriority(link, em), color: em.color, opacity: em.highlighted ? 1 : 0.9 })
         }
       }
-      if (text && em.opacity >= 0.2) {
-        candidates.push({ id: link.id, text, pointAt: curve.pointAt, priority: edgeLabelPriority(link, em), color: em.color, opacity: em.highlighted ? 1 : 0.9 })
+
+      // Drill-through column for the selection.
+      const drill = (() => {
+        if (!selNode || !world.has(selNode.id) || visibleLayers.length < 2) return null
+        const w = world.get(selNode.id)!
+        const ys = visibleLayers.map((l) => planeYOf(l.rank))
+        const column = svgPoints([proj({ x: w.x, y: Math.max(...ys), z: w.z }), proj({ x: w.x, y: Math.min(...ys), z: w.z })])
+        const rings = visibleLayers
+          .filter((l) => l.id !== selNode.layerId)
+          .map((l) => ({ id: l.id, points: svgPoints(ringPoints(w.x, planeYOf(l.rank), w.z, 14).map(proj)) }))
+        return { column, rings }
+      })()
+
+      // Nodes, far first; the selection on top.
+      const nodeDraw = depthSort(visibleNodes, (n) => P.get(n.id)!.depth - (n.id === selectedId ? 1e6 : 0))
+      return {
+        P,
+        radius,
+        topView,
+        planes,
+        titles,
+        segs: depthSort(segs, (s) => s.key),
+        arrows: depthSort(arrows, (s) => s.key),
+        candidates,
+        drill,
+        nodeDraw,
       }
     }
-    const segsSorted = depthSort(segs, (s) => s.key)
-    const arrowsSorted = depthSort(arrows, (s) => s.key)
+    const projectRef = useRef(project)
+    projectRef.current = project
+    const selNode = selectedId != null ? index.nodeById.get(selectedId) : undefined
+    const scene = project()
+    const planeOpacity = (layerId: string) => (focusedLayerId && layerId !== focusedLayerId ? 0.2 : 1)
 
     // Pills: skipped while the camera or the planes move (drag, turntable, any tween) and placed
     // once motion settles; placing them is far too costly per frame, and they would jump.
-    const moving =
-      dragging.current || pinch.current !== null || spinning || tween.isActive()
+    const spinningRef = useRef(spinning)
+    spinningRef.current = spinning
+    const isMoving = useCallback(() => dragging.current || pinch.current !== null || spinningRef.current || tween.isActive(), [tween])
+    const moving = isMoving()
+    const renderedMoving = useRef(moving)
+    renderedMoving.current = moving
     const pills = (() => {
-      if (moving || candidates.length === 0) return []
+      if (moving || scene.candidates.length === 0) return []
+      const { P, radius, candidates } = scene
       const obstacles: LabelBox[] = visibleNodes.map((n) => {
         const p = P.get(n.id)!
         const r = radius(n)
@@ -913,28 +1058,90 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       }).map((pl) => ({ ...pl, color: byId.get(pl.id)!.color, opacity: byId.get(pl.id)!.opacity }))
     })()
 
-    // Drill-through column for the selection.
-    const selNode = selectedId != null ? index.nodeById.get(selectedId) : undefined
-    const drill = (() => {
-      if (!selNode || !world.has(selNode.id) || visibleLayers.length < 2) return null
-      const w = world.get(selNode.id)!
-      const ys = visibleLayers.map((l) => planeYOf(l.rank))
-      const column = svgPoints([proj({ x: w.x, y: Math.max(...ys), z: w.z }), proj({ x: w.x, y: Math.min(...ys), z: w.z })])
-      const rings = visibleLayers
-        .filter((l) => l.id !== selNode.layerId)
-        .map((l) => ({ id: l.id, points: svgPoints(ringPoints(w.x, planeYOf(l.rank), w.z, 14).map(proj)) }))
-      return { column, rings }
-    })()
-
-    // Nodes, far first; the selection on top.
-    const nodeDraw = depthSort(visibleNodes, (n) => P.get(n.id)!.depth - (n.id === selectedId ? 1e6 : 0))
-    const zOf = new Map(nodeDraw.map((n, i) => [n.id, i + 1]))
-
+    // ── paint (per frame, and after every commit) ─────────────────────────
+    const els = useRef<SceneElements | null>(null)
+    const order = useRef<Record<string, string>>({})
+    const paint = useCallback(() => {
+      const e = els.current
+      if (!e) return
+      applyHeld()
+      // Motion starting or settling re-renders once: pills hide, then are placed again.
+      if (isMoving() !== renderedMoving.current) repaintNow()
+      const s = projectRef.current()
+      reorder(e.planeGroup, e.planes, s.planes.map((p) => p.layer.id), order.current, 'planes')
+      for (const p of s.planes) {
+        const g = e.planes.get(p.layer.id)
+        if (!g) continue
+        const [fill, ...grid] = g.children
+        setAttr(fill, 'points', p.points)
+        grid.forEach((line, i) => setAttr(line, 'points', p.grid[i] ?? ''))
+      }
+      reorder(e.linkGroup, e.links, s.segs.map((l) => l.id), order.current, 'links')
+      for (const l of s.segs) {
+        const path = e.links.get(l.id)
+        if (!path) continue
+        setAttr(path, 'd', l.d)
+        setStyle(path, 'strokeWidth', String(l.width))
+      }
+      reorder(e.arrowGroup, e.arrows, s.arrows.map((a) => a.id), order.current, 'arrows')
+      for (const a of s.arrows) {
+        const head = e.arrows.get(a.id)
+        if (!head) continue
+        setAttr(head, 'points', a.points ?? '')
+        setStyle(head, 'display', a.points ? '' : 'none')
+      }
+      if (s.drill && e.drillColumn) {
+        setAttr(e.drillColumn, 'points', s.drill.column)
+        for (const r of s.drill.rings) {
+          const ring = e.drillRings.get(r.id)
+          if (ring) setAttr(ring, 'points', r.points)
+        }
+      }
+      const ids = s.nodeDraw.map((n) => n.id)
+      reorder(e.nodeGroup, e.nodes, ids, order.current, 'nodes')
+      s.nodeDraw.forEach((n, i) => {
+        const p = s.P.get(n.id)!
+        const r = s.radius(n)
+        const g = e.nodes.get(n.id)
+        if (g) {
+          for (const c of g.children) {
+            setAttr(c, 'cx', String(r1(p.x)))
+            setAttr(c, 'cy', String(r1(p.y)))
+            setAttr(c, 'r', String(r1(c.classList.contains('layer-stack__disc') ? r : r + 3.5)))
+          }
+        }
+        const label = e.labels.get(n.id)
+        if (label) {
+          setStyle(label, 'left', `${pcxRef.current(p.x + r + 4)}%`)
+          setStyle(label, 'top', `${pcyRef.current(p.y)}%`)
+          setStyle(label, 'fontSize', `${r1(clamp(10.5 * p.scale, 8, 14))}px`)
+          setStyle(label, 'zIndex', String(i + 1))
+        }
+      })
+      for (const t of s.titles) {
+        const el = e.titles.get(t.id)
+        if (!el) continue
+        setStyle(el, 'left', `${pcxRef.current(t.x)}%`)
+        setStyle(el, 'top', `${pcyRef.current(t.y)}%`)
+        el.classList.toggle('layer-stack__title--rail', s.topView)
+      }
+    }, [applyHeld, isMoving, repaintNow])
+    paintRef.current = paint
+    const pcxRef = useRef(pcx)
+    pcxRef.current = pcx
+    const pcyRef = useRef(pcy)
+    pcyRef.current = pcy
+    // After every commit: find the elements React rendered, then draw them.
+    useLayoutEffect(() => {
+      els.current = stageRef.current ? collectElements(stageRef.current) : null
+      order.current = {}
+      paint()
+    })
     // ── keyboard (roving focus over the node label buttons) ───────────────
     const [rovingId, setRovingId] = useState<string | null>(null)
     const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null)
     const buttonRefs = useRef(new Map<string, HTMLButtonElement>())
-    const tabStop = (rovingId && P.has(rovingId) ? rovingId : null) ?? (selectedId && P.has(selectedId) ? selectedId : null) ?? visibleNodes[0]?.id ?? null
+    const tabStop = (rovingId && visibleIds.has(rovingId) ? rovingId : null) ?? (selectedId && visibleIds.has(selectedId) ? selectedId : null) ?? visibleNodes[0]?.id ?? null
     const moveFocus = (id: string | undefined) => {
       if (!id) return
       setRovingId(id)
@@ -1018,7 +1225,6 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       if (em.hop !== null) return true
       return nodeLabels === 'all' && em.opacity > 0.5
     }
-    const fsOf = (n: IndexedNode) => r1(clamp(10.5 * P.get(n.id)!.scale, 8, 14))
     const label =
       ariaLabel ??
       `Layer stack: ${visibleLayers.length} layers, ${visibleNodes.length} nodes, ${linkEm.length} links${selNode ? `; ${selNode.label} selected` : ''}`
@@ -1045,61 +1251,73 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       >
         <svg className="layer-stack__svg" viewBox={`${-W / 2} ${-H / 2} ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
           <rect className="layer-stack__bg" x={-W / 2} y={-H / 2} width={W} height={H} onClick={onBackgroundClick} />
-          {planes.map((p) => (
-            <g key={p.layer.id} className="layer-stack__plane" opacity={planeOpacity(p.layer.id)} data-layer-id={p.layer.id}>
-              <polygon
-                points={p.points}
-                className={focusedLayerId === p.layer.id ? 'layer-stack__plane-fill layer-stack__plane-fill--focused' : 'layer-stack__plane-fill'}
-                style={{ fill: p.layer.color, stroke: p.layer.color }}
-                onClick={onBackgroundClick}
+          {/* Geometry (points, d, cx/cy/r) and depth order are written by `paint`. */}
+          <g className="layer-stack__planes">
+            {visibleLayers.map((layer) => (
+              <g key={layer.id} className="layer-stack__plane" opacity={planeOpacity(layer.id)} data-layer-id={layer.id}>
+                <polygon
+                  className={focusedLayerId === layer.id ? 'layer-stack__plane-fill layer-stack__plane-fill--focused' : 'layer-stack__plane-fill'}
+                  style={{ fill: layer.color, stroke: layer.color }}
+                  onClick={onBackgroundClick}
+                />
+                {GRID_LINES.map((i) => (
+                  <polyline key={i} className="layer-stack__grid" style={{ stroke: layer.color }} />
+                ))}
+              </g>
+            ))}
+          </g>
+          <g className="layer-stack__links">
+            {drawnLinks.map(({ link, em }) => (
+              <path
+                key={link.id}
+                className="layer-stack__link"
+                data-link-id={link.id}
+                style={{ stroke: em.color, strokeOpacity: em.opacity }}
+                strokeDasharray={em.dash || undefined}
               />
-              {p.grid.map((pts, i) => (
-                <polyline key={i} points={pts} className="layer-stack__grid" style={{ stroke: p.layer.color }} />
-              ))}
-            </g>
-          ))}
-          {segsSorted.map((s) => (
-            <path
-              key={s.id}
-              className="layer-stack__link"
-              data-link-id={s.id}
-              d={s.d}
-              style={{ stroke: s.color, strokeWidth: s.width, strokeOpacity: s.opacity }}
-              strokeDasharray={s.dash || undefined}
-            />
-          ))}
-          {arrowsSorted.map((a) => (
-            <polygon key={a.id} className="layer-stack__arrow" points={a.points} style={{ fill: a.color, fillOpacity: a.opacity }} />
-          ))}
-          {drill && (
+            ))}
+          </g>
+          <g className="layer-stack__arrows">
+            {drawnLinks.map(({ link, em }) =>
+              em.arrow ? (
+                <polygon
+                  key={link.id}
+                  className="layer-stack__arrow"
+                  data-link-id={link.id}
+                  style={{ fill: em.color, fillOpacity: em.highlighted ? 1 : 0.8 }}
+                />
+              ) : null,
+            )}
+          </g>
+          {scene.drill && (
             <g className="layer-stack__drill">
-              <polyline className="layer-stack__drill-column" points={drill.column} />
-              {drill.rings.map((r) => (
-                <polyline key={r.id} className="layer-stack__drill-ring" points={r.points} />
+              <polyline className="layer-stack__drill-column" />
+              {scene.drill.rings.map((r) => (
+                <polyline key={r.id} className="layer-stack__drill-ring" data-layer-id={r.id} />
               ))}
             </g>
           )}
-          {nodeDraw.map((n) => {
-            const p = P.get(n.id)!
-            const em = nodeEm.get(n.id)!
-            const r = radius(n)
-            const layer = index.layerById.get(n.layerId)!
-            const ring = em.selected ? 'selected' : em.followed ? 'followed' : n.id === hoveredId ? 'hover' : null
-            return (
-              <g
-                key={n.id}
-                className="layer-stack__node"
-                data-node-id={n.id}
-                opacity={r2(em.opacity)}
-                onClick={(e) => toggleSelect(e, n.id)}
-                onPointerEnter={() => can.hover && !drag.current?.moved && g.hover(n.id)}
-                onPointerLeave={() => can.hover && hoveredId === n.id && g.hover(null)}
-              >
-                {ring && <circle className={`layer-stack__ring layer-stack__ring--${ring}`} cx={r1(p.x)} cy={r1(p.y)} r={r1(r + 3.5)} />}
-                <circle className="layer-stack__disc" cx={r1(p.x)} cy={r1(p.y)} r={r1(r)} style={{ fill: layer.color }} />
-              </g>
-            )
-          })}
+          <g className="layer-stack__discs">
+            {visibleNodes.map((n) => {
+              const em = nodeEm.get(n.id)!
+              const layer = index.layerById.get(n.layerId)!
+              const ring = em.selected ? 'selected' : em.followed ? 'followed' : n.id === hoveredId ? 'hover' : null
+              return (
+                <g
+                  key={n.id}
+                  className="layer-stack__node"
+                  data-node-id={n.id}
+                  opacity={r2(em.opacity)}
+                  onClick={(e) => toggleSelect(e, n.id)}
+                  onPointerEnter={() => can.hover && !drag.current?.moved && g.hover(n.id)}
+                  onPointerLeave={() => can.hover && hoveredId === n.id && g.hover(null)}
+                >
+                  {ring && <circle className={`layer-stack__ring layer-stack__ring--${ring}`} />}
+                  <circle className="layer-stack__disc" style={{ fill: layer.color }} />
+                </g>
+              )
+            })}
+          </g>
         </svg>
 
         <div className="layer-stack__overlay">
@@ -1121,7 +1339,6 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           <div role="group" aria-label="Nodes" className="layer-stack__nodes">
             {visibleLayers.flatMap((l) =>
               (nodesByLayer.get(l.id) ?? []).map((n) => {
-                const p = P.get(n.id)!
                 const em = nodeEm.get(n.id)!
                 const shown = showLabel(n)
                 const tint = em.selected ? ' layer-stack__label--selected' : em.followed ? ' layer-stack__label--followed' : ''
@@ -1138,13 +1355,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
                     tabIndex={n.id === tabStop ? 0 : -1}
                     aria-pressed={em.selected}
                     aria-label={`${n.label}, ${l.label} layer${em.selected ? ', selected' : ''}`}
-                    style={{
-                      left: `${pcx(p.x + radius(n) + 4)}%`,
-                      top: `${pcy(p.y)}%`,
-                      fontSize: fsOf(n),
-                      opacity: r2(Math.max(em.opacity, 0.35)),
-                      zIndex: zOf.get(n.id),
-                    }}
+                    style={{ opacity: r2(Math.max(em.opacity, 0.35)) }}
                     onClick={(e) => toggleSelect(e, n.id)}
                     onFocus={() => {
                       setRovingId(n.id)
@@ -1161,8 +1372,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
               }),
             )}
           </div>
-          {titles.map(({ p, x, y }) => {
-            const layer = p.layer
+          {visibleLayers.map((layer) => {
             const focused = focusedLayerId === layer.id
             const body = (
               <>
@@ -1173,8 +1383,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
               </>
             )
             const common = {
-              className: `layer-stack__title${focused ? ' layer-stack__title--focused' : ''}${topView ? ' layer-stack__title--rail' : ''}`,
-              style: { left: `${pcx(x)}%`, top: `${pcy(y)}%`, opacity: planeOpacity(layer.id) },
+              className: `layer-stack__title${focused ? ' layer-stack__title--focused' : ''}${scene.topView ? ' layer-stack__title--rail' : ''}`,
+              style: { opacity: planeOpacity(layer.id) },
               'data-layer-id': layer.id,
             }
             return can.focusLayer ? (

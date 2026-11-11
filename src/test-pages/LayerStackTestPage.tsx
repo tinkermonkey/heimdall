@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Profiler, useEffect, useMemo, useRef, useState } from 'react'
 import { LayerStack, type LayerStackHandle, type LayerStackNodeLabels } from '../components/LayerStack'
 import { Button } from '../components/Button'
 import { SegmentedControl } from '../components/SegmentedControl'
@@ -6,17 +6,23 @@ import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import { CAMERA_PRESETS, CAMERA_PRESET_NAMES, cameraFromPreset, type CameraPresetName, type StackCamera } from '../utils/layered/projection'
 import type { BuildLayeredIndexOptions, PlaneLayoutMode, PredicateLabelMode } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
+import { drFullEdges, drFullLayers, drFullNodes } from './fixtures/layeredGraphFullSpec'
 
 // LayerStack on the layered-graph fixtures. Turntable off and a fixed camera; URL params make
 // screenshots deterministic:
-//   ?example=layer-stack&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all
+//   ?example=layer-stack&data=spec|ux|full (full: the whole DR spec, 13 layers)&select=<node id>&follow=0|1|2&labels=off|highlighted|all
 //     &nodeLabels=all|reached|none&preset=stack|exploded|top|profile&focus=<layer id>&layout=coupled&dark=1
 //     &asyncLayout=1 (lay out asynchronously at any size; the caption shows `layout pending|ready`)
 //     &camera=controlled|lagged|held (camera and layer gap as controlled props: `controlled` takes
 //       every change the stack reports, `lagged` takes each two frames late, `held` none; a counter
 //       shows the reports and the page's camera)
 const params = new URLSearchParams(window.location.search)
-const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
+const DATA = params.get('data') === 'ux' || params.get('data') === 'full' ? (params.get('data') as 'ux' | 'full') : 'spec'
+const FIXTURE = {
+  spec: { nodes: drSpecNodes, edges: drSpecEdges, layers: drLayers },
+  ux: { nodes: heimdallUxNodes, edges: heimdallUxEdges, layers: drLayers },
+  full: { nodes: drFullNodes, edges: drFullEdges, layers: drFullLayers },
+}[DATA]
 const CAMERA_MODE = ['controlled', 'lagged', 'held'].includes(params.get('camera') ?? '') ? params.get('camera') : null
 /** Applies a reported value: at once, two frames late (a slow parent), or never. */
 function follow<T>(set: (v: T) => void, v: T) {
@@ -24,6 +30,12 @@ function follow<T>(set: (v: T) => void, v: T) {
   else if (CAMERA_MODE === 'lagged') requestAnimationFrame(() => requestAnimationFrame(() => set(v)))
 }
 const PRESET = (CAMERA_PRESET_NAMES as readonly string[]).includes(params.get('preset') ?? '') ? (params.get('preset') as CameraPresetName) : 'stack'
+
+/** LayerStack commits so far, for the spec's per-frame render check (`window.__layerStackCommits`). */
+const countCommit = () => {
+  const w = window as unknown as { __layerStackCommits?: number }
+  w.__layerStackCommits = (w.__layerStackCommits ?? 0) + 1
+}
 
 const deg = (a: number) => Math.round((a * 180) / Math.PI)
 const describe = (c: StackCamera) => `yaw ${deg(c.yaw)}° pitch ${deg(c.pitch)}° zoom ${c.zoom.toFixed(2)}`
@@ -35,13 +47,13 @@ export default function LayerStackTestPage() {
   }, [])
 
   const layering = useMemo<BuildLayeredIndexOptions>(
-    () => ({ layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
+    () => ({ layerBy: 'layer', layers: FIXTURE.layers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }),
     [],
   )
-  const layout = useMemo(() => ({ layoutCategories: DATA === 'spec' ? ['structural'] : null }), [])
+  const layout = useMemo(() => ({ layoutCategories: DATA === 'ux' ? null : ['structural'] }), [])
   const graph = useLayeredGraph({
-    nodes: DATA === 'spec' ? drSpecNodes : heimdallUxNodes,
-    edges: DATA === 'spec' ? drSpecEdges : heimdallUxEdges,
+    nodes: FIXTURE.nodes,
+    edges: FIXTURE.edges,
     layering,
     layout,
     defaultSelectedId: params.get('select'),
@@ -108,6 +120,7 @@ export default function LayerStackTestPage() {
           {CAMERA_MODE && <span data-testid="layer-stack-reports">{`${CAMERA_MODE} · ${reports} reports · gap ${Math.round(gap)} · ${describe(camera)}`}</span>}
         </div>
         <div style={{ width: 1160, maxWidth: '100%' }}>
+          <Profiler id="layer-stack" onRender={countCommit}>
           <LayerStack
             ref={stack}
             data-testid="layer-stack"
@@ -125,6 +138,7 @@ export default function LayerStackTestPage() {
               follow(setCamera, c)
             }}
           />
+          </Profiler>
         </div>
       </div>
     </LayeredGraphContext.Provider>

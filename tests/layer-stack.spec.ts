@@ -291,6 +291,76 @@ test.describe('LayerStack', () => {
     await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 0.40')
   })
 
+  test.describe('full DR spec', () => {
+    test('draws every layer, node and link of the 13-layer spec', async ({ page }) => {
+      const errors = await open(page, '&data=full')
+      await expect(page.getByTestId('layer-stack-caption')).toContainText('full · 193 nodes · 897 links')
+      await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
+      await expect(page.locator('.layer-stack__node')).toHaveCount(193)
+      await expect(page.locator('button.layer-stack__label')).toHaveCount(193)
+      await expect(page.locator('.layer-stack__link')).toHaveCount(897)
+      expect(errors).toEqual([])
+    })
+
+    /**
+     * Frames paint into the DOM without React: over a stretch of motion the scene changes every
+     * frame while the LayerStack subtree commits no more than the fixed few around it. Counted with
+     * the test page's React Profiler, so it does not depend on machine speed.
+     */
+    const motion = (page: Page, start: string, ms: number) =>
+      page.evaluate(
+        async ([start, ms]) => {
+          const w = window as unknown as { __layerStackCommits: number }
+          const frame = () => new Promise((r) => requestAnimationFrame(r))
+          const plane = () => document.querySelector('.layer-stack__plane[data-layer-id="motivation"] polygon')!.getAttribute('points')
+          ;[...document.querySelectorAll<HTMLElement>('button, [role="radio"]')].find((b) => b.textContent === start)!.click()
+          // Past the commits that start the motion (the prop change, pills hidden).
+          for (let i = 0; i < 3; i++) await frame()
+          const c0 = w.__layerStackCommits
+          const seen = new Set<string | null>()
+          let frames = 0
+          for (const t0 = performance.now(); performance.now() - t0 < ms; frames++) {
+            await frame()
+            seen.add(plane())
+          }
+          return { frames, painted: seen.size, commits: w.__layerStackCommits - c0 }
+        },
+        [start, ms] as const,
+      )
+
+    test('turntable frames paint without re-rendering the React tree', async ({ page }) => {
+      await open(page, '&data=full')
+      const r = await motion(page, 'Turntable', 1000)
+      expect(r.painted).toBeGreaterThan(5)
+      expect(r.commits).toBe(0)
+    })
+
+    test('preset tween frames paint without re-rendering the React tree', async ({ page }) => {
+      await open(page, '&data=full')
+      // Inside the 750 ms tween (its clock starts on its first frame, before this window opens).
+      const r = await motion(page, 'Exploded', 400)
+      expect(r.painted).toBeGreaterThan(3)
+      expect(r.commits).toBe(0)
+      await expect(cameraStatus(page)).toHaveText('preset · yaw -29° pitch 19° zoom 0.86')
+    })
+
+    test('an orbit drag re-renders a fixed few times, not once per move', async ({ page }) => {
+      await open(page, '&data=full')
+      const before = await nodeCenters(page)
+      const box = (await page.getByTestId('layer-stack').boundingBox())!
+      await page.mouse.move(box.x + box.width * 0.85, box.y + box.height * 0.95)
+      await page.mouse.down()
+      const c0 = await page.evaluate(() => (window as unknown as { __layerStackCommits: number }).__layerStackCommits)
+      await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.9, { steps: 30 })
+      const during = await page.evaluate(() => (window as unknown as { __layerStackCommits: number }).__layerStackCommits)
+      expect(await nodeCenters(page)).not.toEqual(before)
+      await page.mouse.up()
+      await expect(cameraStatus(page)).toContainText('orbit · ')
+      // When the drag starts (pills hide) and a hover that ends under the pointer; none per move.
+      expect(during - c0).toBeLessThanOrEqual(3)
+    })
+  })
+
   test.describe('touch', () => {
     test.use({ hasTouch: true })
 
