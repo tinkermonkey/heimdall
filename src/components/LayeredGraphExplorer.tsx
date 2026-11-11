@@ -214,7 +214,10 @@ export interface LayeredGraphExplorerControls {
   follow?: boolean
   /** `PredicateLabelControl` in the link bar. */
   predicateLabels?: boolean
-  /** The link bar (`LinkCategoryFilter`); off also hides the predicate and node-label controls in it. */
+  /**
+   * The link bar (`LinkCategoryFilter`); off also hides its node-label toggle. With `predicateLabels`
+   * on, the predicate control then shows in a bar of its own.
+   */
   linkFilter?: boolean
   /** Node-label toggle in the link bar (stack and hive). */
   nodeLabels?: boolean

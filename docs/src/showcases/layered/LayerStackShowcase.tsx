@@ -208,7 +208,6 @@ const FULL_CODE = `// 13 layers: the preset's gap closes up (presetLayerGap) and
   layering={layering}            // layerBy: 'layer', layers: drFullLayers
   graphOptions={{ defaultSelectedId: 'application.applicationcomponent' }}
   nodeLabels="reached"
-  sceneHeight={1000}             // taller than 780: room for 13 plane titles at 46px apart
   onCameraChange={(camera, cause) => console.log(cause)}   // 'fit' after mount
 />`
 
@@ -651,7 +650,6 @@ function FullSpecDemo() {
           layering={FULL_LAYERING}
           graphOptions={FULL_OPTIONS}
           nodeLabels="reached"
-          sceneHeight={1000}
           onCameraChange={(camera, cause) => setFirst((f) => f ?? { camera, cause })}
           aria-label="Full DR spec layer stack"
         />
