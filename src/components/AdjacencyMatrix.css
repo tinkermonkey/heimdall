@@ -131,3 +131,44 @@
   font-weight: 600;
 }
 
+/* symmetric: a cell holding both directions */
+.adjacency-matrix__both {
+  fill: rgb(var(--canvas-bg));
+  pointer-events: none;
+}
+
+/* aggregate="layer": a neutral ink ramp, so amber stays for focus, selection and reach */
+.adjacency-matrix__heat-empty {
+  fill: none;
+  stroke: rgb(var(--canvas-border));
+  stroke-width: 1;
+}
+
+.adjacency-matrix__heat-cell {
+  cursor: pointer;
+  outline: none;
+}
+
+.adjacency-matrix__heat {
+  fill: rgb(var(--canvas-fg-1));
+}
+
+.adjacency-matrix__heat-cell--active .adjacency-matrix__heat {
+  stroke: rgb(var(--graph-hop-1));
+  stroke-width: 2;
+}
+
+.adjacency-matrix__heat-cell:focus-visible .adjacency-matrix__header-box {
+  stroke: rgb(var(--accent-primary) / 0.18);
+}
+
+.adjacency-matrix__heat-count {
+  fill: rgb(var(--canvas-fg-1));
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.adjacency-matrix__heat-count--inverse {
+  fill: rgb(var(--canvas-bg));
+}
+

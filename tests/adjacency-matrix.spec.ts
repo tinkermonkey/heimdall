@@ -66,3 +66,81 @@ test.describe('AdjacencyMatrix', () => {
     await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-all-codes-light.png')
   })
 })
+
+test.describe('AdjacencyMatrix symmetric', () => {
+  test('merges both directions into one cell above the diagonal', async ({ page }) => {
+    const errors = await open(page, '&symmetric=1')
+    // 162 links over 130 node pairs, 32 of them linked both ways
+    await expect(page.locator('.adjacency-matrix__cell')).toHaveCount(130)
+    await expect(page.locator('.adjacency-matrix__cell--both')).toHaveCount(32)
+    const below = await page.locator('.adjacency-matrix__cell').evaluateAll((els) =>
+      els.filter((el) => Number(el.getAttribute('data-row')) > Number(el.getAttribute('data-col'))).length,
+    )
+    expect(below).toBe(0)
+    await expect(page.locator('.adjacency-matrix__cell--both title').first()).toContainText('\n')
+    expect(errors).toEqual([])
+  })
+
+  test('visual: light canvas, symmetric with a selection', async ({ page }) => {
+    await open(page, `&symmetric=1&select=${ORIGIN}`)
+    await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-symmetric-light.png')
+  })
+})
+
+test.describe('AdjacencyMatrix aggregate="layer"', () => {
+  const PAIR = '["business","application"]'
+
+  test('draws one heat cell per non-empty layer pair', async ({ page }) => {
+    const errors = await open(page, '&aggregate=layer')
+    await expect(page.locator('.adjacency-matrix__heat-cell')).toHaveCount(7)
+    await expect(page.locator('.adjacency-matrix__cell')).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Application to Business: 7 links' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Within Technology: 72 links' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Business layer, 14 nodes' })).toBeVisible()
+    expect(errors).toEqual([])
+  })
+
+  test('symmetric adds both directions into the upper triangle', async ({ page }) => {
+    await open(page, '&aggregate=layer&symmetric=1')
+    await expect(page.locator('.adjacency-matrix__heat-cell')).toHaveCount(6)
+    await expect(page.getByRole('button', { name: 'Between Business and Application: 8 links' })).toBeVisible()
+  })
+
+  test('a cross-layer cell toggles the layer-pair filter; a diagonal cell or header toggles the focus', async ({ page }) => {
+    await open(page, '&aggregate=layer')
+    const state = page.getByTestId('adjacency-matrix-layer-state')
+    const cross = page.getByRole('button', { name: /^Business to Application/ })
+    await cross.click()
+    await expect(state).toHaveText(`pair ${PAIR} · focus none`)
+    await expect(cross).toHaveAttribute('aria-pressed', 'true')
+    // the reverse direction is the same pair
+    await expect(page.getByRole('button', { name: /^Application to Business/ })).toHaveAttribute('aria-pressed', 'true')
+    // counts ignore the pair filter: every cell stays
+    await expect(page.locator('.adjacency-matrix__heat-cell')).toHaveCount(7)
+    await cross.click()
+    await expect(state).toHaveText('pair none · focus none')
+
+    await page.getByRole('button', { name: /^Within Application/ }).click()
+    await expect(state).toHaveText('pair none · focus application')
+    await page.getByRole('button', { name: 'Application layer, 9 nodes, focused' }).focus()
+    await page.keyboard.press('Enter')
+    await expect(state).toHaveText('pair none · focus none')
+    await page.getByRole('button', { name: /^Technology to Business/ }).focus()
+    await page.keyboard.press(' ')
+    await expect(state).toHaveText('pair ["business","technology"] · focus none')
+  })
+
+  test('visual: dark canvas heat map with an active pair', async ({ page }) => {
+    await open(page, '&aggregate=layer&dark=1')
+    await page.getByRole('button', { name: /^Business to Application/ }).click()
+    await page.mouse.move(0, 0)
+    await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-aggregate-dark.png')
+  })
+
+  test('visual: light canvas symmetric heat map with a focused layer', async ({ page }) => {
+    await open(page, '&aggregate=layer&symmetric=1')
+    await page.getByRole('button', { name: 'Application layer, 9 nodes' }).click()
+    await page.mouse.move(0, 0)
+    await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-aggregate-symmetric-light.png')
+  })
+})
