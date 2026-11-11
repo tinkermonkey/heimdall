@@ -7,6 +7,8 @@ import {
   LayeredGraphContext,
   PlaneLayoutControl,
   PredicateLabelControl,
+  PRESET_GAP_FULL_LAYERS,
+  presetLayerGap,
   SegmentedControl,
   Select,
   useLayeredGraph,
@@ -27,6 +29,7 @@ import {
   heimdallUxEdges,
   heimdallUxNodes,
 } from '@/test-pages/fixtures/layeredGraphFixtures'
+import { drFullEdges, drFullLayers, drFullNodes } from '@/test-pages/fixtures/layeredGraphFullSpec'
 import { PageHeader, ShowcaseSection, DemoCard, DemoGrid } from '../../components/ShowcaseSection'
 import { LayerStackHandleTable, LayerStackPropsTable } from './LayerStackReference'
 
@@ -197,6 +200,31 @@ const UX_CODE = `<LayerStack
   nodeLabels="reached"
 />`
 
+const FULL_CODE = `// 13 layers: the preset's gap closes up (presetLayerGap) and, when the planes
+// would still overflow the frame, the mount fits them (reported once as 'fit').
+<LayerStack
+  nodes={drFullNodes}
+  edges={drFullEdges}
+  layering={layering}            // layerBy: 'layer', layers: drFullLayers
+  graphOptions={{ defaultSelectedId: 'application.applicationcomponent' }}
+  nodeLabels="reached"
+  sceneHeight={1000}             // taller than 780: room for 13 plane titles at 46px apart
+  onCameraChange={(camera, cause) => console.log(cause)}   // 'fit' after mount
+/>`
+
+const CONTROLLED_CODE = `const [camera, setCamera] = useState<StackCamera>(() => cameraFromPreset('stack'))
+const [gap, setGap] = useState(170)
+
+<LayerStack
+  camera={camera}
+  onCameraChange={(c) => setCamera(c)}   // every frame of a move; pass it back unchanged
+  layerGap={gap}
+  onLayerGapChange={setGap}
+/>
+
+// Wrong: a rounded value is a change from outside. It jumps, and stops the move.
+onCameraChange={(c) => setCamera({ ...c, yaw: Math.round(c.yaw * 100) / 100 })}`
+
 // ─── Page ──────────────────────────────────────────────────────────────────
 
 export function LayerStackShowcase() {
@@ -240,16 +268,45 @@ export function LayerStackShowcase() {
         <Code>{UX_CODE}</Code>
       </ShowcaseSection>
 
+      <FullSpecDemo />
+
+      <ShowcaseSection
+        label="Labels behind nearer planes"
+        description="A node label whose node sits behind another layer's plane fades to 30% of its emphasis opacity (class layer-stack__label--occluded). It fades rather than hides, so labels do not pop in and out during an orbit. A plane counts when it lies between the node and the camera and the label's point falls inside the plane's projected outline."
+      >
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: fg2, lineHeight: 1.8 }}>
+          <li>Never faded: the selection, every node in its reach, the hovered node and the keyboard-focused node.</li>
+          <li>The top preset is the x-ray through every plane: nothing fades in top view.</li>
+          <li>Planes dimmed by a layer focus are see-through and fade no label; only the focused plane can.</li>
+        </ul>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Interaction">
         <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: fg2, lineHeight: 1.8 }}>
           <li>Click a node to select it; click it again, or click the background, to clear. Clicking a plane title focuses its layer; clicking it again exits.</li>
           <li>Drag to orbit. Pitch is clamped between side-on and top-down, and a 4px threshold keeps a click a click. Orbiting stops the turntable and clears the preset.</li>
           <li>The wheel zooms only while the scene has focus (click it, or tab to a node label), so it never hijacks page scroll.</li>
+          <li>Two fingers pinch to zoom, with the same 0.4–3 clamp as the wheel. A pinch stops any camera move and clears the preset; lifting one finger ends it without starting an orbit. interactions.zoom covers the wheel and the pinch.</li>
+          <li>On touch, one finger swiping vertically scrolls the page (touch-action: pan-y) and a horizontal swipe orbits. With two fingers down the scene cancels touchmove, so a pinch is never taken as a scroll. Put both fingers down together: a second finger added after a one-finger scroll has started cannot pinch, because the browser already owns that touch.</li>
           <li>Node labels are buttons with one tab stop. Left and Right move within a layer, Up and Down move to a linked node (or the first node) on the next layer, Home and End jump to the ends, Enter selects. Labels hidden by nodeLabels stay focusable and show while focused.</li>
           <li>Escape clears the selection.</li>
           <li>Camera moves tween 600–900 ms ease-in-out. Under prefers-reduced-motion they jump, and the turntable stays off.</li>
-          <li>onCameraChange fires when a move settles, not per frame, so chrome that shows the camera does not re-render while it moves. Predicate pills are skipped during a drag and placed again on release.</li>
+          <li>Uncontrolled, onCameraChange fires when a move settles (drag release, end of a tween, a wheel pause, pinch release, turntable stop), not per frame, so chrome that shows the camera does not re-render while it moves. Predicate pills are skipped during a drag and placed again on release.</li>
         </ul>
+      </ShowcaseSection>
+
+      <ShowcaseSection
+        label="Controlled camera"
+        description="Changed in 0.11: a controlled camera and layerGap are strictly held. In 0.10.0 a changed camera prop applied at once and the stack moved on its own between changes; now the view shows the props and nothing else."
+      >
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: fg2, lineHeight: 1.8 }}>
+          <li>The camera fields set are held. An orbit, zoom, preset, focus or turntable only proposes a camera through onCameraChange, on every frame of the move, and the view moves only when the parent passes it back. layerGap works the same through onLayerGapChange. Fields left out of camera stay uncontrolled.</li>
+          <li>Pass each reported value back unchanged. A value the stack never reported (rounded or normalized) counts as a change from outside: it jumps there and stops the stack's move on that field.</li>
+          <li>An echo that lands a frame or more late (React batching on a slow device) is fine: the stack remembers about a second of its own proposals and still treats it as its own.</li>
+          <li>The settle call carries the move's last proposal, so a parent that commits only settled reports still gets the gesture's result.</li>
+          <li>A controlled camera re-renders its parent on every frame. Chrome that only shows or remembers the camera should leave it uncontrolled (defaultCamera, defaultLayerGap) and listen to the settle calls.</li>
+        </ul>
+        <Code>{CONTROLLED_CODE}</Code>
       </ShowcaseSection>
 
       <ShowcaseSection label="Props">
@@ -527,6 +584,99 @@ function PresetVariants() {
         </DemoGrid>
       </LayeredGraphContext.Provider>
       <Code>{VARIANTS_CODE}</Code>
+    </ShowcaseSection>
+  )
+}
+
+// ─── Full DR spec ──────────────────────────────────────────────────────────
+
+const FULL_LAYERING: BuildLayeredIndexOptions = {
+  layerBy: 'layer',
+  layers: drFullLayers,
+  categoryOrder: drCategoryOrder,
+  linkCategoryBy: 'category',
+}
+const FULL_OPTIONS = {
+  defaultSelectedId: 'application.applicationcomponent',
+  defaultFollow: 1,
+  layout: { layoutCategories: ['structural'] },
+}
+const GAP_COUNTS = [3, 5, 8, 13]
+
+function GapTable() {
+  const cell = { padding: '7px 12px' } as const
+  const head = { ...cell, textAlign: 'left', fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: fg3, fontWeight: 500, whiteSpace: 'nowrap' } as const
+  return (
+    <div style={{ border: `1px solid ${border}`, borderRadius: 6, overflow: 'auto' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+        <thead>
+          <tr style={{ background: 'rgb(var(--canvas-bg-2, 243 244 246))' }}>
+            <th style={head}>Preset</th>
+            {GAP_COUNTS.map((n) => (
+              <th key={n} style={{ ...head, textAlign: 'right' }}>
+                {n} layers
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody style={{ borderTop: `1px solid ${border}` }}>
+          {PRESETS.map((p) => (
+            <tr key={p}>
+              <td style={{ ...cell, fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))' }}>{p}</td>
+              {GAP_COUNTS.map((n) => (
+                <td key={n} style={{ ...cell, fontFamily: mono, fontSize: 12, color: fg2, textAlign: 'right' }}>
+                  {Math.round(presetLayerGap(p, n))}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+function FullSpecDemo() {
+  const [first, setFirst] = useState<{ camera: StackCamera; cause: LayerStackCameraCause } | null>(null)
+  const layers = drFullLayers.length
+  return (
+    <ShowcaseSection
+      label="Full DR spec"
+      description={`The whole Documentation Robotics spec meta-model: ${layers} layers, ${drFullNodes.length} node types and ${drFullEdges.length} relationship schemas, which bundle into about 900 links. The stack is tested at this scale. Past ${PRESET_GAP_FULL_LAYERS} layers a preset's gap closes up so the stack keeps the height of ${PRESET_GAP_FULL_LAYERS} layers, and the mount fits the planes to the scene.`}
+    >
+      <DemoCard label={`LayerStack · ${layers} layers`}>
+        <LayerStack
+          nodes={drFullNodes}
+          edges={drFullEdges}
+          layering={FULL_LAYERING}
+          graphOptions={FULL_OPTIONS}
+          nodeLabels="reached"
+          sceneHeight={1000}
+          onCameraChange={(camera, cause) => setFirst((f) => f ?? { camera, cause })}
+          aria-label="Full DR spec layer stack"
+        />
+        <div style={{ marginTop: 10 }}>
+          <MonoLine label="First onCameraChange">{first ? formatCamera(first.camera, first.cause) : 'none yet'}</MonoLine>
+        </div>
+      </DemoCard>
+      <Code>{FULL_CODE}</Code>
+
+      <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <Eyebrow>Fit on load</Eyebrow>
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: fg2, lineHeight: 1.8 }}>
+          <li>On a stack of more than {PRESET_GAP_FULL_LAYERS} layers, a preset's frame is fitted when the planes would overflow it: the same angles, the zoom that fits, the target centred. The preset stays active.</li>
+          <li>It runs on mount (a jump, reported once to onCameraChange with cause fit), when the data arrives or its layer count changes (a fit move toward the preset's destination), and when a preset is picked (the preset's move goes to the fitted frame).</li>
+          <li>Skipped with {PRESET_GAP_FULL_LAYERS} layers or fewer, when the planes already fit, with no preset (cameraPreset null), with a controlled camera, with a defaultCamera zoom or targetY other than the preset's own, and while a layer is focused.</li>
+        </ul>
+      </div>
+
+      <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <Eyebrow>presetLayerGap</Eyebrow>
+        <p style={{ margin: 0, fontSize: 12, color: fg2, lineHeight: 1.65 }}>
+          presetLayerGap(name, layerCount) is a preset's gap for a stack of that many layers: the preset's own up to PRESET_GAP_FULL_LAYERS ({PRESET_GAP_FULL_LAYERS}) layers, then scaled by (PRESET_GAP_FULL_LAYERS − 1) / (layerCount − 1). It is the default defaultLayerGap and the gap a preset moves to. Both are exported. Values below come from the function.
+        </p>
+        <GapTable />
+      </div>
     </ShowcaseSection>
   )
 }
