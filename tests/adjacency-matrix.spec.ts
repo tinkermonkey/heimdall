@@ -188,18 +188,33 @@ test.describe('AdjacencyMatrix onCellSelect and order', () => {
     }
   })
 
-  test('order="cluster" is stable across loads and keeps rows grouped by layer', async ({ page }) => {
-    const rows = async () => page.locator('.adjacency-matrix [role="button"]').evaluateAll((els) => els.map((el) => el.getAttribute('aria-label')))
+  test('order="cluster" puts each community on adjacent rows, the same on every load', async ({ page }) => {
+    const rows = async () =>
+      page.locator('.adjacency-matrix__header[data-node-id]').evaluateAll((els) => els.map((el) => el.getAttribute('aria-label')!.split(',')[0]))
+    // Louvain communities within each layer of the spec fixture
+    const communities = [
+      ['BusinessService', 'Contract', 'Product'],
+      ['BusinessObject', 'Representation'],
+      ['BusinessActor', 'BusinessInterface', 'BusinessRole'],
+      ['BusinessCapability', 'BusinessEvent', 'BusinessFunction', 'BusinessProcess'],
+      ['ApplicationCollaboration', 'ApplicationComponent', 'ApplicationInteraction', 'ApplicationInterface', 'ApplicationService'],
+      ['ApplicationEvent', 'ApplicationFunction', 'ApplicationProcess', 'DataObject'],
+      ['Device', 'Node'],
+    ]
+    const adjacent = (order: string[], group: string[]) => {
+      const at = group.map((g) => order.indexOf(g))
+      return Math.max(...at) - Math.min(...at) === group.length - 1
+    }
     await open(page, '&order=cluster')
     const first = await rows()
     expect(first).toHaveLength(36)
+    for (const group of communities) expect(adjacent(first, group), group.join(', ')).toBe(true)
     await open(page, '&order=cluster')
     expect(await rows()).toEqual(first)
-    await open(page, '&order=degree')
-    expect(await rows()).not.toEqual(first)
-    // layers stay contiguous: Business, then Application, then Technology
-    const layers = first.map((l) => l!.split(', ')[1])
-    expect(layers.filter((l, i) => i === 0 || l !== layers[i - 1])).toEqual(['Business layer', 'Application layer', 'Technology layer'])
+    // the default order splits at least one of them
+    await open(page)
+    const plain = await rows()
+    expect(communities.some((group) => !adjacent(plain, group))).toBe(true)
   })
 
   test('visual: light canvas, cluster order', async ({ page }) => {
@@ -210,44 +225,90 @@ test.describe('AdjacencyMatrix onCellSelect and order', () => {
 
 test.describe('LayeredGraphExplorer matrix link inspector', () => {
   const EXPLORER = 'http://localhost:5173/?example=layered-graph-explorer&view=matrix'
-
-  test('a cell click shows the link; a merged cell steps through both directions', async ({ page }) => {
+  const panel = (page: Page) => page.getByTestId('matrix-link-inspector')
+  const selectedHeaders = (page: Page) => page.locator('.adjacency-matrix__header[aria-label$=", selected"]')
+  async function openExplorer(page: Page, query = '') {
     const errors: string[] = []
     page.on('pageerror', (err) => errors.push(String(err)))
-    await page.goto(EXPLORER + '&matrix=symmetric')
+    await page.goto(EXPLORER + query)
     await page.waitForLoadState('networkidle')
-    const panel = page.getByTestId('matrix-link-inspector')
-    await expect(panel).toHaveCount(0)
+    return errors
+  }
+
+  test('a cell click shows the link; a merged cell steps through both directions', async ({ page }) => {
+    const errors = await openExplorer(page, '&matrix=symmetric')
+    await expect(panel(page)).toHaveCount(0)
 
     await page.locator('.adjacency-matrix__cell--both').first().click()
-    await expect(panel).toBeVisible()
-    await expect(panel).toContainText('Link 1 of 2')
+    await expect(panel(page)).toBeVisible()
+    await expect(page.getByRole('region', { name: 'Link details, 1 of 2' })).toBeVisible()
     await expect(page.getByTestId('adjacency-matrix-selected-cell')).toHaveCount(1)
-    const firstSource = await panel.getByTestId('edge-inspector-source').innerText()
-    const firstTarget = await panel.getByTestId('edge-inspector-target').innerText()
+    // the click shows the link and no longer selects the source
+    await expect(selectedHeaders(page)).toHaveCount(0)
+    await expect(page.getByTestId('explorer-state')).toContainText('no selection')
+    const firstSource = await panel(page).getByTestId('edge-inspector-source').innerText()
+    const firstTarget = await panel(page).getByTestId('edge-inspector-target').innerText()
 
     // the other direction swaps the endpoints
-    await panel.getByRole('button', { name: `${firstTarget} → ${firstSource}` }).click()
-    await expect(panel).toContainText('Link 2 of 2')
-    await expect(panel.getByTestId('edge-inspector-source')).toHaveText(firstTarget)
-    await expect(panel.getByTestId('edge-inspector-target')).toHaveText(firstSource)
+    await panel(page).getByRole('button', { name: `${firstTarget} → ${firstSource}` }).click()
+    await expect(panel(page)).toContainText('2 of 2')
+    await expect(panel(page).getByTestId('edge-inspector-source')).toHaveText(firstTarget)
+    await expect(panel(page).getByTestId('edge-inspector-target')).toHaveText(firstSource)
 
     // an endpoint selects its node; the panel stays
-    await panel.getByTestId('edge-inspector-source').click()
-    await expect(page.locator('.reach-inspector')).toContainText(firstTarget)
-    await expect(panel).toBeVisible()
+    await panel(page).getByTestId('edge-inspector-source').click()
+    await expect(selectedHeaders(page)).toHaveCount(1)
+    await expect(selectedHeaders(page)).toHaveAttribute('aria-label', new RegExp(`^${firstTarget}, .* layer, selected$`))
+    await expect(panel(page)).toBeVisible()
 
-    await panel.getByRole('button', { name: 'Close link' }).click()
-    await expect(panel).toHaveCount(0)
+    await panel(page).getByRole('button', { name: 'Close link details' }).click()
+    await expect(panel(page)).toHaveCount(0)
     await expect(page.getByTestId('adjacency-matrix-selected-cell')).toHaveCount(0)
     expect(errors).toEqual([])
   })
 
+  test('Escape closes the panel and returns focus to the source row header', async ({ page }) => {
+    await openExplorer(page)
+    const cell = page.locator('.adjacency-matrix__cell').first()
+    const source = await cell.getAttribute('data-source-id')
+    await cell.click()
+    await panel(page).getByRole('button', { name: 'Close link details' }).focus()
+    await page.keyboard.press('Escape')
+    await expect(panel(page)).toHaveCount(0)
+    await expect(page.locator(`.adjacency-matrix__header[data-node-id="${source}"]`)).toBeFocused()
+  })
+
+  test('hiding the link’s category drops the panel and the outline', async ({ page }) => {
+    await openExplorer(page)
+    await page.locator('.adjacency-matrix__cell').first().click()
+    const category = await panel(page).locator('dt:text-is("category") + dd').innerText()
+    await page.locator(`.layered-link-filter [data-category="${category}"]`).click()
+    await expect(panel(page)).toHaveCount(0)
+    await expect(page.getByTestId('adjacency-matrix-selected-cell')).toHaveCount(0)
+  })
+
+  test('without the inspector, or with a consumer handler, a cell click keeps its old behaviour', async ({ page }) => {
+    await openExplorer(page, '&hide=inspector')
+    const cell = page.locator('.adjacency-matrix__cell').first()
+    const source = await cell.getAttribute('data-source-id')
+    await cell.click()
+    await expect(page.getByTestId('explorer-state')).toContainText(`selected ${source}`)
+    await expect(panel(page)).toHaveCount(0)
+    await expect(page.getByTestId('adjacency-matrix-selected-cell')).toHaveCount(0)
+
+    await openExplorer(page, '&matrix=report')
+    const reported = page.locator('.adjacency-matrix__cell').first()
+    const id = await reported.getAttribute('data-link-id')
+    await reported.click()
+    await expect(page.getByTestId('cell-report')).toHaveText(`cell ${id}`)
+    await expect(panel(page)).toHaveCount(0)
+    await expect(page.getByTestId('explorer-state')).toContainText('no selection')
+  })
+
   test('visual: link inspector panel', async ({ page }) => {
-    await page.goto(EXPLORER + '&matrix=symmetric')
-    await page.waitForLoadState('networkidle')
+    await openExplorer(page, '&matrix=symmetric')
     await page.locator('.adjacency-matrix__cell--both').first().click()
     await page.mouse.move(0, 0)
-    await expect(page.getByTestId('matrix-link-inspector')).toHaveScreenshot('adjacency-matrix-explorer-link-inspector.png')
+    await expect(panel(page)).toHaveScreenshot('adjacency-matrix-explorer-link-inspector.png')
   })
 })

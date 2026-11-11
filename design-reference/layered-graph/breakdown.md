@@ -437,9 +437,9 @@ Why A was chosen:
   - category-coloured cells, with the amber hop ramp around the selection
   - predicate codes per `predicateLabels`, plus a code legend
   - selection and hover crosshair bands
-- **Interaction:** row headers are focusable buttons (Enter or Space selects, selecting again clears). A cell click selects the source, or calls `onLinkSelect`.
-- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels`, `dark`, `symmetric`, `aggregate` and `report` (records `onLinkSelect` / `onLayerCellSelect`) make it deterministic.
-- **Spec:** `tests/adjacency-matrix.spec.ts` (behaviour tests for the directed, symmetric and layer heat-map modes, 5 screenshots), with darwin and linux baselines. Cell building is unit-tested in `src/utils/__tests__/layeredMatrix.test.ts`.
+- **Interaction:** row headers are focusable buttons (Enter or Space selects, selecting again clears). A cell click selects the source, or calls `onCellSelect(link, links)` (`onLinkSelect` is its deprecated alias). In `LayeredGraphExplorer` a cell click opens the link panel (`GraphEdgeInspector`) instead, unless `matrixProps` has its own cell handler or the inspector is off.
+- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels`, `dark`, `symmetric`, `aggregate`, `order` and `report` (`1` records `onCellSelect` and `onLayerCellSelect`, `legacy` records `onLinkSelect`) make it deterministic. The explorer test page adds `matrix=symmetric|report`.
+- **Spec:** `tests/adjacency-matrix.spec.ts` (behaviour tests for the directed, symmetric and layer heat-map modes, cluster order, and the explorer's link panel; 7 screenshots), with darwin and linux baselines. Cell building, cluster order and link metadata are unit-tested in `src/utils/__tests__/layeredMatrix.test.ts`.
 - **Docs:** documented in the `heimdall-graph` skill. The docs-app showcase waits for step 6, alongside the other views.
 - **Not yet:** virtualization past about 150 nodes. `symmetric`, `aggregate="layer"`, `onCellSelect` with the explorer's link inspector, and `order="cluster"` are in (#336).
 

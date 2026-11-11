@@ -4,17 +4,19 @@ import type { GraphEdgeMetadata } from '../../components/GraphEdgeInspector'
 import { louvainCluster, type ClusterTreeNode } from '../graphClustering'
 import { linkPredicateLabel } from './labels'
 import { orderAcrossLayers } from './layout'
-import type { IndexedLink, LayeredIndex } from './types'
+import type { IndexedLink, IndexedNode, LayeredIndex } from './types'
 
 /**
  * Row and column order for `order="cluster"`: within each layer, Louvain communities over that
  * layer's own links (either direction), bigger communities first and nested communities kept
  * together. (Over every link, the communities are simply the layers.) Deterministic: Louvain runs
- * on the `degree` order (degree, then label) with edges sorted the same way, never on input order,
- * and ties go to the earlier node. Filters do not change it.
+ * on degree order (degree, then label, then id) with edges sorted the same way, never on input
+ * order, and ties go to the earlier node. Filters do not change it.
  */
 export function clusterOrder(index: LayeredIndex): string[] {
-  const base = orderAcrossLayers(index, null, 'degree')
+  const byDegree = (a: IndexedNode, b: IndexedNode) =>
+    b.degree - a.degree || a.label.localeCompare(b.label) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+  const base = orderAcrossLayers(index, null, byDegree)
   const pos = new Map(base.map((id, i) => [id, i]))
   const layerOf = (id: string) => index.nodeById.get(id)!.layerId
 
@@ -55,7 +57,7 @@ export function clusterOrder(index: LayeredIndex): string[] {
   })
 }
 
-/** A link as `GraphEdgeInspector` metadata: predicates as the title, layers and category as rows. */
+/** A link as `GraphEdgeInspector` metadata: predicates as the title ("No predicate" without), layers and category as rows. */
 export function linkEdgeMetadata(index: LayeredIndex, link: IndexedLink): GraphEdgeMetadata {
   const s = index.nodeById.get(link.sourceId)!
   const t = index.nodeById.get(link.targetId)!
@@ -63,7 +65,7 @@ export function linkEdgeMetadata(index: LayeredIndex, link: IndexedLink): GraphE
   const tl = index.layerById.get(t.layerId)?.label ?? t.layerId
   return {
     id: link.id,
-    predicate: link.predicates.length ? linkPredicateLabel(link, index.catalog) : link.primaryCategory,
+    predicate: link.predicates.length ? linkPredicateLabel(link, index.catalog) : 'No predicate',
     sourceId: s.id,
     sourceTitle: s.label,
     targetId: t.id,

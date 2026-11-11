@@ -9,7 +9,7 @@ import {
   type LayeredGraphView,
 } from '../components/LayeredGraphExplorer'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
-import type { BuildLayeredIndexOptions } from '../utils/layered/types'
+import type { BuildLayeredIndexOptions, IndexedLink } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
 
 // LayeredGraphExplorer on the layered-graph fixtures. Turntable off and a fixed camera; URL params
@@ -42,8 +42,9 @@ function parseSnapshot(): LayeredGraphExplorerSnapshotInput | undefined {
 }
 const SNAPSHOT = SYNC ? parseSnapshot() : undefined
 const STACK_PROPS = params.has('gap') ? { defaultLayerGap: Number(params.get('gap')) } : undefined
-// `matrix=symmetric` passes `matrixProps={{ symmetric: true }}`.
-const MATRIX_PROPS = params.get('matrix') === 'symmetric' ? { symmetric: true } : undefined
+// `matrix=symmetric` passes `matrixProps={{ symmetric: true }}`; `matrix=report` passes an
+// `onCellSelect` that writes the link id to `cell-report` (a consumer handler, so no link panel).
+const MATRIX = params.get('matrix')
 const DATA_LABEL = DATA === 'spec' ? 'documentation robotics spec 0.10.0' : 'heimdall ux model'
 
 const mono = { fontFamily: 'var(--font-mono)', fontSize: 11, color: 'rgb(var(--canvas-fg-3))' } as const
@@ -63,6 +64,11 @@ export default function LayeredGraphExplorerTestPage() {
   const [follow, setFollow] = useState(SNAPSHOT?.follow ?? FOLLOW)
   const [view, setView] = useState<LayeredGraphView>(SNAPSHOT?.view ?? VIEW)
   const explorerRef = useRef<LayeredGraphExplorerHandle>(null)
+  const [cellReport, setCellReport] = useState('none')
+  const matrixProps = useMemo(
+    () => (MATRIX === 'symmetric' ? { symmetric: true } : MATRIX === 'report' ? { onCellSelect: (l: IndexedLink) => setCellReport(l.id) } : undefined),
+    [],
+  )
   const [saved, setSaved] = useState<LayeredGraphExplorerSnapshot | null>(null)
   const [snapshotCount, setSnapshotCount] = useState(0)
   const writeUrl = (snapshot: LayeredGraphExplorerSnapshot) => {
@@ -94,7 +100,7 @@ export default function LayeredGraphExplorerTestPage() {
       defaultSnapshot={SNAPSHOT}
       onSnapshotChange={SYNC ? writeUrl : undefined}
       stackProps={STACK_PROPS}
-      matrixProps={MATRIX_PROPS}
+      matrixProps={matrixProps}
       eyebrow="Layered graph"
       title={DATA === 'spec' ? 'Documentation robotics spec' : 'Heimdall UX model'}
       statusLabel={DATA_LABEL}
@@ -107,6 +113,7 @@ export default function LayeredGraphExplorerTestPage() {
       <span data-testid="explorer-state" style={{ ...mono, display: 'block', marginBottom: 8 }}>
         {[`view ${view}`, selected ? `selected ${selected}` : 'no selection', `follow ${follow}`].join(' · ')}
       </span>
+      {MATRIX === 'report' && <span data-testid="cell-report" style={{ ...mono, display: 'block', marginBottom: 8 }}>{`cell ${cellReport}`}</span>}
       {SYNC && (
         <div style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
           <button type="button" onClick={() => setSaved(explorerRef.current?.getSnapshot() ?? null)}>

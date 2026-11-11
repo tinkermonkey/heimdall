@@ -132,6 +132,19 @@ describe('clusterOrder', () => {
     expect(clusterOrder(spec())).toEqual(a)
   })
 
+  it('breaks degree and label ties by id, not input order', () => {
+    // two triangles whose nodes all share one label and one degree
+    const dup = (reverse: boolean) => {
+      const nodes = ['p', 'a', 'b', 'q', 'c', 'd'].map((id) => ({ id, label: 'Dup', attributes: { layer: 'x' } }))
+      const pairs = [['p', 'a'], ['a', 'b'], ['b', 'p'], ['q', 'c'], ['c', 'd'], ['d', 'q']]
+      const edges = pairs.map(([s, t]) => ({ id: s + t, sourceId: s, targetId: t, attributes: { category: 'k' } }))
+      return buildLayeredIndex(reverse ? [...nodes].reverse() : nodes, reverse ? [...edges].reverse() : edges, { layerBy: 'layer', linkCategoryBy: 'category' })
+    }
+    const forward = clusterOrder(dup(false))
+    expect(clusterOrder(dup(true))).toEqual(forward)
+    expect(forward).toEqual(['a', 'b', 'p', 'c', 'd', 'q'])
+  })
+
   it('is a permutation of every node, grouped by layer', () => {
     const ix = spec()
     const ids = clusterOrder(ix)

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { AdjacencyMatrix, MatrixLinkInspector, type AdjacencyMatrixProps } from './AdjacencyMatrix'
+import { AdjacencyMatrix, MatrixLinkInspector, useMatrixLinkPanel, type AdjacencyMatrixProps } from './AdjacencyMatrix'
 import { Button } from './Button'
 import { GraphCanvas, type GraphCanvasProps, type GraphEdge, type GraphNodeData } from './GraphCanvas'
 import { HivePlot, type HivePlotProps } from './HivePlot'
@@ -26,7 +26,7 @@ import {
 } from '../hooks/useLayeredGraph'
 import { CAMERA_PRESET_NAMES, CAMERA_PRESETS, cameraFromPreset, clampCamera, type CameraPresetName, type StackCamera } from '../utils/layered/projection'
 import { sanitizeLayeredGraphSnapshot } from '../utils/layered/snapshot'
-import type { BuildLayeredIndexOptions, IndexedLink, LayeredGraphSnapshot } from '../utils/layered/types'
+import type { BuildLayeredIndexOptions, LayeredGraphSnapshot } from '../utils/layered/types'
 import './LayeredGraphControls.css'
 import './LayeredGraphExplorer.css'
 
@@ -540,9 +540,10 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     const requested = viewProp ?? innerView
     const view = views.includes(requested) ? requested : views[0]
 
-    // ── matrix cell shown in the inspector (dropped when its links leave the index) ──
-    const [matrixCell, setMatrixCell] = useState<{ links: readonly IndexedLink[]; at: number } | null>(null)
-    const shownCell = view === 'matrix' && matrixCell?.links.every((l) => g.index.linkById.get(l.id) === l) ? matrixCell : null
+    // ── matrix cell shown in the inspector; a consumer cell handler replaces the panel ──
+    const consumerCellSelect = matrixProps?.onCellSelect ?? matrixProps?.onLinkSelect
+    const linkPanel = useMatrixLinkPanel(g, show.inspector && !consumerCellSelect && view === 'matrix', view)
+    const shownCell = linkPanel.shown
 
     // ── node labels: the graph's state, unless controlled here ─────────────
     // `defaultNodeLabels` with external state is kept here, as it was before the graph held labels.
@@ -733,14 +734,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           selectedLinkId={shownCell?.links[shownCell.at].id}
           {...matrixProps}
           graph={g}
-          onCellSelect={
-            show.inspector
-              ? (link, links) => {
-                  ;(matrixProps?.onCellSelect ?? matrixProps?.onLinkSelect)?.(link, links)
-                  setMatrixCell({ links, at: links.indexOf(link) })
-                }
-              : matrixProps?.onCellSelect
-          }
+          onCellSelect={linkPanel.enabled ? linkPanel.open : matrixProps?.onCellSelect}
         />
       )
     } else {
@@ -848,14 +842,8 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
             </div>
             {showAside && (
               <aside className="layered-graph-explorer__aside" aria-label="Inspector">
-                {show.inspector && shownCell && (
-                  <MatrixLinkInspector
-                    graph={g}
-                    links={shownCell.links}
-                    at={shownCell.at}
-                    onStep={(at) => setMatrixCell({ ...shownCell, at })}
-                    onClose={() => setMatrixCell(null)}
-                  />
+                {shownCell && (
+                  <MatrixLinkInspector graph={g} links={shownCell.links} at={shownCell.at} onStep={linkPanel.step} onClose={linkPanel.close} />
                 )}
                 {show.inspector ? <ReachInspector empty={lists ?? undefined} /> : lists}
               </aside>
