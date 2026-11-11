@@ -181,7 +181,7 @@
   color: rgb(var(--graph-hop-2));
 }
 
-/* Behind a nearer plane: faded, not hidden, so it stays legible and stable through an orbit. */
+/* Behind a nearer plane: faded to 30% of its emphasis opacity, not hidden, so it does not pop during an orbit. */
 .layer-stack__label--occluded {
   opacity: calc(var(--label-opacity, 1) * 0.3);
 }

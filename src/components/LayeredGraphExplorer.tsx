@@ -591,6 +591,12 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     // Bumped by `restore` to remount the stack, which then starts from the restored camera. Camera
     // reports from a stack of an older epoch (its unmount reports the turntable stopping) are ignored.
     const [stackEpoch, setStackEpoch] = useState(0)
+    /**
+     * The camera the stack last reported, for the status line: a preset's own camera in memory can
+     * differ from what the stack shows (a tall stack is fitted). Cleared when a preset is picked or
+     * the stack remounts, until the stack reports again.
+     */
+    const [liveCamera, setLiveCamera] = useState<StackCamera | null>(null)
     const stackEpochRef = useRef(stackEpoch)
 
     const changeView = useCallback(
@@ -666,6 +672,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
             setStackMem(next)
             stackEpochRef.current += 1
             setStackEpoch(stackEpochRef.current)
+            setLiveCamera(null)
           }
         }
         if (s.view !== undefined) changeView(s.view, !stackChanged)
@@ -705,6 +712,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           onCameraPresetChange={(preset) => {
             if (epoch !== stackEpochRef.current) return
             setStackMem((m) => (preset ? presetMemory(m, preset, layerCountRef.current) : { ...m, preset: null }))
+            if (preset) setLiveCamera(null)
             stackProps?.onCameraPresetChange?.(preset)
           }}
           onTurntableChange={(on) => {
@@ -720,6 +728,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
           onCameraChange={(camera, cause) => {
             if (epoch !== stackEpochRef.current) return
             setStackMem((m) => (m.preset ? m : { ...m, camera }))
+            setLiveCamera(camera)
             stackProps?.onCameraChange?.(camera, cause)
           }}
           className={cx('layered-graph-explorer__stack', stackProps?.className)}
@@ -870,7 +879,7 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
                 <span key={s}>{s}</span>
               ))}
               {view === 'stack' && (
-                <span className="layered-graph-explorer__status-camera">{cameraSummary(stackMem.camera, stackMem.preset, stackMem.gap)}</span>
+                <span className="layered-graph-explorer__status-camera">{cameraSummary(liveCamera ?? stackMem.camera, stackMem.preset, stackMem.gap)}</span>
               )}
             </footer>
           )}

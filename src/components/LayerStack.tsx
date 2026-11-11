@@ -112,7 +112,10 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
    * that field. An echo that lands a frame or more late is fine. Fields left out stay uncontrolled.
    */
   camera?: Partial<StackCamera>
-  /** Initial camera fields when uncontrolled, over the initial preset. */
+  /**
+   * Initial camera fields when uncontrolled, over the initial preset. A zoom or target other than
+   * the preset's own is kept as given: a tall stack is then not fitted to its preset's frame.
+   */
   defaultCamera?: Partial<StackCamera>
   /**
    * Called when a camera move settles (drag release, end of a tween, a wheel pause, pinch release,
@@ -234,17 +237,20 @@ function remember<T>(list: T[], value: T) {
 /**
  * Whether a node's label sits behind another layer's plane: the plane lies between the node and
  * the camera height, and the node's screen point falls inside the plane's projected quad. Planes
- * dimmed by a layer focus do not count.
+ * dimmed by a layer focus do not count, and the top view (the x-ray) fades nothing.
  */
 function behindPlane(
   n: IndexedNode,
   p: Point,
   s: {
+    topView: boolean
     world: ReadonlyMap<string, Vec3>
     cameraY: number
     planes: readonly { layer: { id: string }; y: number; corners: readonly Point[]; occludes: boolean }[]
   },
 ): boolean {
+  // Top view is the x-ray through every plane: nothing fades.
+  if (s.topView) return false
   const y = s.world.get(n.id)?.y
   if (y === undefined) return false
   return s.planes.some((pl) => pl.occludes && pl.layer.id !== n.layerId && (pl.y - y) * (pl.y - s.cameraY) < 0 && insidePolygon(p, pl.corners))
@@ -253,6 +259,25 @@ function behindPlane(
 /** The layers a stack draws (hidden ones filtered out). */
 function shownLayers(index: { layers: readonly { id: string; rank: number }[] }, filters: { hiddenLayers: readonly string[] }) {
   return index.layers.filter((l) => !filters.hiddenLayers.includes(l.id))
+}
+
+/**
+ * The camera a preset shows on a stack: its own (`cameraFromPreset`), or, on a stack of more than
+ * five layers that overflows that framing, the same angles at the zoom that fits (target centred).
+ */
+function presetFrame(
+  name: CameraPresetName,
+  layers: readonly { rank: number }[],
+  layerCount: number,
+  gap: number,
+  extent: number,
+  width: number,
+  height: number,
+): { camera: StackCamera; fitted: boolean } {
+  const camera = cameraFromPreset(name)
+  if (layerCount <= PRESET_GAP_FULL_LAYERS) return { camera, fitted: false }
+  const zoom = overflowFitZoom(layers, layerCount, gap, extent, camera, width, height)
+  return zoom === null ? { camera, fitted: false } : { camera: { ...camera, zoom, targetY: 0 }, fitted: true }
 }
 
 /**
@@ -428,19 +453,28 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
 
     // ── view state (refs) and repaint ─────────────────────────────────────
     const view = useRef<ViewState | null>(null)
+    /** `defaultCamera` set its own zoom or target over the preset's: the preset's fit leaves it alone. */
+    const cameraOverride = useRef(false)
+    /** The mount fitted the stack; reported once after mount. */
+    const mountFit = useRef(false)
     if (view.current === null) {
-      const base = clampCamera({ ...cameraFromPreset(cameraPreset ?? defaultCameraPreset), ...defaultCamera, ...definedCamera(camera) })
+      const initialPreset = cameraPreset ?? defaultCameraPreset
+      const base = clampCamera({ ...cameraFromPreset(initialPreset), ...defaultCamera, ...definedCamera(camera) })
       const focused = focusedLayerId != null && index.layerById.has(focusedLayerId)
-      const gap = layerGap ?? defaultLayerGap ?? presetLayerGap(cameraPreset ?? defaultCameraPreset, index.layers.length)
-      // Presets frame up to five layers. A taller stack that overflows its preset's framing starts
-      // fitted (a preset, an uncontrolled camera, no focus); otherwise the preset's own zoom.
-      const fitted =
-        cameraPreset !== null && camera === undefined && !focused && index.layers.length > PRESET_GAP_FULL_LAYERS
-          ? overflowFitZoom(shownLayers(index, filters), index.layers.length, gap, planeSize, base, sceneWidth, sceneHeight)
+      const gap = layerGap ?? defaultLayerGap ?? presetLayerGap(initialPreset, index.layers.length)
+      cameraOverride.current =
+        (defaultCamera?.zoom !== undefined && !near(defaultCamera.zoom, CAMERA_PRESETS[initialPreset].zoom)) ||
+        (defaultCamera?.targetY !== undefined && !near(defaultCamera.targetY, 0))
+      // A tall stack starts at its preset's frame (`presetFrame`): fitted when it overflows. Not with
+      // no preset, a controlled camera, a `defaultCamera` override or a focused layer.
+      const frame =
+        cameraPreset !== null && camera === undefined && !focused && !cameraOverride.current
+          ? presetFrame(initialPreset, shownLayers(index, filters), index.layers.length, gap, planeSize, sceneWidth, sceneHeight)
           : null
+      mountFit.current = frame?.fitted ?? false
       view.current = {
         ...base,
-        ...(fitted !== null ? { zoom: fitted, targetY: 0 } : null),
+        ...(frame?.fitted ? { zoom: frame.camera.zoom, targetY: frame.camera.targetY } : null),
         ...(focused ? { pitch: FOCUS_PITCH, zoom: FOCUS_ZOOM } : null),
         gap,
         mix: planeLayout === 'coupled' ? 1 : 0,
@@ -648,8 +682,10 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     // ── presets ───────────────────────────────────────────────────────────
     const applyPreset = useCallback(
       (name: CameraPresetName, opts: LayerStackMoveOptions = {}) => {
-        const p = CAMERA_PRESETS[name]
         const gap = presetLayerGap(name, index.layers.length)
+        // The preset's own camera, fitted when a tall stack overflows it.
+        const p = presetFrame(name, shownLayers(index, filters), index.layers.length, held.current.gap ?? gap, planeSize, sceneWidth, sceneHeight).camera
+        cameraOverride.current = false
         appliedPresetRef.current = name
         if (presetRef.current !== name) setPreset(name)
         if (focusedLayerId != null) {
@@ -660,9 +696,9 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         const duration = opts.animate === false ? 0 : CAMERA_MS
         movePlaneFocus(null, duration)
         tween.start({ gap: view.current!.gap }, { gap }, { duration, onDone: () => onLayerGapChangeRef.current?.(gap) })
-        moveView({ yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: 0 }, 'preset', { animate: opts.animate })
+        moveView({ yaw: p.yaw, pitch: p.pitch, zoom: p.zoom, targetY: p.targetY }, 'preset', { animate: opts.animate })
       },
-      [focusedLayerId, g, index, moveView, movePlaneFocus, tween, setPreset],
+      [focusedLayerId, g, index, filters, planeSize, sceneWidth, sceneHeight, moveView, movePlaneFocus, tween, setPreset],
     )
     // Only a change of the prop applies a preset (not a re-render with the same value).
     const prevPresetProp = useRef(cameraPreset)
@@ -698,8 +734,10 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
 
     // ── layer count ───────────────────────────────────────────────────────
     // A graph that arrives (or changes its layer count) after mount takes the active preset's gap
-    // for that many layers (`presetLayerGap`), unless the gap is controlled. A tall one (more than
-    // five layers) is fitted once if it then overflows, as on mount.
+    // for that many layers (`presetLayerGap`), unless the gap is controlled, and moves to the
+    // preset's frame for it (`presetFrame`: fitted when a tall stack overflows), with the same
+    // exceptions as on mount. The frame is the preset's destination, so data that lands during a
+    // preset move retargets it.
     const prevLayerCount = useRef(index.layers.length)
     useEffect(() => {
       const n = index.layers.length
@@ -713,10 +751,17 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         gap = presetLayerGap(name, n)
         if (!near(v.gap, gap)) tween.start({ gap: v.gap }, { gap }, { duration: CAMERA_MS, onDone: () => onLayerGapChangeRef.current?.(gap) })
       }
-      if (Object.keys(held.current.camera).length > 0 || focusedLayerId != null || n <= PRESET_GAP_FULL_LAYERS) return
-      const zoom = overflowFitZoom(shownLayers(index, filters), n, gap, planeSize, cameraOf(v), sceneWidth, sceneHeight)
-      if (zoom !== null) moveView({ targetY: 0, zoom }, 'fit')
+      if (Object.keys(held.current.camera).length > 0 || focusedLayerId != null || cameraOverride.current) return
+      const frame = presetFrame(name, shownLayers(index, filters), n, gap, planeSize, sceneWidth, sceneHeight)
+      const moving = tween.isActive(['zoom', 'targetY'])
+      if (!moving && near(v.zoom, frame.camera.zoom) && near(v.targetY, frame.camera.targetY)) return
+      moveView({ zoom: frame.camera.zoom, targetY: frame.camera.targetY }, frame.fitted ? 'fit' : 'preset')
     }, [index, layerGap, tween])
+    useEffect(() => {
+      if (!mountFit.current) return
+      mountFit.current = false
+      emitCamera('fit')
+    }, [emitCamera])
 
     // ── plane layout mix ──────────────────────────────────────────────────
     useEffect(() => {
