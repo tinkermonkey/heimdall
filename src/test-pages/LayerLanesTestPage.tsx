@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { GraphCanvas } from '../components/GraphCanvas'
+import { GraphCanvas, type GraphNodeData } from '../components/GraphCanvas'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import type { LaneOrientation } from '../utils/laneLayout'
@@ -9,6 +9,9 @@ import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, h
 // GraphCanvas layout="layer-lanes" on the layered-graph fixtures. URL params make screenshots deterministic:
 //   ?example=layer-lanes&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&orientation=vertical&intra=none&dark=1
 // &tooltip=1 adds a hover edgeTooltip (tests/graph-tooltip-placement.spec.ts, #323).
+// &nodeLabels=off starts the layered state's label toggle off (lanes draw 'reached' chips);
+// &nodata=1 leaves out GraphCanvas's nodes/edges, so lanes draw from the context alone.
+// With &nodeLabels set, a 'Node labels' button flips the layered state's label toggle.
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
 const NODES = DATA === 'spec' ? drSpecNodes : heimdallUxNodes
@@ -16,6 +19,9 @@ const EDGES = DATA === 'spec' ? drSpecEdges : heimdallUxEdges
 const ORIENTATION: LaneOrientation = params.get('orientation') === 'vertical' ? 'vertical' : 'horizontal'
 const INTRA = params.get('intra') === 'none' ? 'none' : 'arc'
 const EDGE_TOOLTIP = params.get('tooltip') === '1'
+const NO_DATA = params.get('nodata') === '1'
+// &render=1: a custom renderNode, which nodeLabels 'reached' leaves alone.
+const renderCustomNode = params.get('render') === '1' ? (node: GraphNodeData) => <div className="custom-lane-node" style={{ padding: '4px 8px', border: '1px solid rgb(var(--canvas-border-strong))', fontSize: 11 }}>{node.label}</div> : undefined
 
 export default function LayerLanesTestPage() {
   useEffect(() => {
@@ -36,6 +42,7 @@ export default function LayerLanesTestPage() {
     defaultSelectedId: params.get('select'),
     defaultFollow: params.has('follow') ? Number(params.get('follow')) : 1,
     defaultPredicateLabels: (params.get('labels') as PredicateLabelMode | null) ?? 'highlighted',
+    defaultNodeLabels: params.get('nodeLabels') !== 'off',
   })
   const laneOptions = useMemo(() => ({ orientation: ORIENTATION, intraLinks: INTRA } as const), [])
 
@@ -58,6 +65,11 @@ export default function LayerLanesTestPage() {
             onChange={(v) => graph.setPredicateLabels(v as PredicateLabelMode)}
             options={[{ value: 'off', label: 'Off' }, { value: 'highlighted', label: 'Highlighted' }, { value: 'all', label: 'All' }]}
           />
+          {params.has('nodeLabels') && (
+            <button type="button" aria-pressed={graph.nodeLabels} onClick={() => graph.setNodeLabels(!graph.nodeLabels)}>
+              Node labels
+            </button>
+          )}
           <span data-testid="layer-lanes-selection" style={{ fontFamily: 'var(--font-mono)', color: 'rgb(var(--canvas-fg-3))' }}>
             {graph.selectedId ? `selected ${graph.selectedId} · reach ${graph.reach.hopOf.size - 1}` : 'no selection'}
           </span>
@@ -65,12 +77,12 @@ export default function LayerLanesTestPage() {
         <div style={{ flex: '1 1 auto', minHeight: 0, border: '1px solid rgb(var(--canvas-border))', borderRadius: 8, overflow: 'hidden' }}>
           <GraphCanvas
             data-testid="layer-lanes"
-            nodes={NODES}
-            edges={EDGES}
+            {...(NO_DATA ? {} : { nodes: NODES, edges: EDGES })}
             layout="layer-lanes"
             laneOptions={laneOptions}
             fitView
             fitPadding={24}
+            renderNode={renderCustomNode}
             edgeTooltip={EDGE_TOOLTIP ? (edge) => <span>{edge.label ?? edge.id}</span> : undefined}
             style={{ width: '100%', height: '100%' }}
           />
