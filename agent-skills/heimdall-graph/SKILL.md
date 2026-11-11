@@ -206,7 +206,7 @@ Weighted hierarchy as orbits: body area grows with weight, children orbit their 
 - `showClusterBoundaries` defaults to `false` here.
 - Structural edge labels show only when the edge or one of its nodes is hovered or selected. `structuralEdgeCurvature={0}` draws orbit links straight.
 - The toolbar gains a live-simulation toggle: dragging a node then pulls its subtree along elastically. The toggle is internal state with no prop.
-- Limits: relational edges can cross bodies.
+- Limits: relational edges can cross bodies. Orbits stay evenly spaced (each satellite gets 0.5-1.5× an equal angular share), and that wins over round systems: a parent with many satellites or one dominant branch comes out elongated, up to about 8:1 (GBIF Rodentia root, 102 satellites) and 5.6:1 (Vespertilionidae, 78 satellites).
 
 #### `force-clustered`
 
