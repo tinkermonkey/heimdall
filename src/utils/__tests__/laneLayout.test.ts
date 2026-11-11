@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { curveEndBoxes, laneGutterGapTracks, laneLinkCurve, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneGutterGapTracks, laneLinkCurve, laneNavIndex, laneNavMove, laneNavTarget, laneTagRoom, polylineCurve, retraceLaneGutters, routeLaneGutters, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneLayout, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -493,5 +493,57 @@ describe('routeLaneGutters track order', () => {
     const a = routeLaneGutters(cross, bigBox, bigLayer, bigLanes)
     const b = routeLaneGutters([...cross].reverse(), bigBox, bigLayer, bigLanes)
     for (const [id, c] of a.curves) expect(b.curves.get(id)!.d).toBe(c.d)
+  })
+})
+
+describe('lane keyboard navigation', () => {
+  it('maps keys by screen direction in each orientation', () => {
+    expect(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'a'].map((k) => laneNavMove(k))).toEqual(['prev-lane', 'next-lane', 'prev', 'next', 'first', 'last', null])
+    expect(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].map((k) => laneNavMove(k, 'vertical'))).toEqual(['prev', 'next', 'prev-lane', 'next-lane'])
+  })
+
+  const lanes = layoutLanes(index, layout, { sizeOf, maxRowWidth: 600 })
+  const layerOf = (id: string) => index.nodeById.get(id)?.layerId
+  const nav = laneNavIndex(lanes, layerOf)
+  const posOf = (id: string) => lanes.positions.get(id)
+  const linked = (id: string) => index.links.filter((l) => l.cross && (l.sourceId === id || l.targetId === id)).map((l) => (l.sourceId === id ? l.targetId : l.sourceId))
+
+  it('orders each lane by rows, then along the row', () => {
+    for (const ids of nav.lanes) {
+      for (let i = 1; i < ids.length; i++) {
+        const [p, q] = [posOf(ids[i - 1])!, posOf(ids[i])!]
+        expect(Math.round(p.y) < Math.round(q.y) || (Math.round(p.y) === Math.round(q.y) && p.x < q.x)).toBe(true)
+      }
+    }
+    expect(nav.lanes.map((ids) => ids.length)).toEqual(lanes.bands.map((b) => b.count))
+  })
+
+  it('moves along a lane and to its ends, stopping at them', () => {
+    const app = nav.lanes[1]
+    expect(laneNavTarget(nav, app[0], 'next', posOf)).toBe(app[1])
+    expect(laneNavTarget(nav, app[1], 'prev', posOf)).toBe(app[0])
+    expect(laneNavTarget(nav, app[0], 'prev', posOf)).toBeNull()
+    expect(laneNavTarget(nav, app[0], 'last', posOf)).toBe(app[app.length - 1])
+    expect(laneNavTarget(nav, app[app.length - 1], 'last', posOf)).toBeNull()
+    expect(laneNavTarget(nav, app[2], 'first', posOf)).toBe(app[0])
+  })
+
+  it('crosses lanes to the nearest linked node, else the nearest node', () => {
+    const from = 'application.applicationcomponent'
+    const down = laneNavTarget(nav, from, 'next-lane', posOf, linked)!
+    expect(layerOf(down)).toBe('technology')
+    expect(linked(from)).toContain(down)
+    const p = posOf(from)!
+    for (const id of linked(from).filter((id) => layerOf(id) === 'technology')) expect(Math.abs(posOf(id)!.x - p.x)).toBeGreaterThanOrEqual(Math.abs(posOf(down)!.x - p.x) - 0.5)
+    // No links: the node nearest along the lane.
+    const near = laneNavTarget(nav, from, 'prev-lane', posOf)!
+    const xs = nav.lanes[0].map((id) => Math.abs(posOf(id)!.x - p.x))
+    expect(Math.abs(posOf(near)!.x - p.x)).toBe(Math.min(...xs))
+    expect(laneNavTarget(nav, nav.lanes[0][0], 'prev-lane', posOf)).toBeNull()
+  })
+
+  it('skips an empty lane', () => {
+    const gap = { ...nav, lanes: nav.lanes.map((ids, i) => (i === 1 ? [] : ids)) }
+    expect(layerOf(laneNavTarget(gap, gap.lanes[0][0], 'next-lane', posOf)!)).toBe('technology')
   })
 })
