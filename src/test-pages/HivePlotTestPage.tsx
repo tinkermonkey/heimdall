@@ -2,13 +2,15 @@ import { useEffect, useMemo } from 'react'
 import { HivePlot } from '../components/HivePlot'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
+import { DEFAULT_LINK_FILTERS } from '../utils/layered/filters'
 import type { BuildLayeredIndexOptions, PredicateLabelMode } from '../utils/layered/types'
 import { drCategoryOrder, drLayers, drSpecEdges, drSpecNodes, heimdallUxEdges, heimdallUxNodes } from './fixtures/layeredGraphFixtures'
 
 // HivePlot on the layered-graph fixtures. URL params make screenshots deterministic:
-//   ?example=hive-plot&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&split=0&dark=1
+//   ?example=hive-plot&data=spec|ux&select=<node id>&follow=0|1|2&labels=off|highlighted|all&split=0&hide=<layer id>,…&dark=1
 const params = new URLSearchParams(window.location.search)
 const DATA = params.get('data') === 'ux' ? 'ux' : 'spec'
+const HIDDEN = params.get('hide')?.split(',').filter(Boolean) ?? []
 
 export default function HivePlotTestPage() {
   useEffect(() => {
@@ -28,6 +30,7 @@ export default function HivePlotTestPage() {
     defaultSelectedId: params.get('select'),
     defaultFollow: params.has('follow') ? Number(params.get('follow')) : 1,
     defaultPredicateLabels: (params.get('labels') as PredicateLabelMode | null) ?? 'highlighted',
+    defaultFilters: { ...DEFAULT_LINK_FILTERS, hiddenLayers: HIDDEN },
   })
 
   return (
@@ -49,6 +52,18 @@ export default function HivePlotTestPage() {
             onChange={(v) => graph.setPredicateLabels(v as PredicateLabelMode)}
             options={[{ value: 'off', label: 'Off' }, { value: 'highlighted', label: 'Highlighted' }, { value: 'all', label: 'All' }]}
           />
+          {graph.index.layers.map((l) => (
+            <button
+              key={l.id}
+              type="button"
+              data-testid={`hive-plot-toggle-${l.id}`}
+              aria-pressed={!graph.filters.hiddenLayers.includes(l.id)}
+              onClick={() => graph.toggleLayer(l.id)}
+              style={{ fontFamily: 'var(--font-mono)', fontSize: 11 }}
+            >
+              {l.id}
+            </button>
+          ))}
           <span data-testid="hive-plot-selection" style={{ fontFamily: 'var(--font-mono)', color: 'rgb(var(--canvas-fg-3))' }}>
             {graph.selectedId ? `selected ${graph.selectedId} · reach ${graph.reach.hopOf.size - 1}` : 'no selection'}
           </span>

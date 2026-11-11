@@ -438,10 +438,10 @@ Why A was chosen:
   - predicate codes per `predicateLabels`, plus a code legend
   - selection and hover crosshair bands
 - **Interaction:** row headers are focusable buttons (Enter or Space selects, selecting again clears). A cell click selects the source, or calls `onLinkSelect`.
-- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels` and `dark` make it deterministic.
-- **Spec:** `tests/adjacency-matrix.spec.ts` (4 behaviour tests, 2 screenshots). Darwin baselines are generated (not yet committed); **linux baselines are still to generate** with the Update Visual Snapshots workflow after pushing.
+- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels`, `dark`, `symmetric`, `aggregate` and `report` (records `onLinkSelect` / `onLayerCellSelect`) make it deterministic.
+- **Spec:** `tests/adjacency-matrix.spec.ts` (behaviour tests for the directed, symmetric and layer heat-map modes, 5 screenshots), with darwin and linux baselines. Cell building is unit-tested in `src/utils/__tests__/layeredMatrix.test.ts`.
 - **Docs:** documented in the `heimdall-graph` skill. The docs-app showcase waits for step 6, alongside the other views.
-- **Not yet:** `symmetric` and `aggregate` modes, `onCellSelect` link inspection through `GraphEdgeInspector`, and virtualization past about 150 nodes.
+- **Not yet:** `onCellSelect` link inspection through `GraphEdgeInspector`, and virtualization past about 150 nodes. `symmetric` and `aggregate="layer"` are in (#336).
 
 **Steps 3–6: implemented.**
 
@@ -456,8 +456,8 @@ Why A was chosen:
 
 - Lanes (#334): `skipLayerRouting: 'gutter'`, bundled intra-layer links, a node-label mode, Up/Down focus between lanes.
 - Stack (#335): label occlusion behind planes, and per-frame rendering past fixture size (the full DR spec is untested). Done in the first slice: pinch zoom; independent tween channels (`useTweenChannels`), so a focus after a preset keeps its yaw and a focus switch eases from the current planes; controlled `camera` / `layerGap` held, reporting every frame.
-- Hive (#337): the generic `axes` option (axis by any attribute).
-- Matrix (#336): `symmetric` and `aggregate` modes, link inspection, virtualization.
+- Hive (#337): the generic `axes` option (axis by any attribute). Done: hiding a layer keeps the other axes' angles (a gap is left), and unsplit loops between near neighbours keep room for their arrowheads.
+- Matrix (#336): link inspection (`onCellSelect` → `GraphEdgeInspector`), `order: 'cluster'`, virtualization. `symmetric` and `aggregate="layer"` are in (cells built by `src/utils/layered/matrix.ts`; the heat map toggles the layer-pair filter and layer focus).
 - Multi-select gestures and drawing: shift-click to add, a drill-through column and inspector entry per selected node (the state, actions and union reach are in, see below).
 
 **#338 state API: implemented.**

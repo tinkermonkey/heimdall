@@ -17,11 +17,16 @@ export interface HiveLayoutOptions {
   splitAngle?: number
   /** Angle of the first axis, degrees. Default -90 (up). */
   startAngle?: number
+  /**
+   * Layers to leave out. Their axes keep their angle slot, so hiding a layer leaves a gap and the
+   * other axes don't move. Their nodes get no radius and their links no geometry.
+   */
+  hiddenLayers?: readonly string[]
 }
 
 export interface HiveAxis {
   layerId: string
-  /** Position among the drawn axes, clockwise from `startAngle`. */
+  /** Slot among all the layers (hidden ones included), clockwise from `startAngle`. */
   position: number
   /** Axis angle, degrees. */
   angle: number
@@ -32,9 +37,13 @@ export interface HiveAxis {
 }
 
 export interface HiveLayout {
+  /** The drawn axes: every layer not hidden, in draw order. */
   axes: HiveAxis[]
+  /** Every layer's axis slot, hidden ones included, so a renderer can fit its frame to all of them. */
+  slots: HiveAxis[]
+  /** The drawn axes by layer id. */
   axisOf: ReadonlyMap<string, HiveAxis>
-  /** Radius of every placed node. */
+  /** Radius of every placed node (nodes of hidden layers are not placed). */
   radiusOf: ReadonlyMap<string, number>
   /** The split half-angle actually used (0 when not split), degrees. */
   split: number
@@ -43,6 +52,14 @@ export interface HiveLayout {
 }
 
 const RAD = Math.PI / 180
+
+/**
+ * Least bulge of an unsplit intra-layer loop, viewBox units. The loop's apex sits half the bulge off
+ * the axis, so this keeps a loop between near neighbours wider than its arrowhead (7) plus the
+ * target dot, and the arrowhead arrives close to square on the axis instead of along it, clear of
+ * the next dot.
+ */
+export const HIVE_MIN_LOOP_BULGE = 36
 
 /** Point at `angle` degrees and `radius` from the origin. */
 export function hivePoint(angle: number, radius: number): Point {
@@ -99,7 +116,8 @@ export function hiveLabelSide(axis: HiveAxis, copy = axis.labelCopy): 1 | -1 {
 
 /**
  * Axes for the given layers (in draw order) and each node's radius from its rank in (0, 1)
- * (`rankWithinLayers`). Nodes without a rank sit mid-axis.
+ * (`rankWithinLayers`). Nodes without a rank sit mid-axis. Angles are divided among all the
+ * layers, hidden ones included, so they stay put when a layer is hidden.
  */
 export function hiveLayout(
   layers: readonly { id: string; nodeIds: readonly string[] }[],
@@ -110,13 +128,18 @@ export function hiveLayout(
   const axisLength = options.axisLength ?? 300
   const split = options.splitAxes === false ? 0 : clampSplitAngle(options.splitAngle ?? 13, layers.length)
   const angles = hiveAxisAngles(layers.length, options.startAngle ?? -90)
-  const axes: HiveAxis[] = layers.map((l, i) => {
+  const hidden = new Set(options.hiddenLayers ?? [])
+  const slots: HiveAxis[] = layers.map((l, i) => {
     const offsets = split > 0 ? [-split, split] : [0]
     return { layerId: l.id, position: i, angle: angles[i], offsets, labelCopy: pickLabelCopy(angles[i], offsets) }
   })
+  const axes = slots.filter((a) => !hidden.has(a.layerId))
   const radiusOf = new Map<string, number>()
-  for (const l of layers) for (const id of l.nodeIds) radiusOf.set(id, innerRadius + axisLength * (rank.get(id) ?? 0.5))
-  return { axes, axisOf: new Map(axes.map((a) => [a.layerId, a])), radiusOf, split, innerRadius, axisLength }
+  for (const l of layers) {
+    if (hidden.has(l.id)) continue
+    for (const id of l.nodeIds) radiusOf.set(id, innerRadius + axisLength * (rank.get(id) ?? 0.5))
+  }
+  return { axes, slots, axisOf: new Map(axes.map((a) => [a.layerId, a])), radiusOf, split, innerRadius, axisLength }
 }
 
 export interface HiveLinkGeometry {
@@ -134,7 +157,8 @@ export interface HiveLinkGeometry {
  * and bow toward the center (control at 0.42 of the mean radius, on the bisector). With split
  * axes, links within a layer run from the clockwise copy to the counter-clockwise one, bowing
  * just outside the gap; without, they leave the axis as an arc to one side (clockwise when the
- * target sits farther out), so the side reads as direction. Between exactly opposite axes, links
+ * target sits farther out), so the side reads as direction, and at least `HIVE_MIN_LOOP_BULGE`
+ * wide so short loops keep room for their arrowhead. Between exactly opposite axes, links
  * always leave clockwise, so each direction takes its own side.
  */
 export function hiveLinkGeometry(
@@ -161,7 +185,7 @@ export function hiveLinkGeometry(
     const b = hivePoint(sa.angle, rb)
     const m = hivePoint(sa.angle, (ra + rb) / 2)
     const sign = rb >= ra ? 1 : -1
-    const bulge = Math.abs(rb - ra) * 0.6 + 10
+    const bulge = Math.max(Math.abs(rb - ra) * 0.6 + 10, HIVE_MIN_LOOP_BULGE)
     const nx = -Math.sin(sa.angle * RAD)
     const ny = Math.cos(sa.angle * RAD)
     return { a, b, c: { x: m.x + nx * bulge * sign, y: m.y + ny * bulge * sign }, sourceCopy: 0, targetCopy: 0 }

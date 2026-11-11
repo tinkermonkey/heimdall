@@ -57,6 +57,7 @@ export {
   hiveAxisAngles,
   clampSplitAngle,
   hiveLabelSide,
+  HIVE_MIN_LOOP_BULGE,
   type HiveLayout,
   type HiveLayoutOptions,
   type HiveAxis,

@@ -10,6 +10,7 @@ import {
   type BuildLayeredIndexOptions,
   type IndexedLink,
   type LayerLayoutOptions,
+  type LayerMatrixCell,
   type NodeOrder,
   type PredicateCatalog,
   type UseLayeredGraphOptions,
@@ -198,7 +199,10 @@ export function AdjacencyMatrixShowcase() {
           <PropRow name="labelWidth" type="number" def="210" description="Row-label column width in px." />
           <PropRow name="showBlockCounts" type="boolean" def="true" description="Link count in each cross-layer block." />
           <PropRow name="showCodeLegend" type="boolean" def="true" description="Legend of the predicate codes shown." />
-          <PropRow name="onLinkSelect" type="(link: IndexedLink) => void" description="Cell click handler. Unset: selects the link's source." />
+          <PropRow name="onLinkSelect" type="(link: IndexedLink, links: readonly IndexedLink[]) => void" description="Cell click handler. Unset: selects the link's source. link is the drawn link (in a symmetric cell holding both directions, the reached one, else row → column); links holds every link in the cell, row → column first." />
+          <PropRow name="symmetric" type="boolean" def="false" description="Merge A→B and B→A into one cell above the diagonal, for an undirected reading. A notch marks a cell holding both directions." />
+          <PropRow name="aggregate" type="'none' | 'layer'" def="'none'" description="layer: a layers-by-layers heat map of link counts, the overview for many layers. Counts ignore the layer-pair filter; the active pair is outlined." />
+          <PropRow name="onLayerCellSelect" type="(cell: LayerMatrixCell) => void" description="Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell (or a layer header) the layer focus." />
           <PropRow name="...divProps" type="HTMLAttributes<HTMLDivElement>" description="Remaining props spread onto the root div." />
         </PropsTable>
         <p style={{ fontSize: 12, color: fg2, margin: '12px 0 0', lineHeight: 1.65 }}>
@@ -230,6 +234,9 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
   const [legend, setLegend] = useState(true)
   const [cellClick, setCellClick] = useState<CellClick>('select')
   const [picked, setPicked] = useState<IndexedLink | null>(null)
+  const [symmetric, setSymmetric] = useState(false)
+  const [aggregate, setAggregate] = useState<'none' | 'layer'>('none')
+  const [pickedLayers, setPickedLayers] = useState<LayerMatrixCell | null>(null)
 
   const size = cellSize === 'auto' ? 'auto' : Number(cellSize)
   const jsxProps = [
@@ -238,7 +245,9 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
     labelWidth !== 210 && `labelWidth={${labelWidth}}`,
     !blockCounts && 'showBlockCounts={false}',
     !legend && 'showCodeLegend={false}',
-    cellClick === 'report' && 'onLinkSelect={setPicked}',
+    symmetric && 'symmetric',
+    aggregate === 'layer' && 'aggregate="layer"',
+    cellClick === 'report' && (aggregate === 'layer' ? 'onLayerCellSelect={setPickedLayers}' : 'onLinkSelect={setPicked}'),
   ].filter(Boolean)
   const jsx = `<AdjacencyMatrix${jsxProps.length ? ' ' + jsxProps.join(' ') : ''} />`
 
@@ -249,7 +258,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
     <LayeredGraphContext.Provider value={graph}>
       <ShowcaseSection
         label="Playground"
-        description="Click a row or column header to select a node; its cells and every reached cell take the amber reach ramp, including followed hops. Predicate labels decide which cells show their two-letter code: none, the highlighted ones, or all. With cell click set to Report, onLinkSelect receives the link instead of the matrix selecting its source."
+        description="Click a row or column header to select a node; its cells and every reached cell take the amber reach ramp, including followed hops. Predicate labels decide which cells show their two-letter code: none, the highlighted ones, or all. With cell click set to Report, onLinkSelect receives the link instead of the matrix selecting its source. Symmetric folds both directions above the diagonal; Aggregate: Layer collapses to a layer heat map, where a cross-layer cell toggles the layer-pair filter and a diagonal cell the layer focus."
       >
         <DemoCard>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -304,6 +313,15 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
               </Control>
               <OnOff label="Block counts" value={blockCounts} onChange={setBlockCounts} />
               <OnOff label="Code legend" value={legend} onChange={setLegend} />
+              <OnOff label="Symmetric" value={symmetric} onChange={setSymmetric} />
+              <Control label="Aggregate">
+                <SegmentedControl
+                  aria-label="Aggregate"
+                  value={aggregate}
+                  onChange={(v) => setAggregate(v as 'none' | 'layer')}
+                  options={[{ value: 'none', label: 'None' }, { value: 'layer', label: 'Layer' }]}
+                />
+              </Control>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18, rowGap: 10 }}>
               <FollowControl />
@@ -315,6 +333,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
                   onChange={(v) => {
                     setCellClick(v as CellClick)
                     setPicked(null)
+                    setPickedLayers(null)
                   }}
                   options={[{ value: 'select', label: 'Select source' }, { value: 'report', label: 'Report' }]}
                 />
@@ -331,6 +350,9 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
                 showBlockCounts={blockCounts}
                 showCodeLegend={legend}
                 onLinkSelect={cellClick === 'report' ? setPicked : undefined}
+                symmetric={symmetric}
+                aggregate={aggregate}
+                onLayerCellSelect={cellClick === 'report' ? setPickedLayers : undefined}
               />
             </div>
             {cellClick === 'report' && (
@@ -338,7 +360,15 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
                 aria-live="polite"
                 style={{ padding: '10px 12px', border: `1px solid ${border}`, borderRadius: 6, background: 'rgb(var(--canvas-bg-2))', fontSize: 12, color: fg2 }}
               >
-                {picked && pickedSource && pickedTarget ? (
+                {aggregate === 'layer' ? (
+                  pickedLayers ? (
+                    <span style={{ fontFamily: mono, fontSize: 11 }}>
+                      onLayerCellSelect · {pickedLayers.rowLayerId} → {pickedLayers.colLayerId} · {pickedLayers.linkCount} link{pickedLayers.linkCount === 1 ? '' : 's'} · pair {pickedLayers.pairKey ?? 'none (diagonal)'}
+                    </span>
+                  ) : (
+                    'Click a cell to read its layer pair.'
+                  )
+                ) : picked && pickedSource && pickedTarget ? (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     <span style={{ fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: fg3 }}>
                       onLinkSelect · {picked.cross ? 'cross-layer' : 'within layer'} · {picked.edgeIds.length} edge{picked.edgeIds.length === 1 ? '' : 's'}

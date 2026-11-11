@@ -206,7 +206,7 @@ Weighted hierarchy as orbits: body area grows with weight, children orbit their 
 - `showClusterBoundaries` defaults to `false` here.
 - Structural edge labels show only when the edge or one of its nodes is hovered or selected. `structuralEdgeCurvature={0}` draws orbit links straight.
 - The toolbar gains a live-simulation toggle: dragging a node then pulls its subtree along elastically. The toggle is internal state with no prop.
-- Limits: relational edges can cross bodies.
+- Limits: relational edges can cross bodies. Orbits stay evenly spaced (each satellite gets 0.5-1.5× an equal angular share), and that wins over round systems: a parent with many satellites or one dominant branch comes out elongated, up to about 8:1 (GBIF Rodentia root, 102 satellites) and 5.6:1 (Vespertilionidae, 78 satellites).
 
 #### `force-clustered`
 
@@ -1630,6 +1630,8 @@ A directed block adjacency matrix of a layered graph. There is one row and one c
 - **Cell colours:** each cell takes its link's category colour. Around the selection, cells take the amber reach ramp instead, including followed hops.
 - **Codes:** cells show two-letter predicate codes per `predicateLabels`, with a legend of the codes in view.
 - **Selection:** a row header (a focusable button, Enter or Space) or the matching column header selects a node; selecting it again clears it. Clicking a cell selects the link's source, or calls `onLinkSelect`.
+- **Symmetric:** `symmetric` merges `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. A cell holding both directions has a notch in its lower-left corner (the caption says so), its tooltip lists both links, and `onLinkSelect` receives both as its second argument. Block counts add both directions.
+- **Layer heat map:** `aggregate="layer"` collapses the matrix to one row and column per visible layer, each cell the count of visible links between the two layers, shaded on a neutral ramp. It is the overview when there are many layers. Clicking a cross-layer cell toggles the layer-pair filter (`setLayerPair`), so the other views narrow to that pair; clicking a diagonal cell or a layer header toggles the layer focus (`focusLayer`). Counts ignore the pair filter, so the overview stays whole and the active pair is outlined. Set `onLayerCellSelect` to handle the click yourself; it receives a `LayerMatrixCell` (`rowLayerId`, `colLayerId`, `linkCount`, `pairKey`, which is null on the diagonal). With `symmetric`, both directions add into the upper triangle.
 
 ```tsx
 import { AdjacencyMatrix, useLayeredGraph, LayeredGraphContext } from '@tinkermonkey/heimdall-ui'
@@ -1655,11 +1657,14 @@ const graph = useLayeredGraph({ nodes, edges, layering })
 | `layering` | `BuildLayeredIndexOptions` | — | Standalone layering (`layerBy`, …); memoize it |
 | `graphOptions` | `Omit<UseLayeredGraphOptions, 'nodes' \| 'edges' \| 'layering'>` | — | Standalone selection, follow, filters, label mode |
 | `order` | `NodeOrder` | `'coupled-x'` | Row and column order within each layer (`'degree'` when there is no layout) |
-| `cellSize` | `number \| 'auto'` | `'auto'` | Cell size in px; `auto` fits about 820px, clamped to 10–18 |
+| `cellSize` | `number \| 'auto'` | `'auto'` | Cell size in px; `auto` fits about 820px, clamped to 10–18. With `aggregate="layer"`, `auto` fits about 560px, clamped to 40–72, and a number is at least 24 |
 | `labelWidth` | `number` | `210` | Row-label column width in px |
 | `showBlockCounts` | `boolean` | `true` | Link count in each cross-layer block |
 | `showCodeLegend` | `boolean` | `true` | Legend of the predicate codes shown |
-| `onLinkSelect` | `(link: IndexedLink) => void` | — | Cell click handler. Unset: selects the link's source |
+| `onLinkSelect` | `(link: IndexedLink, links: readonly IndexedLink[]) => void` | — | Cell click handler. Unset: selects the link's source. `link` is the drawn link: in a symmetric cell holding both directions, the reached one, else row → column. `links` holds every link in the cell, row → column first |
+| `symmetric` | `boolean` | `false` | Merge both directions into one cell above the diagonal |
+| `aggregate` | `'none' \| 'layer'` | `'none'` | `layer`: a layers-by-layers heat map of link counts |
+| `onLayerCellSelect` | `(cell: LayerMatrixCell) => void` | — | Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell the layer focus |
 
 Large graphs scroll inside the component (it renders at natural size, so cells stay crisp). There is no virtualization yet: past about 150 nodes, prefer filtering layers out.
 
@@ -1673,9 +1678,10 @@ A hive plot of a layered graph: one radial axis per layer at evenly divided angl
 - **Selection:** click a node (either copy) or press Enter or Space on it to select; again clears; Escape clears. Clicking a link selects its source, or calls `onLinkSelect`.
 - **Keyboard:** the nodes are one tab stop. Arrow Up and Down move outward and inward along the axis, Home and End jump to its ends, Arrow Right and Left move to the next and previous axis at the nearest rank.
 - **Sizing:** the SVG fills its container's width at a fixed aspect ratio (viewBox fit). Node hit targets stay at least 24 px across at any scale.
-- **Without split axes** (`splitAxes={false}`), links within a layer leave the single axis as arcs: clockwise when the target sits farther out, so the side reads as direction.
+- **Hidden layers** (the graph's `filters.hiddenLayers`, e.g. from `LayerList`): angles are divided among every layer, hidden ones included, so hiding a layer leaves a gap and the other axes and the frame don't move. Adding or removing a layer from the data re-divides the angles.
+- **Without split axes** (`splitAxes={false}`), links within a layer leave the single axis as arcs: clockwise when the target sits farther out, so the side reads as direction. Arcs between near neighbours keep a minimum bulge (`HIVE_MIN_LOOP_BULGE`, 36 units) so each arrowhead sits clear of its own loop's start and of the next dot. Node labels take the side of the axis that highlighted loops cross least, and a label is dropped when loop ends cover its start on both sides.
 
-The geometry is exported for custom renderers: `hiveLayout(layers, rank, options)` returns `HiveLayout` (each `HiveAxis` with its angle, copy offsets and label copy, plus every node's radius); `hiveLinkGeometry(layout, source, target)` returns a link's quadratic curve as `HiveLinkGeometry` (feed it to `quadCurve`); `hivePoint`, `hiveAxisAngles`, `clampSplitAngle` and `hiveLabelSide` are the helpers they use. `HiveLayoutOptions` takes the same `innerRadius`, `axisLength`, `splitAxes`, `splitAngle` and `startAngle` as the component.
+The geometry is exported for custom renderers: `hiveLayout(layers, rank, options)` returns `HiveLayout` (each `HiveAxis` with its angle, copy offsets and label copy, plus every node's radius); `hiveLinkGeometry(layout, source, target)` returns a link's quadratic curve as `HiveLinkGeometry` (feed it to `quadCurve`); `hivePoint`, `hiveAxisAngles`, `clampSplitAngle` and `hiveLabelSide` are the helpers they use. `HiveLayoutOptions` takes the same `innerRadius`, `axisLength`, `splitAxes`, `splitAngle` and `startAngle` as the component, plus `hiddenLayers`: those layers keep their angle slot (listed in `HiveLayout.slots`, for fitting a frame) but get no drawn axis, node radius or link geometry.
 
 ```tsx
 import { HivePlot, useLayeredGraph, LayeredGraphContext } from '@tinkermonkey/heimdall-ui'

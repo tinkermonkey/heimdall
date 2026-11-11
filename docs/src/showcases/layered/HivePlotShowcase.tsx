@@ -321,7 +321,7 @@ export function HivePlotShowcase() {
 
       <ShowcaseSection
         label="Split and unsplit axes"
-        description="Split (default): each axis is drawn twice at ±splitAngle, cross-layer links run between the facing copies of two axes and links within a layer cross the gap between one axis's copies. Unsplit: one line per axis, and links within a layer leave it as arcs, clockwise when the target sits farther out, so the side reads as direction. Both show business.businessactor selected."
+        description="Split (default): each axis is drawn twice at ±splitAngle, cross-layer links run between the facing copies of two axes and links within a layer cross the gap between one axis's copies. Unsplit: one line per axis, and links within a layer leave it as arcs, clockwise when the target sits farther out, so the side reads as direction; arcs between near neighbours keep a minimum bulge so each arrowhead stays on its own loop, and node labels take the side the highlighted loops cross least. Both show business.businessactor selected."
       >
         <SplitVariants />
         <Code>{VARIANTS_CODE}</Code>
@@ -332,6 +332,10 @@ export function HivePlotShowcase() {
           With no selection, the axisLabels busiest nodes on each axis are labeled; with one, the selection and its reach are, dropping labels
           that would overlap (the tooltip and accessible name still carry them). Hovering a node labels it. Links take their category colour and
           dash; around the selection they take the amber reach ramp, with arrowheads and predicate pills per predicateLabels.
+        </Note>
+        <Note>
+          Hiding a layer (filters.hiddenLayers, for example from LayerList) leaves a gap: angles are divided among every layer, so the other axes
+          and the frame don't move. Adding or removing a layer from the data re-divides the angles.
         </Note>
       </ShowcaseSection>
 
@@ -374,7 +378,7 @@ export function HivePlotShowcase() {
 
       <ShowcaseSection
         label="Geometry for custom renderers"
-        description="The hive math is exported and free of React. hiveLayout(layers, rank, options) returns a HiveLayout: each HiveAxis with its angle, copy offsets and label copy, every node's radius, and the split actually used. hiveLinkGeometry(layout, source, target) returns a link's quadratic curve as HiveLinkGeometry (a, c, b and the copy used at each end); feed it to quadCurve. HiveLayoutOptions takes the same innerRadius, axisLength, splitAxes, splitAngle and startAngle as the component."
+        description="The hive math is exported and free of React. hiveLayout(layers, rank, options) returns a HiveLayout: each HiveAxis with its angle, copy offsets and label copy, every node's radius, and the split actually used. hiveLinkGeometry(layout, source, target) returns a link's quadratic curve as HiveLinkGeometry (a, c, b and the copy used at each end); feed it to quadCurve. HiveLayoutOptions takes the same innerRadius, axisLength, splitAxes, splitAngle and startAngle as the component, plus hiddenLayers: those keep their angle slot (HiveLayout.slots) but get no drawn axis, radius or link geometry."
       >
         <DemoCard label="Static SVG from hiveLayout and hiveLinkGeometry">
           <HiveGeometryDemo />
@@ -382,7 +386,7 @@ export function HivePlotShowcase() {
         <Code>{GEOMETRY_CODE}</Code>
         <div style={{ height: 12 }} />
         <PropsTable>
-          <PropRow name="hiveLayout" type="(layers, rank, options?) => HiveLayout" description="Axes for the layers in draw order and each node's radius from its rank in (0, 1); nodes without a rank sit mid-axis." />
+          <PropRow name="hiveLayout" type="(layers, rank, options?) => HiveLayout" description="Axes for the layers in draw order and each node's radius from its rank in (0, 1); nodes without a rank sit mid-axis. Angles are divided among all layers, hidden ones included." />
           <PropRow name="hiveLinkGeometry" type="(layout, source, target) => HiveLinkGeometry | null" description="One link's curve; source and target are { layerId, radius }. Null when a layer has no axis." />
           <PropRow name="hivePoint" type="(angle, radius) => Point" description="Point at angle degrees (clockwise from +x, y down) and radius from the origin." />
           <PropRow name="hiveAxisAngles" type="(count, start?) => number[]" def="start -90" description="count evenly divided axis angles, degrees, clockwise from start." />
