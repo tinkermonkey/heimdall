@@ -74,10 +74,10 @@ describe('hive geometry', () => {
     // Neighbours 12 apart on the vertical axis: the apex clears the axis by half the minimum bulge.
     const short = hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'a', radius: 112 })!
     close(short.c.x, HIVE_MIN_LOOP_BULGE)
-    // The end tangent (control to target) arrives close to square on the axis, clear of the next dot.
+    // The end tangent (control to target) arrives steeper than the span-proportional bulge gave (about 70.8°).
     const along = Math.abs(short.b.y - short.c.y)
     const across = Math.abs(short.b.x - short.c.x)
-    expect((Math.atan2(across, along) * 180) / Math.PI).toBeGreaterThan(70)
+    expect((Math.atan2(across, along) * 180) / Math.PI).toBeGreaterThan(78)
     // Long loops keep their span-proportional bulge.
     const long = hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'a', radius: 200 })!
     close(long.c.x, 100 * 0.6 + 10)
@@ -97,6 +97,19 @@ describe('hive geometry', () => {
     expect(hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'b', radius: 100 })).toBeNull()
     const g = hiveLinkGeometry(h, { layerId: 'a', radius: 100 }, { layerId: 'c', radius: 100 })!
     expect(g).toEqual(hiveLinkGeometry(all, { layerId: 'a', radius: 100 }, { layerId: 'c', radius: 100 }))
+  })
+
+  it('keeps angles stable when the first layer, or all but one, is hidden', () => {
+    const all = hiveLayout(layers3, rank)
+    const first = hiveLayout(layers3, rank, { hiddenLayers: ['a'] })
+    expect(first.axes.map((a) => a.position)).toEqual([1, 2])
+    expect(first.axes.map((a) => a.angle)).toEqual([30, 150])
+    expect(first.radiusOf.has('a1')).toBe(false)
+    const one = hiveLayout(layers3, rank, { hiddenLayers: ['a', 'c'] })
+    expect(one.axes.map((a) => [a.layerId, a.angle])).toEqual([['b', 30]])
+    expect(one.slots).toEqual(all.slots)
+    expect(one.split).toBe(all.split)
+    expect([...one.radiusOf.keys()]).toEqual(['b1'])
   })
 
   it('returns null for a layer without an axis', () => {

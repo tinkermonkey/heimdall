@@ -321,7 +321,7 @@ export function HivePlotShowcase() {
 
       <ShowcaseSection
         label="Split and unsplit axes"
-        description="Split (default): each axis is drawn twice at ±splitAngle, cross-layer links run between the facing copies of two axes and links within a layer cross the gap between one axis's copies. Unsplit: one line per axis, and links within a layer leave it as arcs, clockwise when the target sits farther out, so the side reads as direction; arcs between near neighbours keep a minimum bulge so each arrowhead stays on its own loop. Both show business.businessactor selected."
+        description="Split (default): each axis is drawn twice at ±splitAngle, cross-layer links run between the facing copies of two axes and links within a layer cross the gap between one axis's copies. Unsplit: one line per axis, and links within a layer leave it as arcs, clockwise when the target sits farther out, so the side reads as direction; arcs between near neighbours keep a minimum bulge so each arrowhead stays on its own loop, and node labels take the side the highlighted loops cross least. Both show business.businessactor selected."
       >
         <SplitVariants />
         <Code>{VARIANTS_CODE}</Code>
@@ -335,7 +335,7 @@ export function HivePlotShowcase() {
         </Note>
         <Note>
           Hiding a layer (filters.hiddenLayers, for example from LayerList) leaves a gap: angles are divided among every layer, so the other axes
-          and the frame don't move.
+          and the frame don't move. Adding or removing a layer from the data re-divides the angles.
         </Note>
       </ShowcaseSection>
 

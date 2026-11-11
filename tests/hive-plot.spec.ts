@@ -53,6 +53,10 @@ test.describe('HivePlot', () => {
     expect(await viewBox()).toBe(before.viewBox)
     await page.getByTestId('hive-plot-toggle-application').click()
     await expect(page.locator('.hive-plot__axis')).toHaveCount(3)
+    await page.getByTestId('hive-plot-toggle-business').click()
+    await expect(page.locator('.hive-plot__axis')).toHaveCount(2)
+    expect(await axisLines('technology')).toEqual(before.technology)
+    expect(await viewBox()).toBe(before.viewBox)
   })
 
   test('click selects, clicking again and Escape clear', async ({ page }) => {
