@@ -76,6 +76,7 @@ export interface UseLayeredGraphOptions {
   follow?: number
   defaultFollow?: number
   onFollowChange?: (follow: number) => void
+  /** Link categories followed past the direct links (see `computeReach`). Compared by content, so an inline array doesn't recompute reach every render. */
   followCategories?: readonly string[] | null
 
   filters?: LinkFilterState
@@ -269,9 +270,13 @@ export function useLayeredGraph(options: UseLayeredGraphOptions): LayeredGraphSt
   const selectedIdsRef = useRef<readonly string[]>(selectedIds)
   selectedIdsRef.current = selectedIds
 
+  // Keyed on content, so an inline followCategories array keeps reach (and every view's
+  // emphasis and label placement) stable across renders.
+  const followKey = JSON.stringify(followCategories)
+  const stableFollowCategories = useMemo(() => followCategories, [followKey])
   const reach = useMemo(
-    () => computeReach(index, selectedIds.length > 1 ? selectedIds : selectedId, { follow, followCategories, filters }),
-    [index, selectedIds, selectedId, follow, followCategories, filters],
+    () => computeReach(index, selectedIds.length > 1 ? selectedIds : selectedId, { follow, followCategories: stableFollowCategories, filters }),
+    [index, selectedIds, selectedId, follow, stableFollowCategories, filters],
   )
   const hoverReach = useMemo(() => computeReach(index, hoveredId, { follow: 0, filters }), [index, hoveredId, filters])
   const pairNodeIds = useMemo(() => layerPairNodeIds(index, filters.layerPair), [index, filters.layerPair])

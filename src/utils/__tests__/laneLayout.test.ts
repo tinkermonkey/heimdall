@@ -192,6 +192,18 @@ describe('placeLaneTags', () => {
     expect(tag.y).toBeGreaterThan(100) // below: the link leaves upward
   })
 
+  it('vertical: a tag whose links leave on the right sits past their ends, inside the reserved room', () => {
+    const a = { x: 100, y: 100, width: 24, height: 24 }
+    const out = laneLinkCurve(a, { x: 400, y: 160, width: 24, height: 24 }, true, 'vertical')
+    const ends = curveEndBoxes(out, 0)
+    const within = { x: 80, y: 60, width: 32 + laneTagRoom('BusinessProcess') + 20, height: 400 }
+    const [tag] = placeLaneTags([{ ...chip('BusinessProcess', 100, 100), within }], ends, 'vertical')
+    expect(tag).toBeDefined()
+    expect(tag.y).toBe(100)
+    for (const e of ends) expect(apart(tag, e)).toBe(true)
+    expect(tag.x + tag.width / 2).toBeLessThanOrEqual(112 + laneTagRoom('BusinessProcess'))
+  })
+
   it('always places a forced tag, at its first spot when nothing is clear', () => {
     const blocked = chip('selected', 100, 100, 0, true)
     const wall = { x: 100, y: 100, width: 600, height: 200 }

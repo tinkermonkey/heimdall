@@ -306,12 +306,16 @@ export function laneTitleBox(band: LaneBand): LabelBox {
 export const laneTagSize = (text: string) => ({ width: Math.round(text.length * 6 + 12), height: 16 })
 
 const TAG_GAP = 3
+/** How far from a chip `curveEndBoxes` marks its links' ends, px. */
+const LINK_END_LENGTH = 18
+/** Vertical lanes: a tag's offset past that zone (end boxes are 4px, plus placement clearance). */
+const PAST_LINK_ENDS = LINK_END_LENGTH + 6
 
 /**
  * Small boxes along the first `length` px of a curve from one end (`t` 0 or 1): a link's end
  * near a node, for name tags to keep clear of.
  */
-export function curveEndBoxes(curve: EdgeCurve, end: 0 | 1, length = 18, size = 4): LabelBox[] {
+export function curveEndBoxes(curve: EdgeCurve, end: 0 | 1, length = LINK_END_LENGTH, size = 4): LabelBox[] {
   const a = curve.pointAt(end)
   const out: LabelBox[] = []
   for (let i = 0; i <= 15; i++) {
@@ -323,16 +327,19 @@ export function curveEndBoxes(curve: EdgeCurve, end: 0 | 1, length = 18, size = 
   return out
 }
 
-/** Room a name tag takes beside its chip: pass as `sideRoomOf` for vertical lanes of chips. */
-export const laneTagRoom = (text: string) => TAG_GAP + laneTagSize(text).width
+/**
+ * Room a name tag takes right of its chip in vertical lanes, past the zone where the chip's
+ * links leave (so the tag fits even when its links leave on that side): pass as `sideRoomOf`.
+ */
+export const laneTagRoom = (text: string) => PAST_LINK_ENDS + TAG_GAP + laneTagSize(text).width
 
 /**
  * Name tags beside node chips, clear of each other and of `obstacles` (node chips, pills,
  * titles) and inside the candidate's lane band. Horizontal lanes try above, below, right, then
- * left of the chip; vertical lanes try right, left, above, then below. Forced tags go first, so
- * other tags avoid them; a forced tag with no clear spot takes its first spot regardless. Any
- * other tag with no clear spot is dropped. Pass link ends (`curveEndBoxes`) as obstacles so a
- * tag takes the side its links don't use.
+ * left of the chip; vertical lanes try right, right past the link ends, left, above, then below.
+ * Forced tags go first, so other tags avoid them; a forced tag with no clear spot takes its
+ * first spot regardless. Any other tag with no clear spot is dropped. Pass link ends
+ * (`curveEndBoxes`) as obstacles so a tag takes the side its links don't use.
  */
 export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles: readonly LabelBox[], orientation: LaneOrientation = 'horizontal'): PlacedEdgeLabel[] {
   const spots = (c: LaneTagCandidate) => {
@@ -342,7 +349,9 @@ export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles
     const below = { x: b.x, y: b.y + b.height / 2 + TAG_GAP + height / 2 }
     const right = { x: b.x + b.width / 2 + TAG_GAP + width / 2, y: b.y }
     const left = { x: b.x - b.width / 2 - TAG_GAP - width / 2, y: b.y }
-    return orientation === 'horizontal' ? [above, below, right, left] : [right, left, above, below]
+    // Vertical: past the link ends on the right, when links leave there (see laneTagRoom).
+    const rightPast = { x: right.x + PAST_LINK_ENDS, y: b.y }
+    return orientation === 'horizontal' ? [above, below, right, left] : [right, rightPast, left, above, below]
   }
   const inside = (c: LaneTagCandidate, p: Point) => {
     const w = c.within
@@ -350,7 +359,7 @@ export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles
     const { width, height } = laneTagSize(c.text)
     return p.x - width / 2 >= w.x && p.x + width / 2 <= w.x + w.width && p.y - height / 2 >= w.y && p.y + height / 2 <= w.y + w.height
   }
-  const ts = [0, 1, 2, 3]
+  const ts = [0, 1, 2, 3, 4]
   const byId = new Map(candidates.map((c) => [c.id, spots(c)]))
   const NOWHERE = { x: NaN, y: NaN } // placeEdgeLabels skips non-finite spots
   const place = (cs: readonly LaneTagCandidate[], obs: readonly LabelBox[]) =>
@@ -359,7 +368,10 @@ export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles
         id: c.id,
         text: c.text,
         priority: c.priority,
-        pointAt: (t: number) => (inside(c, byId.get(c.id)![t]) ? byId.get(c.id)![t] : NOWHERE),
+        pointAt: (t: number) => {
+          const p = byId.get(c.id)![t]
+          return p && inside(c, p) ? p : NOWHERE
+        },
       })),
       { obstacles: obs, ts, size: laneTagSize },
     )
