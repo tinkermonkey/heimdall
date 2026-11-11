@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, layoutLayers } from '../layered'
-import { laneLinkCurve, laneTagRoom, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
+import { curveEndBoxes, laneLinkCurve, laneTagRoom, laneTagSize, layoutLanes, placeLaneTags, retraceLabels, type LaneTagCandidate } from '../laneLayout'
 import { placeEdgeLabels } from '../layered/edgeLabels'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
@@ -171,6 +171,25 @@ describe('placeLaneTags', () => {
     expect(tag.x + tag.width / 2).toBeLessThanOrEqual(within.x + within.width)
     expect(tag.x - tag.width / 2).toBeGreaterThanOrEqual(within.x)
     expect(placeLaneTags([{ ...chip('ApplicationCollaboration', 150, 100), within: { ...within, height: 40, y: 80 } }], [], 'vertical')).toEqual([])
+  })
+
+  it('places forced tags first, so the others keep clear of them and of each other', () => {
+    // Two forced chips side by side: their tags must not overlap, and an unforced one placed
+    // between them (higher priority) must not land on either.
+    const tags = placeLaneTags([chip('earlier_node', 100, 100, 0), chip('hovered_one', 110, 100, 5, true), chip('focused_one', 160, 100, 5, true)], [])
+    const forced = tags.filter((t) => t.id !== 'earlier_node')
+    expect(forced).toHaveLength(2)
+    for (let i = 0; i < tags.length; i++) for (let j = i + 1; j < tags.length; j++) expect(apart(tags[i], tags[j])).toBe(true)
+  })
+
+  it('takes the side its link ends leave free', () => {
+    const a = { x: 100, y: 100, width: 24, height: 24 }
+    const up = laneLinkCurve(a, { x: 100, y: -100, width: 24, height: 24 }, true)
+    const ends = curveEndBoxes(up, 0)
+    expect(ends.length).toBeGreaterThan(2)
+    for (const e of ends) expect(Math.hypot(e.x - up.pointAt(0).x, e.y - up.pointAt(0).y)).toBeLessThanOrEqual(18)
+    const [tag] = placeLaneTags([chip('alpha', 100, 100)], ends)
+    expect(tag.y).toBeGreaterThan(100) // below: the link leaves upward
   })
 
   it('always places a forced tag, at its first spot when nothing is clear', () => {

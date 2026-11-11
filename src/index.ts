@@ -182,7 +182,7 @@ export {
   type TweenOptions,
   type TweenControls,
 } from './hooks/useTween'
-export { layoutLanes, laneLinkCurve } from './utils/laneLayout'
+export { layoutLanes, laneLinkCurve, laneTagRoom, laneTagSize } from './utils/laneLayout'
 export type { LaneLayoutOptions, LaneLayout, LaneBand, LaneNodeBox, LaneLinkCurve, LaneOrientation, LaneNodeLabels, LayoutLanesInput } from './utils/laneLayout'
 export {
   FollowControl,

@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { GraphCanvas } from '../components/GraphCanvas'
+import { GraphCanvas, type GraphNodeData } from '../components/GraphCanvas'
 import { SegmentedControl } from '../components/SegmentedControl'
 import { LayeredGraphContext, useLayeredGraph } from '../hooks/useLayeredGraph'
 import type { LaneOrientation } from '../utils/laneLayout'
@@ -20,6 +20,8 @@ const ORIENTATION: LaneOrientation = params.get('orientation') === 'vertical' ? 
 const INTRA = params.get('intra') === 'none' ? 'none' : 'arc'
 const EDGE_TOOLTIP = params.get('tooltip') === '1'
 const NO_DATA = params.get('nodata') === '1'
+// &render=1: a custom renderNode, which nodeLabels 'reached' leaves alone.
+const renderCustomNode = params.get('render') === '1' ? (node: GraphNodeData) => <div className="custom-lane-node" style={{ padding: '4px 8px', border: '1px solid rgb(var(--canvas-border-strong))', fontSize: 11 }}>{node.label}</div> : undefined
 
 export default function LayerLanesTestPage() {
   useEffect(() => {
@@ -80,6 +82,7 @@ export default function LayerLanesTestPage() {
             laneOptions={laneOptions}
             fitView
             fitPadding={24}
+            renderNode={renderCustomNode}
             edgeTooltip={EDGE_TOOLTIP ? (edge) => <span>{edge.label ?? edge.id}</span> : undefined}
             style={{ width: '100%', height: '100%' }}
           />

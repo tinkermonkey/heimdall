@@ -740,7 +740,9 @@ export const LayeredGraphExplorer = React.forwardRef<HTMLDivElement, LayeredGrap
     const showSwitcher = show.viewSwitcher && views.length > 1
     const headerControls = showSwitcher || show.follow
     const showHeader = headerControls || title != null || eyebrow != null
-    const labelsApply = view === 'stack' || view === 'hive' || view === 'lanes'
+    // On lanes the toggle can't apply over a fixed laneOptions.nodeLabels or a custom renderNode.
+    const lanesLabelsApply = lanesProps?.laneOptions?.nodeLabels === undefined && !lanesProps?.renderNode
+    const labelsApply = view === 'stack' || view === 'hive' || (view === 'lanes' && lanesLabelsApply)
     const sceneTools = view === 'stack' && (show.camera || show.planeLayout)
     const listsShown = show.layers || show.layerPairs || show.bridgeNodes
     const lists = listsShown ? (

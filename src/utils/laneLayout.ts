@@ -307,14 +307,32 @@ export const laneTagSize = (text: string) => ({ width: Math.round(text.length * 
 
 const TAG_GAP = 3
 
+/**
+ * Small boxes along the first `length` px of a curve from one end (`t` 0 or 1): a link's end
+ * near a node, for name tags to keep clear of.
+ */
+export function curveEndBoxes(curve: EdgeCurve, end: 0 | 1, length = 18, size = 4): LabelBox[] {
+  const a = curve.pointAt(end)
+  const out: LabelBox[] = []
+  for (let i = 0; i <= 15; i++) {
+    const t = end === 0 ? i * 0.02 : 1 - i * 0.02
+    const p = curve.pointAt(t)
+    if (Math.hypot(p.x - a.x, p.y - a.y) > length) break
+    out.push({ x: p.x, y: p.y, width: size, height: size })
+  }
+  return out
+}
+
 /** Room a name tag takes beside its chip: pass as `sideRoomOf` for vertical lanes of chips. */
 export const laneTagRoom = (text: string) => TAG_GAP + laneTagSize(text).width
 
 /**
  * Name tags beside node chips, clear of each other and of `obstacles` (node chips, pills,
  * titles) and inside the candidate's lane band. Horizontal lanes try above, below, right, then
- * left of the chip; vertical lanes try right, left, above, then below. A tag with no clear spot
- * is dropped unless forced, which takes its first spot regardless.
+ * left of the chip; vertical lanes try right, left, above, then below. Forced tags go first, so
+ * other tags avoid them; a forced tag with no clear spot takes its first spot regardless. Any
+ * other tag with no clear spot is dropped. Pass link ends (`curveEndBoxes`) as obstacles so a
+ * tag takes the side its links don't use.
  */
 export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles: readonly LabelBox[], orientation: LaneOrientation = 'horizontal'): PlacedEdgeLabel[] {
   const spots = (c: LaneTagCandidate) => {
@@ -335,20 +353,23 @@ export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles
   const ts = [0, 1, 2, 3]
   const byId = new Map(candidates.map((c) => [c.id, spots(c)]))
   const NOWHERE = { x: NaN, y: NaN } // placeEdgeLabels skips non-finite spots
-  const placed = placeEdgeLabels(
-    candidates.map((c) => ({
-      id: c.id,
-      text: c.text,
-      priority: c.priority,
-      pointAt: (t: number) => (inside(c, byId.get(c.id)![t]) ? byId.get(c.id)![t] : NOWHERE),
-    })),
-    { obstacles, ts, size: laneTagSize },
-  )
-  const done = new Set(placed.map((p) => p.id))
-  for (const c of candidates) {
-    if (!c.forced || done.has(c.id)) continue
-    const at = byId.get(c.id)![0]
-    placed.push({ id: c.id, text: c.text, t: 0, ...laneTagSize(c.text), ...at })
+  const place = (cs: readonly LaneTagCandidate[], obs: readonly LabelBox[]) =>
+    placeEdgeLabels(
+      cs.map((c) => ({
+        id: c.id,
+        text: c.text,
+        priority: c.priority,
+        pointAt: (t: number) => (inside(c, byId.get(c.id)![t]) ? byId.get(c.id)![t] : NOWHERE),
+      })),
+      { obstacles: obs, ts, size: laneTagSize },
+    )
+  // Forced tags first, one at a time (a fallback takes its first spot), so nothing lands on them.
+  const placed: PlacedEdgeLabel[] = []
+  const forced = candidates.filter((c) => c.forced).sort((a, b) => a.priority - b.priority)
+  for (const c of forced) {
+    const [tag] = place([c], [...obstacles, ...placed])
+    placed.push(tag ?? { id: c.id, text: c.text, t: 0, ...laneTagSize(c.text), ...byId.get(c.id)![0] })
   }
+  placed.push(...place(candidates.filter((c) => !c.forced), [...obstacles, ...placed]))
   return placed
 }
