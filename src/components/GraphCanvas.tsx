@@ -69,10 +69,11 @@ import { arrowHeadPoints, linkPredicateLabel } from "../utils/layered/labels";
 import { edgeLabelPriority, placeEdgeLabels, defaultPillSize, type LabelBox, type PlacedEdgeLabel } from "../utils/layered/edgeLabels";
 import type { BuildLayeredIndexOptions, IndexedLink, IndexedNode, LayeredIndex } from "../utils/layered/types";
 import type { LinkEmphasis, NodeEmphasis } from "../utils/layered/emphasis";
-import { curveEndBoxes, layoutLanes, laneBundleCurve, laneBundler, laneLinkCurve, retraceLaneGutters, routeLaneGutters, type LaneGutterTrack, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
+import { curveEndBoxes, laneBundleCurve, laneBundler, laneNavIndex, laneNavMove, laneNavTarget, layoutLanes, laneLinkCurve, retraceLaneGutters, routeLaneGutters, type LaneGutterTrack, laneTagRoom, laneTitleBox, placeLaneTags, retraceLabels, type LaneLayout, type LaneLayoutOptions, type LaneLinkCurve, type LaneNodeLabels, type LaneTagCandidate } from "../utils/laneLayout";
 import { containsAcrossPortals } from "../hooks/useDropdownPortal";
 import "./Tooltip.css";
 import "./GraphCanvas.css";
+import "../styles/utilities.css";
 import "./GraphEdge.css";
 
 export type {
@@ -603,6 +604,12 @@ interface LaneNodeProps {
   compact?: boolean;
   /** Reports keyboard focus (the node's id) and blur (null). */
   onFocusChange?: (id: string | null) => void;
+  /** Roving focus: false takes the node out of the Tab order (arrow keys reach it). Default true. */
+  tabStop?: boolean;
+  /** Arrow keys, Home and End; returns true when it handled the key. */
+  onNavigate?: (id: string, key: string) => boolean;
+  /** Id of the keyboard hint, added to aria-describedby. */
+  hintId?: string;
   onSelect?: (id: string) => void;
   onPopoverOpen?: (triggeringElement: HTMLElement) => void;
   popoverOpen?: boolean;
@@ -661,7 +668,7 @@ function laneLinkEnds(items: readonly LaneLinkItem[], ids: readonly string[]): L
 }
 
 /** layout="layer-lanes" default node: a monospace box with its layer's color bar. */
-function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, compact, onFocusChange, onSelect, onPopoverOpen, popoverOpen, popoverPanelId, tooltipId }: LaneNodeProps) {
+function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, compact, onFocusChange, tabStop = true, onNavigate, hintId, onSelect, onPopoverOpen, popoverOpen, popoverPanelId, tooltipId }: LaneNodeProps) {
   const activate = (el: HTMLElement) => {
     try { onSelect?.(id); } catch (err) { console.error("onSelect failed:", err); }
     try { onPopoverOpen?.(el); } catch (err) { console.error("onPopoverOpen failed:", err); }
@@ -674,13 +681,13 @@ function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, comp
       data-no-drag
       title={fullLabel}
       role={interactive ? "button" : undefined}
-      tabIndex={interactive ? 0 : undefined}
+      tabIndex={interactive ? (tabStop ? 0 : -1) : undefined}
       aria-label={ariaLabel}
       aria-pressed={onSelect ? selected : undefined}
       aria-haspopup={onPopoverOpen ? "dialog" : undefined}
       {...(onPopoverOpen && { "aria-expanded": !!popoverOpen })}
       {...(onPopoverOpen && popoverPanelId && { "aria-controls": popoverPanelId })}
-      {...(tooltipId && { "aria-describedby": tooltipId })}
+      {...((tooltipId || hintId) && { "aria-describedby": [tooltipId, hintId].filter(Boolean).join(" ") })}
       onClick={(e) => {
         e.stopPropagation();
         activate(e.currentTarget);
@@ -691,6 +698,9 @@ function LaneNode({ id, label, ariaLabel, fullLabel, color, tint, selected, comp
           e.preventDefault();
           e.stopPropagation();
           activate(e.currentTarget);
+        } else if (!e.altKey && !e.ctrlKey && !e.metaKey && onNavigate?.(id, e.key)) {
+          e.preventDefault();
+          e.stopPropagation();
         }
       }}
       onFocus={onFocusChange && ((e) => e.target === e.currentTarget && onFocusChange(id))}
@@ -3011,10 +3021,119 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       if (!locked) fitToContent(undefined, { kind: "fit", reason: "layout" });
     }, [laneLayout, laneCompact, dims, fitToContent, locked]);
 
-    // A focused chip that unmounts or leaves compact mode never reports its blur.
+    // layout="layer-lanes" keyboard: arrow keys move between lane nodes (laneNavTarget), with one
+    // Tab stop for them all (roving focus). Only the default lane node takes part.
+    const laneKeys = lanesMode && !renderNode;
+    // Reading order from live positions, so a dragged node is read where it now sits.
+    const laneNav = useMemo(() => {
+      if (!laneKeys || !laneLayout || !lanesIndex) return null;
+      const positions = dragPositions.size
+        ? new Map([...laneLayout.positions].map(([id, p]) => [id, dragPositions.get(id) ?? p]))
+        : laneLayout.positions;
+      return laneNavIndex({ ...laneLayout, positions }, (id) => lanesIndex.nodeById.get(id)?.layerId);
+    }, [laneKeys, laneLayout, lanesIndex, dragPositions]);
+    const laneLinked = useMemo(() => {
+      if (!laneKeys || !laneData) return null;
+      const m = new Map<string, string[]>();
+      for (const l of laneData.links) {
+        if (!l.cross) continue;
+        m.set(l.sourceId, [...(m.get(l.sourceId) ?? []), l.targetId]);
+        m.set(l.targetId, [...(m.get(l.targetId) ?? []), l.sourceId]);
+      }
+      return m;
+    }, [laneKeys, laneData]);
+    const [laneLastFocusId, setLaneLastFocusId] = useState<string | null>(null);
+    const laneFocusPosRef = useRef<{ x: number; y: number } | null>(null);
+    const focusLaneNode = useCallback((id: string) => {
+      const esc = typeof CSS !== "undefined" && CSS.escape ? CSS.escape(id) : id.replace(/["\\]/g, "\\$&");
+      containerRef.current?.querySelector<HTMLElement>(`.graph-nodes [data-node-id="${esc}"] .graph-lane-node`)?.focus({ preventScroll: true });
+    }, []);
+    // Brings a focused lane node into view: the smallest pan that puts its box inside the canvas,
+    // with a margin. Covers arrow moves, Tab entry and the hidden-layer hand-off. Not when locked.
+    const revealLaneNode = useCallback(
+      (id: string) => {
+        const container = containerRef.current;
+        if (!container) return;
+        // Tab focus scrolls the overflow-hidden canvas to show the node; undo that, pan instead.
+        if (container.scrollLeft || container.scrollTop) container.scrollTo(0, 0);
+        const p = dragPositions.get(id) ?? laneLayout?.positions.get(id);
+        if (locked || !p) return;
+        const d = dims.get(id) ?? { width: DEFAULT_NODE_W, height: DEFAULT_NODE_H };
+        const vp = getViewport();
+        const M = 24;
+        const left = vp.x + (p.x - d.width / 2) * vp.zoom;
+        const right = vp.x + (p.x + d.width / 2) * vp.zoom;
+        const top = vp.y + (p.y - d.height / 2) * vp.zoom;
+        const bottom = vp.y + (p.y + d.height / 2) * vp.zoom;
+        const shift = (lo: number, hi: number, size: number) => (lo < M ? M - lo : hi > size - M ? Math.max(M - lo, size - M - hi) : 0);
+        const dx = shift(left, right, container.clientWidth);
+        const dy = shift(top, bottom, container.clientHeight);
+        if (!dx && !dy) return;
+        panTo(vp.x + dx, vp.y + dy);
+        afterProgrammaticMove(null);
+      },
+      [dragPositions, laneLayout, locked, dims, getViewport, panTo, afterProgrammaticMove],
+    );
+    const onLaneFocusChange = useCallback(
+      (id: string | null) => {
+        setLaneFocusId(id);
+        if (!id) return;
+        setLaneLastFocusId(id);
+        laneFocusPosRef.current = dragPositions.get(id) ?? laneLayout?.positions.get(id) ?? null;
+        revealLaneNode(id);
+      },
+      [laneLayout, dragPositions, revealLaneNode],
+    );
+    const handleLaneNavigate = useCallback(
+      (id: string, key: string) => {
+        if (!laneNav) return false;
+        const move = laneNavMove(key, laneNav.orientation);
+        if (!move) return false;
+        const node = visibleNodes.find((n) => n.id === id);
+        const target = laneNavTarget(
+          laneNav,
+          id,
+          move,
+          (nid) => {
+            const n = nid === id ? node : visibleNodes.find((v) => v.id === nid);
+            return n ? getNodePosition(n) : undefined;
+          },
+          (nid) => laneLinked?.get(nid) ?? [],
+        );
+        if (target) focusLaneNode(target);
+        return true; // consumed at a lane's end too, so the canvas doesn't pan instead
+      },
+      [laneNav, laneLinked, visibleNodes, getNodePosition, focusLaneNode],
+    );
+    // The one Tab stop: the focused node, else the selection, else the last focused, else the first.
+    const laneTabStop = useMemo(() => {
+      if (!laneNav) return null;
+      const shown = (id: string | null | undefined): id is string => !!id && laneNav.laneOf.has(id);
+      if (shown(laneFocusId)) return laneFocusId;
+      if (shown(lanesSelectedId)) return lanesSelectedId;
+      if (shown(laneLastFocusId)) return laneLastFocusId;
+      return laneNav.lanes.find((ids) => ids.length > 0)?.[0] ?? null;
+    }, [laneNav, laneFocusId, lanesSelectedId, laneLastFocusId]);
+    // The focused node left the drawing (its layer was hidden, a filter dropped it): its blur never
+    // comes, so move focus to the node now nearest where it was, if focus hasn't gone elsewhere.
     useEffect(() => {
-      if (laneFocusId && (!(laneCompact || laneBundled) || !visibleNodes.some((n) => n.id === laneFocusId))) setLaneFocusId(null);
-    }, [laneFocusId, laneCompact, laneBundled, visibleNodes]);
+      if (!laneFocusId || laneNav?.laneOf.has(laneFocusId)) return;
+      const was = laneFocusPosRef.current;
+      const active = typeof document !== "undefined" ? document.activeElement : null;
+      const lost = !active || active === document.body || !!containerRef.current?.contains(active);
+      let next: string | null = null;
+      if (laneNav && laneLayout && was && lost) {
+        let best = Infinity;
+        for (const [id, p] of laneLayout.positions) {
+          if (!laneNav.laneOf.has(id)) continue;
+          const d = Math.hypot(p.x - was.x, p.y - was.y);
+          if (d < best) [best, next] = [d, id];
+        }
+      }
+      setLaneFocusId(null);
+      if (next) focusLaneNode(next);
+    }, [laneFocusId, laneNav, laneLayout, focusLaneNode]);
+    const laneHintId = `${rawId.replace(/:/g, "")}-lane-keys`;
 
     // Fulfills pendingFullscreenFitRef once the container's real, post-transition size has
     // actually landed — containerSize only updates via the ResizeObserver effect above once the
@@ -3529,7 +3648,10 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               tint={em.selected ? "selected" : em.followed ? "followed" : em.hop !== null ? "reached" : "none"}
               selected={em.selected}
               compact={laneCompact}
-              onFocusChange={laneCompact || laneBundled ? setLaneFocusId : undefined}
+              onFocusChange={laneKeys ? onLaneFocusChange : laneCompact || laneBundled ? setLaneFocusId : undefined}
+              tabStop={!laneTabStop || laneTabStop === node.id}
+              onNavigate={laneKeys ? handleLaneNavigate : undefined}
+              hintId={laneKeys ? laneHintId : undefined}
               onSelect={onNodeSelect}
               onPopoverOpen={nodeProps.onPopoverOpen}
               popoverOpen={isPopoverOpen}
@@ -3558,7 +3680,7 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
           />
         );
       },
-      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph, laneCompact, laneBundled],
+      [renderNode, onNodeSelect, hierarchyMetaFor, nodePopover, nodeTooltip, nodeTooltipTrigger, handleNodePopoverOpen, activePopoverNodeId, galaxyRadii, lanesGraph, laneCompact, laneBundled, laneKeys, onLaneFocusChange, laneTabStop, handleLaneNavigate, laneHintId],
     );
 
     // World-space anchor box (the node's box, or an edge path's midpoint as a point) for the
@@ -3884,6 +4006,14 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
         role={bind.role}
         {...props}
       >
+        {/* layout="layer-lanes": the keyboard hint each lane node's aria-describedby points at. */}
+        {lanesMode && !renderNode && (
+          <div id={laneHintId} className="heimdall-visually-hidden">
+            {laneLayout?.orientation === "vertical"
+              ? "Left and Right arrows move to the linked node in the next lane, Up and Down move within the lane, Home and End go to its ends. Enter or Space selects, Escape clears the selection."
+              : "Up and Down arrows move to the linked node in the next lane, Left and Right move within the lane, Home and End go to its ends. Enter or Space selects, Escape clears the selection."}
+          </div>
+        )}
         {/* Hidden off-screen div — renders node HTML at natural size for measurement. Deliberately
             OUTSIDE the context provider below: useGraphCanvas() being unavailable here is how a
             custom renderNode (e.g. one embedding viewport controls) can tell this measurement

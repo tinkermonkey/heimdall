@@ -795,3 +795,103 @@ export function placeLaneTags(candidates: readonly LaneTagCandidate[], obstacles
   placed.push(...place(candidates.filter((c) => !c.forced), [...obstacles, ...placed]))
   return placed
 }
+
+/** A keyboard move between lane nodes. */
+export type LaneNavMove = 'next-lane' | 'prev-lane' | 'next' | 'prev' | 'first' | 'last'
+
+/**
+ * The move a key makes, by screen direction: horizontal lanes stack top to bottom, so Up/Down
+ * cross lanes and Left/Right run along one; vertical lanes sit side by side, so Left/Right cross
+ * lanes and Up/Down run along one. Home/End go to the lane's ends. Null for any other key.
+ */
+export function laneNavMove(key: string, orientation: LaneOrientation = 'horizontal'): LaneNavMove | null {
+  const v = orientation === 'vertical'
+  switch (key) {
+    case 'ArrowDown': return v ? 'next' : 'next-lane'
+    case 'ArrowUp': return v ? 'prev' : 'prev-lane'
+    case 'ArrowRight': return v ? 'next-lane' : 'next'
+    case 'ArrowLeft': return v ? 'prev-lane' : 'prev'
+    case 'Home': return 'first'
+    case 'End': return 'last'
+    default: return null
+  }
+}
+
+/** Lane nodes in reading order, for keyboard moves (see `laneNavTarget`). */
+export interface LaneNavIndex {
+  orientation: LaneOrientation
+  /** Node ids per drawn lane, in row order (rows top to bottom, each left to right; columns, vertical). */
+  lanes: string[][]
+  laneOf: Map<string, number>
+}
+
+export function laneNavIndex(layout: LaneLayout, layerOf: (id: string) => string | undefined): LaneNavIndex {
+  const v = layout.orientation === 'vertical'
+  const rank = new Map(layout.bands.map((b, i) => [b.layerId, i]))
+  const lanes: string[][] = layout.bands.map(() => [])
+  const laneOf = new Map<string, number>()
+  for (const id of layout.positions.keys()) {
+    const i = rank.get(layerOf(id) ?? '')
+    if (i === undefined) continue
+    lanes[i].push(id)
+    laneOf.set(id, i)
+  }
+  for (const ids of lanes) {
+    ids.sort((a, b) => {
+      const p = layout.positions.get(a)!
+      const q = layout.positions.get(b)!
+      return v ? Math.round(p.x) - Math.round(q.x) || p.y - q.y : Math.round(p.y) - Math.round(q.y) || p.x - q.x
+    })
+  }
+  return { orientation: layout.orientation, lanes, laneOf }
+}
+
+/**
+ * Where a keyboard move from `from` lands, or null when there's nowhere to go. Along a lane:
+ * the neighbour in row order, or the lane's first or last node. Across lanes: the nearest
+ * non-empty lane that way; in it, the nearest linked node (`linked`, usually the node's
+ * cross-layer links), else the nearest node. Nearest prefers the row nearest across (in a
+ * wrapped lane, the row next to the gap), then the position along the lane. `posOf` gives live
+ * positions (a dragged node moves).
+ */
+export function laneNavTarget(
+  nav: LaneNavIndex,
+  from: string,
+  move: LaneNavMove,
+  posOf: (id: string) => Point | undefined,
+  linked: (id: string) => Iterable<string> = () => [],
+): string | null {
+  const lane = nav.laneOf.get(from)
+  if (lane === undefined) return null
+  const ids = nav.lanes[lane]
+  const at = ids.indexOf(from)
+  if (move === 'next') return ids[at + 1] ?? null
+  if (move === 'prev') return at > 0 ? ids[at - 1] : null
+  if (move === 'first') return ids[0] === from ? null : ids[0]
+  if (move === 'last') return ids[ids.length - 1] === from ? null : ids[ids.length - 1]
+  const step = move === 'next-lane' ? 1 : -1
+  let to = lane + step
+  while (to >= 0 && to < nav.lanes.length && nav.lanes[to].length === 0) to += step
+  if (to < 0 || to >= nav.lanes.length) return null
+  const p = posOf(from)
+  if (!p) return nav.lanes[to][0]
+  const v = nav.orientation === 'vertical'
+  const along = (q: Point) => Math.abs(v ? q.y - p.y : q.x - p.x)
+  const across = (q: Point) => Math.abs(v ? q.x - p.x : q.y - p.y)
+  const nearest = (cands: readonly string[]) => {
+    let best: string | null = null
+    let bestA = Infinity
+    let bestC = Infinity
+    for (const id of cands) {
+      const q = posOf(id)
+      if (!q) continue
+      const a = along(q)
+      const c = across(q)
+      if (c < bestC - 0.5 || (Math.abs(c - bestC) <= 0.5 && a < bestA)) [best, bestA, bestC] = [id, a, c]
+    }
+    return best
+  }
+  const target = new Set(nav.lanes[to])
+  const viaLinks = [...linked(from)].filter((id) => target.has(id))
+  return nearest(viaLinks) ?? nearest(nav.lanes[to])
+}

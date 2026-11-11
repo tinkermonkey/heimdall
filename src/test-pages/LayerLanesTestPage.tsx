@@ -20,10 +20,15 @@ const ORIENTATION: LaneOrientation = params.get('orientation') === 'vertical' ? 
 const INTRA = params.get('intra') === 'none' ? 'none' : params.get('intra') === 'bundled' ? 'bundled' : 'arc'
 // &rowWidth=<px>: laneOptions.maxRowWidth (several rows or columns per lane).
 // &gutter=1: skipLayerRouting 'gutter'. &categoryToggle=1 adds a button that toggles the structural category.
+// &layerToggle=1 adds a button that hides the technology layer without taking focus.
 const ROW_WIDTH = params.has('rowWidth') ? Number(params.get('rowWidth')) : undefined
 const SKIP_ROUTING = params.get('gutter') === '1' ? 'gutter' : 'direct'
 const EDGE_TOOLTIP = params.get('tooltip') === '1'
 const NO_DATA = params.get('nodata') === '1'
+// &layout=force: the same graph under layout="force", with node selection (other layouts keep a
+// Tab stop per node).
+const LAYOUT = params.get('layout') === 'force' ? 'force' : 'layer-lanes'
+const noop = () => {}
 // &render=1: a custom renderNode, which nodeLabels 'reached' leaves alone.
 const renderCustomNode = params.get('render') === '1' ? (node: GraphNodeData) => <div className="custom-lane-node" style={{ padding: '4px 8px', border: '1px solid rgb(var(--canvas-border-strong))', fontSize: 11 }}>{node.label}</div> : undefined
 
@@ -69,6 +74,12 @@ export default function LayerLanesTestPage() {
             onChange={(v) => graph.setPredicateLabels(v as PredicateLabelMode)}
             options={[{ value: 'off', label: 'Off' }, { value: 'highlighted', label: 'Highlighted' }, { value: 'all', label: 'All' }]}
           />
+          {params.has('layerToggle') && (
+            // Doesn't take focus on click, so a test can hide the focused node's layer.
+            <button type="button" onMouseDown={(e) => e.preventDefault()} onClick={() => graph.toggleLayer('technology')}>
+              Toggle technology
+            </button>
+          )}
           {params.has('categoryToggle') && (
             <button type="button" aria-pressed={graph.filters.categories.structural !== false} onClick={() => graph.toggleCategory('structural')}>
               Structural links
@@ -87,7 +98,8 @@ export default function LayerLanesTestPage() {
           <GraphCanvas
             data-testid="layer-lanes"
             {...(NO_DATA ? {} : { nodes: NODES, edges: EDGES })}
-            layout="layer-lanes"
+            layout={LAYOUT}
+            onNodeSelect={LAYOUT === 'force' ? noop : undefined}
             laneOptions={laneOptions}
             fitView
             fitPadding={24}

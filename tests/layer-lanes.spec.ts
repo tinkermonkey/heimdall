@@ -295,6 +295,127 @@ test.describe('GraphCanvas layer-lanes', () => {
     await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-reached-vertical-dark.png')
   })
 
+  // Keyboard: the focused lane node, and the nodes of a layer in row order (as drawn).
+  const focused = (page: Page) => page.evaluate(() => {
+    const el = document.activeElement as HTMLElement | null
+    return el?.classList.contains('graph-lane-node') ? el.closest('[data-node-id]')!.getAttribute('data-node-id') : null
+  })
+  const laneOrder = (page: Page, layer: string, vertical = false) =>
+    page.locator('.graph-nodes [data-node-id]').evaluateAll((els, [layer, vertical]) => {
+      const rows = els
+        .filter((g) => g.getAttribute('data-node-id')!.startsWith(`${layer}.`))
+        .map((g) => {
+          const r = g.querySelector('.graph-lane-node')!.getBoundingClientRect()
+          return { id: g.getAttribute('data-node-id')!, x: r.x + r.width / 2, y: r.y + r.height / 2 }
+        })
+      return rows
+        .sort((a, b) => (vertical ? Math.round(a.x) - Math.round(b.x) || a.y - b.y : Math.round(a.y) - Math.round(b.y) || a.x - b.x))
+        .map((r) => r.id)
+    }, [layer, vertical] as const)
+  const linkedTo = (page: Page, a: string, b: string) =>
+    page.locator('.graph-lane-link').evaluateAll((els, [a, b]) => els.some((g) => {
+      const id = g.getAttribute('data-link-id')!
+      return id.includes(a) && id.includes(b)
+    }), [a, b] as const)
+  const focusNode = (page: Page, id: string) => page.locator(`.graph-nodes [data-node-id="${id}"] .graph-lane-node`).focus()
+
+  test('keyboard: one Tab stop for the lane nodes, entering at the first node or the selection', async ({ page }) => {
+    await open(page)
+    const order = await laneOrder(page, 'business')
+    await expect(page.locator('.graph-nodes .graph-lane-node[tabindex="0"]')).toHaveCount(1)
+    await page.getByTestId('layer-lanes').focus()
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).toBe(order[0])
+    await page.keyboard.press('ArrowRight')
+    expect(await focused(page)).toBe(order[1])
+    await expect(page.locator('.graph-nodes .graph-lane-node[tabindex="0"]')).toHaveCount(1)
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).toBeNull() // left the lane nodes in one step
+    await page.keyboard.press('Shift+Tab')
+    expect(await focused(page)).toBe(order[1]) // back to where it left
+    // With a selection, Tab enters at it.
+    await open(page, `&select=${ORIGIN}`)
+    await page.getByTestId('layer-lanes').focus()
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).toBe(ORIGIN)
+    // The hint describes the keys.
+    const hint = await page.locator(`.graph-nodes [data-node-id="${ORIGIN}"] .graph-lane-node`).getAttribute('aria-describedby')
+    await expect(page.locator(`[id="${hint!.split(' ').pop()}"]`)).toContainText('Up and Down arrows move to the linked node in the next lane')
+  })
+
+  test('keyboard: Left/Right along a lane, Home/End to its ends, Up/Down to a linked node in the next lane', async ({ page }) => {
+    await open(page)
+    const app = await laneOrder(page, 'application')
+    const at = app.indexOf(ORIGIN)
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('ArrowRight')
+    expect(await focused(page)).toBe(app[at + 1])
+    await page.keyboard.press('ArrowLeft')
+    expect(await focused(page)).toBe(ORIGIN)
+    await page.keyboard.press('End')
+    expect(await focused(page)).toBe(app[app.length - 1])
+    await page.keyboard.press('Home')
+    expect(await focused(page)).toBe(app[0])
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('ArrowDown')
+    const down = (await focused(page))!
+    expect(down.startsWith('technology.')).toBe(true)
+    expect(await linkedTo(page, ORIGIN, down)).toBe(true)
+    await page.keyboard.press('ArrowUp')
+    const up = (await focused(page))!
+    expect(up.startsWith('application.')).toBe(true)
+    expect(await linkedTo(page, down, up)).toBe(true)
+    await page.keyboard.press('ArrowUp')
+    expect((await focused(page))!.startsWith('business.')).toBe(true)
+    // At the top lane, Up stays put (and doesn't pan the canvas).
+    const top = await focused(page)
+    const before = await page.locator('.graph-svg > g').first().getAttribute('transform')
+    await page.keyboard.press('ArrowUp')
+    expect(await focused(page)).toBe(top)
+    expect(await page.locator('.graph-svg > g').first().getAttribute('transform')).toBe(before)
+    // Enter selects.
+    await page.keyboard.press('Enter')
+    await expect(status(page)).toContainText(`selected ${top}`)
+  })
+
+  test('keyboard: vertical lanes swap the axes (Left/Right between lanes, Up/Down along one)', async ({ page }) => {
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, '&orientation=vertical')
+    const app = await laneOrder(page, 'application', true)
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('ArrowDown')
+    expect(await focused(page)).toBe(app[app.indexOf(ORIGIN) + 1])
+    await page.keyboard.press('ArrowUp')
+    expect(await focused(page)).toBe(ORIGIN)
+    await page.keyboard.press('ArrowRight')
+    const right = (await focused(page))!
+    expect(right.startsWith('technology.')).toBe(true)
+    expect(await linkedTo(page, ORIGIN, right)).toBe(true)
+    await page.keyboard.press('ArrowLeft')
+    expect((await focused(page))!.startsWith('application.')).toBe(true)
+    await expect(page.locator('[id$="-lane-keys"]')).toContainText('Left and Right arrows move to the linked node in the next lane')
+  })
+
+  test("keyboard: hiding the focused node's layer moves focus to a neighbour", async ({ page }) => {
+    await open(page, '&layerToggle=1')
+    await focusNode(page, 'technology.node')
+    expect(await focused(page)).toBe('technology.node')
+    await page.getByRole('button', { name: 'Toggle technology' }).click()
+    await expect(page.locator('.graph-lane')).toHaveCount(2)
+    await expect.poll(() => focused(page)).toMatch(/^application\./)
+  })
+
+  test('keyboard: works with reached chips (focus tag follows) and gutter routing', async ({ page }) => {
+    await open(page, '&nodeLabels=off&gutter=1')
+    const app = await laneOrder(page, 'application')
+    await focusNode(page, app[0])
+    await page.keyboard.press('ArrowRight')
+    expect(await focused(page)).toBe(app[1])
+    await expect(page.locator(`.graph-lane-tag[data-tag-for="${app[1]}"]`)).toBeVisible()
+    await page.keyboard.press('ArrowDown')
+    expect((await focused(page))!.startsWith('technology.')).toBe(true)
+  })
+
   // Intra-layer link paths: id, d and the top of their box (the trunk, when bundled).
   const intraPaths = (page: Page) =>
     page.locator('.graph-lane-link[data-intra]').evaluateAll((els) =>
@@ -454,6 +575,102 @@ test.describe('GraphCanvas layer-lanes', () => {
     await page.setViewportSize({ width: 760, height: 1000 })
     await open(page, `&intra=bundled&orientation=vertical&select=${ORIGIN}&dark=1`)
     await expect(page.getByTestId('layer-lanes')).toHaveScreenshot('layer-lanes-bundled-vertical-dark.png')
+  })
+
+  test('keyboard in bundled mode: arrows fan out the focused node and fold the one it left', async ({ page }) => {
+    await open(page, '&intra=bundled')
+    const fanned = async () => (await intraPaths(page)).filter((p) => isArc(p.d)).map((p) => p.id)
+    await focusNode(page, ORIGIN)
+    await expect.poll(async () => (await fanned()).length).toBeGreaterThan(0)
+    for (const id of await fanned()) expect(id.includes(ORIGIN)).toBe(true)
+    // Move along the lane to the next node that has links in the lane.
+    let now = ORIGIN
+    for (let i = 0; i < 6 && now === ORIGIN; i++) {
+      await page.keyboard.press('ArrowRight')
+      const f = (await focused(page))!
+      await expect.poll(async () => (await fanned()).every((id) => id.includes(f))).toBe(true)
+      if ((await fanned()).length > 0) now = f
+    }
+    expect(now).not.toBe(ORIGIN)
+    // Only the new node's links are fanned; the node it left folded back (unless linked to it).
+    for (const id of await fanned()) expect(id.includes(now)).toBe(true)
+    expect((await fanned()).some((id) => id.includes(ORIGIN) && !id.includes(now))).toBe(false)
+  })
+
+  test('keyboard: the hint is visually hidden (a 1px box) but names Space and Escape', async ({ page }) => {
+    await open(page)
+    const hint = page.locator('[id$="-lane-keys"]')
+    await expect(hint).toContainText('Enter or Space selects, Escape clears the selection')
+    const box = await hint.evaluate((el) => {
+      const r = el.getBoundingClientRect()
+      return { width: r.width, height: r.height, position: getComputedStyle(el).position }
+    })
+    expect(box).toEqual({ width: 1, height: 1, position: 'absolute' })
+  })
+
+  test('keyboard: Space selects; Shift+Tab comes back to the selection', async ({ page }) => {
+    await open(page)
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('Space')
+    await expect(status(page)).toContainText(`selected ${ORIGIN}`)
+    await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).toBeNull()
+    await page.keyboard.press('Shift+Tab')
+    expect(await focused(page)).not.toBeNull()
+    // Leaving and entering again from before the graph lands on the selection.
+    await page.getByTestId('layer-lanes').focus()
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).toBe(ORIGIN)
+  })
+
+  test('keyboard: Home and End in vertical lanes', async ({ page }) => {
+    await page.setViewportSize({ width: 760, height: 1000 })
+    await open(page, '&orientation=vertical')
+    const app = await laneOrder(page, 'application', true)
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('End')
+    expect(await focused(page)).toBe(app[app.length - 1])
+    await page.keyboard.press('Home')
+    expect(await focused(page)).toBe(app[0])
+  })
+
+  test('keyboard: focus pans an off-screen node into view, without scrolling the canvas', async ({ page }) => {
+    await open(page)
+    const canvas = page.getByTestId('layer-lanes')
+    for (let i = 0; i < 5; i++) await page.getByRole('button', { name: 'Zoom in' }).click()
+    const inside = async () => {
+      const id = (await focused(page))!
+      const [n, c] = [(await page.locator(`.graph-nodes [data-node-id="${id}"] .graph-lane-node`).boundingBox())!, (await canvas.boundingBox())!]
+      return n.x >= c.x && n.y >= c.y && n.x + n.width <= c.x + c.width && n.y + n.height <= c.y + c.height
+    }
+    await focusNode(page, ORIGIN)
+    await page.keyboard.press('End')
+    await expect.poll(inside).toBe(true)
+    await page.keyboard.press('Home')
+    await expect.poll(inside).toBe(true)
+    await page.keyboard.press('ArrowUp')
+    await expect.poll(inside).toBe(true)
+    // Tab entry at an off-screen selection: panned into view, the canvas itself not scrolled.
+    await page.keyboard.press('Enter')
+    for (let i = 0; i < 6; i++) await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('Tab')
+    await page.getByRole('button', { name: 'Zoom to fit' }).click()
+    for (let i = 0; i < 5; i++) await page.getByRole('button', { name: 'Zoom in' }).click()
+    await canvas.focus()
+    await page.keyboard.press('Tab')
+    expect(await focused(page)).not.toBeNull()
+    await expect.poll(inside).toBe(true)
+    expect(await canvas.evaluate((el) => [el.scrollLeft, el.scrollTop])).toEqual([0, 0])
+  })
+
+  test('keyboard: other layouts keep one Tab stop per node', async ({ page }) => {
+    await page.goto('/?example=layer-lanes&layout=force')
+    await page.waitForLoadState('networkidle')
+    const nodes = page.locator('.graph-nodes .graph-node')
+    await expect(nodes).toHaveCount(36)
+    await expect(page.locator('.graph-nodes .graph-node[tabindex="0"]')).toHaveCount(36)
+    await expect(page.locator('[id$="-lane-keys"]')).toHaveCount(0)
   })
 
   test('visual: dark canvas with a followed selection', async ({ page }) => {
