@@ -198,6 +198,25 @@
   overflow: auto;
 }
 
+/* A virtualized matrix fills the scene and is the only scroll area, so its sticky labels and its
+   window follow the scene's real height. */
+.layered-graph-explorer--fixed:not(.layered-graph-explorer--narrow) .layered-graph-explorer__scene--matrix:has(> .adjacency-matrix[data-virtual]) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.layered-graph-explorer--fixed:not(.layered-graph-explorer--narrow) .layered-graph-explorer__scene--matrix > .adjacency-matrix[data-virtual] {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.layered-graph-explorer--fixed:not(.layered-graph-explorer--narrow) .layered-graph-explorer__scene--matrix .adjacency-matrix__scroll--virtual {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+}
+
 /* The stack keeps its aspect ratio: as wide as the scene's height allows. */
 .layered-graph-explorer--fixed:not(.layered-graph-explorer--narrow) .layered-graph-explorer__stack {
   width: min(100%, calc(100cqh * 1160 / 780));

@@ -89,6 +89,7 @@
 
 .adjacency-matrix__cell {
   cursor: pointer;
+  outline: none;
 }
 
 .adjacency-matrix__code {
@@ -217,4 +218,53 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* roving focus: the cell that holds the Tab stop draws a ring when focused from the keyboard */
+.adjacency-matrix__cell-focus {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.adjacency-matrix__cell:focus-visible .adjacency-matrix__cell-focus {
+  stroke: rgb(var(--accent-primary));
+}
+
+/* virtualized (past virtualizeAbove nodes): sticky labels around a scrolling body */
+.adjacency-matrix__scroll--virtual {
+  max-height: var(--adjacency-matrix-max-height, 80vh);
+}
+
+.adjacency-matrix__grid {
+  display: grid;
+  width: max-content;
+}
+
+.adjacency-matrix__grid > svg {
+  display: block;
+}
+
+.adjacency-matrix__corner,
+.adjacency-matrix__cols,
+.adjacency-matrix__rows {
+  position: sticky;
+  background: var(--adjacency-matrix-bg, rgb(var(--canvas-bg)));
+}
+
+.adjacency-matrix__corner {
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+.adjacency-matrix__cols {
+  top: 0;
+  z-index: 2;
+}
+
+.adjacency-matrix__rows {
+  left: 0;
+  z-index: 2;
 }
