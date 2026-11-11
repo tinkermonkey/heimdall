@@ -438,8 +438,8 @@ Why A was chosen:
   - predicate codes per `predicateLabels`, plus a code legend
   - selection and hover crosshair bands
 - **Interaction:** row headers are focusable buttons (Enter or Space selects, selecting again clears). A cell click selects the source, or calls `onLinkSelect`.
-- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels` and `dark` make it deterministic.
-- **Spec:** `tests/adjacency-matrix.spec.ts` (4 behaviour tests, 2 screenshots). Darwin baselines are generated (not yet committed); **linux baselines are still to generate** with the Update Visual Snapshots workflow after pushing.
+- **Test page:** `?example=adjacency-matrix`. URL params `data`, `select`, `follow`, `labels`, `dark`, `symmetric`, `aggregate` and `report` (records `onLinkSelect` / `onLayerCellSelect`) make it deterministic.
+- **Spec:** `tests/adjacency-matrix.spec.ts` (behaviour tests for the directed, symmetric and layer heat-map modes, 5 screenshots), with darwin and linux baselines. Cell building is unit-tested in `src/utils/__tests__/layeredMatrix.test.ts`.
 - **Docs:** documented in the `heimdall-graph` skill. The docs-app showcase waits for step 6, alongside the other views.
 - **Not yet:** `onCellSelect` link inspection through `GraphEdgeInspector`, and virtualization past about 150 nodes. `symmetric` and `aggregate="layer"` are in (#336).
 

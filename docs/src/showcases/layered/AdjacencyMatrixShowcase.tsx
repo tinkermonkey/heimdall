@@ -199,7 +199,7 @@ export function AdjacencyMatrixShowcase() {
           <PropRow name="labelWidth" type="number" def="210" description="Row-label column width in px." />
           <PropRow name="showBlockCounts" type="boolean" def="true" description="Link count in each cross-layer block." />
           <PropRow name="showCodeLegend" type="boolean" def="true" description="Legend of the predicate codes shown." />
-          <PropRow name="onLinkSelect" type="(link: IndexedLink) => void" description="Cell click handler. Unset: selects the link's source. A symmetric cell passes the reached direction, else row → column." />
+          <PropRow name="onLinkSelect" type="(link: IndexedLink, links: readonly IndexedLink[]) => void" description="Cell click handler. Unset: selects the link's source. link is the drawn link (in a symmetric cell holding both directions, the reached one, else row → column); links holds every link in the cell, row → column first." />
           <PropRow name="symmetric" type="boolean" def="false" description="Merge A→B and B→A into one cell above the diagonal, for an undirected reading. A notch marks a cell holding both directions." />
           <PropRow name="aggregate" type="'none' | 'layer'" def="'none'" description="layer: a layers-by-layers heat map of link counts, the overview for many layers. Counts ignore the layer-pair filter; the active pair is outlined." />
           <PropRow name="onLayerCellSelect" type="(cell: LayerMatrixCell) => void" description="Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell (or a layer header) the layer focus." />
@@ -247,7 +247,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
     !legend && 'showCodeLegend={false}',
     symmetric && 'symmetric',
     aggregate === 'layer' && 'aggregate="layer"',
-    cellClick === 'report' && (aggregate === 'layer' ? 'onLayerCellSelect={setPicked}' : 'onLinkSelect={setPicked}'),
+    cellClick === 'report' && (aggregate === 'layer' ? 'onLayerCellSelect={setPickedLayers}' : 'onLinkSelect={setPicked}'),
   ].filter(Boolean)
   const jsx = `<AdjacencyMatrix${jsxProps.length ? ' ' + jsxProps.join(' ') : ''} />`
 
@@ -363,7 +363,7 @@ function Playground({ dataset, onDatasetChange }: { dataset: DatasetKey; onDatas
                 {aggregate === 'layer' ? (
                   pickedLayers ? (
                     <span style={{ fontFamily: mono, fontSize: 11 }}>
-                      onLayerCellSelect · {pickedLayers.rowLayerId} → {pickedLayers.colLayerId} · {pickedLayers.linkCount} links · pair {pickedLayers.pairKey ?? 'none (diagonal)'}
+                      onLayerCellSelect · {pickedLayers.rowLayerId} → {pickedLayers.colLayerId} · {pickedLayers.linkCount} link{pickedLayers.linkCount === 1 ? '' : 's'} · pair {pickedLayers.pairKey ?? 'none (diagonal)'}
                     </span>
                   ) : (
                     'Click a cell to read its layer pair.'

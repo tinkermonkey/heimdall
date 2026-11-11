@@ -163,12 +163,19 @@
 }
 
 .adjacency-matrix__heat-count {
+  /* A halo in the opposite tone keeps every ramp level above 4.5:1 in both themes (a flip point
+     alone leaves a mid band below it). */
   fill: rgb(var(--canvas-fg-1));
+  stroke: rgb(var(--canvas-bg));
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  paint-order: stroke;
   font-weight: 600;
   pointer-events: none;
 }
 
 .adjacency-matrix__heat-count--inverse {
   fill: rgb(var(--canvas-bg));
+  stroke: rgb(var(--canvas-fg-1));
 }
 

@@ -31,8 +31,12 @@ export interface AdjacencyMatrixProps extends Omit<React.HTMLAttributes<HTMLDivE
   showBlockCounts?: boolean
   /** Legend of the predicate codes shown in cells. Default true. */
   showCodeLegend?: boolean
-  /** Called when a cell is clicked. Unset: a click selects the link's source node. */
-  onLinkSelect?: (link: IndexedLink) => void
+  /**
+   * Called when a cell is clicked. Unset: a click selects the link's source node. `link` is the
+   * cell's drawn link: in a symmetric cell holding both directions, the reached one, else row →
+   * column. `links` holds every link in the cell, row → column first.
+   */
+  onLinkSelect?: (link: IndexedLink, links: readonly IndexedLink[]) => void
   /**
    * Merge `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. With
    * `aggregate="layer"`, both directions add into the upper triangle. Default false.
@@ -71,6 +75,8 @@ function frame(maxChars: number, fs: number, labelWidth: number, n: number, cs: 
   )
   return { TH, width, height: TH + n * cs + PAD }
 }
+
+const plural = (count: number, noun: string) => `${count} ${noun}${count === 1 ? '' : 's'}`
 
 const activateOnKey = (e: React.KeyboardEvent, run: () => void) => {
   if (e.key === 'Enter' || e.key === ' ') {
@@ -132,7 +138,9 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
     const fs = Math.min(11, Math.round(cs * 0.66 * 10) / 10)
     const maxChars = ids.reduce((m, id) => Math.max(m, index.nodeById.get(id)!.displayLabel.length), 0)
     const LW = labelWidth
-    const caption = symmetric ? `undirected · each pair above the diagonal · ${n} × ${n}` : `row = source · column = target · ${n} × ${n}`
+    const caption = symmetric
+      ? `undirected · each pair above the diagonal · notch = both directions · ${n} × ${n}`
+      : `row = source · column = target · ${n} × ${n}`
     const { TH, width, height } = frame(maxChars, fs, LW, n, cs, caption)
     const isAggregate = aggregate === 'layer'
 
@@ -316,7 +324,8 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
                   data-link-id={link.id}
                   data-row={r}
                   data-col={c}
-                  onClick={() => (onLinkSelect ? onLinkSelect(link) : g.select(link.sourceId))}
+                  data-source-id={link.sourceId}
+                  onClick={() => (onLinkSelect ? onLinkSelect(link, links) : g.select(link.sourceId))}
                   onMouseEnter={() => setHover({ row: ids[r], col: ids[c] })}
                 >
                   <title>{title}</title>
@@ -419,7 +428,7 @@ function LayerHeatMap({ g, cellSize, labelWidth, symmetric, onLayerCellSelect }:
   const cellName = (cell: LayerMatrixCell) => {
     const row = label(cell.rowLayerId)
     const where = !cell.pairKey ? `Within ${row}` : symmetric ? `Between ${row} and ${label(cell.colLayerId)}` : `${row} to ${label(cell.colLayerId)}`
-    return `${where}: ${cell.linkCount} link${cell.linkCount === 1 ? '' : 's'}`
+    return `${where}: ${plural(cell.linkCount, 'link')}`
   }
 
   return (
@@ -467,7 +476,7 @@ function LayerHeatMap({ g, cellSize, labelWidth, symmetric, onLayerCellSelect }:
                 className="adjacency-matrix__header"
                 role="button"
                 tabIndex={0}
-                aria-label={`${layer.label} layer, ${layer.nodeIds.length} nodes${focused ? ', focused' : ''}`}
+                aria-label={`${layer.label} layer, ${plural(layer.nodeIds.length, 'node')}${focused ? ', focused' : ''}`}
                 onClick={() => focus(id)}
                 onKeyDown={(e) => activateOnKey(e, () => focus(id))}
               >
@@ -504,7 +513,7 @@ function LayerHeatMap({ g, cellSize, labelWidth, symmetric, onLayerCellSelect }:
               role="button"
               tabIndex={0}
               aria-label={cellName(cell)}
-              aria-pressed={active}
+              aria-pressed={onLayerCellSelect ? undefined : active}
               onClick={() => pick(cell)}
               onKeyDown={(e) => activateOnKey(e, () => pick(cell))}
               onMouseEnter={() => setHover({ row: cell.rowLayerId, col: cell.colLayerId })}
@@ -518,7 +527,7 @@ function LayerHeatMap({ g, cellSize, labelWidth, symmetric, onLayerCellSelect }:
                 y={TH + r * cs + cs / 2}
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fontSize: Math.min(13, cs * 0.3) }}
+                style={{ fontSize: Math.max(9, Math.min(13, cs * 0.3)) }}
               >
                 {cell.linkCount}
               </text>

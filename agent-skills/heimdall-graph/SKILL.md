@@ -1626,7 +1626,7 @@ A directed block adjacency matrix of a layered graph. There is one row and one c
 - **Cell colours:** each cell takes its link's category colour. Around the selection, cells take the amber reach ramp instead, including followed hops.
 - **Codes:** cells show two-letter predicate codes per `predicateLabels`, with a legend of the codes in view.
 - **Selection:** a row header (a focusable button, Enter or Space) or the matching column header selects a node; selecting it again clears it. Clicking a cell selects the link's source, or calls `onLinkSelect`.
-- **Symmetric:** `symmetric` merges `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. A cell holding both directions has a notch in its lower-left corner, and its tooltip lists both links. Block counts add both directions.
+- **Symmetric:** `symmetric` merges `A→B` and `B→A` into one cell above the diagonal, for an undirected reading. A cell holding both directions has a notch in its lower-left corner (the caption says so), its tooltip lists both links, and `onLinkSelect` receives both as its second argument. Block counts add both directions.
 - **Layer heat map:** `aggregate="layer"` collapses the matrix to one row and column per visible layer, each cell the count of visible links between the two layers, shaded on a neutral ramp. It is the overview when there are many layers. Clicking a cross-layer cell toggles the layer-pair filter (`setLayerPair`), so the other views narrow to that pair; clicking a diagonal cell or a layer header toggles the layer focus (`focusLayer`). Counts ignore the pair filter, so the overview stays whole and the active pair is outlined. Set `onLayerCellSelect` to handle the click yourself; it receives a `LayerMatrixCell` (`rowLayerId`, `colLayerId`, `linkCount`, `pairKey`, which is null on the diagonal). With `symmetric`, both directions add into the upper triangle.
 
 ```tsx
@@ -1657,7 +1657,7 @@ const graph = useLayeredGraph({ nodes, edges, layering })
 | `labelWidth` | `number` | `210` | Row-label column width in px |
 | `showBlockCounts` | `boolean` | `true` | Link count in each cross-layer block |
 | `showCodeLegend` | `boolean` | `true` | Legend of the predicate codes shown |
-| `onLinkSelect` | `(link: IndexedLink) => void` | — | Cell click handler. Unset: selects the link's source. A symmetric cell passes the reached direction, else row → column |
+| `onLinkSelect` | `(link: IndexedLink, links: readonly IndexedLink[]) => void` | — | Cell click handler. Unset: selects the link's source. `link` is the drawn link: in a symmetric cell holding both directions, the reached one, else row → column. `links` holds every link in the cell, row → column first |
 | `symmetric` | `boolean` | `false` | Merge both directions into one cell above the diagonal |
 | `aggregate` | `'none' \| 'layer'` | `'none'` | `layer`: a layers-by-layers heat map of link counts |
 | `onLayerCellSelect` | `(cell: LayerMatrixCell) => void` | — | Heat-map cell click handler. Unset: a cross-layer cell toggles the layer-pair filter, a diagonal cell the layer focus |

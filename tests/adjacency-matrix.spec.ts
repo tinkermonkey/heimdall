@@ -81,6 +81,25 @@ test.describe('AdjacencyMatrix symmetric', () => {
     expect(errors).toEqual([])
   })
 
+  test('clicking a cell holding both directions selects its drawn link source', async ({ page }) => {
+    await open(page, `&symmetric=1&select=${ORIGIN}`)
+    const cell = page.locator('.adjacency-matrix__cell--both').first()
+    const source = await cell.getAttribute('data-source-id')
+    expect(source).toBeTruthy()
+    await cell.click()
+    await expect(page.getByTestId('adjacency-matrix-selection')).toContainText(`selected ${source} `)
+  })
+
+  test('onLinkSelect receives the drawn link and both links of a merged cell', async ({ page }) => {
+    await open(page, '&symmetric=1&report=1')
+    const cell = page.locator('.adjacency-matrix__cell--both').first()
+    const source = await cell.getAttribute('data-source-id')
+    await cell.click()
+    await expect(page.getByTestId('adjacency-matrix-report')).toHaveText(new RegExp(`^link ${source!.replace(/\./g, '\\.')} -> \\S+ · 2 in cell$`))
+    // a report handler replaces the default selection
+    await expect(page.getByTestId('adjacency-matrix-selection')).toHaveText('no selection')
+  })
+
   test('visual: light canvas, symmetric with a selection', async ({ page }) => {
     await open(page, `&symmetric=1&select=${ORIGIN}`)
     await expect(page.getByTestId('adjacency-matrix')).toHaveScreenshot('adjacency-matrix-symmetric-light.png')
@@ -128,6 +147,17 @@ test.describe('AdjacencyMatrix aggregate="layer"', () => {
     await page.getByRole('button', { name: /^Technology to Business/ }).focus()
     await page.keyboard.press(' ')
     await expect(state).toHaveText('pair ["business","technology"] · focus none')
+  })
+
+  test('onLayerCellSelect replaces the default filter and focus toggles', async ({ page }) => {
+    await open(page, '&aggregate=layer&report=1')
+    const cross = page.getByRole('button', { name: 'Application to Business: 7 links' })
+    await expect(cross).not.toHaveAttribute('aria-pressed')
+    await cross.click()
+    await expect(page.getByTestId('adjacency-matrix-report')).toHaveText(`layers application -> business · 7 · pair ${PAIR}`)
+    await page.getByRole('button', { name: 'Within Business: 37 links' }).click()
+    await expect(page.getByTestId('adjacency-matrix-report')).toHaveText('layers business -> business · 37 · pair none')
+    await expect(page.getByTestId('adjacency-matrix-layer-state')).toHaveText('pair none · focus none')
   })
 
   test('visual: dark canvas heat map with an active pair', async ({ page }) => {
