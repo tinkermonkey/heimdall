@@ -191,7 +191,10 @@ export function createTweenChannels(
       opts.onDone?.()
       return
     }
-    if (keys.length === 0) return
+    if (keys.length === 0) {
+      opts.onDone?.()
+      return
+    }
     const move: TweenMove = { t0: null, duration, ease: opts.easing ?? easeInOutCubic, onDone: opts.onDone, keys: new Set(keys), intact: true }
     for (const k of keys) channels.set(k, { from: from[k] ?? to[k], to: to[k], move })
     if (handle === null) handle = scheduler.request(step)

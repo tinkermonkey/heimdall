@@ -102,8 +102,10 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   /**
    * Camera (controlled). The fields set are held: the view shows them and nothing else, and a move
    * (orbit, zoom, a preset, focus, turntable) only reports through `onCameraChange` until the prop
-   * changes. A change from outside jumps and stops the stack's own move on those fields. Fields
-   * left out stay uncontrolled.
+   * changes. Pass each reported camera back unchanged and synchronously (in the callback): a
+   * value that differs from the stack's last report (rounded, normalized, or set later) counts as a
+   * change from outside, which jumps and stops the stack's own move on those fields. Fields left
+   * out stay uncontrolled.
    */
   camera?: Partial<StackCamera>
   /** Initial camera fields when uncontrolled, over the initial preset. */
@@ -112,7 +114,8 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
    * Called when a camera move settles (drag release, end of a tween, a wheel pause, pinch release,
    * turntable stop), not on every frame, so chrome that shows the camera doesn't re-render while
    * it moves. With `camera` set it is also called on every frame of a move, with the camera the
-   * stack proposes, since the view only moves when the prop does.
+   * stack proposes, since the view only moves when the prop does; the settle call then carries
+   * the move's last proposal. Chrome that only shows the camera should leave it uncontrolled.
    */
   onCameraChange?: (camera: StackCamera, cause: LayerStackCameraCause) => void
 
@@ -126,6 +129,7 @@ export interface LayerStackProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   /**
    * Vertical distance between planes, world units (controlled). Held like `camera`: a preset's gap
    * move reports each frame through `onLayerGapChange`, and the planes move only with the prop.
+   * Pass the reported gap back unchanged and synchronously, as with `camera`.
    */
   layerGap?: number
   /** Initial gap when uncontrolled. Default: the initial preset's (170 for `stack`). */
@@ -342,8 +346,6 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     onCameraChangeRef.current = onCameraChange
     const onLayerGapChangeRef = useRef(onLayerGapChange)
     onLayerGapChangeRef.current = onLayerGapChange
-    const emitCamera = useCallback((cause: LayerStackCameraCause) => onCameraChangeRef.current?.(cameraOf(view.current!), cause), [])
-
     // A controlled camera or gap reports every frame of a move (the view moves only when the prop
     // does), as well as when the move settles. The last proposal tells an outside change apart.
     const controlledRef = useRef({ camera: false, gap: false })
@@ -360,6 +362,19 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       proposed.current.gap = view.current!.gap
       onLayerGapChangeRef.current?.(view.current!.gap)
     }, [])
+    /**
+     * Reports a settled camera. Controlled, that is the move's latest proposal: the hold has already
+     * put the prop back into the view, and a parent that commits only the settled report must still
+     * get the gesture's result.
+     */
+    const emitCamera = useCallback((cause: LayerStackCameraCause) => {
+      const c = controlledRef.current.camera && proposed.current.camera ? proposed.current.camera : cameraOf(view.current!)
+      onCameraChangeRef.current?.(c, cause)
+    }, [])
+    /** A new gesture starts without a proposal, so its settle report never repeats an older one. */
+    const startGesture = () => {
+      proposed.current.camera = null
+    }
 
     const writeView = useCallback((values: Record<string, number>) => {
       const v = view.current!
@@ -513,7 +528,10 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       if (!camera) return
       const p = proposed.current.camera
       const outside = CAMERA_KEYS.filter((k) => camera[k] !== undefined && (!p || Math.abs(camera[k]! - p[k]) > 1e-6))
-      if (outside.length > 0) tween.cancel(outside)
+      if (outside.length === 0) return
+      tween.cancel(outside)
+      // A stopped camera move must not settle later, from a gap, focus or layout frame.
+      if (!tween.isActive(CAMERA_KEYS)) cameraDirty.current = false
     }, [camKey])
     useEffect(() => {
       if (layerGap === undefined) return
@@ -537,6 +555,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     useEffect(() => {
       if (!spinning) return
       clearPreset()
+      startGesture()
       let raf = 0
       let last: number | null = null
       const step = (now: number) => {
@@ -600,6 +619,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         suppressClick.current = true
         stopCameraMove()
         clearPreset()
+        startGesture()
         pinch.current = { dist: pointerDistance(), zoom: view.current!.zoom }
         for (const id of pointers.current.keys()) capturePointer(e.currentTarget, id)
         return
@@ -621,7 +641,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         return
       }
       const d = drag.current
-      if (!d || !can.orbit) return
+      if (!d || d.pointerId !== e.pointerId || !can.orbit) return
       const dx = e.clientX - d.x
       const dy = e.clientY - d.y
       if (!d.moved) {
@@ -632,6 +652,7 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         // Capture only once it is a drag, so a plain click still reaches the node under it.
         capturePointer(e.currentTarget, d.pointerId)
         stopCameraMove()
+        startGesture()
         if (turntableRef.current) setTurntable(false)
         clearPreset()
       }
@@ -645,7 +666,11 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       pointers.current.delete(e.pointerId)
       releasePointer(e.currentTarget, e.pointerId)
       if (pinch.current) {
-        if (pointers.current.size >= 2) return
+        if (pointers.current.size >= 2) {
+          // The pinching pair changed: measure from here so the zoom doesn't jump.
+          pinch.current = { dist: pointerDistance(), zoom: view.current!.zoom }
+          return
+        }
         // The finger left down does not start an orbit.
         pinch.current = null
         releaseClickSoon()
@@ -684,9 +709,15 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         if (zoomEmitTimer.current) clearTimeout(zoomEmitTimer.current)
         zoomEmitTimer.current = setTimeout(() => emitCamera('zoom'), 160)
       }
+      // One finger scrolls the page vertically (touch-action: pan-y); two are a pinch, never a scroll.
+      const onTouchMove = (e: TouchEvent) => {
+        if (canZoomRef.current && e.touches.length >= 2 && e.cancelable) e.preventDefault()
+      }
       el.addEventListener('wheel', onWheel, { passive: false })
+      el.addEventListener('touchmove', onTouchMove, { passive: false })
       return () => {
         el.removeEventListener('wheel', onWheel)
+        el.removeEventListener('touchmove', onTouchMove)
         if (zoomEmitTimer.current) clearTimeout(zoomEmitTimer.current)
       }
     }, [stopCameraMove, clearPreset, repaint, emitCamera, proposeCamera])

@@ -228,6 +228,8 @@ test.describe('LayerStack', () => {
     const before = await nodeCenters(page)
     await orbit(page)
     await expect(cameraStatus(page)).toContainText('orbit · ')
+    // The settle report is the gesture's last proposal, not the held camera.
+    await expect(cameraStatus(page)).not.toContainText('yaw -36° pitch 29°')
     expect(await nodeCenters(page)).toEqual(before)
     await page.getByRole('radio', { name: 'Exploded' }).click()
     await expect(cameraStatus(page)).toHaveText('preset · yaw -29° pitch 19° zoom 0.86')
@@ -276,6 +278,32 @@ test.describe('LayerStack', () => {
     await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 3.00')
     await pinch(300, 30)
     await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 0.40')
+  })
+
+  test.describe('touch', () => {
+    test.use({ hasTouch: true })
+
+    test('a two-finger touch pinch zooms and is not taken as a page scroll', async ({ page }) => {
+      await open(page)
+      await page.evaluate(() => {
+        const w = window as unknown as { pinchPrevented: boolean[] }
+        w.pinchPrevented = []
+        document.addEventListener('touchmove', (e) => w.pinchPrevented.push(e.defaultPrevented), { passive: true })
+      })
+      const box = (await page.getByTestId('layer-stack').boundingBox())!
+      const x = box.x + box.width * 0.3
+      const y = box.y + box.height * 0.9
+      const cdp = await page.context().newCDPSession(page)
+      const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', points: { x: number; y: number }[]) =>
+        cdp.send('Input.dispatchTouchEvent', { type, touchPoints: points.map((p, id) => ({ ...p, id })) })
+      await touch('touchStart', [{ x, y }, { x: x + 100, y }])
+      for (let i = 1; i <= 4; i++) await touch('touchMove', [{ x, y }, { x: x + 100 + 25 * i, y }])
+      await touch('touchEnd', [])
+      await expect(cameraStatus(page)).toHaveText('zoom · yaw -36° pitch 29° zoom 2.00')
+      const prevented = await page.evaluate(() => (window as unknown as { pinchPrevented: boolean[] }).pinchPrevented)
+      expect(prevented.length).toBeGreaterThan(0)
+      expect(prevented.every(Boolean)).toBe(true)
+    })
   })
 
   test.describe('visual', () => {
