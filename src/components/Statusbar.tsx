@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMediaQuery } from '../hooks/useMediaQuery'
+import { useMediaQueryMatch } from '../hooks/useMediaQuery'
 import { Icon, type IconName } from './Icon'
 import './Statusbar.css'
 
@@ -70,7 +70,9 @@ const renderStatusbarItems = (items: StatusbarItem[]): React.ReactNode => {
 
 export const Statusbar = React.forwardRef<HTMLDivElement, StatusbarProps>(
   ({ left, center, right, className = '', mobileBreakpoint = 768, ...props }, ref) => {
-    const isMobile = useMediaQuery(
+    // undefined until the client knows (server render, hydration): data-mobile stays off and the
+    // CSS @media (max-width: 768px) rules lay it out.
+    const mobileMatch = useMediaQueryMatch(
       mobileBreakpoint !== false ? `(max-width: ${mobileBreakpoint}px)` : '(max-width: 0px)'
     )
     const classNames = ['statusbar', className].filter(Boolean).join(' ')
@@ -84,7 +86,7 @@ export const Statusbar = React.forwardRef<HTMLDivElement, StatusbarProps>(
     }
 
     return (
-      <div ref={ref} role="status" className={classNames} data-mobile={isMobile} {...props}>
+      <div ref={ref} role="status" className={classNames} data-mobile={mobileMatch} {...props}>
         {left && <div className="statusbar__slot statusbar__slot--left statusbar__left">{renderSlot(left)}</div>}
         {center && <div className="statusbar__slot statusbar__slot--center">{renderSlot(center)}</div>}
         {right && <div className="statusbar__slot statusbar__slot--right statusbar__right">{renderSlot(right)}</div>}

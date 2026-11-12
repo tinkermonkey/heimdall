@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMediaQuery } from '../hooks/useMediaQuery'
+import { useMediaQueryMatch } from '../hooks/useMediaQuery'
 import './Topbar.css'
 
 export interface BreadcrumbItem {
@@ -35,14 +35,17 @@ export const Topbar = React.forwardRef<HTMLDivElement, TopbarProps>(
     },
     ref
   ) => {
-    const isMobile = useMediaQuery(
+    // undefined until the client knows (server render, hydration): data-mobile stays off and the
+    // CSS @media (max-width: 768px) rules lay it out.
+    const mobileMatch = useMediaQueryMatch(
       mobileBreakpoint !== false ? `(max-width: ${mobileBreakpoint}px)` : '(max-width: 0px)'
     )
+    const isMobile = mobileMatch === true
     const classNames = ['topbar', className].filter(Boolean).join(' ')
     const lastIndex = breadcrumbs ? breadcrumbs.length - 1 : -1
 
     return (
-      <div ref={ref} className={classNames} data-mobile={isMobile} {...props}>
+      <div ref={ref} className={classNames} data-mobile={mobileMatch} {...props}>
         {leadingContent && <div className="topbar__leading">{leadingContent}</div>}
         <div className="topbar__breadcrumbs">
           {breadcrumbs && breadcrumbs.length > 0 && (

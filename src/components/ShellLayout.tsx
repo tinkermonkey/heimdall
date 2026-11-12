@@ -6,7 +6,7 @@ import { Sidebar, SidebarProps } from './Sidebar'
 import { Topbar, TopbarProps } from './Topbar'
 import { Drawer } from './Drawer'
 import { Icon } from './Icon'
-import { useMediaQuery } from '../hooks/useMediaQuery'
+import { useMediaQueryMatch } from '../hooks/useMediaQuery'
 import './ShellLayout.css'
 
 export interface ShellLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,9 +36,13 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
   ) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-    const isMobile = useMediaQuery(
+    // undefined until the client knows (server render, hydration). The server HTML is the desktop
+    // layout with data-mobile off, so ShellLayout.css's @media (max-width: 768px) rules hide the
+    // sidebar column on a phone until hydration swaps in the mobile layout.
+    const mobileMatch = useMediaQueryMatch(
       mobileBreakpoint !== false ? `(max-width: ${mobileBreakpoint}px)` : '(max-width: 0px)'
     )
+    const isMobile = mobileMatch === true
 
     useEffect(() => {
       if (!isMobile) {
@@ -71,12 +75,22 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       }
     }
 
+    // Any link in the mobile sidebar (an item with `href`, or one in the footer) navigates away, so
+    // close the drawer behind it.
+    const handleSidebarClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      sidebarProps?.onClick?.(event)
+      if (event.target instanceof Element && event.target.closest('a[href]')) {
+        setMobileMenuOpen(false)
+      }
+    }
+
     const sidebarPropsWithMobileOverrides = isMobile
       ? {
           ...sidebarProps,
           collapsed: false,
           showCollapseToggle: false,
           onSelectItem: handleSidebarSelect,
+          onClick: handleSidebarClick,
         }
       : sidebarProps
 
@@ -105,7 +119,7 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
       : topbarProps
 
     return (
-      <div ref={ref} className={classNames} data-mobile={isMobile} {...props}>
+      <div ref={ref} className={classNames} data-mobile={mobileMatch} {...props}>
         {renderTitlebar && <Titlebar {...titlebarProps} />}
         <div className="shell-layout__main">
           {renderSidebar ? (
