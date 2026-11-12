@@ -56,6 +56,7 @@ import GraphA11yNamesTestPage from './test-pages/GraphA11yNamesTestPage'
 import GraphNodeMeasureTestPage from './test-pages/GraphNodeMeasureTestPage'
 import GraphTooltipPlacementTestPage from './test-pages/GraphTooltipPlacementTestPage'
 import GraphLayoutBusyTestPage from './test-pages/GraphLayoutBusyTestPage'
+import StaticLinksTestPage from './test-pages/StaticLinksTestPage'
 // Injected by vite.config.mjs from package.json (a JSON import here would pull package.json into
 // the declaration build and move every .d.ts under dist/src/).
 declare const __HEIMDALL_VERSION__: string
@@ -120,6 +121,10 @@ export default function App() {
 
   if (exampleParam === 'navigation') {
     return <NavigationComponentTestPage />
+  }
+
+  if (exampleParam === 'static-links') {
+    return <StaticLinksTestPage />
   }
 
   if (exampleParam === 'charts') {
