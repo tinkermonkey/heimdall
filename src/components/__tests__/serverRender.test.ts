@@ -79,8 +79,8 @@ describe('dateUtils', () => {
     expect(formatTimestamp(new Date('2026-11-12T09:00:00Z'), Date.parse('2026-11-12T12:00:00Z'))).toBe('3h ago')
   })
 
-  it('isToday takes a fixed today', () => {
-    expect(isToday(new Date(2026, 0, 5, 23), new Date(2026, 0, 5, 1))).toBe(true)
-    expect(isToday(new Date(2026, 0, 5), new Date(2026, 0, 6))).toBe(false)
+  it('isToday takes a fixed today (a date; dateUtils.test.ts covers timezones)', () => {
+    expect(isToday(new Date(2026, 0, 5), '2026-01-05')).toBe(true)
+    expect(isToday(new Date(2026, 0, 5), '2026-01-06')).toBe(false)
   })
 })

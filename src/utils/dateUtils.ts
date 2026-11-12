@@ -4,12 +4,16 @@ export type DateInput = Date | string | number
 const toDate = (value: DateInput): Date => (value instanceof Date ? value : new Date(value))
 
 /**
- * Relative time (`5m ago`, `3h ago`, `2d ago`), or the locale date after a week. `now` defaults to
- * the clock; pass a fixed value to render the same text on the server and the client.
+ * Relative time (`5m ago`, `3h ago`, `2d ago`), or a date after a week.
+ *
+ * Without `now` it measures from the clock and prints the date in the runtime's locale and
+ * timezone, as before 0.13. With a fixed `now` the output depends only on its arguments: the date
+ * is `en-US` in UTC (`11/3/2026`), so a server and any browser print the same text. For another
+ * format, pass the components' `formatTimestamp` prop.
  */
-export const formatTimestamp = (timestamp: Date | string, now: DateInput = new Date()): string => {
+export const formatTimestamp = (timestamp: Date | string, now?: DateInput): string => {
   const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp
-  const diffMs = toDate(now).getTime() - date.getTime()
+  const diffMs = (now === undefined ? Date.now() : toDate(now).getTime()) - date.getTime()
 
   if (Number.isNaN(diffMs)) {
     return ''
@@ -24,7 +28,7 @@ export const formatTimestamp = (timestamp: Date | string, now: DateInput = new D
   if (diffHours < 24) return `${diffHours}h ago`
   if (diffDays < 7) return `${diffDays}d ago`
 
-  return date.toLocaleDateString()
+  return now === undefined ? date.toLocaleDateString() : date.toLocaleDateString('en-US', { timeZone: 'UTC' })
 }
 
 export const formatTime = (timestamp: Date | string): string => {
@@ -52,9 +56,29 @@ export const isSameDay = (a: Date | string, b: Date | string): boolean => {
   )
 }
 
-/** Whether `d` falls on the same local day as `today` (default: the clock). */
-export const isToday = (d: Date | string, today: DateInput = new Date()): boolean => {
-  return isSameDay(d, toDate(today))
+const DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/
+
+/**
+ * Whether the calendar day `d` is today. `d` is a calendar cell: a Date read in local time (or a
+ * `YYYY-MM-DD` string).
+ *
+ * Without `today` it compares against the clock's local day, as before 0.13. A fixed `today` is a
+ * date, not an instant: a `YYYY-MM-DD` string names the day, and any other value counts as the
+ * UTC day it falls on. So a server in UTC and a browser in Los Angeles agree on the day, which
+ * comparing local days would not.
+ */
+export const isToday = (d: Date | string, today?: DateInput): boolean => {
+  if (today === undefined) return isSameDay(d, new Date())
+  const cell = typeof d === 'string' && DATE_ONLY.test(d) ? d : localDayKey(typeof d === 'string' ? new Date(d) : d)
+  return cell === utcDayKey(today)
+}
+
+const pad = (n: number) => String(n).padStart(2, '0')
+const localDayKey = (date: Date) => `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+const utcDayKey = (value: DateInput): string => {
+  if (typeof value === 'string' && DATE_ONLY.test(value)) return value
+  const date = toDate(value)
+  return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}`
 }
 
 export const getWeekDays = (date: Date | string, weekStartsOn: 0 | 1 = 0): Date[] => {

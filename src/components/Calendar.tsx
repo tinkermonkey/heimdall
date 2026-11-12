@@ -28,8 +28,10 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   onSelectDate?: (date: Date) => void
   onSelectEvent?: (eventId: string) => void
   renderEvent?: (event: CalendarEvent, calendarColor?: string) => React.ReactNode
-  /** The day highlighted as today. Defaults to the clock at render; pass a fixed date when the
-   *  markup is rendered on a server or at build time and hydrated, so both renders agree. */
+  /** The day highlighted as today. Defaults to the clock's local day at render. A fixed value is a
+   *  date: a `YYYY-MM-DD` string, or an instant read as the UTC day it falls on. Pass one when the
+   *  markup is rendered on a server or at build time and hydrated, so both renders highlight the
+   *  same day whatever their timezones. */
   today?: Date | string | number
 }
 

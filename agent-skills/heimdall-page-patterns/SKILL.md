@@ -160,7 +160,7 @@ import { ActivityTimeline } from '@tinkermonkey/heimdall-ui'
 | ---- | ---- | ------- | ----------- |
 | `events` | `ActivityEvent[]` | `[]` | Events to render, in the given order |
 | `emptyState` | `string` | `'No activity recorded'` | Message when `events` is empty |
-| `now` | `Date \| string \| number` | clock at render | Time the relative labels (`5m ago`) are measured from; pass a fixed value for server-rendered or static HTML so hydration prints the same text |
+| `now` | `Date \| string \| number` | clock at render | Time the relative labels (`5m ago`) are measured from; pass a fixed value for server-rendered or static HTML: labels then depend only on `now`, and dates older than a week print `en-US` in UTC, so server and browser match |
 | `formatTimestamp` | `(timestamp: Date \| string) => ReactNode` | — | Replaces the built-in relative label, e.g. an absolute date or a `<time>` element |
 | `...divProps` | | | Remaining props spread onto the root `<div>` |
 

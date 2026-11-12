@@ -33,7 +33,9 @@ export interface VersionTimelineProps extends Omit<React.HTMLAttributes<HTMLDivE
   emptyState?: string
   /** The time relative timestamps (`5m ago`) are measured from. Defaults to the clock at render.
    *  Pass a fixed value (e.g. the build time) when the markup is rendered on a server or at build
-   *  time and hydrated, so both renders print the same text. */
+   *  time and hydrated: the labels then depend only on `now`, and timestamps older than a week
+   *  print as an `en-US` date in UTC (`11/3/2026`), so server and browser text match in any
+   *  locale or timezone. */
   now?: Date | string | number
   /** Formats each timestamp, replacing the built-in relative format. Use it for absolute dates on
    *  static pages, or to render a `<time>` element. */

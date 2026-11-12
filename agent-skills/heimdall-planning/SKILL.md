@@ -32,7 +32,7 @@ import { Calendar, type CalendarEvent, type CalendarView } from '@tinkermonkey/h
 | `onSelectDate` | `(date: Date) => void` | — | Day cell (month) or day column (week) clicked |
 | `onSelectEvent` | `(eventId: string) => void` | — | Event clicked or activated with Enter/Space |
 | `renderEvent` | `(event: CalendarEvent, calendarColor?: string) => ReactNode` | — | Replaces the default event title |
-| `today` | `Date \| string \| number` | clock at render | Day highlighted as today; pass a fixed date for server-rendered or static HTML so hydration agrees |
+| `today` | `Date \| string \| number` | clock at render | Day highlighted as today. A fixed value is a date: `YYYY-MM-DD`, or an instant read as its UTC day, so server and browser agree in any timezone; pass one for server-rendered or static HTML |
 | `...divProps` | | | Remaining props spread onto the root `<div>` (`onChange` omitted) |
 
 ### Data types
@@ -149,7 +149,7 @@ import { MiniCalendar } from '@tinkermonkey/heimdall-ui'
 | `markers` | `Date[]` | `[]` | Days that show a marker dot |
 | `weekStartsOn` | `0 \| 1` | `0` | `0` Sunday, `1` Monday |
 | `onSelect` | `(date: Date) => void` | — | In-month day clicked |
-| `today` | `Date \| string \| number` | clock at render | Day highlighted as today; pass a fixed date for server-rendered or static HTML so hydration agrees |
+| `today` | `Date \| string \| number` | clock at render | Day highlighted as today. A fixed value is a date: `YYYY-MM-DD`, or an instant read as its UTC day, so server and browser agree in any timezone; pass one for server-rendered or static HTML |
 | `className` | `string` | `''` | Extra class on the root `<div>` |
 
 ### Usage

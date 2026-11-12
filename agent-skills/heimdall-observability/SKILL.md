@@ -495,7 +495,7 @@ import { VersionTimeline, type VersionEntry } from '@tinkermonkey/heimdall-ui'
 | `onSelect` | `(id: string) => void` | — | Entry clicked or arrow-key navigated |
 | `order` | `'newest-first' \| 'oldest-first'` | `'newest-first'` | `'oldest-first'` reverses `entries` |
 | `emptyState` | `string` | `'No versions available'` | Text when `entries` is empty |
-| `now` | `Date \| string \| number` | clock at render | Time the relative timestamps are measured from; pass a fixed value for server-rendered or static HTML so hydration prints the same text |
+| `now` | `Date \| string \| number` | clock at render | Time the relative timestamps are measured from; pass a fixed value for server-rendered or static HTML: labels then depend only on `now`, and dates older than a week print `en-US` in UTC, so server and browser match |
 | `formatTimestamp` | `(timestamp: Date \| string) => ReactNode` | — | Replaces the built-in relative timestamp, e.g. an absolute date or a `<time>` element |
 | `...divProps` | | | Remaining props spread onto the root `<div>` (native `onSelect` is omitted) |
 
