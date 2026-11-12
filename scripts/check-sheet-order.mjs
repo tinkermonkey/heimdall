@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* global window, document, getComputedStyle -- page.evaluate callbacks run in the browser */
 // Checks that the opt-in stylesheets don't depend on load order (0.13.0).
 //
 // A component sheet (dist/css/<Name>.css) includes the CSS of every component it renders, so two
