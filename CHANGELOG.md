@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Accessibility and frame cost for the layered graphs, plus package hygiene. `AdjacencyMatrix`
 exposes a real grid to screen readers, so cell navigation works in NVDA, JAWS and VoiceOver.
 `LayerStack` batches links into one SVG path per style, cutting the elements Chrome restyles per
-frame on the full DR spec by about two thirds. The package ships the fonts' OFL licences, and
-docs props tables wrap instead of overflowing the page.
+frame on the full DR spec by about two thirds. LineageRail and TabBar chips keep their colours on dark canvas, the package
+ships the fonts' OFL licences, docs props tables wrap instead of overflowing the page, and
+visual baselines agree on macOS and linux.
 
 ### Breaking
 
