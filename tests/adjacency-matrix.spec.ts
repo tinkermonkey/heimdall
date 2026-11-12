@@ -336,6 +336,31 @@ test.describe('LayeredGraphExplorer matrix link inspector', () => {
     await expect(page.getByTestId('explorer-state')).toContainText('no selection')
   })
 
+  test('a filter that removes the focused cell keeps focus in the grid, with the ring on the new Tab stop', async ({ page }) => {
+    await openExplorer(page)
+    const ring = page.locator('.adjacency-matrix__cell-focus--on')
+    await tabStop(page).focus()
+    await page.keyboard.press('ArrowRight')
+    const before = await focusedCell(page)
+    await expect(page.locator(`.adjacency-matrix__cell[data-cell-key="${before.key}"] .adjacency-matrix__cell-focus--on`)).toHaveCount(1)
+    // hide intra-layer links by script, as live data or a controlled filter would: no pointer, no blur
+    await page.getByRole('button', { name: 'Intra-layer links' }).evaluate((el) => (el as HTMLElement).click())
+    await expect(page.locator(`.adjacency-matrix__cell[data-cell-key="${before.key}"]`)).toHaveCount(0)
+    // focus is back in the grid, on the new Tab stop, and the ring and crosshair follow it
+    await expect(tabStop(page)).toBeFocused()
+    const after = await focusedCell(page)
+    expect(after.role).toBe('gridcell')
+    expect(after.key).not.toBe(before.key)
+    await expect(ring).toHaveCount(1)
+    await expect(page.locator(`.adjacency-matrix__cell[data-cell-key="${after.key}"] .adjacency-matrix__cell-focus--on`)).toHaveCount(1)
+    const cellBox = (await page.locator(`.adjacency-matrix__cell[data-cell-key="${after.key}"] rect`).first().boundingBox())!
+    const rowBand = (await page.locator('.adjacency-matrix__band--hover rect').first().boundingBox())!
+    expect(Math.abs(rowBand.y + rowBand.height / 2 - (cellBox.y + cellBox.height / 2))).toBeLessThan(1)
+    // without focus in the grid there is never a ring
+    await page.keyboard.press('Shift+Tab')
+    await expect(ring).toHaveCount(0)
+  })
+
   test('visual: link inspector panel', async ({ page }) => {
     await openExplorer(page, '&matrix=symmetric')
     await page.locator('.adjacency-matrix__cell--both').first().click()
@@ -561,6 +586,27 @@ test.describe('AdjacencyMatrix virtualization', () => {
     const cells = await gridVsDrawn(page)
     expect(cells.length).toBeGreaterThan(0)
     for (const { grid: at, drawn } of cells) expect(at).toEqual(drawn)
+  })
+
+  test('a focused cell keeps focus, its ring and its indices while the window scrolls away and back', async ({ page }) => {
+    await open(page, LARGE)
+    const scroll = page.locator('.adjacency-matrix__scroll')
+    await tabStop(page).focus()
+    for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('ArrowRight')
+    const start = await focusedCell(page)
+    const holds = async () => {
+      await expect(tabStop(page)).toBeFocused()
+      expect(await focusedCell(page)).toEqual(start)
+      await expect(page.locator('.adjacency-matrix__cell-focus--on')).toHaveCount(1)
+      await expect(page.locator(`.adjacency-matrix__cell[data-cell-key="${start.key}"][data-row="${start.r}"][data-col="${start.c}"] .adjacency-matrix__cell-focus--on`)).toHaveCount(1)
+    }
+    await scroll.evaluate((el) => el.scrollTo(4000, 4000))
+    await expect(page.locator('.adjacency-matrix__header[data-row="450"]')).toHaveCount(1)
+    await holds()
+    await scroll.evaluate((el) => el.scrollTo(0, 0))
+    await expect(page.locator('.adjacency-matrix__header[data-row="0"]')).toHaveCount(1)
+    await holds()
   })
 
   test('keyboard focus survives scrolling: arrows move past the window, row headers stay focusable', async ({ page }) => {

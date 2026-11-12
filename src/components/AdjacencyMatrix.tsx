@@ -250,8 +250,8 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
     // ── roving focus: one Tab stop for the cells, arrow keys move between them ──
     const sorted = useMemo(() => [...cells].sort((a, b) => a.r - b.r || a.c - b.c), [cells])
     const [activeKey, setActiveKey] = useState<string | null>(null)
-    // the Tab-stop cell has keyboard focus: its drawn cell shows the focus ring
-    const [ring, setRing] = useState(false)
+    // key of the grid cell with keyboard focus: its drawn cell shows the focus ring
+    const [ring, setRing] = useState<string | null>(null)
     const activeCell = sorted.find((cell) => cell.links[0].id === activeKey) ?? sorted[0]
     const pendingFocus = useRef<string | null>(null)
     const cellActions = useRef<CellActions>(null!)
@@ -286,9 +286,23 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
     // Layout effect: focus moves in the same commit, so no key lands on <body> in between.
     useLayoutEffect(() => {
       const key = pendingFocus.current
-      if (!key) return
-      pendingFocus.current = null
-      gridCell(key)?.focus({ preventScroll: true })
+      if (key) {
+        pendingFocus.current = null
+        gridCell(key)?.focus({ preventScroll: true })
+        return
+      }
+      // The focused grid cell unmounted or remounted (a filter, a reorder), which fires no blur:
+      // put focus back on the Tab stop, else drop the ring and the crosshair.
+      if (ring === null) return
+      const grid = rootRef.current?.querySelector('.adjacency-matrix__a11y')
+      const lost = document.activeElement
+      if (grid?.contains(lost)) return
+      const stop = activeCell && (lost === null || lost === document.body) ? gridCell(activeCell.links[0].id) : null
+      stop?.focus({ preventScroll: true })
+      if (!stop || document.activeElement !== stop) {
+        setRing(null)
+        setHover(null)
+      }
     })
     // `selectedLinkId` set from outside: bring its cell into view, once per id.
     const revealed = useRef<string | null>(null)
@@ -355,7 +369,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
         const key = cell.links[0].id
         const keyboard = !pointerFocus.current && e.currentTarget.matches(':focus-visible')
         setActiveKey(key)
-        setRing(keyboard)
+        setRing(keyboard ? key : null)
         setHover({ row: ids[cell.r], col: ids[cell.c] })
         if (!keyboard) return
         // the grid is visually hidden, so scroll the drawn cell into view instead
@@ -363,7 +377,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
         rootRef.current?.querySelector(`.adjacency-matrix__cell[data-cell-key="${CSS.escape(key)}"]`)?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
       },
       blur: () => {
-        setRing(false)
+        setRing(null)
         setHover(null)
       },
     }
@@ -472,7 +486,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
         key={cell.links[0].id}
         cell={cell}
         active={cell === activeCell}
-        focused={ring && cell === activeCell}
+        focused={ring === cell.links[0].id && cell === activeCell}
         index={index}
         LW={LW}
         TH={TH}
