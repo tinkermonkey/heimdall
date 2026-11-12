@@ -35,10 +35,14 @@ const legacyCssForwarder = {
 // the order the per-module imports apply the CSS in.
 const EMPTY_CSS_PLACEHOLDER = /^\/\* empty css\s*\*\/$/gm
 const IMPORT_SPECIFIER = /^\s*(?:import|export)\s*(?:[^'";]*?\sfrom\s*)?['"]([^'"]+)['"]/gm
+let resolvedCssTarget
 const injectCssImports = {
   name: 'heimdall-inject-css-imports',
   apply: 'build',
   enforce: 'post',
+  configResolved(config) {
+    resolvedCssTarget = config.build.cssTarget || config.build.target
+  },
   async generateBundle(_options, bundle) {
     const chunks = Object.values(bundle).filter((file) => file.type === 'chunk')
     for (const chunk of chunks) {
@@ -78,8 +82,13 @@ const injectCssImports = {
     }
     for (const chunk of chunks) if (chunk.isEntry) visit(chunk.fileName)
     // Minify the joined sheet as one file, as the single-file build did: that drops the rules two
-    // stylesheets both define (Select and FilterDropdown share the dropdown panel rules).
-    const { code: sheet } = await transformWithEsbuild(ordered.join('\n'), 'style.css', { loader: 'css', minify: true })
+    // stylesheets both define (Select and FilterDropdown share the dropdown panel rules). Same
+    // browser target as Vite's own CSS minification, so it doesn't introduce newer syntax (`inset`).
+    const { code: sheet } = await transformWithEsbuild(ordered.join('\n'), 'style.css', {
+      loader: 'css',
+      minify: true,
+      target: resolvedCssTarget,
+    })
     this.emitFile({ type: 'asset', fileName: 'style.css', source: sheet })
   },
 }
