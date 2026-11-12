@@ -96,7 +96,7 @@ import { Sidebar } from '@tinkermonkey/heimdall-ui'
 | `activeItemId` | `string` | — | Id of the highlighted item or child |
 | `collapsed` | `boolean` | `false` | Icon-only 64px mode; controlled by the parent |
 | `onCollapse` | `(collapsed: boolean) => void` | — | Toggle clicked; receives the next value |
-| `onSelectItem` | `(itemId: string) => void` | — | Leaf item or child clicked (links too, before the browser follows them) |
+| `onSelectItem` | `(itemId: string, event: React.MouseEvent) => void` | — | Leaf item or child clicked. For a link, plain clicks only (not cmd/ctrl/shift/alt or middle clicks, or ones already `preventDefault`ed), before the browser follows it |
 | `defaultExpandedIds` | `string[]` | — | Parents expanded on first render (uncontrolled) |
 | `expandedIds` | `string[]` | — | Controlled set of expanded parents |
 | `onExpandedChange` | `(ids: string[]) => void` | — | Called with the next expanded set |
@@ -212,7 +212,7 @@ import { Sidebar } from '@tinkermonkey/heimdall-ui'
 ### Gotchas
 
 - Clicking a parent (an item with `children`) toggles its expansion and does **not** call `onSelectItem`. Parents are not selectable, and stay buttons even with `href`; give the overview page its own leaf item if one is needed.
-- A link item (`href`) calls `onSelectItem` and lets the browser navigate; it does not call `preventDefault`. For client-side routing, either drop `href` and route in `onSelectItem`, or let your router intercept the `<a>` click.
+- A link item (`href`) calls `onSelectItem` on a plain click and lets the browser navigate; it does not call `preventDefault` itself. Modifier and middle clicks (open in a new tab) don't call `onSelectItem`. For client-side routing keep `href` (so the link still works without JavaScript and in a new tab) and route in the callback: `onSelectItem={(id, event) => { event.preventDefault(); navigate(hrefOf(id)) }}`.
 - Without JavaScript (server HTML before hydration), parent items can't expand. Pass the parent of the current page in `defaultExpandedIds` so its children render in the server HTML.
 - Expansion is uncontrolled by default. `defaultExpandedIds` is read once on mount. Passing `expandedIds` switches to controlled mode: the component only reflects that prop, so update it in `onExpandedChange` or toggles do nothing.
 - `collapsed` is fully controlled. The toggle only calls `onCollapse(!collapsed)`; without `onCollapse` it does nothing, so hide it with `showCollapseToggle={false}`.

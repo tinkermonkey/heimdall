@@ -260,7 +260,7 @@ export function QuickAccessGridShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="tiles" type="QuickAccessGridItem[]" description="Array of {id, icon, title, description, href?} tile definitions; a tile with href renders as a link" />
-          <PropRow name="onAction" type="(id: string) => void" description="Called when a tile is clicked, with the tile's id" />
+          <PropRow name="onAction" type="(id: string, event: MouseEvent) => void" description="Called when a tile is clicked, with the tile's id and the click. For a tile with href, plain clicks only; call event.preventDefault() to route client-side" />
           <PropRow name="columns" type="number" def="4" description="Number of columns in the grid" />
         </PropsTable>
       </ShowcaseSection>

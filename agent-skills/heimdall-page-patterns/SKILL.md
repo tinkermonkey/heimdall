@@ -298,7 +298,7 @@ import { QuickAccessGrid } from '@tinkermonkey/heimdall-ui'
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `tiles` | `QuickAccessGridItem[]` | required | Tile definitions |
-| `onAction` | `(tileId: string) => void` | — | Called with the clicked tile's `id` |
+| `onAction` | `(tileId: string, event: React.MouseEvent) => void` | — | Called with the clicked tile's `id` and the click. For a tile with `href`, plain clicks only (a modifier or middle click opens a new tab instead); call `event.preventDefault()` to route client-side |
 | `columns` | `number` | `4` | Fixed grid column count |
 | `...divProps` | | | Remaining props spread onto the root `<div>` |
 
@@ -310,7 +310,7 @@ interface QuickAccessGridItem {
   icon: IconName
   title: string
   description: string
-  href?: string    // renders the tile as <a href>; onAction still fires on click
+  href?: string    // renders the tile as <a href>; onAction fires on plain clicks
 }
 ```
 

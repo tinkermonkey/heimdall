@@ -127,7 +127,7 @@ export function SidebarShowcase() {
           <PropRow name="sections" type="SidebarSection[]" description="Array of section groups, each with a title and items array" />
           <PropRow name="activeItemId" type="string" description="ID of the currently active nav item" />
           <PropRow name="collapsed" type="boolean" def="false" description="Collapsed state — icon-only 64px width" />
-          <PropRow name="onSelectItem" type="(id: string) => void" description="Called when a non-parent nav item is clicked; for a link item (href), before the browser follows it" />
+          <PropRow name="onSelectItem" type="(id: string, event: MouseEvent) => void" description="Called when a non-parent nav item is clicked; for a link item (href), on plain clicks only (not cmd/ctrl/shift/alt or middle clicks), before the browser follows it. Call event.preventDefault() to route client-side instead" />
           <PropRow name="sections[].items[].href" type="string" description="Renders a leaf item or child as an <a href> (same classes, aria-current on the active one). Ignored on a parent with children." />
           <PropRow name="onCollapse" type="(collapsed: boolean) => void" description="Called when the toggle button is clicked, receives next collapsed value" />
           <PropRow name="defaultExpandedIds" type="string[]" description="Parent item ids expanded on first render (uncontrolled)" />

@@ -318,7 +318,7 @@ import { ShellLayout } from '@tinkermonkey/heimdall-ui'
 - At or below `mobileBreakpoint` (viewport `max-width`):
   - The sidebar column is removed. A menu button (`aria-label="Open sidebar menu"`) is prepended to the topbar's `leadingContent`, or shown in a 56px header row when there is no topbar.
   - The button opens a 280px left `Drawer` holding the sidebar with `collapsed` forced to `false` and `showCollapseToggle` forced to `false`. Focus is trapped, Escape and backdrop clicks close it, and body scroll is locked. The drawer stays mounted, so expansion state survives.
-  - Selecting a leaf item calls `onSelectItem` and then closes the drawer; toggling a parent does not. Clicking any link in the drawer (a sidebar item with `href`, or an `<a href>` in the sidebar `footer`) closes it too.
+  - Selecting a leaf item calls `onSelectItem` and then closes the drawer; toggling a parent does not. Clicking a link in the drawer (a sidebar item with `href`, or an `<a href>` in the sidebar `footer`) closes it too, unless it opens elsewhere: a modifier or middle click, or a link with `target="_blank"`. A click your router `preventDefault`s still closes it.
   - Widening past the breakpoint closes the drawer. The consumer's `collapsed` value is ignored while mobile and applies again on desktop.
   - The breakpoint is forwarded to `Topbar` (search box hides, breadcrumbs truncate) and `Statusbar` (labels truncate) unless their configs set their own `mobileBreakpoint`.
 - With `appTitle` set, the drawer's AppTitle still shows the collapse caret (Sidebar ignores `showCollapseToggle` when it hosts an AppTitle). Clicking it calls `onCollapse(true)` but the drawer stays expanded.
