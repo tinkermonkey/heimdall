@@ -1,3 +1,4 @@
+import React from 'react'
 import { PageHeader, ShowcaseSection, DemoGrid } from '../components/ShowcaseSection'
 
 const mono = 'var(--font-mono, monospace)'
@@ -45,12 +46,18 @@ function TintSample({ values, mode, tint }: { values: Triplet; mode: 'light' | '
   const bg = bgV ? `rgb(${bgV})` : tint?.[0] ?? 'transparent'
   const bd = borderV ? `rgb(${borderV})` : tint?.[1] ?? (bgV ? `rgb(${bgV})` : 'transparent')
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '6px 8px', background: CANVAS_BG[mode], borderRadius: 4 }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '4px 10px', padding: '6px 8px', background: CANVAS_BG[mode], borderRadius: 4 }}>
       <span style={{ fontFamily: mono, fontSize: 11, padding: '2px 7px', borderRadius: 4, color: `rgb(${fgV})`, background: bg, border: `1px solid ${bd}` }}>
         sample
       </span>
-      <span style={{ fontFamily: mono, fontSize: 10, color: mode === 'light' ? 'rgb(100 116 139)' : 'rgb(148 163 184)', whiteSpace: 'nowrap' }}>
-        {values.filter(Boolean).join(' / ')}
+      <span style={{ fontFamily: mono, fontSize: 10, color: mode === 'light' ? 'rgb(100 116 139)' : 'rgb(148 163 184)' }}>
+        {/* Wraps between values, never inside one. */}
+        {values.filter(Boolean).map((v, i, all) => (
+          <React.Fragment key={i}>
+            {i > 0 && ' '}
+            <span style={{ whiteSpace: 'nowrap' }}>{v}{i < all.length - 1 ? ' /' : ''}</span>
+          </React.Fragment>
+        ))}
       </span>
     </div>
   )

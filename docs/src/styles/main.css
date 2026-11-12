@@ -20,3 +20,15 @@ body {
   width: 100%;
   min-height: 100vh;
 }
+
+/* Reference tables (TableFrame in components/ShowcaseSection.tsx). A type wraps at soft
+   breaks (after `: ` and `<`) only when the table is narrow; wide tables keep those runs whole. */
+.props-table {
+  container-type: inline-size;
+}
+
+@container (min-width: 800px) {
+  .type-soft-break {
+    display: none;
+  }
+}
