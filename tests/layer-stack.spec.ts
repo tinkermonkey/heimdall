@@ -437,15 +437,20 @@ test.describe('LayerStack', () => {
     })
 
     /**
-     * The link paths a turntable frame rewrites: every batch at most, plus the reach's own paths.
-     * Counted with a MutationObserver on `d`, so it doesn't depend on machine speed.
+     * Link `d` writes per turntable frame stay within a fixed budget: one per batch (at most
+     * BATCH_BUDGET paths on the full spec) plus one per reach link (169 for ORIGIN on the full
+     * spec). Raw MutationObserver records are counted, not elements, and the budget doesn't come
+     * from the DOM under test, so rewriting every link (897) or a batch twice a frame fails. It
+     * doesn't depend on machine speed.
      */
-    for (const query of ['', `&select=${ORIGIN}`]) {
-      test(`a turntable frame rewrites at most one path per batch plus the reach${query ? ', with a selection' : ''}`, async ({ page }) => {
+    const BATCH_BUDGET = 60
+    for (const [query, reach] of [['', 0], [`&select=${ORIGIN}`, 169]] as const) {
+      test(`a turntable frame writes link paths within one per batch plus the reach${query ? ', with a selection' : ''}`, async ({ page }) => {
         await open(page, `&data=full${query}`)
         const r = await page.evaluate(async () => {
           const frame = () => new Promise((res) => requestAnimationFrame(res))
           const svg = document.querySelector('[data-testid="layer-stack"] .layer-stack__svg')!
+          const isLink = (n: Node) => (n as Element).matches('.layer-stack__link, .layer-stack__link-batch')
           let records: MutationRecord[] = []
           const obs = new MutationObserver((rs) => records.push(...rs))
           obs.observe(svg, { subtree: true, attributes: true, attributeFilter: ['d'] })
@@ -453,28 +458,21 @@ test.describe('LayerStack', () => {
           for (let i = 0; i < 3; i++) await frame()
           records = []
           let worst = 0
-          let worstBound = 0
           let painted = 0
           for (const t0 = performance.now(); performance.now() - t0 < 1000; ) {
             await frame()
-            const batch = [...records, ...obs.takeRecords()]
+            const writes = [...records, ...obs.takeRecords()].filter((m) => isLink(m.target)).length
             records = []
-            const touched = new Set(batch.map((m) => m.target as Element).filter((el) => el.matches('.layer-stack__link, .layer-stack__link-batch')))
-            if (touched.size > 0) painted++
-            // The reach: one arrowhead per reach link (predicate labels on reach links only, the default).
-            const bound = document.querySelectorAll('.layer-stack__link-batch').length + document.querySelectorAll('.layer-stack__arrow').length
-            if (touched.size > worst) [worst, worstBound] = [touched.size, bound]
+            if (writes > 0) painted++
+            worst = Math.max(worst, writes)
           }
           obs.disconnect()
-          const count = (sel: string) => document.querySelectorAll(sel).length
-          return { worst, worstBound, painted, batches: count('.layer-stack__link-batch'), perLink: count('.layer-stack__link'), reach: count('.layer-stack__arrow') }
+          return { worst, painted, perLink: document.querySelectorAll('.layer-stack__link').length }
         })
         expect(r.painted).toBeGreaterThan(5)
-        expect(r.worst).toBeLessThanOrEqual(r.worstBound)
-        expect(r.batches).toBeLessThan(60)
-        expect(r.perLink).toBe(r.reach)
-        if (!query) expect(r.reach).toBe(0)
-        else expect(r.reach).toBeGreaterThan(0)
+        expect(r.worst).toBeLessThanOrEqual(BATCH_BUDGET + reach)
+        // The reach, and only the reach, keeps a path per link.
+        expect(r.perLink).toBe(reach)
       })
     }
 

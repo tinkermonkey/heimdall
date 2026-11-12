@@ -1234,9 +1234,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     // ── paint (per frame, and after every commit) ─────────────────────────
     const els = useRef<SceneElements | null>(null)
     const order = useRef<Record<string, string>>({})
-    /** Batch paths by style key; `paint` creates and removes them. */
-    const linkPool = useRef(new Map<string, Element>())
-    const arrowPool = useRef(new Map<string, Element>())
+    /** Batch paths by style key; `paint` creates and removes them. Made on first paint. */
+    const pools = useRef<{ link: Map<string, Element>; arrow: Map<string, Element> } | null>(null)
     const paint = useCallback(() => {
       const e = els.current
       if (!e) return
@@ -1254,8 +1253,9 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         setAttr(fill, 'points', p.points)
         grid.forEach((line, i) => setAttr(line, 'points', p.grid[i] ?? ''))
       }
-      paintBatches(e.linkBatchGroup, linkPool.current, s.linkBatches, 'link', order.current)
-      paintBatches(e.arrowBatchGroup, arrowPool.current, s.arrowBatches, 'arrow', order.current)
+      const pool = (pools.current ??= { link: new Map(), arrow: new Map() })
+      paintBatches(e.linkBatchGroup, pool.link, s.linkBatches, 'link', order.current)
+      paintBatches(e.arrowBatchGroup, pool.arrow, s.arrowBatches, 'arrow', order.current)
       reorder(e.linkGroup, e.links, s.segs.map((l) => l.id), order.current, 'links')
       for (const l of s.segs) {
         const path = e.links.get(l.id)
