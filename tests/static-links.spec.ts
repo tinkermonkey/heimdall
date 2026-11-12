@@ -83,6 +83,37 @@ test.describe('static sites: link variants', () => {
     })
   })
 
+  test('dark canvas: link variants keep the button variants colours, at rest and on hover', async ({ page }) => {
+    // tokens.css colours every `a` amber on dark canvas; the components' own classes must win.
+    // Transitions off, so each read is the settled colour, not a frame of the 80ms fade.
+    await page.addStyleTag({ content: '*, *::before, *::after { transition: none !important; }' })
+    await page.evaluate(() => document.body.classList.add('dark-canvas'))
+    await expect(page.locator('body')).toHaveClass(/dark-canvas/)
+
+    const pairs: Array<[string, Locator, Locator]> = [
+      ['nav active', page.getByTestId('nav-button'), page.getByTestId('nav-link')],
+      ['nav idle', page.getByTestId('nav-button-idle'), page.getByTestId('nav-link-idle')],
+      ['tile', page.getByTestId('tile-button'), page.getByTestId('tile-link')],
+    ]
+    for (const label of ['Home', 'Graphs', 'About']) {
+      pairs.push([
+        `sidebar ${label}`,
+        page.getByTestId('sidebar-buttons').locator('button.sidebar__item', { hasText: label }),
+        page.getByTestId('sidebar-links').locator('a.sidebar__item', { hasText: label }),
+      ])
+    }
+    for (const [label, button, link] of pairs) {
+      expect(await boxAndStyle(link), label).toEqual({ ...(await boxAndStyle(button)), textDecoration: 'none' })
+      await button.hover()
+      const hoveredButton = await boxAndStyle(button)
+      await link.hover()
+      expect(await boxAndStyle(link), `${label} hover`).toEqual({ ...hoveredButton, textDecoration: 'none' })
+    }
+    // Not amber-400 (the dark-canvas `a` colour).
+    await page.mouse.move(0, 0)
+    await expect(page.getByTestId('nav-link-idle')).not.toHaveCSS('color', 'rgb(251, 191, 36)')
+  })
+
   test('QuickAccessTile with href renders a link matching the button', async ({ page }) => {
     const link = page.getByTestId('tile-link')
     await expect(link).toHaveJSProperty('tagName', 'A')
@@ -99,6 +130,10 @@ test.describe('static sites: link variants', () => {
 
 test.describe('static sites: server render + hydration', () => {
   test('desktop: hydrates without mismatches, with fixed relative times', async ({ page }) => {
+    const errors: string[] = []
+    page.on('console', (msg) => {
+      if (msg.type() === 'error' && /hydrat|did not match/i.test(msg.text())) errors.push(msg.text())
+    })
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/?example=static-links')
     await waitForHydration(page)
@@ -106,6 +141,7 @@ test.describe('static sites: server render + hydration', () => {
     const host = page.getByTestId('hydration-host')
     await expect(host).toHaveAttribute('data-server-mobile', 'unset')
     expect(await page.evaluate(() => window.__staticLinks?.hydrationErrors)).toEqual([])
+    expect(errors).toEqual([])
     await expect(host.locator('.shell-layout')).toHaveAttribute('data-mobile', 'false')
     await expect(host.locator('.shell-layout__sidebar-col')).toBeVisible()
     await expect(host.locator('[data-testid="activity-timestamp"]')).toHaveText(['5m ago', '3h ago'])

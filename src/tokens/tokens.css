@@ -436,12 +436,14 @@
     color: rgb(var(--accent-primary-hover));
   }
 
-  /* On dark canvas the navy surface gives amber-400 ample contrast */
-  body.dark-canvas a {
+  /* On dark canvas the navy surface gives amber-400 ample contrast. :where() keeps these at the
+     specificity of the plain `a` / `a:hover` rules above, so a component's own link class
+     (.nav-item, .sidebar__item, .breadcrumbs__link) still sets its colour. */
+  :where(body.dark-canvas) a {
     color: rgb(var(--accent-primary));
   }
 
-  body.dark-canvas a:hover {
+  :where(body.dark-canvas) a:hover {
     color: rgb(var(--accent-primary-hover));
   }
 
