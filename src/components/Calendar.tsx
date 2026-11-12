@@ -28,6 +28,9 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   onSelectDate?: (date: Date) => void
   onSelectEvent?: (eventId: string) => void
   renderEvent?: (event: CalendarEvent, calendarColor?: string) => React.ReactNode
+  /** The day highlighted as today. Defaults to the clock at render; pass a fixed date when the
+   *  markup is rendered on a server or at build time and hydrated, so both renders agree. */
+  today?: Date | string | number
 }
 
 const getEventsForDate = (date: Date | string, events: CalendarEvent[] = []): CalendarEvent[] => {
@@ -48,6 +51,7 @@ const MonthView: React.FC<{
   onSelectEvent?: (eventId: string) => void
   renderEvent?: (event: CalendarEvent, calendarColor?: string) => React.ReactNode
   onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void
+  today?: Date | string | number
 }> = ({
   focusedDate,
   selectedDate,
@@ -59,6 +63,7 @@ const MonthView: React.FC<{
   onSelectEvent,
   renderEvent,
   onKeyDown,
+  today,
 }) => {
   const focusedD = typeof focusedDate === 'string' ? new Date(focusedDate) : focusedDate
   const selectedD = selectedDate ? (typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate) : null
@@ -88,7 +93,7 @@ const MonthView: React.FC<{
             const isOutOfMonth = date.getMonth() !== focusedD.getMonth()
             const isFocused = isSameDay(date, focusedD)
             const isSelected = selectedD ? isSameDay(date, selectedD) : false
-            const isCurrentDay = isToday(date)
+            const isCurrentDay = isToday(date, today)
             const dayEvents = getEventsForDate(date, events)
             const displayCount = 3
             const hiddenCount = dayEvents.length - displayCount
@@ -366,6 +371,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
       onSelectDate,
       onSelectEvent,
       renderEvent,
+      today,
       className = '',
       ...props
     },
@@ -496,6 +502,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>(
               onSelectEvent={onSelectEvent}
               renderEvent={renderEvent}
               onKeyDown={handleKeyDown}
+              today={today}
             />
           )}
           {view === 'week' && (

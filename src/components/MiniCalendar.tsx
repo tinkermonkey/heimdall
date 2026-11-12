@@ -9,6 +9,9 @@ export interface MiniCalendarProps {
   weekStartsOn?: 0 | 1
   onSelect?: (date: Date) => void
   className?: string
+  /** The day highlighted as today. Defaults to the clock at render; pass a fixed date when the
+   *  markup is rendered on a server or at build time and hydrated, so both renders agree. */
+  today?: Date | string | number
 }
 
 const formatMonthYear = (date: Date | string): string => {
@@ -25,6 +28,7 @@ export const MiniCalendar = React.forwardRef<HTMLDivElement, MiniCalendarProps>(
       weekStartsOn = 0,
       onSelect,
       className = '',
+      today,
       ...props
     },
     ref
@@ -63,7 +67,7 @@ export const MiniCalendar = React.forwardRef<HTMLDivElement, MiniCalendarProps>(
               week.map((date) => {
                 const isOutOfMonth = date.getMonth() !== focusedD.getMonth()
                 const isSelected = selectedD ? isSameDay(date, selectedD) : false
-                const isCurrentDay = isToday(date)
+                const isCurrentDay = isToday(date, today)
                 const hasMarkerDot = hasMarker(date)
 
                 return (

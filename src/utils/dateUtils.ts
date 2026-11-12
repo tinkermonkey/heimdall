@@ -1,7 +1,15 @@
-export const formatTimestamp = (timestamp: Date | string): string => {
+/** A point in time a component compares against instead of the clock (see the `now` props). */
+export type DateInput = Date | string | number
+
+const toDate = (value: DateInput): Date => (value instanceof Date ? value : new Date(value))
+
+/**
+ * Relative time (`5m ago`, `3h ago`, `2d ago`), or the locale date after a week. `now` defaults to
+ * the clock; pass a fixed value to render the same text on the server and the client.
+ */
+export const formatTimestamp = (timestamp: Date | string, now: DateInput = new Date()): string => {
   const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
+  const diffMs = toDate(now).getTime() - date.getTime()
 
   if (Number.isNaN(diffMs)) {
     return ''
@@ -44,8 +52,9 @@ export const isSameDay = (a: Date | string, b: Date | string): boolean => {
   )
 }
 
-export const isToday = (d: Date | string): boolean => {
-  return isSameDay(d, new Date())
+/** Whether `d` falls on the same local day as `today` (default: the clock). */
+export const isToday = (d: Date | string, today: DateInput = new Date()): boolean => {
+  return isSameDay(d, toDate(today))
 }
 
 export const getWeekDays = (date: Date | string, weekStartsOn: 0 | 1 = 0): Date[] => {
