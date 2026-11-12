@@ -84,8 +84,8 @@ src/
 
 public/fonts/                  # Self-hosted fonts, copied to dist/fonts/ by the build
 ├── fonts.css                  # @font-face declarations ("@tinkermonkey/heimdall-ui/fonts")
-├── inter/                     # Inter .woff2 files
-└── jetbrains-mono/            # JetBrains Mono .woff2 files
+├── inter/                     # Inter .woff2 files + OFL.txt
+└── jetbrains-mono/            # JetBrains Mono .woff2 files + OFL.txt
 
 tests/
 ├── foundation.spec.ts         # Token system validation tests
@@ -146,6 +146,8 @@ import '@tinkermonkey/heimdall-ui/fonts'
 Its `url()`s are relative to the stylesheet, so the app's bundler (Vite, webpack) resolves them and emits the font files with the rest of the build. Nothing has to serve `/fonts/`.
 
 In this repo the files live in `public/fonts/`: the dev server serves them at `/fonts/` (the Playwright helpers load them from there) and the build copies the directory to `dist/fonts/`. `npm run setup` refetches them from `@fontsource` if they go missing.
+
+Both fonts are licensed under the SIL Open Font License 1.1. Each font directory carries its licence as `OFL.txt` (`dist/fonts/inter/OFL.txt`, `dist/fonts/jetbrains-mono/OFL.txt`), and the OFL requires it to travel with the font files. An app that redistributes the `.woff2` files outside its bundled build output should ship the licence with them.
 
 ### Build Output
 

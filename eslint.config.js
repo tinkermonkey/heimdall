@@ -38,14 +38,11 @@ export default [
     },
   },
   {
-    files: ['scripts/**/*.js'],
+    files: ['scripts/**/*.{js,mjs}'],
     languageOptions: {
       globals: globals.node,
       ecmaVersion: 'latest',
       sourceType: 'module',
-    },
-    rules: {
-      'no-undef': 'off',
     },
   },
 ]
