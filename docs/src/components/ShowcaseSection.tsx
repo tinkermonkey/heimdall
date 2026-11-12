@@ -69,32 +69,100 @@ export function DemoCard({ children, label }: { children: React.ReactNode; label
   )
 }
 
+// Where a type may wrap, between tokens only. Main breaks: before `|` and `&`; after `,`, `;`,
+// `=>` and a ` / ` between alternatives. Soft breaks, used only in a narrow table (see
+// `.type-soft-break` in styles/main.css): after a `: ` annotation and an opening `<`.
+const TYPE_BREAK = /(\s*[|&]\s*|,\s*|;\s*|=>\s*|\s\/\s+)|(:\s+|<)/g
+
+/** Splits a type into runs that are never broken inside; `soft` marks a soft break before a run. */
+function typeRuns(text: string): { run: string; soft: boolean }[] {
+  const runs: { run: string; soft: boolean }[] = []
+  let start = 0
+  let soft = false
+  for (const m of text.matchAll(TYPE_BREAK)) {
+    const sep = m[0].trimStart()
+    const at = sep[0] === '|' || sep[0] === '&' ? m.index! + m[0].length - sep.length : m.index! + m[0].length
+    if (at > start) {
+      runs.push({ run: text.slice(start, at), soft })
+      start = at
+      soft = m[2] !== undefined
+    }
+  }
+  runs.push({ run: text.slice(start), soft })
+  return runs
+}
+
+const TYPE_MAX_WIDTH = 240
+
+/**
+ * A type or signature that wraps only between tokens, never inside a name.
+ * `maxWidth` caps how wide it asks its table column to be.
+ */
+export function TypeText({ children, maxWidth = TYPE_MAX_WIDTH }: { children: string; maxWidth?: number }) {
+  return (
+    <div style={{ maxWidth }}>
+      {typeRuns(children).map(({ run, soft }, i) => (
+        <React.Fragment key={i}>
+          {i > 0 && <wbr className={soft ? 'type-soft-break' : undefined} />}
+          <span style={{ whiteSpace: 'nowrap' }}>{run}</span>
+        </React.Fragment>
+      ))}
+    </div>
+  )
+}
+
+/** Frame for a reference table; `.props-table` is the container the soft type breaks query. */
+export function TableFrame({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="props-table" style={{ border: `1px solid ${border}`, borderRadius: 6, overflow: 'auto' }}>
+      {children}
+    </div>
+  )
+}
+
+/** A full type too long for a table cell, shown as a code block under the table. */
+export function TypeBlock({ name, children }: { name: string; children: string }) {
+  return (
+    <div style={{ marginTop: 14 }}>
+      <p style={{ fontSize: 12, color: fg2, margin: '0 0 6px', lineHeight: 1.65 }}>
+        Full type of <code style={{ fontFamily: mono, fontSize: 11.5, color: 'rgb(var(--accent-cyan-deep, 14 126 163))' }}>{name}</code>:
+      </p>
+      <pre style={{ margin: 0, padding: '10px 12px', background: 'rgb(var(--canvas-bg-2, 243 244 246))', border: `1px solid ${border}`, borderRadius: 6, fontFamily: mono, fontSize: 11.5, lineHeight: 1.6, color: fg2, overflowX: 'auto' }}>
+        {children}
+      </pre>
+    </div>
+  )
+}
+
 export function PropRow({ name, type, def, description, required }: { name: string; type: string; def?: string; description: string; required?: boolean }) {
+  const cell = { padding: '7px 10px', verticalAlign: 'top' } as const
   return (
     <tr>
-      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))', whiteSpace: 'nowrap' }}>
+      <td style={{ ...cell, fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))', whiteSpace: 'nowrap' }}>
         {name}{required && <span style={{ color: 'rgb(var(--accent-rose, 244 63 94))', marginLeft: 2 }}>*</span>}
       </td>
-      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3, whiteSpace: 'nowrap' }}>{type}</td>
-      <td style={{ padding: '7px 12px', fontFamily: mono, fontSize: 11, color: fg3, whiteSpace: 'nowrap' }}>{def ?? '—'}</td>
-      <td style={{ padding: '7px 12px', fontSize: 12, color: fg2 }}>{description}</td>
+      <td style={{ ...cell, fontFamily: mono, fontSize: 11, color: fg3 }}><TypeText>{type}</TypeText></td>
+      {/* Defaults are often prose ("graph state"), so they wrap at spaces. */}
+      <td style={{ ...cell, fontFamily: mono, fontSize: 11, color: fg3 }}><div style={{ maxWidth: 150 }}>{def ?? '—'}</div></td>
+      {/* A code token in prose may break only when nothing else fits. */}
+      <td style={{ ...cell, fontSize: 12, color: fg2, overflowWrap: 'anywhere' }}>{description}</td>
     </tr>
   )
 }
 
 export function PropsTable({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ border: `1px solid ${border}`, borderRadius: 6, overflow: 'auto' }}>
+    <TableFrame>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
         <thead>
           <tr style={{ background: 'rgb(var(--canvas-bg-2, 243 244 246))' }}>
             {['Prop', 'Type', 'Default', 'Description'].map(h => (
-              <th key={h} style={{ padding: '7px 12px', textAlign: 'left', fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: fg3, fontWeight: 500, whiteSpace: 'nowrap', minWidth: h === 'Description' ? 200 : 'auto' }}>{h}</th>
+              <th key={h} style={{ padding: '7px 10px', textAlign: 'left', fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: fg3, fontWeight: 500, whiteSpace: 'nowrap', minWidth: h === 'Description' ? 160 : 'auto' }}>{h}</th>
             ))}
           </tr>
         </thead>
         <tbody style={{ borderTop: `1px solid ${border}` }}>{children}</tbody>
       </table>
-    </div>
+    </TableFrame>
   )
 }

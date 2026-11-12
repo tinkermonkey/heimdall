@@ -1,4 +1,4 @@
-import { PropsTable, PropRow } from '../../components/ShowcaseSection'
+import { PropsTable, PropRow, TableFrame, TypeText } from '../../components/ShowcaseSection'
 
 const fg2 = 'rgb(var(--canvas-fg-2, 75 85 99))'
 const fg3 = 'rgb(var(--canvas-fg-3, 107 114 128))'
@@ -54,14 +54,14 @@ const METHODS: { name: string; signature: string; description: string }[] = [
 
 /** `LayerStackHandle` methods. */
 export function LayerStackHandleTable() {
-  const cell = { padding: '7px 12px' } as const
+  const cell = { padding: '7px 10px', verticalAlign: 'top' } as const
   return (
-    <div style={{ border: `1px solid ${border}`, borderRadius: 6, overflow: 'auto' }}>
+    <TableFrame>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
         <thead>
           <tr style={{ background: 'rgb(var(--canvas-bg-2, 243 244 246))' }}>
             {['Method', 'Signature', 'Description'].map((h) => (
-              <th key={h} style={{ ...cell, textAlign: 'left', fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: fg3, fontWeight: 500, whiteSpace: 'nowrap', minWidth: h === 'Description' ? 200 : 'auto' }}>
+              <th key={h} style={{ ...cell, textAlign: 'left', fontFamily: mono, fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: fg3, fontWeight: 500, whiteSpace: 'nowrap', minWidth: h === 'Description' ? 160 : 'auto' }}>
                 {h}
               </th>
             ))}
@@ -71,12 +71,12 @@ export function LayerStackHandleTable() {
           {METHODS.map((m) => (
             <tr key={m.name}>
               <td style={{ ...cell, fontFamily: mono, fontSize: 12, color: 'rgb(var(--accent-cyan-deep, 14 126 163))', whiteSpace: 'nowrap' }}>{m.name}</td>
-              <td style={{ ...cell, fontFamily: mono, fontSize: 11, color: fg3, whiteSpace: 'nowrap' }}>{m.signature}</td>
-              <td style={{ ...cell, fontSize: 12, color: fg2 }}>{m.description}</td>
+              <td style={{ ...cell, fontFamily: mono, fontSize: 11, color: fg3 }}><TypeText>{m.signature}</TypeText></td>
+              <td style={{ ...cell, fontSize: 12, color: fg2, overflowWrap: 'anywhere' }}>{m.description}</td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+    </TableFrame>
   )
 }

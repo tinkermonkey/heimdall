@@ -18,14 +18,16 @@ workflow (`.github/workflows/release.yml`).
    git push origin main --tags
    ```
 6. The `Release` workflow runs automatically on the tag push:
-   - `test` — installs deps, installs Playwright browsers, runs `npm test`
-     (visual regression against the committed linux baselines).
-   - `release` (needs `test`) — verifies the tag matches
-     `package.json`'s version, builds, `npm publish --provenance --access
-     public`, then creates a GitHub Release with notes pulled from the
-     matching `CHANGELOG.md` section.
+   - `test` — `npm ci`, `check:skills`, `build` + `check:package`, installs
+     the Playwright Chromium browser, then `npm test` (visual regression
+     against the committed linux baselines).
+   - `release` (needs `test`) — verifies the tag matches `package.json`'s
+     version, `npm ci`, builds, upgrades to the latest npm CLI, runs
+     `npm publish --provenance --access public`, then creates a GitHub
+     Release with notes pulled from the matching `CHANGELOG.md` section.
 7. Watch it in the Actions tab or `gh run watch`. If the tag's version
-   doesn't match `package.json`, the release job fails fast before publishing.
+   doesn't match `package.json`, the release job fails before publishing. A
+   successful publish logs `+ @tinkermonkey/heimdall-ui@x.y.z`.
 
 If the `test` job fails on `-linux.png` screenshot mismatches rather than a
 real regression, that's baseline drift between your local machine and the
@@ -37,55 +39,47 @@ version and re-tag).
 
 ## npm auth
 
-2FA stays **enabled** on the npm account (no "bypass 2FA" token). CI instead
-authenticates via npm's [Trusted Publisher](https://docs.npmjs.com/trusted-publishers)
-(OIDC) — the `release` job already requests `permissions: id-token: write`
-and `npm publish --provenance` for this. Once a Trusted Publisher is
-configured for the package, npm's CLI detects the OIDC context automatically
-and publishes without any token at all.
+Publishing runs through npm [Trusted Publishing](https://docs.npmjs.com/trusted-publishers)
+(OIDC). No npm token is stored in the repo. The Trusted Publisher on
+npmjs.com is keyed to org `tinkermonkey`, repo `heimdall`, workflow
+`release.yml`; the `release` job requests `permissions: id-token: write`, and
+the npm CLI exchanges the GitHub Actions OIDC token for a short-lived publish
+token. `--provenance` attaches a signed provenance attestation to every
+published version.
 
-The `NPM_TOKEN` repo secret is set, but since 2FA is on and this token
-doesn't bypass it, npm will reject a publish attempt authenticated with it
-alone (it can't answer the interactive OTP prompt). That means **the
-`release` job's publish step will fail until a Trusted Publisher is
-configured** — expected for any tag pushed before that setup is done. Once
-Trusted Publishing is configured, that failure mode goes away and
-`NPM_TOKEN` is simply unused; safe to delete it at that point, or leave it
-inert.
+Trusted Publishing needs npm CLI 11.5.1 or later, so the job runs
+`npm install -g npm@latest` before publishing. 2FA stays enabled on the npm
+account; it does not apply to OIDC publishes.
 
-Trusted Publisher can't be attached to a package that doesn't exist on the
-registry yet, so the very first release has to be published by hand from a
-logged-in, 2FA-verified local session — see the checklist below.
+Renaming `release.yml`, moving the repo, or publishing from a different
+workflow breaks the match, and npm rejects the publish. Update the Trusted
+Publisher settings at `npmjs.com/package/@tinkermonkey/heimdall-ui/access`
+first.
 
-## First release checklist
+## Operational notes
 
-- [ ] `tinkermonkey` npm org exists and you're a member.
-- [ ] `npm run build && npm pack --dry-run` locally looks sane (no missing
-      files, no bloat).
-- [ ] Bump the version, update `CHANGELOG.md`, commit, push to `main` — but
-      **don't tag yet**.
-- [ ] Publish manually (see "Manual first publish" below).
-- [ ] Once it's live on npm, configure Trusted Publisher:
-      `npmjs.com/package/@tinkermonkey/heimdall-ui/access` → Trusted
-      Publisher → GitHub Actions → org `tinkermonkey`, repo `heimdall`,
-      workflow `release.yml`.
-- [ ] *Now* tag and push (`git tag vX.Y.Z && git push origin main --tags`)
-      if you want the release recorded/tagged — note this re-triggers the
-      `release` workflow, and since that exact version is already published,
-      its `npm publish` step will fail with a harmless 403 ("cannot publish
-      over previously published version"). That's expected for this one
-      historical tag; every subsequent release goes through the workflow
-      normally end to end.
+- **Registry lag.** `npm view @tinkermonkey/heimdall-ui version` can trail
+  the workflow's `+ @tinkermonkey/heimdall-ui@x.y.z` log line by a couple of
+  minutes. The log line is authoritative; wait before treating an old
+  `npm view` result as a failed publish.
+- **Run stuck "queued".** A CI run can sit "queued" with no jobs, and both
+  cancel and rerun are refused. Close and reopen the PR, or push an empty
+  commit (`git commit --allow-empty -m "ci: retrigger"`), to start a fresh
+  run.
+- **Ubuntu apt mirrors unreachable.** The Playwright install step in
+  `ci.yml`, `release.yml` and `update-snapshots.yml` runs
+  `npx playwright install --with-deps chromium` with a 5-minute timeout. If
+  apt can't reach the mirrors, it logs a warning and installs Chromium without
+  the system dependencies, which the runner image already provides (#364).
 
-### Manual first publish
+## History
 
-```bash
-npm login                     # interactive; must be a member of the tinkermonkey org
-npm run build                 # sanity check the build before publishing
-npm publish --access public   # omit --provenance here — provenance attestation
-                               # requires a supported CI/OIDC context and will
-                               # fail from a local shell
-```
-
-`npm publish` prompts for a one-time password since 2FA is enabled — enter
-the code from your authenticator app when asked.
+- **v0.5.1** was published by hand from a logged-in local session, because a
+  Trusted Publisher can't be attached to a package that doesn't exist on the
+  registry yet (`npm login`, `npm run build`, `npm publish --access public`,
+  no `--provenance`: provenance needs a CI/OIDC context).
+- **v0.5.2** was the first workflow publish. The `NPM_TOKEN` secret it used
+  failed with `EOTP` (npm retired 2FA-bypass automation tokens), so
+  `release.yml` moved to Trusted Publishing. The secret has since been
+  deleted.
+- Every release from v0.5.2 on has published through `release.yml`.

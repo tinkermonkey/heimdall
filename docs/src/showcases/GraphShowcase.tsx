@@ -12,7 +12,7 @@ import {
   type GraphEdgeMetadata,
   type RelationshipLink,
 } from '@tinkermonkey/heimdall-ui'
-import { PageHeader, ShowcaseSection, DemoCard, PropsTable, PropRow } from '../components/ShowcaseSection'
+import { PageHeader, ShowcaseSection, DemoCard, PropsTable, PropRow, TypeBlock } from '../components/ShowcaseSection'
 
 const NODES: (GraphNodeData & { title?: string; domain?: string; description?: string })[] = [
   { id: 'cls_cell', x: 200, y: 160, label: 'Cell', kind: 'C', domainColor: 'life', title: 'Cell', domain: 'life', description: 'Basic unit of life' },
@@ -174,6 +174,18 @@ export function GraphNodeShowcase() {
   )
 }
 
+const RENDER_NODE_TYPE = `(
+  node: GraphNodeData,
+  selected: boolean,
+  hierarchy?: GraphNodeHierarchyMeta,
+  props?: {
+    nodeId: string;
+    tooltipId?: string;
+    onSelect?: (id: string) => void;
+    onPopoverOpen?: (triggeringElement: HTMLElement) => void;
+  },
+) => ReactNode`
+
 export function GraphCanvasShowcase() {
   const [selectedId, setSelectedId] = useState<string | undefined>()
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>()
@@ -292,7 +304,7 @@ export function GraphCanvasShowcase() {
           <PropRow name="selectedEdgeId" type="string" description="Currently selected edge ID (controlled)" />
           <PropRow name="onEdgeSelect" type="(id: string) => void" description="Called when an edge's line or label is clicked. Without it, edges render but aren't interactive." />
           <PropRow name="onBackgroundClick" type="() => void" description="Called when empty canvas background is clicked — the 'click away to deselect' gesture. A genuine pan drag never fires it. Pair with clearing selectedNodeId/selectedEdgeId yourself." />
-          <PropRow name="renderNode" type="(node: GraphNodeData, selected: boolean, hierarchy?: GraphNodeHierarchyMeta, props?: { nodeId: string; tooltipId?: string; onSelect?: (id: string) => void; onPopoverOpen?: (el: HTMLElement) => void }) => ReactNode" description="Custom node renderer. Omit to use the default GraphNode, which under layout='galaxy' draws round bodies sized by weight instead of cards. Read hierarchy to build your own collapse control. props carries the wiring the default node uses: set aria-describedby to tooltipId, and call onPopoverOpen with the clicked element when it is defined, or nodePopover and click-triggered tooltips never open." />
+          <PropRow name="renderNode" type="(node, selected, hierarchy?, props?) => ReactNode" description="Custom node renderer; full type below the table. Omit to use the default GraphNode, which under layout='galaxy' draws round bodies sized by weight instead of cards. Read hierarchy to build your own collapse control. props carries the wiring the default node uses: set aria-describedby to tooltipId, and call onPopoverOpen with the clicked element when it is defined, or nodePopover and click-triggered tooltips never open." />
           <PropRow name="layout" type="'manual' | 'force' | 'organic' | 'orthogonal' | 'galaxy' | 'force-clustered' | 'ux-navigation' | 'radial-tree' | 'layer-lanes'" def="'manual'" description="'manual' uses explicit x/y per node; 'force' runs a spring layout; 'organic' is its successor (stress majorization with guaranteed overlap removal, deterministic, nodeMargin honored as a hard minimum gap); 'orthogonal' places nodes on a cell grid and routes edges as axis-parallel polylines that never cross a node or share a segment; 'galaxy' arranges nodes as a radial hierarchy of orbits built from structural edges; 'force-clustered' groups nodes into nested bubbles by graph structure (Louvain community detection + circle packing), lays each cluster out on its own and rotates it to face the clusters it links to; 'ux-navigation' arranges page trees top to bottom with view fans beside each page (see isPageNode); 'radial-tree' puts each structural tree's root at the centre with each depth on its own ring; 'layer-lanes' draws a layered graph as swimlanes, one lane per layer, with the layered framework's selection, reach and filters (see layeredGraph, layering, layeredGraphOptions and laneOptions below, and the Layer lanes page). See the Graph Layouts page for each engine on the data it suits." />
           <PropRow name="layeredGraph" type="LayeredGraphState" def="context" description="layout='layer-lanes' only. Shared state from useLayeredGraph, so selection, follow, filters and predicate labels match the other layered views. Unset: the enclosing LayeredGraphContext, else the canvas builds its own from nodes, edges and layering. With shared state the drawn graph is the state's index, so nodes and edges are optional; selectedNodeId is ignored and a node click calls the state's select." />
           <PropRow name="layering" type="BuildLayeredIndexOptions" def="{ layerBy: 'kind', missingValue: 'layer' }" description="layout='layer-lanes' only, standalone (no layeredGraph and no context): how nodes split into layers. Memoize it." />
@@ -330,6 +342,7 @@ export function GraphCanvasShowcase() {
           <PropRow name="initialViewport" type="{ center: { x: number; y: number }; zoom: number }" description="Viewport applied after the first layout instead of the fitView fit or plain centring, and instead of centring the node already selected at mount. Read once; reports nothing. For deep links and reloads." />
           <PropRow name="viewportRef" type="React.Ref<GraphViewportHandle>" description="Receives { setViewport(viewport, { animate?, silent? }), getViewport() } for restoring a viewport from outside the canvas, e.g. on popstate. silent skips onViewportNavigate; animate eases over 150ms. The forwarded ref stays the root div. The same two functions are on useGraphCanvas()." />
         </PropsTable>
+        <TypeBlock name="renderNode">{RENDER_NODE_TYPE}</TypeBlock>
       </ShowcaseSection>
       <ShowcaseSection label="Props (GraphNode)">
         <PropsTable>
