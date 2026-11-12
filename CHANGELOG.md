@@ -52,6 +52,11 @@ docs props tables wrap instead of overflowing the page.
 
 ### Fixed
 
+- **LineageRail and TabBar keep their chip colours on dark canvas** (tinkermonkey/heimdall#390).
+  Chip's dark-canvas `.chip--neutral` and `.chip--id-tag` rules outranked the components' own
+  single-class rules, so every LineageRail node turned into a grey neutral chip (the head lost
+  its amber) and the active tab's count chip went grey. Each component rule now carries a
+  dark-canvas selector that outranks Chip's; Chip is unchanged.
 - **Font licences ship with the fonts** (tinkermonkey/heimdall#383, tinkermonkey/heimdall#385).
   `dist/fonts/inter/OFL.txt` and `dist/fonts/jetbrains-mono/OFL.txt` carry the SIL Open Font
   License 1.1 with each font's copyright line, as the licence requires for redistributed font
@@ -71,6 +76,11 @@ docs props tables wrap instead of overflowing the page.
 ### Internal
 
 - `npm run lint` covers `scripts/**/*.{js,mjs}` with Node globals (tinkermonkey/heimdall#383).
+- **Visual baselines agree across platforms** (tinkermonkey/heimdall#382,
+  tinkermonkey/heimdall#389). 55 drifted darwin baselines regenerated, 110 missing darwin
+  baselines added, and 17 stale linux baselines refreshed (they passed CI within the 1%
+  tolerance while predating their pages). Specs use relative `page.goto('/?example=…')` URLs, so
+  they run against any Playwright `baseURL`.
 
 ## [0.11.0]
 
