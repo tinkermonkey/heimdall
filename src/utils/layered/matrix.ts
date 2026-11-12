@@ -185,6 +185,32 @@ export function matrixWindow(
 }
 
 /**
+ * 1-based ARIA position (`aria-rowindex` / `aria-colindex`) of matrix row or column `i` in the
+ * screen-reader grid, where position 1 is the header row or the row-header column.
+ */
+export const matrixGridIndex = (i: number) => i + 2
+
+/**
+ * Accessible name of a matrix grid cell: its row and column, how they are linked, and one sentence
+ * per link, e.g. `Row A, column B, linked: A serves B`.
+ */
+export function matrixCellName(row: string, col: string, sentences: readonly string[], bothWays: boolean, selected = false): string {
+  const state = bothWays ? 'linked both ways' : sentences.length > 1 ? `${sentences.length} links` : 'linked'
+  return `Row ${row}, column ${col}, ${state}: ${sentences.join('; ')}${selected ? ', selected' : ''}`
+}
+
+/**
+ * The screen-reader grid's body rows: each row in `rows` once, in order, with its cells from
+ * `sorted` (row-major) in column order. Rows without cells keep an empty list.
+ */
+export function matrixGridRows<T extends { r: number; c: number }>(rows: Iterable<number>, sorted: readonly T[]): { r: number; cells: T[] }[] {
+  const byRow = new Map<number, T[]>()
+  for (const r of [...new Set(rows)].sort((a, b) => a - b)) byRow.set(r, [])
+  for (const cell of sorted) byRow.get(cell.r)?.push(cell)
+  return [...byRow].map(([r, cells]) => ({ r, cells }))
+}
+
+/**
  * Keyboard move between drawn cells (sorted row-major). Left and Right step through every cell in
  * reading order; Up and Down go to the nearest row above or below that has a cell, at the closest
  * column (the left one on a tie); Home and End go to the row's first and last cell. Null: no move.
