@@ -6,26 +6,93 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.13.0]
 
-Static and server-rendered sites. The package is one module per source file, each importing its
-own stylesheet, so an app's bundler keeps only the components (and the CSS, and the dependencies
-such as d3 and react-markdown) it imports: a page that uses `Panel` and `Chip` went from 665 KB of
-library JS and a 213 KB stylesheet to 1.3 KB and 15 KB. `Sidebar`, `NavItem`, `QuickAccessTile` and
-`QuickAccessGrid` items take `href` and render real links. `useMediaQuery`, `ShellLayout`, `Topbar`
-and `Statusbar` hydrate server HTML without mismatches, and the timelines and calendars take a fixed
-`now` / `today` so server and browser print the same text.
+Static and server-rendered sites. The package is one module per source file, so an app's bundler
+keeps only the components it imports: in a Vite production build, `import { Button }` adds 1.4 KB
+of library JS where 0.12 added 694 KB. The JS still imports no CSS, so Node, SSR builds (Astro,
+Next, `vite build --ssr`) and Vitest load the package with no configuration, as in 0.12. The full
+stylesheet stays the default; a base sheet plus per-component sheets are an opt-in alternative
+(12 KB of CSS for a page that uses only `Button`, against 213 KB). `Sidebar`, `NavItem`,
+`QuickAccessTile` and `QuickAccessGrid` items take `href` and render real links. `useMediaQuery`,
+`ShellLayout`, `Topbar` and `Statusbar` hydrate server HTML without mismatches, and the timelines
+and calendars take a fixed `now` / `today` that prints the same text on a server and in any
+browser, whatever their timezones.
+
+### Breaking
+
+- **`NavItemProps` and `QuickAccessTileProps` are unions.** Each is now
+  `NavItemButtonProps | NavItemLinkProps` (`QuickAccessTileButtonProps |
+  QuickAccessTileLinkProps`), discriminated by `href`, and the ref is
+  `HTMLButtonElement | HTMLAnchorElement`. TypeScript rejects `interface X extends NavItemProps`
+  (an interface can't extend a union), and `Omit<NavItemProps, 'label'>` no longer keeps the
+  members apart, because `Omit` isn't distributive. **Migration:** extend or omit from the member
+  you render: `interface MyNavItemProps extends NavItemButtonProps { … }`, or
+  `Omit<NavItemButtonProps, 'label'>`. All four member types are exported from the package root.
+  A wrapper that should accept both forms can use a distributive omit:
+  `type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never`.
+- **`ShellLayout`, `Topbar` and `Statusbar` leave `data-mobile` off until the client knows the
+  viewport.** Server HTML and the hydration render have no `data-mobile` attribute, so their
+  existing CSS `@media (max-width: 768px)` rules lay out the page (sidebar column and search box
+  hidden on a phone) until the client re-renders with the drawer layout. **Migration:** CSS that
+  selects `[data-mobile="false"]` to mean "desktop" no longer matches before hydration; select
+  `:not([data-mobile="true"])` instead.
+- **Dark-canvas link colours no longer beat a link's own class.** `tokens.css` colours every `a`
+  amber-400 on dark canvas. Those rules were `body.dark-canvas a` and `body.dark-canvas a:hover`,
+  specificity (0,1,2) and (0,2,2), so they overrode single-class link styles such as
+  `.breadcrumbs__link` (`Topbar` breadcrumbs with `href` turned amber on dark canvas) and the new
+  link variants. They are now `:where(body.dark-canvas) a` and `:where(body.dark-canvas) a:hover`,
+  the same specificity as the plain `a` / `a:hover` rules. **Migration:** an app whose own link
+  class should still turn amber on dark canvas sets that colour itself, e.g.
+  `body.dark-canvas .my-link { color: rgb(var(--accent-primary)); }`.
 
 ### Changed
 
-- **One module per source file, with per-component CSS.** `dist/` mirrors `src/`
-  (`dist/index.js` re-exports `dist/components/Panel.js`, …) and each component module imports its
-  own stylesheet (`dist/components/Panel.css`). With `"sideEffects": ["**/*.css"]`, a consumer's
-  bundler drops every module, stylesheet and dependency an app doesn't import; 0.12's single
-  `dist/index.js` kept all 757 KB. `import '@tinkermonkey/heimdall-ui/css'` still works and still
-  loads every stylesheet (`dist/style.css`, same rules in the same order); it is now optional.
-  **Migration:** none for apps built with a bundler (Vite, webpack, Next, Astro, Rollup). Because
-  the JS imports `.css` files, code that imports the package in plain Node (a test runner without
-  CSS handling, a Node script) needs the runner's CSS handling turned on (e.g. Jest
-  `moduleNameMapper` for `\.css$`); Vitest handles it.
+- **One module per source file; JS imports no CSS.** `dist/` mirrors `src/` (`dist/index.js`
+  re-exports `dist/components/Button.js`, …) and `"sideEffects": ["**/*.css"]` stays, so a
+  consumer's bundler drops every module and dependency (d3, react-markdown) an app doesn't
+  import. Measured in a Vite 6 production build from the packed tarball, React 18 in both: an app
+  that renders one `Button` ships 837 KB of JS with 0.12 and 144 KB with 0.13 (142.6 KB of that is
+  React), so heimdall's share went from 694,486 B to 1,427 B (711 B gzip). No JS module imports a
+  stylesheet, which is what lets plain Node import the package: checked from the tarball with
+  `node -e "import('@tinkermonkey/heimdall-ui')"`, a `vite build --ssr` bundle run in Node, and a
+  Vitest test, each with no config file. **Migration:** none.
+- **Stylesheets.** `import '@tinkermonkey/heimdall-ui/css'` (`dist/style.css`) is still the one
+  import an app needs, and still holds every rule in 0.12's order. New and optional, for a page
+  that uses a few components:
+
+  ```ts
+  import '@tinkermonkey/heimdall-ui/css/base'     // once, first: tokens, base element styles, shared utilities
+  import '@tinkermonkey/heimdall-ui/css/Button'   // then one sheet per component module you render
+  import '@tinkermonkey/heimdall-ui/css/Sidebar'
+  ```
+
+  `css/base` (`dist/css/base.css`, 9.9 KB) must load before any component sheet, which holds no
+  tokens of its own. Each component sheet (`dist/css/<Name>.css`, named after the component's
+  module: `ToolBlock` is in `ChatMessage`) is complete for its component: it includes the CSS of
+  every component and helper the component renders (`ShellLayout`'s includes `Sidebar`,
+  `Topbar`, …), so sheets repeat shared rules and can load in any order. Components with no CSS
+  (`Icon`, the charts) have no sheet. For a `Button`-only page, base + `Button` is 12,125 B (3.3 KB
+  gzip) against 213,514 B (30.8 KB gzip) for `/css`. Use one approach per app, not both.
+
+### Added
+
+- **`href` on `SidebarItem` and its children.** A leaf item or child with `href` renders
+  `<a href>` with the same classes and `aria-current="page"` when active. A plain click calls
+  `onSelectItem`, then the browser follows the link; a parent with `children` stays the button
+  that expands them.
+- **`href` on `NavItem` and `QuickAccessTile`** (and on `QuickAccessGridItem`): they render `<a>`
+  (see Breaking for the prop types). The link variants reset `text-decoration` so a site's
+  `a` / `a:hover` rules don't underline them, and match the button variant's box and colours, on
+  light and dark canvas.
+- **Click callbacks receive the event.** `Sidebar`'s `onSelectItem(id, event)` and
+  `QuickAccessGrid`'s `onAction(id, event)` take the `MouseEvent` as a second argument (existing
+  one-argument callbacks are unaffected). For a link they run on plain primary clicks only, not on
+  cmd/ctrl/shift/alt-click, middle-click, or a click already `preventDefault`ed, so opening a link
+  in a new tab doesn't also select it here. A client-side router keeps `href` and calls
+  `event.preventDefault()` in the callback to route itself.
+- **`ShellLayout` closes the mobile drawer on a link click** inside it (a sidebar item with
+  `href`, or a link in the sidebar `footer`), except a modifier or middle click or a link with a
+  `target` such as `_blank`, which open elsewhere. A click a router `preventDefault`s still closes
+  it.
 - **`useMediaQuery` is hydration-safe.** It uses `useSyncExternalStore` with a server snapshot:
   server rendering and hydration see `serverValue` (new optional second argument, default
   `false`), then the client re-renders with the real match. 0.12 read `window.matchMedia` in its
@@ -33,44 +100,52 @@ and `Statusbar` hydrate server HTML without mismatches, and the timelines and ca
   reduced-motion check) rendered different markup on a phone than the server did and React
   reported a hydration mismatch. A client-only render still gets the real value on its first
   render.
-- **`ShellLayout`, `Topbar`, `Statusbar` leave `data-mobile` off until the client knows the
-  viewport.** Server HTML and the hydration render have no `data-mobile` attribute, so their
-  existing CSS `@media (max-width: 768px)` rules lay out the page (sidebar column and search box
-  hidden on a phone) until hydration swaps in the drawer layout. **Migration:** CSS that selects
-  `[data-mobile="false"]` to mean "desktop" no longer matches before hydration.
-
-### Added
-
-- **`href` on `SidebarItem` and its children.** A leaf item or child with `href` renders
-  `<a href>` with the same classes and `aria-current="page"` when active; clicking it calls
-  `onSelectItem`, then the browser follows the link. A parent with `children` stays the button
-  that expands them.
-- **`href` on `NavItem` and `QuickAccessTile`** (and on `QuickAccessGridItem`). With `href` they
-  render `<a>`; the props are a union (`NavItemButtonProps | NavItemLinkProps`,
-  `QuickAccessTileButtonProps | QuickAccessTileLinkProps`, all exported) and the ref is
-  `HTMLButtonElement | HTMLAnchorElement`. The link variants reset `text-decoration` so a site's
-  `a` / `a:hover` rules don't underline them, and match the button variant's box.
-- **`ShellLayout` closes the mobile drawer on any link click** inside it (a sidebar item with
-  `href`, or a link in the sidebar `footer`).
 - **`now` and `formatTimestamp` on `ActivityTimeline` and `VersionTimeline`.** `now` fixes the
-  time relative labels (`5m ago`) are measured from; `formatTimestamp` replaces the label (e.g. an
-  absolute date or a `<time>` element). Either one keeps server and browser text identical.
-- **`today` on `Calendar` and `MiniCalendar`**: the day highlighted as today.
+  time relative labels (`5m ago`) are measured from; with it the text depends only on `now` and
+  the timestamps, and a timestamp older than a week prints as an `en-US` date in UTC
+  (`11/3/2026`) rather than in the runtime's locale and timezone. `formatTimestamp` replaces the
+  label (e.g. another date format, or a `<time>` element).
+- **`today` on `Calendar` and `MiniCalendar`**: the day highlighted as today. A fixed `today` is a
+  date: a `YYYY-MM-DD` string, or an instant read as the UTC day it falls on, so a UTC build
+  server and a browser in Los Angeles highlight the same cell.
 - `formatTimestamp(timestamp, now?)` and `isToday(date, today?)` in `utils/dateUtils` take the
-  reference time as an optional argument.
+  reference time as an optional argument, with the meanings above. Without it they behave as in
+  0.12 (clock, runtime locale and timezone).
+
+### Fixed
+
+- `Topbar` breadcrumbs with `href` stay `shell-fg-2` on dark canvas instead of turning amber (see
+  Breaking).
 
 ### Internal
 
-- `vite.config.mjs`: `preserveModules` (root `src`), `cssCodeSplit`, and a small plugin that puts
-  each module's CSS import back where its source had it and writes the combined `dist/style.css`
-  in ESM evaluation order.
-- `check:package` checks every published JS module (not just `dist/index.js`) for bundled
-  dependencies and undeclared imports, that relative imports resolve to published files, and that
-  each component module imports its own stylesheet.
+- `vite.config.mjs`: `preserveModules` (root `src`) and `cssCodeSplit`, plus a plugin that learns
+  each module's stylesheets from Vite's `/* empty css */` markers, deletes the markers, and writes
+  `dist/style.css`, `dist/css/base.css` and the component sheets in ESM evaluation order (0.12's
+  rule order; the only rules added to `style.css` are the three `a.*` link resets). Three modules
+  render another module's classes without importing its CSS (`GraphEdgeShape`, `AdjacencyMatrix`,
+  `TraceDetailPanel`); an `EXTRA_SHEETS` map adds those stylesheets to their sheets.
+- Rules that won only by coming later in the full sheet now carry the specificity to win in any
+  sheet order, with the same result in `/css`: `.filter-bar .filter-bar__chip`,
+  `.activity-timeline__dot-container .activity-timeline__dot`, `.hash-set-diff .hash-set-diff__pill`,
+  `.side-by-side-diff .side-by-side-diff__pill`, `.dropdown-panel.row-menu__dropdown`, and the
+  `ReachInspector` eyebrow colours. `FilterDropdown`'s `.filter-dropdown__panel { min-width: 220px }`,
+  which `.dropdown-panel` always overrode in 0.12's sheet, is removed. The comment-only chart
+  stylesheets (`BarChart`, `BarH`, `BarV`, `Donut`, `Heatmap`, `LineChart`, `Sparkline`,
+  `StackedBar`, `StatusTimeline`) are deleted.
+- `check:package` fails if a published JS module imports a stylesheet, if plain Node can't import
+  `dist/index.js`, if a published stylesheet isn't reachable through an export or a
+  `css/<Name>` export doesn't resolve, or if a component module renders a heimdall class its sheet
+  doesn't define. It also checks every JS module for bundled dependencies and undeclared imports,
+  and that relative imports resolve.
 - `tests/static-links.spec.ts` (page `?example=static-links`): link variants match the button
-  variants' box and colour under a site's link styles; server HTML hydrates without mismatches at
-  desktop and phone widths; the phone layout is right before hydration; drawer links close the
-  drawer. `src/components/__tests__/serverRender.test.ts` renders the same components in Node.
+  variants' box and colours under a site's link styles, on light and dark canvas, at rest and on
+  hover; modifier clicks skip the callbacks and a callback can `preventDefault` to route; server
+  HTML hydrates without recoverable errors or console mismatch warnings at desktop and phone
+  widths; the phone layout is right before hydration; drawer links close the drawer, links that
+  open elsewhere don't. `src/components/__tests__/serverRender.test.ts` renders the same components
+  in Node, and `src/utils/dateUtils.test.ts` runs the fixed-`now` / `today` cases under five
+  timezones.
 
 ## [0.12.0]
 
