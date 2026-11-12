@@ -140,6 +140,7 @@ export function CalendarShowcase() {
           <PropRow name="events" type="CalendarEvent[]" description="Array of events to display" />
           <PropRow name="calendarColors" type="Record<string, string>" description="Mapping of calendar IDs to CSS colors" />
           <PropRow name="weekStartsOn" type="0 | 1" def="0" description="0 for Sunday, 1 for Monday" />
+          <PropRow name="today" type="Date | string | number" def="clock at render" description="Day highlighted as today; fix it for server-rendered or static HTML" />
           <PropRow name="onChangeView" type="(view: CalendarView) => void" description="Fired when user changes the view" />
           <PropRow name="onNavigate" type="(date: Date) => void" description="Fired when user navigates to a new date" />
           <PropRow name="onSelectDate" type="(date: Date | undefined) => void" description="Fired when user selects/deselects a date" />
@@ -161,6 +162,7 @@ export function CalendarShowcase() {
           <PropRow name="focusedDate" type="Date" description="The month/date to display" required />
           <PropRow name="selectedDate" type="Date | undefined" description="The currently selected date" />
           <PropRow name="weekStartsOn" type="0 | 1" def="0" description="0 for Sunday, 1 for Monday" />
+          <PropRow name="today" type="Date | string | number" def="clock at render" description="Day highlighted as today; fix it for server-rendered or static HTML" />
           <PropRow name="onSelect" type="(date: Date) => void" description="Fired when user clicks a date" required />
           <PropRow name="markers" type="Date[]" description="Dates to mark as having events" />
         </PropsTable>

@@ -1,5 +1,4 @@
 import React from 'react'
-import './Sparkline.css'
 import type { StatusColor } from './statusColors'
 import { statusColorMap } from './statusColors'
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { Badge } from './Badge'
 import type { StatusColor } from './statusColors'
 import { statusColorMap } from './statusColors'
-import { formatTimestamp } from '../utils/dateUtils'
+import { formatTimestamp as formatRelativeTimestamp } from '../utils/dateUtils'
 import './ActivityTimeline.css'
 
 export type ActivityEventType = 'create' | 'update' | 'delete' | 'run'
@@ -23,6 +23,15 @@ export interface ActivityEvent {
 export interface ActivityTimelineProps extends React.HTMLAttributes<HTMLDivElement> {
   events?: ActivityEvent[]
   emptyState?: string
+  /** The time relative timestamps (`5m ago`) are measured from. Defaults to the clock at render.
+   *  Pass a fixed value (e.g. the build time) when the markup is rendered on a server or at build
+   *  time and hydrated: the labels then depend only on `now`, and timestamps older than a week
+   *  print as an `en-US` date in UTC (`11/3/2026`), so server and browser text match in any
+   *  locale or timezone. */
+  now?: Date | string | number
+  /** Formats each timestamp, replacing the built-in relative format. Use it for absolute dates on
+   *  static pages, or to render a `<time>` element. */
+  formatTimestamp?: (timestamp: Date | string) => React.ReactNode
 }
 
 const EVENT_COLOR_MAP: Record<ActivityEventType, 'emerald' | 'cyan' | 'rose' | 'amber'> = {
@@ -33,7 +42,7 @@ const EVENT_COLOR_MAP: Record<ActivityEventType, 'emerald' | 'cyan' | 'rose' | '
 }
 
 export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelineProps>(
-  ({ events = [], emptyState = 'No activity recorded', className = '', ...props }, ref) => {
+  ({ events = [], emptyState = 'No activity recorded', now, formatTimestamp, className = '', ...props }, ref) => {
     const classNames = ['activity-timeline', className].filter(Boolean).join(' ')
 
     if (events.length === 0) {
@@ -91,7 +100,7 @@ export const ActivityTimeline = React.forwardRef<HTMLDivElement, ActivityTimelin
                 )}
               </div>
               <div className="activity-timeline__timestamp" data-testid="activity-timestamp">
-                {formatTimestamp(event.timestamp)}
+                {formatTimestamp ? formatTimestamp(event.timestamp) : formatRelativeTimestamp(event.timestamp, now)}
               </div>
             </div>
           ))}

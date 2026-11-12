@@ -29,7 +29,8 @@
   box-shadow: var(--focus-ring);
 }
 
-/* Panel chrome and item styles inherited from .dropdown-panel / .dropdown-item */
-.row-menu__dropdown {
+/* Panel chrome and item styles inherited from .dropdown-panel / .dropdown-item. Two classes, so the
+   min-width outranks .dropdown-panel whatever order the sheets load in. */
+.dropdown-panel.row-menu__dropdown {
   min-width: 160px;
 }

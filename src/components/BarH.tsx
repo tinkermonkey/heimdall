@@ -1,5 +1,4 @@
 import React from 'react'
-import './BarH.css'
 import { TONE, fmt, type ChartTone } from './chartTone'
 
 // Design paints all bars a single hue; callers override per-item via `color`.

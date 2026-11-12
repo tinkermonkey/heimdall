@@ -54,7 +54,8 @@
   gap: 8px;
 }
 
-.filter-bar__chip {
+/* Scoped under .filter-bar so it outranks Chip's own rules whatever order the sheets load in. */
+.filter-bar .filter-bar__chip {
   display: flex;
   align-items: center;
   gap: 6px;

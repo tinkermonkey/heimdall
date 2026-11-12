@@ -1,5 +1,4 @@
 import React from 'react'
-import './Heatmap.css'
 import { TONE, fmt, type ChartTone } from './chartTone'
 
 export interface HeatmapProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {

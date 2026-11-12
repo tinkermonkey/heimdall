@@ -9,6 +9,12 @@ export interface MiniCalendarProps {
   weekStartsOn?: 0 | 1
   onSelect?: (date: Date) => void
   className?: string
+  /** The day highlighted as today. Defaults to the clock's local day at render. A fixed value is a
+   *  date: a `YYYY-MM-DD` string, or an instant read as the UTC day it falls on. Pass one when the
+   *  markup is rendered on a server or at build time and hydrated, so both renders highlight the
+   *  same day whatever their timezones. Prefer the string: `new Date()` just after midnight east of
+   *  UTC is still the previous day in UTC. */
+  today?: Date | string | number
 }
 
 const formatMonthYear = (date: Date | string): string => {
@@ -25,6 +31,7 @@ export const MiniCalendar = React.forwardRef<HTMLDivElement, MiniCalendarProps>(
       weekStartsOn = 0,
       onSelect,
       className = '',
+      today,
       ...props
     },
     ref
@@ -63,7 +70,7 @@ export const MiniCalendar = React.forwardRef<HTMLDivElement, MiniCalendarProps>(
               week.map((date) => {
                 const isOutOfMonth = date.getMonth() !== focusedD.getMonth()
                 const isSelected = selectedD ? isSameDay(date, selectedD) : false
-                const isCurrentDay = isToday(date)
+                const isCurrentDay = isToday(date, today)
                 const hasMarkerDot = hasMarker(date)
 
                 return (

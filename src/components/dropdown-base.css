@@ -66,8 +66,8 @@
    Rendered on document.body by useDropdownPortal, which writes top/left and
    the two custom properties from the trigger's rect. Fixed positioning means
    no scrolling or overflow-hidden ancestor can clip it. z-index sits above
-   Modal (200), Drawer (220) and Toast/Tooltip (300). Component classes that
-   set min-width (e.g. .row-menu__dropdown) come later and still win. */
+   Modal (200), Drawer (220) and Toast/Tooltip (300). A component that sets
+   min-width uses two classes (.dropdown-panel.row-menu__dropdown) to win. */
 .dropdown-panel--portal {
   position: fixed;
   top: 0;

@@ -1,5 +1,4 @@
 import React from 'react'
-import './Donut.css'
 import { SERIES_COLORS } from './chartColors'
 import { TONE, type ChartTone } from './chartTone'
 

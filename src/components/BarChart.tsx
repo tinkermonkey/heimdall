@@ -1,5 +1,4 @@
 import React from 'react'
-import './BarChart.css'
 import { chartColors } from './chartColors'
 import { TONE, fmt, type ChartTone } from './chartTone'
 import { statusColorMap, type BarChartSeries } from './statusColors'

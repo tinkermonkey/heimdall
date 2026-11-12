@@ -23,10 +23,11 @@
   margin: 0 -4px;
 }
 
-/* Base node styles. Nodes render as a neutral Chip, and Chip's dark-canvas rule
-   (body.dark-canvas .chip--neutral) outranks a single class, so each colour rule
+/* Base node styles. Nodes render as a neutral Chip. Scoped under .lineage-rail so they outrank
+   Chip's single-class rules whatever order the sheets load in; Chip's dark-canvas rule
+   (body.dark-canvas .chip--neutral) outranks these too, so each colour rule
    below also has a dark-canvas selector that outranks it. */
-.lineage-rail__node,
+.lineage-rail .lineage-rail__node,
 body.dark-canvas .lineage-rail .lineage-rail__node {
   display: inline-flex;
   align-items: center;
@@ -49,7 +50,7 @@ body.dark-canvas .lineage-rail .lineage-rail__node {
 }
 
 /* Head node styling */
-.lineage-rail__node--head,
+.lineage-rail .lineage-rail__node--head,
 body.dark-canvas .lineage-rail .lineage-rail__node--head {
   background-color: var(--accent-primary-bg-alpha-sm);
   border-color: var(--accent-primary-border-alpha-sm);
@@ -57,17 +58,17 @@ body.dark-canvas .lineage-rail .lineage-rail__node--head {
 }
 
 /* Interactive node (button) */
-.lineage-rail__node--interactive {
+.lineage-rail .lineage-rail__node--interactive {
   cursor: pointer;
   transition: border-color 150ms ease;
 }
 
-.lineage-rail__node--interactive:hover,
+.lineage-rail .lineage-rail__node--interactive:hover,
 body.dark-canvas .lineage-rail .lineage-rail__node--interactive:hover {
   border-color: rgb(var(--canvas-border-strong));
 }
 
-.lineage-rail__node--interactive:focus-visible {
+.lineage-rail .lineage-rail__node--interactive:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }

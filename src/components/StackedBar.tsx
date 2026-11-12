@@ -1,5 +1,4 @@
 import React from 'react'
-import './StackedBar.css'
 import { SERIES_COLORS } from './chartColors'
 import { TONE, fmt, type ChartTone } from './chartTone'
 

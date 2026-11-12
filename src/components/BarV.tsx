@@ -1,5 +1,4 @@
 import React from 'react'
-import './BarV.css'
 import { SERIES_COLORS } from './chartColors'
 import { TONE, fmt, type ChartTone } from './chartTone'
 

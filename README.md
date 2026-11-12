@@ -151,14 +151,51 @@ Both fonts are licensed under the SIL Open Font License 1.1. Each font directory
 
 ### Build Output
 
-The library builds to ES modules with TypeScript types:
+The library builds to ES modules with TypeScript types, one module per source file, so an app's
+bundler keeps only the components it imports (`import { Button }` bundles to under 0.4 KB of
+minified heimdall code). No JS module imports CSS, so Node, SSR builds (Astro, Next, `vite build --ssr`) and
+test runners such as Vitest load the package without any CSS handling.
 
 ```
 dist/
-├── index.js        # Component library
-├── index.d.ts      # TypeScript declarations
-└── style.css       # Compiled CSS (tokens + components)
+├── index.js                 # Public API barrel (re-exports the modules below)
+├── index.d.ts               # TypeScript declarations
+├── components/Button.js     # One module per component
+├── hooks/, utils/           # Shared modules
+├── style.css                # Every stylesheet ("@tinkermonkey/heimdall-ui/css")
+├── css/base.css             # Tokens, base element styles, utilities ("…/css/base")
+└── css/Button.css           # One sheet per component module ("…/css/Button")
 ```
+
+### Stylesheets
+
+Import the full stylesheet once at the app entry. This is the default and covers every component:
+
+```ts
+import '@tinkermonkey/heimdall-ui/css'
+```
+
+A page or site that renders only a few components can load less CSS with the opt-in sheets
+instead: the base sheet once, first, then one sheet per component it renders.
+
+```ts
+import '@tinkermonkey/heimdall-ui/css/base'
+import '@tinkermonkey/heimdall-ui/css/Button'
+import '@tinkermonkey/heimdall-ui/css/Sidebar'
+```
+
+- `css/base` holds the design tokens, base element styles and shared utilities. Component sheets
+  hold no tokens, so it must load before them.
+- A component sheet is named after the component's module (`ToolBlock` lives in `ChatMessage`,
+  `StatusBadge` in `Badge`) and is complete for that component: it includes the CSS of every
+  component it renders, so `css/ShellLayout` covers `Sidebar`, `Topbar` and the rest. Sheets can
+  repeat each other's rules and load in any order after `css/base`.
+- Components with no CSS of their own (`Icon`, the charts) have no sheet.
+- For a `Button`-only page, `css/base` + `css/Button` is about 12 KB (3.3 KB gzip), against 213 KB
+  (about 30.5 KB gzip) for `/css`. Use one approach per app: loading both repeats every rule.
+- `npm run check:sheets` (after `npm run build`, with the dev server running) loads every test
+  page with base + all component sheets in several orders and fails if any element's computed
+  style differs from `/css`.
 
 ### Testing
 

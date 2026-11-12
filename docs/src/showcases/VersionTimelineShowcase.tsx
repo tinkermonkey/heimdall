@@ -152,6 +152,8 @@ export function VersionTimelineShowcase() {
             description="Display order of entries"
           />
           <PropRow name="emptyState" type="string" def="No versions available" description="Message shown when entries is empty" />
+          <PropRow name="now" type="Date | string | number" def="clock at render" description="Time relative timestamps are measured from; fix it for server-rendered or static HTML" />
+          <PropRow name="formatTimestamp" type="(timestamp: Date | string) => ReactNode" description="Replaces the built-in relative timestamp" />
         </PropsTable>
       </ShowcaseSection>
 

@@ -4,9 +4,12 @@
 // Checks every path in `exports` (all conditions, all subpaths) plus `main`, `module` and `types`
 // against the file list `npm pack` would publish. Run after `npm run build`: dist/ must exist.
 // Also checks that the tarball holds only dist/ and agent-skills/ (no source, tests or CJS build),
-// that declarations don't import unpublished source, that the JS entry leaves its dependencies
-// external, that the fonts stylesheet names its fonts by relative URLs that resolve to published
-// files (tinkermonkey/heimdall#343), and that each font's OFL licence ships (tinkermonkey/heimdall#383).
+// that declarations don't import unpublished source, that every JS module leaves its dependencies
+// external, that relative imports between modules resolve, that no JS module imports CSS and plain
+// Node can import the entry (SSR), that every stylesheet is reachable through an export and each
+// component sheet defines the classes its component renders, that the fonts stylesheet names its
+// fonts by relative URLs that resolve to published files (tinkermonkey/heimdall#343), and that each
+// font's OFL licence ships (tinkermonkey/heimdall#383).
 //
 // Why: 0.9.0 and 0.9.1 shipped with "./css" -> ./dist/style.css while the build emitted
 // dist/heimdall-ui.css (tinkermonkey/heimdall#303). The docs app, test app and tests all alias the
@@ -14,7 +17,7 @@
 
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import path from 'node:path'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -125,23 +128,126 @@ const BUNDLED_SIGNATURES = {
 }
 const declared = new Set([...Object.keys(pkg.dependencies ?? {}), ...Object.keys(pkg.peerDependencies ?? {})])
 const packageOf = (spec) => (spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0])
-for (const target of new Set(targets.map((t) => t.target))) {
-  const rel = target.replace(/^\.\//, '')
-  if (!/\.[cm]?js$/.test(rel) || !files.has(rel)) continue
+// Since 0.13.0 dist/ holds one module per source file (so consumers' bundlers can tree-shake it).
+// Check every published module, not just the entry.
+const IMPORT_RE =
+  /^\s*(?:import|export)\b[^'";]*?\bfrom\s*['"]([^'"]+)['"]|^\s*import\s*['"]([^'"]+)['"]|\bimport\(\s*['"]([^'"]+)['"]\s*\)/gm
+const jsModules = [...files.keys()].filter((f) => f.startsWith('dist/') && /\.[cm]?js$/.test(f))
+for (const rel of jsModules) {
   const code = readFileSync(path.join(root, rel), 'utf8')
   for (const [name, signatures] of Object.entries(BUNDLED_SIGNATURES)) {
     const sig = signatures.find((re) => re.test(code))
     if (sig) problems.push(`${rel}: contains a bundled copy of ${name} (matched ${sig}); keep it external`)
   }
-  // Every bare import left in the bundle must be something npm installs for the consumer.
-  const specifiers = [
-    ...code.matchAll(/^\s*(?:import|export)\b[^'";]*?\bfrom\s*['"]([^'"]+)['"]|^\s*import\s*['"]([^'"]+)['"]|\bimport\(\s*['"]([^'"]+)['"]\s*\)/gm),
-  ]
-    .map((m) => m[1] ?? m[2] ?? m[3])
-    .filter((spec) => !spec.startsWith('.') && !spec.startsWith('/'))
-  for (const spec of new Set(specifiers)) {
-    if (!declared.has(packageOf(spec))) {
+  const specifiers = new Set([...code.matchAll(IMPORT_RE)].map((m) => m[1] ?? m[2] ?? m[3]))
+  for (const spec of specifiers) {
+    if (/\.(css|scss|sass|less)([?#].*)?$/.test(spec)) {
+      // Node can't import a stylesheet (ERR_UNKNOWN_FILE_EXTENSION), so a JS module that imports one
+      // breaks SSR builds, Vitest and plain `import()` of the package. Stylesheets ship as sheets.
+      problems.push(`${rel}: imports the stylesheet ${spec}; JS modules must not import CSS`)
+    } else if (spec.startsWith('.')) {
+      // Relative imports between modules must resolve to a published file.
+      const target = path.posix.normalize(path.posix.join(path.posix.dirname(rel), spec))
+      if (!files.has(target)) problems.push(`${rel}: imports ${spec}, but ${target} is not published`)
+    } else if (spec.startsWith('/')) {
+      problems.push(`${rel}: imports ${spec}, an absolute path`)
+    } else if (!declared.has(packageOf(spec))) {
+      // Every bare import must be something npm installs for the consumer.
       problems.push(`${rel}: imports ${spec}, which is not in dependencies or peerDependencies`)
+    }
+  }
+}
+
+// SSR smoke test: plain Node (no bundler, no CSS handling) must load the entry, as it could in
+// 0.12. Astro and Next server builds, Vite's ssrLoadModule and Vitest all reach the package this way.
+const entryFile = path.join(root, (typeof pkg.exports?.['.'] === 'object' ? pkg.exports['.'].import : pkg.main) ?? 'dist/index.js')
+try {
+  const out = execFileSync(
+    process.execPath,
+    [
+      '--input-type=module',
+      '-e',
+      `const m = await import(${JSON.stringify(pathToFileURL(entryFile).href)}); console.log(Object.keys(m).length)`,
+    ],
+    { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }
+  )
+  if (!(Number(out.trim()) > 0)) problems.push(`node: import('${path.relative(root, entryFile)}') loaded no exports`)
+} catch (error) {
+  const detail = String(error.stderr || error.message).split('\n').find((line) => /Error|ERR_/.test(line)) ?? error.message
+  problems.push(`node: import('${path.relative(root, entryFile)}') fails in plain Node: ${detail.trim()}`)
+}
+
+// Stylesheets: dist/style.css (everything), and the opt-in sheets under dist/css/ (base.css plus one
+// per component module). Every published stylesheet must be one of those, reachable through an
+// export, and every subpath export must resolve to a published file.
+const exportTargets = []
+for (const [key, value] of Object.entries(pkg.exports ?? {})) {
+  for (const { target } of collectTargets(value, key, [])) exportTargets.push({ key, target: target.replace(/^\.\//, '') })
+}
+const reachable = (file) =>
+  exportTargets.some(({ target }) => {
+    if (!target.includes('*')) return target === file
+    const [before, after] = target.split('*')
+    return file.startsWith(before) && file.endsWith(after) && file.length > before.length + after.length
+  })
+const SHEETS_DIR = 'dist/css/'
+const BASE_SHEET = `${SHEETS_DIR}base.css`
+const sheets = [...files.keys()].filter((f) => f.startsWith(SHEETS_DIR) && f.endsWith('.css'))
+for (const file of [...files.keys()].filter((f) => f.endsWith('.css'))) {
+  // The fonts stylesheet and the legacy dist/heimdall-ui.css forwarder (0.9.x) are the exceptions.
+  if (file === 'dist/heimdall-ui.css' || file.startsWith('dist/fonts/')) continue
+  if (!reachable(file)) problems.push(`files: ${file} is published but no export reaches it`)
+  else if (files.get(file) === 0) problems.push(`files: ${file} is empty`)
+}
+if (!files.has(BASE_SHEET)) problems.push(`files: ${BASE_SHEET} (tokens + utilities) is not in the package`)
+// Each subpath export resolves: plain targets were checked above; resolve the pattern ones per
+// sheet, as a consumer's `import '@tinkermonkey/heimdall-ui/css/Button'` would.
+for (const sheet of sheets) {
+  const name = sheet.slice(SHEETS_DIR.length, -'.css'.length)
+  const hit = Object.entries(pkg.exports ?? {}).find(([key, value]) => {
+    if (!key.includes('*') || typeof value !== 'string') return false
+    const [before, after] = key.split('*')
+    const spec = `./css/${name}`
+    if (!spec.startsWith(before) || !spec.endsWith(after)) return false
+    const star = spec.slice(before.length, spec.length - after.length)
+    return value.replace('*', star).replace(/^\.\//, '') === sheet
+  })
+  if (!hit) problems.push(`exports: ${pkg.name}/css/${name} does not resolve to ${sheet}`)
+}
+
+// Each component sheet is complete for its component: every heimdall class a component module
+// names (a BEM-style string literal the full sheet defines) is in its sheet or in base.css. A
+// module that renders another module's classes without importing it (GraphEdgeShape uses
+// GraphEdge.css) needs an EXTRA_SHEETS entry in vite.config.mjs.
+// What it can't see: classes built at runtime (`chip--${tone}`, a prefix joined with a variable),
+// one-word block names (`btn`, `chip`: plain words such as `table` and `panel` also appear in
+// labels and roles), modules outside dist/components/ (hooks, utils), and whether the sheets
+// cascade the same in any load order (scripts/check-sheet-order.mjs covers that).
+const classesIn = (css) => new Set([...css.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]))
+const fullCssFile = typeof cssTarget === 'string' ? cssTarget.replace(/^\.\//, '') : null
+if (fullCssFile && files.has(fullCssFile) && files.has(BASE_SHEET)) {
+  const fullClasses = classesIn(readFileSync(path.join(root, fullCssFile), 'utf8'))
+  const baseClasses = classesIn(readFileSync(path.join(root, BASE_SHEET), 'utf8'))
+  const covered = new Set(baseClasses)
+  for (const sheet of sheets) for (const c of classesIn(readFileSync(path.join(root, sheet), 'utf8'))) covered.add(c)
+  const uncovered = [...fullClasses].filter((c) => !covered.has(c))
+  if (uncovered.length > 0) problems.push(`${SHEETS_DIR}: no sheet defines ${uncovered.slice(0, 8).join(', ')} (in ${fullCssFile})`)
+  // Hyphenated blocks (`stat-tile`), elements (`chip__dot`) and modifiers (`btn--primary`).
+  const CLASS_TOKEN =
+    /^[a-z][a-z0-9]*(?:-[a-z0-9]+)+(?:__[a-z0-9-]+)?(?:--[a-z0-9-]+)?$|^[a-z][a-z0-9-]*__[a-z0-9-]+(?:--[a-z0-9-]+)?$|^[a-z][a-z0-9]*--[a-z0-9-]+$/
+  for (const rel of jsModules.filter((f) => f.startsWith('dist/components/'))) {
+    const code = readFileSync(path.join(root, rel), 'utf8')
+    const tokens = new Set(
+      [...code.matchAll(/(["'`])((?:(?!\1)[^\\\n]|\\.)*)\1/g)]
+        .flatMap((m) => m[2].replace(/\$\{[^}]*\}/g, ' ').split(/\s+/))
+        .filter((t) => CLASS_TOKEN.test(t) && fullClasses.has(t) && !baseClasses.has(t))
+    )
+    if (tokens.size === 0) continue
+    const sheet = `${SHEETS_DIR}${path.posix.basename(rel, '.js')}.css`
+    const own = files.has(sheet) ? classesIn(readFileSync(path.join(root, sheet), 'utf8')) : new Set()
+    const missing = [...tokens].filter((t) => !own.has(t))
+    if (missing.length > 0) {
+      problems.push(`${rel}: renders ${missing.slice(0, 6).join(', ')}${missing.length > 6 ? ', …' : ''}, which ${files.has(sheet) ? sheet : 'no sheet'} doesn't define`)
     }
   }
 }
