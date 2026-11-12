@@ -8,10 +8,16 @@ export interface SidebarItem {
   label: string
   icon?: IconName
   count?: number
+  /** Render the item as a link (`<a href>`) instead of a button. Clicking it still calls
+   *  `onSelectItem`, then the browser follows the link. Ignored on an item with `children`,
+   *  which stays the button that expands and collapses them. */
+  href?: string
   children?: Array<{
     id: string
     label: string
     count?: number
+    /** Render the child as a link (`<a href>`); clicking it still calls `onSelectItem`. */
+    href?: string
   }>
 }
 
@@ -124,54 +130,84 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                   const isExpanded = expandedItems.has(item.id)
                   const isActive = activeItemId === item.id
 
+                  const itemContent = (
+                    <>
+                      {item.icon && (
+                        <Icon name={item.icon} size={18} className="sidebar__item-icon" />
+                      )}
+                      {!collapsed && (
+                        <span className="sidebar__item-label">{item.label}</span>
+                      )}
+                      {!collapsed && item.count !== undefined && (
+                        <span className="sidebar__item-count">{item.count}</span>
+                      )}
+                      {!collapsed && hasChildren && (
+                        <Icon
+                          name="chevronRight"
+                          size={14}
+                          className={`sidebar__item-chevron ${isExpanded ? 'sidebar__item-chevron--open' : ''}`}
+                        />
+                      )}
+                    </>
+                  )
+                  const itemClassName = `sidebar__item ${isActive ? 'sidebar__item--active' : ''}`
+
                   return (
                     <React.Fragment key={item.id}>
-                      <button
-                        type="button"
-                        className={`sidebar__item ${isActive ? 'sidebar__item--active' : ''}`}
-                        onClick={() => {
-                          if (hasChildren) {
-                            toggleExpanded(item.id)
-                          } else {
-                            onSelectItem?.(item.id)
-                          }
-                        }}
-                        title={collapsed ? item.label : undefined}
-                        aria-current={isActive ? 'page' : undefined}
-                        aria-expanded={hasChildren ? isExpanded : undefined}
-                      >
-                        {item.icon && (
-                          <Icon name={item.icon} size={18} className="sidebar__item-icon" />
-                        )}
-                        {!collapsed && (
-                          <span className="sidebar__item-label">{item.label}</span>
-                        )}
-                        {!collapsed && item.count !== undefined && (
-                          <span className="sidebar__item-count">{item.count}</span>
-                        )}
-                        {!collapsed && hasChildren && (
-                          <Icon
-                            name="chevronRight"
-                            size={14}
-                            className={`sidebar__item-chevron ${isExpanded ? 'sidebar__item-chevron--open' : ''}`}
-                          />
-                        )}
-                      </button>
-
-                      {!collapsed && hasChildren && isExpanded && item.children!.map(child => (
-                        <button
-                          key={child.id}
-                          type="button"
-                          className={`sidebar__item sidebar__item--child ${activeItemId === child.id ? 'sidebar__item--active' : ''}`}
-                          onClick={() => onSelectItem?.(child.id)}
-                          aria-current={activeItemId === child.id ? 'page' : undefined}
+                      {item.href !== undefined && !hasChildren ? (
+                        <a
+                          href={item.href}
+                          className={itemClassName}
+                          onClick={() => onSelectItem?.(item.id)}
+                          title={collapsed ? item.label : undefined}
+                          aria-current={isActive ? 'page' : undefined}
                         >
-                          <span className="sidebar__item-label">{child.label}</span>
-                          {child.count !== undefined && (
-                            <span className="sidebar__item-count">{child.count}</span>
-                          )}
+                          {itemContent}
+                        </a>
+                      ) : (
+                        <button
+                          type="button"
+                          className={itemClassName}
+                          onClick={() => {
+                            if (hasChildren) {
+                              toggleExpanded(item.id)
+                            } else {
+                              onSelectItem?.(item.id)
+                            }
+                          }}
+                          title={collapsed ? item.label : undefined}
+                          aria-current={isActive ? 'page' : undefined}
+                          aria-expanded={hasChildren ? isExpanded : undefined}
+                        >
+                          {itemContent}
                         </button>
-                      ))}
+                      )}
+
+                      {!collapsed && hasChildren && isExpanded && item.children!.map(child => {
+                        const childActive = activeItemId === child.id
+                        const childProps = {
+                          className: `sidebar__item sidebar__item--child ${childActive ? 'sidebar__item--active' : ''}`,
+                          onClick: () => onSelectItem?.(child.id),
+                          'aria-current': childActive ? ('page' as const) : undefined,
+                        }
+                        const childContent = (
+                          <>
+                            <span className="sidebar__item-label">{child.label}</span>
+                            {child.count !== undefined && (
+                              <span className="sidebar__item-count">{child.count}</span>
+                            )}
+                          </>
+                        )
+                        return child.href !== undefined ? (
+                          <a key={child.id} href={child.href} {...childProps}>
+                            {childContent}
+                          </a>
+                        ) : (
+                          <button key={child.id} type="button" {...childProps}>
+                            {childContent}
+                          </button>
+                        )
+                      })}
                     </React.Fragment>
                   )
                 })}

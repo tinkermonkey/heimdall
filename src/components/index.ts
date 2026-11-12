@@ -36,7 +36,7 @@ export {
 
 export { Table, type TableProps, type Column } from './Table'
 
-export { NavItem, type NavItemProps } from './NavItem'
+export { NavItem, type NavItemProps, type NavItemButtonProps, type NavItemLinkProps } from './NavItem'
 
 export { Sidebar, type SidebarProps } from './Sidebar'
 

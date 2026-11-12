@@ -113,6 +113,15 @@
   transition: all 80ms ease-out;
 }
 
+/* Link variant (`href`): the same box as the button, without the link underline that an app's own
+   `a` / `a:hover` rules would add. */
+a.sidebar__item,
+a.sidebar__item:hover,
+a.sidebar__item:focus-visible {
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
 .sidebar__item:hover {
   background: rgb(var(--shell-surface));
   color: rgb(var(--shell-fg-1));

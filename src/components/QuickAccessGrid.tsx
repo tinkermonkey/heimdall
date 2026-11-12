@@ -8,6 +8,8 @@ export interface QuickAccessGridItem {
   icon: IconName
   title: string
   description: string
+  /** Render the tile as a link (`<a href>`). Clicking it still calls `onAction`. */
+  href?: string
 }
 
 export interface QuickAccessGridProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -37,6 +39,7 @@ export const QuickAccessGrid = React.forwardRef<HTMLDivElement, QuickAccessGridP
             icon={tile.icon}
             title={tile.title}
             description={tile.description}
+            href={tile.href}
             onClick={() => onAction?.(tile.id)}
             data-testid={`quick-access-tile-${tile.id}`}
           />

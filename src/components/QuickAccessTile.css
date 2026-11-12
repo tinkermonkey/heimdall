@@ -14,6 +14,17 @@
   width: 100%;
 }
 
+/* Link variant (`href`): the same box as the button, without the link underline that an app's own
+   `a` / `a:hover` rules would add. */
+a.quick-access-tile,
+a.quick-access-tile:hover,
+a.quick-access-tile:focus-visible {
+  box-sizing: border-box;
+  /* The tile sets no text colour of its own (its parts do), so don't take the site's link colour. */
+  color: inherit;
+  text-decoration: none;
+}
+
 .quick-access-tile:hover {
   background-color: rgb(var(--canvas-surface));
   border-color: rgb(var(--canvas-border-strong));

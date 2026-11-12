@@ -31,7 +31,7 @@ export {
   type ChromeSurface,
 } from './components/SegmentedControl'
 export { Table, type Column, type TableProps } from './components/Table'
-export { NavItem, type NavItemProps } from './components/NavItem'
+export { NavItem, type NavItemProps, type NavItemButtonProps, type NavItemLinkProps } from './components/NavItem'
 export { Sidebar, type SidebarProps, type SidebarItem, type SidebarSection } from './components/Sidebar'
 export { Topbar, type TopbarProps, type BreadcrumbItem } from './components/Topbar'
 export { TabBar, type TabBarProps, type Tab } from './components/TabBar'
@@ -121,7 +121,12 @@ export { SideBySideDiff, type SideBySideDiffProps, type DiffLine, type DiffLineT
 export { DiffViewer, type DiffViewerProps, type DiffViewerHashSetProps, type DiffViewerSideBySideProps, type DiffViewerMode } from './components/DiffViewer'
 export { AlertStrip, type AlertStripProps, type Alert, type AlertSeverity } from './components/AlertStrip'
 export { QuickAccessGrid, type QuickAccessGridProps, type QuickAccessGridItem } from './components/QuickAccessGrid'
-export { QuickAccessTile, type QuickAccessTileProps } from './components/QuickAccessTile'
+export {
+  QuickAccessTile,
+  type QuickAccessTileProps,
+  type QuickAccessTileButtonProps,
+  type QuickAccessTileLinkProps,
+} from './components/QuickAccessTile'
 export { ConfigTile, type ConfigTileProps, type ConfigTileSummaryItem } from './components/ConfigTile'
 export { ChatMessage, ToolBlock, ThinkingBlock, type ChatMessageProps, type ToolBlockProps, type ToolBlockData, type ThinkingBlockProps, type ThinkingBlockData } from './components/ChatMessage'
 export { ChatDivider, type ChatDividerProps } from './components/ChatDivider'
