@@ -55,7 +55,9 @@
   white-space: nowrap;
 }
 
-.tab-bar__tab--active .chip--id-tag {
+/* The dark-canvas selector outranks Chip's body.dark-canvas .chip--id-tag. */
+.tab-bar__tab--active .chip--id-tag,
+body.dark-canvas .tab-bar__tab--active .chip--id-tag {
   color: rgb(var(--accent-primary));
   background-color: rgb(var(--accent-primary) / 0.1);
   border-color: rgb(var(--accent-primary) / 0.25);
