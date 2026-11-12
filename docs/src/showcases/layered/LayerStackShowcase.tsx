@@ -280,6 +280,17 @@ export function LayerStackShowcase() {
         </ul>
       </ShowcaseSection>
 
+      <ShowcaseSection
+        label="Drawing links"
+        description="Changed in 0.12: links off the selection's reach are drawn in batches, one SVG path per style, so a camera frame on the full DR spec rewrites a few dozen paths instead of about 900."
+      >
+        <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: fg2, lineHeight: 1.8 }}>
+          <li>A batch holds every link that shares a colour, opacity, dash and stroke width (rounded to 0.1, so near and far links fall into different batches). Each is a path with class layer-stack__link-batch and the number of links it draws in data-link-count. Arrowheads off the reach batch the same way (layer-stack__arrow-batch).</li>
+          <li>The selection's reach keeps one path per link (layer-stack__link, with data-link-id) and one arrowhead each (layer-stack__arrow), drawn above the batches in depth order.</li>
+          <li>Links in one batch do not darken each other where they cross. Batches are stacked by emphasis, then by depth, so far batches draw under near ones.</li>
+        </ul>
+      </ShowcaseSection>
+
       <ShowcaseSection label="Interaction">
         <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: fg2, lineHeight: 1.8 }}>
           <li>Click a node to select it; click it again, or click the background, to clear. Clicking a plane title focuses its layer; clicking it again exits.</li>

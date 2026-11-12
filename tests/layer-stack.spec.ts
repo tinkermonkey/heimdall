@@ -48,6 +48,25 @@ async function planeSpacing(page: Page): Promise<number> {
   return (ys[1] - ys[0]) / (ys[2] - ys[1])
 }
 
+/**
+ * Links drawn: the batches (one path per style, `data-link-count` links each) and the per-link
+ * paths of the selection's reach. Arrowheads likewise.
+ */
+async function drawnLinks(page: Page) {
+  return page.evaluate(() => {
+    const sum = (sel: string) => [...document.querySelectorAll(sel)].reduce((s, el) => s + Number(el.getAttribute('data-link-count')), 0)
+    const count = (sel: string) => document.querySelectorAll(sel).length
+    return {
+      batches: count('.layer-stack__link-batch'),
+      batched: sum('.layer-stack__link-batch'),
+      perLink: count('.layer-stack__link'),
+      arrowBatches: count('.layer-stack__arrow-batch'),
+      batchedArrows: sum('.layer-stack__arrow-batch'),
+      perArrow: count('.layer-stack__arrow'),
+    }
+  })
+}
+
 /** Every node disc's center, by node id. */
 async function nodeCenters(page: Page): Promise<Record<string, [number, number]>> {
   return page.evaluate(() =>
@@ -78,9 +97,39 @@ test.describe('LayerStack', () => {
     await expect(page.locator('.layer-stack__node')).toHaveCount(36)
     await expect(page.locator('button.layer-stack__label')).toHaveCount(36)
     await expect(page.locator('button.layer-stack__title')).toHaveCount(3)
-    await expect(page.locator('.layer-stack__link')).toHaveCount(162)
+    // With no selection every link is batched: one path per style.
+    const links = await drawnLinks(page)
+    expect(links.batched).toBe(162)
+    expect(links.perLink).toBe(0)
+    expect(links.batches).toBeLessThan(30)
     await expect(page.locator('.layer-stack__drill')).toHaveCount(0)
     expect(errors).toEqual([])
+  })
+
+  test('the selection\'s reach keeps a path and arrowhead per link; the rest stay batched', async ({ page }) => {
+    await open(page, `&select=${ORIGIN}`)
+    const links = await drawnLinks(page)
+    expect(links.perLink).toBeGreaterThan(0)
+    expect(links.perLink + links.batched).toBe(162)
+    expect(links.perArrow).toBe(links.perLink)
+    expect(links.batchedArrows).toBe(0)
+    const ids = await page.locator('.layer-stack__link').evaluateAll((els) => els.map((e) => e.getAttribute('data-link-id')))
+    expect(ids.every((id) => !!id)).toBe(true)
+    // Every pill belongs to a reach link.
+    const pills = await page.locator('.layer-stack__pill').evaluateAll((els) => els.map((e) => e.getAttribute('data-link-id')))
+    expect(pills.length).toBeGreaterThan(0)
+    for (const id of pills) expect(ids).toContain(id)
+  })
+
+  test('with every predicate labelled, arrowheads off the reach are batched too', async ({ page }) => {
+    await open(page, '&labels=all')
+    const links = await drawnLinks(page)
+    expect(links.perArrow).toBe(0)
+    expect(links.arrowBatches).toBeGreaterThan(0)
+    expect(links.arrowBatches).toBeLessThan(20)
+    // Arrowheads too short for their link are left out, as before.
+    expect(links.batchedArrows).toBeGreaterThan(150)
+    expect(links.batchedArrows).toBeLessThanOrEqual(162)
   })
 
   test('clicking a node selects it, adds the drill-through column, and clicking again clears', async ({ page }) => {
@@ -381,9 +430,53 @@ test.describe('LayerStack', () => {
       await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
       await expect(page.locator('.layer-stack__node')).toHaveCount(193)
       await expect(page.locator('button.layer-stack__label')).toHaveCount(193)
-      await expect(page.locator('.layer-stack__link')).toHaveCount(897)
+      const links = await drawnLinks(page)
+      expect(links.batched).toBe(897)
+      expect(links.batches).toBeLessThan(60)
       expect(errors).toEqual([])
     })
+
+    /**
+     * The link paths a turntable frame rewrites: every batch at most, plus the reach's own paths.
+     * Counted with a MutationObserver on `d`, so it doesn't depend on machine speed.
+     */
+    for (const query of ['', `&select=${ORIGIN}`]) {
+      test(`a turntable frame rewrites at most one path per batch plus the reach${query ? ', with a selection' : ''}`, async ({ page }) => {
+        await open(page, `&data=full${query}`)
+        const r = await page.evaluate(async () => {
+          const frame = () => new Promise((res) => requestAnimationFrame(res))
+          const svg = document.querySelector('[data-testid="layer-stack"] .layer-stack__svg')!
+          let records: MutationRecord[] = []
+          const obs = new MutationObserver((rs) => records.push(...rs))
+          obs.observe(svg, { subtree: true, attributes: true, attributeFilter: ['d'] })
+          ;[...document.querySelectorAll<HTMLElement>('button')].find((b) => b.textContent === 'Turntable')!.click()
+          for (let i = 0; i < 3; i++) await frame()
+          records = []
+          let worst = 0
+          let worstBound = 0
+          let painted = 0
+          for (const t0 = performance.now(); performance.now() - t0 < 1000; ) {
+            await frame()
+            const batch = [...records, ...obs.takeRecords()]
+            records = []
+            const touched = new Set(batch.map((m) => m.target as Element).filter((el) => el.matches('.layer-stack__link, .layer-stack__link-batch')))
+            if (touched.size > 0) painted++
+            // The reach: one arrowhead per reach link (predicate labels on reach links only, the default).
+            const bound = document.querySelectorAll('.layer-stack__link-batch').length + document.querySelectorAll('.layer-stack__arrow').length
+            if (touched.size > worst) [worst, worstBound] = [touched.size, bound]
+          }
+          obs.disconnect()
+          const count = (sel: string) => document.querySelectorAll(sel).length
+          return { worst, worstBound, painted, batches: count('.layer-stack__link-batch'), perLink: count('.layer-stack__link'), reach: count('.layer-stack__arrow') }
+        })
+        expect(r.painted).toBeGreaterThan(5)
+        expect(r.worst).toBeLessThanOrEqual(r.worstBound)
+        expect(r.batches).toBeLessThan(60)
+        expect(r.perLink).toBe(r.reach)
+        if (!query) expect(r.reach).toBe(0)
+        else expect(r.reach).toBeGreaterThan(0)
+      })
+    }
 
     /**
      * Frames paint into the DOM without React: over a stretch of motion the scene changes every
