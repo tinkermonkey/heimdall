@@ -31,7 +31,8 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   /** The day highlighted as today. Defaults to the clock's local day at render. A fixed value is a
    *  date: a `YYYY-MM-DD` string, or an instant read as the UTC day it falls on. Pass one when the
    *  markup is rendered on a server or at build time and hydrated, so both renders highlight the
-   *  same day whatever their timezones. */
+   *  same day whatever their timezones. Prefer the string: `new Date()` just after midnight east of
+   *  UTC is still the previous day in UTC. */
   today?: Date | string | number
 }
 

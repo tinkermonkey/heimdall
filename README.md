@@ -152,8 +152,8 @@ Both fonts are licensed under the SIL Open Font License 1.1. Each font directory
 ### Build Output
 
 The library builds to ES modules with TypeScript types, one module per source file, so an app's
-bundler keeps only the components it imports (a page that renders one `Button` adds about 1.4 KB
-of heimdall JS). No JS module imports CSS, so Node, SSR builds (Astro, Next, `vite build --ssr`) and
+bundler keeps only the components it imports (`import { Button }` bundles to under 0.4 KB of
+minified heimdall code). No JS module imports CSS, so Node, SSR builds (Astro, Next, `vite build --ssr`) and
 test runners such as Vitest load the package without any CSS handling.
 
 ```
@@ -192,7 +192,10 @@ import '@tinkermonkey/heimdall-ui/css/Sidebar'
   repeat each other's rules and load in any order after `css/base`.
 - Components with no CSS of their own (`Icon`, the charts) have no sheet.
 - For a `Button`-only page, `css/base` + `css/Button` is about 12 KB (3.3 KB gzip), against 213 KB
-  (31 KB gzip) for `/css`. Use one approach per app: loading both repeats every rule.
+  (about 30.5 KB gzip) for `/css`. Use one approach per app: loading both repeats every rule.
+- `npm run check:sheets` (after `npm run build`, with the dev server running) loads every test
+  page with base + all component sheets in several orders and fails if any element's computed
+  style differs from `/css`.
 
 ### Testing
 

@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.13.0]
 
 Static and server-rendered sites. The package is one module per source file, so an app's bundler
-keeps only the components it imports: in a Vite production build, `import { Button }` adds 1.4 KB
-of library JS where 0.12 added 694 KB. The JS still imports no CSS, so Node, SSR builds (Astro,
-Next, `vite build --ssr`) and Vitest load the package with no configuration, as in 0.12. The full
-stylesheet stays the default; a base sheet plus per-component sheets are an opt-in alternative
-(12 KB of CSS for a page that uses only `Button`, against 213 KB). `Sidebar`, `NavItem`,
+keeps only the components it imports: bundling `import { Button }` with React external now
+yields 365 B of minified heimdall code, where 0.12 yielded 669 KB. The JS still imports no CSS, so
+Node, SSR builds (Astro, Next, `vite build --ssr`) and Vitest load the package with no
+configuration, as in 0.12. The full stylesheet stays the default; a base sheet plus per-component
+sheets are an opt-in alternative (12 KB of CSS for a page that uses only `Button`, against
+213 KB). `Sidebar`, `NavItem`,
 `QuickAccessTile` and `QuickAccessGrid` items take `href` and render real links. `useMediaQuery`,
 `ShellLayout`, `Topbar` and `Statusbar` hydrate server HTML without mismatches, and the timelines
 and calendars take a fixed `now` / `today` that prints the same text on a server and in any
@@ -42,16 +43,23 @@ browser, whatever their timezones.
   link variants. They are now `:where(body.dark-canvas) a` and `:where(body.dark-canvas) a:hover`,
   the same specificity as the plain `a` / `a:hover` rules. **Migration:** an app whose own link
   class should still turn amber on dark canvas sets that colour itself, e.g.
-  `body.dark-canvas .my-link { color: rgb(var(--accent-primary)); }`.
+  `body.dark-canvas .my-link { color: rgb(var(--accent-primary)); }`. The dark-canvas rule is now
+  only as specific as `a`, so an app reset that loads after heimdall's CSS also beats it: with
+  Tailwind's preflight (`a { color: inherit }`) after `/css`, plain links on dark canvas lose
+  their amber at rest. Restore it in the app's own CSS, after the reset:
+  `body.dark-canvas a { color: rgb(var(--accent-primary)); }`.
 
 ### Changed
 
 - **One module per source file; JS imports no CSS.** `dist/` mirrors `src/` (`dist/index.js`
   re-exports `dist/components/Button.js`, …) and `"sideEffects": ["**/*.css"]` stays, so a
   consumer's bundler drops every module and dependency (d3, react-markdown) an app doesn't
-  import. Measured in a Vite 6 production build from the packed tarball, React 18 in both: an app
-  that renders one `Button` ships 837 KB of JS with 0.12 and 144 KB with 0.13 (142.6 KB of that is
-  React), so heimdall's share went from 694,486 B to 1,427 B (711 B gzip). No JS module imports a
+  import. Measured from the packed tarballs: bundling `export { Button } from
+  '@tinkermonkey/heimdall-ui'` with esbuild (minified, React external) gives 365 B (281 B gzip)
+  with 0.13 and 668,505 B with 0.12, which bundled d3 and react-markdown into its one module. A
+  Vite 6 production app that renders one `Button` ships 144,022 B of JS with 0.13 and 837,081 B
+  with 0.12; a bare React app is 142,595 B, so the 1,427 B difference is heimdall plus the app's
+  entry and Vite's modulepreload polyfill. No JS module imports a
   stylesheet, which is what lets plain Node import the package: checked from the tarball with
   `node -e "import('@tinkermonkey/heimdall-ui')"`, a `vite build --ssr` bundle run in Node, and a
   Vitest test, each with no config file. **Migration:** none.
@@ -70,8 +78,9 @@ browser, whatever their timezones.
   module: `ToolBlock` is in `ChatMessage`) is complete for its component: it includes the CSS of
   every component and helper the component renders (`ShellLayout`'s includes `Sidebar`,
   `Topbar`, …), so sheets repeat shared rules and can load in any order. Components with no CSS
-  (`Icon`, the charts) have no sheet. For a `Button`-only page, base + `Button` is 12,125 B (3.3 KB
-  gzip) against 213,514 B (30.8 KB gzip) for `/css`. Use one approach per app, not both.
+  (`Icon`, the charts) have no sheet. For a `Button`-only page, `dist/css/base.css` +
+  `dist/css/Button.css` is 12,126 B (3.3 KB gzip) against 213,409 B (about 30.5 KB at `gzip -9`)
+  for `dist/style.css`. Use one approach per app, not both.
 
 ### Added
 
@@ -104,13 +113,13 @@ browser, whatever their timezones.
   time relative labels (`5m ago`) are measured from; with it the text depends only on `now` and
   the timestamps, and a timestamp older than a week prints as an `en-US` date in UTC
   (`11/3/2026`) rather than in the runtime's locale and timezone. `formatTimestamp` replaces the
-  label (e.g. another date format, or a `<time>` element).
+  label (e.g. another date format, or a `<time>` element). These props are the public way to fix
+  the reference time; the date helpers behind them aren't exported.
 - **`today` on `Calendar` and `MiniCalendar`**: the day highlighted as today. A fixed `today` is a
   date: a `YYYY-MM-DD` string, or an instant read as the UTC day it falls on, so a UTC build
-  server and a browser in Los Angeles highlight the same cell.
-- `formatTimestamp(timestamp, now?)` and `isToday(date, today?)` in `utils/dateUtils` take the
-  reference time as an optional argument, with the meanings above. Without it they behave as in
-  0.12 (clock, runtime locale and timezone).
+  server and a browser in Los Angeles highlight the same cell. Prefer the string: `new Date()`
+  just after midnight east of UTC is still the previous day in UTC. Without `today` the calendars
+  use the clock's local day, as in 0.12.
 
 ### Fixed
 
@@ -128,11 +137,18 @@ browser, whatever their timezones.
 - Rules that won only by coming later in the full sheet now carry the specificity to win in any
   sheet order, with the same result in `/css`: `.filter-bar .filter-bar__chip`,
   `.activity-timeline__dot-container .activity-timeline__dot`, `.hash-set-diff .hash-set-diff__pill`,
-  `.side-by-side-diff .side-by-side-diff__pill`, `.dropdown-panel.row-menu__dropdown`, and the
-  `ReachInspector` eyebrow colours. `FilterDropdown`'s `.filter-dropdown__panel { min-width: 220px }`,
+  `.side-by-side-diff .side-by-side-diff__pill`, `.dropdown-panel.row-menu__dropdown`, the
+  `ReachInspector` eyebrow colours, and `LineageRail`'s light-canvas node rules
+  (`.lineage-rail .lineage-rail__node`, `--head`, `--interactive`), which beat `Chip`'s only by
+  loading later. `FilterDropdown`'s `.filter-dropdown__panel { min-width: 220px }`,
   which `.dropdown-panel` always overrode in 0.12's sheet, is removed. The comment-only chart
   stylesheets (`BarChart`, `BarH`, `BarV`, `Donut`, `Heatmap`, `LineChart`, `Sparkline`,
   `StackedBar`, `StatusTimeline`) are deleted.
+- `npm run check:sheets` (`scripts/check-sheet-order.mjs`, not in CI) loads every dev-app test page,
+  swaps the library CSS for `dist/style.css`, then for base + every component sheet in
+  alphabetical, reversed and two shuffled orders, and fails if any element's computed style
+  differs. `--dark` repeats each page on dark canvas. Run it after `npm run build` with the dev
+  server up.
 - `check:package` fails if a published JS module imports a stylesheet, if plain Node can't import
   `dist/index.js`, if a published stylesheet isn't reachable through an export or a
   `css/<Name>` export doesn't resolve, or if a component module renders a heimdall class its sheet

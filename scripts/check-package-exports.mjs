@@ -219,6 +219,10 @@ for (const sheet of sheets) {
 // names (a BEM-style string literal the full sheet defines) is in its sheet or in base.css. A
 // module that renders another module's classes without importing it (GraphEdgeShape uses
 // GraphEdge.css) needs an EXTRA_SHEETS entry in vite.config.mjs.
+// What it can't see: classes built at runtime (`chip--${tone}`, a prefix joined with a variable),
+// one-word block names (`btn`, `chip`: plain words such as `table` and `panel` also appear in
+// labels and roles), modules outside dist/components/ (hooks, utils), and whether the sheets
+// cascade the same in any load order (scripts/check-sheet-order.mjs covers that).
 const classesIn = (css) => new Set([...css.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((m) => m[1]))
 const fullCssFile = typeof cssTarget === 'string' ? cssTarget.replace(/^\.\//, '') : null
 if (fullCssFile && files.has(fullCssFile) && files.has(BASE_SHEET)) {
@@ -228,8 +232,9 @@ if (fullCssFile && files.has(fullCssFile) && files.has(BASE_SHEET)) {
   for (const sheet of sheets) for (const c of classesIn(readFileSync(path.join(root, sheet), 'utf8'))) covered.add(c)
   const uncovered = [...fullClasses].filter((c) => !covered.has(c))
   if (uncovered.length > 0) problems.push(`${SHEETS_DIR}: no sheet defines ${uncovered.slice(0, 8).join(', ')} (in ${fullCssFile})`)
-  // Hyphenated tokens only: plain words (`table`, `panel`) show up in labels and roles as well.
-  const CLASS_TOKEN = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)+(?:__[a-z0-9-]+)?(?:--[a-z0-9-]+)?$|^[a-z][a-z0-9-]*__[a-z0-9-]+(?:--[a-z0-9-]+)?$/
+  // Hyphenated blocks (`stat-tile`), elements (`chip__dot`) and modifiers (`btn--primary`).
+  const CLASS_TOKEN =
+    /^[a-z][a-z0-9]*(?:-[a-z0-9]+)+(?:__[a-z0-9-]+)?(?:--[a-z0-9-]+)?$|^[a-z][a-z0-9-]*__[a-z0-9-]+(?:--[a-z0-9-]+)?$|^[a-z][a-z0-9]*--[a-z0-9-]+$/
   for (const rel of jsModules.filter((f) => f.startsWith('dist/components/'))) {
     const code = readFileSync(path.join(root, rel), 'utf8')
     const tokens = new Set(

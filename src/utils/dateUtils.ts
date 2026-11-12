@@ -65,7 +65,8 @@ const DATE_ONLY = /^(\d{4})-(\d{2})-(\d{2})$/
  * Without `today` it compares against the clock's local day, as before 0.13. A fixed `today` is a
  * date, not an instant: a `YYYY-MM-DD` string names the day, and any other value counts as the
  * UTC day it falls on. So a server in UTC and a browser in Los Angeles agree on the day, which
- * comparing local days would not.
+ * comparing local days would not. Prefer the string: `new Date()` just after midnight east of UTC
+ * (Tokyo at 08:00) is still the previous day in UTC.
  */
 export const isToday = (d: Date | string, today?: DateInput): boolean => {
   if (today === undefined) return isSameDay(d, new Date())

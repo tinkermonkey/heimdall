@@ -44,6 +44,7 @@
     "test:unit": "vitest",
     "check:skills": "node scripts/check-skill-coverage.mjs",
     "check:package": "node scripts/check-package-exports.mjs",
+    "check:sheets": "node scripts/check-sheet-order.mjs",
     "bench:router": "node scripts/bench-router.mjs --check",
     "dev": "vite",
     "lint": "eslint src/ docs/src/ scripts/ --ext .ts,.tsx",
