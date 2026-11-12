@@ -57,6 +57,7 @@ export function NavItemShowcase() {
           <PropRow name="count" type="number" description="Badge count rendered right-aligned" />
           <PropRow name="active" type="boolean" def="false" description="Active state — amber border + surface bg" />
           <PropRow name="depth" type="0 | 1" def="0" description="Nesting depth — 1 renders as an indented sub-item without an icon" />
+          <PropRow name="href" type="string" description="Renders an <a href> with the same classes instead of a <button>; the remaining props are anchor props" />
           <PropRow name="disabled" type="boolean" description="Disables the button; inherited from ButtonHTMLAttributes" />
           <PropRow name="onClick" type="() => void" description="Click handler" />
         </PropsTable>
@@ -126,7 +127,8 @@ export function SidebarShowcase() {
           <PropRow name="sections" type="SidebarSection[]" description="Array of section groups, each with a title and items array" />
           <PropRow name="activeItemId" type="string" description="ID of the currently active nav item" />
           <PropRow name="collapsed" type="boolean" def="false" description="Collapsed state — icon-only 64px width" />
-          <PropRow name="onSelectItem" type="(id: string) => void" description="Called when a non-parent nav item is clicked" />
+          <PropRow name="onSelectItem" type="(id: string) => void" description="Called when a non-parent nav item is clicked; for a link item (href), before the browser follows it" />
+          <PropRow name="sections[].items[].href" type="string" description="Renders a leaf item or child as an <a href> (same classes, aria-current on the active one). Ignored on a parent with children." />
           <PropRow name="onCollapse" type="(collapsed: boolean) => void" description="Called when the toggle button is clicked, receives next collapsed value" />
           <PropRow name="defaultExpandedIds" type="string[]" description="Parent item ids expanded on first render (uncontrolled)" />
           <PropRow name="expandedIds" type="string[]" description="Controlled expansion — reflect this set and report changes via onExpandedChange" />

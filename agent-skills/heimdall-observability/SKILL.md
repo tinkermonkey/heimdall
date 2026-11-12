@@ -495,6 +495,8 @@ import { VersionTimeline, type VersionEntry } from '@tinkermonkey/heimdall-ui'
 | `onSelect` | `(id: string) => void` | — | Entry clicked or arrow-key navigated |
 | `order` | `'newest-first' \| 'oldest-first'` | `'newest-first'` | `'oldest-first'` reverses `entries` |
 | `emptyState` | `string` | `'No versions available'` | Text when `entries` is empty |
+| `now` | `Date \| string \| number` | clock at render | Time the relative timestamps are measured from; pass a fixed value for server-rendered or static HTML so hydration prints the same text |
+| `formatTimestamp` | `(timestamp: Date \| string) => ReactNode` | — | Replaces the built-in relative timestamp, e.g. an absolute date or a `<time>` element |
 | `...divProps` | | | Remaining props spread onto the root `<div>` (native `onSelect` is omitted) |
 
 ### Data types
@@ -536,7 +538,7 @@ const [selectedId, setSelectedId] = useState('v3.2.1')
 - Without `onSelect`, entries are not clickable and the keyboard does nothing.
 - Keyboard (list focused): Up/Down select the previous/next entry in display order; with nothing selected, Down selects the first.
 - `transition` takes precedence over `stats`; only stats fields that are set are shown.
-- Timestamps are relative (`just now`, `5m ago`, `2h ago`, `3d ago`, then a locale date) and computed at render; they do not tick.
+- Timestamps are relative (`just now`, `5m ago`, `2h ago`, `3d ago`, then a locale date) and computed at render; they do not tick. For server-rendered or static HTML pass `now` or `formatTimestamp`, or the server and browser print different text and hydration reports a mismatch.
 
 ## LineageRail
 

@@ -4,6 +4,74 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0]
+
+Static and server-rendered sites. The package is one module per source file, each importing its
+own stylesheet, so an app's bundler keeps only the components (and the CSS, and the dependencies
+such as d3 and react-markdown) it imports: a page that uses `Panel` and `Chip` went from 665 KB of
+library JS and a 213 KB stylesheet to 1.3 KB and 15 KB. `Sidebar`, `NavItem`, `QuickAccessTile` and
+`QuickAccessGrid` items take `href` and render real links. `useMediaQuery`, `ShellLayout`, `Topbar`
+and `Statusbar` hydrate server HTML without mismatches, and the timelines and calendars take a fixed
+`now` / `today` so server and browser print the same text.
+
+### Changed
+
+- **One module per source file, with per-component CSS.** `dist/` mirrors `src/`
+  (`dist/index.js` re-exports `dist/components/Panel.js`, …) and each component module imports its
+  own stylesheet (`dist/components/Panel.css`). With `"sideEffects": ["**/*.css"]`, a consumer's
+  bundler drops every module, stylesheet and dependency an app doesn't import; 0.12's single
+  `dist/index.js` kept all 757 KB. `import '@tinkermonkey/heimdall-ui/css'` still works and still
+  loads every stylesheet (`dist/style.css`, same rules in the same order); it is now optional.
+  **Migration:** none for apps built with a bundler (Vite, webpack, Next, Astro, Rollup). Because
+  the JS imports `.css` files, code that imports the package in plain Node (a test runner without
+  CSS handling, a Node script) needs the runner's CSS handling turned on (e.g. Jest
+  `moduleNameMapper` for `\.css$`); Vitest handles it.
+- **`useMediaQuery` is hydration-safe.** It uses `useSyncExternalStore` with a server snapshot:
+  server rendering and hydration see `serverValue` (new optional second argument, default
+  `false`), then the client re-renders with the real match. 0.12 read `window.matchMedia` in its
+  initial state, so a server-rendered `ShellLayout`, `Topbar` or `Statusbar` (and `useTween`'s
+  reduced-motion check) rendered different markup on a phone than the server did and React
+  reported a hydration mismatch. A client-only render still gets the real value on its first
+  render.
+- **`ShellLayout`, `Topbar`, `Statusbar` leave `data-mobile` off until the client knows the
+  viewport.** Server HTML and the hydration render have no `data-mobile` attribute, so their
+  existing CSS `@media (max-width: 768px)` rules lay out the page (sidebar column and search box
+  hidden on a phone) until hydration swaps in the drawer layout. **Migration:** CSS that selects
+  `[data-mobile="false"]` to mean "desktop" no longer matches before hydration.
+
+### Added
+
+- **`href` on `SidebarItem` and its children.** A leaf item or child with `href` renders
+  `<a href>` with the same classes and `aria-current="page"` when active; clicking it calls
+  `onSelectItem`, then the browser follows the link. A parent with `children` stays the button
+  that expands them.
+- **`href` on `NavItem` and `QuickAccessTile`** (and on `QuickAccessGridItem`). With `href` they
+  render `<a>`; the props are a union (`NavItemButtonProps | NavItemLinkProps`,
+  `QuickAccessTileButtonProps | QuickAccessTileLinkProps`, all exported) and the ref is
+  `HTMLButtonElement | HTMLAnchorElement`. The link variants reset `text-decoration` so a site's
+  `a` / `a:hover` rules don't underline them, and match the button variant's box.
+- **`ShellLayout` closes the mobile drawer on any link click** inside it (a sidebar item with
+  `href`, or a link in the sidebar `footer`).
+- **`now` and `formatTimestamp` on `ActivityTimeline` and `VersionTimeline`.** `now` fixes the
+  time relative labels (`5m ago`) are measured from; `formatTimestamp` replaces the label (e.g. an
+  absolute date or a `<time>` element). Either one keeps server and browser text identical.
+- **`today` on `Calendar` and `MiniCalendar`**: the day highlighted as today.
+- `formatTimestamp(timestamp, now?)` and `isToday(date, today?)` in `utils/dateUtils` take the
+  reference time as an optional argument.
+
+### Internal
+
+- `vite.config.mjs`: `preserveModules` (root `src`), `cssCodeSplit`, and a small plugin that puts
+  each module's CSS import back where its source had it and writes the combined `dist/style.css`
+  in ESM evaluation order.
+- `check:package` checks every published JS module (not just `dist/index.js`) for bundled
+  dependencies and undeclared imports, that relative imports resolve to published files, and that
+  each component module imports its own stylesheet.
+- `tests/static-links.spec.ts` (page `?example=static-links`): link variants match the button
+  variants' box and colour under a site's link styles; server HTML hydrates without mismatches at
+  desktop and phone widths; the phone layout is right before hydration; drawer links close the
+  drawer. `src/components/__tests__/serverRender.test.ts` renders the same components in Node.
+
 ## [0.12.0]
 
 Accessibility and frame cost for the layered graphs, plus package hygiene. `AdjacencyMatrix`

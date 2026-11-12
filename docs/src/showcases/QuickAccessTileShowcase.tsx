@@ -74,6 +74,7 @@ export function QuickAccessTileShowcase() {
           <PropRow name="icon" type="IconName" description="Icon name from the Icon system" required />
           <PropRow name="title" type="string" description="Primary label for the action" required />
           <PropRow name="description" type="string" def="—" description="Optional secondary description text" />
+          <PropRow name="href" type="string" def="—" description="Renders an <a href> with the same classes instead of a <button>" />
           <PropRow name="disabled" type="boolean" def="false" description="Disables interaction and reduces opacity" />
           <PropRow name="onClick" type="React.MouseEventHandler<HTMLButtonElement>" description="Handler called when tile is clicked (native button onClick)" />
         </PropsTable>
