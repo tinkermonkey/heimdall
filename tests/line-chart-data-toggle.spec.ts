@@ -7,7 +7,7 @@ test.describe('integration: LineChart data toggle', () => {
     const errors: string[] = []
     page.on('pageerror', (err) => errors.push(err.message))
 
-    await page.goto('http://localhost:5173/?example=line-chart-data-toggle')
+    await page.goto('/?example=line-chart-data-toggle')
     const toggle = page.getByTestId('toggle-data')
     const host = page.getByTestId('chart-host')
 

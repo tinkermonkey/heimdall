@@ -9,7 +9,7 @@ import {
 
 test.describe('integration: Radial Tree Layout', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=radial-tree-test')
+    await page.goto('/?example=radial-tree-test')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts

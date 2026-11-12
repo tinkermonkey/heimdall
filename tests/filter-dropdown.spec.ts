@@ -3,7 +3,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanv
 
 test.describe('integration: FilterDropdown Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=filter-dropdown')
+    await page.goto('/?example=filter-dropdown')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts

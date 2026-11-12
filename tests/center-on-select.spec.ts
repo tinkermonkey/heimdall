@@ -23,7 +23,7 @@ async function viewportZoom(page: import('@playwright/test').Page): Promise<numb
 
 test.describe('integration: GraphCanvas centerOnSelect', () => {
   test('is off by default — selecting an off-screen node does not pan the viewport', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=center-on-select')
+    await page.goto('/?example=center-on-select')
     await page.waitForLoadState('networkidle')
 
     const before = await nodeCenter(page, 'far')
@@ -46,7 +46,7 @@ test.describe('integration: GraphCanvas centerOnSelect', () => {
     // with viewport.zoom in the centerOnSelect effect's own closure still the pre-fit
     // value. Reproduces a real caller shape too: a nav-tree deep link that restores an
     // already-selected node into a fitView'd galaxy/clustered layout.
-    await page.goto('http://localhost:5173/?example=center-on-select&centerOnSelect=1&fitView=1&initialSelected=far')
+    await page.goto('/?example=center-on-select&centerOnSelect=1&fitView=1&initialSelected=far')
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(150)
 
@@ -58,7 +58,7 @@ test.describe('integration: GraphCanvas centerOnSelect', () => {
 
   test.describe('with centerOnSelect enabled', () => {
     test.beforeEach(async ({ page }) => {
-      await page.goto('http://localhost:5173/?example=center-on-select')
+      await page.goto('/?example=center-on-select')
       await page.waitForLoadState('networkidle')
       await page.getByTestId('toggle-center-on-select').click()
     })

@@ -9,7 +9,7 @@ test.describe('integration: Orthogonal Layout', () => {
     const errors: string[] = []
     page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()) })
     page.on('pageerror', err => errors.push(String(err)))
-    await page.goto('http://localhost:5173/?example=orthogonal-layout')
+    await page.goto('/?example=orthogonal-layout')
     await page.waitForLoadState('networkidle')
 
     const caption = page.getByTestId('orthogonal-layout-caption')
@@ -50,7 +50,7 @@ test.describe('integration: Orthogonal Layout', () => {
 
   test('is deterministic across reloads', async ({ page }) => {
     const read = async () => {
-      await page.goto('http://localhost:5173/?example=orthogonal-layout')
+      await page.goto('/?example=orthogonal-layout')
       await page.waitForLoadState('networkidle')
       const nodes = page.locator('[data-testid="orthogonal-canvas"] [data-testid^="graph-node-"]')
       const count = await nodes.count()

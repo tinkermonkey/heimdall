@@ -5,7 +5,7 @@ import { test, expect, type Page } from '@playwright/test'
 // switches, the remembered 3D camera, the `controls` prop, camera controls, narrow stacking and the
 // look of every view. Turntable off, fixed camera.
 
-const BASE = 'http://localhost:5173/?example=layered-graph-explorer'
+const BASE = '/?example=layered-graph-explorer'
 const ORIGIN = 'application.applicationcomponent'
 
 test.use({ viewport: { width: 1440, height: 1000 } })

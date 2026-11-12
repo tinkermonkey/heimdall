@@ -12,7 +12,7 @@ async function openToastWithClockPaused(page: Page) {
 test.describe('integration: Overlay Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to overlay components test page
-    await page.goto('http://localhost:5173/?example=overlays')
+    await page.goto('/?example=overlays')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts

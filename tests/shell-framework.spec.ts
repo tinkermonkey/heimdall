@@ -5,7 +5,7 @@ test.describe('integration: Shell Framework Components', () => {
   test.describe('Topbar and TabBar Components - Visual Regression', () => {
     test.beforeEach(async ({ page }) => {
       // Navigate to the shell-framework test page which renders actual React components
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.goto('/?example=shell-framework')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN

@@ -8,7 +8,7 @@ import {
 
 test.describe("integration: KanbanBoard Component", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:5173/?example=kanban-board");
+    await page.goto("/?example=kanban-board");
     await page.waitForLoadState("networkidle");
     await loadSelfHostedFonts(page);
     await assertFontsLoaded(page);

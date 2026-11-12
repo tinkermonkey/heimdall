@@ -3,7 +3,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './util
 
 test.describe('integration: Forms Components', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=forms')
+    await page.goto('/?example=forms')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)

@@ -4,7 +4,7 @@ import { test, expect, type Page } from '@playwright/test'
 // edge path midpoint, which is where the edge label is drawn, so the card covered the label it
 // explains; it never picked another side, and its 200ms show delay was hard-coded. Geometry
 // assertions only (no screenshot baselines), so the spec is platform-independent.
-const URL = 'http://localhost:5173/?example=graph-tooltip-placement'
+const URL = '/?example=graph-tooltip-placement'
 const CANVAS = '[data-testid="tooltip-placement-canvas"]'
 const DELAY_MS = 600 // GraphTooltipPlacementTestPage's tooltipDelay
 const GAP = 6 // GraphCanvas's tooltip offset
@@ -149,7 +149,7 @@ test.describe('GraphCanvas hover tooltip placement (#323)', () => {
 test.describe('GraphCanvas hover tooltip placement, layer-lanes (#323)', () => {
   const LANES = '[data-testid="layer-lanes"]'
   const open = async (page: Page, labels: 'all' | 'off') => {
-    await page.goto(`http://localhost:5173/?example=layer-lanes&labels=${labels}&tooltip=1`)
+    await page.goto(`/?example=layer-lanes&labels=${labels}&tooltip=1`)
     await expect(page.locator(LANES)).toHaveAttribute('data-layout-state', 'idle')
     await expect(page.locator(`${LANES} g.graph-lane-link`).first()).toBeAttached()
     await page.evaluate(() => document.fonts.ready)

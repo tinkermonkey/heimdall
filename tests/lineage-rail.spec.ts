@@ -3,7 +3,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 test.describe('integration: LineageRail Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=lineage-rail')
+    await page.goto('/?example=lineage-rail')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)
