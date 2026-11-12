@@ -4,6 +4,85 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0]
+
+Accessibility and frame cost for the layered graphs, plus package hygiene. `AdjacencyMatrix`
+exposes a grid to screen readers, so they can navigate it by cell. `LayerStack` batches links into
+one SVG path per style, cutting the elements Chrome restyles per frame on the full DR spec by about
+two thirds. LineageRail and TabBar chips keep their colours on dark canvas, the package ships the
+fonts' OFL licences, docs props tables wrap instead of overflowing the page, and visual baselines
+agree on macOS and linux.
+
+### Breaking
+
+- **`AdjacencyMatrix` cells are grid cells, not buttons** (tinkermonkey/heimdall#378,
+  tinkermonkey/heimdall#386). A visually hidden HTML `role="grid"` mirrors the drawn matrix and
+  holds cell focus. It carries the matrix's accessible name, `aria-rowcount` / `aria-colcount`
+  (nodes + 1), a header row of `columnheader`s, and one `row` per node with a `rowheader` and a
+  `gridcell` per drawn cell, each with its real `aria-rowindex` / `aria-colindex` (also in virtual
+  mode). Cells are named `Row A, column B, linked: A serves B` (`linked both ways: …` for a
+  symmetric cell, `N links: …` for several, `, selected` for `selectedLinkId`). The drawn
+  `<g class="adjacency-matrix__cell">` loses `role="button"` and `tabindex` and sits under
+  `aria-hidden`; its `<title>` tooltip stays. In non-virtual mode the body SVG stays
+  `role="group"` but is named `Rows` and holds only the row-header buttons; in virtual mode it is
+  `aria-hidden`. The Tab stop, arrow / Home / End / Enter / Space keys and callbacks are unchanged,
+  and the drawn cell shows the amber focus ring (`.adjacency-matrix__cell-focus--on`). Row-header
+  buttons and the `aggregate="layer"` heat map (still `role="button"`) are unchanged.
+  **Migration:** tests or scripts that find cells with `getByRole('button')` or
+  `.adjacency-matrix__cell[role="button"]` should use `getByRole('gridcell')` inside
+  `getByRole('grid')`; focus checks should look at the grid cell, not the drawn `<g>`.
+- **`LayerStack` per-link DOM only for the selection's reach** (tinkermonkey/heimdall#379,
+  tinkermonkey/heimdall#388). `.layer-stack__link[data-link-id]` and `.layer-stack__arrow` used to
+  exist for every drawn link; they now exist only for links in the selection's reach (none
+  without a selection). Every other link is part of a `.layer-stack__link-batch` path carrying
+  `data-link-count`, and other arrowheads are `.layer-stack__arrow-batch`. Pills keep
+  `data-link-id`. **Migration:** count links by summing `data-link-count` over
+  `.layer-stack__link-batch` plus the per-link paths; don't look up a non-reach link's path by id.
+
+### Changed
+
+- **`LayerStack` draws links as batched SVG paths** (tinkermonkey/heimdall#379,
+  tinkermonkey/heimdall#388). Links outside the selection's reach share one `<path>` per style
+  bucket (z, colour, opacity, dash, width rounded to 0.1), painted imperatively; a frame writes
+  only each bucket's `d`. On the full DR spec (897 links, 34 buckets) elements restyled per frame
+  drop from about 1,300 to 450, and style recalc per frame drops by roughly a third at 1× CPU and
+  by half or more at 4× throttle. Visible effects, accepted as part of the change: links in one
+  bucket no longer darken each other where they cross, overlapping links of different styles
+  are ordered by their bucket's mean depth, and widths are rounded to 0.1. On the full spec the
+  dense middle is slightly lighter.
+
+### Fixed
+
+- **LineageRail and TabBar keep their chip colours on dark canvas** (tinkermonkey/heimdall#390).
+  Chip's dark-canvas `.chip--neutral` and `.chip--id-tag` rules outranked the components' own
+  single-class rules, so every LineageRail node turned into a grey neutral chip (the head lost
+  its amber) and the active tab's count chip went grey. Each component rule now carries a
+  dark-canvas selector that outranks Chip's; Chip is unchanged.
+- **Font licences ship with the fonts** (tinkermonkey/heimdall#383, tinkermonkey/heimdall#385).
+  `dist/fonts/inter/OFL.txt` and `dist/fonts/jetbrains-mono/OFL.txt` carry the SIL Open Font
+  License 1.1 with each font's copyright line, as the licence requires for redistributed font
+  files; `check:package` fails if either is missing.
+
+### Docs
+
+- **Props tables wrap long types** (tinkermonkey/heimdall#380, tinkermonkey/heimdall#387). Types
+  break only between tokens, `renderNode`'s full signature moves to a code block under the
+  GraphCanvas table, and no reference table overflows the page at 1400 or 1024 px.
+- **`RELEASE.md` describes Trusted Publishing as the only npm auth** (tinkermonkey/heimdall#381,
+  tinkermonkey/heimdall#384), with operational notes on registry lag, runs stuck "queued" and the
+  apt-mirror fallback. The unused `NPM_TOKEN` repo secret is deleted.
+- AdjacencyMatrix and LayerStack pages and the `heimdall-graph` skill describe the grid and the
+  batched links.
+
+### Internal
+
+- `npm run lint` covers `scripts/**/*.{js,mjs}` with Node globals (tinkermonkey/heimdall#383).
+- **Visual baselines agree across platforms** (tinkermonkey/heimdall#382,
+  tinkermonkey/heimdall#389). 55 drifted darwin baselines regenerated, 110 missing darwin
+  baselines added, and 17 stale linux baselines refreshed (they passed CI within the 1%
+  tolerance while predating their pages). Specs use relative `page.goto('/?example=…')` URLs, so
+  they run against any Playwright `baseURL`.
+
 ## [0.11.0]
 
 A smaller, ESM-only package and the second wave of layered graphs. The tarball drops `src/`, the
