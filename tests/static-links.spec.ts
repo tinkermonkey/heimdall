@@ -65,6 +65,29 @@ test.describe('static sites: link variants', () => {
     await expect(page).toHaveURL(/#topic-layout$/)
   })
 
+  test('modifier clicks on links leave the select callbacks alone; a callback can route client-side', async ({
+    page,
+    context,
+  }) => {
+    // cmd/ctrl-click opens a new tab: the browser's job, not a selection in this tab.
+    const popups: Page[] = []
+    context.on('page', (p) => popups.push(p))
+    const about = page.getByTestId('sidebar-links').locator('a.sidebar__item', { hasText: 'About' })
+    await about.click({ modifiers: ['ControlOrMeta'] })
+    await about.click({ modifiers: ['Shift'] })
+    const routedTile = page.getByTestId('quick-access-tile-routed')
+    await routedTile.click({ modifiers: ['ControlOrMeta'] })
+    await expect(page.getByTestId('selected-item')).toHaveText('')
+    await expect(page.getByTestId('routed')).toHaveText('')
+    await expect(page).not.toHaveURL(/#(about|routed)$/)
+    await Promise.all(popups.map((p) => p.close()))
+
+    // A plain click calls onAction with the event; its preventDefault() keeps the browser put.
+    await routedTile.click()
+    await expect(page.getByTestId('routed')).toHaveText('routed')
+    await expect(page).not.toHaveURL(/#routed$/)
+  })
+
   test('NavItem with href renders a link matching the button', async ({ page }) => {
     const link = page.getByTestId('nav-link')
     await expect(link).toHaveJSProperty('tagName', 'A')
@@ -174,8 +197,17 @@ test.describe('static sites: server render + hydration', () => {
     await expect(host.locator('.drawer[data-open="true"]')).toHaveCount(0)
 
     await host.getByRole('button', { name: 'Open sidebar menu' }).click()
-    await expect(host.locator('.drawer[data-open="true"]')).toBeVisible()
-    await host.locator('.drawer[data-open="true"]').getByTestId('hydrated-footer-link').click()
+    const openDrawer = host.locator('.drawer[data-open="true"]')
+    await expect(openDrawer).toBeVisible()
+    // Links that open elsewhere (target=_blank, a modifier click) leave the drawer open.
+    const popups: Page[] = []
+    page.context().on('page', (p) => popups.push(p))
+    await openDrawer.getByTestId('hydrated-footer-external').click()
+    await openDrawer.locator('a.sidebar__item', { hasText: 'Home' }).click({ modifiers: ['ControlOrMeta'] })
+    await expect(openDrawer).toBeVisible()
+    await expect(page.getByTestId('hydrated-selected')).toHaveText('about')
+    await Promise.all(popups.map((p) => p.close()))
+    await openDrawer.getByTestId('hydrated-footer-link').click()
     await expect(host.locator('.drawer[data-open="true"]')).toHaveCount(0)
     await expect(page).toHaveURL(/#footer-link$/)
   })

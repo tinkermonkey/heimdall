@@ -4,6 +4,7 @@ import { renderToString } from 'react-dom/server'
 import { Sidebar, type SidebarSection } from '../components/Sidebar'
 import { NavItem } from '../components/NavItem'
 import { QuickAccessTile } from '../components/QuickAccessTile'
+import { QuickAccessGrid } from '../components/QuickAccessGrid'
 import { ShellLayout } from '../components/ShellLayout'
 import { ActivityTimeline } from '../components/ActivityTimeline'
 import { MiniCalendar } from '../components/MiniCalendar'
@@ -58,9 +59,14 @@ function HydratedShell({ onSelect }: { onSelect: (id: string) => void }) {
         defaultExpandedIds: ['topics'],
         onSelectItem: onSelect,
         footer: (
-          <a href="#footer-link" data-testid="hydrated-footer-link">
-            Footer link
-          </a>
+          <>
+            <a href="#footer-link" data-testid="hydrated-footer-link">
+              Footer link
+            </a>{' '}
+            <a href="#footer-external" target="_blank" data-testid="hydrated-footer-external">
+              External
+            </a>
+          </>
         ),
       }}
       statusbar={{ left: <span>ready</span> }}
@@ -112,6 +118,7 @@ function HydrationHarness() {
 export default function StaticLinksTestPage() {
   const [selected, setSelected] = useState('')
   const [tileClicks, setTileClicks] = useState(0)
+  const [routed, setRouted] = useState('')
 
   return (
     <div style={{ padding: '22px 28px', minHeight: '100vh', backgroundColor: 'rgb(var(--canvas-bg))' }}>
@@ -161,6 +168,18 @@ export default function StaticLinksTestPage() {
         />
       </div>
       <div data-testid="tile-clicks">{tileClicks}</div>
+
+      {/* A client-side router: onAction takes the click and prevents the browser's navigation. */}
+      <QuickAccessGrid
+        columns={2}
+        style={{ width: '574px', marginTop: '16px' }}
+        tiles={[{ id: 'routed', icon: 'data', title: 'Routed', description: 'Client-side route', href: '#routed' }]}
+        onAction={(id, event) => {
+          event.preventDefault()
+          setRouted(id)
+        }}
+      />
+      <div data-testid="routed">{routed}</div>
 
       <div style={{ marginTop: '24px' }}>
         <HydrationHarness />

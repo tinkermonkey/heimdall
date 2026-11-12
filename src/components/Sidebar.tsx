@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Icon, type IconName } from './Icon'
 import { AppTitle, type AppTitleProps } from './AppTitle'
+import { isPlainLinkClick } from '../utils/linkClick'
 import './Sidebar.css'
 
 export interface SidebarItem {
@@ -8,15 +9,16 @@ export interface SidebarItem {
   label: string
   icon?: IconName
   count?: number
-  /** Render the item as a link (`<a href>`) instead of a button. Clicking it still calls
-   *  `onSelectItem`, then the browser follows the link. Ignored on an item with `children`,
+  /** Render the item as a link (`<a href>`) instead of a button. A plain click calls
+   *  `onSelectItem`, then the browser follows the link (unless the callback calls
+   *  `event.preventDefault()`, e.g. to route client-side); a modifier or middle click doesn't call it. Ignored on an item with `children`,
    *  which stays the button that expands and collapses them. */
   href?: string
   children?: Array<{
     id: string
     label: string
     count?: number
-    /** Render the child as a link (`<a href>`); clicking it still calls `onSelectItem`. */
+    /** Render the child as a link (`<a href>`); a plain click still calls `onSelectItem`. */
     href?: string
   }>
 }
@@ -31,7 +33,10 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   activeItemId?: string
   collapsed?: boolean
   onCollapse?: (collapsed: boolean) => void
-  onSelectItem?: (itemId: string) => void
+  /** Called with the item's id and the click. For a link item it runs on plain clicks only (not
+   *  cmd/ctrl/shift/alt or middle clicks, or ones already `preventDefault`ed); call
+   *  `event.preventDefault()` to stop the browser following the link, e.g. to route client-side. */
+  onSelectItem?: (itemId: string, event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void
   /** Ids of parent items expanded on first render (uncontrolled). */
   defaultExpandedIds?: string[]
   /** Controlled expansion. When provided, the component reflects this set and
@@ -158,7 +163,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                         <a
                           href={item.href}
                           className={itemClassName}
-                          onClick={() => onSelectItem?.(item.id)}
+                          onClick={(event) => {
+                            if (isPlainLinkClick(event)) onSelectItem?.(item.id, event)
+                          }}
                           title={collapsed ? item.label : undefined}
                           aria-current={isActive ? 'page' : undefined}
                         >
@@ -168,11 +175,11 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                         <button
                           type="button"
                           className={itemClassName}
-                          onClick={() => {
+                          onClick={(event) => {
                             if (hasChildren) {
                               toggleExpanded(item.id)
                             } else {
-                              onSelectItem?.(item.id)
+                              onSelectItem?.(item.id, event)
                             }
                           }}
                           title={collapsed ? item.label : undefined}
@@ -187,7 +194,9 @@ export const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                         const childActive = activeItemId === child.id
                         const childProps = {
                           className: `sidebar__item sidebar__item--child ${childActive ? 'sidebar__item--active' : ''}`,
-                          onClick: () => onSelectItem?.(child.id),
+                          onClick: (event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+                            if (child.href === undefined || isPlainLinkClick(event)) onSelectItem?.(child.id, event)
+                          },
                           'aria-current': childActive ? ('page' as const) : undefined,
                         }
                         const childContent = (

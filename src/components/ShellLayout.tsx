@@ -7,7 +7,11 @@ import { Topbar, TopbarProps } from './Topbar'
 import { Drawer } from './Drawer'
 import { Icon } from './Icon'
 import { useMediaQueryMatch } from '../hooks/useMediaQuery'
+import { isModifiedClick } from '../utils/linkClick'
 import './ShellLayout.css'
+
+// Link targets that still open in this tab (or its frame tree).
+const SAME_TAB_TARGETS = new Set(['_self', '_parent', '_top'])
 
 export interface ShellLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   titlebar?: TitlebarProps & { hide?: boolean }
@@ -67,19 +71,23 @@ export const ShellLayout = React.forwardRef<HTMLDivElement, ShellLayoutProps>(
     const { hide: _statusbarHide, ...statusbarProps } = statusbar ?? {} as StatusbarProps & { hide?: boolean }
     const renderStatusbar = statusbar && !statusbar.hide
 
-    const handleSidebarSelect = (itemId: string) => {
+    const handleSidebarSelect = (itemId: string, event: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
       try {
-        sidebarProps?.onSelectItem?.(itemId)
+        sidebarProps?.onSelectItem?.(itemId, event)
       } finally {
         setMobileMenuOpen(false)
       }
     }
 
-    // Any link in the mobile sidebar (an item with `href`, or one in the footer) navigates away, so
-    // close the drawer behind it.
+    // A link in the mobile sidebar (an item with `href`, or one in the footer) navigates this tab,
+    // so close the drawer behind it. Not for a modifier or middle click, or a link with a target
+    // like _blank: those open elsewhere and the drawer stays. A preventDefault()ed click still
+    // closes it, since a client-side router prevents the default to navigate itself.
     const handleSidebarClick = (event: React.MouseEvent<HTMLDivElement>) => {
       sidebarProps?.onClick?.(event)
-      if (event.target instanceof Element && event.target.closest('a[href]')) {
+      const link = event.target instanceof Element ? event.target.closest('a[href]') : null
+      const target = link?.getAttribute('target')
+      if (link && !isModifiedClick(event) && (!target || SAME_TAB_TARGETS.has(target))) {
         setMobileMenuOpen(false)
       }
     }
