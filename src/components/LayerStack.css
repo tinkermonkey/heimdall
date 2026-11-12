@@ -49,13 +49,16 @@
   pointer-events: none;
 }
 
-.layer-stack__link {
+/* links off the selection's reach are batched: one path per style (layer-stack__link-batch) */
+.layer-stack__link,
+.layer-stack__link-batch {
   fill: none;
   stroke-linecap: round;
   pointer-events: none;
 }
 
-.layer-stack__arrow {
+.layer-stack__arrow,
+.layer-stack__arrow-batch {
   pointer-events: none;
 }
 

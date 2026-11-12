@@ -7,6 +7,7 @@ import { lineCurve, placeEdgeLabels, edgeLabelPriority, type EdgeLabelCandidate,
 import { arrowHeadPoints, linkPredicateLabel } from '../utils/layered/labels'
 import { mixLayerPositions } from '../utils/layered/layout'
 import { reorder } from '../utils/layered/domOrder'
+import { batchLinks, pointsToPath, type BatchItem, type LinkBatch } from '../utils/layered/linkBatches'
 import { visiblePredicates } from '../utils/layered/filters'
 import {
   CAMERA_PRESETS,
@@ -182,6 +183,8 @@ const DRAG_THRESHOLD = 4
 const ORBIT_YAW_PER_PX = 0.0075
 const ORBIT_PITCH_PER_PX = 0.006
 const NODE_PLANE_INSET = 0.98
+/** Fill opacity of an arrowhead off the selection's reach (one on it is opaque). */
+const ARROW_OPACITY = 0.8
 
 interface ViewState {
   yaw: number
@@ -332,6 +335,10 @@ const GRID_LINES = planeGridLines(0, 1).map((_, i) => i)
 interface SceneElements {
   planeGroup: Element
   planes: Map<string, Element>
+  /** Batched links and arrowheads: one path per style, created and removed by `paint`. */
+  linkBatchGroup: Element
+  arrowBatchGroup: Element
+  /** The selection's reach: one path and arrowhead per link. */
   linkGroup: Element
   links: Map<string, Element>
   arrowGroup: Element
@@ -349,13 +356,17 @@ function collectElements(root: HTMLElement): SceneElements | null {
   const byAttr = <T extends Element>(selector: string, attr: string) =>
     new Map([...root.querySelectorAll<T>(selector)].map((el) => [el.getAttribute(attr) ?? '', el]))
   const planeGroup = group('layer-stack__planes')
+  const linkBatchGroup = group('layer-stack__link-batches')
   const linkGroup = group('layer-stack__links')
+  const arrowBatchGroup = group('layer-stack__arrow-batches')
   const arrowGroup = group('layer-stack__arrows')
   const nodeGroup = group('layer-stack__discs')
-  if (!planeGroup || !linkGroup || !arrowGroup || !nodeGroup) return null
+  if (!planeGroup || !linkBatchGroup || !linkGroup || !arrowBatchGroup || !arrowGroup || !nodeGroup) return null
   return {
     planeGroup,
     planes: byAttr('.layer-stack__plane', 'data-layer-id'),
+    linkBatchGroup,
+    arrowBatchGroup,
     linkGroup,
     links: byAttr('.layer-stack__link', 'data-link-id'),
     arrowGroup,
@@ -376,6 +387,46 @@ function setAttr(el: Element, name: string, value: string) {
 function setStyle(el: Element, name: 'left' | 'top' | 'fontSize' | 'zIndex' | 'strokeWidth' | 'display', value: string) {
   const style = (el as HTMLElement | SVGElement).style
   if (style[name] !== value) style[name] = value
+}
+
+const SVG_NS = 'http://www.w3.org/2000/svg'
+
+/**
+ * Draws batches into `group`, one path per batch from `pool` (keyed by the batch's style, so a
+ * path's style is set once, when it is created). Paths for styles no longer drawn are removed.
+ * React renders `group` empty and never touches these children.
+ */
+function paintBatches(group: Element, pool: Map<string, Element>, batches: readonly LinkBatch[], kind: 'link' | 'arrow', order: Record<string, string>) {
+  const used = new Set<string>()
+  for (const b of batches) {
+    let el = pool.get(b.key)
+    if (!el || el.parentNode !== group) {
+      el = document.createElementNS(SVG_NS, 'path')
+      const style = (el as SVGElement).style
+      if (kind === 'link') {
+        el.setAttribute('class', 'layer-stack__link-batch')
+        style.stroke = b.color
+        style.strokeOpacity = String(b.opacity)
+        style.strokeWidth = String(b.width)
+        if (b.dash) el.setAttribute('stroke-dasharray', b.dash)
+      } else {
+        el.setAttribute('class', 'layer-stack__arrow-batch')
+        style.fill = b.color
+        style.fillOpacity = String(b.opacity)
+      }
+      group.appendChild(el)
+      pool.set(b.key, el)
+    }
+    used.add(b.key)
+    setAttr(el, 'd', b.d)
+    setAttr(el, 'data-link-count', String(b.count))
+  }
+  for (const [key, el] of pool) {
+    if (used.has(key)) continue
+    el.remove()
+    pool.delete(key)
+  }
+  reorder(group, pool, batches.map((b) => b.key), order, kind)
 }
 
 /** Positions for a graph built without layout: each layer's nodes on a circle. */
@@ -994,6 +1045,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
       () => linkEm.filter(({ link }) => visibleIds.has(link.sourceId) && visibleIds.has(link.targetId)),
       [linkEm, visibleIds],
     )
+    /** The selection's reach: drawn one element per link; the rest are batched by `paint`. */
+    const reachLinks = useMemo(() => drawnLinks.filter(({ em }) => em.highlighted), [drawnLinks])
 
     // ── projection ────────────────────────────────────────────────────────
     // A closure over this render's data. `paint` calls the latest one through `projectRef` on every
@@ -1080,16 +1133,22 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         return placed.map((t, i) => ({ ...t, y: ys[i] }))
       })()
 
-      // Links, arrowheads and pill candidates.
+      // Links, arrowheads and pill candidates. The selection's reach keeps a path per link; every
+      // other link goes into a batch, one path per style (`batchLinks`).
       const segs: { id: string; d: string; width: number; key: number }[] = []
       const arrows: { id: string; points: string | null; key: number }[] = []
+      const linkItems: BatchItem[] = []
+      const arrowItems: BatchItem[] = []
       const candidates: (EdgeLabelCandidate & { color: string; opacity: number })[] = []
       for (const { link, em, text } of drawnLinks) {
         const a = P.get(link.sourceId)!
         const b = P.get(link.targetId)!
         const curve = lineCurve(a, b)
-        const key = (a.depth + b.depth) / 2 - em.z * 1e4
-        segs.push({ id: link.id, d: curve.d, width: r2(em.width * Math.min(a.scale, b.scale)), key })
+        const depth = (a.depth + b.depth) / 2
+        const key = depth - em.z * 1e4
+        const width = em.width * Math.min(a.scale, b.scale)
+        if (em.highlighted) segs.push({ id: link.id, d: curve.d, width: r2(width), key })
+        else linkItems.push({ d: curve.d, color: em.color, opacity: em.opacity, dash: em.dash, width, z: em.z, depth })
         if (em.arrow) {
           const dx = b.x - a.x
           const dy = b.y - a.y
@@ -1099,7 +1158,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
           const uy = dy / len
           // Too short to carry a head: hidden.
           const points = len > rb + 14 ? arrowHeadPoints({ x: b.x - ux * rb, y: b.y - uy * rb }, ux, uy, 8 * b.scale, 3.6 * b.scale) : null
-          arrows.push({ id: link.id, points, key })
+          if (em.highlighted) arrows.push({ id: link.id, points, key })
+          else if (points) arrowItems.push({ d: pointsToPath(points), color: em.color, opacity: ARROW_OPACITY, dash: '', width: 0, z: em.z, depth })
         }
         if (text && em.opacity >= 0.2) {
           candidates.push({ id: link.id, text, pointAt: curve.pointAt, priority: edgeLabelPriority(link, em), color: em.color, opacity: em.highlighted ? 1 : 0.9 })
@@ -1131,6 +1191,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         titles,
         segs: depthSort(segs, (s) => s.key),
         arrows: depthSort(arrows, (s) => s.key),
+        linkBatches: batchLinks(linkItems),
+        arrowBatches: batchLinks(arrowItems),
         candidates,
         drill,
         nodeDraw,
@@ -1172,6 +1234,8 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
     // ── paint (per frame, and after every commit) ─────────────────────────
     const els = useRef<SceneElements | null>(null)
     const order = useRef<Record<string, string>>({})
+    /** Batch paths by style key; `paint` creates and removes them. Made on first paint. */
+    const pools = useRef<{ link: Map<string, Element>; arrow: Map<string, Element> } | null>(null)
     const paint = useCallback(() => {
       const e = els.current
       if (!e) return
@@ -1189,6 +1253,9 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
         setAttr(fill, 'points', p.points)
         grid.forEach((line, i) => setAttr(line, 'points', p.grid[i] ?? ''))
       }
+      const pool = (pools.current ??= { link: new Map(), arrow: new Map() })
+      paintBatches(e.linkBatchGroup, pool.link, s.linkBatches, 'link', order.current)
+      paintBatches(e.arrowBatchGroup, pool.arrow, s.arrowBatches, 'arrow', order.current)
       reorder(e.linkGroup, e.links, s.segs.map((l) => l.id), order.current, 'links')
       for (const l of s.segs) {
         const path = e.links.get(l.id)
@@ -1389,8 +1456,9 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
               </g>
             ))}
           </g>
+          <g className="layer-stack__link-batches" />
           <g className="layer-stack__links">
-            {drawnLinks.map(({ link, em }) => (
+            {reachLinks.map(({ link, em }) => (
               <path
                 key={link.id}
                 className="layer-stack__link"
@@ -1400,14 +1468,15 @@ export const LayerStack = React.forwardRef<LayerStackHandle, LayerStackProps>(
               />
             ))}
           </g>
+          <g className="layer-stack__arrow-batches" />
           <g className="layer-stack__arrows">
-            {drawnLinks.map(({ link, em }) =>
+            {reachLinks.map(({ link, em }) =>
               em.arrow ? (
                 <polygon
                   key={link.id}
                   className="layer-stack__arrow"
                   data-link-id={link.id}
-                  style={{ fill: em.color, fillOpacity: em.highlighted ? 1 : 0.8 }}
+                  style={{ fill: em.color, fillOpacity: 1 }}
                 />
               ) : null,
             )}

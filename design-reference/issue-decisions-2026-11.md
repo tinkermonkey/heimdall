@@ -36,3 +36,11 @@ Also from the issue: add `"sideEffects": ["**/*.css"]`, and record packed size, 
 ## PR size for #334–#338
 
 **Decision: one PR per issue, split a PR once it passes about 600 changed lines,** so each review stays focused.
+
+## #379 LayerStack: per-frame style recalc on the full spec
+
+**Decision: batched SVG link paths, not a canvas.** Links off the selection's reach are drawn as one `<path>` per style bucket (colour, opacity, width, dash and z, the emphasis draw order), painted in `paint()`; the reach keeps a path per link.
+
+- Overlap compounding within a bucket is accepted: links of one style no longer darken each other where they cross, a visible change in dense areas.
+- A consequence of batching: within one z level, overlapping links of different styles are ordered by their buckets' mean depth, not link by link.
+- A consequence of batching: stroke widths (scaled by perspective) are rounded to 0.1 scene units, so links of similar width share a bucket.
