@@ -8,7 +8,7 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
       await page.setViewportSize({ width: 640, height: 1024 })
 
       // Navigate to the shell test page
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.goto('/?example=shell-framework')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts
@@ -96,7 +96,7 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
       await page.setViewportSize({ width: 414, height: 896 })
 
       // Navigate to the shell test page
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.goto('/?example=shell-framework')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts
@@ -127,7 +127,7 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
       await page.setViewportSize({ width: 1200, height: 800 })
 
       // Navigate to the shell test page
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.goto('/?example=shell-framework')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts
@@ -154,7 +154,7 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
   test.describe('Mobile sidebar overlay behavior at 640px', () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize({ width: 640, height: 1024 })
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.goto('/?example=shell-framework')
       await page.waitForLoadState('networkidle')
       await loadSelfHostedFonts(page)
       await assertFontsLoaded(page)
@@ -277,7 +277,7 @@ test.describe('integration: Shell Components Responsive Behavior', () => {
   test.describe('Hamburger toggle hidden at desktop', () => {
     test.beforeEach(async ({ page }) => {
       await page.setViewportSize({ width: 1200, height: 800 })
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.goto('/?example=shell-framework')
       await page.waitForLoadState('networkidle')
       await loadSelfHostedFonts(page)
       await assertFontsLoaded(page)

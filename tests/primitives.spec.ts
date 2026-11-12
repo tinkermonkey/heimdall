@@ -4,7 +4,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 test.describe('integration: Primitive Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the primitives test page which renders actual React components
-    await page.goto('http://localhost:5173/?example=primitives')
+    await page.goto('/?example=primitives')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN

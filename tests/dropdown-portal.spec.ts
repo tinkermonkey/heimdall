@@ -24,7 +24,7 @@ async function panelPaintsAt(page: Page, testId: string, x: number, y: number) {
 
 test.describe('integration: dropdown portal', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=dropdown-portal')
+    await page.goto('/?example=dropdown-portal')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)

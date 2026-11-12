@@ -7,7 +7,7 @@ import { test, expect, type Page } from '@playwright/test'
 // The test page's "slow" layout blocks the main thread for SLOW_LAYOUT_MS, so nothing can be
 // sampled while it runs. A recorder installed before the page loads logs every DOM mutation and
 // every animation frame instead, and the assertions read that log afterwards.
-const URL = 'http://localhost:5173/?example=graph-layout-busy'
+const URL = '/?example=graph-layout-busy'
 const SLOW_LAYOUT_MS = 600
 const INDICATOR_DELAY_MS = 150
 const CANVAS = '[data-testid="busy-canvas"]'

@@ -3,7 +3,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 // Issue #329: --semantic-* and --status-{ok,warn,error}-{bg,fg} need explicit
 // body.dark-canvas values, or consumers render light pastels on the dark canvas.
-const URL = 'http://localhost:5173/?example=semantic-tokens'
+const URL = '/?example=semantic-tokens'
 
 test.describe('semantic tokens: Chip, FormCallout, ActivityTimeline, VersionPill', () => {
   test('light canvas snapshot', async ({ page }) => {

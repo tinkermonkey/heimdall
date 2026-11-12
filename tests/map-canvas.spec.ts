@@ -3,7 +3,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanv
 
 test.describe('integration: MapCanvas Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=map-canvas')
+    await page.goto('/?example=map-canvas')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)

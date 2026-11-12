@@ -8,7 +8,7 @@ async function viewportZoom(page: import('@playwright/test').Page): Promise<numb
 
 test.describe('integration: GraphCanvas fullscreenContainerRef', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=fullscreen-container-ref')
+    await page.goto('/?example=fullscreen-container-ref')
     await page.waitForLoadState('networkidle')
   })
 
@@ -88,7 +88,7 @@ test.describe('integration: GraphCanvas fullscreenContainerRef', () => {
   test('omitting the prop falls back to fullscreening GraphCanvas\'s own root (previous default behavior)', async ({
     page,
   }) => {
-    await page.goto('http://localhost:5173/?example=fullscreen-container-ref&omitRef=1')
+    await page.goto('/?example=fullscreen-container-ref&omitRef=1')
     await page.waitForLoadState('networkidle')
 
     const wrapper = page.getByTestId('fullscreen-wrapper')

@@ -3,7 +3,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanv
 
 test.describe('integration: TraceViewer', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=trace-viewer')
+    await page.goto('/?example=trace-viewer')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)

@@ -9,7 +9,7 @@ import {
 
 test.describe('integration: Chart Components', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=charts')
+    await page.goto('/?example=charts')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)

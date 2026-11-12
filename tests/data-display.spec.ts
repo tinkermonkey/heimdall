@@ -4,7 +4,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanv
 test.describe('integration: Data Display Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the data-display test page which renders actual React components
-    await page.goto('http://localhost:5173/?example=data-display')
+    await page.goto('/?example=data-display')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN
@@ -260,7 +260,7 @@ test.describe('integration: Data Display Components', () => {
   })
 
   test('HierarchyTree renders hierarchy rows', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.goto('/?example=hierarchy-tree')
     await page.waitForLoadState('networkidle')
 
     // Verify HierarchyTree container exists
@@ -274,7 +274,7 @@ test.describe('integration: Data Display Components', () => {
   })
 
   test('HierarchyTree row selection', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.goto('/?example=hierarchy-tree')
     await page.waitForLoadState('networkidle')
 
     // Get first row
@@ -291,7 +291,7 @@ test.describe('integration: Data Display Components', () => {
   })
 
   test('HierarchyTree static snapshot', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=hierarchy-tree')
+    await page.goto('/?example=hierarchy-tree')
     await page.waitForLoadState('networkidle')
     await freezeAnimations(page)
     await expect(page).toHaveScreenshot('hierarchy-tree.png', {
@@ -325,7 +325,7 @@ test.describe('integration: Data Display Components', () => {
     })
 
     test('HierarchyTree dark snapshot', async ({ page }) => {
-      await page.goto('http://localhost:5173/?example=hierarchy-tree')
+      await page.goto('/?example=hierarchy-tree')
       await page.waitForLoadState('networkidle')
       await loadSelfHostedFonts(page)
       await applyDarkCanvasMode(page)

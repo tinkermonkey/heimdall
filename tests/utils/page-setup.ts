@@ -2,8 +2,6 @@ import { Page } from '@playwright/test'
 import path from 'path'
 import { loadSelfHostedFonts, assertFontsLoaded, freezeAnimations, applyDarkCanvasMode } from './test-helpers'
 
-const HARNESS_BASE = 'http://localhost:5173'
-
 // Resolve design-reference/preview/ relative to this file's location (tests/utils/)
 const DESIGN_REF_DIR = path.resolve(new URL('.', import.meta.url).pathname, '../../design-reference/preview')
 
@@ -18,7 +16,7 @@ export async function setupHarness(
   exampleId: string,
   options: { darkCanvas?: boolean } = {}
 ): Promise<void> {
-  await page.goto(`${HARNESS_BASE}/?example=${exampleId}`)
+  await page.goto(`/?example=${exampleId}`)
   await page.waitForLoadState('networkidle')
   await loadSelfHostedFonts(page)
   await assertFontsLoaded(page)

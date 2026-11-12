@@ -4,7 +4,7 @@ import { test, expect, type Page } from '@playwright/test'
 // tween math are unit-tested in src/utils/__tests__/layerStackProjection.test.ts; this checks the
 // rendering, the interactions and the two themes. The turntable is off and the camera fixed.
 
-const BASE = 'http://localhost:5173/?example=layer-stack'
+const BASE = '/?example=layer-stack'
 const ORIGIN = 'application.applicationcomponent'
 
 test.use({ viewport: { width: 1280, height: 1000 } })

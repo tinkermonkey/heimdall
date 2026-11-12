@@ -3,7 +3,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanv
 
 test.describe('integration: ResultCard Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=cards-and-lists')
+    await page.goto('/?example=cards-and-lists')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)
@@ -291,7 +291,7 @@ test.describe('integration: ResultCard Component', () => {
 
 test.describe('integration: AssetCard Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=cards-and-lists')
+    await page.goto('/?example=cards-and-lists')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)
@@ -478,7 +478,7 @@ test.describe('integration: AssetCard Component', () => {
 
 test.describe('integration: LogStream Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=cards-and-lists')
+    await page.goto('/?example=cards-and-lists')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)

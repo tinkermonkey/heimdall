@@ -3,7 +3,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 test.describe('integration: DiffViewer Components', () => {
   test('light canvas full page snapshot (covers empty, small, overflow states and glyph rendering)', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=diff-viewer')
+    await page.goto('/?example=diff-viewer')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)
@@ -14,7 +14,7 @@ test.describe('integration: DiffViewer Components', () => {
   })
 
   test('dark canvas full page snapshot (covers empty, small, overflow states and glyph rendering)', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=diff-viewer')
+    await page.goto('/?example=diff-viewer')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)
@@ -26,7 +26,7 @@ test.describe('integration: DiffViewer Components', () => {
   })
 
   test('HashSetDiff collapse/expand interaction', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=diff-viewer')
+    await page.goto('/?example=diff-viewer')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)
@@ -45,7 +45,7 @@ test.describe('integration: DiffViewer Components', () => {
   // Tailwind build has no rule by this name, so this exercises the library stylesheet itself
   // (`npm run check:package` also checks dist/style.css ships the rule).
   test('SideBySideDiff gutter labels are visually hidden', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=diff-viewer')
+    await page.goto('/?example=diff-viewer')
     await page.waitForLoadState('networkidle')
 
     const label = page.locator('.side-by-side-diff__gutter--added .heimdall-visually-hidden').first()

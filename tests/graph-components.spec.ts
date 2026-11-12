@@ -9,7 +9,7 @@ import {
 
 test.describe("integration: Graph Canvas Components", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:5173/?example=graph");
+    await page.goto("/?example=graph");
     await page.waitForLoadState("networkidle");
 
     // Load self-hosted fonts
@@ -2069,7 +2069,7 @@ test.describe("integration: Graph Canvas Components", () => {
 // this page exists to be eyeballed and iterated on directly, not pinned to a baseline.
 test.describe("integration: Galaxy Layout Lab (POC dataset stress test)", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("http://localhost:5173/?example=galaxy-layout-lab");
+    await page.goto("/?example=galaxy-layout-lab");
     await page.waitForLoadState("networkidle");
     await loadSelfHostedFonts(page);
     await assertFontsLoaded(page);
