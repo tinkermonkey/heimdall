@@ -11,8 +11,11 @@ import {
   clusterOrder,
   layerMatrixCells,
   linkEdgeMetadata,
+  matrixCellName,
   matrixCellStep,
   matrixCells,
+  matrixGridIndex,
+  matrixGridRows,
   matrixWindow,
   type LayerMatrixCell,
   nextMatrixWindow,
@@ -247,9 +250,13 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
     // ── roving focus: one Tab stop for the cells, arrow keys move between them ──
     const sorted = useMemo(() => [...cells].sort((a, b) => a.r - b.r || a.c - b.c), [cells])
     const [activeKey, setActiveKey] = useState<string | null>(null)
+    // the Tab-stop cell has keyboard focus: its drawn cell shows the focus ring
+    const [ring, setRing] = useState(false)
     const activeCell = sorted.find((cell) => cell.links[0].id === activeKey) ?? sorted[0]
     const pendingFocus = useRef<string | null>(null)
     const cellActions = useRef<CellActions>(null!)
+    // set while a pointer click hands focus to the grid: no keyboard ring or scroll then
+    const pointerFocus = useRef(false)
     const rootRef = useRef<HTMLDivElement | null>(null)
     const setRoot = useCallback(
       (el: HTMLDivElement | null) => {
@@ -274,12 +281,14 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       el.scrollLeft = fit(LW + c * cs, el.scrollLeft, virtual ? LW : 0, el.clientWidth)
       el.scrollTop = fit(TH + r * cs, el.scrollTop, virtual ? TH : 0, el.clientHeight)
     }
+    // Focus lives in the screen-reader grid; the drawn cell only shows it.
+    const gridCell = (key: string) => rootRef.current?.querySelector<HTMLElement>(`.adjacency-matrix__a11y-cell[data-cell-key="${CSS.escape(key)}"]`)
     // Layout effect: focus moves in the same commit, so no key lands on <body> in between.
     useLayoutEffect(() => {
       const key = pendingFocus.current
       if (!key) return
       pendingFocus.current = null
-      rootRef.current?.querySelector<SVGGElement>(`.adjacency-matrix__cell[data-cell-key="${CSS.escape(key)}"]`)?.focus()
+      gridCell(key)?.focus({ preventScroll: true })
     })
     // `selectedLinkId` set from outside: bring its cell into view, once per id.
     const revealed = useRef<string | null>(null)
@@ -327,15 +336,36 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       e.preventDefault()
       setActiveKey(next.links[0].id)
       pendingFocus.current = next.links[0].id
-      reveal(next.r, next.c)
     }
     cellActions.current = {
       click: (cell) => {
-        setActiveKey(cell.links[0].id)
+        const key = cell.links[0].id
+        setActiveKey(key)
+        const before = document.activeElement
         pick(cell.link, cell.links)
+        // a pointer click moves the Tab stop and focus here, unless the handler moved focus itself
+        if (document.activeElement !== before) return
+        pointerFocus.current = true
+        gridCell(key)?.focus({ preventScroll: true })
+        pointerFocus.current = false
       },
       key: onCellKey,
       hover: (cell) => setHover(cell ? { row: ids[cell.r], col: ids[cell.c] } : null),
+      focus: (e, cell) => {
+        const key = cell.links[0].id
+        const keyboard = !pointerFocus.current && e.currentTarget.matches(':focus-visible')
+        setActiveKey(key)
+        setRing(keyboard)
+        setHover({ row: ids[cell.r], col: ids[cell.c] })
+        if (!keyboard) return
+        // the grid is visually hidden, so scroll the drawn cell into view instead
+        reveal(cell.r, cell.c)
+        rootRef.current?.querySelector(`.adjacency-matrix__cell[data-cell-key="${CSS.escape(key)}"]`)?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
+      },
+      blur: () => {
+        setRing(false)
+        setHover(null)
+      },
     }
 
     const blocks = spans.map((rs) =>
@@ -438,7 +468,17 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
     }
 
     const cellNodes = drawn.map((cell) => (
-      <MatrixCellView key={cell.links[0].id} cell={cell} active={cell === activeCell} index={index} LW={LW} TH={TH} cs={cs} actions={cellActions} />
+      <MatrixCellView
+        key={cell.links[0].id}
+        cell={cell}
+        active={cell === activeCell}
+        focused={ring && cell === activeCell}
+        index={index}
+        LW={LW}
+        TH={TH}
+        cs={cs}
+        actions={cellActions}
+      />
     ))
 
     const selectedOutline = selectedCell && (
@@ -471,6 +511,54 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
       </div>
     )
     const rootClass = ['adjacency-matrix', className].filter(Boolean).join(' ')
+
+    // ── screen-reader grid: mirrors the drawn matrix (the window when virtual) and holds the focus ──
+    const range = (a: number, b: number) => Array.from({ length: Math.max(0, b - a) }, (_, i) => a + i)
+    const withActive = (list: number[], at: number | undefined) =>
+      at === undefined || list.includes(at) ? list : [...list, at].sort((a, b) => a - b)
+    const gridCols = virtual ? withActive(range(win.c0, win.c1), activeCell?.c) : range(0, n)
+    const gridRows = matrixGridRows(virtual ? withActive(range(win.r0, win.r1), activeCell?.r) : range(0, n), virtual ? drawn : sorted)
+    const nodeName = (id: string) => {
+      const node = index.nodeById.get(id)!
+      return `${node.label}, ${index.layerById.get(node.layerId)!.label} layer`
+    }
+    const nodeLabel = (i: number) => index.nodeById.get(ids[i])!.label
+    const grid = (
+      <div
+        role="grid"
+        className="adjacency-matrix__a11y heimdall-visually-hidden"
+        aria-label={groupLabel}
+        aria-rowcount={n + 1}
+        aria-colcount={n + 1}
+      >
+        <div role="row" aria-rowindex={1}>
+          {gridCols.map((c) => (
+            <div key={ids[c]} role="columnheader" aria-colindex={matrixGridIndex(c)}>
+              {nodeName(ids[c])}
+            </div>
+          ))}
+        </div>
+        {gridRows.map(({ r, cells: rowCells }) => (
+          <div key={ids[r]} role="row" aria-rowindex={matrixGridIndex(r)}>
+            <div role="rowheader" aria-colindex={1}>
+              {nodeName(ids[r])}
+            </div>
+            {rowCells.map((cell) => (
+              <MatrixGridCell
+                key={cell.links[0].id}
+                cell={cell}
+                active={cell === activeCell}
+                selected={cell === selectedCell}
+                rowLabel={nodeLabel(cell.r)}
+                colLabel={nodeLabel(cell.c)}
+                index={index}
+                actions={cellActions}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    )
 
     if (virtual) {
       // Four SVGs in a grid: sticky corner, sticky column labels, sticky row labels, and the body.
@@ -511,8 +599,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
                 width={bodyW}
                 height={bodyH}
                 viewBox={`${LW} ${TH} ${bodyW} ${bodyH}`}
-                role="group"
-                aria-label={groupLabel}
+                aria-hidden="true"
                 onMouseLeave={() => setHover(null)}
               >
                 {blocks}
@@ -523,6 +610,7 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
               </svg>
             </div>
           </div>
+          {grid}
           {legend}
         </div>
       )
@@ -537,14 +625,14 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
             height={height}
             viewBox={`0 0 ${width} ${height}`}
             role="group"
-            aria-label={groupLabel}
+            aria-label="Rows"
             onMouseLeave={() => setHover(null)}
           >
-            {/* blocks */}
-            {blocks}
-
-            {/* selection and hover bands */}
-            {bands}
+            {/* blocks, then the selection and hover bands */}
+            <g aria-hidden="true">
+              {blocks}
+              {bands}
+            </g>
 
             {/* headers: row labels on the left, column labels rotated above */}
             {ids.map((id, i) => {
@@ -560,14 +648,15 @@ export const AdjacencyMatrix = React.forwardRef<HTMLDivElement, AdjacencyMatrixP
               )
             })}
 
-            {/* cells */}
-            {cellNodes}
-
-            {selectedOutline}
-
-            {captionNode}
+            {/* cells: drawing only, the grid below carries their semantics */}
+            <g aria-hidden="true">
+              {cellNodes}
+              {selectedOutline}
+              {captionNode}
+            </g>
           </svg>
         </div>
+        {grid}
         {legend}
       </div>
     )
@@ -588,16 +677,67 @@ interface CellActions {
   click: (cell: DrawnCell) => void
   key: (e: React.KeyboardEvent, cell: DrawnCell) => void
   hover: (cell: DrawnCell | null) => void
+  focus: (e: React.FocusEvent<HTMLElement>, cell: DrawnCell) => void
+  blur: () => void
 }
 
+/** One sentence per link in a cell: `source predicate target`. */
+const linkSentences = (links: readonly IndexedLink[], index: LayeredIndex) =>
+  links.map((l) => {
+    const predicate = l.predicates.length ? linkPredicateLabel(l, index.catalog) : l.primaryCategory
+    return `${index.nodeById.get(l.sourceId)!.label} ${predicate} ${index.nodeById.get(l.targetId)!.label}`
+  })
+
 /**
- * One cell. Memoized on the cell (stable while only the scroll position changes), so scrolling a
- * virtualized matrix re-renders only the cells entering the window. Handlers go through `actions`,
- * a ref the matrix refreshes every render.
+ * One cell of the screen-reader grid: a focusable `gridcell` named by its row, column and links.
+ * Memoized like the drawn cell, so scrolling re-renders only the cells entering the window.
+ */
+const MatrixGridCell = React.memo(function MatrixGridCell({
+  cell,
+  active,
+  selected,
+  rowLabel,
+  colLabel,
+  index,
+  actions,
+}: {
+  cell: DrawnCell
+  active: boolean
+  selected: boolean
+  rowLabel: string
+  colLabel: string
+  index: LayeredIndex
+  actions: React.MutableRefObject<CellActions>
+}) {
+  const { links, c } = cell
+  const bothWays = links.some((l) => l.sourceId !== links[0].sourceId)
+  return (
+    <div
+      role="gridcell"
+      className="adjacency-matrix__a11y-cell"
+      data-cell-key={links[0].id}
+      aria-colindex={matrixGridIndex(c)}
+      tabIndex={active ? 0 : -1}
+      onClick={() => actions.current.click(cell)}
+      onKeyDown={(e) => actions.current.key(e, cell)}
+      onFocus={(e) => actions.current.focus(e, cell)}
+      onBlur={() => actions.current.blur()}
+    >
+      {matrixCellName(rowLabel, colLabel, linkSentences(links, index), bothWays, selected)}
+    </div>
+  )
+})
+
+/**
+ * One drawn cell, for the pointer only (the grid holds focus and semantics). Memoized on the cell
+ * (stable while only the scroll position changes), so scrolling a virtualized matrix re-renders
+ * only the cells entering the window. Handlers go through `actions`, a ref the matrix refreshes
+ * every render.
  */
 const MatrixCellView = React.memo(function MatrixCellView({
   cell,
   active,
+  focused,
   index,
   LW,
   TH,
@@ -606,6 +746,7 @@ const MatrixCellView = React.memo(function MatrixCellView({
 }: {
   cell: DrawnCell
   active: boolean
+  focused: boolean
   index: LayeredIndex
   LW: number
   TH: number
@@ -613,11 +754,6 @@ const MatrixCellView = React.memo(function MatrixCellView({
   actions: React.MutableRefObject<CellActions>
 }) {
   const { link, links, r, c, em, opacity, code } = cell
-  // The <title> is the cell's accessible name and its tooltip, one sentence per link.
-  const sentences = links.map((l) => {
-    const predicate = l.predicates.length ? linkPredicateLabel(l, index.catalog) : l.primaryCategory
-    return `${index.nodeById.get(l.sourceId)!.label} ${predicate} ${index.nodeById.get(l.targetId)!.label}`
-  })
   const both = links.length > 1
   return (
     <g
@@ -627,15 +763,11 @@ const MatrixCellView = React.memo(function MatrixCellView({
       data-row={r}
       data-col={c}
       data-source-id={link.sourceId}
-      role="button"
-      tabIndex={active ? 0 : -1}
       onClick={() => actions.current.click(cell)}
-      onKeyDown={(e) => actions.current.key(e, cell)}
-      onFocus={() => actions.current.hover(cell)}
-      onBlur={() => actions.current.hover(null)}
       onMouseEnter={() => actions.current.hover(cell)}
     >
-      <title>{sentences.join('\n')}</title>
+      {/* tooltip: one sentence per link */}
+      <title>{linkSentences(links, index).join('\n')}</title>
       <rect
         x={LW + c * cs + 1}
         y={TH + r * cs + 1}
@@ -658,7 +790,7 @@ const MatrixCellView = React.memo(function MatrixCellView({
           {code}
         </text>
       )}
-      {active && <rect className="adjacency-matrix__cell-focus" x={LW + c * cs - 1} y={TH + r * cs - 1} width={cs + 2} height={cs + 2} rx={3} />}
+      {active && <rect className={focused ? 'adjacency-matrix__cell-focus adjacency-matrix__cell-focus--on' : 'adjacency-matrix__cell-focus'} x={LW + c * cs - 1} y={TH + r * cs - 1} width={cs + 2} height={cs + 2} rx={3} />}
     </g>
   )
 })
@@ -906,9 +1038,9 @@ export function MatrixLinkInspector({
     ref.current?.scrollIntoView?.({ block: 'nearest' })
   }, [cellKey])
   const close = () => {
-    // the matrix's Tab-stop cell (the one clicked) is always rendered, unlike a virtualized row header
+    // the matrix's Tab-stop grid cell (the one clicked) is always rendered, unlike a virtualized row header
     const scope = ref.current?.closest('.layered-graph-explorer') ?? document
-    const stop = scope.querySelector<SVGGElement>('.adjacency-matrix__cell[tabindex="0"]')
+    const stop = scope.querySelector<HTMLElement>('.adjacency-matrix__a11y-cell[tabindex="0"]')
     onClose()
     stop?.focus()
   }
