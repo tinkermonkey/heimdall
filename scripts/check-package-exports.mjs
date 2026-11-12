@@ -5,8 +5,8 @@
 // against the file list `npm pack` would publish. Run after `npm run build`: dist/ must exist.
 // Also checks that the tarball holds only dist/ and agent-skills/ (no source, tests or CJS build),
 // that declarations don't import unpublished source, that the JS entry leaves its dependencies
-// external, and that the fonts stylesheet names its fonts by relative URLs that resolve to published
-// files (tinkermonkey/heimdall#343).
+// external, that the fonts stylesheet names its fonts by relative URLs that resolve to published
+// files (tinkermonkey/heimdall#343), and that each font's OFL licence ships (tinkermonkey/heimdall#383).
 //
 // Why: 0.9.0 and 0.9.1 shipped with "./css" -> ./dist/style.css while the build emitted
 // dist/heimdall-ui.css (tinkermonkey/heimdall#303). The docs app, test app and tests all alias the
@@ -91,8 +91,8 @@ const UNSHIPPABLE = [
   { re: /\.(test|spec)\.(d\.)?[cm]?[jt]sx?$/, what: 'a test' },
   { re: /(^|\/)fixtures?\//, what: 'a test fixture' },
   { re: /\.cjs$/, what: 'a CommonJS build (the package is ESM-only)' },
-  // public/fonts/ is copied to dist/fonts/ wholesale; only the stylesheet and the fonts serve a consumer.
-  { re: /^dist\/fonts\/(?!.*\.(css|woff2)$)/, what: 'neither the fonts stylesheet nor a font file' },
+  // public/fonts/ is copied to dist/fonts/ wholesale; only the stylesheet, the fonts and their licences serve a consumer.
+  { re: /^dist\/fonts\/(?!.*(\.(css|woff2)|\/OFL\.txt)$)/, what: 'neither the fonts stylesheet, a font file nor a font licence' },
 ]
 for (const file of files.keys()) {
   if (!SHIPPED_ROOTS.some((r) => (r.endsWith('/') ? file.startsWith(r) : file === r))) {
@@ -166,6 +166,14 @@ if (typeof fontsCss === 'string' && files.has(fontsCss.replace(/^\.\//, ''))) {
     const resolved = path.posix.normalize(path.posix.join(path.posix.dirname(rel), url.replace(/[?#].*$/, '')))
     if (!files.has(resolved)) problems.push(`exports > ./fonts: ${rel} references ${url}, but ${resolved} is not published`)
   }
+}
+
+// The SIL Open Font License requires its text to accompany redistributed font files
+// (tinkermonkey/heimdall#383).
+const REQUIRED_FILES = ['dist/fonts/inter/OFL.txt', 'dist/fonts/jetbrains-mono/OFL.txt']
+for (const file of REQUIRED_FILES) {
+  if (!files.has(file)) problems.push(`files: ${file} is not in the package (font licence)`)
+  else if (files.get(file) === 0) problems.push(`files: ${file} is empty (font licence)`)
 }
 
 if (problems.length > 0) {
