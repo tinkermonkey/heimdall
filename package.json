@@ -29,6 +29,7 @@
       "types": "./dist/index.d.ts"
     },
     "./css": "./dist/style.css",
+    "./css/*": "./dist/css/*.css",
     "./fonts": {
       "style": "./dist/fonts/fonts.css",
       "import": "./dist/fonts/fonts.css",

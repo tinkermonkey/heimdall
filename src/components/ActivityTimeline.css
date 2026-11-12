@@ -48,7 +48,8 @@
   padding-top: 5px;
 }
 
-.activity-timeline__dot {
+/* Scoped so it outranks Badge's own rules whatever order the sheets load in. */
+.activity-timeline__dot-container .activity-timeline__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;

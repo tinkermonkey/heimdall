@@ -29,7 +29,8 @@
   padding: 0 12px;
 }
 
-.side-by-side-diff__pill {
+/* Scoped so it outranks VersionPill's own rules whatever order the sheets load in. */
+.side-by-side-diff .side-by-side-diff__pill {
   font-size: 10px;
 }
 

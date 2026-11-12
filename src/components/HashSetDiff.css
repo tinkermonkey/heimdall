@@ -29,7 +29,8 @@
   gap: 8px;
 }
 
-.hash-set-diff__pill {
+/* Scoped so it outranks VersionPill's own rules whatever order the sheets load in. */
+.hash-set-diff .hash-set-diff__pill {
   font-size: 10px;
 }
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import './StatusTimeline.css'
 import { TONE, type ChartTone } from './chartTone'
 
 const ACCENT_PRIMARY_DEEP = '#B45309'

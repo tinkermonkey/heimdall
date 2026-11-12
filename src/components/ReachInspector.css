@@ -32,7 +32,8 @@
   min-height: 28px;
 }
 
-.reach-inspector__layer {
+/* Scoped (as is __followed-title) so it outranks .layered-control__eyebrow whatever order the sheets load in. */
+.reach-inspector .reach-inspector__layer {
   color: var(--reach-inspector-layer);
 }
 
@@ -126,7 +127,7 @@
   color: rgb(var(--canvas-fg-4));
 }
 
-.reach-inspector__followed-title,
+.reach-inspector .reach-inspector__followed-title,
 .reach-inspector__hop {
   color: rgb(var(--graph-hop-2));
 }

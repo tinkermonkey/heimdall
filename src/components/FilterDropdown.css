@@ -73,12 +73,9 @@
 }
 
 /* ============================================================================
-   Panel — most chrome inherited from .dropdown-panel
+   Panel — chrome and min-width (the trigger's width, at least 220px) come
+   from .dropdown-panel
    ============================================================================ */
-
-.filter-dropdown__panel {
-  min-width: 220px;
-}
 
 .filter-dropdown__panel:not([hidden]) {
   display: block;
