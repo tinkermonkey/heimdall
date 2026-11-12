@@ -2,7 +2,18 @@
 // link inspector metadata (tinkermonkey/heimdall#336).
 import { describe, it, expect } from 'vitest'
 import { buildLayeredIndex, DEFAULT_LINK_FILTERS, isLinkVisible, orderAcrossLayers } from '../layered'
-import { clusterOrder, layerMatrixCells, linkEdgeMetadata, matrixCellStep, matrixCells, matrixWindow, nextMatrixWindow } from '../layered/matrix'
+import {
+  clusterOrder,
+  layerMatrixCells,
+  linkEdgeMetadata,
+  matrixCellName,
+  matrixCellStep,
+  matrixCells,
+  matrixGridIndex,
+  matrixGridRows,
+  matrixWindow,
+  nextMatrixWindow,
+} from '../layered/matrix'
 import { drLayers, drCategoryOrder, drSpecNodes, drSpecEdges } from '../../test-pages/fixtures/layeredGraphFixtures'
 
 const layering = { layerBy: 'layer', layers: drLayers, categoryOrder: drCategoryOrder, linkCategoryBy: 'category' }
@@ -229,5 +240,28 @@ describe('nextMatrixWindow', () => {
     const win = nextMatrixWindow({ r0: 0, r1: 0, c0: 0, c1: 0 }, view(0, 0), 600, 16)
     expect(win).toEqual({ r0: 0, r1: 66, c0: 0, c1: 96 })
     expect(nextMatrixWindow(win, view(2, 3), 600, 16)).toBe(win)
+  })
+})
+
+describe('matrix grid semantics', () => {
+  it('row and column 0 sit after the header row and the row-header column', () => {
+    expect(matrixGridIndex(0)).toBe(2)
+    expect(matrixGridIndex(599)).toBe(601)
+  })
+
+  it('names a cell by its row, column, link state and links', () => {
+    expect(matrixCellName('A', 'B', ['A serves B'], false)).toBe('Row A, column B, linked: A serves B')
+    expect(matrixCellName('A', 'B', ['A serves B', 'B uses A'], true)).toBe('Row A, column B, linked both ways: A serves B; B uses A')
+    expect(matrixCellName('A', 'B', ['A serves B', 'A uses B'], false)).toBe('Row A, column B, 2 links: A serves B; A uses B')
+    expect(matrixCellName('A', 'B', ['A serves B'], false, true)).toBe('Row A, column B, linked: A serves B, selected')
+  })
+
+  it('groups cells under their rows, keeps empty rows, and drops cells outside the rows given', () => {
+    const cells = [{ r: 0, c: 1 }, { r: 0, c: 5 }, { r: 2, c: 0 }, { r: 7, c: 3 }]
+    expect(matrixGridRows([2, 0, 1, 0], cells)).toEqual([
+      { r: 0, cells: [cells[0], cells[1]] },
+      { r: 1, cells: [] },
+      { r: 2, cells: [cells[2]] },
+    ])
   })
 })

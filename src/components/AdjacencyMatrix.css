@@ -220,7 +220,7 @@
   white-space: nowrap;
 }
 
-/* roving focus: the cell that holds the Tab stop draws a ring when focused from the keyboard */
+/* roving focus: focus sits in the hidden grid; the drawn Tab-stop cell shows the ring while it has keyboard focus */
 .adjacency-matrix__cell-focus {
   fill: none;
   stroke: transparent;
@@ -228,8 +228,16 @@
   pointer-events: none;
 }
 
-.adjacency-matrix__cell:focus-visible .adjacency-matrix__cell-focus {
+.adjacency-matrix__cell-focus--on {
   stroke: rgb(var(--accent-primary));
+}
+
+/* The screen-reader grid is pinned to the viewport, so focusing it never scrolls the page; the
+   matrix scrolls the drawn cell into view itself. */
+.adjacency-matrix__a11y.heimdall-visually-hidden {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 /* virtualized (past virtualizeAbove nodes): sticky labels around a scrolling body */
