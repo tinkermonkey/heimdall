@@ -4,9 +4,11 @@
 // Checks every path in `exports` (all conditions, all subpaths) plus `main`, `module` and `types`
 // against the file list `npm pack` would publish. Run after `npm run build`: dist/ must exist.
 // Also checks that the tarball holds only dist/ and agent-skills/ (no source, tests or CJS build),
-// that declarations don't import unpublished source, that the JS entry leaves its dependencies
-// external, that the fonts stylesheet names its fonts by relative URLs that resolve to published
-// files (tinkermonkey/heimdall#343), and that each font's OFL licence ships (tinkermonkey/heimdall#383).
+// that declarations don't import unpublished source, that every JS module leaves its dependencies
+// external, that relative imports between modules resolve, that each component module imports its
+// own stylesheet, that the fonts stylesheet names its fonts by relative URLs that resolve to
+// published files (tinkermonkey/heimdall#343), and that each font's OFL licence ships
+// (tinkermonkey/heimdall#383).
 //
 // Why: 0.9.0 and 0.9.1 shipped with "./css" -> ./dist/style.css while the build emitted
 // dist/heimdall-ui.css (tinkermonkey/heimdall#303). The docs app, test app and tests all alias the
@@ -125,25 +127,40 @@ const BUNDLED_SIGNATURES = {
 }
 const declared = new Set([...Object.keys(pkg.dependencies ?? {}), ...Object.keys(pkg.peerDependencies ?? {})])
 const packageOf = (spec) => (spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0])
-for (const target of new Set(targets.map((t) => t.target))) {
-  const rel = target.replace(/^\.\//, '')
-  if (!/\.[cm]?js$/.test(rel) || !files.has(rel)) continue
+// Since 0.13.0 dist/ holds one module per source file (so consumers' bundlers can tree-shake it),
+// and each JS module imports its own stylesheet. Check every published module, not just the entry.
+const IMPORT_RE =
+  /^\s*(?:import|export)\b[^'";]*?\bfrom\s*['"]([^'"]+)['"]|^\s*import\s*['"]([^'"]+)['"]|\bimport\(\s*['"]([^'"]+)['"]\s*\)/gm
+const jsModules = [...files.keys()].filter((f) => f.startsWith('dist/') && /\.[cm]?js$/.test(f))
+for (const rel of jsModules) {
   const code = readFileSync(path.join(root, rel), 'utf8')
   for (const [name, signatures] of Object.entries(BUNDLED_SIGNATURES)) {
     const sig = signatures.find((re) => re.test(code))
     if (sig) problems.push(`${rel}: contains a bundled copy of ${name} (matched ${sig}); keep it external`)
   }
-  // Every bare import left in the bundle must be something npm installs for the consumer.
-  const specifiers = [
-    ...code.matchAll(/^\s*(?:import|export)\b[^'";]*?\bfrom\s*['"]([^'"]+)['"]|^\s*import\s*['"]([^'"]+)['"]|\bimport\(\s*['"]([^'"]+)['"]\s*\)/gm),
-  ]
-    .map((m) => m[1] ?? m[2] ?? m[3])
-    .filter((spec) => !spec.startsWith('.') && !spec.startsWith('/'))
-  for (const spec of new Set(specifiers)) {
-    if (!declared.has(packageOf(spec))) {
+  const specifiers = new Set([...code.matchAll(IMPORT_RE)].map((m) => m[1] ?? m[2] ?? m[3]))
+  for (const spec of specifiers) {
+    if (spec.startsWith('.')) {
+      // Relative imports (other modules, their stylesheets) must resolve to a published file.
+      const target = path.posix.normalize(path.posix.join(path.posix.dirname(rel), spec))
+      if (!files.has(target)) problems.push(`${rel}: imports ${spec}, but ${target} is not published`)
+    } else if (spec.startsWith('/')) {
+      problems.push(`${rel}: imports ${spec}, an absolute path`)
+    } else if (!declared.has(packageOf(spec))) {
+      // Every bare import must be something npm installs for the consumer.
       problems.push(`${rel}: imports ${spec}, which is not in dependencies or peerDependencies`)
     }
   }
+}
+
+// Each component's stylesheet ships next to it and its module imports it, so an app that imports
+// one component gets that component's CSS and nothing else.
+for (const rel of jsModules) {
+  const css = rel.replace(/\.js$/, '.css')
+  if (!rel.startsWith('dist/components/') || !files.has(css)) continue
+  const code = readFileSync(path.join(root, rel), 'utf8')
+  const name = path.posix.basename(css)
+  if (!code.includes(`import './${name}'`)) problems.push(`${rel}: does not import its stylesheet ./${name}`)
 }
 
 // The fonts stylesheet must name its fonts by URLs relative to itself, and each must resolve to a
