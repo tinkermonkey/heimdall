@@ -11,7 +11,7 @@
 // (alphabetical, reversed, two shuffles) and reports each element whose computed style differs.
 //
 // Usage (needs `npm run build` and the dev server, `npm run dev` or any port):
-//   node scripts/check-sheet-order.mjs [--url http://127.0.0.1:5173] [--pages a,b] [--dark] [--out file.json]
+//   node scripts/check-sheet-order.mjs [--url http://127.0.0.1:5173] [--pages a,b] [--dark] [--dist dist] [--out file.json]
 // --pages defaults to every `?example=` page in src/App.tsx; --dark also runs each page on dark
 // canvas. Exits 1 when any element differs. Slow (a few minutes for all pages); not run in CI.
 
@@ -31,7 +31,7 @@ const out = arg('out', null)
 const allPages = [...readFileSync(path.join(root, 'src/App.tsx'), 'utf8').matchAll(/exampleParam === '([^']+)'/g)].map((m) => m[1])
 const pages = arg('pages', null)?.split(',') ?? [...new Set(allPages)]
 
-const dist = path.join(root, 'dist')
+const dist = path.resolve(root, arg('dist', 'dist'))
 const read = (file) => readFileSync(path.join(dist, file), 'utf8')
 const full = read('style.css')
 const base = read('css/base.css')
