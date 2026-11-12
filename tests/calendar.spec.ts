@@ -18,7 +18,7 @@ async function openDayViewWithFrozenClock(page: Page) {
 
 test.describe('integration: Calendar Components', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=calendar-test')
+    await page.goto('/?example=calendar-test')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)

@@ -9,7 +9,7 @@ import {
 
 test.describe('integration: Galaxy Layout Collapse/Expand', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=graph')
+    await page.goto('/?example=graph')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts

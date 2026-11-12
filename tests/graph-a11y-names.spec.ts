@@ -21,7 +21,7 @@ async function openEdgePopover(page: Page, edgeId: string) {
 
 test.describe('GraphCanvas accessible names (#304)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=graph-a11y-names')
+    await page.goto('/?example=graph-a11y-names')
     await expect(page.getByTestId(`graph-edge-${LABELLED_EDGE_ID}`)).toBeVisible()
   })
 

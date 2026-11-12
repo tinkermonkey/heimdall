@@ -24,7 +24,7 @@ test.describe('integration: Foundation Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to a test page that loads the actual tokens.css
     // This ensures tests verify the real token system, not hardcoded values
-    await page.goto('http://localhost:5173/?test=foundation')
+    await page.goto('/?test=foundation')
     await page.waitForLoadState('networkidle')
   })
 

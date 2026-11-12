@@ -5,7 +5,7 @@ import { test, expect, type Page } from '@playwright/test'
 // AdjacencyMatrix, all on one useLayeredGraph (src/test-pages/LayeredGraphChromeTestPage.tsx).
 // Each control must change the shared state, and the matrix must reflect it.
 
-const BASE = 'http://localhost:5173/?example=layered-graph-chrome'
+const BASE = '/?example=layered-graph-chrome'
 const ORIGIN = 'application.applicationcomponent'
 
 async function open(page: Page, query = '') {

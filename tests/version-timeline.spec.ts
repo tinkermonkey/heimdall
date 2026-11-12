@@ -3,7 +3,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 test.describe('integration: VersionTimeline Component', () => {
   test('light canvas snapshot', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)
@@ -14,7 +14,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('dark canvas snapshot', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)
@@ -26,7 +26,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('click selection updates onSelect callback', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const selectedText = page.locator('text=Selected: v1').first()
@@ -40,7 +40,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('arrow down key navigates to next version', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').first()
@@ -57,7 +57,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('arrow up key navigates to previous version', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').first()
@@ -74,7 +74,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('arrow down at last entry does not navigate', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').nth(1)
@@ -102,7 +102,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('arrow up at first entry does not navigate', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').first()
@@ -122,7 +122,7 @@ test.describe('integration: VersionTimeline Component', () => {
 
 
   test('oldest-first order reverses entry order', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const newestFirstTimeline = page.locator('[data-testid="version-timeline"]').first()
@@ -136,7 +136,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('empty state renders when no entries provided', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const emptyStateText = page.locator('text=No version history available')
@@ -144,7 +144,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('read-only mode (no onSelect) is not interactive', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const readOnlyTimeline = page.locator('[data-testid="version-timeline"]').nth(4)
@@ -157,7 +157,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('single entry does not show connector rail', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const singleEntryTimeline = page.locator('[data-testid="version-timeline"]').nth(2)
@@ -167,7 +167,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('multiple entries show connector rail', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').nth(0)
@@ -177,7 +177,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('head badge renders for entries with head flag', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const headBadges = page.locator('[data-testid="version-head-v1"]')
@@ -188,7 +188,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('transition indicator renders for entries with transition', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const transitions = page.locator('[data-testid="version-transition-v4"]')
@@ -200,7 +200,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('diff stats render for entries with stats', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const statsList = page.locator('[data-testid="version-stats-v2"]')
@@ -213,7 +213,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('aria listbox semantics are applied', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const listbox = page.locator('[role="listbox"]').first()
@@ -228,7 +228,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('selected entry has aria-selected attribute', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').first()
@@ -241,7 +241,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('visual selection state changes on click', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').first()
@@ -259,7 +259,7 @@ test.describe('integration: VersionTimeline Component', () => {
   })
 
   test('selected entry has head dot indicator when marked as head', async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=version-timeline')
+    await page.goto('/?example=version-timeline')
     await page.waitForLoadState('networkidle')
 
     const timeline = page.locator('[data-testid="version-timeline"]').first()

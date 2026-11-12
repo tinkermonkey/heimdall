@@ -27,7 +27,7 @@ test.describe('integration: usePanZoom', () => {
     let viewport: Locator
 
     test.beforeEach(async ({ page }) => {
-      await page.goto('http://localhost:5173/?example=graph')
+      await page.goto('/?example=graph')
       await page.waitForLoadState('networkidle')
       await page.locator('[data-testid="fitview-view-button"]').click()
       canvas = page.locator('[data-testid="fitview-canvas"]')
@@ -174,7 +174,7 @@ test.describe('integration: usePanZoom', () => {
     }
 
     test.beforeEach(async ({ page }) => {
-      await page.goto('http://localhost:5173/?example=map-canvas')
+      await page.goto('/?example=map-canvas')
       await page.waitForLoadState('networkidle')
     })
 

@@ -3,7 +3,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanv
 
 test.describe('integration: InspectorPanel & KVGrid Components', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=inspector-panel')
+    await page.goto('/?example=inspector-panel')
     await page.waitForLoadState('networkidle')
 
     await loadSelfHostedFonts(page)

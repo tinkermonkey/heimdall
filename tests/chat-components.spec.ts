@@ -10,7 +10,7 @@ import {
 test.describe('integration: Chat Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the chat showcase test page
-    await page.goto('http://localhost:5173/?example=chat')
+    await page.goto('/?example=chat')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN

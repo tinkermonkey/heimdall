@@ -7,11 +7,9 @@ import {
   removeDarkCanvasMode,
 } from './utils/test-helpers'
 
-const BASE_URL = 'http://localhost:5173'
-
 test.describe('integration: UX Navigation Layout', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(`${BASE_URL}/?example=ux-navigation`)
+    await page.goto('/?example=ux-navigation')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts

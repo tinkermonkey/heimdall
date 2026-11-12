@@ -13,7 +13,7 @@ type Snapshot = {
 type Cause = { kind: string; reason?: string; nodeId?: string }
 type ViewportEvent = { type: 'dwell' | 'navigate'; t: number; viewport: Snapshot; cause?: Cause }
 
-const URL = 'http://localhost:5173/?example=graph-viewport-history'
+const URL = '/?example=graph-viewport-history'
 const CANVAS_W = 800
 const CANVAS_H = 500
 

@@ -4,7 +4,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded, applyDarkCanv
 test.describe('integration: Advanced Overlay Components', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to advanced overlay components test page
-    await page.goto('http://localhost:5173/?example=advanced-overlays')
+    await page.goto('/?example=advanced-overlays')
     await page.waitForLoadState('networkidle')
 
     // Load self-hosted fonts

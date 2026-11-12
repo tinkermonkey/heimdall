@@ -5,7 +5,7 @@ import { freezeAnimations, loadSelfHostedFonts, assertFontsLoaded } from './util
 // (cluster/trunk boundaries, radial-tree hierarchy rings), not just the nodes. Radial-tree trunk
 // boundaries reach well past the outermost nodes, so a node-only fit clips them (issue #305).
 
-const RADIAL = 'http://localhost:5173/?example=radial-tree-test'
+const RADIAL = '/?example=radial-tree-test'
 
 async function prepare(page: Page, url: string) {
   await page.goto(url)
@@ -112,7 +112,7 @@ test.describe('integration: fit frames boundary circles (#305)', () => {
 
   test.describe('force-clustered mount fit', () => {
     test('cluster bubbles stay in frame', async ({ page }) => {
-      await prepare(page, 'http://localhost:5173/?example=graph')
+      await prepare(page, '/?example=graph')
       await page.locator('[data-testid="clustered-view-button"]').click()
       const canvas = page.locator('[data-testid="clustered-canvas"]')
       await waitForSettledViewport(canvas)
@@ -152,7 +152,7 @@ test.describe('integration: fit frames boundary circles (#305)', () => {
     })
 
     test('frames force-clustered bubbles after zooming in', async ({ page }) => {
-      await prepare(page, 'http://localhost:5173/?example=graph')
+      await prepare(page, '/?example=graph')
       await page.locator('[data-testid="clustered-view-button"]').click()
       const canvas = page.locator('[data-testid="clustered-canvas"]')
       await waitForSettledViewport(canvas)

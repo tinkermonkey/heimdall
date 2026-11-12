@@ -9,7 +9,7 @@ test.describe('integration: Organic Layout', () => {
     const errors: string[] = []
     page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()) })
     page.on('pageerror', err => errors.push(String(err)))
-    await page.goto('http://localhost:5173/?example=organic-layout')
+    await page.goto('/?example=organic-layout')
     await page.waitForLoadState('networkidle')
 
     const caption = page.getByTestId('organic-layout-caption')
@@ -39,7 +39,7 @@ test.describe('integration: Organic Layout', () => {
 
   test('is deterministic across reloads', async ({ page }) => {
     const read = async () => {
-      await page.goto('http://localhost:5173/?example=organic-layout')
+      await page.goto('/?example=organic-layout')
       await page.waitForLoadState('networkidle')
       const nodes = page.locator('[data-testid="organic-canvas"] [data-testid^="graph-node-"]')
       const count = await nodes.count()

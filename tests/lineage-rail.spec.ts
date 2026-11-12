@@ -3,7 +3,7 @@ import { loadSelfHostedFonts, assertFontsLoaded, applyDarkCanvasMode, freezeAnim
 
 test.describe('integration: LineageRail Component', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:5173/?example=lineage-rail')
+    await page.goto('/?example=lineage-rail')
     await page.waitForLoadState('networkidle')
     await loadSelfHostedFonts(page)
     await assertFontsLoaded(page)
@@ -204,6 +204,26 @@ test.describe('integration: LineageRail Component', () => {
       const secondNode = simpleRail.locator('.lineage-rail__node').nth(1)
       const headClass = await secondNode.getAttribute('class')
       expect(headClass).not.toMatch(/lineage-rail__node--head/)
+    })
+
+    // Nodes are neutral Chips; Chip's dark-canvas neutral rule must not override them.
+    test('keeps the amber head and canvas-surface nodes on dark canvas', async ({ page }) => {
+      const simpleRail = page.locator('[aria-label*="Simple lineage chain"]')
+      const nodes = simpleRail.locator('.lineage-rail__node')
+      const colours = () =>
+        nodes.evaluateAll((els) => els.slice(0, 2).map((el) => getComputedStyle(el).backgroundColor))
+
+      const [lightHead, lightNode] = await colours()
+      await applyDarkCanvasMode(page)
+      const [darkHead, darkNode] = await colours()
+
+      expect(darkHead).toBe(lightHead) // amber alpha tint, same token in both modes
+      expect(darkHead).toBe('rgba(251, 191, 36, 0.1)')
+      const canvasSurface = await page.evaluate(
+        () => `rgb(${getComputedStyle(document.body).getPropertyValue('--canvas-surface').trim().split(/\s+/).join(', ')})`,
+      )
+      expect(darkNode).toBe(canvasSurface)
+      expect(darkNode).not.toBe(lightNode)
     })
   })
 

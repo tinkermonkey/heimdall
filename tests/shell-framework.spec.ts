@@ -5,7 +5,7 @@ test.describe('integration: Shell Framework Components', () => {
   test.describe('Topbar and TabBar Components - Visual Regression', () => {
     test.beforeEach(async ({ page }) => {
       // Navigate to the shell-framework test page which renders actual React components
-      await page.goto('http://localhost:5173/?example=shell-framework')
+      await page.goto('/?example=shell-framework')
       await page.waitForLoadState('networkidle')
 
       // Load self-hosted fonts from /fonts directory instead of Google Fonts CDN
@@ -162,6 +162,14 @@ test.describe('integration: Shell Framework Components', () => {
       test('Statusbar dark snapshot', async ({ page }) => {
         const statusbar = page.locator('.statusbar').first()
         await expect(statusbar).toHaveScreenshot('statusbar-dark.png')
+      })
+
+      // The active tab's count chip stays amber; Chip's dark-canvas id-tag rule must not win.
+      test('active tab count chip keeps its amber on dark canvas', async ({ page }) => {
+        await page.getByRole('tab', { name: /Metrics/ }).first().click()
+        const chip = page.locator('.tab-bar__tab--active .chip--id-tag').first()
+        await expect(chip).toHaveCSS('color', 'rgb(251, 191, 36)')
+        await expect(chip).toHaveCSS('background-color', 'rgba(251, 191, 36, 0.1)')
       })
     })
   })

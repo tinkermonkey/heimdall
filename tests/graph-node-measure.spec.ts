@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test'
 // 16px, the measured height used to include the line-height strut (20px node -> 24px box), and
 // offsetWidth rounded fractional widths down, so labels ellipsized. Geometry assertions only (no
 // screenshot baselines), so the spec is platform-independent.
-const URL = 'http://localhost:5173/?example=graph-node-measure'
+const URL = '/?example=graph-node-measure'
 const CANVAS = '[data-testid="node-measure-canvas"]'
 
 const EDGES: Array<[string, string, string]> = [
