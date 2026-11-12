@@ -23,8 +23,11 @@
   margin: 0 -4px;
 }
 
-/* Base node styles */
-.lineage-rail__node {
+/* Base node styles. Nodes render as a neutral Chip, and Chip's dark-canvas rule
+   (body.dark-canvas .chip--neutral) outranks a single class, so each colour rule
+   below also has a dark-canvas selector that outranks it. */
+.lineage-rail__node,
+body.dark-canvas .lineage-rail .lineage-rail__node {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -46,7 +49,8 @@
 }
 
 /* Head node styling */
-.lineage-rail__node--head {
+.lineage-rail__node--head,
+body.dark-canvas .lineage-rail .lineage-rail__node--head {
   background-color: var(--accent-primary-bg-alpha-sm);
   border-color: var(--accent-primary-border-alpha-sm);
   color: rgb(var(--canvas-fg-1));
@@ -58,7 +62,8 @@
   transition: border-color 150ms ease;
 }
 
-.lineage-rail__node--interactive:hover {
+.lineage-rail__node--interactive:hover,
+body.dark-canvas .lineage-rail .lineage-rail__node--interactive:hover {
   border-color: rgb(var(--canvas-border-strong));
 }
 
