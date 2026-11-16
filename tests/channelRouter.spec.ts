@@ -317,7 +317,7 @@ test.describe('channelRouter', () => {
     // it takes ~130 ms now (scripts/bench-router.mjs). The bound is on this process's CPU time, not
     // wall time, so other processes competing for the machine don't count against it
     // (tinkermonkey/heimdall#392); it stays loose for slow CI runners.
-    test('400 boxes and 400 routes route in well under a second and a half', () => {
+    test('400 boxes and 400 routes route in well under 1.5 s of CPU time', () => {
       const n = 400
       const cols = Math.ceil(Math.sqrt(n))
       const boxes = Array.from({ length: n }, (_, i) => createRect((i % cols) * 150, Math.floor(i / cols) * 120, 100, 23))
