@@ -314,8 +314,10 @@ test.describe('channelRouter', () => {
   test.describe('batch cost', () => {
     // GraphCanvas reroutes on every re-measure or drag, so a batch must stay near-linear. Before
     // the bounds in routeNavigationEdges (tinkermonkey/heimdall#324 review) this batch took 3.6 s;
-    // it takes ~130 ms now (scripts/bench-router.mjs). The bound is loose for slow CI runners.
-    test('400 boxes and 400 routes route in well under a second and a half', () => {
+    // it takes ~130 ms now (scripts/bench-router.mjs). The bound is on this process's CPU time, not
+    // wall time, so other processes competing for the machine don't count against it
+    // (tinkermonkey/heimdall#392); it stays loose for slow CI runners.
+    test('400 boxes and 400 routes route in well under 1.5 s of CPU time', () => {
       const n = 400
       const cols = Math.ceil(Math.sqrt(n))
       const boxes = Array.from({ length: n }, (_, i) => createRect((i % cols) * 150, Math.floor(i / cols) * 120, 100, 23))
@@ -324,9 +326,10 @@ test.describe('channelRouter', () => {
       const edges = Array.from({ length: n }, (_, i) => ({ id: `e${i}`, source: boxes[Math.floor(rnd() * n)], target: boxes[Math.floor(rnd() * n)] }))
         .filter(e => e.source !== e.target)
       routeNavigationEdges(edges.slice(0, 20), boxes) // warm up
-      const t = performance.now()
+      const before = process.cpuUsage()
       const routes = routeNavigationEdges(edges, boxes)
-      expect(performance.now() - t).toBeLessThan(1500)
+      const { user, system } = process.cpuUsage(before)
+      expect((user + system) / 1000).toBeLessThan(1500)
       expect(routes.size).toBe(edges.length)
     })
   })

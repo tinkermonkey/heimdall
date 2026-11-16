@@ -301,8 +301,11 @@ test.describe('LayeredGraphExplorer', () => {
     const errors = await open(page, '&data=full&late=1&sync=1&view=stack')
     await page.getByRole('button', { name: 'Load data' }).click()
     await expect(page.locator('.layer-stack__plane')).toHaveCount(13)
-    // stack's 170 at 13 layers: 170 × 4 / 12.
-    await expect(status(page)).toContainText('stack · yaw -36° pitch 29° zoom 1.00 · gap 57')
+    // stack's 170 at 13 layers: 170 × 4 / 12. The 13 planes overflow the preset's own frame, so the
+    // stack fits them (zoom 0.69) and reports that once the move settles. Until then the status
+    // shows the preset's own zoom 1.00; checking for that raced the report on a loaded machine
+    // (tinkermonkey/heimdall#392).
+    await expect(status(page)).toContainText('stack · yaw -36° pitch 29° zoom 0.69 · gap 57')
     await page.getByRole('button', { name: 'Save snapshot' }).click()
     await expect(page.getByTestId('saved-snapshot')).toHaveText('stack · stack · gap 57')
     // The restored camera and gap are the preset's own: the preset holds and the stack stays.

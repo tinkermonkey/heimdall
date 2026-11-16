@@ -167,23 +167,32 @@ test.describe('integration: GraphCanvas layout busy state', () => {
   })
 
   test('galaxy live simulation reports simulating, and again while a dragged node re-settles', async ({ page }) => {
-    await installRecorder(page)
     await gotoIdle(page, '&initial=galaxy')
     await page.getByTestId('clear-log').click()
-    await resetRecorder(page)
 
+    // The settle after enabling takes ~200 ms, which a check of data-layout-state can miss
+    // (tinkermonkey/heimdall#392); the page's log records every report.
     await page.getByRole('button', { name: 'Enable live simulation' }).click()
-    await expect(page.locator(CANVAS)).toHaveAttribute('data-layout-state', 'simulating')
-    await expect(page.locator(CANVAS)).toHaveAttribute('data-layout-state', 'idle', { timeout: 10000 })
-    // The chip faded in while simulating (the main thread is free, so this samples real opacity).
-    expect(Math.max(...(await samples(page)).map(x => x.chipOpacity))).toBeGreaterThan(0.5)
+    await expect(page.getByTestId('layout-state-log')).toHaveText('simulating idle', { timeout: 10000 })
 
     const node = page.locator(`${CANVAS} [data-testid="graph-node-n4"]`)
     const box = (await node.boundingBox())!
+    const x = box.x + box.width / 2 + 60
+    const y = box.y + box.height / 2 + 40
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
     await page.mouse.down()
-    await page.mouse.move(box.x + box.width / 2 + 60, box.y + box.height / 2 + 40, { steps: 8 })
-    await expect(page.locator(CANVAS)).toHaveAttribute('data-layout-state', 'simulating')
+    await page.mouse.move(x, y, { steps: 8 })
+    // A held drag stays simulating: each move wakes the simulation. Nudging the node on every poll
+    // keeps it awake for as long as the chip takes to fade in (150 ms delay + 120 ms fade; the main
+    // thread is free, so this reads real opacity).
+    let step = 0
+    await expect.poll(async () => {
+      await page.mouse.move(x + (++step % 2), y)
+      return page.locator(CANVAS).evaluate(root => {
+        const chip = root.querySelector('[data-testid="graph-layout-indicator"]')
+        return { state: root.getAttribute('data-layout-state'), fadedIn: !!chip && Number(getComputedStyle(chip).opacity) > 0.5 }
+      })
+    }, { intervals: [50] }).toEqual({ state: 'simulating', fadedIn: true })
     await page.mouse.up()
     await expect(page.locator(CANVAS)).toHaveAttribute('data-layout-state', 'idle', { timeout: 10000 })
     await expect(page.getByTestId('layout-state-log')).toHaveText('simulating idle simulating idle')
