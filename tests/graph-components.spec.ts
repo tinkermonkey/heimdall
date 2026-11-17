@@ -1395,6 +1395,45 @@ test.describe("integration: Graph Canvas Components", () => {
       await page.waitForTimeout(200);
     });
 
+    test("hovering any body shows its orbit-link labels without two of them overlapping", async ({
+      page,
+    }) => {
+      // Galaxy vision D9 ("labels never collide"): orbit-link labels appear only in focus, and
+      // GraphCanvas places every drawn label at once (placeEdgeLabelsJointly), so the labels a
+      // hover reveals clear each other. The at-rest survey never sees these labels. A label that
+      // sits over a body had no clear spot on its edge at all (an edge shorter than its label);
+      // where two such labels go is the open hide-or-move question, so only a pair of two
+      // labels that both sit over bodies is not asserted here.
+      const nodeIds = await page
+        .locator('[data-testid^="graph-node-"]')
+        .evaluateAll((els) => els.map((el) => el.getAttribute("data-testid")!));
+      const overlaps = (a: { l: number; r: number; t: number; b: number }, b: { l: number; r: number; t: number; b: number }) =>
+        Math.min(a.r, b.r) - Math.max(a.l, b.l) > 0.5 && Math.min(a.b, b.b) - Math.max(a.t, b.t) > 0.5;
+      let checked = 0;
+      for (const id of nodeIds) {
+        await page.locator(`[data-testid="${id}"]`).first().hover({ force: true });
+        await page.waitForTimeout(50);
+        const { labels, bodies } = await page.evaluate(() => {
+          const box = (el: Element) => {
+            const r = el.getBoundingClientRect();
+            return { l: r.left, r: r.right, t: r.top, b: r.bottom };
+          };
+          return {
+            labels: [...document.querySelectorAll(".graph-edge__label-bg")].map(box),
+            bodies: [...document.querySelectorAll('[data-testid^="graph-node-"]')].map(box),
+          };
+        });
+        if (labels.length < 2) continue;
+        checked++;
+        const overBody = labels.map((l) => bodies.some((b) => overlaps(l, b)));
+        for (let i = 0; i < labels.length; i++)
+          for (let j = i + 1; j < labels.length; j++)
+            if (!(overBody[i] && overBody[j]))
+              expect(overlaps(labels[i], labels[j]), `${id}: labels ${i} and ${j} overlap`).toBe(false);
+      }
+      expect(checked).toBeGreaterThan(0);
+    });
+
 
 
     test("toolbar zoom in/out buttons anchor at the viewport center, not wherever world origin projects to", async ({
