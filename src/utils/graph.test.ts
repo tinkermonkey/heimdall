@@ -120,6 +120,97 @@ describe('placeEdgeLabelsJointly', () => {
     expect(performance.now() - t).toBeLessThan(500)
   })
 
+  it('offsets the labels of parallel labelled tracks to the outside of their own lines', () => {
+    // The staggering case above, with each edge's line given: the staggered pills each lie across
+    // both tracks, so it is unclear which label names which line. Each pill moves beside its own
+    // line, on the side away from the other track.
+    const nodes = [
+      { x: 8, y: -52, width: 90, height: 20 },
+      { x: 8, y: 52, width: 90, height: 20 },
+    ]
+    const a = [{ x: 0, y: -42 }, { x: 0, y: 42 }]
+    const b = [{ x: 16, y: 42 }, { x: 16, y: -42 }]
+    const ra = { ...request('a', 'aggregates', a, true), path: a }
+    const rb = { ...request('b', 'associated-with', b, true), path: b }
+    const placed = placeEdgeLabelsJointly([ra, rb], nodes)
+    const pa = placed.get('a')!, pb = placed.get('b')!
+    // a's pill is left of its line (x = 0), b's right of its line (x = 16), each clear of both lines.
+    expect(pa.x + ra.size.width / 2).toBeLessThan(0)
+    expect(pb.x - rb.size.width / 2).toBeGreaterThan(16)
+    expect(pa.offset).toBe(true)
+    expect(pb.offset).toBe(true)
+    expect(boxesOverlap(pa, ra.size, pb, rb.size)).toBe(false)
+    for (const n of nodes) {
+      expect(boxesOverlap(pa, ra.size, n, n)).toBe(false)
+      expect(boxesOverlap(pb, rb.size, n, n)).toBe(false)
+    }
+  })
+
+  it('keeps a label on its line when the parallel track is not labelled, or the tracks are apart', () => {
+    const a = [{ x: 0, y: -100 }, { x: 0, y: 100 }]
+    const b = [{ x: 16, y: 100 }, { x: 16, y: -100 }]
+    const far = [{ x: 200, y: 100 }, { x: 200, y: -100 }]
+    const ra = { ...request('a', 'aggregates', a, true), path: a }
+    // Alone next to an unlabelled line: nothing to tell apart.
+    expect(placeEdgeLabelsJointly([ra], []).get('a')).toEqual({ x: 0, y: 0 })
+    // Next to a labelled line far enough away that the pills don't reach it.
+    const rf = { ...request('f', 'associated-with', far, true), path: far }
+    const placed = placeEdgeLabelsJointly([ra, rf], [])
+    expect(placed.get('a')).toEqual({ x: 0, y: 0 })
+    expect(placed.get('f')).toEqual({ x: 200, y: 0 })
+    // Sandwiched between two labelled tracks: no outside to go to, so no offset.
+    const c = [{ x: -16, y: 100 }, { x: -16, y: -100 }]
+    const three = placeEdgeLabelsJointly(
+      [ra, { ...request('b', 'associated-with', b, true), path: b }, { ...request('c', 'realizes', c, true), path: c }],
+      [],
+    )
+    expect(three.get('a')!.offset).toBeUndefined()
+    expect(three.get('a')!.x).toBe(0)
+  })
+
+  it('marks a label with no clear spot as noRoom, only when asked', () => {
+    // A 10 px edge between two cards: no spot on it clears them.
+    const nodes = [
+      { x: 0, y: -20, width: 138, height: 30 },
+      { x: 0, y: 20, width: 138, height: 30 },
+      { x: 400, y: 0, width: 138, height: 30 },
+    ]
+    const short = request('short', 'fulfills-requirements', [{ x: 0, y: -5 }, { x: 0, y: 0 }, { x: 0, y: 5 }])
+    const clear = request('clear', 'realizes', [{ x: 69, y: 0 }, { x: 200, y: 0 }, { x: 331, y: 0 }])
+    expect(placeEdgeLabelsJointly([short, clear], nodes).get('short')!.noRoom).toBeUndefined()
+    const placed = placeEdgeLabelsJointly([short, clear], nodes, { markNoRoom: true })
+    expect(placed.get('short')!.noRoom).toBe(true)
+    expect(placed.get('clear')!.noRoom).toBeUndefined()
+  })
+
+  it('of two labels that cannot clear each other, marks the later one noRoom and keeps the earlier', () => {
+    // One 40 px edge between two cards, carrying two labels: only one fits.
+    const nodes = [
+      { x: -89, y: 0, width: 138, height: 30 },
+      { x: 89, y: 0, width: 138, height: 30 },
+    ]
+    const pts = [{ x: -20, y: 0 }, { x: 0, y: 0 }, { x: 20, y: 0 }]
+    const r1 = request('first', 'x', pts)
+    const r2 = request('second', 'y', [...pts].reverse())
+    const placed = placeEdgeLabelsJointly([r1, r2], nodes, { markNoRoom: true })
+    expect(placed.get('first')!.noRoom).toBeUndefined()
+    expect(placed.get('second')!.noRoom).toBe(true)
+  })
+
+  it('places revealed labels against fixed resting labels without moving or returning them', () => {
+    // A resting label sits at the middle of a horizontal edge; a label revealed on hover on a
+    // crossing edge avoids it where it can, and is allowed to overlap it where it cannot.
+    const resting = { x: 0, y: 0, ...edgeLabelSize('realizes') }
+    const crossing = request('focus', 'depends-on', [{ x: 0, y: -100 }, { x: 0, y: 0 }, { x: 0, y: 100 }])
+    const placed = placeEdgeLabelsJointly([crossing], [], { fixedLabels: [resting] })
+    expect([...placed.keys()]).toEqual(['focus'])
+    expect(boxesOverlap(placed.get('focus')!, crossing.size, resting, resting)).toBe(false)
+    // Nowhere else to go: the revealed label overlaps the resting one, and nothing is marked.
+    const stuck = request('stuck', 'depends-on', [{ x: 0, y: 0 }, { x: 0, y: 0 }, { x: 0, y: 0 }])
+    const s = placeEdgeLabelsJointly([stuck], [], { fixedLabels: [resting] }).get('stuck')!
+    expect(s).toEqual({ x: 0, y: 0 })
+  })
+
   it('is deterministic and leaves unplaceable input alone', () => {
     const r1 = request('a', 'x', [{ x: 0, y: 0 }, { x: 50, y: 0 }, { x: 100, y: 0 }])
     const r2 = request('b', 'y', [{ x: 0, y: 0 }, { x: 50, y: 0 }, { x: 100, y: 0 }])

@@ -14,6 +14,10 @@ export interface GraphEdgeShapeProps {
   d: string
   mid: { x: number; y: number }
   label?: string
+  /** Set when the label is laid out but not drawn: it stays in the DOM with `visibility: hidden`
+   *  and `data-label-state` naming why ("no-room": no clear spot, shown on focus; "drag": its
+   *  route is moving in a node drag), so a test or capture can still find it. */
+  labelHidden?: 'no-room' | 'drag'
   variant: GraphEdgeVariant
   /** 0-100. Maps to a 1-8px stroke width via a square-root curve. */
   weight?: number
@@ -37,6 +41,7 @@ export function GraphEdgeShape({
   d,
   mid,
   label,
+  labelHidden,
   variant,
   weight,
   opacity,
@@ -136,6 +141,8 @@ export function GraphEdgeShape({
           }
           transform={`translate(${mid.x - labelSize.width / 2}, ${mid.y - labelSize.height / 2})`}
           onClick={handleClick}
+          visibility={labelHidden ? 'hidden' : undefined}
+          data-label-state={labelHidden}
         >
           <rect
             width={labelSize.width}

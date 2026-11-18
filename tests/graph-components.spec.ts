@@ -129,6 +129,55 @@ test.describe("integration: Graph Canvas Components", () => {
     await expect(node).not.toHaveClass(/selected/);
   });
 
+  test("a label with no clear spot hides during the drag, stays hidden at rest, and shows on hover without moving other labels", async ({
+    page,
+  }) => {
+    // Drag Nucleus to sit just above Cell: their "contains" edge (edge_1) gets shorter than its
+    // label, so no spot on it clears the two cards. GraphCanvas hides such a label at rest and
+    // shows it when the edge or an endpoint is in focus (Austin, 2026-11-18); during the drag the
+    // label of a moving route is hidden, not frozen. This view draws labels through renderEdge,
+    // which honours EdgeGeometry.labelHidden.
+    const nucleus = page.locator('[data-testid="graph-node-cls_nucleus"]');
+    const cell = page.locator('[data-testid="graph-node-cls_cell"]');
+    const label = page.locator('[data-testid="graph-edge-edge_1"] .graph-edge__label');
+    await expect(label).toBeVisible();
+    const nb = (await nucleus.boundingBox())!;
+    const cb = (await cell.boundingBox())!;
+    const startX = nb.x + nb.width / 2;
+    const startY = nb.y + nb.height / 2;
+    const endX = cb.x + cb.width / 2;
+    const endY = cb.y - nb.height / 2 - 4;
+
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(endX, endY, { steps: 12 });
+    // Mid-drag, with Nucleus under the pointer (in focus): hidden because its route is moving.
+    await expect(label).toBeHidden();
+    await page.mouse.up();
+
+    // Away from every node and edge, so nothing is in focus: hidden for want of room.
+    const canvas = (await page.locator(".graph-canvas").boundingBox())!;
+    await page.mouse.move(canvas.x + canvas.width / 2, canvas.y + 8);
+    await expect(label).toBeHidden();
+    await expect(label).toHaveAttribute("data-label-hidden", "true");
+
+    const restingLabels = async () =>
+      page.locator(".graph-edge__label:not([data-label-hidden])").evaluateAll((els) =>
+        els.map((el) => `${el.closest("[data-edge-id]")?.getAttribute("data-edge-id")} ${el.getAttribute("transform")}`),
+      );
+    const before = await restingLabels();
+    expect(before.length).toBeGreaterThan(0);
+
+    // Hovering an endpoint shows it, and moves none of the labels drawn at rest.
+    await cell.hover({ force: true });
+    await expect(label).toBeVisible();
+    const after = await restingLabels();
+    expect(after.filter((l) => !l.startsWith("edge_1 "))).toEqual(before);
+
+    await page.mouse.move(canvas.x + canvas.width / 2, canvas.y + 8);
+    await expect(label).toBeHidden();
+  });
+
   test("draggable=false disables node dragging without affecting click-to-select", async ({
     page,
   }) => {
