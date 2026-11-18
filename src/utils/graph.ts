@@ -341,6 +341,23 @@ function polylinePointAt(points: readonly Point[], t: number): Point {
 // stays as close to the visual middle of the edge as the nearby nodes allow.
 const LABEL_CANDIDATE_TS = [0.5, 0.38, 0.62, 0.26, 0.74, 0.15, 0.85]
 
+/** A point at parameter t ∈ [0, 1] along an edge path given as `computeEdgePath`/`RoutedEdge`
+ *  points: a polyline when `isPolyline`, else a quadratic (3 points) or cubic (4) control polygon. */
+export function edgePathSampler(points: readonly Point[], isPolyline?: boolean): (t: number) => Point {
+  return isPolyline
+    ? (t: number) => polylinePointAt(points, t)
+    : points.length === 4
+    ? (t: number) => cubicPointAt(points[0], points[1], points[2], points[3], t)
+    : (t: number) => quadraticPointAt(points[0], points[1], points[2], t)
+}
+
+/** findClearLabelPosition's samples, in its order: the candidates a single edge's label tries. */
+export const EDGE_LABEL_TS: readonly number[] = LABEL_CANDIDATE_TS
+
+/** Extra positions a label may move to when it collides with another label or a node (only then:
+ *  a label that is already clear never moves). Finer steps between findClearLabelPosition's. */
+export const EDGE_LABEL_REPAIR_TS: readonly number[] = [0.44, 0.56, 0.32, 0.68, 0.2, 0.8, 0.1, 0.9]
+
 /**
  * Where to center an edge label so it clears every node in `obstacles` by `margin` px, without
  * moving the edge or any node — just samples a handful of points along the path `points` already
@@ -360,12 +377,7 @@ export function findClearLabelPosition(
   margin: number = 6,
   isPolyline?: boolean
 ): Point {
-  const sampleAt =
-    isPolyline
-      ? (t: number) => polylinePointAt(points, t)
-      : points.length === 4
-      ? (t: number) => cubicPointAt(points[0], points[1], points[2], points[3], t)
-      : (t: number) => quadraticPointAt(points[0], points[1], points[2], t)
+  const sampleAt = edgePathSampler(points, isPolyline)
 
   const halfW = size.width / 2 + margin
   const halfH = size.height / 2 + margin
@@ -380,4 +392,398 @@ export function findClearLabelPosition(
     if (clear) return p
   }
   return sampleAt(0.5)
+}
+
+// ─── Joint edge label placement ────────────────────────────────────────────
+
+/** One edge label to place: its pill size, the points along its own edge it may sit at (most
+ *  preferred first), and where it sits when none of them clears the nodes. */
+export interface EdgeLabelRequest {
+  id: string
+  size: { width: number; height: number }
+  /** Tried in order for the label's own spot: the first clear of every node wins, exactly as
+   *  findClearLabelPosition (or a route's label anchors) would choose for this edge alone. */
+  candidates: readonly Point[]
+  /** Where the label sits when no candidate clears the nodes (findClearLabelPosition: the midpoint). */
+  fallback: Point
+  /** More points along the same edge, tried only to resolve a collision. */
+  alternatives?: readonly Point[]
+  /** The label's own edge, when it is a polyline of straight segments. With it, the placement can
+   *  tell when another labelled polyline runs parallel to this one closer than the pill (a
+   *  "parallel track"), and can offer a spot beside this edge's line, on the side away from the
+   *  other track. edgeLabelRequest sets it for polyline routes only. */
+  path?: readonly Point[]
+}
+
+export interface PlaceEdgeLabelsJointlyOptions {
+  /** Clearance kept between a label and a node box, px (EDGE_LABEL_MARGIN). Default 6. */
+  margin?: number
+  /** Clearance kept between two labels, px. Default 2. */
+  gap?: number
+  /** Repair rounds over the colliding labels; 0 places each label as if alone. Default 8. */
+  maxRounds?: number
+  /** Repair work limit, in box-against-box tests; past it, labels keep where they are. Default
+   *  300 000 (a few ms), so a hub with hundreds of labelled spokes cannot stall a frame. */
+  maxWork?: number
+  /** Labels already drawn that this placement must not move (GraphCanvas: the resting labels,
+   *  when placing the labels a hover or selection reveals). They count as labels to avoid, but a
+   *  placed label may still end over one; they are never moved, marked or returned. */
+  fixedLabels?: readonly EdgeEndpointRect[]
+  /** Mark a label `noRoom` when, after the repair, it still overlaps a node box or another label
+   *  by more than `tolerance` on both axes. Of two overlapping labels the earlier keeps its spot.
+   *  GraphCanvas hides such labels at rest and shows them on focus. Default false. */
+  markNoRoom?: boolean
+  /** Overlap, px, up to which a touch is not a collision for `markNoRoom` (the label checks'
+   *  1 px). Default 1. */
+  tolerance?: number
+  /** Space between a pill offset beside its line and that line, px. Default 3. */
+  trackGap?: number
+}
+
+/** Where a label goes. `noRoom`: it has no spot clear of the nodes and the other labels (only with
+ *  `markNoRoom`). `offset`: it sits beside its own line, off a parallel labelled track. */
+export interface PlacedEdgeLabel extends Point {
+  noRoom?: true
+  offset?: true
+}
+
+/** A spot's overlap, compared in order: how many node boxes the label covers (each hides a card's
+ *  name), how many other labels it covers, how many parallel labelled tracks other than its own it
+ *  lies across (it is then unclear which line it names), then the areas covered (nodes, labels),
+ *  then intrusion into the clearance bands only. Counts come first so a move never adds a
+ *  collision to shrink another one: a label never trades a stack for a spot over a card, nor the
+ *  reverse. */
+type LabelCost = [nodeHits: number, labelHits: number, trackHits: number, nodeArea: number, labelArea: number, band: number]
+const lessCost = (a: LabelCost, b: LabelCost) => {
+  for (let k = 0; k < a.length; k++) {
+    if (a[k] < b[k] - 1e-9) return true
+    if (a[k] > b[k] + 1e-9) return false
+  }
+  return false
+}
+const isZero = (c: LabelCost) => c.every((v) => v === 0)
+
+/** Two segments closer to parallel than this (sine of the angle, ~10 degrees) are parallel tracks. */
+const TRACK_PARALLEL_SIN = 0.17
+
+/** Whether segment a-b crosses the box [x0, x1] x [y0, y1] (Liang-Barsky clip). */
+function segmentCrossesBox(ax: number, ay: number, bx: number, by: number, x0: number, y0: number, x1: number, y1: number): boolean {
+  let t0 = 0, t1 = 1
+  const dx = bx - ax, dy = by - ay
+  const clip = (p: number, q: number) => {
+    if (p === 0) return q >= 0
+    const r = q / p
+    if (p < 0) { if (r > t1) return false; if (r > t0) t0 = r }
+    else { if (r < t0) return false; if (r < t1) t1 = r }
+    return true
+  }
+  return clip(-dx, ax - x0) && clip(dx, x1 - ax) && clip(-dy, ay - y0) && clip(dy, y1 - ay) && t0 <= t1
+}
+
+/** One edge's label request for placeEdgeLabelsJointly, from its drawn route (GraphCanvas). Its
+ *  first choice is exactly what this edge would pick alone: a pre-routed edge's anchors
+ *  (orthogonal: straight-segment midpoints, longest first), then findClearLabelPosition's samples,
+ *  falling back to the midpoint. Only a polyline route (straight segments: orthogonal,
+ *  ux-navigation) carries its line as `path`, so only polyline edges form parallel tracks and get
+ *  outside offsets; a bezier's label stays on its curve (Austin, 2026-11-18: converging curves at
+ *  an organic hub are not parallel tracks). */
+export function edgeLabelRequest(
+  id: string,
+  label: string,
+  route: { points: readonly Point[]; isPolyline?: boolean; labelAnchors?: readonly Point[] },
+): EdgeLabelRequest {
+  const sampleAt = edgePathSampler(route.points, route.isPolyline)
+  return {
+    id,
+    size: edgeLabelSize(label),
+    candidates: [...(route.labelAnchors ?? []), ...EDGE_LABEL_TS.map(sampleAt)],
+    fallback: sampleAt(0.5),
+    alternatives: EDGE_LABEL_REPAIR_TS.map(sampleAt),
+    ...(route.isPolyline && { path: route.points }),
+  }
+}
+
+/**
+ * Places every edge label at once so labels stay clear of each other as well as of the nodes.
+ *
+ * 1. Each label first takes the spot it would take alone (the first candidate clear of every node by
+ *    `margin`, else `fallback`), so a graph without collisions renders exactly as before.
+ * 2. Repair: a label that overlaps another label (closer than `gap`) or a node (closer than
+ *    `margin`), or lies across another labelled edge running parallel to its own (a parallel
+ *    track, needs `path`), moves to whichever of its spots has the least overlap, compared in order:
+ *    node boxes covered, other labels covered, parallel tracks crossed, then those areas, then
+ *    clearance-band intrusion (see LabelCost; a move never adds a collision), preferring earlier
+ *    spots on ties. Its spots: its candidates and alternatives along its own line, then, where a
+ *    parallel labelled track crowds a spot from one side, that spot moved beside its own line on
+ *    the other side. Rounds repeat over the labels still colliding until nothing moves or `maxWork`
+ *    is spent. Labels that never collide are never moved.
+ * 3. With `markNoRoom`, a label still over a node or another label is marked `noRoom` (the caller
+ *    decides whether to draw it).
+ *
+ * Pure and deterministic (input order breaks ties). Returns id -> where the label's centre goes.
+ */
+export function placeEdgeLabelsJointly(
+  requests: readonly EdgeLabelRequest[],
+  obstacles: readonly EdgeEndpointRect[],
+  options: PlaceEdgeLabelsJointlyOptions = {},
+): Map<string, PlacedEdgeLabel> {
+  const margin = options.margin ?? 6
+  const gap = options.gap ?? 2
+  const maxRounds = options.maxRounds ?? 8
+  const maxWork = options.maxWork ?? 300_000
+  const tolerance = options.tolerance ?? 1
+  const trackGap = options.trackGap ?? 3
+  const fixed = options.fixedLabels ?? []
+  let work = 0
+  const n = requests.length
+  const out = new Map<string, PlacedEdgeLabel>()
+  if (n === 0) return out
+
+  // Uniform grid over node boxes, placed labels and labelled edge segments, so a query touches
+  // only nearby boxes.
+  let maxW = 0, maxH = 0
+  for (const r of requests) { maxW = Math.max(maxW, r.size.width); maxH = Math.max(maxH, r.size.height) }
+  const cell = Math.max(64, maxW + 2 * margin, maxH + 2 * margin)
+  const key = (cx: number, cy: number) => cx * 73856093 ^ cy * 19349663
+  const boxCells = (x: number, y: number, hw: number, hh: number, fn: (k: number) => void) => {
+    const x0 = Math.floor((x - hw) / cell), x1 = Math.floor((x + hw) / cell)
+    const y0 = Math.floor((y - hh) / cell), y1 = Math.floor((y + hh) / cell)
+    for (let cx = x0; cx <= x1; cx++) for (let cy = y0; cy <= y1; cy++) fn(key(cx, cy))
+  }
+  const nodeGrid = new Map<number, number[]>()
+  obstacles.forEach((o, i) => boxCells(o.x, o.y, o.width / 2, o.height / 2, (k) => {
+    const b = nodeGrid.get(k); if (b) b.push(i); else nodeGrid.set(k, [i])
+  }))
+  // Labels: 0..n-1 are the requests, n.. the fixed labels (never moved).
+  const boxW = (i: number) => (i < n ? requests[i].size.width : fixed[i - n].width)
+  const boxH = (i: number) => (i < n ? requests[i].size.height : fixed[i - n].height)
+  const labelGrid = new Map<number, Set<number>>()
+  const pos: Point[] = new Array(n)
+  const at = (i: number): Point => (i < n ? pos[i] : fixed[i - n])
+  const addLabel = (i: number) => boxCells(at(i).x, at(i).y, boxW(i) / 2, boxH(i) / 2, (k) => {
+    const b = labelGrid.get(k); if (b) b.add(i); else labelGrid.set(k, new Set([i]))
+  })
+  const removeLabel = (i: number) => boxCells(at(i).x, at(i).y, boxW(i) / 2, boxH(i) / 2, (k) => {
+    labelGrid.get(k)?.delete(i)
+  })
+  const fine = (p: Point) => Number.isFinite(p.x) && Number.isFinite(p.y)
+  fixed.forEach((f, j) => { if (fine(f)) addLabel(n + j) })
+
+  // Labelled edge segments, for parallel tracks.
+  interface Seg { owner: number; ax: number; ay: number; bx: number; by: number; ux: number; uy: number }
+  const segs: Seg[] = []
+  const segGrid = new Map<number, number[]>()
+  const ownSegs: number[][] = requests.map(() => [])
+  requests.forEach((r, i) => {
+    const pts = r.path ?? []
+    for (let k = 1; k < pts.length; k++) {
+      const a = pts[k - 1], b = pts[k]
+      const len = Math.hypot(b.x - a.x, b.y - a.y)
+      if (!(len > 1e-6) || !fine(a) || !fine(b)) continue
+      const s = segs.length
+      segs.push({ owner: i, ax: a.x, ay: a.y, bx: b.x, by: b.y, ux: (b.x - a.x) / len, uy: (b.y - a.y) / len })
+      ownSegs[i].push(s)
+      boxCells((a.x + b.x) / 2, (a.y + b.y) / 2, Math.abs(b.x - a.x) / 2, Math.abs(b.y - a.y) / 2, (k2) => {
+        const c = segGrid.get(k2); if (c) c.push(s); else segGrid.set(k2, [s])
+      })
+    }
+  })
+  // The direction of label i's own edge nearest p (its closest own segment), or null without a path.
+  const ownDirection = (i: number, p: Point): Seg | null => {
+    let best: Seg | null = null, bestD = Infinity
+    for (const s of ownSegs[i]) {
+      const g = segs[s]
+      const t = Math.max(0, Math.min(1, ((p.x - g.ax) * (g.bx - g.ax) + (p.y - g.ay) * (g.by - g.ay)) / ((g.bx - g.ax) ** 2 + (g.by - g.ay) ** 2)))
+      const d = Math.hypot(g.ax + t * (g.bx - g.ax) - p.x, g.ay + t * (g.by - g.ay) - p.y)
+      if (d < bestD) { bestD = d; best = g }
+    }
+    return best
+  }
+  // Other labelled edges' segments parallel to `dir` crossing label i's box at p.
+  const parallelTracks = (i: number, p: Point, dir: Seg, fn: (g: Seg) => void) => {
+    const hw = requests[i].size.width / 2 - tolerance, hh = requests[i].size.height / 2 - tolerance
+    const seen = new Set<number>()
+    boxCells(p.x, p.y, hw, hh, (k) => {
+      for (const s of segGrid.get(k) ?? []) {
+        if (seen.has(s)) continue
+        seen.add(s)
+        const g = segs[s]
+        if (g.owner === i) continue
+        work++
+        if (Math.abs(g.ux * dir.uy - g.uy * dir.ux) > TRACK_PARALLEL_SIN) continue
+        if (segmentCrossesBox(g.ax, g.ay, g.bx, g.by, p.x - hw, p.y - hh, p.x + hw, p.y + hh)) fn(g)
+      }
+    })
+  }
+  const trackCost = (i: number, p: Point): number => {
+    if (!ownSegs[i].length) return 0
+    const dir = ownDirection(i, p)
+    if (!dir) return 0
+    const owners = new Set<number>()
+    parallelTracks(i, p, dir, (g) => owners.add(g.owner))
+    return owners.size
+  }
+  // Spot p moved beside label i's own line, on the side away from the parallel labelled tracks
+  // crowding it there; null when none crowds it, or tracks crowd it from both sides.
+  const outsideOffset = (i: number, p: Point): Point | null => {
+    if (!ownSegs[i].length || !fine(p)) return null
+    const dir = ownDirection(i, p)
+    if (!dir) return null
+    const nx = -dir.uy, ny = dir.ux
+    let side = 0, mixed = false
+    parallelTracks(i, p, dir, (g) => {
+      // Signed distance of the other track from p, across this edge.
+      const t = Math.max(0, Math.min(1, ((p.x - g.ax) * (g.bx - g.ax) + (p.y - g.ay) * (g.by - g.ay)) / ((g.bx - g.ax) ** 2 + (g.by - g.ay) ** 2)))
+      const s = (g.ax + t * (g.bx - g.ax) - p.x) * nx + (g.ay + t * (g.by - g.ay) - p.y) * ny
+      const sign = Math.sign(s)
+      if (sign === 0) { mixed = true; return }
+      if (side === 0) side = sign
+      else if (side !== sign) mixed = true
+    })
+    if (side === 0 || mixed) return null
+    const { width, height } = requests[i].size
+    const across = Math.abs(nx) * width / 2 + Math.abs(ny) * height / 2 + trackGap
+    return { x: p.x - side * nx * across, y: p.y - side * ny * across }
+  }
+
+  // Overlap of two centred boxes along one axis, past a clearance `c`: [true overlap, band overlap].
+  const axis = (d: number, sum: number, c: number): [number, number] => {
+    const band = sum + c - d
+    if (band <= 0) return [0, 0]
+    return [Math.max(0, sum - d), band]
+  }
+  const nodeCost = (p: Point, hw: number, hh: number): [number, number, number] => {
+    let hits = 0, hard = 0, band = 0
+    const seen = new Set<number>()
+    boxCells(p.x, p.y, hw + margin, hh + margin, (k) => {
+      for (const j of nodeGrid.get(k) ?? []) {
+        if (seen.has(j)) continue
+        seen.add(j)
+        work++
+        const o = obstacles[j]
+        const [tx, bx] = axis(Math.abs(p.x - o.x), hw + o.width / 2, margin)
+        if (bx === 0) continue
+        const [ty, by] = axis(Math.abs(p.y - o.y), hh + o.height / 2, margin)
+        if (by === 0) continue
+        if (tx > 0 && ty > 0) hits++
+        hard += tx * ty
+        band += bx * by
+      }
+    })
+    return [hits, hard, band]
+  }
+  const labelCost = (i: number, p: Point): [number, number, number] => {
+    const hw = requests[i].size.width / 2, hh = requests[i].size.height / 2
+    let hits = 0, hard = 0, band = 0
+    const seen = new Set<number>()
+    boxCells(p.x, p.y, hw + gap, hh + gap, (k) => {
+      for (const j of labelGrid.get(k) ?? []) {
+        if (j === i || seen.has(j)) continue
+        seen.add(j)
+        work++
+        const q = at(j)
+        const [tx, bx] = axis(Math.abs(p.x - q.x), hw + boxW(j) / 2, gap)
+        if (bx === 0) continue
+        const [ty, by] = axis(Math.abs(p.y - q.y), hh + boxH(j) / 2, gap)
+        if (by === 0) continue
+        if (tx > 0 && ty > 0) hits++
+        hard += tx * ty
+        band += bx * by
+      }
+    })
+    return [hits, hard, band]
+  }
+  const cost = (i: number, p: Point): LabelCost => {
+    const [nHits, nArea, nBand] = nodeCost(p, requests[i].size.width / 2, requests[i].size.height / 2)
+    const [lHits, lArea, lBand] = labelCost(i, p)
+    return [nHits, lHits, trackCost(i, p), nArea, lArea, nBand + lBand]
+  }
+
+  // 1. Each label's own spot, as if alone.
+  requests.forEach((r, i) => {
+    const hw = r.size.width / 2, hh = r.size.height / 2
+    pos[i] = r.candidates.find((p) => fine(p) && nodeCost(p, hw, hh)[2] === 0) ?? r.fallback
+    if (fine(pos[i])) addLabel(i)
+  })
+
+  // 2. Repair the collisions.
+  work = 0
+  const offsetSpots = new Set<Point>()
+  repair: for (let round = 0; round < maxRounds; round++) {
+    let moved = false
+    for (let i = 0; i < n; i++) {
+      if (work > maxWork) break repair
+      if (!fine(pos[i])) continue
+      const current = cost(i, pos[i])
+      if (isZero(current)) continue
+      const onLine = [...requests[i].candidates, ...(requests[i].alternatives ?? [])]
+      let best = pos[i], bestCost: LabelCost = current
+      const consider = (p: Point) => {
+        const c = cost(i, p)
+        if (lessCost(c, bestCost)) { best = p; bestCost = c }
+      }
+      for (const p of onLine) {
+        if (!fine(p)) continue
+        consider(p)
+        if (isZero(bestCost)) break
+      }
+      // Beside its own line, away from a parallel labelled track: only when no spot on the line is
+      // clear, so a label leaves its line only for a parallel track.
+      if (!isZero(bestCost) && ownSegs[i].length) {
+        for (const p of onLine) {
+          const q = outsideOffset(i, p)
+          if (!q) continue
+          offsetSpots.add(q)
+          consider(q)
+          if (isZero(bestCost)) break
+        }
+      }
+      if (best !== pos[i]) {
+        removeLabel(i)
+        pos[i] = best
+        addLabel(i)
+        moved = true
+      }
+    }
+    if (!moved) break
+  }
+
+  // 3. No room: still over a node or another label past the tolerance. Over a node first (that
+  //    doesn't depend on the other labels); then, of two overlapping labels, the earlier keeps.
+  const noRoom = new Array<boolean>(n).fill(false)
+  if (options.markNoRoom) {
+    const over = (p: Point, w: number, h: number, q: Point, w2: number, h2: number) =>
+      Math.min(p.x + w / 2, q.x + w2 / 2) - Math.max(p.x - w / 2, q.x - w2 / 2) > tolerance &&
+      Math.min(p.y + h / 2, q.y + h2 / 2) - Math.max(p.y - h / 2, q.y - h2 / 2) > tolerance
+    for (let i = 0; i < n; i++) {
+      if (!fine(pos[i])) continue
+      const { width: w, height: h } = requests[i].size
+      boxCells(pos[i].x, pos[i].y, w / 2, h / 2, (k) => {
+        if (noRoom[i]) return
+        for (const j of nodeGrid.get(k) ?? []) {
+          const o = obstacles[j]
+          if (over(pos[i], w, h, o, o.width, o.height)) { noRoom[i] = true; return }
+        }
+      })
+    }
+    for (let i = 0; i < n; i++) {
+      if (!fine(pos[i]) || noRoom[i]) continue
+      const { width: w, height: h } = requests[i].size
+      boxCells(pos[i].x, pos[i].y, w / 2, h / 2, (k) => {
+        if (noRoom[i]) return
+        for (const j of labelGrid.get(k) ?? []) {
+          if (j === i || (j < n && (j > i || noRoom[j]))) continue
+          if (over(pos[i], w, h, at(j), boxW(j), boxH(j))) { noRoom[i] = true; return }
+        }
+      })
+    }
+  }
+
+  requests.forEach((r, i) => {
+    const p: PlacedEdgeLabel = { x: pos[i].x, y: pos[i].y }
+    if (noRoom[i]) p.noRoom = true
+    if (offsetSpots.has(pos[i])) p.offset = true
+    out.set(r.id, p)
+  })
+  return out
 }

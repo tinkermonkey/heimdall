@@ -126,7 +126,7 @@ The edge data type is declared as `GraphEdge` in `GraphCanvas.tsx` but exported 
 | `curvature` | `number` | Overrides the 0.22 default (and `structuralEdgeCurvature`) |
 | `attributes` | `Record<string, GraphAttributeValue \| GraphAttributeValue[]>` | Free-form data. GraphCanvas ignores it; the layered graph framework can read a link category from it (`linkCategoryBy`) |
 
-`EdgeGeometry` (second argument of `renderEdge`): `{ path, mid, labelPos, angle, selected, hovered }`. `path` is the SVG `d` string actually drawn (an orthogonal polyline under `layout="orthogonal"`), `mid` the path midpoint, `labelPos` the collision-cleared label center, `angle` the tangent at the midpoint in radians.
+`EdgeGeometry` (second argument of `renderEdge`): `{ path, mid, labelPos, labelHidden?, angle, selected, hovered }`. `path` is the SVG `d` string actually drawn (an orthogonal polyline under `layout="orthogonal"`), `mid` the path midpoint, `labelPos` the collision-cleared label center, `angle` the tangent at the midpoint in radians. `labelHidden` is `true` while the default renderer would not draw the label: it has no spot clear of the nodes and other labels (until the edge or an endpoint is hovered or selected), or a node drag is moving its route.
 
 `GraphNodeHierarchyMeta` (third argument of `renderNode`): `{ hasChildren, collapsed, hiddenDescendantCount, onToggleCollapse? }`.
 
@@ -400,6 +400,8 @@ const renderEdge = useCallback<NonNullable<GraphCanvasProps['renderEdge']>>(
   [],
 )
 ```
+
+Honouring `geometry.labelHidden` is opt-in: a custom renderer draws its label regardless unless it checks the flag, e.g. `visibility={geometry.labelHidden ? 'hidden' : undefined}` on the label element.
 
 The `edge` passed to `renderEdge` is rebuilt from the `GraphEdgeData` fields only; extra fields on your own edge type are not on it. Look them up by `edge.id`. (Classifiers, `edgeTooltip` and `edgePopover` receive your original objects.)
 
@@ -720,6 +722,7 @@ import { GraphEdgeShape } from '@tinkermonkey/heimdall-ui'
 | `mid` | `{ x: number; y: number }` | required | Label center |
 | `variant` | `'default' \| 'hot' \| 'irrelevant'` | required | Selects the arrow marker color |
 | `label` | `string` | — | Label pill text |
+| `labelHidden` | `'no-room' \| 'drag'` | — | Hides the label pill. It stays in the DOM with `visibility: hidden` and `data-label-state` set to the reason. GraphCanvas sets `'no-room'` for a label with no clear spot until the edge or an endpoint is in focus, and `'drag'` while a node drag moves its route |
 | `weight` | `number` | — | 0-100 → 1-8 px stroke; marker scales with it |
 | `opacity` | `number` | — | 0-1 on line and arrow |
 | `strokeDash` | `number \| [number, number]` | — | Dash pattern |

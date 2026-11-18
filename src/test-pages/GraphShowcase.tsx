@@ -418,11 +418,14 @@ export default function GraphShowcase() {
             opacity={geometry.hovered ? "0.8" : "0.4"}
           />
         </g>
-        {/* Render label if present, using collision-cleared labelPos */}
+        {/* Render label if present, using collision-cleared labelPos; hidden when GraphCanvas
+            hides its own labels (no clear spot and not in focus, or mid-drag) */}
         {edge.label && labelSize && (
           <g
             className="graph-edge__label graph-edge__label--clickable"
             transform={`translate(${geometry.labelPos.x - labelSize.width / 2}, ${geometry.labelPos.y - labelSize.height / 2})`}
+            visibility={geometry.labelHidden ? 'hidden' : undefined}
+            data-label-hidden={geometry.labelHidden ? 'true' : undefined}
           >
             <rect
               width={labelSize.width}

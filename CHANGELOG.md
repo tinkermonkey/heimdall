@@ -4,6 +4,27 @@ All notable changes to `@tinkermonkey/heimdall-ui` are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **`GraphCanvas` places every edge label at once.** Labels no longer print over each other: each
+  label first takes the spot it would take alone, and only colliding labels move along their own
+  edge. Where two labelled straight-segment routes (orthogonal, ux-navigation) run parallel closer
+  than a label, each label moves beside its own line, on the side away from the other line.
+- **A label with no clear spot is hidden until its edge is in focus.** When no spot on its edge
+  clears the cards and the other labels, the label is not drawn at rest. It shows when its edge or
+  one of the edge's endpoints is hovered or selected, without moving any other label. It stays in
+  the DOM with `visibility: hidden` and `data-label-state="no-room"`. During a node drag, labels
+  whose route is moving are hidden (`data-label-state="drag"`) and placed again on release.
+
+### Added
+
+- **`EdgeGeometry.labelHidden`.** `renderEdge` receives `labelHidden: true` when GraphCanvas would
+  not draw the edge's label right now (no clear spot and not in focus, or mid-drag). A
+  `renderEdge` that draws its own label should hide it when this is set; honouring it is opt-in, and
+  a callback that ignores it draws every label as before.
+
 ## [0.13.0]
 
 Static and server-rendered sites. The package is one module per source file, so an app's bundler

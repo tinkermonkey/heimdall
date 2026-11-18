@@ -129,6 +129,55 @@ test.describe("integration: Graph Canvas Components", () => {
     await expect(node).not.toHaveClass(/selected/);
   });
 
+  test("a label with no clear spot hides during the drag, stays hidden at rest, and shows on hover without moving other labels", async ({
+    page,
+  }) => {
+    // Drag Nucleus to sit just above Cell: their "contains" edge (edge_1) gets shorter than its
+    // label, so no spot on it clears the two cards. GraphCanvas hides such a label at rest and
+    // shows it when the edge or an endpoint is in focus (Austin, 2026-11-18); during the drag the
+    // label of a moving route is hidden, not frozen. This view draws labels through renderEdge,
+    // which honours EdgeGeometry.labelHidden.
+    const nucleus = page.locator('[data-testid="graph-node-cls_nucleus"]');
+    const cell = page.locator('[data-testid="graph-node-cls_cell"]');
+    const label = page.locator('[data-testid="graph-edge-edge_1"] .graph-edge__label');
+    await expect(label).toBeVisible();
+    const nb = (await nucleus.boundingBox())!;
+    const cb = (await cell.boundingBox())!;
+    const startX = nb.x + nb.width / 2;
+    const startY = nb.y + nb.height / 2;
+    const endX = cb.x + cb.width / 2;
+    const endY = cb.y - nb.height / 2 - 4;
+
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(endX, endY, { steps: 12 });
+    // Mid-drag, with Nucleus under the pointer (in focus): hidden because its route is moving.
+    await expect(label).toBeHidden();
+    await page.mouse.up();
+
+    // Away from every node and edge, so nothing is in focus: hidden for want of room.
+    const canvas = (await page.locator(".graph-canvas").boundingBox())!;
+    await page.mouse.move(canvas.x + canvas.width / 2, canvas.y + 8);
+    await expect(label).toBeHidden();
+    await expect(label).toHaveAttribute("data-label-hidden", "true");
+
+    const restingLabels = async () =>
+      page.locator(".graph-edge__label:not([data-label-hidden])").evaluateAll((els) =>
+        els.map((el) => `${el.closest("[data-edge-id]")?.getAttribute("data-edge-id")} ${el.getAttribute("transform")}`),
+      );
+    const before = await restingLabels();
+    expect(before.length).toBeGreaterThan(0);
+
+    // Hovering an endpoint shows it, and moves none of the labels drawn at rest.
+    await cell.hover({ force: true });
+    await expect(label).toBeVisible();
+    const after = await restingLabels();
+    expect(after.filter((l) => !l.startsWith("edge_1 "))).toEqual(before);
+
+    await page.mouse.move(canvas.x + canvas.width / 2, canvas.y + 8);
+    await expect(label).toBeHidden();
+  });
+
   test("draggable=false disables node dragging without affecting click-to-select", async ({
     page,
   }) => {
@@ -1393,6 +1442,45 @@ test.describe("integration: Graph Canvas Components", () => {
     test.beforeEach(async ({ page }) => {
       await page.locator('[data-testid="galaxy-view-button"]').click();
       await page.waitForTimeout(200);
+    });
+
+    test("hovering any body shows its orbit-link labels without two of them overlapping", async ({
+      page,
+    }) => {
+      // Galaxy vision D9 ("labels never collide"): orbit-link labels appear only in focus, and
+      // GraphCanvas places every drawn label at once (placeEdgeLabelsJointly), so the labels a
+      // hover reveals clear each other. The at-rest survey never sees these labels. A label that
+      // sits over a body had no clear spot on its edge at all (an edge shorter than its label);
+      // where two such labels go is the open hide-or-move question, so only a pair of two
+      // labels that both sit over bodies is not asserted here.
+      const nodeIds = await page
+        .locator('[data-testid^="graph-node-"]')
+        .evaluateAll((els) => els.map((el) => el.getAttribute("data-testid")!));
+      const overlaps = (a: { l: number; r: number; t: number; b: number }, b: { l: number; r: number; t: number; b: number }) =>
+        Math.min(a.r, b.r) - Math.max(a.l, b.l) > 0.5 && Math.min(a.b, b.b) - Math.max(a.t, b.t) > 0.5;
+      let checked = 0;
+      for (const id of nodeIds) {
+        await page.locator(`[data-testid="${id}"]`).first().hover({ force: true });
+        await page.waitForTimeout(50);
+        const { labels, bodies } = await page.evaluate(() => {
+          const box = (el: Element) => {
+            const r = el.getBoundingClientRect();
+            return { l: r.left, r: r.right, t: r.top, b: r.bottom };
+          };
+          return {
+            labels: [...document.querySelectorAll(".graph-edge__label-bg")].map(box),
+            bodies: [...document.querySelectorAll('[data-testid^="graph-node-"]')].map(box),
+          };
+        });
+        if (labels.length < 2) continue;
+        checked++;
+        const overBody = labels.map((l) => bodies.some((b) => overlaps(l, b)));
+        for (let i = 0; i < labels.length; i++)
+          for (let j = i + 1; j < labels.length; j++)
+            if (!(overBody[i] && overBody[j]))
+              expect(overlaps(labels[i], labels[j]), `${id}: labels ${i} and ${j} overlap`).toBe(false);
+      }
+      expect(checked).toBeGreaterThan(0);
     });
 
 

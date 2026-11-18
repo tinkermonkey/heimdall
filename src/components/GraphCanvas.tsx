@@ -16,8 +16,13 @@ import {
   extendBoundingBoxByCircles,
   edgeLabelSize,
   findClearLabelPosition,
+  edgeLabelRequest,
+  placeEdgeLabelsJointly,
   DEFAULT_QUADRATIC_CURVATURE,
   type BoundingBox,
+  type EdgeEndpointRect,
+  type EdgeLabelRequest,
+  type Point,
   type EdgeAnchor,
 } from "../utils/graph";
 import { routeNavigationEdge, routeNavigationEdges, polylineToRoutedEdge, DEFAULT_TRACE_SPACING, type RoutedEdge } from "../utils/channelRouter";
@@ -217,6 +222,10 @@ export type EdgeGeometry = {
   path: string;
   mid: { x: number; y: number };
   labelPos: { x: number; y: number };
+  /** True when GraphCanvas does not draw this edge's label right now: it has no spot clear of the
+   *  nodes and the other labels (shown again when the edge or an endpoint is hovered or selected),
+   *  or a node drag is moving its route (placed again when the drag ends). */
+  labelHidden?: boolean;
   angle: number;
   selected: boolean;
   hovered: boolean;
@@ -338,10 +347,81 @@ type InternalEdgeProps = GraphEdge & {
   tooltipId?: string;
   isNavigationRoute?: boolean;
   preRoutedEdge?: RoutedEdge;
+  /** This edge's route and where GraphCanvas's joint placement put its label
+   *  (placeEdgeLabelsJointly), when it placed one. */
+  placedLabel?: PlacedEdgeLabelGeometry;
+  /** Why the label is not drawn right now (it stays in the DOM, hidden, marked with
+   *  data-label-state): no clear spot and not in focus, or its route is moving in a drag. */
+  labelHidden?: EdgeLabelHiddenState;
 };
 
 // Margin (px, in graph space) kept clear around an edge label when steering it away from nodes.
 const EDGE_LABEL_MARGIN = 6;
+
+/** What an edge needs to draw its path: the inputs GraphEdgeInternal routes from. */
+interface EdgeRouteInput {
+  sourceId: string;
+  targetId: string;
+  sourceAnchor?: EdgeAnchor;
+  targetAnchor?: EdgeAnchor;
+  curvature?: number;
+  isNavigationRoute?: boolean;
+  preRoutedEdge?: RoutedEdge;
+}
+
+/** The drawn path of one edge: the pre-routed route, a navigation polyline, or a bezier. Shared by
+ *  GraphEdgeInternal (to draw it) and the joint label placement (to put labels on it). */
+function edgeRouteGeometry(
+  e: EdgeRouteInput,
+  getNodeRect: (id: string) => EdgeEndpointRect | null,
+  nodeRects: readonly EdgeEndpointRect[],
+): (ReturnType<typeof computeEdgePath> & { isPolyline?: boolean }) | RoutedEdge | null {
+  if (e.preRoutedEdge) return e.preRoutedEdge;
+  const src = getNodeRect(e.sourceId);
+  const tgt = getNodeRect(e.targetId);
+  if (!src || !tgt) return null;
+  if (e.isNavigationRoute) {
+    const obstacleRects = nodeRects.filter(
+      (r) => !(r.x === src.x && r.y === src.y && r.width === src.width && r.height === src.height) &&
+             !(r.x === tgt.x && r.y === tgt.y && r.width === tgt.width && r.height === tgt.height)
+    );
+    return routeNavigationEdge(src, tgt, obstacleRects);
+  }
+  return computeEdgePath(src, tgt, { sourceAnchor: e.sourceAnchor, targetAnchor: e.targetAnchor, curvature: e.curvature });
+}
+
+/** Why GraphCanvas does not draw a label: "no-room", it has no spot clear of the nodes and the
+ *  other labels and nothing focuses it; "drag", a node drag is moving its route. */
+type EdgeLabelHiddenState = "no-room" | "drag";
+
+/** An edge's route and its placed label, as GraphCanvas's joint placement hands it to GraphEdgeInternal. */
+interface PlacedEdgeLabelGeometry {
+  route: NonNullable<ReturnType<typeof edgeRouteGeometry>>;
+  labelPos: Point;
+  label?: string;
+  /** Set when the label is not drawn at rest: no clear spot ("no-room"), or its route moved
+   *  mid-drag ("drag"). */
+  state?: EdgeLabelHiddenState;
+}
+
+function samePoints(a: readonly Point[], b: readonly Point[]): boolean {
+  return a.length === b.length && a.every((p, i) => p.x === b[i].x && p.y === b[i].y);
+}
+
+/** Whether an edge's label shows only while the edge or an endpoint is in focus.
+ *  Galaxy: a structural edge is an orbit link — the geometry already says "contains" — and labels
+ *  on every orbit link buried the bodies (the original charts draw none).
+ *  ux-navigation: the same rule for structural edges — a page -> view fan edge is viewFanGap
+ *  (40 px) long and page -> child-page edges are the tree; fan position and depth already say
+ *  "contains" — and for navigation routes when showAllRelations draws them all at once: a label
+ *  on every route collides with the next route's and with the boxes it passes
+ *  (heimdall-layout-loop judge, 2026-10-26: critical occlusion on the showcase and test-page data
+ *  for both). A route revealed by hovering an endpoint is in focus and keeps its label, as does
+ *  any edge that is hovered or selected. */
+function labelOnlyInFocus(layout: string | undefined, routing: { structural: boolean; navigationRoute: boolean }): boolean {
+  return (layout === "galaxy" && routing.structural) ||
+    (layout === "ux-navigation" && (routing.structural || routing.navigationRoute));
+}
 
 /** Layout hints for a labelled edge under layout="organic": the label's footprint padded by the
  *  clear margin on every side, where the bowed edge carries it (bezierPath bows the midpoint by
@@ -398,10 +478,16 @@ function GraphEdgeInternal({
   tooltipId,
   isNavigationRoute = false,
   preRoutedEdge,
+  placedLabel,
+  labelHidden,
 }: InternalEdgeProps) {
   const { getNodeRect, nodeRects } = useGraphCanvas();
 
   const result = useMemo(() => {
+    // GraphCanvas places every drawn label at once (placeEdgeLabelsJointly), so labels clear each
+    // other as well as the nodes; the single-edge choice below is the fallback for an edge it did
+    // not place.
+    if (label && placedLabel) return { ...placedLabel.route, labelPos: placedLabel.labelPos };
     // If this is a pre-routed navigation edge from batch routing, use that directly
     if (preRoutedEdge) {
       let labelPos = preRoutedEdge.mid;
@@ -448,6 +534,7 @@ function GraphEdgeInternal({
   }, [
     preRoutedEdge,
     label,
+    placedLabel,
     nodeRects,
     getNodeRect,
     sourceId,
@@ -542,6 +629,7 @@ function GraphEdgeInternal({
             path: result.d,
             mid: result.mid,
             labelPos: result.labelPos,
+            ...(labelHidden && { labelHidden: true }),
             angle: result.angle,
             selected: !!selected,
             hovered: !!hovered,
@@ -559,6 +647,7 @@ function GraphEdgeInternal({
           d={result.d}
           mid={result.labelPos}
           label={label}
+          labelHidden={labelHidden}
           variant={variant}
           weight={weight}
           opacity={opacity}
@@ -3557,6 +3646,180 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
       return routeNavigationEdges(edgesWithRects, nodeRects, DEFAULT_TRACE_SPACING);
     }, [layout, isNavigationRoute, edges, getNodeRect, nodeRects, isStructuralEdge, structuralEdgeCurvature]);
 
+    // How an edge routes, independent of focus: whether it is structural, a navigation route, its
+    // curvature and its pre-computed route. Read by the edge loop and the label placement.
+    const edgeRoutingInputs = useCallback(
+      (edge: GraphEdge) => {
+        // Only isStructuralEdge callers opt into hiding — without it every edge
+        // is treated as structural, so this never changes existing behavior.
+        const structural = safeIsStructuralEdge(isStructuralEdge, edge, layout);
+        // Navigation routes only meaningful with ux-navigation layout
+        const navigationRoute = layout === "ux-navigation"
+          ? safeIsNavigationRoute(isNavigationRoute, edge)
+          : false;
+        return {
+          structural,
+          navigationRoute,
+          curvature: edge.curvature ?? (structural ? structuralEdgeCurvature : undefined),
+          preRoutedEdge: navigationEdgeRoutes.get(edge.id) ?? effectiveRoutes.get(edge.id),
+        };
+      },
+      [isStructuralEdge, isNavigationRoute, layout, structuralEdgeCurvature, navigationEdgeRoutes, effectiveRoutes],
+    );
+
+    // How each edge is drawn right now: absent when it is hidden (non-structural and out of focus,
+    // or an endpoint not placed yet), else its routing inputs, its label as shown (focus-only
+    // labels dropped) and whether it is in focus. The edge loop draws from it.
+    const drawnEdges = useMemo(() => {
+      const drawn = new Map<string, ReturnType<typeof edgeRoutingInputs> & { label?: string; focus: boolean }>();
+      if (lanesMode) return drawn;
+      for (const edge of edges ?? []) {
+        const routing = edgeRoutingInputs(edge);
+        const touchesFocus =
+          edge.sourceId === hoveredNodeId ||
+          edge.targetId === hoveredNodeId ||
+          edge.id === hoveredEdgeId ||
+          edge.sourceId === selectedNodeId ||
+          edge.targetId === selectedNodeId ||
+          edge.id === selectedEdgeId;
+        // Check if this is a visible navigation route (ux-navigation layout only)
+        const isVisibleNavigationRoute = visibleNavigationRouteIds.has(edge.id);
+        const hidden =
+          !routing.structural && !showAllRelations && !touchesFocus && !isVisibleNavigationRoute;
+        // Not rendered at all rather than dimmed to a low opacity — line, marker, and
+        // label alike disappear, and it isn't clickable while hidden either.
+        if (hidden) continue;
+        if (unplacedNodeIds.has(edge.sourceId) || unplacedNodeIds.has(edge.targetId)) continue;
+        drawn.set(edge.id, {
+          ...routing,
+          label: labelOnlyInFocus(layout, routing) && !touchesFocus ? undefined : edge.label,
+          focus: touchesFocus,
+        });
+      }
+      return drawn;
+    }, [
+      lanesMode, edges, edgeRoutingInputs, hoveredNodeId, hoveredEdgeId, selectedNodeId, selectedEdgeId,
+      visibleNavigationRouteIds, showAllRelations, unplacedNodeIds, layout,
+    ]);
+
+    // The edges whose label is drawn at rest (nothing hovered or selected), as a key. It does not
+    // read the focus, so the resting placement below never reruns on hover: hovering moves no
+    // resting label (Austin, 2026-11-18: overlap is better than movement).
+    const restingLabelKey = useMemo(() => {
+      if (lanesMode) return "";
+      const ids: string[] = [];
+      for (const edge of edges ?? []) {
+        if (!edge.label) continue;
+        const routing = edgeRoutingInputs(edge);
+        if (!routing.structural && !showAllRelations && !visibleNavigationRouteIds.has(edge.id)) continue;
+        if (unplacedNodeIds.has(edge.sourceId) || unplacedNodeIds.has(edge.targetId)) continue;
+        if (labelOnlyInFocus(layout, routing)) continue;
+        ids.push(edge.id);
+      }
+      return ids.join("\u0000");
+    }, [lanesMode, edges, edgeRoutingInputs, showAllRelations, visibleNavigationRouteIds, unplacedNodeIds, layout]);
+
+    // The labels drawn only because something is in focus (focus-only labels, edges shown only in
+    // focus), as a key: placed against the resting labels, never moving them.
+    const focusLabelKey = useMemo(() => {
+      const resting = new Set(restingLabelKey ? restingLabelKey.split("\u0000") : []);
+      const ids: string[] = [];
+      for (const [id, d] of drawnEdges) if (d.label && !resting.has(id)) ids.push(id);
+      return ids.join("\u0000");
+    }, [drawnEdges, restingLabelKey]);
+
+    // Places one set of labels at once (placeEdgeLabelsJointly): no two labels print over each
+    // other, and each starts where it would sit alone; only colliding labels move, along their own
+    // edge or, off a parallel labelled track, beside their own line. The result carries each edge's
+    // route too, so GraphEdgeInternal doesn't route it again.
+    // Mid-drag nothing is placed: a label whose route did not change keeps its last spot and state,
+    // one whose route moved is hidden ("drag"; a frozen label looks broken). Every label is placed
+    // again when the drag ends.
+    const placeLabelSet = useCallback(
+      (
+        key: string,
+        held: Map<string, PlacedEdgeLabelGeometry> | null,
+        dragging: boolean,
+        options: { markNoRoom?: boolean; fixedLabels?: EdgeEndpointRect[] },
+      ) => {
+        const placed = new Map<string, PlacedEdgeLabelGeometry>();
+        if (!key) return placed;
+        const ids = new Set(key.split("\u0000"));
+        const requests: EdgeLabelRequest[] = [];
+        const routes = new Map<string, NonNullable<ReturnType<typeof edgeRouteGeometry>>>();
+        const texts = new Map<string, string>();
+        for (const edge of edges ?? []) {
+          if (!ids.has(edge.id) || !edge.label) continue;
+          const routing = edgeRoutingInputs(edge);
+          const route = edgeRouteGeometry(
+            {
+              sourceId: edge.sourceId,
+              targetId: edge.targetId,
+              sourceAnchor: edge.sourceAnchor,
+              targetAnchor: edge.targetAnchor,
+              curvature: routing.curvature,
+              isNavigationRoute: routing.navigationRoute,
+              preRoutedEdge: routing.preRoutedEdge,
+            },
+            getNodeRect,
+            nodeRects,
+          );
+          if (!route) continue;
+          if (dragging) {
+            const last = held?.get(edge.id);
+            placed.set(
+              edge.id,
+              last && last.label === edge.label && samePoints(last.route.points, route.points)
+                ? { ...last, route }
+                : { route, labelPos: route.mid, label: edge.label, state: "drag" },
+            );
+            continue;
+          }
+          routes.set(edge.id, route);
+          texts.set(edge.id, edge.label);
+          requests.push(edgeLabelRequest(edge.id, edge.label, route));
+        }
+        if (!requests.length) return placed;
+        const positions = placeEdgeLabelsJointly(requests, nodeRects, { margin: EDGE_LABEL_MARGIN, ...options });
+        for (const [id, p] of positions) {
+          placed.set(id, {
+            route: routes.get(id)!,
+            labelPos: { x: p.x, y: p.y },
+            label: texts.get(id),
+            ...(p.noRoom && { state: "no-room" as const }),
+          });
+        }
+        return placed;
+      },
+      [edges, edgeRoutingInputs, getNodeRect, nodeRects],
+    );
+
+    // The resting labels, placed together. A label with no spot clear of the nodes and the other
+    // labels is hidden at rest ("no-room") and shown when its edge or an endpoint is in focus
+    // (Austin, 2026-11-18, every mode).
+    const restingPlacementRef = useRef<Map<string, PlacedEdgeLabelGeometry> | null>(null);
+    const restingLabelPlacement = useMemo(() => {
+      const placed = placeLabelSet(restingLabelKey, restingPlacementRef.current, nodeDragging, { markNoRoom: true });
+      restingPlacementRef.current = placed;
+      return placed;
+    }, [restingLabelKey, nodeDragging, placeLabelSet]);
+
+    // The labels focus reveals, placed together against the drawn resting labels, which stay put:
+    // a revealed label may overlap a resting one, but never moves it.
+    const focusPlacementRef = useRef<Map<string, PlacedEdgeLabelGeometry> | null>(null);
+    const focusLabelPlacement = useMemo(() => {
+      const fixedLabels: EdgeEndpointRect[] = [];
+      for (const p of restingLabelPlacement.values()) {
+        if (p.state || !p.label) continue;
+        const size = edgeLabelSize(p.label);
+        fixedLabels.push({ x: p.labelPos.x, y: p.labelPos.y, width: size.width, height: size.height });
+      }
+      const placed = placeLabelSet(focusLabelKey, focusPlacementRef.current, nodeDragging, { fixedLabels });
+      focusPlacementRef.current = placed;
+      return placed;
+    }, [focusLabelKey, restingLabelPlacement, nodeDragging, placeLabelSet]);
+
+
     const hierarchyMetaFor = useCallback(
       (id: string): GraphNodeHierarchyMeta => {
         const hasChildren = (forest.childrenOf.get(id)?.length ?? 0) > 0;
@@ -4206,46 +4469,19 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
               {!lanesMode && (
               <g className="graph-edges">
                 {edges?.map((edge) => {
-                  // Only isStructuralEdge callers opt into hiding — without it every edge
-                  // is treated as structural, so this never changes existing behavior.
-                  const structural = safeIsStructuralEdge(isStructuralEdge, edge, layout);
-                  // Navigation routes only meaningful with ux-navigation layout
-                  const navigationRoute = layout === "ux-navigation"
-                    ? safeIsNavigationRoute(isNavigationRoute, edge)
-                    : false;
-                  const touchesFocus =
-                    edge.sourceId === hoveredNodeId ||
-                    edge.targetId === hoveredNodeId ||
-                    edge.id === hoveredEdgeId ||
-                    edge.sourceId === selectedNodeId ||
-                    edge.targetId === selectedNodeId ||
-                    edge.id === selectedEdgeId;
-                  // Check if this is a visible navigation route (ux-navigation layout only)
-                  const isVisibleNavigationRoute = visibleNavigationRouteIds.has(edge.id);
-                  const hidden =
-                    !structural && !showAllRelations && !touchesFocus && !isVisibleNavigationRoute;
-                  // Not rendered at all rather than dimmed to a low opacity — line, marker, and
-                  // label alike disappear, and it isn't clickable while hidden either.
-                  if (hidden) return null;
-                  if (unplacedNodeIds.has(edge.sourceId) || unplacedNodeIds.has(edge.targetId)) return null;
+                  const st = drawnEdges.get(edge.id);
+                  if (!st) return null;
+                  const { navigationRoute, label: edgeLabel, curvature: edgeCurvature } = st;
                   const isPopoverOpen = activePopoverEdgeId === edge.id;
                   const tooltipId = tooltipTarget?.type === 'edge' && tooltipTarget.edgeId === edge.id ? tooltipTarget.tooltipId : undefined;
-                  const edgeCurvature = edge.curvature ?? (structural ? structuralEdgeCurvature : undefined);
-                  // Galaxy: a structural edge is an orbit link — the geometry already says
-                  // "contains" — so its label only shows when the edge or an end is in focus.
-                  // Labels on every orbit link buried the bodies (the original charts draw none).
-                  // ux-navigation: the same rule for structural edges — a page -> view fan edge
-                  // is viewFanGap (40 px) long and page -> child-page edges are the tree; fan
-                  // position and depth already say "contains" — and for navigation routes when
-                  // showAllRelations draws them all at once: a label on every route collides
-                  // with the next route's and with the boxes it passes (heimdall-layout-loop
-                  // judge, 2026-10-26: critical occlusion on the showcase and test-page data for
-                  // both). A route revealed by hovering an endpoint is in focus and keeps its
-                  // label, as does any edge that is hovered or selected.
-                  const labelOnlyInFocus =
-                    (layout === "galaxy" && structural) ||
-                    (layout === "ux-navigation" && (structural || navigationRoute));
-                  const edgeLabel = labelOnlyInFocus && !touchesFocus ? undefined : edge.label;
+                  const placedLabel = edgeLabel
+                    ? restingLabelPlacement.get(edge.id) ?? focusLabelPlacement.get(edge.id)
+                    : undefined;
+                  // A label with no clear spot shows only in focus; one whose route moves in a drag not at all.
+                  const labelHidden =
+                    placedLabel?.state === "drag" || (placedLabel?.state === "no-room" && !st.focus)
+                      ? placedLabel.state
+                      : undefined;
                   return (
                     <GraphEdgeInternal
                       key={edge.id}
@@ -4274,7 +4510,9 @@ export const GraphCanvas = React.forwardRef<HTMLDivElement, GraphCanvasProps>(
                       popoverPanelId={isPopoverOpen ? `popover-edge-${edge.id}` : undefined}
                       tooltipId={tooltipId}
                       isNavigationRoute={navigationRoute}
-                      preRoutedEdge={navigationEdgeRoutes.get(edge.id) ?? effectiveRoutes.get(edge.id)}
+                      preRoutedEdge={st.preRoutedEdge}
+                      placedLabel={placedLabel}
+                      labelHidden={labelHidden}
                     />
                   );
                 })}
