@@ -16,10 +16,8 @@ import {
   extendBoundingBoxByCircles,
   edgeLabelSize,
   findClearLabelPosition,
-  edgePathSampler,
+  edgeLabelRequest,
   placeEdgeLabelsJointly,
-  EDGE_LABEL_TS,
-  EDGE_LABEL_REPAIR_TS,
   DEFAULT_QUADRATIC_CURVATURE,
   type BoundingBox,
   type EdgeEndpointRect,
@@ -410,9 +408,6 @@ function samePoints(a: readonly Point[], b: readonly Point[]): boolean {
   return a.length === b.length && a.every((p, i) => p.x === b[i].x && p.y === b[i].y);
 }
 
-// Points along a bezier edge (t in [0, 1]) for its label request's `path`: 16 pieces, each near straight.
-const EDGE_PATH_TS = Array.from({ length: 17 }, (_, k) => k / 16);
-
 /** Whether an edge's label shows only while the edge or an endpoint is in focus.
  *  Galaxy: a structural edge is an orbit link — the geometry already says "contains" — and labels
  *  on every orbit link buried the bodies (the original charts draw none).
@@ -426,27 +421,6 @@ const EDGE_PATH_TS = Array.from({ length: 17 }, (_, k) => k / 16);
 function labelOnlyInFocus(layout: string | undefined, routing: { structural: boolean; navigationRoute: boolean }): boolean {
   return (layout === "galaxy" && routing.structural) ||
     (layout === "ux-navigation" && (routing.structural || routing.navigationRoute));
-}
-
-/** One label's request to placeEdgeLabelsJointly. Its first choice is exactly what this edge would
- *  pick alone: a pre-routed edge's anchors (orthogonal: straight-segment midpoints, longest first),
- *  then findClearLabelPosition's samples, falling back to the midpoint. */
-function edgeLabelRequest(
-  id: string,
-  label: string,
-  route: { points: readonly Point[]; isPolyline?: boolean; labelAnchors?: Point[] },
-): EdgeLabelRequest {
-  const sampleAt = edgePathSampler(route.points, route.isPolyline);
-  return {
-    id,
-    size: edgeLabelSize(label),
-    candidates: [...(route.labelAnchors ?? []), ...EDGE_LABEL_TS.map(sampleAt)],
-    fallback: sampleAt(0.5),
-    alternatives: EDGE_LABEL_REPAIR_TS.map(sampleAt),
-    // The line itself, so the placement can see parallel labelled tracks: a polyline as routed,
-    // a bezier sampled finely enough that each piece is near straight.
-    path: route.isPolyline ? route.points : EDGE_PATH_TS.map(sampleAt),
-  };
 }
 
 /** Layout hints for a labelled edge under layout="organic": the label's footprint padded by the

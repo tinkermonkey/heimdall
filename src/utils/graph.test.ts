@@ -5,6 +5,7 @@ import {
   edgePathSampler,
   findClearLabelPosition,
   placeEdgeLabelsJointly,
+  edgeLabelRequest,
   EDGE_LABEL_TS,
   EDGE_LABEL_REPAIR_TS,
   type EdgeLabelRequest,
@@ -166,6 +167,39 @@ describe('placeEdgeLabelsJointly', () => {
     )
     expect(three.get('a')!.offset).toBeUndefined()
     expect(three.get('a')!.x).toBe(0)
+  })
+
+  it('builds requests with a line only for polyline routes, so bezier labels never leave their curve', () => {
+    // Owner decision 2026-11-18: outside offsets are for straight-segment (polyline) tracks only, not
+    // the converging curves of an organic hub.
+    const poly = edgeLabelRequest('p', 'aggregates', { points: [{ x: 0, y: -42 }, { x: 0, y: 42 }], isPolyline: true })
+    expect(poly.path).toEqual([{ x: 0, y: -42 }, { x: 0, y: 42 }])
+    const curve = edgeLabelRequest('c', 'aggregates', { points: [{ x: 0, y: -42 }, { x: 4, y: 0 }, { x: 0, y: 42 }] })
+    expect(curve.path).toBeUndefined()
+    expect(curve.candidates).toHaveLength(EDGE_LABEL_TS.length)
+    // Anchors come first, as findClearLabelPosition's caller tried them.
+    const anchored = edgeLabelRequest('a', 'x', { points: [{ x: 0, y: 0 }, { x: 100, y: 0 }], isPolyline: true, labelAnchors: [{ x: 30, y: 0 }] })
+    expect(anchored.candidates[0]).toEqual({ x: 30, y: 0 })
+
+    // Two near-parallel curves 16 px apart between two rows of cards: their labels lie across both
+    // lines, but as beziers they are not parallel tracks, so each stays on its own curve.
+    const nodes = [
+      { x: 8, y: -52, width: 90, height: 20 },
+      { x: 8, y: 52, width: 90, height: 20 },
+    ]
+    const ca = edgeLabelRequest('a', 'aggregates', { points: [{ x: 0, y: -42 }, { x: 0, y: 0 }, { x: 0, y: 42 }] })
+    const cb = edgeLabelRequest('b', 'associated-with', { points: [{ x: 16, y: 42 }, { x: 16, y: 0 }, { x: 16, y: -42 }] })
+    const curved = placeEdgeLabelsJointly([ca, cb], nodes)
+    expect(curved.get('a')!.offset).toBeUndefined()
+    expect(curved.get('b')!.offset).toBeUndefined()
+    expect(curved.get('a')!.x).toBeCloseTo(0)
+    expect(curved.get('b')!.x).toBeCloseTo(16)
+    // The same lines as polylines are parallel tracks: each pill goes beside its own line.
+    const pa = edgeLabelRequest('a', 'aggregates', { points: [{ x: 0, y: -42 }, { x: 0, y: 42 }], isPolyline: true })
+    const pb = edgeLabelRequest('b', 'associated-with', { points: [{ x: 16, y: 42 }, { x: 16, y: -42 }], isPolyline: true })
+    const straight = placeEdgeLabelsJointly([pa, pb], nodes)
+    expect(straight.get('a')!.offset).toBe(true)
+    expect(straight.get('b')!.offset).toBe(true)
   })
 
   it('marks a label with no clear spot as noRoom, only when asked', () => {

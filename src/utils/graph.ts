@@ -408,9 +408,10 @@ export interface EdgeLabelRequest {
   fallback: Point
   /** More points along the same edge, tried only to resolve a collision. */
   alternatives?: readonly Point[]
-  /** The label's own edge as a polyline (a bezier sampled). With it, the placement can tell when
-   *  another labelled edge runs parallel to this one closer than the pill (a "parallel track"),
-   *  and can offer a spot beside this edge's line, on the side away from the other track. */
+  /** The label's own edge, when it is a polyline of straight segments. With it, the placement can
+   *  tell when another labelled polyline runs parallel to this one closer than the pill (a
+   *  "parallel track"), and can offer a spot beside this edge's line, on the side away from the
+   *  other track. edgeLabelRequest sets it for polyline routes only. */
   path?: readonly Point[]
 }
 
@@ -477,6 +478,29 @@ function segmentCrossesBox(ax: number, ay: number, bx: number, by: number, x0: n
     return true
   }
   return clip(-dx, ax - x0) && clip(dx, x1 - ax) && clip(-dy, ay - y0) && clip(dy, y1 - ay) && t0 <= t1
+}
+
+/** One edge's label request for placeEdgeLabelsJointly, from its drawn route (GraphCanvas). Its
+ *  first choice is exactly what this edge would pick alone: a pre-routed edge's anchors
+ *  (orthogonal: straight-segment midpoints, longest first), then findClearLabelPosition's samples,
+ *  falling back to the midpoint. Only a polyline route (straight segments: orthogonal,
+ *  ux-navigation) carries its line as `path`, so only polyline edges form parallel tracks and get
+ *  outside offsets; a bezier's label stays on its curve (Austin, 2026-11-18: converging curves at
+ *  an organic hub are not parallel tracks). */
+export function edgeLabelRequest(
+  id: string,
+  label: string,
+  route: { points: readonly Point[]; isPolyline?: boolean; labelAnchors?: readonly Point[] },
+): EdgeLabelRequest {
+  const sampleAt = edgePathSampler(route.points, route.isPolyline)
+  return {
+    id,
+    size: edgeLabelSize(label),
+    candidates: [...(route.labelAnchors ?? []), ...EDGE_LABEL_TS.map(sampleAt)],
+    fallback: sampleAt(0.5),
+    alternatives: EDGE_LABEL_REPAIR_TS.map(sampleAt),
+    ...(route.isPolyline && { path: route.points }),
+  }
 }
 
 /**
