@@ -1,6 +1,6 @@
 # Intra-layer relationships
 # Format: source_id -> predicate -> target_id
-# Last updated: 2026-09-18T14:45:21.189Z
+# Last updated: 2026-11-17T17:34:50.236Z
 
 - source: technology.artifact.heimdall-ui-package
   target: technology.artifact.react-peer-dependency
@@ -34,52 +34,52 @@
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.force-directed-layout-algorithm
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.clustered-force-layout-algorithm
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.galaxy-aspect-ratio-resolution
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.ux-navigation-tree-layout-algorithm
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.radial-tree-layout-algorithm
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.structural-forest-construction
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.bezier-edge-path-computation
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.edge-label-clear-position-search
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
   target: application.applicationfunction.navigation-edge-orthogonal-routing
-  predicate: composes
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-canvas-component
@@ -139,17 +139,12 @@
   category: structural
 - source: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
   target: application.applicationinteraction.panzoom-gesture-handling
-  predicate: depends-on
-  layer: application
-  category: structural
-- source: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
-  target: application.dataobject.node-position-map
-  predicate: depends-on
+  predicate: assigned-to
   layer: application
   category: structural
 - source: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
   target: application.applicationservice.live-galaxy-simulation-service
-  predicate: delivers-value
+  predicate: realizes
   layer: application
   category: structural
 - source: application.applicationfunction.force-directed-layout-algorithm
@@ -247,11 +242,6 @@
   predicate: triggers
   layer: application
   category: structural
-- source: application.applicationevent.node-hover-change-event
-  target: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
-  predicate: triggers
-  layer: application
-  category: structural
 - source: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
   target: application.applicationfunction.force-directed-layout-algorithm
   predicate: depends-on
@@ -259,12 +249,12 @@
   category: structural
 - source: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
   target: application.dataobject.node-position-map
-  predicate: depends-on
+  predicate: accesses
   layer: application
   category: structural
 - source: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
   target: application.dataobject.node-rect-registry
-  predicate: depends-on
+  predicate: accesses
   layer: application
   category: structural
 - source: application.applicationcomponent.graph-inspector-component
@@ -279,97 +269,97 @@
   category: structural
 - source: api.operation.graph-canvas
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.graph-node
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.graph-edge
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.graph-edge-shape
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.graph-toolbar
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.graph-collapse-control
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.graph-inspector
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.graph-edge-inspector
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.force-layout
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.clustered-force-layout
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.galaxy-layout
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.ux-nav-layout
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.radial-tree-layout
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.louvain-cluster
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.pack-clusters
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.build-structural-forest
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.visible-navigation-edge-ids
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.use-pan-zoom
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.compute-edge-path
   target: api.tag.graph
-  predicate: aggregates
+  predicate: references
   layer: api
   category: structural
 - source: api.operation.force-layout
@@ -593,41 +583,36 @@
   category: structural
 - source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
   target: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
-  predicate: aggregates
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
   target: testing.testcoveragetarget.force-force-clustered-layout-algorithms
-  predicate: aggregates
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
   target: testing.testcoveragetarget.galaxy-layout-and-live-simulation
-  predicate: aggregates
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
   target: testing.testcoveragetarget.radial-tree-layout-algorithm
-  predicate: aggregates
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
   target: testing.testcoveragetarget.navigation-edge-channel-routing
-  predicate: aggregates
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
   target: testing.testcoveragetarget.graph-edge-geometry-utilities
-  predicate: aggregates
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
   target: testing.testcoveragetarget.edge-label-placement-and-styling
-  predicate: aggregates
-  layer: testing
-  category: structural
-- source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
-  target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
   predicate: composes
   layer: testing
   category: structural
@@ -644,7 +629,7 @@
   category: structural
 - source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
   target: application.applicationcomponent.graph-canvas-component
-  predicate: tests
+  predicate: covers
   layer: testing
   targetLayer: application
   category: structural
@@ -668,19 +653,19 @@
   category: structural
 - source: testing.testcoveragetarget.navigation-edge-channel-routing
   target: application.applicationcomponent.graph-canvas-component
-  predicate: tests
+  predicate: covers
   layer: testing
   targetLayer: application
   category: structural
 - source: testing.testcoveragetarget.graph-edge-geometry-utilities
   target: application.applicationcomponent.graph-canvas-component
-  predicate: tests
+  predicate: covers
   layer: testing
   targetLayer: application
   category: structural
 - source: testing.testcoveragetarget.edge-label-placement-and-styling
   target: application.applicationcomponent.graph-canvas-component
-  predicate: tests
+  predicate: covers
   layer: testing
   targetLayer: application
   category: structural
@@ -693,17 +678,6 @@
   target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
   predicate: composes
   layer: testing
-  category: structural
-- source: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
-  target: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
-  predicate: flows-to
-  layer: testing
-  category: structural
-- source: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
-  target: application.applicationfunction.node-overlap-separation-pass
-  predicate: covers
-  layer: testing
-  targetLayer: application
   category: structural
 - source: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
   target: application.applicationfunction.force-directed-layout-algorithm
@@ -722,9 +696,9 @@
   layer: testing
   targetLayer: application
   category: structural
-- source: testing.testcasesketch.clustered-view-bubble-packing-integration
-  target: testing.testcoveragetarget.force-force-clustered-layout-algorithms
-  predicate: validates
+- source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+  target: testing.testcasesketch.clustered-view-bubble-packing-integration
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
@@ -733,9 +707,9 @@
   layer: testing
   targetLayer: application
   category: structural
-- source: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
-  target: testing.testcoveragetarget.galaxy-layout-and-live-simulation
-  predicate: validates
+- source: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+  target: testing.testcasesketch.galaxy-layout-lab-poc-dataset-stress-test
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcasesketch.radial-tree-layout-collapsed-nodes
@@ -744,9 +718,9 @@
   layer: testing
   targetLayer: application
   category: structural
-- source: testing.testcasesketch.radial-tree-layout-collapsed-nodes
-  target: testing.testcoveragetarget.radial-tree-layout-algorithm
-  predicate: validates
+- source: testing.testcoveragetarget.radial-tree-layout-algorithm
+  target: testing.testcasesketch.radial-tree-layout-collapsed-nodes
+  predicate: composes
   layer: testing
   category: structural
 - source: testing.testcasesketch.route-navigation-edge-avoids-obstacles
@@ -755,24 +729,9 @@
   layer: testing
   targetLayer: application
   category: structural
-- source: testing.testcasesketch.route-navigation-edge-avoids-obstacles
-  target: testing.testcoveragetarget.navigation-edge-channel-routing
-  predicate: validates
-  layer: testing
-  category: structural
-- source: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
-  target: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
-  predicate: serves
-  layer: testing
-  category: structural
-- source: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
-  target: testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation
-  predicate: aggregates
-  layer: testing
-  category: structural
-- source: testing.coveragesummary.graph-layout-rendering-test-coverage-summary
-  target: testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology
-  predicate: aggregates
+- source: testing.testcoveragetarget.navigation-edge-channel-routing
+  target: testing.testcasesketch.route-navigation-edge-avoids-obstacles
+  predicate: composes
   layer: testing
   category: structural
 - source: business.businessprocess.render-graph-from-domain-data-to-interactive-view
@@ -785,15 +744,15 @@
   predicate: realizes
   layer: business
   category: structural
-- source: business.businessprocess.render-graph-from-domain-data-to-interactive-view
-  target: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
-  predicate: aggregates
-  layer: business
-  targetLayer: application
+- source: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+  target: business.businessprocess.render-graph-from-domain-data-to-interactive-view
+  predicate: realizes
+  layer: application
+  targetLayer: business
   category: structural
 - source: business.businessprocess.render-graph-from-domain-data-to-interactive-view
   target: business.businessfunction.automatic-node-layout-computation
-  predicate: triggers
+  predicate: flows-to
   layer: business
   category: structural
 - source: business.businessfunction.automatic-node-layout-computation
@@ -821,57 +780,45 @@
   predicate: serves
   layer: business
   category: structural
-- source: product.capability.force-directed-graph-layout
+- source: product.softwarecapability.force-directed-graph-layout
   target: business.businessfunction.automatic-node-layout-computation
   predicate: realizes
   layer: product
   targetLayer: business
   category: structural
-- source: product.capability.clustered-force-layout-community-bubbles
+- source: product.softwarecapability.clustered-force-layout-community-bubbles
   target: business.businessfunction.community-and-cluster-discovery-in-relationship-graphs
   predicate: realizes
   layer: product
   targetLayer: business
   category: structural
-- source: product.capability.galaxy-radial-orbit-layout
+- source: product.softwarecapability.galaxy-radial-orbit-layout
   target: business.businessfunction.automatic-node-layout-computation
   predicate: realizes
   layer: product
   targetLayer: business
   category: structural
-- source: product.capability.ux-navigation-tree-layout
+- source: product.softwarecapability.ux-navigation-tree-layout
   target: business.businessfunction.automatic-node-layout-computation
   predicate: realizes
   layer: product
   targetLayer: business
   category: structural
-- source: product.capability.radial-tree-layout
+- source: product.softwarecapability.radial-tree-layout
   target: business.businessfunction.automatic-node-layout-computation
   predicate: realizes
   layer: product
   targetLayer: business
   category: structural
-- source: product.capability.clustered-force-layout-community-bubbles
-  target: product.capability.force-directed-graph-layout
+- source: product.softwarecapability.clustered-force-layout-community-bubbles
+  target: product.softwarecapability.force-directed-graph-layout
   predicate: aggregates
   layer: product
   category: structural
 - source: product.feature.live-draggable-galaxy-simulation
-  target: product.capability.galaxy-radial-orbit-layout
+  target: product.softwarecapability.galaxy-radial-orbit-layout
   predicate: realizes
   layer: product
-  category: structural
-- source: product.feature.progressive-disclosure-via-node-collapseexpand
-  target: business.businessservice.hierarchical-and-navigation-structure-visualization
-  predicate: realizes
-  layer: product
-  targetLayer: business
-  category: structural
-- source: product.feature.node-and-edge-tooltips-and-popovers
-  target: business.businessservice.large-graph-visualization
-  predicate: realizes
-  layer: product
-  targetLayer: business
   category: structural
 - source: product.feature.live-draggable-galaxy-simulation
   target: product.persona.application-developer-embedding-a-graph-view
@@ -900,17 +847,17 @@
   category: structural
 - source: motivation.principle.deterministic-reproducible-layout-output
   target: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
-  predicate: realizes
+  predicate: influence
   layer: motivation
   category: structural
 - source: motivation.principle.zero-literal-node-overlap-guarantee
   target: motivation.goal.readable-layout-for-structurally-complex-graphs
-  predicate: realizes
+  predicate: influence
   layer: motivation
   category: structural
-- source: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
-  target: motivation.driver.external-regression-gated-layout-quality-loop
-  predicate: associated-with
+- source: motivation.driver.external-regression-gated-layout-quality-loop
+  target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  predicate: influence
   layer: motivation
   category: structural
 - source: motivation.stakeholder.heimdall-layout-loop-quality-harness
@@ -922,18 +869,6 @@
   target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
   predicate: associated-with
   layer: motivation
-  category: structural
-- source: application.applicationcomponent.graph-canvas-component
-  target: motivation.goal.readable-layout-for-structurally-complex-graphs
-  predicate: realizes
-  layer: application
-  targetLayer: motivation
-  category: structural
-- source: application.applicationcomponent.graph-canvas-component
-  target: motivation.principle.zero-literal-node-overlap-guarantee
-  predicate: realizes
-  layer: application
-  targetLayer: motivation
   category: structural
 - source: application.applicationfunction.clustered-force-layout-algorithm
   target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
@@ -947,31 +882,31 @@
   layer: application
   targetLayer: motivation
   category: structural
-- source: product.capability.force-directed-graph-layout
+- source: product.softwarecapability.force-directed-graph-layout
   target: motivation.goal.readable-layout-for-structurally-complex-graphs
   predicate: supports
   layer: product
   targetLayer: motivation
   category: structural
-- source: product.capability.clustered-force-layout-community-bubbles
+- source: product.softwarecapability.clustered-force-layout-community-bubbles
   target: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
   predicate: supports
   layer: product
   targetLayer: motivation
   category: structural
-- source: product.capability.galaxy-radial-orbit-layout
+- source: product.softwarecapability.galaxy-radial-orbit-layout
   target: motivation.goal.readable-layout-for-structurally-complex-graphs
   predicate: supports
   layer: product
   targetLayer: motivation
   category: structural
-- source: product.capability.radial-tree-layout
+- source: product.softwarecapability.radial-tree-layout
   target: motivation.goal.readable-layout-for-structurally-complex-graphs
   predicate: supports
   layer: product
   targetLayer: motivation
   category: structural
-- source: product.capability.ux-navigation-tree-layout
+- source: product.softwarecapability.ux-navigation-tree-layout
   target: motivation.goal.readable-layout-for-structurally-complex-graphs
   predicate: supports
   layer: product
@@ -979,31 +914,31 @@
   category: structural
 - source: product.persona.application-developer-embedding-a-graph-view
   target: motivation.stakeholder.embedding-application-developer-npm-consumer
-  predicate: realizes
+  predicate: references
   layer: product
   targetLayer: motivation
   category: structural
 - source: product.persona.end-user-exploring-a-rendered-graph
   target: motivation.stakeholder.end-user-of-an-embedding-application
-  predicate: realizes
+  predicate: references
   layer: product
   targetLayer: motivation
   category: structural
 - source: business.businessactor.embedding-application-developer
   target: motivation.stakeholder.embedding-application-developer-npm-consumer
-  predicate: serves
+  predicate: references
   layer: business
   targetLayer: motivation
   category: structural
 - source: business.businessactor.end-user-exploring-a-graph-view
   target: motivation.stakeholder.end-user-of-an-embedding-application
-  predicate: serves
+  predicate: references
   layer: business
   targetLayer: motivation
   category: structural
-- source: technology.artifact.type-script-compiler-configuration
-  target: technology.technologyprocess.npm-run-build-vite-build
-  predicate: flows-to
+- source: technology.technologyprocess.npm-run-build-vite-build
+  target: technology.artifact.type-script-compiler-configuration
+  predicate: accesses
   layer: technology
   category: structural
 - source: technology.technologyfunction.library-bundling-and-type-declaration-generation
@@ -1035,10 +970,4 @@
   target: technology.technologyprocess.npm-test-npm-run-testunit
   predicate: flows-to
   layer: technology
-  category: structural
-- source: technology.technologyfunction.automated-test-execution
-  target: application.applicationfunction.force-directed-layout-algorithm
-  predicate: serves
-  layer: technology
-  targetLayer: application
   category: structural

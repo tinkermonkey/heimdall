@@ -1,9 +1,9 @@
 version: 0.1.0
 schema: documentation-robotics-v1
-cli_version: 0.2.0
-spec_version: 0.10.0
+cli_version: 0.5.0
+spec_version: 0.13.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-09-18T14:45:21.201Z
+updated: 2026-11-17T17:34:50.455Z
 project:
   name: heimdall-ux
   description: ""
@@ -37,15 +37,14 @@ layers:
     path: documentation-robotics/model/03_product/
     enabled: true
     elements:
-      capability: 5
       feature: 3
       persona: 2
+      softwarecapability: 5
   security:
     order: 4
     name: Security
     path: documentation-robotics/model/04_security/
     enabled: true
-    elements: {}
   application:
     order: 5
     name: Application
@@ -89,7 +88,6 @@ layers:
     name: Data store
     path: documentation-robotics/model/09_data-store/
     enabled: true
-    elements: {}
   ux:
     order: 10
     name: Ux
@@ -105,13 +103,11 @@ layers:
     name: Navigation
     path: documentation-robotics/model/11_navigation/
     enabled: true
-    elements: {}
   apm:
     order: 12
     name: Apm
     path: documentation-robotics/model/12_apm/
     enabled: true
-    elements: {}
   testing:
     order: 13
     name: Testing
