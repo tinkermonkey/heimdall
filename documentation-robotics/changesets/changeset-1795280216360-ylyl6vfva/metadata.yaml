@@ -1,0 +1,614 @@
+id: changeset-1795280216360-ylyl6vfva
+name: review-questions
+description: Answers to review question bank 0.1
+created: 2026-11-21T16:56:56.361Z
+modified: 2026-11-21T17:17:11.650Z
+status: staged
+baseSnapshot: v2:sha256:173f87c8a3ec4cd70007639fe692daa935bf1d0d7bd4228652f2474931359486
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 6021
+  modifications: 0
+  deletions: 0
+lastSequence: 6067
+unstaged:
+  - sequence: 4492
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-a-na-n-aspect-ratio-e-g-from-an-unmeasured-0-0-container-is-treated-as-ef780c32
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-a-na-n-aspect-ratio-e-g-from-an-unmeasured-0-0-container-is-treated-as-ef780c32
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4493
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-a-single-galaxy-is-never-squashed-to-fit-a-wide-aspect-ratio-its-ab5d27dd
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-a-single-galaxy-is-never-squashed-to-fit-a-wide-aspect-ratio-its-ab5d27dd
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4494
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-a-wide-aspect-ratio-spreads-a-forests-galaxies-into-a-measurably-wider-839831ad
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-a-wide-aspect-ratio-spreads-a-forests-galaxies-into-a-measurably-wider-839831ad
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4495
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4497
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-formula-the-warp-scales-the-root-ring-offset-by-resolve-aspect-ratio-726fb4bc
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-formula-the-warp-scales-the-root-ring-offset-by-resolve-aspect-ratio-726fb4bc
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4498
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4500
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-omitted-and-1-produce-identical-positions-backward-compatible-with-the-c84e0a36
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-omitted-and-1-produce-identical-positions-backward-compatible-with-the-c84e0a36
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4501
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-pinned-coordinates-are-unaffected-by-aspect-ratio
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-pinned-coordinates-are-unaffected-by-aspect-ratio
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4502
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-the-ratio-is-clamped-to-1-8-8-extreme-values-beyond-the-clamp-are-e11f0212
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.aspect-ratio-elliptical-warp-the-ratio-is-clamped-to-1-8-8-extreme-values-beyond-the-clamp-are-e11f0212
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4503
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-a-root-with-exactly-one-child-stays-in-that-childs-group-delegating-headship-to-a-348660e4
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-a-root-with-exactly-one-child-stays-in-that-childs-group-delegating-headship-to-a-348660e4
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4504
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-a-root-with-more-than-one-child-a-genuinely-delegating-root-still-travels-with-its-8a9b2d33
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-a-root-with-more-than-one-child-a-genuinely-delegating-root-still-travels-with-its-8a9b2d33
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4505
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-a-single-root-tree-has-nothing-to-separate-separate-groups-is-a-no-op
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-a-single-root-tree-has-nothing-to-separate-separate-groups-is-a-no-op
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4506
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4508
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-galaxy-layout-the-batch-entry-point-respects-a-pinned-node-even-when-separate-groups-d80e2ae5
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-galaxy-layout-the-batch-entry-point-respects-a-pinned-node-even-when-separate-groups-d80e2ae5
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4509
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-independent-galaxies-never-overlap-whatever-their-depth
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-independent-galaxies-never-overlap-whatever-their-depth
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4511
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-pinning-a-non-leaf-node-repositions-its-children-relative-to-the-pin-not-the-original-7a0b3c87
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-pinning-a-non-leaf-node-repositions-its-children-relative-to-the-pin-not-the-original-7a0b3c87
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4512
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-positions-every-node
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-positions-every-node
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4513
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-respects-pinned-nodes-their-position-never-changes
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-respects-pinned-nodes-their-position-never-changes
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4514
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-the-layout-is-deterministic
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-layout-the-layout-is-deterministic
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4515
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4517
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-one-step-nudges-toward-home-without-fully-arriving-unless-already-there
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-simulation-step-one-step-nudges-toward-home-without-fully-arriving-unless-already-there
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4518
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-repeated-calls-converge-toward-the-same-result-galaxy-layout-produces
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-simulation-step-repeated-calls-converge-toward-the-same-result-galaxy-layout-produces
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4519
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-running-many-ticks-with-no-user-interaction-does-not-erode-group-separation-ffdb4a3c
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-simulation-step-running-many-ticks-with-no-user-interaction-does-not-erode-group-separation-ffdb4a3c
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4520
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-separate-groups-false-opts-the-per-tick-home-out-of-group-separation-too
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-tests
+        target: testing.testcasesketch.galaxy-simulation-step-separate-groups-false-opts-the-per-tick-home-out-of-group-separation-too
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4932
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4934
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4936
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4938
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4940
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4942
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4944
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4946
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-follow-changes-the-reach
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-follow-changes-the-reach
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4948
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4950
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4952
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-link-click-selects-its-source
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-link-click-selects-its-source
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4954
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4956
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4958
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4960
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4962
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4964
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4966
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.hive-plot-tests
+        target: testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5345
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.organic-layout-tests::composes::testing.testcasesketch.integration-organic-layout-is-deterministic-across-reloads
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.organic-layout-tests
+        target: testing.testcasesketch.integration-organic-layout-is-deterministic-across-reloads
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5346
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.organic-layout-tests::composes::testing.testcasesketch.integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.organic-layout-tests
+        target: testing.testcasesketch.integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5348
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.orthogonal-layout-tests::composes::testing.testcasesketch.integration-orthogonal-layout-is-deterministic-across-reloads
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.orthogonal-layout-tests
+        target: testing.testcasesketch.integration-orthogonal-layout-is-deterministic-across-reloads
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5349
+    removedAt: 5954
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.orthogonal-layout-tests::composes::testing.testcasesketch.integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.orthogonal-layout-tests
+        target: testing.testcasesketch.integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes
+        predicate: composes
+        layer: testing
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
