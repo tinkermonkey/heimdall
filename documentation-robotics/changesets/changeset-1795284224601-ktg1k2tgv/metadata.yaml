@@ -1,0 +1,16 @@
+id: changeset-1795284224601-ktg1k2tgv
+name: review-open
+description: "Step B open architect review of the heimdall model: what the base
+  model plus review-questions lacks or gets wrong"
+created: 2026-11-21T18:03:44.602Z
+modified: 2026-11-21T18:12:15.505Z
+status: staged
+baseSnapshot: v2:sha256:173f87c8a3ec4cd70007639fe692daa935bf1d0d7bd4228652f2474931359486
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 460
+  modifications: 4
+  deletions: 3
+lastSequence: 466
