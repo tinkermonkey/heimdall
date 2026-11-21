@@ -1,9 +1,9 @@
 version: 0.1.0
 schema: documentation-robotics-v1
-cli_version: 0.5.0
-spec_version: 0.13.0
+cli_version: 0.7.0
+spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-17T17:34:50.455Z
+updated: 2026-11-21T16:55:39.028Z
 project:
   name: heimdall-ux
   description: ""
