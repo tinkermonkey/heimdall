@@ -2,613 +2,2816 @@ id: changeset-1795280216360-ylyl6vfva
 name: review-questions
 description: Answers to review question bank 0.1
 created: 2026-11-21T16:56:56.361Z
-modified: 2026-11-21T17:17:11.650Z
+modified: 2026-11-23T16:40:02.430Z
 status: staged
 baseSnapshot: v2:sha256:173f87c8a3ec4cd70007639fe692daa935bf1d0d7bd4228652f2474931359486
 origin:
   kind: plan
 purpose: plan
 stats:
-  additions: 6021
+  additions: 5076
   modifications: 0
   deletions: 0
-lastSequence: 6067
+lastSequence: 6068
+unstagedPrunedThrough: 6068
 unstaged:
-  - sequence: 4492
-    removedAt: 5954
+  - sequence: 4092
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-a-na-n-aspect-ratio-e-g-from-an-unmeasured-0-0-container-is-treated-as-ef780c32
+      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.sparkline-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-a-na-n-aspect-ratio-e-g-from-an-unmeasured-0-0-container-is-treated-as-ef780c32
-        predicate: composes
+        source: testing.testcoveragetarget.charts-showcase-tests
+        target: application.applicationcomponent.sparkline-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4493
-    removedAt: 5954
+  - sequence: 4094
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-a-single-galaxy-is-never-squashed-to-fit-a-wide-aspect-ratio-its-ab5d27dd
+      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.line-chart-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-a-single-galaxy-is-never-squashed-to-fit-a-wide-aspect-ratio-its-ab5d27dd
-        predicate: composes
+        source: testing.testcoveragetarget.charts-showcase-tests
+        target: application.applicationcomponent.line-chart-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4494
-    removedAt: 5954
+  - sequence: 4096
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-a-wide-aspect-ratio-spreads-a-forests-galaxies-into-a-measurably-wider-839831ad
+      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.metric-row-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-a-wide-aspect-ratio-spreads-a-forests-galaxies-into-a-measurably-wider-839831ad
-        predicate: composes
+        source: testing.testcoveragetarget.charts-showcase-tests
+        target: application.applicationcomponent.metric-row-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4495
-    removedAt: 5954
+  - sequence: 4098
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d
+      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.heatmap-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d
-        predicate: composes
+        source: testing.testcoveragetarget.charts-showcase-tests
+        target: application.applicationcomponent.heatmap-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4497
-    removedAt: 5954
+  - sequence: 4100
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-formula-the-warp-scales-the-root-ring-offset-by-resolve-aspect-ratio-726fb4bc
+      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.donut-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-formula-the-warp-scales-the-root-ring-offset-by-resolve-aspect-ratio-726fb4bc
-        predicate: composes
+        source: testing.testcoveragetarget.charts-showcase-tests
+        target: application.applicationcomponent.donut-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4498
-    removedAt: 5954
+  - sequence: 4102
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap
+      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.bar-v-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap
-        predicate: composes
+        source: testing.testcoveragetarget.charts-showcase-tests
+        target: application.applicationcomponent.bar-v-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4500
-    removedAt: 5954
+  - sequence: 4104
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-omitted-and-1-produce-identical-positions-backward-compatible-with-the-c84e0a36
+      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.bar-h-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-omitted-and-1-produce-identical-positions-backward-compatible-with-the-c84e0a36
-        predicate: composes
+        source: testing.testcoveragetarget.charts-showcase-tests
+        target: application.applicationcomponent.bar-h-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4501
-    removedAt: 5954
+  - sequence: 4187
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-pinned-coordinates-are-unaffected-by-aspect-ratio
+      elementId: testing.testcoveragetarget.chat-components-tests::covers::application.applicationcomponent.chat-suggestions-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-pinned-coordinates-are-unaffected-by-aspect-ratio
-        predicate: composes
+        source: testing.testcoveragetarget.chat-components-tests
+        target: application.applicationcomponent.chat-suggestions-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4502
-    removedAt: 5954
+  - sequence: 4189
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.aspect-ratio-elliptical-warp-the-ratio-is-clamped-to-1-8-8-extreme-values-beyond-the-clamp-are-e11f0212
+      elementId: testing.testcoveragetarget.chat-components-tests::covers::application.applicationcomponent.thinking-block-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.aspect-ratio-elliptical-warp-the-ratio-is-clamped-to-1-8-8-extreme-values-beyond-the-clamp-are-e11f0212
-        predicate: composes
+        source: testing.testcoveragetarget.chat-components-tests
+        target: application.applicationcomponent.thinking-block-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4503
-    removedAt: 5954
+  - sequence: 4191
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-a-root-with-exactly-one-child-stays-in-that-childs-group-delegating-headship-to-a-348660e4
+      elementId: testing.testcoveragetarget.chat-components-tests::covers::application.applicationcomponent.chat-container-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-a-root-with-exactly-one-child-stays-in-that-childs-group-delegating-headship-to-a-348660e4
-        predicate: composes
+        source: testing.testcoveragetarget.chat-components-tests
+        target: application.applicationcomponent.chat-container-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4504
-    removedAt: 5954
+  - sequence: 4193
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-a-root-with-more-than-one-child-a-genuinely-delegating-root-still-travels-with-its-8a9b2d33
+      elementId: testing.testcoveragetarget.chat-components-tests::covers::application.applicationcomponent.chat-composer-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-a-root-with-more-than-one-child-a-genuinely-delegating-root-still-travels-with-its-8a9b2d33
-        predicate: composes
+        source: testing.testcoveragetarget.chat-components-tests
+        target: application.applicationcomponent.chat-composer-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4505
-    removedAt: 5954
+  - sequence: 4195
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-a-single-root-tree-has-nothing-to-separate-separate-groups-is-a-no-op
+      elementId: testing.testcoveragetarget.chat-components-tests::covers::application.applicationcomponent.chat-message-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-a-single-root-tree-has-nothing-to-separate-separate-groups-is-a-no-op
-        predicate: composes
+        source: testing.testcoveragetarget.chat-components-tests
+        target: application.applicationcomponent.chat-message-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4506
-    removedAt: 5954
+  - sequence: 4197
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles
+      elementId: testing.testcoveragetarget.chat-components-tests::covers::application.applicationcomponent.chat-divider-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles
-        predicate: composes
+        source: testing.testcoveragetarget.chat-components-tests
+        target: application.applicationcomponent.chat-divider-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4508
-    removedAt: 5954
+  - sequence: 4199
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-galaxy-layout-the-batch-entry-point-respects-a-pinned-node-even-when-separate-groups-d80e2ae5
+      elementId: testing.testcoveragetarget.chat-components-tests::covers::application.applicationcomponent.tool-block-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-galaxy-layout-the-batch-entry-point-respects-a-pinned-node-even-when-separate-groups-d80e2ae5
-        predicate: composes
+        source: testing.testcoveragetarget.chat-components-tests
+        target: application.applicationcomponent.tool-block-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4509
-    removedAt: 5954
+  - sequence: 4241
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-independent-galaxies-never-overlap-whatever-their-depth
+      elementId: testing.testcoveragetarget.dark-canvas-semantic-tests::covers::application.applicationcomponent.activity-timeline-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-independent-galaxies-never-overlap-whatever-their-depth
-        predicate: composes
+        source: testing.testcoveragetarget.dark-canvas-semantic-tests
+        target: application.applicationcomponent.activity-timeline-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4511
-    removedAt: 5954
+  - sequence: 4243
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-pinning-a-non-leaf-node-repositions-its-children-relative-to-the-pin-not-the-original-7a0b3c87
+      elementId: testing.testcoveragetarget.dark-canvas-semantic-tests::covers::application.applicationcomponent.form-callout-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-pinning-a-non-leaf-node-repositions-its-children-relative-to-the-pin-not-the-original-7a0b3c87
-        predicate: composes
+        source: testing.testcoveragetarget.dark-canvas-semantic-tests
+        target: application.applicationcomponent.form-callout-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4512
-    removedAt: 5954
+  - sequence: 4245
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-positions-every-node
+      elementId: testing.testcoveragetarget.dark-canvas-semantic-tests::covers::application.applicationcomponent.version-pill-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-positions-every-node
-        predicate: composes
+        source: testing.testcoveragetarget.dark-canvas-semantic-tests
+        target: application.applicationcomponent.version-pill-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4513
-    removedAt: 5954
+  - sequence: 4247
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-respects-pinned-nodes-their-position-never-changes
+      elementId: testing.testcoveragetarget.dark-canvas-semantic-tests::covers::application.applicationcomponent.chip-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-respects-pinned-nodes-their-position-never-changes
-        predicate: composes
+        source: testing.testcoveragetarget.dark-canvas-semantic-tests
+        target: application.applicationcomponent.chip-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4514
-    removedAt: 5954
+  - sequence: 4254
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-layout-the-layout-is-deterministic
+      elementId: testing.testcoveragetarget.data-display-tests::covers::application.applicationcomponent.hierarchy-tree-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-layout-the-layout-is-deterministic
-        predicate: composes
+        source: testing.testcoveragetarget.data-display-tests
+        target: application.applicationcomponent.hierarchy-tree-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4515
-    removedAt: 5954
+  - sequence: 4256
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap
+      elementId: testing.testcoveragetarget.data-display-tests::covers::application.applicationcomponent.hierarchy-row-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap
-        predicate: composes
+        source: testing.testcoveragetarget.data-display-tests
+        target: application.applicationcomponent.hierarchy-row-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4517
-    removedAt: 5954
+  - sequence: 4258
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-one-step-nudges-toward-home-without-fully-arriving-unless-already-there
+      elementId: testing.testcoveragetarget.data-display-tests::covers::application.applicationcomponent.stat-tile-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-simulation-step-one-step-nudges-toward-home-without-fully-arriving-unless-already-there
-        predicate: composes
+        source: testing.testcoveragetarget.data-display-tests
+        target: application.applicationcomponent.stat-tile-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4518
-    removedAt: 5954
+  - sequence: 4260
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-repeated-calls-converge-toward-the-same-result-galaxy-layout-produces
+      elementId: testing.testcoveragetarget.data-display-tests::covers::application.applicationcomponent.stat-grid-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-simulation-step-repeated-calls-converge-toward-the-same-result-galaxy-layout-produces
-        predicate: composes
+        source: testing.testcoveragetarget.data-display-tests
+        target: application.applicationcomponent.stat-grid-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4519
-    removedAt: 5954
+  - sequence: 4262
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-running-many-ticks-with-no-user-interaction-does-not-erode-group-separation-ffdb4a3c
+      elementId: testing.testcoveragetarget.data-display-tests::covers::application.applicationcomponent.select-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-simulation-step-running-many-ticks-with-no-user-interaction-does-not-erode-group-separation-ffdb4a3c
-        predicate: composes
+        source: testing.testcoveragetarget.data-display-tests
+        target: application.applicationcomponent.select-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4520
-    removedAt: 5954
+  - sequence: 4264
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.galaxy-layout-tests::composes::testing.testcasesketch.galaxy-simulation-step-separate-groups-false-opts-the-per-tick-home-out-of-group-separation-too
+      elementId: testing.testcoveragetarget.data-display-tests::covers::application.applicationcomponent.table-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.galaxy-layout-tests
-        target: testing.testcasesketch.galaxy-simulation-step-separate-groups-false-opts-the-per-tick-home-out-of-group-separation-too
-        predicate: composes
+        source: testing.testcoveragetarget.data-display-tests
+        target: application.applicationcomponent.table-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4932
-    removedAt: 5954
+  - sequence: 4296
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown
+      elementId: testing.testcoveragetarget.diff-viewer-tests::covers::application.applicationcomponent.side-by-side-diff-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.diff-viewer-tests
+        target: application.applicationcomponent.side-by-side-diff-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4298
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.diff-viewer-tests::covers::application.applicationcomponent.hash-set-diff-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.diff-viewer-tests
+        target: application.applicationcomponent.hash-set-diff-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4300
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.diff-viewer-tests::covers::application.applicationcomponent.diff-viewer-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.diff-viewer-tests
+        target: application.applicationcomponent.diff-viewer-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4307
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.dropdown-portal-tests::covers::application.applicationcomponent.popover-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.dropdown-portal-tests
+        target: application.applicationcomponent.popover-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4309
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.dropdown-portal-tests::covers::application.applicationcomponent.row-menu-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.dropdown-portal-tests
+        target: application.applicationcomponent.row-menu-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4311
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.dropdown-portal-tests::covers::application.applicationcomponent.select-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.dropdown-portal-tests
+        target: application.applicationcomponent.select-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4325
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.filter-dropdown-tests::covers::application.applicationcomponent.filter-dropdown-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.filter-dropdown-tests
+        target: application.applicationcomponent.filter-dropdown-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4327
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.filter-dropdown-tests::covers::application.applicationcomponent.select-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.filter-dropdown-tests
+        target: application.applicationcomponent.select-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4329
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.filter-dropdown-tests::covers::application.applicationcomponent.panel-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.filter-dropdown-tests
+        target: application.applicationcomponent.panel-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4355
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.forms-components-tests::covers::application.applicationcomponent.relationship-builder-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.forms-components-tests
+        target: application.applicationcomponent.relationship-builder-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4357
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.forms-components-tests::covers::application.applicationcomponent.key-value-editor-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.forms-components-tests
+        target: application.applicationcomponent.key-value-editor-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4359
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.forms-components-tests::covers::application.applicationcomponent.entity-picker-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.forms-components-tests
+        target: application.applicationcomponent.entity-picker-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4361
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.forms-components-tests::covers::application.applicationcomponent.pipeline-card-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.forms-components-tests
+        target: application.applicationcomponent.pipeline-card-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4363
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.forms-components-tests::covers::application.applicationcomponent.ordered-list-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.forms-components-tests
+        target: application.applicationcomponent.ordered-list-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4365
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.forms-components-tests::covers::application.applicationcomponent.form-callout-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.forms-components-tests
+        target: application.applicationcomponent.form-callout-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4367
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.forms-components-tests::covers::application.applicationcomponent.row-menu-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.forms-components-tests
+        target: application.applicationcomponent.row-menu-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4460
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-collapse-tests::covers::application.applicationcomponent.topology-node-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-collapse-tests
+        target: application.applicationcomponent.topology-node-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4464
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.galaxy-layout-collapse-tests::covers::application.applicationcomponent.badge-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.galaxy-layout-collapse-tests
+        target: application.applicationcomponent.badge-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4537
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-canvas-click-tooltip-tests::covers::application.applicationcomponent.tooltip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-canvas-click-tooltip-tests
+        target: application.applicationcomponent.tooltip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4539
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-canvas-click-tooltip-tests::covers::application.applicationcomponent.popover-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-canvas-click-tooltip-tests
+        target: application.applicationcomponent.popover-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4586
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-canvas-popover-tests::covers::application.applicationcomponent.tooltip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-canvas-popover-tests
+        target: application.applicationcomponent.tooltip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4588
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-canvas-popover-tests::covers::application.applicationcomponent.popover-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-canvas-popover-tests
+        target: application.applicationcomponent.popover-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4656
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationcomponent.topology-node-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+        target: application.applicationcomponent.topology-node-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4663
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationcomponent.tooltip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+        target: application.applicationcomponent.tooltip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4812
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::application.applicationcomponent.topology-node-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+        target: application.applicationcomponent.topology-node-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4930
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.hive-plot-tests::covers::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
         source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown
-        predicate: composes
+        target: application.applicationcomponent.hive-plot-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4934
-    removedAt: 5954
+  - sequence: 4933
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id
+      elementId: testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-a-selection-on-a-node-without-an-axis-is-named-as-not-shown
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4936
-    removedAt: 5954
+  - sequence: 4935
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548
+      elementId: testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-axes-by-any-attribute-one-axis-per-value-sorted-titled-by-id
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4938
-    removedAt: 5954
+  - sequence: 4937
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put
+      elementId: testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-axes-by-attribute-a-layer-filter-that-empties-an-axis-leaves-a-gap-the-rest-and-the-frame-55808548
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4940
-    removedAt: 5954
+  - sequence: 4939
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first
+      elementId: testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-axes-by-attribute-hiding-a-layer-hides-its-nodes-and-every-axis-stays-put
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4942
-    removedAt: 5954
+  - sequence: 4941
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear
+      elementId: testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-axis-order-puts-the-listed-axes-first
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4944
-    removedAt: 5954
+  - sequence: 4943
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node
+      elementId: testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-click-selects-clicking-again-and-escape-clear
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4946
-    removedAt: 5954
+  - sequence: 4945
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-follow-changes-the-reach
+      elementId: testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-follow-changes-the-reach
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-draws-doubled-axes-every-link-and-one-focusable-button-per-node
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4948
-    removedAt: 5954
+  - sequence: 4947
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit
+      elementId: testing.testcasesketch.hive-plot-follow-changes-the-reach::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-follow-changes-the-reach
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4950
-    removedAt: 5954
+  - sequence: 4949
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects
+      elementId: testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-hiding-a-layer-leaves-a-gap-the-other-axes-and-the-frame-stay-put-split-unsplit
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4952
-    removedAt: 5954
+  - sequence: 4951
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-link-click-selects-its-source
+      elementId: testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-link-click-selects-its-source
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-keyboard-one-tab-stop-arrows-move-along-and-across-axes-enter-selects
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4954
-    removedAt: 5954
+  - sequence: 4953
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning
+      elementId: testing.testcasesketch.hive-plot-link-click-selects-its-source::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-link-click-selects-its-source
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4956
-    removedAt: 5954
+  - sequence: 4955
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis
+      elementId: testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-nodes-without-an-axis-are-not-drawn-with-a-dev-warning
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4958
-    removedAt: 5954
+  - sequence: 4957
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label
+      elementId: testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-split0-draws-one-line-per-axis
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4960
-    removedAt: 5954
+  - sequence: 4959
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection
+      elementId: testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-unsplit-hovering-a-node-never-moves-or-drops-another-label
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4962
-    removedAt: 5954
+  - sequence: 4961
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection
+      elementId: testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-visual-theme-canvas-axes-by-attribute-with-a-selection
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4964
-    removedAt: 5954
+  - sequence: 4963
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1
+      elementId: testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-visual-theme-canvas-no-selection
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4966
-    removedAt: 5954
+  - sequence: 4965
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.hive-plot-tests::composes::testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer
+      elementId: testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.hive-plot-tests
-        target: testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-visual-theme-canvas-selection-at-follow-1
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 5345
-    removedAt: 5954
+  - sequence: 4967
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.organic-layout-tests::composes::testing.testcasesketch.integration-organic-layout-is-deterministic-across-reloads
+      elementId: testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer::tests::application.applicationcomponent.hive-plot-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.organic-layout-tests
-        target: testing.testcasesketch.integration-organic-layout-is-deterministic-across-reloads
-        predicate: composes
+        source: testing.testcasesketch.hive-plot-visual-unsplit-loops-with-a-hidden-layer
+        target: application.applicationcomponent.hive-plot-component
+        predicate: tests
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 5346
-    removedAt: 5954
+  - sequence: 4969
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.organic-layout-tests::composes::testing.testcasesketch.integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes
+      elementId: testing.testcoveragetarget.inspector-panel-tests::covers::application.applicationcomponent.inspector-panel-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.organic-layout-tests
-        target: testing.testcasesketch.integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes
-        predicate: composes
+        source: testing.testcoveragetarget.inspector-panel-tests
+        target: application.applicationcomponent.inspector-panel-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 5348
-    removedAt: 5954
+  - sequence: 4971
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.orthogonal-layout-tests::composes::testing.testcasesketch.integration-orthogonal-layout-is-deterministic-across-reloads
+      elementId: testing.testcoveragetarget.inspector-panel-tests::covers::application.applicationcomponent.version-pill-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.orthogonal-layout-tests
-        target: testing.testcasesketch.integration-orthogonal-layout-is-deterministic-across-reloads
-        predicate: composes
+        source: testing.testcoveragetarget.inspector-panel-tests
+        target: application.applicationcomponent.version-pill-component
+        predicate: covers
         layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 5349
-    removedAt: 5954
+  - sequence: 4973
+    removedAt: 6068
     change:
       type: relationship-add
-      elementId: testing.testcoveragetarget.orthogonal-layout-tests::composes::testing.testcasesketch.integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes
+      elementId: testing.testcoveragetarget.inspector-panel-tests::covers::application.applicationcomponent.kvgrid-component
       layerName: testing
       after:
-        source: testing.testcoveragetarget.orthogonal-layout-tests
-        target: testing.testcasesketch.integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes
-        predicate: composes
+        source: testing.testcoveragetarget.inspector-panel-tests
+        target: application.applicationcomponent.kvgrid-component
+        predicate: covers
         layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 4989
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.kanban-board-tests::covers::application.applicationcomponent.kanban-board-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.kanban-board-tests
+        target: application.applicationcomponent.kanban-board-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5020
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layer-lanes-tests::covers::application.applicationcomponent.layered-graph-context-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layer-lanes-tests
+        target: application.applicationcomponent.layered-graph-context-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5105
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layer-stack-tests::covers::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layer-stack-tests
+        target: application.applicationcomponent.layer-stack-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5108
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-13-layers-frame-a-controlled-camera-is-never-fitted::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-13-layers-frame-a-controlled-camera-is-never-fitted
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5110
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-13-layers-frame-a-default-camera-zoom-over-the-preset-is-kept-no-fit::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-13-layers-frame-a-default-camera-zoom-over-the-preset-is-kept-no-fit
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5112
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-13-layers-frame-at-docs-width-870px-every-plane-title-of-the-13-sits-inside-the-scene-4477cf87::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-13-layers-frame-at-docs-width-870px-every-plane-title-of-the-13-sits-inside-the-scene-4477cf87
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5114
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-13-layers-frame-data-that-loads-after-mount-takes-the-preset-gap-and-is-fitted-with-no-1c98b609::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-13-layers-frame-data-that-loads-after-mount-takes-the-preset-gap-and-is-fitted-with-no-1c98b609
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5116
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-13-layers-frame-every-preset-then-fit-keeps-all-13-planes-inside-the-scene::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-13-layers-frame-every-preset-then-fit-keeps-all-13-planes-inside-the-scene
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5118
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-13-layers-frame-mounting-at-preset-fits-the-13-layer-stack-and-reports-it::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-13-layers-frame-mounting-at-preset-fits-the-13-layer-stack-and-reports-it
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5120
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-13-layers-frame-picking-a-preset-on-13-layers-frames-it::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-13-layers-frame-picking-a-preset-on-13-layers-frames-it
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5122
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-a-camera-preset-animates-to-it-ref-methods-move-the-camera::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-a-camera-preset-animates-to-it-ref-methods-move-the-camera
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5124
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-are-held-interactions-only-report::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-are-held-interactions-only-report
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5126
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-that-take-every-report-follow-each-frame::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-a-controlled-camera-and-gap-that-take-every-report-follow-each-frame
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5128
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-a-controlled-parent-that-echoes-reports-late-still-lets-a-preset-finish::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-a-controlled-parent-that-echoes-reports-late-still-lets-a-preset-finish
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5130
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-a-drag-right-after-exiting-focus-still-lets-the-planes-close::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-a-drag-right-after-exiting-focus-still-lets-the-planes-close
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5132
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-a-layer-focus-right-after-a-preset-keeps-the-preset-turning::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-a-layer-focus-right-after-a-preset-keeps-the-preset-turning
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5134
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-after-an-orbit-enter-on-a-node-label-still-selects-it::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-after-an-orbit-enter-on-a-node-label-still-selects-it
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5136
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-an-asynchronous-layout-lands-on-the-same-positions-as-the-synchronous-one::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-an-asynchronous-layout-lands-on-the-same-positions-as-the-synchronous-one
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5138
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-an-orbit-fades-and-clears-labels-frame-by-frame-without-a-react-commit::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-an-orbit-fades-and-clears-labels-frame-by-frame-without-a-react-commit
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5140
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-clicking-a-node-selects-it-adds-the-drill-through-column-and-clicking-again-clears::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-clicking-a-node-selects-it-adds-the-drill-through-column-and-clicking-again-clears
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5142
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-dragging-orbits-without-selecting::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-dragging-orbits-without-selecting
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5144
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-draws-a-plane-per-layer-a-disc-and-a-label-button-per-node::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-draws-a-plane-per-layer-a-disc-and-a-label-button-per-node
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5146
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-full-dr-spec-a-turntable-frame-writes-link-paths-within-one-per-batch-plus-the-reach-81e72c99::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-full-dr-spec-a-turntable-frame-writes-link-paths-within-one-per-batch-plus-the-reach-81e72c99
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5148
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-full-dr-spec-an-orbit-drag-re-renders-a-fixed-few-times-not-once-per-move::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-full-dr-spec-an-orbit-drag-re-renders-a-fixed-few-times-not-once-per-move
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5150
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-full-dr-spec-draws-every-layer-node-and-link-of-the-13-layer-spec::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-full-dr-spec-draws-every-layer-node-and-link-of-the-13-layer-spec
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5152
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-full-dr-spec-preset-tween-frames-paint-without-re-rendering-the-react-tree::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-full-dr-spec-preset-tween-frames-paint-without-re-rendering-the-react-tree
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5154
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-full-dr-spec-turntable-frames-paint-without-re-rendering-the-react-tree::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-full-dr-spec-turntable-frames-paint-without-re-rendering-the-react-tree
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5156
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-keyboard-arrows-move-between-nodes-and-layers-enter-selects-escape-clears::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-keyboard-arrows-move-between-nodes-and-layers-enter-selects-escape-clears
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5158
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-labels-behind-planes-a-focused-layer-reads-clearly-the-planes-dimmed-around-it-fade-no-5c4a61fc::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-labels-behind-planes-a-focused-layer-reads-clearly-the-planes-dimmed-around-it-fade-no-5c4a61fc
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5160
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-labels-behind-planes-profile-view-almost-side-on-nothing-sits-behind-a-plane::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-labels-behind-planes-profile-view-almost-side-on-nothing-sits-behind-a-plane
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5162
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-labels-behind-planes-stack-preset-labels-under-a-nearer-plane-fade-the-top-layer-stays-30a19309::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-labels-behind-planes-stack-preset-labels-under-a-nearer-plane-fade-the-top-layer-stays-30a19309
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5164
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-labels-behind-planes-the-selection-its-reach-and-the-hovered-node-are-never-faded::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-labels-behind-planes-the-selection-its-reach-and-the-hovered-node-are-never-faded
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5166
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-labels-behind-planes-top-view-is-the-x-ray-no-label-fades::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-labels-behind-planes-top-view-is-the-x-ray-no-label-fades
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5168
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-pills-follow-the-camera-a-wheel-zoom-places-the-pills-again-with-no-parent-re-render::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-pills-follow-the-camera-a-wheel-zoom-places-the-pills-again-with-no-parent-re-render
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5170
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-pills-follow-the-camera-an-outside-camera-change-during-a-zoom-stops-it-and-brings-the-55fcaf7b::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-pills-follow-the-camera-an-outside-camera-change-during-a-zoom-stops-it-and-brings-the-55fcaf7b
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5172
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-pills-follow-the-camera-reduced-motion-a-jump-zoom-by-places-the-pills-again-with-no-ace4b863::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-pills-follow-the-camera-reduced-motion-a-jump-zoom-by-places-the-pills-again-with-no-ace4b863
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5174
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-pinch-zooms-clamped-like-the-wheel::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-pinch-zooms-clamped-like-the-wheel
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5176
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-switching-focus-straight-to-another-layer-eases-the-planes-from-where-they-are::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-switching-focus-straight-to-another-layer-eases-the-planes-from-where-they-are
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5178
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-the-plane-title-focuses-its-layer-clicking-again-exits::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-the-plane-title-focuses-its-layer-clicking-again-exits
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5180
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-the-selections-reach-keeps-a-path-and-arrowhead-per-link-the-rest-stay-batched::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-the-selections-reach-keeps-a-path-and-arrowhead-per-link-the-rest-stay-batched
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5182
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-touch-a-two-finger-touch-pinch-zooms-and-is-not-taken-as-a-page-scroll::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-touch-a-two-finger-touch-pinch-zooms-and-is-not-taken-as-a-page-scroll
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5184
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-visual-focused-layer-theme::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-visual-focused-layer-theme
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5186
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-visual-stack-preset-with-a-followed-selection-theme::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-visual-stack-preset-with-a-followed-selection-theme
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5188
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-visual-stack-preset-labels-behind-planes-faded-theme::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-visual-stack-preset-labels-behind-planes-faded-theme
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5190
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-visual-top-preset-theme::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-visual-top-preset-theme
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5192
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layer-stack-with-every-predicate-labelled-arrowheads-off-the-reach-are-batched-too::tests::application.applicationcomponent.layer-stack-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layer-stack-with-every-predicate-labelled-arrowheads-off-the-reach-are-batched-too
+        target: application.applicationcomponent.layer-stack-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5194
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.predicate-label-control-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.predicate-label-control-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5196
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.plane-layout-control-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.plane-layout-control-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5198
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.link-category-filter-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.link-category-filter-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5200
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.adjacency-matrix-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.adjacency-matrix-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5202
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.bridge-node-list-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.bridge-node-list-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5204
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.reach-inspector-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.reach-inspector-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5206
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.follow-control-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.follow-control-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5208
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.layer-pair-list-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.layer-pair-list-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5210
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-chrome-tests::covers::application.applicationcomponent.layer-list-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-chrome-tests
+        target: application.applicationcomponent.layer-list-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5227
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.layered-graph-explorer-tests::covers::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.layered-graph-explorer-tests
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5230
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-a-graph-that-loads-after-mount-keeps-its-preset-at-the-13-layer-gap-and-its-569454b9::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-a-graph-that-loads-after-mount-keeps-its-preset-at-the-13-layer-gap-and-its-569454b9
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5232
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-a-malformed-snapshot-in-the-url-loads-with-sane-defaults::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-a-malformed-snapshot-in-the-url-loads-with-sane-defaults
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5234
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-a-preset-with-other-camera-fields-restores-the-camera-and-drops-the-preset::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-a-preset-with-other-camera-fields-restores-the-camera-and-drops-the-preset
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5236
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-a-stack-props-gap-override-is-what-the-snapshot-reports-and-round-trips::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-a-stack-props-gap-override-is-what-the-snapshot-reports-and-round-trips
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5238
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-below-the-stacking-width-the-inspector-moves-under-the-scene::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-below-the-stacking-width-the-inspector-moves-under-the-scene
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5240
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-camera-controls-move-the-stack-and-the-camera-is-remembered-across-view-1439bdbf::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-camera-controls-move-the-stack-and-the-camera-is-remembered-across-view-1439bdbf
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5242
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-each-preset-click-reports-exactly-one-snapshot-already-settled::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-each-preset-click-reports-exactly-one-snapshot-already-settled
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5244
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-layer-focus-round-trips-through-the-url::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-layer-focus-round-trips-through-the-url
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5246
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-renders-the-header-stack-link-bar-inspector-and-status-line::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-renders-the-header-stack-link-bar-inspector-and-status-line
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5248
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-restore-keeps-the-stack-when-the-camera-is-unchanged-and-wins-over-a-running-e58f795b::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-restore-keeps-the-stack-when-the-camera-is-unchanged-and-wins-over-a-running-e58f795b
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5250
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-screenshots-view-with-a-selection-dark::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-screenshots-view-with-a-selection-dark
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5252
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-screenshots-narrow-width-stacks-the-inspector-light::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-screenshots-narrow-width-stacks-the-inspector-light
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5254
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-screenshots-stack-with-a-selection-light::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-screenshots-stack-with-a-selection-light
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5256
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-switching-views-keeps-the-selection-and-follow::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-switching-views-keeps-the-selection-and-follow
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5258
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-the-controls-prop-hides-chrome-a-single-view-hides-the-switcher::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-the-controls-prop-hides-chrome-a-single-view-hides-the-switcher
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5260
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-the-handle-saves-a-snapshot-with-the-live-camera-and-gap-and-restores-it::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-the-handle-saves-a-snapshot-with-the-live-camera-and-gap-and-restores-it
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5262
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-the-node-label-toggle-drives-the-stack-and-lane-labels-and-only-shows-for-a1879e62::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-the-node-label-toggle-drives-the-stack-and-lane-labels-and-only-shows-for-a1879e62
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5264
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-the-snapshot-round-trips-the-whole-explorer-through-the-url::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-the-snapshot-round-trips-the-whole-explorer-through-the-url
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5266
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layered-graph-explorer-with-external-state-the-graph-prop-drives-every-view::tests::application.applicationcomponent.layered-graph-explorer-component
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layered-graph-explorer-with-external-state-the-graph-prop-drives-every-view
+        target: application.applicationcomponent.layered-graph-explorer-component
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5268
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.line-chart-data-toggle-tests::covers::application.applicationcomponent.line-chart-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.line-chart-data-toggle-tests
+        target: application.applicationcomponent.line-chart-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5272
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.lineage-rail-tests::covers::application.applicationcomponent.lineage-rail-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.lineage-rail-tests
+        target: application.applicationcomponent.lineage-rail-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5274
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.lineage-rail-tests::covers::application.applicationcomponent.chip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.lineage-rail-tests
+        target: application.applicationcomponent.chip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5304
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.map-canvas-tests::covers::application.applicationcomponent.map-canvas-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.map-canvas-tests
+        target: application.applicationcomponent.map-canvas-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5306
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.map-canvas-tests::covers::application.applicationcomponent.heatmap-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.map-canvas-tests
+        target: application.applicationcomponent.heatmap-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5308
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.map-canvas-tests::covers::application.applicationcomponent.select-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.map-canvas-tests
+        target: application.applicationcomponent.select-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5352
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-advanced-tests::covers::application.applicationcomponent.command-palette-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-advanced-tests
+        target: application.applicationcomponent.command-palette-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5354
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-advanced-tests::covers::application.applicationcomponent.split-pane-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-advanced-tests
+        target: application.applicationcomponent.split-pane-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5356
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-advanced-tests::covers::application.applicationcomponent.select-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-advanced-tests
+        target: application.applicationcomponent.select-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5358
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-advanced-tests::covers::application.applicationcomponent.drawer-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-advanced-tests
+        target: application.applicationcomponent.drawer-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5382
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-components-tests::covers::application.applicationcomponent.confirm-dialog-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-components-tests
+        target: application.applicationcomponent.confirm-dialog-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5384
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-components-tests::covers::application.applicationcomponent.tooltip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-components-tests
+        target: application.applicationcomponent.tooltip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5386
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-components-tests::covers::application.applicationcomponent.popover-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-components-tests
+        target: application.applicationcomponent.popover-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5388
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-components-tests::covers::application.applicationcomponent.modal-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-components-tests
+        target: application.applicationcomponent.modal-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5390
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.overlay-components-tests::covers::application.applicationcomponent.toast-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.overlay-components-tests
+        target: application.applicationcomponent.toast-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5436
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.page-patterns-tests::covers::application.applicationcomponent.activity-timeline-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.page-patterns-tests
+        target: application.applicationcomponent.activity-timeline-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5438
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.page-patterns-tests::covers::application.applicationcomponent.quick-access-grid-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.page-patterns-tests
+        target: application.applicationcomponent.quick-access-grid-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5440
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.page-patterns-tests::covers::application.applicationcomponent.quick-access-tile-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.page-patterns-tests
+        target: application.applicationcomponent.quick-access-tile-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5442
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.page-patterns-tests::covers::application.applicationcomponent.page-header-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.page-patterns-tests
+        target: application.applicationcomponent.page-header-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5444
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.page-patterns-tests::covers::application.applicationcomponent.alert-strip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.page-patterns-tests
+        target: application.applicationcomponent.alert-strip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5446
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.page-patterns-tests::covers::application.applicationcomponent.config-tile-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.page-patterns-tests
+        target: application.applicationcomponent.config-tile-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5448
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.page-patterns-tests::covers::application.applicationcomponent.filter-bar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.page-patterns-tests
+        target: application.applicationcomponent.filter-bar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5499
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.pan-zoom-tests::covers::application.applicationcomponent.map-canvas-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.pan-zoom-tests
+        target: application.applicationcomponent.map-canvas-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5506
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.segmented-control-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.segmented-control-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5508
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.number-input-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.number-input-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5510
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.version-pill-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.version-pill-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5512
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.text-input-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.text-input-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5514
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.text-area-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.text-area-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5516
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.tri-state-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.tri-state-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5518
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.select-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.select-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5520
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.button-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.button-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5522
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.field-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.field-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5524
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.panel-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.panel-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5526
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.badge-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.badge-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5528
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.icon-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.icon-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5530
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.primitives-tests::covers::application.applicationcomponent.chip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.primitives-tests
+        target: application.applicationcomponent.chip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5580
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.responsive-shell-tests::covers::application.applicationcomponent.statusbar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.responsive-shell-tests
+        target: application.applicationcomponent.statusbar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5582
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.responsive-shell-tests::covers::application.applicationcomponent.sidebar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.responsive-shell-tests
+        target: application.applicationcomponent.sidebar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5584
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.responsive-shell-tests::covers::application.applicationcomponent.topbar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.responsive-shell-tests
+        target: application.applicationcomponent.topbar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5586
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.responsive-shell-tests::covers::application.applicationcomponent.drawer-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.responsive-shell-tests
+        target: application.applicationcomponent.drawer-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5609
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.shell-framework-tests::covers::application.applicationcomponent.shell-layout-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.shell-framework-tests
+        target: application.applicationcomponent.shell-layout-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5611
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.shell-framework-tests::covers::application.applicationcomponent.statusbar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.shell-framework-tests
+        target: application.applicationcomponent.statusbar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5613
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.shell-framework-tests::covers::application.applicationcomponent.topbar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.shell-framework-tests
+        target: application.applicationcomponent.topbar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5615
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.shell-framework-tests::covers::application.applicationcomponent.tab-bar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.shell-framework-tests
+        target: application.applicationcomponent.tab-bar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5617
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.shell-framework-tests::covers::application.applicationcomponent.chip-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.shell-framework-tests
+        target: application.applicationcomponent.chip-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5637
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.static-links-tests::covers::application.applicationcomponent.activity-timeline-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.static-links-tests
+        target: application.applicationcomponent.activity-timeline-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5639
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.static-links-tests::covers::application.applicationcomponent.quick-access-tile-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.static-links-tests
+        target: application.applicationcomponent.quick-access-tile-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5641
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.static-links-tests::covers::application.applicationcomponent.mini-calendar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.static-links-tests
+        target: application.applicationcomponent.mini-calendar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5643
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.static-links-tests::covers::application.applicationcomponent.shell-layout-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.static-links-tests
+        target: application.applicationcomponent.shell-layout-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5645
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.static-links-tests::covers::application.applicationcomponent.nav-item-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.static-links-tests
+        target: application.applicationcomponent.nav-item-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5647
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.static-links-tests::covers::application.applicationcomponent.sidebar-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.static-links-tests
+        target: application.applicationcomponent.sidebar-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5687
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.trace-viewer-tests::covers::application.applicationcomponent.trace-viewer-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.trace-viewer-tests
+        target: application.applicationcomponent.trace-viewer-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5748
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.version-timeline-tests::covers::application.applicationcomponent.version-timeline-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.version-timeline-tests
+        target: application.applicationcomponent.version-timeline-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 5770
+    removedAt: 6068
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.workspace-switcher-dialog-tests::covers::application.applicationcomponent.workspace-switcher-dialog-component
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.workspace-switcher-dialog-tests
+        target: application.applicationcomponent.workspace-switcher-dialog-component
+        predicate: covers
+        layer: testing
+        targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
