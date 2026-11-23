@@ -16,3 +16,40 @@ api.tag.graph:
     created_at: 2026-09-18T14:37:29.385Z
     updated_at: 2026-09-18T14:37:29.385Z
     version: 1
+api.tag.observability:
+  id: b9097307-fef9-481c-9660-360b9be6f36a
+  path: api.tag.observability
+  spec_node_id: api.tag
+  type: tag
+  layer_id: api
+  name: observability
+  description: Trace adapters and trace-model helpers of
+    @tinkermonkey/heimdall-ui's public exported API (src/index.ts).
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: TraceViewer
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+api.tag.hooks:
+  id: a46c1bf4-5d0d-41c2-bd97-7ff44221360c
+  path: api.tag.hooks
+  spec_node_id: api.tag
+  type: tag
+  layer_id: api
+  name: hooks
+  description: "Framework-free React hooks of @tinkermonkey/heimdall-ui's public
+    exported API (src/index.ts): responsive, controllable-state and animation
+    hooks."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: useMediaQuery
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1

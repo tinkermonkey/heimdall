@@ -17,7 +17,7 @@ motivation.driver.external-regression-gated-layout-quality-loop:
     provenance: inferred
     locations:
       - file: CHANGELOG.md
-        symbol: Graph force layout (forceLayout, used by GraphCanvas)
+        symbol: Graph force layout
   metadata:
     created_at: 2026-09-18T14:43:26.560Z
     updated_at: 2026-09-18T14:43:26.560Z

@@ -199,9 +199,10 @@ data-model.schemadefinition.galaxy-layout-options:
   type: schemadefinition
   layer_id: data-model
   name: GalaxyLayoutOptions
-  description: "Tuning parameters for galaxyLayout: nodeSpread, startAngle,
-    settleCycles, homeStrength, nodeMargin, separateGroups, aspectRatio,
-    resolvedAspectScale."
+  description: "Tuning parameters for galaxyLayout: nodeSpread (multiple of the
+    median body radius), nodeMargin, startAngle, aspectRatio and homeStrength.
+    settleCycles, separateGroups and resolvedAspectScale are deprecated and
+    ignored."
   attributes:
     title: GalaxyLayoutOptions
     type: object
@@ -289,7 +290,8 @@ data-model.schemadefinition.edge-geometry:
   name: EdgeGeometry
   description: "Computed rendering geometry passed to a custom renderEdge
     callback: SVG path string, curve midpoint, collision-cleared label position,
-    tangent angle, selected/hovered state."
+    tangent angle and, since PR #396, labelHidden: true when GraphCanvas would
+    not draw the label now (no clear spot and not in focus, or mid-drag)."
   attributes:
     title: EdgeGeometry
     type: object
@@ -323,4 +325,199 @@ data-model.schemadefinition.radial-tree-layout-result:
   metadata:
     created_at: 2026-09-18T14:34:09.334Z
     updated_at: 2026-09-18T14:34:09.334Z
+    version: 1
+data-model.schemadefinition.orthogonal-layout-options:
+  id: ebbd6888-6c07-4048-83be-61e5e213006e
+  path: data-model.schemadefinition.orthogonal-layout-options
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: OrthogonalLayoutOptions
+  description: "Tuning for orthogonalLayout: clearance, laneSpacing, lanes,
+    bendPenalty, crossingPenalty, componentGap, orderingSweeps, isPageNode,
+    busTreeEdges, scope (auto, cold, sketch)."
+  attributes:
+    title: OrthogonalLayoutOptions
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/orthogonalLayout.ts
+        symbol: OrthogonalLayoutOptions
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.orthogonal-layout-stats:
+  id: 429ea216-1d20-4e50-9678-951b5942bd79
+  path: data-model.schemadefinition.orthogonal-layout-stats
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: OrthogonalLayoutStats
+  description: 'Diagnostics returned with an orthogonal layout, including router:
+    "lattice" (exact, graphs up to 150 edges) or "channel"
+    (orthogonalChannelRouter, larger graphs), plus fallback and pitch counts.'
+  attributes:
+    title: OrthogonalLayoutStats
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/orthogonalLayout.ts
+        symbol: OrthogonalLayoutStats
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.orthogonal-layout-result:
+  id: 175a0c5e-b44a-4e47-9906-bb00e0b9af75
+  path: data-model.schemadefinition.orthogonal-layout-result
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: OrthogonalLayoutResult
+  description: "Return shape of orthogonalLayout: positions, routes (one polyline
+    per input edge, box boundary to box boundary), groups, cell pitch, origin
+    and stats."
+  attributes:
+    title: OrthogonalLayoutResult
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/orthogonalLayout.ts
+        symbol: OrthogonalLayoutResult
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.organic-layout-options:
+  id: 47935a91-6451-48c5-bcfc-ba1996d97a26
+  path: data-model.schemadefinition.organic-layout-options
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: OrganicLayoutOptions
+  description: "Tuning for organicLayout: preferredEdgeLength,
+    minimumNodeDistance, compactness, componentSpacing, maxIterations,
+    tolerance, scope (auto, all, affected) and affectedIds."
+  attributes:
+    title: OrganicLayoutOptions
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/organicLayout.ts
+        symbol: OrganicLayoutOptions
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.organic-layout-stats:
+  id: e8e664e0-0235-402e-abf5-ae908d6d8d55
+  path: data-model.schemadefinition.organic-layout-stats
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: OrganicLayoutStats
+  description: Diagnostics returned with an organic layout (iterations run, final
+    stress, convergence).
+  attributes:
+    title: OrganicLayoutStats
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/organicLayout.ts
+        symbol: OrganicLayoutStats
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.organic-layout-result:
+  id: 2f13d199-61e2-4701-a32b-a7831bf05e98
+  path: data-model.schemadefinition.organic-layout-result
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: OrganicLayoutResult
+  description: "Return shape of organicLayout: positions, stressHistory and stats."
+  attributes:
+    title: OrganicLayoutResult
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/organicLayout.ts
+        symbol: OrganicLayoutResult
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.layered-index:
+  id: 3767627b-c4ab-428a-b985-44cfc936d069
+  path: data-model.schemadefinition.layered-index
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: LayeredIndex
+  description: "The indexed layered graph built by buildLayeredIndex: layers,
+    nodes, links, adjacency, layer-pair summaries, predicate catalog and
+    indexing issues."
+  attributes:
+    title: LayeredIndex
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: LayeredIndex
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.layered-graph-snapshot:
+  id: 44abbe53-3556-45fb-9137-6d1a2527dc7f
+  path: data-model.schemadefinition.layered-graph-snapshot
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: LayeredGraphSnapshot
+  description: Serializable view state of the layered views (selection, follow
+    depth, link filters, focused and hidden layers, predicate label mode, plane
+    layout), saved and restored by LayeredGraphExplorer.
+  attributes:
+    title: LayeredGraphSnapshot
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: LayeredGraphSnapshot
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+data-model.schemadefinition.trace:
+  id: 04dac8e7-af12-42a9-8e47-2f6e30e33539
+  path: data-model.schemadefinition.trace
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: Trace
+  description: "A distributed trace as TraceViewer reads it: spans (id, parent,
+    service, name, kind, start, duration, status, attributes, events) plus trace
+    metadata and service info; produced by fromOTLP and fromXRay."
+  attributes:
+    title: Trace
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/traceViewerModel.ts
+        symbol: Trace
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
     version: 1

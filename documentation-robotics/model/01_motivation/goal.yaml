@@ -42,3 +42,21 @@ motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-gra
     created_at: 2026-09-18T14:43:25.337Z
     updated_at: 2026-09-18T14:43:25.337Z
     version: 1
+motivation.goal.consistent-component-library-for-data-dense-ide-style-applications:
+  id: f02ebb8c-7c66-48cf-9632-eb27fcb5e05e
+  path: motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: Consistent Component Library for Data-Dense IDE-Style Applications
+  description: One React component library, published as
+    @tinkermonkey/heimdall-ui, that gives IDE-density applications a consistent
+    look (two-surface shell and canvas, amber accent, Inter and JetBrains Mono)
+    and behaviour across primitives, inputs, data display, charts, overlays,
+    chat, observability and graph views. Stated in CLAUDE.md and README.md.
+  attributes:
+    priority: high
+  metadata:
+    created_at: 2026-11-23T16:44:40.168Z
+    updated_at: 2026-11-23T16:44:40.168Z
+    version: 1

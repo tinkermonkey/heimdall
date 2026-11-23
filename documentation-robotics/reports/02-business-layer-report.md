@@ -16,16 +16,16 @@ Business processes, functions, roles, and services.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 7     |
-| Intra-Layer Relationships | 8     |
-| Inter-Layer Relationships | 10    |
-| Inbound Relationships     | 7     |
-| Outbound Relationships    | 3     |
+| Elements                  | 9     |
+| Intra-Layer Relationships | 10    |
+| Inter-Layer Relationships | 20    |
+| Inbound Relationships     | 18    |
+| Outbound Relationships    | 2     |
 
 **Cross-Layer References**:
 
-- **Upstream layers**: [Product](./03-product-layer-report.md)
-- **Downstream layers**: [Application](./05-application-layer-report.md), [Motivation](./01-motivation-layer-report.md)
+- **Upstream layers**: [Application](./05-application-layer-report.md), [Product](./03-product-layer-report.md)
+- **Downstream layers**: [Motivation](./01-motivation-layer-report.md)
 
 ## Intra-Layer Relationships
 
@@ -34,17 +34,21 @@ flowchart LR
   subgraph business
     business_businessactor_embedding_application_developer["Embedding Application Developer"]
     business_businessactor_end_user_exploring_a_graph_view["End User Exploring a Graph View"]
+    business_businessfunction_assemble_application_screens_from_library_components["Assemble Application Screens from Library Components"]
     business_businessfunction_automatic_node_layout_computation["Automatic Node Layout Computation"]
     business_businessfunction_community_and_cluster_discovery_in_relationship_graphs["Community and Cluster Discovery in Relationship Graphs"]
     business_businessprocess_render_graph_from_domain_data_to_interactive_view["Render Graph From Domain Data to Interactive View"]
+    business_businessservice_design_system_components_for_data_dense_applications["Design-System Components for Data-Dense Applications"]
     business_businessservice_hierarchical_and_navigation_structure_visualization["Hierarchical and Navigation Structure Visualization"]
     business_businessservice_large_graph_visualization["Large Graph Visualization"]
+    business_businessfunction_assemble_application_screens_from_library_components -->|realizes| business_businessservice_design_system_components_for_data_dense_applications
     business_businessfunction_automatic_node_layout_computation -->|composes| business_businessfunction_community_and_cluster_discovery_in_relationship_graphs
     business_businessfunction_automatic_node_layout_computation -->|realizes| business_businessservice_large_graph_visualization
     business_businessfunction_community_and_cluster_discovery_in_relationship_graphs -->|realizes| business_businessservice_large_graph_visualization
+    business_businessprocess_render_graph_from_domain_data_to_interactive_view -->|flows-to| business_businessfunction_automatic_node_layout_computation
     business_businessprocess_render_graph_from_domain_data_to_interactive_view -->|realizes| business_businessservice_hierarchical_and_navigation_structure_visualization
     business_businessprocess_render_graph_from_domain_data_to_interactive_view -->|realizes| business_businessservice_large_graph_visualization
-    business_businessprocess_render_graph_from_domain_data_to_interactive_view -->|triggers| business_businessfunction_automatic_node_layout_computation
+    business_businessservice_design_system_components_for_data_dense_applications -->|serves| business_businessactor_embedding_application_developer
     business_businessservice_hierarchical_and_navigation_structure_visualization -->|serves| business_businessactor_end_user_exploring_a_graph_view
     business_businessservice_large_graph_visualization -->|serves| business_businessactor_end_user_exploring_a_graph_view
   end
@@ -68,7 +72,7 @@ flowchart TB
   navigation["Navigation"]
   apm["APM"]
   testing["Testing"]
-  business --> application
+  application --> business
   business --> motivation
   product --> business
   class business current
@@ -76,18 +80,28 @@ flowchart TB
 
 ## Inter-Layer Relationships Table
 
-| Relationship ID                                                      | Source Node                                                                  | Dest Node                                                                          | Dest Layer    | Predicate    | Cardinality  | Strength |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------- | ------------ | ------------ | -------- |
-| `business.businessactor.serves.motivation.stakeholder`               | `business.businessactor.embedding-application-developer`                     | `motivation.stakeholder.embedding-application-developer-npm-consumer`              | `motivation`  | `serves`     | many-to-many | medium   |
-| `business.businessactor.serves.motivation.stakeholder`               | `business.businessactor.end-user-exploring-a-graph-view`                     | `motivation.stakeholder.end-user-of-an-embedding-application`                      | `motivation`  | `serves`     | many-to-many | medium   |
-| `business.businessprocess.aggregates.application.applicationprocess` | `business.businessprocess.render-graph-from-domain-data-to-interactive-view` | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline`    | `application` | `aggregates` | many-to-many | medium   |
-| `product.capability.realizes.business.businessfunction`              | `product.capability.clustered-force-layout-community-bubbles`                | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs` | `business`    | `realizes`   | many-to-many | medium   |
-| `product.capability.realizes.business.businessfunction`              | `product.capability.force-directed-graph-layout`                             | `business.businessfunction.automatic-node-layout-computation`                      | `business`    | `realizes`   | many-to-many | medium   |
-| `product.capability.realizes.business.businessfunction`              | `product.capability.galaxy-radial-orbit-layout`                              | `business.businessfunction.automatic-node-layout-computation`                      | `business`    | `realizes`   | many-to-many | medium   |
-| `product.capability.realizes.business.businessfunction`              | `product.capability.radial-tree-layout`                                      | `business.businessfunction.automatic-node-layout-computation`                      | `business`    | `realizes`   | many-to-many | medium   |
-| `product.capability.realizes.business.businessfunction`              | `product.capability.ux-navigation-tree-layout`                               | `business.businessfunction.automatic-node-layout-computation`                      | `business`    | `realizes`   | many-to-many | medium   |
-| `product.feature.realizes.business.businessservice`                  | `product.feature.node-and-edge-tooltips-and-popovers`                        | `business.businessservice.large-graph-visualization`                               | `business`    | `realizes`   | many-to-many | medium   |
-| `product.feature.realizes.business.businessservice`                  | `product.feature.progressive-disclosure-via-node-collapseexpand`             | `business.businessservice.hierarchical-and-navigation-structure-visualization`     | `business`    | `realizes`   | many-to-many | medium   |
+| Relationship ID                                                    | Source Node                                                                     | Dest Node                                                                          | Dest Layer   | Predicate    | Cardinality  | Strength |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
+| `application.applicationprocess.realizes.business.businessprocess` | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline` | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`       | `business`   | `realizes`   | many-to-many | medium   |
+| `business.businessactor.references.motivation.stakeholder`         | `business.businessactor.embedding-application-developer`                        | `motivation.stakeholder.embedding-application-developer-npm-consumer`              | `motivation` | `references` | many-to-many | medium   |
+| `business.businessactor.references.motivation.stakeholder`         | `business.businessactor.end-user-exploring-a-graph-view`                        | `motivation.stakeholder.end-user-of-an-embedding-application`                      | `motivation` | `references` | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.chat-interface`                                     | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.clustered-force-layout-community-bubbles`           | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs` | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.data-display-and-charts`                            | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.design-primitives-and-tokens`                       | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.force-directed-graph-layout`                        | `business.businessfunction.automatic-node-layout-computation`                      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.form-inputs-and-editors`                            | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.galaxy-radial-orbit-layout`                         | `business.businessfunction.automatic-node-layout-computation`                      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.ide-application-shell-and-navigation`               | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.layered-graph-exploration`                          | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs` | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.observability-views`                                | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.organic-graph-layout`                               | `business.businessfunction.automatic-node-layout-computation`                      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.orthogonal-graph-layout`                            | `business.businessfunction.automatic-node-layout-computation`                      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.overlays-and-dialogs`                               | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.page-patterns`                                      | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.planning-views`                                     | `business.businessfunction.assemble-application-screens-from-library-components`   | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.radial-tree-layout`                                 | `business.businessfunction.automatic-node-layout-computation`                      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`    | `product.softwarecapability.ux-navigation-tree-layout`                          | `business.businessfunction.automatic-node-layout-computation`                      | `business`   | `realizes`   | many-to-many | medium   |
 
 ## Element Reference
 
@@ -101,9 +115,10 @@ Inferred actor: the developer who installs @tinkermonkey/heimdall-ui and wires G
 
 #### Relationships
 
-| Type        | Related Element                                                       | Predicate | Direction |
-| ----------- | --------------------------------------------------------------------- | --------- | --------- |
-| inter-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer` | `serves`  | outbound  |
+| Type        | Related Element                                                                 | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer`           | `references` | outbound  |
+| intra-layer | `business.businessservice.design-system-components-for-data-dense-applications` | `serves`     | inbound   |
 
 ### End User Exploring a Graph View {#end-user-exploring-a-graph-view}
 
@@ -115,11 +130,34 @@ Inferred actor: the person who ultimately pans, zooms, selects, hovers, drags, a
 
 #### Relationships
 
-| Type        | Related Element                                                                | Predicate | Direction |
-| ----------- | ------------------------------------------------------------------------------ | --------- | --------- |
-| inter-layer | `motivation.stakeholder.end-user-of-an-embedding-application`                  | `serves`  | outbound  |
-| intra-layer | `business.businessservice.hierarchical-and-navigation-structure-visualization` | `serves`  | inbound   |
-| intra-layer | `business.businessservice.large-graph-visualization`                           | `serves`  | inbound   |
+| Type        | Related Element                                                                | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `motivation.stakeholder.end-user-of-an-embedding-application`                  | `references` | outbound  |
+| intra-layer | `business.businessservice.hierarchical-and-navigation-structure-visualization` | `serves`     | inbound   |
+| intra-layer | `business.businessservice.large-graph-visualization`                           | `serves`     | inbound   |
+
+### Assemble Application Screens from Library Components {#assemble-application-screens-from-library-components}
+
+**ID**: `business.businessfunction.assemble-application-screens-from-library-components`
+
+**Type**: `businessfunction`
+
+Inferred business function: an application developer composes screens from heimdall components and tokens, importing only the components a page uses.
+
+#### Relationships
+
+| Type        | Related Element                                                                 | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.chat-interface`                                     | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.data-display-and-charts`                            | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.design-primitives-and-tokens`                       | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.form-inputs-and-editors`                            | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.ide-application-shell-and-navigation`               | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.observability-views`                                | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.overlays-and-dialogs`                               | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.page-patterns`                                      | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.planning-views`                                     | `realizes` | inbound   |
+| intra-layer | `business.businessservice.design-system-components-for-data-dense-applications` | `realizes` | outbound  |
 
 ### Automatic Node Layout Computation {#automatic-node-layout-computation}
 
@@ -133,13 +171,15 @@ Inferred business function: given arbitrary node/edge data with no pre-set posit
 
 | Type        | Related Element                                                                    | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `product.capability.force-directed-graph-layout`                                   | `realizes` | inbound   |
-| inter-layer | `product.capability.galaxy-radial-orbit-layout`                                    | `realizes` | inbound   |
-| inter-layer | `product.capability.radial-tree-layout`                                            | `realizes` | inbound   |
-| inter-layer | `product.capability.ux-navigation-tree-layout`                                     | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.force-directed-graph-layout`                           | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.galaxy-radial-orbit-layout`                            | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.organic-graph-layout`                                  | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.orthogonal-graph-layout`                               | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.radial-tree-layout`                                    | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.ux-navigation-tree-layout`                             | `realizes` | inbound   |
 | intra-layer | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs` | `composes` | outbound  |
 | intra-layer | `business.businessservice.large-graph-visualization`                               | `realizes` | outbound  |
-| intra-layer | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`       | `triggers` | inbound   |
+| intra-layer | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`       | `flows-to` | inbound   |
 
 ### Community and Cluster Discovery in Relationship Graphs {#community-and-cluster-discovery-in-relationship-graphs}
 
@@ -151,11 +191,12 @@ Inferred business function: surface community structure in a relationship graph 
 
 #### Relationships
 
-| Type        | Related Element                                               | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `product.capability.clustered-force-layout-community-bubbles` | `realizes` | inbound   |
-| intra-layer | `business.businessfunction.automatic-node-layout-computation` | `composes` | inbound   |
-| intra-layer | `business.businessservice.large-graph-visualization`          | `realizes` | outbound  |
+| Type        | Related Element                                                       | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.clustered-force-layout-community-bubbles` | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.layered-graph-exploration`                | `realizes` | inbound   |
+| intra-layer | `business.businessfunction.automatic-node-layout-computation`         | `composes` | inbound   |
+| intra-layer | `business.businessservice.large-graph-visualization`                  | `realizes` | outbound  |
 
 ### Render Graph From Domain Data to Interactive View {#render-graph-from-domain-data-to-interactive-view}
 
@@ -167,12 +208,27 @@ Inferred end-to-end business process: a consumer's domain data (nodes/edges) ent
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline` | `aggregates` | outbound  |
-| intra-layer | `business.businessservice.hierarchical-and-navigation-structure-visualization`  | `realizes`   | outbound  |
-| intra-layer | `business.businessservice.large-graph-visualization`                            | `realizes`   | outbound  |
-| intra-layer | `business.businessfunction.automatic-node-layout-computation`                   | `triggers`   | outbound  |
+| Type        | Related Element                                                                 | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline` | `realizes` | inbound   |
+| intra-layer | `business.businessfunction.automatic-node-layout-computation`                   | `flows-to` | outbound  |
+| intra-layer | `business.businessservice.hierarchical-and-navigation-structure-visualization`  | `realizes` | outbound  |
+| intra-layer | `business.businessservice.large-graph-visualization`                            | `realizes` | outbound  |
+
+### Design-System Components for Data-Dense Applications {#design-system-components-for-data-dense-applications}
+
+**ID**: `business.businessservice.design-system-components-for-data-dense-applications`
+
+**Type**: `businessservice`
+
+Inferred business service: give application teams ready-made, consistent UI building blocks (shell chrome, inputs, tables, charts, overlays, chat, observability and planning views) so they assemble data-dense IDE-style screens instead of building them.
+
+#### Relationships
+
+| Type        | Related Element                                                                  | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------------------------- | ---------- | --------- |
+| intra-layer | `business.businessfunction.assemble-application-screens-from-library-components` | `realizes` | inbound   |
+| intra-layer | `business.businessactor.embedding-application-developer`                         | `serves`   | outbound  |
 
 ### Hierarchical and Navigation Structure Visualization {#hierarchical-and-navigation-structure-visualization}
 
@@ -186,7 +242,6 @@ Inferred business capability: visualize page/view navigation hierarchies and gen
 
 | Type        | Related Element                                                              | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `product.feature.progressive-disclosure-via-node-collapseexpand`             | `realizes` | inbound   |
 | intra-layer | `business.businessprocess.render-graph-from-domain-data-to-interactive-view` | `realizes` | inbound   |
 | intra-layer | `business.businessactor.end-user-exploring-a-graph-view`                     | `serves`   | outbound  |
 
@@ -202,7 +257,6 @@ Inferred business capability: enable consumers to render and let end users navig
 
 | Type        | Related Element                                                                    | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `product.feature.node-and-edge-tooltips-and-popovers`                              | `realizes` | inbound   |
 | intra-layer | `business.businessfunction.automatic-node-layout-computation`                      | `realizes` | inbound   |
 | intra-layer | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs` | `realizes` | inbound   |
 | intra-layer | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`       | `realizes` | inbound   |
@@ -210,4 +264,4 @@ Inferred business capability: enable consumers to render and let end users navig
 
 ---
 
-Generated: 2026-09-18T14:44:15.109Z | Model Version: 0.1.0
+Generated: 2026-11-23T17:44:43.297Z | Model Version: 0.1.0

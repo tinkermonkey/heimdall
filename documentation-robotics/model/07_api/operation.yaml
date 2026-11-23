@@ -388,25 +388,344 @@ api.operation.use-pan-zoom:
     created_at: 2026-09-18T14:38:08.453Z
     updated_at: 2026-09-18T14:38:08.453Z
     version: 1
-api.operation.compute-edge-path:
-  id: 7f2e342c-d219-408e-8d15-0f5328a59f7d
-  path: api.operation.compute-edge-path
+api.operation.orthogonal-layout:
+  id: f5714be0-49ff-495e-a49a-c58f4d1ceb05
+  path: api.operation.orthogonal-layout
   spec_node_id: api.operation
   type: operation
   layer_id: api
-  name: computeEdgePath
-  description: Exported function resolving the rendered bezier path between two
-    node rectangles.
+  name: orthogonalLayout
+  description: Exported function running the orthogonal layout with lattice and
+    channel routing.
   attributes:
-    operationId: computeEdgePath
-    summary: Compute the rendered path between two node rectangles
+    operationId: orthogonalLayout
+    summary: Lay out a graph on a grid with right-angle edge routes
     tags: graph
   source_reference:
     provenance: extracted
     locations:
       - file: src/index.ts
-        symbol: computeEdgePath
+        symbol: orthogonalLayout
   metadata:
-    created_at: 2026-09-18T14:38:08.783Z
-    updated_at: 2026-09-18T14:38:08.783Z
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+api.operation.organic-layout:
+  id: aea7c25d-1e39-48b7-ac21-64c098769392
+  path: api.operation.organic-layout
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: organicLayout
+  description: Exported function running the organic (stress-majorization) layout.
+  attributes:
+    operationId: organicLayout
+    summary: Lay out a graph by stress majorization
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: organicLayout
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+api.operation.bezier-path:
+  id: ec242811-2b20-4d88-a329-dd16cbae1246
+  path: api.operation.bezier-path
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: bezierPath
+  description: Exported edge-geometry helper (with rectEdgePoint,
+    rectEdgeDirection, edgeLabelSize) for custom edge renderers; replaces
+    computeEdgePath, which is internal to src/utils/graph.ts and no longer
+    exported.
+  attributes:
+    operationId: bezierPath
+    summary: Compute the curved path between two node rectangles
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: bezierPath
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+api.operation.find-clear-label-position:
+  id: e0b8aaeb-f819-4ed8-a045-37ff820c06bf
+  path: api.operation.find-clear-label-position
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: findClearLabelPosition
+  description: Exported edge-label helper for custom renderers.
+  attributes:
+    operationId: findClearLabelPosition
+    summary: Find a label spot along an edge clear of every node
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: findClearLabelPosition
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.use-layered-graph:
+  id: 4387bfe8-77ea-4001-aeb0-455a04ba804c
+  path: api.operation.use-layered-graph
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: useLayeredGraph
+  description: Exported hook providing the layered graph framework state through
+    LayeredGraphContext.
+  attributes:
+    operationId: useLayeredGraph
+    summary: Hold the shared state of the layered graph views
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: useLayeredGraph
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.build-layered-index:
+  id: 88144920-9301-4803-b772-cca8c245ae85
+  path: api.operation.build-layered-index
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: buildLayeredIndex
+  description: Exported function building the layered index.
+  attributes:
+    operationId: buildLayeredIndex
+    summary: Index a graph by layer
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: buildLayeredIndex
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.compute-reach:
+  id: 00659bf1-866e-4746-9d87-e02c25ceb292
+  path: api.operation.compute-reach
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: computeReach
+  description: Exported function computing the selection reach.
+  attributes:
+    operationId: computeReach
+    summary: Compute the reach of a selected node across layers
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: computeReach
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.layout-layers:
+  id: 26ff9fd1-a1e1-4f0a-a9a7-0adf582e58b1
+  path: api.operation.layout-layers
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: layoutLayers
+  description: Exported function (with layoutLayersAsync) laying out layer planes.
+  attributes:
+    operationId: layoutLayers
+    summary: Lay out each layer plane of a layered graph
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: layoutLayers
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.hive-layout:
+  id: 03c35361-d82d-4386-82b9-5f8c1962bc9b
+  path: api.operation.hive-layout
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: hiveLayout
+  description: Exported function computing hive axes, node positions and link curves.
+  attributes:
+    operationId: hiveLayout
+    summary: Compute a hive plot layout
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: hiveLayout
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.layout-lanes:
+  id: 909cdd4d-1aa6-4a31-8603-a7e8554290f7
+  path: api.operation.layout-lanes
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: layoutLanes
+  description: Exported function laying out layers as lanes with gutter routing.
+  attributes:
+    operationId: layoutLanes
+    summary: Lay out a layered graph as swim lanes
+    tags: graph
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: layoutLanes
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.build-trace-model:
+  id: 2a068410-e231-4d31-9ec8-d6e40c1d4b44
+  path: api.operation.build-trace-model
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: buildTraceModel
+  description: Exported trace-model helper behind TraceViewer.
+  attributes:
+    operationId: buildTraceModel
+    summary: Build the waterfall model of a trace
+    tags: observability
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: buildTraceModel
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.from-otlp:
+  id: e013b610-e149-454f-a036-3ddc22205bff
+  path: api.operation.from-otlp
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: fromOTLP
+  description: Exported OTLP trace adapter.
+  attributes:
+    operationId: fromOTLP
+    summary: Convert OTLP/JSON traces into a heimdall Trace
+    tags: observability
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: fromOTLP
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.from-xray:
+  id: 0a1cd3d1-3b73-4950-95a2-7bde0cf72390
+  path: api.operation.from-xray
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: fromXRay
+  description: Exported X-Ray trace adapter.
+  attributes:
+    operationId: fromXRay
+    summary: Convert AWS X-Ray segments into a heimdall Trace
+    tags: observability
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: fromXRay
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.use-media-query:
+  id: 6974f923-fe44-4779-8fa7-555d6e5b141a
+  path: api.operation.use-media-query
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: useMediaQuery
+  description: Exported SSR-safe media-query hook.
+  attributes:
+    operationId: useMediaQuery
+    summary: Match a media query without hydration mismatches
+    tags: hooks
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: useMediaQuery
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.use-controllable:
+  id: 1afe3ec7-0e21-4adc-85a5-a79f3625302f
+  path: api.operation.use-controllable
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: useControllable
+  description: Exported controllable-state hook.
+  attributes:
+    operationId: useControllable
+    summary: Hold state that may be controlled or uncontrolled
+    tags: hooks
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: useControllable
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+api.operation.use-tween:
+  id: 3c5ee6d0-cac2-4767-8219-83821f1eb43e
+  path: api.operation.use-tween
+  spec_node_id: api.operation
+  type: operation
+  layer_id: api
+  name: useTween
+  description: Exported animation hook.
+  attributes:
+    operationId: useTween
+    summary: Tween numeric values with reduced-motion support
+    tags: hooks
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/index.ts
+        symbol: useTween
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
     version: 1

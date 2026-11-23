@@ -5,9 +5,10 @@ ux.librarycomponent.graph-canvas-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphCanvas (UX)
-  description: "Interactive graph canvas: pan/zoom viewport,
-    selectable/hoverable/draggable nodes and edges, tooltips/popovers, toolbar,
-    and progressive-disclosure collapse controls."
+  description: "Interactive graph canvas: pan/zoom viewport with history,
+    selectable, hoverable and draggable nodes and edges, jointly placed edge
+    labels, tooltips and popovers, toolbar, and progressive-disclosure collapse
+    controls, over nine layouts."
   attributes:
     type: display
   source_reference:
@@ -122,4 +123,2305 @@ ux.librarycomponent.graph-collapse-control-ux:
   metadata:
     created_at: 2026-09-18T14:39:46.534Z
     updated_at: 2026-09-18T14:39:46.534Z
+    version: 1
+ux.librarycomponent.icon:
+  id: 3854fa4d-4e63-4148-9567-82dd5781e2d2
+  path: ux.librarycomponent.icon
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Icon
+  description: Renders a named outline icon from the Heimdall icon set. Use it for
+    every icon; never paste raw SVG.
+  attributes:
+    type: display
+    category: heimdall-primitives
+    label: Icon
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Icon.tsx
+        symbol: Icon
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.avatar:
+  id: 9ce1f7dc-03d8-4b3b-81db-0f122eab16a0
+  path: ux.librarycomponent.avatar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Avatar
+  description: "People identifier: renders a photo, or initials on a deterministic
+    gradient, with an optional presence dot."
+  attributes:
+    type: display
+    category: heimdall-primitives
+    label: Avatar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Avatar.tsx
+        symbol: Avatar
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.button:
+  id: 11fa7308-e21a-403e-8716-c7f0cfcc86c0
+  path: ux.librarycomponent.button
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Button
+  description: Standard action button with six variants and two sizes.
+  attributes:
+    type: input
+    category: heimdall-primitives
+    label: Button
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Button.tsx
+        symbol: Button
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.chip:
+  id: 360b4d29-1539-48a3-8873-307570187c9d
+  path: ux.librarycomponent.chip
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Chip
+  description: Inline tag for statuses, identifiers, versions, environments and
+    inferred values.
+  attributes:
+    type: display
+    category: heimdall-primitives
+    label: Chip
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Chip.tsx
+        symbol: Chip
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.badge:
+  id: 71d5a6cb-3780-4a97-834e-731edeeaa12b
+  path: ux.librarycomponent.badge
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Badge
+  description: A static 8px colored dot for inline use beside text.
+  attributes:
+    type: display
+    category: heimdall-primitives
+    label: Badge
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Badge.tsx
+        symbol: Badge
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.status-badge:
+  id: 44897f59-ebcc-471d-9252-9c056530b002
+  path: ux.librarycomponent.status-badge
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: StatusBadge
+  description: Solid 8px dot with an optional pulsing halo, for live status indicators.
+  attributes:
+    type: display
+    category: heimdall-primitives
+    label: StatusBadge
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Badge.tsx
+        symbol: StatusBadge
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.text-input:
+  id: a54c978e-0bb4-4019-9523-f3eee5cf293a
+  path: ux.librarycomponent.text-input
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: TextInput
+  description: Single-line text input with optional monospace font and error state.
+  attributes:
+    type: input
+    category: heimdall-inputs
+    label: TextInput
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/TextInput.tsx
+        symbol: TextInput
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.text-area:
+  id: 9bf89ebb-620b-4ee0-86cf-0cd404574973
+  path: ux.librarycomponent.text-area
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: TextArea
+  description: Multi-line text input with optional monospace font and error state.
+  attributes:
+    type: input
+    category: heimdall-inputs
+    label: TextArea
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/TextArea.tsx
+        symbol: TextArea
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.number-input:
+  id: 264f668e-1e56-4a8c-8757-a71f16b43e17
+  path: ux.librarycomponent.number-input
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: NumberInput
+  description: Numeric input rendered as `<input type="number">`.
+  attributes:
+    type: input
+    category: heimdall-inputs
+    label: NumberInput
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/NumberInput.tsx
+        symbol: NumberInput
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.select:
+  id: 82000d8f-b3a2-4ccf-a055-bd8315efa625
+  path: ux.librarycomponent.select
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Select
+  description: Custom dropdown (not a native `<select>`) with single and
+    multi-select modes, compound item children, icons, descriptions, separators
+    and section titles.
+  attributes:
+    type: input
+    category: heimdall-inputs
+    label: Select
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Select.tsx
+        symbol: Select
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.tri-state:
+  id: 9e7ce824-6987-449a-b7bc-06d51bd9e133
+  path: ux.librarycomponent.tri-state
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: TriState
+  description: "Checkbox with three visual states: unchecked, indeterminate (dash)
+    and checked. Used for select-all rows."
+  attributes:
+    type: input
+    category: heimdall-inputs
+    label: TriState
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/TriState.tsx
+        symbol: TriState
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.field:
+  id: 76c2b4c9-f40c-49b5-b233-cc2e6fc06389
+  path: ux.librarycomponent.field
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Field
+  description: Layout wrapper that adds a label, required marker, inline hint and
+    error message around any input.
+  attributes:
+    type: form
+    category: heimdall-inputs
+    label: Field
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Field.tsx
+        symbol: Field
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.stat-tile:
+  id: 1d2a0d2a-c21a-465e-8873-bf59c52eca9b
+  path: ux.librarycomponent.stat-tile
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: StatTile
+  description: KPI tile with a colored left bar, optional delta, sparkline, icon
+    and meta line.
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: StatTile
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/StatTile.tsx
+        symbol: StatTile
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.stat-grid:
+  id: f123b6d2-9215-4f67-bfb1-f3792527f452
+  path: ux.librarycomponent.stat-grid
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: StatGrid
+  description: Responsive grid for a row of `StatTile`s (14px gap).
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: StatGrid
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/StatGrid.tsx
+        symbol: StatGrid
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.version-pill:
+  id: 29dc2353-96cb-4087-971e-cf8362d86871
+  path: ux.librarycomponent.version-pill
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: VersionPill
+  description: Compact monospace tag for version strings, tinted by tone.
+  attributes:
+    type: display
+    category: heimdall-primitives
+    label: VersionPill
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/VersionPill.tsx
+        symbol: VersionPill
+  metadata:
+    created_at: 2026-11-23T16:44:48.923Z
+    updated_at: 2026-11-23T16:44:48.923Z
+    version: 1
+ux.librarycomponent.segmented-control:
+  id: 717d9fe3-7f92-4b68-ac0f-0c65ce1b6f37
+  path: ux.librarycomponent.segmented-control
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: SegmentedControl
+  description: Radio group rendered as a connected row of segments, for mutually
+    exclusive view or filter selection.
+  attributes:
+    type: input
+    category: heimdall-primitives
+    label: SegmentedControl
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/SegmentedControl.tsx
+        symbol: SegmentedControl
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.table:
+  id: 262f2428-6615-4f5b-a3a2-7f3cf11f8a95
+  path: ux.librarycomponent.table
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Table
+  description: Generic data table with sortable headers, checkbox selection,
+    clickable rows and custom cell rendering.
+  attributes:
+    type: table
+    category: heimdall-data-display
+    label: Table
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Table.tsx
+        symbol: Table
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.nav-item:
+  id: dc8ad8b8-0fb9-4ea7-b23b-4f18ff92157e
+  path: ux.librarycomponent.nav-item
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: NavItem
+  description: Single shell-surface navigation button (or link, with `href`) with
+    optional icon, count, and active marker; use it to build a custom nav column
+    when `Sidebar` does not fit.
+  attributes:
+    type: navigation
+    category: heimdall-navigation
+    label: NavItem
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/NavItem.tsx
+        symbol: NavItem
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.sidebar:
+  id: 64abcc11-7df3-424e-a3a9-b80a584d1926
+  path: ux.librarycomponent.sidebar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Sidebar
+  description: Left navigation column with titled sections, expandable parent
+    items, a 256px/64px collapse toggle, an optional `AppTitle` header, and a
+    footer slot.
+  attributes:
+    type: navigation
+    category: heimdall-navigation
+    label: Sidebar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Sidebar.tsx
+        symbol: Sidebar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.topbar:
+  id: 88998b31-0b65-416f-b718-fb787ba24dd5
+  path: ux.librarycomponent.topbar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Topbar
+  description: 48px bar above the canvas with breadcrumbs, a leading slot, an
+    optional search box with a shortcut hint, and a right-side actions slot.
+  attributes:
+    type: navigation
+    category: heimdall-navigation
+    label: Topbar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Topbar.tsx
+        symbol: Topbar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.tab-bar:
+  id: 1cdd32b7-b679-44f9-9f69-2c2a3542a4b5
+  path: ux.librarycomponent.tab-bar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: TabBar
+  description: Canvas-surface horizontal tab strip with an amber underline on the
+    active tab, optional count chips, and roving-focus keyboard navigation.
+  attributes:
+    type: navigation
+    category: heimdall-navigation
+    label: TabBar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/TabBar.tsx
+        symbol: TabBar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.app-title:
+  id: 92e5fa58-ac8c-4fab-a094-ca27e4efa321
+  path: ux.librarycomponent.app-title
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: AppTitle
+  description: Brand row with the amber mark, application name, optional version
+    tag, and an optional trailing action; sits at the top of the sidebar column.
+  attributes:
+    type: display
+    category: heimdall-shell
+    label: AppTitle
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/AppTitle.tsx
+        symbol: AppTitle
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.titlebar:
+  id: 39118ff1-f62d-4337-baf5-1aebb12fd543
+  path: ux.librarycomponent.titlebar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Titlebar
+  description: 48px full-width chrome bar with left, center, and right slots,
+    rendered above the sidebar and content.
+  attributes:
+    type: layout
+    category: heimdall-shell
+    label: Titlebar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Titlebar.tsx
+        symbol: Titlebar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.statusbar:
+  id: 2e7e93f4-91f5-4cec-a8e4-a6d243074295
+  path: ux.librarycomponent.statusbar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Statusbar
+  description: 27px bottom bar with left, center, and right slots; each slot takes
+    React nodes or a typed `StatusbarItem[]` of pulses, icons, and dividers.
+  attributes:
+    type: layout
+    category: heimdall-shell
+    label: Statusbar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Statusbar.tsx
+        symbol: Statusbar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.shell-layout:
+  id: fb66b6e7-7a8f-4199-9489-8a99043fce5b
+  path: ux.librarycomponent.shell-layout
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ShellLayout
+  description: "Full-viewport IDE chrome: optional Titlebar on top, Sidebar (with
+    AppTitle) on the left, Topbar above a scrolling canvas `<main>`, optional
+    Statusbar at the bottom, and a drawer-based sidebar below a mobile
+    breakpoint."
+  attributes:
+    type: layout
+    category: heimdall-shell
+    label: ShellLayout
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ShellLayout.tsx
+        symbol: ShellLayout
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.modal:
+  id: 69e6db73-3cdb-48ed-8b48-7cb6a7c281b2
+  path: ux.librarycomponent.modal
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Modal
+  description: General-purpose dialog with header, body, footer, and optional hint strip.
+  attributes:
+    type: layout
+    category: heimdall-overlays
+    label: Modal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Modal.tsx
+        symbol: Modal
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.confirm-dialog:
+  id: b23f9737-7663-4e3e-938a-e33b5cf931d6
+  path: ux.librarycomponent.confirm-dialog
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ConfirmDialog
+  description: Two-button confirmation built on `Modal`. Defaults to the `danger` variant.
+  attributes:
+    type: feedback
+    category: heimdall-overlays
+    label: ConfirmDialog
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ConfirmDialog.tsx
+        symbol: ConfirmDialog
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.workspace-switcher-dialog:
+  id: 0c2de33f-f02d-4876-996f-b2658fa9e4ca
+  path: ux.librarycomponent.workspace-switcher-dialog
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: WorkspaceSwitcherDialog
+  description: "Modal for switching workspaces: optional action tiles plus a
+    recent-workspace list."
+  attributes:
+    type: layout
+    category: heimdall-overlays
+    label: WorkspaceSwitcherDialog
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/WorkspaceSwitcherDialog.tsx
+        symbol: WorkspaceSwitcherDialog
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.filter-dropdown:
+  id: b8174b9c-8fe0-4e03-a4d1-b8c33b53e709
+  path: ux.librarycomponent.filter-dropdown
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: FilterDropdown
+  description: "Compound dropdown for filter bars: a trigger with an eyebrow label
+    and summary, and a panel of checkbox (multi) or radio (single) options."
+  attributes:
+    type: input
+    category: heimdall-inputs
+    label: FilterDropdown
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/FilterDropdown.tsx
+        symbol: FilterDropdown
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.toast:
+  id: c0163441-0339-476f-b04f-57a939cc01d9
+  path: ux.librarycomponent.toast
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Toast
+  description: Single dismissible notification with optional auto-dismiss. Does
+    not position itself.
+  attributes:
+    type: feedback
+    category: heimdall-overlays
+    label: Toast
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Toast.tsx
+        symbol: Toast
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.tooltip:
+  id: 75d87b1a-69d9-4b3a-be4c-743d472d5382
+  path: ux.librarycomponent.tooltip
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Tooltip
+  description: Short hover/focus hint attached to a single child element.
+  attributes:
+    type: display
+    category: heimdall-overlays
+    label: Tooltip
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Tooltip.tsx
+        symbol: Tooltip
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.popover:
+  id: 3390e342-3449-4f56-af57-8801908163e4
+  path: ux.librarycomponent.popover
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Popover
+  description: "Click-to-open non-modal panel anchored to a trigger. Compound
+    component: `Popover` + `Popover.Trigger` + `Popover.Panel`."
+  attributes:
+    type: layout
+    category: heimdall-overlays
+    label: Popover
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Popover.tsx
+        symbol: Popover
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.command-palette:
+  id: c299d3d7-540a-493c-b1ae-e315b7bb4659
+  path: ux.librarycomponent.command-palette
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: CommandPalette
+  description: Keyboard-driven command launcher with substring search and optional groups.
+  attributes:
+    type: navigation
+    category: heimdall-overlays
+    label: CommandPalette
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/CommandPalette.tsx
+        symbol: CommandPalette
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.panel:
+  id: 95d2a93b-ed95-4714-8bea-7718eb30a828
+  path: ux.librarycomponent.panel
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Panel
+  description: Bordered content card with optional header (title, subtitle,
+    trailing action) and footer.
+  attributes:
+    type: layout
+    category: heimdall-layout
+    label: Panel
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Panel.tsx
+        symbol: Panel
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.drawer:
+  id: 15198767-dea5-4ae3-ad80-398764c532c4
+  path: ux.librarycomponent.drawer
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Drawer
+  description: Modal slide-in side panel with backdrop, optional title, and
+    configurable edge and width.
+  attributes:
+    type: layout
+    category: heimdall-overlays
+    label: Drawer
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Drawer.tsx
+        symbol: Drawer
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.split-pane:
+  id: 92de6ccb-423b-40e2-9e0a-f881663e3ce2
+  path: ux.librarycomponent.split-pane
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: SplitPane
+  description: Resizable two-pane split with a draggable, keyboard-focusable
+    divider. Controlled or uncontrolled.
+  attributes:
+    type: layout
+    category: heimdall-layout
+    label: SplitPane
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/SplitPane.tsx
+        symbol: SplitPane
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.inspector-panel:
+  id: 47986451-3db5-4eb4-86c4-a047791ff6a4
+  path: ux.librarycomponent.inspector-panel
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: InspectorPanel
+  description: "Full-height details panel for one entity: eyebrow, title, id,
+    version pill, header actions, and a scrolling body of sections."
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: InspectorPanel
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/InspectorPanel.tsx
+        symbol: InspectorPanel
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.kvgrid:
+  id: c716c170-2ff7-4e77-819f-2724d93486d2
+  path: ux.librarycomponent.kvgrid
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: KVGrid
+  description: Two-column key/value list for entity metadata, rendered as
+    `<dl>`/`<dt>`/`<dd>`.
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: KVGrid
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/KVGrid.tsx
+        symbol: KVGrid
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.chart-wrapper:
+  id: 1def2e13-0010-43d9-9bac-1178f0f3aeb7
+  path: ux.librarycomponent.chart-wrapper
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ChartWrapper
+  description: Accessible `<svg>` container (`role="img"` plus `aria-label`) for
+    hand-drawn custom charts.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: ChartWrapper
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChartWrapper.tsx
+        symbol: ChartWrapper
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.sparkline:
+  id: 4c96521b-e612-41ba-a3ff-2067569fb4a6
+  path: ux.librarycomponent.sparkline
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Sparkline
+  description: Shape-only trend line (88 × 28 by default) for tiles, table cells
+    and cards. No axes, labels or tooltip.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: Sparkline
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Sparkline.tsx
+        symbol: Sparkline
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.line-chart:
+  id: 1ed2a60b-4b02-488d-8b58-0efd937117df
+  path: ux.librarycomponent.line-chart
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LineChart
+  description: Multi-series line chart with optional area fill, axes, grid,
+    threshold line, event markers and hover tooltip.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: LineChart
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LineChart.tsx
+        symbol: LineChart
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.bar-chart:
+  id: bcd0b1d2-9302-4d41-993a-a6f0ad24dc97
+  path: ux.librarycomponent.bar-chart
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: BarChart
+  description: Grouped multi-series vertical bar chart with built-in axes and an
+    optional legend. Older API; for a single series prefer `BarV`, for
+    composition `StackedBar`.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: BarChart
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/BarChart.tsx
+        symbol: BarChart
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.bar-v:
+  id: cfce90e7-dca8-4cc9-b5b8-dc3df915a062
+  path: ux.librarycomponent.bar-v
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: BarV
+  description: Single-series vertical bar chart with a zero baseline.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: BarV
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/BarV.tsx
+        symbol: BarV
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.bar-h:
+  id: 90502645-5ccf-4971-ab69-8168793477dc
+  path: ux.librarycomponent.bar-h
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: BarH
+  description: "Horizontal bar chart for ranked categories: a label column, an
+    inset track and a filled bar per item, with an optional value at the bar's
+    end."
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: BarH
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/BarH.tsx
+        symbol: BarH
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.stacked-bar:
+  id: ac3a729c-6857-4612-8df1-9b01f73b5a6b
+  path: ux.librarycomponent.stacked-bar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: StackedBar
+  description: Vertical stacked bars, one stack per category, with optional 100%
+    normalized mode and per-stack labels.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: StackedBar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/StackedBar.tsx
+        symbol: StackedBar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.donut:
+  id: 2e03af28-fbdd-4df6-a8d9-eebec3ae9e05
+  path: ux.librarycomponent.donut
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Donut
+  description: Ring chart for composition, with optional center value and eyebrow
+    label. No legend.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: Donut
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Donut.tsx
+        symbol: Donut
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.heatmap:
+  id: 9e783ef4-0d02-4f27-a127-3819fde9807d
+  path: ux.librarycomponent.heatmap
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Heatmap
+  description: 2-D density grid on a single-hue alpha scale, for hour-by-day
+    activity or host-by-metric matrices.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: Heatmap
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Heatmap.tsx
+        symbol: Heatmap
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.status-timeline:
+  id: 956d8af5-3e7e-4dc9-b892-0e67241ce4f3
+  path: ux.librarycomponent.status-timeline
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: StatusTimeline
+  description: "Gantt-style status history: one horizontal track per service,
+    colored segments across a time window, optional amber event marker."
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: StatusTimeline
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/StatusTimeline.tsx
+        symbol: StatusTimeline
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.progress-bar:
+  id: 990fc98b-c779-4dbc-8131-93a17c3019ac
+  path: ux.librarycomponent.progress-bar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ProgressBar
+  description: Thin horizontal fill bar for progress, quota or utilization, with
+    `role="progressbar"`.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: ProgressBar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ProgressBar.tsx
+        symbol: ProgressBar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.metric-row:
+  id: 75bbb14a-3816-4bf8-9150-c52055ea8520
+  path: ux.librarycomponent.metric-row
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: MetricRow
+  description: One dashboard row combining a label, a progress bar, a 60 × 18
+    sparkline and a value with unit.
+  attributes:
+    type: chart
+    category: heimdall-charts
+    label: MetricRow
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/MetricRow.tsx
+        symbol: MetricRow
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.page-header:
+  id: 2e6a01d9-6e39-4ad3-9c46-9f03e7b2ed92
+  path: ux.librarycomponent.page-header
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: PageHeader
+  description: "Page title block: `<h1>` title with optional eyebrow row,
+    identifier chip, subtitle, and right-aligned action slot."
+  attributes:
+    type: layout
+    category: heimdall-page-patterns
+    label: PageHeader
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/PageHeader.tsx
+        symbol: PageHeader
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.filter-bar:
+  id: bba00bc3-f6c4-436e-b652-d2fb6a7b709c
+  path: ux.librarycomponent.filter-bar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: FilterBar
+  description: Search input with optional inline controls, a "Showing X of Y"
+    caption, and a row of removable filter chips.
+  attributes:
+    type: input
+    category: heimdall-page-patterns
+    label: FilterBar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/FilterBar.tsx
+        symbol: FilterBar
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.activity-timeline:
+  id: 050fcc35-ada5-436a-ae90-d12a268bd1df
+  path: ux.librarycomponent.activity-timeline
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ActivityTimeline
+  description: Vertical feed of timestamped events with type-colored dots,
+    optional kind tags, meta lines, and clickable rows.
+  attributes:
+    type: display
+    category: heimdall-page-patterns
+    label: ActivityTimeline
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ActivityTimeline.tsx
+        symbol: ActivityTimeline
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.version-timeline:
+  id: 9353156b-2fad-4bc7-a38c-fbbc528ee0de
+  path: ux.librarycomponent.version-timeline
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: VersionTimeline
+  description: "Vertical, selectable version history: amber version pill, optional
+    headline, diff stats or a state transition, and a relative timestamp per
+    entry, with a filled dot and `head` chip on the current version."
+  attributes:
+    type: display
+    category: heimdall-observability
+    label: VersionTimeline
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/VersionTimeline.tsx
+        symbol: VersionTimeline
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.hash-set-diff:
+  id: 97dbbb60-4d04-484e-bca8-bbf315f7a6b6
+  path: ux.librarycomponent.hash-set-diff
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: HashSetDiff
+  description: Three-column set diff (Added / Removed / Kept, with counts) for
+    comparing two versions of a set of identifiers. Standalone version of
+    `DiffViewer.HashSet` without the label pill.
+  attributes:
+    type: display
+    category: heimdall-observability
+    label: HashSetDiff
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/HashSetDiff.tsx
+        symbol: HashSetDiff
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.side-by-side-diff:
+  id: 7cc455fb-29b3-402a-84fc-e398f3961ccf
+  path: ux.librarycomponent.side-by-side-diff
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: SideBySideDiff
+  description: Virtualized line diff with +/− gutter markers, tinted added and
+    removed rows, and full-width hunk headers. Lines render in one column in the
+    order given (a unified diff), under a fixed "Version 2 (Added)" / "Version 1
+    (Removed)" header.
+  attributes:
+    type: display
+    category: heimdall-observability
+    label: SideBySideDiff
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/SideBySideDiff.tsx
+        symbol: SideBySideDiff
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.diff-viewer:
+  id: 3b638e5c-e9ce-4938-ad5e-e8590f69c086
+  path: ux.librarycomponent.diff-viewer
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: DiffViewer
+  description: Tabbed diff panel that switches between a set diff
+    (`DiffViewer.HashSet`, added / removed / kept items) and a line diff
+    (`DiffViewer.SideBySide`).
+  attributes:
+    type: display
+    category: heimdall-observability
+    label: DiffViewer
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/DiffViewer.tsx
+        symbol: DiffViewer
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.alert-strip:
+  id: ba03ad5b-7079-4101-8b41-838263341d7d
+  path: ux.librarycomponent.alert-strip
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: AlertStrip
+  description: Stacked list of compact severity alerts, each with a colored dot,
+    message, and optional dismiss button.
+  attributes:
+    type: feedback
+    category: heimdall-page-patterns
+    label: AlertStrip
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/AlertStrip.tsx
+        symbol: AlertStrip
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.quick-access-grid:
+  id: 75b29ca1-a2c4-4213-8e29-38147e8fe363
+  path: ux.librarycomponent.quick-access-grid
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: QuickAccessGrid
+  description: Grid of `QuickAccessTile` buttons (or links, with `href`) driven by
+    a data array, for landing-page shortcuts.
+  attributes:
+    type: display
+    category: heimdall-page-patterns
+    label: QuickAccessGrid
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/QuickAccessGrid.tsx
+        symbol: QuickAccessGrid
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.quick-access-tile:
+  id: d2cb6a72-cc8f-4299-9a4f-5fe76e1ade70
+  path: ux.librarycomponent.quick-access-tile
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: QuickAccessTile
+  description: Single shortcut button (or link, with `href`) with an icon tile,
+    title, optional description, and trailing chevron.
+  attributes:
+    type: display
+    category: heimdall-page-patterns
+    label: QuickAccessTile
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/QuickAccessTile.tsx
+        symbol: QuickAccessTile
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.config-tile:
+  id: f4e9154e-393a-4a4b-bf08-e2f0b9e5eb65
+  path: ux.librarycomponent.config-tile
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ConfigTile
+  description: Settings-page tile button with a 24px icon, title, description, a
+    key/value summary grid, and trailing chevron.
+  attributes:
+    type: display
+    category: heimdall-page-patterns
+    label: ConfigTile
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ConfigTile.tsx
+        symbol: ConfigTile
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.chat-message:
+  id: 829f8f1d-fa50-4da5-83ed-19adf319ce98
+  path: ux.librarycomponent.chat-message
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ChatMessage
+  description: A single chat turn (user or bot) with an optional inline tool call
+    and reasoning block.
+  attributes:
+    type: display
+    category: heimdall-chat
+    label: ChatMessage
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatMessage.tsx
+        symbol: ChatMessage
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.tool-block:
+  id: a3828801-b1d7-418f-91f5-e4faff5c13f9
+  path: ux.librarycomponent.tool-block
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ToolBlock
+  description: Collapsible block showing a tool call name, execution status, and
+    optional key/value output rows.
+  attributes:
+    type: display
+    category: heimdall-chat
+    label: ToolBlock
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatMessage.tsx
+        symbol: ToolBlock
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.thinking-block:
+  id: c2d0e1fb-0c3b-44fc-a609-0f955da96302
+  path: ux.librarycomponent.thinking-block
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ThinkingBlock
+  description: Collapsible monospace block for model reasoning or step-by-step thought text.
+  attributes:
+    type: display
+    category: heimdall-chat
+    label: ThinkingBlock
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatMessage.tsx
+        symbol: ThinkingBlock
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.chat-divider:
+  id: e17f1bf8-7a27-4b64-971d-0799d6542796
+  path: ux.librarycomponent.chat-divider
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ChatDivider
+  description: Horizontal rule with a centered label for separating conversation
+    sections (dates, sessions).
+  attributes:
+    type: display
+    category: heimdall-chat
+    label: ChatDivider
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatDivider.tsx
+        symbol: ChatDivider
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.chat-suggestions:
+  id: 05ff8dab-cbd5-4faf-b8c7-ace012f580e6
+  path: ux.librarycomponent.chat-suggestions
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ChatSuggestions
+  description: Row of quick-reply chips. Once one is selected, the others are disabled.
+  attributes:
+    type: input
+    category: heimdall-chat
+    label: ChatSuggestions
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatSuggestions.tsx
+        symbol: ChatSuggestions
+  metadata:
+    created_at: 2026-11-23T16:44:48.924Z
+    updated_at: 2026-11-23T16:44:48.924Z
+    version: 1
+ux.librarycomponent.chat-composer:
+  id: 1fe29d46-5c85-4eff-8b52-96acdef706dc
+  path: ux.librarycomponent.chat-composer
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ChatComposer
+  description: Controlled message input with context chips, attachment chips, a
+    file picker and a send button.
+  attributes:
+    type: input
+    category: heimdall-chat
+    label: ChatComposer
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatComposer.tsx
+        symbol: ChatComposer
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.chat-container:
+  id: bca445a3-6cd5-432e-9aab-a4d3992f575e
+  path: ux.librarycomponent.chat-container
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ChatContainer
+  description: Chat panel composing optional bot tabs, a scrolling message thread
+    and a composer slot.
+  attributes:
+    type: layout
+    category: heimdall-chat
+    label: ChatContainer
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatContainer.tsx
+        symbol: ChatContainer
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.chat-markdown-content:
+  id: 27e64598-759f-4233-a420-d67dc236ed75
+  path: ux.librarycomponent.chat-markdown-content
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ChatMarkdownContent
+  description: Renders a markdown string (GitHub-flavored) with Heimdall chat
+    typography; the standard renderer for model output in a message body.
+  attributes:
+    type: display
+    category: heimdall-chat
+    label: ChatMarkdownContent
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatMarkdownContent.tsx
+        symbol: ChatMarkdownContent
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.entity-picker:
+  id: b8816576-66e6-4594-a8e0-773b09505e79
+  path: ux.librarycomponent.entity-picker
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: EntityPicker
+  description: Search-as-you-type combobox that lists entity results with optional
+    domain chips. The parent owns the query and does the filtering.
+  attributes:
+    type: input
+    category: heimdall-inputs
+    label: EntityPicker
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/EntityPicker.tsx
+        symbol: EntityPicker
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.key-value-editor:
+  id: 05c0c9c0-97a6-4aac-96f7-1a2bf48fa89d
+  path: ux.librarycomponent.key-value-editor
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: KeyValueEditor
+  description: Editable table of key/value rows with an optional datatype column
+    and add/remove controls.
+  attributes:
+    type: form
+    category: heimdall-inputs
+    label: KeyValueEditor
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/KeyValueEditor.tsx
+        symbol: KeyValueEditor
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.ordered-list:
+  id: 0930726e-6d9e-4222-ad6c-e2c82febdb8b
+  path: ux.librarycomponent.ordered-list
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: OrderedList
+  description: Ranked list with move-up / move-down buttons and an optional star
+    marker on a primary item.
+  attributes:
+    type: form
+    category: heimdall-inputs
+    label: OrderedList
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/OrderedList.tsx
+        symbol: OrderedList
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.relationship-builder:
+  id: 654dace7-68d9-4b5d-aada-39b0a35ca256
+  path: ux.librarycomponent.relationship-builder
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: RelationshipBuilder
+  description: Three-column form (Source / Predicate / Target) composing two
+    `EntityPicker`s and a `Select` into one relationship value.
+  attributes:
+    type: form
+    category: heimdall-inputs
+    label: RelationshipBuilder
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/RelationshipBuilder.tsx
+        symbol: RelationshipBuilder
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.row-menu:
+  id: d6a2ba56-8513-4084-9aed-270eb9838da1
+  path: ux.librarycomponent.row-menu
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: RowMenu
+  description: Kebab trigger that opens a dropdown of row actions, with
+    separators, danger and disabled items, and full keyboard navigation.
+  attributes:
+    type: navigation
+    category: heimdall-page-patterns
+    label: RowMenu
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/RowMenu.tsx
+        symbol: RowMenu
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.pipeline-card:
+  id: 45adfff4-6840-4914-8257-823ffe77f452
+  path: ux.librarycomponent.pipeline-card
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: PipelineCard
+  description: "Pipeline status card: name, id, status/target/tag chips, run
+    controls, a stage flow strip, and a recent-stats footer."
+  attributes:
+    type: display
+    category: heimdall-page-patterns
+    label: PipelineCard
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/PipelineCard.tsx
+        symbol: PipelineCard
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.form-callout:
+  id: f424f4b3-85db-4303-8c41-9c51747914e0
+  path: ux.librarycomponent.form-callout
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: FormCallout
+  description: Inline info, warning, or error block inside forms, with
+    backtick-delimited code rendered as `<code>`.
+  attributes:
+    type: feedback
+    category: heimdall-page-patterns
+    label: FormCallout
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/FormCallout.tsx
+        symbol: FormCallout
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.adjacency-matrix:
+  id: 6b4afb64-da63-406f-9574-3d5ed5419f3c
+  path: ux.librarycomponent.adjacency-matrix
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: AdjacencyMatrix
+  description: A directed block adjacency matrix of a layered graph. There is one
+    row and one column per node, grouped by layer, and one cell per link (row =
+    source, column = target).
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: AdjacencyMatrix
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/AdjacencyMatrix.tsx
+        symbol: AdjacencyMatrix
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.hive-plot:
+  id: f4fcbe17-a0c9-4db7-9ee5-bf9194f0796f
+  path: ux.librarycomponent.hive-plot
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: HivePlot
+  description: "A hive plot of a layered graph: one radial axis per layer at
+    evenly divided angles, nodes placed outward along their axis by rank (degree
+    by default, busiest farthest out), and links drawn as curves between axes."
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: HivePlot
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/HivePlot.tsx
+        symbol: HivePlot
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.layer-stack:
+  id: f338b84d-c8c8-4d0d-9dfd-cbc8f6759d47
+  path: ux.librarycomponent.layer-stack
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LayerStack
+  description: "The layered graph as a 3D stack: one translucent plane per layer
+    (with a grid and a clickable title showing node and link counts), nodes as
+    layer-coloured discs sized by degree, intra-layer links on their plane and
+    cross-layer links between planes."
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: LayerStack
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayerStack.tsx
+        symbol: LayerStack
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.follow-control:
+  id: 3ee364f4-4a9d-4d26-b062-a3f5f889854f
+  path: ux.librarycomponent.follow-control
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: FollowControl
+  description: "Segmented control for how far the selection's reach follows
+    cross-layer links: Direct / +1 layer / +2 layers. Writes `follow` on the
+    shared `useLayeredGraph` state."
+  attributes:
+    type: input
+    category: heimdall-graph
+    label: FollowControl
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: FollowControl
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.predicate-label-control:
+  id: c43e9d5e-b98f-4d50-b50d-1dc14a0b0186
+  path: ux.librarycomponent.predicate-label-control
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: PredicateLabelControl
+  description: "Segmented control for which links show predicate labels: Off /
+    Highlighted (reached links and the active layer pair) / All."
+  attributes:
+    type: input
+    category: heimdall-graph
+    label: PredicateLabelControl
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: PredicateLabelControl
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.plane-layout-control:
+  id: 82fb6b4e-af6e-45ad-b00d-f9b80f0c8234
+  path: ux.librarycomponent.plane-layout-control
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: PlaneLayoutControl
+  description: Segmented control for Independent (each layer laid out on its own)
+    or Coupled (cross-layer neighbours aligned). Writes `planeLayout`; views
+    that position nodes per layer read it.
+  attributes:
+    type: input
+    category: heimdall-graph
+    label: PlaneLayoutControl
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: PlaneLayoutControl
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.link-category-filter:
+  id: 5d6cf0ae-bdbc-4eb9-a13b-40656f08ea54
+  path: ux.librarycomponent.link-category-filter
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LinkCategoryFilter
+  description: "The link bar: one toggle button per link category, each with its
+    dash sample (from `linkCategoryStyle`) and link count, then optional
+    intra-layer and node-label toggles."
+  attributes:
+    type: input
+    category: heimdall-graph
+    label: LinkCategoryFilter
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: LinkCategoryFilter
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.layer-list:
+  id: d49e63f9-de4a-4d02-99f4-beef6f92cd3d
+  path: ux.librarycomponent.layer-list
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LayerList
+  description: "One row per layer: colour swatch, name, and `nodes · links within`
+    counts. The row is a button that focuses the layer (again to clear); the eye
+    button hides or shows it."
+  attributes:
+    type: navigation
+    category: heimdall-graph
+    label: LayerList
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: LayerList
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.layer-pair-list:
+  id: 499fe668-9bb0-445b-9d5c-aeb052b685ca
+  path: ux.librarycomponent.layer-pair-list
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LayerPairList
+  description: "One row per layer pair with cross-layer links: both swatches, the
+    names and the link count. A row toggles layer-pair focus (only that pair's
+    cross-layer links show) and by default clears the selection."
+  attributes:
+    type: navigation
+    category: heimdall-graph
+    label: LayerPairList
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: LayerPairList
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.bridge-node-list:
+  id: 5ed54db0-fc31-4877-8f03-3c69569df2da
+  path: ux.librarycomponent.bridge-node-list
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: BridgeNodeList
+  description: The nodes with the most cross-layer links (ties by total degree),
+    skipping hidden layers. A row selects the node.
+  attributes:
+    type: navigation
+    category: heimdall-graph
+    label: BridgeNodeList
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: BridgeNodeList
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.reach-inspector:
+  id: 9e0d6027-5df1-4869-a111-72d2eafd9a3a
+  path: ux.librarycomponent.reach-inspector
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ReachInspector
+  description: "Inspector for the layered views' selection: the selected node's
+    direct links split into cross-layer and intra-layer rows (direction,
+    predicate, layer) and the nodes its reach followed, with hop and the node
+    and predicate each came through; reads the enclosing LayeredGraphContext or
+    a graph prop."
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: ReachInspector
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ReachInspector.tsx
+        symbol: ReachInspector
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.layered-graph-explorer:
+  id: 9e67864d-ad19-4de7-8b26-3e63ba6a485a
+  path: ux.librarycomponent.layered-graph-explorer
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LayeredGraphExplorer
+  description: "The ready-made layered graph explorer: every layered view and its
+    chrome in one component."
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: LayeredGraphExplorer
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphExplorer.tsx
+        symbol: LayeredGraphExplorer
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.view-switcher:
+  id: c242f8ff-32d7-4898-95e8-0796f63b3e6c
+  path: ux.librarycomponent.view-switcher
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ViewSwitcher
+  description: Segmented control for the explorer's view (3D stack, Lanes, Matrix,
+    Hive). Use it to build your own explorer layout; `LAYERED_GRAPH_VIEWS` and
+    `LAYERED_GRAPH_VIEW_LABELS` list the views and their default labels.
+  attributes:
+    type: input
+    category: heimdall-graph
+    label: ViewSwitcher
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphExplorer.tsx
+        symbol: ViewSwitcher
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.camera-controls:
+  id: 8f4fa3cd-cea4-4534-9f8d-34e4189a4fc4
+  path: ux.librarycomponent.camera-controls
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: CameraControls
+  description: "Camera chrome for `LayerStack`: preset segmented control, zoom in
+    and out, fit and the turntable toggle, driven by a LayerStack ref or
+    controlled props."
+  attributes:
+    type: input
+    category: heimdall-graph
+    label: CameraControls
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphExplorer.tsx
+        symbol: CameraControls
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.detail-drawer:
+  id: ae6fd621-3875-413f-905f-d18f8e823413
+  path: ux.librarycomponent.detail-drawer
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: DetailDrawer
+  description: Non-modal translucent panel that slides over the right edge of its
+    nearest positioned ancestor, opening when `open` is true and collapsing to
+    zero width otherwise.
+  attributes:
+    type: layout
+    category: heimdall-graph
+    label: DetailDrawer
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/DetailDrawer.tsx
+        symbol: DetailDrawer
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.topology-node:
+  id: c2606c59-9f4d-4e22-83e6-7b8e242b86ae
+  path: ux.librarycomponent.topology-node
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: TopologyNode
+  description: Infrastructure/service node card with status dot and metric
+    progress bars. Supports absolute positioning for hand-placed diagrams, and
+    works as `renderNode` content in `GraphCanvas`.
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: TopologyNode
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/TopologyNode.tsx
+        symbol: TopologyNode
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.hierarchy-row:
+  id: 5b540499-757e-4090-82bf-46d7a3bff7e1
+  path: ux.librarycomponent.hierarchy-row
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: HierarchyRow
+  description: A single row in a taxonomy/hierarchy list with depth indentation,
+    connector, domain color swatch, kind badge and right-hand description.
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: HierarchyRow
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/HierarchyRow.tsx
+        symbol: HierarchyRow
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.hierarchy-tree:
+  id: 718d307d-09c7-4a3f-a3c8-8b117ad74eef
+  path: ux.librarycomponent.hierarchy-tree
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: HierarchyTree
+  description: Plain container for `HierarchyRow` items.
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: HierarchyTree
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/HierarchyTree.tsx
+        symbol: HierarchyTree
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.lineage-rail:
+  id: 4d80cc38-4fb7-4dc9-b005-3e4400d9e471
+  path: ux.librarycomponent.lineage-rail
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LineageRail
+  description: Horizontal chain of chips joined by arrows, showing the lineage of
+    a dataset, run, or entity. The first node is styled as the head.
+  attributes:
+    type: display
+    category: heimdall-observability
+    label: LineageRail
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LineageRail.tsx
+        symbol: LineageRail
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.asset-card:
+  id: 540424e9-158c-4c2f-a470-936bfac94239
+  path: ux.librarycomponent.asset-card
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: AssetCard
+  description: Thumbnail card for a document, image or cover asset, with title,
+    subtitle, meta and an optional corner badge.
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: AssetCard
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/AssetCard.tsx
+        symbol: AssetCard
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.asset-grid:
+  id: aa24e029-2342-444f-8970-99777fcf377b
+  path: ux.librarycomponent.asset-grid
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: AssetGrid
+  description: Responsive grid container for `AssetCard`s.
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: AssetGrid
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/AssetGrid.tsx
+        symbol: AssetGrid
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.calendar:
+  id: 335096c7-991b-4945-bbec-e56029211c05
+  path: ux.librarycomponent.calendar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: Calendar
+  description: Controlled date-based event calendar with month, week, day and
+    agenda views, a header with previous / Today / next buttons, and a view
+    switcher.
+  attributes:
+    type: display
+    category: heimdall-planning
+    label: Calendar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/Calendar.tsx
+        symbol: Calendar
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.kanban-board:
+  id: fe6d83de-ac33-45e2-98c1-bd30a3e5bead
+  path: ux.librarycomponent.kanban-board
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: KanbanBoard
+  description: Column board of cards with pointer drag-and-drop, keyboard moves,
+    per-column counts, WIP-limit warnings and controlled selection.
+  attributes:
+    type: display
+    category: heimdall-planning
+    label: KanbanBoard
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/KanbanBoard.tsx
+        symbol: KanbanBoard
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.log-stream:
+  id: 6cb0d8d0-7fe0-46d1-b2b2-bef300dc321b
+  path: ux.librarycomponent.log-stream
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LogStream
+  description: Monospace, auto-following log tail with timestamp and level
+    columns, and optional operation / target columns.
+  attributes:
+    type: display
+    category: heimdall-observability
+    label: LogStream
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LogStream.tsx
+        symbol: LogStream
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.map-canvas:
+  id: 642db5d8-ecc8-4352-95b1-2ed0ac5c9fb3
+  path: ux.librarycomponent.map-canvas
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: MapCanvas
+  description: Pan/zoom Web Mercator map that renders pins, a track polyline, or a
+    heatmap, over a grid or optional raster tiles.
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: MapCanvas
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/MapCanvas.tsx
+        symbol: MapCanvas
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.mini-calendar:
+  id: 8126c402-8ff2-4bf2-9976-c05307aec837
+  path: ux.librarycomponent.mini-calendar
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: MiniCalendar
+  description: Compact single-month date picker for sidebars, with today and
+    selected-day highlighting and dot markers for days that have events.
+  attributes:
+    type: display
+    category: heimdall-planning
+    label: MiniCalendar
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/MiniCalendar.tsx
+        symbol: MiniCalendar
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.result-card:
+  id: fd80e113-8469-434c-af54-fca9e62cb681
+  path: ux.librarycomponent.result-card
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: ResultCard
+  description: "Search or retrieval result: source, version, relevance score bar,
+    snippet, provenance and row actions."
+  attributes:
+    type: display
+    category: heimdall-data-display
+    label: ResultCard
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ResultCard.tsx
+        symbol: ResultCard
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.trace-viewer:
+  id: e4facf37-68cb-48ba-95fa-7a234758bd5f
+  path: ux.librarycomponent.trace-viewer
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: TraceViewer
+  description: "Distributed-trace waterfall: span tree, service-colored timeline
+    with parent-to-child connectors, summary strip, toolbar, and a fly-out span
+    detail panel."
+  attributes:
+    type: display
+    category: heimdall-observability
+    label: TraceViewer
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/TraceViewer.tsx
+        symbol: TraceViewer
+  metadata:
+    created_at: 2026-11-23T16:44:48.925Z
+    updated_at: 2026-11-23T16:44:48.925Z
     version: 1

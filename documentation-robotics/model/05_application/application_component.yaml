@@ -5,10 +5,12 @@ application.applicationcomponent.graph-canvas-component:
   type: applicationcomponent
   layer_id: application
   name: GraphCanvas Component
-  description: "The primary orchestrating React component: manages node
-    measurement, dispatches to whichever layout engine is selected, owns
-    pan/zoom/selection/hover/collapse state, and renders nodes, edges, toolbar,
-    tooltips, and popovers."
+  description: "The primary orchestrating React component: measures nodes,
+    dispatches to the layout selected by its layout prop (manual, force,
+    organic, orthogonal, galaxy, force-clustered, ux-navigation, radial-tree,
+    layer-lanes), owns pan/zoom, selection, hover, collapse and viewport
+    history, places edge labels jointly (hiding labels with no room until
+    focus), and renders nodes, edges, toolbar, tooltips and popovers."
   attributes:
     type: service-component
   source_reference:
@@ -47,9 +49,10 @@ application.applicationcomponent.graph-edge-component:
   type: applicationcomponent
   layer_id: application
   name: GraphEdge Component
-  description: Standalone exported edge component (for use outside GraphCanvas's
-    own internal edge renderer) — computes its own path via computeEdgePath and
-    delegates drawing to GraphEdgeShape.
+  description: "Standalone exported edge component (for use outside GraphCanvas's
+    own internal edge renderer): computes its own path with the internal
+    computeEdgePath helper (src/utils/graph.ts, no longer a public export) and
+    delegates drawing to GraphEdgeShape."
   attributes:
     type: internal
   source_reference:
@@ -163,4 +166,129 @@ application.applicationcomponent.graph-collapse-control-component:
   metadata:
     created_at: 2026-09-18T14:34:37.787Z
     updated_at: 2026-09-18T14:34:37.787Z
+    version: 1
+application.applicationcomponent.layer-stack-component:
+  id: 26b7b915-c247-4bc5-b497-3f9663cbb80d
+  path: application.applicationcomponent.layer-stack-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: LayerStack Component
+  description: Renders a layered graph as a 3D stack of translucent layer planes
+    in SVG with a perspective projection, an HTML label overlay,
+    orbit/zoom/preset camera, layer focus and drill-through selection.
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayerStack.tsx
+        symbol: LayerStack
+  metadata:
+    created_at: 2026-11-23T16:44:40.172Z
+    updated_at: 2026-11-23T16:44:40.172Z
+    version: 1
+application.applicationcomponent.adjacency-matrix-component:
+  id: 410183f6-4a3d-4459-809a-989ed3dbd638
+  path: application.applicationcomponent.adjacency-matrix-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: AdjacencyMatrix Component
+  description: Renders a layered graph as a directed block adjacency matrix, one
+    row and column per node grouped by layer, windowed for large graphs.
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/AdjacencyMatrix.tsx
+        symbol: AdjacencyMatrix
+  metadata:
+    created_at: 2026-11-23T16:44:40.172Z
+    updated_at: 2026-11-23T16:44:40.172Z
+    version: 1
+application.applicationcomponent.hive-plot-component:
+  id: cb96534c-3c0b-48b9-8d65-a5c472da5d53
+  path: application.applicationcomponent.hive-plot-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: HivePlot Component
+  description: "Renders a layered graph as a hive plot: one radial axis per layer
+    (or per group), nodes along the axis, links as curves between axes."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/HivePlot.tsx
+        symbol: HivePlot
+  metadata:
+    created_at: 2026-11-23T16:44:40.172Z
+    updated_at: 2026-11-23T16:44:40.172Z
+    version: 1
+application.applicationcomponent.layered-graph-explorer-component:
+  id: 562687bf-e835-40dc-a65f-a6e57edf25bb
+  path: application.applicationcomponent.layered-graph-explorer-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: LayeredGraphExplorer Component
+  description: Hosts every layered view (LayerStack, lanes through GraphCanvas
+    layout="layer-lanes", AdjacencyMatrix, HivePlot) with its chrome over one
+    useLayeredGraph state, with an imperative handle and snapshot save/restore.
+  attributes:
+    type: service-component
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayeredGraphExplorer.tsx
+        symbol: LayeredGraphExplorer
+  metadata:
+    created_at: 2026-11-23T16:44:40.172Z
+    updated_at: 2026-11-23T16:44:40.172Z
+    version: 1
+application.applicationcomponent.trace-viewer-component:
+  id: ed944b11-b769-4dc0-aaf0-a1257d42bb1b
+  path: application.applicationcomponent.trace-viewer-component
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: TraceViewer Component
+  description: "Distributed-trace waterfall: builds a trace model from a Trace and
+    renders the span tree, service-coloured timeline, summary strip and span
+    detail panel."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/TraceViewer.tsx
+        symbol: TraceViewer
+  metadata:
+    created_at: 2026-11-23T16:44:40.172Z
+    updated_at: 2026-11-23T16:44:40.172Z
+    version: 1
+application.applicationcomponent.heimdall-ui-library-module:
+  id: 2b15e7f7-1810-4c5f-9a55-112e9c3702bd
+  path: application.applicationcomponent.heimdall-ui-library-module
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: Heimdall UI Library Module
+  description: "The package's public module (src/index.ts barrel over one module
+    per source file) taken as the owner of the shared, component-independent
+    behaviour its hooks and utilities perform: placement, focus and scroll
+    management, controllable state, SSR-safe media queries, fixed-clock dates,
+    link-click handling, virtualization and trace adapters."
+  attributes:
+    type: service-component
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/index.ts
+  metadata:
+    created_at: 2026-11-23T16:47:22.576Z
+    updated_at: 2026-11-23T16:47:22.576Z
     version: 1

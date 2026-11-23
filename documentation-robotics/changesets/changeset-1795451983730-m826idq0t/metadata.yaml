@@ -1,0 +1,114 @@
+id: changeset-1795451983730-m826idq0t
+name: heimdall-model-audit-2026-11
+description: "Audit of the DR model against origin/main (5d20eb9, package
+  0.13.0). Brings the model from its September graph-visualization scope
+  (v0.8.0) up to the code as built: fixes stale source references and test
+  symbols, removes the api.operation for computeEdgePath (no longer a public
+  export), adds the newer graph engines (orthogonalLayout with its lattice and
+  channel routers, organicLayout), joint edge-label placement
+  (EdgeGeometry.labelHidden), the layered-graph framework and views (LayerStack,
+  lanes, AdjacencyMatrix, HivePlot, LayeredGraphExplorer, ReachInspector), the
+  0.13.0 work (one module per source file, href links, SSR-safe useMediaQuery,
+  fixed now/today props), and the full public component inventory of
+  src/index.ts as ux library components with their test coverage. Done when
+  every exported component and engine has an element with a source reference,
+  stale references are fixed, and the brief shows no unexplained gaps."
+created: 2026-11-23T16:39:43.731Z
+modified: 2026-11-23T17:44:43.233Z
+status: committed
+baseSnapshot: v2:sha256:173f87c8a3ec4cd70007639fe692daa935bf1d0d7bd4228652f2474931359486
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 1114
+  modifications: 28
+  deletions: 10
+lastSequence: 1154
+unstaged:
+  - sequence: 34
+    removedAt: 1152
+    change:
+      type: add
+      elementId: application.applicationfunction.joint-edge-label-placement
+      layerName: application
+      after:
+        id: 17202703-9e0f-42db-860f-afb534dc88e3
+        path: application.applicationfunction.joint-edge-label-placement
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Joint Edge-Label Placement
+        description: "placeEdgeLabelsJointly(): places every edge label at once; each
+          label takes its solo spot, then colliding labels move along their own
+          edge (or beside their own line where a parallel labelled track crowds
+          them), and a label with no clear spot is marked noRoom, which
+          GraphCanvas turns into EdgeGeometry.labelHidden (PR #396)."
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/graph.ts
+              symbol: placeEdgeLabelsJointly
+        metadata:
+          created_at: 2026-11-23T16:44:40.173Z
+          updated_at: 2026-11-23T16:44:40.173Z
+          version: 1
+      timestamp: 2026-11-23T16:44:40.193Z
+    rewritten: true
+  - sequence: 8
+    removedAt: 1153
+    change:
+      type: add
+      elementId: product.softwarecapability.organic-graph-layout
+      layerName: product
+      after:
+        id: 50528768-e3c1-42a9-8714-569a61e38538
+        path: product.softwarecapability.organic-graph-layout
+        spec_node_id: product.softwarecapability
+        type: softwarecapability
+        layer_id: product
+        name: Organic Graph Layout
+        description: 'Shipped capability: stress-majorization layout (organicLayout,
+          layout="organic") with preferred edge length, minimum node distance,
+          compactness, label-box reservation and incremental affected-node
+          scope.'
+        attributes:
+          status: delivered
+        metadata:
+          created_at: 2026-11-23T16:44:40.170Z
+          updated_at: 2026-11-23T16:44:40.170Z
+          version: 1
+      timestamp: 2026-11-23T16:44:40.193Z
+    rewritten: true
+  - sequence: 90
+    removedAt: 1154
+    change:
+      type: add
+      elementId: ux.uxlibrary.heimdall-ui
+      layerName: ux
+      after:
+        id: 829af31e-4dbe-4e94-819f-9b5819c1c402
+        path: ux.uxlibrary.heimdall-ui
+        spec_node_id: ux.uxlibrary
+        type: uxlibrary
+        layer_id: ux
+        name: Heimdall UI
+        description: "The @tinkermonkey/heimdall-ui package: the full public component
+          inventory exported from src/index.ts (primitives, inputs, data
+          display, navigation, shell, overlays, layout, charts, page patterns,
+          chat, graph and layered graph, observability, planning), with design
+          tokens and Tailwind theme."
+        attributes:
+          version: 0.13.0
+          license: MIT
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: package.json
+              symbol: name
+        metadata:
+          created_at: 2026-11-23T16:44:40.175Z
+          updated_at: 2026-11-23T16:44:40.175Z
+          version: 1
+      timestamp: 2026-11-23T16:44:40.193Z
+    rewritten: true

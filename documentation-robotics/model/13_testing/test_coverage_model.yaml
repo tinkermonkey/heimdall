@@ -20,3 +20,25 @@ testing.testcoveragemodel.heimdall-graph-layout-test-coverage:
     created_at: 2026-09-18T14:40:53.890Z
     updated_at: 2026-09-18T14:40:53.890Z
     version: 1
+testing.testcoveragemodel.heimdall-ui-test-coverage:
+  id: 4e0f8e71-639f-42e1-bd63-dae1ecacd1bd
+  path: testing.testcoveragemodel.heimdall-ui-test-coverage
+  spec_node_id: testing.testcoveragemodel
+  type: testcoveragemodel
+  layer_id: testing
+  name: Heimdall UI Test Coverage
+  description: "Coverage model for the whole @tinkermonkey/heimdall-ui package
+    beyond the graph-layout surface: one target per Playwright spec
+    (tests/*.spec.ts, visual and behavioural, run by npm test) and per Vitest
+    file (src/**/*.test.ts, run by npm run test:unit)."
+  attributes:
+    version: 0.13.0
+    application: "@tinkermonkey/heimdall-ui"
+  source_reference:
+    provenance: manual
+    locations:
+      - file: playwright.config.ts
+  metadata:
+    created_at: 2026-11-23T16:46:20.766Z
+    updated_at: 2026-11-23T16:46:20.766Z
+    version: 1
