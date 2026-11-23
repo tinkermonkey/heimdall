@@ -88,3 +88,42 @@ ux.actionpattern.panzoom-viewport-gesture:
     created_at: 2026-09-18T14:39:47.790Z
     updated_at: 2026-09-18T14:39:47.790Z
     version: 1
+ux.actionpattern.layer-stack-camera-orbit-and-presets:
+  id: 1cd34262-717d-413e-bee4-42920ce4f841
+  path: ux.actionpattern.layer-stack-camera-orbit-and-presets
+  spec_node_id: ux.actionpattern
+  type: actionpattern
+  layer_id: ux
+  name: Layer Stack Camera Orbit and Presets
+  description: Drag to orbit the layer stack (pitch clamped, 4px click threshold),
+    wheel or pinch to zoom while focused, pick a stack, exploded, top or profile
+    preset, or run the turntable; moves tween and jump under
+    prefers-reduced-motion.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/LayerStack.tsx
+        symbol: LayerStack
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1
+ux.actionpattern.link-navigation:
+  id: a7449142-3f19-474b-ac50-77df53eb9897
+  path: ux.actionpattern.link-navigation
+  spec_node_id: ux.actionpattern
+  type: actionpattern
+  layer_id: ux
+  name: Link Navigation
+  description: "A navigation item with href renders an anchor: a plain click runs
+    onClick (client routing), a modified click opens a new tab or window as the
+    browser does."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/linkClick.ts
+        symbol: isPlainLinkClick
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1

@@ -5,10 +5,10 @@ application.dataobject.node-position-map:
   type: dataobject
   layer_id: application
   name: Node Position Map
-  description: Map<string, {x, y}> — the universal output shape every layout
-    engine (forceLayout, galaxyLayout, uxNavLayout, radialTreeLayout,
-    clusteredForceLayout) returns, consumed uniformly by GraphCanvas regardless
-    of which engine produced it.
+  description: "Map<string, {x, y}> of node centres: the universal output every
+    layout engine returns (forceLayout, clusteredForceLayout, organicLayout,
+    orthogonalLayout, galaxyLayout, uxNavLayout, radialTreeLayout, layoutLanes),
+    which GraphCanvas commits to state."
   source_reference:
     provenance: extracted
     locations:

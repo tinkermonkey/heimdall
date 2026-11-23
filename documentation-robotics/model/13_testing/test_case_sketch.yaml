@@ -15,8 +15,8 @@ testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-
     provenance: extracted
     locations:
       - file: tests/graph-layout.spec.ts
-        symbol: keeps large card-sized nodes non-overlapping in a bushy hub-and-spoke
-          topology
+        symbol: forceLayout > keeps large card-sized nodes non-overlapping in a bushy
+          hub-and-spoke topology
   metadata:
     created_at: 2026-09-18T14:40:56.637Z
     updated_at: 2026-09-18T14:40:56.637Z
@@ -37,7 +37,9 @@ testing.testcasesketch.clustered-view-bubble-packing-integration:
     provenance: extracted
     locations:
       - file: tests/graph-components.spec.ts
-        symbol: Clustered View - Bubble Packing (layout="force-clustered")
+        symbol: 'integration: Graph Canvas Components > Clustered View - Bubble Packing
+          (layout="force-clustered") > renders every node and at least one
+          cluster boundary bubble'
   metadata:
     created_at: 2026-09-18T14:40:56.955Z
     updated_at: 2026-09-18T14:40:56.955Z
@@ -79,7 +81,8 @@ testing.testcasesketch.radial-tree-layout-collapsed-nodes:
     provenance: extracted
     locations:
       - file: src/utils/__tests__/radialTreeLayout.test.ts
-        symbol: collapsed nodes
+        symbol: radialTreeLayout > collapsed nodes > excludes descendants of collapsed
+          nodes from placement
   metadata:
     created_at: 2026-09-18T14:40:57.620Z
     updated_at: 2026-09-18T14:40:57.620Z
@@ -100,7 +103,8 @@ testing.testcasesketch.route-navigation-edge-avoids-obstacles:
     provenance: extracted
     locations:
       - file: src/utils/channelRouter.test.ts
-        symbol: routeNavigationEdge
+        symbol: channelRouter > routeNavigationEdge > avoids obstacles with orthogonal
+          paths
   metadata:
     created_at: 2026-09-18T14:40:57.942Z
     updated_at: 2026-09-18T14:40:57.942Z

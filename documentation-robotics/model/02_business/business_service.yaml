@@ -31,3 +31,18 @@ business.businessservice.hierarchical-and-navigation-structure-visualization:
     created_at: 2026-09-18T14:41:59.775Z
     updated_at: 2026-09-18T14:41:59.775Z
     version: 1
+business.businessservice.design-system-components-for-data-dense-applications:
+  id: 3957cbfd-bf1d-4677-b2dd-281c7839485c
+  path: business.businessservice.design-system-components-for-data-dense-applications
+  spec_node_id: business.businessservice
+  type: businessservice
+  layer_id: business
+  name: Design-System Components for Data-Dense Applications
+  description: "Inferred business service: give application teams ready-made,
+    consistent UI building blocks (shell chrome, inputs, tables, charts,
+    overlays, chat, observability and planning views) so they assemble
+    data-dense IDE-style screens instead of building them."
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1

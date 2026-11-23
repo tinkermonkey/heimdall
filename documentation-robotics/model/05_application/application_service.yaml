@@ -5,10 +5,11 @@ application.applicationservice.graph-layout-engine-service:
   type: applicationservice
   layer_id: application
   name: Graph Layout Engine Service
-  description: The set of one-shot layout engines
-    (forceLayout/clusteredForceLayout/galaxyLayout/uxNavLayout/radialTreeLayout)
-    GraphCanvas dispatches to synchronously by its layout prop to compute node
-    positions from graph structure.
+  description: "The set of one-shot layout engines GraphCanvas dispatches to by
+    its layout prop: forceLayout, clusteredForceLayout, organicLayout,
+    orthogonalLayout, galaxyLayout, uxNavLayout, radialTreeLayout and
+    layoutLanes (layer-lanes). Each is also exported for headless use; all are
+    deterministic and return node centres."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -41,4 +42,25 @@ application.applicationservice.live-galaxy-simulation-service:
   metadata:
     created_at: 2026-09-18T14:35:21.480Z
     updated_at: 2026-09-18T14:35:21.480Z
+    version: 1
+application.applicationservice.layered-graph-framework-service:
+  id: d7bd3aa4-ba9f-4cd8-9afa-6a090dec85b1
+  path: application.applicationservice.layered-graph-framework-service
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Layered Graph Framework Service
+  description: "useLayeredGraph(): the shared state behind the layered views: an
+    indexed graph, selection, reach, link and layer filters, focus, predicate
+    labels and plane layout, offered to views through LayeredGraphContext."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: useLayeredGraph
+  metadata:
+    created_at: 2026-11-23T16:44:40.172Z
+    updated_at: 2026-11-23T16:44:40.172Z
     version: 1

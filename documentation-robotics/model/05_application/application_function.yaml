@@ -268,3 +268,631 @@ application.applicationfunction.edge-label-clear-position-search:
     created_at: 2026-09-18T14:35:03.333Z
     updated_at: 2026-09-18T14:35:03.333Z
     version: 1
+application.applicationfunction.orthogonal-channel-edge-routing:
+  id: edcc0e6c-3dee-4dcb-a279-4ee0e05570c4
+  path: application.applicationfunction.orthogonal-channel-edge-routing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Orthogonal Channel Edge Routing
+  description: 'routeChannels(): routes orthogonal edges over a grid of cell,
+    channel and junction tiles in two stages (path search with port-line
+    capacity, then interval-colouring line assignment), so no route crosses a
+    node; used by orthogonalLayout above 150 edges (PR #394).
+    OrthogonalLayoutStats.router reports "channel".'
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/orthogonalChannelRouter.ts
+        symbol: routeChannels
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.orthogonal-layout-algorithm:
+  id: f447ebeb-34b0-44a5-b6fb-0e2bb5877f58
+  path: application.applicationfunction.orthogonal-layout-algorithm
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Orthogonal Layout Algorithm
+  description: "orthogonalLayout(): places nodes on a grid with barycentric
+    ordering sweeps and routes every edge as a right-angle polyline from box
+    boundary to box boundary, with the exact lattice router up to 150 edges and
+    the channel router beyond; supports pinned nodes, sketch scope and bus
+    trees."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/orthogonalLayout.ts
+        symbol: orthogonalLayout
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.organic-layout-algorithm:
+  id: 6b78db61-938b-4f4f-acb7-42a11153453e
+  path: application.applicationfunction.organic-layout-algorithm
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Organic Layout Algorithm
+  description: 'organicLayout(): stress-majorization layout with preferred edge
+    length, minimum node distance, compactness, component packing, edge-label
+    box reservation and an incremental "affected" scope; deterministic, and a
+    no-op on its own output.'
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/organicLayout.ts
+        symbol: organicLayout
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.joint-edge-label-placement:
+  id: 17202703-9e0f-42db-860f-afb534dc88e3
+  path: application.applicationfunction.joint-edge-label-placement
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Joint Edge-Label Placement
+  description: "placeEdgeLabelsJointly(): places every edge label at once; each
+    label takes its solo spot, then colliding labels move along their own edge
+    (or beside their own line where a parallel labelled track crowds them), and
+    a label with no clear spot is marked noRoom, which GraphCanvas turns into
+    EdgeGeometry.labelHidden (PR #396)."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graph.ts
+        symbol: placeEdgeLabelsJointly
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: api.operation
+      reason: placeEdgeLabelsJointly is internal to src/utils/graph.ts and not
+        exported from src/index.ts; consumers reach it only through GraphCanvas
+        (EdgeGeometry.labelHidden).
+      decided_by: agent
+      decided_at: 2026-11-23T16:49:03.632Z
+      changeset: changeset-1795451983730-m826idq0t
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.layered-graph-index-construction:
+  id: 0a664010-6f80-470b-ba70-97fdddb2abb2
+  path: application.applicationfunction.layered-graph-index-construction
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Graph Index Construction
+  description: "buildLayeredIndex(): reads each node's layer(s) through a LayerDef
+    accessor and builds the layered index (layers, nodes, links, adjacency,
+    layer-pair summaries, predicate catalog) with issues for missing or
+    multi-valued layers."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/buildLayeredIndex.ts
+        symbol: buildLayeredIndex
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.layered-reach-computation:
+  id: 22b98ad2-46e9-49f2-ae1c-419659b73617
+  path: application.applicationfunction.layered-reach-computation
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Reach Computation
+  description: "computeReach() and reachPath(): from a selected node, follows
+    traversable links within its layer and across up to the chosen number of
+    layers, recording each reached node's hop and the node and predicate it came
+    through."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/reach.ts
+        symbol: computeReach
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.layered-link-filtering-and-emphasis:
+  id: 695ea9d5-baab-4578-a29a-f1bb5eccbeee
+  path: application.applicationfunction.layered-link-filtering-and-emphasis
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Link Filtering and Emphasis
+  description: "isLinkVisible, isLinkTraversable, isNodeVisible and
+    linkEmphasis/nodeEmphasis: apply the link-category and layer filters and
+    compute each link's and node's emphasis for the current selection, reach and
+    focus."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/filters.ts
+        symbol: isLinkVisible
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.layered-graph-snapshot-sanitization:
+  id: db94fa13-d5c6-4d30-96cb-e67db01c3e1e
+  path: application.applicationfunction.layered-graph-snapshot-sanitization
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Graph Snapshot Sanitization
+  description: "sanitizeLayeredGraphSnapshot(): validates a saved layered-graph
+    view state (selection, filters, focus, follow depth, labels, plane layout)
+    against the current graph so a stale snapshot restores safely."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/snapshot.ts
+        symbol: sanitizeLayeredGraphSnapshot
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.layer-plane-layout:
+  id: 93595269-1d7f-479d-9f14-89d1b5d65794
+  path: application.applicationfunction.layer-plane-layout
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layer Plane Layout
+  description: "layoutLayers() / layoutLayersAsync(): lays out each layer's nodes
+    on its plane, independently or coupled (cross-layer neighbours aligned via
+    orderAcrossLayers), the async form yielding between layers for graphs over
+    ASYNC_LAYOUT_MIN_NODES nodes (useAsyncLayerLayout)."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/layout.ts
+        symbol: layoutLayers
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.layered-edge-label-placement:
+  id: 8ed3807f-b8d2-44e0-b8d3-1eb6447e39c5
+  path: application.applicationfunction.layered-edge-label-placement
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Edge-Label Placement
+  description: "placeEdgeLabels(): places predicate pills on projected or drawn
+    links in priority order (edgeLabelPriority), skipping pills that would
+    overlap placed ones, for the layer stack, lanes and hive views."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/edgeLabels.ts
+        symbol: placeEdgeLabels
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.layer-stack-3d-projection:
+  id: 1ed0a110-f29c-465a-9a26-dd3d7a613382
+  path: application.applicationfunction.layer-stack-3d-projection
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layer Stack 3D Projection
+  description: "createProjector() and the camera helpers (cameraFromPreset,
+    clampCamera, lerpCamera, fitZoom, depthSort): perspective projection of
+    layer planes and nodes into SVG screen space for LayerStack, with stack,
+    exploded, top and profile presets."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/projection.ts
+        symbol: createProjector
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.hive-plot-layout:
+  id: 1304f51a-b3cf-46d4-88b2-99cb2c6fb803
+  path: application.applicationfunction.hive-plot-layout
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Hive Plot Layout
+  description: "hiveLayout(), hiveLinkGeometry() and hiveAxisGroups(): axis angles
+    per layer or group, node radii along each axis, and link curves between axes
+    (with loop bulges for same-axis links)."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/hive.ts
+        symbol: hiveLayout
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.adjacency-matrix-cells:
+  id: 516ebd3b-522b-4d85-9baa-9d3653140682
+  path: application.applicationfunction.adjacency-matrix-cells
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Adjacency Matrix Cells
+  description: "layerMatrixCells(), matrixWindow() and linkEdgeMetadata(): builds
+    the block adjacency matrix cells per layer pair and the visible window for
+    large matrices."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/matrix.ts
+        symbol: layerMatrixCells
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.lane-layout-and-gutter-routing:
+  id: a6e8edcb-1b6c-4110-a576-df9b3685f87c
+  path: application.applicationfunction.lane-layout-and-gutter-routing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Lane Layout and Gutter Routing
+  description: 'layoutLanes(), routeLaneGutters() and laneBundler(): lays out
+    layers as swim lanes (horizontal or vertical) and routes cross-lane links
+    through gutter tracks with bundling, used by GraphCanvas
+    layout="layer-lanes".'
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/laneLayout.ts
+        symbol: layoutLanes
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.trace-model-construction:
+  id: dd3bef40-15dc-4131-85cd-0a246c5dc4b5
+  path: application.applicationfunction.trace-model-construction
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Trace Model Construction
+  description: "buildTraceModel(): turns a Trace (spans with parent ids, services,
+    timings, status, events) into the span tree, self times, visible rows and
+    time scale the TraceViewer waterfall draws."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/traceViewerModel.ts
+        symbol: buildTraceModel
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.otlp-trace-adaptation:
+  id: fcbc3233-7e0d-4821-a391-1d77c4a63e6a
+  path: application.applicationfunction.otlp-trace-adaptation
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: OTLP Trace Adaptation
+  description: "fromOTLP(): converts OpenTelemetry OTLP/JSON traces data into
+    heimdall's Trace shape (services from resource attributes, span kinds,
+    status, events)."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/otlpTrace.ts
+        symbol: fromOTLP
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.aws-x-ray-trace-adaptation:
+  id: e233a766-a727-4bb3-aff8-8d20231728d2
+  path: application.applicationfunction.aws-x-ray-trace-adaptation
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: AWS X-Ray Trace Adaptation
+  description: "fromXRay(): converts AWS X-Ray segment documents (segments,
+    subsegments, exceptions and causes) into heimdall's Trace shape."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/xrayTrace.ts
+        symbol: fromXRay
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.ssr-safe-media-query:
+  id: 4771c9ce-1064-4374-9d8b-9733d4c273d0
+  path: application.applicationfunction.ssr-safe-media-query
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: SSR-Safe Media Query
+  description: "useMediaQuery(query, serverValue): returns serverValue during
+    server render and hydration and the real match after mount, so server HTML
+    and the first client render agree (0.13.0); useMediaQueryMatch returns
+    undefined until known."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useMediaQuery.ts
+        symbol: useMediaQuery
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.fixed-clock-date-formatting:
+  id: 33bc582d-2f05-4106-b40c-47ce16038844
+  path: application.applicationfunction.fixed-clock-date-formatting
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Fixed-Clock Date Formatting
+  description: "formatTimestamp(timestamp, now) and isToday(date, today) in
+    dateUtils: relative and calendar text computed from a caller-supplied
+    now/today, so timelines and calendars print the same text on a server and in
+    any browser and timezone (0.13.0)."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/dateUtils.ts
+        symbol: formatTimestamp
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.plain-link-click-detection:
+  id: caf1eda4-2545-4e73-9925-8e57b019bd0c
+  path: application.applicationfunction.plain-link-click-detection
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Plain Link Click Detection
+  description: "isPlainLinkClick() / isModifiedClick(): lets href-rendering
+    components (NavItem, Sidebar, QuickAccessTile) run onClick for a plain click
+    and leave modified clicks (new tab, new window) to the browser."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/linkClick.ts
+        symbol: isPlainLinkClick
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.dropdown-placement:
+  id: 719321be-bc59-4843-b4e0-a04bc17b9623
+  path: application.applicationfunction.dropdown-placement
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Dropdown Placement
+  description: "computeDropdownPosition(): places a dropdown panel below or above
+    its trigger, start- or end-aligned, flipping and clamping inside the
+    viewport and reporting the available height."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/dropdownPlacement.ts
+        symbol: computeDropdownPosition
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.tooltip-placement:
+  id: e29f6722-145e-42e7-9abc-d7a782c39ad6
+  path: application.applicationfunction.tooltip-placement
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Tooltip Placement
+  description: "computeTooltipPosition(): places a tooltip card on the preferred
+    side of its anchor, flipping to the opposite or a perpendicular side and
+    clamping inside the bounds when there is no room."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/tooltipPlacement.ts
+        symbol: computeTooltipPosition
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.dropdown-portal-and-outside-click-containment:
+  id: 3dfe65b5-c738-4f8d-b2ca-4db21e0df075
+  path: application.applicationfunction.dropdown-portal-and-outside-click-containment
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Dropdown Portal and Outside-Click Containment
+  description: "useDropdownPortal() and containsAcrossPortals(): renders dropdown
+    panels in a body portal and treats clicks inside any nested portal as inside
+    the owning control."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useDropdownPortal.ts
+        symbol: useDropdownPortal
+  metadata:
+    created_at: 2026-11-23T16:44:40.173Z
+    updated_at: 2026-11-23T16:44:40.173Z
+    version: 1
+application.applicationfunction.focus-trap:
+  id: 85f89a83-7778-4181-9565-9f61073e011c
+  path: application.applicationfunction.focus-trap
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Focus Trap
+  description: "useFocusTrap(): keeps keyboard focus inside an open modal surface
+    (Modal, Drawer, CommandPalette) and restores it on close."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useFocusTrap.ts
+        symbol: useFocusTrap
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.body-scroll-lock:
+  id: cba325fd-c6e8-4fb0-971f-4a564edd0cb9
+  path: application.applicationfunction.body-scroll-lock
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Body Scroll Lock
+  description: "useBodyOverflow(): locks body scrolling while a modal overlay is open."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useBodyOverflow.ts
+        symbol: useBodyOverflow
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.controlled-or-uncontrolled-state:
+  id: cafc0238-f52c-4400-8a48-43cb66569985
+  path: application.applicationfunction.controlled-or-uncontrolled-state
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Controlled or Uncontrolled State
+  description: "useControllable(): one state hook for props that may be controlled
+    (value + onChange) or uncontrolled (defaultValue), used across inputs and
+    views."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useControllable.ts
+        symbol: useControllable
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.tweened-animation:
+  id: 94212523-21b9-46c5-b475-9da71a801f62
+  path: application.applicationfunction.tweened-animation
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Tweened Animation
+  description: "useTween() with easeInOutCubic and interpolateValues: animates
+    numeric values on requestAnimationFrame and jumps under
+    prefers-reduced-motion (usePrefersReducedMotion); drives LayerStack camera
+    and plane moves."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useTween.ts
+        symbol: useTween
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.virtualized-list-windowing:
+  id: d564faf0-fda0-4575-bef0-708ad548ad28
+  path: application.applicationfunction.virtualized-list-windowing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Virtualized List Windowing
+  description: "useVirtualList(): computes the visible row window for long lists
+    such as SideBySideDiff and LogStream."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useVirtualList.ts
+        symbol: useVirtualList
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.pan-inertia-glide:
+  id: feac927c-608d-43aa-be4a-5493c4a92286
+  path: application.applicationfunction.pan-inertia-glide
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Pan Inertia Glide
+  description: "releaseVelocity(), decayVelocity() and glideHasSettled():
+    pointer-release velocity over a 100 ms window and exponential decay for
+    usePanZoom's inertial glide."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/panInertia.ts
+        symbol: releaseVelocity
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.yield-to-paint:
+  id: 1d7c3ac3-e249-468d-9a1a-363817191800
+  path: application.applicationfunction.yield-to-paint
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Yield to Paint
+  description: "yieldToPaint(): defers work until after the next paint (double
+    requestAnimationFrame) so a busy indicator shows before a long synchronous
+    layout."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/yieldToPaint.ts
+        symbol: yieldToPaint
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.edge-weight-and-dash-styling:
+  id: e249c409-6fe2-480d-bf41-53f488db3d24
+  path: application.applicationfunction.edge-weight-and-dash-styling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Edge Weight and Dash Styling
+  description: "weightToStrokeWidth(), markerSizeForStrokeWidth() and
+    strokeDashToDasharray(): map an edge's 0-100 weight to stroke width and
+    marker size and its strokeDash to an SVG dasharray."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphEdgeStyle.ts
+        symbol: weightToStrokeWidth
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.heatmap-colour-scale:
+  id: 64c28092-2e38-43ed-ad27-2e0ec59c91ee
+  path: application.applicationfunction.heatmap-colour-scale
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Heatmap Colour Scale
+  description: "getHeatmapColor() and normalizeColorToHex(): single-hue alpha
+    scale for Heatmap and MapCanvas heatmap cells."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/heatmapUtils.ts
+        symbol: getHeatmapColor
+  metadata:
+    created_at: 2026-11-23T16:44:40.174Z
+    updated_at: 2026-11-23T16:44:40.174Z
+    version: 1

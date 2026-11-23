@@ -61,3 +61,23 @@ ux.statepattern.live-simulation-vs-static-layout-state:
     created_at: 2026-09-18T14:39:48.753Z
     updated_at: 2026-09-18T14:39:48.753Z
     version: 1
+ux.statepattern.layered-selection-and-reach:
+  id: 43d252f2-ae69-42c6-a74e-f895de02955b
+  path: ux.statepattern.layered-selection-and-reach
+  spec_node_id: ux.statepattern
+  type: statepattern
+  layer_id: ux
+  name: Layered Selection and Reach
+  description: The layered views share one selection and its reach (followed
+    across up to two layers, lit in the amber hop ramp), plus link-category
+    filters, hidden and focused layers, predicate label mode and plane layout,
+    held by useLayeredGraph and restorable from a snapshot.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: useLayeredGraph
+  metadata:
+    created_at: 2026-11-23T16:44:40.175Z
+    updated_at: 2026-11-23T16:44:40.175Z
+    version: 1

@@ -5,9 +5,10 @@ technology.technologyfunction.library-bundling-and-type-declaration-generation:
   type: technologyfunction
   layer_id: technology
   name: Library Bundling and Type Declaration Generation
-  description: Vite library-mode build (rollup under the hood) plus
-    vite-plugin-dts, producing dist/index.js and dist/index.d.ts from
-    src/index.ts's barrel export, with react/react-dom externalized.
+  description: Vite library-mode build (Rollup with preserveModules and
+    preserveModulesRoot src, so every source file is its own module and bundlers
+    tree-shake per component) plus vite-plugin-dts for type declarations; the JS
+    imports no CSS and the stylesheets are emitted separately (0.13.0).
   source_reference:
     provenance: extracted
     locations:
@@ -24,9 +25,9 @@ technology.technologyfunction.automated-test-execution:
   type: technologyfunction
   layer_id: technology
   name: Automated Test Execution
-  description: The capability of running heimdall's graph-visualization test suite
-    — Playwright browser tests (tests/graph-*.spec.ts) and Vitest unit tests
-    (src/utils/*.test.ts) — via 'npm test' / 'npm run test:unit'.
+  description: "Running heimdall's test suites: the Playwright visual and
+    behavioural suite (tests/*.spec.ts, per-OS screenshot baselines, sharded in
+    CI) and the Vitest unit suite (src/**/*.test.ts)."
   source_reference:
     provenance: extracted
     locations:

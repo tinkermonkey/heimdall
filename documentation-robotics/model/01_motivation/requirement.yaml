@@ -23,3 +23,57 @@ motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existin
     created_at: 2026-09-18T14:43:26.253Z
     updated_at: 2026-09-18T14:43:26.253Z
     version: 1
+motivation.requirement.server-rendered-output-hydrates-without-mismatch:
+  id: 8705277e-edff-4733-9e9c-d03f464fc2ad
+  path: motivation.requirement.server-rendered-output-hydrates-without-mismatch
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Server-Rendered Output Hydrates Without Mismatch
+  description: "Components must render on a server (Astro, Next, vite build --ssr,
+    Vitest) without touching window during render, and hydrate without text or
+    attribute mismatches: media queries resolve after mount and time-relative
+    text takes a fixed now/today. Shipped in 0.13.0 (CHANGELOG.md)."
+  attributes:
+    requirementType: non-functional
+    priority: high
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1
+motivation.requirement.consumers-bundle-only-the-components-they-import:
+  id: ce116fc3-988d-4d47-93f3-8e00f8e226f6
+  path: motivation.requirement.consumers-bundle-only-the-components-they-import
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Consumers Bundle Only the Components They Import
+  description: "An application that imports one component must bundle only that
+    component and what it uses: the package is built one module per source file
+    and its JS imports no CSS. Shipped in 0.13.0 (CHANGELOG.md: import { Button
+    } yields 365 B where 0.12 yielded 669 KB)."
+  attributes:
+    requirementType: non-functional
+    priority: high
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1
+motivation.requirement.every-public-export-is-documented-for-agents:
+  id: af104196-c722-4a9f-b9b3-ee29de81c7f6
+  path: motivation.requirement.every-public-export-is-documented-for-agents
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Every Public Export Is Documented for Agents
+  description: Every component and non-component value exported from src/index.ts
+    must have a section in its category skill under agent-skills/, with props
+    tables that match the component types. Enforced in CI by npm run
+    check:skills (scripts/check-skill-coverage.mjs).
+  attributes:
+    requirementType: quality
+    priority: medium
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1

@@ -98,3 +98,206 @@ product.softwarecapability.radial-tree-layout:
     created_at: 2026-09-18T14:42:16.128Z
     updated_at: 2026-09-18T14:42:16.128Z
     version: 1
+product.softwarecapability.organic-graph-layout:
+  id: 50528768-e3c1-42a9-8714-569a61e38538
+  path: product.softwarecapability.organic-graph-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Organic Graph Layout
+  description: 'Shipped capability: stress-majorization layout (organicLayout,
+    layout="organic") with preferred edge length, minimum node distance,
+    compactness, label-box reservation and incremental affected-node scope.'
+  attributes:
+    status: delivered
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: product.feature
+      reason: Organic layout ships as a layout mode (layout="organic") and a headless
+        function, with no separate user-facing feature beyond the capability
+        itself, like force-directed and radial-tree.
+      decided_by: agent
+      decided_at: 2026-11-23T16:49:05.355Z
+      changeset: changeset-1795451983730-m826idq0t
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1
+product.softwarecapability.orthogonal-graph-layout:
+  id: 7c0c4903-6319-4cfe-9e2e-204732eac9ff
+  path: product.softwarecapability.orthogonal-graph-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Orthogonal Graph Layout
+  description: 'Shipped capability: grid-snapped layout with right-angle edge
+    routes (orthogonalLayout, layout="orthogonal"): a lattice router for graphs
+    up to 150 edges and a channel router for larger ones, so no route passes
+    through a node.'
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.layered-graph-exploration:
+  id: 5cfc2871-2da4-409a-a7f9-1fb84a42f32a
+  path: product.softwarecapability.layered-graph-exploration
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Layered Graph Exploration
+  description: "Shipped capability: explore a graph whose nodes belong to layers
+    (such as a DR model) as a 3D layer stack, swim lanes, a block adjacency
+    matrix or a hive plot, sharing one selection, reach and filter state
+    (useLayeredGraph, LayeredGraphExplorer)."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.ide-application-shell-and-navigation:
+  id: c92a965e-1210-493c-965f-b520fc33053e
+  path: product.softwarecapability.ide-application-shell-and-navigation
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: IDE Application Shell and Navigation
+  description: "Shipped capability: full-viewport IDE chrome (ShellLayout with
+    Titlebar, Sidebar, Topbar, Statusbar), navigation items, tab bars, panels
+    and split panes, responsive down to a phone drawer."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.design-primitives-and-tokens:
+  id: 9ad72bad-45fa-45e4-994e-6d024935832e
+  path: product.softwarecapability.design-primitives-and-tokens
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Design Primitives and Tokens
+  description: "Shipped capability: design tokens (src/tokens/tokens.css, wired
+    into Tailwind) and the primitives built on them: Icon, Avatar, Button, Chip,
+    Badge, StatusBadge, VersionPill, SegmentedControl."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.form-inputs-and-editors:
+  id: 14697441-e952-431e-a1cc-504f019a7f2b
+  path: product.softwarecapability.form-inputs-and-editors
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Form Inputs and Editors
+  description: "Shipped capability: text, number, select, tri-state and filter
+    inputs, labelled fields, entity pickers and structured editors (key/value,
+    ordered list, relationship builder)."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.data-display-and-charts:
+  id: db492088-4d45-438e-90b5-768f0ffc43be
+  path: product.softwarecapability.data-display-and-charts
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Data Display and Charts
+  description: "Shipped capability: stat tiles and grids, tables, key/value grids,
+    inspector panels, result and asset cards, map canvas, and SVG charts (line,
+    bar, stacked, donut, heatmap, sparkline, status timeline, progress)."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.overlays-and-dialogs:
+  id: 8e33941d-bf10-4870-ad12-6b249a7a1d98
+  path: product.softwarecapability.overlays-and-dialogs
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Overlays and Dialogs
+  description: "Shipped capability: modal, confirm dialog, drawer, toast, tooltip,
+    popover, command palette and workspace switcher, with focus trapping and
+    portal-aware dismissal."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.page-patterns:
+  id: 2dff61a6-f41b-4176-93b0-64ff2c003f29
+  path: product.softwarecapability.page-patterns
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Page Patterns
+  description: "Shipped capability: page headers, filter bars, activity timelines,
+    alert strips, quick-access grids and tiles, config tiles, pipeline cards,
+    form callouts and row menus."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.chat-interface:
+  id: 02205f82-d68a-47de-afd1-b5dcf06c72f1
+  path: product.softwarecapability.chat-interface
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Chat Interface
+  description: "Shipped capability: chat messages with tool and thinking blocks,
+    dividers, suggestions, a composer with context and attachment chips, a
+    container with bot tabs, and GitHub-flavored markdown rendering."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.observability-views:
+  id: 52596eb7-9495-4c5f-a823-176f63af7297
+  path: product.softwarecapability.observability-views
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Observability Views
+  description: "Shipped capability: distributed-trace waterfall (TraceViewer) fed
+    by OTLP and AWS X-Ray adapters, log stream, set and line diffs, version
+    timeline and lineage rail."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.planning-views:
+  id: f49871cd-fc97-43eb-8f4b-9f70c1a27d06
+  path: product.softwarecapability.planning-views
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Planning Views
+  description: "Shipped capability: event calendar (month, week, day, agenda),
+    mini calendar and kanban board with drag-and-drop and WIP limits."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
