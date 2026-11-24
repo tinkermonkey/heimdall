@@ -18,9 +18,9 @@ Infrastructure, platforms, systems, and technology components.
 | ------------------------- | ----- |
 | Elements                  | 48    |
 | Intra-Layer Relationships | 58    |
-| Inter-Layer Relationships | 130   |
+| Inter-Layer Relationships | 131   |
 | Inbound Relationships     | 113   |
-| Outbound Relationships    | 17    |
+| Outbound Relationships    | 18    |
 
 **Cross-Layer References**:
 
@@ -119,6 +119,7 @@ flowchart TB
 | `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-inspector-component`        | `application` | `realizes`   | many-to-many | medium   |
 | `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-node-component`             | `application` | `realizes`   | many-to-many | medium   |
 | `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-toolbar-component`          | `application` | `realizes`   | many-to-many | medium   |
+| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.heimdall-ui-package`              | `application` | `realizes`   | many-to-many | medium   |
 | `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-canvas-component`           | `application` | `serves`     | many-to-many | medium   |
 | `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-collapse-control-component` | `application` | `serves`     | many-to-many | medium   |
 | `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-edge-component`             | `application` | `serves`     | many-to-many | medium   |
@@ -558,6 +559,7 @@ The published @tinkermonkey/heimdall-ui npm package (0.13.0): per-module ESM, ty
 | inter-layer | `application.applicationcomponent.graph-inspector-component`                     | `realizes`   | outbound  |
 | inter-layer | `application.applicationcomponent.graph-node-component`                          | `realizes`   | outbound  |
 | inter-layer | `application.applicationcomponent.graph-toolbar-component`                       | `realizes`   | outbound  |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package`                           | `realizes`   | outbound  |
 | intra-layer | `technology.artifact.docs-showcase-site`                                         | `depends-on` | inbound   |
 | intra-layer | `technology.artifact.agent-skills-bundle`                                        | `composes`   | outbound  |
 | intra-layer | `technology.artifact.base-stylesheet`                                            | `composes`   | outbound  |
@@ -1332,4 +1334,4 @@ External package registry the release publishes @tinkermonkey/heimdall-ui to and
 
 ---
 
-Generated: 2026-11-24T13:25:05.973Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0

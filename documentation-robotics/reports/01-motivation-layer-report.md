@@ -18,13 +18,13 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | ------------------------- | ----- |
 | Elements                  | 32    |
 | Intra-Layer Relationships | 29    |
-| Inter-Layer Relationships | 209   |
-| Inbound Relationships     | 209   |
+| Inter-Layer Relationships | 208   |
+| Inbound Relationships     | 208   |
 | Outbound Relationships    | 0     |
 
 **Cross-Layer References**:
 
-- **Upstream layers**: [API](./07-api-layer-report.md), [Application](./05-application-layer-report.md), [Business](./02-business-layer-report.md), [Product](./03-product-layer-report.md), [Testing](./13-testing-layer-report.md), [UX](./10-ux-layer-report.md)
+- **Upstream layers**: [Application](./05-application-layer-report.md), [Business](./02-business-layer-report.md), [Product](./03-product-layer-report.md), [Testing](./13-testing-layer-report.md), [UX](./10-ux-layer-report.md)
 
 ## Intra-Layer Relationships
 
@@ -83,7 +83,6 @@ flowchart TB
   navigation["Navigation"]
   apm["APM"]
   testing["Testing"]
-  api --> motivation
   application --> motivation
   business --> motivation
   product --> motivation
@@ -96,10 +95,6 @@ flowchart TB
 
 | Relationship ID                                                    | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer   | Predicate    | Cardinality  | Strength |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
-| `api.operation.satisfies.motivation.requirement`                   | `api.operation.graph-canvas`                                                                                                          | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
-| `api.operation.satisfies.motivation.requirement`                   | `api.operation.graph-canvas`                                                                                                          | `motivation.requirement.large-layouts-do-not-block-the-first-paint`                         | `motivation` | `satisfies`  | many-to-many | medium   |
-| `api.operation.satisfies.motivation.requirement`                   | `api.operation.graph-canvas`                                                                                                          | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
-| `api.operation.satisfies.motivation.requirement`                   | `api.operation.graph-node`                                                                                                            | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.clustered-force-layout-algorithm`                                                                    | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.dropdown-portal-placement`                                                                           | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.force-directed-layout-algorithm`                                                                     | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -227,11 +222,14 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.form-callout-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.large-layouts-do-not-block-the-first-paint`                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.motion-honours-reduced-motion-preference`                           | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-edgegraph-edge-shape-ux`                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-inspector-graph-edge-inspector-ux`                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.hash-set-diff-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.heatmap-ux`                                                                                                      | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -835,9 +833,8 @@ Every focusable node, edge and control in a graph has an accessible name (edgeAc
 
 | Type        | Related Element                            | Predicate   | Direction |
 | ----------- | ------------------------------------------ | ----------- | --------- |
-| inter-layer | `api.operation.graph-canvas`               | `satisfies` | inbound   |
-| inter-layer | `api.operation.graph-node`                 | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.graph-canvas-ux`      | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-node-ux`        | `satisfies` | inbound   |
 | intra-layer | `motivation.goal.usable-by-every-end-user` | `realizes`  | outbound  |
 
 ### HivePlot Keeps Axis Angles Stable When a Layer Is Hidden {#hiveplot-keeps-axis-angles-stable-when-a-layer-is-hidden}
@@ -881,7 +878,7 @@ Engine layouts run only after the computing state has painted (yieldToPaint), an
 
 | Type        | Related Element                                                                       | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------------- | ----------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                                                          | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-canvas-ux`                                                 | `satisfies` | inbound   |
 | intra-layer | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `realizes`  | outbound  |
 
 ### Layout Engines Must Be Pluggable Without Breaking Existing Callers {#layout-engines-must-be-pluggable-without-breaking-existing-callers}
@@ -903,11 +900,11 @@ Inferred from clusteredForceLayout's own docs ('strictly additive/opt-in: it doe
 
 | Type        | Related Element                                                       | Predicate         | Direction |
 | ----------- | --------------------------------------------------------------------- | ----------------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                                          | `satisfies`       | inbound   |
 | inter-layer | `application.applicationfunction.clustered-force-layout-algorithm`    | `satisfies`       | inbound   |
 | inter-layer | `application.applicationfunction.force-directed-layout-algorithm`     | `satisfies`       | inbound   |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`          | `satisfies`       | inbound   |
 | inter-layer | `product.softwarecapability.clustered-force-layout-community-bubbles` | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.graph-canvas-ux`                                 | `satisfies`       | inbound   |
 | intra-layer | `motivation.driver.external-regression-gated-layout-quality-loop`     | `influence`       | inbound   |
 | intra-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer` | `associated-with` | inbound   |
 
@@ -1201,4 +1198,4 @@ Inferred from CHANGELOG.md's reference to 'the project's own layout-quality test
 
 ---
 
-Generated: 2026-11-24T13:25:05.973Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0

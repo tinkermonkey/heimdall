@@ -310,3 +310,638 @@ application.applicationservice.layered-graph-visualization:
     created_at: 2026-11-21T17:06:20.098Z
     updated_at: 2026-11-21T17:06:20.098Z
     version: 1
+application.applicationservice.dropdown-portal-containment:
+  id: 313bac17-cf67-4010-8a9f-c3c2e6a5d874
+  path: application.applicationservice.dropdown-portal-containment
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Dropdown Portal Containment
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/hooks/useDropdownPortal.ts: containsAcrossPortals."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/hooks/useDropdownPortal.ts
+        symbol: containsAcrossPortals
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: application.applicationfunction
+      reason: No function in the model is the exported containsAcrossPortals
+        (dropdown-portal-placement is useDropdownPortal, which is not exported);
+        the package realizes the service directly.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:13.343Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.552Z
+    updated_at: 2026-11-24T14:27:00.552Z
+    version: 1
+application.applicationservice.graph-canvas-context-hook:
+  id: e859d2f1-2ac2-48ce-b34a-8e700256cea1
+  path: application.applicationservice.graph-canvas-context-hook
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Graph Canvas Context Hook
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/components/GraphCanvas.tsx: useGraphCanvas."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: useGraphCanvas
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: application.applicationfunction
+      reason: useGraphCanvas only reads GraphCanvas's context; no function in the
+        model is it, and the package realizes the service directly.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:18.162Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.592Z
+    updated_at: 2026-11-24T14:27:00.592Z
+    version: 1
+application.applicationservice.adjacency-matrix-link-metadata:
+  id: 0ef97e10-f932-4c00-91f0-bbaaa38f9d02
+  path: application.applicationservice.adjacency-matrix-link-metadata
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Adjacency Matrix Link Metadata
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/layered/matrix.ts: linkEdgeMetadata."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/layered/matrix.ts
+        symbol: linkEdgeMetadata
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: application.applicationfunction
+      reason: No function in the model is the exported linkEdgeMetadata
+        (adjacency-matrix-ordering is clusterOrder, which is not exported); the
+        package realizes the service directly.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:22.513Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.592Z
+    updated_at: 2026-11-24T14:27:00.592Z
+    version: 1
+application.applicationservice.tween-animation-hooks:
+  id: b5c13e87-48ff-48fb-9d8c-978f087c7d1a
+  path: application.applicationservice.tween-animation-hooks
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Tween Animation Hooks
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/hooks/useTween.ts: easeInOutCubic, interpolateValues, useTween,
+    usePrefersReducedMotion, with the constants REDUCED_MOTION_QUERY."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/hooks/useTween.ts
+        symbol: easeInOutCubic
+  metadata:
+    created_at: 2026-11-24T14:27:00.654Z
+    updated_at: 2026-11-24T14:27:00.654Z
+    version: 1
+application.applicationservice.lane-layout:
+  id: f2068cfc-5301-456b-80e1-9b3a7b11e10d
+  path: application.applicationservice.lane-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Lane Layout
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/laneLayout.ts: layoutLanes, laneLinkCurve, laneBundleCurve,
+    laneBundler, laneTagRoom, laneTagSize, routeLaneGutters, retraceLaneGutters,
+    laneGutterGapTracks."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/laneLayout.ts
+        symbol: layoutLanes
+  metadata:
+    created_at: 2026-11-24T14:27:00.654Z
+    updated_at: 2026-11-24T14:27:00.654Z
+    version: 1
+application.applicationservice.layered-graph-control-helpers:
+  id: d6805917-dba3-469f-8f2e-dd6c57767220
+  path: application.applicationservice.layered-graph-control-helpers
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Layered Graph Control Helpers
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/components/LayeredGraphControls.tsx: followOptionLabel,
+    categoryDisplayLabel, useLayeredGraphProp."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: followOptionLabel
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: application.applicationfunction
+      reason: No function in the model is useLayeredGraphProp, followOptionLabel or
+        categoryDisplayLabel; the package realizes the service directly.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:26.471Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.654Z
+    updated_at: 2026-11-24T14:27:00.654Z
+    version: 1
+application.applicationservice.reach-relationship-helpers:
+  id: f9fc3fb3-f038-4cdd-b99f-de33a27ac685
+  path: application.applicationservice.reach-relationship-helpers
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Reach Relationship Helpers
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/components/ReachInspector.tsx: reachRelationships, reachSummaryText."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/ReachInspector.tsx
+        symbol: reachRelationships
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: application.applicationfunction
+      reason: No function in the model is reachRelationships or reachSummaryText; the
+        package realizes the service directly.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:29.582Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.655Z
+    updated_at: 2026-11-24T14:27:00.655Z
+    version: 1
+application.applicationservice.layered-graph-explorer-snapshot:
+  id: b9866f7e-2ba9-4172-aec5-fb6daf2c33b4
+  path: application.applicationservice.layered-graph-explorer-snapshot
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Layered Graph Explorer Snapshot
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/components/LayeredGraphExplorer.tsx:
+    sanitizeLayeredGraphExplorerSnapshot, with the constants
+    LAYERED_GRAPH_VIEWS, LAYERED_GRAPH_VIEW_LABELS."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/LayeredGraphExplorer.tsx
+        symbol: sanitizeLayeredGraphExplorerSnapshot
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: application.applicationfunction
+      reason: No function in the model is sanitizeLayeredGraphExplorerSnapshot; the
+        package realizes the service directly.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:32.854Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.657Z
+    updated_at: 2026-11-24T14:27:00.657Z
+    version: 1
+application.applicationservice.force-layout:
+  id: ce72db60-acc4-4a71-9b80-bb2c116b004b
+  path: application.applicationservice.force-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Force Layout
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/graphLayout.ts: forceLayout, clusteredForceLayout,
+    boundingCirclesByGroup."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/graphLayout.ts
+        symbol: forceLayout
+  metadata:
+    created_at: 2026-11-24T14:27:00.658Z
+    updated_at: 2026-11-24T14:27:00.658Z
+    version: 1
+application.applicationservice.galaxy-layout:
+  id: 8743743e-dd6b-44f6-9187-08fa506cd63c
+  path: application.applicationservice.galaxy-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Galaxy Layout
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/galaxyLayout.ts: galaxyLayout."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/galaxyLayout.ts
+        symbol: galaxyLayout
+  metadata:
+    created_at: 2026-11-24T14:27:00.658Z
+    updated_at: 2026-11-24T14:27:00.658Z
+    version: 1
+application.applicationservice.organic-layout:
+  id: f85ca976-2846-41ca-84ae-490dc0845068
+  path: application.applicationservice.organic-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Organic Layout
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/organicLayout.ts: organicLayout."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/organicLayout.ts
+        symbol: organicLayout
+  metadata:
+    created_at: 2026-11-24T14:27:00.659Z
+    updated_at: 2026-11-24T14:27:00.659Z
+    version: 1
+application.applicationservice.orthogonal-layout:
+  id: 2c5cccfd-e6b4-4292-abc0-3daf5c9dec1d
+  path: application.applicationservice.orthogonal-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Orthogonal Layout
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/orthogonalLayout.ts: orthogonalLayout."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/orthogonalLayout.ts
+        symbol: orthogonalLayout
+  metadata:
+    created_at: 2026-11-24T14:27:00.665Z
+    updated_at: 2026-11-24T14:27:00.665Z
+    version: 1
+application.applicationservice.ux-navigation-layout:
+  id: 41f1e885-56f6-4e4a-97e6-489d0f51f788
+  path: application.applicationservice.ux-navigation-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: UX Navigation Layout
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/uxNavLayout.ts: uxNavLayout."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/uxNavLayout.ts
+        symbol: uxNavLayout
+  metadata:
+    created_at: 2026-11-24T14:27:00.665Z
+    updated_at: 2026-11-24T14:27:00.665Z
+    version: 1
+application.applicationservice.radial-tree-layout:
+  id: 72db6214-5d4f-4985-929b-5b46ad995de9
+  path: application.applicationservice.radial-tree-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Radial Tree Layout
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/radialTreeLayout.ts: radialTreeLayout."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/radialTreeLayout.ts
+        symbol: radialTreeLayout
+  metadata:
+    created_at: 2026-11-24T14:27:00.665Z
+    updated_at: 2026-11-24T14:27:00.665Z
+    version: 1
+application.applicationservice.ux-navigation-edge-visibility:
+  id: 062ebbb5-8e33-4577-9e15-b90b229dbd34
+  path: application.applicationservice.ux-navigation-edge-visibility
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: UX Navigation Edge Visibility
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/uxNavEdgeVisibility.ts: visibleNavigationEdgeIds."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/uxNavEdgeVisibility.ts
+        symbol: visibleNavigationEdgeIds
+  metadata:
+    created_at: 2026-11-24T14:27:00.665Z
+    updated_at: 2026-11-24T14:27:00.665Z
+    version: 1
+application.applicationservice.structural-hierarchy:
+  id: 8ff3f53f-63d2-45e2-96c7-e6c0d1802867
+  path: application.applicationservice.structural-hierarchy
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Structural Hierarchy
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/graphHierarchy.ts: buildStructuralForest, structuralDescendants."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/graphHierarchy.ts
+        symbol: buildStructuralForest
+  metadata:
+    created_at: 2026-11-24T14:27:00.665Z
+    updated_at: 2026-11-24T14:27:00.665Z
+    version: 1
+application.applicationservice.louvain-clustering:
+  id: 81c957d8-6ebb-4ed9-a01e-e16fd7fb27c5
+  path: application.applicationservice.louvain-clustering
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Louvain Clustering
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/graphClustering.ts: louvainCluster."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/graphClustering.ts
+        symbol: louvainCluster
+  metadata:
+    created_at: 2026-11-24T14:27:00.665Z
+    updated_at: 2026-11-24T14:27:00.665Z
+    version: 1
+application.applicationservice.cluster-packing:
+  id: 349ab824-a8dd-48f9-8306-a52a55464ff9
+  path: application.applicationservice.cluster-packing
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Cluster Packing
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/graphPacking.ts: packClusters."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/graphPacking.ts
+        symbol: packClusters
+  metadata:
+    created_at: 2026-11-24T14:27:00.665Z
+    updated_at: 2026-11-24T14:27:00.665Z
+    version: 1
+application.applicationservice.edge-geometry:
+  id: c7ecac5f-c928-4c49-9a63-1a7d23a32155
+  path: application.applicationservice.edge-geometry
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Edge Geometry
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/graph.ts: bezierPath, rectEdgePoint, rectEdgeDirection,
+    edgeLabelSize, findClearLabelPosition."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/graph.ts
+        symbol: bezierPath
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.pan-and-zoom-hook:
+  id: bef8fdbe-b854-4fad-9765-b3121340d53d
+  path: application.applicationservice.pan-and-zoom-hook
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Pan and Zoom Hook
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/hooks/usePanZoom.ts: usePanZoom."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/hooks/usePanZoom.ts
+        symbol: usePanZoom
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: application.applicationfunction
+      reason: No function in the model is usePanZoom; the package realizes the service
+        directly.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:35.121Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.layered-graph-state-hooks:
+  id: 23856a89-2409-4cf9-88e6-c3d30190e764
+  path: application.applicationservice.layered-graph-state-hooks
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Layered Graph State Hooks
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/hooks/useLayeredGraph.ts: layeredGraphSnapshotDefaults, useLayeredGraph,
+    useLayeredGraphContext, with the constants ASYNC_LAYOUT_MIN_NODES,
+    LayeredGraphContext."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: layeredGraphSnapshotDefaults
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.layered-graph-utilities:
+  id: 40121771-3e8b-4e2e-987c-35bf66904d60
+  path: application.applicationservice.layered-graph-utilities
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Layered Graph Utilities
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/layered/index.ts: buildLayeredIndex, readLayerValues,
+    layerPairKey, layerPaletteColor, assignPredicateCodes, isNodeVisible,
+    isLinkVisible, isLinkTraversable, visiblePredicates, layerPairNodeIds,
+    computeReach, reachPath, sanitizeLayeredGraphSnapshot, linkEmphasis,
+    nodeEmphasis, linkCategoryStyle, linkCategoryStyleAt, layoutLayers,
+    layoutLayersAsync, mixLayerPositions, orderWithinLayers, orderAcrossLayers,
+    rankWithinLayers, linkPredicateLabel, arrowHeadPoints, placeEdgeLabels,
+    edgeLabelPriority, lineCurve, quadCurve, cubicCurve, defaultPillSize,
+    hiveLayout, hiveLinkGeometry, hivePoint, hiveAxisAngles, clampSplitAngle,
+    hiveLabelSide, hiveAxisGroups, cameraFromPreset, presetLayerGap,
+    clampCamera, wrapAngle, nearestYaw, lerpCamera, createProjector,
+    projectPoint, depthSort, stackPlaneY, planeCorners, planeGridLines,
+    ringPoints, svgPoints, leftmostPoint, screenBounds, fitZoom, titleRail, with
+    the constants LAYER_PALETTE_SIZE, DEFAULT_LINK_FILTERS,
+    LINK_CATEGORY_PALETTE_SIZE, HOP_COLORS, DEFAULT_LABEL_TS,
+    HIVE_MIN_LOOP_BULGE, CAMERA_PRESETS, CAMERA_PRESET_NAMES, PITCH_RANGE,
+    ZOOM_RANGE, DEFAULT_CAMERA_DISTANCE, TOP_VIEW_PITCH,
+    PRESET_GAP_FULL_LAYERS."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/layered/index.ts
+        symbol: buildLayeredIndex
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.media-query-hook:
+  id: 9d601939-8277-4c7d-87e2-43fbed448943
+  path: application.applicationservice.media-query-hook
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Media Query Hook
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/hooks/useMediaQuery.ts: useMediaQuery."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/hooks/useMediaQuery.ts
+        symbol: useMediaQuery
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.controllable-state-hook:
+  id: df8662ce-5b83-4530-9e10-a101a3ca73ce
+  path: application.applicationservice.controllable-state-hook
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Controllable State Hook
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/hooks/useControllable.ts: useControllable."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/hooks/useControllable.ts
+        symbol: useControllable
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.trace-viewer-model:
+  id: 08678daa-36a6-4f20-a4af-5f573dd19811
+  path: application.applicationservice.trace-viewer-model
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Trace Viewer Model
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/components/traceViewerModel.ts: buildTraceModel, selfTime, visibleRows,
+    createTimeScale, niceTicks, fmtTraceMs, resolveServiceColor,
+    resolveServiceLabel, paletteColor, with the constants
+    DEFAULT_SERVICE_PALETTE."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/traceViewerModel.ts
+        symbol: buildTraceModel
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.otlp-trace-adapter:
+  id: 982462cd-88b7-4323-9fbd-1f8d0a7604fa
+  path: application.applicationservice.otlp-trace-adapter
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: OTLP Trace Adapter
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/otlpTrace.ts: fromOTLP."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/otlpTrace.ts
+        symbol: fromOTLP
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1
+application.applicationservice.x-ray-trace-adapter:
+  id: aff12cf0-32d9-4a8e-a87a-af61a63f6eb4
+  path: application.applicationservice.x-ray-trace-adapter
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: X-Ray Trace Adapter
+  description: "Exported from the package entry point (src/index.ts) out of
+    src/utils/xrayTrace.ts: fromXRay."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/xrayTrace.ts
+        symbol: fromXRay
+  metadata:
+    created_at: 2026-11-24T14:27:00.666Z
+    updated_at: 2026-11-24T14:27:00.666Z
+    version: 1

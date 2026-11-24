@@ -18,13 +18,13 @@ Product features, capabilities, personas, and milestones.
 | ------------------------- | ----- |
 | Elements                  | 31    |
 | Intra-Layer Relationships | 8     |
-| Inter-Layer Relationships | 127   |
-| Inbound Relationships     | 96    |
+| Inter-Layer Relationships | 152   |
+| Inbound Relationships     | 121   |
 | Outbound Relationships    | 31    |
 
 **Cross-Layer References**:
 
-- **Upstream layers**: [API](./07-api-layer-report.md), [Application](./05-application-layer-report.md), [Testing](./13-testing-layer-report.md)
+- **Upstream layers**: [Application](./05-application-layer-report.md), [Testing](./13-testing-layer-report.md)
 - **Downstream layers**: [Business](./02-business-layer-report.md), [Motivation](./01-motivation-layer-report.md)
 
 ## Intra-Layer Relationships
@@ -83,7 +83,6 @@ flowchart TB
   navigation["Navigation"]
   apm["APM"]
   testing["Testing"]
-  api --> product
   application --> product
   product --> business
   product --> motivation
@@ -95,21 +94,20 @@ flowchart TB
 
 | Relationship ID                                                      | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer   | Predicate    | Cardinality  | Strength |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-canvas`                                                                                                          | `product.feature.edge-selection-and-inspection`                                             | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-canvas`                                                                                                          | `product.feature.layout-progress-indicator`                                                 | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-canvas`                                                                                                          | `product.feature.live-draggable-galaxy-simulation`                                          | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-canvas`                                                                                                          | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-canvas`                                                                                                          | `product.feature.progressive-disclosure-via-node-collapseexpand`                            | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-canvas`                                                                                                          | `product.feature.viewport-history-and-restore`                                              | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-collapse-control`                                                                                                | `product.feature.progressive-disclosure-via-node-collapseexpand`                            | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-edge-inspector`                                                                                                  | `product.feature.edge-selection-and-inspection`                                             | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-toolbar`                                                                                                         | `product.feature.fullscreen-canvas`                                                         | `product`    | `exposes`    | many-to-many | medium   |
-| `api.operation.exposes.product.feature`                              | `api.operation.graph-toolbar`                                                                                                         | `product.feature.live-draggable-galaxy-simulation`                                          | `product`    | `exposes`    | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.adjacency-matrix-link-metadata`                                                                       | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.app-shell-components`                                                                                 | `product.softwarecapability.app-shell`                                                      | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.chart-components`                                                                                     | `product.softwarecapability.charting`                                                       | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.chat-components`                                                                                      | `product.softwarecapability.chat-ui`                                                        | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.cluster-packing`                                                                                      | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.controllable-state-hook`                                                                              | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.data-display-components`                                                                              | `product.softwarecapability.data-display`                                                   | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.dropdown-portal-containment`                                                                          | `product.softwarecapability.overlays-and-dialogs`                                           | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.edge-geometry`                                                                                        | `product.softwarecapability.interactive-graph-exploration`                                  | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.force-layout`                                                                                         | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.force-layout`                                                                                         | `product.softwarecapability.force-directed-graph-layout`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.form-input-components`                                                                                | `product.softwarecapability.form-input`                                                     | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.galaxy-layout`                                                                                        | `product.softwarecapability.galaxy-radial-orbit-layout`                                     | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-canvas-context-hook`                                                                            | `product.softwarecapability.interactive-graph-exploration`                                  | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.force-directed-graph-layout`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.galaxy-radial-orbit-layout`                                     | `product`    | `realizes`   | many-to-many | medium   |
@@ -118,16 +116,42 @@ flowchart TB
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.orthogonal-graph-layout`                                        | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.radial-tree-layout`                                             | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.edge-selection-and-inspection`                                             | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.fullscreen-canvas`                                                         | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.layout-progress-indicator`                                                 | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.live-draggable-galaxy-simulation`                                          | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.progressive-disclosure-via-node-collapseexpand`                            | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.viewport-history-and-restore`                                              | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.softwarecapability.interactive-graph-exploration`                                  | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.lane-layout`                                                                                          | `product.softwarecapability.layer-lanes-layout`                                             | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-control-helpers`                                                                        | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-explorer-snapshot`                                                                      | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-state-hooks`                                                                            | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-utilities`                                                                              | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-visualization`                                                                          | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layout-components`                                                                                    | `product.softwarecapability.responsive-layout`                                              | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.feature`            | `application.applicationservice.live-galaxy-simulation-service`                                                                       | `product.feature.live-draggable-galaxy-simulation`                                          | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.louvain-clustering`                                                                                   | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.media-query-hook`                                                                                     | `product.softwarecapability.responsive-layout`                                              | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.navigation-components`                                                                                | `product.softwarecapability.app-navigation`                                                 | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.observability-view-components`                                                                        | `product.softwarecapability.run-history-and-observability-views`                            | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.organic-layout`                                                                                       | `product.softwarecapability.organic-graph-layout`                                           | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.orthogonal-layout`                                                                                    | `product.softwarecapability.orthogonal-graph-layout`                                        | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.otlp-trace-adapter`                                                                                   | `product.softwarecapability.run-history-and-observability-views`                            | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.overlay-components`                                                                                   | `product.softwarecapability.overlays-and-dialogs`                                           | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.page-pattern-components`                                                                              | `product.softwarecapability.page-patterns`                                                  | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.pan-and-zoom-hook`                                                                                    | `product.softwarecapability.interactive-graph-exploration`                                  | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.planning-components`                                                                                  | `product.softwarecapability.planning-and-scheduling`                                        | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.primitive-components`                                                                                 | `product.softwarecapability.ui-primitives`                                                  | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.radial-tree-layout`                                                                                   | `product.softwarecapability.radial-tree-layout`                                             | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.reach-relationship-helpers`                                                                           | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.structural-hierarchy`                                                                                 | `product.softwarecapability.interactive-graph-exploration`                                  | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.trace-viewer-model`                                                                                   | `product.softwarecapability.run-history-and-observability-views`                            | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.tween-animation-hooks`                                                                                | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.ux-navigation-edge-visibility`                                                                        | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.ux-navigation-layout`                                                                                 | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.x-ray-trace-adapter`                                                                                  | `product.softwarecapability.run-history-and-observability-views`                            | `product`    | `realizes`   | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                  | `product.persona.application-developer-embedding-a-graph-view`                                                                        | `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `motivation` | `references` | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                  | `product.persona.end-user-exploring-a-rendered-graph`                                                                                 | `motivation.stakeholder.end-user-of-an-embedding-application`                               | `motivation` | `references` | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-navigation`                                                                                           | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
@@ -242,10 +266,9 @@ Edges are hoverable and selectable like nodes, with tooltips and GraphEdgeInspec
 
 #### Relationships
 
-| Type        | Related Element                      | Predicate | Direction |
-| ----------- | ------------------------------------ | --------- | --------- |
-| inter-layer | `api.operation.graph-canvas`         | `exposes` | inbound   |
-| inter-layer | `api.operation.graph-edge-inspector` | `exposes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
 
 ### Fullscreen Canvas {#fullscreen-canvas}
 
@@ -264,9 +287,9 @@ GraphToolbar toggles fullscreen on the canvas or on a caller-chosen container (f
 
 #### Relationships
 
-| Type        | Related Element               | Predicate | Direction |
-| ----------- | ----------------------------- | --------- | --------- |
-| inter-layer | `api.operation.graph-toolbar` | `exposes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
 
 ### Layout Progress Indicator {#layout-progress-indicator}
 
@@ -285,9 +308,9 @@ GraphCanvas reports idle/computing/simulating through onLayoutStateChange and ca
 
 #### Relationships
 
-| Type        | Related Element              | Predicate | Direction |
-| ----------- | ---------------------------- | --------- | --------- |
-| inter-layer | `api.operation.graph-canvas` | `exposes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
 
 ### Live Draggable Galaxy Simulation {#live-draggable-galaxy-simulation}
 
@@ -309,8 +332,7 @@ Opt-in continuous elastic simulation for galaxy layout, so dragging a node repos
 
 | Type        | Related Element                                                 | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                                    | `exposes`  | inbound   |
-| inter-layer | `api.operation.graph-toolbar`                                   | `exposes`  | inbound   |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`    | `realizes` | inbound   |
 | inter-layer | `application.applicationservice.live-galaxy-simulation-service` | `realizes` | inbound   |
 | inter-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`  | `covers`   | inbound   |
 | intra-layer | `product.softwarecapability.galaxy-radial-orbit-layout`         | `realizes` | outbound  |
@@ -336,7 +358,7 @@ Render-prop tooltip/popover overlays anchored to a hovered/clicked node or edge,
 
 | Type        | Related Element                                                                                                                       | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                                                                                                          | `exposes`  | inbound   |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`                                                                          | `realizes` | inbound   |
 | inter-layer | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing`                 | `tests`    | inbound   |
 | inter-layer | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-near-the-canvas-top-tooltip-flips-below-the-2326f2d8`  | `tests`    | inbound   |
 | inter-layer | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-tooltip-sits-above-the-label-without-a1ce7be4`         | `tests`    | inbound   |
@@ -420,12 +442,11 @@ Collapse a node to hide its structural descendants (and their edges) for dense h
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                               | `exposes`  | inbound   |
-| inter-layer | `api.operation.graph-collapse-control`                     | `exposes`  | inbound   |
-| intra-layer | `product.softwarecapability.interactive-graph-exploration` | `realizes` | outbound  |
-| intra-layer | `product.persona.end-user-exploring-a-rendered-graph`      | `serves`   | outbound  |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
+| intra-layer | `product.softwarecapability.interactive-graph-exploration`   | `realizes` | outbound  |
+| intra-layer | `product.persona.end-user-exploring-a-rendered-graph`        | `serves`   | outbound  |
 
 ### Viewport History and Restore {#viewport-history-and-restore}
 
@@ -444,9 +465,9 @@ Callers can restore a viewport (initialViewport), drive it imperatively (viewpor
 
 #### Relationships
 
-| Type        | Related Element              | Predicate | Direction |
-| ----------- | ---------------------------- | --------- | --------- |
-| inter-layer | `api.operation.graph-canvas` | `exposes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
 
 ### Application Developer Embedding a Graph View {#application-developer-embedding-a-graph-view}
 
@@ -595,7 +616,10 @@ Shipped capability: nested-bubble layout grouping nodes by Louvain community str
 
 | Type        | Related Element                                                                             | Predicate    | Direction |
 | ----------- | ------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationservice.cluster-packing`                                            | `realizes`   | inbound   |
+| inter-layer | `application.applicationservice.force-layout`                                               | `realizes`   | inbound   |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`                                | `realizes`   | inbound   |
+| inter-layer | `application.applicationservice.louvain-clustering`                                         | `realizes`   | inbound   |
 | inter-layer | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`          | `realizes`   | outbound  |
 | inter-layer | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `satisfies`  | outbound  |
 | inter-layer | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `supports`   | outbound  |
@@ -641,6 +665,7 @@ Shipped capability: spring/repulsion-based automatic layout for arbitrary node/e
 
 | Type        | Related Element                                                       | Predicate    | Direction |
 | ----------- | --------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationservice.force-layout`                         | `realizes`   | inbound   |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`          | `realizes`   | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation`         | `realizes`   | outbound  |
 | inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`     | `supports`   | outbound  |
@@ -686,6 +711,7 @@ Shipped capability: radial hierarchy-of-orbits layout for structural trees/fores
 
 | Type        | Related Element                                                   | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.galaxy-layout`                    | `realizes` | inbound   |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`      | `realizes` | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation`     | `realizes` | outbound  |
 | inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs` | `supports` | outbound  |
@@ -709,7 +735,11 @@ What the canvas lets an end user do with a laid-out graph in place: hide and rev
 
 | Type        | Related Element                                                   | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.edge-geometry`                    | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.graph-canvas-context-hook`        | `realizes` | inbound   |
 | inter-layer | `application.applicationservice.interactive-graph-rendering`      | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.pan-and-zoom-hook`                | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.structural-hierarchy`             | `realizes` | inbound   |
 | inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs` | `supports` | outbound  |
 | intra-layer | `product.feature.node-and-edge-tooltips-and-popovers`             | `realizes` | inbound   |
 | intra-layer | `product.feature.progressive-disclosure-via-node-collapseexpand`  | `realizes` | inbound   |
@@ -733,6 +763,7 @@ GraphCanvas layout layer-lanes: the layered-graph swimlane view inside GraphCanv
 | Type        | Related Element                                               | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`  | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.lane-layout`                  | `realizes` | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation` | `realizes` | outbound  |
 
 ### Layered Graph Visualization {#layered-graph-visualization}
@@ -753,7 +784,15 @@ Shipped capability: Views of a graph whose nodes belong to layers: a 3D layer st
 
 | Type        | Related Element                                                             | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.adjacency-matrix-link-metadata`             | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.controllable-state-hook`                    | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-control-helpers`              | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-explorer-snapshot`            | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-state-hooks`                  | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-utilities`                    | `realizes` | inbound   |
 | inter-layer | `application.applicationservice.layered-graph-visualization`                | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.reach-relationship-helpers`                 | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.tween-animation-hooks`                      | `realizes` | inbound   |
 | inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
 | inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`           | `supports` | outbound  |
 
@@ -776,6 +815,7 @@ GraphCanvas layout organic: stress-majorization layout, successor to force, with
 | Type        | Related Element                                               | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`  | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.organic-layout`               | `realizes` | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation` | `realizes` | outbound  |
 
 ### Orthogonal Graph Layout {#orthogonal-graph-layout}
@@ -797,6 +837,7 @@ GraphCanvas layout orthogonal: nodes on a cell grid layered from a BFS spanning 
 | Type        | Related Element                                               | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`  | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.orthogonal-layout`            | `realizes` | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation` | `realizes` | outbound  |
 
 ### Overlays and Dialogs {#overlays-and-dialogs}
@@ -817,6 +858,7 @@ Shipped capability: Modals, confirm dialogs, toasts, tooltips, popovers, drawers
 
 | Type        | Related Element                                                             | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.dropdown-portal-containment`                | `realizes` | inbound   |
 | inter-layer | `application.applicationservice.overlay-components`                         | `realizes` | inbound   |
 | inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
 
@@ -881,6 +923,7 @@ Shipped capability: concentric-ring radial tree layout with multi-trunk packing.
 | Type        | Related Element                                                   | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`      | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.radial-tree-layout`               | `realizes` | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation`     | `realizes` | outbound  |
 | inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs` | `supports` | outbound  |
 
@@ -903,6 +946,7 @@ Shipped capability: Panels, resizable split panes and media-query driven layout.
 | Type        | Related Element                                                             | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationservice.layout-components`                          | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.media-query-hook`                           | `realizes` | inbound   |
 | inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
 
 ### Run History and Observability Views {#run-history-and-observability-views}
@@ -924,6 +968,9 @@ Shipped capability: Trace viewer, log stream, diff viewers, version timeline and
 | Type        | Related Element                                                             | Predicate  | Direction |
 | ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationservice.observability-view-components`              | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.otlp-trace-adapter`                         | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.trace-viewer-model`                         | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.x-ray-trace-adapter`                        | `realizes` | inbound   |
 | inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
 
 ### UI Primitives {#ui-primitives}
@@ -966,9 +1013,11 @@ Shipped capability: page-tree + view-fan layout for visualizing page/view naviga
 | Type        | Related Element                                                   | Predicate  | Direction |
 | ----------- | ----------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `application.applicationservice.graph-layout-engine-service`      | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.ux-navigation-edge-visibility`    | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.ux-navigation-layout`             | `realizes` | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation`     | `realizes` | outbound  |
 | inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs` | `supports` | outbound  |
 
 ---
 
-Generated: 2026-11-24T13:25:05.973Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0

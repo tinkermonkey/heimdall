@@ -3,7 +3,7 @@ schema: documentation-robotics-v1
 cli_version: 0.7.1
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-24T13:25:05.564Z
+updated: 2026-11-24T15:11:54.090Z
 project:
   name: heimdall-ux
   description: ""
@@ -47,10 +47,10 @@ layers:
     path: documentation-robotics/model/04_security/
     enabled: true
     elements:
-      securitymodel: 1
-      secureresource: 2
-      threat: 3
       countermeasure: 3
+      secureresource: 2
+      securitymodel: 1
+      threat: 3
   application:
     order: 5
     name: Application
@@ -58,12 +58,12 @@ layers:
     enabled: true
     elements:
       applicationcollaboration: 1
-      applicationcomponent: 10
+      applicationcomponent: 11
       applicationevent: 9
       applicationfunction: 52
       applicationinteraction: 1
       applicationprocess: 1
-      applicationservice: 16
+      applicationservice: 43
       dataobject: 2
   technology:
     order: 6
@@ -82,9 +82,7 @@ layers:
     name: Api
     path: documentation-robotics/model/07_api/
     enabled: true
-    elements:
-      operation: 18
-      tag: 1
+    elements: {}
   data-model:
     order: 8
     name: Data model
@@ -145,4 +143,7 @@ changeset_history:
     action: committed
   - name: review-open
     committed_at: 2026-11-24T13:25:05.564Z
+    action: committed
+  - name: heimdall-ui-public-api
+    committed_at: 2026-11-24T15:11:54.089Z
     action: committed

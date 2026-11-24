@@ -18,8 +18,8 @@ Data entities, relationships, and data structure definitions.
 | ------------------------- | ----- |
 | Elements                  | 35    |
 | Intra-Layer Relationships | 25    |
-| Inter-Layer Relationships | 33    |
-| Inbound Relationships     | 31    |
+| Inter-Layer Relationships | 37    |
+| Inbound Relationships     | 35    |
 | Outbound Relationships    | 2     |
 
 **Cross-Layer References**:
@@ -124,9 +124,13 @@ flowchart TB
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-options`     | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.louvain-community-clustering`         | `data-model.schemadefinition.cluster-tree-node`         | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.node-overlap-separation-pass`         | `data-model.schemadefinition.layout-node`               | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`             | `data-model.schemadefinition.organic-layout-options`    | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`          | `data-model.schemadefinition.orthogonal-layout-options` | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adapter`                   | `data-model.schemadefinition.otlp-traces-data`          | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.radial-tree-layout-algorithm`         | `data-model.schemadefinition.radial-tree-layout-result` | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.hierarchy-edge`            | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.structural-forest`         | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.x-ray-trace-adapter`                  | `data-model.schemadefinition.xray-segment`              | `data-model`  | `accesses` | many-to-many | medium   |
 | `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.graph-node-data`                          | `application.dataobject.node-rect-registry`             | `application` | `realizes` | many-to-many | medium   |
 | `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.layout-node`                              | `application.dataobject.node-position-map`              | `application` | `realizes` | many-to-many | medium   |
 
@@ -700,6 +704,12 @@ Tuning for organicLayout (stress majorization with a hard minimum node gap); its
 | title | OrganicLayoutOptions |
 | type  | object               |
 
+#### Relationships
+
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `accesses` | inbound   |
+
 ### OrthogonalLayoutOptions {#orthogonallayoutoptions}
 
 **ID**: `data-model.schemadefinition.orthogonal-layout-options`
@@ -715,6 +725,12 @@ Tuning for orthogonalLayout (grid cells layered from a BFS spanning tree, orthog
 | title | OrthogonalLayoutOptions |
 | type  | object                  |
 
+#### Relationships
+
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm` | `accesses` | inbound   |
+
 ### OtlpTracesData {#otlptracesdata}
 
 **ID**: `data-model.schemadefinition.otlp-traces-data`
@@ -729,6 +745,12 @@ OpenTelemetry OTLP/JSON trace export (resourceSpans &gt; scopeSpans &gt; spans w
 | ----- | -------------- |
 | title | OtlpTracesData |
 | type  | object         |
+
+#### Relationships
+
+| Type        | Related Element                                      | Predicate  | Direction |
+| ----------- | ---------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.otlp-trace-adapter` | `accesses` | inbound   |
 
 ### PredicateCatalog {#predicatecatalog}
 
@@ -896,6 +918,12 @@ AWS X-Ray segment document with nested subsegments, http, sql, cause and excepti
 | title | XRaySegment |
 | type  | object      |
 
+#### Relationships
+
+| Type        | Related Element                                       | Predicate  | Direction |
+| ----------- | ----------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.x-ray-trace-adapter` | `accesses` | inbound   |
+
 ---
 
-Generated: 2026-11-24T13:25:05.973Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0

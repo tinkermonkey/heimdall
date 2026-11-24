@@ -207,3 +207,56 @@ application.applicationcomponent.consumer-smoke-test-app:
     created_at: 2026-11-21T18:11:57.657Z
     updated_at: 2026-11-21T18:11:57.657Z
     version: 1
+application.applicationcomponent.heimdall-ui-package:
+  id: 21f78e21-c7b1-474a-b56a-432cc6c764fa
+  path: application.applicationcomponent.heimdall-ui-package
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: Heimdall UI Package
+  description: "The published library @tinkermonkey/heimdall-ui: an ESM package
+    built to dist/ whose public entry point is src/index.ts (the `.` export in
+    package.json). It ships the React UI components (modelled in the ux layer),
+    the layout engines, layered-graph utilities and hooks offered as application
+    services, and the CSS and font assets (technology artifacts)."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: manual
+    locations:
+      - file: package.json
+        symbol: "@tinkermonkey/heimdall-ui"
+  accepted_gaps:
+    - direction: incoming
+      predicate: covers
+      other_spec_node_id: testing.testcoveragetarget
+      reason: No test file targets the package as a whole; coverage targets cover its
+        export services and ux library components instead. The peers this gap
+        compares with are the 8 Graph application components that duplicate ux
+        library components (S10).
+      decided_by: agent
+      decided_at: 2026-11-24T14:31:59.238Z
+      changeset: changeset-1795530260776-vzupu4xrv
+    - direction: incoming
+      predicate: serves
+      other_spec_node_id: technology.systemsoftware
+      reason: The browser runtime is recorded where the code runs, on the package's ux
+        library components (depends-on web-browser). The peers this gap compares
+        with are the 8 Graph application components that duplicate ux library
+        components (S10).
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:05.284Z
+      changeset: changeset-1795530260776-vzupu4xrv
+    - direction: outgoing
+      predicate: uses
+      other_spec_node_id: application.applicationcomponent
+      reason: The package uses no other application component; its runtime
+        dependencies (d3, react-markdown, remark-gfm, React as a peer) are
+        technology artifacts.
+      decided_by: agent
+      decided_at: 2026-11-24T14:32:10.550Z
+      changeset: changeset-1795530260776-vzupu4xrv
+  metadata:
+    created_at: 2026-11-24T14:27:00.162Z
+    updated_at: 2026-11-24T14:27:00.162Z
+    version: 1

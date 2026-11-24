@@ -1,0 +1,4272 @@
+- type: add
+  elementId: application.applicationcomponent.heimdall-ui-package
+  layerName: application
+  after:
+    id: 21f78e21-c7b1-474a-b56a-432cc6c764fa
+    path: application.applicationcomponent.heimdall-ui-package
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: Heimdall UI Package
+    description: "The published library @tinkermonkey/heimdall-ui: an ESM package
+      built to dist/ whose public entry point is src/index.ts (the `.` export in
+      package.json). It ships the React UI components (modelled in the ux
+      layer), the layout engines, layered-graph utilities and hooks offered as
+      application services, and the CSS and font assets (technology artifacts)."
+    attributes:
+      type: internal
+    source_reference:
+      provenance: manual
+      locations:
+        - file: package.json
+          symbol: "@tinkermonkey/heimdall-ui"
+    metadata:
+      created_at: 2026-11-24T14:27:00.162Z
+      updated_at: 2026-11-24T14:27:00.162Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: covers
+        other_spec_node_id: testing.testcoveragetarget
+        reason: No test file targets the package as a whole; coverage targets cover its
+          export services and ux library components instead. The peers this gap
+          compares with are the 8 Graph application components that duplicate ux
+          library components (S10).
+        decided_by: agent
+        decided_at: 2026-11-24T14:31:59.238Z
+        changeset: changeset-1795530260776-vzupu4xrv
+      - direction: incoming
+        predicate: serves
+        other_spec_node_id: technology.systemsoftware
+        reason: The browser runtime is recorded where the code runs, on the package's ux
+          library components (depends-on web-browser). The peers this gap
+          compares with are the 8 Graph application components that duplicate ux
+          library components (S10).
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:05.284Z
+        changeset: changeset-1795530260776-vzupu4xrv
+      - direction: outgoing
+        predicate: uses
+        other_spec_node_id: application.applicationcomponent
+        reason: The package uses no other application component; its runtime
+          dependencies (d3, react-markdown, remark-gfm, React as a peer) are
+          technology artifacts.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:10.550Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:10.631Z
+  sequenceNumber: 0
+- type: add
+  elementId: application.applicationservice.dropdown-portal-containment
+  layerName: application
+  after:
+    id: 313bac17-cf67-4010-8a9f-c3c2e6a5d874
+    path: application.applicationservice.dropdown-portal-containment
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Dropdown Portal Containment
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/hooks/useDropdownPortal.ts: containsAcrossPortals."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/hooks/useDropdownPortal.ts
+          symbol: containsAcrossPortals
+    metadata:
+      created_at: 2026-11-24T14:27:00.552Z
+      updated_at: 2026-11-24T14:27:00.552Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: realizes
+        other_spec_node_id: application.applicationfunction
+        reason: No function in the model is the exported containsAcrossPortals
+          (dropdown-portal-placement is useDropdownPortal, which is not
+          exported); the package realizes the service directly.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:13.343Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:13.544Z
+  sequenceNumber: 1
+- type: add
+  elementId: application.applicationservice.graph-canvas-context-hook
+  layerName: application
+  after:
+    id: e859d2f1-2ac2-48ce-b34a-8e700256cea1
+    path: application.applicationservice.graph-canvas-context-hook
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Graph Canvas Context Hook
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/components/GraphCanvas.tsx: useGraphCanvas."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: useGraphCanvas
+    metadata:
+      created_at: 2026-11-24T14:27:00.592Z
+      updated_at: 2026-11-24T14:27:00.592Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: realizes
+        other_spec_node_id: application.applicationfunction
+        reason: useGraphCanvas only reads GraphCanvas's context; no function in the
+          model is it, and the package realizes the service directly.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:18.162Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:18.263Z
+  sequenceNumber: 2
+- type: add
+  elementId: application.applicationservice.adjacency-matrix-link-metadata
+  layerName: application
+  after:
+    id: 0ef97e10-f932-4c00-91f0-bbaaa38f9d02
+    path: application.applicationservice.adjacency-matrix-link-metadata
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Adjacency Matrix Link Metadata
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/layered/matrix.ts: linkEdgeMetadata."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/layered/matrix.ts
+          symbol: linkEdgeMetadata
+    metadata:
+      created_at: 2026-11-24T14:27:00.592Z
+      updated_at: 2026-11-24T14:27:00.592Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: realizes
+        other_spec_node_id: application.applicationfunction
+        reason: No function in the model is the exported linkEdgeMetadata
+          (adjacency-matrix-ordering is clusterOrder, which is not exported);
+          the package realizes the service directly.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:22.513Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:22.728Z
+  sequenceNumber: 3
+- type: add
+  elementId: application.applicationservice.tween-animation-hooks
+  layerName: application
+  after:
+    id: b5c13e87-48ff-48fb-9d8c-978f087c7d1a
+    path: application.applicationservice.tween-animation-hooks
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Tween Animation Hooks
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/hooks/useTween.ts: easeInOutCubic, interpolateValues, useTween,
+      usePrefersReducedMotion, with the constants REDUCED_MOTION_QUERY."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/hooks/useTween.ts
+          symbol: easeInOutCubic
+    metadata:
+      created_at: 2026-11-24T14:27:00.654Z
+      updated_at: 2026-11-24T14:27:00.654Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 4
+- type: add
+  elementId: application.applicationservice.lane-layout
+  layerName: application
+  after:
+    id: f2068cfc-5301-456b-80e1-9b3a7b11e10d
+    path: application.applicationservice.lane-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Lane Layout
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/laneLayout.ts: layoutLanes, laneLinkCurve, laneBundleCurve,
+      laneBundler, laneTagRoom, laneTagSize, routeLaneGutters,
+      retraceLaneGutters, laneGutterGapTracks."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/laneLayout.ts
+          symbol: layoutLanes
+    metadata:
+      created_at: 2026-11-24T14:27:00.654Z
+      updated_at: 2026-11-24T14:27:00.654Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 5
+- type: add
+  elementId: application.applicationservice.layered-graph-control-helpers
+  layerName: application
+  after:
+    id: d6805917-dba3-469f-8f2e-dd6c57767220
+    path: application.applicationservice.layered-graph-control-helpers
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Layered Graph Control Helpers
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/components/LayeredGraphControls.tsx: followOptionLabel,
+      categoryDisplayLabel, useLayeredGraphProp."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/LayeredGraphControls.tsx
+          symbol: followOptionLabel
+    metadata:
+      created_at: 2026-11-24T14:27:00.654Z
+      updated_at: 2026-11-24T14:27:00.654Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: realizes
+        other_spec_node_id: application.applicationfunction
+        reason: No function in the model is useLayeredGraphProp, followOptionLabel or
+          categoryDisplayLabel; the package realizes the service directly.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:26.471Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:26.549Z
+  sequenceNumber: 6
+- type: add
+  elementId: application.applicationservice.reach-relationship-helpers
+  layerName: application
+  after:
+    id: f9fc3fb3-f038-4cdd-b99f-de33a27ac685
+    path: application.applicationservice.reach-relationship-helpers
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Reach Relationship Helpers
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/components/ReachInspector.tsx: reachRelationships, reachSummaryText."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/ReachInspector.tsx
+          symbol: reachRelationships
+    metadata:
+      created_at: 2026-11-24T14:27:00.655Z
+      updated_at: 2026-11-24T14:27:00.655Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: realizes
+        other_spec_node_id: application.applicationfunction
+        reason: No function in the model is reachRelationships or reachSummaryText; the
+          package realizes the service directly.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:29.582Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:29.704Z
+  sequenceNumber: 7
+- type: add
+  elementId: application.applicationservice.layered-graph-explorer-snapshot
+  layerName: application
+  after:
+    id: b9866f7e-2ba9-4172-aec5-fb6daf2c33b4
+    path: application.applicationservice.layered-graph-explorer-snapshot
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Layered Graph Explorer Snapshot
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/components/LayeredGraphExplorer.tsx:
+      sanitizeLayeredGraphExplorerSnapshot, with the constants
+      LAYERED_GRAPH_VIEWS, LAYERED_GRAPH_VIEW_LABELS."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/LayeredGraphExplorer.tsx
+          symbol: sanitizeLayeredGraphExplorerSnapshot
+    metadata:
+      created_at: 2026-11-24T14:27:00.657Z
+      updated_at: 2026-11-24T14:27:00.657Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: realizes
+        other_spec_node_id: application.applicationfunction
+        reason: No function in the model is sanitizeLayeredGraphExplorerSnapshot; the
+          package realizes the service directly.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:32.854Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:32.978Z
+  sequenceNumber: 8
+- type: add
+  elementId: application.applicationservice.force-layout
+  layerName: application
+  after:
+    id: ce72db60-acc4-4a71-9b80-bb2c116b004b
+    path: application.applicationservice.force-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Force Layout
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/graphLayout.ts: forceLayout, clusteredForceLayout,
+      boundingCirclesByGroup."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/graphLayout.ts
+          symbol: forceLayout
+    metadata:
+      created_at: 2026-11-24T14:27:00.658Z
+      updated_at: 2026-11-24T14:27:00.658Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 9
+- type: add
+  elementId: application.applicationservice.galaxy-layout
+  layerName: application
+  after:
+    id: 8743743e-dd6b-44f6-9187-08fa506cd63c
+    path: application.applicationservice.galaxy-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Galaxy Layout
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/galaxyLayout.ts: galaxyLayout."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/galaxyLayout.ts
+          symbol: galaxyLayout
+    metadata:
+      created_at: 2026-11-24T14:27:00.658Z
+      updated_at: 2026-11-24T14:27:00.658Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 10
+- type: add
+  elementId: application.applicationservice.organic-layout
+  layerName: application
+  after:
+    id: f85ca976-2846-41ca-84ae-490dc0845068
+    path: application.applicationservice.organic-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Organic Layout
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/organicLayout.ts: organicLayout."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/organicLayout.ts
+          symbol: organicLayout
+    metadata:
+      created_at: 2026-11-24T14:27:00.659Z
+      updated_at: 2026-11-24T14:27:00.659Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 11
+- type: add
+  elementId: application.applicationservice.orthogonal-layout
+  layerName: application
+  after:
+    id: 2c5cccfd-e6b4-4292-abc0-3daf5c9dec1d
+    path: application.applicationservice.orthogonal-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Orthogonal Layout
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/orthogonalLayout.ts: orthogonalLayout."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/orthogonalLayout.ts
+          symbol: orthogonalLayout
+    metadata:
+      created_at: 2026-11-24T14:27:00.665Z
+      updated_at: 2026-11-24T14:27:00.665Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 12
+- type: add
+  elementId: application.applicationservice.ux-navigation-layout
+  layerName: application
+  after:
+    id: 41f1e885-56f6-4e4a-97e6-489d0f51f788
+    path: application.applicationservice.ux-navigation-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: UX Navigation Layout
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/uxNavLayout.ts: uxNavLayout."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/uxNavLayout.ts
+          symbol: uxNavLayout
+    metadata:
+      created_at: 2026-11-24T14:27:00.665Z
+      updated_at: 2026-11-24T14:27:00.665Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 13
+- type: add
+  elementId: application.applicationservice.radial-tree-layout
+  layerName: application
+  after:
+    id: 72db6214-5d4f-4985-929b-5b46ad995de9
+    path: application.applicationservice.radial-tree-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Radial Tree Layout
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/radialTreeLayout.ts: radialTreeLayout."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/radialTreeLayout.ts
+          symbol: radialTreeLayout
+    metadata:
+      created_at: 2026-11-24T14:27:00.665Z
+      updated_at: 2026-11-24T14:27:00.665Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 14
+- type: add
+  elementId: application.applicationservice.ux-navigation-edge-visibility
+  layerName: application
+  after:
+    id: 062ebbb5-8e33-4577-9e15-b90b229dbd34
+    path: application.applicationservice.ux-navigation-edge-visibility
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: UX Navigation Edge Visibility
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/uxNavEdgeVisibility.ts: visibleNavigationEdgeIds."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/uxNavEdgeVisibility.ts
+          symbol: visibleNavigationEdgeIds
+    metadata:
+      created_at: 2026-11-24T14:27:00.665Z
+      updated_at: 2026-11-24T14:27:00.665Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 15
+- type: add
+  elementId: application.applicationservice.structural-hierarchy
+  layerName: application
+  after:
+    id: 8ff3f53f-63d2-45e2-96c7-e6c0d1802867
+    path: application.applicationservice.structural-hierarchy
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Structural Hierarchy
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/graphHierarchy.ts: buildStructuralForest,
+      structuralDescendants."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/graphHierarchy.ts
+          symbol: buildStructuralForest
+    metadata:
+      created_at: 2026-11-24T14:27:00.665Z
+      updated_at: 2026-11-24T14:27:00.665Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 16
+- type: add
+  elementId: application.applicationservice.louvain-clustering
+  layerName: application
+  after:
+    id: 81c957d8-6ebb-4ed9-a01e-e16fd7fb27c5
+    path: application.applicationservice.louvain-clustering
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Louvain Clustering
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/graphClustering.ts: louvainCluster."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/graphClustering.ts
+          symbol: louvainCluster
+    metadata:
+      created_at: 2026-11-24T14:27:00.665Z
+      updated_at: 2026-11-24T14:27:00.665Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 17
+- type: add
+  elementId: application.applicationservice.cluster-packing
+  layerName: application
+  after:
+    id: 349ab824-a8dd-48f9-8306-a52a55464ff9
+    path: application.applicationservice.cluster-packing
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Cluster Packing
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/graphPacking.ts: packClusters."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/graphPacking.ts
+          symbol: packClusters
+    metadata:
+      created_at: 2026-11-24T14:27:00.665Z
+      updated_at: 2026-11-24T14:27:00.665Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 18
+- type: add
+  elementId: application.applicationservice.edge-geometry
+  layerName: application
+  after:
+    id: c7ecac5f-c928-4c49-9a63-1a7d23a32155
+    path: application.applicationservice.edge-geometry
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Edge Geometry
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/graph.ts: bezierPath, rectEdgePoint, rectEdgeDirection,
+      edgeLabelSize, findClearLabelPosition."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/graph.ts
+          symbol: bezierPath
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 19
+- type: add
+  elementId: application.applicationservice.pan-and-zoom-hook
+  layerName: application
+  after:
+    id: bef8fdbe-b854-4fad-9765-b3121340d53d
+    path: application.applicationservice.pan-and-zoom-hook
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Pan and Zoom Hook
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/hooks/usePanZoom.ts: usePanZoom."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/hooks/usePanZoom.ts
+          symbol: usePanZoom
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: realizes
+        other_spec_node_id: application.applicationfunction
+        reason: No function in the model is usePanZoom; the package realizes the service
+          directly.
+        decided_by: agent
+        decided_at: 2026-11-24T14:32:35.121Z
+        changeset: changeset-1795530260776-vzupu4xrv
+  timestamp: 2026-11-24T14:32:35.207Z
+  sequenceNumber: 20
+- type: add
+  elementId: application.applicationservice.layered-graph-state-hooks
+  layerName: application
+  after:
+    id: 23856a89-2409-4cf9-88e6-c3d30190e764
+    path: application.applicationservice.layered-graph-state-hooks
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Layered Graph State Hooks
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/hooks/useLayeredGraph.ts: layeredGraphSnapshotDefaults,
+      useLayeredGraph, useLayeredGraphContext, with the constants
+      ASYNC_LAYOUT_MIN_NODES, LayeredGraphContext."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/hooks/useLayeredGraph.ts
+          symbol: layeredGraphSnapshotDefaults
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 21
+- type: add
+  elementId: application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    id: 40121771-3e8b-4e2e-987c-35bf66904d60
+    path: application.applicationservice.layered-graph-utilities
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Layered Graph Utilities
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/layered/index.ts: buildLayeredIndex, readLayerValues,
+      layerPairKey, layerPaletteColor, assignPredicateCodes, isNodeVisible,
+      isLinkVisible, isLinkTraversable, visiblePredicates, layerPairNodeIds,
+      computeReach, reachPath, sanitizeLayeredGraphSnapshot, linkEmphasis,
+      nodeEmphasis, linkCategoryStyle, linkCategoryStyleAt, layoutLayers,
+      layoutLayersAsync, mixLayerPositions, orderWithinLayers,
+      orderAcrossLayers, rankWithinLayers, linkPredicateLabel, arrowHeadPoints,
+      placeEdgeLabels, edgeLabelPriority, lineCurve, quadCurve, cubicCurve,
+      defaultPillSize, hiveLayout, hiveLinkGeometry, hivePoint, hiveAxisAngles,
+      clampSplitAngle, hiveLabelSide, hiveAxisGroups, cameraFromPreset,
+      presetLayerGap, clampCamera, wrapAngle, nearestYaw, lerpCamera,
+      createProjector, projectPoint, depthSort, stackPlaneY, planeCorners,
+      planeGridLines, ringPoints, svgPoints, leftmostPoint, screenBounds,
+      fitZoom, titleRail, with the constants LAYER_PALETTE_SIZE,
+      DEFAULT_LINK_FILTERS, LINK_CATEGORY_PALETTE_SIZE, HOP_COLORS,
+      DEFAULT_LABEL_TS, HIVE_MIN_LOOP_BULGE, CAMERA_PRESETS,
+      CAMERA_PRESET_NAMES, PITCH_RANGE, ZOOM_RANGE, DEFAULT_CAMERA_DISTANCE,
+      TOP_VIEW_PITCH, PRESET_GAP_FULL_LAYERS."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/layered/index.ts
+          symbol: buildLayeredIndex
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 22
+- type: add
+  elementId: application.applicationservice.media-query-hook
+  layerName: application
+  after:
+    id: 9d601939-8277-4c7d-87e2-43fbed448943
+    path: application.applicationservice.media-query-hook
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Media Query Hook
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/hooks/useMediaQuery.ts: useMediaQuery."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/hooks/useMediaQuery.ts
+          symbol: useMediaQuery
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 23
+- type: add
+  elementId: application.applicationservice.controllable-state-hook
+  layerName: application
+  after:
+    id: df8662ce-5b83-4530-9e10-a101a3ca73ce
+    path: application.applicationservice.controllable-state-hook
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Controllable State Hook
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/hooks/useControllable.ts: useControllable."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/hooks/useControllable.ts
+          symbol: useControllable
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 24
+- type: add
+  elementId: application.applicationservice.trace-viewer-model
+  layerName: application
+  after:
+    id: 08678daa-36a6-4f20-a4af-5f573dd19811
+    path: application.applicationservice.trace-viewer-model
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Trace Viewer Model
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/components/traceViewerModel.ts: buildTraceModel, selfTime,
+      visibleRows, createTimeScale, niceTicks, fmtTraceMs, resolveServiceColor,
+      resolveServiceLabel, paletteColor, with the constants
+      DEFAULT_SERVICE_PALETTE."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/traceViewerModel.ts
+          symbol: buildTraceModel
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 25
+- type: add
+  elementId: application.applicationservice.otlp-trace-adapter
+  layerName: application
+  after:
+    id: 982462cd-88b7-4323-9fbd-1f8d0a7604fa
+    path: application.applicationservice.otlp-trace-adapter
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: OTLP Trace Adapter
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/otlpTrace.ts: fromOTLP."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/otlpTrace.ts
+          symbol: fromOTLP
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 26
+- type: add
+  elementId: application.applicationservice.x-ray-trace-adapter
+  layerName: application
+  after:
+    id: aff12cf0-32d9-4a8e-a87a-af61a63f6eb4
+    path: application.applicationservice.x-ray-trace-adapter
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: X-Ray Trace Adapter
+    description: "Exported from the package entry point (src/index.ts) out of
+      src/utils/xrayTrace.ts: fromXRay."
+    attributes:
+      serviceType: synchronous
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/xrayTrace.ts
+          symbol: fromXRay
+    metadata:
+      created_at: 2026-11-24T14:27:00.666Z
+      updated_at: 2026-11-24T14:27:00.666Z
+      version: 1
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.dropdown-portal-containment
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.dropdown-portal-containment
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 28
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.graph-canvas-context-hook
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.graph-canvas-context-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 29
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.adjacency-matrix-link-metadata
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.adjacency-matrix-link-metadata
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.tween-animation-hooks
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.tween-animation-hooks
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.lane-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.lane-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.layered-graph-control-helpers
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.layered-graph-control-helpers
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.reach-relationship-helpers
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.reach-relationship-helpers
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.layered-graph-explorer-snapshot
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.layered-graph-explorer-snapshot
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.force-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.force-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.galaxy-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.galaxy-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.organic-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.organic-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.orthogonal-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.orthogonal-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.ux-navigation-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.ux-navigation-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.radial-tree-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.radial-tree-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.ux-navigation-edge-visibility
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.ux-navigation-edge-visibility
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.structural-hierarchy
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.structural-hierarchy
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.louvain-clustering
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.louvain-clustering
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.cluster-packing
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.cluster-packing
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.edge-geometry
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.edge-geometry
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 46
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.pan-and-zoom-hook
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.pan-and-zoom-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 47
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.layered-graph-state-hooks
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.layered-graph-state-hooks
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 48
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 49
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.media-query-hook
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.media-query-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 50
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.controllable-state-hook
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.controllable-state-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 51
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.trace-viewer-model
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.trace-viewer-model
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 52
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.otlp-trace-adapter
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.otlp-trace-adapter
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 53
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.x-ray-trace-adapter
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.x-ray-trace-adapter
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 54
+- type: relationship-add
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.heimdall-ui-package
+  layerName: technology
+  after:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.heimdall-ui-package
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 55
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.primitive-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.primitive-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 56
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.form-input-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.form-input-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 57
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.data-display-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.data-display-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 58
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.navigation-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.navigation-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 59
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.app-shell-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.app-shell-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 60
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.overlay-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.overlay-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 61
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.layout-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.layout-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 62
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.chart-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.chart-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 63
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.page-pattern-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.page-pattern-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 64
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.chat-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.chat-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 65
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.planning-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.planning-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 66
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.observability-view-components
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.observability-view-components
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 67
+- type: relationship-add
+  elementId: application.applicationfunction.force-directed-layout-algorithm::realizes::application.applicationservice.force-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.force-directed-layout-algorithm
+    target: application.applicationservice.force-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 68
+- type: relationship-add
+  elementId: application.applicationfunction.clustered-force-layout-algorithm::realizes::application.applicationservice.force-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.clustered-force-layout-algorithm
+    target: application.applicationservice.force-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 69
+- type: relationship-add
+  elementId: application.applicationfunction.galaxy-radial-orbit-layout-algorithm::realizes::application.applicationservice.galaxy-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+    target: application.applicationservice.galaxy-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 70
+- type: relationship-add
+  elementId: application.applicationfunction.ux-navigation-tree-layout-algorithm::realizes::application.applicationservice.ux-navigation-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    target: application.applicationservice.ux-navigation-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 71
+- type: relationship-add
+  elementId: application.applicationfunction.radial-tree-layout-algorithm::realizes::application.applicationservice.radial-tree-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.radial-tree-layout-algorithm
+    target: application.applicationservice.radial-tree-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 72
+- type: relationship-add
+  elementId: application.applicationfunction.louvain-community-clustering::realizes::application.applicationservice.louvain-clustering
+  layerName: application
+  after:
+    source: application.applicationfunction.louvain-community-clustering
+    target: application.applicationservice.louvain-clustering
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 73
+- type: relationship-add
+  elementId: application.applicationfunction.cluster-circle-packing::realizes::application.applicationservice.cluster-packing
+  layerName: application
+  after:
+    source: application.applicationfunction.cluster-circle-packing
+    target: application.applicationservice.cluster-packing
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 74
+- type: relationship-add
+  elementId: application.applicationfunction.structural-forest-construction::realizes::application.applicationservice.structural-hierarchy
+  layerName: application
+  after:
+    source: application.applicationfunction.structural-forest-construction
+    target: application.applicationservice.structural-hierarchy
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 75
+- type: relationship-add
+  elementId: application.applicationfunction.edge-label-clear-position-search::realizes::application.applicationservice.edge-geometry
+  layerName: application
+  after:
+    source: application.applicationfunction.edge-label-clear-position-search
+    target: application.applicationservice.edge-geometry
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 76
+- type: relationship-add
+  elementId: application.applicationfunction.organic-layout-algorithm::realizes::application.applicationservice.organic-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.organic-layout-algorithm
+    target: application.applicationservice.organic-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 77
+- type: relationship-add
+  elementId: application.applicationfunction.orthogonal-layout-algorithm::realizes::application.applicationservice.orthogonal-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.orthogonal-layout-algorithm
+    target: application.applicationservice.orthogonal-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 78
+- type: relationship-add
+  elementId: application.applicationfunction.swimlane-layer-layout::realizes::application.applicationservice.lane-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.swimlane-layer-layout
+    target: application.applicationservice.lane-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 79
+- type: relationship-add
+  elementId: application.applicationfunction.layered-index-building::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.layered-index-building
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 80
+- type: relationship-add
+  elementId: application.applicationfunction.layer-placement-layout::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.layer-placement-layout
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 81
+- type: relationship-add
+  elementId: application.applicationfunction.selection-reach-computation::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.selection-reach-computation
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 82
+- type: relationship-add
+  elementId: application.applicationfunction.link-visibility-filtering::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.link-visibility-filtering
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 83
+- type: relationship-add
+  elementId: application.applicationfunction.link-and-node-emphasis-styling::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.link-and-node-emphasis-styling
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 84
+- type: relationship-add
+  elementId: application.applicationfunction.hive-plot-geometry::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.hive-plot-geometry
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 85
+- type: relationship-add
+  elementId: application.applicationfunction.layer-stack-projection-and-camera::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.layer-stack-projection-and-camera
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 86
+- type: relationship-add
+  elementId: application.applicationfunction.predicate-label-placement::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.predicate-label-placement
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 87
+- type: relationship-add
+  elementId: application.applicationfunction.layered-graph-snapshot-sanitizing::realizes::application.applicationservice.layered-graph-utilities
+  layerName: application
+  after:
+    source: application.applicationfunction.layered-graph-snapshot-sanitizing
+    target: application.applicationservice.layered-graph-utilities
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 88
+- type: relationship-add
+  elementId: application.applicationfunction.structural-descendant-lookup::realizes::application.applicationservice.structural-hierarchy
+  layerName: application
+  after:
+    source: application.applicationfunction.structural-descendant-lookup
+    target: application.applicationservice.structural-hierarchy
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 89
+- type: relationship-add
+  elementId: application.applicationfunction.trace-model-building::realizes::application.applicationservice.trace-viewer-model
+  layerName: application
+  after:
+    source: application.applicationfunction.trace-model-building
+    target: application.applicationservice.trace-viewer-model
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 90
+- type: relationship-add
+  elementId: application.applicationfunction.otlp-trace-adapter::realizes::application.applicationservice.otlp-trace-adapter
+  layerName: application
+  after:
+    source: application.applicationfunction.otlp-trace-adapter
+    target: application.applicationservice.otlp-trace-adapter
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 91
+- type: relationship-add
+  elementId: application.applicationfunction.x-ray-trace-adapter::realizes::application.applicationservice.x-ray-trace-adapter
+  layerName: application
+  after:
+    source: application.applicationfunction.x-ray-trace-adapter
+    target: application.applicationservice.x-ray-trace-adapter
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 92
+- type: relationship-add
+  elementId: application.applicationfunction.controllable-state::realizes::application.applicationservice.controllable-state-hook
+  layerName: application
+  after:
+    source: application.applicationfunction.controllable-state
+    target: application.applicationservice.controllable-state-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 93
+- type: relationship-add
+  elementId: application.applicationfunction.media-query-tracking::realizes::application.applicationservice.media-query-hook
+  layerName: application
+  after:
+    source: application.applicationfunction.media-query-tracking
+    target: application.applicationservice.media-query-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 94
+- type: relationship-add
+  elementId: application.applicationfunction.animated-tween::realizes::application.applicationservice.tween-animation-hooks
+  layerName: application
+  after:
+    source: application.applicationfunction.animated-tween
+    target: application.applicationservice.tween-animation-hooks
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 95
+- type: relationship-add
+  elementId: application.applicationfunction.layered-graph-state::realizes::application.applicationservice.layered-graph-state-hooks
+  layerName: application
+  after:
+    source: application.applicationfunction.layered-graph-state
+    target: application.applicationservice.layered-graph-state-hooks
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 96
+- type: relationship-add
+  elementId: application.applicationfunction.organic-layout-algorithm::accesses::data-model.schemadefinition.organic-layout-options
+  layerName: application
+  after:
+    source: application.applicationfunction.organic-layout-algorithm
+    target: data-model.schemadefinition.organic-layout-options
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 97
+- type: relationship-add
+  elementId: application.applicationfunction.orthogonal-layout-algorithm::accesses::data-model.schemadefinition.orthogonal-layout-options
+  layerName: application
+  after:
+    source: application.applicationfunction.orthogonal-layout-algorithm
+    target: data-model.schemadefinition.orthogonal-layout-options
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 98
+- type: relationship-add
+  elementId: application.applicationfunction.otlp-trace-adapter::accesses::data-model.schemadefinition.otlp-traces-data
+  layerName: application
+  after:
+    source: application.applicationfunction.otlp-trace-adapter
+    target: data-model.schemadefinition.otlp-traces-data
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 99
+- type: relationship-add
+  elementId: application.applicationfunction.x-ray-trace-adapter::accesses::data-model.schemadefinition.xray-segment
+  layerName: application
+  after:
+    source: application.applicationfunction.x-ray-trace-adapter
+    target: data-model.schemadefinition.xray-segment
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 100
+- type: relationship-add
+  elementId: application.applicationfunction.ux-navigation-tree-layout-algorithm::realizes::application.applicationservice.ux-navigation-edge-visibility
+  layerName: application
+  after:
+    source: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    target: application.applicationservice.ux-navigation-edge-visibility
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 101
+- type: relationship-add
+  elementId: application.applicationservice.interactive-graph-rendering::realizes::product.feature.node-and-edge-tooltips-and-popovers
+  layerName: application
+  after:
+    source: application.applicationservice.interactive-graph-rendering
+    target: product.feature.node-and-edge-tooltips-and-popovers
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 102
+- type: relationship-add
+  elementId: application.applicationservice.interactive-graph-rendering::realizes::product.feature.progressive-disclosure-via-node-collapseexpand
+  layerName: application
+  after:
+    source: application.applicationservice.interactive-graph-rendering
+    target: product.feature.progressive-disclosure-via-node-collapseexpand
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 103
+- type: relationship-add
+  elementId: application.applicationservice.interactive-graph-rendering::realizes::product.feature.live-draggable-galaxy-simulation
+  layerName: application
+  after:
+    source: application.applicationservice.interactive-graph-rendering
+    target: product.feature.live-draggable-galaxy-simulation
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 104
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::satisfies::motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 105
+- type: relationship-add
+  elementId: testing.testcoveragetarget.galaxy-layout-browser-tests::covers::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.galaxy-layout-browser-tests
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 106
+- type: relationship-add
+  elementId: testing.testcoveragetarget.galaxy-layout-browser-tests::covers::application.applicationservice.galaxy-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.galaxy-layout-browser-tests
+    target: application.applicationservice.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 107
+- type: relationship-add
+  elementId: testing.testcoveragetarget.galaxy-layout-browser-tests::covers::application.applicationservice.structural-hierarchy
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.galaxy-layout-browser-tests
+    target: application.applicationservice.structural-hierarchy
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 108
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-edge-label-tests::covers::application.applicationservice.force-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-edge-label-tests
+    target: application.applicationservice.force-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 109
+- type: relationship-add
+  elementId: testing.testcoveragetarget.map-canvas-tests::covers::application.applicationservice.pan-and-zoom-hook
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.map-canvas-tests
+    target: application.applicationservice.pan-and-zoom-hook
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 110
+- type: relationship-add
+  elementId: testing.testcoveragetarget.organic-layout-browser-tests::covers::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.organic-layout-browser-tests
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 111
+- type: relationship-add
+  elementId: testing.testcoveragetarget.orthogonal-layout-browser-tests::covers::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.orthogonal-layout-browser-tests
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 112
+- type: relationship-add
+  elementId: testing.testcoveragetarget.pan-zoom-tests::covers::application.applicationservice.pan-and-zoom-hook
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.pan-zoom-tests
+    target: application.applicationservice.pan-and-zoom-hook
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 113
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationservice.force-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationservice.force-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 114
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationservice.galaxy-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationservice.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 115
+- type: relationship-add
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::covers::application.applicationservice.radial-tree-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: application.applicationservice.radial-tree-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 116
+- type: relationship-add
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::covers::application.applicationservice.structural-hierarchy
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: application.applicationservice.structural-hierarchy
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 117
+- type: relationship-add
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::application.applicationservice.force-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: application.applicationservice.force-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 118
+- type: relationship-add
+  elementId: testing.testcoveragetarget.galaxy-layout-and-live-simulation::covers::application.applicationservice.galaxy-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+    target: application.applicationservice.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 119
+- type: relationship-add
+  elementId: testing.testcoveragetarget.galaxy-layout-tests::covers::application.applicationservice.galaxy-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.galaxy-layout-tests
+    target: application.applicationservice.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 120
+- type: relationship-add
+  elementId: testing.testcoveragetarget.galaxy-live-drag-tests::covers::application.applicationservice.galaxy-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.galaxy-live-drag-tests
+    target: application.applicationservice.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 121
+- type: relationship-add
+  elementId: testing.testcoveragetarget.pan-inertia-tests::covers::application.applicationservice.pan-and-zoom-hook
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.pan-inertia-tests
+    target: application.applicationservice.pan-and-zoom-hook
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 122
+- type: relationship-add
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::application.applicationservice.structural-hierarchy
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: application.applicationservice.structural-hierarchy
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 123
+- type: relationship-add
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::application.applicationservice.ux-navigation-edge-visibility
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: application.applicationservice.ux-navigation-edge-visibility
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 124
+- type: relationship-add
+  elementId: testing.testcoveragetarget.ux-nav-layout-tests::covers::application.applicationservice.ux-navigation-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.ux-nav-layout-tests
+    target: application.applicationservice.ux-navigation-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 125
+- type: relationship-add
+  elementId: application.applicationservice.interactive-graph-rendering::realizes::product.feature.layout-progress-indicator
+  layerName: application
+  after:
+    source: application.applicationservice.interactive-graph-rendering
+    target: product.feature.layout-progress-indicator
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 126
+- type: relationship-add
+  elementId: application.applicationservice.interactive-graph-rendering::realizes::product.feature.viewport-history-and-restore
+  layerName: application
+  after:
+    source: application.applicationservice.interactive-graph-rendering
+    target: product.feature.viewport-history-and-restore
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 127
+- type: relationship-add
+  elementId: application.applicationservice.interactive-graph-rendering::realizes::product.feature.edge-selection-and-inspection
+  layerName: application
+  after:
+    source: application.applicationservice.interactive-graph-rendering
+    target: product.feature.edge-selection-and-inspection
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 128
+- type: relationship-add
+  elementId: application.applicationservice.interactive-graph-rendering::realizes::product.feature.fullscreen-canvas
+  layerName: application
+  after:
+    source: application.applicationservice.interactive-graph-rendering
+    target: product.feature.fullscreen-canvas
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 129
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-node-ux::satisfies::motivation.requirement.graph-nodes-and-edges-have-accessible-names
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-node-ux
+    target: motivation.requirement.graph-nodes-and-edges-have-accessible-names
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 130
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::satisfies::motivation.requirement.large-layouts-do-not-block-the-first-paint
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: motivation.requirement.large-layouts-do-not-block-the-first-paint
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T14:27:00.828Z
+  sequenceNumber: 131
+- type: delete
+  elementId: api.operation.graph-canvas
+  layerName: api
+  before:
+    id: 9eddabd5-e8e7-44f6-9b9b-74b083203090
+    path: api.operation.graph-canvas
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphCanvas
+    description: Exported React component — the public entry point for rendering an
+      interactive graph.
+    attributes:
+      operationId: GraphCanvas
+      summary: Render an interactive, pan/zoomable graph with a pluggable layout engine
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphCanvas
+    metadata:
+      created_at: 2026-09-18T14:38:03.058Z
+      updated_at: 2026-09-18T14:38:03.058Z
+      version: 1
+  timestamp: 2026-11-24T14:27:24.488Z
+  sequenceNumber: 132
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:27:24.671Z
+  sequenceNumber: 133
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:24.793Z
+  sequenceNumber: 134
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::references::application.applicationservice.live-galaxy-simulation-service
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationservice.live-galaxy-simulation-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:24.932Z
+  sequenceNumber: 135
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::exposes::product.feature.node-and-edge-tooltips-and-popovers
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: product.feature.node-and-edge-tooltips-and-popovers
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:25.059Z
+  sequenceNumber: 136
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::exposes::product.feature.progressive-disclosure-via-node-collapseexpand
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: product.feature.progressive-disclosure-via-node-collapseexpand
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:25.178Z
+  sequenceNumber: 137
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::exposes::product.feature.live-draggable-galaxy-simulation
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: product.feature.live-draggable-galaxy-simulation
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:25.274Z
+  sequenceNumber: 138
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::satisfies::motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers
+    predicate: satisfies
+    layer: api
+    targetLayer: motivation
+  timestamp: 2026-11-24T14:27:25.400Z
+  sequenceNumber: 139
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:25.498Z
+  sequenceNumber: 140
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.node-hover-change-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.node-hover-change-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:25.624Z
+  sequenceNumber: 141
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.node-drag-end-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.node-drag-end-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:25.727Z
+  sequenceNumber: 142
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:25.905Z
+  sequenceNumber: 143
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.center-on-select-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.center-on-select-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.082Z
+  sequenceNumber: 144
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.fullscreen-container-ref-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.fullscreen-container-ref-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.224Z
+  sequenceNumber: 145
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-browser-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-browser-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.307Z
+  sequenceNumber: 146
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-a11y-names-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-a11y-names-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.375Z
+  sequenceNumber: 147
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-click-tooltip-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-click-tooltip-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.484Z
+  sequenceNumber: 148
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-popover-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-popover-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.701Z
+  sequenceNumber: 149
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-fit-boundaries-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-fit-boundaries-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.792Z
+  sequenceNumber: 150
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-layout-busy-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-layout-busy-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:26.900Z
+  sequenceNumber: 151
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-node-measure-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-node-measure-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.017Z
+  sequenceNumber: 152
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-tooltip-placement-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-tooltip-placement-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.111Z
+  sequenceNumber: 153
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-viewport-history-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-viewport-history-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.206Z
+  sequenceNumber: 154
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layer-lanes-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layer-lanes-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.279Z
+  sequenceNumber: 155
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.organic-layout-browser-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.organic-layout-browser-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.416Z
+  sequenceNumber: 156
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.orthogonal-layout-browser-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.orthogonal-layout-browser-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.524Z
+  sequenceNumber: 157
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.pan-zoom-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.pan-zoom-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.679Z
+  sequenceNumber: 158
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.777Z
+  sequenceNumber: 159
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.897Z
+  sequenceNumber: 160
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:27.986Z
+  sequenceNumber: 161
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.reach-inspector-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.reach-inspector-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:28.131Z
+  sequenceNumber: 162
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-live-drag-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-live-drag-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:28.260Z
+  sequenceNumber: 163
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-async-layout-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-async-layout-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:28.426Z
+  sequenceNumber: 164
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.organic-layout-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.organic-layout-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:28.606Z
+  sequenceNumber: 165
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.orthogonal-layout-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.orthogonal-layout-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:28.879Z
+  sequenceNumber: 166
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.channel-router-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.channel-router-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:29.045Z
+  sequenceNumber: 167
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:29.157Z
+  sequenceNumber: 168
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-layout-tests::covers::api.operation.graph-canvas
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-layout-tests
+    target: api.operation.graph-canvas
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:29.276Z
+  sequenceNumber: 169
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.edge-select-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.edge-select-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:29.353Z
+  sequenceNumber: 170
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.edge-hover-change-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.edge-hover-change-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:29.504Z
+  sequenceNumber: 171
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.background-click-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.background-click-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:29.680Z
+  sequenceNumber: 172
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.collapse-toggle-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.collapse-toggle-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:29.814Z
+  sequenceNumber: 173
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.layout-state-change-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.layout-state-change-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:30.005Z
+  sequenceNumber: 174
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.viewport-dwell-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.viewport-dwell-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:30.265Z
+  sequenceNumber: 175
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::triggers::application.applicationevent.viewport-navigate-event
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: application.applicationevent.viewport-navigate-event
+    predicate: triggers
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:30.396Z
+  sequenceNumber: 176
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::exposes::product.feature.layout-progress-indicator
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: product.feature.layout-progress-indicator
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:30.551Z
+  sequenceNumber: 177
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::exposes::product.feature.viewport-history-and-restore
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: product.feature.viewport-history-and-restore
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:30.722Z
+  sequenceNumber: 178
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::exposes::product.feature.edge-selection-and-inspection
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: product.feature.edge-selection-and-inspection
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:30.939Z
+  sequenceNumber: 179
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::satisfies::motivation.requirement.graph-nodes-and-edges-have-accessible-names
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: motivation.requirement.graph-nodes-and-edges-have-accessible-names
+    predicate: satisfies
+    layer: api
+    targetLayer: motivation
+  timestamp: 2026-11-24T14:27:31.149Z
+  sequenceNumber: 180
+- type: relationship-delete
+  elementId: api.operation.graph-canvas::satisfies::motivation.requirement.large-layouts-do-not-block-the-first-paint
+  layerName: api
+  before:
+    source: api.operation.graph-canvas
+    target: motivation.requirement.large-layouts-do-not-block-the-first-paint
+    predicate: satisfies
+    layer: api
+    targetLayer: motivation
+  timestamp: 2026-11-24T14:27:31.249Z
+  sequenceNumber: 181
+- type: delete
+  elementId: api.operation.graph-node
+  layerName: api
+  before:
+    id: 2bdef60b-a43f-4339-9a77-f3aab951841e
+    path: api.operation.graph-node
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphNode
+    description: Exported default node renderer component, usable standalone or via
+      GraphCanvas's renderNode.
+    attributes:
+      operationId: GraphNode
+      summary: Default graph node renderer
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphNode
+    metadata:
+      created_at: 2026-09-18T14:38:03.383Z
+      updated_at: 2026-09-18T14:38:03.383Z
+      version: 1
+  timestamp: 2026-11-24T14:27:34.580Z
+  sequenceNumber: 182
+- type: relationship-delete
+  elementId: api.operation.graph-node::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-node
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:27:34.680Z
+  sequenceNumber: 183
+- type: relationship-delete
+  elementId: api.operation.graph-node::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-node
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:34.865Z
+  sequenceNumber: 184
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.center-on-select-tests::covers::api.operation.graph-node
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.center-on-select-tests
+    target: api.operation.graph-node
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:35.037Z
+  sequenceNumber: 185
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-collapse-tests::covers::api.operation.graph-node
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-collapse-tests
+    target: api.operation.graph-node
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:35.324Z
+  sequenceNumber: 186
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-edge-label-tests::covers::api.operation.graph-node
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-edge-label-tests
+    target: api.operation.graph-node
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:35.425Z
+  sequenceNumber: 187
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.graph-node
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.graph-node
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:35.652Z
+  sequenceNumber: 188
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::api.operation.graph-node
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: api.operation.graph-node
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:36.148Z
+  sequenceNumber: 189
+- type: relationship-delete
+  elementId: api.operation.graph-node::satisfies::motivation.requirement.graph-nodes-and-edges-have-accessible-names
+  layerName: api
+  before:
+    source: api.operation.graph-node
+    target: motivation.requirement.graph-nodes-and-edges-have-accessible-names
+    predicate: satisfies
+    layer: api
+    targetLayer: motivation
+  timestamp: 2026-11-24T14:27:36.439Z
+  sequenceNumber: 190
+- type: delete
+  elementId: api.operation.graph-edge
+  layerName: api
+  before:
+    id: 037dfc67-1c2b-4dff-ad9e-726579807eea
+    path: api.operation.graph-edge
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphEdge
+    description: Exported standalone edge component for use outside GraphCanvas's
+      own internal edge renderer.
+    attributes:
+      operationId: GraphEdge
+      summary: Standalone graph edge component
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphEdge
+    metadata:
+      created_at: 2026-09-18T14:38:03.681Z
+      updated_at: 2026-09-18T14:38:03.681Z
+      version: 1
+  timestamp: 2026-11-24T14:27:41.476Z
+  sequenceNumber: 191
+- type: relationship-delete
+  elementId: api.operation.graph-edge::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-edge
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:27:41.805Z
+  sequenceNumber: 192
+- type: relationship-delete
+  elementId: api.operation.graph-edge::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-edge
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:42.118Z
+  sequenceNumber: 193
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-tests::covers::api.operation.graph-edge
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-tests
+    target: api.operation.graph-edge
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:42.498Z
+  sequenceNumber: 194
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.graph-edge
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.graph-edge
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:42.887Z
+  sequenceNumber: 195
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.reach-inspector-tests::covers::api.operation.graph-edge
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.reach-inspector-tests
+    target: api.operation.graph-edge
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:43.407Z
+  sequenceNumber: 196
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::api.operation.graph-edge
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: api.operation.graph-edge
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:43.813Z
+  sequenceNumber: 197
+- type: delete
+  elementId: api.operation.graph-edge-shape
+  layerName: api
+  before:
+    id: 9c973f74-f499-4eec-9a6d-180a43ef5d0e
+    path: api.operation.graph-edge-shape
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphEdgeShape
+    description: Exported low-level SVG edge-drawing primitive (line, markers, hit
+      target, label pill), for fully custom renderEdge callbacks.
+    attributes:
+      operationId: GraphEdgeShape
+      summary: Low-level SVG edge shape primitive
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphEdgeShape
+    metadata:
+      created_at: 2026-09-18T14:38:03.975Z
+      updated_at: 2026-09-18T14:38:03.975Z
+      version: 1
+  timestamp: 2026-11-24T14:27:49.010Z
+  sequenceNumber: 198
+- type: relationship-delete
+  elementId: api.operation.graph-edge-shape::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-edge-shape
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:27:49.260Z
+  sequenceNumber: 199
+- type: relationship-delete
+  elementId: api.operation.graph-edge-shape::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-edge-shape
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:49.474Z
+  sequenceNumber: 200
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-a11y-names-tests::covers::api.operation.graph-edge-shape
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-a11y-names-tests
+    target: api.operation.graph-edge-shape
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:49.690Z
+  sequenceNumber: 201
+- type: delete
+  elementId: api.operation.graph-toolbar
+  layerName: api
+  before:
+    id: 1b9bab7b-40b4-4a03-a484-988650ca61b3
+    path: api.operation.graph-toolbar
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphToolbar
+    description: Exported floating zoom/pan/lock/fullscreen/live-simulation control
+      cluster, for a custom toolbar placement.
+    attributes:
+      operationId: GraphToolbar
+      summary: Zoom/pan/lock/fullscreen toolbar for GraphCanvas
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphToolbar
+    metadata:
+      created_at: 2026-09-18T14:38:04.273Z
+      updated_at: 2026-09-18T14:38:04.273Z
+      version: 1
+  timestamp: 2026-11-24T14:27:55.233Z
+  sequenceNumber: 202
+- type: relationship-delete
+  elementId: api.operation.graph-toolbar::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-toolbar
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:27:55.654Z
+  sequenceNumber: 203
+- type: relationship-delete
+  elementId: api.operation.graph-toolbar::exposes::product.feature.live-draggable-galaxy-simulation
+  layerName: api
+  before:
+    source: api.operation.graph-toolbar
+    target: product.feature.live-draggable-galaxy-simulation
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:56.147Z
+  sequenceNumber: 204
+- type: relationship-delete
+  elementId: api.operation.graph-toolbar::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-toolbar
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:27:56.595Z
+  sequenceNumber: 205
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.graph-toolbar
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.graph-toolbar
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:27:57.106Z
+  sequenceNumber: 206
+- type: relationship-delete
+  elementId: api.operation.graph-toolbar::exposes::product.feature.fullscreen-canvas
+  layerName: api
+  before:
+    source: api.operation.graph-toolbar
+    target: product.feature.fullscreen-canvas
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:27:57.487Z
+  sequenceNumber: 207
+- type: delete
+  elementId: api.operation.graph-collapse-control
+  layerName: api
+  before:
+    id: 85be95eb-949e-4901-a581-73d9791d31f6
+    path: api.operation.graph-collapse-control
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphCollapseControl
+    description: Exported collapse/expand affordance button for a node with
+      structural children.
+    attributes:
+      operationId: GraphCollapseControl
+      summary: Collapse/expand affordance for a hierarchical node
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphCollapseControl
+    metadata:
+      created_at: 2026-09-18T14:38:04.581Z
+      updated_at: 2026-09-18T14:38:04.581Z
+      version: 1
+  timestamp: 2026-11-24T14:28:06.527Z
+  sequenceNumber: 208
+- type: relationship-delete
+  elementId: api.operation.graph-collapse-control::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-collapse-control
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:28:07.504Z
+  sequenceNumber: 209
+- type: relationship-delete
+  elementId: api.operation.graph-collapse-control::exposes::product.feature.progressive-disclosure-via-node-collapseexpand
+  layerName: api
+  before:
+    source: api.operation.graph-collapse-control
+    target: product.feature.progressive-disclosure-via-node-collapseexpand
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:28:08.772Z
+  sequenceNumber: 210
+- type: relationship-delete
+  elementId: api.operation.graph-collapse-control::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-collapse-control
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:28:09.886Z
+  sequenceNumber: 211
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-collapse-tests::covers::api.operation.graph-collapse-control
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-collapse-tests
+    target: api.operation.graph-collapse-control
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:28:10.646Z
+  sequenceNumber: 212
+- type: delete
+  elementId: api.operation.graph-inspector
+  layerName: api
+  before:
+    id: e32cda96-fec3-47c7-a69b-08bd6d8d508d
+    path: api.operation.graph-inspector
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphInspector
+    description: Exported detail panel component for a selected node's metadata and
+      relationships.
+    attributes:
+      operationId: GraphInspector
+      summary: Detail panel for a selected graph node
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphInspector
+    metadata:
+      created_at: 2026-09-18T14:38:04.924Z
+      updated_at: 2026-09-18T14:38:04.924Z
+      version: 1
+  timestamp: 2026-11-24T14:28:21.797Z
+  sequenceNumber: 213
+- type: relationship-delete
+  elementId: api.operation.graph-inspector::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-inspector
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:28:22.322Z
+  sequenceNumber: 214
+- type: relationship-delete
+  elementId: api.operation.graph-inspector::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-inspector
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:28:22.704Z
+  sequenceNumber: 215
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.graph-inspector
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.graph-inspector
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:28:23.049Z
+  sequenceNumber: 216
+- type: delete
+  elementId: api.operation.graph-edge-inspector
+  layerName: api
+  before:
+    id: 37e11ef0-f472-4c04-90d0-5ba893f02a7f
+    path: api.operation.graph-edge-inspector
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: GraphEdgeInspector
+    description: Exported detail panel component for a selected edge's endpoints and
+      metadata.
+    attributes:
+      operationId: GraphEdgeInspector
+      summary: Detail panel for a selected graph edge
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphEdgeInspector
+    metadata:
+      created_at: 2026-09-18T14:38:05.235Z
+      updated_at: 2026-09-18T14:38:05.235Z
+      version: 1
+  timestamp: 2026-11-24T14:28:32.605Z
+  sequenceNumber: 217
+- type: relationship-delete
+  elementId: api.operation.graph-edge-inspector::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.graph-edge-inspector
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:28:33.979Z
+  sequenceNumber: 218
+- type: relationship-delete
+  elementId: api.operation.graph-edge-inspector::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.graph-edge-inspector
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:28:34.800Z
+  sequenceNumber: 219
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-matrix-tests::covers::api.operation.graph-edge-inspector
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-matrix-tests
+    target: api.operation.graph-edge-inspector
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:28:35.683Z
+  sequenceNumber: 220
+- type: relationship-delete
+  elementId: api.operation.graph-edge-inspector::exposes::product.feature.edge-selection-and-inspection
+  layerName: api
+  before:
+    source: api.operation.graph-edge-inspector
+    target: product.feature.edge-selection-and-inspection
+    predicate: exposes
+    layer: api
+    targetLayer: product
+  timestamp: 2026-11-24T14:28:36.565Z
+  sequenceNumber: 221
+- type: delete
+  elementId: api.operation.force-layout
+  layerName: api
+  before:
+    id: a951408f-3b02-4775-81a7-19e62e282b57
+    path: api.operation.force-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: forceLayout
+    description: Exported function running the spring/repulsion force-directed
+      layout algorithm.
+    attributes:
+      operationId: forceLayout
+      summary: Compute a force-directed layout for a node/edge set
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: forceLayout
+    metadata:
+      created_at: 2026-09-18T14:38:05.548Z
+      updated_at: 2026-09-18T14:38:05.548Z
+      version: 1
+  timestamp: 2026-11-24T14:28:50.562Z
+  sequenceNumber: 222
+- type: relationship-delete
+  elementId: api.operation.force-layout::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.force-layout
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:28:51.642Z
+  sequenceNumber: 223
+- type: relationship-delete
+  elementId: api.operation.force-layout::realizes::application.applicationfunction.force-directed-layout-algorithm
+  layerName: api
+  before:
+    source: api.operation.force-layout
+    target: application.applicationfunction.force-directed-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:28:52.848Z
+  sequenceNumber: 224
+- type: relationship-delete
+  elementId: api.operation.force-layout::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.force-layout
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:28:53.480Z
+  sequenceNumber: 225
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-edge-label-tests::covers::api.operation.force-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-edge-label-tests
+    target: api.operation.force-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:28:55.539Z
+  sequenceNumber: 226
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.force-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.force-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:28:57.398Z
+  sequenceNumber: 227
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::api.operation.force-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: api.operation.force-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:28:58.359Z
+  sequenceNumber: 228
+- type: delete
+  elementId: api.operation.clustered-force-layout
+  layerName: api
+  before:
+    id: 90740f8a-2d89-4c34-8dba-c777f34a4d90
+    path: api.operation.clustered-force-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: clusteredForceLayout
+    description: Exported function running the Louvain-clustered nested-bubble force layout.
+    attributes:
+      operationId: clusteredForceLayout
+      summary: Compute a community-clustered force layout
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: clusteredForceLayout
+    metadata:
+      created_at: 2026-09-18T14:38:05.858Z
+      updated_at: 2026-09-18T14:38:05.858Z
+      version: 1
+  timestamp: 2026-11-24T14:29:08.545Z
+  sequenceNumber: 229
+- type: relationship-delete
+  elementId: api.operation.clustered-force-layout::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.clustered-force-layout
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:29:09.106Z
+  sequenceNumber: 230
+- type: relationship-delete
+  elementId: api.operation.clustered-force-layout::realizes::application.applicationfunction.clustered-force-layout-algorithm
+  layerName: api
+  before:
+    source: api.operation.clustered-force-layout
+    target: application.applicationfunction.clustered-force-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:09.667Z
+  sequenceNumber: 231
+- type: relationship-delete
+  elementId: api.operation.clustered-force-layout::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.clustered-force-layout
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:10.261Z
+  sequenceNumber: 232
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.clustered-force-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.clustered-force-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:10.766Z
+  sequenceNumber: 233
+- type: delete
+  elementId: api.operation.galaxy-layout
+  layerName: api
+  before:
+    id: 0386bc09-e2cf-4263-8933-03116d221ebf
+    path: api.operation.galaxy-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: galaxyLayout
+    description: Exported function running the radial-orbit galaxy layout algorithm.
+    attributes:
+      operationId: galaxyLayout
+      summary: Compute a radial-hierarchy galaxy layout
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: galaxyLayout
+    metadata:
+      created_at: 2026-09-18T14:38:06.175Z
+      updated_at: 2026-09-18T14:38:06.175Z
+      version: 1
+  timestamp: 2026-11-24T14:29:20.504Z
+  sequenceNumber: 234
+- type: relationship-delete
+  elementId: api.operation.galaxy-layout::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.galaxy-layout
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:29:21.213Z
+  sequenceNumber: 235
+- type: relationship-delete
+  elementId: api.operation.galaxy-layout::realizes::application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+  layerName: api
+  before:
+    source: api.operation.galaxy-layout
+    target: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:21.854Z
+  sequenceNumber: 236
+- type: relationship-delete
+  elementId: api.operation.galaxy-layout::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.galaxy-layout
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:22.562Z
+  sequenceNumber: 237
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-browser-tests::covers::api.operation.galaxy-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-browser-tests
+    target: api.operation.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:23.130Z
+  sequenceNumber: 238
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::api.operation.galaxy-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: api.operation.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:23.644Z
+  sequenceNumber: 239
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-and-live-simulation::covers::api.operation.galaxy-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-and-live-simulation
+    target: api.operation.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:24.549Z
+  sequenceNumber: 240
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-tests::covers::api.operation.galaxy-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-tests
+    target: api.operation.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:25.543Z
+  sequenceNumber: 241
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-live-drag-tests::covers::api.operation.galaxy-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-live-drag-tests
+    target: api.operation.galaxy-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:26.768Z
+  sequenceNumber: 242
+- type: delete
+  elementId: api.operation.ux-nav-layout
+  layerName: api
+  before:
+    id: 546b643b-7381-4483-bfed-28b2598617f7
+    path: api.operation.ux-nav-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: uxNavLayout
+    description: Exported function running the page/view navigation tree layout algorithm.
+    attributes:
+      operationId: uxNavLayout
+      summary: Compute a page-tree + view-fan navigation layout
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: uxNavLayout
+    metadata:
+      created_at: 2026-09-18T14:38:06.498Z
+      updated_at: 2026-09-18T14:38:06.498Z
+      version: 1
+  timestamp: 2026-11-24T14:29:38.343Z
+  sequenceNumber: 243
+- type: relationship-delete
+  elementId: api.operation.ux-nav-layout::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.ux-nav-layout
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:29:39.247Z
+  sequenceNumber: 244
+- type: relationship-delete
+  elementId: api.operation.ux-nav-layout::realizes::application.applicationfunction.ux-navigation-tree-layout-algorithm
+  layerName: api
+  before:
+    source: api.operation.ux-nav-layout
+    target: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:40.180Z
+  sequenceNumber: 245
+- type: relationship-delete
+  elementId: api.operation.ux-nav-layout::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.ux-nav-layout
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:40.660Z
+  sequenceNumber: 246
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-layout-tests::covers::api.operation.ux-nav-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-layout-tests
+    target: api.operation.ux-nav-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:41.225Z
+  sequenceNumber: 247
+- type: delete
+  elementId: api.operation.radial-tree-layout
+  layerName: api
+  before:
+    id: 184fab9c-30da-4049-b5fc-6f5265b47601
+    path: api.operation.radial-tree-layout
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: radialTreeLayout
+    description: Exported function running the radial-tree (concentric ring) layout
+      algorithm.
+    attributes:
+      operationId: radialTreeLayout
+      summary: Compute a radial-tree layout with depth rings
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: radialTreeLayout
+    metadata:
+      created_at: 2026-09-18T14:38:06.823Z
+      updated_at: 2026-09-18T14:38:06.823Z
+      version: 1
+  timestamp: 2026-11-24T14:29:46.067Z
+  sequenceNumber: 248
+- type: relationship-delete
+  elementId: api.operation.radial-tree-layout::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.radial-tree-layout
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:29:46.212Z
+  sequenceNumber: 249
+- type: relationship-delete
+  elementId: api.operation.radial-tree-layout::realizes::application.applicationfunction.radial-tree-layout-algorithm
+  layerName: api
+  before:
+    source: api.operation.radial-tree-layout
+    target: application.applicationfunction.radial-tree-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:46.422Z
+  sequenceNumber: 250
+- type: relationship-delete
+  elementId: api.operation.radial-tree-layout::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.radial-tree-layout
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:46.614Z
+  sequenceNumber: 251
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::covers::api.operation.radial-tree-layout
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: api.operation.radial-tree-layout
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:29:46.801Z
+  sequenceNumber: 252
+- type: delete
+  elementId: api.operation.louvain-cluster
+  layerName: api
+  before:
+    id: a72ec6eb-0790-437a-a41c-0f31a1124dfe
+    path: api.operation.louvain-cluster
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: louvainCluster
+    description: Exported function running deterministic multi-level Louvain
+      community clustering.
+    attributes:
+      operationId: louvainCluster
+      summary: Compute a deterministic Louvain cluster dendrogram
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: louvainCluster
+    metadata:
+      created_at: 2026-09-18T14:38:07.154Z
+      updated_at: 2026-09-18T14:38:07.154Z
+      version: 1
+  timestamp: 2026-11-24T14:29:50.586Z
+  sequenceNumber: 253
+- type: relationship-delete
+  elementId: api.operation.louvain-cluster::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.louvain-cluster
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:29:51.200Z
+  sequenceNumber: 254
+- type: relationship-delete
+  elementId: api.operation.louvain-cluster::realizes::application.applicationfunction.louvain-community-clustering
+  layerName: api
+  before:
+    source: api.operation.louvain-cluster
+    target: application.applicationfunction.louvain-community-clustering
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:52.045Z
+  sequenceNumber: 255
+- type: relationship-delete
+  elementId: api.operation.louvain-cluster::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.louvain-cluster
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:29:52.810Z
+  sequenceNumber: 256
+- type: delete
+  elementId: api.operation.pack-clusters
+  layerName: api
+  before:
+    id: ee0757b4-3256-4699-8760-38ce07a0bbda
+    path: api.operation.pack-clusters
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: packClusters
+    description: Exported function packing a cluster dendrogram into non-overlapping
+      nested circles.
+    attributes:
+      operationId: packClusters
+      summary: Pack a cluster dendrogram into nested circles
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: packClusters
+    metadata:
+      created_at: 2026-09-18T14:38:07.485Z
+      updated_at: 2026-09-18T14:38:07.485Z
+      version: 1
+  timestamp: 2026-11-24T14:30:02.132Z
+  sequenceNumber: 257
+- type: relationship-delete
+  elementId: api.operation.pack-clusters::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.pack-clusters
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:30:02.529Z
+  sequenceNumber: 258
+- type: relationship-delete
+  elementId: api.operation.pack-clusters::realizes::application.applicationfunction.cluster-circle-packing
+  layerName: api
+  before:
+    source: api.operation.pack-clusters
+    target: application.applicationfunction.cluster-circle-packing
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:30:02.912Z
+  sequenceNumber: 259
+- type: relationship-delete
+  elementId: api.operation.pack-clusters::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.pack-clusters
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:30:03.223Z
+  sequenceNumber: 260
+- type: delete
+  elementId: api.operation.build-structural-forest
+  layerName: api
+  before:
+    id: f586314d-8ef0-4bde-86f6-4aafae7cd10b
+    path: api.operation.build-structural-forest
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: buildStructuralForest
+    description: Exported function deriving a parent/child forest from structural edges.
+    attributes:
+      operationId: buildStructuralForest
+      summary: Build a structural parent/child forest from edges
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: buildStructuralForest
+    metadata:
+      created_at: 2026-09-18T14:38:07.807Z
+      updated_at: 2026-09-18T14:38:07.807Z
+      version: 1
+  timestamp: 2026-11-24T14:30:07.057Z
+  sequenceNumber: 261
+- type: relationship-delete
+  elementId: api.operation.build-structural-forest::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.build-structural-forest
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:30:07.268Z
+  sequenceNumber: 262
+- type: relationship-delete
+  elementId: api.operation.build-structural-forest::realizes::application.applicationfunction.structural-forest-construction
+  layerName: api
+  before:
+    source: api.operation.build-structural-forest
+    target: application.applicationfunction.structural-forest-construction
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:30:07.380Z
+  sequenceNumber: 263
+- type: relationship-delete
+  elementId: api.operation.build-structural-forest::references::application.applicationservice.graph-layout-engine-service
+  layerName: api
+  before:
+    source: api.operation.build-structural-forest
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:30:07.555Z
+  sequenceNumber: 264
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-browser-tests::covers::api.operation.build-structural-forest
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-browser-tests
+    target: api.operation.build-structural-forest
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:30:07.708Z
+  sequenceNumber: 265
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::covers::api.operation.build-structural-forest
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: api.operation.build-structural-forest
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:30:07.855Z
+  sequenceNumber: 266
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::api.operation.build-structural-forest
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: api.operation.build-structural-forest
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:30:08.005Z
+  sequenceNumber: 267
+- type: delete
+  elementId: api.operation.visible-navigation-edge-ids
+  layerName: api
+  before:
+    id: 0e5dcb3e-2ecb-473e-900c-bad677db8023
+    path: api.operation.visible-navigation-edge-ids
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: visibleNavigationEdgeIds
+    description: Exported function computing which ux-navigation route edges should
+      be visible for a given hover/collapse state.
+    attributes:
+      operationId: visibleNavigationEdgeIds
+      summary: Compute visible navigation-route edge ids for a hover state
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: visibleNavigationEdgeIds
+    metadata:
+      created_at: 2026-09-18T14:38:08.127Z
+      updated_at: 2026-09-18T14:38:08.127Z
+      version: 1
+  timestamp: 2026-11-24T14:30:10.132Z
+  sequenceNumber: 268
+- type: relationship-delete
+  elementId: api.operation.visible-navigation-edge-ids::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.visible-navigation-edge-ids
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:30:10.342Z
+  sequenceNumber: 269
+- type: relationship-delete
+  elementId: api.operation.visible-navigation-edge-ids::realizes::application.applicationfunction.ux-navigation-tree-layout-algorithm
+  layerName: api
+  before:
+    source: api.operation.visible-navigation-edge-ids
+    target: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    predicate: realizes
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:30:10.698Z
+  sequenceNumber: 270
+- type: relationship-delete
+  elementId: api.operation.visible-navigation-edge-ids::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.visible-navigation-edge-ids
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:30:11.250Z
+  sequenceNumber: 271
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::api.operation.visible-navigation-edge-ids
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: api.operation.visible-navigation-edge-ids
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:30:11.657Z
+  sequenceNumber: 272
+- type: delete
+  elementId: api.operation.use-pan-zoom
+  layerName: api
+  before:
+    id: a736be53-61a4-4b8a-a130-ac39854b4562
+    path: api.operation.use-pan-zoom
+    spec_node_id: api.operation
+    type: operation
+    layer_id: api
+    name: usePanZoom
+    description: Exported React hook implementing wheel/pinch/drag/keyboard
+      pan-and-zoom with inertia.
+    attributes:
+      operationId: usePanZoom
+      summary: Pan/zoom viewport hook with inertia
+      tags: graph
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: usePanZoom
+    metadata:
+      created_at: 2026-09-18T14:38:08.453Z
+      updated_at: 2026-09-18T14:38:08.453Z
+      version: 1
+  timestamp: 2026-11-24T14:30:18.642Z
+  sequenceNumber: 273
+- type: relationship-delete
+  elementId: api.operation.use-pan-zoom::references::api.tag.graph
+  layerName: api
+  before:
+    source: api.operation.use-pan-zoom
+    target: api.tag.graph
+    predicate: references
+    layer: api
+  timestamp: 2026-11-24T14:30:19.116Z
+  sequenceNumber: 274
+- type: relationship-delete
+  elementId: api.operation.use-pan-zoom::references::application.applicationservice.interactive-graph-rendering
+  layerName: api
+  before:
+    source: api.operation.use-pan-zoom
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: references
+    layer: api
+    targetLayer: application
+  timestamp: 2026-11-24T14:30:20.035Z
+  sequenceNumber: 275
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.map-canvas-tests::covers::api.operation.use-pan-zoom
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.map-canvas-tests
+    target: api.operation.use-pan-zoom
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:30:20.792Z
+  sequenceNumber: 276
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.pan-zoom-tests::covers::api.operation.use-pan-zoom
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.pan-zoom-tests
+    target: api.operation.use-pan-zoom
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:30:21.559Z
+  sequenceNumber: 277
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.pan-inertia-tests::covers::api.operation.use-pan-zoom
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.pan-inertia-tests
+    target: api.operation.use-pan-zoom
+    predicate: covers
+    layer: testing
+    targetLayer: api
+  timestamp: 2026-11-24T14:30:22.095Z
+  sequenceNumber: 278
+- type: delete
+  elementId: api.tag.graph
+  layerName: api
+  before:
+    id: 093ad787-9bd6-451f-8756-b4fc263a8508
+    path: api.tag.graph
+    spec_node_id: api.tag
+    type: tag
+    layer_id: api
+    name: graph
+    description: Graph visualization and layout portion of
+      @tinkermonkey/heimdall-ui's public exported API surface (src/index.ts).
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/index.ts
+          symbol: GraphCanvas
+    metadata:
+      created_at: 2026-09-18T14:37:29.385Z
+      updated_at: 2026-09-18T14:37:29.385Z
+      version: 1
+  timestamp: 2026-11-24T14:30:31.356Z
+  sequenceNumber: 279
+- type: relationship-add
+  elementId: application.applicationservice.force-layout::realizes::product.softwarecapability.force-directed-graph-layout
+  layerName: application
+  after:
+    source: application.applicationservice.force-layout
+    target: product.softwarecapability.force-directed-graph-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 280
+- type: relationship-add
+  elementId: application.applicationservice.force-layout::realizes::product.softwarecapability.clustered-force-layout-community-bubbles
+  layerName: application
+  after:
+    source: application.applicationservice.force-layout
+    target: product.softwarecapability.clustered-force-layout-community-bubbles
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 281
+- type: relationship-add
+  elementId: application.applicationservice.galaxy-layout::realizes::product.softwarecapability.galaxy-radial-orbit-layout
+  layerName: application
+  after:
+    source: application.applicationservice.galaxy-layout
+    target: product.softwarecapability.galaxy-radial-orbit-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 282
+- type: relationship-add
+  elementId: application.applicationservice.organic-layout::realizes::product.softwarecapability.organic-graph-layout
+  layerName: application
+  after:
+    source: application.applicationservice.organic-layout
+    target: product.softwarecapability.organic-graph-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 283
+- type: relationship-add
+  elementId: application.applicationservice.orthogonal-layout::realizes::product.softwarecapability.orthogonal-graph-layout
+  layerName: application
+  after:
+    source: application.applicationservice.orthogonal-layout
+    target: product.softwarecapability.orthogonal-graph-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 284
+- type: relationship-add
+  elementId: application.applicationservice.ux-navigation-layout::realizes::product.softwarecapability.ux-navigation-tree-layout
+  layerName: application
+  after:
+    source: application.applicationservice.ux-navigation-layout
+    target: product.softwarecapability.ux-navigation-tree-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 285
+- type: relationship-add
+  elementId: application.applicationservice.ux-navigation-edge-visibility::realizes::product.softwarecapability.ux-navigation-tree-layout
+  layerName: application
+  after:
+    source: application.applicationservice.ux-navigation-edge-visibility
+    target: product.softwarecapability.ux-navigation-tree-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 286
+- type: relationship-add
+  elementId: application.applicationservice.radial-tree-layout::realizes::product.softwarecapability.radial-tree-layout
+  layerName: application
+  after:
+    source: application.applicationservice.radial-tree-layout
+    target: product.softwarecapability.radial-tree-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 287
+- type: relationship-add
+  elementId: application.applicationservice.louvain-clustering::realizes::product.softwarecapability.clustered-force-layout-community-bubbles
+  layerName: application
+  after:
+    source: application.applicationservice.louvain-clustering
+    target: product.softwarecapability.clustered-force-layout-community-bubbles
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 288
+- type: relationship-add
+  elementId: application.applicationservice.cluster-packing::realizes::product.softwarecapability.clustered-force-layout-community-bubbles
+  layerName: application
+  after:
+    source: application.applicationservice.cluster-packing
+    target: product.softwarecapability.clustered-force-layout-community-bubbles
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 289
+- type: relationship-add
+  elementId: application.applicationservice.structural-hierarchy::realizes::product.softwarecapability.interactive-graph-exploration
+  layerName: application
+  after:
+    source: application.applicationservice.structural-hierarchy
+    target: product.softwarecapability.interactive-graph-exploration
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 290
+- type: relationship-add
+  elementId: application.applicationservice.edge-geometry::realizes::product.softwarecapability.interactive-graph-exploration
+  layerName: application
+  after:
+    source: application.applicationservice.edge-geometry
+    target: product.softwarecapability.interactive-graph-exploration
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 291
+- type: relationship-add
+  elementId: application.applicationservice.graph-canvas-context-hook::realizes::product.softwarecapability.interactive-graph-exploration
+  layerName: application
+  after:
+    source: application.applicationservice.graph-canvas-context-hook
+    target: product.softwarecapability.interactive-graph-exploration
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 292
+- type: relationship-add
+  elementId: application.applicationservice.pan-and-zoom-hook::realizes::product.softwarecapability.interactive-graph-exploration
+  layerName: application
+  after:
+    source: application.applicationservice.pan-and-zoom-hook
+    target: product.softwarecapability.interactive-graph-exploration
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 293
+- type: relationship-add
+  elementId: application.applicationservice.lane-layout::realizes::product.softwarecapability.layer-lanes-layout
+  layerName: application
+  after:
+    source: application.applicationservice.lane-layout
+    target: product.softwarecapability.layer-lanes-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 294
+- type: relationship-add
+  elementId: application.applicationservice.layered-graph-utilities::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.layered-graph-utilities
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 295
+- type: relationship-add
+  elementId: application.applicationservice.layered-graph-state-hooks::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.layered-graph-state-hooks
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 296
+- type: relationship-add
+  elementId: application.applicationservice.layered-graph-control-helpers::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.layered-graph-control-helpers
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 297
+- type: relationship-add
+  elementId: application.applicationservice.reach-relationship-helpers::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.reach-relationship-helpers
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 298
+- type: relationship-add
+  elementId: application.applicationservice.layered-graph-explorer-snapshot::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.layered-graph-explorer-snapshot
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 299
+- type: relationship-add
+  elementId: application.applicationservice.adjacency-matrix-link-metadata::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.adjacency-matrix-link-metadata
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 300
+- type: relationship-add
+  elementId: application.applicationservice.tween-animation-hooks::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.tween-animation-hooks
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 301
+- type: relationship-add
+  elementId: application.applicationservice.controllable-state-hook::realizes::product.softwarecapability.layered-graph-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.controllable-state-hook
+    target: product.softwarecapability.layered-graph-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 302
+- type: relationship-add
+  elementId: application.applicationservice.trace-viewer-model::realizes::product.softwarecapability.run-history-and-observability-views
+  layerName: application
+  after:
+    source: application.applicationservice.trace-viewer-model
+    target: product.softwarecapability.run-history-and-observability-views
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 303
+- type: relationship-add
+  elementId: application.applicationservice.otlp-trace-adapter::realizes::product.softwarecapability.run-history-and-observability-views
+  layerName: application
+  after:
+    source: application.applicationservice.otlp-trace-adapter
+    target: product.softwarecapability.run-history-and-observability-views
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 304
+- type: relationship-add
+  elementId: application.applicationservice.x-ray-trace-adapter::realizes::product.softwarecapability.run-history-and-observability-views
+  layerName: application
+  after:
+    source: application.applicationservice.x-ray-trace-adapter
+    target: product.softwarecapability.run-history-and-observability-views
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 305
+- type: relationship-add
+  elementId: application.applicationservice.media-query-hook::realizes::product.softwarecapability.responsive-layout
+  layerName: application
+  after:
+    source: application.applicationservice.media-query-hook
+    target: product.softwarecapability.responsive-layout
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 306
+- type: relationship-add
+  elementId: application.applicationservice.dropdown-portal-containment::realizes::product.softwarecapability.overlays-and-dialogs
+  layerName: application
+  after:
+    source: application.applicationservice.dropdown-portal-containment
+    target: product.softwarecapability.overlays-and-dialogs
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T14:31:20.152Z
+  sequenceNumber: 307
+- type: relationship-add
+  elementId: application.applicationcomponent.consumer-smoke-test-app::uses::application.applicationcomponent.heimdall-ui-package
+  layerName: application
+  after:
+    source: application.applicationcomponent.consumer-smoke-test-app
+    target: application.applicationcomponent.heimdall-ui-package
+    predicate: uses
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:31:56.187Z
+  sequenceNumber: 308
+- type: relationship-add
+  elementId: application.applicationcomponent.test-page-host-app::uses::application.applicationcomponent.heimdall-ui-package
+  layerName: application
+  after:
+    source: application.applicationcomponent.test-page-host-app
+    target: application.applicationcomponent.heimdall-ui-package
+    predicate: uses
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T14:31:56.187Z
+  sequenceNumber: 309

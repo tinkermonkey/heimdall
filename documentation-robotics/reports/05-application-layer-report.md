@@ -16,15 +16,15 @@ Application components, services, and interactions.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 92    |
-| Intra-Layer Relationships | 128   |
-| Inter-Layer Relationships | 363   |
-| Inbound Relationships     | 282   |
-| Outbound Relationships    | 81    |
+| Elements                  | 120   |
+| Intra-Layer Relationships | 199   |
+| Inter-Layer Relationships | 382   |
+| Inbound Relationships     | 262   |
+| Outbound Relationships    | 120   |
 
 **Cross-Layer References**:
 
-- **Upstream layers**: [API](./07-api-layer-report.md), [Data Model](./08-data-model-layer-report.md), [Navigation](./11-navigation-layer-report.md), [Technology](./06-technology-layer-report.md), [Testing](./13-testing-layer-report.md)
+- **Upstream layers**: [Data Model](./08-data-model-layer-report.md), [Navigation](./11-navigation-layer-report.md), [Technology](./06-technology-layer-report.md), [Testing](./13-testing-layer-report.md)
 - **Downstream layers**: [Business](./02-business-layer-report.md), [Data Model](./08-data-model-layer-report.md), [Motivation](./01-motivation-layer-report.md), [Product](./03-product-layer-report.md)
 
 ## Intra-Layer Relationships
@@ -34,7 +34,7 @@ Application components, services, and interactions.
 | Element                                                                          | Type                       | Relationships |
 | -------------------------------------------------------------------------------- | -------------------------- | ------------- |
 | `application.applicationcollaboration.graph-canvas-layoutviewport-collaboration` | `applicationcollaboration` | 4             |
-| `application.applicationcomponent.consumer-smoke-test-app`                       | `applicationcomponent`     | 1             |
+| `application.applicationcomponent.consumer-smoke-test-app`                       | `applicationcomponent`     | 2             |
 | `application.applicationcomponent.graph-canvas-component`                        | `applicationcomponent`     | 30            |
 | `application.applicationcomponent.graph-collapse-control-component`              | `applicationcomponent`     | 2             |
 | `application.applicationcomponent.graph-edge-component`                          | `applicationcomponent`     | 5             |
@@ -43,7 +43,8 @@ Application components, services, and interactions.
 | `application.applicationcomponent.graph-inspector-component`                     | `applicationcomponent`     | 2             |
 | `application.applicationcomponent.graph-node-component`                          | `applicationcomponent`     | 3             |
 | `application.applicationcomponent.graph-toolbar-component`                       | `applicationcomponent`     | 2             |
-| `application.applicationcomponent.test-page-host-app`                            | `applicationcomponent`     | 1             |
+| `application.applicationcomponent.heimdall-ui-package`                           | `applicationcomponent`     | 41            |
+| `application.applicationcomponent.test-page-host-app`                            | `applicationcomponent`     | 2             |
 | `application.applicationevent.background-click-event`                            | `applicationevent`         | 0             |
 | `application.applicationevent.collapse-toggle-event`                             | `applicationevent`         | 0             |
 | `application.applicationevent.edge-hover-change-event`                           | `applicationevent`         | 0             |
@@ -54,75 +55,102 @@ Application components, services, and interactions.
 | `application.applicationevent.viewport-dwell-event`                              | `applicationevent`         | 0             |
 | `application.applicationevent.viewport-navigate-event`                           | `applicationevent`         | 0             |
 | `application.applicationfunction.adjacency-matrix-ordering`                      | `applicationfunction`      | 1             |
-| `application.applicationfunction.animated-tween`                                 | `applicationfunction`      | 1             |
+| `application.applicationfunction.animated-tween`                                 | `applicationfunction`      | 2             |
 | `application.applicationfunction.async-layer-layout`                             | `applicationfunction`      | 1             |
 | `application.applicationfunction.batched-link-path-drawing`                      | `applicationfunction`      | 1             |
 | `application.applicationfunction.bezier-edge-path-computation`                   | `applicationfunction`      | 4             |
 | `application.applicationfunction.body-scroll-lock`                               | `applicationfunction`      | 1             |
-| `application.applicationfunction.cluster-circle-packing`                         | `applicationfunction`      | 2             |
-| `application.applicationfunction.clustered-force-layout-algorithm`               | `applicationfunction`      | 5             |
-| `application.applicationfunction.controllable-state`                             | `applicationfunction`      | 1             |
+| `application.applicationfunction.cluster-circle-packing`                         | `applicationfunction`      | 3             |
+| `application.applicationfunction.clustered-force-layout-algorithm`               | `applicationfunction`      | 6             |
+| `application.applicationfunction.controllable-state`                             | `applicationfunction`      | 2             |
 | `application.applicationfunction.dropdown-menu-keyboard-navigation`              | `applicationfunction`      | 1             |
 | `application.applicationfunction.dropdown-portal-placement`                      | `applicationfunction`      | 1             |
-| `application.applicationfunction.edge-label-clear-position-search`               | `applicationfunction`      | 5             |
+| `application.applicationfunction.edge-label-clear-position-search`               | `applicationfunction`      | 6             |
 | `application.applicationfunction.edge-stroke-styling`                            | `applicationfunction`      | 2             |
 | `application.applicationfunction.focus-trap`                                     | `applicationfunction`      | 1             |
-| `application.applicationfunction.force-directed-layout-algorithm`                | `applicationfunction`      | 6             |
+| `application.applicationfunction.force-directed-layout-algorithm`                | `applicationfunction`      | 7             |
 | `application.applicationfunction.galaxy-aspect-ratio-resolution`                 | `applicationfunction`      | 3             |
 | `application.applicationfunction.galaxy-live-simulation-step`                    | `applicationfunction`      | 4             |
-| `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`           | `applicationfunction`      | 5             |
+| `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`           | `applicationfunction`      | 6             |
 | `application.applicationfunction.heatmap-color-scaling`                          | `applicationfunction`      | 1             |
-| `application.applicationfunction.hive-plot-geometry`                             | `applicationfunction`      | 1             |
+| `application.applicationfunction.hive-plot-geometry`                             | `applicationfunction`      | 2             |
 | `application.applicationfunction.joint-edge-label-placement`                     | `applicationfunction`      | 3             |
-| `application.applicationfunction.layer-placement-layout`                         | `applicationfunction`      | 3             |
-| `application.applicationfunction.layer-stack-projection-and-camera`              | `applicationfunction`      | 1             |
-| `application.applicationfunction.layered-graph-snapshot-sanitizing`              | `applicationfunction`      | 1             |
-| `application.applicationfunction.layered-graph-state`                            | `applicationfunction`      | 1             |
-| `application.applicationfunction.layered-index-building`                         | `applicationfunction`      | 2             |
-| `application.applicationfunction.link-and-node-emphasis-styling`                 | `applicationfunction`      | 1             |
-| `application.applicationfunction.link-visibility-filtering`                      | `applicationfunction`      | 1             |
-| `application.applicationfunction.louvain-community-clustering`                   | `applicationfunction`      | 2             |
-| `application.applicationfunction.media-query-tracking`                           | `applicationfunction`      | 1             |
+| `application.applicationfunction.layer-placement-layout`                         | `applicationfunction`      | 4             |
+| `application.applicationfunction.layer-stack-projection-and-camera`              | `applicationfunction`      | 2             |
+| `application.applicationfunction.layered-graph-snapshot-sanitizing`              | `applicationfunction`      | 2             |
+| `application.applicationfunction.layered-graph-state`                            | `applicationfunction`      | 2             |
+| `application.applicationfunction.layered-index-building`                         | `applicationfunction`      | 3             |
+| `application.applicationfunction.link-and-node-emphasis-styling`                 | `applicationfunction`      | 2             |
+| `application.applicationfunction.link-visibility-filtering`                      | `applicationfunction`      | 2             |
+| `application.applicationfunction.louvain-community-clustering`                   | `applicationfunction`      | 3             |
+| `application.applicationfunction.media-query-tracking`                           | `applicationfunction`      | 2             |
 | `application.applicationfunction.modified-click-link-handling`                   | `applicationfunction`      | 1             |
 | `application.applicationfunction.navigation-edge-orthogonal-routing`             | `applicationfunction`      | 2             |
 | `application.applicationfunction.node-overlap-separation-pass`                   | `applicationfunction`      | 4             |
 | `application.applicationfunction.node-pointer-handling`                          | `applicationfunction`      | 4             |
-| `application.applicationfunction.organic-layout-algorithm`                       | `applicationfunction`      | 2             |
+| `application.applicationfunction.organic-layout-algorithm`                       | `applicationfunction`      | 3             |
 | `application.applicationfunction.orthogonal-channel-routing`                     | `applicationfunction`      | 1             |
-| `application.applicationfunction.orthogonal-layout-algorithm`                    | `applicationfunction`      | 2             |
-| `application.applicationfunction.otlp-trace-adapter`                             | `applicationfunction`      | 1             |
+| `application.applicationfunction.orthogonal-layout-algorithm`                    | `applicationfunction`      | 3             |
+| `application.applicationfunction.otlp-trace-adapter`                             | `applicationfunction`      | 2             |
 | `application.applicationfunction.paint-deferred-scheduling`                      | `applicationfunction`      | 1             |
 | `application.applicationfunction.painter-depth-reordering`                       | `applicationfunction`      | 1             |
 | `application.applicationfunction.pan-inertia-glide`                              | `applicationfunction`      | 1             |
-| `application.applicationfunction.predicate-label-placement`                      | `applicationfunction`      | 2             |
-| `application.applicationfunction.radial-tree-layout-algorithm`                   | `applicationfunction`      | 3             |
-| `application.applicationfunction.selection-reach-computation`                    | `applicationfunction`      | 1             |
+| `application.applicationfunction.predicate-label-placement`                      | `applicationfunction`      | 3             |
+| `application.applicationfunction.radial-tree-layout-algorithm`                   | `applicationfunction`      | 4             |
+| `application.applicationfunction.selection-reach-computation`                    | `applicationfunction`      | 2             |
 | `application.applicationfunction.static-date-formatting`                         | `applicationfunction`      | 1             |
-| `application.applicationfunction.structural-descendant-lookup`                   | `applicationfunction`      | 1             |
-| `application.applicationfunction.structural-forest-construction`                 | `applicationfunction`      | 4             |
-| `application.applicationfunction.swimlane-layer-layout`                          | `applicationfunction`      | 1             |
-| `application.applicationfunction.trace-model-building`                           | `applicationfunction`      | 1             |
-| `application.applicationfunction.ux-navigation-tree-layout-algorithm`            | `applicationfunction`      | 3             |
+| `application.applicationfunction.structural-descendant-lookup`                   | `applicationfunction`      | 2             |
+| `application.applicationfunction.structural-forest-construction`                 | `applicationfunction`      | 5             |
+| `application.applicationfunction.swimlane-layer-layout`                          | `applicationfunction`      | 2             |
+| `application.applicationfunction.trace-model-building`                           | `applicationfunction`      | 2             |
+| `application.applicationfunction.ux-navigation-tree-layout-algorithm`            | `applicationfunction`      | 5             |
 | `application.applicationfunction.virtualized-list-windowing`                     | `applicationfunction`      | 1             |
-| `application.applicationfunction.x-ray-trace-adapter`                            | `applicationfunction`      | 1             |
+| `application.applicationfunction.x-ray-trace-adapter`                            | `applicationfunction`      | 2             |
 | `application.applicationinteraction.panzoom-gesture-handling`                    | `applicationinteraction`   | 2             |
 | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline`  | `applicationprocess`       | 8             |
-| `application.applicationservice.app-shell-components`                            | `applicationservice`       | 0             |
-| `application.applicationservice.chart-components`                                | `applicationservice`       | 0             |
-| `application.applicationservice.chat-components`                                 | `applicationservice`       | 0             |
-| `application.applicationservice.data-display-components`                         | `applicationservice`       | 1             |
-| `application.applicationservice.form-input-components`                           | `applicationservice`       | 2             |
+| `application.applicationservice.adjacency-matrix-link-metadata`                  | `applicationservice`       | 1             |
+| `application.applicationservice.app-shell-components`                            | `applicationservice`       | 1             |
+| `application.applicationservice.chart-components`                                | `applicationservice`       | 1             |
+| `application.applicationservice.chat-components`                                 | `applicationservice`       | 1             |
+| `application.applicationservice.cluster-packing`                                 | `applicationservice`       | 2             |
+| `application.applicationservice.controllable-state-hook`                         | `applicationservice`       | 2             |
+| `application.applicationservice.data-display-components`                         | `applicationservice`       | 2             |
+| `application.applicationservice.dropdown-portal-containment`                     | `applicationservice`       | 1             |
+| `application.applicationservice.edge-geometry`                                   | `applicationservice`       | 2             |
+| `application.applicationservice.force-layout`                                    | `applicationservice`       | 3             |
+| `application.applicationservice.form-input-components`                           | `applicationservice`       | 3             |
+| `application.applicationservice.galaxy-layout`                                   | `applicationservice`       | 2             |
+| `application.applicationservice.graph-canvas-context-hook`                       | `applicationservice`       | 1             |
 | `application.applicationservice.graph-layout-engine-service`                     | `applicationservice`       | 19            |
 | `application.applicationservice.interactive-graph-rendering`                     | `applicationservice`       | 18            |
+| `application.applicationservice.lane-layout`                                     | `applicationservice`       | 2             |
+| `application.applicationservice.layered-graph-control-helpers`                   | `applicationservice`       | 1             |
+| `application.applicationservice.layered-graph-explorer-snapshot`                 | `applicationservice`       | 1             |
+| `application.applicationservice.layered-graph-state-hooks`                       | `applicationservice`       | 2             |
+| `application.applicationservice.layered-graph-utilities`                         | `applicationservice`       | 10            |
 | `application.applicationservice.layered-graph-visualization`                     | `applicationservice`       | 19            |
-| `application.applicationservice.layout-components`                               | `applicationservice`       | 1             |
+| `application.applicationservice.layout-components`                               | `applicationservice`       | 2             |
 | `application.applicationservice.live-galaxy-simulation-service`                  | `applicationservice`       | 4             |
-| `application.applicationservice.navigation-components`                           | `applicationservice`       | 1             |
-| `application.applicationservice.observability-view-components`                   | `applicationservice`       | 4             |
-| `application.applicationservice.overlay-components`                              | `applicationservice`       | 2             |
-| `application.applicationservice.page-pattern-components`                         | `applicationservice`       | 0             |
-| `application.applicationservice.planning-components`                             | `applicationservice`       | 1             |
-| `application.applicationservice.primitive-components`                            | `applicationservice`       | 0             |
+| `application.applicationservice.louvain-clustering`                              | `applicationservice`       | 2             |
+| `application.applicationservice.media-query-hook`                                | `applicationservice`       | 2             |
+| `application.applicationservice.navigation-components`                           | `applicationservice`       | 2             |
+| `application.applicationservice.observability-view-components`                   | `applicationservice`       | 5             |
+| `application.applicationservice.organic-layout`                                  | `applicationservice`       | 2             |
+| `application.applicationservice.orthogonal-layout`                               | `applicationservice`       | 2             |
+| `application.applicationservice.otlp-trace-adapter`                              | `applicationservice`       | 2             |
+| `application.applicationservice.overlay-components`                              | `applicationservice`       | 3             |
+| `application.applicationservice.page-pattern-components`                         | `applicationservice`       | 1             |
+| `application.applicationservice.pan-and-zoom-hook`                               | `applicationservice`       | 1             |
+| `application.applicationservice.planning-components`                             | `applicationservice`       | 2             |
+| `application.applicationservice.primitive-components`                            | `applicationservice`       | 1             |
+| `application.applicationservice.radial-tree-layout`                              | `applicationservice`       | 2             |
+| `application.applicationservice.reach-relationship-helpers`                      | `applicationservice`       | 1             |
+| `application.applicationservice.structural-hierarchy`                            | `applicationservice`       | 3             |
+| `application.applicationservice.trace-viewer-model`                              | `applicationservice`       | 2             |
+| `application.applicationservice.tween-animation-hooks`                           | `applicationservice`       | 2             |
+| `application.applicationservice.ux-navigation-edge-visibility`                   | `applicationservice`       | 2             |
+| `application.applicationservice.ux-navigation-layout`                            | `applicationservice`       | 2             |
+| `application.applicationservice.x-ray-trace-adapter`                             | `applicationservice`       | 2             |
 | `application.dataobject.node-position-map`                                       | `dataobject`               | 7             |
 | `application.dataobject.node-rect-registry`                                      | `dataobject`               | 4             |
 
@@ -144,7 +172,6 @@ flowchart TB
   navigation["Navigation"]
   apm["APM"]
   testing["Testing"]
-  api --> application
   application --> business
   application --> data_model
   application --> motivation
@@ -160,44 +187,6 @@ flowchart TB
 
 | Relationship ID                                                         | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer    | Predicate    | Cardinality  | Strength |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------------ | ------------ | -------- |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.build-structural-forest`                                                                                               | `application.applicationfunction.structural-forest-construction`                            | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.build-structural-forest`                                                                                               | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.clustered-force-layout`                                                                                                | `application.applicationfunction.clustered-force-layout-algorithm`                          | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.clustered-force-layout`                                                                                                | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.force-layout`                                                                                                          | `application.applicationfunction.force-directed-layout-algorithm`                           | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.force-layout`                                                                                                          | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.galaxy-layout`                                                                                                         | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`                      | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.galaxy-layout`                                                                                                         | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-canvas`                                                                                                          | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-canvas`                                                                                                          | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-canvas`                                                                                                          | `application.applicationservice.live-galaxy-simulation-service`                             | `application` | `references` | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.background-click-event`                                       | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.collapse-toggle-event`                                        | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.edge-hover-change-event`                                      | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.edge-select-event`                                            | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.layout-state-change-event`                                    | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.node-drag-end-event`                                          | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.node-hover-change-event`                                      | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.viewport-dwell-event`                                         | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.triggers.application.applicationevent`                   | `api.operation.graph-canvas`                                                                                                          | `application.applicationevent.viewport-navigate-event`                                      | `application` | `triggers`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-collapse-control`                                                                                                | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-edge-inspector`                                                                                                  | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-edge`                                                                                                            | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-edge-shape`                                                                                                      | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-inspector`                                                                                                       | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-node`                                                                                                            | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.graph-toolbar`                                                                                                         | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.louvain-cluster`                                                                                                       | `application.applicationfunction.louvain-community-clustering`                              | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.louvain-cluster`                                                                                                       | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.pack-clusters`                                                                                                         | `application.applicationfunction.cluster-circle-packing`                                    | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.pack-clusters`                                                                                                         | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.radial-tree-layout`                                                                                                    | `application.applicationfunction.radial-tree-layout-algorithm`                              | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.radial-tree-layout`                                                                                                    | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.use-pan-zoom`                                                                                                          | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.ux-nav-layout`                                                                                                         | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                       | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.ux-nav-layout`                                                                                                         | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`                | `api.operation.visible-navigation-edge-ids`                                                                                           | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                       | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice`               | `api.operation.visible-navigation-edge-ids`                                                                                           | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
 | `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`                                                                             | `data-model.schemadefinition.edge-geometry`                                                 | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`                                                                             | `data-model.schemadefinition.graph-edge-data-shape`                                         | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`                                                                             | `data-model.schemadefinition.graph-layout-state`                                            | `data-model`  | `accesses`   | many-to-many | medium   |
@@ -241,21 +230,34 @@ flowchart TB
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.navigation-edge-orthogonal-routing`                                                                  | `motivation.requirement.navigation-routing-stays-within-its-time-budget`                    | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.node-overlap-separation-pass`                                                                        | `data-model.schemadefinition.layout-node`                                                   | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.node-overlap-separation-pass`                                                                        | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`                                                                            | `data-model.schemadefinition.organic-layout-options`                                        | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.organic-layout-algorithm`                                                                            | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.organic-layout-algorithm`                                                                            | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`                                                                         | `data-model.schemadefinition.orthogonal-layout-options`                                     | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.orthogonal-layout-algorithm`                                                                         | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adapter`                                                                                  | `data-model.schemadefinition.otlp-traces-data`                                              | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.radial-tree-layout-algorithm`                                                                        | `data-model.schemadefinition.radial-tree-layout-result`                                     | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.realizes.business.businessfunction`    | `application.applicationfunction.radial-tree-layout-algorithm`                                                                        | `business.businessfunction.automatic-node-layout-computation`                               | `business`    | `realizes`   | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.radial-tree-layout-algorithm`                                                                        | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`                                                                      | `data-model.schemadefinition.hierarchy-edge`                                                | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`                                                                      | `data-model.schemadefinition.structural-forest`                                             | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.realizes.business.businessfunction`    | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                                                                 | `business.businessfunction.automatic-node-layout-computation`                               | `business`    | `realizes`   | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.x-ray-trace-adapter`                                                                                 | `data-model.schemadefinition.xray-segment`                                                  | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationprocess.realizes.business.businessprocess`      | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline`                                                       | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`                | `business`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.adjacency-matrix-link-metadata`                                                                       | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.app-shell-components`                                                                                 | `product.softwarecapability.app-shell`                                                      | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.chart-components`                                                                                     | `product.softwarecapability.charting`                                                       | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.chat-components`                                                                                      | `product.softwarecapability.chat-ui`                                                        | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.cluster-packing`                                                                                      | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.controllable-state-hook`                                                                              | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.data-display-components`                                                                              | `product.softwarecapability.data-display`                                                   | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.dropdown-portal-containment`                                                                          | `product.softwarecapability.overlays-and-dialogs`                                           | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.edge-geometry`                                                                                        | `product.softwarecapability.interactive-graph-exploration`                                  | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.force-layout`                                                                                         | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.force-layout`                                                                                         | `product.softwarecapability.force-directed-graph-layout`                                    | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.form-input-components`                                                                                | `product.softwarecapability.form-input`                                                     | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.galaxy-layout`                                                                                        | `product.softwarecapability.galaxy-radial-orbit-layout`                                     | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.graph-canvas-context-hook`                                                                            | `product.softwarecapability.interactive-graph-exploration`                                  | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.business.businessservice`      | `application.applicationservice.graph-layout-engine-service`                                                                          | `business.businessservice.hierarchical-and-navigation-structure-visualization`              | `business`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.business.businessservice`      | `application.applicationservice.graph-layout-engine-service`                                                                          | `business.businessservice.large-graph-visualization`                                        | `business`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`     | `realizes`   | many-to-many | medium   |
@@ -268,17 +270,43 @@ flowchart TB
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.graph-layout-engine-service`                                                                          | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.satisfies.motivation.requirement`       | `application.applicationservice.graph-layout-engine-service`                                                                          | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationservice.serves.business.businessprocess`        | `application.applicationservice.graph-layout-engine-service`                                                                          | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`                | `business`    | `serves`     | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.edge-selection-and-inspection`                                             | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.fullscreen-canvas`                                                         | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.layout-progress-indicator`                                                 | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.live-draggable-galaxy-simulation`                                          | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.progressive-disclosure-via-node-collapseexpand`                            | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.feature.viewport-history-and-restore`                                              | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.interactive-graph-rendering`                                                                          | `product.softwarecapability.interactive-graph-exploration`                                  | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.lane-layout`                                                                                          | `product.softwarecapability.layer-lanes-layout`                                             | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.layered-graph-control-helpers`                                                                        | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.layered-graph-explorer-snapshot`                                                                      | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.layered-graph-state-hooks`                                                                            | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.layered-graph-utilities`                                                                              | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.layered-graph-visualization`                                                                          | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.satisfies.motivation.constraint`        | `application.applicationservice.layered-graph-visualization`                                                                          | `motivation.constraint.layer-stack-draws-links-as-batched-svg-paths-not-canvas`             | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.layout-components`                                                                                    | `product.softwarecapability.responsive-layout`                                              | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.feature`               | `application.applicationservice.live-galaxy-simulation-service`                                                                       | `product.feature.live-draggable-galaxy-simulation`                                          | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.louvain-clustering`                                                                                   | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.media-query-hook`                                                                                     | `product.softwarecapability.responsive-layout`                                              | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.navigation-components`                                                                                | `product.softwarecapability.app-navigation`                                                 | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.observability-view-components`                                                                        | `product.softwarecapability.run-history-and-observability-views`                            | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.organic-layout`                                                                                       | `product.softwarecapability.organic-graph-layout`                                           | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.orthogonal-layout`                                                                                    | `product.softwarecapability.orthogonal-graph-layout`                                        | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.otlp-trace-adapter`                                                                                   | `product.softwarecapability.run-history-and-observability-views`                            | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.overlay-components`                                                                                   | `product.softwarecapability.overlays-and-dialogs`                                           | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.page-pattern-components`                                                                              | `product.softwarecapability.page-patterns`                                                  | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.pan-and-zoom-hook`                                                                                    | `product.softwarecapability.interactive-graph-exploration`                                  | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.planning-components`                                                                                  | `product.softwarecapability.planning-and-scheduling`                                        | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.primitive-components`                                                                                 | `product.softwarecapability.ui-primitives`                                                  | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.radial-tree-layout`                                                                                   | `product.softwarecapability.radial-tree-layout`                                             | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.reach-relationship-helpers`                                                                           | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.structural-hierarchy`                                                                                 | `product.softwarecapability.interactive-graph-exploration`                                  | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.trace-viewer-model`                                                                                   | `product.softwarecapability.run-history-and-observability-views`                            | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.tween-animation-hooks`                                                                                | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.ux-navigation-edge-visibility`                                                                        | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.ux-navigation-layout`                                                                                 | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.x-ray-trace-adapter`                                                                                  | `product.softwarecapability.run-history-and-observability-views`                            | `product`     | `realizes`   | many-to-many | medium   |
 | `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.graph-node-data`                                                                                         | `application.dataobject.node-rect-registry`                                                 | `application` | `realizes`   | many-to-many | medium   |
 | `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.layout-node`                                                                                             | `application.dataobject.node-position-map`                                                  | `application` | `realizes`   | many-to-many | medium   |
 | `navigation.route.depends-on.application.applicationcomponent`          | `navigation.route.test-page-example-route`                                                                                            | `application.applicationcomponent.test-page-host-app`                                       | `application` | `depends-on` | many-to-many | medium   |
@@ -290,6 +318,7 @@ flowchart TB
 | `technology.artifact.realizes.application.applicationcomponent`         | `technology.artifact.heimdall-ui-package`                                                                                             | `application.applicationcomponent.graph-inspector-component`                                | `application` | `realizes`   | many-to-many | medium   |
 | `technology.artifact.realizes.application.applicationcomponent`         | `technology.artifact.heimdall-ui-package`                                                                                             | `application.applicationcomponent.graph-node-component`                                     | `application` | `realizes`   | many-to-many | medium   |
 | `technology.artifact.realizes.application.applicationcomponent`         | `technology.artifact.heimdall-ui-package`                                                                                             | `application.applicationcomponent.graph-toolbar-component`                                  | `application` | `realizes`   | many-to-many | medium   |
+| `technology.artifact.realizes.application.applicationcomponent`         | `technology.artifact.heimdall-ui-package`                                                                                             | `application.applicationcomponent.heimdall-ui-package`                                      | `application` | `realizes`   | many-to-many | medium   |
 | `technology.systemsoftware.serves.application.applicationcomponent`     | `technology.systemsoftware.web-browser`                                                                                               | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `serves`     | many-to-many | medium   |
 | `technology.systemsoftware.serves.application.applicationcomponent`     | `technology.systemsoftware.web-browser`                                                                                               | `application.applicationcomponent.graph-collapse-control-component`                         | `application` | `serves`     | many-to-many | medium   |
 | `technology.systemsoftware.serves.application.applicationcomponent`     | `technology.systemsoftware.web-browser`                                                                                               | `application.applicationcomponent.graph-edge-component`                                     | `application` | `serves`     | many-to-many | medium   |
@@ -484,13 +513,19 @@ flowchart TB
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.edge-label-placement-and-styling`                                                                         | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `application.applicationcomponent.graph-node-component`                                     | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `application.applicationservice.force-layout`                                               | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `application.applicationservice.graph-layout-engine-service`                                | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.fullscreen-container-ref-tests`                                                                           | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `application.applicationservice.galaxy-layout`                                              | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `application.applicationservice.live-galaxy-simulation-service`                             | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.galaxy-layout-browser-tests`                                                                              | `application.applicationservice.galaxy-layout`                                              | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.galaxy-layout-browser-tests`                                                                              | `application.applicationservice.structural-hierarchy`                                       | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                                                                             | `application.applicationcomponent.graph-collapse-control-component`                         | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                                                                             | `application.applicationcomponent.graph-node-component`                                     | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.galaxy-layout-tests`                                                                                      | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.galaxy-layout-tests`                                                                                      | `application.applicationservice.galaxy-layout`                                              | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.galaxy-live-drag-tests`                                                                                   | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.galaxy-live-drag-tests`                                                                                   | `application.applicationservice.galaxy-layout`                                              | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-a11y-names-tests`                                                                                   | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-a11y-names-tests`                                                                                   | `application.applicationcomponent.graph-edge-shape-component`                               | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                                                                         | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
@@ -500,8 +535,11 @@ flowchart TB
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `application.applicationcomponent.graph-inspector-component`                                | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `application.applicationcomponent.graph-node-component`                                     | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `application.applicationcomponent.graph-toolbar-component`                                  | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `application.applicationservice.force-layout`                                               | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `application.applicationservice.galaxy-layout`                                              | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-edge-geometry-utilities`                                                                            | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-edge-label-tests`                                                                                   | `application.applicationcomponent.graph-node-component`                                     | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.graph-edge-label-tests`                                                                                   | `application.applicationservice.force-layout`                                               | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-fit-boundaries-tests`                                                                               | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-layout-busy-tests`                                                                                  | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.graph-node-measure-tests`                                                                                 | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
@@ -512,17 +550,25 @@ flowchart TB
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.layered-matrix-tests`                                                                                     | `application.applicationcomponent.graph-edge-inspector-component`                           | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.layered-tests`                                                                                            | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.layered-tests`                                                                                            | `application.applicationcomponent.graph-edge-component`                                     | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.map-canvas-tests`                                                                                         | `application.applicationservice.pan-and-zoom-hook`                                          | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.navigation-edge-channel-routing`                                                                          | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.organic-layout-tests`                                                                                     | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.orthogonal-layout-tests`                                                                                  | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.pan-inertia-tests`                                                                                        | `application.applicationservice.pan-and-zoom-hook`                                          | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.pan-zoom-tests`                                                                                           | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.pan-zoom-tests`                                                                                           | `application.applicationservice.pan-and-zoom-hook`                                          | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `application.applicationservice.graph-layout-engine-service`                                | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `application.applicationservice.radial-tree-layout`                                         | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `application.applicationservice.structural-hierarchy`                                       | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.reach-inspector-tests`                                                                                    | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.reach-inspector-tests`                                                                                    | `application.applicationcomponent.graph-edge-component`                                     | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`                                                                             | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`                                                                             | `application.applicationcomponent.graph-edge-component`                                     | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`                                                                             | `application.applicationservice.structural-hierarchy`                                       | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`                                                                             | `application.applicationservice.ux-navigation-edge-visibility`                              | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.ux-nav-layout-tests`                                                                                      | `application.applicationcomponent.graph-canvas-component`                                   | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.ux-nav-layout-tests`                                                                                      | `application.applicationservice.ux-navigation-layout`                                       | `application` | `covers`     | many-to-many | medium   |
 
 ## Element Reference
 
@@ -562,6 +608,7 @@ test-app/: a separate Vite app that installs the package as a consumer would (fi
 | Type        | Related Element                                           | Predicate | Direction |
 | ----------- | --------------------------------------------------------- | --------- | --------- |
 | intra-layer | `application.applicationcomponent.graph-canvas-component` | `uses`    | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`    | `uses`    | outbound  |
 
 ### GraphCanvas Component {#graphcanvas-component}
 
@@ -891,6 +938,67 @@ Floating zoom in/out/fit, pan-lock, fullscreen, and (layout=galaxy only) live-si
 | intra-layer | `application.applicationcomponent.graph-canvas-component`           | `uses`     | inbound   |
 | intra-layer | `application.applicationservice.interactive-graph-rendering`        | `realizes` | outbound  |
 
+### Heimdall UI Package {#heimdall-ui-package}
+
+**ID**: `application.applicationcomponent.heimdall-ui-package`
+
+**Type**: `applicationcomponent`
+
+The published library @tinkermonkey/heimdall-ui: an ESM package built to dist/ whose public entry point is src/index.ts (the `.` export in package.json). It ships the React UI components (modelled in the ux layer), the layout engines, layered-graph utilities and hooks offered as application services, and the CSS and font assets (technology artifacts).
+
+#### Attributes
+
+| Name | Value    |
+| ---- | -------- |
+| type | internal |
+
+#### Relationships
+
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `technology.artifact.heimdall-ui-package`                        | `realizes` | inbound   |
+| intra-layer | `application.applicationcomponent.consumer-smoke-test-app`       | `uses`     | inbound   |
+| intra-layer | `application.applicationservice.adjacency-matrix-link-metadata`  | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.app-shell-components`            | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.chart-components`                | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.chat-components`                 | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.cluster-packing`                 | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.controllable-state-hook`         | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.data-display-components`         | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.dropdown-portal-containment`     | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.edge-geometry`                   | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.force-layout`                    | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.form-input-components`           | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.galaxy-layout`                   | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.graph-canvas-context-hook`       | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.lane-layout`                     | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.layered-graph-control-helpers`   | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.layered-graph-explorer-snapshot` | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.layered-graph-state-hooks`       | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.layered-graph-utilities`         | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.layout-components`               | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.louvain-clustering`              | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.media-query-hook`                | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.navigation-components`           | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.observability-view-components`   | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.organic-layout`                  | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.orthogonal-layout`               | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.otlp-trace-adapter`              | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.overlay-components`              | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.page-pattern-components`         | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.pan-and-zoom-hook`               | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.planning-components`             | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.primitive-components`            | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.radial-tree-layout`              | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.reach-relationship-helpers`      | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.structural-hierarchy`            | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.trace-viewer-model`              | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.tween-animation-hooks`           | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.ux-navigation-edge-visibility`   | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.ux-navigation-layout`            | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.x-ray-trace-adapter`             | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.test-page-host-app`            | `uses`     | inbound   |
+
 ### Test Page Host App {#test-page-host-app}
 
 **ID**: `application.applicationcomponent.test-page-host-app`
@@ -911,6 +1019,7 @@ The repo-root Vite dev app (index.html, src/main.tsx, src/App.tsx): renders one 
 | ----------- | --------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `navigation.route.test-page-example-route`                | `depends-on` | inbound   |
 | intra-layer | `application.applicationcomponent.graph-canvas-component` | `uses`       | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`    | `uses`       | outbound  |
 
 ### Background Click Event {#background-click-event}
 
@@ -926,12 +1035,6 @@ onBackgroundClick(): a click on empty canvas, used by callers to clear selection
 | --------- | ------ |
 | eventType | domain |
 
-#### Relationships
-
-| Type        | Related Element              | Predicate  | Direction |
-| ----------- | ---------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas` | `triggers` | inbound   |
-
 ### Collapse Toggle Event {#collapse-toggle-event}
 
 **ID**: `application.applicationevent.collapse-toggle-event`
@@ -945,12 +1048,6 @@ onToggleCollapse(nodeId): the user asked to collapse or expand a node; the calle
 | Name      | Value  |
 | --------- | ------ |
 | eventType | domain |
-
-#### Relationships
-
-| Type        | Related Element              | Predicate  | Direction |
-| ----------- | ---------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas` | `triggers` | inbound   |
 
 ### Edge Hover Change Event {#edge-hover-change-event}
 
@@ -966,12 +1063,6 @@ onEdgeHover(edgeId \| undefined): pointer enters or leaves an edge's hit path; d
 | --------- | ------ |
 | eventType | domain |
 
-#### Relationships
-
-| Type        | Related Element              | Predicate  | Direction |
-| ----------- | ---------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas` | `triggers` | inbound   |
-
 ### Edge Select Event {#edge-select-event}
 
 **ID**: `application.applicationevent.edge-select-event`
@@ -985,12 +1076,6 @@ onEdgeSelect(edgeId): fired when an edge is clicked or activated by keyboard; dr
 | Name      | Value  |
 | --------- | ------ |
 | eventType | domain |
-
-#### Relationships
-
-| Type        | Related Element              | Predicate  | Direction |
-| ----------- | ---------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas` | `triggers` | inbound   |
 
 ### Layout State Change Event {#layout-state-change-event}
 
@@ -1010,7 +1095,6 @@ onLayoutStateChange(state): GraphCanvas moved between idle, computing and simula
 
 | Type        | Related Element                                  | Predicate  | Direction |
 | ----------- | ------------------------------------------------ | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                     | `triggers` | inbound   |
 | inter-layer | `data-model.schemadefinition.graph-layout-state` | `accesses` | outbound  |
 
 ### Node Drag End Event {#node-drag-end-event}
@@ -1031,7 +1115,6 @@ onNodeDragEnd callback fired once a node drag ends past DRAG_THRESHOLD, carrying
 
 | Type        | Related Element                                                                 | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                                                    | `triggers` | inbound   |
 | intra-layer | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline` | `triggers` | outbound  |
 | intra-layer | `application.applicationfunction.node-pointer-handling`                         | `triggers` | inbound   |
 
@@ -1053,7 +1136,6 @@ onNodeHover callback fired with a node's id on pointer-enter and undefined on po
 
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                            | `triggers` | inbound   |
 | intra-layer | `application.applicationfunction.node-pointer-handling` | `triggers` | inbound   |
 
 ### Viewport Dwell Event {#viewport-dwell-event}
@@ -1074,7 +1156,6 @@ onViewportDwell(snapshot): the viewport has rested for dwellMs; callers record i
 
 | Type        | Related Element                                       | Predicate  | Direction |
 | ----------- | ----------------------------------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                          | `triggers` | inbound   |
 | inter-layer | `data-model.schemadefinition.graph-viewport-snapshot` | `accesses` | outbound  |
 
 ### Viewport Navigate Event {#viewport-navigate-event}
@@ -1095,7 +1176,6 @@ onViewportNavigate(snapshot, cause): the viewport moved for a stated cause (fit,
 
 | Type        | Related Element                                       | Predicate  | Direction |
 | ----------- | ----------------------------------------------------- | ---------- | --------- |
-| inter-layer | `api.operation.graph-canvas`                          | `triggers` | inbound   |
 | inter-layer | `data-model.schemadefinition.graph-viewport-snapshot` | `accesses` | outbound  |
 
 ### Adjacency Matrix Ordering {#adjacency-matrix-ordering}
@@ -1125,6 +1205,7 @@ useTween(): eased numeric tweens per animation frame, honouring prefers-reduced-
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.tween-animation-hooks`       | `realizes` | outbound  |
 
 ### Async Layer Layout {#async-layer-layout}
 
@@ -1200,8 +1281,8 @@ packClusters(): wraps d3-hierarchy's pack() to turn a Louvain dendrogram into co
 
 | Type        | Related Element                                                    | Predicate    | Direction |
 | ----------- | ------------------------------------------------------------------ | ------------ | --------- |
-| inter-layer | `api.operation.pack-clusters`                                      | `realizes`   | inbound   |
 | inter-layer | `data-model.schemadefinition.cluster-tree-node`                    | `accesses`   | outbound  |
+| intra-layer | `application.applicationservice.cluster-packing`                   | `realizes`   | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`       | `realizes`   | outbound  |
 | intra-layer | `application.applicationfunction.clustered-force-layout-algorithm` | `depends-on` | inbound   |
 
@@ -1217,7 +1298,6 @@ clusteredForceLayout(): opt-in nested-bubble layout — Louvain clustering + cir
 
 | Type        | Related Element                                                                             | Predicate     | Direction |
 | ----------- | ------------------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `api.operation.clustered-force-layout`                                                      | `realizes`    | inbound   |
 | inter-layer | `data-model.schemadefinition.clustered-layout-options`                                      | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.clustered-layout-result`                                       | `accesses`    | outbound  |
 | inter-layer | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `satisfies`   | outbound  |
@@ -1226,6 +1306,7 @@ clusteredForceLayout(): opt-in nested-bubble layout — Louvain clustering + cir
 | intra-layer | `application.applicationfunction.cluster-circle-packing`                                    | `depends-on`  | outbound  |
 | intra-layer | `application.applicationfunction.force-directed-layout-algorithm`                           | `depends-on`  | outbound  |
 | intra-layer | `application.applicationfunction.louvain-community-clustering`                              | `depends-on`  | outbound  |
+| intra-layer | `application.applicationservice.force-layout`                                               | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                                | `realizes`    | outbound  |
 
 ### Controllable State {#controllable-state}
@@ -1240,6 +1321,7 @@ useControllable(): the value/defaultValue/onChange pattern for state a caller ma
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.controllable-state-hook`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Dropdown Menu Keyboard Navigation {#dropdown-menu-keyboard-navigation}
@@ -1293,6 +1375,7 @@ findClearLabelPosition(): samples candidate points along an edge's path and pick
 | intra-layer | `application.applicationcomponent.graph-canvas-component`                                                                           | `assigned-to` | inbound   |
 | intra-layer | `application.applicationcomponent.graph-edge-component`                                                                             | `assigned-to` | inbound   |
 | intra-layer | `application.applicationcomponent.graph-edge-shape-component`                                                                       | `assigned-to` | inbound   |
+| intra-layer | `application.applicationservice.edge-geometry`                                                                                      | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.interactive-graph-rendering`                                                                        | `realizes`    | outbound  |
 | intra-layer | `application.applicationfunction.joint-edge-label-placement`                                                                        | `depends-on`  | inbound   |
 
@@ -1337,7 +1420,6 @@ forceLayout(): spring/repulsion/collision/center-gravity simulation placing node
 
 | Type        | Related Element                                                                                  | Predicate     | Direction |
 | ----------- | ------------------------------------------------------------------------------------------------ | ------------- | --------- |
-| inter-layer | `api.operation.force-layout`                                                                     | `realizes`    | inbound   |
 | inter-layer | `data-model.schemadefinition.force-layout-options`                                               | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.layout-edge`                                                        | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.layout-node`                                                        | `accesses`    | outbound  |
@@ -1349,6 +1431,7 @@ forceLayout(): spring/repulsion/collision/center-gravity simulation placing node
 | intra-layer | `application.applicationfunction.clustered-force-layout-algorithm`                               | `depends-on`  | inbound   |
 | intra-layer | `application.dataobject.node-position-map`                                                       | `accesses`    | outbound  |
 | intra-layer | `application.applicationfunction.node-overlap-separation-pass`                                   | `depends-on`  | outbound  |
+| intra-layer | `application.applicationservice.force-layout`                                                    | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                                     | `realizes`    | outbound  |
 | intra-layer | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline`                  | `depends-on`  | inbound   |
 
@@ -1417,7 +1500,6 @@ galaxyLayout(): positions nodes as a radial hierarchy of orbits from structural 
 
 | Type        | Related Element                                                                 | Predicate     | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `api.operation.galaxy-layout`                                                   | `realizes`    | inbound   |
 | inter-layer | `data-model.schemadefinition.galaxy-layout-edge`                                | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.galaxy-layout-node`                                | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.galaxy-layout-options`                             | `accesses`    | outbound  |
@@ -1429,6 +1511,7 @@ galaxyLayout(): positions nodes as a radial hierarchy of orbits from structural 
 | intra-layer | `application.dataobject.node-position-map`                                      | `accesses`    | outbound  |
 | intra-layer | `application.applicationfunction.galaxy-live-simulation-step`                   | `depends-on`  | outbound  |
 | intra-layer | `application.applicationfunction.node-overlap-separation-pass`                  | `depends-on`  | outbound  |
+| intra-layer | `application.applicationservice.galaxy-layout`                                  | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                    | `realizes`    | outbound  |
 
 ### Heatmap Color Scaling {#heatmap-color-scaling}
@@ -1458,6 +1541,7 @@ hiveLayout(): one radial axis per layer at evenly divided angles, optionally spl
 | Type        | Related Element                                                                    | Predicate   | Direction |
 | ----------- | ---------------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden` | `satisfies` | outbound  |
+| intra-layer | `application.applicationservice.layered-graph-utilities`                           | `realizes`  | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization`                       | `realizes`  | outbound  |
 
 ### Joint Edge Label Placement {#joint-edge-label-placement}
@@ -1489,6 +1573,7 @@ layoutLayers()/layoutLayersAsync(): places each layer's nodes on its plane, orde
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | intra-layer | `application.applicationfunction.predicate-label-placement`  | `flows-to` | outbound  |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 | intra-layer | `application.applicationfunction.layered-index-building`     | `flows-to` | inbound   |
 
@@ -1504,6 +1589,7 @@ createProjector/cameraFromPreset/clampCamera: camera presets and projection math
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Layered Graph Snapshot Sanitizing {#layered-graph-snapshot-sanitizing}
@@ -1518,6 +1604,7 @@ sanitizeLayeredGraphSnapshot(): validates a saved view snapshot (selection, filt
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Layered Graph State {#layered-graph-state}
@@ -1532,6 +1619,7 @@ useLayeredGraph(): the shared state of a layered graph (index, selection, filter
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.layered-graph-state-hooks`   | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Layered Index Building {#layered-index-building}
@@ -1547,6 +1635,7 @@ buildLayeredIndex(): reads each node's layer through layerBy and indexes nodes, 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | intra-layer | `application.applicationfunction.layer-placement-layout`     | `flows-to` | outbound  |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Link and Node Emphasis Styling {#link-and-node-emphasis-styling}
@@ -1561,6 +1650,7 @@ linkEmphasis/nodeEmphasis/linkCategoryStyle: the emphasis and palette each node 
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Link Visibility Filtering {#link-visibility-filtering}
@@ -1575,6 +1665,7 @@ isNodeVisible/isLinkVisible/visiblePredicates: applies category and predicate fi
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Louvain Community Clustering {#louvain-community-clustering}
@@ -1589,12 +1680,12 @@ louvainCluster(): deterministic multi-level Louvain modularity clustering produc
 
 | Type        | Related Element                                                                    | Predicate    | Direction |
 | ----------- | ---------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `api.operation.louvain-cluster`                                                    | `realizes`   | inbound   |
 | inter-layer | `data-model.schemadefinition.cluster-tree-node`                                    | `accesses`   | outbound  |
 | inter-layer | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs` | `realizes`   | outbound  |
 | inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`          | `satisfies`  | outbound  |
 | intra-layer | `application.applicationfunction.clustered-force-layout-algorithm`                 | `depends-on` | inbound   |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                       | `realizes`   | outbound  |
+| intra-layer | `application.applicationservice.louvain-clustering`                                | `realizes`   | outbound  |
 
 ### Media Query Tracking {#media-query-tracking}
 
@@ -1609,6 +1700,7 @@ useMediaQuery(): SSR-safe media query match with a server value.
 | Type        | Related Element                                    | Predicate  | Direction |
 | ----------- | -------------------------------------------------- | ---------- | --------- |
 | intra-layer | `application.applicationservice.layout-components` | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.media-query-hook`  | `realizes` | outbound  |
 
 ### Modified Click Link Handling {#modified-click-link-handling}
 
@@ -1732,10 +1824,12 @@ organicLayout(): deterministic force-free organic layout (spectral seed, overlap
 
 | Type        | Related Element                                                                 | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `data-model.schemadefinition.organic-layout-options`                            | `accesses`  | outbound  |
 | inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`       | `satisfies` | outbound  |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies` | outbound  |
 | intra-layer | `application.dataobject.node-position-map`                                      | `accesses`  | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                    | `realizes`  | outbound  |
+| intra-layer | `application.applicationservice.organic-layout`                                 | `realizes`  | outbound  |
 
 ### Orthogonal Channel Routing {#orthogonal-channel-routing}
 
@@ -1763,9 +1857,11 @@ orthogonalLayout(): place-then-route layered grid layout with right-angle edges;
 
 | Type        | Related Element                                                           | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `data-model.schemadefinition.orthogonal-layout-options`                   | `accesses`  | outbound  |
 | inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input` | `satisfies` | outbound  |
 | intra-layer | `application.dataobject.node-position-map`                                | `accesses`  | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`              | `realizes`  | outbound  |
+| intra-layer | `application.applicationservice.orthogonal-layout`                        | `realizes`  | outbound  |
 
 ### OTLP Trace Adapter {#otlp-trace-adapter}
 
@@ -1779,7 +1875,9 @@ fromOTLP(): converts an OpenTelemetry OTLP JSON trace into the TraceViewer's Tra
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `data-model.schemadefinition.otlp-traces-data`                 | `accesses` | outbound  |
 | intra-layer | `application.applicationservice.observability-view-components` | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.otlp-trace-adapter`            | `realizes` | outbound  |
 
 ### Paint Deferred Scheduling {#paint-deferred-scheduling}
 
@@ -1836,6 +1934,7 @@ placeEdgeLabels(): greedy predicate-pill placement over sampled curve points, sh
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | intra-layer | `application.applicationfunction.layer-placement-layout`     | `flows-to` | inbound   |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Radial Tree Layout Algorithm {#radial-tree-layout-algorithm}
@@ -1850,7 +1949,6 @@ radialTreeLayout(): per-trunk sizing, d3.tree()-based polar placement of descend
 
 | Type        | Related Element                                                                 | Predicate     | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `api.operation.radial-tree-layout`                                              | `realizes`    | inbound   |
 | inter-layer | `data-model.schemadefinition.radial-tree-layout-result`                         | `accesses`    | outbound  |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation`                   | `realizes`    | outbound  |
 | inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `satisfies`   | outbound  |
@@ -1858,6 +1956,7 @@ radialTreeLayout(): per-trunk sizing, d3.tree()-based polar placement of descend
 | intra-layer | `application.applicationcomponent.graph-canvas-component`                       | `assigned-to` | inbound   |
 | intra-layer | `application.applicationfunction.node-overlap-separation-pass`                  | `depends-on`  | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                    | `realizes`    | outbound  |
+| intra-layer | `application.applicationservice.radial-tree-layout`                             | `realizes`    | outbound  |
 
 ### Selection Reach Computation {#selection-reach-computation}
 
@@ -1871,6 +1970,7 @@ computeReach(): the nodes and links a selection reaches, hop by hop over travers
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.layered-graph-utilities`     | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Static Date Formatting {#static-date-formatting}
@@ -1900,6 +2000,7 @@ structuralDescendants(): the nodes under a node in the structural forest, used t
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | intra-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.structural-hierarchy`        | `realizes` | outbound  |
 
 ### Structural Forest Construction {#structural-forest-construction}
 
@@ -1913,7 +2014,6 @@ buildStructuralForest(): derives a parent/child forest from structural edges onl
 
 | Type        | Related Element                                                                                                                       | Predicate     | Direction |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `api.operation.build-structural-forest`                                                                                               | `realizes`    | inbound   |
 | inter-layer | `data-model.schemadefinition.hierarchy-edge`                                                                                          | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.structural-forest`                                                                                       | `accesses`    | outbound  |
 | inter-layer | `testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d`    | `tests`       | inbound   |
@@ -1949,6 +2049,7 @@ buildStructuralForest(): derives a parent/child forest from structural edges onl
 | intra-layer | `application.applicationcomponent.graph-canvas-component`                                                                             | `assigned-to` | inbound   |
 | intra-layer | `application.applicationfunction.galaxy-live-simulation-step`                                                                         | `depends-on`  | inbound   |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                                                                          | `realizes`    | outbound  |
+| intra-layer | `application.applicationservice.structural-hierarchy`                                                                                 | `realizes`    | outbound  |
 | intra-layer | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                                                                 | `depends-on`  | inbound   |
 
 ### Swimlane Layer Layout {#swimlane-layer-layout}
@@ -1963,6 +2064,7 @@ layoutLanes(): one lane per layer, nodes packed into rows in framework order, gu
 
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| intra-layer | `application.applicationservice.lane-layout`                 | `realizes` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization` | `realizes` | outbound  |
 
 ### Trace Model Building {#trace-model-building}
@@ -1978,6 +2080,7 @@ buildTraceModel(): normalizes a Trace into rows, self times, time scale and serv
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
 | intra-layer | `application.applicationservice.observability-view-components` | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.trace-viewer-model`            | `realizes` | outbound  |
 
 ### UX Navigation Tree Layout Algorithm {#ux-navigation-tree-layout-algorithm}
 
@@ -1991,8 +2094,6 @@ uxNavLayout(): positions page nodes as independent top-down d3.tree() hierarchie
 
 | Type        | Related Element                                                                                                  | Predicate     | Direction |
 | ----------- | ---------------------------------------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `api.operation.ux-nav-layout`                                                                                    | `realizes`    | inbound   |
-| inter-layer | `api.operation.visible-navigation-edge-ids`                                                                      | `realizes`    | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation`                                                    | `realizes`    | outbound  |
 | inter-layer | `testing.testcasesketch.ux-nav-layout-handles-complex-multi-parent-view-scenario`                                | `tests`       | inbound   |
 | inter-layer | `testing.testcasesketch.ux-nav-layout-handles-custom-dimensions`                                                 | `tests`       | inbound   |
@@ -2019,6 +2120,8 @@ uxNavLayout(): positions page nodes as independent top-down d3.tree() hierarchie
 | intra-layer | `application.applicationcomponent.graph-canvas-component`                                                        | `assigned-to` | inbound   |
 | intra-layer | `application.applicationfunction.structural-forest-construction`                                                 | `depends-on`  | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                                                     | `realizes`    | outbound  |
+| intra-layer | `application.applicationservice.ux-navigation-edge-visibility`                                                   | `realizes`    | outbound  |
+| intra-layer | `application.applicationservice.ux-navigation-layout`                                                            | `realizes`    | outbound  |
 
 ### Virtualized List Windowing {#virtualized-list-windowing}
 
@@ -2046,7 +2149,9 @@ fromXRay(): converts an AWS X-Ray trace document into the TraceViewer's Trace sh
 
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `data-model.schemadefinition.xray-segment`                     | `accesses` | outbound  |
 | intra-layer | `application.applicationservice.observability-view-components` | `realizes` | outbound  |
+| intra-layer | `application.applicationservice.x-ray-trace-adapter`           | `realizes` | outbound  |
 
 ### Pan/Zoom Gesture Handling {#pan-zoom-gesture-handling}
 
@@ -2091,6 +2196,27 @@ GraphCanvas's core pipeline: measure node dimensions -&gt; run the selected layo
 | intra-layer | `application.applicationservice.interactive-graph-rendering`                     | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                     | `serves`      | inbound   |
 
+### Adjacency Matrix Link Metadata {#adjacency-matrix-link-metadata}
+
+**ID**: `application.applicationservice.adjacency-matrix-link-metadata`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/layered/matrix.ts: linkEdgeMetadata.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
+
 ### App Shell Components {#app-shell-components}
 
 **ID**: `application.applicationservice.app-shell-components`
@@ -2107,9 +2233,10 @@ Titlebar, statusbar, app title and the ShellLayout that composes the IDE chrome.
 
 #### Relationships
 
-| Type        | Related Element                        | Predicate  | Direction |
-| ----------- | -------------------------------------- | ---------- | --------- |
-| inter-layer | `product.softwarecapability.app-shell` | `realizes` | outbound  |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.app-shell`                 | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
 
 ### Chart Components {#chart-components}
 
@@ -2127,9 +2254,10 @@ Sparklines, line, bar, stacked and donut charts, heatmaps, status timelines, pro
 
 #### Relationships
 
-| Type        | Related Element                       | Predicate  | Direction |
-| ----------- | ------------------------------------- | ---------- | --------- |
-| inter-layer | `product.softwarecapability.charting` | `realizes` | outbound  |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.charting`                  | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
 
 ### Chat Components {#chat-components}
 
@@ -2147,9 +2275,54 @@ Chat messages with tool and thinking blocks, markdown content, suggestions, comp
 
 #### Relationships
 
-| Type        | Related Element                      | Predicate  | Direction |
-| ----------- | ------------------------------------ | ---------- | --------- |
-| inter-layer | `product.softwarecapability.chat-ui` | `realizes` | outbound  |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.chat-ui`                   | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
+
+### Cluster Packing {#cluster-packing}
+
+**ID**: `application.applicationservice.cluster-packing`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/graphPacking.ts: packClusters.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                       | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.clustered-force-layout-community-bubbles` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`                | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.cluster-circle-packing`              | `realizes` | inbound   |
+
+### Controllable State Hook {#controllable-state-hook}
+
+**ID**: `application.applicationservice.controllable-state-hook`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/hooks/useControllable.ts: useControllable.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.controllable-state`     | `realizes` | inbound   |
 
 ### Data Display Components {#data-display-components}
 
@@ -2170,7 +2343,78 @@ Stat tiles and grids, tables, key-value grids, inspector panels, result and asse
 | Type        | Related Element                                         | Predicate  | Direction |
 | ----------- | ------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `product.softwarecapability.data-display`               | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`  | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.heatmap-color-scaling` | `realizes` | inbound   |
+
+### Dropdown Portal Containment {#dropdown-portal-containment}
+
+**ID**: `application.applicationservice.dropdown-portal-containment`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/hooks/useDropdownPortal.ts: containsAcrossPortals.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.overlays-and-dialogs`      | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
+
+### Edge Geometry {#edge-geometry}
+
+**ID**: `application.applicationservice.edge-geometry`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/graph.ts: bezierPath, rectEdgePoint, rectEdgeDirection, edgeLabelSize, findClearLabelPosition.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                    | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.interactive-graph-exploration`         | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`             | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.edge-label-clear-position-search` | `realizes` | inbound   |
+
+### Force Layout {#force-layout}
+
+**ID**: `application.applicationservice.force-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/graphLayout.ts: forceLayout, clusteredForceLayout, boundingCirclesByGroup.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                       | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.clustered-force-layout-community-bubbles` | `realizes` | outbound  |
+| inter-layer | `product.softwarecapability.force-directed-graph-layout`              | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`  | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`   | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-edge-label-tests`                   | `covers`   | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`                | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.clustered-force-layout-algorithm`    | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.force-directed-layout-algorithm`     | `realizes` | inbound   |
 
 ### Form Input Components {#form-input-components}
 
@@ -2191,8 +2435,57 @@ Text, number, select, tri-state and structured inputs (pickers, key-value and re
 | Type        | Related Element                                                     | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `product.softwarecapability.form-input`                             | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`              | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.dropdown-menu-keyboard-navigation` | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.dropdown-portal-placement`         | `realizes` | inbound   |
+
+### Galaxy Layout {#galaxy-layout}
+
+**ID**: `application.applicationservice.galaxy-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/galaxyLayout.ts: galaxyLayout.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                        | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.galaxy-radial-orbit-layout`                | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`         | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-browser-tests`               | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-tests`                       | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-live-drag-tests`                    | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`    | `covers`   | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`                 | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `realizes` | inbound   |
+
+### Graph Canvas Context Hook {#graph-canvas-context-hook}
+
+**ID**: `application.applicationservice.graph-canvas-context-hook`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/components/GraphCanvas.tsx: useGraphCanvas.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.interactive-graph-exploration` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`     | `realizes` | inbound   |
 
 ### Graph Layout Engine Service {#graph-layout-engine-service}
 
@@ -2212,15 +2505,6 @@ The layout engines GraphCanvas dispatches to by its layout prop: force, organic,
 
 | Type        | Related Element                                                                             | Predicate    | Direction |
 | ----------- | ------------------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `api.operation.build-structural-forest`                                                     | `references` | inbound   |
-| inter-layer | `api.operation.clustered-force-layout`                                                      | `references` | inbound   |
-| inter-layer | `api.operation.force-layout`                                                                | `references` | inbound   |
-| inter-layer | `api.operation.galaxy-layout`                                                               | `references` | inbound   |
-| inter-layer | `api.operation.graph-canvas`                                                                | `references` | inbound   |
-| inter-layer | `api.operation.louvain-cluster`                                                             | `references` | inbound   |
-| inter-layer | `api.operation.pack-clusters`                                                               | `references` | inbound   |
-| inter-layer | `api.operation.radial-tree-layout`                                                          | `references` | inbound   |
-| inter-layer | `api.operation.ux-nav-layout`                                                               | `references` | inbound   |
 | inter-layer | `business.businessservice.hierarchical-and-navigation-structure-visualization`              | `realizes`   | outbound  |
 | inter-layer | `business.businessservice.large-graph-visualization`                                        | `realizes`   | outbound  |
 | inter-layer | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `realizes`   | outbound  |
@@ -2273,16 +2557,13 @@ Rendering and in-place interaction for a laid-out graph: GraphCanvas and its nod
 
 | Type        | Related Element                                                                 | Predicate    | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `api.operation.graph-canvas`                                                    | `references` | inbound   |
-| inter-layer | `api.operation.graph-collapse-control`                                          | `references` | inbound   |
-| inter-layer | `api.operation.graph-edge-inspector`                                            | `references` | inbound   |
-| inter-layer | `api.operation.graph-edge`                                                      | `references` | inbound   |
-| inter-layer | `api.operation.graph-edge-shape`                                                | `references` | inbound   |
-| inter-layer | `api.operation.graph-inspector`                                                 | `references` | inbound   |
-| inter-layer | `api.operation.graph-node`                                                      | `references` | inbound   |
-| inter-layer | `api.operation.graph-toolbar`                                                   | `references` | inbound   |
-| inter-layer | `api.operation.use-pan-zoom`                                                    | `references` | inbound   |
-| inter-layer | `api.operation.visible-navigation-edge-ids`                                     | `references` | inbound   |
+| inter-layer | `product.feature.edge-selection-and-inspection`                                 | `realizes`   | outbound  |
+| inter-layer | `product.feature.fullscreen-canvas`                                             | `realizes`   | outbound  |
+| inter-layer | `product.feature.layout-progress-indicator`                                     | `realizes`   | outbound  |
+| inter-layer | `product.feature.live-draggable-galaxy-simulation`                              | `realizes`   | outbound  |
+| inter-layer | `product.feature.node-and-edge-tooltips-and-popovers`                           | `realizes`   | outbound  |
+| inter-layer | `product.feature.progressive-disclosure-via-node-collapseexpand`                | `realizes`   | outbound  |
+| inter-layer | `product.feature.viewport-history-and-restore`                                  | `realizes`   | outbound  |
 | inter-layer | `product.softwarecapability.interactive-graph-exploration`                      | `realizes`   | outbound  |
 | intra-layer | `application.applicationcomponent.graph-canvas-component`                       | `realizes`   | inbound   |
 | intra-layer | `application.applicationcomponent.graph-collapse-control-component`             | `realizes`   | inbound   |
@@ -2302,6 +2583,122 @@ Rendering and in-place interaction for a laid-out graph: GraphCanvas and its nod
 | intra-layer | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline` | `realizes`   | inbound   |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                    | `depends-on` | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization`                    | `depends-on` | inbound   |
+
+### Lane Layout {#lane-layout}
+
+**ID**: `application.applicationservice.lane-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/laneLayout.ts: layoutLanes, laneLinkCurve, laneBundleCurve, laneBundler, laneTagRoom, laneTagSize, routeLaneGutters, retraceLaneGutters, laneGutterGapTracks.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                         | Predicate  | Direction |
+| ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layer-lanes-layout`         | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`  | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.swimlane-layer-layout` | `realizes` | inbound   |
+
+### Layered Graph Control Helpers {#layered-graph-control-helpers}
+
+**ID**: `application.applicationservice.layered-graph-control-helpers`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/components/LayeredGraphControls.tsx: followOptionLabel, categoryDisplayLabel, useLayeredGraphProp.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
+
+### Layered Graph Explorer Snapshot {#layered-graph-explorer-snapshot}
+
+**ID**: `application.applicationservice.layered-graph-explorer-snapshot`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/components/LayeredGraphExplorer.tsx: sanitizeLayeredGraphExplorerSnapshot, with the constants LAYERED_GRAPH_VIEWS, LAYERED_GRAPH_VIEW_LABELS.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
+
+### Layered Graph State Hooks {#layered-graph-state-hooks}
+
+**ID**: `application.applicationservice.layered-graph-state-hooks`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/hooks/useLayeredGraph.ts: layeredGraphSnapshotDefaults, useLayeredGraph, useLayeredGraphContext, with the constants ASYNC_LAYOUT_MIN_NODES, LayeredGraphContext.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.layered-graph-state`    | `realizes` | inbound   |
+
+### Layered Graph Utilities {#layered-graph-utilities}
+
+**ID**: `application.applicationservice.layered-graph-utilities`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/layered/index.ts: buildLayeredIndex, readLayerValues, layerPairKey, layerPaletteColor, assignPredicateCodes, isNodeVisible, isLinkVisible, isLinkTraversable, visiblePredicates, layerPairNodeIds, computeReach, reachPath, sanitizeLayeredGraphSnapshot, linkEmphasis, nodeEmphasis, linkCategoryStyle, linkCategoryStyleAt, layoutLayers, layoutLayersAsync, mixLayerPositions, orderWithinLayers, orderAcrossLayers, rankWithinLayers, linkPredicateLabel, arrowHeadPoints, placeEdgeLabels, edgeLabelPriority, lineCurve, quadCurve, cubicCurve, defaultPillSize, hiveLayout, hiveLinkGeometry, hivePoint, hiveAxisAngles, clampSplitAngle, hiveLabelSide, hiveAxisGroups, cameraFromPreset, presetLayerGap, clampCamera, wrapAngle, nearestYaw, lerpCamera, createProjector, projectPoint, depthSort, stackPlaneY, planeCorners, planeGridLines, ringPoints, svgPoints, leftmostPoint, screenBounds, fitZoom, titleRail, with the constants LAYER_PALETTE_SIZE, DEFAULT_LINK_FILTERS, LINK_CATEGORY_PALETTE_SIZE, HOP_COLORS, DEFAULT_LABEL_TS, HIVE_MIN_LOOP_BULGE, CAMERA_PRESETS, CAMERA_PRESET_NAMES, PITCH_RANGE, ZOOM_RANGE, DEFAULT_CAMERA_DISTANCE, TOP_VIEW_PITCH, PRESET_GAP_FULL_LAYERS.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                     | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization`            | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`              | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.hive-plot-geometry`                | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.layer-placement-layout`            | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.layer-stack-projection-and-camera` | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.layered-graph-snapshot-sanitizing` | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.layered-index-building`            | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.link-and-node-emphasis-styling`    | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.link-visibility-filtering`         | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.predicate-label-placement`         | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.selection-reach-computation`       | `realizes` | inbound   |
 
 ### Layered Graph Visualization {#layered-graph-visualization}
 
@@ -2362,6 +2759,7 @@ Panels, resizable split panes and media-query driven layout.
 | Type        | Related Element                                        | Predicate  | Direction |
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `product.softwarecapability.responsive-layout`         | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.media-query-tracking` | `realizes` | inbound   |
 
 ### Live Galaxy Simulation Service {#live-galaxy-simulation-service}
@@ -2380,15 +2778,58 @@ useGalaxySimulation(): a continuous, self-scheduling requestAnimationFrame loop 
 
 #### Relationships
 
-| Type        | Related Element                                                                  | Predicate    | Direction |
-| ----------- | -------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `api.operation.graph-canvas`                                                     | `references` | inbound   |
-| inter-layer | `product.feature.live-draggable-galaxy-simulation`                               | `realizes`   | outbound  |
-| inter-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                   | `covers`     | inbound   |
-| intra-layer | `application.applicationcollaboration.graph-canvas-layoutviewport-collaboration` | `realizes`   | inbound   |
-| intra-layer | `application.applicationcomponent.graph-canvas-component`                        | `realizes`   | inbound   |
-| intra-layer | `application.applicationfunction.galaxy-live-simulation-step`                    | `realizes`   | inbound   |
-| intra-layer | `application.applicationcomponent.graph-canvas-component`                        | `serves`     | outbound  |
+| Type        | Related Element                                                                  | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.feature.live-draggable-galaxy-simulation`                               | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                   | `covers`   | inbound   |
+| intra-layer | `application.applicationcollaboration.graph-canvas-layoutviewport-collaboration` | `realizes` | inbound   |
+| intra-layer | `application.applicationcomponent.graph-canvas-component`                        | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.galaxy-live-simulation-step`                    | `realizes` | inbound   |
+| intra-layer | `application.applicationcomponent.graph-canvas-component`                        | `serves`   | outbound  |
+
+### Louvain Clustering {#louvain-clustering}
+
+**ID**: `application.applicationservice.louvain-clustering`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/graphClustering.ts: louvainCluster.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                       | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.clustered-force-layout-community-bubbles` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`                | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.louvain-community-clustering`        | `realizes` | inbound   |
+
+### Media Query Hook {#media-query-hook}
+
+**ID**: `application.applicationservice.media-query-hook`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/hooks/useMediaQuery.ts: useMediaQuery.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.responsive-layout`         | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.media-query-tracking` | `realizes` | inbound   |
 
 ### Navigation Components {#navigation-components}
 
@@ -2409,6 +2850,7 @@ Nav items, sidebar, topbar and tab bar for moving between an app's areas.
 | Type        | Related Element                                                | Predicate  | Direction |
 | ----------- | -------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `product.softwarecapability.app-navigation`                    | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`         | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.modified-click-link-handling` | `realizes` | inbound   |
 
 ### Observability View Components {#observability-view-components}
@@ -2430,10 +2872,77 @@ Trace viewer, log stream, diff viewers, version timeline and lineage rail, with 
 | Type        | Related Element                                                  | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `product.softwarecapability.run-history-and-observability-views` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`           | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.otlp-trace-adapter`             | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.trace-model-building`           | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.virtualized-list-windowing`     | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.x-ray-trace-adapter`            | `realizes` | inbound   |
+
+### Organic Layout {#organic-layout}
+
+**ID**: `application.applicationservice.organic-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/organicLayout.ts: organicLayout.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.organic-graph-layout`          | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`     | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.organic-layout-algorithm` | `realizes` | inbound   |
+
+### Orthogonal Layout {#orthogonal-layout}
+
+**ID**: `application.applicationservice.orthogonal-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/orthogonalLayout.ts: orthogonalLayout.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.orthogonal-graph-layout`          | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`        | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.orthogonal-layout-algorithm` | `realizes` | inbound   |
+
+### OTLP Trace Adapter {#otlp-trace-adapter}
+
+**ID**: `application.applicationservice.otlp-trace-adapter`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/otlpTrace.ts: fromOTLP.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.run-history-and-observability-views` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`           | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.otlp-trace-adapter`             | `realizes` | inbound   |
 
 ### Overlay Components {#overlay-components}
 
@@ -2451,11 +2960,12 @@ Modals, confirm dialogs, toasts, tooltips, popovers, drawers, the command palett
 
 #### Relationships
 
-| Type        | Related Element                                    | Predicate  | Direction |
-| ----------- | -------------------------------------------------- | ---------- | --------- |
-| inter-layer | `product.softwarecapability.overlays-and-dialogs`  | `realizes` | outbound  |
-| intra-layer | `application.applicationfunction.body-scroll-lock` | `realizes` | inbound   |
-| intra-layer | `application.applicationfunction.focus-trap`       | `realizes` | inbound   |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.overlays-and-dialogs`      | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.body-scroll-lock`     | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.focus-trap`           | `realizes` | inbound   |
 
 ### Page Pattern Components {#page-pattern-components}
 
@@ -2473,9 +2983,34 @@ Page headers, filter bars, activity timelines, alert strips, quick-access tiles,
 
 #### Relationships
 
-| Type        | Related Element                            | Predicate  | Direction |
-| ----------- | ------------------------------------------ | ---------- | --------- |
-| inter-layer | `product.softwarecapability.page-patterns` | `realizes` | outbound  |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.page-patterns`             | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
+
+### Pan and Zoom Hook {#pan-and-zoom-hook}
+
+**ID**: `application.applicationservice.pan-and-zoom-hook`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/hooks/usePanZoom.ts: usePanZoom.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.interactive-graph-exploration` | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.map-canvas-tests`              | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-inertia-tests`             | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-zoom-tests`                | `covers`   | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`     | `realizes` | inbound   |
 
 ### Planning Components {#planning-components}
 
@@ -2496,6 +3031,7 @@ Calendar, mini calendar and kanban board.
 | Type        | Related Element                                          | Predicate  | Direction |
 | ----------- | -------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `product.softwarecapability.planning-and-scheduling`     | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
 | intra-layer | `application.applicationfunction.static-date-formatting` | `realizes` | inbound   |
 
 ### Primitive Components {#primitive-components}
@@ -2514,9 +3050,192 @@ Icons, buttons, chips, badges, avatars and segmented controls every other compon
 
 #### Relationships
 
-| Type        | Related Element                            | Predicate  | Direction |
-| ----------- | ------------------------------------------ | ---------- | --------- |
-| inter-layer | `product.softwarecapability.ui-primitives` | `realizes` | outbound  |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `product.softwarecapability.ui-primitives`             | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package` | `realizes` | inbound   |
+
+### Radial Tree Layout {#radial-tree-layout}
+
+**ID**: `application.applicationservice.radial-tree-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/radialTreeLayout.ts: radialTreeLayout.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.radial-tree-layout`                | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.radial-tree-layout-algorithm`      | `covers`   | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`         | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.radial-tree-layout-algorithm` | `realizes` | inbound   |
+
+### Reach Relationship Helpers {#reach-relationship-helpers}
+
+**ID**: `application.applicationservice.reach-relationship-helpers`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/components/ReachInspector.tsx: reachRelationships, reachSummaryText.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
+
+### Structural Hierarchy {#structural-hierarchy}
+
+**ID**: `application.applicationservice.structural-hierarchy`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/graphHierarchy.ts: buildStructuralForest, structuralDescendants.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.interactive-graph-exploration`       | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-browser-tests`         | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.radial-tree-layout-algorithm`        | `covers`   | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`        | `covers`   | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`           | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.structural-descendant-lookup`   | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.structural-forest-construction` | `realizes` | inbound   |
+
+### Trace Viewer Model {#trace-viewer-model}
+
+**ID**: `application.applicationservice.trace-viewer-model`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/components/traceViewerModel.ts: buildTraceModel, selfTime, visibleRows, createTimeScale, niceTicks, fmtTraceMs, resolveServiceColor, resolveServiceLabel, paletteColor, with the constants DEFAULT_SERVICE_PALETTE.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.run-history-and-observability-views` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`           | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.trace-model-building`           | `realizes` | inbound   |
+
+### Tween Animation Hooks {#tween-animation-hooks}
+
+**ID**: `application.applicationservice.tween-animation-hooks`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/hooks/useTween.ts: easeInOutCubic, interpolateValues, useTween, usePrefersReducedMotion, with the constants REDUCED_MOTION_QUERY.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`   | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.animated-tween`         | `realizes` | inbound   |
+
+### UX Navigation Edge Visibility {#ux-navigation-edge-visibility}
+
+**ID**: `application.applicationservice.ux-navigation-edge-visibility`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/uxNavEdgeVisibility.ts: visibleNavigationEdgeIds.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                       | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.ux-navigation-tree-layout`                | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`             | `covers`   | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`                | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.ux-navigation-tree-layout-algorithm` | `realizes` | inbound   |
+
+### UX Navigation Layout {#ux-navigation-layout}
+
+**ID**: `application.applicationservice.ux-navigation-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/uxNavLayout.ts: uxNavLayout.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                       | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.ux-navigation-tree-layout`                | `realizes` | outbound  |
+| inter-layer | `testing.testcoveragetarget.ux-nav-layout-tests`                      | `covers`   | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`                | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.ux-navigation-tree-layout-algorithm` | `realizes` | inbound   |
+
+### X-Ray Trace Adapter {#x-ray-trace-adapter}
+
+**ID**: `application.applicationservice.x-ray-trace-adapter`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point (src/index.ts) out of src/utils/xrayTrace.ts: fromXRay.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                  | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `product.softwarecapability.run-history-and-observability-views` | `realizes` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-package`           | `realizes` | inbound   |
+| intra-layer | `application.applicationfunction.x-ray-trace-adapter`            | `realizes` | inbound   |
 
 ### Node Position Map {#node-position-map}
 
@@ -2559,4 +3278,4 @@ GraphCanvasContext's nodeRects/getNodeRect — every currently-visible node's me
 
 ---
 
-Generated: 2026-11-24T13:25:05.973Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0
