@@ -238,8 +238,8 @@ palette with their `tone` prop, not the body class.
 
 **Charts need the tokens on the page.** Chart colors, status colors and the trace service palette
 are `rgb(var(--…))` strings, so load `@tinkermonkey/heimdall-ui/css` or `…/css/base`. Code that
-parses the exported color constants as hex, or uses them in a canvas 2D context, must resolve
-them first with `getComputedStyle`. `Heatmap.baseColor` and `MapCanvas.heatmapColor` default to
+parses the exported `DEFAULT_SERVICE_PALETTE` as hex, or uses it in a canvas 2D context, must resolve
+it first with `getComputedStyle`. `Heatmap.baseColor` and `MapCanvas.heatmapColor` default to
 `rgb(var(--status-emerald))` and accept any CSS color.
 
 **Keeping literals out.** `npm run check:colors` scans `src/**/*.{css,ts,tsx}` (not `src/tokens/`,

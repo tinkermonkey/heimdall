@@ -24,9 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `rgb(var(--status-emerald))`. Cells and points are filled with the color and a `fill-opacity`
   (the same 1/255-quantized alpha as before), so a color that already has alpha renders fainter.
   Before, only `#RRGGBB` worked.
-- **Breaking-ish (pre-1.0):** the color constants `SERIES_COLORS`, `chartColors`, `statusColorMap`,
-  `TONE` and `DEFAULT_SERVICE_PALETTE` now hold `rgb(var(--…))` strings instead of hex. Code that
-  parses them as hex, or uses them in a canvas 2D context, must resolve them first with
+- **Breaking-ish (pre-1.0):** the exported `DEFAULT_SERVICE_PALETTE` now holds
+  `rgb(var(--trace-service-N))` strings instead of hex, as do the charts' internal palettes. Code
+  that parses it as hex, or uses it in a canvas 2D context, must resolve it first with
   `getComputedStyle`.
 - **Charts need the tokens on the page.** Load `/css` or `/css/base`, as for every other component;
   charts used to render their colors with no heimdall CSS loaded. An SVG serialized out of the

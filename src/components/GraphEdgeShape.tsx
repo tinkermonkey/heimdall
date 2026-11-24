@@ -90,7 +90,7 @@ export function GraphEdgeShape({
           markerUnits={markerUnits}
           orient="auto-start-reverse"
         >
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, rgb(var(--canvas-fg-4)))" style={markerStyle} />
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--graph-edge-strong, rgb(var(--graph-edge-marker)))" style={markerStyle} />
         </marker>
         <marker
           id={markerRoseId}

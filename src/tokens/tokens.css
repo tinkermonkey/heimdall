@@ -250,6 +250,9 @@
     --graph-hop-1: 180 83 9;            /* #b45309 — amber-700 */
     --graph-hop-2: 217 119 6;           /* #d97706 — amber-600 */
     --graph-hop-3: 245 158 11;          /* #f59e0b — amber-500 */
+    /* GraphEdgeShape's arrowhead outside a GraphCanvas (no --graph-edge-strong there). The same on
+       both canvases, so it is not overridden under .dark-canvas. */
+    --graph-edge-marker: 148 163 184;   /* #94a3b8 — slate-400 */
     /* Link colors by category position (dashes are set in code: solid, dashed, dotted, sparse,
        dash-dot, short dash). */
     --graph-link-1: 100 116 139;        /* #64748b — slate-500 */
