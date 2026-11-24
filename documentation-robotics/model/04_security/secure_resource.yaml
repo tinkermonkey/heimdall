@@ -1,5 +1,5 @@
 security.secureresource.rendered-chat-markdown:
-  id: c39ee1b5-9874-424b-930a-844d63db894f
+  id: e8eba0f4-dbea-40fb-9c3d-78c9ef9cfbda
   path: security.secureresource.rendered-chat-markdown
   spec_node_id: security.secureresource
   type: secureresource
@@ -15,11 +15,11 @@ security.secureresource.rendered-chat-markdown:
     locations:
       - file: src/components/ChatMarkdownContent.tsx
   metadata:
-    created_at: 2026-11-21T18:10:35.032Z
-    updated_at: 2026-11-21T18:10:35.032Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 security.secureresource.published-npm-package:
-  id: 6fa0b08b-0487-40c3-ab76-2b1c8a236181
+  id: bdfdff33-e84d-4d37-939e-0ab707e27aab
   path: security.secureresource.published-npm-package
   spec_node_id: security.secureresource
   type: secureresource
@@ -35,6 +35,6 @@ security.secureresource.published-npm-package:
     locations:
       - file: .github/workflows/release.yml
   metadata:
-    created_at: 2026-11-21T18:10:35.033Z
-    updated_at: 2026-11-21T18:10:35.033Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1

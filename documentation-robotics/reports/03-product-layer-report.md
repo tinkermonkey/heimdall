@@ -16,11 +16,11 @@ Product features, capabilities, personas, and milestones.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 31    |
-| Intra-Layer Relationships | 8     |
-| Inter-Layer Relationships | 152   |
-| Inbound Relationships     | 121   |
-| Outbound Relationships    | 31    |
+| Elements                  | 36    |
+| Intra-Layer Relationships | 21    |
+| Inter-Layer Relationships | 174   |
+| Inbound Relationships     | 126   |
+| Outbound Relationships    | 48    |
 
 **Cross-Layer References**:
 
@@ -35,34 +35,39 @@ Product features, capabilities, personas, and milestones.
 | --------------------------------------------------------------------- | -------------------- | ------------- |
 | `product.feature.edge-selection-and-inspection`                       | `feature`            | 0             |
 | `product.feature.fullscreen-canvas`                                   | `feature`            | 0             |
+| `product.feature.joint-edge-label-placement`                          | `feature`            | 3             |
+| `product.feature.layered-graph-explorer`                              | `feature`            | 2             |
 | `product.feature.layout-progress-indicator`                           | `feature`            | 0             |
+| `product.feature.link-navigation-with-href`                           | `feature`            | 3             |
 | `product.feature.live-draggable-galaxy-simulation`                    | `feature`            | 2             |
 | `product.feature.node-and-edge-tooltips-and-popovers`                 | `feature`            | 2             |
+| `product.feature.per-component-imports`                               | `feature`            | 2             |
 | `product.feature.progressive-disclosure-via-node-collapseexpand`      | `feature`            | 2             |
+| `product.feature.server-side-rendering-support`                       | `feature`            | 3             |
 | `product.feature.viewport-history-and-restore`                        | `feature`            | 0             |
-| `product.persona.application-developer-embedding-a-graph-view`        | `persona`            | 1             |
-| `product.persona.end-user-exploring-a-rendered-graph`                 | `persona`            | 2             |
-| `product.softwarecapability.app-navigation`                           | `softwarecapability` | 0             |
-| `product.softwarecapability.app-shell`                                | `softwarecapability` | 0             |
+| `product.persona.application-developer-embedding-a-graph-view`        | `persona`            | 4             |
+| `product.persona.end-user-exploring-a-rendered-graph`                 | `persona`            | 4             |
+| `product.softwarecapability.app-navigation`                           | `softwarecapability` | 2             |
+| `product.softwarecapability.app-shell`                                | `softwarecapability` | 2             |
 | `product.softwarecapability.charting`                                 | `softwarecapability` | 0             |
 | `product.softwarecapability.chat-ui`                                  | `softwarecapability` | 0             |
 | `product.softwarecapability.clustered-force-layout-community-bubbles` | `softwarecapability` | 2             |
 | `product.softwarecapability.data-display`                             | `softwarecapability` | 0             |
-| `product.softwarecapability.force-directed-graph-layout`              | `softwarecapability` | 2             |
+| `product.softwarecapability.force-directed-graph-layout`              | `softwarecapability` | 3             |
 | `product.softwarecapability.form-input`                               | `softwarecapability` | 0             |
 | `product.softwarecapability.galaxy-radial-orbit-layout`               | `softwarecapability` | 1             |
 | `product.softwarecapability.interactive-graph-exploration`            | `softwarecapability` | 2             |
 | `product.softwarecapability.layer-lanes-layout`                       | `softwarecapability` | 0             |
-| `product.softwarecapability.layered-graph-visualization`              | `softwarecapability` | 0             |
+| `product.softwarecapability.layered-graph-visualization`              | `softwarecapability` | 1             |
 | `product.softwarecapability.organic-graph-layout`                     | `softwarecapability` | 0             |
-| `product.softwarecapability.orthogonal-graph-layout`                  | `softwarecapability` | 0             |
+| `product.softwarecapability.orthogonal-graph-layout`                  | `softwarecapability` | 1             |
 | `product.softwarecapability.overlays-and-dialogs`                     | `softwarecapability` | 0             |
 | `product.softwarecapability.page-patterns`                            | `softwarecapability` | 0             |
 | `product.softwarecapability.planning-and-scheduling`                  | `softwarecapability` | 0             |
 | `product.softwarecapability.radial-tree-layout`                       | `softwarecapability` | 0             |
 | `product.softwarecapability.responsive-layout`                        | `softwarecapability` | 0             |
 | `product.softwarecapability.run-history-and-observability-views`      | `softwarecapability` | 0             |
-| `product.softwarecapability.ui-primitives`                            | `softwarecapability` | 0             |
+| `product.softwarecapability.ui-primitives`                            | `softwarecapability` | 1             |
 | `product.softwarecapability.ux-navigation-tree-layout`                | `softwarecapability` | 0             |
 
 ## Inter-Layer Dependencies
@@ -127,6 +132,7 @@ flowchart TB
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.lane-layout`                                                                                          | `product.softwarecapability.layer-lanes-layout`                                             | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-control-helpers`                                                                        | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-explorer-snapshot`                                                                      | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-framework-service`                                                                      | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-state-hooks`                                                                            | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-utilities`                                                                              | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-visualization`                                                                          | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
@@ -152,35 +158,52 @@ flowchart TB
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.ux-navigation-edge-visibility`                                                                        | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.ux-navigation-layout`                                                                                 | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.x-ray-trace-adapter`                                                                                  | `product.softwarecapability.run-history-and-observability-views`                            | `product`    | `realizes`   | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.per-component-imports`                                                                                               | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.server-side-rendering-support`                                                                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                  | `product.persona.application-developer-embedding-a-graph-view`                                                                        | `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `motivation` | `references` | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                  | `product.persona.end-user-exploring-a-rendered-graph`                                                                                 | `motivation.stakeholder.end-user-of-an-embedding-application`                               | `motivation` | `references` | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-navigation`                                                                                           | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-shell`                                                                                                | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.charting`                                                                                                 | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.chat-ui`                                                                                                  | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.app-navigation`                                                                                           | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-navigation`                                                                                           | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.app-shell`                                                                                                | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-shell`                                                                                                | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.charting`                                                                                                 | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.charting`                                                                                                 | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.chat-ui`                                                                                                  | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.chat-ui`                                                                                                  | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.clustered-force-layout-community-bubbles`                                                                 | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`          | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.satisfies.motivation.requirement`        | `product.softwarecapability.clustered-force-layout-community-bubbles`                                                                 | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.clustered-force-layout-community-bubbles`                                                                 | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.data-display`                                                                                             | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.data-display`                                                                                             | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.data-display`                                                                                             | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.force-directed-graph-layout`                                                                              | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.force-directed-graph-layout`                                                                              | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.form-input`                                                                                               | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.form-input`                                                                                               | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.form-input`                                                                                               | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.galaxy-radial-orbit-layout`                                                                               | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.galaxy-radial-orbit-layout`                                                                               | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.interactive-graph-exploration`                                                                            | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.layer-lanes-layout`                                                                                       | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.layered-graph-visualization`                                                                              | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.layered-graph-visualization`                                                                              | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`          | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.layered-graph-visualization`                                                                              | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.layered-graph-visualization`                                                                              | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.layered-graph-visualization`                                                                              | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.organic-graph-layout`                                                                                     | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.organic-graph-layout`                                                                                     | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.orthogonal-graph-layout`                                                                                  | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.overlays-and-dialogs`                                                                                     | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.page-patterns`                                                                                            | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.planning-and-scheduling`                                                                                  | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.orthogonal-graph-layout`                                                                                  | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.overlays-and-dialogs`                                                                                     | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.overlays-and-dialogs`                                                                                     | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.page-patterns`                                                                                            | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.page-patterns`                                                                                            | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.planning-and-scheduling`                                                                                  | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.planning-and-scheduling`                                                                                  | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.radial-tree-layout`                                                                                       | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.radial-tree-layout`                                                                                       | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.responsive-layout`                                                                                        | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.run-history-and-observability-views`                                                                      | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ui-primitives`                                                                                            | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools`                 | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.responsive-layout`                                                                                        | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.run-history-and-observability-views`                                                                      | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.run-history-and-observability-views`                                                                      | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ui-primitives`                                                                                            | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ui-primitives`                                                                                            | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing`                 | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
@@ -246,6 +269,10 @@ flowchart TB
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-popover-with-interactive-505b383d` | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `product.feature.live-draggable-galaxy-simulation`                                          | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement`                                                                 | `product.feature.joint-edge-label-placement`                                                | `product`    | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.layered-graph-explorer`                                                                                   | `product.feature.layered-graph-explorer`                                                    | `product`    | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.server-rendering`                                                                                         | `product.feature.server-side-rendering-support`                                             | `product`    | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `product.feature.link-navigation-with-href`                                                 | `product`    | `covers`     | many-to-many | medium   |
 
 ## Element Reference
 
@@ -291,6 +318,53 @@ GraphToolbar toggles fullscreen on the canvas or on a caller-chosen container (f
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
 
+### Joint Edge-Label Placement {#joint-edge-label-placement}
+
+**ID**: `product.feature.joint-edge-label-placement`
+
+**Type**: `feature`
+
+GraphCanvas places every edge label at once so labels do not print over each other or the cards; a label with no clear spot is hidden until its edge or an endpoint is in focus, and renderEdge receives EdgeGeometry.labelHidden (PR #396, Unreleased in CHANGELOG.md).
+
+#### Attributes
+
+| Name     | Value     |
+| -------- | --------- |
+| priority | high      |
+| status   | delivered |
+
+#### Relationships
+
+| Type        | Related Element                                                       | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `covers`   | inbound   |
+| intra-layer | `product.softwarecapability.force-directed-graph-layout`              | `realizes` | outbound  |
+| intra-layer | `product.softwarecapability.orthogonal-graph-layout`                  | `realizes` | outbound  |
+| intra-layer | `product.persona.end-user-exploring-a-rendered-graph`                 | `serves`   | outbound  |
+
+### Layered Graph Explorer {#layered-graph-explorer}
+
+**ID**: `product.feature.layered-graph-explorer`
+
+**Type**: `feature`
+
+A ready-made explorer (LayeredGraphExplorer) that switches between the 3D stack, lanes, matrix and hive views with shared selection, reach following, link-category filters, layer focus, camera presets and snapshot save/restore.
+
+#### Attributes
+
+| Name     | Value     |
+| -------- | --------- |
+| priority | high      |
+| status   | delivered |
+
+#### Relationships
+
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-explorer`      | `covers`   | inbound   |
+| intra-layer | `product.softwarecapability.layered-graph-visualization` | `realizes` | outbound  |
+| intra-layer | `product.persona.end-user-exploring-a-rendered-graph`    | `serves`   | outbound  |
+
 ### Layout Progress Indicator {#layout-progress-indicator}
 
 **ID**: `product.feature.layout-progress-indicator`
@@ -311,6 +385,30 @@ GraphCanvas reports idle/computing/simulating through onLayoutStateChange and ca
 | Type        | Related Element                                              | Predicate  | Direction |
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
+
+### Link Navigation with href {#link-navigation-with-href}
+
+**ID**: `product.feature.link-navigation-with-href`
+
+**Type**: `feature`
+
+Sidebar items, NavItem, QuickAccessTile and QuickAccessGrid items take href and render real anchors (modified clicks open in a new tab), so static and server-rendered sites navigate without client routing (0.13.0).
+
+#### Attributes
+
+| Name     | Value     |
+| -------- | --------- |
+| priority | medium    |
+| status   | delivered |
+
+#### Relationships
+
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants`         | `covers`   | inbound   |
+| intra-layer | `product.softwarecapability.app-navigation`                    | `realizes` | outbound  |
+| intra-layer | `product.softwarecapability.app-shell`                         | `realizes` | outbound  |
+| intra-layer | `product.persona.application-developer-embedding-a-graph-view` | `serves`   | outbound  |
 
 ### Live Draggable Galaxy Simulation {#live-draggable-galaxy-simulation}
 
@@ -424,6 +522,29 @@ Render-prop tooltip/popover overlays anchored to a hovered/clicked node or edge,
 | intra-layer | `product.softwarecapability.interactive-graph-exploration`                                                                            | `realizes` | outbound  |
 | intra-layer | `product.persona.end-user-exploring-a-rendered-graph`                                                                                 | `serves`   | outbound  |
 
+### Per-Component Imports {#per-component-imports}
+
+**ID**: `product.feature.per-component-imports`
+
+**Type**: `feature`
+
+The package is one module per source file and its JS imports no CSS, so a bundler keeps only the imported components; a base stylesheet plus per-component sheets are an opt-in alternative to the full stylesheet (0.13.0).
+
+#### Attributes
+
+| Name     | Value     |
+| -------- | --------- |
+| priority | high      |
+| status   | delivered |
+
+#### Relationships
+
+| Type        | Related Element                                                           | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.consumers-bundle-only-the-components-they-import` | `satisfies` | outbound  |
+| intra-layer | `product.softwarecapability.ui-primitives`                                | `realizes`  | outbound  |
+| intra-layer | `product.persona.application-developer-embedding-a-graph-view`            | `serves`    | outbound  |
+
 ### Progressive Disclosure via Node Collapse/Expand {#progressive-disclosure-via-node-collapse-expand}
 
 **ID**: `product.feature.progressive-disclosure-via-node-collapseexpand`
@@ -447,6 +568,31 @@ Collapse a node to hide its structural descendants (and their edges) for dense h
 | inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
 | intra-layer | `product.softwarecapability.interactive-graph-exploration`   | `realizes` | outbound  |
 | intra-layer | `product.persona.end-user-exploring-a-rendered-graph`        | `serves`   | outbound  |
+
+### Server-Side Rendering Support {#server-side-rendering-support}
+
+**ID**: `product.feature.server-side-rendering-support`
+
+**Type**: `feature`
+
+Components render on a server and hydrate without mismatches: useMediaQuery takes a serverValue and resolves after mount, ShellLayout, Topbar and Statusbar leave data-mobile off until the client knows the viewport, and timelines and calendars take a fixed now/today (0.13.0).
+
+#### Attributes
+
+| Name     | Value     |
+| -------- | --------- |
+| priority | high      |
+| status   | delivered |
+
+#### Relationships
+
+| Type        | Related Element                                                           | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies` | outbound  |
+| inter-layer | `testing.testcoveragetarget.server-rendering`                             | `covers`    | inbound   |
+| intra-layer | `product.softwarecapability.app-navigation`                               | `realizes`  | outbound  |
+| intra-layer | `product.softwarecapability.app-shell`                                    | `realizes`  | outbound  |
+| intra-layer | `product.persona.application-developer-embedding-a-graph-view`            | `serves`    | outbound  |
 
 ### Viewport History and Restore {#viewport-history-and-restore}
 
@@ -489,7 +635,10 @@ Inferred persona: a React/TypeScript developer integrating GraphCanvas into thei
 | Type        | Related Element                                                       | Predicate    | Direction |
 | ----------- | --------------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer` | `references` | outbound  |
+| intra-layer | `product.feature.link-navigation-with-href`                           | `serves`     | inbound   |
 | intra-layer | `product.feature.live-draggable-galaxy-simulation`                    | `serves`     | inbound   |
+| intra-layer | `product.feature.per-component-imports`                               | `serves`     | inbound   |
+| intra-layer | `product.feature.server-side-rendering-support`                       | `serves`     | inbound   |
 
 ### End User Exploring a Rendered Graph {#end-user-exploring-a-rendered-graph}
 
@@ -511,6 +660,8 @@ Inferred persona: the person who ultimately interacts with the rendered graph (p
 | Type        | Related Element                                                  | Predicate    | Direction |
 | ----------- | ---------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `motivation.stakeholder.end-user-of-an-embedding-application`    | `references` | outbound  |
+| intra-layer | `product.feature.joint-edge-label-placement`                     | `serves`     | inbound   |
+| intra-layer | `product.feature.layered-graph-explorer`                         | `serves`     | inbound   |
 | intra-layer | `product.feature.node-and-edge-tooltips-and-popovers`            | `serves`     | inbound   |
 | intra-layer | `product.feature.progressive-disclosure-via-node-collapseexpand` | `serves`     | inbound   |
 
@@ -530,10 +681,13 @@ Shipped capability: Nav items, sidebar, topbar and tab bar for moving between an
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.navigation-components`                      | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.navigation-components`                               | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
+| intra-layer | `product.feature.link-navigation-with-href`                                          | `realizes` | inbound   |
+| intra-layer | `product.feature.server-side-rendering-support`                                      | `realizes` | inbound   |
 
 ### App Shell {#app-shell}
 
@@ -551,10 +705,13 @@ Shipped capability: Titlebar, statusbar, app title and the ShellLayout that comp
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.app-shell-components`                       | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.app-shell-components`                                | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
+| intra-layer | `product.feature.link-navigation-with-href`                                          | `realizes` | inbound   |
+| intra-layer | `product.feature.server-side-rendering-support`                                      | `realizes` | inbound   |
 
 ### Charting {#charting}
 
@@ -572,10 +729,11 @@ Shipped capability: Sparklines, line, bar, stacked and donut charts, heatmaps, s
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.chart-components`                           | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.chart-components`                                    | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Chat UI {#chat-ui}
 
@@ -593,10 +751,11 @@ Shipped capability: Chat messages with tool and thinking blocks, markdown conten
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.chat-components`                            | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.chat-components`                                     | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Clustered Force Layout (Community Bubbles) {#clustered-force-layout-community-bubbles}
 
@@ -642,10 +801,11 @@ Shipped capability: Stat tiles and grids, tables, key-value grids, inspector pan
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.data-display-components`                    | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.data-display-components`                             | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Force-Directed Graph Layout {#force-directed-graph-layout}
 
@@ -669,6 +829,7 @@ Shipped capability: spring/repulsion-based automatic layout for arbitrary node/e
 | inter-layer | `application.applicationservice.graph-layout-engine-service`          | `realizes`   | inbound   |
 | inter-layer | `business.businessfunction.automatic-node-layout-computation`         | `realizes`   | outbound  |
 | inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`     | `supports`   | outbound  |
+| intra-layer | `product.feature.joint-edge-label-placement`                          | `realizes`   | inbound   |
 | intra-layer | `product.softwarecapability.clustered-force-layout-community-bubbles` | `aggregates` | inbound   |
 | intra-layer | `product.softwarecapability.clustered-force-layout-community-bubbles` | `depends-on` | inbound   |
 
@@ -688,10 +849,11 @@ Shipped capability: Text, number, select, tri-state and structured inputs (picke
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.form-input-components`                      | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.form-input-components`                               | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Galaxy Radial Orbit Layout {#galaxy-radial-orbit-layout}
 
@@ -782,19 +944,23 @@ Shipped capability: Views of a graph whose nodes belong to layers: a 3D layer st
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.adjacency-matrix-link-metadata`             | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.controllable-state-hook`                    | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.layered-graph-control-helpers`              | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.layered-graph-explorer-snapshot`            | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.layered-graph-state-hooks`                  | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.layered-graph-utilities`                    | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.layered-graph-visualization`                | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.reach-relationship-helpers`                 | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.tween-animation-hooks`                      | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
-| inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`           | `supports` | outbound  |
+| Type        | Related Element                                                                       | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.adjacency-matrix-link-metadata`                       | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.controllable-state-hook`                              | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-control-helpers`                        | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-explorer-snapshot`                      | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-framework-service`                      | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-state-hooks`                            | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-utilities`                              | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.layered-graph-visualization`                          | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.reach-relationship-helpers`                           | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.tween-animation-hooks`                                | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`    | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `supports` | outbound  |
+| inter-layer | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `supports` | outbound  |
+| inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `supports` | outbound  |
+| intra-layer | `product.feature.layered-graph-explorer`                                              | `realizes` | inbound   |
 
 ### Organic Graph Layout {#organic-graph-layout}
 
@@ -802,7 +968,7 @@ Shipped capability: Views of a graph whose nodes belong to layers: a 3D layer st
 
 **Type**: `softwarecapability`
 
-GraphCanvas layout organic: stress-majorization layout, successor to force, with the node margin as a hard minimum gap.
+Shipped capability: stress-majorization layout (organicLayout, layout="organic") with preferred edge length, minimum node distance, compactness, label-box reservation and incremental affected-node scope.
 
 #### Attributes
 
@@ -812,11 +978,12 @@ GraphCanvas layout organic: stress-majorization layout, successor to force, with
 
 #### Relationships
 
-| Type        | Related Element                                               | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.graph-layout-engine-service`  | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.organic-layout`               | `realizes` | inbound   |
-| inter-layer | `business.businessfunction.automatic-node-layout-computation` | `realizes` | outbound  |
+| Type        | Related Element                                                   | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`      | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.organic-layout`                   | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.automatic-node-layout-computation`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs` | `supports` | outbound  |
 
 ### Orthogonal Graph Layout {#orthogonal-graph-layout}
 
@@ -824,7 +991,7 @@ GraphCanvas layout organic: stress-majorization layout, successor to force, with
 
 **Type**: `softwarecapability`
 
-GraphCanvas layout orthogonal: nodes on a cell grid layered from a BFS spanning tree, edges routed at right angles through channels.
+Shipped capability: grid-snapped layout with right-angle edge routes (orthogonalLayout, layout="orthogonal"): a lattice router for graphs up to 150 edges and a channel router for larger ones, so no route passes through a node.
 
 #### Attributes
 
@@ -834,11 +1001,13 @@ GraphCanvas layout orthogonal: nodes on a cell grid layered from a BFS spanning 
 
 #### Relationships
 
-| Type        | Related Element                                               | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.graph-layout-engine-service`  | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.orthogonal-layout`            | `realizes` | inbound   |
-| inter-layer | `business.businessfunction.automatic-node-layout-computation` | `realizes` | outbound  |
+| Type        | Related Element                                                   | Predicate  | Direction |
+| ----------- | ----------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`      | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.orthogonal-layout`                | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.automatic-node-layout-computation`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs` | `supports` | outbound  |
+| intra-layer | `product.feature.joint-edge-label-placement`                      | `realizes` | inbound   |
 
 ### Overlays and Dialogs {#overlays-and-dialogs}
 
@@ -846,7 +1015,7 @@ GraphCanvas layout orthogonal: nodes on a cell grid layered from a BFS spanning 
 
 **Type**: `softwarecapability`
 
-Shipped capability: Modals, confirm dialogs, toasts, tooltips, popovers, drawers, the command palette and the workspace switcher.
+Shipped capability: modal, confirm dialog, drawer, toast, tooltip, popover, command palette and workspace switcher, with focus trapping and portal-aware dismissal.
 
 #### Attributes
 
@@ -856,11 +1025,12 @@ Shipped capability: Modals, confirm dialogs, toasts, tooltips, popovers, drawers
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.dropdown-portal-containment`                | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.overlay-components`                         | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.dropdown-portal-containment`                         | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.overlay-components`                                  | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Page Patterns {#page-patterns}
 
@@ -868,7 +1038,7 @@ Shipped capability: Modals, confirm dialogs, toasts, tooltips, popovers, drawers
 
 **Type**: `softwarecapability`
 
-Shipped capability: Page headers, filter bars, activity timelines, alert strips, quick-access tiles, config and pipeline cards, row menus.
+Shipped capability: page headers, filter bars, activity timelines, alert strips, quick-access grids and tiles, config tiles, pipeline cards, form callouts and row menus.
 
 #### Attributes
 
@@ -878,10 +1048,11 @@ Shipped capability: Page headers, filter bars, activity timelines, alert strips,
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.page-pattern-components`                    | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.page-pattern-components`                             | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Planning and Scheduling {#planning-and-scheduling}
 
@@ -899,10 +1070,11 @@ Shipped capability: Calendar, mini calendar and kanban board.
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.planning-components`                        | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.planning-components`                                 | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Radial Tree Layout {#radial-tree-layout}
 
@@ -943,11 +1115,11 @@ Shipped capability: Panels, resizable split panes and media-query driven layout.
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.layout-components`                          | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.media-query-hook`                           | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.layout-components`                                   | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.media-query-hook`                                    | `realizes` | inbound   |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### Run History and Observability Views {#run-history-and-observability-views}
 
@@ -965,13 +1137,14 @@ Shipped capability: Trace viewer, log stream, diff viewers, version timeline and
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.observability-view-components`              | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.otlp-trace-adapter`                         | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.trace-viewer-model`                         | `realizes` | inbound   |
-| inter-layer | `application.applicationservice.x-ray-trace-adapter`                        | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.observability-view-components`                       | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.otlp-trace-adapter`                                  | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.trace-viewer-model`                                  | `realizes` | inbound   |
+| inter-layer | `application.applicationservice.x-ray-trace-adapter`                                 | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 
 ### UI Primitives {#ui-primitives}
 
@@ -989,10 +1162,12 @@ Shipped capability: Icons, buttons, chips, badges, avatars and segmented control
 
 #### Relationships
 
-| Type        | Related Element                                                             | Predicate  | Direction |
-| ----------- | --------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.primitive-components`                       | `realizes` | inbound   |
-| inter-layer | `motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools` | `supports` | outbound  |
+| Type        | Related Element                                                                      | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationservice.primitive-components`                                | `realizes` | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
+| intra-layer | `product.feature.per-component-imports`                                              | `realizes` | inbound   |
 
 ### UX Navigation Tree Layout {#ux-navigation-tree-layout}
 
@@ -1020,4 +1195,4 @@ Shipped capability: page-tree + view-fan layout for visualizing page/view naviga
 
 ---
 
-Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0
+Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0

@@ -41,7 +41,7 @@ application.applicationevent.node-hover-change-event:
     updated_at: 2026-09-18T14:35:20.804Z
     version: 1
 application.applicationevent.edge-select-event:
-  id: e5be4385-5f96-4837-a233-5766e19f8d87
+  id: 0e31ee56-5f99-4e7d-9319-8aed9e6ff83a
   path: application.applicationevent.edge-select-event
   spec_node_id: application.applicationevent
   type: applicationevent
@@ -57,11 +57,11 @@ application.applicationevent.edge-select-event:
       - file: src/components/GraphCanvas.tsx
         symbol: onEdgeSelect
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationevent.edge-hover-change-event:
-  id: c6aff205-f408-4f69-819f-cc5a9789b9ff
+  id: 1db57eac-d691-45fc-9db5-a37bf0056046
   path: application.applicationevent.edge-hover-change-event
   spec_node_id: application.applicationevent
   type: applicationevent
@@ -77,11 +77,11 @@ application.applicationevent.edge-hover-change-event:
       - file: src/components/GraphCanvas.tsx
         symbol: onEdgeHover
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationevent.background-click-event:
-  id: d36b88e8-b510-4813-898e-c1115c716cb6
+  id: dd3bd1d3-f6ec-4608-b7b0-bd7df45dd526
   path: application.applicationevent.background-click-event
   spec_node_id: application.applicationevent
   type: applicationevent
@@ -97,11 +97,11 @@ application.applicationevent.background-click-event:
       - file: src/components/GraphCanvas.tsx
         symbol: onBackgroundClick
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationevent.collapse-toggle-event:
-  id: 05b48b0e-54f8-43ee-bb29-44b59f8e90d2
+  id: 76256fc0-9c30-41c7-a9dc-295215aea859
   path: application.applicationevent.collapse-toggle-event
   spec_node_id: application.applicationevent
   type: applicationevent
@@ -117,11 +117,11 @@ application.applicationevent.collapse-toggle-event:
       - file: src/components/GraphCanvas.tsx
         symbol: onToggleCollapse
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationevent.layout-state-change-event:
-  id: 2c317361-c433-499a-a2ae-d45403f02ba7
+  id: 83729b23-c97c-4dc5-b8e1-4845b2b6dfb8
   path: application.applicationevent.layout-state-change-event
   spec_node_id: application.applicationevent
   type: applicationevent
@@ -138,11 +138,11 @@ application.applicationevent.layout-state-change-event:
       - file: src/components/GraphCanvas.tsx
         symbol: onLayoutStateChange
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationevent.viewport-dwell-event:
-  id: 26503107-c249-4e69-91d7-105ac49a0063
+  id: 2db69550-1fb7-4be1-8aea-ac9e0f4e6ec1
   path: application.applicationevent.viewport-dwell-event
   spec_node_id: application.applicationevent
   type: applicationevent
@@ -158,11 +158,11 @@ application.applicationevent.viewport-dwell-event:
       - file: src/components/GraphCanvas.tsx
         symbol: onViewportDwell
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationevent.viewport-navigate-event:
-  id: c5c46d45-447c-4bab-855c-e7022e63bfce
+  id: 7fc13a22-3dbb-4b33-b859-18f32f86e243
   path: application.applicationevent.viewport-navigate-event
   spec_node_id: application.applicationevent
   type: applicationevent
@@ -179,6 +179,6 @@ application.applicationevent.viewport-navigate-event:
       - file: src/components/GraphCanvas.tsx
         symbol: onViewportNavigate
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1

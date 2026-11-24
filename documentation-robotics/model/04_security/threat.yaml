@@ -1,5 +1,5 @@
 security.threat.script-injection-through-rendered-markdown:
-  id: 427e665d-c377-48f6-85ee-0436ef624a92
+  id: f2ca7ab7-4493-4d0d-b3e3-e869fdbeca0b
   path: security.threat.script-injection-through-rendered-markdown
   spec_node_id: security.threat
   type: threat
@@ -16,11 +16,11 @@ security.threat.script-injection-through-rendered-markdown:
     locations:
       - file: src/components/ChatMarkdownContent.tsx
   metadata:
-    created_at: 2026-11-21T18:10:35.033Z
-    updated_at: 2026-11-21T18:10:35.033Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 security.threat.reverse-tabnabbing-from-rendered-links:
-  id: 5353bc45-8f75-403e-b2dc-715c9d58b031
+  id: 875fdaf4-a52c-4451-800f-776677752236
   path: security.threat.reverse-tabnabbing-from-rendered-links
   spec_node_id: security.threat
   type: threat
@@ -37,11 +37,11 @@ security.threat.reverse-tabnabbing-from-rendered-links:
     locations:
       - file: src/components/ChatMarkdownContent.tsx
   metadata:
-    created_at: 2026-11-21T18:10:35.034Z
-    updated_at: 2026-11-21T18:10:35.034Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 security.threat.tampered-package-release:
-  id: 71d2ccff-15ed-48b1-b1c6-e8ef15d44026
+  id: b8824a8e-d339-4e1b-ae7f-de98b6b2ead9
   path: security.threat.tampered-package-release
   spec_node_id: security.threat
   type: threat
@@ -58,6 +58,6 @@ security.threat.tampered-package-release:
     locations:
       - file: .github/workflows/release.yml
   metadata:
-    created_at: 2026-11-21T18:10:35.034Z
-    updated_at: 2026-11-21T18:10:35.034Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1

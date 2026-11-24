@@ -5,12 +5,11 @@ application.applicationservice.graph-layout-engine-service:
   type: applicationservice
   layer_id: application
   name: Graph Layout Engine Service
-  description: "The layout engines GraphCanvas dispatches to by its layout prop:
-    force, organic, orthogonal, galaxy, force-clustered, ux-navigation,
-    radial-tree and layer-lanes ('manual' runs none). GraphCanvas first renders
-    the computing layout state and yields a frame (yieldToPaint), then runs the
-    engine, reporting idle/computing/simulating through onLayoutStateChange.
-    Was: five engines dispatched synchronously."
+  description: "The set of one-shot layout engines GraphCanvas dispatches to by
+    its layout prop: forceLayout, clusteredForceLayout, organicLayout,
+    orthogonalLayout, galaxyLayout, uxNavLayout, radialTreeLayout and
+    layoutLanes (layer-lanes). Each is also exported for headless use; all are
+    deterministic and return node centres."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -44,8 +43,29 @@ application.applicationservice.live-galaxy-simulation-service:
     created_at: 2026-09-18T14:35:21.480Z
     updated_at: 2026-09-18T14:35:21.480Z
     version: 1
+application.applicationservice.layered-graph-framework-service:
+  id: d7bd3aa4-ba9f-4cd8-9afa-6a090dec85b1
+  path: application.applicationservice.layered-graph-framework-service
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Layered Graph Framework Service
+  description: "useLayeredGraph(): the shared state behind the layered views: an
+    indexed graph, selection, reach, link and layer filters, focus, predicate
+    labels and plane layout, offered to views through LayeredGraphContext."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: useLayeredGraph
+  metadata:
+    created_at: 2026-11-23T16:44:40.172Z
+    updated_at: 2026-11-23T16:44:40.172Z
+    version: 1
 application.applicationservice.primitive-components:
-  id: 647d8afd-28f3-48d8-935a-bafd509be43a
+  id: 367a7e17-f2c0-4f29-8863-db4eff54924a
   path: application.applicationservice.primitive-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -60,11 +80,11 @@ application.applicationservice.primitive-components:
     locations:
       - file: agent-skills/heimdall-primitives/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 application.applicationservice.form-input-components:
-  id: fb8a50d3-9e1c-43f2-8103-e143d0de079a
+  id: 6308ca82-d3ab-4a0d-95d3-fce348df145c
   path: application.applicationservice.form-input-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -79,11 +99,11 @@ application.applicationservice.form-input-components:
     locations:
       - file: agent-skills/heimdall-inputs/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 application.applicationservice.data-display-components:
-  id: b72e5680-d303-442b-8626-0956d85b2169
+  id: be55ca39-cb23-4582-92d0-25237497ff91
   path: application.applicationservice.data-display-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -98,11 +118,11 @@ application.applicationservice.data-display-components:
     locations:
       - file: agent-skills/heimdall-data-display/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.navigation-components:
-  id: 48baae76-2be4-464b-8787-00985b658a05
+  id: d43dc9d6-55c0-4829-98f0-8f8bf9af5b6b
   path: application.applicationservice.navigation-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -116,11 +136,11 @@ application.applicationservice.navigation-components:
     locations:
       - file: agent-skills/heimdall-navigation/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.app-shell-components:
-  id: d1c19b90-4ed7-4b5f-9788-30d748c2781c
+  id: 10b3b36e-0fa1-4c56-ad1e-a0d00caf2cd3
   path: application.applicationservice.app-shell-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -135,11 +155,11 @@ application.applicationservice.app-shell-components:
     locations:
       - file: agent-skills/heimdall-shell/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.overlay-components:
-  id: 10452a7d-b38d-498f-9b57-78e82fde1904
+  id: ff2d6603-b30d-463c-b55c-accc54ad9048
   path: application.applicationservice.overlay-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -154,11 +174,11 @@ application.applicationservice.overlay-components:
     locations:
       - file: agent-skills/heimdall-overlays/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.layout-components:
-  id: 057556f2-81eb-480e-bd86-340997e4a0c4
+  id: e07f3073-83fd-4785-872f-709f95e91ec7
   path: application.applicationservice.layout-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -172,11 +192,11 @@ application.applicationservice.layout-components:
     locations:
       - file: agent-skills/heimdall-layout/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.chart-components:
-  id: 78895d0b-108d-45ac-bb18-133a0c0ba0d3
+  id: 182c4cb9-8d78-4b6b-bda2-507ece11012b
   path: application.applicationservice.chart-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -191,11 +211,11 @@ application.applicationservice.chart-components:
     locations:
       - file: agent-skills/heimdall-charts/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.page-pattern-components:
-  id: dae2fd05-b03b-4f77-b7ee-ba3d6ad3b4af
+  id: 9f802abf-eff7-4e50-a610-f3526a417f05
   path: application.applicationservice.page-pattern-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -210,11 +230,11 @@ application.applicationservice.page-pattern-components:
     locations:
       - file: agent-skills/heimdall-page-patterns/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.chat-components:
-  id: 77be62f7-cc45-4d75-a796-790c8c04e3d1
+  id: d4d1fa5f-0822-4933-8ec3-490135c482ff
   path: application.applicationservice.chat-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -229,11 +249,11 @@ application.applicationservice.chat-components:
     locations:
       - file: agent-skills/heimdall-chat/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.planning-components:
-  id: 2926b50e-edbf-4577-ae15-0908c456f019
+  id: 54363500-8cd0-479a-94e3-afe51f6ca8f5
   path: application.applicationservice.planning-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -247,11 +267,11 @@ application.applicationservice.planning-components:
     locations:
       - file: agent-skills/heimdall-planning/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.observability-view-components:
-  id: c4ed21ea-8c96-427b-b76a-808e0c231191
+  id: 066aee39-63b3-4f1a-9074-6b47bb353442
   path: application.applicationservice.observability-view-components
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -266,11 +286,11 @@ application.applicationservice.observability-view-components:
     locations:
       - file: agent-skills/heimdall-observability/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.interactive-graph-rendering:
-  id: 8087b4de-e623-4542-bfe2-f0d7d517a04c
+  id: 2079e5d7-b9db-4f94-8643-febfaf04c5ea
   path: application.applicationservice.interactive-graph-rendering
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -287,11 +307,11 @@ application.applicationservice.interactive-graph-rendering:
     locations:
       - file: src/components/GraphCanvas.tsx
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.layered-graph-visualization:
-  id: fef98065-5adb-451a-9052-9337b0dfec60
+  id: dab0239f-a398-42f6-9acf-76549b2354f9
   path: application.applicationservice.layered-graph-visualization
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -307,11 +327,11 @@ application.applicationservice.layered-graph-visualization:
     locations:
       - file: agent-skills/heimdall-graph/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.dropdown-portal-containment:
-  id: 313bac17-cf67-4010-8a9f-c3c2e6a5d874
+  id: 5657abbd-20bd-4140-9dcd-cb723a16779b
   path: application.applicationservice.dropdown-portal-containment
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -326,22 +346,12 @@ application.applicationservice.dropdown-portal-containment:
     locations:
       - file: src/hooks/useDropdownPortal.ts
         symbol: containsAcrossPortals
-  accepted_gaps:
-    - direction: incoming
-      predicate: realizes
-      other_spec_node_id: application.applicationfunction
-      reason: No function in the model is the exported containsAcrossPortals
-        (dropdown-portal-placement is useDropdownPortal, which is not exported);
-        the package realizes the service directly.
-      decided_by: agent
-      decided_at: 2026-11-24T14:32:13.343Z
-      changeset: changeset-1795530260776-vzupu4xrv
   metadata:
-    created_at: 2026-11-24T14:27:00.552Z
-    updated_at: 2026-11-24T14:27:00.552Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.graph-canvas-context-hook:
-  id: e859d2f1-2ac2-48ce-b34a-8e700256cea1
+  id: d8f7f2ed-0e7c-4630-9d8e-8a8930172d7f
   path: application.applicationservice.graph-canvas-context-hook
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -356,21 +366,12 @@ application.applicationservice.graph-canvas-context-hook:
     locations:
       - file: src/components/GraphCanvas.tsx
         symbol: useGraphCanvas
-  accepted_gaps:
-    - direction: incoming
-      predicate: realizes
-      other_spec_node_id: application.applicationfunction
-      reason: useGraphCanvas only reads GraphCanvas's context; no function in the
-        model is it, and the package realizes the service directly.
-      decided_by: agent
-      decided_at: 2026-11-24T14:32:18.162Z
-      changeset: changeset-1795530260776-vzupu4xrv
   metadata:
-    created_at: 2026-11-24T14:27:00.592Z
-    updated_at: 2026-11-24T14:27:00.592Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.adjacency-matrix-link-metadata:
-  id: 0ef97e10-f932-4c00-91f0-bbaaa38f9d02
+  id: 4f99c26e-7d5a-47b6-8bb4-69677a540ff8
   path: application.applicationservice.adjacency-matrix-link-metadata
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -385,22 +386,12 @@ application.applicationservice.adjacency-matrix-link-metadata:
     locations:
       - file: src/utils/layered/matrix.ts
         symbol: linkEdgeMetadata
-  accepted_gaps:
-    - direction: incoming
-      predicate: realizes
-      other_spec_node_id: application.applicationfunction
-      reason: No function in the model is the exported linkEdgeMetadata
-        (adjacency-matrix-ordering is clusterOrder, which is not exported); the
-        package realizes the service directly.
-      decided_by: agent
-      decided_at: 2026-11-24T14:32:22.513Z
-      changeset: changeset-1795530260776-vzupu4xrv
   metadata:
-    created_at: 2026-11-24T14:27:00.592Z
-    updated_at: 2026-11-24T14:27:00.592Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.tween-animation-hooks:
-  id: b5c13e87-48ff-48fb-9d8c-978f087c7d1a
+  id: e572b698-a6cf-40be-8662-695ac060d851
   path: application.applicationservice.tween-animation-hooks
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -417,11 +408,11 @@ application.applicationservice.tween-animation-hooks:
       - file: src/hooks/useTween.ts
         symbol: easeInOutCubic
   metadata:
-    created_at: 2026-11-24T14:27:00.654Z
-    updated_at: 2026-11-24T14:27:00.654Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.lane-layout:
-  id: f2068cfc-5301-456b-80e1-9b3a7b11e10d
+  id: ffb6be94-955c-4572-8dd9-50b25fecd223
   path: application.applicationservice.lane-layout
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -439,11 +430,11 @@ application.applicationservice.lane-layout:
       - file: src/utils/laneLayout.ts
         symbol: layoutLanes
   metadata:
-    created_at: 2026-11-24T14:27:00.654Z
-    updated_at: 2026-11-24T14:27:00.654Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.layered-graph-control-helpers:
-  id: d6805917-dba3-469f-8f2e-dd6c57767220
+  id: 990926ef-82d2-4d9e-aed3-3974cf331be8
   path: application.applicationservice.layered-graph-control-helpers
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -459,21 +450,12 @@ application.applicationservice.layered-graph-control-helpers:
     locations:
       - file: src/components/LayeredGraphControls.tsx
         symbol: followOptionLabel
-  accepted_gaps:
-    - direction: incoming
-      predicate: realizes
-      other_spec_node_id: application.applicationfunction
-      reason: No function in the model is useLayeredGraphProp, followOptionLabel or
-        categoryDisplayLabel; the package realizes the service directly.
-      decided_by: agent
-      decided_at: 2026-11-24T14:32:26.471Z
-      changeset: changeset-1795530260776-vzupu4xrv
   metadata:
-    created_at: 2026-11-24T14:27:00.654Z
-    updated_at: 2026-11-24T14:27:00.654Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.reach-relationship-helpers:
-  id: f9fc3fb3-f038-4cdd-b99f-de33a27ac685
+  id: fe691b90-ca24-4b12-9f29-8b7ae8e4aa4f
   path: application.applicationservice.reach-relationship-helpers
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -488,21 +470,12 @@ application.applicationservice.reach-relationship-helpers:
     locations:
       - file: src/components/ReachInspector.tsx
         symbol: reachRelationships
-  accepted_gaps:
-    - direction: incoming
-      predicate: realizes
-      other_spec_node_id: application.applicationfunction
-      reason: No function in the model is reachRelationships or reachSummaryText; the
-        package realizes the service directly.
-      decided_by: agent
-      decided_at: 2026-11-24T14:32:29.582Z
-      changeset: changeset-1795530260776-vzupu4xrv
   metadata:
-    created_at: 2026-11-24T14:27:00.655Z
-    updated_at: 2026-11-24T14:27:00.655Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.layered-graph-explorer-snapshot:
-  id: b9866f7e-2ba9-4172-aec5-fb6daf2c33b4
+  id: 1513441e-73c5-4e64-9ffd-a14537e02a16
   path: application.applicationservice.layered-graph-explorer-snapshot
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -519,21 +492,12 @@ application.applicationservice.layered-graph-explorer-snapshot:
     locations:
       - file: src/components/LayeredGraphExplorer.tsx
         symbol: sanitizeLayeredGraphExplorerSnapshot
-  accepted_gaps:
-    - direction: incoming
-      predicate: realizes
-      other_spec_node_id: application.applicationfunction
-      reason: No function in the model is sanitizeLayeredGraphExplorerSnapshot; the
-        package realizes the service directly.
-      decided_by: agent
-      decided_at: 2026-11-24T14:32:32.854Z
-      changeset: changeset-1795530260776-vzupu4xrv
   metadata:
-    created_at: 2026-11-24T14:27:00.657Z
-    updated_at: 2026-11-24T14:27:00.657Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.force-layout:
-  id: ce72db60-acc4-4a71-9b80-bb2c116b004b
+  id: 608a7ca7-b4f2-4ddf-b8fb-09bed347c629
   path: application.applicationservice.force-layout
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -550,11 +514,11 @@ application.applicationservice.force-layout:
       - file: src/utils/graphLayout.ts
         symbol: forceLayout
   metadata:
-    created_at: 2026-11-24T14:27:00.658Z
-    updated_at: 2026-11-24T14:27:00.658Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.galaxy-layout:
-  id: 8743743e-dd6b-44f6-9187-08fa506cd63c
+  id: 88534e09-3c5a-4a30-9276-31b74f16ba0b
   path: application.applicationservice.galaxy-layout
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -570,11 +534,11 @@ application.applicationservice.galaxy-layout:
       - file: src/utils/galaxyLayout.ts
         symbol: galaxyLayout
   metadata:
-    created_at: 2026-11-24T14:27:00.658Z
-    updated_at: 2026-11-24T14:27:00.658Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.organic-layout:
-  id: f85ca976-2846-41ca-84ae-490dc0845068
+  id: 34607e9b-db9a-4dd7-b339-33c24e866220
   path: application.applicationservice.organic-layout
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -590,11 +554,11 @@ application.applicationservice.organic-layout:
       - file: src/utils/organicLayout.ts
         symbol: organicLayout
   metadata:
-    created_at: 2026-11-24T14:27:00.659Z
-    updated_at: 2026-11-24T14:27:00.659Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.orthogonal-layout:
-  id: 2c5cccfd-e6b4-4292-abc0-3daf5c9dec1d
+  id: f57d11d1-8cf8-4c98-b498-a78852e25a70
   path: application.applicationservice.orthogonal-layout
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -610,11 +574,11 @@ application.applicationservice.orthogonal-layout:
       - file: src/utils/orthogonalLayout.ts
         symbol: orthogonalLayout
   metadata:
-    created_at: 2026-11-24T14:27:00.665Z
-    updated_at: 2026-11-24T14:27:00.665Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.ux-navigation-layout:
-  id: 41f1e885-56f6-4e4a-97e6-489d0f51f788
+  id: c6317f29-c0be-413a-8840-6fbf8d1c0655
   path: application.applicationservice.ux-navigation-layout
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -630,11 +594,11 @@ application.applicationservice.ux-navigation-layout:
       - file: src/utils/uxNavLayout.ts
         symbol: uxNavLayout
   metadata:
-    created_at: 2026-11-24T14:27:00.665Z
-    updated_at: 2026-11-24T14:27:00.665Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.radial-tree-layout:
-  id: 72db6214-5d4f-4985-929b-5b46ad995de9
+  id: 58f52b30-1503-4c86-8ad9-7c2563eecbb7
   path: application.applicationservice.radial-tree-layout
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -650,11 +614,11 @@ application.applicationservice.radial-tree-layout:
       - file: src/utils/radialTreeLayout.ts
         symbol: radialTreeLayout
   metadata:
-    created_at: 2026-11-24T14:27:00.665Z
-    updated_at: 2026-11-24T14:27:00.665Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.ux-navigation-edge-visibility:
-  id: 062ebbb5-8e33-4577-9e15-b90b229dbd34
+  id: dd96c6f1-4b11-4371-aa1c-81de67f0c065
   path: application.applicationservice.ux-navigation-edge-visibility
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -670,11 +634,11 @@ application.applicationservice.ux-navigation-edge-visibility:
       - file: src/utils/uxNavEdgeVisibility.ts
         symbol: visibleNavigationEdgeIds
   metadata:
-    created_at: 2026-11-24T14:27:00.665Z
-    updated_at: 2026-11-24T14:27:00.665Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.structural-hierarchy:
-  id: 8ff3f53f-63d2-45e2-96c7-e6c0d1802867
+  id: 188b8e40-f405-44ff-8577-a9d2d9baa00a
   path: application.applicationservice.structural-hierarchy
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -690,11 +654,11 @@ application.applicationservice.structural-hierarchy:
       - file: src/utils/graphHierarchy.ts
         symbol: buildStructuralForest
   metadata:
-    created_at: 2026-11-24T14:27:00.665Z
-    updated_at: 2026-11-24T14:27:00.665Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.louvain-clustering:
-  id: 81c957d8-6ebb-4ed9-a01e-e16fd7fb27c5
+  id: 47b97438-6753-4752-896a-19611096777f
   path: application.applicationservice.louvain-clustering
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -710,11 +674,11 @@ application.applicationservice.louvain-clustering:
       - file: src/utils/graphClustering.ts
         symbol: louvainCluster
   metadata:
-    created_at: 2026-11-24T14:27:00.665Z
-    updated_at: 2026-11-24T14:27:00.665Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.cluster-packing:
-  id: 349ab824-a8dd-48f9-8306-a52a55464ff9
+  id: 14908d5b-a45c-444a-a334-4107202a69fb
   path: application.applicationservice.cluster-packing
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -730,11 +694,11 @@ application.applicationservice.cluster-packing:
       - file: src/utils/graphPacking.ts
         symbol: packClusters
   metadata:
-    created_at: 2026-11-24T14:27:00.665Z
-    updated_at: 2026-11-24T14:27:00.665Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.edge-geometry:
-  id: c7ecac5f-c928-4c49-9a63-1a7d23a32155
+  id: 52b73d50-20e0-44d5-8f86-dabbf425ad1d
   path: application.applicationservice.edge-geometry
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -751,11 +715,11 @@ application.applicationservice.edge-geometry:
       - file: src/utils/graph.ts
         symbol: bezierPath
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.pan-and-zoom-hook:
-  id: bef8fdbe-b854-4fad-9765-b3121340d53d
+  id: b2bbb353-7a68-46e0-aac5-98f598d5f8c9
   path: application.applicationservice.pan-and-zoom-hook
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -770,21 +734,12 @@ application.applicationservice.pan-and-zoom-hook:
     locations:
       - file: src/hooks/usePanZoom.ts
         symbol: usePanZoom
-  accepted_gaps:
-    - direction: incoming
-      predicate: realizes
-      other_spec_node_id: application.applicationfunction
-      reason: No function in the model is usePanZoom; the package realizes the service
-        directly.
-      decided_by: agent
-      decided_at: 2026-11-24T14:32:35.121Z
-      changeset: changeset-1795530260776-vzupu4xrv
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.layered-graph-state-hooks:
-  id: 23856a89-2409-4cf9-88e6-c3d30190e764
+  id: 0cb83794-fd95-45e6-afad-86824398e0bd
   path: application.applicationservice.layered-graph-state-hooks
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -802,11 +757,11 @@ application.applicationservice.layered-graph-state-hooks:
       - file: src/hooks/useLayeredGraph.ts
         symbol: layeredGraphSnapshotDefaults
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.layered-graph-utilities:
-  id: 40121771-3e8b-4e2e-987c-35bf66904d60
+  id: 9aaa51eb-fac2-492e-8158-d7dd0f10335d
   path: application.applicationservice.layered-graph-utilities
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -839,11 +794,11 @@ application.applicationservice.layered-graph-utilities:
       - file: src/utils/layered/index.ts
         symbol: buildLayeredIndex
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.media-query-hook:
-  id: 9d601939-8277-4c7d-87e2-43fbed448943
+  id: df37272e-7903-4890-8843-5670bf5a5709
   path: application.applicationservice.media-query-hook
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -859,11 +814,11 @@ application.applicationservice.media-query-hook:
       - file: src/hooks/useMediaQuery.ts
         symbol: useMediaQuery
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.controllable-state-hook:
-  id: df8662ce-5b83-4530-9e10-a101a3ca73ce
+  id: d5ad3c67-be8d-437f-90b8-3cbe3f2eef1b
   path: application.applicationservice.controllable-state-hook
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -879,11 +834,11 @@ application.applicationservice.controllable-state-hook:
       - file: src/hooks/useControllable.ts
         symbol: useControllable
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.trace-viewer-model:
-  id: 08678daa-36a6-4f20-a4af-5f573dd19811
+  id: 4198fb37-8913-40cb-be8c-3c50c3acf204
   path: application.applicationservice.trace-viewer-model
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -902,11 +857,11 @@ application.applicationservice.trace-viewer-model:
       - file: src/components/traceViewerModel.ts
         symbol: buildTraceModel
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.otlp-trace-adapter:
-  id: 982462cd-88b7-4323-9fbd-1f8d0a7604fa
+  id: 10349dcc-9fbe-42ad-a301-1f62c7243904
   path: application.applicationservice.otlp-trace-adapter
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -922,11 +877,11 @@ application.applicationservice.otlp-trace-adapter:
       - file: src/utils/otlpTrace.ts
         symbol: fromOTLP
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1
 application.applicationservice.x-ray-trace-adapter:
-  id: aff12cf0-32d9-4a8e-a87a-af61a63f6eb4
+  id: c02c333b-d0d5-40c9-98e6-2d020877cf20
   path: application.applicationservice.x-ray-trace-adapter
   spec_node_id: application.applicationservice
   type: applicationservice
@@ -942,6 +897,6 @@ application.applicationservice.x-ray-trace-adapter:
       - file: src/utils/xrayTrace.ts
         symbol: fromXRay
   metadata:
-    created_at: 2026-11-24T14:27:00.666Z
-    updated_at: 2026-11-24T14:27:00.666Z
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
     version: 1

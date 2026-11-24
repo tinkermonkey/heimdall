@@ -22,7 +22,7 @@ testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation:
     updated_at: 2026-09-18T14:40:56.309Z
     version: 1
 testing.coveragerequirement.every-canvas-control-and-overlay-exercised:
-  id: ef077f63-5cd3-49cb-9fc5-6e41fcfe5c41
+  id: 4e5b23aa-5ce0-4b66-a867-270376519543
   path: testing.coveragerequirement.every-canvas-control-and-overlay-exercised
   spec_node_id: testing.coveragerequirement
   type: coveragerequirement
@@ -37,11 +37,11 @@ testing.coveragerequirement.every-canvas-control-and-overlay-exercised:
     locations:
       - file: tests/graph-components.spec.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.214Z
-    updated_at: 2026-11-21T17:15:51.214Z
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
     version: 1
 testing.coveragerequirement.galaxy-across-relation-aspect-and-live-modes:
-  id: 3a5f7cff-50ea-4f69-a1d2-465a8e0405e9
+  id: c94fbd4e-eb3d-4fdb-ba6d-6fe1a1ae31ef
   path: testing.coveragerequirement.galaxy-across-relation-aspect-and-live-modes
   spec_node_id: testing.coveragerequirement
   type: coveragerequirement
@@ -56,11 +56,11 @@ testing.coveragerequirement.galaxy-across-relation-aspect-and-live-modes:
     locations:
       - file: tests/graph-components.spec.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.214Z
-    updated_at: 2026-11-21T17:15:51.214Z
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
     version: 1
 testing.coveragerequirement.routing-with-and-without-obstacles:
-  id: aec61968-7885-4f50-9363-e947d5ec465a
+  id: 0cba317e-2c78-43b3-90a1-54163d80db58
   path: testing.coveragerequirement.routing-with-and-without-obstacles
   spec_node_id: testing.coveragerequirement
   type: coveragerequirement
@@ -75,11 +75,11 @@ testing.coveragerequirement.routing-with-and-without-obstacles:
     locations:
       - file: tests/graph-components.spec.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.214Z
-    updated_at: 2026-11-21T17:15:51.214Z
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
     version: 1
 testing.coveragerequirement.edge-endpoints-at-rect-sides-and-corners:
-  id: 4d2298e8-e842-41f9-b2c0-00dfa062baf8
+  id: ed53be3d-fae9-4935-8145-cfad3b02da07
   path: testing.coveragerequirement.edge-endpoints-at-rect-sides-and-corners
   spec_node_id: testing.coveragerequirement
   type: coveragerequirement
@@ -94,11 +94,11 @@ testing.coveragerequirement.edge-endpoints-at-rect-sides-and-corners:
     locations:
       - file: tests/graph-components.spec.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.214Z
-    updated_at: 2026-11-21T17:15:51.214Z
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
     version: 1
 testing.coveragerequirement.label-placement-clear-and-fallback:
-  id: 9c22be15-961d-4c7d-8b62-c56b1cd5eae6
+  id: 78220e9e-0e6a-44e1-820a-ae38e439a15b
   path: testing.coveragerequirement.label-placement-clear-and-fallback
   spec_node_id: testing.coveragerequirement
   type: coveragerequirement
@@ -113,6 +113,6 @@ testing.coveragerequirement.label-placement-clear-and-fallback:
     locations:
       - file: tests/graph-components.spec.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.214Z
-    updated_at: 2026-11-21T17:15:51.214Z
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
     version: 1

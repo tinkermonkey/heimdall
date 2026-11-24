@@ -1,5 +1,5 @@
 testing.environmentfactor.ci-chromium-rendering-environment:
-  id: 26ac5816-1238-48a0-b8da-b7346e530349
+  id: d6462d31-25e7-403a-aec6-c805e921bdc8
   path: testing.environmentfactor.ci-chromium-rendering-environment
   spec_node_id: testing.environmentfactor
   type: environmentfactor
@@ -16,6 +16,6 @@ testing.environmentfactor.ci-chromium-rendering-environment:
     locations:
       - file: playwright.config.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.214Z
-    updated_at: 2026-11-21T17:15:51.214Z
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
     version: 1

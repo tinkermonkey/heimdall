@@ -3,7 +3,7 @@ schema: documentation-robotics-v1
 cli_version: 0.7.1
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-24T15:33:35.347Z
+updated: 2026-11-24T20:12:20.893Z
 project:
   name: heimdall-ux
   description: ""
@@ -16,12 +16,12 @@ layers:
     path: documentation-robotics/model/01_motivation/
     enabled: true
     elements:
-      constraint: 4
       driver: 1
       goal: 5
-      principle: 3
-      requirement: 16
+      principle: 4
+      requirement: 17
       stakeholder: 3
+      constraint: 4
   business:
     order: 2
     name: Business
@@ -29,16 +29,16 @@ layers:
     enabled: true
     elements:
       businessactor: 2
-      businessfunction: 2
+      businessfunction: 3
       businessprocess: 1
-      businessservice: 2
+      businessservice: 3
   product:
     order: 3
     name: Product
     path: documentation-robotics/model/03_product/
     enabled: true
     elements:
-      feature: 7
+      feature: 12
       persona: 2
       softwarecapability: 22
   security:
@@ -48,9 +48,9 @@ layers:
     enabled: true
     elements:
       countermeasure: 3
-      secureresource: 2
-      securitymodel: 1
       threat: 3
+      securitymodel: 1
+      secureresource: 2
   application:
     order: 5
     name: Application
@@ -59,10 +59,10 @@ layers:
     elements:
       applicationcomponent: 3
       applicationevent: 9
-      applicationfunction: 56
+      applicationfunction: 59
       applicationinteraction: 1
       applicationprocess: 1
-      applicationservice: 43
+      applicationservice: 44
       dataobject: 2
   technology:
     order: 6
@@ -71,11 +71,11 @@ layers:
     enabled: true
     elements:
       artifact: 32
-      node: 1
-      systemsoftware: 1
       technologyfunction: 6
       technologyprocess: 6
       technologyservice: 2
+      node: 1
+      systemsoftware: 1
   api:
     order: 7
     name: Api
@@ -88,7 +88,7 @@ layers:
     path: documentation-robotics/model/08_data-model/
     enabled: true
     elements:
-      schemadefinition: 35
+      schemadefinition: 39
   data-store:
     order: 9
     name: Data store
@@ -100,9 +100,9 @@ layers:
     path: documentation-robotics/model/10_ux/
     enabled: true
     elements:
-      actionpattern: 4
+      actionpattern: 6
       librarycomponent: 113
-      statepattern: 5
+      statepattern: 6
       uxlibrary: 1
   navigation:
     order: 11
@@ -122,30 +122,24 @@ layers:
     path: documentation-robotics/model/13_testing/
     enabled: true
     elements:
-      contextvariation: 1
       coveragerequirement: 6
       coveragesummary: 1
-      environmentfactor: 1
+      testcasesketch: 1690
+      testcoveragemodel: 2
+      testcoveragetarget: 85
       inputpartitionselection: 2
-      inputspacepartition: 2
       partitionvalue: 4
       targetinputfield: 2
-      testcasesketch: 1694
-      testcoveragemodel: 1
-      testcoveragetarget: 88
+      contextvariation: 1
+      environmentfactor: 1
+      inputspacepartition: 2
 changeset_history:
   - name: wire-technology-orphans
     committed_at: 2026-09-18T14:45:21.201Z
     action: committed
-  - name: review-questions
-    committed_at: 2026-11-24T13:16:58.294Z
+  - name: heimdall-model-audit-2026-11
+    committed_at: 2026-11-23T17:44:43.295Z
     action: committed
-  - name: review-open
-    committed_at: 2026-11-24T13:25:05.564Z
-    action: committed
-  - name: heimdall-ui-public-api
-    committed_at: 2026-11-24T15:11:54.089Z
-    action: committed
-  - name: heimdall-graph-components-s10
-    committed_at: 2026-11-24T15:33:35.347Z
+  - name: reconcile-pilot-with-model-audit
+    committed_at: 2026-11-24T20:12:20.893Z
     action: committed

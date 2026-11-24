@@ -16,11 +16,11 @@ Data entities, relationships, and data structure definitions.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 35    |
-| Intra-Layer Relationships | 25    |
-| Inter-Layer Relationships | 37    |
-| Inbound Relationships     | 35    |
-| Outbound Relationships    | 2     |
+| Elements                  | 39    |
+| Intra-Layer Relationships | 32    |
+| Inter-Layer Relationships | 47    |
+| Inbound Relationships     | 43    |
+| Outbound Relationships    | 4     |
 
 **Cross-Layer References**:
 
@@ -50,15 +50,19 @@ Data entities, relationships, and data structure definitions.
 | `data-model.schemadefinition.hierarchy-edge`              | `schemadefinition` | 3             |
 | `data-model.schemadefinition.lane-layout`                 | `schemadefinition` | 1             |
 | `data-model.schemadefinition.layer-def`                   | `schemadefinition` | 1             |
-| `data-model.schemadefinition.layered-graph-snapshot`      | `schemadefinition` | 1             |
+| `data-model.schemadefinition.layered-graph-snapshot`      | `schemadefinition` | 2             |
 | `data-model.schemadefinition.layered-graph-state`         | `schemadefinition` | 3             |
-| `data-model.schemadefinition.layered-index`               | `schemadefinition` | 5             |
+| `data-model.schemadefinition.layered-index`               | `schemadefinition` | 6             |
 | `data-model.schemadefinition.layered-index-issue`         | `schemadefinition` | 1             |
 | `data-model.schemadefinition.layout-edge`                 | `schemadefinition` | 1             |
-| `data-model.schemadefinition.layout-node`                 | `schemadefinition` | 2             |
+| `data-model.schemadefinition.layout-node`                 | `schemadefinition` | 6             |
 | `data-model.schemadefinition.link-filter-state`           | `schemadefinition` | 2             |
-| `data-model.schemadefinition.organic-layout-options`      | `schemadefinition` | 0             |
-| `data-model.schemadefinition.orthogonal-layout-options`   | `schemadefinition` | 0             |
+| `data-model.schemadefinition.organic-layout-options`      | `schemadefinition` | 1             |
+| `data-model.schemadefinition.organic-layout-result`       | `schemadefinition` | 2             |
+| `data-model.schemadefinition.organic-layout-stats`        | `schemadefinition` | 1             |
+| `data-model.schemadefinition.orthogonal-layout-options`   | `schemadefinition` | 1             |
+| `data-model.schemadefinition.orthogonal-layout-result`    | `schemadefinition` | 2             |
+| `data-model.schemadefinition.orthogonal-layout-stats`     | `schemadefinition` | 1             |
 | `data-model.schemadefinition.otlp-traces-data`            | `schemadefinition` | 0             |
 | `data-model.schemadefinition.predicate-catalog`           | `schemadefinition` | 1             |
 | `data-model.schemadefinition.radial-tree-layout-result`   | `schemadefinition` | 1             |
@@ -96,17 +100,19 @@ flowchart TB
 
 | Relationship ID                                                         | Source Node                                                            | Dest Node                                               | Dest Layer    | Predicate  | Cardinality  | Strength |
 | ----------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------- | ------------- | ---------- | ------------ | -------- |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.edge-geometry`             | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-edge-data-shape`     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-node-data`           | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-viewport`            | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.lane-layout`               | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.layered-graph-state`       | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.edge-geometry`             | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-edge-data-shape`     | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-node-data`           | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-viewport`            | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.lane-layout`               | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.layered-graph-state`       | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.layout-state-change-event`               | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-dwell-event`                    | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-navigate-event`                 | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`           | `data-model.schemadefinition.trace`                     | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`           | `data-model.schemadefinition.xray-segment`              | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.cluster-circle-packing`               | `data-model.schemadefinition.cluster-tree-node`         | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`     | `data-model.schemadefinition.clustered-layout-options`  | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`     | `data-model.schemadefinition.clustered-layout-result`   | `data-model`  | `accesses` | many-to-many | medium   |
@@ -122,17 +128,25 @@ flowchart TB
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-edge`        | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-node`        | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-options`     | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.joint-edge-label-placement`           | `data-model.schemadefinition.edge-geometry`             | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-index-construction`     | `data-model.schemadefinition.layered-index`             | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-snapshot-sanitization`  | `data-model.schemadefinition.layered-graph-snapshot`    | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.louvain-community-clustering`         | `data-model.schemadefinition.cluster-tree-node`         | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.node-overlap-separation-pass`         | `data-model.schemadefinition.layout-node`               | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`             | `data-model.schemadefinition.organic-layout-options`    | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`             | `data-model.schemadefinition.organic-layout-result`     | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`          | `data-model.schemadefinition.orthogonal-layout-options` | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adapter`                   | `data-model.schemadefinition.otlp-traces-data`          | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`          | `data-model.schemadefinition.orthogonal-layout-result`  | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adaptation`                | `data-model.schemadefinition.otlp-traces-data`          | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adaptation`                | `data-model.schemadefinition.trace`                     | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.radial-tree-layout-algorithm`         | `data-model.schemadefinition.radial-tree-layout-result` | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.hierarchy-edge`            | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.structural-forest`         | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.x-ray-trace-adapter`                  | `data-model.schemadefinition.xray-segment`              | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.trace-model-construction`             | `data-model.schemadefinition.trace`                     | `data-model`  | `accesses` | many-to-many | medium   |
 | `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.graph-node-data`                          | `application.dataobject.node-rect-registry`             | `application` | `realizes` | many-to-many | medium   |
 | `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.layout-node`                              | `application.dataobject.node-position-map`              | `application` | `realizes` | many-to-many | medium   |
+| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.organic-layout-result`                    | `application.dataobject.node-position-map`              | `application` | `realizes` | many-to-many | medium   |
+| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.orthogonal-layout-result`                 | `application.dataobject.node-position-map`              | `application` | `realizes` | many-to-many | medium   |
 
 ## Element Reference
 
@@ -233,7 +247,7 @@ Return shape of clusteredForceLayout: final node positions plus an approximate b
 
 **Type**: `schemadefinition`
 
-Computed rendering geometry passed to a custom renderEdge callback: SVG path string, curve midpoint, collision-cleared label position, tangent angle, selected/hovered state.
+Computed rendering geometry passed to a custom renderEdge callback: SVG path string, curve midpoint, collision-cleared label position, tangent angle and, since PR #396, labelHidden: true when GraphCanvas would not draw the label now (no clear spot and not in focus, or mid-drag).
 
 #### Attributes
 
@@ -244,10 +258,11 @@ Computed rendering geometry passed to a custom renderEdge callback: SVG path str
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate    | Direction |
-| ----------- | ------------------------------------------------------ | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
-| intra-layer | `data-model.schemadefinition.graph-edge-data-shape`    | `references` | inbound   |
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.joint-edge-label-placement`  | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.graph-edge-data-shape`           | `references` | inbound   |
 
 ### ForceLayoutOptions {#forcelayoutoptions}
 
@@ -329,7 +344,7 @@ Node shape for galaxyLayout/galaxySimulationStep: id, width/height, optional exp
 
 **Type**: `schemadefinition`
 
-Tuning parameters for galaxyLayout: nodeSpread, startAngle, settleCycles, homeStrength, nodeMargin, separateGroups, aspectRatio, resolvedAspectScale.
+Tuning parameters for galaxyLayout: nodeSpread (multiple of the median body radius), nodeMargin, startAngle, aspectRatio and homeStrength. settleCycles, separateGroups and resolvedAspectScale are deprecated and ignored.
 
 #### Attributes
 
@@ -364,11 +379,11 @@ Public data shape for a graph edge: id/sourceId/targetId plus optional label, va
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate    | Direction |
-| ----------- | ------------------------------------------------------ | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
-| intra-layer | `data-model.schemadefinition.edge-geometry`            | `references` | outbound  |
-| intra-layer | `data-model.schemadefinition.layered-index`            | `references` | inbound   |
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.edge-geometry`                   | `references` | outbound  |
+| intra-layer | `data-model.schemadefinition.layered-index`                   | `references` | inbound   |
 
 ### GraphLayoutState {#graphlayoutstate}
 
@@ -388,10 +403,10 @@ idle \| computing \| simulating: whether GraphCanvas is waiting on a layout engi
 
 #### Relationships
 
-| Type        | Related Element                                          | Predicate  | Direction |
-| ----------- | -------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package`   | `accesses` | inbound   |
-| inter-layer | `application.applicationevent.layout-state-change-event` | `accesses` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses` | inbound   |
+| inter-layer | `application.applicationevent.layout-state-change-event`      | `accesses` | inbound   |
 
 ### GraphNodeData {#graphnodedata}
 
@@ -410,11 +425,11 @@ Public data shape for a graph node passed to GraphCanvas: id, label, optional ki
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate    | Direction |
-| ----------- | ------------------------------------------------------ | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
-| inter-layer | `application.dataobject.node-rect-registry`            | `realizes`   | outbound  |
-| intra-layer | `data-model.schemadefinition.layered-index`            | `references` | inbound   |
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses`   | inbound   |
+| inter-layer | `application.dataobject.node-rect-registry`                   | `realizes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.layered-index`                   | `references` | inbound   |
 
 ### GraphViewport {#graphviewport}
 
@@ -433,10 +448,10 @@ A GraphCanvas viewport (pan x/y and zoom) a caller can restore through initialVi
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate  | Direction |
-| ----------- | ------------------------------------------------------ | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses` | inbound   |
-| intra-layer | `data-model.schemadefinition.graph-viewport-snapshot`  | `composes` | inbound   |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses` | inbound   |
+| intra-layer | `data-model.schemadefinition.graph-viewport-snapshot`         | `composes` | inbound   |
 
 ### GraphViewportSnapshot {#graphviewportsnapshot}
 
@@ -455,12 +470,12 @@ Viewport plus selection and the cause of the change (GraphViewportCause), passed
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate  | Direction |
-| ----------- | ------------------------------------------------------ | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses` | inbound   |
-| inter-layer | `application.applicationevent.viewport-dwell-event`    | `accesses` | inbound   |
-| inter-layer | `application.applicationevent.viewport-navigate-event` | `accesses` | inbound   |
-| intra-layer | `data-model.schemadefinition.graph-viewport`           | `composes` | outbound  |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses` | inbound   |
+| inter-layer | `application.applicationevent.viewport-dwell-event`           | `accesses` | inbound   |
+| inter-layer | `application.applicationevent.viewport-navigate-event`        | `accesses` | inbound   |
+| intra-layer | `data-model.schemadefinition.graph-viewport`                  | `composes` | outbound  |
 
 ### HierarchyEdge {#hierarchyedge}
 
@@ -503,10 +518,10 @@ Output of layoutLanes: lane bands and node boxes for the swimlane view (orientat
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate    | Direction |
-| ----------- | ------------------------------------------------------ | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
-| intra-layer | `data-model.schemadefinition.layered-index`            | `references` | outbound  |
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.layered-index`                   | `references` | outbound  |
 
 ### LayerDef {#layerdef}
 
@@ -535,7 +550,7 @@ One layer of a layered graph: id, label, order and optional color; supplied thro
 
 **Type**: `schemadefinition`
 
-The serializable view state of a layered graph (selection, follow mode, filters, label mode, plane layout, camera). Consumers persist it (URL, storage) and restore it through sanitizeLayeredGraphSnapshot, which drops ids the current graph no longer has.
+Serializable view state of the layered views (selection, follow depth, link filters, focused and hidden layers, predicate label mode, plane layout), saved and restored by LayeredGraphExplorer.
 
 #### Attributes
 
@@ -546,9 +561,11 @@ The serializable view state of a layered graph (selection, follow mode, filters,
 
 #### Relationships
 
-| Type        | Related Element                                 | Predicate  | Direction |
-| ----------- | ----------------------------------------------- | ---------- | --------- |
-| intra-layer | `data-model.schemadefinition.link-filter-state` | `composes` | outbound  |
+| Type        | Related Element                                                       | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-snapshot-sanitization` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.link-filter-state`                       | `composes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.layered-index`                           | `references` | outbound  |
 
 ### LayeredGraphState {#layeredgraphstate}
 
@@ -567,12 +584,12 @@ Return value of useLayeredGraph, shared through LayeredGraphContext: the index, 
 
 #### Relationships
 
-| Type        | Related Element                                        | Predicate  | Direction |
-| ----------- | ------------------------------------------------------ | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses` | inbound   |
-| intra-layer | `data-model.schemadefinition.layered-index`            | `composes` | outbound  |
-| intra-layer | `data-model.schemadefinition.link-filter-state`        | `composes` | outbound  |
-| intra-layer | `data-model.schemadefinition.reach-result`             | `composes` | outbound  |
+| Type        | Related Element                                               | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses` | inbound   |
+| intra-layer | `data-model.schemadefinition.layered-index`                   | `composes` | outbound  |
+| intra-layer | `data-model.schemadefinition.link-filter-state`               | `composes` | outbound  |
+| intra-layer | `data-model.schemadefinition.reach-result`                    | `composes` | outbound  |
 
 ### LayeredIndex {#layeredindex}
 
@@ -580,7 +597,7 @@ Return value of useLayeredGraph, shared through LayeredGraphContext: the index, 
 
 **Type**: `schemadefinition`
 
-Output of buildLayeredIndex: indexed layers, nodes, links, adjacency, layer-pair summaries and the issues found (missing layer value, dangling edge, self loop, ...). The shared read model behind LayerStack, lanes, matrix and hive views.
+The indexed layered graph built by buildLayeredIndex: layers, nodes, links, adjacency, layer-pair summaries, predicate catalog and indexing issues.
 
 #### Attributes
 
@@ -591,13 +608,15 @@ Output of buildLayeredIndex: indexed layers, nodes, links, adjacency, layer-pair
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| intra-layer | `data-model.schemadefinition.lane-layout`           | `references` | inbound   |
-| intra-layer | `data-model.schemadefinition.layered-graph-state`   | `composes`   | inbound   |
-| intra-layer | `data-model.schemadefinition.layered-index-issue`   | `composes`   | outbound  |
-| intra-layer | `data-model.schemadefinition.graph-edge-data-shape` | `references` | outbound  |
-| intra-layer | `data-model.schemadefinition.graph-node-data`       | `references` | outbound  |
+| Type        | Related Element                                                    | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationfunction.layered-graph-index-construction` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.lane-layout`                          | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.layered-graph-snapshot`               | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.layered-graph-state`                  | `composes`   | inbound   |
+| intra-layer | `data-model.schemadefinition.layered-index-issue`                  | `composes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.graph-edge-data-shape`                | `references` | outbound  |
+| intra-layer | `data-model.schemadefinition.graph-node-data`                      | `references` | outbound  |
 
 ### LayeredIndexIssue {#layeredindexissue}
 
@@ -666,6 +685,10 @@ Internal layout-engine node shape shared by forceLayout/clusteredForceLayout/sep
 | inter-layer | `application.dataobject.node-position-map`                        | `realizes`   | outbound  |
 | intra-layer | `data-model.schemadefinition.clustered-layout-result`             | `references` | inbound   |
 | intra-layer | `data-model.schemadefinition.force-layout-options`                | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.organic-layout-options`              | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.organic-layout-result`               | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.orthogonal-layout-options`           | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.orthogonal-layout-result`            | `references` | inbound   |
 
 ### LinkFilterState {#linkfilterstate}
 
@@ -695,7 +718,7 @@ Which link categories, predicates and layer pairs are shown; DEFAULT_LINK_FILTER
 
 **Type**: `schemadefinition`
 
-Tuning for organicLayout (stress majorization with a hard minimum node gap); its result carries positions and OrganicLayoutStats.
+Tuning for organicLayout: preferredEdgeLength, minimumNodeDistance, compactness, componentSpacing, maxIterations, tolerance, scope (auto, all, affected) and affectedIds.
 
 #### Attributes
 
@@ -706,9 +729,55 @@ Tuning for organicLayout (stress majorization with a hard minimum node gap); its
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `accesses` | inbound   |
+| Type        | Related Element                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.layout-node`                  | `references` | outbound  |
+
+### OrganicLayoutResult {#organiclayoutresult}
+
+**ID**: `data-model.schemadefinition.organic-layout-result`
+
+**Type**: `schemadefinition`
+
+Return shape of organicLayout: positions, stressHistory and stats.
+
+#### Attributes
+
+| Name  | Value               |
+| ----- | ------------------- |
+| title | OrganicLayoutResult |
+| type  | object              |
+
+#### Relationships
+
+| Type        | Related Element                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm` | `accesses`   | inbound   |
+| inter-layer | `application.dataobject.node-position-map`                 | `realizes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.layout-node`                  | `references` | outbound  |
+| intra-layer | `data-model.schemadefinition.organic-layout-stats`         | `references` | outbound  |
+
+### OrganicLayoutStats {#organiclayoutstats}
+
+**ID**: `data-model.schemadefinition.organic-layout-stats`
+
+**Type**: `schemadefinition`
+
+Diagnostics returned with an organic layout (iterations run, final stress, convergence).
+
+#### Attributes
+
+| Name  | Value              |
+| ----- | ------------------ |
+| title | OrganicLayoutStats |
+| type  | object             |
+
+#### Relationships
+
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| intra-layer | `data-model.schemadefinition.organic-layout-result` | `references` | inbound   |
 
 ### OrthogonalLayoutOptions {#orthogonallayoutoptions}
 
@@ -716,7 +785,7 @@ Tuning for organicLayout (stress majorization with a hard minimum node gap); its
 
 **Type**: `schemadefinition`
 
-Tuning for orthogonalLayout (grid cells layered from a BFS spanning tree, orthogonal routes); its result carries positions, routes and OrthogonalLayoutStats.
+Tuning for orthogonalLayout: clearance, laneSpacing, lanes, bendPenalty, crossingPenalty, componentGap, orderingSweeps, isPageNode, busTreeEdges, scope (auto, cold, sketch).
 
 #### Attributes
 
@@ -727,9 +796,55 @@ Tuning for orthogonalLayout (grid cells layered from a BFS spanning tree, orthog
 
 #### Relationships
 
-| Type        | Related Element                                               | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm` | `accesses` | inbound   |
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.layout-node`                     | `references` | outbound  |
+
+### OrthogonalLayoutResult {#orthogonallayoutresult}
+
+**ID**: `data-model.schemadefinition.orthogonal-layout-result`
+
+**Type**: `schemadefinition`
+
+Return shape of orthogonalLayout: positions, routes (one polyline per input edge, box boundary to box boundary), groups, cell pitch, origin and stats.
+
+#### Attributes
+
+| Name  | Value                  |
+| ----- | ---------------------- |
+| title | OrthogonalLayoutResult |
+| type  | object                 |
+
+#### Relationships
+
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm` | `accesses`   | inbound   |
+| inter-layer | `application.dataobject.node-position-map`                    | `realizes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.layout-node`                     | `references` | outbound  |
+| intra-layer | `data-model.schemadefinition.orthogonal-layout-stats`         | `references` | outbound  |
+
+### OrthogonalLayoutStats {#orthogonallayoutstats}
+
+**ID**: `data-model.schemadefinition.orthogonal-layout-stats`
+
+**Type**: `schemadefinition`
+
+Diagnostics returned with an orthogonal layout, including router: "lattice" (exact, graphs up to 150 edges) or "channel" (orthogonalChannelRouter, larger graphs), plus fallback and pitch counts.
+
+#### Attributes
+
+| Name  | Value                 |
+| ----- | --------------------- |
+| title | OrthogonalLayoutStats |
+| type  | object                |
+
+#### Relationships
+
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| intra-layer | `data-model.schemadefinition.orthogonal-layout-result` | `references` | inbound   |
 
 ### OtlpTracesData {#otlptracesdata}
 
@@ -748,9 +863,9 @@ OpenTelemetry OTLP/JSON trace export (resourceSpans &gt; scopeSpans &gt; spans w
 
 #### Relationships
 
-| Type        | Related Element                                      | Predicate  | Direction |
-| ----------- | ---------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationfunction.otlp-trace-adapter` | `accesses` | inbound   |
+| Type        | Related Element                                         | Predicate  | Direction |
+| ----------- | ------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation` | `accesses` | inbound   |
 
 ### PredicateCatalog {#predicatecatalog}
 
@@ -845,7 +960,7 @@ Output of buildStructuralForest: parentOf map, childrenOf map, and roots array d
 
 **Type**: `schemadefinition`
 
-Format-neutral trace TraceViewer renders: TraceMeta, TraceSpan list (id, parent, service, kind, status, start/duration, attributes, events) and ServiceInfo. fromOTLP and fromXRay produce it.
+A distributed trace as TraceViewer reads it: spans (id, parent, service, name, kind, start, duration, status, attributes, events) plus trace metadata and service info; produced by fromOTLP and fromXRay.
 
 #### Attributes
 
@@ -856,10 +971,13 @@ Format-neutral trace TraceViewer renders: TraceMeta, TraceSpan list (id, parent,
 
 #### Relationships
 
-| Type        | Related Element                           | Predicate    | Direction |
-| ----------- | ----------------------------------------- | ------------ | --------- |
-| intra-layer | `data-model.schemadefinition.trace-span`  | `composes`   | outbound  |
-| intra-layer | `data-model.schemadefinition.trace-model` | `references` | inbound   |
+| Type        | Related Element                                              | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationfunction.aws-x-ray-trace-adaptation` | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.otlp-trace-adaptation`      | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.trace-model-construction`   | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.trace-span`                     | `composes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.trace-model`                    | `references` | inbound   |
 
 ### TraceModel {#tracemodel}
 
@@ -920,10 +1038,10 @@ AWS X-Ray segment document with nested subsegments, http, sql, cause and excepti
 
 #### Relationships
 
-| Type        | Related Element                                       | Predicate  | Direction |
-| ----------- | ----------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationfunction.x-ray-trace-adapter` | `accesses` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.aws-x-ray-trace-adaptation` | `accesses` | inbound   |
 
 ---
 
-Generated: 2026-11-24T15:33:35.364Z | Model Version: 0.1.0
+Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0

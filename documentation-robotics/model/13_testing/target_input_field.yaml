@@ -1,5 +1,5 @@
 testing.targetinputfield.layout-node-size-field:
-  id: 93fe7b1d-beef-4c36-8c11-063f6dd9a127
+  id: db1dede0-8552-4581-b584-4c895573e95f
   path: testing.targetinputfield.layout-node-size-field
   spec_node_id: testing.targetinputfield
   type: targetinputfield
@@ -13,11 +13,11 @@ testing.targetinputfield.layout-node-size-field:
     locations:
       - file: tests/graph-layout.spec.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.213Z
-    updated_at: 2026-11-21T17:15:51.213Z
+    created_at: 2026-11-24T19:01:20.531Z
+    updated_at: 2026-11-24T19:01:20.531Z
     version: 1
 testing.targetinputfield.graph-edge-set-field:
-  id: 3bd53f74-6279-439d-8c4c-6345cb2f39cc
+  id: 857e0df5-e514-4de4-8afb-03b614756b5e
   path: testing.targetinputfield.graph-edge-set-field
   spec_node_id: testing.targetinputfield
   type: targetinputfield
@@ -31,6 +31,6 @@ testing.targetinputfield.graph-edge-set-field:
     locations:
       - file: tests/graph-layout.spec.ts
   metadata:
-    created_at: 2026-11-21T17:15:51.214Z
-    updated_at: 2026-11-21T17:15:51.214Z
+    created_at: 2026-11-24T19:01:20.531Z
+    updated_at: 2026-11-24T19:01:20.531Z
     version: 1

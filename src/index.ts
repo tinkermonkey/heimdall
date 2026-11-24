@@ -72,6 +72,7 @@ export { CommandPalette, type Command, type CommandPaletteProps } from './compon
 export { Panel, type PanelProps } from './components/Panel'
 export { Drawer, type DrawerProps } from './components/Drawer'
 export { SplitPane, type SplitPaneProps } from './components/SplitPane'
+export { PaneRail, type PaneRailProps, type PaneRailMark } from './components/PaneRail'
 export {
   InspectorPanel,
   type InspectorPanelProps,

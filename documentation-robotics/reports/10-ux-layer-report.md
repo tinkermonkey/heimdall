@@ -16,11 +16,11 @@ User interface components, screens, and user experience elements.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 123   |
-| Intra-Layer Relationships | 282   |
-| Inter-Layer Relationships | 486   |
-| Inbound Relationships     | 250   |
-| Outbound Relationships    | 236   |
+| Elements                  | 126   |
+| Intra-Layer Relationships | 317   |
+| Inter-Layer Relationships | 549   |
+| Inbound Relationships     | 305   |
+| Outbound Relationships    | 244   |
 
 **Cross-Layer References**:
 
@@ -34,128 +34,131 @@ User interface components, screens, and user experience elements.
 | Element                                                              | Type               | Relationships |
 | -------------------------------------------------------------------- | ------------------ | ------------- |
 | `ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click` | `actionpattern`    | 3             |
+| `ux.actionpattern.layer-stack-camera-orbit-and-presets`              | `actionpattern`    | 2             |
+| `ux.actionpattern.link-navigation`                                   | `actionpattern`    | 4             |
 | `ux.actionpattern.node-drag-reposition`                              | `actionpattern`    | 2             |
 | `ux.actionpattern.node-select-on-click-or-enterspace`                | `actionpattern`    | 2             |
 | `ux.actionpattern.panzoom-viewport-gesture`                          | `actionpattern`    | 1             |
-| `ux.librarycomponent.activity-timeline-ux`                           | `librarycomponent` | 2             |
-| `ux.librarycomponent.adjacency-matrix-ux`                            | `librarycomponent` | 8             |
-| `ux.librarycomponent.alert-strip-ux`                                 | `librarycomponent` | 3             |
-| `ux.librarycomponent.app-title-ux`                                   | `librarycomponent` | 3             |
-| `ux.librarycomponent.asset-card-ux`                                  | `librarycomponent` | 2             |
-| `ux.librarycomponent.asset-grid-ux`                                  | `librarycomponent` | 1             |
-| `ux.librarycomponent.avatar-ux`                                      | `librarycomponent` | 1             |
-| `ux.librarycomponent.badge-ux`                                       | `librarycomponent` | 3             |
-| `ux.librarycomponent.bar-chart-ux`                                   | `librarycomponent` | 1             |
-| `ux.librarycomponent.bar-h-ux`                                       | `librarycomponent` | 1             |
-| `ux.librarycomponent.bar-v-ux`                                       | `librarycomponent` | 1             |
-| `ux.librarycomponent.bridge-node-list-ux`                            | `librarycomponent` | 5             |
-| `ux.librarycomponent.button-ux`                                      | `librarycomponent` | 19            |
-| `ux.librarycomponent.calendar-ux`                                    | `librarycomponent` | 5             |
-| `ux.librarycomponent.camera-controls-ux`                             | `librarycomponent` | 10            |
-| `ux.librarycomponent.chart-wrapper-ux`                               | `librarycomponent` | 1             |
-| `ux.librarycomponent.chat-composer-ux`                               | `librarycomponent` | 3             |
-| `ux.librarycomponent.chat-container-ux`                              | `librarycomponent` | 1             |
-| `ux.librarycomponent.chat-divider-ux`                                | `librarycomponent` | 1             |
-| `ux.librarycomponent.chat-markdown-content-ux`                       | `librarycomponent` | 1             |
-| `ux.librarycomponent.chat-message-ux`                                | `librarycomponent` | 2             |
-| `ux.librarycomponent.chat-suggestions-ux`                            | `librarycomponent` | 1             |
-| `ux.librarycomponent.chip-ux`                                        | `librarycomponent` | 10            |
-| `ux.librarycomponent.command-palette-ux`                             | `librarycomponent` | 2             |
-| `ux.librarycomponent.config-tile-ux`                                 | `librarycomponent` | 2             |
-| `ux.librarycomponent.confirm-dialog-ux`                              | `librarycomponent` | 4             |
-| `ux.librarycomponent.detail-drawer-ux`                               | `librarycomponent` | 1             |
-| `ux.librarycomponent.diff-viewer-ux`                                 | `librarycomponent` | 4             |
-| `ux.librarycomponent.donut-ux`                                       | `librarycomponent` | 1             |
-| `ux.librarycomponent.drawer-ux`                                      | `librarycomponent` | 3             |
-| `ux.librarycomponent.entity-picker-ux`                               | `librarycomponent` | 4             |
-| `ux.librarycomponent.field-ux`                                       | `librarycomponent` | 1             |
-| `ux.librarycomponent.filter-bar-ux`                                  | `librarycomponent` | 3             |
-| `ux.librarycomponent.filter-dropdown-ux`                             | `librarycomponent` | 2             |
-| `ux.librarycomponent.follow-control-ux`                              | `librarycomponent` | 9             |
-| `ux.librarycomponent.form-callout-ux`                                | `librarycomponent` | 2             |
-| `ux.librarycomponent.graph-canvas-ux`                                | `librarycomponent` | 12            |
+| `ux.librarycomponent.activity-timeline`                              | `librarycomponent` | 2             |
+| `ux.librarycomponent.adjacency-matrix`                               | `librarycomponent` | 9             |
+| `ux.librarycomponent.alert-strip`                                    | `librarycomponent` | 3             |
+| `ux.librarycomponent.app-title`                                      | `librarycomponent` | 3             |
+| `ux.librarycomponent.asset-card`                                     | `librarycomponent` | 2             |
+| `ux.librarycomponent.asset-grid`                                     | `librarycomponent` | 1             |
+| `ux.librarycomponent.avatar`                                         | `librarycomponent` | 1             |
+| `ux.librarycomponent.badge`                                          | `librarycomponent` | 3             |
+| `ux.librarycomponent.bar-chart`                                      | `librarycomponent` | 1             |
+| `ux.librarycomponent.bar-h`                                          | `librarycomponent` | 1             |
+| `ux.librarycomponent.bar-v`                                          | `librarycomponent` | 1             |
+| `ux.librarycomponent.bridge-node-list`                               | `librarycomponent` | 8             |
+| `ux.librarycomponent.button`                                         | `librarycomponent` | 19            |
+| `ux.librarycomponent.calendar`                                       | `librarycomponent` | 5             |
+| `ux.librarycomponent.camera-controls`                                | `librarycomponent` | 19            |
+| `ux.librarycomponent.chart-wrapper`                                  | `librarycomponent` | 1             |
+| `ux.librarycomponent.chat-composer`                                  | `librarycomponent` | 3             |
+| `ux.librarycomponent.chat-container`                                 | `librarycomponent` | 1             |
+| `ux.librarycomponent.chat-divider`                                   | `librarycomponent` | 1             |
+| `ux.librarycomponent.chat-markdown-content`                          | `librarycomponent` | 1             |
+| `ux.librarycomponent.chat-message`                                   | `librarycomponent` | 2             |
+| `ux.librarycomponent.chat-suggestions`                               | `librarycomponent` | 1             |
+| `ux.librarycomponent.chip`                                           | `librarycomponent` | 10            |
+| `ux.librarycomponent.command-palette`                                | `librarycomponent` | 2             |
+| `ux.librarycomponent.config-tile`                                    | `librarycomponent` | 2             |
+| `ux.librarycomponent.confirm-dialog`                                 | `librarycomponent` | 4             |
+| `ux.librarycomponent.detail-drawer`                                  | `librarycomponent` | 1             |
+| `ux.librarycomponent.diff-viewer`                                    | `librarycomponent` | 4             |
+| `ux.librarycomponent.donut`                                          | `librarycomponent` | 1             |
+| `ux.librarycomponent.drawer`                                         | `librarycomponent` | 3             |
+| `ux.librarycomponent.entity-picker`                                  | `librarycomponent` | 4             |
+| `ux.librarycomponent.field`                                          | `librarycomponent` | 1             |
+| `ux.librarycomponent.filter-bar`                                     | `librarycomponent` | 3             |
+| `ux.librarycomponent.filter-dropdown`                                | `librarycomponent` | 2             |
+| `ux.librarycomponent.follow-control`                                 | `librarycomponent` | 9             |
+| `ux.librarycomponent.form-callout`                                   | `librarycomponent` | 2             |
+| `ux.librarycomponent.graph-canvas-ux`                                | `librarycomponent` | 15            |
 | `ux.librarycomponent.graph-collapse-control-ux`                      | `librarycomponent` | 4             |
 | `ux.librarycomponent.graph-edge-inspector-ux`                        | `librarycomponent` | 3             |
 | `ux.librarycomponent.graph-edge-shape-ux`                            | `librarycomponent` | 3             |
-| `ux.librarycomponent.graph-edge-ux`                                  | `librarycomponent` | 2             |
+| `ux.librarycomponent.graph-edge-ux`                                  | `librarycomponent` | 5             |
 | `ux.librarycomponent.graph-inspector-ux`                             | `librarycomponent` | 1             |
 | `ux.librarycomponent.graph-node-ux`                                  | `librarycomponent` | 4             |
 | `ux.librarycomponent.graph-toolbar-ux`                               | `librarycomponent` | 3             |
-| `ux.librarycomponent.hash-set-diff-ux`                               | `librarycomponent` | 3             |
-| `ux.librarycomponent.heatmap-ux`                                     | `librarycomponent` | 1             |
-| `ux.librarycomponent.hierarchy-row-ux`                               | `librarycomponent` | 1             |
-| `ux.librarycomponent.hierarchy-tree-ux`                              | `librarycomponent` | 1             |
-| `ux.librarycomponent.hive-plot-ux`                                   | `librarycomponent` | 5             |
-| `ux.librarycomponent.icon-ux`                                        | `librarycomponent` | 50            |
-| `ux.librarycomponent.inspector-panel-ux`                             | `librarycomponent` | 2             |
-| `ux.librarycomponent.kanban-board-ux`                                | `librarycomponent` | 5             |
-| `ux.librarycomponent.key-value-editor-ux`                            | `librarycomponent` | 5             |
-| `ux.librarycomponent.kvgrid-ux`                                      | `librarycomponent` | 1             |
-| `ux.librarycomponent.layer-list-ux`                                  | `librarycomponent` | 5             |
-| `ux.librarycomponent.layer-pair-list-ux`                             | `librarycomponent` | 5             |
-| `ux.librarycomponent.layer-stack-ux`                                 | `librarycomponent` | 5             |
+| `ux.librarycomponent.hash-set-diff`                                  | `librarycomponent` | 3             |
+| `ux.librarycomponent.heatmap`                                        | `librarycomponent` | 1             |
+| `ux.librarycomponent.hierarchy-row`                                  | `librarycomponent` | 1             |
+| `ux.librarycomponent.hierarchy-tree`                                 | `librarycomponent` | 1             |
+| `ux.librarycomponent.hive-plot`                                      | `librarycomponent` | 6             |
+| `ux.librarycomponent.icon`                                           | `librarycomponent` | 50            |
+| `ux.librarycomponent.inspector-panel`                                | `librarycomponent` | 2             |
+| `ux.librarycomponent.kanban-board`                                   | `librarycomponent` | 5             |
+| `ux.librarycomponent.key-value-editor`                               | `librarycomponent` | 5             |
+| `ux.librarycomponent.kvgrid`                                         | `librarycomponent` | 1             |
+| `ux.librarycomponent.layer-list`                                     | `librarycomponent` | 8             |
+| `ux.librarycomponent.layer-pair-list`                                | `librarycomponent` | 8             |
+| `ux.librarycomponent.layer-stack`                                    | `librarycomponent` | 7             |
 | `ux.librarycomponent.layered-graph-context-ux`                       | `librarycomponent` | 15            |
-| `ux.librarycomponent.layered-graph-explorer-ux`                      | `librarycomponent` | 10            |
-| `ux.librarycomponent.line-chart-ux`                                  | `librarycomponent` | 1             |
-| `ux.librarycomponent.lineage-rail-ux`                                | `librarycomponent` | 3             |
-| `ux.librarycomponent.link-category-filter-ux`                        | `librarycomponent` | 5             |
-| `ux.librarycomponent.log-stream-ux`                                  | `librarycomponent` | 1             |
-| `ux.librarycomponent.map-canvas-ux`                                  | `librarycomponent` | 1             |
-| `ux.librarycomponent.metric-row-ux`                                  | `librarycomponent` | 3             |
-| `ux.librarycomponent.mini-calendar-ux`                               | `librarycomponent` | 1             |
-| `ux.librarycomponent.modal-ux`                                       | `librarycomponent` | 6             |
-| `ux.librarycomponent.nav-item-ux`                                    | `librarycomponent` | 2             |
-| `ux.librarycomponent.number-input-ux`                                | `librarycomponent` | 1             |
-| `ux.librarycomponent.ordered-list-ux`                                | `librarycomponent` | 3             |
-| `ux.librarycomponent.page-header-ux`                                 | `librarycomponent` | 2             |
-| `ux.librarycomponent.panel-ux`                                       | `librarycomponent` | 2             |
-| `ux.librarycomponent.pipeline-card-ux`                               | `librarycomponent` | 3             |
-| `ux.librarycomponent.plane-layout-control-ux`                        | `librarycomponent` | 5             |
-| `ux.librarycomponent.popover-ux`                                     | `librarycomponent` | 1             |
-| `ux.librarycomponent.predicate-label-control-ux`                     | `librarycomponent` | 5             |
-| `ux.librarycomponent.progress-bar-ux`                                | `librarycomponent` | 3             |
-| `ux.librarycomponent.quick-access-grid-ux`                           | `librarycomponent` | 3             |
-| `ux.librarycomponent.quick-access-tile-ux`                           | `librarycomponent` | 3             |
-| `ux.librarycomponent.reach-inspector-ux`                             | `librarycomponent` | 9             |
-| `ux.librarycomponent.relationship-builder-ux`                        | `librarycomponent` | 3             |
-| `ux.librarycomponent.result-card-ux`                                 | `librarycomponent` | 5             |
-| `ux.librarycomponent.row-menu-ux`                                    | `librarycomponent` | 2             |
-| `ux.librarycomponent.segmented-control-ux`                           | `librarycomponent` | 12            |
-| `ux.librarycomponent.select-ux`                                      | `librarycomponent` | 4             |
-| `ux.librarycomponent.shell-layout-ux`                                | `librarycomponent` | 8             |
-| `ux.librarycomponent.side-by-side-diff-ux`                           | `librarycomponent` | 3             |
-| `ux.librarycomponent.sidebar-ux`                                     | `librarycomponent` | 4             |
-| `ux.librarycomponent.sparkline-ux`                                   | `librarycomponent` | 3             |
-| `ux.librarycomponent.split-pane-ux`                                  | `librarycomponent` | 1             |
-| `ux.librarycomponent.stacked-bar-ux`                                 | `librarycomponent` | 1             |
-| `ux.librarycomponent.stat-grid-ux`                                   | `librarycomponent` | 1             |
-| `ux.librarycomponent.stat-tile-ux`                                   | `librarycomponent` | 4             |
-| `ux.librarycomponent.status-badge-ux`                                | `librarycomponent` | 1             |
-| `ux.librarycomponent.status-timeline-ux`                             | `librarycomponent` | 1             |
-| `ux.librarycomponent.statusbar-ux`                                   | `librarycomponent` | 3             |
-| `ux.librarycomponent.tab-bar-ux`                                     | `librarycomponent` | 2             |
-| `ux.librarycomponent.table-ux`                                       | `librarycomponent` | 2             |
-| `ux.librarycomponent.text-area-ux`                                   | `librarycomponent` | 1             |
-| `ux.librarycomponent.text-input-ux`                                  | `librarycomponent` | 2             |
-| `ux.librarycomponent.thinking-block-ux`                              | `librarycomponent` | 2             |
-| `ux.librarycomponent.titlebar-ux`                                    | `librarycomponent` | 2             |
-| `ux.librarycomponent.toast-ux`                                       | `librarycomponent` | 2             |
-| `ux.librarycomponent.tool-block-ux`                                  | `librarycomponent` | 2             |
-| `ux.librarycomponent.tooltip-ux`                                     | `librarycomponent` | 1             |
-| `ux.librarycomponent.topbar-ux`                                      | `librarycomponent` | 2             |
-| `ux.librarycomponent.topology-node-ux`                               | `librarycomponent` | 1             |
-| `ux.librarycomponent.trace-viewer-ux`                                | `librarycomponent` | 2             |
-| `ux.librarycomponent.tri-state-ux`                                   | `librarycomponent` | 1             |
-| `ux.librarycomponent.version-pill-ux`                                | `librarycomponent` | 8             |
-| `ux.librarycomponent.version-timeline-ux`                            | `librarycomponent` | 3             |
-| `ux.librarycomponent.view-switcher-ux`                               | `librarycomponent` | 10            |
-| `ux.librarycomponent.workspace-switcher-dialog-ux`                   | `librarycomponent` | 4             |
+| `ux.librarycomponent.layered-graph-explorer`                         | `librarycomponent` | 19            |
+| `ux.librarycomponent.line-chart`                                     | `librarycomponent` | 1             |
+| `ux.librarycomponent.lineage-rail`                                   | `librarycomponent` | 3             |
+| `ux.librarycomponent.link-category-filter`                           | `librarycomponent` | 8             |
+| `ux.librarycomponent.log-stream`                                     | `librarycomponent` | 1             |
+| `ux.librarycomponent.map-canvas`                                     | `librarycomponent` | 1             |
+| `ux.librarycomponent.metric-row`                                     | `librarycomponent` | 3             |
+| `ux.librarycomponent.mini-calendar`                                  | `librarycomponent` | 1             |
+| `ux.librarycomponent.modal`                                          | `librarycomponent` | 6             |
+| `ux.librarycomponent.nav-item`                                       | `librarycomponent` | 3             |
+| `ux.librarycomponent.number-input`                                   | `librarycomponent` | 1             |
+| `ux.librarycomponent.ordered-list`                                   | `librarycomponent` | 3             |
+| `ux.librarycomponent.page-header`                                    | `librarycomponent` | 2             |
+| `ux.librarycomponent.panel`                                          | `librarycomponent` | 2             |
+| `ux.librarycomponent.pipeline-card`                                  | `librarycomponent` | 3             |
+| `ux.librarycomponent.plane-layout-control`                           | `librarycomponent` | 8             |
+| `ux.librarycomponent.popover`                                        | `librarycomponent` | 1             |
+| `ux.librarycomponent.predicate-label-control`                        | `librarycomponent` | 8             |
+| `ux.librarycomponent.progress-bar`                                   | `librarycomponent` | 3             |
+| `ux.librarycomponent.quick-access-grid`                              | `librarycomponent` | 4             |
+| `ux.librarycomponent.quick-access-tile`                              | `librarycomponent` | 4             |
+| `ux.librarycomponent.reach-inspector`                                | `librarycomponent` | 10            |
+| `ux.librarycomponent.relationship-builder`                           | `librarycomponent` | 3             |
+| `ux.librarycomponent.result-card`                                    | `librarycomponent` | 5             |
+| `ux.librarycomponent.row-menu`                                       | `librarycomponent` | 2             |
+| `ux.librarycomponent.segmented-control`                              | `librarycomponent` | 12            |
+| `ux.librarycomponent.select`                                         | `librarycomponent` | 4             |
+| `ux.librarycomponent.shell-layout`                                   | `librarycomponent` | 8             |
+| `ux.librarycomponent.side-by-side-diff`                              | `librarycomponent` | 3             |
+| `ux.librarycomponent.sidebar`                                        | `librarycomponent` | 5             |
+| `ux.librarycomponent.sparkline`                                      | `librarycomponent` | 3             |
+| `ux.librarycomponent.split-pane`                                     | `librarycomponent` | 1             |
+| `ux.librarycomponent.stacked-bar`                                    | `librarycomponent` | 1             |
+| `ux.librarycomponent.stat-grid`                                      | `librarycomponent` | 1             |
+| `ux.librarycomponent.stat-tile`                                      | `librarycomponent` | 4             |
+| `ux.librarycomponent.status-badge`                                   | `librarycomponent` | 1             |
+| `ux.librarycomponent.status-timeline`                                | `librarycomponent` | 1             |
+| `ux.librarycomponent.statusbar`                                      | `librarycomponent` | 3             |
+| `ux.librarycomponent.tab-bar`                                        | `librarycomponent` | 2             |
+| `ux.librarycomponent.table`                                          | `librarycomponent` | 2             |
+| `ux.librarycomponent.text-area`                                      | `librarycomponent` | 1             |
+| `ux.librarycomponent.text-input`                                     | `librarycomponent` | 2             |
+| `ux.librarycomponent.thinking-block`                                 | `librarycomponent` | 2             |
+| `ux.librarycomponent.titlebar`                                       | `librarycomponent` | 2             |
+| `ux.librarycomponent.toast`                                          | `librarycomponent` | 2             |
+| `ux.librarycomponent.tool-block`                                     | `librarycomponent` | 2             |
+| `ux.librarycomponent.tooltip`                                        | `librarycomponent` | 1             |
+| `ux.librarycomponent.topbar`                                         | `librarycomponent` | 2             |
+| `ux.librarycomponent.topology-node`                                  | `librarycomponent` | 1             |
+| `ux.librarycomponent.trace-viewer`                                   | `librarycomponent` | 2             |
+| `ux.librarycomponent.tri-state`                                      | `librarycomponent` | 1             |
+| `ux.librarycomponent.version-pill`                                   | `librarycomponent` | 8             |
+| `ux.librarycomponent.version-timeline`                               | `librarycomponent` | 3             |
+| `ux.librarycomponent.view-switcher`                                  | `librarycomponent` | 18            |
+| `ux.librarycomponent.workspace-switcher-dialog`                      | `librarycomponent` | 4             |
 | `ux.statepattern.canvas-theme-light-or-dark-canvas`                  | `statepattern`     | 1             |
 | `ux.statepattern.collapsed-node-set-progressive-disclosure`          | `statepattern`     | 2             |
+| `ux.statepattern.layered-selection-and-reach`                        | `statepattern`     | 5             |
 | `ux.statepattern.layout-computation-state`                           | `statepattern`     | 1             |
 | `ux.statepattern.live-simulation-vs-static-layout-state`             | `statepattern`     | 1             |
 | `ux.statepattern.node-hover-and-selection-state`                     | `statepattern`     | 3             |
-| `ux.uxlibrary.heimdall-graph-visualization-ux-library`               | `uxlibrary`        | 113           |
+| `ux.uxlibrary.heimdall-ui`                                           | `uxlibrary`        | 113           |
 
 ## Inter-Layer Dependencies
 
@@ -242,86 +245,120 @@ flowchart TB
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units`               | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline`                                    | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32`   | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.adjacency-matrix-tests`                                                                                   | `ux.librarycomponent.adjacency-matrix-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.adjacency-matrix-tests`                                                                                   | `ux.librarycomponent.layered-graph-explorer-ux`                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.avatar-tests`                                                                                             | `ux.librarycomponent.avatar-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-tests`                                                                                           | `ux.librarycomponent.calendar-ux`                                                           | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-tests`                                                                                           | `ux.librarycomponent.select-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists-tests`                                                                                    | `ux.librarycomponent.asset-card-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists-tests`                                                                                    | `ux.librarycomponent.asset-grid-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists-tests`                                                                                    | `ux.librarycomponent.badge-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists-tests`                                                                                    | `ux.librarycomponent.log-stream-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists-tests`                                                                                    | `ux.librarycomponent.progress-bar-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists-tests`                                                                                    | `ux.librarycomponent.result-card-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.center-on-select-tests`                                                                                   | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.center-on-select-tests`                                                                                   | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.channel-router-tests`                                                                                     | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.bar-h-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.bar-v-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.donut-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.heatmap-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.line-chart-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.metric-row-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.progress-bar-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.sparkline-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.stacked-bar-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.charts-showcase-tests`                                                                                    | `ux.librarycomponent.status-timeline-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components-tests`                                                                                    | `ux.librarycomponent.chat-composer-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components-tests`                                                                                    | `ux.librarycomponent.chat-container-ux`                                                     | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components-tests`                                                                                    | `ux.librarycomponent.chat-divider-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components-tests`                                                                                    | `ux.librarycomponent.chat-message-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components-tests`                                                                                    | `ux.librarycomponent.chat-suggestions-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components-tests`                                                                                    | `ux.librarycomponent.thinking-block-ux`                                                     | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components-tests`                                                                                    | `ux.librarycomponent.tool-block-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tests`                                                                               | `ux.librarycomponent.activity-timeline-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tests`                                                                               | `ux.librarycomponent.chip-ux`                                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tests`                                                                               | `ux.librarycomponent.form-callout-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tests`                                                                               | `ux.librarycomponent.version-pill-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-tests`                                                                                       | `ux.librarycomponent.hierarchy-row-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-tests`                                                                                       | `ux.librarycomponent.hierarchy-tree-ux`                                                     | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-tests`                                                                                       | `ux.librarycomponent.select-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-tests`                                                                                       | `ux.librarycomponent.stat-grid-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-tests`                                                                                       | `ux.librarycomponent.stat-tile-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-tests`                                                                                       | `ux.librarycomponent.table-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.date-utils-tests`                                                                                         | `ux.librarycomponent.activity-timeline-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.date-utils-tests`                                                                                         | `ux.librarycomponent.mini-calendar-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.diff-viewer-tests`                                                                                        | `ux.librarycomponent.diff-viewer-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.diff-viewer-tests`                                                                                        | `ux.librarycomponent.hash-set-diff-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.diff-viewer-tests`                                                                                        | `ux.librarycomponent.side-by-side-diff-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-placement-tests`                                                                                 | `ux.librarycomponent.panel-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-portal-tests`                                                                                    | `ux.librarycomponent.popover-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-portal-tests`                                                                                    | `ux.librarycomponent.row-menu-ux`                                                           | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-portal-tests`                                                                                    | `ux.librarycomponent.select-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.adjacency-matrix-view`                                                                                    | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.adjacency-matrix-view`                                                                                    | `ux.librarycomponent.layered-graph-explorer`                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.command-palette`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.detail-drawer`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.drawer`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.popover`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.split-pane`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.tooltip`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.avatar`                                                                                                   | `ux.librarycomponent.avatar`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `ux.librarycomponent.calendar`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `ux.librarycomponent.mini-calendar`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `ux.librarycomponent.asset-card`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `ux.librarycomponent.asset-grid`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `ux.librarycomponent.badge`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `ux.librarycomponent.log-stream`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `ux.librarycomponent.ordered-list`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `ux.librarycomponent.progress-bar`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `ux.librarycomponent.result-card`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.bar-chart`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.bar-h`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.bar-v`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.chart-wrapper`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.donut`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.heatmap`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.line-chart`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.metric-row`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.progress-bar`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.sparkline`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.stacked-bar`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chart-components`                                                                                         | `ux.librarycomponent.status-timeline`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.chat-composer`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.chat-container`                                                        | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.chat-divider`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.chat-markdown-content`                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.chat-message`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.chat-suggestions`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.thinking-block`                                                        | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.chat-components`                                                                                          | `ux.librarycomponent.tool-block`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tokens`                                                                              | `ux.librarycomponent.activity-timeline`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tokens`                                                                              | `ux.librarycomponent.chip`                                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tokens`                                                                              | `ux.librarycomponent.form-callout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dark-canvas-semantic-tokens`                                                                              | `ux.librarycomponent.version-pill`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-components`                                                                                  | `ux.librarycomponent.hierarchy-row`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-components`                                                                                  | `ux.librarycomponent.hierarchy-tree`                                                        | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-components`                                                                                  | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-components`                                                                                  | `ux.librarycomponent.stat-grid`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-components`                                                                                  | `ux.librarycomponent.stat-tile`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-components`                                                                                  | `ux.librarycomponent.table`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.data-display-components`                                                                                  | `ux.librarycomponent.topology-node`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.date-utilities`                                                                                           | `ux.librarycomponent.activity-timeline`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.date-utilities`                                                                                           | `ux.librarycomponent.calendar`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.date-utilities`                                                                                           | `ux.librarycomponent.mini-calendar`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.date-utilities`                                                                                           | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.design-foundation-tokens-and-typography`                                                                  | `ux.librarycomponent.icon`                                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.design-reference-comparison`                                                                              | `ux.librarycomponent.shell-layout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.diff-viewer-components`                                                                                   | `ux.librarycomponent.diff-viewer`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.diff-viewer-components`                                                                                   | `ux.librarycomponent.hash-set-diff`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.diff-viewer-components`                                                                                   | `ux.librarycomponent.side-by-side-diff`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-placement`                                                                                       | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-placement`                                                                                       | `ux.librarycomponent.panel`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-placement`                                                                                       | `ux.librarycomponent.row-menu`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-placement`                                                                                       | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-portal`                                                                                          | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-portal`                                                                                          | `ux.librarycomponent.popover`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-portal`                                                                                          | `ux.librarycomponent.row-menu`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.dropdown-portal`                                                                                          | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.edge-label-placement-and-styling`                                                                         | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.filter-dropdown-tests`                                                                                    | `ux.librarycomponent.filter-dropdown-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.filter-dropdown-tests`                                                                                    | `ux.librarycomponent.panel-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.filter-dropdown-tests`                                                                                    | `ux.librarycomponent.select-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.edge-label-placement-and-styling`                                                                         | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.filter-dropdown`                                                                                          | `ux.librarycomponent.filter-dropdown`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.filter-dropdown`                                                                                          | `ux.librarycomponent.panel`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.filter-dropdown`                                                                                          | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `ux.librarycomponent.topology-node-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.forms-components-tests`                                                                                   | `ux.librarycomponent.entity-picker-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.forms-components-tests`                                                                                   | `ux.librarycomponent.form-callout-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.forms-components-tests`                                                                                   | `ux.librarycomponent.key-value-editor-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.forms-components-tests`                                                                                   | `ux.librarycomponent.ordered-list-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.forms-components-tests`                                                                                   | `ux.librarycomponent.pipeline-card-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.forms-components-tests`                                                                                   | `ux.librarycomponent.relationship-builder-ux`                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.forms-components-tests`                                                                                   | `ux.librarycomponent.row-menu-ux`                                                           | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.fullscreen-container-ref-tests`                                                                           | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-browser-tests`                                                                              | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                                                                             | `ux.librarycomponent.badge-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                                                                             | `ux.librarycomponent.graph-collapse-control-ux`                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                                                                             | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                                                                             | `ux.librarycomponent.topology-node-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-tests`                                                                                      | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-live-drag-tests`                                                                                   | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-a11y-names-tests`                                                                                   | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-a11y-names-tests`                                                                                   | `ux.librarycomponent.graph-edge-shape-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                                                                         | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                                                                         | `ux.librarycomponent.popover-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                                                                         | `ux.librarycomponent.tooltip-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-popover-tests`                                                                               | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-popover-tests`                                                                               | `ux.librarycomponent.popover-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-popover-tests`                                                                               | `ux.librarycomponent.tooltip-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `ux.librarycomponent.topology-node`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.entity-picker`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.field`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.form-callout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.key-value-editor`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.number-input`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.ordered-list`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.pipeline-card`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.relationship-builder`                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.row-menu`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.text-area`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.text-input`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.form-components`                                                                                          | `ux.librarycomponent.tri-state`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-algorithm-unit`                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `ux.librarycomponent.badge`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `ux.librarycomponent.graph-collapse-control-ux`                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `ux.librarycomponent.topology-node`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.galaxy-live-drag`                                                                                         | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-accessible-names`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-accessible-names`                                                                            | `ux.librarycomponent.graph-edge-shape-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-center-on-select`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-center-on-select`                                                                            | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-click-tooltips`                                                                              | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-click-tooltips`                                                                              | `ux.librarycomponent.popover`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-click-tooltips`                                                                              | `ux.librarycomponent.tooltip`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-fit-to-boundaries`                                                                           | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-fullscreen-container`                                                                        | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-hover-tooltip-placement`                                                                     | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-layer-lanes`                                                                                 | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-layer-lanes`                                                                                 | `ux.librarycomponent.layered-graph-context-ux`                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-layout-busy-state`                                                                           | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-node-measurement`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-popovers`                                                                                    | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-popovers`                                                                                    | `ux.librarycomponent.popover`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-popovers`                                                                                    | `ux.librarycomponent.tooltip`                                                               | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.graph-edge-inspector-ux`                                               | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.graph-edge-shape-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
@@ -329,348 +366,377 @@ flowchart TB
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.graph-inspector-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.graph-toolbar-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.tooltip-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.topology-node-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.tooltip`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `ux.librarycomponent.topology-node`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-canvas-viewport-history`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-edge-geometry-utilities`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-edge-label-tests`                                                                                   | `ux.librarycomponent.graph-node-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-fit-boundaries-tests`                                                                               | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-layout-busy-tests`                                                                                  | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-node-measure-tests`                                                                                 | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-tooltip-placement-tests`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-viewport-history-tests`                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.hive-plot-tests`                                                                                          | `ux.librarycomponent.hive-plot-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.inspector-panel-tests`                                                                                    | `ux.librarycomponent.inspector-panel-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.inspector-panel-tests`                                                                                    | `ux.librarycomponent.kvgrid-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.inspector-panel-tests`                                                                                    | `ux.librarycomponent.version-pill-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.kanban-board-tests`                                                                                       | `ux.librarycomponent.kanban-board-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layer-lanes-tests`                                                                                        | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layer-lanes-tests`                                                                                        | `ux.librarycomponent.layered-graph-context-ux`                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layer-stack-tests`                                                                                        | `ux.librarycomponent.layer-stack-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-async-layout-tests`                                                                               | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-dom-order-tests`                                                                                  | `ux.librarycomponent.layer-stack-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.adjacency-matrix-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.bridge-node-list-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.follow-control-ux`                                                     | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.layer-list-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.layer-pair-list-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.link-category-filter-ux`                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.plane-layout-control-ux`                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.predicate-label-control-ux`                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome-tests`                                                                               | `ux.librarycomponent.reach-inspector-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-explorer-tests`                                                                             | `ux.librarycomponent.layered-graph-explorer-ux`                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-link-batches-tests`                                                                               | `ux.librarycomponent.layer-stack-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-matrix-tests`                                                                                     | `ux.librarycomponent.adjacency-matrix-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-matrix-tests`                                                                                     | `ux.librarycomponent.graph-edge-inspector-ux`                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-snapshot-tests`                                                                                   | `ux.librarycomponent.layered-graph-explorer-ux`                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-tests`                                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.line-chart-data-toggle-tests`                                                                             | `ux.librarycomponent.line-chart-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.lineage-rail-tests`                                                                                       | `ux.librarycomponent.chip-ux`                                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.lineage-rail-tests`                                                                                       | `ux.librarycomponent.lineage-rail-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.map-canvas-tests`                                                                                         | `ux.librarycomponent.heatmap-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.map-canvas-tests`                                                                                         | `ux.librarycomponent.map-canvas-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.map-canvas-tests`                                                                                         | `ux.librarycomponent.select-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-edge-style-utilities`                                                                               | `ux.librarycomponent.graph-edge-shape-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement`                                                                 | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.hive-plot-layout`                                                                                         | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.hive-plot-view`                                                                                           | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.inspector-panel-and-kvgrid`                                                                               | `ux.librarycomponent.inspector-panel`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.inspector-panel-and-kvgrid`                                                                               | `ux.librarycomponent.kvgrid`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.inspector-panel-and-kvgrid`                                                                               | `ux.librarycomponent.version-pill`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.kanban-board`                                                                                             | `ux.librarycomponent.kanban-board`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.lane-layout-and-gutter-routing`                                                                           | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layer-stack-projection`                                                                                   | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layer-stack-view`                                                                                         | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-adjacency-matrix-cells`                                                                           | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-adjacency-matrix-cells`                                                                           | `ux.librarycomponent.graph-edge-inspector-ux`                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-async-layout`                                                                                     | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-dom-order`                                                                                        | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-edge-labels`                                                                                      | `ux.librarycomponent.hive-plot`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-edge-labels`                                                                                      | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.adjacency-matrix`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.bridge-node-list`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.camera-controls`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.follow-control`                                                        | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.layer-list`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.layer-pair-list`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.link-category-filter`                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.plane-layout-control`                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.predicate-label-control`                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.reach-inspector`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-chrome`                                                                                     | `ux.librarycomponent.view-switcher`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-explorer`                                                                                   | `ux.librarycomponent.camera-controls`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-explorer`                                                                                   | `ux.librarycomponent.layered-graph-explorer`                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-explorer`                                                                                   | `ux.librarycomponent.view-switcher`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-graph-index-and-reach`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-link-batches`                                                                                     | `ux.librarycomponent.layer-stack`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.layered-snapshot-sanitization`                                                                            | `ux.librarycomponent.layered-graph-explorer`                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.line-chart-data-toggle`                                                                                   | `ux.librarycomponent.line-chart`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.lineage-rail`                                                                                             | `ux.librarycomponent.chip`                                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.lineage-rail`                                                                                             | `ux.librarycomponent.lineage-rail`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.map-canvas`                                                                                               | `ux.librarycomponent.heatmap`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.map-canvas`                                                                                               | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.map-canvas`                                                                                               | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.navigation-edge-channel-routing-browser`                                                                  | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.navigation-edge-channel-routing`                                                                          | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.organic-layout-browser-tests`                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.organic-layout-tests`                                                                                     | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.orthogonal-layout-browser-tests`                                                                          | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.orthogonal-layout-tests`                                                                                  | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-advanced-tests`                                                                                   | `ux.librarycomponent.command-palette-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-advanced-tests`                                                                                   | `ux.librarycomponent.drawer-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-advanced-tests`                                                                                   | `ux.librarycomponent.select-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-advanced-tests`                                                                                   | `ux.librarycomponent.split-pane-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components-tests`                                                                                 | `ux.librarycomponent.confirm-dialog-ux`                                                     | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components-tests`                                                                                 | `ux.librarycomponent.modal-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components-tests`                                                                                 | `ux.librarycomponent.popover-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components-tests`                                                                                 | `ux.librarycomponent.toast-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components-tests`                                                                                 | `ux.librarycomponent.tooltip-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-patterns-tests`                                                                                      | `ux.librarycomponent.activity-timeline-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-patterns-tests`                                                                                      | `ux.librarycomponent.alert-strip-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-patterns-tests`                                                                                      | `ux.librarycomponent.config-tile-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-patterns-tests`                                                                                      | `ux.librarycomponent.filter-bar-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-patterns-tests`                                                                                      | `ux.librarycomponent.page-header-ux`                                                        | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-patterns-tests`                                                                                      | `ux.librarycomponent.quick-access-grid-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-patterns-tests`                                                                                      | `ux.librarycomponent.quick-access-tile-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-zoom-tests`                                                                                           | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-zoom-tests`                                                                                           | `ux.librarycomponent.map-canvas-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.badge-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.button-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.chip-ux`                                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.field-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.icon-ux`                                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.number-input-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.panel-ux`                                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.segmented-control-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.select-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.text-area-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.text-input-ux`                                                         | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.tri-state-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitives-tests`                                                                                         | `ux.librarycomponent.version-pill-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.organic-layout-algorithm`                                                                                 | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.organic-layout-browser`                                                                                   | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers`                                                                  | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.orthogonal-layout-browser`                                                                                | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components`                                                                                       | `ux.librarycomponent.confirm-dialog`                                                        | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components`                                                                                       | `ux.librarycomponent.drawer`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components`                                                                                       | `ux.librarycomponent.modal`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components`                                                                                       | `ux.librarycomponent.popover`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components`                                                                                       | `ux.librarycomponent.toast`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.overlay-components`                                                                                       | `ux.librarycomponent.tooltip`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.activity-timeline`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.alert-strip`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.config-tile`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.filter-bar`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.form-callout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.page-header`                                                           | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.pipeline-card`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.quick-access-grid`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.quick-access-tile`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `ux.librarycomponent.row-menu`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-inertia`                                                                                              | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.avatar`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.badge`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.button`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.chip`                                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.field`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.icon`                                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.number-input`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.panel`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.segmented-control`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.status-badge`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.text-area`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.text-input`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.tri-state`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.version-pill`                                                          | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.reach-inspector-tests`                                                                                    | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.reach-inspector-tests`                                                                                    | `ux.librarycomponent.layered-graph-context-ux`                                              | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.reach-inspector-tests`                                                                                    | `ux.librarycomponent.reach-inspector-ux`                                                    | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell-tests`                                                                                   | `ux.librarycomponent.drawer-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell-tests`                                                                                   | `ux.librarycomponent.sidebar-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell-tests`                                                                                   | `ux.librarycomponent.statusbar-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell-tests`                                                                                   | `ux.librarycomponent.topbar-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-render-tests`                                                                                      | `ux.librarycomponent.activity-timeline-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-render-tests`                                                                                      | `ux.librarycomponent.mini-calendar-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-render-tests`                                                                                      | `ux.librarycomponent.nav-item-ux`                                                           | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-render-tests`                                                                                      | `ux.librarycomponent.quick-access-tile-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-render-tests`                                                                                      | `ux.librarycomponent.shell-layout-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-render-tests`                                                                                      | `ux.librarycomponent.version-timeline-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-tests`                                                                                    | `ux.librarycomponent.chip-ux`                                                               | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-tests`                                                                                    | `ux.librarycomponent.shell-layout-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-tests`                                                                                    | `ux.librarycomponent.statusbar-ux`                                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-tests`                                                                                    | `ux.librarycomponent.tab-bar-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-tests`                                                                                    | `ux.librarycomponent.topbar-ux`                                                             | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-links-tests`                                                                                       | `ux.librarycomponent.activity-timeline-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-links-tests`                                                                                       | `ux.librarycomponent.mini-calendar-ux`                                                      | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-links-tests`                                                                                       | `ux.librarycomponent.nav-item-ux`                                                           | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-links-tests`                                                                                       | `ux.librarycomponent.quick-access-tile-ux`                                                  | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-links-tests`                                                                                       | `ux.librarycomponent.shell-layout-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-links-tests`                                                                                       | `ux.librarycomponent.sidebar-ux`                                                            | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.trace-viewer-tests`                                                                                       | `ux.librarycomponent.trace-viewer-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.ux-nav-layout-tests`                                                                                      | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.version-timeline-tests`                                                                                   | `ux.librarycomponent.version-timeline-ux`                                                   | `ux`         | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.workspace-switcher-dialog-tests`                                                                          | `ux.librarycomponent.workspace-switcher-dialog-ux`                                          | `ux`         | `covers`     | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.activity-timeline-ux`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.activity-timeline-ux`                                                                                            | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.adjacency-matrix-ux`                                                                                             | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.adjacency-matrix-ux`                                                                                             | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.alert-strip-ux`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.alert-strip-ux`                                                                                                  | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.app-title-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.app-title-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.asset-card-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.asset-card-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.asset-grid-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.asset-grid-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.avatar-ux`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.avatar-ux`                                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.badge-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.badge-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-chart-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-chart-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-h-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-h-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-v-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-v-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bridge-node-list-ux`                                                                                             | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bridge-node-list-ux`                                                                                             | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.button-ux`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.button-ux`                                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.calendar-ux`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.calendar-ux`                                                                                                     | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.camera-controls-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.camera-controls-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chart-wrapper-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chart-wrapper-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-composer-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-composer-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-container-ux`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-container-ux`                                                                                               | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-divider-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-divider-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-markdown-content-ux`                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-markdown-content-ux`                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-message-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-message-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-suggestions-ux`                                                                                             | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-suggestions-ux`                                                                                             | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chip-ux`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chip-ux`                                                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.command-palette-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.command-palette-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.config-tile-ux`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.config-tile-ux`                                                                                                  | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.confirm-dialog-ux`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.confirm-dialog-ux`                                                                                               | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.detail-drawer-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.detail-drawer-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.diff-viewer-ux`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.diff-viewer-ux`                                                                                                  | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.donut-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.donut-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.drawer-ux`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.drawer-ux`                                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.entity-picker-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.entity-picker-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.entity-picker-ux`                                                                                                | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.field-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.field-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.filter-bar-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.filter-bar-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.filter-dropdown-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.filter-dropdown-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.filter-dropdown-ux`                                                                                              | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.follow-control-ux`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.follow-control-ux`                                                                                               | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.form-callout-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.form-callout-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.radial-tree-layout-browser`                                                                               | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.reach-inspector-relationships`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.reach-inspector-relationships`                                                                            | `ux.librarycomponent.layered-graph-context-ux`                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.reach-inspector-relationships`                                                                            | `ux.librarycomponent.reach-inspector`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell`                                                                                         | `ux.librarycomponent.drawer`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell`                                                                                         | `ux.librarycomponent.shell-layout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell`                                                                                         | `ux.librarycomponent.sidebar`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell`                                                                                         | `ux.librarycomponent.statusbar`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.responsive-shell`                                                                                         | `ux.librarycomponent.topbar`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-rendering`                                                                                         | `ux.librarycomponent.activity-timeline`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-rendering`                                                                                         | `ux.librarycomponent.mini-calendar`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-rendering`                                                                                         | `ux.librarycomponent.nav-item`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-rendering`                                                                                         | `ux.librarycomponent.quick-access-tile`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-rendering`                                                                                         | `ux.librarycomponent.shell-layout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.server-rendering`                                                                                         | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.app-title`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.chip`                                                                  | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.nav-item`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.panel`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.shell-layout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.sidebar`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.split-pane`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.statusbar`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.tab-bar`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.titlebar`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.shell-framework-components`                                                                               | `ux.librarycomponent.topbar`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `ux.librarycomponent.activity-timeline`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `ux.librarycomponent.mini-calendar`                                                         | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `ux.librarycomponent.nav-item`                                                              | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `ux.librarycomponent.quick-access-grid`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `ux.librarycomponent.quick-access-tile`                                                     | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `ux.librarycomponent.shell-layout`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `ux.librarycomponent.sidebar`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.tooltip-placement`                                                                                        | `ux.librarycomponent.tooltip`                                                               | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.trace-adapters`                                                                                           | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.trace-viewer`                                                                                             | `ux.librarycomponent.trace-viewer`                                                          | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.ux-navigation-edge-visibility`                                                                            | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.ux-navigation-layout-algorithm`                                                                           | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.ux-navigation-layout-browser`                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.version-timeline`                                                                                         | `ux.librarycomponent.version-timeline`                                                      | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.workspace-switcher-dialog`                                                                                | `ux.librarycomponent.workspace-switcher-dialog`                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.yield-to-paint`                                                                                           | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.activity-timeline`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.activity-timeline`                                                                                               | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.activity-timeline`                                                                                               | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.adjacency-matrix`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.adjacency-matrix`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.alert-strip`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.alert-strip`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.app-title`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.app-title`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.asset-card`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.asset-card`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.asset-grid`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.asset-grid`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.avatar`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.avatar`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.badge`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.badge`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-chart`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-chart`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-h`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-v`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-v`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bridge-node-list`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bridge-node-list`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.button`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.button`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.calendar`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.calendar`                                                                                                        | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.calendar`                                                                                                        | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.camera-controls`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.camera-controls`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chart-wrapper`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chart-wrapper`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-composer`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-composer`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-container`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-container`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-divider`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-divider`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-markdown-content`                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-markdown-content`                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-message`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-message`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-suggestions`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-suggestions`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chip`                                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chip`                                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.command-palette`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.command-palette`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.config-tile`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.config-tile`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.confirm-dialog`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.confirm-dialog`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.detail-drawer`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.detail-drawer`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.diff-viewer`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.diff-viewer`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.donut`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.donut`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.drawer`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.drawer`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.entity-picker`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.entity-picker`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.entity-picker`                                                                                                   | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.field`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.field`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.filter-bar`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.filter-bar`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.filter-dropdown`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.filter-dropdown`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.filter-dropdown`                                                                                                 | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.follow-control`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.follow-control`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.form-callout`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.form-callout`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.large-layouts-do-not-block-the-first-paint`                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.motion-honours-reduced-motion-preference`                           | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-edge-inspector-ux`                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-edge-inspector-ux`                                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-edge-inspector-ux`                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-edge-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-edge-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-edge-ux`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-node-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hash-set-diff-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hash-set-diff-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.heatmap-ux`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.heatmap-ux`                                                                                                      | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hierarchy-row-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hierarchy-row-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hierarchy-tree-ux`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hierarchy-tree-ux`                                                                                               | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hive-plot-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hive-plot-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.hive-plot-ux`                                                                                                    | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden`          | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.icon-ux`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.icon-ux`                                                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.inspector-panel-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.inspector-panel-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.kanban-board-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.kanban-board-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.key-value-editor-ux`                                                                                             | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.key-value-editor-ux`                                                                                             | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.kvgrid-ux`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.kvgrid-ux`                                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layer-list-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layer-list-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layer-pair-list-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layer-pair-list-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layer-stack-ux`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layer-stack-ux`                                                                                                  | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hash-set-diff`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hash-set-diff`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.heatmap`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.heatmap`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hierarchy-row`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hierarchy-row`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hierarchy-tree`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hierarchy-tree`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hive-plot`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hive-plot`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.hive-plot`                                                                                                       | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden`          | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.icon`                                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.icon`                                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.inspector-panel`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.inspector-panel`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.kanban-board`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.kanban-board`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.key-value-editor`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.key-value-editor`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.kvgrid`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.kvgrid`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layer-list`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layer-list`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layer-pair-list`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layer-pair-list`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layer-stack`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layer-stack`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layered-graph-context-ux`                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layered-graph-context-ux`                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layered-graph-explorer-ux`                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layered-graph-explorer-ux`                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.line-chart-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.line-chart-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.lineage-rail-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.lineage-rail-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.link-category-filter-ux`                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.link-category-filter-ux`                                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.log-stream-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.log-stream-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.map-canvas-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.map-canvas-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.metric-row-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.metric-row-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.mini-calendar-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.mini-calendar-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.modal-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.modal-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.nav-item-ux`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.nav-item-ux`                                                                                                     | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.number-input-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.number-input-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.ordered-list-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.ordered-list-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.page-header-ux`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.page-header-ux`                                                                                                  | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.panel-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.panel-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.pipeline-card-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.pipeline-card-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.plane-layout-control-ux`                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.plane-layout-control-ux`                                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.popover-ux`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.popover-ux`                                                                                                      | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.predicate-label-control-ux`                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.predicate-label-control-ux`                                                                                      | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.progress-bar-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.progress-bar-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.quick-access-grid-ux`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.quick-access-grid-ux`                                                                                            | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.quick-access-tile-ux`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.quick-access-tile-ux`                                                                                            | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.reach-inspector-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.reach-inspector-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.relationship-builder-ux`                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.relationship-builder-ux`                                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.result-card-ux`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.result-card-ux`                                                                                                  | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.row-menu-ux`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.row-menu-ux`                                                                                                     | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.row-menu-ux`                                                                                                     | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.segmented-control-ux`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.segmented-control-ux`                                                                                            | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.select-ux`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.select-ux`                                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.select-ux`                                                                                                       | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.shell-layout-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.shell-layout-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.side-by-side-diff-ux`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.side-by-side-diff-ux`                                                                                            | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.sidebar-ux`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.sidebar-ux`                                                                                                      | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.sparkline-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.sparkline-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.split-pane-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.split-pane-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stacked-bar-ux`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stacked-bar-ux`                                                                                                  | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stat-grid-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stat-grid-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stat-tile-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stat-tile-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.status-badge-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.status-badge-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.status-timeline-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.status-timeline-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.statusbar-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.statusbar-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tab-bar-ux`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tab-bar-ux`                                                                                                      | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.table-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.table-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.text-area-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.text-area-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.text-input-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.text-input-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.thinking-block-ux`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.thinking-block-ux`                                                                                               | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.titlebar-ux`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.titlebar-ux`                                                                                                     | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.toast-ux`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.toast-ux`                                                                                                        | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tool-block-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tool-block-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tooltip-ux`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tooltip-ux`                                                                                                      | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.topbar-ux`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.topbar-ux`                                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.topology-node-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.topology-node-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.trace-viewer-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.trace-viewer-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tri-state-ux`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tri-state-ux`                                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.version-pill-ux`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.version-pill-ux`                                                                                                 | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.version-timeline-ux`                                                                                             | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.version-timeline-ux`                                                                                             | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.view-switcher-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.view-switcher-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.workspace-switcher-dialog-ux`                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.workspace-switcher-dialog-ux`                                                                                    | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layered-graph-context-ux`                                                                                        | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.line-chart`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.line-chart`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.lineage-rail`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.lineage-rail`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.link-category-filter`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.link-category-filter`                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.log-stream`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.log-stream`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.map-canvas`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.map-canvas`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.metric-row`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.metric-row`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.mini-calendar`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.mini-calendar`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.mini-calendar`                                                                                                   | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.modal`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.modal`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.nav-item`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.nav-item`                                                                                                        | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.number-input`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.number-input`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.ordered-list`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.ordered-list`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.page-header`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.page-header`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.panel`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.panel`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.pipeline-card`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.pipeline-card`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.plane-layout-control`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.plane-layout-control`                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.popover`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.popover`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.predicate-label-control`                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.predicate-label-control`                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.progress-bar`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.progress-bar`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.quick-access-grid`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.quick-access-grid`                                                                                               | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.quick-access-tile`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.quick-access-tile`                                                                                               | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.reach-inspector`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.reach-inspector`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.relationship-builder`                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.relationship-builder`                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.result-card`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.result-card`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.row-menu`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.row-menu`                                                                                                        | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.row-menu`                                                                                                        | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.segmented-control`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.segmented-control`                                                                                               | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.select`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.select`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.select`                                                                                                          | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.shell-layout`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.shell-layout`                                                                                                    | `motivation.principle.ide-density-and-terse-voice`                                          | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.shell-layout`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.shell-layout`                                                                                                    | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.side-by-side-diff`                                                                                               | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.side-by-side-diff`                                                                                               | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.sidebar`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.sidebar`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.sparkline`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.sparkline`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.split-pane`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.split-pane`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stacked-bar`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stacked-bar`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stat-grid`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stat-grid`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stat-tile`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stat-tile`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.status-badge`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.status-badge`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.status-timeline`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.status-timeline`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.statusbar`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.statusbar`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.statusbar`                                                                                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tab-bar`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tab-bar`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.table`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.table`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.text-area`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.text-area`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.text-input`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.text-input`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.thinking-block`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.thinking-block`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.titlebar`                                                                                                        | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.titlebar`                                                                                                        | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.toast`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.toast`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tool-block`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tool-block`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tooltip`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tooltip`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.topbar`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.topbar`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.topbar`                                                                                                          | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.topology-node`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.topology-node`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.trace-viewer`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.trace-viewer`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tri-state`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tri-state`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.version-pill`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.version-pill`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.version-timeline`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.version-timeline`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.version-timeline`                                                                                                | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.view-switcher`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.view-switcher`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.workspace-switcher-dialog`                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.workspace-switcher-dialog`                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 
 ## Element Reference
 
@@ -697,6 +763,38 @@ Shift+Enter on a focused hierarchical node, or clicking its chevron button, togg
 | intra-layer | `ux.statepattern.collapsed-node-set-progressive-disclosure` | `associated-with` | outbound  |
 | intra-layer | `ux.librarycomponent.graph-collapse-control-ux`             | `uses`            | inbound   |
 | intra-layer | `ux.librarycomponent.graph-node-ux`                         | `uses`            | inbound   |
+
+### Layer Stack Camera Orbit and Presets {#layer-stack-camera-orbit-and-presets}
+
+**ID**: `ux.actionpattern.layer-stack-camera-orbit-and-presets`
+
+**Type**: `actionpattern`
+
+Drag to orbit the layer stack (pitch clamped, 4px click threshold), wheel or pinch to zoom while focused, pick a stack, exploded, top or profile preset, or run the turntable; moves tween and jump under prefers-reduced-motion.
+
+#### Relationships
+
+| Type        | Related Element                       | Predicate | Direction |
+| ----------- | ------------------------------------- | --------- | --------- |
+| intra-layer | `ux.librarycomponent.camera-controls` | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.layer-stack`     | `uses`    | inbound   |
+
+### Link Navigation {#link-navigation}
+
+**ID**: `ux.actionpattern.link-navigation`
+
+**Type**: `actionpattern`
+
+A navigation item with href renders an anchor: a plain click runs onClick (client routing), a modified click opens a new tab or window as the browser does.
+
+#### Relationships
+
+| Type        | Related Element                         | Predicate | Direction |
+| ----------- | --------------------------------------- | --------- | --------- |
+| intra-layer | `ux.librarycomponent.nav-item`          | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.quick-access-grid` | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.quick-access-tile` | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.sidebar`           | `uses`    | inbound   |
 
 ### Node Drag Reposition {#node-drag-reposition}
 
@@ -766,9 +864,9 @@ Wheel/pinch zoom (anchored under the cursor), pointer-drag pan with release iner
 | ----------- | ------------------------------------- | --------- | --------- |
 | intra-layer | `ux.librarycomponent.graph-canvas-ux` | `uses`    | inbound   |
 
-### ActivityTimeline (UX) {#activitytimeline-ux}
+### ActivityTimeline {#activitytimeline}
 
-**ID**: `ux.librarycomponent.activity-timeline-ux`
+**ID**: `ux.librarycomponent.activity-timeline`
 
 **Type**: `librarycomponent`
 
@@ -776,59 +874,65 @@ Vertical feed of timestamped events with type-colored dots, optional kind tags, 
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | ActivityTimeline       |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.date-utils-tests`                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.page-patterns-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.server-render-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.static-links-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.badge-ux`                                                  | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tokens`                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.date-utilities`                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components`                      | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.server-rendering`                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.badge`                                               | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
 
-### AdjacencyMatrix (UX) {#adjacencymatrix-ux}
+### AdjacencyMatrix {#adjacencymatrix}
 
-**ID**: `ux.librarycomponent.adjacency-matrix-ux`
+**ID**: `ux.librarycomponent.adjacency-matrix`
 
 **Type**: `librarycomponent`
 
-A directed block adjacency matrix of a layered graph. There is one row and one column per node, grouped by layer, and one cell per link (row = source, column = target). Diagonal blocks hold links within a layer; off-diagonal blocks hold links between two layers, with a count in the corner. Every link is visible and nothing crosses, so it stays readable on dense graphs where node-link drawings tang
+A directed block adjacency matrix of a layered graph. There is one row and one column per node, grouped by layer, and one cell per link (row = source, column = target).
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-graph  |
+| label    | AdjacencyMatrix |
+| type     | display         |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.adjacency-matrix-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-matrix-tests`                               | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                             | Predicate    | Direction |
+| ----------- | ----------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.adjacency-matrix-view`          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                     | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`         | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                                | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`               | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                  | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`              | `composes`   | outbound  |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`               | `uses`       | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                         | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                  | `aggregates` | inbound   |
 
-### AlertStrip (UX) {#alertstrip-ux}
+### AlertStrip {#alertstrip}
 
-**ID**: `ux.librarycomponent.alert-strip-ux`
+**ID**: `ux.librarycomponent.alert-strip`
 
 **Type**: `librarycomponent`
 
@@ -836,24 +940,26 @@ Stacked list of compact severity alerts, each with a colored dot, message, and o
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | AlertStrip             |
+| type     | feedback               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.page-patterns-tests`                                | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.badge-ux`                                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.badge`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                           | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### AppTitle (UX) {#apptitle-ux}
+### AppTitle {#apptitle}
 
-**ID**: `ux.librarycomponent.app-title-ux`
+**ID**: `ux.librarycomponent.app-title`
 
 **Type**: `librarycomponent`
 
@@ -861,23 +967,26 @@ Brand row with the amber mark, application name, optional version tag, and an op
 
 #### Attributes
 
-| Name | Value  |
-| ---- | ------ |
-| type | layout |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-shell |
+| label    | AppTitle       |
+| type     | display        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.sidebar-ux`                                                | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.sidebar`                           | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### AssetCard (UX) {#assetcard-ux}
+### AssetCard {#assetcard}
 
-**ID**: `ux.librarycomponent.asset-card-ux`
+**ID**: `ux.librarycomponent.asset-card`
 
 **Type**: `librarycomponent`
 
@@ -885,46 +994,50 @@ Thumbnail card for a document, image or cover asset, with title, subtitle, meta 
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | AssetCard             |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.cards-and-lists-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.cards-and-lists`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### AssetGrid (UX) {#assetgrid-ux}
+### AssetGrid {#assetgrid}
 
-**ID**: `ux.librarycomponent.asset-grid-ux`
+**ID**: `ux.librarycomponent.asset-grid`
 
 **Type**: `librarycomponent`
 
-Responsive grid container for AssetCards.
+Responsive grid container for `AssetCard`s.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | AssetGrid             |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.cards-and-lists-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.cards-and-lists`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Avatar (UX) {#avatar-ux}
+### Avatar {#avatar}
 
-**ID**: `ux.librarycomponent.avatar-ux`
+**ID**: `ux.librarycomponent.avatar`
 
 **Type**: `librarycomponent`
 
@@ -932,22 +1045,25 @@ People identifier: renders a photo, or initials on a deterministic gradient, wit
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | Avatar              |
+| type     | display             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.avatar-tests`                                       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.avatar`                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Badge (UX) {#badge-ux}
+### Badge {#badge}
 
-**ID**: `ux.librarycomponent.badge-ux`
+**ID**: `ux.librarycomponent.badge`
 
 **Type**: `librarycomponent`
 
@@ -955,48 +1071,53 @@ A static 8px colored dot for inline use beside text.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | Badge               |
+| type     | display             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.cards-and-lists-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                       | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.activity-timeline-ux`                                      | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.alert-strip-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.cards-and-lists`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`              | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                        | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`            | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.activity-timeline`                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.alert-strip`                              | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                     | `aggregates` | inbound   |
 
-### BarChart (UX) {#barchart-ux}
+### BarChart {#barchart}
 
-**ID**: `ux.librarycomponent.bar-chart-ux`
+**ID**: `ux.librarycomponent.bar-chart`
 
 **Type**: `librarycomponent`
 
-Grouped multi-series vertical bar chart with built-in axes and an optional legend. Older API; for a single series prefer BarV, for composition StackedBar.
+Grouped multi-series vertical bar chart with built-in axes and an optional legend. Older API; for a single series prefer `BarV`, for composition `StackedBar`.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | BarChart        |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### BarH (UX) {#barh-ux}
+### BarH {#barh}
 
-**ID**: `ux.librarycomponent.bar-h-ux`
+**ID**: `ux.librarycomponent.bar-h`
 
 **Type**: `librarycomponent`
 
@@ -1004,22 +1125,24 @@ Horizontal bar chart for ranked categories: a label column, an inset track and a
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | BarH            |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### BarV (UX) {#barv-ux}
+### BarV {#barv}
 
-**ID**: `ux.librarycomponent.bar-v-ux`
+**ID**: `ux.librarycomponent.bar-v`
 
 **Type**: `librarycomponent`
 
@@ -1027,22 +1150,24 @@ Single-series vertical bar chart with a zero baseline.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | BarV            |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### BridgeNodeList (UX) {#bridgenodelist-ux}
+### BridgeNodeList {#bridgenodelist}
 
-**ID**: `ux.librarycomponent.bridge-node-list-ux`
+**ID**: `ux.librarycomponent.bridge-node-list`
 
 **Type**: `librarycomponent`
 
@@ -1050,26 +1175,31 @@ The nodes with the most cross-layer links (ties by total degree), skipping hidde
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | BridgeNodeList |
+| type     | navigation     |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Button (UX) {#button-ux}
+### Button {#button}
 
-**ID**: `ux.librarycomponent.button-ux`
+**ID**: `ux.librarycomponent.button`
 
 **Type**: `librarycomponent`
 
@@ -1077,40 +1207,42 @@ Standard action button with six variants and two sizes.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | Button              |
+| type     | input               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.bridge-node-list-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.calendar-ux`                                               | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.chat-composer-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.confirm-dialog-ux`                                         | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.key-value-editor-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-list-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-pair-list-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.link-category-filter-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.ordered-list-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.plane-layout-control-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.predicate-label-control-ux`                                | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.result-card-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.bridge-node-list`              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.calendar`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.chat-composer`                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.confirm-dialog`                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.follow-control`                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.key-value-editor`              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-list`                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-pair-list`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.link-category-filter`          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.ordered-list`                  | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.plane-layout-control`          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.predicate-label-control`       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.reach-inspector`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.result-card`                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Calendar (UX) {#calendar-ux}
+### Calendar {#calendar}
 
-**ID**: `ux.librarycomponent.calendar-ux`
+**ID**: `ux.librarycomponent.calendar`
 
 **Type**: `librarycomponent`
 
@@ -1118,79 +1250,99 @@ Controlled date-based event calendar with month, week, day and agenda views, a h
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-planning |
+| label    | Calendar          |
+| type     | display           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.calendar-tests`                                     | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.calendar-and-mini-calendar`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.date-utilities`                               | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                                              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                                | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`                                   | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
 
-### CameraControls (UX) {#cameracontrols-ux}
+### CameraControls {#cameracontrols}
 
-**ID**: `ux.librarycomponent.camera-controls-ux`
+**ID**: `ux.librarycomponent.camera-controls`
 
 **Type**: `librarycomponent`
 
-Camera chrome for LayerStack: preset segmented control, zoom in and out, fit and the turntable toggle, driven by a LayerStack ref or controlled props.
+Camera chrome for `LayerStack`: preset segmented control, zoom in and out, fit and the turntable toggle, driven by a LayerStack ref or controlled props.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | CameraControls |
+| type     | input          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`                                       | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.hive-plot-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layer-stack-ux`                                            | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-graph-explorer`     | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`                  | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.bridge-node-list`                  | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.button`                            | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.follow-control`                    | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`                   | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-ux`                     | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.hive-plot`                         | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-list`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-pair-list`                   | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-stack`                       | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.link-category-filter`              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.plane-layout-control`              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.predicate-label-control`           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.reach-inspector`                   | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`                 | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.layer-stack-camera-orbit-and-presets` | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### ChartWrapper (UX) {#chartwrapper-ux}
+### ChartWrapper {#chartwrapper}
 
-**ID**: `ux.librarycomponent.chart-wrapper-ux`
+**ID**: `ux.librarycomponent.chart-wrapper`
 
 **Type**: `librarycomponent`
 
-Accessible &lt;svg&gt; container (role="img" plus aria-label) for hand-drawn custom charts.
+Accessible `&lt;svg&gt;` container (`role="img"` plus `aria-label`) for hand-drawn custom charts.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | ChartWrapper    |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ChatComposer (UX) {#chatcomposer-ux}
+### ChatComposer {#chatcomposer}
 
-**ID**: `ux.librarycomponent.chat-composer-ux`
+**ID**: `ux.librarycomponent.chat-composer`
 
 **Type**: `librarycomponent`
 
@@ -1198,24 +1350,26 @@ Controlled message input with context chips, attachment chips, a file picker and
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value         |
+| -------- | ------------- |
+| category | heimdall-chat |
+| label    | ChatComposer  |
+| type     | input         |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ChatContainer (UX) {#chatcontainer-ux}
+### ChatContainer {#chatcontainer}
 
-**ID**: `ux.librarycomponent.chat-container-ux`
+**ID**: `ux.librarycomponent.chat-container`
 
 **Type**: `librarycomponent`
 
@@ -1223,22 +1377,24 @@ Chat panel composing optional bot tabs, a scrolling message thread and a compose
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value         |
+| -------- | ------------- |
+| category | heimdall-chat |
+| label    | ChatContainer |
+| type     | layout        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ChatDivider (UX) {#chatdivider-ux}
+### ChatDivider {#chatdivider}
 
-**ID**: `ux.librarycomponent.chat-divider-ux`
+**ID**: `ux.librarycomponent.chat-divider`
 
 **Type**: `librarycomponent`
 
@@ -1246,22 +1402,24 @@ Horizontal rule with a centered label for separating conversation sections (date
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value         |
+| -------- | ------------- |
+| category | heimdall-chat |
+| label    | ChatDivider   |
+| type     | display       |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ChatMarkdownContent (UX) {#chatmarkdowncontent-ux}
+### ChatMarkdownContent {#chatmarkdowncontent}
 
-**ID**: `ux.librarycomponent.chat-markdown-content-ux`
+**ID**: `ux.librarycomponent.chat-markdown-content`
 
 **Type**: `librarycomponent`
 
@@ -1269,21 +1427,24 @@ Renders a markdown string (GitHub-flavored) with Heimdall chat typography; the s
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-chat       |
+| label    | ChatMarkdownContent |
+| type     | display             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ChatMessage (UX) {#chatmessage-ux}
+### ChatMessage {#chatmessage}
 
-**ID**: `ux.librarycomponent.chat-message-ux`
+**ID**: `ux.librarycomponent.chat-message`
 
 **Type**: `librarycomponent`
 
@@ -1291,23 +1452,25 @@ A single chat turn (user or bot) with an optional inline tool call and reasoning
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value         |
+| -------- | ------------- |
+| category | heimdall-chat |
+| label    | ChatMessage   |
+| type     | display       |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ChatSuggestions (UX) {#chatsuggestions-ux}
+### ChatSuggestions {#chatsuggestions}
 
-**ID**: `ux.librarycomponent.chat-suggestions-ux`
+**ID**: `ux.librarycomponent.chat-suggestions`
 
 **Type**: `librarycomponent`
 
@@ -1315,22 +1478,24 @@ Row of quick-reply chips. Once one is selected, the others are disabled.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-chat   |
+| label    | ChatSuggestions |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Chip (UX) {#chip-ux}
+### Chip {#chip}
 
-**ID**: `ux.librarycomponent.chip-ux`
+**ID**: `ux.librarycomponent.chip`
 
 **Type**: `librarycomponent`
 
@@ -1338,34 +1503,36 @@ Inline tag for statuses, identifiers, versions, environments and inferred values
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | Chip                |
+| type     | display             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.lineage-rail-tests`                                 | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.shell-framework-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.calendar-ux`                                               | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.entity-picker-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.filter-bar-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.kanban-board-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.lineage-rail-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.page-header-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.pipeline-card-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.tab-bar-ux`                                                | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.version-timeline-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                          | Predicate    | Direction |
+| ----------- | -------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tokens` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.lineage-rail`                | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components`  | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                  | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`      | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.calendar`                           | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.entity-picker`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.filter-bar`                         | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.kanban-board`                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.lineage-rail`                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.page-header`                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.pipeline-card`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.tab-bar`                            | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.version-timeline`                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                               | `aggregates` | inbound   |
 
-### CommandPalette (UX) {#commandpalette-ux}
+### CommandPalette {#commandpalette}
 
-**ID**: `ux.librarycomponent.command-palette-ux`
+**ID**: `ux.librarycomponent.command-palette`
 
 **Type**: `librarycomponent`
 
@@ -1373,23 +1540,25 @@ Keyboard-driven command launcher with substring search and optional groups.
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-overlays |
+| label    | CommandPalette    |
+| type     | navigation        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.overlay-advanced-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.advanced-overlays`      | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ConfigTile (UX) {#configtile-ux}
+### ConfigTile {#configtile}
 
-**ID**: `ux.librarycomponent.config-tile-ux`
+**ID**: `ux.librarycomponent.config-tile`
 
 **Type**: `librarycomponent`
 
@@ -1397,120 +1566,131 @@ Settings-page tile button with a 24px icon, title, description, a key/value summ
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | ConfigTile             |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.page-patterns-tests`                                | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                           | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### ConfirmDialog (UX) {#confirmdialog-ux}
+### ConfirmDialog {#confirmdialog}
 
-**ID**: `ux.librarycomponent.confirm-dialog-ux`
+**ID**: `ux.librarycomponent.confirm-dialog`
 
 **Type**: `librarycomponent`
 
-Two-button confirmation built on Modal. Defaults to the danger variant.
+Two-button confirmation built on `Modal`. Defaults to the `danger` variant.
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-overlays |
+| label    | ConfirmDialog     |
+| type     | feedback          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate     | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `testing.testcoveragetarget.overlay-components-tests`                           | `covers`      | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on`  | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`   | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`    | outbound  |
-| intra-layer | `ux.librarycomponent.modal-ux`                                                  | `composes`    | outbound  |
-| intra-layer | `ux.librarycomponent.modal-ux`                                                  | `specializes` | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates`  | inbound   |
+| Type        | Related Element                                     | Predicate     | Direction |
+| ----------- | --------------------------------------------------- | ------------- | --------- |
+| inter-layer | `testing.testcoveragetarget.overlay-components`     | `covers`      | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`   | outbound  |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`    | outbound  |
+| intra-layer | `ux.librarycomponent.modal`                         | `composes`    | outbound  |
+| intra-layer | `ux.librarycomponent.modal`                         | `specializes` | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates`  | inbound   |
 
-### DetailDrawer (UX) {#detaildrawer-ux}
+### DetailDrawer {#detaildrawer}
 
-**ID**: `ux.librarycomponent.detail-drawer-ux`
+**ID**: `ux.librarycomponent.detail-drawer`
 
 **Type**: `librarycomponent`
 
-Non-modal translucent panel that slides over the right edge of its nearest positioned ancestor, opening when open is true and collapsing to zero width otherwise. Use it for selection-driven detail (a graph node or edge, a list row) without reserving layout space.
+Non-modal translucent panel that slides over the right edge of its nearest positioned ancestor, opening when `open` is true and collapsing to zero width otherwise.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | DetailDrawer   |
+| type     | layout         |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.advanced-overlays`      | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### DiffViewer (UX) {#diffviewer-ux}
+### DiffViewer {#diffviewer}
 
-**ID**: `ux.librarycomponent.diff-viewer-ux`
+**ID**: `ux.librarycomponent.diff-viewer`
 
 **Type**: `librarycomponent`
 
-Tabbed diff panel that switches between a set diff (DiffViewer.HashSet, added / removed / kept items) and a line diff (DiffViewer.SideBySide). mode selects which child renders.
+Tabbed diff panel that switches between a set diff (`DiffViewer.HashSet`, added / removed / kept items) and a line diff (`DiffViewer.SideBySide`).
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-observability |
+| label    | DiffViewer             |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.diff-viewer-tests`                                  | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.hash-set-diff-ux`                                          | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.side-by-side-diff-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.diff-viewer-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.hash-set-diff`                 | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.side-by-side-diff`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Donut (UX) {#donut-ux}
+### Donut {#donut}
 
-**ID**: `ux.librarycomponent.donut-ux`
+**ID**: `ux.librarycomponent.donut`
 
 **Type**: `librarycomponent`
 
-Ring chart for composition, with optional center value and eyebrow label. No legend. There is no separate pie component; see Gotchas for a pie.
+Ring chart for composition, with optional center value and eyebrow label. No legend.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | Donut           |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Drawer (UX) {#drawer-ux}
+### Drawer {#drawer}
 
-**ID**: `ux.librarycomponent.drawer-ux`
+**ID**: `ux.librarycomponent.drawer`
 
 **Type**: `librarycomponent`
 
@@ -1518,25 +1698,28 @@ Modal slide-in side panel with backdrop, optional title, and configurable edge a
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-overlays |
+| label    | Drawer            |
+| type     | layout            |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.overlay-advanced-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.responsive-shell-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.advanced-overlays`      | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.overlay-components`     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.responsive-shell`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                  | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### EntityPicker (UX) {#entitypicker-ux}
+### EntityPicker {#entitypicker}
 
-**ID**: `ux.librarycomponent.entity-picker-ux`
+**ID**: `ux.librarycomponent.entity-picker`
 
 **Type**: `librarycomponent`
 
@@ -1544,26 +1727,28 @@ Search-as-you-type combobox that lists entity results with optional domain chips
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | EntityPicker    |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.forms-components-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`          | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.relationship-builder-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                        | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`                           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                    | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.relationship-builder`                             | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                             | `aggregates` | inbound   |
 
-### Field (UX) {#field-ux}
+### Field {#field}
 
-**ID**: `ux.librarycomponent.field-ux`
+**ID**: `ux.librarycomponent.field`
 
 **Type**: `librarycomponent`
 
@@ -1571,22 +1756,25 @@ Layout wrapper that adds a label, required marker, inline hint and error message
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | form  |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | Field           |
+| type     | form            |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### FilterBar (UX) {#filterbar-ux}
+### FilterBar {#filterbar}
 
-**ID**: `ux.librarycomponent.filter-bar-ux`
+**ID**: `ux.librarycomponent.filter-bar`
 
 **Type**: `librarycomponent`
 
@@ -1594,24 +1782,26 @@ Search input with optional inline controls, a "Showing X of Y" caption, and a ro
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | FilterBar              |
+| type     | input                  |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.page-patterns-tests`                                | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                           | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### FilterDropdown (UX) {#filterdropdown-ux}
+### FilterDropdown {#filterdropdown}
 
-**ID**: `ux.librarycomponent.filter-dropdown-ux`
+**ID**: `ux.librarycomponent.filter-dropdown`
 
 **Type**: `librarycomponent`
 
@@ -1619,76 +1809,85 @@ Compound dropdown for filter bars: a trigger with an eyebrow label and summary, 
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | FilterDropdown  |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.filter-dropdown-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`          | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                        | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.dropdown-placement`                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.dropdown-portal`                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.filter-dropdown`                           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                    | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                             | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                             | `aggregates` | inbound   |
 
-### FollowControl (UX) {#followcontrol-ux}
+### FollowControl {#followcontrol}
 
-**ID**: `ux.librarycomponent.follow-control-ux`
+**ID**: `ux.librarycomponent.follow-control`
 
 **Type**: `librarycomponent`
 
-Segmented control for how far the selection's reach follows cross-layer links: Direct / +1 layer / +2 layers. Writes follow on the shared useLayeredGraph state. Like every layered chrome control, it reads the graph prop, else the enclosing LayeredGraphContext, and throws a clear error with neither (useLayeredGraphProp(graph, name) is the same lookup for your own chrome). followOptionLabel(n) gives
+Segmented control for how far the selection's reach follows cross-layer links: Direct / +1 layer / +2 layers. Writes `follow` on the shared `useLayeredGraph` state.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | FollowControl  |
+| type     | input          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.reach-inspector`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### FormCallout (UX) {#formcallout-ux}
+### FormCallout {#formcallout}
 
-**ID**: `ux.librarycomponent.form-callout-ux`
+**ID**: `ux.librarycomponent.form-callout`
 
 **Type**: `librarycomponent`
 
-Inline info, warning, or error block inside forms, with backtick-delimited code rendered as &lt;code&gt;.
+Inline info, warning, or error block inside forms, with backtick-delimited code rendered as `&lt;code&gt;`.
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | FormCallout            |
+| type     | feedback               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.forms-components-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                          | Predicate    | Direction |
+| ----------- | -------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tokens` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.form-components`             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components`     | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                  | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`      | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                               | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                               | `aggregates` | inbound   |
 
 ### GraphCanvas (UX) {#graphcanvas-ux}
 
@@ -1696,7 +1895,7 @@ Inline info, warning, or error block inside forms, with backtick-delimited code 
 
 **Type**: `librarycomponent`
 
-Interactive graph canvas: pan/zoom viewport, selectable/hoverable/draggable nodes and edges, tooltips/popovers, toolbar, and progressive-disclosure collapse controls.
+Interactive graph canvas: pan/zoom viewport with history, selectable, hoverable and draggable nodes and edges, jointly placed edge labels, tooltips and popovers, toolbar, and progressive-disclosure collapse controls, over nine layouts.
 
 #### Attributes
 
@@ -1765,43 +1964,51 @@ Interactive graph canvas: pan/zoom viewport, selectable/hoverable/draggable node
 | inter-layer | `testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units`               | `tests`      | inbound   |
 | inter-layer | `testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline`                                    | `tests`      | inbound   |
 | inter-layer | `testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32`   | `tests`      | inbound   |
-| inter-layer | `testing.testcoveragetarget.center-on-select-tests`                                                                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.channel-router-tests`                                                                                     | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.edge-label-placement-and-styling`                                                                         | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.fullscreen-container-ref-tests`                                                                           | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.galaxy-layout-browser-tests`                                                                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.galaxy-layout-tests`                                                                                      | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.galaxy-live-drag-tests`                                                                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-a11y-names-tests`                                                                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                                                                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-popover-tests`                                                                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-algorithm-unit`                                                                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-live-drag`                                                                                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-accessible-names`                                                                            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-center-on-select`                                                                            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-click-tooltips`                                                                              | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-fit-to-boundaries`                                                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-fullscreen-container`                                                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-hover-tooltip-placement`                                                                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-layer-lanes`                                                                                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-layout-busy-state`                                                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-node-measurement`                                                                            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-popovers`                                                                                    | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-viewport-history`                                                                            | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.graph-edge-geometry-utilities`                                                                            | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-fit-boundaries-tests`                                                                               | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-layout-busy-tests`                                                                                  | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-node-measure-tests`                                                                                 | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-tooltip-placement-tests`                                                                            | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-viewport-history-tests`                                                                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layer-lanes-tests`                                                                                        | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-async-layout-tests`                                                                               | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-tests`                                                                                            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement`                                                                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.lane-layout-and-gutter-routing`                                                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-async-layout`                                                                                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-graph-index-and-reach`                                                                            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.navigation-edge-channel-routing-browser`                                                                  | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.navigation-edge-channel-routing`                                                                          | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.organic-layout-browser-tests`                                                                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.organic-layout-tests`                                                                                     | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.orthogonal-layout-browser-tests`                                                                          | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.orthogonal-layout-tests`                                                                                  | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.pan-zoom-tests`                                                                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.organic-layout-algorithm`                                                                                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.organic-layout-browser`                                                                                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.orthogonal-layout-algorithm-and-routers`                                                                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.orthogonal-layout-browser`                                                                                | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-inertia`                                                                                              | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.reach-inspector-tests`                                                                                    | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`                                                                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.ux-nav-layout-tests`                                                                                      | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.radial-tree-layout-browser`                                                                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.reach-inspector-relationships`                                                                            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-navigation-edge-visibility`                                                                            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-navigation-layout-algorithm`                                                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-navigation-layout-browser`                                                                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.yield-to-paint`                                                                                           | `covers`     | inbound   |
 | inter-layer | `technology.systemsoftware.web-browser`                                                                                               | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`                                                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                   | `satisfies`  | outbound  |
 | inter-layer | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                                                                  | `satisfies`  | outbound  |
 | inter-layer | `motivation.requirement.large-layouts-do-not-block-the-first-paint`                                                                   | `satisfies`  | outbound  |
 | inter-layer | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers`                                           | `satisfies`  | outbound  |
 | inter-layer | `motivation.requirement.motion-honours-reduced-motion-preference`                                                                     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                                                                                                 | `composes`   | inbound   |
 | intra-layer | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `composes`   | outbound  |
 | intra-layer | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `composes`   | outbound  |
 | intra-layer | `ux.librarycomponent.graph-node-ux`                                                                                                   | `composes`   | outbound  |
@@ -1813,7 +2020,9 @@ Interactive graph canvas: pan/zoom viewport, selectable/hoverable/draggable node
 | intra-layer | `ux.statepattern.layout-computation-state`                                                                                            | `uses`       | outbound  |
 | intra-layer | `ux.statepattern.live-simulation-vs-static-layout-state`                                                                              | `uses`       | outbound  |
 | intra-layer | `ux.statepattern.node-hover-and-selection-state`                                                                                      | `uses`       | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                                                                                | `aggregates` | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                                                                                                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                            | `aggregates` | inbound   |
 
 ### GraphCollapseControl (UX) {#graphcollapsecontrol-ux}
 
@@ -1831,15 +2040,15 @@ Small floating button anchored to a node's right edge for toggling structural co
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.graph-canvas-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click`            | `uses`       | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                      | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                                           | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click` | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                           | `aggregates` | inbound   |
 
 ### GraphEdgeInspector (UX) {#graphedgeinspector-ux}
 
@@ -1857,15 +2066,15 @@ Detail panel for a selected edge: predicate or title, source and target endpoint
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-matrix-tests`                               | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells`         | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                 | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`                              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                          | `aggregates` | inbound   |
 
 ### GraphEdgeShape (UX) {#graphedgeshape-ux}
 
@@ -1883,15 +2092,16 @@ Low-level SVG edge drawing: line or curve, arrow markers per variant, hit-target
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.graph-a11y-names-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.graph-canvas-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.graph-edge-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-accessible-names`          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-edge-style-utilities`             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                 | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`                               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.graph-edge-ux`                                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                          | `aggregates` | inbound   |
 
 ### GraphEdge (UX) {#graphedge-ux}
 
@@ -1909,13 +2119,16 @@ Standalone edge component for use outside GraphCanvas's own edge renderer: compu
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.graph-edge-shape-ux`                                       | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                 | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.graph-edge-shape-ux`                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                          | `aggregates` | inbound   |
 
 ### GraphInspector (UX) {#graphinspector-ux}
 
@@ -1933,12 +2146,12 @@ Detail panel for a selected node: title, kind and domain badges, description, ke
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                 | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                          | `aggregates` | inbound   |
 
 ### GraphNode (UX) {#graphnode-ux}
 
@@ -1956,20 +2169,20 @@ Default node visual: label, kind badge, domain-color swatch, selection ring, and
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.center-on-select-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`            | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                       | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-edge-label-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`            | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.graph-canvas-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click`            | `uses`       | outbound  |
-| intra-layer | `ux.actionpattern.node-select-on-click-or-enterspace`                           | `uses`       | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                      | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.edge-label-placement-and-styling`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-center-on-select`           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                  | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.graph-nodes-and-edges-have-accessible-names` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`                                | `composes`   | inbound   |
+| intra-layer | `ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click` | `uses`       | outbound  |
+| intra-layer | `ux.actionpattern.node-select-on-click-or-enterspace`                | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                           | `aggregates` | inbound   |
 
 ### GraphToolbar (UX) {#graphtoolbar-ux}
 
@@ -1987,43 +2200,45 @@ Floating control cluster: zoom in/out/fit, pan-lock toggle, fullscreen toggle, a
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.graph-canvas-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                 | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`                               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                          | `aggregates` | inbound   |
 
-### HashSetDiff (UX) {#hashsetdiff-ux}
+### HashSetDiff {#hashsetdiff}
 
-**ID**: `ux.librarycomponent.hash-set-diff-ux`
+**ID**: `ux.librarycomponent.hash-set-diff`
 
 **Type**: `librarycomponent`
 
-Three-column set diff (Added / Removed / Kept, with counts) for comparing two versions of a set of identifiers. Standalone version of DiffViewer.HashSet without the label pill.
+Three-column set diff (Added / Removed / Kept, with counts) for comparing two versions of a set of identifiers. Standalone version of `DiffViewer.HashSet` without the label pill.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-observability |
+| label    | HashSetDiff            |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.diff-viewer-tests`                                  | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.diff-viewer-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.version-pill-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.diff-viewer-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.diff-viewer`                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Heatmap (UX) {#heatmap-ux}
+### Heatmap {#heatmap}
 
-**ID**: `ux.librarycomponent.heatmap-ux`
+**ID**: `ux.librarycomponent.heatmap`
 
 **Type**: `librarycomponent`
 
@@ -2031,23 +2246,25 @@ Three-column set diff (Added / Removed / Kept, with counts) for comparing two ve
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | Heatmap         |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.map-canvas-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.map-canvas`             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### HierarchyRow (UX) {#hierarchyrow-ux}
+### HierarchyRow {#hierarchyrow}
 
-**ID**: `ux.librarycomponent.hierarchy-row-ux`
+**ID**: `ux.librarycomponent.hierarchy-row`
 
 **Type**: `librarycomponent`
 
@@ -2055,73 +2272,82 @@ A single row in a taxonomy/hierarchy list with depth indentation, connector, dom
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | HierarchyRow   |
+| type     | display        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.data-display-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.data-display-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### HierarchyTree (UX) {#hierarchytree-ux}
+### HierarchyTree {#hierarchytree}
 
-**ID**: `ux.librarycomponent.hierarchy-tree-ux`
+**ID**: `ux.librarycomponent.hierarchy-tree`
 
 **Type**: `librarycomponent`
 
-Plain container for HierarchyRow items.
+Plain container for `HierarchyRow` items.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | HierarchyTree  |
+| type     | display        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.data-display-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.data-display-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### HivePlot (UX) {#hiveplot-ux}
+### HivePlot {#hiveplot}
 
-**ID**: `ux.librarycomponent.hive-plot-ux`
+**ID**: `ux.librarycomponent.hive-plot`
 
 **Type**: `librarycomponent`
 
-A hive plot of a layered graph: one radial axis per layer at evenly divided angles, nodes placed outward along their axis by rank (degree by default, busiest farthest out), and links drawn as curves between axes. Each axis is doubled (±13° by default) so links within a layer span the gap between the two copies; cross-layer links run between the facing copies of two axes. It compares how the layers
+A hive plot of a layered graph: one radial axis per layer at evenly divided angles, nodes placed outward along their axis by rank (degree by default, busiest farthest out), and links drawn as curves between axes.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | HivePlot       |
+| type     | display        |
 
 #### Relationships
 
 | Type        | Related Element                                                                    | Predicate    | Direction |
 | ----------- | ---------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.hive-plot-tests`                                       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.hive-plot-layout`                                      | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.hive-plot-view`                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-edge-labels`                                   | `covers`     | inbound   |
 | inter-layer | `technology.systemsoftware.web-browser`                                            | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`    | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                | `satisfies`  | outbound  |
 | inter-layer | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                           | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.camera-controls`                                              | `composes`   | inbound   |
 | intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                     | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                    | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                             | `aggregates` | inbound   |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`                                      | `uses`       | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                                                | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                         | `aggregates` | inbound   |
 
-### Icon (UX) {#icon-ux}
+### Icon {#icon}
 
-**ID**: `ux.librarycomponent.icon-ux`
+**ID**: `ux.librarycomponent.icon`
 
 **Type**: `librarycomponent`
 
@@ -2129,71 +2355,74 @@ Renders a named outline icon from the Heimdall icon set. Use it for every icon; 
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | Icon                |
+| type     | display             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.alert-strip-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.asset-card-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.bridge-node-list-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.calendar-ux`                                               | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.chat-composer-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.chat-message-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.command-palette-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.config-tile-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.drawer-ux`                                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.entity-picker-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.filter-bar-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.filter-dropdown-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.form-callout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.graph-collapse-control-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.graph-toolbar-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.kanban-board-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.key-value-editor-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-list-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-pair-list-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.lineage-rail-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.link-category-filter-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.modal-ux`                                                  | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.nav-item-ux`                                               | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.ordered-list-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.pipeline-card-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.plane-layout-control-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.predicate-label-control-ux`                                | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.quick-access-grid-ux`                                      | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.quick-access-tile-ux`                                      | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.result-card-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.row-menu-ux`                                               | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.select-ux`                                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.sidebar-ux`                                                | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.stat-tile-ux`                                              | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.statusbar-ux`                                              | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.table-ux`                                                  | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.thinking-block-ux`                                         | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.toast-ux`                                                  | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.tool-block-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.trace-viewer-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.workspace-switcher-dialog-ux`                              | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                      | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.design-foundation-tokens-and-typography` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`                               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.alert-strip`                                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.asset-card`                                     | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.bridge-node-list`                               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.calendar`                                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.camera-controls`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.chat-composer`                                  | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.chat-message`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.command-palette`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.config-tile`                                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.drawer`                                         | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.entity-picker`                                  | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.filter-bar`                                     | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.filter-dropdown`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.follow-control`                                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.form-callout`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.graph-collapse-control-ux`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.graph-toolbar-ux`                               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.kanban-board`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.key-value-editor`                               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-list`                                     | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-pair-list`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`                         | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.lineage-rail`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.link-category-filter`                           | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.modal`                                          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.nav-item`                                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.ordered-list`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.pipeline-card`                                  | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.plane-layout-control`                           | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.predicate-label-control`                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.quick-access-grid`                              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.quick-access-tile`                              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.reach-inspector`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.result-card`                                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.row-menu`                                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.select`                                         | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.shell-layout`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.sidebar`                                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.stat-tile`                                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.statusbar`                                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.table`                                          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.thinking-block`                                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.toast`                                          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.tool-block`                                     | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.trace-viewer`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                                  | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.workspace-switcher-dialog`                      | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                           | `aggregates` | inbound   |
 
-### InspectorPanel (UX) {#inspectorpanel-ux}
+### InspectorPanel {#inspectorpanel}
 
-**ID**: `ux.librarycomponent.inspector-panel-ux`
+**ID**: `ux.librarycomponent.inspector-panel`
 
 **Type**: `librarycomponent`
 
@@ -2201,23 +2430,25 @@ Full-height details panel for one entity: eyebrow, title, id, version pill, head
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | InspectorPanel        |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.inspector-panel-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### KanbanBoard (UX) {#kanbanboard-ux}
+### KanbanBoard {#kanbanboard}
 
-**ID**: `ux.librarycomponent.kanban-board-ux`
+**ID**: `ux.librarycomponent.kanban-board`
 
 **Type**: `librarycomponent`
 
@@ -2225,26 +2456,28 @@ Column board of cards with pointer drag-and-drop, keyboard moves, per-column cou
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-planning |
+| label    | KanbanBoard       |
+| type     | display           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.kanban-board-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.panel-ux`                                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.kanban-board`           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.panel`                         | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### KeyValueEditor (UX) {#keyvalueeditor-ux}
+### KeyValueEditor {#keyvalueeditor}
 
-**ID**: `ux.librarycomponent.key-value-editor-ux`
+**ID**: `ux.librarycomponent.key-value-editor`
 
 **Type**: `librarycomponent`
 
@@ -2252,76 +2485,85 @@ Editable table of key/value rows with an optional datatype column and add/remove
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | form  |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | KeyValueEditor  |
+| type     | form            |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.forms-components-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.select-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.text-input-ux`                                             | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.select`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.text-input`                    | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### KVGrid (UX) {#kvgrid-ux}
+### KVGrid {#kvgrid}
 
-**ID**: `ux.librarycomponent.kvgrid-ux`
+**ID**: `ux.librarycomponent.kvgrid`
 
 **Type**: `librarycomponent`
 
-Two-column key/value list for entity metadata, rendered as &lt;dl&gt;/&lt;dt&gt;/&lt;dd&gt;.
+Two-column key/value list for entity metadata, rendered as `&lt;dl&gt;`/`&lt;dt&gt;`/`&lt;dd&gt;`.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | KVGrid                |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.inspector-panel-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### LayerList (UX) {#layerlist-ux}
+### LayerList {#layerlist}
 
-**ID**: `ux.librarycomponent.layer-list-ux`
+**ID**: `ux.librarycomponent.layer-list`
 
 **Type**: `librarycomponent`
 
-One row per layer: colour swatch, name, and nodes · links within counts. The row is a button that focuses the layer (again to clear); the eye button hides or shows it.
+One row per layer: colour swatch, name, and `nodes · links within` counts. The row is a button that focuses the layer (again to clear); the eye button hides or shows it.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | LayerList      |
+| type     | navigation     |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### LayerPairList (UX) {#layerpairlist-ux}
+### LayerPairList {#layerpairlist}
 
-**ID**: `ux.librarycomponent.layer-pair-list-ux`
+**ID**: `ux.librarycomponent.layer-pair-list`
 
 **Type**: `librarycomponent`
 
@@ -2329,51 +2571,62 @@ One row per layer pair with cross-layer links: both swatches, the names and the 
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | LayerPairList  |
+| type     | navigation     |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### LayerStack (UX) {#layerstack-ux}
+### LayerStack {#layerstack}
 
-**ID**: `ux.librarycomponent.layer-stack-ux`
+**ID**: `ux.librarycomponent.layer-stack`
 
 **Type**: `librarycomponent`
 
-The layered graph as a 3D stack: one translucent plane per layer (with a grid and a clickable title showing node and link counts), nodes as layer-coloured discs sized by degree, intra-layer links on their plane and cross-layer links between planes. Drawn as SVG with a perspective projection, so it stays crisp, accessible and snapshot-testable; tested at the full DR spec (13 layers, 193 nodes, abou
+The layered graph as a 3D stack: one translucent plane per layer (with a grid and a clickable title showing node and link counts), nodes as layer-coloured discs sized by degree, intra-layer links on their plane and cross-layer links between planes.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | LayerStack     |
+| type     | display        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layer-stack-tests`                                  | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-dom-order-tests`                            | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-link-batches-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layer-stack-projection`     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layer-stack-view`           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-dom-order`          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-edge-labels`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-link-batches`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`          | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.layer-stack-camera-orbit-and-presets` | `uses`       | outbound  |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`           | `uses`       | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`            | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                     | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
 ### LayeredGraphContext (UX) {#layeredgraphcontext-ux}
 
@@ -2391,31 +2644,31 @@ A React context that shares one useLayeredGraph result with every layered view a
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layer-lanes-tests`                                  | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.reach-inspector-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.bridge-node-list-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.hive-plot-ux`                                              | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-list-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-pair-list-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-stack-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.link-category-filter-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.plane-layout-control-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.predicate-label-control-ux`                                | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-layer-lanes`      | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                    | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`        | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`                     | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.bridge-node-list`                     | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.camera-controls`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.follow-control`                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.hive-plot`                            | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-list`                           | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-pair-list`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-stack`                          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.link-category-filter`                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.plane-layout-control`                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.predicate-label-control`              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.reach-inspector`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                        | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                 | `aggregates` | inbound   |
 
-### LayeredGraphExplorer (UX) {#layeredgraphexplorer-ux}
+### LayeredGraphExplorer {#layeredgraphexplorer}
 
-**ID**: `ux.librarycomponent.layered-graph-explorer-ux`
+**ID**: `ux.librarycomponent.layered-graph-explorer`
 
 **Type**: `librarycomponent`
 
@@ -2423,33 +2676,44 @@ The ready-made layered graph explorer: every layered view and its chrome in one 
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                |
+| -------- | -------------------- |
+| category | heimdall-graph       |
+| label    | LayeredGraphExplorer |
+| type     | display              |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.adjacency-matrix-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-graph-explorer-tests`                       | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.layered-snapshot-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`                                       | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.hive-plot-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layer-stack-ux`                                            | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.adjacency-matrix-view`         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-graph-explorer`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-snapshot-sanitization` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                    | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`        | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`                     | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.bridge-node-list`                     | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.button`                               | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.follow-control`                       | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`                      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-ux`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.hive-plot`                            | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                 | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-list`                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-pair-list`                      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-stack`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.link-category-filter`                 | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.plane-layout-control`                 | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.predicate-label-control`              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.reach-inspector`                      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`                    | `composes`   | outbound  |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`              | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                 | `aggregates` | inbound   |
 
-### LineChart (UX) {#linechart-ux}
+### LineChart {#linechart}
 
-**ID**: `ux.librarycomponent.line-chart-ux`
+**ID**: `ux.librarycomponent.line-chart`
 
 **Type**: `librarycomponent`
 
@@ -2457,23 +2721,25 @@ Multi-series line chart with optional area fill, axes, grid, threshold line, eve
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | LineChart       |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle-tests`                       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### LineageRail (UX) {#lineagerail-ux}
+### LineageRail {#lineagerail}
 
-**ID**: `ux.librarycomponent.lineage-rail-ux`
+**ID**: `ux.librarycomponent.lineage-rail`
 
 **Type**: `librarycomponent`
 
@@ -2481,51 +2747,58 @@ Horizontal chain of chips joined by arrows, showing the lineage of a dataset, ru
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-observability |
+| label    | LineageRail            |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.lineage-rail-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.lineage-rail`           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### LinkCategoryFilter (UX) {#linkcategoryfilter-ux}
+### LinkCategoryFilter {#linkcategoryfilter}
 
-**ID**: `ux.librarycomponent.link-category-filter-ux`
+**ID**: `ux.librarycomponent.link-category-filter`
 
 **Type**: `librarycomponent`
 
-The link bar: one toggle button per link category, each with its dash sample (from linkCategoryStyle) and link count, then optional intra-layer and node-label toggles. Category and intra toggles write filters; the node-label toggle writes the graph's nodeLabels (or calls onNodeLabelsChange with a controlled nodeLabels). children render after a divider at the end of the bar. Each divider is glued t
+The link bar: one toggle button per link category, each with its dash sample (from `linkCategoryStyle`) and link count, then optional intra-layer and node-label toggles.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value              |
+| -------- | ------------------ |
+| category | heimdall-graph     |
+| label    | LinkCategoryFilter |
+| type     | input              |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### LogStream (UX) {#logstream-ux}
+### LogStream {#logstream}
 
-**ID**: `ux.librarycomponent.log-stream-ux`
+**ID**: `ux.librarycomponent.log-stream`
 
 **Type**: `librarycomponent`
 
@@ -2533,22 +2806,24 @@ Monospace, auto-following log tail with timestamp and level columns, and optiona
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-observability |
+| label    | LogStream              |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.cards-and-lists-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.cards-and-lists`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### MapCanvas (UX) {#mapcanvas-ux}
+### MapCanvas {#mapcanvas}
 
-**ID**: `ux.librarycomponent.map-canvas-ux`
+**ID**: `ux.librarycomponent.map-canvas`
 
 **Type**: `librarycomponent`
 
@@ -2556,23 +2831,25 @@ Pan/zoom Web Mercator map that renders pins, a track polyline, or a heatmap, ove
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | MapCanvas             |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.map-canvas-tests`                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.pan-zoom-tests`                                     | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.map-canvas`             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-and-zoom`           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### MetricRow (UX) {#metricrow-ux}
+### MetricRow {#metricrow}
 
-**ID**: `ux.librarycomponent.metric-row-ux`
+**ID**: `ux.librarycomponent.metric-row`
 
 **Type**: `librarycomponent`
 
@@ -2580,24 +2857,26 @@ One dashboard row combining a label, a progress bar, a 60 × 18 sparkline and a 
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | MetricRow       |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.progress-bar-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.sparkline-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.progress-bar`                  | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.sparkline`                     | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### MiniCalendar (UX) {#minicalendar-ux}
+### MiniCalendar {#minicalendar}
 
-**ID**: `ux.librarycomponent.mini-calendar-ux`
+**ID**: `ux.librarycomponent.mini-calendar`
 
 **Type**: `librarycomponent`
 
@@ -2605,24 +2884,28 @@ Compact single-month date picker for sidebars, with today and selected-day highl
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-planning |
+| label    | MiniCalendar      |
+| type     | display           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.date-utils-tests`                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.server-render-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.static-links-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.calendar-and-mini-calendar`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.date-utilities`                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.server-rendering`                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
 
-### Modal (UX) {#modal-ux}
+### Modal {#modal}
 
-**ID**: `ux.librarycomponent.modal-ux`
+**ID**: `ux.librarycomponent.modal`
 
 **Type**: `librarycomponent`
 
@@ -2630,75 +2913,84 @@ General-purpose dialog with header, body, footer, and optional hint strip.
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-overlays |
+| label    | Modal             |
+| type     | layout            |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate     | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `testing.testcoveragetarget.overlay-components-tests`                           | `covers`      | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on`  | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`   | outbound  |
-| intra-layer | `ux.librarycomponent.confirm-dialog-ux`                                         | `composes`    | inbound   |
-| intra-layer | `ux.librarycomponent.confirm-dialog-ux`                                         | `specializes` | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`    | outbound  |
-| intra-layer | `ux.librarycomponent.workspace-switcher-dialog-ux`                              | `composes`    | inbound   |
-| intra-layer | `ux.librarycomponent.workspace-switcher-dialog-ux`                              | `specializes` | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates`  | inbound   |
+| Type        | Related Element                                     | Predicate     | Direction |
+| ----------- | --------------------------------------------------- | ------------- | --------- |
+| inter-layer | `testing.testcoveragetarget.overlay-components`     | `covers`      | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`   | outbound  |
+| intra-layer | `ux.librarycomponent.confirm-dialog`                | `composes`    | inbound   |
+| intra-layer | `ux.librarycomponent.confirm-dialog`                | `specializes` | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`    | outbound  |
+| intra-layer | `ux.librarycomponent.workspace-switcher-dialog`     | `composes`    | inbound   |
+| intra-layer | `ux.librarycomponent.workspace-switcher-dialog`     | `specializes` | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates`  | inbound   |
 
-### NavItem (UX) {#navitem-ux}
+### NavItem {#navitem}
 
-**ID**: `ux.librarycomponent.nav-item-ux`
+**ID**: `ux.librarycomponent.nav-item`
 
 **Type**: `librarycomponent`
 
-Single shell-surface navigation button (or link, with href) with optional icon, count, and active marker; use it to build a custom nav column when Sidebar does not fit.
+Single shell-surface navigation button (or link, with `href`) with optional icon, count, and active marker; use it to build a custom nav column when `Sidebar` does not fit.
 
 #### Attributes
 
-| Name | Value      |
-| ---- | ---------- |
-| type | navigation |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-navigation |
+| label    | NavItem             |
+| type     | navigation          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.server-render-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.static-links-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.server-rendering`           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants`  | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                              | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.link-navigation`                      | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### NumberInput (UX) {#numberinput-ux}
+### NumberInput {#numberinput}
 
-**ID**: `ux.librarycomponent.number-input-ux`
+**ID**: `ux.librarycomponent.number-input`
 
 **Type**: `librarycomponent`
 
-Numeric input rendered as &lt;input type="number"&gt;.
+Numeric input rendered as `&lt;input type="number"&gt;`.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | NumberInput     |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### OrderedList (UX) {#orderedlist-ux}
+### OrderedList {#orderedlist}
 
-**ID**: `ux.librarycomponent.ordered-list-ux`
+**ID**: `ux.librarycomponent.ordered-list`
 
 **Type**: `librarycomponent`
 
@@ -2706,48 +2998,53 @@ Ranked list with move-up / move-down buttons and an optional star marker on a pr
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | OrderedList     |
+| type     | form            |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.forms-components-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.cards-and-lists`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### PageHeader (UX) {#pageheader-ux}
+### PageHeader {#pageheader}
 
-**ID**: `ux.librarycomponent.page-header-ux`
+**ID**: `ux.librarycomponent.page-header`
 
 **Type**: `librarycomponent`
 
-Page title block: &lt;h1&gt; title with optional eyebrow row, identifier chip, subtitle, and right-aligned action slot.
+Page title block: `&lt;h1&gt;` title with optional eyebrow row, identifier chip, subtitle, and right-aligned action slot.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | PageHeader             |
+| type     | layout                 |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.page-patterns-tests`                                | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                           | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### Panel (UX) {#panel-ux}
+### Panel {#panel}
 
-**ID**: `ux.librarycomponent.panel-ux`
+**ID**: `ux.librarycomponent.panel`
 
 **Type**: `librarycomponent`
 
@@ -2755,25 +3052,28 @@ Bordered content card with optional header (title, subtitle, trailing action) an
 
 #### Attributes
 
-| Name | Value  |
-| ---- | ------ |
-| type | layout |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-layout |
+| label    | Panel           |
+| type     | layout          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dropdown-placement-tests`                           | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.filter-dropdown-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.kanban-board-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.dropdown-placement`         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.filter-dropdown`            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.kanban-board`                      | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### PipelineCard (UX) {#pipelinecard-ux}
+### PipelineCard {#pipelinecard}
 
-**ID**: `ux.librarycomponent.pipeline-card-ux`
+**ID**: `ux.librarycomponent.pipeline-card`
 
 **Type**: `librarycomponent`
 
@@ -2781,239 +3081,269 @@ Pipeline status card: name, id, status/target/tag chips, run controls, a stage f
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | PipelineCard           |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.forms-components-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                           | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### PlaneLayoutControl (UX) {#planelayoutcontrol-ux}
+### PlaneLayoutControl {#planelayoutcontrol}
 
-**ID**: `ux.librarycomponent.plane-layout-control-ux`
+**ID**: `ux.librarycomponent.plane-layout-control`
 
 **Type**: `librarycomponent`
 
-Segmented control for Independent (each layer laid out on its own) or Coupled (cross-layer neighbours aligned). Writes planeLayout; views that position nodes per layer read it.
+Segmented control for Independent (each layer laid out on its own) or Coupled (cross-layer neighbours aligned). Writes `planeLayout`; views that position nodes per layer read it.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value              |
+| -------- | ------------------ |
+| category | heimdall-graph     |
+| label    | PlaneLayoutControl |
+| type     | input              |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Popover (UX) {#popover-ux}
+### Popover {#popover}
 
-**ID**: `ux.librarycomponent.popover-ux`
+**ID**: `ux.librarycomponent.popover`
 
 **Type**: `librarycomponent`
 
-Click-to-open non-modal panel anchored to a trigger. Compound component: Popover + Popover.Trigger + Popover.Panel.
+Click-to-open non-modal panel anchored to a trigger. Compound component: `Popover` + `Popover.Trigger` + `Popover.Panel`.
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-overlays |
+| label    | Popover           |
+| type     | layout            |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dropdown-portal-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-popover-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.overlay-components-tests`                           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                          | Predicate    | Direction |
+| ----------- | -------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.advanced-overlays`           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.dropdown-portal`             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-click-tooltips` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-popovers`       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.overlay-components`          | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                  | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`      | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                               | `aggregates` | inbound   |
 
-### PredicateLabelControl (UX) {#predicatelabelcontrol-ux}
+### PredicateLabelControl {#predicatelabelcontrol}
 
-**ID**: `ux.librarycomponent.predicate-label-control-ux`
+**ID**: `ux.librarycomponent.predicate-label-control`
 
 **Type**: `librarycomponent`
 
-Segmented control for which links show predicate labels: Off / Highlighted (reached links and the active layer pair) / All. Writes predicateLabels.
+Segmented control for which links show predicate labels: Off / Highlighted (reached links and the active layer pair) / All.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-graph        |
+| label    | PredicateLabelControl |
+| type     | input                 |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ProgressBar (UX) {#progressbar-ux}
+### ProgressBar {#progressbar}
 
-**ID**: `ux.librarycomponent.progress-bar-ux`
+**ID**: `ux.librarycomponent.progress-bar`
 
 **Type**: `librarycomponent`
 
-Thin horizontal fill bar for progress, quota or utilization, with role="progressbar".
+Thin horizontal fill bar for progress, quota or utilization, with `role="progressbar"`.
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | ProgressBar     |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.cards-and-lists-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.metric-row-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.result-card-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.cards-and-lists`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.metric-row`                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.result-card`                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### QuickAccessGrid (UX) {#quickaccessgrid-ux}
+### QuickAccessGrid {#quickaccessgrid}
 
-**ID**: `ux.librarycomponent.quick-access-grid-ux`
+**ID**: `ux.librarycomponent.quick-access-grid`
 
 **Type**: `librarycomponent`
 
-Grid of QuickAccessTile buttons (or links, with href) driven by a data array, for landing-page shortcuts.
+Grid of `QuickAccessTile` buttons (or links, with `href`) driven by a data array, for landing-page shortcuts.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | QuickAccessGrid        |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.page-patterns-tests`                                | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.quick-access-tile-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components`   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`    | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.quick-access-tile`                | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.link-navigation`                     | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                             | `aggregates` | inbound   |
 
-### QuickAccessTile (UX) {#quickaccesstile-ux}
+### QuickAccessTile {#quickaccesstile}
 
-**ID**: `ux.librarycomponent.quick-access-tile-ux`
+**ID**: `ux.librarycomponent.quick-access-tile`
 
 **Type**: `librarycomponent`
 
-Single shortcut button (or link, with href) with an icon tile, title, optional description, and trailing chevron.
+Single shortcut button (or link, with `href`) with an icon tile, title, optional description, and trailing chevron.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | QuickAccessTile        |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.page-patterns-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.server-render-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.static-links-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.quick-access-grid-ux`                                      | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components`   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.server-rendering`          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`    | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.quick-access-grid`                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                             | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.link-navigation`                     | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                             | `aggregates` | inbound   |
 
-### ReachInspector (UX) {#reachinspector-ux}
+### ReachInspector {#reachinspector}
 
-**ID**: `ux.librarycomponent.reach-inspector-ux`
+**ID**: `ux.librarycomponent.reach-inspector`
 
 **Type**: `librarycomponent`
 
-Inspector for the layered views' selection:
+Inspector for the layered views' selection: the selected node's direct links split into cross-layer and intra-layer rows (direction, predicate, layer) and the nodes its reach followed, with hop and the node and predicate each came through; reads the enclosing LayeredGraphContext or a graph prop.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | ReachInspector |
+| type     | display        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.layered-graph-chrome-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.reach-inspector-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.stat-tile-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                    | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`        | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.button`                               | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.follow-control`                       | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                 | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.stat-tile`                            | `composes`   | outbound  |
+| intra-layer | `ux.statepattern.layered-selection-and-reach`              | `uses`       | outbound  |
+| intra-layer | `ux.librarycomponent.view-switcher`                        | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                 | `aggregates` | inbound   |
 
-### RelationshipBuilder (UX) {#relationshipbuilder-ux}
+### RelationshipBuilder {#relationshipbuilder}
 
-**ID**: `ux.librarycomponent.relationship-builder-ux`
+**ID**: `ux.librarycomponent.relationship-builder`
 
 **Type**: `librarycomponent`
 
-Three-column form (Source / Predicate / Target) composing two EntityPickers and a Select into one relationship value.
+Three-column form (Source / Predicate / Target) composing two `EntityPicker`s and a `Select` into one relationship value.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | form  |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-inputs     |
+| label    | RelationshipBuilder |
+| type     | form                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.forms-components-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.entity-picker-ux`                                          | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.select-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.entity-picker`                 | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.select`                        | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ResultCard (UX) {#resultcard-ux}
+### ResultCard {#resultcard}
 
-**ID**: `ux.librarycomponent.result-card-ux`
+**ID**: `ux.librarycomponent.result-card`
 
 **Type**: `librarycomponent`
 
@@ -3021,26 +3351,28 @@ Search or retrieval result: source, version, relevance score bar, snippet, prove
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | ResultCard            |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.cards-and-lists-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.progress-bar-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.cards-and-lists`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.progress-bar`                  | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### RowMenu (UX) {#rowmenu-ux}
+### RowMenu {#rowmenu}
 
-**ID**: `ux.librarycomponent.row-menu-ux`
+**ID**: `ux.librarycomponent.row-menu`
 
 **Type**: `librarycomponent`
 
@@ -3048,25 +3380,29 @@ Kebab trigger that opens a dropdown of row actions, with separators, danger and 
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-page-patterns |
+| label    | RowMenu                |
+| type     | navigation             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dropdown-portal-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.forms-components-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`          | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                        | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.dropdown-placement`                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.dropdown-portal`                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.form-components`                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.page-pattern-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                    | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                             | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                             | `aggregates` | inbound   |
 
-### SegmentedControl (UX) {#segmentedcontrol-ux}
+### SegmentedControl {#segmentedcontrol}
 
-**ID**: `ux.librarycomponent.segmented-control-ux`
+**ID**: `ux.librarycomponent.segmented-control`
 
 **Type**: `librarycomponent`
 
@@ -3074,98 +3410,110 @@ Radio group rendered as a connected row of segments, for mutually exclusive view
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | SegmentedControl    |
+| type     | input               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.bridge-node-list-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.calendar-ux`                                               | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-list-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layer-pair-list-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`                                 | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.link-category-filter-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.plane-layout-control-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.predicate-label-control-ux`                                | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.bridge-node-list`              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.calendar`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.camera-controls`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.follow-control`                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-list`                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layer-pair-list`               | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.link-category-filter`          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.plane-layout-control`          | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.predicate-label-control`       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.view-switcher`                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Select (UX) {#select-ux}
+### Select {#select}
 
-**ID**: `ux.librarycomponent.select-ux`
+**ID**: `ux.librarycomponent.select`
 
 **Type**: `librarycomponent`
 
-Custom dropdown (not a native &lt;select&gt;) with single and multi-select modes, compound item children, icons, descriptions, separators and section titles.
+Custom dropdown (not a native `&lt;select&gt;`) with single and multi-select modes, compound item children, icons, descriptions, separators and section titles.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | Select          |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.calendar-tests`                                     | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.data-display-tests`                                 | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.dropdown-portal-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.filter-dropdown-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.map-canvas-tests`                                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.overlay-advanced-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`          | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.key-value-editor-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.relationship-builder-ux`                                   | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                        | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.advanced-overlays`                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.calendar-and-mini-calendar`                | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.data-display-components`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.dropdown-placement`                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.dropdown-portal`                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.filter-dropdown`                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.form-components`                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.map-canvas`                                | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`                      | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                    | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.key-value-editor`                                 | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.relationship-builder`                             | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                                             | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                             | `aggregates` | inbound   |
 
-### ShellLayout (UX) {#shelllayout-ux}
+### ShellLayout {#shelllayout}
 
-**ID**: `ux.librarycomponent.shell-layout-ux`
+**ID**: `ux.librarycomponent.shell-layout`
 
 **Type**: `librarycomponent`
 
-Full-viewport IDE chrome: optional Titlebar on top, Sidebar (with AppTitle) on the left, Topbar above a scrolling canvas &lt;main&gt;, optional Statusbar at the bottom, and a drawer-based sidebar below a mobile breakpoint.
+Full-viewport IDE chrome: optional Titlebar on top, Sidebar (with AppTitle) on the left, Topbar above a scrolling canvas `&lt;main&gt;`, optional Statusbar at the bottom, and a drawer-based sidebar below a mobile breakpoint.
 
 #### Attributes
 
-| Name | Value  |
-| ---- | ------ |
-| type | layout |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-shell |
+| label    | ShellLayout    |
+| type     | layout         |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.server-render-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.shell-framework-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.static-links-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.app-title-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.drawer-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.sidebar-ux`                                                | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.statusbar-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.titlebar-ux`                                               | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.topbar-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.design-reference-comparison`                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.responsive-shell`                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.server-rendering`                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.ide-density-and-terse-voice`                        | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.app-title`                                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.drawer`                                              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                                | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.sidebar`                                             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.statusbar`                                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.titlebar`                                            | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.topbar`                                              | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
 
-### SideBySideDiff (UX) {#sidebysidediff-ux}
+### SideBySideDiff {#sidebysidediff}
 
-**ID**: `ux.librarycomponent.side-by-side-diff-ux`
+**ID**: `ux.librarycomponent.side-by-side-diff`
 
 **Type**: `librarycomponent`
 
@@ -3173,51 +3521,57 @@ Virtualized line diff with +/− gutter markers, tinted added and removed rows, 
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-observability |
+| label    | SideBySideDiff         |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.diff-viewer-tests`                                  | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.diff-viewer-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.version-pill-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.diff-viewer-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.diff-viewer`                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Sidebar (UX) {#sidebar-ux}
+### Sidebar {#sidebar}
 
-**ID**: `ux.librarycomponent.sidebar-ux`
+**ID**: `ux.librarycomponent.sidebar`
 
 **Type**: `librarycomponent`
 
-Left navigation column with titled sections, expandable parent items, a 256px/64px collapse toggle, an optional AppTitle header, and a footer slot.
+Left navigation column with titled sections, expandable parent items, a 256px/64px collapse toggle, an optional `AppTitle` header, and a footer slot.
 
 #### Attributes
 
-| Name | Value      |
-| ---- | ---------- |
-| type | navigation |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-navigation |
+| label    | Sidebar             |
+| type     | navigation          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.responsive-shell-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.static-links-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.app-title-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.responsive-shell`           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.static-site-link-variants`  | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.app-title`                         | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                              | `composes`   | outbound  |
+| intra-layer | `ux.actionpattern.link-navigation`                      | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### Sparkline (UX) {#sparkline-ux}
+### Sparkline {#sparkline}
 
-**ID**: `ux.librarycomponent.sparkline-ux`
+**ID**: `ux.librarycomponent.sparkline`
 
 **Type**: `librarycomponent`
 
@@ -3225,24 +3579,26 @@ Shape-only trend line (88 × 28 by default) for tiles, table cells and cards. No
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | Sparkline       |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.metric-row-ux`                                             | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.stat-tile-ux`                                              | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.metric-row`                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.stat-tile`                     | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### SplitPane (UX) {#splitpane-ux}
+### SplitPane {#splitpane}
 
-**ID**: `ux.librarycomponent.split-pane-ux`
+**ID**: `ux.librarycomponent.split-pane`
 
 **Type**: `librarycomponent`
 
@@ -3250,22 +3606,25 @@ Resizable two-pane split with a draggable, keyboard-focusable divider. Controlle
 
 #### Attributes
 
-| Name | Value  |
-| ---- | ------ |
-| type | layout |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-layout |
+| label    | SplitPane       |
+| type     | layout          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.overlay-advanced-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.advanced-overlays`          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### StackedBar (UX) {#stackedbar-ux}
+### StackedBar {#stackedbar}
 
-**ID**: `ux.librarycomponent.stacked-bar-ux`
+**ID**: `ux.librarycomponent.stacked-bar`
 
 **Type**: `librarycomponent`
 
@@ -3273,45 +3632,49 @@ Vertical stacked bars, one stack per category, with optional 100% normalized mod
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | StackedBar      |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### StatGrid (UX) {#statgrid-ux}
+### StatGrid {#statgrid}
 
-**ID**: `ux.librarycomponent.stat-grid-ux`
+**ID**: `ux.librarycomponent.stat-grid`
 
 **Type**: `librarycomponent`
 
-Responsive grid for a row of StatTiles (14px gap).
+Responsive grid for a row of `StatTile`s (14px gap).
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | StatGrid              |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.data-display-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.data-display-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### StatTile (UX) {#stattile-ux}
+### StatTile {#stattile}
 
-**ID**: `ux.librarycomponent.stat-tile-ux`
+**ID**: `ux.librarycomponent.stat-tile`
 
 **Type**: `librarycomponent`
 
@@ -3319,25 +3682,27 @@ KPI tile with a colored left bar, optional delta, sparkline, icon and meta line.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | StatTile              |
+| type     | display               |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.data-display-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.sparkline-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.data-display-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.reach-inspector`                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                           | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.sparkline`                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### StatusBadge (UX) {#statusbadge-ux}
+### StatusBadge {#statusbadge}
 
-**ID**: `ux.librarycomponent.status-badge-ux`
+**ID**: `ux.librarycomponent.status-badge`
 
 **Type**: `librarycomponent`
 
@@ -3345,21 +3710,24 @@ Solid 8px dot with an optional pulsing halo, for live status indicators.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | StatusBadge         |
+| type     | display             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### StatusTimeline (UX) {#statustimeline-ux}
+### StatusTimeline {#statustimeline}
 
-**ID**: `ux.librarycomponent.status-timeline-ux`
+**ID**: `ux.librarycomponent.status-timeline`
 
 **Type**: `librarycomponent`
 
@@ -3367,48 +3735,53 @@ Gantt-style status history: one horizontal track per service, colored segments a
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | chart |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-charts |
+| label    | StatusTimeline  |
+| type     | chart           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.charts-showcase-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Statusbar (UX) {#statusbar-ux}
+### Statusbar {#statusbar}
 
-**ID**: `ux.librarycomponent.statusbar-ux`
+**ID**: `ux.librarycomponent.statusbar`
 
 **Type**: `librarycomponent`
 
-27px bottom bar with left, center, and right slots; each slot takes React nodes or a typed StatusbarItem\[\] of pulses, icons, and dividers.
+27px bottom bar with left, center, and right slots; each slot takes React nodes or a typed `StatusbarItem\[\]` of pulses, icons, and dividers.
 
 #### Attributes
 
-| Name | Value  |
-| ---- | ------ |
-| type | layout |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-shell |
+| label    | Statusbar      |
+| type     | layout         |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.responsive-shell-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.shell-framework-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.responsive-shell`                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.icon`                                                | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
 
-### TabBar (UX) {#tabbar-ux}
+### TabBar {#tabbar}
 
-**ID**: `ux.librarycomponent.tab-bar-ux`
+**ID**: `ux.librarycomponent.tab-bar`
 
 **Type**: `librarycomponent`
 
@@ -3416,23 +3789,25 @@ Canvas-surface horizontal tab strip with an amber underline on the active tab, o
 
 #### Attributes
 
-| Name | Value      |
-| ---- | ---------- |
-| type | navigation |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-navigation |
+| label    | TabBar              |
+| type     | navigation          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.shell-framework-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                              | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### Table (UX) {#table-ux}
+### Table {#table}
 
-**ID**: `ux.librarycomponent.table-ux`
+**ID**: `ux.librarycomponent.table`
 
 **Type**: `librarycomponent`
 
@@ -3440,23 +3815,25 @@ Generic data table with sortable headers, checkbox selection, clickable rows and
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | table |
+| Name     | Value                 |
+| -------- | --------------------- |
+| category | heimdall-data-display |
+| label    | Table                 |
+| type     | table                 |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.data-display-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                      | Predicate    | Direction |
+| ----------- | ---------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.data-display-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                           | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
 
-### TextArea (UX) {#textarea-ux}
+### TextArea {#textarea}
 
-**ID**: `ux.librarycomponent.text-area-ux`
+**ID**: `ux.librarycomponent.text-area`
 
 **Type**: `librarycomponent`
 
@@ -3464,22 +3841,25 @@ Multi-line text input with optional monospace font and error state.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | TextArea        |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### TextInput (UX) {#textinput-ux}
+### TextInput {#textinput}
 
-**ID**: `ux.librarycomponent.text-input-ux`
+**ID**: `ux.librarycomponent.text-input`
 
 **Type**: `librarycomponent`
 
@@ -3487,23 +3867,26 @@ Single-line text input with optional monospace font and error state.
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | TextInput       |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.key-value-editor-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.key-value-editor`              | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ThinkingBlock (UX) {#thinkingblock-ux}
+### ThinkingBlock {#thinkingblock}
 
-**ID**: `ux.librarycomponent.thinking-block-ux`
+**ID**: `ux.librarycomponent.thinking-block`
 
 **Type**: `librarycomponent`
 
@@ -3511,23 +3894,25 @@ Collapsible monospace block for model reasoning or step-by-step thought text.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value         |
+| -------- | ------------- |
+| category | heimdall-chat |
+| label    | ThinkingBlock |
+| type     | display       |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Titlebar (UX) {#titlebar-ux}
+### Titlebar {#titlebar}
 
-**ID**: `ux.librarycomponent.titlebar-ux`
+**ID**: `ux.librarycomponent.titlebar`
 
 **Type**: `librarycomponent`
 
@@ -3535,22 +3920,25 @@ Collapsible monospace block for model reasoning or step-by-step thought text.
 
 #### Attributes
 
-| Name | Value  |
-| ---- | ------ |
-| type | layout |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-shell |
+| label    | Titlebar       |
+| type     | layout         |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                      | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
 
-### Toast (UX) {#toast-ux}
+### Toast {#toast}
 
-**ID**: `ux.librarycomponent.toast-ux`
+**ID**: `ux.librarycomponent.toast`
 
 **Type**: `librarycomponent`
 
@@ -3558,23 +3946,25 @@ Single dismissible notification with optional auto-dismiss. Does not position it
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-overlays |
+| label    | Toast             |
+| type     | feedback          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.overlay-components-tests`                           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.overlay-components`     | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### ToolBlock (UX) {#toolblock-ux}
+### ToolBlock {#toolblock}
 
-**ID**: `ux.librarycomponent.tool-block-ux`
+**ID**: `ux.librarycomponent.tool-block`
 
 **Type**: `librarycomponent`
 
@@ -3582,23 +3972,25 @@ Collapsible block showing a tool call name, execution status, and optional key/v
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value         |
+| -------- | ------------- |
+| category | heimdall-chat |
+| label    | ToolBlock     |
+| type     | display       |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### Tooltip (UX) {#tooltip-ux}
+### Tooltip {#tooltip}
 
-**ID**: `ux.librarycomponent.tooltip-ux`
+**ID**: `ux.librarycomponent.tooltip`
 
 **Type**: `librarycomponent`
 
@@ -3606,25 +3998,29 @@ Short hover/focus hint attached to a single child element.
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value             |
+| -------- | ----------------- |
+| category | heimdall-overlays |
+| label    | Tooltip           |
+| type     | display           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                   | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-popover-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.overlay-components-tests`                           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.advanced-overlays`                      | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-click-tooltips`            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-popovers`                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.overlay-components`                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.tooltip-placement`                      | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                 | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                          | `aggregates` | inbound   |
 
-### Topbar (UX) {#topbar-ux}
+### Topbar {#topbar}
 
-**ID**: `ux.librarycomponent.topbar-ux`
+**ID**: `ux.librarycomponent.topbar`
 
 **Type**: `librarycomponent`
 
@@ -3632,73 +4028,82 @@ Short hover/focus hint attached to a single child element.
 
 #### Attributes
 
-| Name | Value      |
-| ---- | ---------- |
-| type | navigation |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-navigation |
+| label    | Topbar              |
+| type     | navigation          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.responsive-shell-tests`                             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.shell-framework-tests`                              | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.responsive-shell`                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                                        | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
 
-### TopologyNode (UX) {#topologynode-ux}
+### TopologyNode {#topologynode}
 
-**ID**: `ux.librarycomponent.topology-node-ux`
+**ID**: `ux.librarycomponent.topology-node`
 
 **Type**: `librarycomponent`
 
-Infrastructure/service node card with status dot and metric progress bars. Supports absolute positioning for hand-placed diagrams, and works as renderNode content in GraphCanvas.
+Infrastructure/service node card with status dot and metric progress bars. Supports absolute positioning for hand-placed diagrams, and works as `renderNode` content in `GraphCanvas`.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | TopologyNode   |
+| type     | display        |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`            | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-tests`                       | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                      | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.data-display-components`                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                  | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                           | `aggregates` | inbound   |
 
-### TraceViewer (UX) {#traceviewer-ux}
+### TraceViewer {#traceviewer}
 
-**ID**: `ux.librarycomponent.trace-viewer-ux`
+**ID**: `ux.librarycomponent.trace-viewer`
 
 **Type**: `librarycomponent`
 
-Distributed-trace waterfall: span tree, service-colored timeline with parent-to-child connectors, summary strip, toolbar, and a fly-out span detail panel. Accepts raw OTLP/JSON or AWS X-Ray documents directly, or a normalized Trace.
+Distributed-trace waterfall: span tree, service-colored timeline with parent-to-child connectors, summary strip, toolbar, and a fly-out span detail panel.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-observability |
+| label    | TraceViewer            |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.trace-viewer-tests`                                 | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.trace-adapters`         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.trace-viewer`           | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### TriState (UX) {#tristate-ux}
+### TriState {#tristate}
 
-**ID**: `ux.librarycomponent.tri-state-ux`
+**ID**: `ux.librarycomponent.tri-state`
 
 **Type**: `librarycomponent`
 
@@ -3706,22 +4111,25 @@ Checkbox with three visual states: unchecked, indeterminate (dash) and checked. 
 
 #### Attributes
 
-| Name | Value |
-| ---- | ----- |
-| type | input |
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-inputs |
+| label    | TriState        |
+| type     | input           |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.form-components`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### VersionPill (UX) {#versionpill-ux}
+### VersionPill {#versionpill}
 
-**ID**: `ux.librarycomponent.version-pill-ux`
+**ID**: `ux.librarycomponent.version-pill`
 
 **Type**: `librarycomponent`
 
@@ -3729,88 +4137,106 @@ Compact monospace tag for version strings, tinted by tone.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value               |
+| -------- | ------------------- |
+| category | heimdall-primitives |
+| label    | VersionPill         |
+| type     | display             |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tests`                         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.inspector-panel-tests`                              | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.primitives-tests`                                   | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.diff-viewer-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.hash-set-diff-ux`                                          | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.inspector-panel-ux`                                        | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.kanban-board-ux`                                           | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.result-card-ux`                                            | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.side-by-side-diff-ux`                                      | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.version-timeline-ux`                                       | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                          | Predicate    | Direction |
+| ----------- | -------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.dark-canvas-semantic-tokens` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.inspector-panel-and-kvgrid`  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.primitive-components`        | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                  | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`      | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.diff-viewer`                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.hash-set-diff`                      | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.inspector-panel`                    | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.kanban-board`                       | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.result-card`                        | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.side-by-side-diff`                  | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.version-timeline`                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                               | `aggregates` | inbound   |
 
-### VersionTimeline (UX) {#versiontimeline-ux}
+### VersionTimeline {#versiontimeline}
 
-**ID**: `ux.librarycomponent.version-timeline-ux`
+**ID**: `ux.librarycomponent.version-timeline`
 
 **Type**: `librarycomponent`
 
-Vertical, selectable version history: amber version pill, optional headline, diff stats or a state transition, and a relative timestamp per entry, with a filled dot and head chip on the current version.
+Vertical, selectable version history: amber version pill, optional headline, diff stats or a state transition, and a relative timestamp per entry, with a filled dot and `head` chip on the current version.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value                  |
+| -------- | ---------------------- |
+| category | heimdall-observability |
+| label    | VersionTimeline        |
+| type     | display                |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.server-render-tests`                                | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.version-timeline-tests`                             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill-ux`                                           | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                           | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.date-utilities`                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.server-rendering`                             | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.version-timeline`                             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                   | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                                | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                                        | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                | `aggregates` | inbound   |
 
-### ViewSwitcher (UX) {#viewswitcher-ux}
+### ViewSwitcher {#viewswitcher}
 
-**ID**: `ux.librarycomponent.view-switcher-ux`
+**ID**: `ux.librarycomponent.view-switcher`
 
 **Type**: `librarycomponent`
 
-Segmented control for the explorer's view (3D stack, Lanes, Matrix, Hive). Use it to build your own explorer layout; LAYERED_GRAPH_VIEWS and LAYERED_GRAPH_VIEW_LABELS list the views and their default labels.
+Segmented control for the explorer's view (3D stack, Lanes, Matrix, Hive). Use it to build your own explorer layout; `LAYERED_GRAPH_VIEWS` and `LAYERED_GRAPH_VIEW_LABELS` list the views and their default labels.
 
 #### Attributes
 
-| Name | Value   |
-| ---- | ------- |
-| type | display |
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | ViewSwitcher   |
+| type     | input          |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`                                       | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                                                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.follow-control-ux`                                         | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.hive-plot-ux`                                              | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layer-stack-ux`                                            | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`                                  | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`                                        | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`                                      | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates` | inbound   |
+| Type        | Related Element                                     | Predicate    | Direction |
+| ----------- | --------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.layered-graph-chrome`   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-graph-explorer` | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.bridge-node-list`              | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.follow-control`                | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`               | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-ux`                 | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.hive-plot`                     | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-list`                    | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-pair-list`               | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layer-stack`                   | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.link-category-filter`          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.plane-layout-control`          | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.predicate-label-control`       | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.reach-inspector`               | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`             | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
 
-### WorkspaceSwitcherDialog (UX) {#workspaceswitcherdialog-ux}
+### WorkspaceSwitcherDialog {#workspaceswitcherdialog}
 
-**ID**: `ux.librarycomponent.workspace-switcher-dialog-ux`
+**ID**: `ux.librarycomponent.workspace-switcher-dialog`
 
 **Type**: `librarycomponent`
 
@@ -3818,21 +4244,23 @@ Modal for switching workspaces: optional action tiles plus a recent-workspace li
 
 #### Attributes
 
-| Name | Value    |
-| ---- | -------- |
-| type | feedback |
+| Name     | Value                   |
+| -------- | ----------------------- |
+| category | heimdall-overlays       |
+| label    | WorkspaceSwitcherDialog |
+| type     | layout                  |
 
 #### Relationships
 
-| Type        | Related Element                                                                 | Predicate     | Direction |
-| ----------- | ------------------------------------------------------------------------------- | ------------- | --------- |
-| inter-layer | `testing.testcoveragetarget.workspace-switcher-dialog-tests`                    | `covers`      | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                                         | `depends-on`  | outbound  |
-| inter-layer | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters` | `satisfies`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                                                   | `composes`    | outbound  |
-| intra-layer | `ux.librarycomponent.modal-ux`                                                  | `composes`    | outbound  |
-| intra-layer | `ux.librarycomponent.modal-ux`                                                  | `specializes` | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-graph-visualization-ux-library`                          | `aggregates`  | inbound   |
+| Type        | Related Element                                        | Predicate     | Direction |
+| ----------- | ------------------------------------------------------ | ------------- | --------- |
+| inter-layer | `testing.testcoveragetarget.workspace-switcher-dialog` | `covers`      | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                | `depends-on`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`    | `satisfies`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                             | `composes`    | outbound  |
+| intra-layer | `ux.librarycomponent.modal`                            | `composes`    | outbound  |
+| intra-layer | `ux.librarycomponent.modal`                            | `specializes` | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                             | `aggregates`  | inbound   |
 
 ### Canvas Theme (Light or Dark Canvas) {#canvas-theme-light-or-dark-canvas}
 
@@ -3868,6 +4296,24 @@ collapsedNodeIds (controlled by the caller) hides a collapsed node's structural 
 | ----------- | -------------------------------------------------------------------- | ----------------- | --------- |
 | intra-layer | `ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click` | `associated-with` | inbound   |
 | intra-layer | `ux.librarycomponent.graph-canvas-ux`                                | `uses`            | inbound   |
+
+### Layered Selection and Reach {#layered-selection-and-reach}
+
+**ID**: `ux.statepattern.layered-selection-and-reach`
+
+**Type**: `statepattern`
+
+The layered views share one selection and its reach (followed across up to two layers, lit in the amber hop ramp), plus link-category filters, hidden and focused layers, predicate label mode and plane layout, held by useLayeredGraph and restorable from a snapshot.
+
+#### Relationships
+
+| Type        | Related Element                              | Predicate | Direction |
+| ----------- | -------------------------------------------- | --------- | --------- |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`       | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.hive-plot`              | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.layer-stack`            | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer` | `uses`    | inbound   |
+| intra-layer | `ux.librarycomponent.reach-inspector`        | `uses`    | inbound   |
 
 ### Layout Computation State {#layout-computation-state}
 
@@ -3925,138 +4371,139 @@ hoveredNodeId/selectedNodeId (and their edge equivalents) tracked in GraphCanvas
 | intra-layer | `ux.actionpattern.node-select-on-click-or-enterspace` | `associated-with` | inbound   |
 | intra-layer | `ux.librarycomponent.graph-canvas-ux`                 | `uses`            | inbound   |
 
-### Heimdall Graph Visualization UX Library {#heimdall-graph-visualization-ux-library}
+### Heimdall UI {#heimdall-ui}
 
-**ID**: `ux.uxlibrary.heimdall-graph-visualization-ux-library`
+**ID**: `ux.uxlibrary.heimdall-ui`
 
 **Type**: `uxlibrary`
 
-The UX library of @tinkermonkey/heimdall-ui (0.13.0): GraphCanvas and its supporting components, and, since the review-questions changeset, every exported component. Was: the graph-visualization subset at v0.8.0.
+The @tinkermonkey/heimdall-ui package: the full public component inventory exported from src/index.ts (primitives, inputs, data display, navigation, shell, overlays, layout, charts, page patterns, chat, graph and layered graph, observability, planning), with design tokens and Tailwind theme.
 
 #### Attributes
 
 | Name    | Value  |
 | ------- | ------ |
-| version | 0.13.0 |
+| license | MIT    |
+| version | 0.14.0 |
 
 #### Relationships
 
-| Type        | Related Element                                    | Predicate    | Direction |
-| ----------- | -------------------------------------------------- | ------------ | --------- |
-| intra-layer | `ux.librarycomponent.activity-timeline-ux`         | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.adjacency-matrix-ux`          | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.alert-strip-ux`               | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.app-title-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.asset-card-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.asset-grid-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.avatar-ux`                    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.badge-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.bar-chart-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.bar-h-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.bar-v-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.bridge-node-list-ux`          | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.button-ux`                    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.calendar-ux`                  | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.camera-controls-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chart-wrapper-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chat-composer-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chat-container-ux`            | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chat-divider-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chat-markdown-content-ux`     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chat-message-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chat-suggestions-ux`          | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.chip-ux`                      | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.command-palette-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.config-tile-ux`               | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.confirm-dialog-ux`            | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.detail-drawer-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.diff-viewer-ux`               | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.donut-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.drawer-ux`                    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.entity-picker-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.field-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.filter-bar-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.filter-dropdown-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.follow-control-ux`            | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.form-callout-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-canvas-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-collapse-control-ux`    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`      | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-edge-shape-ux`          | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-edge-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-inspector-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-node-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.graph-toolbar-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.hash-set-diff-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.heatmap-ux`                   | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.hierarchy-row-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.hierarchy-tree-ux`            | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.hive-plot-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.icon-ux`                      | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.inspector-panel-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.kanban-board-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.key-value-editor-ux`          | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.kvgrid-ux`                    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.layer-list-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.layer-pair-list-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.layer-stack-ux`               | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-context-ux`     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.layered-graph-explorer-ux`    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.line-chart-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.lineage-rail-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.link-category-filter-ux`      | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.log-stream-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.map-canvas-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.metric-row-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.mini-calendar-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.modal-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.nav-item-ux`                  | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.number-input-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.ordered-list-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.page-header-ux`               | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.panel-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.pipeline-card-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.plane-layout-control-ux`      | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.popover-ux`                   | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.predicate-label-control-ux`   | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.progress-bar-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.quick-access-grid-ux`         | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.quick-access-tile-ux`         | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.reach-inspector-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.relationship-builder-ux`      | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.result-card-ux`               | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.row-menu-ux`                  | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.segmented-control-ux`         | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.select-ux`                    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.side-by-side-diff-ux`         | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.sidebar-ux`                   | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.sparkline-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.split-pane-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.stacked-bar-ux`               | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.stat-grid-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.stat-tile-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.status-badge-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.status-timeline-ux`           | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.statusbar-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.tab-bar-ux`                   | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.table-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.text-area-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.text-input-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.thinking-block-ux`            | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.titlebar-ux`                  | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.toast-ux`                     | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.tool-block-ux`                | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.tooltip-ux`                   | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.topbar-ux`                    | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.topology-node-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.trace-viewer-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.tri-state-ux`                 | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill-ux`              | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.version-timeline-ux`          | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.view-switcher-ux`             | `aggregates` | outbound  |
-| intra-layer | `ux.librarycomponent.workspace-switcher-dialog-ux` | `aggregates` | outbound  |
+| Type        | Related Element                                 | Predicate    | Direction |
+| ----------- | ----------------------------------------------- | ------------ | --------- |
+| intra-layer | `ux.librarycomponent.activity-timeline`         | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.adjacency-matrix`          | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.alert-strip`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.app-title`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.asset-card`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.asset-grid`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.avatar`                    | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.badge`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.bar-chart`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.bar-h`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.bar-v`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.bridge-node-list`          | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.button`                    | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.calendar`                  | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.camera-controls`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chart-wrapper`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chat-composer`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chat-container`            | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chat-divider`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chat-markdown-content`     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chat-message`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chat-suggestions`          | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                      | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.command-palette`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.config-tile`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.confirm-dialog`            | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.detail-drawer`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.diff-viewer`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.donut`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.drawer`                    | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.entity-picker`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.field`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.filter-bar`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.filter-dropdown`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.follow-control`            | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.form-callout`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-canvas-ux`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-collapse-control-ux` | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-inspector-ux`   | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-shape-ux`       | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-edge-ux`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-inspector-ux`        | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-node-ux`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.graph-toolbar-ux`          | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.hash-set-diff`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.heatmap`                   | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.hierarchy-row`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.hierarchy-tree`            | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.hive-plot`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                      | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.inspector-panel`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.kanban-board`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.key-value-editor`          | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.kvgrid`                    | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.layer-list`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.layer-pair-list`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.layer-stack`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-context-ux`  | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.layered-graph-explorer`    | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.line-chart`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.lineage-rail`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.link-category-filter`      | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.log-stream`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.map-canvas`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.metric-row`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.mini-calendar`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.modal`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.nav-item`                  | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.number-input`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.ordered-list`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.page-header`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.panel`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.pipeline-card`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.plane-layout-control`      | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.popover`                   | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.predicate-label-control`   | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.progress-bar`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.quick-access-grid`         | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.quick-access-tile`         | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.reach-inspector`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.relationship-builder`      | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.result-card`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.row-menu`                  | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.segmented-control`         | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.select`                    | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.side-by-side-diff`         | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.sidebar`                   | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.sparkline`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.split-pane`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.stacked-bar`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.stat-grid`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.stat-tile`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.status-badge`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.status-timeline`           | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.statusbar`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.tab-bar`                   | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.table`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.text-area`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.text-input`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.thinking-block`            | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.titlebar`                  | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.toast`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.tool-block`                | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.tooltip`                   | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.topbar`                    | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.topology-node`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.trace-viewer`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.tri-state`                 | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`              | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.version-timeline`          | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.view-switcher`             | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.workspace-switcher-dialog` | `aggregates` | outbound  |
 
 ---
 
-Generated: 2026-11-24T15:33:35.364Z | Model Version: 0.1.0
+Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0

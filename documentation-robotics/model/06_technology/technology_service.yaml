@@ -1,5 +1,5 @@
 technology.technologyservice.npm-registry:
-  id: 99d9de84-6776-44e2-a672-702c981ee1a8
+  id: 5ab23bb0-b9fc-488f-a953-9bb48c4e8c52
   path: technology.technologyservice.npm-registry
   spec_node_id: technology.technologyservice
   type: technologyservice
@@ -14,11 +14,11 @@ technology.technologyservice.npm-registry:
     locations:
       - file: package.json
   metadata:
-    created_at: 2026-11-21T17:11:26.786Z
-    updated_at: 2026-11-21T17:11:26.786Z
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
     version: 1
 technology.technologyservice.git-hub-pages:
-  id: 1ba68321-b69a-461a-b9a4-afbf943985c9
+  id: 15ae52d8-55a5-46b2-b9cc-15f89ae66b7b
   path: technology.technologyservice.git-hub-pages
   spec_node_id: technology.technologyservice
   type: technologyservice
@@ -32,6 +32,6 @@ technology.technologyservice.git-hub-pages:
     locations:
       - file: .github/workflows/deploy-docs.yml
   metadata:
-    created_at: 2026-11-21T17:11:26.788Z
-    updated_at: 2026-11-21T17:11:26.788Z
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
     version: 1

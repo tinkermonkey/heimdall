@@ -9,7 +9,7 @@ import { StatTileShowcase, StatGridShowcase, TableShowcase, KVGridShowcase } fro
 import { NavItemShowcase, SidebarShowcase, TopbarShowcase, TabBarShowcase } from './showcases/NavigationShowcase'
 import { TitlebarShowcase, AppTitleShowcase, StatusbarShowcase, ShellLayoutShowcase } from './showcases/ShellShowcase'
 import { ModalShowcase, ConfirmDialogShowcase, ToastShowcase, CommandPaletteShowcase } from './showcases/OverlaysShowcase'
-import { PanelShowcase, DrawerShowcase, SplitPaneShowcase } from './showcases/LayoutShowcase'
+import { PanelShowcase, DrawerShowcase, SplitPaneShowcase, PaneRailShowcase } from './showcases/LayoutShowcase'
 import { ChartsOverviewShowcase, SparklineShowcase, LineChartShowcase, BarVShowcase, BarHShowcase, StackedBarShowcase, DonutShowcase, HeatmapShowcase, StatusTimelineShowcase, BarChartShowcase, ProgressBarShowcase, MetricRowShowcase, ChartWrapperShowcase } from './showcases/ChartsShowcase'
 import { PageHeaderShowcase, FilterBarShowcase, ActivityTimelineShowcase, AlertStripShowcase, QuickAccessGridShowcase } from './showcases/PagePatternsShowcase'
 import { ChatMessageShowcase, ToolBlockShowcase, ThinkingBlockShowcase, ChatDividerShowcase, ChatSuggestionsShowcase, ChatComposerShowcase, ChatContainerShowcase } from './showcases/ChatShowcase'
@@ -137,6 +137,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   panel: PanelShowcase,
   drawer: DrawerShowcase,
   'split-pane': SplitPaneShowcase,
+  'pane-rail': PaneRailShowcase,
   // Charts
   'charts-overview': ChartsOverviewShowcase,
   sparkline: SparklineShowcase,
@@ -292,6 +293,7 @@ const NAV_SECTIONS: NavSection[] = [
       { id: 'panel', label: 'Panel', icon: 'layout' },
       { id: 'drawer', label: 'Drawer', icon: 'chevronLeft' },
       { id: 'split-pane', label: 'SplitPane', icon: 'layout' },
+      { id: 'pane-rail', label: 'PaneRail', icon: 'chevronRight' },
     ],
   },
   {

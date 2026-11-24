@@ -23,8 +23,62 @@ motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existin
     created_at: 2026-09-18T14:43:26.253Z
     updated_at: 2026-09-18T14:43:26.253Z
     version: 1
+motivation.requirement.server-rendered-output-hydrates-without-mismatch:
+  id: 8705277e-edff-4733-9e9c-d03f464fc2ad
+  path: motivation.requirement.server-rendered-output-hydrates-without-mismatch
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Server-Rendered Output Hydrates Without Mismatch
+  description: "Components must render on a server (Astro, Next, vite build --ssr,
+    Vitest) without touching window during render, and hydrate without text or
+    attribute mismatches: media queries resolve after mount and time-relative
+    text takes a fixed now/today. Shipped in 0.13.0 (CHANGELOG.md)."
+  attributes:
+    requirementType: non-functional
+    priority: high
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1
+motivation.requirement.consumers-bundle-only-the-components-they-import:
+  id: ce116fc3-988d-4d47-93f3-8e00f8e226f6
+  path: motivation.requirement.consumers-bundle-only-the-components-they-import
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Consumers Bundle Only the Components They Import
+  description: "An application that imports one component must bundle only that
+    component and what it uses: the package is built one module per source file
+    and its JS imports no CSS. Shipped in 0.13.0 (CHANGELOG.md: import { Button
+    } yields 365 B where 0.12 yielded 669 KB)."
+  attributes:
+    requirementType: non-functional
+    priority: high
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1
+motivation.requirement.every-public-export-is-documented-for-agents:
+  id: af104196-c722-4a9f-b9b3-ee29de81c7f6
+  path: motivation.requirement.every-public-export-is-documented-for-agents
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Every Public Export Is Documented for Agents
+  description: Every component and non-component value exported from src/index.ts
+    must have a section in its category skill under agent-skills/, with props
+    tables that match the component types. Enforced in CI by npm run
+    check:skills (scripts/check-skill-coverage.mjs).
+  attributes:
+    requirementType: quality
+    priority: medium
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1
 motivation.requirement.layout-output-is-deterministic-for-a-given-input:
-  id: fda7a794-b0cf-4515-9b7b-30128f08e1bd
+  id: f47bc161-5b72-4c85-8ac4-eef404e598e8
   path: motivation.requirement.layout-output-is-deterministic-for-a-given-input
   spec_node_id: motivation.requirement
   type: requirement
@@ -42,11 +96,11 @@ motivation.requirement.layout-output-is-deterministic-for-a-given-input:
     locations:
       - file: src/utils/graphClustering.ts
   metadata:
-    created_at: 2026-11-21T17:02:59.075Z
-    updated_at: 2026-11-21T17:02:59.075Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs:
-  id: ed5d65d4-d1cd-4204-a84c-bea2cfb5dfa2
+  id: 4dbba99f-31ca-482e-9566-502365e17ecc
   path: motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
   spec_node_id: motivation.requirement
   type: requirement
@@ -63,11 +117,11 @@ motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs:
     locations:
       - file: src/utils/graphLayout.ts
   metadata:
-    created_at: 2026-11-21T17:02:59.076Z
-    updated_at: 2026-11-21T17:02:59.076Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.galaxy-keeps-orbits-even-over-round-systems:
-  id: 57528d68-2be9-4992-a185-a676d1245a4e
+  id: 765bca29-0779-4055-8b0e-b1d76485bebf
   path: motivation.requirement.galaxy-keeps-orbits-even-over-round-systems
   spec_node_id: motivation.requirement
   type: requirement
@@ -85,11 +139,11 @@ motivation.requirement.galaxy-keeps-orbits-even-over-round-systems:
     locations:
       - file: design-reference/issue-decisions-2026-11.md
   metadata:
-    created_at: 2026-11-21T17:02:59.076Z
-    updated_at: 2026-11-21T17:02:59.076Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.dropdown-panels-render-in-a-portal-by-default:
-  id: 54393a2f-a63b-4bfd-8a88-d64fb7203c51
+  id: 61c241b5-12e0-4464-8b74-7303a66e75f7
   path: motivation.requirement.dropdown-panels-render-in-a-portal-by-default
   spec_node_id: motivation.requirement
   type: requirement
@@ -108,11 +162,11 @@ motivation.requirement.dropdown-panels-render-in-a-portal-by-default:
     locations:
       - file: design-reference/issue-decisions-2026-11.md
   metadata:
-    created_at: 2026-11-21T17:02:59.076Z
-    updated_at: 2026-11-21T17:02:59.076Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden:
-  id: 8437d99f-951d-4492-9e39-e94bb213e7bb
+  id: 10626561-3d3c-43f4-97a4-d63d9a1a1fec
   path: motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden
   spec_node_id: motivation.requirement
   type: requirement
@@ -127,11 +181,11 @@ motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden
     locations:
       - file: design-reference/issue-decisions-2026-11.md
   metadata:
-    created_at: 2026-11-21T17:02:59.077Z
-    updated_at: 2026-11-21T17:02:59.077Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners:
-  id: 50eaab75-46b5-4dd9-9775-9cf543e6bd99
+  id: 23503859-7a79-43f5-8da8-bd7383cd8178
   path: motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners
   spec_node_id: motivation.requirement
   type: requirement
@@ -148,32 +202,11 @@ motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners:
     locations:
       - file: vite.config.mjs
   metadata:
-    created_at: 2026-11-21T18:06:32.237Z
-    updated_at: 2026-11-21T18:06:32.237Z
-    version: 1
-motivation.requirement.unused-components-drop-out-of-a-consumer-bundle:
-  id: d2f6aaa8-71e6-40af-b152-d6b6e4f3a7e1
-  path: motivation.requirement.unused-components-drop-out-of-a-consumer-bundle
-  spec_node_id: motivation.requirement
-  type: requirement
-  layer_id: motivation
-  name: Unused Components Drop Out of a Consumer Bundle
-  description: Each source module is its own dist file and the package is
-    sideEffects-free except CSS, so an app pays only for the components it
-    imports (0.13.0).
-  attributes:
-    requirementType: non-functional
-    priority: medium
-  source_reference:
-    provenance: inferred
-    locations:
-      - file: package.json
-  metadata:
-    created_at: 2026-11-21T18:06:32.237Z
-    updated_at: 2026-11-21T18:06:32.237Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.opt-in-component-stylesheets-are-load-order-independent:
-  id: b571197a-8b06-499d-a571-bb09aa6038e1
+  id: 2b6af5e0-9a63-442a-96f9-d620c7066836
   path: motivation.requirement.opt-in-component-stylesheets-are-load-order-independent
   spec_node_id: motivation.requirement
   type: requirement
@@ -189,11 +222,11 @@ motivation.requirement.opt-in-component-stylesheets-are-load-order-independent:
     locations:
       - file: scripts/check-sheet-order.mjs
   metadata:
-    created_at: 2026-11-21T18:06:32.237Z
-    updated_at: 2026-11-21T18:06:32.237Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.every-exported-path-resolves-in-the-published-tarball:
-  id: 4c805c48-fbbf-4985-96e9-b2327bc815b2
+  id: 60086144-ba0d-4933-938f-3640845ab1cb
   path: motivation.requirement.every-exported-path-resolves-in-the-published-tarball
   spec_node_id: motivation.requirement
   type: requirement
@@ -210,11 +243,11 @@ motivation.requirement.every-exported-path-resolves-in-the-published-tarball:
     locations:
       - file: scripts/check-package-exports.mjs
   metadata:
-    created_at: 2026-11-21T18:06:32.238Z
-    updated_at: 2026-11-21T18:06:32.238Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.graph-nodes-and-edges-have-accessible-names:
-  id: edbf1d28-e8cd-4ee3-8724-3faa80622cb5
+  id: 2abf1f4c-742a-4836-a8af-d6c503fcb613
   path: motivation.requirement.graph-nodes-and-edges-have-accessible-names
   spec_node_id: motivation.requirement
   type: requirement
@@ -233,11 +266,11 @@ motivation.requirement.graph-nodes-and-edges-have-accessible-names:
       - file: src/utils/graph.ts
         symbol: edgeAccessibleName
   metadata:
-    created_at: 2026-11-21T18:11:14.899Z
-    updated_at: 2026-11-21T18:11:14.899Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.motion-honours-reduced-motion-preference:
-  id: 1a326c1d-b8a0-4e5d-8425-7d84e62ec314
+  id: 03412bbf-0adb-42aa-9fa6-8f5b4eadeff7
   path: motivation.requirement.motion-honours-reduced-motion-preference
   spec_node_id: motivation.requirement
   type: requirement
@@ -255,33 +288,11 @@ motivation.requirement.motion-honours-reduced-motion-preference:
       - file: src/hooks/useTween.ts
         symbol: usePrefersReducedMotion
   metadata:
-    created_at: 2026-11-21T18:11:14.899Z
-    updated_at: 2026-11-21T18:11:14.899Z
-    version: 1
-motivation.requirement.components-render-on-the-server:
-  id: 55e244e8-00b3-4684-a9d8-bd3bc96397ba
-  path: motivation.requirement.components-render-on-the-server
-  spec_node_id: motivation.requirement
-  type: requirement
-  layer_id: motivation
-  name: Components Render on the Server
-  description: Every exported component renders to a string without a DOM (no
-    window or document access during render), so consumers can server-render
-    pages that use them. Checked by
-    src/components/__tests__/serverRender.test.ts.
-  attributes:
-    requirementType: non-functional
-    priority: medium
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/__tests__/serverRender.test.ts
-  metadata:
-    created_at: 2026-11-21T18:11:14.899Z
-    updated_at: 2026-11-21T18:11:14.899Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.navigation-routing-stays-within-its-time-budget:
-  id: 95e3cb77-b735-44fa-b6ed-1582049ea0c5
+  id: 130c58e7-65eb-43da-aea6-ddd5d50f70d8
   path: motivation.requirement.navigation-routing-stays-within-its-time-budget
   spec_node_id: motivation.requirement
   type: requirement
@@ -299,11 +310,11 @@ motivation.requirement.navigation-routing-stays-within-its-time-budget:
       - file: scripts/bench-router.mjs
         symbol: BUDGET
   metadata:
-    created_at: 2026-11-21T18:11:17.793Z
-    updated_at: 2026-11-21T18:11:17.793Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.live-galaxy-drag-stays-interactive:
-  id: 94c18a85-840a-4489-b4de-fe49491efdfd
+  id: ca6e0d10-d925-415c-aa3c-686001f6226b
   path: motivation.requirement.live-galaxy-drag-stays-interactive
   spec_node_id: motivation.requirement
   type: requirement
@@ -320,11 +331,11 @@ motivation.requirement.live-galaxy-drag-stays-interactive:
     locations:
       - file: scripts/bench-galaxy-drag.mjs
   metadata:
-    created_at: 2026-11-21T18:11:17.793Z
-    updated_at: 2026-11-21T18:11:17.793Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.requirement.large-layouts-do-not-block-the-first-paint:
-  id: 3af79818-7e97-4ded-ba11-0798e30ff92d
+  id: eecc0c98-48f7-4845-9218-fdbdc8d1b10b
   path: motivation.requirement.large-layouts-do-not-block-the-first-paint
   spec_node_id: motivation.requirement
   type: requirement
@@ -342,6 +353,6 @@ motivation.requirement.large-layouts-do-not-block-the-first-paint:
     locations:
       - file: src/utils/yieldToPaint.ts
   metadata:
-    created_at: 2026-11-21T18:11:17.793Z
-    updated_at: 2026-11-21T18:11:17.793Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1

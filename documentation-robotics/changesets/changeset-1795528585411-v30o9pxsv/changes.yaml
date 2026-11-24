@@ -1,0 +1,1105 @@
+- type: add
+  elementId: testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1
+  layerName: testing
+  after:
+    id: a2184e04-c80e-4783-816b-99653a05c263
+    path: testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: clampPaneRailPosition > clamps positions outside 0..1
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: clampPaneRailPosition > clamps positions outside 0..1
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 0
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1
+  layerName: testing
+  after:
+    id: 204ece62-de80-4f37-ab82-6536f8e44814
+    path: testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: clampPaneRailPosition > keeps positions inside 0..1
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: clampPaneRailPosition > keeps positions inside 0..1
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 1
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0
+  layerName: testing
+  after:
+    id: f659e712-43e0-4b01-ac75-9d0a5b1beced
+    path: testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: clampPaneRailPosition > sends non-finite positions to 0
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: clampPaneRailPosition > sends non-finite positions to 0
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 2
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection
+  layerName: testing
+  after:
+    id: 3902c9ae-7f40-40fb-bd4d-0f5e02f89e28
+    path: testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: nearestPaneRailMarkIndex > finds the mark nearest the selection
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: nearestPaneRailMarkIndex > finds the mark nearest the selection
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 3
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks
+  layerName: testing
+  after:
+    id: 882a2bed-13c4-4758-af72-6702b23bb2a2
+    path: testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: nearestPaneRailMarkIndex > returns 0 for no marks
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: nearestPaneRailMarkIndex > returns 0 for no marks
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 4
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection
+  layerName: testing
+  after:
+    id: 6529e5cd-4646-426d-b849-98c082f5495d
+    path: testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: nearestPaneRailMarkIndex > starts at the first mark without a selection
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: nearestPaneRailMarkIndex > starts at the first mark without a selection
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 5
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails
+  layerName: testing
+  after:
+    id: b547b373-3a78-422b-95a1-363103b58e46
+    path: testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: nextPaneRailMarkIndex > ignores other keys and empty rails
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: nextPaneRailMarkIndex > ignores other keys and empty rails
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 6
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end
+  layerName: testing
+  after:
+    id: e2227047-5b90-4a04-bb77-c2cc0a8eb0d4
+    path: testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: nextPaneRailMarkIndex > jumps to the ends with Home and End
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: nextPaneRailMarkIndex > jumps to the ends with Home and End
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 7
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends
+  layerName: testing
+  after:
+    id: dc173dad-1ba7-43c8-8ab3-91ab5796aebd
+    path: testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: nextPaneRailMarkIndex > moves one mark with the arrow keys and stops at
+      the ends
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: nextPaneRailMarkIndex > moves one mark with the arrow keys and stops at
+            the ends
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 8
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged
+  layerName: testing
+  after:
+    id: ed15a93a-6900-4f1c-91db-a1f084d0fca0
+    path: testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: orderPaneRailMarks > clamps positions and leaves the input unchanged
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: orderPaneRailMarks > clamps positions and leaves the input unchanged
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 9
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position
+  layerName: testing
+  after:
+    id: e3a68063-cb43-4d8f-9201-8bd13cf246a5
+    path: testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: orderPaneRailMarks > keeps input order for marks at the same position
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: orderPaneRailMarks > keeps input order for marks at the same position
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 10
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label
+  layerName: testing
+  after:
+    id: eea9d1dd-7410-482d-a76b-5f3b8ad11358
+    path: testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: orderPaneRailMarks > keeps tone and label
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: orderPaneRailMarks > keeps tone and label
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 11
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks
+  layerName: testing
+  after:
+    id: d4799547-5126-4cb1-a68a-fee80848b25c
+    path: testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: orderPaneRailMarks > orders hundreds of marks
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: orderPaneRailMarks > orders hundreds of marks
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 12
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom
+  layerName: testing
+  after:
+    id: 722da2a6-f1dd-4cf0-b8da-9457ca7b056c
+    path: testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: orderPaneRailMarks > sorts marks top to bottom
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+          symbol: orderPaneRailMarks > sorts marks top to bottom
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 13
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks
+  layerName: testing
+  after:
+    id: 3c51ce67-2b60-4078-8cad-9910ac8cf0da
+    path: testing.testcasesketch.integration-pane-rail-component-accessibility-arrow-keys-home-and-end-move-focus-between-marks
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Accessibility > arrow keys, Home and
+      End move focus between marks"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Accessibility > arrow keys, Home and
+            End move focus between marks"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 14
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5
+  layerName: testing
+  after:
+    id: 2537184d-9d33-488a-8193-c1f2ec1cc9bf
+    path: testing.testcasesketch.integration-pane-rail-component-accessibility-expand-button-is-collapsed-named-and-carries-the-ecbb99b5
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Accessibility > expand button is
+      collapsed, named and carries the shortcut"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Accessibility > expand button is
+            collapsed, named and carries the shortcut"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 15
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-group
+  layerName: testing
+  after:
+    id: 21293731-aa66-4ea3-af53-d470bde93bdc
+    path: testing.testcasesketch.integration-pane-rail-component-accessibility-marks-are-named-buttons-in-a-labelled-group
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Accessibility > marks are named buttons
+      in a labelled group"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Accessibility > marks are named
+            buttons in a labelled group"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 16
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978
+  layerName: testing
+  after:
+    id: e3215022-d935-4efa-a367-50465d8a3c2b
+    path: testing.testcasesketch.integration-pane-rail-component-accessibility-the-map-is-one-tab-stop-starting-at-the-mark-nearest-e1d7f978
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Accessibility > the map is one tab
+      stop, starting at the mark nearest the selection"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Accessibility > the map is one tab
+            stop, starting at the mark nearest the selection"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 17
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand
+  layerName: testing
+  after:
+    id: 2a67212a-1b72-4d68-9850-69b78f966788
+    path: testing.testcasesketch.integration-pane-rail-component-callbacks-a-mark-click-calls-on-mark-click-not-on-expand
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Callbacks > a mark click calls
+      onMarkClick, not onExpand"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Callbacks > a mark click calls
+            onMarkClick, not onExpand"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 18
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand
+  layerName: testing
+  after:
+    id: 2dfe8788-4081-4a77-85f9-4fc8d0c5769e
+    path: testing.testcasesketch.integration-pane-rail-component-callbacks-expand-button-calls-on-expand
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Callbacks > expand button calls
+      onExpand"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Callbacks > expand button calls
+            onExpand"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 19
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave
+  layerName: testing
+  after:
+    id: 1b5e99da-a418-4dba-adfc-df2315c77c72
+    path: testing.testcasesketch.integration-pane-rail-component-callbacks-focus-and-blur-call-on-mark-hover-and-on-mark-leave
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Callbacks > focus and blur call
+      onMarkHover and onMarkLeave"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Callbacks > focus and blur call
+            onMarkHover and onMarkLeave"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 20
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19
+  layerName: testing
+  after:
+    id: 93f43355-3da6-40cf-9aa8-cc7040336072
+    path: testing.testcasesketch.integration-pane-rail-component-callbacks-hover-and-leave-call-on-mark-hover-with-the-anchor-then-97bf8e19
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Callbacks > hover and leave call
+      onMarkHover with the anchor, then onMarkLeave"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Callbacks > hover and leave call
+            onMarkHover with the anchor, then onMarkLeave"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 21
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand
+  layerName: testing
+  after:
+    id: 0b9cca6a-639c-47b4-94cd-0bf4a4b70854
+    path: testing.testcasesketch.integration-pane-rail-component-callbacks-the-rails-empty-area-calls-on-expand
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Callbacks > the rail's empty area calls
+      onExpand"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Callbacks > the rail's empty area
+            calls onExpand"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 22
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane
+  layerName: testing
+  after:
+    id: ee05347b-c458-45c8-964b-36c0435041ba
+    path: testing.testcasesketch.integration-pane-rail-component-callbacks-without-on-mark-click-a-mark-click-expands-the-pane
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Callbacks > without onMarkClick a mark
+      click expands the pane"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Callbacks > without onMarkClick a
+            mark click expands the pane"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 23
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position
+  layerName: testing
+  after:
+    id: 5472fca7-2ab8-4f8c-a060-e247438cf53c
+    path: testing.testcasesketch.integration-pane-rail-component-rendering-draws-the-notch-at-the-selected-position
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Rendering > draws the notch at the
+      selected position"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Rendering > draws the notch at the
+            selected position"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 24
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container
+  layerName: testing
+  after:
+    id: dc5a9984-4a1b-40b2-83b8-f2b9e671a10d
+    path: testing.testcasesketch.integration-pane-rail-component-rendering-is-a-40px-rail-as-tall-as-its-container
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Rendering > is a 40px rail as tall as
+      its container"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Rendering > is a 40px rail as tall as
+            its container"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 25
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks
+  layerName: testing
+  after:
+    id: fe91d7c3-9562-4c64-b97d-9f2f101d8db0
+    path: testing.testcasesketch.integration-pane-rail-component-rendering-renders-400-marks
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Rendering > renders 400 marks"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Rendering > renders 400 marks"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 26
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-group-and-no-notch-without-marks-or-1d2b03ad
+  layerName: testing
+  after:
+    id: b24be5eb-bcd7-4731-af02-c63272c7c23d
+    path: testing.testcasesketch.integration-pane-rail-component-rendering-renders-no-map-group-and-no-notch-without-marks-or-1d2b03ad
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Rendering > renders no map group and no
+      notch without marks or selection"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Rendering > renders no map group and
+            no notch without marks or selection"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 27
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned
+  layerName: testing
+  after:
+    id: 44da4e7a-71e0-4385-b259-30bfd24d1ab6
+    path: testing.testcasesketch.integration-pane-rail-component-rendering-renders-one-mark-per-item-sorted-top-to-bottom-toned
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Rendering > renders one mark per item,
+      sorted top to bottom, toned"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Rendering > renders one mark per
+            item, sorted top to bottom, toned"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 28
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label
+  layerName: testing
+  after:
+    id: 48032f37-00a9-4cd8-b4ff-a6be9221a1c3
+    path: testing.testcasesketch.integration-pane-rail-component-rendering-shows-the-name-key-hint-and-position-label
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Rendering > shows the name, key hint
+      and position label"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Rendering > shows the name, key hint
+            and position label"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 29
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot
+  layerName: testing
+  after:
+    id: fe70cd44-1eba-4e69-b870-9462f96e1524
+    path: testing.testcasesketch.integration-pane-rail-component-visual-regression-dark-canvas-snapshot
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Visual Regression > dark canvas
+      snapshot"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Visual Regression > dark canvas
+            snapshot"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 30
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot
+  layerName: testing
+  after:
+    id: 3f1b1a03-ad80-49e4-a872-a5be2282693f
+    path: testing.testcasesketch.integration-pane-rail-component-visual-regression-light-canvas-snapshot
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "integration: PaneRail Component > Visual Regression > light canvas
+      snapshot"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: tests/pane-rail.spec.ts
+          symbol: "integration: PaneRail Component > Visual Regression > light canvas
+            snapshot"
+    metadata:
+      created_at: 2026-11-24T13:56:25.394Z
+      updated_at: 2026-11-24T13:56:25.394Z
+      version: 1
+  timestamp: 2026-11-24T13:56:25.417Z
+  sequenceNumber: 31
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: application.applicationfunction.order-pane-rail-marks
+  layerName: application
+  after:
+    id: 3105ee5b-c30c-4850-be56-3e0ba0f02c56
+    path: application.applicationfunction.order-pane-rail-marks
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: orderPaneRailMarks
+    description: "The marks in the order the rail renders them: positions clamped to
+      0..1, sorted top to bottom. Marks at the same position keep their input
+      order. Returns a new array; the input is unchanged."
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/paneRailMarks.ts
+          symbol: orderPaneRailMarks
+    metadata:
+      created_at: 2026-11-24T13:56:56.234Z
+      updated_at: 2026-11-24T13:56:56.234Z
+      version: 1
+  origin:
+    by: agent
+    rule: project:decide-card-0
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.clamp-pane-rail-position-clamps-positions-outside-0-1
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.clamp-pane-rail-position-keeps-positions-inside-0-1
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.clamp-pane-rail-position-sends-non-finite-positions-to-0
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.nearest-pane-rail-mark-index-finds-the-mark-nearest-the-selection
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.nearest-pane-rail-mark-index-returns-0-for-no-marks
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.nearest-pane-rail-mark-index-starts-at-the-first-mark-without-a-selection
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.next-pane-rail-mark-index-ignores-other-keys-and-empty-rails
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.next-pane-rail-mark-index-jumps-to-the-ends-with-home-and-end
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.next-pane-rail-mark-index-moves-one-mark-with-the-arrow-keys-and-stops-at-the-ends
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.order-pane-rail-marks-clamps-positions-and-leaves-the-input-unchanged
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.order-pane-rail-marks-keeps-input-order-for-marks-at-the-same-position
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.order-pane-rail-marks-keeps-tone-and-label
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.order-pane-rail-marks-orders-hundreds-of-marks
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom::tests::application.applicationfunction.order-pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcasesketch.order-pane-rail-marks-sorts-marks-top-to-bottom
+    target: application.applicationfunction.order-pane-rail-marks
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  origin:
+    by: tier0
+    rule: js_test_case_call
+  timestamp: 2026-11-24T13:56:56.256Z
+  sequenceNumber: 46

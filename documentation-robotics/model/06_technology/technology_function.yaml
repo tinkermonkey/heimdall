@@ -5,11 +5,10 @@ technology.technologyfunction.library-bundling-and-type-declaration-generation:
   type: technologyfunction
   layer_id: technology
   name: Library Bundling and Type Declaration Generation
-  description: "Vite library-mode build (rollup) with preserveModules: one ESM
-    file per source module under dist/ (CJS dropped, #343), declarations for the
-    public API from vite-plugin-dts, peer and runtime dependencies left
-    external. CSS is split by the heimdall-css-sheets plugin (see Stylesheet
-    Splitting and Ordering). Was: a single dist/index.js bundle."
+  description: Vite library-mode build (Rollup with preserveModules and
+    preserveModulesRoot src, so every source file is its own module and bundlers
+    tree-shake per component) plus vite-plugin-dts for type declarations; the JS
+    imports no CSS and the stylesheets are emitted separately (0.13.0).
   source_reference:
     provenance: extracted
     locations:
@@ -26,9 +25,9 @@ technology.technologyfunction.automated-test-execution:
   type: technologyfunction
   layer_id: technology
   name: Automated Test Execution
-  description: The capability of running heimdall's graph-visualization test suite
-    — Playwright browser tests (tests/graph-*.spec.ts) and Vitest unit tests
-    (src/utils/*.test.ts) — via 'npm test' / 'npm run test:unit'.
+  description: "Running heimdall's test suites: the Playwright visual and
+    behavioural suite (tests/*.spec.ts, per-OS screenshot baselines, sharded in
+    CI) and the Vitest unit suite (src/**/*.test.ts)."
   source_reference:
     provenance: extracted
     locations:
@@ -39,7 +38,7 @@ technology.technologyfunction.automated-test-execution:
     updated_at: 2026-09-18T14:45:05.767Z
     version: 1
 technology.technologyfunction.stylesheet-splitting-and-ordering:
-  id: d113a291-d232-4741-bbb7-f8d5c3b267a4
+  id: 0b21d2f2-d339-487a-9a1b-fcd463658a18
   path: technology.technologyfunction.stylesheet-splitting-and-ordering
   spec_node_id: technology.technologyfunction
   type: technologyfunction
@@ -55,11 +54,11 @@ technology.technologyfunction.stylesheet-splitting-and-ordering:
       - file: vite.config.mjs
         symbol: cssSheets
   metadata:
-    created_at: 2026-11-21T18:06:32.237Z
-    updated_at: 2026-11-21T18:06:32.237Z
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
     version: 1
 technology.technologyfunction.published-package-verification:
-  id: 6727e252-1a21-4259-91f9-bad90ab7d26d
+  id: 6eed06b1-9f09-4bef-8523-6318a354b440
   path: technology.technologyfunction.published-package-verification
   spec_node_id: technology.technologyfunction
   type: technologyfunction
@@ -75,11 +74,11 @@ technology.technologyfunction.published-package-verification:
     locations:
       - file: scripts/check-package-exports.mjs
   metadata:
-    created_at: 2026-11-21T18:06:32.237Z
-    updated_at: 2026-11-21T18:06:32.237Z
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
     version: 1
 technology.technologyfunction.stylesheet-load-order-check:
-  id: 4903a0bd-e633-431b-8f18-788ac8406d37
+  id: 13faa3cf-a79e-4756-94d4-ec0fe9ba2d22
   path: technology.technologyfunction.stylesheet-load-order-check
   spec_node_id: technology.technologyfunction
   type: technologyfunction
@@ -94,11 +93,11 @@ technology.technologyfunction.stylesheet-load-order-check:
     locations:
       - file: scripts/check-sheet-order.mjs
   metadata:
-    created_at: 2026-11-21T18:06:32.237Z
-    updated_at: 2026-11-21T18:06:32.237Z
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
     version: 1
 technology.technologyfunction.npm-oidc-trusted-publishing:
-  id: b56dee3a-d19b-4a00-b31f-4808303a9bf8
+  id: ba17fbc3-fa73-4956-9dfd-970baf006b52
   path: technology.technologyfunction.npm-oidc-trusted-publishing
   spec_node_id: technology.technologyfunction
   type: technologyfunction
@@ -112,6 +111,6 @@ technology.technologyfunction.npm-oidc-trusted-publishing:
     locations:
       - file: .github/workflows/release.yml
   metadata:
-    created_at: 2026-11-21T18:10:35.035Z
-    updated_at: 2026-11-21T18:10:35.035Z
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
     version: 1

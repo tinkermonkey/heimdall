@@ -98,8 +98,83 @@ product.softwarecapability.radial-tree-layout:
     created_at: 2026-09-18T14:42:16.128Z
     updated_at: 2026-09-18T14:42:16.128Z
     version: 1
+product.softwarecapability.organic-graph-layout:
+  id: 50528768-e3c1-42a9-8714-569a61e38538
+  path: product.softwarecapability.organic-graph-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Organic Graph Layout
+  description: 'Shipped capability: stress-majorization layout (organicLayout,
+    layout="organic") with preferred edge length, minimum node distance,
+    compactness, label-box reservation and incremental affected-node scope.'
+  attributes:
+    status: delivered
+  accepted_gaps:
+    - direction: incoming
+      predicate: realizes
+      other_spec_node_id: product.feature
+      reason: Organic layout ships as a layout mode (layout="organic") and a headless
+        function, with no separate user-facing feature beyond the capability
+        itself, like force-directed and radial-tree.
+      decided_by: agent
+      decided_at: 2026-11-23T16:49:05.355Z
+      changeset: changeset-1795451983730-m826idq0t
+  metadata:
+    created_at: 2026-11-23T16:44:40.170Z
+    updated_at: 2026-11-23T16:44:40.170Z
+    version: 1
+product.softwarecapability.orthogonal-graph-layout:
+  id: 7c0c4903-6319-4cfe-9e2e-204732eac9ff
+  path: product.softwarecapability.orthogonal-graph-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Orthogonal Graph Layout
+  description: 'Shipped capability: grid-snapped layout with right-angle edge
+    routes (orthogonalLayout, layout="orthogonal"): a lattice router for graphs
+    up to 150 edges and a channel router for larger ones, so no route passes
+    through a node.'
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.overlays-and-dialogs:
+  id: 8e33941d-bf10-4870-ad12-6b249a7a1d98
+  path: product.softwarecapability.overlays-and-dialogs
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Overlays and Dialogs
+  description: "Shipped capability: modal, confirm dialog, drawer, toast, tooltip,
+    popover, command palette and workspace switcher, with focus trapping and
+    portal-aware dismissal."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
+product.softwarecapability.page-patterns:
+  id: 2dff61a6-f41b-4176-93b0-64ff2c003f29
+  path: product.softwarecapability.page-patterns
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Page Patterns
+  description: "Shipped capability: page headers, filter bars, activity timelines,
+    alert strips, quick-access grids and tiles, config tiles, pipeline cards,
+    form callouts and row menus."
+  attributes:
+    status: delivered
+  metadata:
+    created_at: 2026-11-23T16:44:40.171Z
+    updated_at: 2026-11-23T16:44:40.171Z
+    version: 1
 product.softwarecapability.interactive-graph-exploration:
-  id: 231e9242-a531-418c-b9df-35abdd514c39
+  id: 20b2848d-22f3-4071-a06c-ed529abbad3a
   path: product.softwarecapability.interactive-graph-exploration
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -116,11 +191,11 @@ product.softwarecapability.interactive-graph-exploration:
     locations:
       - file: src/components/GraphCanvas.tsx
   metadata:
-    created_at: 2026-11-21T17:01:29.632Z
-    updated_at: 2026-11-21T17:01:29.632Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.ui-primitives:
-  id: 143f7ba2-08d6-4ac4-a6a3-de6306f93481
+  id: 42daa127-6a65-4961-8cab-3c8353982d42
   path: product.softwarecapability.ui-primitives
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -135,11 +210,11 @@ product.softwarecapability.ui-primitives:
     locations:
       - file: agent-skills/heimdall-primitives/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.form-input:
-  id: 13d244cf-935b-4773-81e8-0506e16cf452
+  id: a87104ae-83b2-497b-ac7b-539b88fea100
   path: product.softwarecapability.form-input
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -155,11 +230,11 @@ product.softwarecapability.form-input:
     locations:
       - file: agent-skills/heimdall-inputs/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.data-display:
-  id: d8d3dfd6-8731-4b6f-b9d1-a6f05945a795
+  id: 74b94366-f3da-490e-abe5-fd966ad19cf6
   path: product.softwarecapability.data-display
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -174,11 +249,11 @@ product.softwarecapability.data-display:
     locations:
       - file: agent-skills/heimdall-data-display/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.app-navigation:
-  id: 78e20d3c-4f3f-4089-acc4-9a582c2b4b33
+  id: 3b108658-9ffe-4cfc-a285-8343098163fc
   path: product.softwarecapability.app-navigation
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -193,11 +268,11 @@ product.softwarecapability.app-navigation:
     locations:
       - file: agent-skills/heimdall-navigation/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.app-shell:
-  id: 47b038fa-0cbb-4f70-befc-80acfbdbf296
+  id: 43360186-13f8-4ff4-809a-1510d093eae2
   path: product.softwarecapability.app-shell
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -212,30 +287,11 @@ product.softwarecapability.app-shell:
     locations:
       - file: agent-skills/heimdall-shell/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.097Z
-    updated_at: 2026-11-21T17:06:20.097Z
-    version: 1
-product.softwarecapability.overlays-and-dialogs:
-  id: a8c0068c-1691-4e44-add4-2b7731e517e4
-  path: product.softwarecapability.overlays-and-dialogs
-  spec_node_id: product.softwarecapability
-  type: softwarecapability
-  layer_id: product
-  name: Overlays and Dialogs
-  description: "Shipped capability: Modals, confirm dialogs, toasts, tooltips,
-    popovers, drawers, the command palette and the workspace switcher."
-  attributes:
-    status: delivered
-  source_reference:
-    provenance: inferred
-    locations:
-      - file: agent-skills/heimdall-overlays/SKILL.md
-  metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.responsive-layout:
-  id: 5812fc10-b0ad-4b6e-91e5-27a06f19bfd4
+  id: 0a5c6f69-d3b5-4b17-9c59-cd043b4a6032
   path: product.softwarecapability.responsive-layout
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -250,11 +306,11 @@ product.softwarecapability.responsive-layout:
     locations:
       - file: agent-skills/heimdall-layout/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.charting:
-  id: 1500fb2f-ccde-4186-89ea-1c135c1d361f
+  id: 68625a64-6275-4541-8936-b3518b608daf
   path: product.softwarecapability.charting
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -269,30 +325,11 @@ product.softwarecapability.charting:
     locations:
       - file: agent-skills/heimdall-charts/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
-    version: 1
-product.softwarecapability.page-patterns:
-  id: 760ea0b3-3a06-4e5f-9f7a-28af582d9242
-  path: product.softwarecapability.page-patterns
-  spec_node_id: product.softwarecapability
-  type: softwarecapability
-  layer_id: product
-  name: Page Patterns
-  description: "Shipped capability: Page headers, filter bars, activity timelines,
-    alert strips, quick-access tiles, config and pipeline cards, row menus."
-  attributes:
-    status: delivered
-  source_reference:
-    provenance: inferred
-    locations:
-      - file: agent-skills/heimdall-page-patterns/SKILL.md
-  metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.chat-ui:
-  id: add18a9e-ad8d-4d94-9667-1c5df734aab7
+  id: 80104455-2d86-4c1e-a128-850c55994372
   path: product.softwarecapability.chat-ui
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -307,11 +344,11 @@ product.softwarecapability.chat-ui:
     locations:
       - file: agent-skills/heimdall-chat/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.planning-and-scheduling:
-  id: 868b7c8e-2c78-4945-8ab2-c796c6ea9513
+  id: 4adca690-9e2e-4ac3-b8b7-8db92ae0bffb
   path: product.softwarecapability.planning-and-scheduling
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -325,11 +362,11 @@ product.softwarecapability.planning-and-scheduling:
     locations:
       - file: agent-skills/heimdall-planning/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.run-history-and-observability-views:
-  id: 019e3ea1-d6db-43e5-9dc1-107d74ff13ac
+  id: 5b7b3b9c-f6c6-4f3b-b0fa-00b14a02801a
   path: product.softwarecapability.run-history-and-observability-views
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -344,11 +381,11 @@ product.softwarecapability.run-history-and-observability-views:
     locations:
       - file: agent-skills/heimdall-observability/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.layered-graph-visualization:
-  id: 3532b2d8-1820-4504-ab5e-e2e84328baed
+  id: 0f52176f-7ba1-4e53-ab73-c16a6b64413f
   path: product.softwarecapability.layered-graph-visualization
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -364,49 +401,11 @@ product.softwarecapability.layered-graph-visualization:
     locations:
       - file: agent-skills/heimdall-graph/SKILL.md
   metadata:
-    created_at: 2026-11-21T17:06:20.098Z
-    updated_at: 2026-11-21T17:06:20.098Z
-    version: 1
-product.softwarecapability.organic-graph-layout:
-  id: a855034a-bc24-4dba-bbbd-c606eef2918d
-  path: product.softwarecapability.organic-graph-layout
-  spec_node_id: product.softwarecapability
-  type: softwarecapability
-  layer_id: product
-  name: Organic Graph Layout
-  description: "GraphCanvas layout organic: stress-majorization layout, successor
-    to force, with the node margin as a hard minimum gap."
-  attributes:
-    status: delivered
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/utils/organicLayout.ts
-  metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
-    version: 1
-product.softwarecapability.orthogonal-graph-layout:
-  id: 2b7adcb8-1a11-4cd1-a319-0c7e4a538a4e
-  path: product.softwarecapability.orthogonal-graph-layout
-  spec_node_id: product.softwarecapability
-  type: softwarecapability
-  layer_id: product
-  name: Orthogonal Graph Layout
-  description: "GraphCanvas layout orthogonal: nodes on a cell grid layered from a
-    BFS spanning tree, edges routed at right angles through channels."
-  attributes:
-    status: delivered
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/utils/orthogonalLayout.ts
-  metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1
 product.softwarecapability.layer-lanes-layout:
-  id: 82bac626-0d9b-47e7-bc93-81a5251f86f2
+  id: 56b8af64-4db7-4c7b-8dea-f1373771373c
   path: product.softwarecapability.layer-lanes-layout
   spec_node_id: product.softwarecapability
   type: softwarecapability
@@ -421,6 +420,6 @@ product.softwarecapability.layer-lanes-layout:
     locations:
       - file: src/utils/laneLayout.ts
   metadata:
-    created_at: 2026-11-21T18:09:52.826Z
-    updated_at: 2026-11-21T18:09:52.826Z
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1

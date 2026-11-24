@@ -1,5 +1,5 @@
 motivation.constraint.layer-stack-draws-links-as-batched-svg-paths-not-canvas:
-  id: 1b5f8ca1-2a8e-403f-bfd0-3f61efe3ad97
+  id: 82cd52a0-7ba4-4c96-8ccf-2d43d41bda1a
   path: motivation.constraint.layer-stack-draws-links-as-batched-svg-paths-not-canvas
   spec_node_id: motivation.constraint
   type: constraint
@@ -15,11 +15,11 @@ motivation.constraint.layer-stack-draws-links-as-batched-svg-paths-not-canvas:
     locations:
       - file: design-reference/issue-decisions-2026-11.md
   metadata:
-    created_at: 2026-11-21T17:02:59.077Z
-    updated_at: 2026-11-21T17:02:59.077Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.constraint.package-ships-esm-dist-and-agent-skills-only:
-  id: 91095900-ba7c-4221-ae37-ccf237456726
+  id: 317d36a9-c532-403b-b653-be36e791bfe2
   path: motivation.constraint.package-ships-esm-dist-and-agent-skills-only
   spec_node_id: motivation.constraint
   type: constraint
@@ -36,11 +36,11 @@ motivation.constraint.package-ships-esm-dist-and-agent-skills-only:
     locations:
       - file: package.json
   metadata:
-    created_at: 2026-11-21T17:02:59.079Z
-    updated_at: 2026-11-21T17:02:59.079Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.constraint.visual-changes-pass-per-os-screenshot-baselines:
-  id: 6f5de278-639e-476b-9ce9-96c4420cac90
+  id: 172b74c6-b3d9-4793-a900-418e8bb34c2e
   path: motivation.constraint.visual-changes-pass-per-os-screenshot-baselines
   spec_node_id: motivation.constraint
   type: constraint
@@ -56,11 +56,11 @@ motivation.constraint.visual-changes-pass-per-os-screenshot-baselines:
     locations:
       - file: .github/workflows/ci.yml
   metadata:
-    created_at: 2026-11-21T17:02:59.079Z
-    updated_at: 2026-11-21T17:02:59.079Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.constraint.every-exported-component-is-covered-by-an-agent-skill:
-  id: ba707042-1ee2-47ba-9107-533c27538188
+  id: 059c5df1-22e4-47ce-9741-aa97dcaa352b
   path: motivation.constraint.every-exported-component-is-covered-by-an-agent-skill
   spec_node_id: motivation.constraint
   type: constraint
@@ -75,6 +75,6 @@ motivation.constraint.every-exported-component-is-covered-by-an-agent-skill:
     locations:
       - file: scripts/check-skill-coverage.mjs
   metadata:
-    created_at: 2026-11-21T17:02:59.079Z
-    updated_at: 2026-11-21T17:02:59.079Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1

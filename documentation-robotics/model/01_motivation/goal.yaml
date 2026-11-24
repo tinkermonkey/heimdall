@@ -42,29 +42,26 @@ motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-gra
     created_at: 2026-09-18T14:43:25.337Z
     updated_at: 2026-09-18T14:43:25.337Z
     version: 1
-motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools:
-  id: a6bd3238-fa98-4edd-8422-8cf49c828616
-  path: motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools
+motivation.goal.consistent-component-library-for-data-dense-ide-style-applications:
+  id: f02ebb8c-7c66-48cf-9632-eb27fcb5e05e
+  path: motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
   spec_node_id: motivation.goal
   type: goal
   layer_id: motivation
-  name: One Consistent IDE-Density UI Across Heimdall-Based Tools
-  description: "Inferred from README.md and CLAUDE.md: tools built on Heimdall
-    share one two-surface look, IDE-density typography and the same behaviour
-    for every common control, so a team assembles an app from tested parts
-    instead of styling its own."
+  name: Consistent Component Library for Data-Dense IDE-Style Applications
+  description: One React component library, published as
+    @tinkermonkey/heimdall-ui, that gives IDE-density applications a consistent
+    look (two-surface shell and canvas, amber accent, Inter and JetBrains Mono)
+    and behaviour across primitives, inputs, data display, charts, overlays,
+    chat, observability and graph views. Stated in CLAUDE.md and README.md.
   attributes:
     priority: high
-  source_reference:
-    provenance: inferred
-    locations:
-      - file: README.md
   metadata:
-    created_at: 2026-11-21T17:06:20.096Z
-    updated_at: 2026-11-21T17:06:20.096Z
+    created_at: 2026-11-23T16:44:40.168Z
+    updated_at: 2026-11-23T16:44:40.168Z
     version: 1
 motivation.goal.low-friction-adoption-in-any-react-toolchain:
-  id: 58f18d3e-b821-44d0-a436-54be08d0ee97
+  id: d39f3089-57f9-4c24-a9aa-212d7d499cc1
   path: motivation.goal.low-friction-adoption-in-any-react-toolchain
   spec_node_id: motivation.goal
   type: goal
@@ -80,11 +77,11 @@ motivation.goal.low-friction-adoption-in-any-react-toolchain:
     locations:
       - file: vite.config.mjs
   metadata:
-    created_at: 2026-11-21T18:06:43.725Z
-    updated_at: 2026-11-21T18:06:43.725Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
 motivation.goal.usable-by-every-end-user:
-  id: 4b869a31-39da-40f3-a7df-44d42ae69fd5
+  id: c5d52971-b877-4a7f-9f5f-fd4d6852e41d
   path: motivation.goal.usable-by-every-end-user
   spec_node_id: motivation.goal
   type: goal
@@ -99,6 +96,6 @@ motivation.goal.usable-by-every-end-user:
     locations:
       - file: tests/graph-a11y-names.spec.ts
   metadata:
-    created_at: 2026-11-21T18:11:14.899Z
-    updated_at: 2026-11-21T18:11:14.899Z
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
