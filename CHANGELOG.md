@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`PaneRail`.** A folded pane as a 40px vertical rail: an expand button (`aria-expanded="false"`,
+  `aria-keyshortcuts` when `shortcut` is set), a map of the pane's items as toned marks at their
+  0..1 positions (`marks: { id, position, tone, label }[]`, the `Chip` tones), an amber notch at
+  `selectedPosition`, an optional `positionLabel` such as `5 / 37`, the pane's name written up the
+  rail and its key hint. The expand button and a click on the rail's empty area call `onExpand`; a
+  mark calls `onMarkClick`, and mouse enter or focus call `onMarkHover(id, anchor)` (leave or blur,
+  `onMarkLeave`) so the app can show its own hover card. Marks are one tab stop, moved with the
+  arrow keys, Home and End; hundreds of marks render as plain buttons. The rail holds no folding
+  state and does not bind its key: the app shows it while the pane is folded. Exports `PaneRail`,
+  `PaneRailProps` and `PaneRailMark`.
+
 ## [0.14.0]
 
 Graph readability. Large orthogonal graphs no longer route edges through nodes, and `GraphCanvas`

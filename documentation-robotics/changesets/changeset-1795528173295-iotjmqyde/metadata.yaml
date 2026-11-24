@@ -1,0 +1,23 @@
+id: changeset-1795528173295-iotjmqyde
+name: pane-rail
+description: "Add PaneRail, a layout component: a folded pane shown as a 40px
+  vertical rail with an expand button, a toned map of the pane's items (marks at
+  0..1 positions, clickable, hover/focus callbacks for the app's hover card), an
+  amber notch at the selection, the pane's name written up the rail and its key
+  hint. For Context Studio #1635 step 8 (context-studio#1665): either left pane
+  of the review page folds to a rail. Done when PaneRail is exported with its
+  props, documented (docs showcase, heimdall-layout skill), covered by a
+  Playwright visual spec (light and dark canvas) and unit tests of its pure
+  mark-ordering helper."
+created: 2026-11-24T13:49:33.301Z
+modified: 2026-11-24T13:50:01.374Z
+status: staged
+baseSnapshot: v2:sha256:39b64040e976fa94f57b509a0e0f15d7359a083d8ba60b960b80036d9ee782db
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 14
+  modifications: 0
+  deletions: 0
+lastSequence: 13

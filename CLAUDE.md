@@ -71,7 +71,7 @@ docs/                          # Vite + React docs app (showcase pages)
 
 **Navigation:** `NavItem`, `Sidebar`, `Topbar`, `TabBar`
 
-**Shell / layout:** `Titlebar`, `Statusbar`, `ShellLayout`, `SplitPane`, `Drawer`, `Panel`
+**Shell / layout:** `Titlebar`, `Statusbar`, `ShellLayout`, `SplitPane`, `PaneRail`, `Drawer`, `Panel`
 
 **Overlays:** `Modal`, `ConfirmDialog`, `Toast`, `CommandPalette`
 

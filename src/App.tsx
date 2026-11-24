@@ -44,6 +44,7 @@ import CalendarTestPage from './test-pages/CalendarTestPage'
 import KanbanBoardTestPage from './test-pages/KanbanBoardTestPage'
 import MapCanvasTestPage from './test-pages/MapCanvasTestPage'
 import LineageRailTestPage from './test-pages/LineageRailTestPage'
+import PaneRailTestPage from './test-pages/PaneRailTestPage'
 import DiffViewerTestPage from './test-pages/DiffViewerTestPage'
 import VersionTimelineTestPage from './test-pages/VersionTimelineTestPage'
 import TraceViewerTestPage from './test-pages/TraceViewerTestPage'
@@ -251,6 +252,10 @@ export default function App() {
 
   if (exampleParam === 'lineage-rail') {
     return <LineageRailTestPage />
+  }
+
+  if (exampleParam === 'pane-rail') {
+    return <PaneRailTestPage />
   }
 
   if (exampleParam === 'diff-viewer') {

@@ -1,0 +1,210 @@
+/* A folded pane: a 40px rail with the expand button, a map of the pane's items, the selection
+   notch, the pane's name written up the rail and its key hint. */
+.pane-rail {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 40px;
+  min-width: 40px;
+  height: 100%;
+  padding: 6px 0 10px;
+  background: rgb(var(--canvas-bg-2));
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.pane-rail--left {
+  border-right: 1px solid rgb(var(--canvas-border));
+}
+
+.pane-rail--right {
+  border-left: 1px solid rgb(var(--canvas-border));
+}
+
+.pane-rail:hover {
+  background: rgb(var(--canvas-surface));
+}
+
+.pane-rail__expand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: rgb(var(--canvas-fg-3));
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.pane-rail__expand:hover {
+  background: rgb(var(--canvas-surface-2));
+  color: rgb(var(--canvas-fg-1));
+}
+
+.pane-rail__expand:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  color: rgb(var(--canvas-fg-1));
+}
+
+/* The map: the pane's height, top to bottom, on a faint centre line. */
+.pane-rail__map {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 24px;
+  margin: 4px 0;
+}
+
+.pane-rail__map::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: rgb(var(--canvas-border));
+}
+
+.pane-rail__marks {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Each mark is a 20x7 button (the hit area) drawing a 16x3 bar. Marks at nearly the same
+   position overlap; the later one in position order is on top. */
+.pane-rail__mark {
+  position: absolute;
+  left: 50%;
+  width: 20px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.pane-rail__mark::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 3px;
+  border-radius: 1px;
+  background: var(--pane-rail-mark-color);
+  transform: translate(-50%, -50%);
+  transition: width 80ms ease, height 80ms ease;
+}
+
+.pane-rail__mark:hover,
+.pane-rail__mark:focus-visible {
+  z-index: 1;
+}
+
+.pane-rail__mark:hover::before,
+.pane-rail__mark:focus-visible::before {
+  width: 22px;
+  height: 5px;
+}
+
+.pane-rail__mark:focus-visible {
+  outline: none;
+}
+
+.pane-rail__mark:focus-visible::before {
+  box-shadow: var(--focus-ring);
+}
+
+.pane-rail__mark--emerald { --pane-rail-mark-color: rgb(var(--status-emerald)); }
+.pane-rail__mark--amber { --pane-rail-mark-color: rgb(var(--status-amber)); }
+.pane-rail__mark--rose { --pane-rail-mark-color: rgb(var(--status-rose)); }
+.pane-rail__mark--cyan { --pane-rail-mark-color: rgb(var(--status-cyan)); }
+.pane-rail__mark--violet { --pane-rail-mark-color: rgb(var(--status-violet)); }
+.pane-rail__mark--neutral { --pane-rail-mark-color: rgb(var(--status-neutral)); }
+
+/* The selection: an amber line across the rail, under the marks so the selected mark stays
+   visible, with a notch on the outer edge. */
+.pane-rail__notch {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgb(var(--accent-primary));
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.pane-rail__notch::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  transform: translateY(-50%);
+}
+
+.pane-rail--left .pane-rail__notch::before {
+  left: 0;
+  border-left: 5px solid rgb(var(--accent-primary));
+}
+
+.pane-rail--right .pane-rail__notch::before {
+  right: 0;
+  border-right: 5px solid rgb(var(--accent-primary));
+}
+
+/* Text written up the rail, read bottom to top. */
+.pane-rail__position,
+.pane-rail__name {
+  flex-shrink: 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+
+.pane-rail__position {
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--canvas-fg-3));
+}
+
+.pane-rail__name {
+  max-height: 40%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(var(--canvas-fg-2));
+}
+
+.pane-rail__key {
+  flex-shrink: 0;
+  min-width: 18px;
+  box-sizing: border-box;
+  padding: 1px 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 14px;
+  text-align: center;
+  color: rgb(var(--canvas-fg-3));
+  background: rgb(var(--canvas-bg));
+  border: 1px solid rgb(var(--canvas-border-strong));
+  border-radius: 4px;
+}
