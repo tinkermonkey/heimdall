@@ -3,7 +3,7 @@ schema: documentation-robotics-v1
 cli_version: 0.7.1
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-23T17:44:52.943Z
+updated: 2026-11-24T20:14:36.656Z
 project:
   name: heimdall-ux
   description: ""
@@ -18,9 +18,9 @@ layers:
     elements:
       driver: 1
       goal: 3
-      principle: 4
-      requirement: 4
-      stakeholder: 3
+      principle: 5
+      requirement: 6
+      stakeholder: 4
   business:
     order: 2
     name: Business
@@ -37,8 +37,8 @@ layers:
     path: documentation-robotics/model/03_product/
     enabled: true
     elements:
-      feature: 8
-      persona: 2
+      feature: 9
+      persona: 3
       softwarecapability: 17
   security:
     order: 4
@@ -54,7 +54,7 @@ layers:
       applicationcollaboration: 1
       applicationcomponent: 14
       applicationevent: 2
-      applicationfunction: 46
+      applicationfunction: 45
       applicationinteraction: 1
       applicationprocess: 1
       applicationservice: 3
@@ -65,9 +65,9 @@ layers:
     path: documentation-robotics/model/06_technology/
     enabled: true
     elements:
-      artifact: 9
+      artifact: 12
       technologyfunction: 2
-      technologyprocess: 2
+      technologyprocess: 5
   api:
     order: 7
     name: Api
@@ -116,7 +116,7 @@ layers:
     elements:
       coveragerequirement: 1
       coveragesummary: 1
-      testcasesketch: 5
+      testcasesketch: 8
       testcoveragemodel: 2
       testcoveragetarget: 85
 changeset_history:
@@ -125,4 +125,7 @@ changeset_history:
     action: committed
   - name: heimdall-model-audit-2026-11
     committed_at: 2026-11-23T17:44:43.295Z
+    action: committed
+  - name: theme-slot
+    committed_at: 2026-11-24T20:14:36.656Z
     action: committed

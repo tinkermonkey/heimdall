@@ -109,3 +109,59 @@ testing.testcasesketch.route-navigation-edge-avoids-obstacles:
     created_at: 2026-09-18T14:40:57.942Z
     updated_at: 2026-09-18T14:40:57.942Z
     version: 1
+testing.testcasesketch.chart-fills-resolve-from-tokens:
+  id: 057a47a5-52fc-4408-a598-431a35d0ea45
+  path: testing.testcasesketch.chart-fills-resolve-from-tokens
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: Chart Fills Resolve From Tokens
+  description: "tests/charts-showcase.spec.ts, updated: the LineChart and
+    StatusTimeline marker circles carry rgb(var(--accent-primary-hover)) instead
+    of #F59E0B; StatusTimeline segment fills are status-token references;
+    Heatmap cells fill with the base color and a fill-opacity in [0.12, 1] (was:
+    non-empty hex fills). Screenshots stay identical to the existing baselines."
+  attributes:
+    status: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/charts-showcase.spec.ts
+        symbol: cell fill is the base color, fill-opacity is in [0.12, 1]
+  metadata:
+    created_at: 2026-11-24T17:33:47.451Z
+    updated_at: 2026-11-24T17:33:47.451Z
+    version: 1
+testing.testcasesketch.theme-override-ships-after-the-tokens:
+  id: 67a88b14-170a-4c8d-8296-91d1e341909d
+  path: testing.testcasesketch.theme-override-ships-after-the-tokens
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: Theme Override Ships After the Tokens
+  description: "With :root { --accent-primary: 37 99 235; } in
+    src/tokens/theme.css, npm run build puts that declaration after
+    --accent-primary: 251 191 36 in dist/style.css and dist/css/base.css;
+    check:sheets passes."
+  attributes:
+    status: draft
+  metadata:
+    created_at: 2026-11-24T17:33:47.454Z
+    updated_at: 2026-11-24T17:33:47.454Z
+    version: 1
+testing.testcasesketch.color-literal-check-rejects-a-component-literal:
+  id: 9f417791-a778-4f81-ae5b-65808781dc59
+  path: testing.testcasesketch.color-literal-check-rejects-a-component-literal
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: Color Literal Check Rejects a Component Literal
+  description: "npm run check:colors passes on the branch and fails when a literal
+    such as #f59e0b is added to any component file; pure black and white, URL
+    fragments and issue references in comments (#320) pass."
+  attributes:
+    status: draft
+  metadata:
+    created_at: 2026-11-24T17:33:47.454Z
+    updated_at: 2026-11-24T17:33:47.454Z
+    version: 1

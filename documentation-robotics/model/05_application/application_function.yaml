@@ -878,21 +878,3 @@ application.applicationfunction.edge-weight-and-dash-styling:
     created_at: 2026-11-23T16:44:40.174Z
     updated_at: 2026-11-23T16:44:40.174Z
     version: 1
-application.applicationfunction.heatmap-colour-scale:
-  id: 64c28092-2e38-43ed-ad27-2e0ec59c91ee
-  path: application.applicationfunction.heatmap-colour-scale
-  spec_node_id: application.applicationfunction
-  type: applicationfunction
-  layer_id: application
-  name: Heatmap Colour Scale
-  description: "getHeatmapColor() and normalizeColorToHex(): single-hue alpha
-    scale for Heatmap and MapCanvas heatmap cells."
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/utils/heatmapUtils.ts
-        symbol: getHeatmapColor
-  metadata:
-    created_at: 2026-11-23T16:44:40.174Z
-    updated_at: 2026-11-23T16:44:40.174Z
-    version: 1

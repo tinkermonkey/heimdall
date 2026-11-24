@@ -35,3 +35,59 @@ technology.technologyprocess.npm-test-npm-run-testunit:
     created_at: 2026-09-18T14:45:06.110Z
     updated_at: 2026-09-18T14:45:06.110Z
     version: 1
+technology.technologyprocess.pr-ci-workflow:
+  id: df8e82bf-007e-492c-a16b-5d75b2a74ed7
+  path: technology.technologyprocess.pr-ci-workflow
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: PR CI Workflow
+  description: ".github/workflows/ci.yml: Checks job (tsc, lint, unit tests,
+    check:skills, check:colors after it, build + check:package) and the sharded
+    Visual regression job. The changes job outputs visual=false when
+    github.repository is not tinkermonkey/heimdall, so a mirror's shards skip
+    and the summary check stays green."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: .github/workflows/ci.yml
+  metadata:
+    created_at: 2026-11-24T17:33:21.795Z
+    updated_at: 2026-11-24T17:33:21.795Z
+    version: 1
+technology.technologyprocess.release-workflow:
+  id: 7d2581b0-f810-42a2-8547-27f586e22f8a
+  path: technology.technologyprocess.release-workflow
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: Release Workflow
+  description: ".github/workflows/release.yml: on a v* tag, tests and publishes
+    @tinkermonkey/heimdall-ui to npm. Its test and release jobs gain if:
+    github.repository == 'tinkermonkey/heimdall'."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: .github/workflows/release.yml
+  metadata:
+    created_at: 2026-11-24T17:33:21.795Z
+    updated_at: 2026-11-24T17:33:21.795Z
+    version: 1
+technology.technologyprocess.docs-deploy-workflow:
+  id: 414f4e69-eaaf-48f0-b1c8-057078f4142e
+  path: technology.technologyprocess.docs-deploy-workflow
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: Docs Deploy Workflow
+  description: ".github/workflows/deploy-docs.yml: builds the docs app and deploys
+    it to GitHub Pages. Its build job gains if: github.repository ==
+    'tinkermonkey/heimdall' (deploy needs build, so it skips too)."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: .github/workflows/deploy-docs.yml
+  metadata:
+    created_at: 2026-11-24T17:33:21.795Z
+    updated_at: 2026-11-24T17:33:21.795Z
+    version: 1

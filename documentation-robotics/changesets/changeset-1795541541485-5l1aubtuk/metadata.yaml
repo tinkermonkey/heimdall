@@ -8,8 +8,8 @@ description: "Let a mirrored copy of the repo restyle the library from one file:
   tinkermonkey/heimdall, and docs. Done = default rendering pixel-identical, all
   checks pass, no snapshot updates. (Issue #402)"
 created: 2026-11-24T17:32:21.488Z
-modified: 2026-11-24T18:12:45.058Z
-status: staged
+modified: 2026-11-24T20:14:36.652Z
+status: committed
 baseSnapshot: v2:sha256:39b64040e976fa94f57b509a0e0f15d7359a083d8ba60b960b80036d9ee782db
 origin:
   kind: plan

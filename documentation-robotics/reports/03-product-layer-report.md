@@ -16,11 +16,11 @@ Product features, capabilities, personas, and milestones.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 27    |
-| Intra-Layer Relationships | 16    |
-| Inter-Layer Relationships | 45    |
-| Inbound Relationships     | 7     |
-| Outbound Relationships    | 38    |
+| Elements                  | 29    |
+| Intra-Layer Relationships | 18    |
+| Inter-Layer Relationships | 52    |
+| Inbound Relationships     | 10    |
+| Outbound Relationships    | 42    |
 
 **Cross-Layer References**:
 
@@ -40,8 +40,10 @@ flowchart LR
     product_feature_per_component_imports["Per-Component Imports"]
     product_feature_progressive_disclosure_via_node_collapseexpand["Progressive Disclosure via Node Collapse/Expand"]
     product_feature_server_side_rendering_support["Server-Side Rendering Support"]
+    product_feature_theme_slot["Theme Slot"]
     product_persona_application_developer_embedding_a_graph_view["Application Developer Embedding a Graph View"]
     product_persona_end_user_exploring_a_rendered_graph["End User Exploring a Rendered Graph"]
+    product_persona_mirror_maintainer_restyling_the_library["Mirror Maintainer Restyling the Library"]
     product_softwarecapability_chat_interface["Chat Interface"]
     product_softwarecapability_clustered_force_layout_community_bubbles["Clustered Force Layout (Community Bubbles)"]
     product_softwarecapability_data_display_and_charts["Data Display and Charts"]
@@ -74,6 +76,8 @@ flowchart LR
     product_feature_progressive_disclosure_via_node_collapseexpand -->|serves| product_persona_end_user_exploring_a_rendered_graph
     product_feature_server_side_rendering_support -->|realizes| product_softwarecapability_ide_application_shell_and_navigation
     product_feature_server_side_rendering_support -->|serves| product_persona_application_developer_embedding_a_graph_view
+    product_feature_theme_slot -->|realizes| product_softwarecapability_design_primitives_and_tokens
+    product_feature_theme_slot -->|serves| product_persona_mirror_maintainer_restyling_the_library
     product_softwarecapability_clustered_force_layout_community_bubbles -->|aggregates| product_softwarecapability_force_directed_graph_layout
   end
 ```
@@ -105,53 +109,60 @@ flowchart TB
 
 ## Inter-Layer Relationships Table
 
-| Relationship ID                                                      | Source Node                                                           | Dest Node                                                                             | Dest Layer   | Predicate    | Cardinality  | Strength |
-| -------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
-| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`          | `product.softwarecapability.organic-graph-layout`                                     | `product`    | `realizes`   | many-to-many | medium   |
-| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`          | `product.softwarecapability.orthogonal-graph-layout`                                  | `product`    | `realizes`   | many-to-many | medium   |
-| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-framework-service`      | `product.softwarecapability.layered-graph-exploration`                                | `product`    | `realizes`   | many-to-many | medium   |
-| `product.feature.satisfies.motivation.requirement`                   | `product.feature.per-component-imports`                               | `motivation.requirement.consumers-bundle-only-the-components-they-import`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `product.feature.satisfies.motivation.requirement`                   | `product.feature.server-side-rendering-support`                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `product.persona.references.motivation.stakeholder`                  | `product.persona.application-developer-embedding-a-graph-view`        | `motivation.stakeholder.embedding-application-developer-npm-consumer`                 | `motivation` | `references` | many-to-many | medium   |
-| `product.persona.references.motivation.stakeholder`                  | `product.persona.end-user-exploring-a-rendered-graph`                 | `motivation.stakeholder.end-user-of-an-embedding-application`                         | `motivation` | `references` | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.chat-interface`                           | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.chat-interface`                           | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.clustered-force-layout-community-bubbles` | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`    | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.clustered-force-layout-community-bubbles` | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.data-display-and-charts`                  | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.data-display-and-charts`                  | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.design-primitives-and-tokens`             | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.design-primitives-and-tokens`             | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.force-directed-graph-layout`              | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.force-directed-graph-layout`              | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.form-inputs-and-editors`                  | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.form-inputs-and-editors`                  | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.galaxy-radial-orbit-layout`               | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.galaxy-radial-orbit-layout`               | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ide-application-shell-and-navigation`     | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ide-application-shell-and-navigation`     | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.layered-graph-exploration`                | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`    | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.layered-graph-exploration`                | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.observability-views`                      | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.observability-views`                      | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.organic-graph-layout`                     | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.organic-graph-layout`                     | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.orthogonal-graph-layout`                  | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.orthogonal-graph-layout`                  | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.overlays-and-dialogs`                     | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.overlays-and-dialogs`                     | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.page-patterns`                            | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.page-patterns`                            | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.planning-views`                           | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.planning-views`                           | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.radial-tree-layout`                       | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.radial-tree-layout`                       | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
-| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ux-navigation-tree-layout`                | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
-| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ux-navigation-tree-layout`                | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement` | `product.feature.joint-edge-label-placement`                                          | `product`    | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.layered-graph-explorer`                   | `product.feature.layered-graph-explorer`                                              | `product`    | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.server-rendering`                         | `product.feature.server-side-rendering-support`                                       | `product`    | `covers`     | many-to-many | medium   |
-| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.static-site-link-variants`                | `product.feature.link-navigation-with-href`                                           | `product`    | `covers`     | many-to-many | medium   |
+| Relationship ID                                                      | Source Node                                                              | Dest Node                                                                             | Dest Layer   | Predicate    | Cardinality  | Strength |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`             | `product.softwarecapability.organic-graph-layout`                                     | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.graph-layout-engine-service`             | `product.softwarecapability.orthogonal-graph-layout`                                  | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.layered-graph-framework-service`         | `product.softwarecapability.layered-graph-exploration`                                | `product`    | `realizes`   | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.per-component-imports`                                  | `motivation.requirement.consumers-bundle-only-the-components-they-import`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.server-side-rendering-support`                          | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.theme-slot`                                             | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`               | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.theme-slot`                                             | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror`          | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.persona.references.motivation.stakeholder`                  | `product.persona.application-developer-embedding-a-graph-view`           | `motivation.stakeholder.embedding-application-developer-npm-consumer`                 | `motivation` | `references` | many-to-many | medium   |
+| `product.persona.references.motivation.stakeholder`                  | `product.persona.end-user-exploring-a-rendered-graph`                    | `motivation.stakeholder.end-user-of-an-embedding-application`                         | `motivation` | `references` | many-to-many | medium   |
+| `product.persona.references.motivation.stakeholder`                  | `product.persona.mirror-maintainer-restyling-the-library`                | `motivation.stakeholder.mirror-maintainer`                                            | `motivation` | `references` | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.chat-interface`                              | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.chat-interface`                              | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.clustered-force-layout-community-bubbles`    | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`    | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.clustered-force-layout-community-bubbles`    | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.data-display-and-charts`                     | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.data-display-and-charts`                     | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.design-primitives-and-tokens`                | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.satisfies.motivation.requirement`        | `product.softwarecapability.design-primitives-and-tokens`                | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`               | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.design-primitives-and-tokens`                | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.force-directed-graph-layout`                 | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.force-directed-graph-layout`                 | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.form-inputs-and-editors`                     | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.form-inputs-and-editors`                     | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.galaxy-radial-orbit-layout`                  | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.galaxy-radial-orbit-layout`                  | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ide-application-shell-and-navigation`        | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ide-application-shell-and-navigation`        | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.layered-graph-exploration`                   | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`    | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.layered-graph-exploration`                   | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.observability-views`                         | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.observability-views`                         | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.organic-graph-layout`                        | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.organic-graph-layout`                        | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.orthogonal-graph-layout`                     | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.orthogonal-graph-layout`                     | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.overlays-and-dialogs`                        | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.overlays-and-dialogs`                        | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.page-patterns`                               | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.page-patterns`                               | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.planning-views`                              | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.planning-views`                              | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`  | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.radial-tree-layout`                          | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.radial-tree-layout`                          | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ux-navigation-tree-layout`                   | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ux-navigation-tree-layout`                   | `motivation.goal.readable-layout-for-structurally-complex-graphs`                     | `motivation` | `supports`   | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.chart-fills-resolve-from-tokens`                 | `product.feature.theme-slot`                                                          | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.color-literal-check-rejects-a-component-literal` | `product.feature.theme-slot`                                                          | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.theme-override-ships-after-the-tokens`           | `product.feature.theme-slot`                                                          | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement`    | `product.feature.joint-edge-label-placement`                                          | `product`    | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.layered-graph-explorer`                      | `product.feature.layered-graph-explorer`                                              | `product`    | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.server-rendering`                            | `product.feature.server-side-rendering-support`                                       | `product`    | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.static-site-link-variants`                   | `product.feature.link-navigation-with-href`                                           | `product`    | `covers`     | many-to-many | medium   |
 
 ## Element Reference
 
@@ -339,6 +350,34 @@ Components render on a server and hydrate without mismatches: useMediaQuery take
 | intra-layer | `product.softwarecapability.ide-application-shell-and-navigation`         | `realizes`  | outbound  |
 | intra-layer | `product.persona.application-developer-embedding-a-graph-view`            | `serves`    | outbound  |
 
+### Theme Slot {#theme-slot}
+
+**ID**: `product.feature.theme-slot`
+
+**Type**: `feature`
+
+An empty src/tokens/theme.css loaded after tokens.css in every stylesheet entry point (index.ts, index.css, dist/style.css, dist/css/base.css); accent-derived tokens (focus ring, accent alpha tints); new token families for colors that were hard-coded (chart series and tones, trace services, accent ink, shadow tint); TS and CSS color literals replaced by token references; check:colors in CI; repo-guarded release, docs deploy and visual regression. Issue #402.
+
+#### Attributes
+
+| Name     | Value     |
+| -------- | --------- |
+| priority | high      |
+| size     | l         |
+| status   | delivered |
+
+#### Relationships
+
+| Type        | Related Element                                                              | Predicate   | Direction |
+| ----------- | ---------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`      | `satisfies` | outbound  |
+| inter-layer | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror` | `satisfies` | outbound  |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`                     | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`     | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.theme-override-ships-after-the-tokens`               | `tests`     | inbound   |
+| intra-layer | `product.softwarecapability.design-primitives-and-tokens`                    | `realizes`  | outbound  |
+| intra-layer | `product.persona.mirror-maintainer-restyling-the-library`                    | `serves`    | outbound  |
+
 ### Application Developer Embedding a Graph View {#application-developer-embedding-a-graph-view}
 
 **ID**: `product.persona.application-developer-embedding-a-graph-view`
@@ -388,6 +427,28 @@ Inferred persona: the person who ultimately interacts with the rendered graph (p
 | intra-layer | `product.feature.layered-graph-explorer`                         | `serves`     | inbound   |
 | intra-layer | `product.feature.node-and-edge-tooltips-and-popovers`            | `serves`     | inbound   |
 | intra-layer | `product.feature.progressive-disclosure-via-node-collapseexpand` | `serves`     | inbound   |
+
+### Mirror Maintainer Restyling the Library {#mirror-maintainer-restyling-the-library}
+
+**ID**: `product.persona.mirror-maintainer-restyling-the-library`
+
+**Type**: `persona`
+
+A developer on a downstream team who applies the team's brand palette in theme.css and merges upstream release tags into the mirror.
+
+#### Attributes
+
+| Name        | Value     |
+| ----------- | --------- |
+| category    | secondary |
+| proficiency | advanced  |
+
+#### Relationships
+
+| Type        | Related Element                            | Predicate    | Direction |
+| ----------- | ------------------------------------------ | ------------ | --------- |
+| inter-layer | `motivation.stakeholder.mirror-maintainer` | `references` | outbound  |
+| intra-layer | `product.feature.theme-slot`               | `serves`     | inbound   |
 
 ### Chat Interface {#chat-interface}
 
@@ -469,11 +530,13 @@ Shipped capability: design tokens (src/tokens/tokens.css, wired into Tailwind) a
 
 #### Relationships
 
-| Type        | Related Element                                                                      | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
-| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
-| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
-| intra-layer | `product.feature.per-component-imports`                                              | `realizes` | inbound   |
+| Type        | Related Element                                                                      | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ----------- | --------- |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes`  | outbound  |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `satisfies` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports`  | outbound  |
+| intra-layer | `product.feature.per-component-imports`                                              | `realizes`  | inbound   |
+| intra-layer | `product.feature.theme-slot`                                                         | `realizes`  | inbound   |
 
 ### Force-Directed Graph Layout {#force-directed-graph-layout}
 
@@ -760,4 +823,4 @@ Shipped capability: page-tree + view-fan layout for visualizing page/view naviga
 
 ---
 
-Generated: 2026-11-23T17:44:43.297Z | Model Version: 0.1.0
+Generated: 2026-11-24T20:14:36.659Z | Model Version: 0.1.0

@@ -77,3 +77,19 @@ motivation.principle.ide-density-and-terse-voice:
     created_at: 2026-11-23T16:44:40.170Z
     updated_at: 2026-11-23T16:44:40.170Z
     version: 1
+motivation.principle.every-component-color-comes-from-a-token:
+  id: 005b60a0-7bfe-4cfc-831b-25de5872c307
+  path: motivation.principle.every-component-color-comes-from-a-token
+  spec_node_id: motivation.principle
+  type: principle
+  layer_id: motivation
+  name: Every Component Color Comes From a Token
+  description: Component CSS and TypeScript take colors only from design tokens
+    (rgb(var(--token)) in both); no color literals outside src/tokens/, except
+    pure black and white. npm run check:colors enforces it.
+  attributes:
+    category: architecture
+  metadata:
+    created_at: 2026-11-24T17:33:21.786Z
+    updated_at: 2026-11-24T17:33:21.786Z
+    version: 1
