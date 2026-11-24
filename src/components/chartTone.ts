@@ -5,9 +5,18 @@ export interface ToneTokens {
   grid: string; border: string; card: string; inset: string
 }
 
+function toneTokens(tone: ChartTone): ToneTokens {
+  const c = (name: string) => `rgb(var(--chart-${tone}-${name}))`
+  return {
+    fg1: c('fg-1'), fg2: c('fg-2'), fg3: c('fg-3'), fg4: c('fg-4'),
+    grid: c('grid'), border: c('border'), card: c('card'), inset: c('inset'),
+  }
+}
+
+// Chart chrome per `tone` prop, read from the --chart-light-* / --chart-dark-* tokens.
 export const TONE: Record<ChartTone, ToneTokens> = {
-  light: { fg1: '#0B1220', fg2: '#475569', fg3: '#64748B', fg4: '#94A3B8', grid: '#EEF1F4', border: '#E5E9EE', card: '#FFFFFF', inset: '#F7F9FB' },
-  dark:  { fg1: '#E2E8F0', fg2: '#94A3B8', fg3: '#64748B', fg4: '#475569', grid: '#1B2949', border: '#243763', card: '#1B2949', inset: '#13203A' },
+  light: toneTokens('light'),
+  dark: toneTokens('dark'),
 }
 
 export function fmt(n: number): string {

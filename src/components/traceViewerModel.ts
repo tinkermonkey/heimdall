@@ -235,16 +235,16 @@ export function fmtMs(ms: number | null | undefined): string {
  * range. Rose is intentionally excluded (reserved for error markers).
  */
 export const DEFAULT_SERVICE_PALETTE = [
-  '#22D3EE', // cyan
-  '#818CF8', // indigo
-  '#10B981', // emerald
-  '#8B5CF6', // violet
-  '#14B8A6', // teal
-  '#F59E0B', // amber
-  '#38BDF8', // sky
-  '#A3E635', // lime
-  '#E879F9', // fuchsia
-  '#2DD4BF', // teal-300
+  'rgb(var(--trace-service-1))', // cyan
+  'rgb(var(--trace-service-2))', // indigo
+  'rgb(var(--trace-service-3))', // emerald
+  'rgb(var(--trace-service-4))', // violet
+  'rgb(var(--trace-service-5))', // teal
+  'rgb(var(--trace-service-6))', // amber
+  'rgb(var(--trace-service-7))', // sky
+  'rgb(var(--trace-service-8))', // lime
+  'rgb(var(--trace-service-9))', // fuchsia
+  'rgb(var(--trace-service-10))', // teal-400
 ] as const
 
 function hashString(seed: string): number {

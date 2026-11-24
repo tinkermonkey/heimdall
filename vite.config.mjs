@@ -39,7 +39,7 @@ const EMPTY_CSS_PLACEHOLDER = /^\/\* empty css\s*\*\/$/gm
 const IMPORT_SPECIFIER = /^\s*(?:import|export)\s*(?:[^'";]*?\sfrom\s*)?['"]([^'"]+)['"]/gm
 const CSS_MARK = 'heimdall-css:'
 // The stylesheets that make up dist/css/base.css, as emitted under dist/.
-const BASE_SHEETS = ['tokens/tokens.css', 'styles/utilities.css']
+const BASE_SHEETS = ['tokens/tokens.css', 'styles/utilities.css', 'tokens/theme.css']
 // Classes a module renders from another module's stylesheet without importing it. Importing it in
 // source would move that stylesheet earlier in dist/style.css, so the component sheets add it here.
 const EXTRA_SHEETS = {

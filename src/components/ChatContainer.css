@@ -3,8 +3,8 @@
   flex-direction: column;
   min-height: 0;
   max-height: 100%;
-  background: rgb(var(--canvas-bg, 15, 23, 41));
-  border: 1px solid rgb(var(--canvas-border, 30, 42, 68));
+  background: rgb(var(--canvas-bg));
+  border: 1px solid rgb(var(--canvas-border));
   border-radius: 6px;
   overflow: hidden;
 }
@@ -12,8 +12,8 @@
 .chat-container__bot-tabs {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  border-bottom: 1px solid rgb(var(--canvas-border, 30, 42, 68));
-  background: rgb(var(--canvas-bg, 15, 23, 41));
+  border-bottom: 1px solid rgb(var(--canvas-border));
+  background: rgb(var(--canvas-bg));
   flex: none;
   gap: 1px;
 }
@@ -24,7 +24,7 @@
   background: transparent;
   border: none;
   border-bottom: 2px solid transparent;
-  color: rgb(var(--canvas-fg-3, 107, 114, 128));
+  color: rgb(var(--canvas-fg-3));
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -35,7 +35,7 @@
 
 .chat-container__bot-tab:hover {
   color: rgb(var(--canvas-fg-1));
-  background: rgb(var(--canvas-surface, 36, 55, 99));
+  background: rgb(var(--canvas-surface));
 }
 
 .chat-container__bot-label {
@@ -58,19 +58,19 @@
 }
 
 .chat-container__bot-status--idle {
-  background: rgb(var(--canvas-fg-4, 107, 114, 128));
+  background: rgb(var(--canvas-fg-4));
 }
 
 .chat-container__bot-status--busy {
-  background: rgb(var(--status-amber, 245, 158, 11));
+  background: rgb(var(--status-amber));
 }
 
 .chat-container__bot-status--healthy {
-  background: rgb(var(--status-emerald, 52, 211, 153));
+  background: rgb(var(--status-emerald));
 }
 
 .chat-container__bot-status--error {
-  background: rgb(var(--status-rose, 251, 113, 133));
+  background: rgb(var(--status-rose));
 }
 
 .chat-container__bot-role {
@@ -78,17 +78,17 @@
   font-size: 9px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(var(--canvas-fg-4, 107, 114, 128));
+  color: rgb(var(--canvas-fg-4));
 }
 
 .chat-container__bot-tab--active {
   color: rgb(var(--canvas-fg-1));
-  border-bottom-color: rgb(var(--accent-primary, 245, 158, 11));
-  background: rgb(var(--canvas-surface, 36, 55, 99));
+  border-bottom-color: rgb(var(--accent-primary));
+  background: rgb(var(--canvas-surface));
 }
 
 .chat-container__bot-tab--active .chat-container__bot-role {
-  color: rgb(var(--accent-primary, 245, 158, 11));
+  color: rgb(var(--accent-primary));
 }
 
 .chat-container__thread {
@@ -107,7 +107,7 @@
 }
 
 .chat-container__thread::-webkit-scrollbar-thumb {
-  background: rgb(var(--canvas-border, 30, 42, 68));
+  background: rgb(var(--canvas-border));
   border-radius: 9999px;
 }
 

@@ -31,7 +31,7 @@
 
   &:hover {
     color: rgb(var(--canvas-fg));
-    background: rgba(251, 191, 36, 0.04);
+    background: rgb(var(--accent-primary) / 0.04);
   }
 
   &[aria-selected='true'] {
@@ -41,7 +41,7 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: inset 0 0 0 2px rgba(251, 191, 36, 0.18);
+    box-shadow: inset 0 0 0 2px rgb(var(--accent-primary) / 0.18);
   }
 }
 
