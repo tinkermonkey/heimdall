@@ -8,6 +8,9 @@ on:
 jobs:
   test:
     name: Test
+    # Publish only from this repo: a mirror that pushes upstream's tags must not publish
+    # @tinkermonkey/heimdall-ui (#402).
+    if: github.repository == 'tinkermonkey/heimdall'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -46,6 +49,7 @@ jobs:
   release:
     name: Publish to npm
     needs: [test]
+    if: github.repository == 'tinkermonkey/heimdall'
     runs-on: ubuntu-latest
     permissions:
       contents: write

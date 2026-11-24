@@ -194,7 +194,7 @@ Secondary exports for building custom trace views (sidebars, mini waterfalls, su
 | `resolveServiceColor` | `(service, services?, serviceColor?, palette?) => string` | Callback, then `services[key].color`, then palette |
 | `resolveServiceLabel` | `(service, services?) => string` | `services[key].label` or the raw key |
 | `paletteColor` | `(service: string, palette?: readonly string[]) => string` | Deterministic hash of the key into the palette |
-| `DEFAULT_SERVICE_PALETTE` | `readonly string[]` | Ten service hues; rose is excluded (reserved for errors) |
+| `DEFAULT_SERVICE_PALETTE` | `readonly string[]` | Ten service hues as `rgb(var(--trace-service-N))` strings; rose is excluded (reserved for errors). Resolve with `getComputedStyle` before parsing as hex or using in a canvas 2D context |
 
 `TraceModelNode` is a `TraceSpan` plus `end`, `depth`, `children`, and `hasChildren`. `fmtTraceMs` is the package export name of the internal `fmtMs`.
 
