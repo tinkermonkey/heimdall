@@ -21,3 +21,98 @@ testing.coveragerequirement.zero-literal-node-overlap-under-layout-simulation:
     created_at: 2026-09-18T14:40:56.309Z
     updated_at: 2026-09-18T14:40:56.309Z
     version: 1
+testing.coveragerequirement.every-canvas-control-and-overlay-exercised:
+  id: 4e5b23aa-5ce0-4b66-a867-270376519543
+  path: testing.coveragerequirement.every-canvas-control-and-overlay-exercised
+  spec_node_id: testing.coveragerequirement
+  type: coveragerequirement
+  layer_id: testing
+  name: Every Canvas Control and Overlay Exercised
+  description: Each viewport control (fit, zoom, pan lock, fullscreen), overlay
+    (tooltip, popover) and custom renderer is driven at least once.
+  attributes:
+    coverageCriteria: each-choice
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-components.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
+    version: 1
+testing.coveragerequirement.galaxy-across-relation-aspect-and-live-modes:
+  id: c94fbd4e-eb3d-4fdb-ba6d-6fe1a1ae31ef
+  path: testing.coveragerequirement.galaxy-across-relation-aspect-and-live-modes
+  spec_node_id: testing.coveragerequirement
+  type: coveragerequirement
+  layer_id: testing
+  name: Galaxy Across Relation, Aspect and Live Modes
+  description: Galaxy layout is exercised with and without relational edges, at
+    several aspect ratios, and with live simulation on and off.
+  attributes:
+    coverageCriteria: each-choice
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-components.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
+    version: 1
+testing.coveragerequirement.routing-with-and-without-obstacles:
+  id: 0cba317e-2c78-43b3-90a1-54163d80db58
+  path: testing.coveragerequirement.routing-with-and-without-obstacles
+  spec_node_id: testing.coveragerequirement
+  type: coveragerequirement
+  layer_id: testing
+  name: Routing With and Without Obstacles
+  description: Single and multiple navigation edges are routed with no obstacle
+    and with obstacles in the way.
+  attributes:
+    coverageCriteria: each-choice
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-components.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
+    version: 1
+testing.coveragerequirement.edge-endpoints-at-rect-sides-and-corners:
+  id: ed53be3d-fae9-4935-8145-cfad3b02da07
+  path: testing.coveragerequirement.edge-endpoints-at-rect-sides-and-corners
+  spec_node_id: testing.coveragerequirement
+  type: coveragerequirement
+  layer_id: testing
+  name: Edge Endpoints at Rect Sides and Corners
+  description: Edge geometry is checked where the line meets each side of a node
+    rect and at the corners.
+  attributes:
+    coverageCriteria: boundary-values
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-components.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
+    version: 1
+testing.coveragerequirement.label-placement-clear-and-fallback:
+  id: 78220e9e-0e6a-44e1-820a-ae38e439a15b
+  path: testing.coveragerequirement.label-placement-clear-and-fallback
+  spec_node_id: testing.coveragerequirement
+  type: coveragerequirement
+  layer_id: testing
+  name: Label Placement Clear and Fallback
+  description: Label placement is checked when a clear position exists and when it
+    must fall back to the midpoint; weight, marker and dash styles each mapped.
+  attributes:
+    coverageCriteria: each-choice
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-components.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
+    version: 1

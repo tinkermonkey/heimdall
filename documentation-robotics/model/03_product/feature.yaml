@@ -154,3 +154,88 @@ product.feature.layered-graph-explorer:
     created_at: 2026-11-23T16:44:40.172Z
     updated_at: 2026-11-23T16:44:40.172Z
     version: 1
+product.feature.layout-progress-indicator:
+  id: fc1857ef-3fea-42b5-9383-1ddd1aacf9e9
+  path: product.feature.layout-progress-indicator
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Layout Progress Indicator
+  description: GraphCanvas reports idle/computing/simulating through
+    onLayoutStateChange and can show a built-in indicator (showLayoutIndicator)
+    while a large layout computes.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: showLayoutIndicator
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+product.feature.viewport-history-and-restore:
+  id: 68f9b1d6-934d-4e41-bf81-f7ea1333120d
+  path: product.feature.viewport-history-and-restore
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Viewport History and Restore
+  description: Callers can restore a viewport (initialViewport), drive it
+    imperatively (viewportRef handle) and keep back/forward history from dwell
+    and navigate events.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onViewportDwell
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+product.feature.edge-selection-and-inspection:
+  id: be64eca5-4eb5-4fbb-916f-ba92b1fac97e
+  path: product.feature.edge-selection-and-inspection
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Edge Selection and Inspection
+  description: Edges are hoverable and selectable like nodes, with tooltips and
+    GraphEdgeInspector for the selected edge.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onEdgeSelect
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+product.feature.fullscreen-canvas:
+  id: 7774152b-f870-45d0-8581-4d2feff6803e
+  path: product.feature.fullscreen-canvas
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Fullscreen Canvas
+  description: GraphToolbar toggles fullscreen on the canvas or on a caller-chosen
+    container (fullscreenContainerRef), refitting the view after the change.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphToolbar.tsx
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1

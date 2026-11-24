@@ -1,0 +1,63 @@
+security.threat.script-injection-through-rendered-markdown:
+  id: f2ca7ab7-4493-4d0d-b3e3-e869fdbeca0b
+  path: security.threat.script-injection-through-rendered-markdown
+  spec_node_id: security.threat
+  type: threat
+  layer_id: security
+  name: Script Injection Through Rendered Markdown
+  description: "Untrusted markdown carrying raw HTML or javascript: URLs executes
+    script in the consumer's page."
+  attributes:
+    threatens: Rendered Chat Markdown
+    likelihood: moderate
+    impact: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/components/ChatMarkdownContent.tsx
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+security.threat.reverse-tabnabbing-from-rendered-links:
+  id: 875fdaf4-a52c-4451-800f-776677752236
+  path: security.threat.reverse-tabnabbing-from-rendered-links
+  spec_node_id: security.threat
+  type: threat
+  layer_id: security
+  name: Reverse Tabnabbing From Rendered Links
+  description: A link opened in a new tab from rendered content gets window.opener
+    and navigates the consumer's page to a phishing copy.
+  attributes:
+    threatens: Rendered Chat Markdown
+    likelihood: low
+    impact: moderate
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/components/ChatMarkdownContent.tsx
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+security.threat.tampered-package-release:
+  id: b8824a8e-d339-4e1b-ae7f-de98b6b2ead9
+  path: security.threat.tampered-package-release
+  spec_node_id: security.threat
+  type: threat
+  layer_id: security
+  name: Tampered Package Release
+  description: A stolen long-lived npm token or a build outside CI publishes a
+    malicious version consumers install.
+  attributes:
+    threatens: Published npm Package
+    likelihood: low
+    impact: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: .github/workflows/release.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1

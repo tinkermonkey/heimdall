@@ -35,3 +35,74 @@ technology.technologyprocess.npm-test-npm-run-testunit:
     created_at: 2026-09-18T14:45:06.110Z
     updated_at: 2026-09-18T14:45:06.110Z
     version: 1
+technology.technologyprocess.ci-checks-workflow:
+  id: b19c09f6-a697-4208-9af5-a663df8e28c9
+  path: technology.technologyprocess.ci-checks-workflow
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: CI Checks Workflow
+  description: ".github/workflows/ci.yml on PRs and pushes to main: tsc --noEmit,
+    lint, Vitest, check:skills, build + check:package, then the Playwright suite
+    sharded over 4 runners against -linux.png baselines."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: .github/workflows/ci.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+technology.technologyprocess.release-to-npm:
+  id: 4a6034d0-5422-445b-b36d-105a82ac7db7
+  path: technology.technologyprocess.release-to-npm
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: Release to npm
+  description: ".github/workflows/release.yml on a version tag: test job (skill
+    coverage, package exports, Playwright) then publish to npm via Trusted
+    Publisher."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: .github/workflows/release.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+technology.technologyprocess.deploy-docs-to-git-hub-pages:
+  id: f5b34324-f48d-4c50-a70e-a8c5d3297dd8
+  path: technology.technologyprocess.deploy-docs-to-git-hub-pages
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: Deploy Docs to GitHub Pages
+  description: ".github/workflows/deploy-docs.yml on push to main: builds the
+    library and the docs app and deploys docs/dist to GitHub Pages."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: .github/workflows/deploy-docs.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+technology.technologyprocess.update-visual-snapshots-workflow:
+  id: 17c7a72d-b4cc-45cc-b750-1a52eb966d69
+  path: technology.technologyprocess.update-visual-snapshots-workflow
+  spec_node_id: technology.technologyprocess
+  type: technologyprocess
+  layer_id: technology
+  name: Update Visual Snapshots Workflow
+  description: ".github/workflows/update-snapshots.yml (manual): regenerates
+    -linux.png baselines on ubuntu-latest and uploads them as an artifact for
+    review."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: .github/workflows/update-snapshots.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1

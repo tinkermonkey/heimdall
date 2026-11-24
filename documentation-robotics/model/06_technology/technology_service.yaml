@@ -1,0 +1,37 @@
+technology.technologyservice.npm-registry:
+  id: 5ab23bb0-b9fc-488f-a953-9bb48c4e8c52
+  path: technology.technologyservice.npm-registry
+  spec_node_id: technology.technologyservice
+  type: technologyservice
+  layer_id: technology
+  name: npm Registry
+  description: External package registry the release publishes
+    @tinkermonkey/heimdall-ui to and consumers install from.
+  attributes:
+    serviceType: storage
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+technology.technologyservice.git-hub-pages:
+  id: 15ae52d8-55a5-46b2-b9cc-15f89ae66b7b
+  path: technology.technologyservice.git-hub-pages
+  spec_node_id: technology.technologyservice
+  type: technologyservice
+  layer_id: technology
+  name: GitHub Pages
+  description: External static hosting serving the docs showcase site.
+  attributes:
+    serviceType: storage
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: .github/workflows/deploy-docs.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1

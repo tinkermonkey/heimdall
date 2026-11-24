@@ -1,0 +1,80 @@
+motivation.constraint.layer-stack-draws-links-as-batched-svg-paths-not-canvas:
+  id: 82cd52a0-7ba4-4c96-8ccf-2d43d41bda1a
+  path: motivation.constraint.layer-stack-draws-links-as-batched-svg-paths-not-canvas
+  spec_node_id: motivation.constraint
+  type: constraint
+  layer_id: motivation
+  name: LayerStack Draws Links as Batched SVG Paths, Not Canvas
+  description: "Decision #379: links off the selection's reach are drawn as one
+    <path> per style bucket; overlap compounding within a bucket and 0.1-unit
+    width rounding are accepted."
+  attributes:
+    constraintType: technical
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: design-reference/issue-decisions-2026-11.md
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+motivation.constraint.package-ships-esm-dist-and-agent-skills-only:
+  id: 317d36a9-c532-403b-b653-be36e791bfe2
+  path: motivation.constraint.package-ships-esm-dist-and-agent-skills-only
+  spec_node_id: motivation.constraint
+  type: constraint
+  layer_id: motivation
+  name: Package Ships ESM dist and agent-skills Only
+  description: "Decision #343: files is [dist, agent-skills]; no src/, no CJS
+    build; d3-delaunay, d3-hierarchy, react-markdown and remark-gfm are
+    externalized and kept in dependencies; sideEffects limited to CSS. Checked
+    in CI by check:package."
+  attributes:
+    constraintType: technical
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+motivation.constraint.visual-changes-pass-per-os-screenshot-baselines:
+  id: 172b74c6-b3d9-4793-a900-418e8bb34c2e
+  path: motivation.constraint.visual-changes-pass-per-os-screenshot-baselines
+  spec_node_id: motivation.constraint
+  type: constraint
+  layer_id: motivation
+  name: Visual Changes Pass Per-OS Screenshot Baselines
+  description: CI runs the Playwright suite against committed -linux.png baselines
+    with maxDiffPixelRatio 1%; a visual change ships with regenerated baselines
+    (CLAUDE.md, ci.yml, update-snapshots.yml).
+  attributes:
+    constraintType: technical
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: .github/workflows/ci.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+motivation.constraint.every-exported-component-is-covered-by-an-agent-skill:
+  id: 059c5df1-22e4-47ce-9741-aa97dcaa352b
+  path: motivation.constraint.every-exported-component-is-covered-by-an-agent-skill
+  spec_node_id: motivation.constraint
+  type: constraint
+  layer_id: motivation
+  name: Every Exported Component Is Covered by an Agent Skill
+  description: npm run check:skills (scripts/check-skill-coverage.mjs) fails CI
+    when an export of src/index.ts is not documented in agent-skills/.
+  attributes:
+    constraintType: organizational
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: scripts/check-skill-coverage.mjs
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1

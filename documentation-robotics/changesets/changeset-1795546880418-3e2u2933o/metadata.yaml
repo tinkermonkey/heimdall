@@ -1,0 +1,29 @@
+id: changeset-1795546880418-3e2u2933o
+name: reconcile-pilot-with-model-audit
+description: "Bring PR 404's model work onto main's audited model (#400), so the
+  two lines of work become one model. Built on main: add what the PR has and
+  main lacks, under main's ids where the same element exists (same type and
+  source symbol, or the same test file for coverage targets), and apply rulings
+  S1 and S10 to main's additions too. S1: the 34 library exports filed as
+  api.operation and their 3 tags retire; their links move to the export services
+  or ux library components. S10: the 13 application components that duplicate ux
+  library components retire, their tests to the ux components and their
+  behaviour to the package; the two paired ux elements split; the one-member
+  layout/viewport collaboration retires. Maintainer decisions of 2026-11-24: the
+  PR's one-per-skill-family capabilities stay and main's 8 grouped ones retire
+  into them; the near-identical goal, principle and two requirements merge into
+  main's element; main's Heimdall UI Library Module is the package and takes the
+  PR's package links. Where both sides edited the same base element, main's
+  version stays."
+created: 2026-11-24T19:01:20.425Z
+modified: 2026-11-24T20:12:20.176Z
+status: committed
+baseSnapshot: v2:sha256:39b64040e976fa94f57b509a0e0f15d7359a083d8ba60b960b80036d9ee782db
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 4653
+  modifications: 0
+  deletions: 242
+lastSequence: 4894

@@ -896,3 +896,243 @@ application.applicationfunction.heatmap-colour-scale:
     created_at: 2026-11-23T16:44:40.174Z
     updated_at: 2026-11-23T16:44:40.174Z
     version: 1
+application.applicationfunction.link-and-node-emphasis-styling:
+  id: 60a1163a-a9fd-48d2-a55d-091e9a576429
+  path: application.applicationfunction.link-and-node-emphasis-styling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Link and Node Emphasis Styling
+  description: "linkEmphasis/nodeEmphasis/linkCategoryStyle: the emphasis and
+    palette each node and link draws with given selection, hover and reach."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/emphasis.ts
+        symbol: linkEmphasis
+  metadata:
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
+    version: 1
+application.applicationfunction.batched-link-path-drawing:
+  id: 76e1a50e-f32c-461d-bbda-bd55d89957af
+  path: application.applicationfunction.batched-link-path-drawing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Batched Link Path Drawing
+  description: "batchLinks(): links that share a style are drawn as one SVG path
+    per bucket, so a frame restyles one element per style."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/linkBatches.ts
+        symbol: batchLinks
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.adjacency-matrix-ordering:
+  id: 5661a701-e2b5-4228-8eb8-0378b2019aa0
+  path: application.applicationfunction.adjacency-matrix-ordering
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Adjacency Matrix Ordering
+  description: "clusterOrder()/matrixCells(): row and column order (Louvain
+    communities per layer) and the cells of the adjacency matrix."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/matrix.ts
+        symbol: clusterOrder
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.painter-depth-reordering:
+  id: 6564b179-3ef8-43a5-8077-546fd24d44e7
+  path: application.applicationfunction.painter-depth-reordering
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Painter Depth Reordering
+  description: "reorder(): restacks projected scene elements in painter's order
+    each frame with the fewest DOM moves."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/domOrder.ts
+        symbol: reorder
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.structural-descendant-lookup:
+  id: 6ebd0132-9a74-4081-9041-ea468427eb51
+  path: application.applicationfunction.structural-descendant-lookup
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Structural Descendant Lookup
+  description: "structuralDescendants(): the nodes under a node in the structural
+    forest, used to hide a collapsed node's subtree."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphHierarchy.ts
+        symbol: structuralDescendants
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.dropdown-menu-keyboard-navigation:
+  id: 65c65ba8-3e6c-41f7-a313-58d26cc42fbe
+  path: application.applicationfunction.dropdown-menu-keyboard-navigation
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Dropdown Menu Keyboard Navigation
+  description: "useDropdownMenu(): open state, active item and keyboard navigation
+    shared by Select, FilterDropdown, EntityPicker and RowMenu."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useDropdownMenu.ts
+        symbol: useDropdownMenu
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.layered-graph-state:
+  id: d85e4ede-8298-4edd-b732-566a2cfbaf99
+  path: application.applicationfunction.layered-graph-state
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Graph State
+  description: "useLayeredGraph(): the shared state of a layered graph (index,
+    selection, filters, reach, layout) behind LayeredGraphContext."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: useLayeredGraph
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.async-layer-layout:
+  id: 34f5bcc6-de80-47d5-922b-cc51237636a8
+  path: application.applicationfunction.async-layer-layout
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Async Layer Layout
+  description: "useAsyncLayerLayout(): runs layoutLayersAsync off the main path
+    for graphs over asyncLayoutMinNodes, keeping the last result while it
+    computes."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useAsyncLayerLayout.ts
+        symbol: useAsyncLayerLayout
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.node-pointer-handling:
+  id: 144d6ec6-128c-4fa8-b2dd-a61624b87f59
+  path: application.applicationfunction.node-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Node Pointer Handling
+  description: "GraphCanvas's node pointer handlers: a drag past DRAG_THRESHOLD
+    moves the node and, on release, raises onNodeDragEnd with its id and
+    position; pointer enter and leave update hoveredNodeId and raise
+    onNodeHover."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleNodePointerUp
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.edge-pointer-handling:
+  id: 725ae284-94b9-42bb-8189-d8b47a7324ce
+  path: application.applicationfunction.edge-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Edge Pointer Handling
+  description: "GraphCanvas's edge hover start and end handlers and an edge's
+    activation: report the hovered edge through onEdgeHover and the selected
+    edge through onEdgeSelect."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleEdgeHoverStart
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.canvas-pointer-handling:
+  id: a6a5dc55-31af-464f-9eee-f00bae228f23
+  path: application.applicationfunction.canvas-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Canvas Pointer Handling
+  description: "GraphCanvas's pointer-up handler on the canvas background: a click
+    that is not a pan reports onBackgroundClick."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleCanvasPointerUp
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.collapse-toggling:
+  id: 43266904-5571-464f-8fe9-b8d16a3cb4da
+  path: application.applicationfunction.collapse-toggling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Collapse Toggling
+  description: GraphCanvas hands each node with structural children an
+    onToggleCollapse that reports the node to the consumer's onToggleCollapse;
+    GraphCollapseControl and Shift+Enter call it.
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onToggleCollapse
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.programmatic-viewport-move-reporting:
+  id: b29f8762-36cb-42f5-b182-4e15dad607e9
+  path: application.applicationfunction.programmatic-viewport-move-reporting
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Programmatic Viewport Move Reporting
+  description: "Runs after every viewport move GraphCanvas or the app makes:
+    cancels a running ease, drops a pending dwell and queues onViewportNavigate
+    with the move's cause, reported once the move has rendered."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: afterProgrammaticMove
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1

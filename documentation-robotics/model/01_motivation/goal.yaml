@@ -60,3 +60,42 @@ motivation.goal.consistent-component-library-for-data-dense-ide-style-applicatio
     created_at: 2026-11-23T16:44:40.168Z
     updated_at: 2026-11-23T16:44:40.168Z
     version: 1
+motivation.goal.low-friction-adoption-in-any-react-toolchain:
+  id: d39f3089-57f9-4c24-a9aa-212d7d499cc1
+  path: motivation.goal.low-friction-adoption-in-any-react-toolchain
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: Low-Friction Adoption in Any React Toolchain
+  description: A consumer can install the package and import only what it uses, in
+    a browser bundle, an SSR build or a test runner, with paths that resolve and
+    CSS it can load whole or per component.
+  attributes:
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+motivation.goal.usable-by-every-end-user:
+  id: c5d52971-b877-4a7f-9f5f-fd4d6852e41d
+  path: motivation.goal.usable-by-every-end-user
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: Usable by Every End User
+  description: Graph and component UI that works with keyboard and assistive
+    technology and respects motion preferences.
+  attributes:
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-a11y-names.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1

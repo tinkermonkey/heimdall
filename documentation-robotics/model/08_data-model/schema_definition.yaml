@@ -521,3 +521,330 @@ data-model.schemadefinition.trace:
     created_at: 2026-11-23T16:44:40.174Z
     updated_at: 2026-11-23T16:44:40.174Z
     version: 1
+data-model.schemadefinition.layer-def:
+  id: 73a2c975-fa10-4bbe-b773-1e2092c419cf
+  path: data-model.schemadefinition.layer-def
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: LayerDef
+  description: "One layer of a layered graph: id, label, order and optional color;
+    supplied through BuildLayeredIndexOptions or derived from node attribute
+    values."
+  attributes:
+    title: LayerDef
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: LayerDef
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+data-model.schemadefinition.build-layered-index-options:
+  id: 2b4a920d-ade0-4ac3-b909-06c0c3d7ea78
+  path: data-model.schemadefinition.build-layered-index-options
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BuildLayeredIndexOptions
+  description: How to read a layer from each node (attribute name or accessor),
+    multi- and missing-value policies, layer order and the predicate catalog of
+    link categories.
+  attributes:
+    title: BuildLayeredIndexOptions
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: BuildLayeredIndexOptions
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+data-model.schemadefinition.predicate-catalog:
+  id: 263e4be3-fd57-4c42-b90e-0165e2424d1c
+  path: data-model.schemadefinition.predicate-catalog
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: PredicateCatalog
+  description: "Map from edge predicate to LinkCategoryInfo (category, label,
+    direction): drives link coloring, category filters and predicate labels in
+    every layered view."
+  attributes:
+    title: PredicateCatalog
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: PredicateCatalog
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+data-model.schemadefinition.layered-index-issue:
+  id: 2c4037c0-8cb2-4455-b542-8d8b9b00aae8
+  path: data-model.schemadefinition.layered-index-issue
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: LayeredIndexIssue
+  description: "A data problem buildLayeredIndex found and skipped instead of
+    throwing: missing-layer-value, multi-value-excluded, dangling-edge,
+    self-loop, duplicate."
+  attributes:
+    title: LayeredIndexIssue
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: LayeredIndexIssue
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+data-model.schemadefinition.link-filter-state:
+  id: 9ce13525-3b03-4a5f-99c8-51a1b5943e1b
+  path: data-model.schemadefinition.link-filter-state
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: LinkFilterState
+  description: Which link categories, predicates and layer pairs are shown;
+    DEFAULT_LINK_FILTERS is its initial value.
+  attributes:
+    title: LinkFilterState
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: LinkFilterState
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.reach-result:
+  id: 426be38d-f904-4e4d-867d-c8e52b027f83
+  path: data-model.schemadefinition.reach-result
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: ReachResult
+  description: Nodes and links reachable from the selection with the hop at which
+    each was reached and the link it came through (ReachVia).
+  attributes:
+    title: ReachResult
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/types.ts
+        symbol: ReachResult
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.layered-graph-state:
+  id: 3fd493f8-5f3c-4c82-b106-ec4915f19514
+  path: data-model.schemadefinition.layered-graph-state
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: LayeredGraphState
+  description: "Return value of useLayeredGraph, shared through
+    LayeredGraphContext: the index, current filters, selection, reach, camera,
+    async layout state and setters."
+  attributes:
+    title: LayeredGraphState
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: LayeredGraphState
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.lane-layout:
+  id: 3ba8d179-ee8a-4022-9e86-09bb6d8bb058
+  path: data-model.schemadefinition.lane-layout
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: LaneLayout
+  description: "Output of layoutLanes: lane bands and node boxes for the swimlane
+    view (orientation, label policy) used by GraphCanvas layout layer-lanes."
+  attributes:
+    title: LaneLayout
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/laneLayout.ts
+        symbol: LaneLayout
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.trace-span:
+  id: d024224e-717a-440c-bfb0-51ffb1066c57
+  path: data-model.schemadefinition.trace-span
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: TraceSpan
+  description: "One span of a Trace: ids, service, name, SpanKind, SpanStatus
+    (ok/warn/error), timing, attributes and SpanEvents."
+  attributes:
+    title: TraceSpan
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/traceViewerModel.ts
+        symbol: TraceSpan
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.trace-model:
+  id: 67690849-f8b5-447d-95d1-5ea9aa2db529
+  path: data-model.schemadefinition.trace-model
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: TraceModel
+  description: "Output of buildTraceModel: the span tree (TraceModelNode with
+    depth and self time), time bounds and services, from which TraceViewer
+    derives visible rows and its time scale."
+  attributes:
+    title: TraceModel
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/traceViewerModel.ts
+        symbol: TraceModel
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.otlp-traces-data:
+  id: 60da11f0-82f7-4c4a-9810-90828b6e69d7
+  path: data-model.schemadefinition.otlp-traces-data
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: OtlpTracesData
+  description: OpenTelemetry OTLP/JSON trace export (resourceSpans > scopeSpans >
+    spans with key-value attributes), the input of fromOTLP.
+  attributes:
+    title: OtlpTracesData
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/otlpTrace.ts
+        symbol: OtlpTracesData
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.xray-segment:
+  id: 082e081e-faf4-44af-ac6b-5132e538b693
+  path: data-model.schemadefinition.xray-segment
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: XRaySegment
+  description: AWS X-Ray segment document with nested subsegments, http, sql,
+    cause and exception blocks, the input of fromXRay.
+  attributes:
+    title: XRaySegment
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/xrayTrace.ts
+        symbol: XRaySegment
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.graph-viewport:
+  id: 9bcf82f2-1fd1-4631-8106-60c8abe7d012
+  path: data-model.schemadefinition.graph-viewport
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: GraphViewport
+  description: A GraphCanvas viewport (pan x/y and zoom) a caller can restore
+    through initialViewport or read and set through the GraphViewportHandle ref.
+  attributes:
+    title: GraphViewport
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvasContext.tsx
+        symbol: GraphViewport
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.graph-viewport-snapshot:
+  id: 97f96a3e-fbc7-46e9-8ee0-3d1a44617bfe
+  path: data-model.schemadefinition.graph-viewport-snapshot
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: GraphViewportSnapshot
+  description: Viewport plus selection and the cause of the change
+    (GraphViewportCause), passed to onViewportDwell and onViewportNavigate so a
+    caller can keep back/forward history.
+  attributes:
+    title: GraphViewportSnapshot
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvasContext.tsx
+        symbol: GraphViewportSnapshot
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.graph-layout-state:
+  id: 8788aca7-47c5-4790-bcb4-33163e6162db
+  path: data-model.schemadefinition.graph-layout-state
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: GraphLayoutState
+  description: "idle | computing | simulating: whether GraphCanvas is waiting on a
+    layout engine, reported by onLayoutStateChange and shown by the layout
+    indicator."
+  attributes:
+    title: GraphLayoutState
+    type: string
+    enum:
+      - idle
+      - computing
+      - simulating
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: GraphLayoutState
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1

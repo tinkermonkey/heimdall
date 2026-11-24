@@ -37,3 +37,80 @@ technology.technologyfunction.automated-test-execution:
     created_at: 2026-09-18T14:45:05.767Z
     updated_at: 2026-09-18T14:45:05.767Z
     version: 1
+technology.technologyfunction.stylesheet-splitting-and-ordering:
+  id: 0b21d2f2-d339-487a-9a1b-fcd463658a18
+  path: technology.technologyfunction.stylesheet-splitting-and-ordering
+  spec_node_id: technology.technologyfunction
+  type: technologyfunction
+  layer_id: technology
+  name: Stylesheet Splitting and Ordering
+  description: "The heimdall-css-sheets Vite plugin: reads where each module's CSS
+    sat in ESM evaluation order, removes the empty-css placeholders, and writes
+    style.css, css/base.css and one css/<Name>.css per component in that order,
+    failing the build when a sheet is unreachable or out of order."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+        symbol: cssSheets
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+technology.technologyfunction.published-package-verification:
+  id: 6eed06b1-9f09-4bef-8523-6318a354b440
+  path: technology.technologyfunction.published-package-verification
+  spec_node_id: technology.technologyfunction
+  type: technologyfunction
+  layer_id: technology
+  name: Published Package Verification
+  description: "npm run check:package (scripts/check-package-exports.mjs), run in
+    CI and before publishing: every exports/main/types path is in the npm pack
+    file list, the tarball holds only dist/ and agent-skills/, declarations
+    import no unpublished source, dependencies stay external, and no JS module
+    imports CSS."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/check-package-exports.mjs
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+technology.technologyfunction.stylesheet-load-order-check:
+  id: 13faa3cf-a79e-4756-94d4-ec0fe9ba2d22
+  path: technology.technologyfunction.stylesheet-load-order-check
+  spec_node_id: technology.technologyfunction
+  type: technologyfunction
+  layer_id: technology
+  name: Stylesheet Load-Order Check
+  description: "npm run check:sheets (scripts/check-sheet-order.mjs): renders each
+    dev-app test page with dist/style.css swapped in and checks that opt-in
+    component sheets do not depend on load order. Run by hand; no workflow runs
+    it."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/check-sheet-order.mjs
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+technology.technologyfunction.npm-oidc-trusted-publishing:
+  id: ba17fbc3-fa73-4956-9dfd-970baf006b52
+  path: technology.technologyfunction.npm-oidc-trusted-publishing
+  spec_node_id: technology.technologyfunction
+  type: technologyfunction
+  layer_id: technology
+  name: npm OIDC Trusted Publishing
+  description: "The id-token: write permission plus npm publish --provenance: the
+    GitHub Actions OIDC token is exchanged for a short-lived npm token keyed to
+    this repository and workflow."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: .github/workflows/release.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.530Z
+    updated_at: 2026-11-24T19:01:20.530Z
+    version: 1

@@ -1,0 +1,21 @@
+testing.environmentfactor.ci-chromium-rendering-environment:
+  id: d6462d31-25e7-403a-aec6-c805e921bdc8
+  path: testing.environmentfactor.ci-chromium-rendering-environment
+  spec_node_id: testing.environmentfactor
+  type: environmentfactor
+  layer_id: testing
+  name: CI Chromium Rendering Environment
+  description: Screenshots are compared against -linux.png baselines rasterized
+    here; a different OS, Chromium build or font set shifts pixels.
+  attributes:
+    factorType: os
+    value: ubuntu-latest, Playwright Chromium, TZ=UTC, bundled Inter and JetBrains
+      Mono fonts
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: playwright.config.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.588Z
+    updated_at: 2026-11-24T19:01:20.588Z
+    version: 1
