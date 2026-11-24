@@ -26,7 +26,12 @@
       created_at: 2026-11-24T13:49:47.537Z
       updated_at: 2026-11-24T13:49:47.537Z
       version: 1
-  timestamp: 2026-11-24T13:49:47.563Z
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/PaneRail.tsx
+          symbol: PaneRail
+  timestamp: 2026-11-24T13:57:07.215Z
   sequenceNumber: 0
 - type: add
   elementId: application.applicationfunction.pane-rail-marks
@@ -46,7 +51,12 @@
       created_at: 2026-11-24T13:49:47.543Z
       updated_at: 2026-11-24T13:49:47.543Z
       version: 1
-  timestamp: 2026-11-24T13:49:47.563Z
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/paneRailMarks.ts
+          symbol: orderPaneRailMarks
+  timestamp: 2026-11-24T13:57:07.215Z
   sequenceNumber: 1
 - type: add
   elementId: testing.testcoveragetarget.pane-rail
@@ -68,7 +78,11 @@
       created_at: 2026-11-24T13:49:47.546Z
       updated_at: 2026-11-24T13:49:47.546Z
       version: 1
-  timestamp: 2026-11-24T13:49:47.563Z
+    source_reference:
+      provenance: manual
+      locations:
+        - file: tests/pane-rail.spec.ts
+  timestamp: 2026-11-24T13:57:07.215Z
   sequenceNumber: 2
 - type: add
   elementId: testing.testcoveragetarget.pane-rail-marks
@@ -88,7 +102,11 @@
       created_at: 2026-11-24T13:49:47.548Z
       updated_at: 2026-11-24T13:49:47.548Z
       version: 1
-  timestamp: 2026-11-24T13:49:47.563Z
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+  timestamp: 2026-11-24T13:57:07.215Z
   sequenceNumber: 3
 - type: relationship-add
   elementId: ux.uxlibrary.heimdall-ui::aggregates::ux.librarycomponent.pane-rail

@@ -1,0 +1,20 @@
+id: changeset-1795528585411-v30o9pxsv
+name: pane-rail-as-built
+description: "As-built verification record for the pane-rail plan: what the
+  feat/pane-rail branch built since origin/main."
+created: 2026-11-24T13:56:25.415Z
+modified: 2026-11-24T13:56:56.262Z
+status: staged
+baseSnapshot: v2:sha256:39b64040e976fa94f57b509a0e0f15d7359a083d8ba60b960b80036d9ee782db
+origin:
+  kind: extract
+purpose: verification
+verifies: changeset-1795528173295-iotjmqyde
+scope:
+  since: origin/main
+  codeCommit: 71f445ac773650d309b42dcd569290dce58335fb
+stats:
+  additions: 47
+  modifications: 0
+  deletions: 0
+lastSequence: 46
