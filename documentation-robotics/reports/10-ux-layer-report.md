@@ -18,9 +18,9 @@ User interface components, screens, and user experience elements.
 | ------------------------- | ----- |
 | Elements                  | 121   |
 | Intra-Layer Relationships | 290   |
-| Inter-Layer Relationships | 254   |
-| Inbound Relationships     | 136   |
-| Outbound Relationships    | 118   |
+| Inter-Layer Relationships | 277   |
+| Inbound Relationships     | 139   |
+| Outbound Relationships    | 138   |
 
 **Cross-Layer References**:
 
@@ -182,6 +182,9 @@ flowchart TB
 
 | Relationship ID                                         | Source Node                                                          | Dest Node                                                                 | Dest Layer   | Predicate   | Cardinality  | Strength |
 | ------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------- | ------------ | ----------- | ------------ | -------- |
+| `testing.testcasesketch.tests.ux.librarycomponent`      | `testing.testcasesketch.chart-fills-resolve-from-tokens`             | `ux.librarycomponent.heatmap`                                             | `ux`         | `tests`     | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`      | `testing.testcasesketch.chart-fills-resolve-from-tokens`             | `ux.librarycomponent.line-chart`                                          | `ux`         | `tests`     | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`      | `testing.testcasesketch.chart-fills-resolve-from-tokens`             | `ux.librarycomponent.status-timeline`                                     | `ux`         | `tests`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent` | `testing.testcoveragetarget.adjacency-matrix-view`                   | `ux.librarycomponent.adjacency-matrix`                                    | `ux`         | `covers`    | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent` | `testing.testcoveragetarget.advanced-overlays`                       | `ux.librarycomponent.command-palette`                                     | `ux`         | `covers`    | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent` | `testing.testcoveragetarget.advanced-overlays`                       | `ux.librarycomponent.detail-drawer`                                       | `ux`         | `covers`    | many-to-many | medium   |
@@ -322,12 +325,15 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`  | `ux.librarycomponent.activity-timeline`                              | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.adjacency-matrix`                               | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.alert-strip`                                    | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.app-title`                                      | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.app-title`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.asset-card`                                     | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.asset-grid`                                     | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.avatar`                                         | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.badge`                                          | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.bar-chart`                                      | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.bar-chart`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.bar-h`                                          | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.bar-h`                                          | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.bar-v`                                          | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.bridge-node-list`                               | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
@@ -336,18 +342,25 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`  | `ux.librarycomponent.calendar`                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.camera-controls`                                | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chart-wrapper`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-composer`                                  | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-composer`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-container`                                 | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-container`                                 | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-divider`                                   | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-divider`                                   | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-markdown-content`                          | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-message`                                   | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-message`                                   | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-suggestions`                               | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chat-suggestions`                               | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.chip`                                           | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.command-palette`                                | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.config-tile`                                    | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.confirm-dialog`                                 | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.detail-drawer`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.diff-viewer`                                    | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.diff-viewer`                                    | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.donut`                                          | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.donut`                                          | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.drawer`                                         | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.entity-picker`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
@@ -360,15 +373,18 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.graph-collapse-control-ux`                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.graph-edgegraph-edge-shape-ux`                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.graph-inspector-graph-edge-inspector-ux`        | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.graph-node-ux`                                  | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.graph-node-ux`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.graph-toolbar-ux`                               | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.hash-set-diff`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.heatmap`                                        | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.heatmap`                                        | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.hierarchy-row`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.hierarchy-tree`                                 | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.hive-plot`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.icon`                                           | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.inspector-panel`                                | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.kanban-board`                                   | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.kanban-board`                                   | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.key-value-editor`                               | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.kvgrid`                                         | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
@@ -376,10 +392,12 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.layer-pair-list`                                | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.layer-stack`                                    | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.layered-graph-explorer`                         | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.line-chart`                                     | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.line-chart`                                     | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.lineage-rail`                                   | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.link-category-filter`                           | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.log-stream`                                     | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.map-canvas`                                     | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.map-canvas`                                     | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.metric-row`                                     | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.mini-calendar`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
@@ -408,12 +426,15 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`  | `ux.librarycomponent.shell-layout`                                   | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.side-by-side-diff`                              | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.sidebar`                                        | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.sparkline`                                      | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.sparkline`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.split-pane`                                     | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.stacked-bar`                                    | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.stacked-bar`                                    | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.stat-grid`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.stat-tile`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.status-badge`                                   | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.status-timeline`                                | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.status-timeline`                                | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.statusbar`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`  | `ux.librarycomponent.statusbar`                                      | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `motivation` | `satisfies` | many-to-many | medium   |
@@ -428,7 +449,9 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.tooltip`                                        | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.topbar`                                         | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`  | `ux.librarycomponent.topbar`                                         | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.topology-node`                                  | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.topology-node`                                  | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.trace-viewer`                                   | `motivation.principle.every-component-color-comes-from-a-token`           | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.trace-viewer`                                   | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.tri-state`                                      | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`    | `ux.librarycomponent.version-pill`                                   | `motivation.principle.two-surface-shell-and-canvas`                       | `motivation` | `satisfies` | many-to-many | medium   |
@@ -666,13 +689,14 @@ Brand row with the amber mark, application name, optional version tag, and an op
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate    | Direction |
-| ----------- | ------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout`                      | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.sidebar`                           | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components`         | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.sidebar`                                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### AssetCard {#assetcard}
 
@@ -792,11 +816,12 @@ Grouped multi-series vertical bar chart with built-in axes and an optional legen
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### BarH {#barh}
 
@@ -816,11 +841,12 @@ Horizontal bar chart for ranked categories: a label column, an inset track and a
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### BarV {#barv}
 
@@ -1031,13 +1057,14 @@ Controlled message input with context chips, attachment chips, a file picker and
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                                    | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatContainer {#chatcontainer}
 
@@ -1057,11 +1084,12 @@ Chat panel composing optional bot tabs, a scrolling message thread and a compose
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatDivider {#chatdivider}
 
@@ -1081,11 +1109,12 @@ Horizontal rule with a centered label for separating conversation sections (date
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatMarkdownContent {#chatmarkdowncontent}
 
@@ -1129,12 +1158,13 @@ A single chat turn (user or bot) with an optional inline tool call and reasoning
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatSuggestions {#chatsuggestions}
 
@@ -1154,11 +1184,12 @@ Row of quick-reply chips. Once one is selected, the others are disabled.
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Chip {#chip}
 
@@ -1312,14 +1343,15 @@ Tabbed diff panel that switches between a set diff (`DiffViewer.HashSet`, added 
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.diff-viewer-components` | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.hash-set-diff`                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.side-by-side-diff`             | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.diff-viewer-components`             | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.hash-set-diff`                             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.side-by-side-diff`                         | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                              | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Donut {#donut}
 
@@ -1339,11 +1371,12 @@ Ring chart for composition, with optional center value and eyebrow label. No leg
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Drawer {#drawer}
 
@@ -1653,6 +1686,7 @@ Default node visual: label, kind badge, domain-color swatch, selection ring, and
 
 | Type        | Related Element                                                      | Predicate    | Direction |
 | ----------- | -------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`      | `satisfies`  | outbound  |
 | inter-layer | `motivation.principle.two-surface-shell-and-canvas`                  | `satisfies`  | outbound  |
 | intra-layer | `ux.librarycomponent.graph-canvas-ux`                                | `composes`   | inbound   |
 | intra-layer | `ux.actionpattern.collapseexpand-toggle-shiftenter-or-chevron-click` | `uses`       | outbound  |
@@ -1725,11 +1759,13 @@ Three-column set diff (Added / Removed / Kept, with counts) for comparing two ve
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### HierarchyRow {#hierarchyrow}
 
@@ -1920,15 +1956,16 @@ Column board of cards with pointer drag-and-drop, keyboard moves, per-column cou
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.kanban-board`           | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip`                          | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.panel`                         | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.kanban-board`                       | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.panel`                                     | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                              | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### KeyValueEditor {#keyvalueeditor}
 
@@ -2130,12 +2167,14 @@ Multi-series line chart with optional area fill, axes, grid, threshold line, eve
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle` | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle`             | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### LineageRail {#lineagerail}
 
@@ -2235,11 +2274,12 @@ Pan/zoom Web Mercator map that renders pins, a track polyline, or a heatmap, ove
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.map-canvas`             | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.map-canvas`                         | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### MetricRow {#metricrow}
 
@@ -2927,13 +2967,14 @@ Shape-only trend line (88 × 28 by default) for tiles, table cells and cards. No
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.metric-row`                    | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.stat-tile`                     | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.metric-row`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.stat-tile`                                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### SplitPane {#splitpane}
 
@@ -2977,11 +3018,12 @@ Vertical stacked bars, one stack per category, with optional 100% normalized mod
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### StatGrid {#statgrid}
 
@@ -3076,11 +3118,13 @@ Gantt-style status history: one horizontal track per service, colored segments a
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Statusbar {#statusbar}
 
@@ -3379,11 +3423,12 @@ Infrastructure/service node card with status dot and metric progress bars. Suppo
 
 #### Relationships
 
-| Type        | Related Element                                      | Predicate    | Direction |
-| ----------- | ---------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.data-display-components` | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.data-display-components`            | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### TraceViewer {#traceviewer}
 
@@ -3403,12 +3448,13 @@ Distributed-trace waterfall: span tree, service-colored timeline with parent-to-
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.trace-viewer`           | `covers`     | inbound   |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.trace-viewer`                       | `covers`     | inbound   |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### TriState {#tristate}
 
@@ -3773,4 +3819,4 @@ The @tinkermonkey/heimdall-ui package: the full public component inventory expor
 
 ---
 
-Generated: 2026-11-23T17:44:43.297Z | Model Version: 0.1.0
+Generated: 2026-11-24T20:14:36.659Z | Model Version: 0.1.0

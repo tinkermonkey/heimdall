@@ -16,8 +16,8 @@ Application components, services, and interactions.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 70    |
-| Intra-Layer Relationships | 106   |
+| Elements                  | 69    |
+| Intra-Layer Relationships | 105   |
 | Inter-Layer Relationships | 119   |
 | Inbound Relationships     | 101   |
 | Outbound Relationships    | 18    |
@@ -43,7 +43,7 @@ Application components, services, and interactions.
 | `application.applicationcomponent.graph-inspector-component`                     | `applicationcomponent`     | 1             |
 | `application.applicationcomponent.graph-node-component`                          | `applicationcomponent`     | 1             |
 | `application.applicationcomponent.graph-toolbar-component`                       | `applicationcomponent`     | 1             |
-| `application.applicationcomponent.heimdall-ui-library-module`                    | `applicationcomponent`     | 13            |
+| `application.applicationcomponent.heimdall-ui-library-module`                    | `applicationcomponent`     | 12            |
 | `application.applicationcomponent.hive-plot-component`                           | `applicationcomponent`     | 3             |
 | `application.applicationcomponent.layer-stack-component`                         | `applicationcomponent`     | 5             |
 | `application.applicationcomponent.layered-graph-explorer-component`              | `applicationcomponent`     | 1             |
@@ -67,7 +67,6 @@ Application components, services, and interactions.
 | `application.applicationfunction.galaxy-aspect-ratio-resolution`                 | `applicationfunction`      | 2             |
 | `application.applicationfunction.galaxy-live-simulation-step`                    | `applicationfunction`      | 4             |
 | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`           | `applicationfunction`      | 5             |
-| `application.applicationfunction.heatmap-colour-scale`                           | `applicationfunction`      | 1             |
 | `application.applicationfunction.hive-plot-layout`                               | `applicationfunction`      | 3             |
 | `application.applicationfunction.joint-edge-label-placement`                     | `applicationfunction`      | 2             |
 | `application.applicationfunction.lane-layout-and-gutter-routing`                 | `applicationfunction`      | 4             |
@@ -544,7 +543,6 @@ The package's public module (src/index.ts barrel over one module per source file
 | intra-layer | `application.applicationfunction.dropdown-portal-and-outside-click-containment` | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.fixed-clock-date-formatting`                   | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.focus-trap`                                    | `assigned-to` | outbound  |
-| intra-layer | `application.applicationfunction.heatmap-colour-scale`                          | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.otlp-trace-adaptation`                         | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.plain-link-click-detection`                    | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.ssr-safe-media-query`                          | `assigned-to` | outbound  |
@@ -964,20 +962,6 @@ galaxyLayout(): positions nodes as a radial hierarchy of orbits from structural 
 | intra-layer | `application.applicationfunction.galaxy-live-simulation-step`      | `depends-on`  | outbound  |
 | intra-layer | `application.applicationfunction.node-overlap-separation-pass`     | `depends-on`  | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`       | `realizes`    | outbound  |
-
-### Heatmap Colour Scale {#heatmap-colour-scale}
-
-**ID**: `application.applicationfunction.heatmap-colour-scale`
-
-**Type**: `applicationfunction`
-
-getHeatmapColor() and normalizeColorToHex(): single-hue alpha scale for Heatmap and MapCanvas heatmap cells.
-
-#### Relationships
-
-| Type        | Related Element                                               | Predicate     | Direction |
-| ----------- | ------------------------------------------------------------- | ------------- | --------- |
-| intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `assigned-to` | inbound   |
 
 ### Hive Plot Layout {#hive-plot-layout}
 
@@ -1622,4 +1606,4 @@ GraphCanvasContext's nodeRects/getNodeRect — every currently-visible node's me
 
 ---
 
-Generated: 2026-11-23T17:44:43.297Z | Model Version: 0.1.0
+Generated: 2026-11-24T20:14:36.659Z | Model Version: 0.1.0
