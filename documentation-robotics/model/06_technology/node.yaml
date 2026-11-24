@@ -1,0 +1,19 @@
+technology.node.git-hub-actions-ubuntu-latest-runner:
+  id: 741320fa-3e55-4a1b-be86-14f6001c71e4
+  path: technology.node.git-hub-actions-ubuntu-latest-runner
+  spec_node_id: technology.node
+  type: node
+  layer_id: technology
+  name: GitHub Actions ubuntu-latest Runner
+  description: Hosted runner VM that runs every workflow; the reference rasterizer
+    for the -linux.png baselines.
+  attributes:
+    nodeType: virtual-machine
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: .github/workflows/ci.yml
+  metadata:
+    created_at: 2026-11-21T17:11:26.784Z
+    updated_at: 2026-11-21T17:11:26.784Z
+    version: 1

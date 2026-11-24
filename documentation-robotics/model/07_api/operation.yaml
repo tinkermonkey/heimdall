@@ -388,25 +388,3 @@ api.operation.use-pan-zoom:
     created_at: 2026-09-18T14:38:08.453Z
     updated_at: 2026-09-18T14:38:08.453Z
     version: 1
-api.operation.compute-edge-path:
-  id: 7f2e342c-d219-408e-8d15-0f5328a59f7d
-  path: api.operation.compute-edge-path
-  spec_node_id: api.operation
-  type: operation
-  layer_id: api
-  name: computeEdgePath
-  description: Exported function resolving the rendered bezier path between two
-    node rectangles.
-  attributes:
-    operationId: computeEdgePath
-    summary: Compute the rendered path between two node rectangles
-    tags: graph
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/index.ts
-        symbol: computeEdgePath
-  metadata:
-    created_at: 2026-09-18T14:38:08.783Z
-    updated_at: 2026-09-18T14:38:08.783Z
-    version: 1

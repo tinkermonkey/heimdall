@@ -1,0 +1,36 @@
+testing.targetinputfield.layout-node-size-field:
+  id: 93fe7b1d-beef-4c36-8c11-063f6dd9a127
+  path: testing.targetinputfield.layout-node-size-field
+  spec_node_id: testing.targetinputfield
+  type: targetinputfield
+  layer_id: testing
+  name: Layout Node Size Field
+  attributes:
+    fieldRef: data-model.schemadefinition.layout-node
+    partitionRef: testing.inputspacepartition.node-size-class
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-21T17:15:51.213Z
+    updated_at: 2026-11-21T17:15:51.213Z
+    version: 1
+testing.targetinputfield.graph-edge-set-field:
+  id: 3bd53f74-6279-439d-8c4c-6345cb2f39cc
+  path: testing.targetinputfield.graph-edge-set-field
+  spec_node_id: testing.targetinputfield
+  type: targetinputfield
+  layer_id: testing
+  name: Graph Edge Set Field
+  attributes:
+    fieldRef: data-model.schemadefinition.layout-edge
+    partitionRef: testing.inputspacepartition.graph-topology
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-21T17:15:51.214Z
+    updated_at: 2026-11-21T17:15:51.214Z
+    version: 1

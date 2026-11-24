@@ -1,0 +1,59 @@
+security.countermeasure.markdown-rendered-without-raw-html:
+  id: d224d2c4-fba9-4cc8-b93c-64cdab8fc6d8
+  path: security.countermeasure.markdown-rendered-without-raw-html
+  spec_node_id: security.countermeasure
+  type: countermeasure
+  layer_id: security
+  name: Markdown Rendered Without Raw HTML
+  description: "ChatMarkdownContent uses react-markdown with remark-gfm only: no
+    rehype-raw, so raw HTML is not rendered, and react-markdown's default URL
+    transform drops unsafe protocols such as javascript:."
+  attributes:
+    type: technical
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatMarkdownContent.tsx
+        symbol: ReactMarkdown
+  metadata:
+    created_at: 2026-11-21T18:10:35.034Z
+    updated_at: 2026-11-21T18:10:35.034Z
+    version: 1
+security.countermeasure.new-tab-links-use-noopener-noreferrer:
+  id: 20a03317-945b-4a72-852c-320eb2e4a869
+  path: security.countermeasure.new-tab-links-use-noopener-noreferrer
+  spec_node_id: security.countermeasure
+  type: countermeasure
+  layer_id: security
+  name: New-Tab Links Use noopener noreferrer
+  description: Markdown links render with target=_blank and rel=noopener noreferrer.
+  attributes:
+    type: technical
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatMarkdownContent.tsx
+  metadata:
+    created_at: 2026-11-21T18:10:35.035Z
+    updated_at: 2026-11-21T18:10:35.035Z
+    version: 1
+security.countermeasure.trusted-publishing-with-provenance:
+  id: d60f6950-4d0f-45ff-bd1c-ac7442c5c251
+  path: security.countermeasure.trusted-publishing-with-provenance
+  spec_node_id: security.countermeasure
+  type: countermeasure
+  layer_id: security
+  name: Trusted Publishing With Provenance
+  description: release.yml publishes with npm Trusted Publishing (GitHub OIDC, no
+    stored NPM_TOKEN) and --provenance, only after the tag matches package.json
+    and the build, skills and package checks pass.
+  attributes:
+    type: technical
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: .github/workflows/release.yml
+  metadata:
+    created_at: 2026-11-21T18:10:35.035Z
+    updated_at: 2026-11-21T18:10:35.035Z
+    version: 1

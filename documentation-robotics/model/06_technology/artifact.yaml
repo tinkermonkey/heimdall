@@ -5,9 +5,10 @@ technology.artifact.heimdall-ui-package:
   type: artifact
   layer_id: technology
   name: Heimdall UI Package
-  description: The published @tinkermonkey/heimdall-ui npm package artifact
-    (library) whose graph-visualization surface (GraphCanvas + layout engines)
-    this model covers.
+  description: "The published @tinkermonkey/heimdall-ui npm package (0.13.0):
+    per-module ESM, type declarations, bundled and per-component stylesheets,
+    fonts and agent-skills, published from release.yml with npm provenance.
+    Covers the whole component library, not only the graph surface."
   attributes:
     artifactType: library
   source_reference:
@@ -122,4 +123,515 @@ technology.artifact.vitest:
   metadata:
     created_at: 2026-09-18T14:33:15.525Z
     updated_at: 2026-09-18T14:33:15.525Z
+    version: 1
+technology.artifact.d3-delaunay:
+  id: 24cf090f-b435-4096-a060-6a3bc196b398
+  path: technology.artifact.d3-delaunay
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: d3-delaunay
+  description: "Runtime dependency (externalized, decision #343): Delaunay
+    triangulation used by organicLayout."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.react-markdown:
+  id: cbf65b73-b4fb-4aba-b0aa-1df8392b5044
+  path: technology.artifact.react-markdown
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: react-markdown
+  description: "Runtime dependency (externalized): renders chat markdown in
+    ChatMarkdownContent."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.remark-gfm:
+  id: f919337f-8deb-459f-aca8-294dc3c1e864
+  path: technology.artifact.remark-gfm
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: remark-gfm
+  description: "Runtime dependency (externalized): GitHub-flavoured markdown
+    plugin for react-markdown."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.vite:
+  id: ef5f0aef-afeb-42f1-8c07-01ded6e9d967
+  path: technology.artifact.vite
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Vite
+  description: "Build tool (devDependency): dev server, library-mode build of
+    dist/, and the docs site build."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.tailwind-css:
+  id: ef0df6ea-011b-4087-bc50-02b4e65b3367
+  path: technology.artifact.tailwind-css
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Tailwind CSS
+  description: "devDependency: utility CSS whose theme is wired to the design
+    tokens in src/tokens/tokens.css (tailwind.config.ts)."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: tailwind.config.ts
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.eslint:
+  id: 0e89566f-8566-4920-a27e-bb78b11c209d
+  path: technology.artifact.eslint
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: ESLint
+  description: "devDependency: lint gate in CI (npm run lint over src/, docs/src/,
+    scripts/)."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: eslint.config.js
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.agent-skills-bundle:
+  id: e8775de5-ab94-487e-b6b4-2ecfa43371b8
+  path: technology.artifact.agent-skills-bundle
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Agent Skills Bundle
+  description: "agent-skills/: Claude Code skills documenting every exported
+    component for coding agents in consumer repos; shipped inside the npm
+    package (files: dist, agent-skills)."
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: agent-skills/heimdall-graph/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.docs-showcase-site:
+  id: 5394b8ea-0c84-47cf-bb2c-73ddbf6f187d
+  path: technology.artifact.docs-showcase-site
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Docs Showcase Site
+  description: "docs/: the Vite + React showcase app built to docs/dist and
+    published to GitHub Pages (tinkermonkey.github.io/heimdall)."
+  attributes:
+    artifactType: archive
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: docs/vite.config.ts
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.heimdall-agent-environment-image:
+  id: 8128c9c9-d5e1-4bd2-b057-32bb64b9dc09
+  path: technology.artifact.heimdall-agent-environment-image
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Heimdall Agent Environment Image
+  description: "Dockerfile.agent: container image for coding agents working on
+    this repo, with Playwright/Chromium system libraries, fonts and pinned
+    locale and TZ for consistent screenshots."
+  attributes:
+    artifactType: container-image
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: Dockerfile.agent
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.switchyard-orchestrator:
+  id: 18702b95-a4d6-42b4-9fe4-b1ba6d21b6de
+  path: technology.artifact.switchyard-orchestrator
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: switchyard-orchestrator
+  description: Base image of Dockerfile.agent (FROM
+    switchyard-orchestrator:latest), built elsewhere.
+  attributes:
+    artifactType: container-image
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: Dockerfile.agent
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.agent-environment-entrypoint:
+  id: 714d3d75-4594-4845-ad27-a41814a5e47a
+  path: technology.artifact.agent-environment-entrypoint
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Agent Environment Entrypoint
+  description: "heimdall-docker-entrypoint.sh: links the image's pre-installed
+    node_modules into the bind-mounted /workspace at container start."
+  attributes:
+    artifactType: script
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: heimdall-docker-entrypoint.sh
+  metadata:
+    created_at: 2026-11-21T17:11:26.783Z
+    updated_at: 2026-11-21T17:11:26.783Z
+    version: 1
+technology.artifact.react-dom-peer-dependency:
+  id: 5401ee9f-4905-40cd-bea1-c9b36ead51e0
+  path: technology.artifact.react-dom-peer-dependency
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: react-dom (peer dependency)
+  description: react-dom ^18 || ^19 peer dependency. The library renders through
+    it (createPortal for dropdown panels, server rendering in tests) and leaves
+    it external in the build.
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-21T18:06:32.235Z
+    updated_at: 2026-11-21T18:06:32.235Z
+    version: 1
+technology.artifact.per-module-esm-build-output:
+  id: b71b4c8e-d678-427e-9c77-fcfd9bfa2b66
+  path: technology.artifact.per-module-esm-build-output
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Per-Module ESM Build Output
+  description: "dist/<module>.js: one ESM file per source module (rollup
+    preserveModules, root src), CJS dropped (#343), so a consumer's bundler
+    drops the modules of components it never imports. No JS module imports CSS,
+    so Node, SSR builds and test runners load it as plain ESM."
+  attributes:
+    artifactType: library
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.236Z
+    updated_at: 2026-11-21T18:06:32.236Z
+    version: 1
+technology.artifact.type-declarations:
+  id: 589a7f68-4ca7-40a9-8da5-ea907fd32baa
+  path: technology.artifact.type-declarations
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Type Declarations
+  description: dist/**/*.d.ts generated by vite-plugin-dts for the public API only
+    (the dev app, test pages and tests are excluded); the package's types entry.
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.236Z
+    updated_at: 2026-11-21T18:06:32.236Z
+    version: 1
+technology.artifact.bundled-stylesheet:
+  id: c2244be1-6cfb-4297-9be0-09bc3504bf53
+  path: technology.artifact.bundled-stylesheet
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Bundled Stylesheet
+  description: "dist/style.css, the './css' export: every stylesheet (tokens,
+    utilities, all components) in ESM evaluation order, minified as one file."
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.236Z
+    updated_at: 2026-11-21T18:06:32.236Z
+    version: 1
+technology.artifact.base-stylesheet:
+  id: 20d14d30-8d11-4ee5-a7dc-47d96688b21f
+  path: technology.artifact.base-stylesheet
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Base Stylesheet
+  description: "dist/css/base.css, the './css/base' export: tokens.css plus
+    styles/utilities.css, the sheet every opt-in component sheet assumes."
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.236Z
+    updated_at: 2026-11-21T18:06:32.236Z
+    version: 1
+technology.artifact.per-component-stylesheets:
+  id: 25b1a247-f800-4390-bc1d-3366c0413f01
+  path: technology.artifact.per-component-stylesheets
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Per-Component Stylesheets
+  description: "dist/css/<Name>.css, the './css/*' exports (0.13.0): one sheet per
+    component module holding its own CSS and that of every component it renders,
+    minus base, so an app can load only the CSS it uses."
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.236Z
+    updated_at: 2026-11-21T18:06:32.236Z
+    version: 1
+technology.artifact.legacy-css-forwarder:
+  id: 60b06995-886d-4839-8140-1cade23ac545
+  path: technology.artifact.legacy-css-forwarder
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Legacy CSS Forwarder
+  description: dist/heimdall-ui.css, a one-line @import of style.css kept for
+    consumers who pointed at the 0.9.0/0.9.1 file name directly. Deprecated.
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: vite.config.mjs
+        symbol: legacyCssForwarder
+  metadata:
+    created_at: 2026-11-21T18:06:32.236Z
+    updated_at: 2026-11-21T18:06:32.236Z
+    version: 1
+technology.artifact.font-bundle:
+  id: 04b924b9-29ee-445c-a8b5-1c13d8f6a4b0
+  path: technology.artifact.font-bundle
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Font Bundle
+  description: Inter and JetBrains Mono font files with fonts.css, kept in
+    public/fonts (fetched by scripts/download-fonts.js) and copied to
+    dist/fonts; the './fonts' export.
+  attributes:
+    artifactType: archive
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: public/fonts/fonts.css
+  metadata:
+    created_at: 2026-11-21T18:06:32.237Z
+    updated_at: 2026-11-21T18:06:32.237Z
+    version: 1
+technology.artifact.router-benchmark-script:
+  id: 4a978b8a-6a04-4861-922b-7da1753e35a1
+  path: technology.artifact.router-benchmark-script
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Router Benchmark Script
+  description: "scripts/bench-router.mjs (npm run bench:router): seeded grid
+    benchmark of routeNavigationEdges with a route fingerprint and per-size
+    budgets."
+  attributes:
+    artifactType: script
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/bench-router.mjs
+  metadata:
+    created_at: 2026-11-21T18:11:14.899Z
+    updated_at: 2026-11-21T18:11:14.899Z
+    version: 1
+technology.artifact.galaxy-drag-benchmark-script:
+  id: b68e084c-f4b2-47d0-a0ef-a95670dee87d
+  path: technology.artifact.galaxy-drag-benchmark-script
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Galaxy Drag Benchmark Script
+  description: "scripts/bench-galaxy-drag.mjs: headless live-simulation drag
+    benchmark for galaxySimulationStep."
+  attributes:
+    artifactType: script
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/bench-galaxy-drag.mjs
+  metadata:
+    created_at: 2026-11-21T18:11:14.899Z
+    updated_at: 2026-11-21T18:11:14.899Z
+    version: 1
+technology.artifact.performance-baseline:
+  id: 36cc8538-4fe9-4e86-bc9c-df8f11863884
+  path: technology.artifact.performance-baseline
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Performance Baseline
+  description: "performance-baseline.json from scripts/measure-performance.js:
+    bundle sizes and render times recorded 2026-05-17 for the single-bundle
+    build. Stale since the 0.13.0 per-module build and not checked by anything."
+  attributes:
+    artifactType: configuration
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: performance-baseline.json
+  metadata:
+    created_at: 2026-11-21T18:11:14.899Z
+    updated_at: 2026-11-21T18:11:14.899Z
+    version: 1
+technology.artifact.layered-graph-fixture-builder:
+  id: 890cdfce-f80a-472b-920c-fba9937c2a0a
+  path: technology.artifact.layered-graph-fixture-builder
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Layered Graph Fixture Builder
+  description: "scripts/build-layered-fixtures.mjs: generates
+    src/test-pages/fixtures from Documentation Robotics data, the DR spec
+    meta-model (read from the sibling ../documentation_robotics/spec checkout)
+    and this repo's own documentation-robotics/model. The layered-graph test
+    fixtures therefore depend on the DR model and on a second repository."
+  attributes:
+    artifactType: script
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/build-layered-fixtures.mjs
+  metadata:
+    created_at: 2026-11-21T18:11:53.826Z
+    updated_at: 2026-11-21T18:11:53.826Z
+    version: 1
+technology.artifact.ci-dev-server-script:
+  id: 78157304-127e-4f8f-8a5a-5cf37e065a71
+  path: technology.artifact.ci-dev-server-script
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: CI Dev Server Script
+  description: "scripts/ci-dev-server.sh: starts the Vite dev server for
+    Playwright in CI from a copy of the config in /tmp, for runners where the
+    checkout is not writable."
+  attributes:
+    artifactType: script
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/ci-dev-server.sh
+  metadata:
+    created_at: 2026-11-21T18:11:53.826Z
+    updated_at: 2026-11-21T18:11:53.826Z
+    version: 1
+technology.artifact.font-download-script:
+  id: 6fc4fec7-a9d8-4bef-b375-6aae4e58a991
+  path: technology.artifact.font-download-script
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Font Download Script
+  description: "scripts/download-fonts.js (npm run setup): fetches the Inter and
+    JetBrains Mono files into public/fonts, the only copy, which the build
+    copies to dist/fonts."
+  attributes:
+    artifactType: script
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/download-fonts.js
+  metadata:
+    created_at: 2026-11-21T18:11:53.826Z
+    updated_at: 2026-11-21T18:11:53.826Z
+    version: 1
+technology.artifact.design-token-stylesheet:
+  id: 9b7947ad-19aa-4451-95a7-6e95fc0a87cb
+  path: technology.artifact.design-token-stylesheet
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Design Token Stylesheet
+  description: "src/tokens/tokens.css: about 260 CSS custom properties (shell and
+    canvas surfaces, accent, status colors, radius, shadow, fonts, spacing) that
+    tailwind.config.ts maps every theme key to; .dark-canvas on body overrides
+    every --canvas-* value. Shipped inside base.css and style.css."
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/tokens/tokens.css
+  metadata:
+    created_at: 2026-11-21T18:12:15.411Z
+    updated_at: 2026-11-21T18:12:15.411Z
     version: 1

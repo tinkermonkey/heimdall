@@ -23,3 +23,325 @@ motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existin
     created_at: 2026-09-18T14:43:26.253Z
     updated_at: 2026-09-18T14:43:26.253Z
     version: 1
+motivation.requirement.layout-output-is-deterministic-for-a-given-input:
+  id: fda7a794-b0cf-4515-9b7b-30128f08e1bd
+  path: motivation.requirement.layout-output-is-deterministic-for-a-given-input
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Layout Output Is Deterministic for a Given Input
+  description: "The same nodes and edges produce the same positions on every run:
+    no Math.random, no wall-clock stopping, fixed iteration order and tie-breaks
+    (graphClustering.ts, organicLayout.ts headers; galaxyLayout.ts drag
+    frames)."
+  attributes:
+    requirementType: non-functional
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/graphClustering.ts
+  metadata:
+    created_at: 2026-11-21T17:02:59.075Z
+    updated_at: 2026-11-21T17:02:59.075Z
+    version: 1
+motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs:
+  id: ed5d65d4-d1cd-4204-a84c-bea2cfb5dfa2
+  path: motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: No Two Node Boxes Overlap After Any Layout Engine Runs
+  description: Every engine finishes with a separation pass so rendered node
+    rectangles do not overlap (resolveOverlaps / separationPass /
+    FINAL_CLEANUP_MAX_PASSES in graphLayout.ts and galaxyLayout.ts).
+  attributes:
+    requirementType: quality
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/graphLayout.ts
+  metadata:
+    created_at: 2026-11-21T17:02:59.076Z
+    updated_at: 2026-11-21T17:02:59.076Z
+    version: 1
+motivation.requirement.galaxy-keeps-orbits-even-over-round-systems:
+  id: 57528d68-2be9-4992-a185-a676d1245a4e
+  path: motivation.requirement.galaxy-keeps-orbits-even-over-round-systems
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Galaxy Keeps Orbits Even Over Round Systems
+  description: "Decision #288 (2026-11-09): for parents with many satellites or
+    one dominant branch, even orbit slots win over round systems; the trade-off
+    is documented next to SLOT_EVENNESS_BAND and the layout-loop gate is
+    relaxed."
+  attributes:
+    requirementType: quality
+    priority: medium
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: design-reference/issue-decisions-2026-11.md
+  metadata:
+    created_at: 2026-11-21T17:02:59.076Z
+    updated_at: 2026-11-21T17:02:59.076Z
+    version: 1
+motivation.requirement.dropdown-panels-render-in-a-portal-by-default:
+  id: 54393a2f-a63b-4bfd-8a88-d64fb7203c51
+  path: motivation.requirement.dropdown-panels-render-in-a-portal-by-default
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Dropdown Panels Render in a Portal by Default
+  description: "Decision #328: every .dropdown-panel user (RowMenu,
+    FilterDropdown, Select, EntityPicker) renders its panel in a portal
+    positioned from the trigger rect, flipping when there is no room and
+    repositioning or closing on scroll; portal={false} keeps in-place
+    rendering."
+  attributes:
+    requirementType: functional
+    priority: medium
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: design-reference/issue-decisions-2026-11.md
+  metadata:
+    created_at: 2026-11-21T17:02:59.076Z
+    updated_at: 2026-11-21T17:02:59.076Z
+    version: 1
+motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden:
+  id: 8437d99f-951d-4492-9e39-e94bb213e7bb
+  path: motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: HivePlot Keeps Axis Angles Stable When a Layer Is Hidden
+  description: "Decision #337: a hidden layer leaves a gap and the other axes do not move."
+  attributes:
+    requirementType: functional
+    priority: low
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: design-reference/issue-decisions-2026-11.md
+  metadata:
+    created_at: 2026-11-21T17:02:59.077Z
+    updated_at: 2026-11-21T17:02:59.077Z
+    version: 1
+motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners:
+  id: 50eaab75-46b5-4dd9-9775-9cf543e6bd99
+  path: motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Package Loads as Plain ESM in Node, SSR and Test Runners
+  description: No JS module in dist imports CSS, so the package can be imported
+    where CSS imports fail (Node, SSR, Vitest). Checked by check:package and
+    src/components/__tests__/serverRender.test.ts.
+  attributes:
+    requirementType: non-functional
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.237Z
+    updated_at: 2026-11-21T18:06:32.237Z
+    version: 1
+motivation.requirement.unused-components-drop-out-of-a-consumer-bundle:
+  id: d2f6aaa8-71e6-40af-b152-d6b6e4f3a7e1
+  path: motivation.requirement.unused-components-drop-out-of-a-consumer-bundle
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Unused Components Drop Out of a Consumer Bundle
+  description: Each source module is its own dist file and the package is
+    sideEffects-free except CSS, so an app pays only for the components it
+    imports (0.13.0).
+  attributes:
+    requirementType: non-functional
+    priority: medium
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-21T18:06:32.237Z
+    updated_at: 2026-11-21T18:06:32.237Z
+    version: 1
+motivation.requirement.opt-in-component-stylesheets-are-load-order-independent:
+  id: b571197a-8b06-499d-a571-bb09aa6038e1
+  path: motivation.requirement.opt-in-component-stylesheets-are-load-order-independent
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Opt-In Component Stylesheets Are Load-Order Independent
+  description: Any combination of dist/css/<Name>.css sheets, in any order,
+    renders as dist/style.css does.
+  attributes:
+    requirementType: non-functional
+    priority: medium
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: scripts/check-sheet-order.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.237Z
+    updated_at: 2026-11-21T18:06:32.237Z
+    version: 1
+motivation.requirement.every-exported-path-resolves-in-the-published-tarball:
+  id: 4c805c48-fbbf-4985-96e9-b2327bc815b2
+  path: motivation.requirement.every-exported-path-resolves-in-the-published-tarball
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Every Exported Path Resolves in the Published Tarball
+  description: Every path package.json gives consumers (exports, main, types)
+    exists in what npm publishes; 0.9.0 and 0.9.1 shipped a './css' export that
+    pointed at nothing (#303).
+  attributes:
+    requirementType: non-functional
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: scripts/check-package-exports.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:32.238Z
+    updated_at: 2026-11-21T18:06:32.238Z
+    version: 1
+motivation.requirement.graph-nodes-and-edges-have-accessible-names:
+  id: edbf1d28-e8cd-4ee3-8724-3faa80622cb5
+  path: motivation.requirement.graph-nodes-and-edges-have-accessible-names
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Graph Nodes and Edges Have Accessible Names
+  description: Every focusable node, edge and control in a graph has an accessible
+    name (edgeAccessibleName, aria-labels on collapse and toolbar buttons) and
+    can be operated from the keyboard. Checked by
+    tests/graph-a11y-names.spec.ts.
+  attributes:
+    requirementType: non-functional
+    priority: high
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graph.ts
+        symbol: edgeAccessibleName
+  metadata:
+    created_at: 2026-11-21T18:11:14.899Z
+    updated_at: 2026-11-21T18:11:14.899Z
+    version: 1
+motivation.requirement.motion-honours-reduced-motion-preference:
+  id: 1a326c1d-b8a0-4e5d-8425-7d84e62ec314
+  path: motivation.requirement.motion-honours-reduced-motion-preference
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Motion Honours Reduced-Motion Preference
+  description: Animated transitions (useTween, viewport easing) skip or shorten
+    motion when the user prefers reduced motion (REDUCED_MOTION_QUERY,
+    usePrefersReducedMotion).
+  attributes:
+    requirementType: non-functional
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useTween.ts
+        symbol: usePrefersReducedMotion
+  metadata:
+    created_at: 2026-11-21T18:11:14.899Z
+    updated_at: 2026-11-21T18:11:14.899Z
+    version: 1
+motivation.requirement.components-render-on-the-server:
+  id: 55e244e8-00b3-4684-a9d8-bd3bc96397ba
+  path: motivation.requirement.components-render-on-the-server
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Components Render on the Server
+  description: Every exported component renders to a string without a DOM (no
+    window or document access during render), so consumers can server-render
+    pages that use them. Checked by
+    src/components/__tests__/serverRender.test.ts.
+  attributes:
+    requirementType: non-functional
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/__tests__/serverRender.test.ts
+  metadata:
+    created_at: 2026-11-21T18:11:14.899Z
+    updated_at: 2026-11-21T18:11:14.899Z
+    version: 1
+motivation.requirement.navigation-routing-stays-within-its-time-budget:
+  id: 95e3cb77-b735-44fa-b6ed-1582049ea0c5
+  path: motivation.requirement.navigation-routing-stays-within-its-time-budget
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Navigation Routing Stays Within Its Time Budget
+  description: routeNavigationEdges reruns on every re-measure and drag, so its
+    median batch time must stay under 20/40/100/250 ms for 50/100/200/400 boxes
+    with as many edges (bench:router --check). Not run in CI.
+  attributes:
+    requirementType: quality
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/bench-router.mjs
+        symbol: BUDGET
+  metadata:
+    created_at: 2026-11-21T18:11:17.793Z
+    updated_at: 2026-11-21T18:11:17.793Z
+    version: 1
+motivation.requirement.live-galaxy-drag-stays-interactive:
+  id: 94c18a85-840a-4489-b4de-fe49491efdfd
+  path: motivation.requirement.live-galaxy-drag-stays-interactive
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Live Galaxy Drag Stays Interactive
+  description: Dragging a satellite in live galaxy mode must keep per-frame layout
+    time low and settle in few ticks after release, measured by
+    scripts/bench-galaxy-drag.mjs (#287). No pass/fail threshold is encoded.
+  attributes:
+    requirementType: quality
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: scripts/bench-galaxy-drag.mjs
+  metadata:
+    created_at: 2026-11-21T18:11:17.793Z
+    updated_at: 2026-11-21T18:11:17.793Z
+    version: 1
+motivation.requirement.large-layouts-do-not-block-the-first-paint:
+  id: 3af79818-7e97-4ded-ba11-0798e30ff92d
+  path: motivation.requirement.large-layouts-do-not-block-the-first-paint
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Large Layouts Do Not Block the First Paint
+  description: Engine layouts run only after the computing state has painted
+    (yieldToPaint), and layered layouts above ASYNC_LAYOUT_MIN_NODES run in
+    chunks (layoutLayersAsync), so the canvas and its busy indicator appear
+    before heavy work.
+  attributes:
+    requirementType: quality
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/utils/yieldToPaint.ts
+  metadata:
+    created_at: 2026-11-21T18:11:17.793Z
+    updated_at: 2026-11-21T18:11:17.793Z
+    version: 1

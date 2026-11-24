@@ -3,8 +3,8 @@ name: review-open
 description: "Step B open architect review of the heimdall model: what the base
   model plus review-questions lacks or gets wrong"
 created: 2026-11-21T18:03:44.602Z
-modified: 2026-11-23T16:36:44.833Z
-status: staged
+modified: 2026-11-24T13:25:05.523Z
+status: committed
 baseSnapshot: v2:sha256:173f87c8a3ec4cd70007639fe692daa935bf1d0d7bd4228652f2474931359486
 origin:
   kind: plan

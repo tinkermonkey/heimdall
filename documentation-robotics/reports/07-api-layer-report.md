@@ -16,15 +16,16 @@ REST APIs, operations, endpoints, and API integrations.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 20    |
-| Intra-Layer Relationships | 19    |
-| Inter-Layer Relationships | 12    |
-| Inbound Relationships     | 0     |
-| Outbound Relationships    | 12    |
+| Elements                  | 19    |
+| Intra-Layer Relationships | 18    |
+| Inter-Layer Relationships | 111   |
+| Inbound Relationships     | 59    |
+| Outbound Relationships    | 52    |
 
 **Cross-Layer References**:
 
-- **Downstream layers**: [Application](./05-application-layer-report.md)
+- **Upstream layers**: [Testing](./13-testing-layer-report.md)
+- **Downstream layers**: [Application](./05-application-layer-report.md), [Motivation](./01-motivation-layer-report.md), [Product](./03-product-layer-report.md)
 
 ## Intra-Layer Relationships
 
@@ -33,7 +34,6 @@ flowchart LR
   subgraph api
     api_operation_build_structural_forest["buildStructuralForest"]
     api_operation_clustered_force_layout["clusteredForceLayout"]
-    api_operation_compute_edge_path["computeEdgePath"]
     api_operation_force_layout["forceLayout"]
     api_operation_galaxy_layout["galaxyLayout"]
     api_operation_graph_canvas["GraphCanvas"]
@@ -51,25 +51,24 @@ flowchart LR
     api_operation_ux_nav_layout["uxNavLayout"]
     api_operation_visible_navigation_edge_ids["visibleNavigationEdgeIds"]
     api_tag_graph["graph"]
-    api_operation_build_structural_forest -->|aggregates| api_tag_graph
-    api_operation_clustered_force_layout -->|aggregates| api_tag_graph
-    api_operation_compute_edge_path -->|aggregates| api_tag_graph
-    api_operation_force_layout -->|aggregates| api_tag_graph
-    api_operation_galaxy_layout -->|aggregates| api_tag_graph
-    api_operation_graph_canvas -->|aggregates| api_tag_graph
-    api_operation_graph_collapse_control -->|aggregates| api_tag_graph
-    api_operation_graph_edge -->|aggregates| api_tag_graph
-    api_operation_graph_edge_inspector -->|aggregates| api_tag_graph
-    api_operation_graph_edge_shape -->|aggregates| api_tag_graph
-    api_operation_graph_inspector -->|aggregates| api_tag_graph
-    api_operation_graph_node -->|aggregates| api_tag_graph
-    api_operation_graph_toolbar -->|aggregates| api_tag_graph
-    api_operation_louvain_cluster -->|aggregates| api_tag_graph
-    api_operation_pack_clusters -->|aggregates| api_tag_graph
-    api_operation_radial_tree_layout -->|aggregates| api_tag_graph
-    api_operation_use_pan_zoom -->|aggregates| api_tag_graph
-    api_operation_ux_nav_layout -->|aggregates| api_tag_graph
-    api_operation_visible_navigation_edge_ids -->|aggregates| api_tag_graph
+    api_operation_build_structural_forest -->|references| api_tag_graph
+    api_operation_clustered_force_layout -->|references| api_tag_graph
+    api_operation_force_layout -->|references| api_tag_graph
+    api_operation_galaxy_layout -->|references| api_tag_graph
+    api_operation_graph_canvas -->|references| api_tag_graph
+    api_operation_graph_collapse_control -->|references| api_tag_graph
+    api_operation_graph_edge_inspector -->|references| api_tag_graph
+    api_operation_graph_edge -->|references| api_tag_graph
+    api_operation_graph_edge_shape -->|references| api_tag_graph
+    api_operation_graph_inspector -->|references| api_tag_graph
+    api_operation_graph_node -->|references| api_tag_graph
+    api_operation_graph_toolbar -->|references| api_tag_graph
+    api_operation_louvain_cluster -->|references| api_tag_graph
+    api_operation_pack_clusters -->|references| api_tag_graph
+    api_operation_radial_tree_layout -->|references| api_tag_graph
+    api_operation_use_pan_zoom -->|references| api_tag_graph
+    api_operation_ux_nav_layout -->|references| api_tag_graph
+    api_operation_visible_navigation_edge_ids -->|references| api_tag_graph
   end
 ```
 
@@ -92,25 +91,127 @@ flowchart TB
   apm["APM"]
   testing["Testing"]
   api --> application
+  api --> motivation
+  api --> product
+  testing --> api
   class api current
 ```
 
 ## Inter-Layer Relationships Table
 
-| Relationship ID                                           | Source Node                                 | Dest Node                                                              | Dest Layer    | Predicate    | Cardinality  | Strength |
-| --------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------- | ------------- | ------------ | ------------ | -------- |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.build-structural-forest`     | `application.applicationfunction.structural-forest-construction`       | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.clustered-force-layout`      | `application.applicationfunction.clustered-force-layout-algorithm`     | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.compute-edge-path`           | `application.applicationfunction.bezier-edge-path-computation`         | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.force-layout`                | `application.applicationfunction.force-directed-layout-algorithm`      | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.galaxy-layout`               | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.references.application.applicationservice` | `api.operation.graph-canvas`                | `application.applicationservice.graph-layout-engine-service`           | `application` | `references` | many-to-many | medium   |
-| `api.operation.references.application.applicationservice` | `api.operation.graph-canvas`                | `application.applicationservice.live-galaxy-simulation-service`        | `application` | `references` | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.louvain-cluster`             | `application.applicationfunction.louvain-community-clustering`         | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.pack-clusters`               | `application.applicationfunction.cluster-circle-packing`               | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.radial-tree-layout`          | `application.applicationfunction.radial-tree-layout-algorithm`         | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.ux-nav-layout`               | `application.applicationfunction.ux-navigation-tree-layout-algorithm`  | `application` | `realizes`   | many-to-many | medium   |
-| `api.operation.realizes.application.applicationfunction`  | `api.operation.visible-navigation-edge-ids` | `application.applicationfunction.ux-navigation-tree-layout-algorithm`  | `application` | `realizes`   | many-to-many | medium   |
+| Relationship ID                                           | Source Node                                                          | Dest Node                                                                                   | Dest Layer    | Predicate    | Cardinality  | Strength |
+| --------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------------ | ------------ | -------- |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.build-structural-forest`                              | `application.applicationfunction.structural-forest-construction`                            | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.build-structural-forest`                              | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.clustered-force-layout`                               | `application.applicationfunction.clustered-force-layout-algorithm`                          | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.clustered-force-layout`                               | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.force-layout`                                         | `application.applicationfunction.force-directed-layout-algorithm`                           | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.force-layout`                                         | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.galaxy-layout`                                        | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`                      | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.galaxy-layout`                                        | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-canvas`                                         | `product.feature.edge-selection-and-inspection`                                             | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-canvas`                                         | `product.feature.layout-progress-indicator`                                                 | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-canvas`                                         | `product.feature.live-draggable-galaxy-simulation`                                          | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-canvas`                                         | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-canvas`                                         | `product.feature.progressive-disclosure-via-node-collapseexpand`                            | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-canvas`                                         | `product.feature.viewport-history-and-restore`                                              | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-canvas`                                         | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-canvas`                                         | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-canvas`                                         | `application.applicationservice.live-galaxy-simulation-service`                             | `application` | `references` | many-to-many | medium   |
+| `api.operation.satisfies.motivation.requirement`          | `api.operation.graph-canvas`                                         | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `api.operation.satisfies.motivation.requirement`          | `api.operation.graph-canvas`                                         | `motivation.requirement.large-layouts-do-not-block-the-first-paint`                         | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `api.operation.satisfies.motivation.requirement`          | `api.operation.graph-canvas`                                         | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.background-click-event`                                       | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.collapse-toggle-event`                                        | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.edge-hover-change-event`                                      | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.edge-select-event`                                            | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.layout-state-change-event`                                    | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.node-drag-end-event`                                          | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.node-hover-change-event`                                      | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.viewport-dwell-event`                                         | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.triggers.application.applicationevent`     | `api.operation.graph-canvas`                                         | `application.applicationevent.viewport-navigate-event`                                      | `application` | `triggers`   | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-collapse-control`                               | `product.feature.progressive-disclosure-via-node-collapseexpand`                            | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-collapse-control`                               | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-edge-inspector`                                 | `product.feature.edge-selection-and-inspection`                                             | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-edge-inspector`                                 | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-edge`                                           | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-edge-shape`                                     | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-inspector`                                      | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-node`                                           | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.satisfies.motivation.requirement`          | `api.operation.graph-node`                                           | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-toolbar`                                        | `product.feature.fullscreen-canvas`                                                         | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.exposes.product.feature`                   | `api.operation.graph-toolbar`                                        | `product.feature.live-draggable-galaxy-simulation`                                          | `product`     | `exposes`    | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.graph-toolbar`                                        | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.louvain-cluster`                                      | `application.applicationfunction.louvain-community-clustering`                              | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.louvain-cluster`                                      | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.pack-clusters`                                        | `application.applicationfunction.cluster-circle-packing`                                    | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.pack-clusters`                                        | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.radial-tree-layout`                                   | `application.applicationfunction.radial-tree-layout-algorithm`                              | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.radial-tree-layout`                                   | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.use-pan-zoom`                                         | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.ux-nav-layout`                                        | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                       | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.ux-nav-layout`                                        | `application.applicationservice.graph-layout-engine-service`                                | `application` | `references` | many-to-many | medium   |
+| `api.operation.realizes.application.applicationfunction`  | `api.operation.visible-navigation-edge-ids`                          | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                       | `application` | `realizes`   | many-to-many | medium   |
+| `api.operation.references.application.applicationservice` | `api.operation.visible-navigation-edge-ids`                          | `application.applicationservice.interactive-graph-rendering`                                | `application` | `references` | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.center-on-select-tests`                  | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.center-on-select-tests`                  | `api.operation.graph-node`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.channel-router-tests`                    | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `api.operation.force-layout`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `api.operation.graph-node`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.fullscreen-container-ref-tests`          | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`       | `api.operation.galaxy-layout`                                                               | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-layout-browser-tests`             | `api.operation.build-structural-forest`                                                     | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-layout-browser-tests`             | `api.operation.galaxy-layout`                                                               | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-layout-browser-tests`             | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-layout-collapse-tests`            | `api.operation.graph-collapse-control`                                                      | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-layout-collapse-tests`            | `api.operation.graph-node`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-layout-tests`                     | `api.operation.galaxy-layout`                                                               | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-live-drag-tests`                  | `api.operation.galaxy-layout`                                                               | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.galaxy-live-drag-tests`                  | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-a11y-names-tests`                  | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-a11y-names-tests`                  | `api.operation.graph-edge-shape`                                                            | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`        | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-popover-tests`              | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.clustered-force-layout`                                                      | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.force-layout`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.galaxy-layout`                                                               | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.graph-edge`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.graph-inspector`                                                             | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.graph-node`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `api.operation.graph-toolbar`                                                               | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-edge-label-tests`                  | `api.operation.force-layout`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-edge-label-tests`                  | `api.operation.graph-node`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-fit-boundaries-tests`              | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-layout-busy-tests`                 | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-node-measure-tests`                | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-tooltip-placement-tests`           | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.graph-viewport-history-tests`            | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.layer-lanes-tests`                       | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.layered-async-layout-tests`              | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.layered-matrix-tests`                    | `api.operation.graph-edge-inspector`                                                        | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.layered-tests`                           | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.layered-tests`                           | `api.operation.graph-edge`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.map-canvas-tests`                        | `api.operation.use-pan-zoom`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.organic-layout-browser-tests`            | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.organic-layout-tests`                    | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.orthogonal-layout-browser-tests`         | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.orthogonal-layout-tests`                 | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.pan-inertia-tests`                       | `api.operation.use-pan-zoom`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.pan-zoom-tests`                          | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.pan-zoom-tests`                          | `api.operation.use-pan-zoom`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.radial-tree-layout-algorithm`            | `api.operation.build-structural-forest`                                                     | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.radial-tree-layout-algorithm`            | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.radial-tree-layout-algorithm`            | `api.operation.radial-tree-layout`                                                          | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.reach-inspector-tests`                   | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.reach-inspector-tests`                   | `api.operation.graph-edge`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`            | `api.operation.build-structural-forest`                                                     | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`            | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`            | `api.operation.graph-edge`                                                                  | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`            | `api.operation.visible-navigation-edge-ids`                                                 | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.ux-nav-layout-tests`                     | `api.operation.graph-canvas`                                                                | `api`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.api.operation`         | `testing.testcoveragetarget.ux-nav-layout-tests`                     | `api.operation.ux-nav-layout`                                                               | `api`         | `covers`     | many-to-many | medium   |
 
 ## Element Reference
 
@@ -135,7 +236,11 @@ Exported function deriving a parent/child forest from structural edges.
 | Type        | Related Element                                                  | Predicate    | Direction |
 | ----------- | ---------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `application.applicationfunction.structural-forest-construction` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                  | `aggregates` | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`     | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-browser-tests`         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.radial-tree-layout-algorithm`        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`        | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                  | `references` | outbound  |
 
 ### clusteredForceLayout {#clusteredforcelayout}
 
@@ -155,33 +260,12 @@ Exported function running the Louvain-clustered nested-bubble force layout.
 
 #### Relationships
 
-| Type        | Related Element                                                    | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------ | ------------ | --------- |
-| inter-layer | `application.applicationfunction.clustered-force-layout-algorithm` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                    | `aggregates` | outbound  |
-
-### computeEdgePath {#computeedgepath}
-
-**ID**: `api.operation.compute-edge-path`
-
-**Type**: `operation`
-
-Exported function resolving the rendered bezier path between two node rectangles.
-
-#### Attributes
-
-| Name        | Value                                                 |
-| ----------- | ----------------------------------------------------- |
-| operationId | computeEdgePath                                       |
-| summary     | Compute the rendered path between two node rectangles |
-| tags        | graph                                                 |
-
-#### Relationships
-
-| Type        | Related Element                                                | Predicate    | Direction |
-| ----------- | -------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationfunction.bezier-edge-path-computation` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                | `aggregates` | outbound  |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.clustered-force-layout-algorithm`  | `realizes`   | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`        | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                     | `references` | outbound  |
 
 ### forceLayout {#forcelayout}
 
@@ -201,10 +285,14 @@ Exported function running the spring/repulsion force-directed layout algorithm.
 
 #### Relationships
 
-| Type        | Related Element                                                   | Predicate    | Direction |
-| ----------- | ----------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationfunction.force-directed-layout-algorithm` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                   | `aggregates` | outbound  |
+| Type        | Related Element                                                      | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.force-directed-layout-algorithm`    | `realizes`   | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`         | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-edge-label-tests`                  | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                      | `references` | outbound  |
 
 ### galaxyLayout {#galaxylayout}
 
@@ -227,7 +315,13 @@ Exported function running the radial-orbit galaxy layout algorithm.
 | Type        | Related Element                                                        | Predicate    | Direction |
 | ----------- | ---------------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                        | `aggregates` | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`           | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-browser-tests`               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-tests`                       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-live-drag-tests`                    | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`    | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                        | `references` | outbound  |
 
 ### GraphCanvas {#graphcanvas}
 
@@ -247,11 +341,57 @@ Exported React component — the public entry point for rendering an interactive
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate    | Direction |
-| ----------- | --------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationservice.graph-layout-engine-service`    | `references` | outbound  |
-| inter-layer | `application.applicationservice.live-galaxy-simulation-service` | `references` | outbound  |
-| intra-layer | `api.tag.graph`                                                 | `aggregates` | outbound  |
+| Type        | Related Element                                                                             | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `product.feature.edge-selection-and-inspection`                                             | `exposes`    | outbound  |
+| inter-layer | `product.feature.layout-progress-indicator`                                                 | `exposes`    | outbound  |
+| inter-layer | `product.feature.live-draggable-galaxy-simulation`                                          | `exposes`    | outbound  |
+| inter-layer | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `exposes`    | outbound  |
+| inter-layer | `product.feature.progressive-disclosure-via-node-collapseexpand`                            | `exposes`    | outbound  |
+| inter-layer | `product.feature.viewport-history-and-restore`                                              | `exposes`    | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`                                | `references` | outbound  |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`                                | `references` | outbound  |
+| inter-layer | `application.applicationservice.live-galaxy-simulation-service`                             | `references` | outbound  |
+| inter-layer | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.large-layouts-do-not-block-the-first-paint`                         | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `satisfies`  | outbound  |
+| inter-layer | `application.applicationevent.background-click-event`                                       | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.collapse-toggle-event`                                        | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.edge-hover-change-event`                                      | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.edge-select-event`                                            | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.layout-state-change-event`                                    | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.node-drag-end-event`                                          | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.node-hover-change-event`                                      | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.viewport-dwell-event`                                         | `triggers`   | outbound  |
+| inter-layer | `application.applicationevent.viewport-navigate-event`                                      | `triggers`   | outbound  |
+| inter-layer | `testing.testcoveragetarget.center-on-select-tests`                                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.channel-router-tests`                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.fullscreen-container-ref-tests`                                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-browser-tests`                                    | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-live-drag-tests`                                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-a11y-names-tests`                                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-click-tooltip-tests`                               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-popover-tests`                                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-fit-boundaries-tests`                                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-layout-busy-tests`                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-node-measure-tests`                                       | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-tooltip-placement-tests`                                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-viewport-history-tests`                                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layer-lanes-tests`                                              | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-async-layout-tests`                                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-tests`                                                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.organic-layout-browser-tests`                                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.organic-layout-tests`                                           | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.orthogonal-layout-browser-tests`                                | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.orthogonal-layout-tests`                                        | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-zoom-tests`                                                 | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.reach-inspector-tests`                                          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`                                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-nav-layout-tests`                                            | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                                             | `references` | outbound  |
 
 ### GraphCollapseControl {#graphcollapsecontrol}
 
@@ -271,9 +411,12 @@ Exported collapse/expand affordance button for a node with structural children.
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                                  | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `product.feature.progressive-disclosure-via-node-collapseexpand` | `exposes`    | outbound  |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`     | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-tests`        | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                  | `references` | outbound  |
 
 ### GraphEdge {#graphedge}
 
@@ -293,9 +436,14 @@ Exported standalone edge component for use outside GraphCanvas's own internal ed
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`        | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.layered-tests`                          | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.reach-inspector-tests`                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`           | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                     | `references` | outbound  |
 
 ### GraphEdgeInspector {#graphedgeinspector}
 
@@ -315,9 +463,12 @@ Exported detail panel component for a selected edge's endpoints and metadata.
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                              | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `product.feature.edge-selection-and-inspection`              | `exposes`    | outbound  |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.layered-matrix-tests`            | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                              | `references` | outbound  |
 
 ### GraphEdgeShape {#graphedgeshape}
 
@@ -337,9 +488,11 @@ Exported low-level SVG edge-drawing primitive (line, markers, hit target, label 
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                              | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.graph-a11y-names-tests`          | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                              | `references` | outbound  |
 
 ### GraphInspector {#graphinspector}
 
@@ -359,9 +512,11 @@ Exported detail panel component for a selected node's metadata and relationships
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`        | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                     | `references` | outbound  |
 
 ### GraphNode {#graphnode}
 
@@ -381,9 +536,16 @@ Exported default node renderer component, usable standalone or via GraphCanvas's
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                                      | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`         | `references` | outbound  |
+| inter-layer | `motivation.requirement.graph-nodes-and-edges-have-accessible-names` | `satisfies`  | outbound  |
+| inter-layer | `testing.testcoveragetarget.center-on-select-tests`                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-tests`            | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.graph-edge-label-tests`                  | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                      | `references` | outbound  |
 
 ### GraphToolbar {#graphtoolbar}
 
@@ -403,9 +565,13 @@ Exported floating zoom/pan/lock/fullscreen/live-simulation control cluster, for 
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `product.feature.fullscreen-canvas`                                 | `exposes`    | outbound  |
+| inter-layer | `product.feature.live-draggable-galaxy-simulation`                  | `exposes`    | outbound  |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`        | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                     | `references` | outbound  |
 
 ### louvainCluster {#louvaincluster}
 
@@ -428,7 +594,8 @@ Exported function running deterministic multi-level Louvain community clustering
 | Type        | Related Element                                                | Predicate    | Direction |
 | ----------- | -------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `application.applicationfunction.louvain-community-clustering` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                | `aggregates` | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`   | `references` | outbound  |
+| intra-layer | `api.tag.graph`                                                | `references` | outbound  |
 
 ### packClusters {#packclusters}
 
@@ -448,10 +615,11 @@ Exported function packing a cluster dendrogram into non-overlapping nested circl
 
 #### Relationships
 
-| Type        | Related Element                                          | Predicate    | Direction |
-| ----------- | -------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationfunction.cluster-circle-packing` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                          | `aggregates` | outbound  |
+| Type        | Related Element                                              | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationfunction.cluster-circle-packing`     | `realizes`   | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service` | `references` | outbound  |
+| intra-layer | `api.tag.graph`                                              | `references` | outbound  |
 
 ### radialTreeLayout {#radialtreelayout}
 
@@ -474,7 +642,9 @@ Exported function running the radial-tree (concentric ring) layout algorithm.
 | Type        | Related Element                                                | Predicate    | Direction |
 | ----------- | -------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `application.applicationfunction.radial-tree-layout-algorithm` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                | `aggregates` | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`   | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.radial-tree-layout-algorithm`      | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                | `references` | outbound  |
 
 ### usePanZoom {#usepanzoom}
 
@@ -494,9 +664,13 @@ Exported React hook implementing wheel/pinch/drag/keyboard pan-and-zoom with ine
 
 #### Relationships
 
-| Type        | Related Element | Predicate    | Direction |
-| ----------- | --------------- | ------------ | --------- |
-| intra-layer | `api.tag.graph` | `aggregates` | outbound  |
+| Type        | Related Element                                              | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationservice.interactive-graph-rendering` | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.map-canvas-tests`                | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-inertia-tests`               | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-zoom-tests`                  | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                              | `references` | outbound  |
 
 ### uxNavLayout {#uxnavlayout}
 
@@ -519,7 +693,9 @@ Exported function running the page/view navigation tree layout algorithm.
 | Type        | Related Element                                                       | Predicate    | Direction |
 | ----------- | --------------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `application.applicationfunction.ux-navigation-tree-layout-algorithm` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                       | `aggregates` | outbound  |
+| inter-layer | `application.applicationservice.graph-layout-engine-service`          | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.ux-nav-layout-tests`                      | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                       | `references` | outbound  |
 
 ### visibleNavigationEdgeIds {#visiblenavigationedgeids}
 
@@ -542,7 +718,9 @@ Exported function computing which ux-navigation route edges should be visible fo
 | Type        | Related Element                                                       | Predicate    | Direction |
 | ----------- | --------------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `application.applicationfunction.ux-navigation-tree-layout-algorithm` | `realizes`   | outbound  |
-| intra-layer | `api.tag.graph`                                                       | `aggregates` | outbound  |
+| inter-layer | `application.applicationservice.interactive-graph-rendering`          | `references` | outbound  |
+| inter-layer | `testing.testcoveragetarget.ux-nav-edge-visibility-tests`             | `covers`     | inbound   |
+| intra-layer | `api.tag.graph`                                                       | `references` | outbound  |
 
 ### graph {#graph}
 
@@ -556,26 +734,25 @@ Graph visualization and layout portion of @tinkermonkey/heimdall-ui's public exp
 
 | Type        | Related Element                             | Predicate    | Direction |
 | ----------- | ------------------------------------------- | ------------ | --------- |
-| intra-layer | `api.operation.build-structural-forest`     | `aggregates` | inbound   |
-| intra-layer | `api.operation.clustered-force-layout`      | `aggregates` | inbound   |
-| intra-layer | `api.operation.compute-edge-path`           | `aggregates` | inbound   |
-| intra-layer | `api.operation.force-layout`                | `aggregates` | inbound   |
-| intra-layer | `api.operation.galaxy-layout`               | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-canvas`                | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-collapse-control`      | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-edge`                  | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-edge-inspector`        | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-edge-shape`            | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-inspector`             | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-node`                  | `aggregates` | inbound   |
-| intra-layer | `api.operation.graph-toolbar`               | `aggregates` | inbound   |
-| intra-layer | `api.operation.louvain-cluster`             | `aggregates` | inbound   |
-| intra-layer | `api.operation.pack-clusters`               | `aggregates` | inbound   |
-| intra-layer | `api.operation.radial-tree-layout`          | `aggregates` | inbound   |
-| intra-layer | `api.operation.use-pan-zoom`                | `aggregates` | inbound   |
-| intra-layer | `api.operation.ux-nav-layout`               | `aggregates` | inbound   |
-| intra-layer | `api.operation.visible-navigation-edge-ids` | `aggregates` | inbound   |
+| intra-layer | `api.operation.build-structural-forest`     | `references` | inbound   |
+| intra-layer | `api.operation.clustered-force-layout`      | `references` | inbound   |
+| intra-layer | `api.operation.force-layout`                | `references` | inbound   |
+| intra-layer | `api.operation.galaxy-layout`               | `references` | inbound   |
+| intra-layer | `api.operation.graph-canvas`                | `references` | inbound   |
+| intra-layer | `api.operation.graph-collapse-control`      | `references` | inbound   |
+| intra-layer | `api.operation.graph-edge-inspector`        | `references` | inbound   |
+| intra-layer | `api.operation.graph-edge`                  | `references` | inbound   |
+| intra-layer | `api.operation.graph-edge-shape`            | `references` | inbound   |
+| intra-layer | `api.operation.graph-inspector`             | `references` | inbound   |
+| intra-layer | `api.operation.graph-node`                  | `references` | inbound   |
+| intra-layer | `api.operation.graph-toolbar`               | `references` | inbound   |
+| intra-layer | `api.operation.louvain-cluster`             | `references` | inbound   |
+| intra-layer | `api.operation.pack-clusters`               | `references` | inbound   |
+| intra-layer | `api.operation.radial-tree-layout`          | `references` | inbound   |
+| intra-layer | `api.operation.use-pan-zoom`                | `references` | inbound   |
+| intra-layer | `api.operation.ux-nav-layout`               | `references` | inbound   |
+| intra-layer | `api.operation.visible-navigation-edge-ids` | `references` | inbound   |
 
 ---
 
-Generated: 2026-09-18T14:44:15.109Z | Model Version: 0.1.0
+Generated: 2026-11-24T13:25:05.973Z | Model Version: 0.1.0

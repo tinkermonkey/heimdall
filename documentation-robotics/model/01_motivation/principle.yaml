@@ -43,3 +43,23 @@ motivation.principle.zero-literal-node-overlap-guarantee:
     created_at: 2026-09-18T14:43:25.951Z
     updated_at: 2026-09-18T14:43:25.951Z
     version: 1
+motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters:
+  id: 7a6728fd-9d3a-43b3-9788-c14ced507e11
+  path: motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+  spec_node_id: motivation.principle
+  type: principle
+  layer_id: motivation
+  name: Theme Through Tokens on Two Surfaces, Never Color Filters
+  description: Every screen is built from a shell and a canvas surface; dark
+    canvas overrides every --canvas-* token explicitly under .dark-canvas, never
+    with filter() or invert() (CLAUDE.md, src/tokens/tokens.css).
+  attributes:
+    category: architecture
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/tokens/tokens.css
+  metadata:
+    created_at: 2026-11-21T17:02:59.079Z
+    updated_at: 2026-11-21T17:02:59.079Z
+    version: 1

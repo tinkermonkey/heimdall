@@ -61,3 +61,41 @@ ux.statepattern.live-simulation-vs-static-layout-state:
     created_at: 2026-09-18T14:39:48.753Z
     updated_at: 2026-09-18T14:39:48.753Z
     version: 1
+ux.statepattern.layout-computation-state:
+  id: 8ffc64ac-3c3f-4a09-ae53-d9ed3b9218d2
+  path: ux.statepattern.layout-computation-state
+  spec_node_id: ux.statepattern
+  type: statepattern
+  layer_id: ux
+  name: Layout Computation State
+  description: "idle -> computing -> idle (or simulating for live galaxy):
+    GraphCanvas renders computing first, yields a frame (yieldToPaint), then
+    runs the engine, so the indicator paints before the main thread blocks."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: GraphLayoutState
+  metadata:
+    created_at: 2026-11-21T18:09:47.882Z
+    updated_at: 2026-11-21T18:09:47.882Z
+    version: 1
+ux.statepattern.canvas-theme-light-or-dark-canvas:
+  id: 1867fffc-013b-4d5c-ad9e-147d8be148b8
+  path: ux.statepattern.canvas-theme-light-or-dark-canvas
+  spec_node_id: ux.statepattern
+  type: statepattern
+  layer_id: ux
+  name: Canvas Theme (Light or Dark Canvas)
+  description: Light canvas by default; the consumer adds dark-canvas to body and
+    every --canvas-* token switches to its explicit dark value (no filter or
+    invert). The shell surface stays dark in both.
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/tokens/tokens.css
+        symbol: .dark-canvas
+  metadata:
+    created_at: 2026-11-21T18:12:15.411Z
+    updated_at: 2026-11-21T18:12:15.411Z
+    version: 1

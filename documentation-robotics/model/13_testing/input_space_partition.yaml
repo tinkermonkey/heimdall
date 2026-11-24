@@ -1,0 +1,37 @@
+testing.inputspacepartition.node-size-class:
+  id: 49919927-0069-4833-b466-df86631a33e8
+  path: testing.inputspacepartition.node-size-class
+  spec_node_id: testing.inputspacepartition
+  type: inputspacepartition
+  layer_id: testing
+  name: Node Size Class
+  description: "Node box size the overlap tests vary: default chip-sized nodes
+    versus large card-sized nodes."
+  attributes:
+    presenceRule: required
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-21T17:15:51.210Z
+    updated_at: 2026-11-21T17:15:51.210Z
+    version: 1
+testing.inputspacepartition.graph-topology:
+  id: d8752586-22a3-46af-b546-3ce043fa8513
+  path: testing.inputspacepartition.graph-topology
+  spec_node_id: testing.inputspacepartition
+  type: inputspacepartition
+  layer_id: testing
+  name: Graph Topology
+  description: Shape of the graph the overlap tests lay out.
+  attributes:
+    presenceRule: required
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-21T17:15:51.213Z
+    updated_at: 2026-11-21T17:15:51.213Z
+    version: 1

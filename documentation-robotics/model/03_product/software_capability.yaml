@@ -98,3 +98,329 @@ product.softwarecapability.radial-tree-layout:
     created_at: 2026-09-18T14:42:16.128Z
     updated_at: 2026-09-18T14:42:16.128Z
     version: 1
+product.softwarecapability.interactive-graph-exploration:
+  id: 231e9242-a531-418c-b9df-35abdd514c39
+  path: product.softwarecapability.interactive-graph-exploration
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Interactive Graph Exploration
+  description: "What the canvas lets an end user do with a laid-out graph in
+    place: hide and reveal structural descendants, and read node and edge detail
+    on demand through tooltips and popovers. Inferred from GraphCanvas's
+    collapsedNodeIds and renderTooltip/renderPopover props."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: src/components/GraphCanvas.tsx
+  metadata:
+    created_at: 2026-11-21T17:01:29.632Z
+    updated_at: 2026-11-21T17:01:29.632Z
+    version: 1
+product.softwarecapability.ui-primitives:
+  id: 143f7ba2-08d6-4ac4-a6a3-de6306f93481
+  path: product.softwarecapability.ui-primitives
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: UI Primitives
+  description: "Shipped capability: Icons, buttons, chips, badges, avatars and
+    segmented controls every other component builds on."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-primitives/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.097Z
+    updated_at: 2026-11-21T17:06:20.097Z
+    version: 1
+product.softwarecapability.form-input:
+  id: 13d244cf-935b-4773-81e8-0506e16cf452
+  path: product.softwarecapability.form-input
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Form Input
+  description: "Shipped capability: Text, number, select, tri-state and structured
+    inputs (pickers, key-value and relationship editors) with field labels and
+    errors."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-inputs/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.097Z
+    updated_at: 2026-11-21T17:06:20.097Z
+    version: 1
+product.softwarecapability.data-display:
+  id: d8d3dfd6-8731-4b6f-b9d1-a6f05945a795
+  path: product.softwarecapability.data-display
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Data Display
+  description: "Shipped capability: Stat tiles and grids, tables, key-value grids,
+    inspector panels, result and asset cards, and the map canvas."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-data-display/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.097Z
+    updated_at: 2026-11-21T17:06:20.097Z
+    version: 1
+product.softwarecapability.app-navigation:
+  id: 78e20d3c-4f3f-4089-acc4-9a582c2b4b33
+  path: product.softwarecapability.app-navigation
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: App Navigation
+  description: "Shipped capability: Nav items, sidebar, topbar and tab bar for
+    moving between an app's areas."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-navigation/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.097Z
+    updated_at: 2026-11-21T17:06:20.097Z
+    version: 1
+product.softwarecapability.app-shell:
+  id: 47b038fa-0cbb-4f70-befc-80acfbdbf296
+  path: product.softwarecapability.app-shell
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: App Shell
+  description: "Shipped capability: Titlebar, statusbar, app title and the
+    ShellLayout that composes the IDE chrome."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-shell/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.097Z
+    updated_at: 2026-11-21T17:06:20.097Z
+    version: 1
+product.softwarecapability.overlays-and-dialogs:
+  id: a8c0068c-1691-4e44-add4-2b7731e517e4
+  path: product.softwarecapability.overlays-and-dialogs
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Overlays and Dialogs
+  description: "Shipped capability: Modals, confirm dialogs, toasts, tooltips,
+    popovers, drawers, the command palette and the workspace switcher."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-overlays/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.responsive-layout:
+  id: 5812fc10-b0ad-4b6e-91e5-27a06f19bfd4
+  path: product.softwarecapability.responsive-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Responsive Layout
+  description: "Shipped capability: Panels, resizable split panes and media-query
+    driven layout."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-layout/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.charting:
+  id: 1500fb2f-ccde-4186-89ea-1c135c1d361f
+  path: product.softwarecapability.charting
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Charting
+  description: "Shipped capability: Sparklines, line, bar, stacked and donut
+    charts, heatmaps, status timelines, progress bars and metric rows."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-charts/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.page-patterns:
+  id: 760ea0b3-3a06-4e5f-9f7a-28af582d9242
+  path: product.softwarecapability.page-patterns
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Page Patterns
+  description: "Shipped capability: Page headers, filter bars, activity timelines,
+    alert strips, quick-access tiles, config and pipeline cards, row menus."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-page-patterns/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.chat-ui:
+  id: add18a9e-ad8d-4d94-9667-1c5df734aab7
+  path: product.softwarecapability.chat-ui
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Chat UI
+  description: "Shipped capability: Chat messages with tool and thinking blocks,
+    markdown content, suggestions, composer and container."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-chat/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.planning-and-scheduling:
+  id: 868b7c8e-2c78-4945-8ab2-c796c6ea9513
+  path: product.softwarecapability.planning-and-scheduling
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Planning and Scheduling
+  description: "Shipped capability: Calendar, mini calendar and kanban board."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-planning/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.run-history-and-observability-views:
+  id: 019e3ea1-d6db-43e5-9dc1-107d74ff13ac
+  path: product.softwarecapability.run-history-and-observability-views
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Run History and Observability Views
+  description: "Shipped capability: Trace viewer, log stream, diff viewers,
+    version timeline and lineage rail, with OTLP and X-Ray trace adapters."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-observability/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.layered-graph-visualization:
+  id: 3532b2d8-1820-4504-ab5e-e2e84328baed
+  path: product.softwarecapability.layered-graph-visualization
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Layered Graph Visualization
+  description: "Shipped capability: Views of a graph whose nodes belong to layers:
+    a 3D layer stack, swimlanes, adjacency matrix and hive plot, with reach,
+    filtering and camera controls."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: agent-skills/heimdall-graph/SKILL.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.098Z
+    updated_at: 2026-11-21T17:06:20.098Z
+    version: 1
+product.softwarecapability.organic-graph-layout:
+  id: a855034a-bc24-4dba-bbbd-c606eef2918d
+  path: product.softwarecapability.organic-graph-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Organic Graph Layout
+  description: "GraphCanvas layout organic: stress-majorization layout, successor
+    to force, with the node margin as a hard minimum gap."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/organicLayout.ts
+  metadata:
+    created_at: 2026-11-21T18:09:52.826Z
+    updated_at: 2026-11-21T18:09:52.826Z
+    version: 1
+product.softwarecapability.orthogonal-graph-layout:
+  id: 2b7adcb8-1a11-4cd1-a319-0c7e4a538a4e
+  path: product.softwarecapability.orthogonal-graph-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Orthogonal Graph Layout
+  description: "GraphCanvas layout orthogonal: nodes on a cell grid layered from a
+    BFS spanning tree, edges routed at right angles through channels."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/orthogonalLayout.ts
+  metadata:
+    created_at: 2026-11-21T18:09:52.826Z
+    updated_at: 2026-11-21T18:09:52.826Z
+    version: 1
+product.softwarecapability.layer-lanes-layout:
+  id: 82bac626-0d9b-47e7-bc93-81a5251f86f2
+  path: product.softwarecapability.layer-lanes-layout
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Layer Lanes Layout
+  description: "GraphCanvas layout layer-lanes: the layered-graph swimlane view
+    inside GraphCanvas, one lane per layer, driven by useLayeredGraph."
+  attributes:
+    status: delivered
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/laneLayout.ts
+  metadata:
+    created_at: 2026-11-21T18:09:52.826Z
+    updated_at: 2026-11-21T18:09:52.826Z
+    version: 1

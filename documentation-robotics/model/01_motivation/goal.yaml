@@ -42,3 +42,63 @@ motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-gra
     created_at: 2026-09-18T14:43:25.337Z
     updated_at: 2026-09-18T14:43:25.337Z
     version: 1
+motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools:
+  id: a6bd3238-fa98-4edd-8422-8cf49c828616
+  path: motivation.goal.one-consistent-ide-density-ui-across-heimdall-based-tools
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: One Consistent IDE-Density UI Across Heimdall-Based Tools
+  description: "Inferred from README.md and CLAUDE.md: tools built on Heimdall
+    share one two-surface look, IDE-density typography and the same behaviour
+    for every common control, so a team assembles an app from tested parts
+    instead of styling its own."
+  attributes:
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: README.md
+  metadata:
+    created_at: 2026-11-21T17:06:20.096Z
+    updated_at: 2026-11-21T17:06:20.096Z
+    version: 1
+motivation.goal.low-friction-adoption-in-any-react-toolchain:
+  id: 58f18d3e-b821-44d0-a436-54be08d0ee97
+  path: motivation.goal.low-friction-adoption-in-any-react-toolchain
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: Low-Friction Adoption in Any React Toolchain
+  description: A consumer can install the package and import only what it uses, in
+    a browser bundle, an SSR build or a test runner, with paths that resolve and
+    CSS it can load whole or per component.
+  attributes:
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: vite.config.mjs
+  metadata:
+    created_at: 2026-11-21T18:06:43.725Z
+    updated_at: 2026-11-21T18:06:43.725Z
+    version: 1
+motivation.goal.usable-by-every-end-user:
+  id: 4b869a31-39da-40f3-a7df-44d42ae69fd5
+  path: motivation.goal.usable-by-every-end-user
+  spec_node_id: motivation.goal
+  type: goal
+  layer_id: motivation
+  name: Usable by Every End User
+  description: Graph and component UI that works with keyboard and assistive
+    technology and respects motion preferences.
+  attributes:
+    priority: high
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-a11y-names.spec.ts
+  metadata:
+    created_at: 2026-11-21T18:11:14.899Z
+    updated_at: 2026-11-21T18:11:14.899Z
+    version: 1

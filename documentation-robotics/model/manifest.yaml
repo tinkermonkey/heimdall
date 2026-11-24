@@ -1,9 +1,9 @@
 version: 0.1.0
 schema: documentation-robotics-v1
-cli_version: 0.7.0
+cli_version: 0.7.1
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-21T16:55:39.028Z
+updated: 2026-11-24T13:25:05.564Z
 project:
   name: heimdall-ux
   description: ""
@@ -16,10 +16,11 @@ layers:
     path: documentation-robotics/model/01_motivation/
     enabled: true
     elements:
+      constraint: 4
       driver: 1
-      goal: 2
-      principle: 2
-      requirement: 1
+      goal: 5
+      principle: 3
+      requirement: 16
       stakeholder: 3
   business:
     order: 2
@@ -37,14 +38,19 @@ layers:
     path: documentation-robotics/model/03_product/
     enabled: true
     elements:
-      feature: 3
+      feature: 7
       persona: 2
-      softwarecapability: 5
+      softwarecapability: 22
   security:
     order: 4
     name: Security
     path: documentation-robotics/model/04_security/
     enabled: true
+    elements:
+      securitymodel: 1
+      secureresource: 2
+      threat: 3
+      countermeasure: 3
   application:
     order: 5
     name: Application
@@ -52,12 +58,12 @@ layers:
     enabled: true
     elements:
       applicationcollaboration: 1
-      applicationcomponent: 8
-      applicationevent: 2
-      applicationfunction: 14
+      applicationcomponent: 10
+      applicationevent: 9
+      applicationfunction: 52
       applicationinteraction: 1
       applicationprocess: 1
-      applicationservice: 2
+      applicationservice: 16
       dataobject: 2
   technology:
     order: 6
@@ -65,16 +71,19 @@ layers:
     path: documentation-robotics/model/06_technology/
     enabled: true
     elements:
-      artifact: 6
-      technologyfunction: 2
-      technologyprocess: 2
+      artifact: 32
+      node: 1
+      systemsoftware: 1
+      technologyfunction: 6
+      technologyprocess: 6
+      technologyservice: 2
   api:
     order: 7
     name: Api
     path: documentation-robotics/model/07_api/
     enabled: true
     elements:
-      operation: 19
+      operation: 18
       tag: 1
   data-model:
     order: 8
@@ -82,7 +91,7 @@ layers:
     path: documentation-robotics/model/08_data-model/
     enabled: true
     elements:
-      schemadefinition: 15
+      schemadefinition: 35
   data-store:
     order: 9
     name: Data store
@@ -95,14 +104,16 @@ layers:
     enabled: true
     elements:
       actionpattern: 4
-      librarycomponent: 6
-      statepattern: 3
+      librarycomponent: 111
+      statepattern: 5
       uxlibrary: 1
   navigation:
     order: 11
     name: Navigation
     path: documentation-robotics/model/11_navigation/
     enabled: true
+    elements:
+      route: 1
   apm:
     order: 12
     name: Apm
@@ -114,12 +125,24 @@ layers:
     path: documentation-robotics/model/13_testing/
     enabled: true
     elements:
-      coveragerequirement: 1
+      contextvariation: 1
+      coveragerequirement: 6
       coveragesummary: 1
-      testcasesketch: 5
+      environmentfactor: 1
+      inputpartitionselection: 2
+      inputspacepartition: 2
+      partitionvalue: 4
+      targetinputfield: 2
+      testcasesketch: 1694
       testcoveragemodel: 1
-      testcoveragetarget: 7
+      testcoveragetarget: 88
 changeset_history:
   - name: wire-technology-orphans
     committed_at: 2026-09-18T14:45:21.201Z
+    action: committed
+  - name: review-questions
+    committed_at: 2026-11-24T13:16:58.294Z
+    action: committed
+  - name: review-open
+    committed_at: 2026-11-24T13:25:05.564Z
     action: committed
