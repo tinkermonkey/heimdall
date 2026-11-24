@@ -223,7 +223,7 @@ export function SparklineShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="data" type="number[]" required description="Values to plot (min 2 points)" />
-          <PropRow name="color" type="SparklineColor | string" def="'emerald'" description="StatusColor name or any hex string" />
+          <PropRow name="color" type="SparklineColor | string" def="'emerald'" description="StatusColor name or any CSS color" />
           <PropRow name="area" type="boolean" def="true" description="Gradient area fill beneath the line" />
           <PropRow name="width" type="number" def="88" description="SVG width in pixels" />
           <PropRow name="height" type="number" def="28" description="SVG height in pixels" />
@@ -302,7 +302,7 @@ export function LineChartShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="series" type="number[][]" description="Each inner array is one series. Multi-series cycles the canonical palette." />
-          <PropRow name="colors" type="string[]" description="Hex color per series. Overrides palette." />
+          <PropRow name="colors" type="string[]" description="CSS color per series. Overrides palette." />
           <PropRow name="width" type="number" def="480" description="SVG width in px" />
           <PropRow name="height" type="number" def="200" description="SVG height in px" />
           <PropRow name="area" type="boolean" def="false" description="Gradient area fill (22 % → 0 % vertical)" />
@@ -368,7 +368,7 @@ export function BarVShowcase() {
         <PropsTable>
           <PropRow name="values" type="number[]" description="Bar heights. Y-axis always starts at 0." />
           <PropRow name="xLabels" type="string[]" description="X-axis label per bar (requires axes=true)" />
-          <PropRow name="color" type="string" def="amber (#F59E0B)" description="Bar fill — inherit host domain color for single-series" />
+          <PropRow name="color" type="string" def="amber (--chart-series-3)" description="Bar fill — inherit host domain color for single-series" />
           <PropRow name="width" type="number" def="480" description="SVG width in pixels" />
           <PropRow name="height" type="number" def="200" description="SVG height in pixels" />
           <PropRow name="axes" type="boolean" def="false" description="Axis lines + y-tick labels" />
@@ -508,7 +508,7 @@ export function StackedBarShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="stacks" type="{ label, parts: number[] }[]" description="Each stack has a x-label and array of part values (≤ 4 parts)" />
-          <PropRow name="colors" type="string[]" description="Hex colors per part. Defaults to canonical SERIES_COLORS." />
+          <PropRow name="colors" type="string[]" description="CSS colors per part. Defaults to canonical SERIES_COLORS." />
           <PropRow name="normalized" type="boolean" def="false" description="Normalize all stacks to 100 %. Shows percentage y-labels." />
           <PropRow name="axes" type="boolean" def="false" description="Axis lines + tick labels" />
           <PropRow name="grid" type="boolean" def="false" description="Horizontal grid lines" />
@@ -607,7 +607,7 @@ export function DonutShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="slices" type="{ value, color? }[]" description="Up to 5 slices. Merge the 6th+ into an 'other' slice at call site." />
-          <PropRow name="colors" type="string[]" description="Hex colors per slice. Defaults to canonical SERIES_COLORS." />
+          <PropRow name="colors" type="string[]" description="CSS colors per slice. Defaults to canonical SERIES_COLORS." />
           <PropRow name="width" type="number" def="160" description="SVG width in pixels" />
           <PropRow name="height" type="number" def="160" description="SVG height in pixels" />
           <PropRow name="thickness" type="number" def="14" description="Ring width in pixels" />
@@ -674,7 +674,7 @@ export function HeatmapShowcase() {
       <ShowcaseSection label="Props">
         <PropsTable>
           <PropRow name="data" type="(number | null)[][]" description="2-D array [rows][cols]. null cells render as inset background." />
-          <PropRow name="baseColor" type="string" def="'#10B981'" description="Hot end of the single-hue alpha scale" />
+          <PropRow name="baseColor" type="string" def="'rgb(var(--status-emerald))'" description="CSS color for the hot end of the single-hue alpha scale. A color that already has alpha renders fainter." />
           <PropRow name="xLabels" type="string[]" description="Axis tick labels along the x axis. Empty strings skip that label." />
           <PropRow name="yLabels" type="string[]" description="Axis tick labels along the y axis. Empty strings skip that label." />
           <PropRow name="axes" type="boolean" def="false" description="Show x/y axis labels" />

@@ -15,7 +15,8 @@ These apply across the chart components below.
 
 - **Fixed pixel size.** Every SVG chart renders at its `width` × `height` in pixels (default sizes differ per chart). Charts do not measure their container; to fill a responsive slot, measure the container (e.g. `ResizeObserver`) and pass the numbers in.
 - **`tone`** (`'light' | 'dark'`, default `'light'`) picks text, grid, border and inset colors for the canvas the chart sits on. It does not follow the `dark-canvas` body class; pass `tone="dark"` yourself on a dark canvas. Accepted by `LineChart`, `BarChart`, `BarV`, `BarH`, `StackedBar`, `Donut`, `Heatmap` and `StatusTimeline`. `Sparkline`, `ProgressBar`, `MetricRow` and `ChartWrapper` have no `tone`.
-- **Series palette.** Charts that take `colors?: string[]` default to the internal 6-color series palette, in order: `#22D3EE` cyan, `#10B981` emerald, `#F59E0B` amber, `#818CF8` indigo, `#8B5CF6` violet, `#F43F5E` rose. The palette is not exported; pass `colors` (hex strings) to override. Colors cycle when there are more series than colors.
+- **Series palette.** Charts that take `colors?: string[]` default to the internal 6-color series palette, in order: cyan, emerald, amber, indigo, violet, rose. Each is a token, `rgb(var(--chart-series-1))` through `rgb(var(--chart-series-6))` (`#22D3EE`, `#10B981`, `#F59E0B`, `#818CF8`, `#8B5CF6`, `#F43F5E` by default), so a theme can recolor them. The palette is not exported; pass `colors` (any CSS color) to override. Colors cycle when there are more series than colors.
+- **Colors are token references.** The internal color constants (`SERIES_COLORS` and its alias `chartColors`, `statusColorMap`, the `TONE` palettes) and the exported `DEFAULT_SERVICE_PALETTE` hold `rgb(var(--…))` strings, not hex. The tone palettes come from `--chart-light-*` and `--chart-dark-*`, the status colors from `--status-*`. Resolve a string with `getComputedStyle(el).getPropertyValue(…)` (or set it on an element and read its computed `color`) before parsing it as hex or using it in a canvas 2D context. Charts need the heimdall CSS on the page (`/css` or `/css/base`): without it every token-based fill is invalid, and an SVG serialized out of the page no longer carries its colors.
 - **Empty data.** Most SVG charts return `null` on empty input (no placeholder). `BarChart` is the exception and renders a "No data" box.
 - **`style` merging.** SVG charts merge your `style` over `{ display: 'block' }`. `ChartWrapper`, `BarChart` and `ProgressBar` instead replace their root inline style with yours (see each section).
 
@@ -140,7 +141,7 @@ import { LineChart, type ThresholdLine, type EventMarker } from '@tinkermonkey/h
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `series` | `number[][]` | required | One inner array per series |
-| `colors` | `string[]` | series palette | Hex per series; single series defaults to cyan |
+| `colors` | `string[]` | series palette | CSS color per series; single series defaults to cyan |
 | `xLabels` | `string[]` | — | One label per data index |
 | `width` | `number` | `480` | SVG width in px |
 | `height` | `number` | `200` | SVG height in px |
@@ -289,7 +290,7 @@ import { BarV } from '@tinkermonkey/heimdall-ui'
 | ---- | ---- | ------- | ----------- |
 | `values` | `number[]` | required | Bar heights, zero or positive |
 | `xLabels` | `string[]` | — | Label per bar (needs `axes`) |
-| `color` | `string` | `'#F59E0B'` (amber) | Hex fill for every bar |
+| `color` | `string` | `rgb(var(--chart-series-3))` (amber) | CSS color fill for every bar |
 | `width` | `number` | `480` | SVG width in px |
 | `height` | `number` | `200` | SVG height in px |
 | `axes` | `boolean` | `false` | Axis lines, y ticks, x labels |
@@ -414,7 +415,7 @@ import { StackedBar, type StackedBarStack } from '@tinkermonkey/heimdall-ui'
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `stacks` | `StackedBarStack[]` | required | One entry per bar |
-| `colors` | `string[]` | series palette | Hex per part index |
+| `colors` | `string[]` | series palette | CSS color per part index |
 | `width` | `number` | `480` | SVG width in px |
 | `height` | `number` | `200` | SVG height in px |
 | `axes` | `boolean` | `false` | Axis lines, y ticks, stack labels |
@@ -497,7 +498,7 @@ import { Donut, type DonutSlice } from '@tinkermonkey/heimdall-ui'
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `slices` | `DonutSlice[]` | required | One entry per slice, clockwise from 12 o'clock |
-| `colors` | `string[]` | series palette | Hex per slice index |
+| `colors` | `string[]` | series palette | CSS color per slice index |
 | `width` | `number` | `160` | SVG width in px |
 | `height` | `number` | `160` | SVG height in px |
 | `thickness` | `number` | `14` | Ring width in px |
@@ -571,7 +572,7 @@ import { Heatmap } from '@tinkermonkey/heimdall-ui'
 | Prop | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
 | `data` | `(number \| null)[][]` | required | `[rows][cols]` values |
-| `baseColor` | `string` | `'#10B981'` | `#RRGGBB` for the hottest cells |
+| `baseColor` | `string` | `'rgb(var(--status-emerald))'` | CSS color for the hottest cells |
 | `xLabels` | `string[]` | — | Column labels (needs `axes`) |
 | `yLabels` | `string[]` | — | Row labels (needs `axes`) |
 | `width` | `number` | `480` | SVG width in px |
@@ -617,7 +618,7 @@ const activity: (number | null)[][] = [
 
 ### Gotchas
 
-- `baseColor` must be a 6-digit `#RRGGBB` hex: the component appends a two-digit alpha. `rgb()`, named colors and 3-digit hex produce invalid fills.
+- `baseColor` takes any CSS color (hex, `rgb()`, named, a `var()` reference). The component sets it as `fill` and varies `fill-opacity` from 0.12 to 1, so a color that already has alpha renders fainter than its face value (a base at 50% alpha peaks at 50%). Pass an opaque color.
 - The scale is relative: 12% opacity at the data minimum, 100% at the maximum. Uniform data renders every cell at 12%.
 - `null` and `NaN` cells render as the inset background; use `null` for missing data, not `0`.
 - Column count comes from `data[0].length`; keep rows the same length.

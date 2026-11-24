@@ -2,14 +2,14 @@ import React from 'react'
 import { SERIES_COLORS } from './chartColors'
 import { TONE, fmt, type ChartTone } from './chartTone'
 
-const ACCENT_PRIMARY = '#F59E0B'
-const ACCENT_PRIMARY_DEEP = '#B45309'
+const ACCENT_PRIMARY = 'rgb(var(--accent-primary-hover))'
+const ACCENT_PRIMARY_DEEP = 'rgb(var(--accent-primary-deep))'
 
 // Tooltip is a deliberate dark "shell popover" floating over the canvas in both tones
-const POPOVER_BG = '#1B2949'       // shell-surface
-const POPOVER_BORDER = '#2A3A5C'   // shell-border-2
-const POPOVER_FG = '#E6EDF3'       // shell-fg-1
-const POPOVER_FG_MUTED = '#A6B1BD' // shell-fg-2
+const POPOVER_BG = 'rgb(var(--shell-surface))'
+const POPOVER_BORDER = 'rgb(var(--shell-border-2))'
+const POPOVER_FG = 'rgb(var(--shell-fg-1))'
+const POPOVER_FG_MUTED = 'rgb(var(--shell-fg-2))'
 
 export interface ThresholdLine {
   value: number
@@ -25,7 +25,7 @@ export interface EventMarker {
 export interface LineChartProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
   /** Each inner array is one series: [v0, v1, …] */
   series: number[][]
-  /** Hex color per series. Defaults to canonical SERIES_COLORS. */
+  /** CSS color per series. Defaults to canonical SERIES_COLORS. */
   colors?: string[]
   xLabels?: string[]
   width?: number

@@ -45,6 +45,10 @@ jobs:
       - name: Check agent skill coverage
         run: npm run check:skills
 
+      # Component colors come from tokens, so src/tokens/theme.css can restyle them (#402).
+      - name: Check for color literals
+        run: npm run check:colors
+
       # Same as release.yml: every path package.json hands consumers must be in the tarball (#303).
       - name: Build and check package exports
         run: |
@@ -72,6 +76,14 @@ jobs:
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
+          # Only this repo checks its own baselines. A mirror with its own theme can't match
+          # them, so it skips the suite and the Visual regression check passes (#402). PRs
+          # from GitHub forks run in this repo's context, so they still run it.
+          if [ "${{ github.repository }}" != "tinkermonkey/heimdall" ]; then
+            echo "Not tinkermonkey/heimdall; skipping the visual suite."
+            echo "visual=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           if [ "${{ github.event_name }}" != "pull_request" ]; then
             echo "visual=true" >> "$GITHUB_OUTPUT"
             exit 0

@@ -4,7 +4,8 @@ import { TONE, fmt, type ChartTone } from './chartTone'
 export interface HeatmapProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
   /** 2-D array of [rows][cols] values. null cells render as inset background. */
   data: (number | null)[][]
-  /** Hex color for the hot end of the single-hue scale (default emerald) */
+  /** CSS color for the hot end of the single-hue scale (default emerald). Cells paint it at an
+   *  opacity from 0.12 to 1, so a color that already has alpha renders fainter. */
   baseColor?: string
   xLabels?: string[]
   yLabels?: string[]
@@ -28,7 +29,7 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
   (
     {
       data,
-      baseColor = '#10B981',
+      baseColor = 'rgb(var(--status-emerald))',
       xLabels,
       yLabels,
       width = 480,
@@ -59,15 +60,14 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
     const lo = flat.length ? Math.min(...flat) : 0
     const hi = flat.length ? Math.max(...flat) : 1
 
-    // Strip leading '#' so we can append hex alpha
-    const base = baseColor.replace('#', '')
     const formatValue = valueFormat ?? fmt
 
-    function shade(v: number | null): string {
-      if (v == null || isNaN(v)) return T.inset
+    // Empty cells paint a solid inset; valued cells paint baseColor at an opacity quantized to
+    // 1/255 steps, from 0.12 at the low end to 1 at the high end.
+    function shade(v: number | null): { fill: string; fillOpacity?: number } {
+      if (v == null || isNaN(v)) return { fill: T.inset }
       const t = (v - lo) / (hi - lo || 1)
-      const alpha = Math.round((0.12 + t * 0.88) * 255).toString(16).padStart(2, '0')
-      return `#${base}${alpha}`
+      return { fill: baseColor, fillOpacity: Math.round((0.12 + t * 0.88) * 255) / 255 }
     }
 
     function getTextColor(v: number): string {
@@ -96,6 +96,7 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
             const cellCenterX = cellX + (cw - 2) / 2
             const cellCenterY = cellY + (ch - 2) / 2
             const mark = cellMark?.(r, c, (v != null && !isNaN(v)) ? v : null)
+            const { fill, fillOpacity } = shade(v)
             return (
               <g key={`${r}-${c}`}>
                 <rect
@@ -103,7 +104,8 @@ export const Heatmap = React.forwardRef<SVGSVGElement, HeatmapProps>(
                   y={cellY}
                   width={Math.max(0, cw - 2)}
                   height={Math.max(0, ch - 2)}
-                  fill={shade(v)}
+                  fill={fill}
+                  fillOpacity={fillOpacity}
                   rx="2"
                 />
                 {showValues && v != null && !isNaN(v) && (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { TONE, type ChartTone } from './chartTone'
 
-const ACCENT_PRIMARY_DEEP = '#B45309'
+const ACCENT_PRIMARY_DEEP = 'rgb(var(--accent-primary-deep))'
 
 export type SegmentKind = 'ok' | 'warn' | 'error' | 'idle' | 'info'
 
@@ -31,11 +31,11 @@ export interface StatusTimelineProps extends Omit<React.SVGAttributes<SVGSVGElem
 }
 
 const KIND_COLORS: Record<SegmentKind, string> = {
-  ok:    '#10B981',
-  warn:  '#F59E0B',
-  error: '#F43F5E',
+  ok:    'rgb(var(--status-emerald))',
+  warn:  'rgb(var(--status-amber))',
+  error: 'rgb(var(--status-rose))',
   idle:  '',          // filled per tone at render time
-  info:  '#22D3EE',
+  info:  'rgb(var(--status-cyan))',
 }
 
 export const StatusTimeline = React.forwardRef<SVGSVGElement, StatusTimelineProps>(

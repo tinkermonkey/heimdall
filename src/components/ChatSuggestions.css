@@ -7,8 +7,8 @@
 .chat-suggestions__pill {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: rgb(var(--canvas-fg-2, 156, 163, 175));
-  background: rgb(var(--canvas-surface, 36, 55, 99));
+  color: rgb(var(--canvas-fg-2));
+  background: rgb(var(--canvas-surface));
   border: 1px solid rgb(var(--canvas-border-2));
   padding: 5px 10px;
   border-radius: 4px;
@@ -22,19 +22,19 @@
 .chat-suggestions__pill:hover:not(:disabled) {
   color: rgb(var(--canvas-fg-1));
   background: rgb(var(--canvas-surface-2));
-  border-color: rgb(var(--canvas-border, 30, 42, 68));
+  border-color: rgb(var(--canvas-border));
 }
 
 .chat-suggestions__pill:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
-  border-color: rgb(var(--accent-primary, 245, 158, 11));
+  border-color: rgb(var(--accent-primary));
 }
 
 .chat-suggestions__pill--selected {
-  color: rgb(var(--accent-primary, 245, 158, 11));
-  border-color: rgb(var(--accent-primary, 245, 158, 11));
-  background: rgb(var(--canvas-surface, 36, 55, 99));
+  color: rgb(var(--accent-primary));
+  border-color: rgb(var(--accent-primary));
+  background: rgb(var(--canvas-surface));
 }
 
 .chat-suggestions__pill--disabled {

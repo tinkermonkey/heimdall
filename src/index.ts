@@ -3,6 +3,7 @@
 
 import './tokens/tokens.css'
 import './styles/utilities.css'
+import './tokens/theme.css'
 
 export { ICONS, Icon, type IconName, type IconProps } from './components/Icon'
 export { Avatar, type AvatarProps, type AvatarSize, type AvatarShape } from './components/Avatar'

@@ -35,6 +35,7 @@
     --accent-primary: 251 191 36;        /* #fbbf24 — amber-400, active states */
     --accent-primary-hover: 245 158 11;  /* #f59e0b — amber-500, hover */
     --accent-primary-deep: 180 83 9;     /* #b45309 — amber-700, deep/CTA */
+    --accent-primary-ink: 11 15 20;      /* #0b0f14 — marks drawn on an accent fill (AppTitle glyph) */
 
     /* ---- Semantic Status Colors (unchanged from reference) ---- */
     --status-ok-bg: 220 252 231;
@@ -113,13 +114,16 @@
     --white-overlay-lg: rgba(255, 255, 255, 0.10);
     --white-overlay-xl: rgba(255, 255, 255, 0.12);
 
-    /* ---- Accent Alpha Variants (accent-primary #fbbf24 tints) ---- */
-    --accent-primary-bg-alpha-xs: rgba(251, 191, 36, 0.05);
-    --accent-primary-bg-alpha-sm: rgba(251, 191, 36, 0.10);
-    --accent-primary-bg-alpha-md: rgba(251, 191, 36, 0.12);
-    --accent-primary-border-alpha-sm: rgba(251, 191, 36, 0.20);
-    --accent-primary-border-alpha-md: rgba(251, 191, 36, 0.22);
-    --accent-primary-border-alpha-lg: rgba(251, 191, 36, 0.28);
+    /* ---- Accent Alpha Variants (tints of --accent-primary) ----
+       Derived from --accent-primary, so a theme that changes the accent on :root changes these
+       too. They resolve on :root: a theme that changes --accent-primary only under
+       body.dark-canvas must redeclare them there. */
+    --accent-primary-bg-alpha-xs: rgb(var(--accent-primary) / 0.05);
+    --accent-primary-bg-alpha-sm: rgb(var(--accent-primary) / 0.10);
+    --accent-primary-bg-alpha-md: rgb(var(--accent-primary) / 0.12);
+    --accent-primary-border-alpha-sm: rgb(var(--accent-primary) / 0.20);
+    --accent-primary-border-alpha-md: rgb(var(--accent-primary) / 0.22);
+    --accent-primary-border-alpha-lg: rgb(var(--accent-primary) / 0.28);
 
     /* ---- Status Alpha Variants (for tinted backgrounds and borders) ---- */
     --status-emerald-bg-alpha: rgba(16, 185, 129, 0.1);
@@ -186,6 +190,7 @@
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
     --shadow-modal: 0 24px 64px -16px rgba(0, 0, 0, 0.55);
     --shadow-toast: 0 14px 40px -16px rgba(0, 0, 0, 0.5);
+    --shadow-tint: 15 23 42;             /* #0f172a — slate-900; GraphNode / TopologyNode shadows */
 
     /* ---- Type Families (self-hosted fonts loaded separately) ---- */
     --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -245,6 +250,9 @@
     --graph-hop-1: 180 83 9;            /* #b45309 — amber-700 */
     --graph-hop-2: 217 119 6;           /* #d97706 — amber-600 */
     --graph-hop-3: 245 158 11;          /* #f59e0b — amber-500 */
+    /* GraphEdgeShape's arrowhead outside a GraphCanvas (no --graph-edge-strong there). The same on
+       both canvases, so it is not overridden under .dark-canvas. */
+    --graph-edge-marker: 148 163 184;   /* #94a3b8 — slate-400 */
     /* Link colors by category position (dashes are set in code: solid, dashed, dotted, sparse,
        dash-dot, short dash). */
     --graph-link-1: 100 116 139;        /* #64748b — slate-500 */
@@ -272,8 +280,47 @@
     --graph-pill-bg: rgba(255, 255, 255, 0.9);
     --graph-plane-fill-alpha: 0.06;
 
-    /* ---- Focus Ring (amber accent — amber-400 to match --accent-primary) ---- */
-    --focus-ring: 0 0 0 3px rgba(251, 191, 36, 0.18);
+    /* ---- Chart palettes ----
+       Series colors, in order: cyan, emerald, amber, indigo, violet, rose. */
+    --chart-series-1: 34 211 238;       /* #22d3ee — cyan-400 */
+    --chart-series-2: 16 185 129;       /* #10b981 — emerald-500 */
+    --chart-series-3: 245 158 11;       /* #f59e0b — amber-500 */
+    --chart-series-4: 129 140 248;      /* #818cf8 — indigo-400 */
+    --chart-series-5: 139 92 246;       /* #8b5cf6 — violet-500 */
+    --chart-series-6: 244 63 94;        /* #f43f5e — rose-500 */
+    /* Chart chrome by `tone` prop. Charts pick a palette with their tone prop, not with
+       body.dark-canvas, so both sets live here and neither is overridden under .dark-canvas. */
+    --chart-light-fg-1: 11 18 32;       /* #0b1220 */
+    --chart-light-fg-2: 71 85 105;      /* #475569 */
+    --chart-light-fg-3: 100 116 139;    /* #64748b */
+    --chart-light-fg-4: 148 163 184;    /* #94a3b8 */
+    --chart-light-grid: 238 241 244;    /* #eef1f4 */
+    --chart-light-border: 229 233 238;  /* #e5e9ee */
+    --chart-light-card: 255 255 255;    /* #ffffff */
+    --chart-light-inset: 247 249 251;   /* #f7f9fb */
+    --chart-dark-fg-1: 226 232 240;     /* #e2e8f0 */
+    --chart-dark-fg-2: 148 163 184;     /* #94a3b8 */
+    --chart-dark-fg-3: 100 116 139;     /* #64748b */
+    --chart-dark-fg-4: 71 85 105;       /* #475569 */
+    --chart-dark-grid: 27 41 73;        /* #1b2949 */
+    --chart-dark-border: 36 55 99;      /* #243763 */
+    --chart-dark-card: 27 41 73;        /* #1b2949 */
+    --chart-dark-inset: 19 32 58;       /* #13203a */
+
+    /* ---- Trace viewer service palette (assigned to services by hash) ---- */
+    --trace-service-1: 34 211 238;      /* #22d3ee — cyan-400 */
+    --trace-service-2: 129 140 248;     /* #818cf8 — indigo-400 */
+    --trace-service-3: 16 185 129;      /* #10b981 — emerald-500 */
+    --trace-service-4: 139 92 246;      /* #8b5cf6 — violet-500 */
+    --trace-service-5: 20 184 166;      /* #14b8a6 — teal-500 */
+    --trace-service-6: 245 158 11;      /* #f59e0b — amber-500 */
+    --trace-service-7: 56 189 248;      /* #38bdf8 — sky-400 */
+    --trace-service-8: 163 230 53;      /* #a3e635 — lime-400 */
+    --trace-service-9: 232 121 249;     /* #e879f9 — fuchsia-400 */
+    --trace-service-10: 45 212 191;     /* #2dd4bf — teal-400 */
+
+    /* ---- Focus Ring (derived from --accent-primary; see the accent alpha note above) ---- */
+    --focus-ring: 0 0 0 3px rgb(var(--accent-primary) / 0.18);
   }
 
   /* ---- Dark Canvas Mode (slate-toned navy) ---- */

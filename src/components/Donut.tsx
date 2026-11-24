@@ -9,7 +9,7 @@ export interface DonutSlice {
 
 export interface DonutProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children'> {
   slices: DonutSlice[]
-  /** Hex colors per slice. Defaults to SERIES_COLORS. */
+  /** CSS colors per slice. Defaults to SERIES_COLORS. */
   colors?: string[]
   width?: number
   height?: number

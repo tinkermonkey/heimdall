@@ -4,7 +4,7 @@
   border-radius: 8px;
   padding: 12px;
   min-width: 180px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 2px rgb(var(--shadow-tint) / 0.04);
   transition:
     border-color 0.1s,
     box-shadow 0.1s;
@@ -14,7 +14,7 @@
 
 .topology-node:hover {
   border-color: rgb(var(--accent-primary-deep));
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 4px 12px rgb(var(--shadow-tint) / 0.08);
 }
 
 .topology-node__head {
