@@ -56,11 +56,11 @@ jobs:
           npm run check:package
 
   # Decides whether the PR can change anything the Playwright suite renders.
-  # Only changes confined to docs/, design-reference/, agent-skills/, .claude/
-  # or Markdown files skip it; anything else runs the full suite. The suite is
-  # not narrowed to "specs for changed components": test pages import shared
-  # components (and src/index.ts), so a per-spec selection would miss
-  # transitive changes and report a false pass.
+  # Only changes confined to docs/, design-reference/, agent-skills/, .claude/,
+  # documentation-robotics/ or Markdown files skip it; anything else runs the
+  # full suite. The suite is not narrowed to "specs for changed components":
+  # test pages import shared components (and src/index.ts), so a per-spec
+  # selection would miss transitive changes and report a false pass.
   changes:
     name: Detect visual changes
     runs-on: ubuntu-latest
@@ -90,7 +90,7 @@ jobs:
           fi
           git diff --name-only "$BASE_SHA...HEAD" > /tmp/changed.txt
           echo "Changed files:"; cat /tmp/changed.txt
-          if grep -Ev '^(docs/|design-reference/|agent-skills/|\.claude/)|\.md$' /tmp/changed.txt > /dev/null; then
+          if grep -Ev '^(docs/|design-reference/|agent-skills/|\.claude/|documentation-robotics/)|\.md$' /tmp/changed.txt > /dev/null; then
             echo "visual=true" >> "$GITHUB_OUTPUT"
           else
             echo "No changes the visual suite renders; skipping it."
