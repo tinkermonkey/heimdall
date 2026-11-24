@@ -80,18 +80,33 @@
   z-index: 1;
 }
 
-/* Each mark is a 20x7 button (the hit area) drawing a 16x3 bar. Marks at nearly the same
-   position overlap; the later one in position order is on top. */
+/* Each mark is a 20x7 button drawing a 16x3 bar (::before), with an invisible 24x24 hit area
+   (::after) centred on it. The button is centred with margins, not a transform, so it makes no
+   stacking context: every ::after sits at z-index -1 in the toolbar's stacking context, under
+   every button and bar. A visible mark therefore always takes the pointer over a neighbour's
+   extension, and the extensions only catch the empty space around the marks. Marks at nearly the
+   same position overlap; the later one in position order is on top. */
 .pane-rail__mark {
   position: absolute;
   left: 50%;
   width: 20px;
   height: 7px;
+  margin: -3.5px 0 0 -10px;
   padding: 0;
   border: 0;
   background: transparent;
-  transform: translate(-50%, -50%);
   cursor: pointer;
+}
+
+.pane-rail__mark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
 }
 
 .pane-rail__mark::before {
@@ -107,8 +122,8 @@
   transition: width 80ms ease, height 80ms ease;
 }
 
-.pane-rail__mark:hover,
-.pane-rail__mark:focus-visible {
+.pane-rail__mark:hover::before,
+.pane-rail__mark:focus-visible::before {
   z-index: 1;
 }
 
@@ -207,4 +222,43 @@
   background: rgb(var(--canvas-bg));
   border: 1px solid rgb(var(--canvas-border-strong));
   border-radius: 4px;
+}
+
+/* Windows High Contrast and other forced colours: the bars, the centre line and the notch are
+   backgrounds and borders the browser would repaint as Canvas, so draw them in system colours.
+   Tones are lost; the marks' names carry the item. Box-shadow focus rings are dropped, so focus
+   is an outline. */
+@media (forced-colors: active) {
+  .pane-rail__map::before {
+    forced-color-adjust: none;
+    background: GrayText;
+  }
+
+  .pane-rail__mark::before {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+
+  .pane-rail__mark:focus-visible::before {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .pane-rail__notch {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+
+  .pane-rail--left .pane-rail__notch::before {
+    border-left-color: Highlight;
+  }
+
+  .pane-rail--right .pane-rail__notch::before {
+    border-right-color: Highlight;
+  }
+
+  .pane-rail__expand:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
 }

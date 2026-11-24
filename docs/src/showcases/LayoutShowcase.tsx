@@ -326,7 +326,7 @@ export function PaneRailShowcase() {
           <PropRow name="shortcut" type="string" description="Key hint; also the expand button's aria-keyshortcuts. The app handles the key" />
           <PropRow name="side" type="'left' | 'right'" def="'left'" description="Edge the folded pane sits on: border and chevron face the content" />
           <PropRow name="expandLabel" type="string" def="`Expand ${label}`" description="Accessible name of the expand button" />
-          <PropRow name="mapLabel" type="string" def="`${label} map`" description="Accessible name of the group of marks" />
+          <PropRow name="mapLabel" type="string" def="`${label} map`" description="Accessible name of the marks' vertical toolbar" />
           <PropRow name="onMarkClick" type="(id: string) => void" description="A mark was clicked or activated; without it a mark click expands the pane" />
           <PropRow name="onMarkHover" type="(id: string, anchor: HTMLElement) => void" description="Mouse enter or focus on a mark, with its element, for the app's hover card" />
           <PropRow name="onMarkLeave" type="(id: string) => void" description="Mouse leave or blur on a mark" />

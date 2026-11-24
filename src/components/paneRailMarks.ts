@@ -64,3 +64,25 @@ export function nearestPaneRailMarkIndex(ordered: readonly PaneRailMark[], posit
   }
   return best
 }
+
+/**
+ * One React key per mark, unique even when ids repeat: a mark keeps its id as its key, and the
+ * second and later marks with an id already seen get `${id}#${n}` (n counting from 2). Keys of
+ * marks with unique ids stay stable when other marks are added or removed.
+ */
+export function paneRailMarkKeys(ordered: readonly PaneRailMark[]): string[] {
+  const used = new Set<string>()
+  const seen = new Map<string, number>()
+  return ordered.map((mark) => {
+    let count = (seen.get(mark.id) ?? 0) + 1
+    let key = count === 1 ? mark.id : `${mark.id}#${count}`
+    // An id may itself look like `a#2`; skip on until the key is free.
+    while (used.has(key)) {
+      count += 1
+      key = `${mark.id}#${count}`
+    }
+    seen.set(mark.id, count)
+    used.add(key)
+    return key
+  })
+}

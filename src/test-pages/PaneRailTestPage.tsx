@@ -52,9 +52,9 @@ const LIST_MARKS: PaneRailMark[] = Array.from({ length: 37 }, (_, i) => ({
   label: `Operation ${i + 1}`,
 }))
 
-// 400 marks, deterministic, many at nearly the same position.
+// 400 marks, deterministic, many at nearly the same position. The first two share the id `d0`.
 const DENSE_MARKS: PaneRailMark[] = Array.from({ length: 400 }, (_, i) => ({
-  id: `d${i}`,
+  id: `d${i === 1 ? 0 : i}`,
   position: ((i * 97) % 400) / 399,
   tone: (['emerald', 'amber', 'rose', 'cyan', 'violet', 'neutral'] as StatusColor[])[i % 6],
   label: `Item ${i + 1}`,

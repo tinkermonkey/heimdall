@@ -14,8 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `selectedPosition`, an optional `positionLabel` such as `5 / 37`, the pane's name written up the
   rail and its key hint. The expand button and a click on the rail's empty area call `onExpand`; a
   mark calls `onMarkClick`, and mouse enter or focus call `onMarkHover(id, anchor)` (leave or blur,
-  `onMarkLeave`) so the app can show its own hover card. Marks are one tab stop, moved with the
-  arrow keys, Home and End; hundreds of marks render as plain buttons. The rail holds no folding
+  `onMarkLeave`) so the app can show its own hover card. Marks are a vertical toolbar
+  (`role="toolbar"`, `aria-orientation="vertical"`) with one tab stop, moved with the arrow keys,
+  Home and End, which returns next to the notch when focus leaves; each mark has a 24px hit area
+  (an invisible extension under every bar, so a visible mark always takes the pointer), stays visible in
+  forced-colors mode, and repeated ids still get distinct React keys. Hundreds of marks render as
+  plain buttons. The rail holds no folding
   state and does not bind its key: the app shows it while the pane is folded. Exports `PaneRail`,
   `PaneRailProps` and `PaneRailMark`.
 

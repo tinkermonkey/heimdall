@@ -51,9 +51,9 @@ test.describe('integration: PaneRail Component', () => {
       await expect(page.getByTestId('pane-rail-dense')).toHaveClass(/pane-rail--right/)
     })
 
-    test('renders no map group and no notch without marks or selection', async ({ page }) => {
+    test('renders no map toolbar and no notch without marks or selection', async ({ page }) => {
       const rail = page.getByTestId('pane-rail-empty')
-      await expect(rail.getByRole('group')).toHaveCount(0)
+      await expect(rail.getByRole('toolbar')).toHaveCount(0)
       await expect(rail.locator('.pane-rail__notch')).toHaveCount(0)
       await expect(rail.locator('.pane-rail__key')).toHaveCount(0)
     })
@@ -69,10 +69,11 @@ test.describe('integration: PaneRail Component', () => {
       await expect(noKey).not.toHaveAttribute('aria-keyshortcuts')
     })
 
-    test('marks are named buttons in a labelled group', async ({ page }) => {
-      const group = page.getByTestId('pane-rail-source').getByRole('group', { name: 'Source map' })
-      await expect(group.getByRole('button', { name: 'Rejected: Retry policy' })).toHaveCount(1)
-      await expect(group.getByRole('button')).toHaveCount(11)
+    test('marks are named buttons in a labelled vertical toolbar', async ({ page }) => {
+      const toolbar = page.getByTestId('pane-rail-source').getByRole('toolbar', { name: 'Source map' })
+      await expect(toolbar).toHaveAttribute('aria-orientation', 'vertical')
+      await expect(toolbar.getByRole('button', { name: 'Rejected: Retry policy' })).toHaveCount(1)
+      await expect(toolbar.getByRole('button')).toHaveCount(11)
     })
 
     test('the map is one tab stop, starting at the mark nearest the selection', async ({ page }) => {
@@ -95,6 +96,93 @@ test.describe('integration: PaneRail Component', () => {
       await expect(rail.locator('[data-mark-id="h1"]')).toBeFocused()
       await expect(rail.locator('[data-mark-id="h1"]')).toHaveAttribute('tabindex', '0')
       await expect(rail.locator('[data-mark-id="h6"]')).toHaveAttribute('tabindex', '-1')
+    })
+
+    test('leaving the toolbar puts the tab stop back on the mark nearest the selection', async ({ page }) => {
+      const rail = page.getByTestId('pane-rail-source')
+      await rail.locator('[data-mark-id="h6"]').focus()
+      await page.keyboard.press('End')
+      await expect(rail.locator('[data-mark-id="h11"]')).toHaveAttribute('tabindex', '0')
+      await page.keyboard.press('Tab')
+      await expect(rail.locator('[data-mark-id="h11"]')).not.toBeFocused()
+      await expect(rail.locator('.pane-rail__mark[tabindex="0"]')).toHaveAttribute('data-mark-id', 'h6')
+      await page.keyboard.press('Shift+Tab')
+      await expect(rail.locator('[data-mark-id="h6"]')).toBeFocused()
+    })
+
+    test('duplicate mark ids render every mark without a React key warning', async ({ page }) => {
+      const warnings: string[] = []
+      page.on('console', (msg) => {
+        if (/same key/i.test(msg.text())) warnings.push(msg.text())
+      })
+      await page.reload()
+      await page.waitForLoadState('networkidle')
+      const dense = page.getByTestId('pane-rail-dense')
+      await expect(dense.locator('[data-mark-id="d0"]')).toHaveCount(2)
+      await expect(dense.locator('.pane-rail__mark')).toHaveCount(400)
+      expect(warnings).toEqual([])
+    })
+
+    test('each mark has a 24px hit area around its bar', async ({ page }) => {
+      const mark = page.getByTestId('pane-rail-source').locator('[data-mark-id="h9"]')
+      const size = await mark.evaluate((el) => {
+        const after = getComputedStyle(el, '::after')
+        return [after.width, after.height]
+      })
+      expect(size).toEqual(['24px', '24px'])
+
+      // 10px below the bar: outside the 7px button, inside its extension.
+      const box = await mark.boundingBox()
+      await page.mouse.click(box!.x + box!.width / 2, box!.y + box!.height / 2 + 10)
+      await expect(page.getByTestId('pane-rail-log')).toHaveText('click:h9')
+    })
+
+    test('a neighbour\'s hit area does not cover a visible mark', async ({ page }) => {
+      // List marks are ~4px apart, so op22's 24px extension spans op20's whole bar. Across the bar
+      // the pointer must find op20, or op21 where the two buttons overlap, never op22 or later.
+      const probe = await page.getByTestId('pane-rail-list').evaluate((rail) => {
+        const op20 = rail.querySelector('[data-mark-id="op20"]')!.getBoundingClientRect()
+        const op22 = rail.querySelector('[data-mark-id="op22"]')!.getBoundingClientRect()
+        const centre = op20.top + op20.height / 2
+        const x = op20.left + op20.width / 2
+        const hits = new Set<string | null | undefined>()
+        for (let y = centre - 1.5; y <= centre + 1.5; y += 0.5) {
+          hits.add(document.elementFromPoint(x, y)?.getAttribute('data-mark-id'))
+        }
+        return { op22CoversBar: op22.top + op22.height / 2 - 12 < centre - 1.5, hits: [...hits].sort() }
+      })
+      expect(probe.op22CoversBar).toBe(true)
+      expect(probe.hits).toContain('op20')
+      expect(probe.hits.every((id) => id === 'op20' || id === 'op21')).toBe(true)
+    })
+
+    test('marks, centre line and notch use system colours in forced-colors mode', async ({ page }) => {
+      await page.emulateMedia({ forcedColors: 'active' })
+      const colours = await page.getByTestId('pane-rail-source').evaluate((rail) => {
+        const probe = (value: string) => {
+          const el = document.createElement('div')
+          el.style.forcedColorAdjust = 'none'
+          el.style.backgroundColor = value
+          document.body.appendChild(el)
+          const colour = getComputedStyle(el).backgroundColor
+          el.remove()
+          return colour
+        }
+        const mark = rail.querySelector('.pane-rail__mark')!
+        return {
+          mark: getComputedStyle(mark, '::before').backgroundColor,
+          line: getComputedStyle(rail.querySelector('.pane-rail__map')!, '::before').backgroundColor,
+          notch: getComputedStyle(rail.querySelector('.pane-rail__notch')!).backgroundColor,
+          canvasText: probe('CanvasText'),
+          grayText: probe('GrayText'),
+          highlight: probe('Highlight'),
+          canvas: probe('Canvas'),
+        }
+      })
+      expect(colours.mark).toBe(colours.canvasText)
+      expect(colours.line).toBe(colours.grayText)
+      expect(colours.notch).toBe(colours.highlight)
+      expect(colours.mark).not.toBe(colours.canvas)
     })
   })
 

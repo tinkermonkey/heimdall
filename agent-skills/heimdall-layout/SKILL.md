@@ -182,13 +182,13 @@ import { PaneRail, type PaneRailMark } from '@tinkermonkey/heimdall-ui'
 | `shortcut` | `string` | — | Key hint shown at the bottom; also the expand button's `aria-keyshortcuts`. The app handles the key |
 | `side` | `'left' \| 'right'` | `'left'` | Edge the folded pane sits on: its border and the chevron face the content |
 | `expandLabel` | `string` | `` `Expand ${label}` `` | Accessible name of the expand button |
-| `mapLabel` | `string` | `` `${label} map` `` | Accessible name of the group of marks |
+| `mapLabel` | `string` | `` `${label} map` `` | Accessible name of the marks' toolbar (`role="toolbar"`, `aria-orientation="vertical"`) |
 | `onMarkClick` | `(id: string) => void` | — | A mark was clicked or activated by keyboard. Without it, a mark click expands the pane |
 | `onMarkHover` | `(id: string, anchor: HTMLElement) => void` | — | Mouse enter or focus on a mark, with the mark's element to anchor the app's hover card |
 | `onMarkLeave` | `(id: string) => void` | — | Mouse leave or blur on a mark |
 | `...divProps` | | | Remaining props spread onto the root `<div>` (`className`, `data-testid`, `aria-*`, ...) |
 
-`PaneRailMark`: `id: string`, `position: number` (0 top, 1 bottom; clamped), `tone?: StatusColor` (`'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'`, the `Chip` tones; default `'neutral'`), `label: string` (the mark button's accessible name).
+`PaneRailMark`: `id: string`, `position: number` (0 top, 1 bottom; clamped), `tone?: StatusColor` (`'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'`, the `Chip` tones; default `'neutral'`), `label: string` (the mark button's accessible name). Ids should be unique; duplicates still render (each mark gets its own React key) and both report the same id to the callbacks.
 
 ### Usage
 
@@ -245,8 +245,11 @@ useEffect(() => {
 - The root is `width: 40px; height: 100%`. Put it in a flex row (or a parent with an explicit height); the map takes whatever height the button, labels and key hint leave.
 - The rail does not fold or expand anything and does not listen for its `shortcut`. Show it while the pane is folded and bind the key yourself.
 - A click anywhere on the rail that no mark handles calls `onExpand`, the name and key hint included. A root `onClick` runs first; call `e.preventDefault()` in it to stop the expand.
-- Marks render in position order whatever order you pass them in. Marks at nearly the same position overlap (the later one is on top), so with hundreds of marks some are hard to hit with the mouse; every mark stays reachable by keyboard.
-- The marks are one tab stop: Tab lands on the mark nearest `selectedPosition` (or the last one focused), then ArrowUp/ArrowDown move one mark and Home/End jump to the ends. Focus calls `onMarkHover` and blur calls `onMarkLeave`, as mouse enter and leave do.
+- Marks render in position order whatever order you pass them in. Marks at nearly the same position overlap (the later one is on top).
+- Each mark's bar is 16x3, its button 20x7, and an invisible `::after` extends its hit area to 24x24 (the WCAG 2.5.8 minimum) without enlarging the bar. The extensions sit under every bar, so a visible mark always takes the pointer and the extensions only fill the empty space around marks.
+- **Dense rails are an exception to the 24px target size.** When marks are closer than 24px (about 10 or more marks on a short rail, and always with hundreds), their extensions overlap and a given point can only belong to one mark, so some marks are hard to hit with the mouse. Every mark stays reachable by keyboard and has an accessible name, which is the equivalent path WCAG 2.5.8 allows; if mouse precision matters, expand the pane.
+- The marks are a vertical toolbar (`role="toolbar"`, `aria-orientation="vertical"`) with one tab stop: Tab lands on the mark nearest `selectedPosition`, ArrowUp/ArrowDown move one mark (stopping at the ends) and Home/End jump to the first and last. While focus stays in the toolbar the tab stop follows it; once focus leaves, the next Tab in lands next to the notch again. Focus calls `onMarkHover` and blur calls `onMarkLeave`, as mouse enter and leave do.
+- In forced-colors mode (Windows High Contrast) the bars are drawn in `CanvasText`, the centre line in `GrayText` and the notch in `Highlight`; tones are not shown, so put the tone's meaning in each mark's `label` (e.g. `'Rejected: Retry policy'`). Keyboard focus shows as a `Highlight` outline.
 - There is no built-in tooltip. Use `onMarkHover`'s `anchor` with your own hover card (for example a `Popover` or `Tooltip` you position yourself).
 - The notch line is drawn under the marks so the selected mark stays visible; its arrow sits on the rail's outer edge.
 - `selectedPosition` and `position` are clamped to 0..1; a non-finite position is drawn at 0.

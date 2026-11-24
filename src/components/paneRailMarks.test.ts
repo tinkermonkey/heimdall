@@ -4,6 +4,7 @@ import {
   nearestPaneRailMarkIndex,
   nextPaneRailMarkIndex,
   orderPaneRailMarks,
+  paneRailMarkKeys,
   type PaneRailMark,
 } from './paneRailMarks'
 
@@ -99,5 +100,31 @@ describe('nearestPaneRailMarkIndex', () => {
 
   it('returns 0 for no marks', () => {
     expect(nearestPaneRailMarkIndex([], 0.5)).toBe(0)
+  })
+})
+
+describe('paneRailMarkKeys', () => {
+  it('keys marks with unique ids by their id', () => {
+    const ordered = orderPaneRailMarks([mark('a', 0.1), mark('b', 0.5), mark('c', 0.9)])
+    expect(paneRailMarkKeys(ordered)).toEqual(['a', 'b', 'c'])
+  })
+
+  it('gives duplicate ids distinct keys, in position order', () => {
+    const ordered = orderPaneRailMarks([mark('x', 0.8), mark('x', 0.2), mark('y', 0.5), mark('x', 0.5)])
+    expect(ordered.map((m) => m.id)).toEqual(['x', 'y', 'x', 'x'])
+    const keys = paneRailMarkKeys(ordered)
+    expect(keys).toEqual(['x', 'y', 'x#2', 'x#3'])
+    expect(new Set(keys).size).toBe(keys.length)
+  })
+
+  it('stays unique when an id looks like a generated key', () => {
+    const keys = paneRailMarkKeys([mark('a#2', 0), mark('a', 0.1), mark('a', 0.2), mark('a#2', 0.3)])
+    expect(new Set(keys).size).toBe(4)
+    expect(keys[0]).toBe('a#2')
+    expect(keys[1]).toBe('a')
+  })
+
+  it('returns no keys for no marks', () => {
+    expect(paneRailMarkKeys([])).toEqual([])
   })
 })
