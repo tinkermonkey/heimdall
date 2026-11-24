@@ -17,6 +17,9 @@ concurrency:
 jobs:
   build:
     name: Build
+    # Deploy only this repo's docs; a mirror's push to main deploys nothing. Deploy needs
+    # this job, so it skips too (#402).
+    if: github.repository == 'tinkermonkey/heimdall'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
