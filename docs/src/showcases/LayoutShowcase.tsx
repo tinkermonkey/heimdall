@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Panel, Drawer, SplitPane, Button, Icon } from '@tinkermonkey/heimdall-ui'
+import { useEffect, useState } from 'react'
+import { Panel, Drawer, SplitPane, PaneRail, Button, Icon, type PaneRailMark } from '@tinkermonkey/heimdall-ui'
 import { PageHeader, ShowcaseSection, DemoRow, PropsTable, PropRow } from '../components/ShowcaseSection'
 
 const border = 'rgb(var(--canvas-border, 229 231 235))'
@@ -210,6 +210,126 @@ export function SplitPaneShowcase() {
           <PropRow name="first" type="ReactNode" description="Content for the first (left or top) pane" />
           <PropRow name="second" type="ReactNode" description="Content for the second (right or bottom) pane" />
           <PropRow name="dividerLabel" type="string" description="Accessible label for the divider element" />
+        </PropsTable>
+      </ShowcaseSection>
+    </div>
+  )
+}
+
+const SOURCE_PARAGRAPHS = [
+  { text: 'The payment service records each charge in the order store.', tone: 'emerald' as const, term: 'Payment service' },
+  { text: 'A retry policy resubmits failed charges after a backoff.', tone: 'rose' as const, term: 'Retry policy' },
+  { text: 'The checkout flow reads the cart and reserves inventory.', tone: 'amber' as const, term: 'Checkout flow' },
+  { text: 'Inventory sync runs every five minutes against the warehouse.', tone: 'violet' as const, term: 'Inventory sync' },
+  { text: 'A fraud check scores each order before capture.', tone: 'cyan' as const, term: 'Fraud check' },
+  { text: 'The ledger keeps an append-only record of every movement.', tone: 'emerald' as const, term: 'Ledger' },
+  { text: 'An audit log stores who changed what, and when.', tone: 'neutral' as const, term: 'Audit log' },
+]
+
+const SOURCE_MARKS: PaneRailMark[] = SOURCE_PARAGRAPHS.map((p, i) => ({
+  id: `p${i}`,
+  position: (i + 0.5) / SOURCE_PARAGRAPHS.length,
+  tone: p.tone,
+  label: p.term,
+}))
+
+const LIST_MARKS: PaneRailMark[] = Array.from({ length: 37 }, (_, i) => ({
+  id: `op${i + 1}`,
+  position: i / 36,
+  tone: (['emerald', 'emerald', 'amber', 'rose', 'neutral'] as const)[i % 5],
+  label: `Operation ${i + 1}`,
+}))
+
+export function PaneRailShowcase() {
+  const [folded, setFolded] = useState(true)
+  const [selected, setSelected] = useState(3)
+  const [hovered, setHovered] = useState<string | null>(null)
+
+  // The app owns the shortcut; the rail only shows it.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== '[' || e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+      setFolded((f) => !f)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  const hoveredMark = SOURCE_MARKS.find((m) => m.id === hovered)
+  const paneStyle = { padding: 16, fontSize: 13, lineHeight: 1.65, color: fg2 }
+
+  return (
+    <div>
+      <PageHeader
+        name="PaneRail"
+        description="A folded pane as a 40px rail: expand button, a map of the pane's items as toned marks, an amber notch at the selection, the pane's name and its key hint. The app decides when to show it."
+      />
+      <ShowcaseSection label="Fold and expand a source pane (press [)">
+        <div style={{ display: 'flex', border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', height: 300 }}>
+          {folded ? (
+            <PaneRail
+              label="Source"
+              shortcut="["
+              marks={SOURCE_MARKS}
+              selectedPosition={SOURCE_MARKS[selected].position}
+              onExpand={() => setFolded(false)}
+              onMarkClick={(id) => {
+                setSelected(SOURCE_MARKS.findIndex((m) => m.id === id))
+                setFolded(false)
+              }}
+              onMarkHover={(id) => setHovered(id)}
+              onMarkLeave={() => setHovered(null)}
+            />
+          ) : (
+            <div style={{ width: 280, borderRight: `1px solid ${border}`, overflow: 'auto' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '6px 6px 0' }}>
+                <Button variant="ghost" size="sm" aria-label="Fold Source" onClick={() => setFolded(true)}>
+                  <Icon name="chevronLeft" size={14} />
+                </Button>
+              </div>
+              {SOURCE_PARAGRAPHS.map((p, i) => (
+                <p key={p.term} style={{ ...paneStyle, margin: 0, paddingTop: 4, paddingBottom: 4, fontWeight: i === selected ? 600 : 400 }}>
+                  {p.text}
+                </p>
+              ))}
+            </div>
+          )}
+          <div style={{ ...paneStyle, flex: 1 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: fg3, marginBottom: 8 }}>
+              Inspector
+            </div>
+            <div>Selected: {SOURCE_PARAGRAPHS[selected].term}</div>
+            <div style={{ color: fg3 }}>Hovered mark: {hoveredMark ? hoveredMark.label : 'none'}</div>
+          </div>
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="List pane with a position label">
+        <div style={{ display: 'flex', border: `1px solid ${border}`, borderRadius: 8, overflow: 'hidden', height: 300 }}>
+          <PaneRail
+            label="Operations"
+            shortcut="]"
+            marks={LIST_MARKS}
+            selectedPosition={4 / 36}
+            positionLabel="5 / 37"
+            onExpand={() => undefined}
+          />
+          <div style={{ ...paneStyle, flex: 1 }}>Review content</div>
+        </div>
+      </ShowcaseSection>
+      <ShowcaseSection label="Props">
+        <PropsTable>
+          <PropRow name="label" type="string" required description="The pane's name, written up the rail; also names the expand button" />
+          <PropRow name="onExpand" type="() => void" required description="Called by the expand button and by a click on the rail outside a handled mark" />
+          <PropRow name="marks" type="PaneRailMark[]" def="[]" description="The pane's items: { id, position (0..1), tone?, label }" />
+          <PropRow name="selectedPosition" type="number" description="Position (0..1) of the amber notch; omit for none" />
+          <PropRow name="positionLabel" type="string" description="Short text under the map, e.g. '5 / 37'" />
+          <PropRow name="shortcut" type="string" description="Key hint; also the expand button's aria-keyshortcuts. The app handles the key" />
+          <PropRow name="side" type="'left' | 'right'" def="'left'" description="Edge the folded pane sits on: border and chevron face the content" />
+          <PropRow name="expandLabel" type="string" def="`Expand ${label}`" description="Accessible name of the expand button" />
+          <PropRow name="mapLabel" type="string" def="`${label} map`" description="Accessible name of the marks' vertical toolbar" />
+          <PropRow name="onMarkClick" type="(id: string) => void" description="A mark was clicked or activated; without it a mark click expands the pane" />
+          <PropRow name="onMarkHover" type="(id: string, anchor: HTMLElement) => void" description="Mouse enter or focus on a mark, with its element, for the app's hover card" />
+          <PropRow name="onMarkLeave" type="(id: string) => void" description="Mouse leave or blur on a mark" />
         </PropsTable>
       </ShowcaseSection>
     </div>

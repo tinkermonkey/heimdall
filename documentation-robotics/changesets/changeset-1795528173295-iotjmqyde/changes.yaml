@@ -1,0 +1,225 @@
+- type: add
+  elementId: ux.librarycomponent.pane-rail
+  layerName: ux
+  after:
+    id: c24aeb60-0dfb-4896-858c-74b8afc887aa
+    path: ux.librarycomponent.pane-rail
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: PaneRail
+    description: "A folded pane shown as a 40px vertical rail: an expand button
+      (aria-expanded false, aria-keyshortcuts when a key is given), a map of the
+      pane's items as toned marks at 0..1 positions (buttons with accessible
+      names, one tab stop with arrow-key roving), an amber notch at the
+      selection's position, an optional position label, the pane's name written
+      up the rail and its key hint. Clicking the button or the rail's empty area
+      calls onExpand; a mark calls onMarkClick, and hover/focus call
+      onMarkHover/onMarkLeave with the mark's anchor element so the app can show
+      its own hover card. Holds no folding state: the app decides when to show
+      it."
+    attributes:
+      type: layout
+      category: heimdall-layout
+      label: PaneRail
+    metadata:
+      created_at: 2026-11-24T13:49:47.537Z
+      updated_at: 2026-11-24T13:49:47.537Z
+      version: 1
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/PaneRail.tsx
+          symbol: PaneRail
+  timestamp: 2026-11-24T13:57:07.215Z
+  sequenceNumber: 0
+- type: add
+  elementId: application.applicationfunction.pane-rail-marks
+  layerName: application
+  after:
+    id: f5cc3caa-67ab-4250-ba0f-f75be43fe651
+    path: application.applicationfunction.pane-rail-marks
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Pane Rail Marks
+    description: orderPaneRailMarks() clamps each mark's position to 0..1 and sorts
+      the marks by position (stable), so the rail renders them top to bottom in
+      reading order; nextPaneRailMarkIndex() maps ArrowUp/ArrowDown/Home/End to
+      the next focused mark for the rail's roving tab stop.
+    metadata:
+      created_at: 2026-11-24T13:49:47.543Z
+      updated_at: 2026-11-24T13:49:47.543Z
+      version: 1
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/paneRailMarks.ts
+          symbol: orderPaneRailMarks
+  timestamp: 2026-11-24T13:57:07.215Z
+  sequenceNumber: 1
+- type: add
+  elementId: testing.testcoveragetarget.pane-rail
+  layerName: testing
+  after:
+    id: 321436ca-faee-4d06-a17c-1e8c46229fcc
+    path: testing.testcoveragetarget.pane-rail
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: PaneRail
+    description: "Playwright spec tests/pane-rail.spec.ts: a source-style rail with
+      toned marks and a notch, a list-style rail with a position label,
+      callbacks and ARIA, on light and dark canvas."
+    attributes:
+      targetType: ui-component
+      priority: medium
+    metadata:
+      created_at: 2026-11-24T13:49:47.546Z
+      updated_at: 2026-11-24T13:49:47.546Z
+      version: 1
+    source_reference:
+      provenance: manual
+      locations:
+        - file: tests/pane-rail.spec.ts
+  timestamp: 2026-11-24T13:57:07.215Z
+  sequenceNumber: 2
+- type: add
+  elementId: testing.testcoveragetarget.pane-rail-marks
+  layerName: testing
+  after:
+    id: 3cf56de8-13bd-45f3-950c-1a657f4f40cf
+    path: testing.testcoveragetarget.pane-rail-marks
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Pane Rail Marks
+    description: Vitest unit test src/components/paneRailMarks.test.ts.
+    attributes:
+      targetType: application-component
+      priority: medium
+    metadata:
+      created_at: 2026-11-24T13:49:47.548Z
+      updated_at: 2026-11-24T13:49:47.548Z
+      version: 1
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/paneRailMarks.test.ts
+  timestamp: 2026-11-24T13:57:07.215Z
+  sequenceNumber: 3
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-ui::aggregates::ux.librarycomponent.pane-rail
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-ui
+    target: ux.librarycomponent.pane-rail
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 4
+- type: relationship-add
+  elementId: ux.librarycomponent.pane-rail::composes::ux.librarycomponent.icon
+  layerName: ux
+  after:
+    source: ux.librarycomponent.pane-rail
+    target: ux.librarycomponent.icon
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 5
+- type: relationship-add
+  elementId: ux.librarycomponent.pane-rail::satisfies::motivation.principle.two-surface-shell-and-canvas
+  layerName: ux
+  after:
+    source: ux.librarycomponent.pane-rail
+    target: motivation.principle.two-surface-shell-and-canvas
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 6
+- type: relationship-add
+  elementId: ux.librarycomponent.pane-rail::satisfies::motivation.principle.ide-density-and-terse-voice
+  layerName: ux
+  after:
+    source: ux.librarycomponent.pane-rail
+    target: motivation.principle.ide-density-and-terse-voice
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 7
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.pane-rail-marks
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.pane-rail-marks
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 8
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-ui-test-coverage::composes::testing.testcoveragetarget.pane-rail
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-ui-test-coverage
+    target: testing.testcoveragetarget.pane-rail
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 9
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-ui-test-coverage::composes::testing.testcoveragetarget.pane-rail-marks
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-ui-test-coverage
+    target: testing.testcoveragetarget.pane-rail-marks
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 10
+- type: relationship-add
+  elementId: testing.testcoveragetarget.pane-rail::covers::ux.librarycomponent.pane-rail
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.pane-rail
+    target: ux.librarycomponent.pane-rail
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 11
+- type: relationship-add
+  elementId: testing.testcoveragetarget.pane-rail-marks::covers::ux.librarycomponent.pane-rail
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.pane-rail-marks
+    target: ux.librarycomponent.pane-rail
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T13:49:47.563Z
+  sequenceNumber: 12
+- type: relationship-add
+  elementId: ux.librarycomponent.pane-rail::satisfies::motivation.requirement.every-public-export-is-documented-for-agents
+  layerName: ux
+  after:
+    source: ux.librarycomponent.pane-rail
+    target: motivation.requirement.every-public-export-is-documented-for-agents
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T13:50:01.372Z
+  sequenceNumber: 13
