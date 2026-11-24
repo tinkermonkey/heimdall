@@ -2,61 +2,19 @@ id: changeset-1795280216360-ylyl6vfva
 name: review-questions
 description: Answers to review question bank 0.1
 created: 2026-11-21T16:56:56.361Z
-modified: 2026-11-23T16:40:02.430Z
+modified: 2026-11-24T12:12:01.172Z
 status: staged
 baseSnapshot: v2:sha256:173f87c8a3ec4cd70007639fe692daa935bf1d0d7bd4228652f2474931359486
 origin:
   kind: plan
 purpose: plan
 stats:
-  additions: 5076
+  additions: 5073
   modifications: 0
   deletions: 0
-lastSequence: 6068
+lastSequence: 6069
 unstagedPrunedThrough: 6068
 unstaged:
-  - sequence: 4092
-    removedAt: 6068
-    change:
-      type: relationship-add
-      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.sparkline-component
-      layerName: testing
-      after:
-        source: testing.testcoveragetarget.charts-showcase-tests
-        target: application.applicationcomponent.sparkline-component
-        predicate: covers
-        layer: testing
-        targetLayer: application
-        category: structural
-      timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4094
-    removedAt: 6068
-    change:
-      type: relationship-add
-      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.line-chart-component
-      layerName: testing
-      after:
-        source: testing.testcoveragetarget.charts-showcase-tests
-        target: application.applicationcomponent.line-chart-component
-        predicate: covers
-        layer: testing
-        targetLayer: application
-        category: structural
-      timestamp: 2026-11-21T17:13:58.157Z
-  - sequence: 4096
-    removedAt: 6068
-    change:
-      type: relationship-add
-      elementId: testing.testcoveragetarget.charts-showcase-tests::covers::application.applicationcomponent.metric-row-component
-      layerName: testing
-      after:
-        source: testing.testcoveragetarget.charts-showcase-tests
-        target: application.applicationcomponent.metric-row-component
-        predicate: covers
-        layer: testing
-        targetLayer: application
-        category: structural
-      timestamp: 2026-11-21T17:13:58.157Z
   - sequence: 4098
     removedAt: 6068
     change:
@@ -2815,3 +2773,45 @@ unstaged:
         targetLayer: application
         category: structural
       timestamp: 2026-11-21T17:13:58.157Z
+  - sequence: 705
+    removedAt: 6069
+    change:
+      type: relationship-add
+      elementId: api.operation.compute-edge-path::references::application.applicationservice.interactive-graph-rendering
+      layerName: api
+      after:
+        source: api.operation.compute-edge-path
+        target: application.applicationservice.interactive-graph-rendering
+        predicate: references
+        layer: api
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T17:08:15.249Z
+  - sequence: 5992
+    removedAt: 6069
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-utils-tests::covers::api.operation.compute-edge-path
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-utils-tests
+        target: api.operation.compute-edge-path
+        predicate: covers
+        layer: testing
+        targetLayer: api
+        category: structural
+      timestamp: 2026-11-21T17:15:52.397Z
+  - sequence: 6015
+    removedAt: 6069
+    change:
+      type: relationship-add
+      elementId: testing.testcoveragetarget.graph-edge-geometry-utilities::covers::api.operation.compute-edge-path
+      layerName: testing
+      after:
+        source: testing.testcoveragetarget.graph-edge-geometry-utilities
+        target: api.operation.compute-edge-path
+        predicate: covers
+        layer: testing
+        targetLayer: api
+        category: structural
+      timestamp: 2026-11-21T17:15:52.397Z

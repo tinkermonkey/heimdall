@@ -3686,18 +3686,6 @@
   timestamp: 2026-11-21T17:08:15.249Z
   sequenceNumber: 704
 - type: relationship-add
-  elementId: api.operation.compute-edge-path::references::application.applicationservice.interactive-graph-rendering
-  layerName: api
-  after:
-    source: api.operation.compute-edge-path
-    target: application.applicationservice.interactive-graph-rendering
-    predicate: references
-    layer: api
-    targetLayer: application
-    category: structural
-  timestamp: 2026-11-21T17:08:15.249Z
-  sequenceNumber: 705
-- type: relationship-add
   elementId: api.operation.visible-navigation-edge-ids::references::application.applicationservice.interactive-graph-rendering
   layerName: api
   after:
@@ -82965,18 +82953,6 @@
   timestamp: 2026-11-21T17:15:52.397Z
   sequenceNumber: 5991
 - type: relationship-add
-  elementId: testing.testcoveragetarget.graph-utils-tests::covers::api.operation.compute-edge-path
-  layerName: testing
-  after:
-    source: testing.testcoveragetarget.graph-utils-tests
-    target: api.operation.compute-edge-path
-    predicate: covers
-    layer: testing
-    targetLayer: api
-    category: structural
-  timestamp: 2026-11-21T17:15:52.397Z
-  sequenceNumber: 5992
-- type: relationship-add
   elementId: testing.testcoveragetarget.graph-viewport-history-tests::covers::api.operation.graph-canvas
   layerName: testing
   after:
@@ -83240,18 +83216,6 @@
     category: structural
   timestamp: 2026-11-21T17:15:52.397Z
   sequenceNumber: 6014
-- type: relationship-add
-  elementId: testing.testcoveragetarget.graph-edge-geometry-utilities::covers::api.operation.compute-edge-path
-  layerName: testing
-  after:
-    source: testing.testcoveragetarget.graph-edge-geometry-utilities
-    target: api.operation.compute-edge-path
-    predicate: covers
-    layer: testing
-    targetLayer: api
-    category: structural
-  timestamp: 2026-11-21T17:15:52.397Z
-  sequenceNumber: 6015
 - type: relationship-add
   elementId: testing.inputspacepartition.node-size-class::composes::testing.partitionvalue.chip-sized-node
   layerName: testing
