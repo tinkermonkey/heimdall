@@ -959,3 +959,96 @@ application.applicationfunction.joint-edge-label-placement:
     created_at: 2026-11-21T18:09:47.880Z
     updated_at: 2026-11-21T18:09:47.880Z
     version: 1
+application.applicationfunction.edge-pointer-handling:
+  id: cb22e5d5-8b5a-432c-9545-56ac830a71f1
+  path: application.applicationfunction.edge-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Edge Pointer Handling
+  description: "GraphCanvas's edge hover start and end handlers and an edge's
+    activation: report the hovered edge through onEdgeHover and the selected
+    edge through onEdgeSelect."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleEdgeHoverStart
+  metadata:
+    created_at: 2026-11-24T15:24:34.050Z
+    updated_at: 2026-11-24T15:24:34.050Z
+    version: 1
+application.applicationfunction.canvas-pointer-handling:
+  id: 67b0b9ba-59c5-4175-ae64-1b957f2db667
+  path: application.applicationfunction.canvas-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Canvas Pointer Handling
+  description: "GraphCanvas's pointer-up handler on the canvas background: a click
+    that is not a pan reports onBackgroundClick."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleCanvasPointerUp
+  accepted_gaps:
+    - direction: incoming
+      predicate: tests
+      other_spec_node_id: testing.testcasesketch
+      reason: No test in heimdall exercises onBackgroundClick or GraphCanvas's
+        background pointer-up handling.
+      decided_by: agent
+      decided_at: 2026-11-24T15:25:51.800Z
+      changeset: changeset-1795533873263-0v04j7duj
+  metadata:
+    created_at: 2026-11-24T15:24:34.051Z
+    updated_at: 2026-11-24T15:24:34.051Z
+    version: 1
+application.applicationfunction.collapse-toggling:
+  id: 69bb6238-46cf-49e2-818d-233af99ca382
+  path: application.applicationfunction.collapse-toggling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Collapse Toggling
+  description: GraphCanvas hands each node with structural children an
+    onToggleCollapse that reports the node to the consumer's onToggleCollapse;
+    GraphCollapseControl and Shift+Enter call it.
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onToggleCollapse
+  accepted_gaps:
+    - direction: incoming
+      predicate: tests
+      other_spec_node_id: testing.testcasesketch
+      reason: No test exercises the onToggleCollapse callback; the collapse-control
+        tests are visual snapshots of the rendered control.
+      decided_by: agent
+      decided_at: 2026-11-24T15:25:54.238Z
+      changeset: changeset-1795533873263-0v04j7duj
+  metadata:
+    created_at: 2026-11-24T15:24:34.051Z
+    updated_at: 2026-11-24T15:24:34.051Z
+    version: 1
+application.applicationfunction.programmatic-viewport-move-reporting:
+  id: c511d850-54ab-4d95-923e-db3919f6d3bf
+  path: application.applicationfunction.programmatic-viewport-move-reporting
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Programmatic Viewport Move Reporting
+  description: "Runs after every viewport move GraphCanvas or the app makes:
+    cancels a running ease, drops a pending dwell and queues onViewportNavigate
+    with the move's cause, reported once the move has rendered."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: afterProgrammaticMove
+  metadata:
+    created_at: 2026-11-24T15:24:34.051Z
+    updated_at: 2026-11-24T15:24:34.051Z
+    version: 1

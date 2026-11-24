@@ -3,7 +3,7 @@ schema: documentation-robotics-v1
 cli_version: 0.7.1
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-24T15:11:54.090Z
+updated: 2026-11-24T15:33:35.347Z
 project:
   name: heimdall-ux
   description: ""
@@ -57,10 +57,9 @@ layers:
     path: documentation-robotics/model/05_application/
     enabled: true
     elements:
-      applicationcollaboration: 1
-      applicationcomponent: 11
+      applicationcomponent: 3
       applicationevent: 9
-      applicationfunction: 52
+      applicationfunction: 56
       applicationinteraction: 1
       applicationprocess: 1
       applicationservice: 43
@@ -102,7 +101,7 @@ layers:
     enabled: true
     elements:
       actionpattern: 4
-      librarycomponent: 111
+      librarycomponent: 113
       statepattern: 5
       uxlibrary: 1
   navigation:
@@ -146,4 +145,7 @@ changeset_history:
     action: committed
   - name: heimdall-ui-public-api
     committed_at: 2026-11-24T15:11:54.089Z
+    action: committed
+  - name: heimdall-graph-components-s10
+    committed_at: 2026-11-24T15:33:35.347Z
     action: committed

@@ -18,8 +18,8 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | ------------------------- | ----- |
 | Elements                  | 32    |
 | Intra-Layer Relationships | 29    |
-| Inter-Layer Relationships | 208   |
-| Inbound Relationships     | 208   |
+| Inter-Layer Relationships | 210   |
+| Inbound Relationships     | 210   |
 | Outbound Relationships    | 0     |
 
 **Cross-Layer References**:
@@ -226,8 +226,10 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `motivation.requirement.motion-honours-reduced-motion-preference`                           | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-edgegraph-edge-shape-ux`                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
-| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-inspector-graph-edge-inspector-ux`                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-edge-inspector-ux`                                                                                         | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-edge-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters`             | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -625,8 +627,10 @@ Every screen is built from a shell and a canvas surface; dark canvas overrides e
 | inter-layer | `ux.librarycomponent.form-callout-ux`                                       | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.graph-canvas-ux`                                       | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.graph-collapse-control-ux`                             | `satisfies` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-edgegraph-edge-shape-ux`                         | `satisfies` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-inspector-graph-edge-inspector-ux`               | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-edge-inspector-ux`                               | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-edge-shape-ux`                                   | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-edge-ux`                                         | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-inspector-ux`                                    | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.graph-node-ux`                                         | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.graph-toolbar-ux`                                      | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.hash-set-diff-ux`                                      | `satisfies` | inbound   |
@@ -1198,4 +1202,4 @@ Inferred from CHANGELOG.md's reference to 'the project's own layout-quality test
 
 ---
 
-Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:33:35.364Z | Model Version: 0.1.0

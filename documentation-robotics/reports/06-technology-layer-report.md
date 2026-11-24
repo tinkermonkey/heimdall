@@ -18,9 +18,9 @@ Infrastructure, platforms, systems, and technology components.
 | ------------------------- | ----- |
 | Elements                  | 48    |
 | Intra-Layer Relationships | 58    |
-| Inter-Layer Relationships | 131   |
-| Inbound Relationships     | 113   |
-| Outbound Relationships    | 18    |
+| Inter-Layer Relationships | 117   |
+| Inbound Relationships     | 115   |
+| Outbound Relationships    | 2     |
 
 **Cross-Layer References**:
 
@@ -109,139 +109,125 @@ flowchart TB
 
 ## Inter-Layer Relationships Table
 
-| Relationship ID                                                     | Source Node                                                   | Dest Node                                                           | Dest Layer    | Predicate    | Cardinality  | Strength |
-| ------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------- | ------------- | ------------ | ------------ | -------- |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-canvas-component`           | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-collapse-control-component` | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-edge-component`             | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-edge-inspector-component`   | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-edge-shape-component`       | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-inspector-component`        | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-node-component`             | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.graph-toolbar-component`          | `application` | `realizes`   | many-to-many | medium   |
-| `technology.artifact.realizes.application.applicationcomponent`     | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.heimdall-ui-package`              | `application` | `realizes`   | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-canvas-component`           | `application` | `serves`     | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-collapse-control-component` | `application` | `serves`     | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-edge-component`             | `application` | `serves`     | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-edge-inspector-component`   | `application` | `serves`     | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-edge-shape-component`       | `application` | `serves`     | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-inspector-component`        | `application` | `serves`     | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-node-component`             | `application` | `serves`     | many-to-many | medium   |
-| `technology.systemsoftware.serves.application.applicationcomponent` | `technology.systemsoftware.web-browser`                       | `application.applicationcomponent.graph-toolbar-component`          | `application` | `serves`     | many-to-many | medium   |
-| `technology.technologyfunction.realizes.security.countermeasure`    | `technology.technologyfunction.npm-oidc-trusted-publishing`   | `security.countermeasure.trusted-publishing-with-provenance`        | `security`    | `realizes`   | many-to-many | medium   |
-| `testing.environmentfactor.references.technology.node`              | `testing.environmentfactor.ci-chromium-rendering-environment` | `technology.node.git-hub-actions-ubuntu-latest-runner`              | `technology`  | `references` | many-to-many | medium   |
-| `testing.environmentfactor.references.technology.systemsoftware`    | `testing.environmentfactor.ci-chromium-rendering-environment` | `technology.systemsoftware.web-browser`                             | `technology`  | `references` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.activity-timeline-ux`                    | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.adjacency-matrix-ux`                     | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.alert-strip-ux`                          | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.app-title-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.asset-card-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.asset-grid-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.avatar-ux`                               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.badge-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.bar-chart-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.bar-h-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.bar-v-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.bridge-node-list-ux`                     | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.button-ux`                               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.calendar-ux`                             | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.camera-controls-ux`                      | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chart-wrapper-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chat-composer-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chat-container-ux`                       | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chat-divider-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chat-markdown-content-ux`                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chat-message-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chat-suggestions-ux`                     | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.chip-ux`                                 | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.command-palette-ux`                      | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.config-tile-ux`                          | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.confirm-dialog-ux`                       | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.detail-drawer-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.diff-viewer-ux`                          | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.donut-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.drawer-ux`                               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.entity-picker-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.field-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.filter-bar-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.filter-dropdown-ux`                      | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.follow-control-ux`                       | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.form-callout-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.graph-canvas-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.graph-collapse-control-ux`               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.graph-edgegraph-edge-shape-ux`           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.graph-inspector-graph-edge-inspector-ux` | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.graph-node-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.graph-toolbar-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.hash-set-diff-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.heatmap-ux`                              | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.hierarchy-row-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.hierarchy-tree-ux`                       | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.hive-plot-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.icon-ux`                                 | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.inspector-panel-ux`                      | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.kanban-board-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.key-value-editor-ux`                     | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.kvgrid-ux`                               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.layer-list-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.layer-pair-list-ux`                      | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.layer-stack-ux`                          | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.layered-graph-context-ux`                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.layered-graph-explorer-ux`               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.line-chart-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.lineage-rail-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.link-category-filter-ux`                 | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.log-stream-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.map-canvas-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.metric-row-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.mini-calendar-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.modal-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.nav-item-ux`                             | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.number-input-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.ordered-list-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.page-header-ux`                          | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.panel-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.pipeline-card-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.plane-layout-control-ux`                 | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.popover-ux`                              | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.predicate-label-control-ux`              | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.progress-bar-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.quick-access-grid-ux`                    | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.quick-access-tile-ux`                    | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.reach-inspector-ux`                      | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.relationship-builder-ux`                 | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.result-card-ux`                          | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.row-menu-ux`                             | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.segmented-control-ux`                    | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.select-ux`                               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.shell-layout-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.side-by-side-diff-ux`                    | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.sidebar-ux`                              | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.sparkline-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.split-pane-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.stacked-bar-ux`                          | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.stat-grid-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.stat-tile-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.status-badge-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.status-timeline-ux`                      | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.statusbar-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.tab-bar-ux`                              | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.table-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.text-area-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.text-input-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.thinking-block-ux`                       | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.titlebar-ux`                             | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.toast-ux`                                | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.tool-block-ux`                           | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.tooltip-ux`                              | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.topbar-ux`                               | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.topology-node-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.trace-viewer-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.tri-state-ux`                            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.version-pill-ux`                         | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.version-timeline-ux`                     | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.view-switcher-ux`                        | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
-| `ux.librarycomponent.depends-on.technology.systemsoftware`          | `ux.librarycomponent.workspace-switcher-dialog-ux`            | `technology.systemsoftware.web-browser`                             | `technology`  | `depends-on` | many-to-many | medium   |
+| Relationship ID                                                  | Source Node                                                   | Dest Node                                                    | Dest Layer    | Predicate    | Cardinality  | Strength |
+| ---------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------ | ------------- | ------------ | ------------ | -------- |
+| `technology.artifact.realizes.application.applicationcomponent`  | `technology.artifact.heimdall-ui-package`                     | `application.applicationcomponent.heimdall-ui-package`       | `application` | `realizes`   | many-to-many | medium   |
+| `technology.technologyfunction.realizes.security.countermeasure` | `technology.technologyfunction.npm-oidc-trusted-publishing`   | `security.countermeasure.trusted-publishing-with-provenance` | `security`    | `realizes`   | many-to-many | medium   |
+| `testing.environmentfactor.references.technology.node`           | `testing.environmentfactor.ci-chromium-rendering-environment` | `technology.node.git-hub-actions-ubuntu-latest-runner`       | `technology`  | `references` | many-to-many | medium   |
+| `testing.environmentfactor.references.technology.systemsoftware` | `testing.environmentfactor.ci-chromium-rendering-environment` | `technology.systemsoftware.web-browser`                      | `technology`  | `references` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.activity-timeline-ux`                    | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.adjacency-matrix-ux`                     | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.alert-strip-ux`                          | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.app-title-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.asset-card-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.asset-grid-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.avatar-ux`                               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.badge-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bar-chart-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bar-h-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bar-v-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bridge-node-list-ux`                     | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.button-ux`                               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.calendar-ux`                             | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.camera-controls-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chart-wrapper-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chat-composer-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chat-container-ux`                       | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chat-divider-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chat-markdown-content-ux`                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chat-message-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chat-suggestions-ux`                     | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.chip-ux`                                 | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.command-palette-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.config-tile-ux`                          | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.confirm-dialog-ux`                       | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.detail-drawer-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.diff-viewer-ux`                          | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.donut-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.drawer-ux`                               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.entity-picker-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.field-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.filter-bar-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.filter-dropdown-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.follow-control-ux`                       | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.form-callout-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-canvas-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-collapse-control-ux`               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-edge-inspector-ux`                 | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-edge-shape-ux`                     | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-edge-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-inspector-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-node-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.graph-toolbar-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.hash-set-diff-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.heatmap-ux`                              | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.hierarchy-row-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.hierarchy-tree-ux`                       | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.hive-plot-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.icon-ux`                                 | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.inspector-panel-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.kanban-board-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.key-value-editor-ux`                     | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.kvgrid-ux`                               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.layer-list-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.layer-pair-list-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.layer-stack-ux`                          | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.layered-graph-context-ux`                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.layered-graph-explorer-ux`               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.line-chart-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.lineage-rail-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.link-category-filter-ux`                 | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.log-stream-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.map-canvas-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.metric-row-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.mini-calendar-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.modal-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.nav-item-ux`                             | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.number-input-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.ordered-list-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.page-header-ux`                          | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.panel-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.pipeline-card-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.plane-layout-control-ux`                 | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.popover-ux`                              | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.predicate-label-control-ux`              | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.progress-bar-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.quick-access-grid-ux`                    | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.quick-access-tile-ux`                    | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.reach-inspector-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.relationship-builder-ux`                 | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.result-card-ux`                          | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.row-menu-ux`                             | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.segmented-control-ux`                    | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.select-ux`                               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.shell-layout-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.side-by-side-diff-ux`                    | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.sidebar-ux`                              | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.sparkline-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.split-pane-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.stacked-bar-ux`                          | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.stat-grid-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.stat-tile-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.status-badge-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.status-timeline-ux`                      | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.statusbar-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.tab-bar-ux`                              | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.table-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.text-area-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.text-input-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.thinking-block-ux`                       | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.titlebar-ux`                             | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.toast-ux`                                | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.tool-block-ux`                           | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.tooltip-ux`                              | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.topbar-ux`                               | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.topology-node-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.trace-viewer-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.tri-state-ux`                            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.version-pill-ux`                         | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.version-timeline-ux`                     | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.view-switcher-ux`                        | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.workspace-switcher-dialog-ux`            | `technology.systemsoftware.web-browser`                      | `technology`  | `depends-on` | many-to-many | medium   |
 
 ## Element Reference
 
@@ -551,14 +537,6 @@ The published @tinkermonkey/heimdall-ui npm package (0.13.0): per-module ESM, ty
 
 | Type        | Related Element                                                                  | Predicate    | Direction |
 | ----------- | -------------------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component`                        | `realizes`   | outbound  |
-| inter-layer | `application.applicationcomponent.graph-collapse-control-component`              | `realizes`   | outbound  |
-| inter-layer | `application.applicationcomponent.graph-edge-component`                          | `realizes`   | outbound  |
-| inter-layer | `application.applicationcomponent.graph-edge-inspector-component`                | `realizes`   | outbound  |
-| inter-layer | `application.applicationcomponent.graph-edge-shape-component`                    | `realizes`   | outbound  |
-| inter-layer | `application.applicationcomponent.graph-inspector-component`                     | `realizes`   | outbound  |
-| inter-layer | `application.applicationcomponent.graph-node-component`                          | `realizes`   | outbound  |
-| inter-layer | `application.applicationcomponent.graph-toolbar-component`                       | `realizes`   | outbound  |
 | inter-layer | `application.applicationcomponent.heimdall-ui-package`                           | `realizes`   | outbound  |
 | intra-layer | `technology.artifact.docs-showcase-site`                                         | `depends-on` | inbound   |
 | intra-layer | `technology.artifact.agent-skills-bundle`                                        | `composes`   | outbound  |
@@ -971,128 +949,122 @@ The consumer's browser, which runs every Heimdall component: DOM and SVG renderi
 
 #### Relationships
 
-| Type        | Related Element                                                     | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component`           | `serves`     | outbound  |
-| inter-layer | `application.applicationcomponent.graph-collapse-control-component` | `serves`     | outbound  |
-| inter-layer | `application.applicationcomponent.graph-edge-component`             | `serves`     | outbound  |
-| inter-layer | `application.applicationcomponent.graph-edge-inspector-component`   | `serves`     | outbound  |
-| inter-layer | `application.applicationcomponent.graph-edge-shape-component`       | `serves`     | outbound  |
-| inter-layer | `application.applicationcomponent.graph-inspector-component`        | `serves`     | outbound  |
-| inter-layer | `application.applicationcomponent.graph-node-component`             | `serves`     | outbound  |
-| inter-layer | `application.applicationcomponent.graph-toolbar-component`          | `serves`     | outbound  |
-| inter-layer | `testing.environmentfactor.ci-chromium-rendering-environment`       | `references` | inbound   |
-| inter-layer | `ux.librarycomponent.activity-timeline-ux`                          | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.adjacency-matrix-ux`                           | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.alert-strip-ux`                                | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.app-title-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.asset-card-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.asset-grid-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.avatar-ux`                                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.badge-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.bar-chart-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.bar-h-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.bar-v-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.bridge-node-list-ux`                           | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.button-ux`                                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.calendar-ux`                                   | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.camera-controls-ux`                            | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chart-wrapper-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chat-composer-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chat-container-ux`                             | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chat-divider-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chat-markdown-content-ux`                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chat-message-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chat-suggestions-ux`                           | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.chip-ux`                                       | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.command-palette-ux`                            | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.config-tile-ux`                                | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.confirm-dialog-ux`                             | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.detail-drawer-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.diff-viewer-ux`                                | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.donut-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.drawer-ux`                                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.entity-picker-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.field-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.filter-bar-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.filter-dropdown-ux`                            | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.follow-control-ux`                             | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.form-callout-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-canvas-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-collapse-control-ux`                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-edgegraph-edge-shape-ux`                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-inspector-graph-edge-inspector-ux`       | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-node-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-toolbar-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.hash-set-diff-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.heatmap-ux`                                    | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.hierarchy-row-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.hierarchy-tree-ux`                             | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.hive-plot-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.icon-ux`                                       | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.inspector-panel-ux`                            | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.kanban-board-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.key-value-editor-ux`                           | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.kvgrid-ux`                                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.layer-list-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.layer-pair-list-ux`                            | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.layer-stack-ux`                                | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.layered-graph-context-ux`                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.layered-graph-explorer-ux`                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.line-chart-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.lineage-rail-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.link-category-filter-ux`                       | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.log-stream-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.map-canvas-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.metric-row-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.mini-calendar-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.modal-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.nav-item-ux`                                   | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.number-input-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.ordered-list-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.page-header-ux`                                | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.panel-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.pipeline-card-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.plane-layout-control-ux`                       | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.popover-ux`                                    | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.predicate-label-control-ux`                    | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.progress-bar-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.quick-access-grid-ux`                          | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.quick-access-tile-ux`                          | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.reach-inspector-ux`                            | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.relationship-builder-ux`                       | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.result-card-ux`                                | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.row-menu-ux`                                   | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.segmented-control-ux`                          | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.select-ux`                                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.shell-layout-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.side-by-side-diff-ux`                          | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.sidebar-ux`                                    | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.sparkline-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.split-pane-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.stacked-bar-ux`                                | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.stat-grid-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.stat-tile-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.status-badge-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.status-timeline-ux`                            | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.statusbar-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.tab-bar-ux`                                    | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.table-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.text-area-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.text-input-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.thinking-block-ux`                             | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.titlebar-ux`                                   | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.toast-ux`                                      | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.tool-block-ux`                                 | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.tooltip-ux`                                    | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.topbar-ux`                                     | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.topology-node-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.trace-viewer-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.tri-state-ux`                                  | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.version-pill-ux`                               | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.version-timeline-ux`                           | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.view-switcher-ux`                              | `depends-on` | inbound   |
-| inter-layer | `ux.librarycomponent.workspace-switcher-dialog-ux`                  | `depends-on` | inbound   |
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.environmentfactor.ci-chromium-rendering-environment` | `references` | inbound   |
+| inter-layer | `ux.librarycomponent.activity-timeline-ux`                    | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.adjacency-matrix-ux`                     | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.alert-strip-ux`                          | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.app-title-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.asset-card-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.asset-grid-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.avatar-ux`                               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.badge-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.bar-chart-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.bar-h-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.bar-v-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.bridge-node-list-ux`                     | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.button-ux`                               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.calendar-ux`                             | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.camera-controls-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chart-wrapper-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chat-composer-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chat-container-ux`                       | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chat-divider-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chat-markdown-content-ux`                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chat-message-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chat-suggestions-ux`                     | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.chip-ux`                                 | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.command-palette-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.config-tile-ux`                          | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.confirm-dialog-ux`                       | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.detail-drawer-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.diff-viewer-ux`                          | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.donut-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.drawer-ux`                               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.entity-picker-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.field-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.filter-bar-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.filter-dropdown-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.follow-control-ux`                       | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.form-callout-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-canvas-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-collapse-control-ux`               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-edge-inspector-ux`                 | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-edge-shape-ux`                     | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-edge-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-inspector-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-node-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-toolbar-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.hash-set-diff-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.heatmap-ux`                              | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.hierarchy-row-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.hierarchy-tree-ux`                       | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.hive-plot-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.icon-ux`                                 | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.inspector-panel-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.kanban-board-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.key-value-editor-ux`                     | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.kvgrid-ux`                               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.layer-list-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.layer-pair-list-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.layer-stack-ux`                          | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.layered-graph-context-ux`                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.layered-graph-explorer-ux`               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.line-chart-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.lineage-rail-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.link-category-filter-ux`                 | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.log-stream-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.map-canvas-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.metric-row-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.mini-calendar-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.modal-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.nav-item-ux`                             | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.number-input-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.ordered-list-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.page-header-ux`                          | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.panel-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.pipeline-card-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.plane-layout-control-ux`                 | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.popover-ux`                              | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.predicate-label-control-ux`              | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.progress-bar-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.quick-access-grid-ux`                    | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.quick-access-tile-ux`                    | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.reach-inspector-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.relationship-builder-ux`                 | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.result-card-ux`                          | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.row-menu-ux`                             | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.segmented-control-ux`                    | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.select-ux`                               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.shell-layout-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.side-by-side-diff-ux`                    | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.sidebar-ux`                              | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.sparkline-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.split-pane-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.stacked-bar-ux`                          | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.stat-grid-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.stat-tile-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.status-badge-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.status-timeline-ux`                      | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.statusbar-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.tab-bar-ux`                              | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.table-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.text-area-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.text-input-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.thinking-block-ux`                       | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.titlebar-ux`                             | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.toast-ux`                                | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.tool-block-ux`                           | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.tooltip-ux`                              | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.topbar-ux`                               | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.topology-node-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.trace-viewer-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.tri-state-ux`                            | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.version-pill-ux`                         | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.version-timeline-ux`                     | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.view-switcher-ux`                        | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.workspace-switcher-dialog-ux`            | `depends-on` | inbound   |
 
 ### Automated Test Execution {#automated-test-execution}
 
@@ -1334,4 +1306,4 @@ External package registry the release publishes @tinkermonkey/heimdall-ui to and
 
 ---
 
-Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:33:35.364Z | Model Version: 0.1.0

@@ -96,14 +96,14 @@ flowchart TB
 
 | Relationship ID                                                         | Source Node                                                            | Dest Node                                               | Dest Layer    | Predicate  | Cardinality  | Strength |
 | ----------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------- | ------------- | ---------- | ------------ | -------- |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.edge-geometry`             | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.graph-edge-data-shape`     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.graph-node-data`           | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.graph-viewport`            | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.lane-layout`               | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.graph-canvas-component`              | `data-model.schemadefinition.layered-graph-state`       | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.edge-geometry`             | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-edge-data-shape`     | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-node-data`           | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-viewport`            | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.lane-layout`               | `data-model`  | `accesses` | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-package`                 | `data-model.schemadefinition.layered-graph-state`       | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.layout-state-change-event`               | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-dwell-event`                    | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
 | `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-navigate-event`                 | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
@@ -244,10 +244,10 @@ Computed rendering geometry passed to a custom renderEdge callback: SVG path str
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate    | Direction |
-| ----------- | --------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses`   | inbound   |
-| intra-layer | `data-model.schemadefinition.graph-edge-data-shape`       | `references` | inbound   |
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.graph-edge-data-shape`    | `references` | inbound   |
 
 ### ForceLayoutOptions {#forcelayoutoptions}
 
@@ -364,11 +364,11 @@ Public data shape for a graph edge: id/sourceId/targetId plus optional label, va
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate    | Direction |
-| ----------- | --------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses`   | inbound   |
-| intra-layer | `data-model.schemadefinition.edge-geometry`               | `references` | outbound  |
-| intra-layer | `data-model.schemadefinition.layered-index`               | `references` | inbound   |
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.edge-geometry`            | `references` | outbound  |
+| intra-layer | `data-model.schemadefinition.layered-index`            | `references` | inbound   |
 
 ### GraphLayoutState {#graphlayoutstate}
 
@@ -388,10 +388,10 @@ idle \| computing \| simulating: whether GraphCanvas is waiting on a layout engi
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate  | Direction |
-| ----------- | --------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses` | inbound   |
-| inter-layer | `application.applicationevent.layout-state-change-event`  | `accesses` | inbound   |
+| Type        | Related Element                                          | Predicate  | Direction |
+| ----------- | -------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package`   | `accesses` | inbound   |
+| inter-layer | `application.applicationevent.layout-state-change-event` | `accesses` | inbound   |
 
 ### GraphNodeData {#graphnodedata}
 
@@ -410,11 +410,11 @@ Public data shape for a graph node passed to GraphCanvas: id, label, optional ki
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate    | Direction |
-| ----------- | --------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses`   | inbound   |
-| inter-layer | `application.dataobject.node-rect-registry`               | `realizes`   | outbound  |
-| intra-layer | `data-model.schemadefinition.layered-index`               | `references` | inbound   |
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
+| inter-layer | `application.dataobject.node-rect-registry`            | `realizes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.layered-index`            | `references` | inbound   |
 
 ### GraphViewport {#graphviewport}
 
@@ -433,10 +433,10 @@ A GraphCanvas viewport (pan x/y and zoom) a caller can restore through initialVi
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate  | Direction |
-| ----------- | --------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses` | inbound   |
-| intra-layer | `data-model.schemadefinition.graph-viewport-snapshot`     | `composes` | inbound   |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses` | inbound   |
+| intra-layer | `data-model.schemadefinition.graph-viewport-snapshot`  | `composes` | inbound   |
 
 ### GraphViewportSnapshot {#graphviewportsnapshot}
 
@@ -455,12 +455,12 @@ Viewport plus selection and the cause of the change (GraphViewportCause), passed
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate  | Direction |
-| ----------- | --------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses` | inbound   |
-| inter-layer | `application.applicationevent.viewport-dwell-event`       | `accesses` | inbound   |
-| inter-layer | `application.applicationevent.viewport-navigate-event`    | `accesses` | inbound   |
-| intra-layer | `data-model.schemadefinition.graph-viewport`              | `composes` | outbound  |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses` | inbound   |
+| inter-layer | `application.applicationevent.viewport-dwell-event`    | `accesses` | inbound   |
+| inter-layer | `application.applicationevent.viewport-navigate-event` | `accesses` | inbound   |
+| intra-layer | `data-model.schemadefinition.graph-viewport`           | `composes` | outbound  |
 
 ### HierarchyEdge {#hierarchyedge}
 
@@ -503,10 +503,10 @@ Output of layoutLanes: lane bands and node boxes for the swimlane view (orientat
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate    | Direction |
-| ----------- | --------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses`   | inbound   |
-| intra-layer | `data-model.schemadefinition.layered-index`               | `references` | outbound  |
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.layered-index`            | `references` | outbound  |
 
 ### LayerDef {#layerdef}
 
@@ -567,12 +567,12 @@ Return value of useLayeredGraph, shared through LayeredGraphContext: the index, 
 
 #### Relationships
 
-| Type        | Related Element                                           | Predicate  | Direction |
-| ----------- | --------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationcomponent.graph-canvas-component` | `accesses` | inbound   |
-| intra-layer | `data-model.schemadefinition.layered-index`               | `composes` | outbound  |
-| intra-layer | `data-model.schemadefinition.link-filter-state`           | `composes` | outbound  |
-| intra-layer | `data-model.schemadefinition.reach-result`                | `composes` | outbound  |
+| Type        | Related Element                                        | Predicate  | Direction |
+| ----------- | ------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-package` | `accesses` | inbound   |
+| intra-layer | `data-model.schemadefinition.layered-index`            | `composes` | outbound  |
+| intra-layer | `data-model.schemadefinition.link-filter-state`        | `composes` | outbound  |
+| intra-layer | `data-model.schemadefinition.reach-result`             | `composes` | outbound  |
 
 ### LayeredIndex {#layeredindex}
 
@@ -926,4 +926,4 @@ AWS X-Ray segment document with nested subsegments, http, sql, cause and excepti
 
 ---
 
-Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:33:35.364Z | Model Version: 0.1.0

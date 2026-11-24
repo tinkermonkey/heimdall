@@ -4,10 +4,10 @@
 
 | Metric              | Value                    |
 | ------------------- | ------------------------ |
-| Total Elements      | 2206                     |
-| Total Relationships | 3380                     |
+| Total Elements      | 2203                     |
+| Total Relationships | 3320                     |
 | Populated Layers    | 10                       |
-| Last Updated        | 2026-11-24T15:11:54.090Z |
+| Last Updated        | 2026-11-24T15:33:35.347Z |
 | CLI Version         | 0.7.1                    |
 | Spec Version        | 0.14.0                   |
 
@@ -56,16 +56,16 @@ Each layer is independently managed but interconnected, allowing elements in hig
 | Business    | 7        | [02-business-layer-report.md](./reports/02-business-layer-report.md)       |
 | Product     | 31       | [03-product-layer-report.md](./reports/03-product-layer-report.md)         |
 | Security    | 9        | [04-security-layer-report.md](./reports/04-security-layer-report.md)       |
-| Application | 120      | [05-application-layer-report.md](./reports/05-application-layer-report.md) |
+| Application | 115      | [05-application-layer-report.md](./reports/05-application-layer-report.md) |
 | Technology  | 48       | [06-technology-layer-report.md](./reports/06-technology-layer-report.md)   |
 | API         | 0        | —                                                                          |
 | Data Model  | 35       | [08-data-model-layer-report.md](./reports/08-data-model-layer-report.md)   |
 | Data Store  | 0        | —                                                                          |
-| UX          | 121      | [10-ux-layer-report.md](./reports/10-ux-layer-report.md)                   |
+| UX          | 123      | [10-ux-layer-report.md](./reports/10-ux-layer-report.md)                   |
 | Navigation  | 1        | [11-navigation-layer-report.md](./reports/11-navigation-layer-report.md)   |
 | APM         | 0        | —                                                                          |
 | Testing     | 1802     | [13-testing-layer-report.md](./reports/13-testing-layer-report.md)         |
 
 ---
 
-Generated: 2026-11-24T15:11:54.119Z | Model Version: 0.1.0
+Generated: 2026-11-24T15:33:35.364Z | Model Version: 0.1.0
