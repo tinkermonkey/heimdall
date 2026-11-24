@@ -105,13 +105,13 @@
       release, docs deploy and visual regression. Issue #402."
     attributes:
       priority: high
-      status: planned
+      status: delivered
       size: l
     metadata:
       created_at: 2026-11-24T17:33:21.790Z
       updated_at: 2026-11-24T17:33:21.790Z
       version: 1
-  timestamp: 2026-11-24T17:33:21.807Z
+  timestamp: 2026-11-24T18:12:45.041Z
   sequenceNumber: 4
 - type: add
   elementId: technology.artifact.design-token-stylesheet
@@ -163,7 +163,11 @@
       created_at: 2026-11-24T17:33:21.794Z
       updated_at: 2026-11-24T17:33:21.794Z
       version: 1
-  timestamp: 2026-11-24T17:33:21.807Z
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/tokens/theme.css
+  timestamp: 2026-11-24T18:12:39.276Z
   sequenceNumber: 6
 - type: add
   elementId: technology.artifact.color-literal-check-script
@@ -186,7 +190,11 @@
       created_at: 2026-11-24T17:33:21.794Z
       updated_at: 2026-11-24T17:33:21.794Z
       version: 1
-  timestamp: 2026-11-24T17:33:21.807Z
+    source_reference:
+      provenance: manual
+      locations:
+        - file: scripts/check-color-literals.mjs
+  timestamp: 2026-11-24T18:12:39.276Z
   sequenceNumber: 7
 - type: add
   elementId: technology.technologyprocess.pr-ci-workflow
@@ -771,12 +779,17 @@
       [0.12, 1] (was: non-empty hex fills). Screenshots stay identical to the
       existing baselines."
     attributes:
-      status: draft
+      status: automated
     metadata:
       created_at: 2026-11-24T17:33:47.451Z
       updated_at: 2026-11-24T17:33:47.451Z
       version: 1
-  timestamp: 2026-11-24T17:33:47.469Z
+    source_reference:
+      provenance: manual
+      locations:
+        - file: tests/charts-showcase.spec.ts
+          symbol: cell fill is the base color, fill-opacity is in [0.12, 1]
+  timestamp: 2026-11-24T18:12:45.004Z
   sequenceNumber: 52
 - type: add
   elementId: testing.testcasesketch.theme-override-ships-after-the-tokens

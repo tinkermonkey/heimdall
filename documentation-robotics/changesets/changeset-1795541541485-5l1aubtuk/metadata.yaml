@@ -8,7 +8,7 @@ description: "Let a mirrored copy of the repo restyle the library from one file:
   tinkermonkey/heimdall, and docs. Done = default rendering pixel-identical, all
   checks pass, no snapshot updates. (Issue #402)"
 created: 2026-11-24T17:32:21.488Z
-modified: 2026-11-24T17:34:00.386Z
+modified: 2026-11-24T18:12:45.058Z
 status: staged
 baseSnapshot: v2:sha256:39b64040e976fa94f57b509a0e0f15d7359a083d8ba60b960b80036d9ee782db
 origin:
@@ -18,4 +18,148 @@ stats:
   additions: 67
   modifications: 0
   deletions: 2
-lastSequence: 68
+lastSequence: 73
+unstaged:
+  - sequence: 7
+    removedAt: 69
+    change:
+      type: add
+      elementId: technology.artifact.color-literal-check-script
+      layerName: technology
+      after:
+        id: 779cd254-a17f-4306-9bec-90a28f6e081b
+        path: technology.artifact.color-literal-check-script
+        spec_node_id: technology.artifact
+        type: artifact
+        layer_id: technology
+        name: Color Literal Check Script
+        description: "scripts/check-color-literals.mjs (npm run check:colors): scans
+          src/**/*.{css,ts,tsx} except src/tokens/, src/test-pages/ and
+          *.test.*, comments stripped; fails on hex colors (3/4/6/8 digits, not
+          after /), rgb/rgba/hsl/hsla with numeric arguments, and var(--x, N, N,
+          N) fallbacks; allows pure black and white at any alpha."
+        attributes:
+          artifactType: script
+        metadata:
+          created_at: 2026-11-24T17:33:21.794Z
+          updated_at: 2026-11-24T17:33:21.794Z
+          version: 1
+      timestamp: 2026-11-24T17:33:21.807Z
+    rewritten: true
+  - sequence: 6
+    removedAt: 70
+    change:
+      type: add
+      elementId: technology.artifact.theme-stylesheet
+      layerName: technology
+      after:
+        id: c06f3dbb-7022-4f5a-ac1b-ac813ceb1abd
+        path: technology.artifact.theme-stylesheet
+        spec_node_id: technology.artifact
+        type: artifact
+        layer_id: technology
+        name: Theme Stylesheet
+        description: "src/tokens/theme.css: an override layer that is empty upstream
+          (header comment with an example and the caveat that derived tokens
+          resolve on :root, so a theme that changes --accent-primary only under
+          body.dark-canvas must redeclare them there). Loaded after tokens.css
+          from src/index.ts, src/index.css and vite.config.mjs BASE_SHEETS
+          (last), so it ships after the tokens in dist/style.css and
+          dist/css/base.css."
+        attributes:
+          artifactType: file
+        metadata:
+          created_at: 2026-11-24T17:33:21.794Z
+          updated_at: 2026-11-24T17:33:21.794Z
+          version: 1
+      timestamp: 2026-11-24T17:33:21.807Z
+    rewritten: true
+  - sequence: 52
+    removedAt: 71
+    change:
+      type: add
+      elementId: testing.testcasesketch.chart-fills-resolve-from-tokens
+      layerName: testing
+      after:
+        id: 057a47a5-52fc-4408-a598-431a35d0ea45
+        path: testing.testcasesketch.chart-fills-resolve-from-tokens
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: Chart Fills Resolve From Tokens
+        description: "tests/charts-showcase.spec.ts, updated: the LineChart and
+          StatusTimeline marker circles carry rgb(var(--accent-primary-hover))
+          instead of #F59E0B; StatusTimeline segment fills are status-token
+          references; Heatmap cells fill with the base color and a fill-opacity
+          in [0.12, 1] (was: non-empty hex fills). Screenshots stay identical to
+          the existing baselines."
+        attributes:
+          status: draft
+        metadata:
+          created_at: 2026-11-24T17:33:47.451Z
+          updated_at: 2026-11-24T17:33:47.451Z
+          version: 1
+      timestamp: 2026-11-24T17:33:47.469Z
+    rewritten: true
+  - sequence: 52
+    removedAt: 72
+    change:
+      type: add
+      elementId: testing.testcasesketch.chart-fills-resolve-from-tokens
+      layerName: testing
+      after:
+        id: 057a47a5-52fc-4408-a598-431a35d0ea45
+        path: testing.testcasesketch.chart-fills-resolve-from-tokens
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: Chart Fills Resolve From Tokens
+        description: "tests/charts-showcase.spec.ts, updated: the LineChart and
+          StatusTimeline marker circles carry rgb(var(--accent-primary-hover))
+          instead of #F59E0B; StatusTimeline segment fills are status-token
+          references; Heatmap cells fill with the base color and a fill-opacity
+          in [0.12, 1] (was: non-empty hex fills). Screenshots stay identical to
+          the existing baselines."
+        attributes:
+          status: draft
+        metadata:
+          created_at: 2026-11-24T17:33:47.451Z
+          updated_at: 2026-11-24T17:33:47.451Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: tests/charts-showcase.spec.ts
+              symbol: cell fill is the base color, fill-opacity is in [0.12, 1]
+      timestamp: 2026-11-24T18:12:39.276Z
+    rewritten: true
+  - sequence: 4
+    removedAt: 73
+    change:
+      type: add
+      elementId: product.feature.theme-slot
+      layerName: product
+      after:
+        id: 98ac34d7-f2b9-4c58-976a-74eab4a5f086
+        path: product.feature.theme-slot
+        spec_node_id: product.feature
+        type: feature
+        layer_id: product
+        name: Theme Slot
+        description: "An empty src/tokens/theme.css loaded after tokens.css in every
+          stylesheet entry point (index.ts, index.css, dist/style.css,
+          dist/css/base.css); accent-derived tokens (focus ring, accent alpha
+          tints); new token families for colors that were hard-coded (chart
+          series and tones, trace services, accent ink, shadow tint); TS and CSS
+          color literals replaced by token references; check:colors in CI;
+          repo-guarded release, docs deploy and visual regression. Issue #402."
+        attributes:
+          priority: high
+          status: planned
+          size: l
+        metadata:
+          created_at: 2026-11-24T17:33:21.790Z
+          updated_at: 2026-11-24T17:33:21.790Z
+          version: 1
+      timestamp: 2026-11-24T17:33:21.807Z
+    rewritten: true
