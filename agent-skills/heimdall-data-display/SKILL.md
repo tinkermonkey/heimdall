@@ -603,7 +603,7 @@ import { MapCanvas, type MapPin, type MapTrackPoint, type HeatmapDataPoint, type
 | `onSelectPin` | `(pinId: string \| null) => void` | — | Pin clicked, or `null` on Escape |
 | `trackPoints` | `MapTrackPoint[]` | `[]` | Polyline points; required when `mode="track"` |
 | `heatmapData` | `HeatmapDataPoint[]` | `[]` | Weighted points; required when `mode="heatmap"` |
-| `heatmapColor` | `string` | `'#10b981'` | Heatmap base color (hex, `rgb()` or `hsl()`) |
+| `heatmapColor` | `string` | `'rgb(var(--status-emerald))'` | Heatmap base color; any CSS color. Opacity varies per point, so a color that already has alpha renders fainter |
 | `tileUrl` | `string \| ((x: number, y: number, z: number) => string)` | — | Raster tiles; grid pattern when unset |
 | `bounds` | `[LatLng, LatLng]` | — | Initial area to frame; defaults to data extent |
 | `scaleBar` | `boolean` | `false` | Shows a `Zoom: N.N` readout |

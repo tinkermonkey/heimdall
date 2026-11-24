@@ -28,7 +28,7 @@ npm run build
 npm test
 ```
 
-**PR CI** (`.github/workflows/ci.yml`, on PRs to `main` and pushes to `main`): `Checks` runs `tsc --noEmit`, `npm run lint`, `npm run test:unit -- --run` (Vitest, `src/**/*.test.ts` only), `check:skills`, `build` + `check:package`. `Visual regression` runs the full Playwright suite with `CI=true` sharded across 4 runners (each still 1 worker, 2 retries, checking `-linux.png` baselines); it is skipped only when every changed file is under `docs/`, `design-reference/`, `agent-skills/`, `.claude/` or is Markdown. On failure, download the `playwright-report-shard-N` artifact. A newer push to the PR cancels the older run.
+**PR CI** (`.github/workflows/ci.yml`, on PRs to `main` and pushes to `main`): `Checks` runs `tsc --noEmit`, `npm run lint`, `npm run test:unit -- --run` (Vitest, `src/**/*.test.ts` only), `check:skills`, `check:colors`, `build` + `check:package`. `Visual regression` runs the full Playwright suite with `CI=true` sharded across 4 runners (each still 1 worker, 2 retries, checking `-linux.png` baselines); it is skipped only when every changed file is under `docs/`, `design-reference/`, `agent-skills/`, `.claude/` or is Markdown. On failure, download the `playwright-report-shard-N` artifact. A newer push to the PR cancels the older run.
 
 **Before starting any dev server**, check whether one is already running to avoid accumulating orphaned processes:
 
@@ -90,6 +90,8 @@ All components are exported from `src/index.ts` with their TypeScript prop types
 Tokens live in `src/tokens/tokens.css` as CSS custom properties. Tailwind's theme maps every color, radius, shadow, font, spacing, and font-size token to those properties, so Tailwind utility classes automatically respect the two-surface system.
 
 Dark canvas is toggled by adding `dark-canvas` class to `<body>` — the token file overrides all `--canvas-*` variables under `.dark-canvas`. Never use `filter()` or `invert()`.
+
+Every component color comes from a token: `rgb(var(--token))` in CSS and TypeScript alike (SVG presentation attributes resolve `var()`). No color literals outside `src/tokens/`; pure black and white, at any alpha, are the only exception. A new color gets a token in `tokens.css`. Do not add numeric fallbacks such as `rgb(var(--canvas-border, 30, 42, 68))`. `npm run check:colors` enforces this and runs in CI after `check:skills`. A downstream mirror restyles the library from `src/tokens/theme.css`, which stays empty upstream: never put palette changes there, and keep colors reachable from it.
 
 ### React Pattern
 

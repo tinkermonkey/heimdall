@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Theme slot: restyle the library from `src/tokens/theme.css`.** A mirror of the repo keeps its
+  brand colors in one file that upstream never edits. `theme.css` is empty upstream, loads right
+  after `tokens.css` (in `src/index.ts`, `src/index.css`, and last in the base sheets, so it ships
+  in `dist/style.css` and `dist/css/base.css`) and uses the same selectors (`:root`,
+  `body.dark-canvas`). `--focus-ring`, `--accent-primary-bg-alpha-xs/sm/md` and
+  `--accent-primary-border-alpha-sm/md/lg` now derive from `--accent-primary` (same computed
+  values); a theme that changes the accent only under `body.dark-canvas` must redeclare them there.
+  New tokens, all with the values the code painted before: `--chart-series-1..6`,
+  `--chart-light-*` and `--chart-dark-*` (`fg-1..4`, `grid`, `border`, `card`, `inset`; both on
+  `:root`), `--trace-service-1..10`, `--accent-primary-ink` and `--shadow-tint`. Every component
+  color in `src/` is now a token reference (`rgb(var(--token))`) in CSS and TypeScript, and the
+  numeric fallbacks in the chat stylesheets are gone. Default rendering is unchanged.
+- **`Heatmap.baseColor` and `MapCanvas.heatmapColor` accept any CSS color.** They default to
+  `rgb(var(--status-emerald))`. Cells and points are filled with the color and a `fill-opacity`
+  (the same 1/255-quantized alpha as before), so a color that already has alpha renders fainter.
+  Before, only `#RRGGBB` worked.
+- **Breaking-ish (pre-1.0):** the color constants `SERIES_COLORS`, `chartColors`, `statusColorMap`,
+  `TONE` and `DEFAULT_SERVICE_PALETTE` now hold `rgb(var(--…))` strings instead of hex. Code that
+  parses them as hex, or uses them in a canvas 2D context, must resolve them first with
+  `getComputedStyle`.
+- **Charts need the tokens on the page.** Load `/css` or `/css/base`, as for every other component;
+  charts used to render their colors with no heimdall CSS loaded. An SVG serialized out of the
+  page (for example exported to a file) no longer carries its colors.
+
 ### Added
 
 - **`PaneRail`.** A folded pane as a 40px vertical rail: an expand button (`aria-expanded="false"`,
@@ -22,6 +48,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   plain buttons. The rail holds no folding
   state and does not bind its key: the app shows it while the pane is folded. Exports `PaneRail`,
   `PaneRailProps` and `PaneRailMark`.
+- **`npm run check:colors`.** Fails on color literals in `src/` outside `src/tokens/`: hex colors,
+  numeric `rgb()`, `rgba()`, `hsl()` and `hsla()`, and `var(--x, N, N, N)` fallbacks. Pure black
+  and white are allowed. Runs in CI after `check:skills`.
+- **Release, docs deploy and visual regression run only in `tinkermonkey/heimdall`.** `release.yml`
+  and `deploy-docs.yml` are guarded by repository, and CI skips the visual shards elsewhere, so a
+  mirror that merges release tags publishes nothing and stays green.
 
 ## [0.14.0]
 
