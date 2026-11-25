@@ -27,6 +27,7 @@ import OrganicLayoutTestPage from './test-pages/OrganicLayoutTestPage'
 import OrthogonalLayoutTestPage from './test-pages/OrthogonalLayoutTestPage'
 import AdjacencyMatrixTestPage from './test-pages/AdjacencyMatrixTestPage'
 import LayerLanesTestPage from './test-pages/LayerLanesTestPage'
+import BranchMapConceptsPage from './test-pages/branchMap/BranchMapConceptsPage'
 import LayerStackTestPage from './test-pages/LayerStackTestPage'
 import LayeredGraphChromeTestPage from './test-pages/LayeredGraphChromeTestPage'
 import LayeredGraphExplorerTestPage from './test-pages/LayeredGraphExplorerTestPage'
@@ -164,6 +165,9 @@ export default function App() {
     return <AdjacencyMatrixTestPage />
   }
 
+  if (exampleParam === 'branch-map-concepts') {
+    return <BranchMapConceptsPage />
+  }
   if (exampleParam === 'layer-lanes') {
     return <LayerLanesTestPage />
   }
