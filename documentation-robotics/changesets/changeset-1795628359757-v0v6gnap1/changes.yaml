@@ -170,7 +170,7 @@
     type: applicationfunction
     layer_id: application
     name: Branch Map Placement
-    description: "layoutBranchMap() in src/utils/branchMap/layout.ts: validate the input (duplicate ids, dangling references and cycles go to issues, never throw), rank stations (rank.ts: dated done stations above the start marker by date; open stations below it by longest path over station.after, line from-to with a minimum span, and dependency links, solved across all groups so cross-group links point down), choose each trunk, bundle lines, assign rank bands with one sub-row per station per group, assign lanes by interval colouring (lanes.ts: trunk on lane 0, freed lanes reused; lines from the start leave the trunk one row apart as a staggered fan), place the labels, then pack groups left to right by their measured width. Output is BranchMapLayout: positions only."
+    description: "layoutBranchMap() in src/utils/branchMap/layout.ts: validate the input (duplicate ids, dangling references and cycles go to issues, never throw), rank stations (rank.ts: dated done stations above the start marker by date; open stations below it by longest path over station.after, line from-to with a minimum span, and dependency links, solved across all groups so cross-group links point down), choose each trunk (dated done stations no live line leads to join it), bundle lines, assign rank bands with one sub-row per station per group, assign lanes by interval colouring (lanes.ts: trunk on lane 0, freed lanes reused; lines from the start leave the trunk one row apart as a staggered fan), place the labels, then pack groups left to right by their measured width. Output is BranchMapLayout: positions only."
     metadata:
       created_at: 2026-11-25T17:41:12.936Z
       updated_at: 2026-11-25T17:41:12.936Z
@@ -180,7 +180,7 @@
       locations:
         - file: src/utils/branchMap/layout.ts
           symbol: layoutBranchMap
-  timestamp: 2026-11-25T22:32:39.353Z
+  timestamp: 2026-11-25T23:08:59.348Z
   sequenceNumber: 8
 - type: add
   elementId: application.applicationfunction.branch-map-trunk-selection
@@ -236,7 +236,7 @@
     type: applicationfunction
     layer_id: application
     name: Branch Map Label Placement
-    description: "placeBranchMapLabels() in src/utils/branchMap/labels.ts: per group, candidate boxes for each station label on its own sub-row (right of the station, right of the lines running past that row, or left of a station off the trunk) and each line label (horizontal, right of the line's run near its fork, sliding down the run when taken), placed greedily by priority (trunk stations, then other stations, then line names) so no box overlaps another box or a station mark; crossing a line and distance from the anchor are soft costs. Text width from options.measureText or a character-width estimate; wraps to two lines at maxLabelWidth, then ellipsis. Unplaced labels are listed. Returns the group's label extent, which sets its width."
+    description: "placeBranchMapLabels() in src/utils/branchMap/labels.ts: per group, candidate boxes for each station label on its own sub-row (right of the station, right of the lines running past that row, or left of a station off the trunk) and each line label (horizontal, right of the line's run near its fork, sliding down the run when taken), placed greedily by priority (trunk stations, then other stations, then line names) so no box overlaps another box or a station mark; crossing a line and distance from the anchor are soft costs. Text width from options.measureText or a character-width estimate; wraps to two lines at maxLabelWidth, then ellipsis. Returns placed and unplaced labels; layoutBranchMap sets the group's width from the placed boxes."
     metadata:
       created_at: 2026-11-25T17:41:12.936Z
       updated_at: 2026-11-25T17:41:12.936Z
@@ -246,7 +246,7 @@
       locations:
         - file: src/utils/branchMap/labels.ts
           symbol: placeBranchMapLabels
-  timestamp: 2026-11-25T22:32:39.436Z
+  timestamp: 2026-11-25T23:08:57.756Z
   sequenceNumber: 11
 - type: add
   elementId: application.applicationfunction.branch-map-routing
@@ -302,7 +302,7 @@
     type: schemadefinition
     layer_id: data-model
     name: BranchMapData
-    description: "The branch map's input: groups, stations, lines and links. Vocabulary-free; ids are unique across groups and stations."
+    description: "The branch map's input: groups, stations, lines and links. Vocabulary-free; ids are unique across groups, stations, lines and links, and a duplicate or a reference to an unknown id is reported in the layout's issues, never thrown."
     attributes:
       title: BranchMapData
       type: object
@@ -315,7 +315,7 @@
       locations:
         - file: src/utils/branchMap/types.ts
           symbol: BranchMapData
-  timestamp: 2026-11-25T22:32:22.525Z
+  timestamp: 2026-11-25T23:08:56.988Z
   sequenceNumber: 14
 - type: add
   elementId: data-model.schemadefinition.branch-map-group
@@ -327,7 +327,7 @@
     type: schemadefinition
     layer_id: data-model
     name: BranchMapGroup
-    description: "One group (a column with its own trunk): id, label, optional color (a --graph-layer-<n> palette index, else by order), optional trunk (station ids, in order) that overrides the derived trunk."
+    description: "One group (a column with its own trunk): id, label, optional color (a --graph-layer-<n> palette index, else by order), optional trunk: waypoints, station ids of this group top to bottom that the derived trunk must pass through (decision 4, 2026-11-25)."
     attributes:
       title: BranchMapGroup
       type: object
@@ -340,7 +340,7 @@
       locations:
         - file: src/utils/branchMap/types.ts
           symbol: BranchMapGroup
-  timestamp: 2026-11-25T22:32:22.525Z
+  timestamp: 2026-11-25T23:08:56.820Z
   sequenceNumber: 15
 - type: add
   elementId: data-model.schemadefinition.branch-map-station
@@ -427,7 +427,7 @@
     type: schemadefinition
     layer_id: data-model
     name: BranchMapOptions
-    description: "Layout options: rowGap, rankGap, laneGap (default 24), groupGap, minBranchRanks, maxLanes (default 8), expanded (group or bundle ids), width ('off' default, or 'weight'), maxLabelWidth (default 180), measureText (optional, injected so layout stays headless), looseStations ('spur': stations no line leads to sit on one dotted planned line per group)."
+    description: "Layout options: rowGap, rankGap, laneGap (default 24), groupGap, minBranchRanks, maxLanes (default 8), expanded (group, bundle or more:<group> ids), width ('off' default, or 'weight'), maxLabelWidth (default 180), measureText (optional, injected so layout stays headless), looseStations ('spur': stations no line leads to sit on one dotted planned line per group)."
     attributes:
       title: BranchMapOptions
       type: object
@@ -440,7 +440,7 @@
       locations:
         - file: src/utils/branchMap/types.ts
           symbol: BranchMapOptions
-  timestamp: 2026-11-25T22:32:22.525Z
+  timestamp: 2026-11-25T23:08:57.191Z
   sequenceNumber: 19
 - type: add
   elementId: data-model.schemadefinition.branch-map-layout
@@ -527,7 +527,7 @@
     type: librarycomponent
     layer_id: ux
     name: BranchMap
-    description: "A standalone SVG view of a branch map: it runs branchMapScene, draws groups, trunks, lines, stations, ticks, links and placed labels in --graph-layer-* colours, and handles direct manipulation only (no chrome). Selection is controlled (selectedId, onSelect(id, item); Escape clears), hover and keyboard focus set hoveredId (onHoverChange), pan and zoom come from usePanZoom, stations and lines are one roving tab stop with accessible names, a bundle or 'N more' line expands when activated (expanded, defaultExpanded, onExpandedChange) and each group has an expand or collapse toggle, startLabel names the start markers, and renderTooltip draws hover detail. Layout options are individual props. Links are mouse-only."
+    description: "A standalone SVG view of a branch map: it runs branchMapScene, draws groups, trunks, lines, stations, ticks, links and placed labels in --graph-layer-* colours, and handles direct manipulation only (no chrome). Selection is controllable (selectedId, onSelect(id, item); uncontrolled when selectedId is unset; Escape clears), hover and keyboard focus set hoveredId (onHoverChange), pan and zoom come from usePanZoom, stations and lines are one roving tab stop with accessible names, a bundle or 'N more' line expands when activated (expanded, defaultExpanded, onExpandedChange) and a group with bundled or expanded lines has an expand or collapse toggle, startLabel names the start markers, and renderTooltip draws hover detail. Layout options are individual props. Links are mouse-only."
     attributes:
       type: display
       category: heimdall-graph
@@ -549,7 +549,7 @@
       locations:
         - file: src/components/BranchMap.tsx
           symbol: BranchMap
-  timestamp: 2026-11-25T22:32:39.653Z
+  timestamp: 2026-11-25T23:08:58.576Z
   sequenceNumber: 23
 - type: add
   elementId: testing.testcoveragetarget.branch-map-view

@@ -7,8 +7,8 @@
  * Stages, each in its own module:
  * 1. validate: duplicate ids and dangling references go to `issues`, never thrown;
  * 2. rank (rank.ts): dated done work above the start, open work below it by longest path;
- * 3. trunk (trunk.ts): stated, else the heaviest chain of stops; dated stations no line leads
- *    to run down the trunk too;
+ * 3. trunk (trunk.ts): the heaviest chain of stops, through any stated waypoints; dated
+ *    stations no line leads to run down the trunk too;
  * 4. rows: one band per rank across all groups, one sub-row per station per group, so no two
  *    stations of a group share a row;
  * 5. bundle (bundle.ts) and lanes (lanes.ts): lines to `maxLanes` lanes by interval colouring;

@@ -221,7 +221,7 @@ export interface BranchMapStationLayout {
 
 /**
  * - `line`: one input line.
- * - `bundle`: input lines with the same fork rank and destination, drawn as one.
+ * - `bundle`: input lines with the same fork (a station, or the start) and destination, drawn as one.
  * - `more`: the lightest lines left over the lane budget, drawn as one "N more" line.
  * - `spur`: the dotted planned line that carries stations no line leads to.
  */
