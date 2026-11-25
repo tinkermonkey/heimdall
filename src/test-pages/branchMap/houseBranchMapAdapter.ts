@@ -14,6 +14,8 @@
  * | depends_on across projects         | `dependency` link                                      |
  * | interface                          | `provides` link, provider's next delivering milestone → |
  * |                                    | each user's start marker                               |
+ * | milestones that deliver interfaces | the group's `trunk` waypoints: the heaviest chain of    |
+ * |                                    | milestones, passing through every one                  |
  *
  * House stores no start for a workstream, so a line starts at the latest of the visible stations
  * in its own project that opened it (`opens`) or that it waits on (`depends_on`); failing those,
@@ -179,11 +181,22 @@ export function houseToBranchMap(snapshot: HouseOrganizingSnapshot, options: Hou
     return ka - kb || da.localeCompare(db) || na - nb || a.localeCompare(b)
   }
 
-  const groups: BranchMapGroup[] = projects.map((id, i) => ({
-    id,
-    label: snapshot.projects.find((p) => p.id === id)!.name,
-    color: HOUSE_PROJECT_COLORS[id] ?? i,
-  }))
+  // The trunk (decision 4, 2026-11-25): still the heaviest chain of milestones, but it passes
+  // through every milestone that delivers an interface (what the project promises others), given
+  // to the layout as waypoints in depends_on order. A project that delivers none states none.
+  const delivering = new Set(snapshot.interfaces.filter((i) => i.status === 'active').flatMap((i) => i.milestones))
+  const trunkOf = (project: string) =>
+    [...kept].filter(([ref, n]) => n.kind === 'milestone' && n.record.project === project && n.record.status !== 'dropped' && delivering.has(ref)).map(([ref]) => ref).sort(compare)
+
+  const groups: BranchMapGroup[] = projects.map((id, i) => {
+    const trunk = trunkOf(id)
+    return {
+      id,
+      label: snapshot.projects.find((p) => p.id === id)!.name,
+      color: HOUSE_PROJECT_COLORS[id] ?? i,
+      ...(trunk.length ? { trunk } : {}),
+    }
+  })
 
   const stations: BranchMapStation[] = []
   for (const [ref, n] of kept) {

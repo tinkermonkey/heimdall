@@ -71,7 +71,16 @@ describe('house branch map adapter > maps workstreams, interfaces and blocked as
     expect(shown.groups.map((g) => [g.id, g.label])).toEqual([['r', 'Project R'], ['p', 'Project P']])
     const real = houseToBranchMap(SNAPSHOT, { projects: ['heimdall', 'dr_viewer'] })
     expect(real.groups.map((g) => g.color)).toEqual([HOUSE_PROJECT_COLORS.heimdall, HOUSE_PROJECT_COLORS.dr_viewer])
-    expect(real.groups.every((g) => g.trunk === undefined)).toBe(true)
+  })
+
+  it('gives the milestones that deliver an interface as trunk waypoints, in depends_on order, else none', () => {
+    const groups = byId(data.groups)
+    expect(groups.get('p')?.trunk).toEqual(['p-1', 'p-2']) // p-done is closed, so not shown from now on
+    expect(groups.get('q')?.trunk).toBeUndefined() // delivers nothing: the trunk is all derived
+    expect(groups.get('r')?.trunk).toBeUndefined()
+    expect(byId(houseToBranchMap(SMALL, { horizon: 'all' }).groups).get('p')?.trunk).toEqual(['p-done', 'p-1', 'p-2'])
+    const retiredOnly: HouseOrganizingSnapshot = { ...SMALL, interfaces: SMALL.interfaces.map((i) => ({ ...i, status: 'retired' as const })) }
+    expect(byId(houseToBranchMap(retiredOnly).groups).get('p')?.trunk).toBeUndefined()
   })
 
   it('maps milestones to stops and gates to decisions; the forward horizon keeps open work only', () => {

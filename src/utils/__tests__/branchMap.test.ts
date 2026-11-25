@@ -164,7 +164,7 @@ describe('layoutBranchMap', () => {
   })
 
   describe('trunk', () => {
-    it('a stated trunk wins: exactly those stations on lane 0', () => {
+    it('a stated trunk names waypoints: the trunk passes through every one, and stays derived around them', () => {
       const layout = layoutBranchMap(branchMapSample)
       const atlas = layout.groups.find((g) => g.id === G.small)!
       expect(atlas.trunk).toEqual(['a-s0', 'a-s1', 'a-s2', 'a-s3'])
@@ -177,7 +177,13 @@ describe('layoutBranchMap', () => {
         groups: branchMapSample.groups.map((g) => (g.id === G.twentyLines ? { ...g, trunk: ['b-s4', 'b-s8'] } : g)),
       }
       const restated = layoutBranchMap(stated)
-      expect(restated.groups.find((g) => g.id === G.twentyLines)!.trunk).toEqual(['b-s4', 'b-s8'])
+      const trunk = restated.groups.find((g) => g.id === G.twentyLines)!.trunk
+      expect(trunk).toContain('b-s4') // both waypoints, in order
+      expect(trunk).toContain('b-s8')
+      expect(trunk.indexOf('b-s4')).toBeLessThan(trunk.indexOf('b-s8'))
+      expect(trunk.length).toBeGreaterThan(2) // and the heaviest stops around them
+      const ranks = new Map(restated.stations.map((s) => [s.id, s.rank]))
+      for (let i = 1; i < trunk.length; i++) expect(ranks.get(trunk[i])!).toBeGreaterThanOrEqual(ranks.get(trunk[i - 1])!)
       expect(restated.issues).toEqual([])
       expectNoOverlaps(restated)
     })
@@ -263,11 +269,11 @@ describe('layoutBranchMap', () => {
     })
 
     it('draws what "N more" held when it is expanded, past the budget', () => {
-      const held = layoutBranchMap(branchMapSample).lines.find((l) => l.id === moreIdOf('cirrus'))!.members.map((l) => l.id)
+      const held = layoutBranchMap(branchMapSample).lines.find((l) => l.id === moreIdOf('cirrus'))!.members
       expect(held.length).toBeGreaterThan(1)
       const layout = layoutBranchMap(branchMapSample, { expanded: [moreIdOf('cirrus')] })
       expect(layout.lines.find((l) => l.id === moreIdOf('cirrus'))).toBeUndefined()
-      const drawn = layout.lines.filter((l) => l.group === 'cirrus' && l.kind !== 'spur').flatMap((l) => l.members.map((m) => m.id))
+      const drawn = layout.lines.filter((l) => l.group === 'cirrus' && l.kind !== 'spur').flatMap((l) => l.members)
       for (const id of held) expect(drawn).toContain(id)
       expect(lanesOf(layout, 'cirrus')).toBeGreaterThan(8)
       expectNoOverlaps(layout)

@@ -43,8 +43,8 @@ export interface BranchMapGroup {
   /** Palette index into `--graph-layer-<n>`. Unset: by the group's order. */
   color?: number
   /**
-   * Station ids of this group, top to bottom, that form its trunk. Overrides the derived trunk
-   * (the heaviest chain of stops).
+   * Waypoints: station ids of this group, top to bottom, that its trunk must pass through. The
+   * rest of the trunk is still derived (the heaviest chain of stops), between and around them.
    */
   trunk?: readonly string[]
 }
