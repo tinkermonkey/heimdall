@@ -2,7 +2,7 @@ id: changeset-1795628359757-v0v6gnap1
 name: branch-map-poc
 description: 'Proof of concept for the Metro bands branch map (direction decided 2026-11-25, House gate "Branch map direction"; House milestone "Branch map POC"; GitHub milestone tinkermonkey/heimdall milestone 1). Promotes the prototype in src/test-pages/branchMap/ into a vocabulary-free heimdall view: a generic input model (groups, stations with kind, status and optional date, lines with from, to, weight and style, links between groups), a pure deterministic layout under src/utils/branchMap/ with placement, label placement and routing as separate stages, a standalone BranchMap view component, and a House adapter that stays in the test pages. Built in four pieces that do not share files: #411 model types, stubs and sample fixture (first; the others wait for it), then in parallel #412 layout and its unit tests, #413 BranchMap view plus src/index.ts exports and the graph agent skill, #414 House adapter, test page, App.tsx route, Playwright spec and baselines, docs showcase, README, and verifying and landing this changeset. Done when: no two stations, labels or groups overlap on the 2026-11-25 House snapshot (unit-tested); every group stays within its lane budget (Documentation Robotics'' 20 streams and Claude Plugins'' 17 fit in 8 lanes, expandable); labels sit beside their stations with no fixed label column and no rotated lane names; the test page ?example=branch-map renders the snapshot through the adapter; tests/branch-map.spec.ts has light and dark baselines; BranchMap is exported, documented in agent-skills/heimdall-graph and passes check:skills and check:colors. Proposed defaults for the open decisions, pending Austin''s confirmation: (3) width off by default, weight-based width available as an option; (4) a group may state its trunk, otherwise the heaviest milestone chain is derived; (5) bundle lines by destination, then collapse the rest into one ''N more'' line per group past maxLanes (8), expandable per group or bundle; (6) a standalone view component sharing usePanZoom and the controlled-selection convention, not a GraphCanvas layout mode.'
 created: 2026-11-25T17:39:19.784Z
-modified: 2026-11-25T22:32:39.804Z
+modified: 2026-11-25T23:03:27.712Z
 status: staged
 baseSnapshot: v2:sha256:5fd5c92961fe57efafd93591e0b1155d87748161008e8257a820df0ca6b40872
 origin:
@@ -12,7 +12,7 @@ stats:
   additions: 157
   modifications: 0
   deletions: 0
-lastSequence: 197
+lastSequence: 202
 unstaged:
   - sequence: 23
     removedAt: 156
@@ -954,4 +954,130 @@ unstaged:
             - file: tests/branch-map.spec.ts
               symbol: "keyboard: Enter selects a station, Space a line, Escape clears"
       timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 9
+    removedAt: 198
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-trunk-selection
+      layerName: application
+      after:
+        id: ad8dade0-8030-4fab-83c1-dbb035b79f9a
+        path: application.applicationfunction.branch-map-trunk-selection
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Trunk Selection
+        description: "chooseBranchMapTrunk(): a group's stated trunk (group.trunk, station ids) when given, else the heaviest chain of stops in rank order (weight from arriving lines and their weight, a bonus for consecutive stops linked by after). Decision stations sit on the trunk when nothing leads to them and their row is free. Promoted from the prototype's trunk stage."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/utils/branchMap/trunk.ts
+              symbol: chooseBranchMapTrunk
+      timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 30
+    removedAt: 199
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+      layerName: testing
+      after:
+        id: cac50748-04c4-46ef-85ad-c5b7844f28ff
+        path: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: branch map layout > a stated trunk wins over the derived chain
+        description: group.trunk puts exactly those stations on lane 0; without it the heaviest chain is chosen.
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/utils/__tests__/branchMap.test.ts
+              symbol: "a stated trunk wins: exactly those stations on lane 0"
+      timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 10
+    removedAt: 200
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-line-bundling
+      layerName: application
+      after:
+        id: 0412909b-c3f8-4759-979e-0379924e3ea1
+        path: application.applicationfunction.branch-map-line-bundling
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Line Bundling
+        description: "bundleBranchLines() in src/utils/branchMap/bundle.ts: keeps a group within maxLanes. Merges lines that fork from the same place (a station, or the group's start) and deliver to the same station into one bundle line (members, count, summed weight; id bundle:<group>:<from|start>:<to>), largest sets first; if still over budget, collapses the lightest remaining lines and bundles into one 'N more' line per group (more:<group>). Groups and bundles named in expanded are left whole. Deterministic tie-breaks by id. As built, the bundle key is the exact fork plus destination, not the fork's rank as first planned."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/utils/branchMap/bundle.ts
+              symbol: bundleBranchLines
+      timestamp: 2026-11-25T22:32:39.270Z
+    rewritten: true
+  - sequence: 13
+    removedAt: 201
+    change:
+      type: add
+      elementId: application.applicationfunction.house-branch-map-adapter
+      layerName: application
+      after:
+        id: 11d91168-d6cb-4614-b857-4e854dfa5410
+        path: application.applicationfunction.house-branch-map-adapter
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: House Branch Map Adapter
+        description: "houseToBranchMap(snapshot, { projects, horizon, widthBy }) in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups (fixed palette colour per project), milestones stops and gates decisions (proposed to planned, open gate to active, reached and decided to done, with reached_on or decided_on as the date), depends_on and opens within a project become station after; workstreams become lines (from: the latest station in its own project that opened it or that it waits on, else the start; style dashed for explorations, dotted for set aside, set aside winning; weight 1 or open plus done tasks; open tasks as marks, in progress emphasized), depends_on across projects dependency links (a workstream's wait lands on its destination), interfaces provides links from the provider's next open delivering milestone (else its start) to each other user's start, blocked derived as House derives it over the whole snapshot. Visible projects and the horizon (from now, whole history) are the adapter's filter. Stays out of the library."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/test-pages/branchMap/houseBranchMapAdapter.ts
+              symbol: houseToBranchMap
+      timestamp: 2026-11-25T22:32:39.520Z
+    rewritten: true
+  - sequence: 2
+    removedAt: 202
+    change:
+      type: add
+      elementId: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+      layerName: motivation
+      after:
+        id: fb6bf071-96f3-4bc0-aaab-d5f0f35dae7a
+        path: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+        spec_node_id: motivation.requirement
+        type: requirement
+        layer_id: motivation
+        name: Branch Map Groups Stay Within a Lane Budget
+        description: A group never draws more than maxLanes branch lanes (default 8). Past it, lines that share a destination merge into one bundle line with a count; if that is still over budget, the lightest remaining lines collapse into one 'N more' line per group. Expanding a group or a bundle (a controlled prop) draws its lines again. On the 2026-11-25 House snapshot, Documentation Robotics (20 open streams, 9 destinations) and Claude Plugins (17 streams, 15 destinations) both fit.
+        attributes:
+          requirementType: functional
+          priority: high
+        metadata:
+          created_at: 2026-11-25T17:41:12.931Z
+          updated_at: 2026-11-25T17:41:12.931Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
     rewritten: true

@@ -110,8 +110,8 @@ House MCP and Claude Plugins (142 milestones, 37 gates, 78 workstreams, 7 interf
   date they were recorded in House: organizing projects shipped 2026-11-24 and roadmaps were
   imported then. The past collapses into one band until real dates build up.
 - **Few milestone chains.** Many open milestones have no `depends_on` between them, so the trunk
-  heuristic has little to go on and chooses among peers. A stated trunk would be more honest (see
-  the decisions below).
+  heuristic has little to go on and chooses among peers. Decision 4 below anchors it on the
+  milestones that deliver an interface.
 
 ## The concepts
 
@@ -188,25 +188,33 @@ gates, then the open branches.
    as a list.
 2. **Geometry. Decided 2026-11-25 with the row model: 45° octilinear with rounded corners.**
    Set aside: S-curves (git).
-3. **Width. Default chosen for the POC: off**, with `width: 'weight'` as an option. With weight
-   on, width is the square root of weight; a fork takes a line's weight off the trunk and a join
-   gives it back, and a dead end never returns it, so the trunk is visibly thinner after one. The
-   House adapter weighs a workstream as 1 (`Streams`, the steadier choice) or by its open and
-   done tasks (`Tasks`).
-4. **The trunk. Default chosen for the POC: derived unless stated.** A group may state its trunk
-   (`group.trunk`, station ids); otherwise the layout takes the heaviest chain of stops. The House
-   adapter states none yet, since House has no field for it.
-5. **Scale. Default chosen for the POC: a lane budget.** A group draws at most `maxLanes` (8)
-   branch lanes. Past it, lines with the same fork and destination bundle into one line with a
-   count, then the lightest lines left collapse into one "N more" line. A bundle or a whole group
-   can be expanded.
-6. **Where it lives. Default chosen for the POC: a standalone `BranchMap` view**, with pan and
-   zoom from `usePanZoom` and controlled selection, rather than a `GraphCanvas` layout mode.
-   Heimdall stays ignorant of House: the adapter is in the test pages.
+3. **Width. Decided 2026-11-25: off by default**, with `width: 'weight'` as an option. With
+   weight on, width is the square root of weight; a fork takes a line's weight off the trunk, a
+   join gives it back, and a dead end never returns it, so the trunk is visibly thinner after one.
+   The House adapter weighs a workstream as 1 (`Streams`, the steadier choice) or by its open and
+   done tasks (`Tasks`). Set aside as the default: either weighting, since House tasks vary a lot
+   in size.
+4. **The trunk. Decided 2026-11-25: derived, through interface milestones.** The trunk is the
+   heaviest chain of stops, and a group may name waypoints it must pass through (`group.trunk`);
+   each stretch between waypoints is chosen on its own. The House adapter gives a project's
+   milestones that deliver an interface (what it promises other projects) as its waypoints, in
+   `depends_on` order. A project that delivers none gets the plain derived chain. Set aside:
+   - a trunk of only the interface milestones, which was tried and gave one-station trunks that
+     few branches rejoin;
+   - the derived chain alone;
+   - a trunk stated in House, which has no field for it.
+5. **Scale. Decided 2026-11-25: a lane budget.** A group draws at most `maxLanes` (8) branch
+   lanes. Past it, lines with the same fork and destination bundle into one line with a count,
+   then the lightest lines left collapse into one "N more" line. A bundle, the "N more" line or a
+   whole group can be expanded. Set aside: bundling by sub-project, and collapsing unfocused
+   projects to their trunk.
+6. **Where it lives. Decided 2026-11-25: a standalone `BranchMap` view**, with pan and zoom from
+   `usePanZoom` and controlled selection, rather than a `GraphCanvas` layout mode. Lines with their
+   own width and stations on lines don't fit GraphCanvas's nodes and edges. Heimdall stays ignorant
+   of House: the adapter is in the test pages.
 
-Decisions 3 to 6 are defaults for the POC, to be confirmed once it runs on real data. The two
-weaknesses Metro bands showed in the concepts (a wide label column, cramped names along 18 px
-lanes) are addressed in the POC by placing labels beside their own stations and running line
+The two weaknesses Metro bands showed in the concepts (a wide label column, cramped names along
+18 px lanes) are addressed in the POC by placing labels beside their own stations and running line
 names horizontally at the fork.
 
 ## The proof of concept
@@ -250,6 +258,7 @@ How the adapter maps House:
 | `depends_on` across projects | a `dependency` link from the station waited on; a workstream's wait lands on its destination |
 | interface | a `provides` link from the provider's next open milestone that delivers it, else its start marker, to each other project that uses it |
 | blocked | an open station that waits on a milestone or gate still open (in any project, shown or not) or on a task |
+| milestones that deliver an interface | the group's trunk waypoints, in `depends_on` order: the trunk is the heaviest chain through them |
 
 Known limits of the POC:
 

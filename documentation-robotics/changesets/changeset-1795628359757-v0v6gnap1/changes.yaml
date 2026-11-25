@@ -48,7 +48,7 @@
     type: requirement
     layer_id: motivation
     name: Branch Map Groups Stay Within a Lane Budget
-    description: A group never draws more than maxLanes branch lanes (default 8). Past it, lines that share a destination merge into one bundle line with a count; if that is still over budget, the lightest remaining lines collapse into one 'N more' line per group. Expanding a group or a bundle (a controlled prop) draws its lines again. On the 2026-11-25 House snapshot, Documentation Robotics (20 open streams, 9 destinations) and Claude Plugins (17 streams, 15 destinations) both fit.
+    description: A group never draws more than maxLanes branch lanes (default 8; decision 5, confirmed 2026-11-25). Past it, lines that share a fork and a destination merge into one bundle line with a count; if that is still over budget, the lightest remaining lines collapse into one 'N more' line per group. Expanding a group, a bundle or the 'N more' line (a controlled prop) draws its lines again. On the 2026-11-25 House snapshot, Documentation Robotics (20 open streams, 9 destinations) and Claude Plugins (17 streams, 15 destinations) both fit.
     attributes:
       requirementType: functional
       priority: high
@@ -56,7 +56,7 @@
       created_at: 2026-11-25T17:41:12.931Z
       updated_at: 2026-11-25T17:41:12.931Z
       version: 1
-  timestamp: 2026-11-25T17:41:12.958Z
+  timestamp: 2026-11-25T23:03:27.672Z
   sequenceNumber: 2
 - type: add
   elementId: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
@@ -192,7 +192,7 @@
     type: applicationfunction
     layer_id: application
     name: Branch Map Trunk Selection
-    description: "chooseBranchMapTrunk(): a group's stated trunk (group.trunk, station ids) when given, else the heaviest chain of stops in rank order (weight from arriving lines and their weight, a bonus for consecutive stops linked by after). Decision stations sit on the trunk when nothing leads to them and their row is free. Promoted from the prototype's trunk stage."
+    description: "chooseBranchMapTrunk(): the heaviest chain of stops in rank order (weight from arriving lines and their weight, a bonus for consecutive stops linked by after). A stated trunk (group.trunk) names waypoints the chain must pass through; each stretch between waypoints, and before the first and after the last, is chosen on its own. Waypoints of one rank are a tie, not an inversion; ids outside the group or a later rank given before an earlier one are reported as invalid-trunk. Decision stations sit on the trunk when nothing leads to them and their row is free. Decided 2026-11-25 (decision 4): waypoints rather than an exact trunk, so a stated trunk stays a long main line."
     metadata:
       created_at: 2026-11-25T17:41:12.936Z
       updated_at: 2026-11-25T17:41:12.936Z
@@ -202,7 +202,7 @@
       locations:
         - file: src/utils/branchMap/trunk.ts
           symbol: chooseBranchMapTrunk
-  timestamp: 2026-11-25T22:32:22.572Z
+  timestamp: 2026-11-25T23:03:21.478Z
   sequenceNumber: 9
 - type: add
   elementId: application.applicationfunction.branch-map-line-bundling
@@ -214,7 +214,7 @@
     type: applicationfunction
     layer_id: application
     name: Branch Map Line Bundling
-    description: "bundleBranchLines() in src/utils/branchMap/bundle.ts: keeps a group within maxLanes. Merges lines that fork from the same place (a station, or the group's start) and deliver to the same station into one bundle line (members, count, summed weight; id bundle:<group>:<from|start>:<to>), largest sets first; if still over budget, collapses the lightest remaining lines and bundles into one 'N more' line per group (more:<group>). Groups and bundles named in expanded are left whole. Deterministic tie-breaks by id. As built, the bundle key is the exact fork plus destination, not the fork's rank as first planned."
+    description: "bundleBranchLines() in src/utils/branchMap/bundle.ts: keeps a group within maxLanes. Merges lines that fork from the same place (a station, or the group's start) and deliver to the same station into one bundle line (members, count, summed weight; id bundle:<group>:<from|start>:<to>), largest sets first; if still over budget, collapses the lightest remaining lines and bundles into one 'N more' line per group (more:<group>). Groups and bundles named in expanded are left whole, and an expanded more:<group> draws the lines and bundles it would have held, past the budget. Deterministic tie-breaks by id. As built, the bundle key is the exact fork plus destination, not the fork's rank as first planned."
     metadata:
       created_at: 2026-11-25T17:41:12.936Z
       updated_at: 2026-11-25T17:41:12.936Z
@@ -224,7 +224,7 @@
       locations:
         - file: src/utils/branchMap/bundle.ts
           symbol: bundleBranchLines
-  timestamp: 2026-11-25T22:32:39.270Z
+  timestamp: 2026-11-25T23:03:21.675Z
   sequenceNumber: 10
 - type: add
   elementId: application.applicationfunction.branch-map-label-placement
@@ -280,7 +280,7 @@
     type: applicationfunction
     layer_id: application
     name: House Branch Map Adapter
-    description: "houseToBranchMap(snapshot, { projects, horizon, widthBy }) in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups (fixed palette colour per project), milestones stops and gates decisions (proposed to planned, open gate to active, reached and decided to done, with reached_on or decided_on as the date), depends_on and opens within a project become station after; workstreams become lines (from: the latest station in its own project that opened it or that it waits on, else the start; style dashed for explorations, dotted for set aside, set aside winning; weight 1 or open plus done tasks; open tasks as marks, in progress emphasized), depends_on across projects dependency links (a workstream's wait lands on its destination), interfaces provides links from the provider's next open delivering milestone (else its start) to each other user's start, blocked derived as House derives it over the whole snapshot. Visible projects and the horizon (from now, whole history) are the adapter's filter. Stays out of the library."
+    description: "houseToBranchMap(snapshot, { projects, horizon, widthBy }) in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups (fixed palette colour per project), milestones stops and gates decisions (proposed to planned, open gate to active, reached and decided to done, with reached_on or decided_on as the date), depends_on and opens within a project become station after; workstreams become lines (from: the latest station in its own project that opened it or that it waits on, else the start; style dashed for explorations, dotted for set aside, set aside winning; weight 1 or open plus done tasks; open tasks as marks, in progress emphasized), depends_on across projects dependency links (a workstream's wait lands on its destination), interfaces provides links from the provider's next open delivering milestone (else its start) to each other user's start, blocked derived as House derives it over the whole snapshot. A project's milestones that deliver an active interface become its trunk waypoints in depends_on order (decision 4, 2026-11-25); a project delivering none states none. Visible projects and the horizon (from now, whole history) are the adapter's filter. Stays out of the library."
     metadata:
       created_at: 2026-11-25T17:41:12.936Z
       updated_at: 2026-11-25T17:41:12.936Z
@@ -290,7 +290,7 @@
       locations:
         - file: src/test-pages/branchMap/houseBranchMapAdapter.ts
           symbol: houseToBranchMap
-  timestamp: 2026-11-25T22:32:39.520Z
+  timestamp: 2026-11-25T23:03:21.778Z
   sequenceNumber: 13
 - type: add
   elementId: data-model.schemadefinition.branch-map-data
@@ -715,8 +715,8 @@
     spec_node_id: testing.testcasesketch
     type: testcasesketch
     layer_id: testing
-    name: branch map layout > a stated trunk wins over the derived chain
-    description: group.trunk puts exactly those stations on lane 0; without it the heaviest chain is chosen.
+    name: branch map layout > a stated trunk names waypoints
+    description: "group.trunk names waypoints: the trunk passes through every one, in rank order, and stays derived around them; a tie in rank among waypoints is not reported, an inversion is."
     attributes:
       status: draft
       implementationFormat: automated
@@ -729,7 +729,9 @@
       locations:
         - file: src/utils/__tests__/branchMap.test.ts
           symbol: "a stated trunk wins: exactly those stations on lane 0"
-  timestamp: 2026-11-25T22:32:22.572Z
+        - file: src/utils/__tests__/branchMap.test.ts
+          symbol: "a stated trunk names waypoints: the trunk passes through every one, and stays derived around them"
+  timestamp: 2026-11-25T23:03:21.587Z
   sequenceNumber: 30
 - type: add
   elementId: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
