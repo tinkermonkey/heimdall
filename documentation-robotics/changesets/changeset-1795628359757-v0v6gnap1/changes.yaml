@@ -1,0 +1,2115 @@
+- type: add
+  elementId: motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: motivation
+  after:
+    id: 27d3e563-1442-4b90-bb56-0a923fdecbe8
+    path: motivation.requirement.branch-map-library-stays-vocabulary-free
+    spec_node_id: motivation.requirement
+    type: requirement
+    layer_id: motivation
+    name: Branch Map Library Stays Vocabulary-Free
+    description: The branch map takes a generic model (groups, stations, lines, links) and knows nothing of House or any other source. Mapping a source onto it is the consuming app's job; in this repo the House adapter lives in src/test-pages/, never in src/utils/ or src/components/. Follows the layered-graph precedent (design-reference/layered-graph/breakdown.md §1.1).
+    attributes:
+      requirementType: quality
+      priority: high
+    metadata:
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 0
+- type: add
+  elementId: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+  layerName: motivation
+  after:
+    id: 88cf5f1d-fcd6-4249-b289-55c12162b0a9
+    path: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+    spec_node_id: motivation.requirement
+    type: requirement
+    layer_id: motivation
+    name: Branch Map Labels Sit Beside Their Stations Without Overlap
+    description: Station labels are placed per station beside its own sub-row, not in a fixed label column, and a group is as wide as its lanes plus its widest placed label (maxLabelWidth, default 180 px, wrapping to two lines then ellipsis). Line names run horizontally at the fork, not rotated along an 18 px lane. Every placed label box clears every other label, every station and every other group; a label with no clear spot is left unplaced and reported, shown on hover and in the inspector. Fixes the two weaknesses Metro bands showed in the concepts.
+    attributes:
+      requirementType: functional
+      priority: high
+    metadata:
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 1
+- type: add
+  elementId: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+  layerName: motivation
+  after:
+    id: fb6bf071-96f3-4bc0-aaab-d5f0f35dae7a
+    path: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+    spec_node_id: motivation.requirement
+    type: requirement
+    layer_id: motivation
+    name: Branch Map Groups Stay Within a Lane Budget
+    description: A group never draws more than maxLanes branch lanes (default 8). Past it, lines that share a destination merge into one bundle line with a count; if that is still over budget, the lightest remaining lines collapse into one 'N more' line per group. Expanding a group or a bundle (a controlled prop) draws its lines again. On the 2026-11-25 House snapshot, Documentation Robotics (20 open streams, 9 destinations) and Claude Plugins (17 streams, 15 destinations) both fit.
+    attributes:
+      requirementType: functional
+      priority: high
+    metadata:
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 2
+- type: add
+  elementId: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+  layerName: motivation
+  after:
+    id: aef0f0aa-8629-4723-b7a3-232920bc9d15
+    path: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    spec_node_id: motivation.requirement
+    type: requirement
+    layer_id: motivation
+    name: Graph Layout and Edge Routing Are Separate Headless Stages
+    description: "A graph layout mode is a pure, headless function: placement emits positions, and edge or line routing is a separate stage that reads only the placement and emits polylines per edge or line. No DOM, no measurement during layout (text widths come from an injected measure function or a character-width estimate). From the graph layout foundation's hard requirements."
+    attributes:
+      requirementType: quality
+      priority: high
+    metadata:
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 3
+- type: add
+  elementId: product.softwarecapability.branch-map-visualization
+  layerName: product
+  after:
+    id: b9ea123a-40d0-4973-ac17-c8c928e15e92
+    path: product.softwarecapability.branch-map-visualization
+    spec_node_id: product.softwarecapability
+    type: softwarecapability
+    layer_id: product
+    name: Branch Map Visualization
+    description: "A vertical metro-map view of how groups of work are organized: per group a trunk running down from a start marker, a branch per line from where it starts to the station it delivers to, stations along the lines, ticks for the work on a line, and links between groups (dependency arrows and provider arches). Prior art: Nesbitt's metro map metaphor (IV 2004), Stott et al.'s project plans as metro maps (IV 2005), commit-graph lane assignment (pvigier 2019)."
+    attributes:
+      status: planned
+    metadata:
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 4
+- type: add
+  elementId: product.feature.branch-map
+  layerName: product
+  after:
+    id: 833573f9-83ea-4b34-8d3a-4020b3d31346
+    path: product.feature.branch-map
+    spec_node_id: product.feature
+    type: feature
+    layer_id: product
+    name: Branch Map
+    description: "BranchMap: draws a set of groups as Metro bands (stations of one rank share a band with a sub-row each, 45-degree rounded branches, labels beside their stations), with selection, pan and zoom, bundled lines that expand, and optional width by weight."
+    attributes:
+      priority: medium
+      status: planned
+      size: l
+    metadata:
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 5
+- type: add
+  elementId: product.milestone.branch-map-poc
+  layerName: product
+  after:
+    id: 5c5fc3fc-cfa7-4e0e-8592-9356a4a04434
+    path: product.milestone.branch-map-poc
+    spec_node_id: product.milestone
+    type: milestone
+    layer_id: product
+    name: Branch Map POC
+    description: "The Metro bands branch map proof of concept: generic model, hardened layout, BranchMap view, House adapter, test page and visual spec. Mirrors the House milestone of the same name on the Heimdall project."
+    attributes:
+      status: active
+    metadata:
+      created_at: 2026-11-25T17:41:12.931Z
+      updated_at: 2026-11-25T17:41:12.931Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 6
+- type: add
+  elementId: application.applicationservice.branch-map-layout
+  layerName: application
+  after:
+    id: a8e4c971-82cf-4393-9415-21739b08c45c
+    path: application.applicationservice.branch-map-layout
+    spec_node_id: application.applicationservice
+    type: applicationservice
+    layer_id: application
+    name: Branch Map Layout
+    description: "Exported from the package entry point out of src/utils/branchMap/: layoutBranchMap (placement and label placement), routeBranchMap (line and link routing) and branchMapScene (both, memoizable), with the BranchMap* types."
+    attributes:
+      serviceType: synchronous
+    metadata:
+      created_at: 2026-11-25T17:41:12.932Z
+      updated_at: 2026-11-25T17:41:12.932Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 7
+- type: add
+  elementId: application.applicationfunction.branch-map-placement
+  layerName: application
+  after:
+    id: 05923b0b-b2d5-4d23-9045-f625886d93e0
+    path: application.applicationfunction.branch-map-placement
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Branch Map Placement
+    description: "layoutBranchMap(): validate the input (duplicate ids, dangling references and cycles go to issues, never throw), rank stations (dated done stations above the start marker by date; open stations below it by longest path over station.after, line from-to with a minimum span, and dependency links, solved across all groups so cross-group links point down), choose each trunk, bundle lines, assign rank bands with one sub-row per station per group, assign lanes by interval colouring (trunk on lane 0, freed lanes reused), place the labels, then pack groups left to right by their measured width. Output is BranchMapLayout: positions only."
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 8
+- type: add
+  elementId: application.applicationfunction.branch-map-trunk-selection
+  layerName: application
+  after:
+    id: ad8dade0-8030-4fab-83c1-dbb035b79f9a
+    path: application.applicationfunction.branch-map-trunk-selection
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Branch Map Trunk Selection
+    description: "chooseBranchMapTrunk(): a group's stated trunk (group.trunk, station ids) when given, else the heaviest chain of stops in rank order (weight from arriving lines and their weight, a bonus for consecutive stops linked by after). Decision stations sit on the trunk when nothing leads to them and their row is free. Promoted from the prototype's trunk stage."
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 9
+- type: add
+  elementId: application.applicationfunction.branch-map-line-bundling
+  layerName: application
+  after:
+    id: 0412909b-c3f8-4759-979e-0379924e3ea1
+    path: application.applicationfunction.branch-map-line-bundling
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Branch Map Line Bundling
+    description: "bundleBranchLines(): keeps a group within maxLanes. Merges lines with the same from-rank and destination into one bundle line (members, count, summed weight), largest sets first; if still over budget, collapses the lightest remaining lines into one 'N more' line per group. Groups and bundles named in expanded are left whole. Deterministic tie-breaks by id."
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 10
+- type: add
+  elementId: application.applicationfunction.branch-map-label-placement
+  layerName: application
+  after:
+    id: 32362735-cf60-4334-96a5-14153be11cfb
+    path: application.applicationfunction.branch-map-label-placement
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Branch Map Label Placement
+    description: "placeBranchMapLabels(): per group, candidate boxes for each station label (right of the station on its sub-row, then left when the station is off the trunk and the side is free) and each line label (horizontal, at the fork, right of the run), placed greedily by priority (trunk stations, then other stations, then line names) so no box overlaps another box or a station mark. Text width from options.measureText or a character-width estimate; wraps to two lines at maxLabelWidth, then ellipsis. Unplaced labels are listed. Returns the group's label extent, which sets its width."
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 11
+- type: add
+  elementId: application.applicationfunction.branch-map-routing
+  layerName: application
+  after:
+    id: 71bed825-1608-4b2e-90a8-4f8dd472aef6
+    path: application.applicationfunction.branch-map-routing
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Branch Map Routing
+    description: "routeBranchMap(): from a BranchMapLayout only, each line's polyline (fork at 45 degrees, straight run along its lane, rejoin at 45 degrees, corners rounded with polylineCurve from laneLayout.ts) with its run for ticks, how it ends (join, station, open, dead), the trunk as straight segments with per-segment width when width is on (fork takes weight off, join gives it back, a dead end never returns it), and link curves (dependency arrows between stations, arches from a provider station to a group's start). Output is BranchMapScene."
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 12
+- type: add
+  elementId: application.applicationfunction.house-branch-map-adapter
+  layerName: application
+  after:
+    id: 11d91168-d6cb-4614-b857-4e854dfa5410
+    path: application.applicationfunction.house-branch-map-adapter
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: House Branch Map Adapter
+    description: "houseToBranchMap() in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups, milestones stops and gates decisions (status proposed to planned, reached and decided to done), workstreams lines (from: the latest gate that opened it or station it waits on, else the start; style dashed for explorations, dotted for set aside; weight from streams or tasks), depends_on across projects dependency links, interfaces arches from the provider's next delivering milestone to each user's start, blocked derived as House derives it. Horizon (from now, whole history) is the adapter's filter. Stays out of the library."
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 13
+- type: add
+  elementId: data-model.schemadefinition.branch-map-data
+  layerName: data-model
+  after:
+    id: 4b3e4812-a62a-4e77-9fd6-565c81c38692
+    path: data-model.schemadefinition.branch-map-data
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapData
+    description: "The branch map's input: groups, stations, lines and links. Vocabulary-free; ids are unique across groups and stations."
+    attributes:
+      title: BranchMapData
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 14
+- type: add
+  elementId: data-model.schemadefinition.branch-map-group
+  layerName: data-model
+  after:
+    id: 17c75b89-3611-4ed7-b4cf-2148de69fb8f
+    path: data-model.schemadefinition.branch-map-group
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapGroup
+    description: "One group (a column with its own trunk): id, label, optional color (a --graph-layer-<n> palette index, else by order), optional trunk (station ids, in order) that overrides the derived trunk."
+    attributes:
+      title: BranchMapGroup
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 15
+- type: add
+  elementId: data-model.schemadefinition.branch-map-station
+  layerName: data-model
+  after:
+    id: a71859ab-a10d-4076-9ada-a332d47634b1
+    path: data-model.schemadefinition.branch-map-station
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapStation
+    description: "A station on a group's map: id, group, label, kind ('stop' drawn as a circle, 'decision' drawn as a diamond), status ('planned', 'active', 'done', 'set-aside', 'dropped'), optional date (ISO; places a done station above the start), optional after (station ids it follows), progress ([met, total]), blocked flag and data (passed through to callbacks)."
+    attributes:
+      title: BranchMapStation
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 16
+- type: add
+  elementId: data-model.schemadefinition.branch-map-line
+  layerName: data-model
+  after:
+    id: cf922bb8-78df-4c96-9f51-dfe21af8709a
+    path: data-model.schemadefinition.branch-map-line
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapLine
+    description: "A line (a branch): id, group, label, from (a station id, or null for the group's start), to (a station id, or null for an open end), status ('active', 'done', 'set-aside', 'dropped': dropped ends with a bar), style ('solid', 'dashed', 'dotted'), weight (for width and bundling), marks ({ total, emphasized }: ticks along the run) and data."
+    attributes:
+      title: BranchMapLine
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 17
+- type: add
+  elementId: data-model.schemadefinition.branch-map-link
+  layerName: data-model
+  after:
+    id: 29b054bd-ac39-41ca-885e-f67163009c73
+    path: data-model.schemadefinition.branch-map-link
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapLink
+    description: "A link between groups: id, kind ('dependency': an arrow from the station waited on to the waiting one, which also orders ranks; 'provides': a dotted arch from a provider station to another group's start), from, to (station or group ids; a group id means its start marker) and optional label."
+    attributes:
+      title: BranchMapLink
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 18
+- type: add
+  elementId: data-model.schemadefinition.branch-map-options
+  layerName: data-model
+  after:
+    id: b5d1e2d6-09a8-4b3f-aa9f-7bed3adca924
+    path: data-model.schemadefinition.branch-map-options
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapOptions
+    description: "Layout options: rowGap, rankGap, laneGap (default 24), groupGap, minBranchRanks, maxLanes (default 8), expanded (group or bundle ids), width ('off' default, or 'weight'), maxLabelWidth (default 180), measureText (optional, injected so layout stays headless), looseStations ('spur': stations no line leads to sit on one dotted planned line per group)."
+    attributes:
+      title: BranchMapOptions
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 19
+- type: add
+  elementId: data-model.schemadefinition.branch-map-layout
+  layerName: data-model
+  after:
+    id: 324b791c-5f3f-4005-9c58-7f9c51743798
+    path: data-model.schemadefinition.branch-map-layout
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapLayout
+    description: "Output of layoutBranchMap: groups (x, width, trunk x, lane count, counts), stations (x, y, rank, lane, onTrunk), lines before routing (lane, from, to, members when bundled), label boxes (placed and unplaced), bounds and issues."
+    attributes:
+      title: BranchMapLayout
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 20
+- type: add
+  elementId: data-model.schemadefinition.branch-map-scene
+  layerName: data-model
+  after:
+    id: 497ba143-cec6-4aff-8a0b-45a1878e6748
+    path: data-model.schemadefinition.branch-map-scene
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: BranchMapScene
+    description: "Output of routeBranchMap: the layout plus each line's points, path, run and end, trunk segments with width and weight, and link paths with a mid point for labels."
+    attributes:
+      title: BranchMapScene
+      type: object
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 21
+- type: add
+  elementId: data-model.schemadefinition.house-organizing-snapshot
+  layerName: data-model
+  after:
+    id: f6c070bf-54be-4bab-bf3c-5acdbe3472f6
+    path: data-model.schemadefinition.house-organizing-snapshot
+    spec_node_id: data-model.schemadefinition
+    type: schemadefinition
+    layer_id: data-model
+    name: HouseOrganizingSnapshot
+    description: The House organizing snapshot fixture's shape (projects, milestones, gates, workstreams, interfaces), named after the House ontology. Test-page data only; the library never imports it.
+    attributes:
+      title: HouseOrganizingSnapshot
+      type: object
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/test-pages/fixtures/houseOrganizingTypes.ts
+          symbol: HouseOrganizingSnapshot
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 22
+- type: add
+  elementId: ux.librarycomponent.branch-map
+  layerName: ux
+  after:
+    id: 93a52678-8b62-4a21-8f09-b10723be3a48
+    path: ux.librarycomponent.branch-map
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: BranchMap
+    description: "A standalone SVG view of a branch map: it runs branchMapScene, draws groups, trunks, lines, stations, ticks, links and placed labels in --graph-layer-* colours, and handles direct manipulation only (no chrome). Selection is controlled (selectedId, onSelect; Escape clears), hover sets hoveredId, pan and zoom come from usePanZoom, stations and lines are focusable with accessible names, bundles expand through expanded and onExpandedChange, and renderTooltip draws hover detail. Layout options are props."
+    attributes:
+      type: display
+      category: heimdall-graph
+      label: BranchMap
+    metadata:
+      created_at: 2026-11-25T17:41:12.936Z
+      updated_at: 2026-11-25T17:41:12.936Z
+      version: 1
+    accepted_gaps:
+      - direction: outgoing
+        predicate: composes
+        other_spec_node_id: ux.librarycomponent
+        reason: BranchMap draws its own SVG scene and has no chrome (the layered-graph precedent); hover detail comes through the caller's renderTooltip, so it composes no other library component.
+        decided_by: agent
+        decided_at: 2026-11-25T17:41:34.543Z
+        changeset: changeset-1795628359757-v0v6gnap1
+  timestamp: 2026-11-25T17:41:34.556Z
+  sequenceNumber: 23
+- type: add
+  elementId: testing.testcoveragetarget.branch-map-view
+  layerName: testing
+  after:
+    id: cae58113-f2c2-49ef-a1ce-f1bb69a80c59
+    path: testing.testcoveragetarget.branch-map-view
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Branch Map View
+    description: "Playwright spec tests/branch-map.spec.ts against ?example=branch-map: selection, keyboard, expand, and visual baselines."
+    attributes:
+      targetType: ui-component
+      priority: high
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 24
+- type: add
+  elementId: testing.testcoveragetarget.branch-map-layout-tests
+  layerName: testing
+  after:
+    id: 28282f0b-4874-45c1-965c-0935b77dbeef
+    path: testing.testcoveragetarget.branch-map-layout-tests
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: Branch Map Layout Tests
+    description: "Vitest unit tests src/utils/__tests__/branchMap.test.ts on the vocabulary-free sample (src/test-pages/fixtures/branchMapSample.ts, which mirrors the snapshot's 20- and 17-line projects): overlap, determinism, lane budget, trunk, label placement and stage separation."
+    attributes:
+      targetType: library
+      priority: high
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:44:36.894Z
+  sequenceNumber: 25
+- type: add
+  elementId: testing.testcoveragetarget.house-branch-map-adapter-tests
+  layerName: testing
+  after:
+    id: e31c037a-7df8-4f38-80ff-0e7069d9958a
+    path: testing.testcoveragetarget.house-branch-map-adapter-tests
+    spec_node_id: testing.testcoveragetarget
+    type: testcoveragetarget
+    layer_id: testing
+    name: House Branch Map Adapter Tests
+    description: "Vitest unit test src/test-pages/branchMap/houseBranchMapAdapter.test.ts: the adapter's mapping, and the whole House snapshot run through the adapter and the layout with no overlapping stations, labels or groups."
+    attributes:
+      targetType: application-component
+      priority: medium
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+    accepted_gaps:
+      - direction: outgoing
+        predicate: covers
+        other_spec_node_id: ux.librarycomponent
+        reason: The House adapter is test-page code that maps a fixture to the generic model; it covers no library component, by design (the library stays vocabulary-free).
+        decided_by: agent
+        decided_at: 2026-11-25T17:41:35.356Z
+        changeset: changeset-1795628359757-v0v6gnap1
+  timestamp: 2026-11-25T17:44:36.986Z
+  sequenceNumber: 26
+- type: add
+  elementId: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+  layerName: testing
+  after:
+    id: d5a707fa-d98f-4698-9df0-e4aa0b783dcf
+    path: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: branch map layout > no stations, labels or groups overlap on the House snapshot
+    description: "All seven projects of the 2026-11-25 snapshot, both horizons: every pair of station marks, placed label boxes and group extents is disjoint."
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 27
+- type: add
+  elementId: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+  layerName: testing
+  after:
+    id: e9a92e6f-e5fc-4c32-8573-e6cb85dd6311
+    path: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: branch map layout > the same input gives the same scene
+    description: Two runs, and a run on shuffled input arrays, give deep-equal scenes.
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 28
+- type: add
+  elementId: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+  layerName: testing
+  after:
+    id: 6aa25c5d-2666-4f92-9ced-1d85fa4a68f6
+    path: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: branch map layout > a group past its lane budget bundles by destination, then into N more
+    description: The sample's 20-line group (9 destinations) and 17-line group (15 destinations), shaped like Documentation Robotics and Claude Plugins, lay out in at most 8 lanes; expanding the group draws every line.
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:44:37.067Z
+  sequenceNumber: 29
+- type: add
+  elementId: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+  layerName: testing
+  after:
+    id: cac50748-04c4-46ef-85ad-c5b7844f28ff
+    path: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: branch map layout > a stated trunk wins over the derived chain
+    description: group.trunk puts exactly those stations on lane 0; without it the heaviest chain is chosen.
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 30
+- type: add
+  elementId: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+  layerName: testing
+  after:
+    id: 53822c85-511f-43c1-ac64-55a0a912f59a
+    path: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: branch map layout > routing reads only the placement
+    description: routeBranchMap on a serialized and parsed BranchMapLayout gives the same scene as branchMapScene; every line starts and ends on its stations' positions.
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 31
+- type: add
+  elementId: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+  layerName: testing
+  after:
+    id: 199d59b7-7c34-4e26-8890-5637f58cf51a
+    path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: house branch map adapter > maps workstreams, interfaces and blocked as House does
+    description: Open workstreams become lines from their opening gate or the start; interfaces become provides links; depends_on across projects become dependency links; blocked matches House's rule.
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 32
+- type: add
+  elementId: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+  layerName: testing
+  after:
+    id: c3bb1834-bf04-4fd4-8d2b-c09d718bed5e
+    path: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: BranchMap > click and keyboard select stations and lines, Escape clears
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 33
+- type: add
+  elementId: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+  layerName: testing
+  after:
+    id: acba5c88-fda7-4f45-8b67-4a38c8551801
+    path: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "BranchMap > visual: theme canvas, three projects from now"
+    description: Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 34
+- type: add
+  elementId: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+  layerName: testing
+  after:
+    id: ed329dce-f379-4d83-b675-c7fa5772f705
+    path: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "BranchMap > visual: Documentation Robotics bundled and expanded"
+    attributes:
+      status: draft
+      implementationFormat: automated
+    metadata:
+      created_at: 2026-11-25T17:41:12.937Z
+      updated_at: 2026-11-25T17:41:12.937Z
+      version: 1
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: motivation.requirement.branch-map-library-stays-vocabulary-free::realizes::motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+  layerName: motivation
+  after:
+    source: motivation.requirement.branch-map-library-stays-vocabulary-free
+    target: motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap::realizes::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: motivation
+  after:
+    source: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: motivation.requirement.branch-map-groups-stay-within-a-lane-budget::realizes::motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+  layerName: motivation
+  after:
+    source: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+    target: motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages::realizes::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: motivation
+  after:
+    source: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages::realizes::motivation.principle.deterministic-reproducible-layout-output
+  layerName: motivation
+  after:
+    source: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    target: motivation.principle.deterministic-reproducible-layout-output
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: product.softwarecapability.branch-map-visualization::supports::motivation.goal.readable-layout-for-structurally-complex-graphs
+  layerName: product
+  after:
+    source: product.softwarecapability.branch-map-visualization
+    target: motivation.goal.readable-layout-for-structurally-complex-graphs
+    predicate: supports
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: product.softwarecapability.branch-map-visualization::scheduled-for::product.milestone.branch-map-poc
+  layerName: product
+  after:
+    source: product.softwarecapability.branch-map-visualization
+    target: product.milestone.branch-map-poc
+    predicate: scheduled-for
+    layer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: product.feature.branch-map::realizes::product.softwarecapability.branch-map-visualization
+  layerName: product
+  after:
+    source: product.feature.branch-map
+    target: product.softwarecapability.branch-map-visualization
+    predicate: realizes
+    layer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: product.feature.branch-map::serves::product.persona.application-developer-embedding-a-graph-view
+  layerName: product
+  after:
+    source: product.feature.branch-map
+    target: product.persona.application-developer-embedding-a-graph-view
+    predicate: serves
+    layer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: product.feature.branch-map::serves::product.persona.end-user-exploring-a-rendered-graph
+  layerName: product
+  after:
+    source: product.feature.branch-map
+    target: product.persona.end-user-exploring-a-rendered-graph
+    predicate: serves
+    layer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: product.feature.branch-map::satisfies::motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+  layerName: product
+  after:
+    source: product.feature.branch-map
+    target: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+    predicate: satisfies
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 46
+- type: relationship-add
+  elementId: product.feature.branch-map::satisfies::motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+  layerName: product
+  after:
+    source: product.feature.branch-map
+    target: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+    predicate: satisfies
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 47
+- type: relationship-add
+  elementId: product.feature.branch-map::scheduled-for::product.milestone.branch-map-poc
+  layerName: product
+  after:
+    source: product.feature.branch-map
+    target: product.milestone.branch-map-poc
+    predicate: scheduled-for
+    layer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 48
+- type: relationship-add
+  elementId: application.applicationservice.branch-map-layout::realizes::product.softwarecapability.branch-map-visualization
+  layerName: application
+  after:
+    source: application.applicationservice.branch-map-layout
+    target: product.softwarecapability.branch-map-visualization
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 49
+- type: relationship-add
+  elementId: application.applicationservice.branch-map-layout::realizes::product.feature.branch-map
+  layerName: application
+  after:
+    source: application.applicationservice.branch-map-layout
+    target: product.feature.branch-map
+    predicate: realizes
+    layer: application
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 50
+- type: relationship-add
+  elementId: application.applicationservice.branch-map-layout::satisfies::motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: application
+  after:
+    source: application.applicationservice.branch-map-layout
+    target: motivation.requirement.branch-map-library-stays-vocabulary-free
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 51
+- type: relationship-add
+  elementId: application.applicationservice.branch-map-layout::satisfies::motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+  layerName: application
+  after:
+    source: application.applicationservice.branch-map-layout
+    target: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 52
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::realizes::application.applicationservice.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationservice.branch-map-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 53
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.branch-map-placement
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.branch-map-placement
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 54
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.branch-map-trunk-selection
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.branch-map-trunk-selection
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 55
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.branch-map-line-bundling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.branch-map-line-bundling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 56
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.branch-map-label-placement
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.branch-map-label-placement
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 57
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.branch-map-routing
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.branch-map-routing
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 58
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::accesses::data-model.schemadefinition.branch-map-data
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: data-model.schemadefinition.branch-map-data
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 59
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::accesses::data-model.schemadefinition.branch-map-scene
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: data-model.schemadefinition.branch-map-scene
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 60
+- type: relationship-add
+  elementId: application.applicationcomponent.test-page-host-app::assigned-to::application.applicationfunction.house-branch-map-adapter
+  layerName: application
+  after:
+    source: application.applicationcomponent.test-page-host-app
+    target: application.applicationfunction.house-branch-map-adapter
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 61
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::realizes::application.applicationservice.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: application.applicationservice.branch-map-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 62
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::depends-on::application.applicationfunction.branch-map-trunk-selection
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: application.applicationfunction.branch-map-trunk-selection
+    predicate: depends-on
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 63
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::depends-on::application.applicationfunction.branch-map-line-bundling
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: application.applicationfunction.branch-map-line-bundling
+    predicate: depends-on
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 64
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::depends-on::application.applicationfunction.branch-map-label-placement
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: application.applicationfunction.branch-map-label-placement
+    predicate: depends-on
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 65
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::accesses::data-model.schemadefinition.branch-map-data
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: data-model.schemadefinition.branch-map-data
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 66
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::accesses::data-model.schemadefinition.branch-map-options
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: data-model.schemadefinition.branch-map-options
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 67
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::accesses::data-model.schemadefinition.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: data-model.schemadefinition.branch-map-layout
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 68
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::satisfies::motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 69
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::satisfies::motivation.requirement.layout-output-is-deterministic-for-a-given-input
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: motivation.requirement.layout-output-is-deterministic-for-a-given-input
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 70
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::satisfies::motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 71
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-placement::flows-to::application.applicationfunction.branch-map-routing
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-placement
+    target: application.applicationfunction.branch-map-routing
+    predicate: flows-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 72
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-trunk-selection::realizes::application.applicationservice.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-trunk-selection
+    target: application.applicationservice.branch-map-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 73
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-trunk-selection::accesses::data-model.schemadefinition.branch-map-group
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-trunk-selection
+    target: data-model.schemadefinition.branch-map-group
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 74
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-trunk-selection::satisfies::motivation.requirement.layout-output-is-deterministic-for-a-given-input
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-trunk-selection
+    target: motivation.requirement.layout-output-is-deterministic-for-a-given-input
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 75
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-line-bundling::realizes::application.applicationservice.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-line-bundling
+    target: application.applicationservice.branch-map-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 76
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-line-bundling::accesses::data-model.schemadefinition.branch-map-line
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-line-bundling
+    target: data-model.schemadefinition.branch-map-line
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 77
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-line-bundling::satisfies::motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-line-bundling
+    target: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 78
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-line-bundling::satisfies::motivation.requirement.layout-output-is-deterministic-for-a-given-input
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-line-bundling
+    target: motivation.requirement.layout-output-is-deterministic-for-a-given-input
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 79
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-label-placement::realizes::application.applicationservice.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-label-placement
+    target: application.applicationservice.branch-map-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 80
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-label-placement::accesses::data-model.schemadefinition.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-label-placement
+    target: data-model.schemadefinition.branch-map-layout
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 81
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-label-placement::satisfies::motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-label-placement
+    target: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 82
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-label-placement::satisfies::motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-label-placement
+    target: motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 83
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-routing::realizes::application.applicationservice.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-routing
+    target: application.applicationservice.branch-map-layout
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 84
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-routing::depends-on::application.applicationfunction.lane-layout-and-gutter-routing
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-routing
+    target: application.applicationfunction.lane-layout-and-gutter-routing
+    predicate: depends-on
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 85
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-routing::accesses::data-model.schemadefinition.branch-map-layout
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-routing
+    target: data-model.schemadefinition.branch-map-layout
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 86
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-routing::accesses::data-model.schemadefinition.branch-map-scene
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-routing
+    target: data-model.schemadefinition.branch-map-scene
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 87
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-routing::satisfies::motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-routing
+    target: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 88
+- type: relationship-add
+  elementId: application.applicationfunction.branch-map-routing::satisfies::motivation.requirement.layout-output-is-deterministic-for-a-given-input
+  layerName: application
+  after:
+    source: application.applicationfunction.branch-map-routing
+    target: motivation.requirement.layout-output-is-deterministic-for-a-given-input
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 89
+- type: relationship-add
+  elementId: application.applicationfunction.house-branch-map-adapter::accesses::data-model.schemadefinition.house-organizing-snapshot
+  layerName: application
+  after:
+    source: application.applicationfunction.house-branch-map-adapter
+    target: data-model.schemadefinition.house-organizing-snapshot
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 90
+- type: relationship-add
+  elementId: application.applicationfunction.house-branch-map-adapter::accesses::data-model.schemadefinition.branch-map-data
+  layerName: application
+  after:
+    source: application.applicationfunction.house-branch-map-adapter
+    target: data-model.schemadefinition.branch-map-data
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 91
+- type: relationship-add
+  elementId: application.applicationfunction.house-branch-map-adapter::satisfies::motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: application
+  after:
+    source: application.applicationfunction.house-branch-map-adapter
+    target: motivation.requirement.branch-map-library-stays-vocabulary-free
+    predicate: satisfies
+    layer: application
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 92
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-data::composes::data-model.schemadefinition.branch-map-group
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-data
+    target: data-model.schemadefinition.branch-map-group
+    predicate: composes
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 93
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-data::composes::data-model.schemadefinition.branch-map-station
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-data
+    target: data-model.schemadefinition.branch-map-station
+    predicate: composes
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 94
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-data::composes::data-model.schemadefinition.branch-map-line
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-data
+    target: data-model.schemadefinition.branch-map-line
+    predicate: composes
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 95
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-data::composes::data-model.schemadefinition.branch-map-link
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-data
+    target: data-model.schemadefinition.branch-map-link
+    predicate: composes
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 96
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-data::satisfies::motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-data
+    target: motivation.requirement.branch-map-library-stays-vocabulary-free
+    predicate: satisfies
+    layer: data-model
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 97
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-line::references::data-model.schemadefinition.branch-map-station
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-line
+    target: data-model.schemadefinition.branch-map-station
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 98
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-station::references::data-model.schemadefinition.branch-map-group
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-station
+    target: data-model.schemadefinition.branch-map-group
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 99
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-link::references::data-model.schemadefinition.branch-map-station
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-link
+    target: data-model.schemadefinition.branch-map-station
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 100
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-layout::references::data-model.schemadefinition.branch-map-data
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-layout
+    target: data-model.schemadefinition.branch-map-data
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 101
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-layout::references::data-model.schemadefinition.branch-map-options
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-layout
+    target: data-model.schemadefinition.branch-map-options
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 102
+- type: relationship-add
+  elementId: data-model.schemadefinition.branch-map-scene::references::data-model.schemadefinition.branch-map-layout
+  layerName: data-model
+  after:
+    source: data-model.schemadefinition.branch-map-scene
+    target: data-model.schemadefinition.branch-map-layout
+    predicate: references
+    layer: data-model
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 103
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-ui::aggregates::ux.librarycomponent.branch-map
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-ui
+    target: ux.librarycomponent.branch-map
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 104
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::realizes::product.feature.branch-map
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: product.feature.branch-map
+    predicate: realizes
+    layer: ux
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 105
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::uses::ux.actionpattern.panzoom-viewport-gesture
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: ux.actionpattern.panzoom-viewport-gesture
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 106
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::uses::ux.actionpattern.node-select-on-click-or-enterspace
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: ux.actionpattern.node-select-on-click-or-enterspace
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 107
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::uses::ux.statepattern.canvas-theme-light-or-dark-canvas
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: ux.statepattern.canvas-theme-light-or-dark-canvas
+    predicate: uses
+    layer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 108
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::satisfies::motivation.principle.two-surface-shell-and-canvas
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: motivation.principle.two-surface-shell-and-canvas
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 109
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 110
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::satisfies::motivation.requirement.graph-nodes-and-edges-have-accessible-names
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: motivation.requirement.graph-nodes-and-edges-have-accessible-names
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 111
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::satisfies::motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 112
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::depends-on::technology.systemsoftware.web-browser
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: technology.systemsoftware.web-browser
+    predicate: depends-on
+    layer: ux
+    targetLayer: technology
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 113
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-ui-test-coverage::composes::testing.testcoveragetarget.branch-map-view
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-ui-test-coverage
+    target: testing.testcoveragetarget.branch-map-view
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 114
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::composes::testing.testcoveragetarget.branch-map-layout-tests
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: testing.testcoveragetarget.branch-map-layout-tests
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 115
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-ui-test-coverage::composes::testing.testcoveragetarget.house-branch-map-adapter-tests
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-ui-test-coverage
+    target: testing.testcoveragetarget.house-branch-map-adapter-tests
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 116
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-view::covers::ux.librarycomponent.branch-map
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-view
+    target: ux.librarycomponent.branch-map
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 117
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-view::covers::product.feature.branch-map
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-view
+    target: product.feature.branch-map
+    predicate: covers
+    layer: testing
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 118
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-layout-tests::covers::application.applicationservice.branch-map-layout
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-layout-tests
+    target: application.applicationservice.branch-map-layout
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 119
+- type: relationship-add
+  elementId: testing.testcoveragetarget.house-branch-map-adapter-tests::covers::application.applicationcomponent.test-page-host-app
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.house-branch-map-adapter-tests
+    target: application.applicationcomponent.test-page-host-app
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 120
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-layout-tests::composes::testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-layout-tests
+    target: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 122
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-layout-tests::composes::testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-layout-tests
+    target: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 123
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-layout-tests::composes::testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-layout-tests
+    target: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 124
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-layout-tests::composes::testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-layout-tests
+    target: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 125
+- type: relationship-add
+  elementId: testing.testcoveragetarget.house-branch-map-adapter-tests::composes::testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.house-branch-map-adapter-tests
+    target: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 126
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-view::composes::testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-view
+    target: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 127
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-view::composes::testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-view
+    target: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 128
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-view::composes::testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-view
+    target: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 129
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot::tests::application.applicationfunction.branch-map-placement
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+    target: application.applicationfunction.branch-map-placement
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 130
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot::tests::application.applicationfunction.branch-map-label-placement
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+    target: application.applicationfunction.branch-map-label-placement
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 131
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot::satisfies::motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+    target: motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 132
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot::satisfies::motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+    target: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 133
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene::tests::application.applicationservice.branch-map-layout
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+    target: application.applicationservice.branch-map-layout
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 134
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene::satisfies::motivation.requirement.layout-output-is-deterministic-for-a-given-input
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+    target: motivation.requirement.layout-output-is-deterministic-for-a-given-input
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 135
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more::tests::application.applicationfunction.branch-map-line-bundling
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+    target: application.applicationfunction.branch-map-line-bundling
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 136
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more::satisfies::motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+    target: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 137
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain::tests::application.applicationfunction.branch-map-trunk-selection
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+    target: application.applicationfunction.branch-map-trunk-selection
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 138
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement::tests::application.applicationfunction.branch-map-routing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+    target: application.applicationfunction.branch-map-routing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 139
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement::satisfies::motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+    target: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 140
+- type: relationship-add
+  elementId: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does::tests::application.applicationfunction.house-branch-map-adapter
+  layerName: testing
+  after:
+    source: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+    target: application.applicationfunction.house-branch-map-adapter
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 141
+- type: relationship-add
+  elementId: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does::satisfies::motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: testing
+  after:
+    source: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+    target: motivation.requirement.branch-map-library-stays-vocabulary-free
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 142
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears::tests::ux.librarycomponent.branch-map
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+    target: ux.librarycomponent.branch-map
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 143
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears::satisfies::motivation.requirement.graph-nodes-and-edges-have-accessible-names
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+    target: motivation.requirement.graph-nodes-and-edges-have-accessible-names
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 144
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now::tests::ux.librarycomponent.branch-map
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+    target: ux.librarycomponent.branch-map
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 145
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded::tests::ux.librarycomponent.branch-map
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+    target: ux.librarycomponent.branch-map
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 146
+- type: relationship-add
+  elementId: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded::satisfies::motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+  layerName: testing
+  after:
+    source: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+    target: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:12.958Z
+  sequenceNumber: 147
+- type: relationship-add
+  elementId: product.softwarecapability.branch-map-visualization::realizes::business.businessfunction.automatic-node-layout-computation
+  layerName: product
+  after:
+    source: product.softwarecapability.branch-map-visualization
+    target: business.businessfunction.automatic-node-layout-computation
+    predicate: realizes
+    layer: product
+    targetLayer: business
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 148
+- type: relationship-add
+  elementId: product.softwarecapability.branch-map-visualization::supports::motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+  layerName: product
+  after:
+    source: product.softwarecapability.branch-map-visualization
+    target: motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+    predicate: supports
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 149
+- type: relationship-add
+  elementId: product.feature.branch-map::satisfies::motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: product
+  after:
+    source: product.feature.branch-map
+    target: motivation.requirement.branch-map-library-stays-vocabulary-free
+    predicate: satisfies
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 150
+- type: relationship-add
+  elementId: motivation.stakeholder.embedding-application-developer-npm-consumer::associated-with::motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.embedding-application-developer-npm-consumer
+    target: motivation.requirement.branch-map-library-stays-vocabulary-free
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 151
+- type: relationship-add
+  elementId: motivation.stakeholder.end-user-of-an-embedding-application::associated-with::motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.end-user-of-an-embedding-application
+    target: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 152
+- type: relationship-add
+  elementId: motivation.stakeholder.end-user-of-an-embedding-application::associated-with::motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.end-user-of-an-embedding-application
+    target: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 153
+- type: relationship-add
+  elementId: motivation.stakeholder.heimdall-layout-loop-quality-harness::associated-with::motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.heimdall-layout-loop-quality-harness
+    target: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 154
+- type: relationship-add
+  elementId: testing.testcoveragetarget.branch-map-layout-tests::covers::ux.librarycomponent.branch-map
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.branch-map-layout-tests
+    target: ux.librarycomponent.branch-map
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-25T17:41:33.664Z
+  sequenceNumber: 155
+- type: relationship-add
+  elementId: ux.librarycomponent.branch-map::satisfies::motivation.requirement.branch-map-library-stays-vocabulary-free
+  layerName: ux
+  after:
+    source: ux.librarycomponent.branch-map
+    target: motivation.requirement.branch-map-library-stays-vocabulary-free
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-25T17:41:52.882Z
+  sequenceNumber: 158
+- type: relationship-add
+  elementId: testing.testcoveragetarget.house-branch-map-adapter-tests::composes::testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.house-branch-map-adapter-tests
+    target: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T17:44:36.216Z
+  sequenceNumber: 160
