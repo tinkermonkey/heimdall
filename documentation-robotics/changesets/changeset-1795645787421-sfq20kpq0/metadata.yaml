@@ -2,7 +2,7 @@ id: changeset-1795645787421-sfq20kpq0
 name: extract-6190a49..f7429a9
 description: As-built record of the branch map POC (pieces 0 to 3) since main, to verify the branch-map-poc plan against the build.
 created: 2026-11-25T22:29:47.433Z
-modified: 2026-11-25T22:31:36.072Z
+modified: 2026-11-25T23:11:00.258Z
 status: staged
 baseSnapshot: v2:sha256:5fd5c92961fe57efafd93591e0b1155d87748161008e8257a820df0ca6b40872
 origin:
@@ -13,10 +13,10 @@ scope:
   since: main
   codeCommit: f7429a993a96ffa3a7101601d35ca2df28f26192
 stats:
-  additions: 137
+  additions: 143
   modifications: 0
   deletions: 0
-lastSequence: 154
+lastSequence: 164
 unstaged:
   - sequence: 92
     removedAt: 102
@@ -252,3 +252,48 @@ unstaged:
           updated_at: 2026-11-25T22:30:42.368Z
           version: 1
       timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 29
+    removedAt: 163
+    change:
+      type: add
+      elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
+      layerName: testing
+      after:
+        id: 89afa2dc-9504-4481-a29a-c6e8b966479f
+        path: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: "layoutBranchMap > trunk > a stated trunk wins: exactly those stations on lane 0"
+        attributes:
+          status: automated
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/__tests__/branchMap.test.ts
+              symbol: "layoutBranchMap > trunk > a stated trunk wins: exactly those stations on lane 0"
+        metadata:
+          created_at: 2026-11-25T22:29:47.343Z
+          updated_at: 2026-11-25T22:29:47.343Z
+          version: 1
+      timestamp: 2026-11-25T22:29:47.439Z
+      origin:
+        by: tier0
+        rule: js_test_case_call
+  - sequence: 84
+    removedAt: 164
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0::tests::application.applicationfunction.layout-branch-map
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
+        target: application.applicationfunction.layout-branch-map
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-25T22:30:21.263Z
+      origin:
+        by: tier0
+        rule: js_test_case_call

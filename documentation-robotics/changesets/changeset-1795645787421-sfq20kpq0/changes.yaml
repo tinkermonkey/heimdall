@@ -753,32 +753,6 @@
     by: tier0
     rule: js_test_case_call
 - type: add
-  elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
-  layerName: testing
-  after:
-    id: 89afa2dc-9504-4481-a29a-c6e8b966479f
-    path: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
-    spec_node_id: testing.testcasesketch
-    type: testcasesketch
-    layer_id: testing
-    name: "layoutBranchMap > trunk > a stated trunk wins: exactly those stations on lane 0"
-    attributes:
-      status: automated
-    source_reference:
-      provenance: extracted
-      locations:
-        - file: src/utils/__tests__/branchMap.test.ts
-          symbol: "layoutBranchMap > trunk > a stated trunk wins: exactly those stations on lane 0"
-    metadata:
-      created_at: 2026-11-25T22:29:47.343Z
-      updated_at: 2026-11-25T22:29:47.343Z
-      version: 1
-  timestamp: 2026-11-25T22:29:47.439Z
-  sequenceNumber: 29
-  origin:
-    by: tier0
-    rule: js_test_case_call
-- type: add
   elementId: testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest
   layerName: testing
   after:
@@ -1841,21 +1815,6 @@
     by: tier0
     rule: js_test_case_call
 - type: relationship-add
-  elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0::tests::application.applicationfunction.layout-branch-map
-  layerName: testing
-  after:
-    source: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
-    target: application.applicationfunction.layout-branch-map
-    predicate: tests
-    layer: testing
-    targetLayer: application
-    category: structural
-  timestamp: 2026-11-25T22:30:21.263Z
-  sequenceNumber: 84
-  origin:
-    by: tier0
-    rule: js_test_case_call
-- type: relationship-add
   elementId: testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest::tests::application.applicationfunction.layout-branch-map
   layerName: testing
   after:
@@ -2211,11 +2170,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 120
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 120
 - type: relationship-add
   elementId: application.applicationfunction.choose-branch-map-trunk::accesses::data-model.schemadefinition.branch-map-group
   layerName: application
@@ -2226,11 +2185,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 121
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 121
 - type: relationship-add
   elementId: application.applicationfunction.choose-branch-map-trunk::accesses::data-model.schemadefinition.branch-map-line
   layerName: application
@@ -2241,11 +2200,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 122
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 122
 - type: relationship-add
   elementId: application.applicationfunction.choose-branch-map-trunk::accesses::data-model.schemadefinition.branch-map-station
   layerName: application
@@ -2256,11 +2215,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 123
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 123
 - type: relationship-add
   elementId: application.applicationfunction.house-to-branch-map::accesses::data-model.schemadefinition.branch-map-data
   layerName: application
@@ -2271,11 +2230,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 124
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 124
 - type: relationship-add
   elementId: application.applicationfunction.house-to-branch-map::accesses::data-model.schemadefinition.branch-map-group
   layerName: application
@@ -2286,11 +2245,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 125
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 125
 - type: relationship-add
   elementId: application.applicationfunction.house-to-branch-map::accesses::data-model.schemadefinition.branch-map-line
   layerName: application
@@ -2301,11 +2260,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 126
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 126
 - type: relationship-add
   elementId: application.applicationfunction.house-to-branch-map::accesses::data-model.schemadefinition.branch-map-link
   layerName: application
@@ -2316,11 +2275,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 127
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 127
 - type: relationship-add
   elementId: application.applicationfunction.house-to-branch-map::accesses::data-model.schemadefinition.branch-map-station
   layerName: application
@@ -2331,11 +2290,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 128
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 128
 - type: relationship-add
   elementId: application.applicationfunction.house-to-branch-map::accesses::data-model.schemadefinition.house-organizing-snapshot
   layerName: application
@@ -2346,11 +2305,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 129
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 129
 - type: relationship-add
   elementId: application.applicationfunction.layout-branch-map::accesses::data-model.schemadefinition.branch-map-data
   layerName: application
@@ -2361,11 +2320,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 130
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 130
 - type: relationship-add
   elementId: application.applicationfunction.layout-branch-map::accesses::data-model.schemadefinition.branch-map-group
   layerName: application
@@ -2376,11 +2335,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 131
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 131
 - type: relationship-add
   elementId: application.applicationfunction.layout-branch-map::accesses::data-model.schemadefinition.branch-map-layout
   layerName: application
@@ -2391,11 +2350,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 132
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 132
 - type: relationship-add
   elementId: application.applicationfunction.layout-branch-map::accesses::data-model.schemadefinition.branch-map-line
   layerName: application
@@ -2406,11 +2365,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 133
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 133
 - type: relationship-add
   elementId: application.applicationfunction.layout-branch-map::accesses::data-model.schemadefinition.branch-map-options
   layerName: application
@@ -2421,11 +2380,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 134
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 134
 - type: relationship-add
   elementId: application.applicationfunction.layout-branch-map::accesses::data-model.schemadefinition.branch-map-scene
   layerName: application
@@ -2436,11 +2395,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 135
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 135
 - type: relationship-add
   elementId: application.applicationfunction.layout-branch-map::accesses::data-model.schemadefinition.branch-map-station
   layerName: application
@@ -2451,11 +2410,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 136
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 136
 - type: relationship-add
   elementId: application.applicationfunction.route-branch-map::accesses::data-model.schemadefinition.branch-map-layout
   layerName: application
@@ -2466,11 +2425,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 137
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 137
 - type: relationship-add
   elementId: application.applicationfunction.route-branch-map::accesses::data-model.schemadefinition.branch-map-scene
   layerName: application
@@ -2481,11 +2440,11 @@
     layer: application
     targetLayer: data-model
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 138
   origin:
     by: tier0
     rule: edge:USAGE
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 138
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-click-selects-a-station-again-clears-the-inspector-shows-the-house-record::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2496,11 +2455,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 139
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 139
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-documentation-robotics-bundles-past-the-lane-budget-a-bundle-and-the-group-84657fef::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2511,11 +2470,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 140
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 140
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-draws-the-three-projects-from-now-with-no-console-errors::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2526,11 +2485,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 141
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 141
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-keyboard-enter-selects-a-station-space-a-line-escape-clears::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2541,11 +2500,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 142
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 142
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-the-inspector-links-to-what-a-station-waits-on-in-another-project::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2556,11 +2515,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 143
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 143
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-visual-documentation-robotics-bundled::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2571,11 +2530,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 144
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 144
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-visual-documentation-robotics-expanded::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2586,11 +2545,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 145
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 145
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-on-house-data-visual-three-projects-from-now-dark-dark-light-canvas::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2601,11 +2560,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 146
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 146
 - type: relationship-add
   elementId: testing.testcasesketch.branch-map-stays-headless-touches-no-dom-in-src-utils-branch-map::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2616,11 +2575,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 147
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 147
 - type: relationship-add
   elementId: testing.testcasesketch.layout-branch-map-lanes-reuses-a-lane-once-it-is-free-and-continues-a-line-straight-on-from-its-4d677d55::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2631,11 +2590,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 148
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 148
 - type: relationship-add
   elementId: testing.testcasesketch.layout-branch-map-ranks-and-bands-gives-every-station-of-a-group-its-own-row-and-a-rank-one-band-85af82af::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2646,11 +2605,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 149
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 149
 - type: relationship-add
   elementId: testing.testcasesketch.layout-branch-map-ranks-and-bands-orders-open-stations-by-longest-path-over-after-lines-and-1aab84d3::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2661,11 +2620,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 150
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 150
 - type: relationship-add
   elementId: testing.testcasesketch.layout-branch-map-ranks-and-bands-places-dated-done-stations-above-the-start-in-date-order::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2676,11 +2635,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 151
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 151
 - type: relationship-add
   elementId: testing.testcasesketch.route-branch-map-draws-one-width-for-every-line-and-one-trunk-segment-with-width-off::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2691,11 +2650,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 152
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 152
 - type: relationship-add
   elementId: testing.testcasesketch.route-branch-map-routes-dependency-arrows-down-to-the-waiting-station-and-provides-arches-to-a-38c78d5a::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2706,11 +2665,11 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 153
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 153
 - type: relationship-add
   elementId: testing.testcasesketch.route-branch-map-runs-every-line-from-its-fork-to-its-station-along-45-degree-horizontal-and-1aa8c846::tests::ux.librarycomponent.branch-map
   layerName: testing
@@ -2721,8 +2680,172 @@
     layer: testing
     targetLayer: ux
     category: structural
+  timestamp: 2026-11-25T22:31:36.058Z
+  sequenceNumber: 154
   origin:
     by: tier0
     rule: edge:TEST_FILE_NAME
-  timestamp: 2026-11-25T22:31:36.058Z
-  sequenceNumber: 154
+- type: add
+  elementId: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d
+  layerName: testing
+  after:
+    id: d19f8820-6ed6-4c5d-9be1-ca60ff444640
+    path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: house branch map adapter > maps workstreams, interfaces and blocked as House does > gives the milestones that deliver an interface as trunk waypoints, in depends_on order, else none
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+          symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > gives the milestones that deliver an interface as trunk waypoints, in depends_on order, else none
+    metadata:
+      created_at: 2026-11-25T23:10:48.015Z
+      updated_at: 2026-11-25T23:10:48.015Z
+      version: 1
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 155
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget
+  layerName: testing
+  after:
+    id: 88d09f15-ccda-4476-81ab-f3199bcce05e
+    path: testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: layoutBranchMap > lane budget > draws what "N more" held when it is expanded, past the budget
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/__tests__/branchMap.test.ts
+          symbol: layoutBranchMap > lane budget > draws what "N more" held when it is expanded, past the budget
+    metadata:
+      created_at: 2026-11-25T23:10:48.015Z
+      updated_at: 2026-11-25T23:10:48.015Z
+      version: 1
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 156
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-names-waypoints-the-trunk-passes-through-every-one-and-stays-93024995
+  layerName: testing
+  after:
+    id: e8e792e2-c5a7-4e70-b4e9-e78477eeba09
+    path: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-names-waypoints-the-trunk-passes-through-every-one-and-stays-93024995
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: "layoutBranchMap > trunk > a stated trunk names waypoints: the trunk passes through every one, and stays derived around them"
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/__tests__/branchMap.test.ts
+          symbol: "layoutBranchMap > trunk > a stated trunk names waypoints: the trunk passes through every one, and stays derived around them"
+    metadata:
+      created_at: 2026-11-25T23:10:48.015Z
+      updated_at: 2026-11-25T23:10:48.015Z
+      version: 1
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 157
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: add
+  elementId: testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409
+  layerName: testing
+  after:
+    id: 867e6e48-f903-4b85-88f9-482c1311b0d2
+    path: testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: layoutBranchMap > trunk > keeps the given order among stated stations of one rank, and reports only a real inversion
+    attributes:
+      status: automated
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/__tests__/branchMap.test.ts
+          symbol: layoutBranchMap > trunk > keeps the given order among stated stations of one rank, and reports only a real inversion
+    metadata:
+      created_at: 2026-11-25T23:10:48.015Z
+      updated_at: 2026-11-25T23:10:48.015Z
+      version: 1
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 158
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: relationship-add
+  elementId: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d::tests::application.applicationfunction.house-to-branch-map
+  layerName: testing
+  after:
+    source: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d
+    target: application.applicationfunction.house-to-branch-map
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 159
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: relationship-add
+  elementId: testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget::tests::application.applicationfunction.layout-branch-map
+  layerName: testing
+  after:
+    source: testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget
+    target: application.applicationfunction.layout-branch-map
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 160
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: relationship-add
+  elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-names-waypoints-the-trunk-passes-through-every-one-and-stays-93024995::tests::application.applicationfunction.layout-branch-map
+  layerName: testing
+  after:
+    source: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-names-waypoints-the-trunk-passes-through-every-one-and-stays-93024995
+    target: application.applicationfunction.layout-branch-map
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 161
+  origin:
+    by: tier0
+    rule: js_test_case_call
+- type: relationship-add
+  elementId: testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409::tests::application.applicationfunction.layout-branch-map
+  layerName: testing
+  after:
+    source: testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409
+    target: application.applicationfunction.layout-branch-map
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T23:10:48.119Z
+  sequenceNumber: 162
+  origin:
+    by: tier0
+    rule: js_test_case_call
