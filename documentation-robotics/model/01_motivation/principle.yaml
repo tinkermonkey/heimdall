@@ -5,10 +5,7 @@ motivation.principle.deterministic-reproducible-layout-output:
   type: principle
   layer_id: motivation
   name: Deterministic, Reproducible Layout Output
-  description: "Inferred from graphClustering.ts's header comment: louvainCluster
-    never uses Math.random or wall-clock time, always iterates in a fixed order,
-    and breaks every tie deterministically, because the layout loop's scoring
-    depends on reproducible layouts across runs of the same input."
+  description: "Inferred from graphClustering.ts's header comment: louvainCluster never uses Math.random or wall-clock time, always iterates in a fixed order, and breaks every tie deterministically, because the layout loop's scoring depends on reproducible layouts across runs of the same input."
   attributes:
     category: development
   source_reference:
@@ -27,11 +24,7 @@ motivation.principle.zero-literal-node-overlap-guarantee:
   type: principle
   layer_id: motivation
   name: Zero Literal Node-Overlap Guarantee
-  description: Inferred from repeated 'zero literal overlap' language across
-    graphLayout.ts/galaxyLayout.ts (resolveOverlaps, FINAL_CLEANUP_MAX_PASSES,
-    nodeMargin docs) — every layout engine runs an unpadded final cleanup pass
-    specifically to guarantee this regardless of what padding options were
-    requested.
+  description: Inferred from repeated 'zero literal overlap' language across graphLayout.ts/galaxyLayout.ts (resolveOverlaps, FINAL_CLEANUP_MAX_PASSES, nodeMargin docs) — every layout engine runs an unpadded final cleanup pass specifically to guarantee this regardless of what padding options were requested.
   attributes:
     category: architecture
   source_reference:
@@ -50,10 +43,7 @@ motivation.principle.two-surface-shell-and-canvas:
   type: principle
   layer_id: motivation
   name: Two-Surface Shell and Canvas
-  description: "Every screen is built from two surfaces: an always-dark slate-navy
-    shell and a canvas that is white or dark (the dark-canvas class on body).
-    Every colour is a design token in src/tokens/tokens.css with an explicit
-    dark-canvas override; filter() and invert() are never used."
+  description: "Every screen is built from two surfaces: an always-dark slate-navy shell and a canvas that is white or dark (the dark-canvas class on body). Every colour is a design token in src/tokens/tokens.css with an explicit dark-canvas override; filter() and invert() are never used."
   attributes:
     category: architecture
   metadata:
@@ -67,10 +57,7 @@ motivation.principle.ide-density-and-terse-voice:
   type: principle
   layer_id: motivation
   name: IDE Density and Terse Voice
-  description: "Components default to IDE density (14px body, 24px page H1,
-    monospace identifiers and eyebrows) and a terse, impersonal voice:
-    sentence-case headings, no exclamation marks or emoji, confirmations that
-    state the consequence."
+  description: "Components default to IDE density (14px body, 24px page H1, monospace identifiers and eyebrows) and a terse, impersonal voice: sentence-case headings, no exclamation marks or emoji, confirmations that state the consequence."
   attributes:
     category: development
   metadata:
@@ -78,18 +65,16 @@ motivation.principle.ide-density-and-terse-voice:
     updated_at: 2026-11-23T16:44:40.170Z
     version: 1
 motivation.principle.every-component-color-comes-from-a-token:
-  id: 005b60a0-7bfe-4cfc-831b-25de5872c307
+  id: a7ee2cbf-067b-447b-a7e6-d4877c443da5
   path: motivation.principle.every-component-color-comes-from-a-token
   spec_node_id: motivation.principle
   type: principle
   layer_id: motivation
   name: Every Component Color Comes From a Token
-  description: Component CSS and TypeScript take colors only from design tokens
-    (rgb(var(--token)) in both); no color literals outside src/tokens/, except
-    pure black and white. npm run check:colors enforces it.
+  description: Component CSS and TypeScript take colors only from design tokens (rgb(var(--token)) in both); no color literals outside src/tokens/, except pure black and white. npm run check:colors enforces it.
   attributes:
     category: architecture
   metadata:
-    created_at: 2026-11-24T17:33:21.786Z
-    updated_at: 2026-11-24T17:33:21.786Z
+    created_at: 2026-11-24T21:49:32.045Z
+    updated_at: 2026-11-24T21:49:32.045Z
     version: 1

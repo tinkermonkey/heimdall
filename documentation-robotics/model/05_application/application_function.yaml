@@ -5,10 +5,7 @@ application.applicationfunction.force-directed-layout-algorithm:
   type: applicationfunction
   layer_id: application
   name: Force-Directed Layout Algorithm
-  description: "forceLayout(): spring/repulsion/collision/center-gravity
-    simulation placing nodes without explicit coordinates, followed by a
-    capped-displacement overlap-resolution post-process
-    (resolveOverlaps/separationPass)."
+  description: "forceLayout(): spring/repulsion/collision/center-gravity simulation placing nodes without explicit coordinates, followed by a capped-displacement overlap-resolution post-process (resolveOverlaps/separationPass)."
   source_reference:
     provenance: extracted
     locations:
@@ -25,10 +22,7 @@ application.applicationfunction.clustered-force-layout-algorithm:
   type: applicationfunction
   layer_id: application
   name: Clustered Force Layout Algorithm
-  description: "clusteredForceLayout(): opt-in nested-bubble layout — Louvain
-    clustering + circle packing + a macro force pass over cluster pseudo-nodes +
-    a micro force pass over real nodes gravity-biased toward their cluster
-    centroid."
+  description: "clusteredForceLayout(): opt-in nested-bubble layout — Louvain clustering + circle packing + a macro force pass over cluster pseudo-nodes + a micro force pass over real nodes gravity-biased toward their cluster centroid."
   source_reference:
     provenance: extracted
     locations:
@@ -45,9 +39,7 @@ application.applicationfunction.galaxy-radial-orbit-layout-algorithm:
   type: applicationfunction
   layer_id: application
   name: Galaxy Radial Orbit Layout Algorithm
-  description: "galaxyLayout(): positions nodes as a radial hierarchy of orbits
-    from structural edges, settled over repeated galaxySimulationStep cycles,
-    then group-separated so independent root subtrees don't overlap."
+  description: "galaxyLayout(): positions nodes as a radial hierarchy of orbits from structural edges, settled over repeated galaxySimulationStep cycles, then group-separated so independent root subtrees don't overlap."
   source_reference:
     provenance: extracted
     locations:
@@ -64,10 +56,7 @@ application.applicationfunction.galaxy-live-simulation-step:
   type: applicationfunction
   layer_id: application
   name: Galaxy Live Simulation Step
-  description: "galaxySimulationStep(): one settle iteration of the galaxy
-    algorithm — recomputed orbital home positions, collision separation,
-    homeStrength nudge — driven either as a bounded batch (galaxyLayout) or
-    continuously per animation frame for live dragging."
+  description: "galaxySimulationStep(): one settle iteration of the galaxy algorithm — recomputed orbital home positions, collision separation, homeStrength nudge — driven either as a bounded batch (galaxyLayout) or continuously per animation frame for live dragging."
   source_reference:
     provenance: extracted
     locations:
@@ -84,9 +73,7 @@ application.applicationfunction.galaxy-aspect-ratio-resolution:
   type: applicationfunction
   layer_id: application
   name: Galaxy Aspect-Ratio Resolution
-  description: "resolveAspectRatioScale(): binary-searches how much a galaxy
-    layout's orbital ellipse can be warped toward a container's aspect ratio
-    without inflating rendered area past a cap."
+  description: "resolveAspectRatioScale(): binary-searches how much a galaxy layout's orbital ellipse can be warped toward a container's aspect ratio without inflating rendered area past a cap."
   source_reference:
     provenance: extracted
     locations:
@@ -103,9 +90,7 @@ application.applicationfunction.ux-navigation-tree-layout-algorithm:
   type: applicationfunction
   layer_id: application
   name: UX Navigation Tree Layout Algorithm
-  description: "uxNavLayout(): positions page nodes as independent top-down
-    d3.tree() hierarchies and view nodes as horizontal fans attached to their
-    parent pages, handling multi-parent views and orphan views."
+  description: "uxNavLayout(): positions page nodes as independent top-down d3.tree() hierarchies and view nodes as horizontal fans attached to their parent pages, handling multi-parent views and orphan views."
   source_reference:
     provenance: extracted
     locations:
@@ -122,9 +107,7 @@ application.applicationfunction.radial-tree-layout-algorithm:
   type: applicationfunction
   layer_id: application
   name: Radial Tree Layout Algorithm
-  description: "radialTreeLayout(): per-trunk sizing, d3.tree()-based polar
-    placement of descendants on depth rings, trunk packing (d3 packSiblings),
-    and a global separation pass."
+  description: "radialTreeLayout(): per-trunk sizing, d3.tree()-based polar placement of descendants on depth rings, trunk packing (d3 packSiblings), and a global separation pass."
   source_reference:
     provenance: extracted
     locations:
@@ -141,9 +124,7 @@ application.applicationfunction.louvain-community-clustering:
   type: applicationfunction
   layer_id: application
   name: Louvain Community Clustering
-  description: "louvainCluster(): deterministic multi-level Louvain modularity
-    clustering producing a nested dendrogram, used as the community structure
-    clusteredForceLayout packs and lays out."
+  description: "louvainCluster(): deterministic multi-level Louvain modularity clustering producing a nested dendrogram, used as the community structure clusteredForceLayout packs and lays out."
   source_reference:
     provenance: extracted
     locations:
@@ -160,9 +141,7 @@ application.applicationfunction.cluster-circle-packing:
   type: applicationfunction
   layer_id: application
   name: Cluster Circle Packing
-  description: "packClusters(): wraps d3-hierarchy's pack() to turn a Louvain
-    dendrogram into concrete non-overlapping nested circles sized to each leaf's
-    real bounding box."
+  description: "packClusters(): wraps d3-hierarchy's pack() to turn a Louvain dendrogram into concrete non-overlapping nested circles sized to each leaf's real bounding box."
   source_reference:
     provenance: extracted
     locations:
@@ -179,10 +158,7 @@ application.applicationfunction.structural-forest-construction:
   type: applicationfunction
   layer_id: application
   name: Structural Forest Construction
-  description: "buildStructuralForest(): derives a parent/child forest from
-    structural edges only, breaking structural cycles by promoting one node per
-    cycle to a root. Shared by galaxyLayout, radialTreeLayout, uxNavLayout, and
-    GraphCanvas's collapse/expand logic."
+  description: "buildStructuralForest(): derives a parent/child forest from structural edges only, breaking structural cycles by promoting one node per cycle to a root. Shared by galaxyLayout, radialTreeLayout, uxNavLayout, and GraphCanvas's collapse/expand logic."
   source_reference:
     provenance: extracted
     locations:
@@ -199,9 +175,7 @@ application.applicationfunction.node-overlap-separation-pass:
   type: applicationfunction
   layer_id: application
   name: Node Overlap Separation Pass
-  description: "separationPass(): pushes every currently-overlapping node pair
-    apart along the least-movement axis, capped per node — shared post-process
-    reused by forceLayout, galaxyLayout, and radialTreeLayout."
+  description: "separationPass(): pushes every currently-overlapping node pair apart along the least-movement axis, capped per node — shared post-process reused by forceLayout, galaxyLayout, and radialTreeLayout."
   source_reference:
     provenance: extracted
     locations:
@@ -218,9 +192,7 @@ application.applicationfunction.navigation-edge-orthogonal-routing:
   type: applicationfunction
   layer_id: application
   name: Navigation Edge Orthogonal Routing
-  description: "routeNavigationEdge/routeNavigationEdges(): builds
-    obstacle-avoiding orthogonal (right-angle) paths for ux-navigation route
-    edges, with a nudge pass spreading overlapping parallel segments."
+  description: "routeNavigationEdge/routeNavigationEdges(): builds obstacle-avoiding orthogonal (right-angle) paths for ux-navigation route edges, with a nudge pass spreading overlapping parallel segments."
   source_reference:
     provenance: extracted
     locations:
@@ -237,9 +209,7 @@ application.applicationfunction.bezier-edge-path-computation:
   type: applicationfunction
   layer_id: application
   name: Bezier Edge Path Computation
-  description: "computeEdgePath()/bezierPath()/cubicBezierPath(): resolves the
-    rendered curve between two node rectangles, choosing quadratic vs. cubic
-    bezier depending on whether either endpoint has a fixed anchor side."
+  description: "computeEdgePath()/bezierPath()/cubicBezierPath(): resolves the rendered curve between two node rectangles, choosing quadratic vs. cubic bezier depending on whether either endpoint has a fixed anchor side."
   source_reference:
     provenance: extracted
     locations:
@@ -256,9 +226,7 @@ application.applicationfunction.edge-label-clear-position-search:
   type: applicationfunction
   layer_id: application
   name: Edge Label Clear-Position Search
-  description: "findClearLabelPosition(): samples candidate points along an edge's
-    path and picks the first whose label footprint clears every node, falling
-    back to the exact midpoint."
+  description: "findClearLabelPosition(): samples candidate points along an edge's path and picks the first whose label footprint clears every node, falling back to the exact midpoint."
   source_reference:
     provenance: extracted
     locations:
@@ -275,11 +243,7 @@ application.applicationfunction.orthogonal-channel-edge-routing:
   type: applicationfunction
   layer_id: application
   name: Orthogonal Channel Edge Routing
-  description: 'routeChannels(): routes orthogonal edges over a grid of cell,
-    channel and junction tiles in two stages (path search with port-line
-    capacity, then interval-colouring line assignment), so no route crosses a
-    node; used by orthogonalLayout above 150 edges (PR #394).
-    OrthogonalLayoutStats.router reports "channel".'
+  description: 'routeChannels(): routes orthogonal edges over a grid of cell, channel and junction tiles in two stages (path search with port-line capacity, then interval-colouring line assignment), so no route crosses a node; used by orthogonalLayout above 150 edges (PR #394). OrthogonalLayoutStats.router reports "channel".'
   source_reference:
     provenance: extracted
     locations:
@@ -296,11 +260,7 @@ application.applicationfunction.orthogonal-layout-algorithm:
   type: applicationfunction
   layer_id: application
   name: Orthogonal Layout Algorithm
-  description: "orthogonalLayout(): places nodes on a grid with barycentric
-    ordering sweeps and routes every edge as a right-angle polyline from box
-    boundary to box boundary, with the exact lattice router up to 150 edges and
-    the channel router beyond; supports pinned nodes, sketch scope and bus
-    trees."
+  description: "orthogonalLayout(): places nodes on a grid with barycentric ordering sweeps and routes every edge as a right-angle polyline from box boundary to box boundary, with the exact lattice router up to 150 edges and the channel router beyond; supports pinned nodes, sketch scope and bus trees."
   source_reference:
     provenance: extracted
     locations:
@@ -317,10 +277,7 @@ application.applicationfunction.organic-layout-algorithm:
   type: applicationfunction
   layer_id: application
   name: Organic Layout Algorithm
-  description: 'organicLayout(): stress-majorization layout with preferred edge
-    length, minimum node distance, compactness, component packing, edge-label
-    box reservation and an incremental "affected" scope; deterministic, and a
-    no-op on its own output.'
+  description: 'organicLayout(): stress-majorization layout with preferred edge length, minimum node distance, compactness, component packing, edge-label box reservation and an incremental "affected" scope; deterministic, and a no-op on its own output.'
   source_reference:
     provenance: extracted
     locations:
@@ -337,11 +294,7 @@ application.applicationfunction.joint-edge-label-placement:
   type: applicationfunction
   layer_id: application
   name: Joint Edge-Label Placement
-  description: "placeEdgeLabelsJointly(): places every edge label at once; each
-    label takes its solo spot, then colliding labels move along their own edge
-    (or beside their own line where a parallel labelled track crowds them), and
-    a label with no clear spot is marked noRoom, which GraphCanvas turns into
-    EdgeGeometry.labelHidden (PR #396)."
+  description: "placeEdgeLabelsJointly(): places every edge label at once; each label takes its solo spot, then colliding labels move along their own edge (or beside their own line where a parallel labelled track crowds them), and a label with no clear spot is marked noRoom, which GraphCanvas turns into EdgeGeometry.labelHidden (PR #396)."
   source_reference:
     provenance: extracted
     locations:
@@ -351,9 +304,7 @@ application.applicationfunction.joint-edge-label-placement:
     - direction: incoming
       predicate: realizes
       other_spec_node_id: api.operation
-      reason: placeEdgeLabelsJointly is internal to src/utils/graph.ts and not
-        exported from src/index.ts; consumers reach it only through GraphCanvas
-        (EdgeGeometry.labelHidden).
+      reason: placeEdgeLabelsJointly is internal to src/utils/graph.ts and not exported from src/index.ts; consumers reach it only through GraphCanvas (EdgeGeometry.labelHidden).
       decided_by: agent
       decided_at: 2026-11-23T16:49:03.632Z
       changeset: changeset-1795451983730-m826idq0t
@@ -368,10 +319,7 @@ application.applicationfunction.layered-graph-index-construction:
   type: applicationfunction
   layer_id: application
   name: Layered Graph Index Construction
-  description: "buildLayeredIndex(): reads each node's layer(s) through a LayerDef
-    accessor and builds the layered index (layers, nodes, links, adjacency,
-    layer-pair summaries, predicate catalog) with issues for missing or
-    multi-valued layers."
+  description: "buildLayeredIndex(): reads each node's layer(s) through a LayerDef accessor and builds the layered index (layers, nodes, links, adjacency, layer-pair summaries, predicate catalog) with issues for missing or multi-valued layers."
   source_reference:
     provenance: extracted
     locations:
@@ -388,10 +336,7 @@ application.applicationfunction.layered-reach-computation:
   type: applicationfunction
   layer_id: application
   name: Layered Reach Computation
-  description: "computeReach() and reachPath(): from a selected node, follows
-    traversable links within its layer and across up to the chosen number of
-    layers, recording each reached node's hop and the node and predicate it came
-    through."
+  description: "computeReach() and reachPath(): from a selected node, follows traversable links within its layer and across up to the chosen number of layers, recording each reached node's hop and the node and predicate it came through."
   source_reference:
     provenance: extracted
     locations:
@@ -408,10 +353,7 @@ application.applicationfunction.layered-link-filtering-and-emphasis:
   type: applicationfunction
   layer_id: application
   name: Layered Link Filtering and Emphasis
-  description: "isLinkVisible, isLinkTraversable, isNodeVisible and
-    linkEmphasis/nodeEmphasis: apply the link-category and layer filters and
-    compute each link's and node's emphasis for the current selection, reach and
-    focus."
+  description: "isLinkVisible, isLinkTraversable, isNodeVisible and linkEmphasis/nodeEmphasis: apply the link-category and layer filters and compute each link's and node's emphasis for the current selection, reach and focus."
   source_reference:
     provenance: extracted
     locations:
@@ -428,9 +370,7 @@ application.applicationfunction.layered-graph-snapshot-sanitization:
   type: applicationfunction
   layer_id: application
   name: Layered Graph Snapshot Sanitization
-  description: "sanitizeLayeredGraphSnapshot(): validates a saved layered-graph
-    view state (selection, filters, focus, follow depth, labels, plane layout)
-    against the current graph so a stale snapshot restores safely."
+  description: "sanitizeLayeredGraphSnapshot(): validates a saved layered-graph view state (selection, filters, focus, follow depth, labels, plane layout) against the current graph so a stale snapshot restores safely."
   source_reference:
     provenance: extracted
     locations:
@@ -447,10 +387,7 @@ application.applicationfunction.layer-plane-layout:
   type: applicationfunction
   layer_id: application
   name: Layer Plane Layout
-  description: "layoutLayers() / layoutLayersAsync(): lays out each layer's nodes
-    on its plane, independently or coupled (cross-layer neighbours aligned via
-    orderAcrossLayers), the async form yielding between layers for graphs over
-    ASYNC_LAYOUT_MIN_NODES nodes (useAsyncLayerLayout)."
+  description: "layoutLayers() / layoutLayersAsync(): lays out each layer's nodes on its plane, independently or coupled (cross-layer neighbours aligned via orderAcrossLayers), the async form yielding between layers for graphs over ASYNC_LAYOUT_MIN_NODES nodes (useAsyncLayerLayout)."
   source_reference:
     provenance: extracted
     locations:
@@ -467,9 +404,7 @@ application.applicationfunction.layered-edge-label-placement:
   type: applicationfunction
   layer_id: application
   name: Layered Edge-Label Placement
-  description: "placeEdgeLabels(): places predicate pills on projected or drawn
-    links in priority order (edgeLabelPriority), skipping pills that would
-    overlap placed ones, for the layer stack, lanes and hive views."
+  description: "placeEdgeLabels(): places predicate pills on projected or drawn links in priority order (edgeLabelPriority), skipping pills that would overlap placed ones, for the layer stack, lanes and hive views."
   source_reference:
     provenance: extracted
     locations:
@@ -486,10 +421,7 @@ application.applicationfunction.layer-stack-3d-projection:
   type: applicationfunction
   layer_id: application
   name: Layer Stack 3D Projection
-  description: "createProjector() and the camera helpers (cameraFromPreset,
-    clampCamera, lerpCamera, fitZoom, depthSort): perspective projection of
-    layer planes and nodes into SVG screen space for LayerStack, with stack,
-    exploded, top and profile presets."
+  description: "createProjector() and the camera helpers (cameraFromPreset, clampCamera, lerpCamera, fitZoom, depthSort): perspective projection of layer planes and nodes into SVG screen space for LayerStack, with stack, exploded, top and profile presets."
   source_reference:
     provenance: extracted
     locations:
@@ -506,9 +438,7 @@ application.applicationfunction.hive-plot-layout:
   type: applicationfunction
   layer_id: application
   name: Hive Plot Layout
-  description: "hiveLayout(), hiveLinkGeometry() and hiveAxisGroups(): axis angles
-    per layer or group, node radii along each axis, and link curves between axes
-    (with loop bulges for same-axis links)."
+  description: "hiveLayout(), hiveLinkGeometry() and hiveAxisGroups(): axis angles per layer or group, node radii along each axis, and link curves between axes (with loop bulges for same-axis links)."
   source_reference:
     provenance: extracted
     locations:
@@ -525,9 +455,7 @@ application.applicationfunction.adjacency-matrix-cells:
   type: applicationfunction
   layer_id: application
   name: Adjacency Matrix Cells
-  description: "layerMatrixCells(), matrixWindow() and linkEdgeMetadata(): builds
-    the block adjacency matrix cells per layer pair and the visible window for
-    large matrices."
+  description: "layerMatrixCells(), matrixWindow() and linkEdgeMetadata(): builds the block adjacency matrix cells per layer pair and the visible window for large matrices."
   source_reference:
     provenance: extracted
     locations:
@@ -544,10 +472,7 @@ application.applicationfunction.lane-layout-and-gutter-routing:
   type: applicationfunction
   layer_id: application
   name: Lane Layout and Gutter Routing
-  description: 'layoutLanes(), routeLaneGutters() and laneBundler(): lays out
-    layers as swim lanes (horizontal or vertical) and routes cross-lane links
-    through gutter tracks with bundling, used by GraphCanvas
-    layout="layer-lanes".'
+  description: 'layoutLanes(), routeLaneGutters() and laneBundler(): lays out layers as swim lanes (horizontal or vertical) and routes cross-lane links through gutter tracks with bundling, used by GraphCanvas layout="layer-lanes".'
   source_reference:
     provenance: extracted
     locations:
@@ -564,9 +489,7 @@ application.applicationfunction.trace-model-construction:
   type: applicationfunction
   layer_id: application
   name: Trace Model Construction
-  description: "buildTraceModel(): turns a Trace (spans with parent ids, services,
-    timings, status, events) into the span tree, self times, visible rows and
-    time scale the TraceViewer waterfall draws."
+  description: "buildTraceModel(): turns a Trace (spans with parent ids, services, timings, status, events) into the span tree, self times, visible rows and time scale the TraceViewer waterfall draws."
   source_reference:
     provenance: extracted
     locations:
@@ -583,9 +506,7 @@ application.applicationfunction.otlp-trace-adaptation:
   type: applicationfunction
   layer_id: application
   name: OTLP Trace Adaptation
-  description: "fromOTLP(): converts OpenTelemetry OTLP/JSON traces data into
-    heimdall's Trace shape (services from resource attributes, span kinds,
-    status, events)."
+  description: "fromOTLP(): converts OpenTelemetry OTLP/JSON traces data into heimdall's Trace shape (services from resource attributes, span kinds, status, events)."
   source_reference:
     provenance: extracted
     locations:
@@ -602,8 +523,7 @@ application.applicationfunction.aws-x-ray-trace-adaptation:
   type: applicationfunction
   layer_id: application
   name: AWS X-Ray Trace Adaptation
-  description: "fromXRay(): converts AWS X-Ray segment documents (segments,
-    subsegments, exceptions and causes) into heimdall's Trace shape."
+  description: "fromXRay(): converts AWS X-Ray segment documents (segments, subsegments, exceptions and causes) into heimdall's Trace shape."
   source_reference:
     provenance: extracted
     locations:
@@ -620,10 +540,7 @@ application.applicationfunction.ssr-safe-media-query:
   type: applicationfunction
   layer_id: application
   name: SSR-Safe Media Query
-  description: "useMediaQuery(query, serverValue): returns serverValue during
-    server render and hydration and the real match after mount, so server HTML
-    and the first client render agree (0.13.0); useMediaQueryMatch returns
-    undefined until known."
+  description: "useMediaQuery(query, serverValue): returns serverValue during server render and hydration and the real match after mount, so server HTML and the first client render agree (0.13.0); useMediaQueryMatch returns undefined until known."
   source_reference:
     provenance: extracted
     locations:
@@ -640,10 +557,7 @@ application.applicationfunction.fixed-clock-date-formatting:
   type: applicationfunction
   layer_id: application
   name: Fixed-Clock Date Formatting
-  description: "formatTimestamp(timestamp, now) and isToday(date, today) in
-    dateUtils: relative and calendar text computed from a caller-supplied
-    now/today, so timelines and calendars print the same text on a server and in
-    any browser and timezone (0.13.0)."
+  description: "formatTimestamp(timestamp, now) and isToday(date, today) in dateUtils: relative and calendar text computed from a caller-supplied now/today, so timelines and calendars print the same text on a server and in any browser and timezone (0.13.0)."
   source_reference:
     provenance: extracted
     locations:
@@ -660,9 +574,7 @@ application.applicationfunction.plain-link-click-detection:
   type: applicationfunction
   layer_id: application
   name: Plain Link Click Detection
-  description: "isPlainLinkClick() / isModifiedClick(): lets href-rendering
-    components (NavItem, Sidebar, QuickAccessTile) run onClick for a plain click
-    and leave modified clicks (new tab, new window) to the browser."
+  description: "isPlainLinkClick() / isModifiedClick(): lets href-rendering components (NavItem, Sidebar, QuickAccessTile) run onClick for a plain click and leave modified clicks (new tab, new window) to the browser."
   source_reference:
     provenance: extracted
     locations:
@@ -679,9 +591,7 @@ application.applicationfunction.dropdown-placement:
   type: applicationfunction
   layer_id: application
   name: Dropdown Placement
-  description: "computeDropdownPosition(): places a dropdown panel below or above
-    its trigger, start- or end-aligned, flipping and clamping inside the
-    viewport and reporting the available height."
+  description: "computeDropdownPosition(): places a dropdown panel below or above its trigger, start- or end-aligned, flipping and clamping inside the viewport and reporting the available height."
   source_reference:
     provenance: extracted
     locations:
@@ -698,9 +608,7 @@ application.applicationfunction.tooltip-placement:
   type: applicationfunction
   layer_id: application
   name: Tooltip Placement
-  description: "computeTooltipPosition(): places a tooltip card on the preferred
-    side of its anchor, flipping to the opposite or a perpendicular side and
-    clamping inside the bounds when there is no room."
+  description: "computeTooltipPosition(): places a tooltip card on the preferred side of its anchor, flipping to the opposite or a perpendicular side and clamping inside the bounds when there is no room."
   source_reference:
     provenance: extracted
     locations:
@@ -717,9 +625,7 @@ application.applicationfunction.dropdown-portal-and-outside-click-containment:
   type: applicationfunction
   layer_id: application
   name: Dropdown Portal and Outside-Click Containment
-  description: "useDropdownPortal() and containsAcrossPortals(): renders dropdown
-    panels in a body portal and treats clicks inside any nested portal as inside
-    the owning control."
+  description: "useDropdownPortal() and containsAcrossPortals(): renders dropdown panels in a body portal and treats clicks inside any nested portal as inside the owning control."
   source_reference:
     provenance: extracted
     locations:
@@ -736,8 +642,7 @@ application.applicationfunction.focus-trap:
   type: applicationfunction
   layer_id: application
   name: Focus Trap
-  description: "useFocusTrap(): keeps keyboard focus inside an open modal surface
-    (Modal, Drawer, CommandPalette) and restores it on close."
+  description: "useFocusTrap(): keeps keyboard focus inside an open modal surface (Modal, Drawer, CommandPalette) and restores it on close."
   source_reference:
     provenance: extracted
     locations:
@@ -771,9 +676,7 @@ application.applicationfunction.controlled-or-uncontrolled-state:
   type: applicationfunction
   layer_id: application
   name: Controlled or Uncontrolled State
-  description: "useControllable(): one state hook for props that may be controlled
-    (value + onChange) or uncontrolled (defaultValue), used across inputs and
-    views."
+  description: "useControllable(): one state hook for props that may be controlled (value + onChange) or uncontrolled (defaultValue), used across inputs and views."
   source_reference:
     provenance: extracted
     locations:
@@ -790,10 +693,7 @@ application.applicationfunction.tweened-animation:
   type: applicationfunction
   layer_id: application
   name: Tweened Animation
-  description: "useTween() with easeInOutCubic and interpolateValues: animates
-    numeric values on requestAnimationFrame and jumps under
-    prefers-reduced-motion (usePrefersReducedMotion); drives LayerStack camera
-    and plane moves."
+  description: "useTween() with easeInOutCubic and interpolateValues: animates numeric values on requestAnimationFrame and jumps under prefers-reduced-motion (usePrefersReducedMotion); drives LayerStack camera and plane moves."
   source_reference:
     provenance: extracted
     locations:
@@ -810,8 +710,7 @@ application.applicationfunction.virtualized-list-windowing:
   type: applicationfunction
   layer_id: application
   name: Virtualized List Windowing
-  description: "useVirtualList(): computes the visible row window for long lists
-    such as SideBySideDiff and LogStream."
+  description: "useVirtualList(): computes the visible row window for long lists such as SideBySideDiff and LogStream."
   source_reference:
     provenance: extracted
     locations:
@@ -828,9 +727,7 @@ application.applicationfunction.pan-inertia-glide:
   type: applicationfunction
   layer_id: application
   name: Pan Inertia Glide
-  description: "releaseVelocity(), decayVelocity() and glideHasSettled():
-    pointer-release velocity over a 100 ms window and exponential decay for
-    usePanZoom's inertial glide."
+  description: "releaseVelocity(), decayVelocity() and glideHasSettled(): pointer-release velocity over a 100 ms window and exponential decay for usePanZoom's inertial glide."
   source_reference:
     provenance: extracted
     locations:
@@ -847,9 +744,7 @@ application.applicationfunction.yield-to-paint:
   type: applicationfunction
   layer_id: application
   name: Yield to Paint
-  description: "yieldToPaint(): defers work until after the next paint (double
-    requestAnimationFrame) so a busy indicator shows before a long synchronous
-    layout."
+  description: "yieldToPaint(): defers work until after the next paint (double requestAnimationFrame) so a busy indicator shows before a long synchronous layout."
   source_reference:
     provenance: extracted
     locations:
@@ -866,9 +761,7 @@ application.applicationfunction.edge-weight-and-dash-styling:
   type: applicationfunction
   layer_id: application
   name: Edge Weight and Dash Styling
-  description: "weightToStrokeWidth(), markerSizeForStrokeWidth() and
-    strokeDashToDasharray(): map an edge's 0-100 weight to stroke width and
-    marker size and its strokeDash to an SVG dasharray."
+  description: "weightToStrokeWidth(), markerSizeForStrokeWidth() and strokeDashToDasharray(): map an edge's 0-100 weight to stroke width and marker size and its strokeDash to an SVG dasharray."
   source_reference:
     provenance: extracted
     locations:
@@ -877,4 +770,225 @@ application.applicationfunction.edge-weight-and-dash-styling:
   metadata:
     created_at: 2026-11-23T16:44:40.174Z
     updated_at: 2026-11-23T16:44:40.174Z
+    version: 1
+application.applicationfunction.link-and-node-emphasis-styling:
+  id: 60a1163a-a9fd-48d2-a55d-091e9a576429
+  path: application.applicationfunction.link-and-node-emphasis-styling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Link and Node Emphasis Styling
+  description: "linkEmphasis/nodeEmphasis/linkCategoryStyle: the emphasis and palette each node and link draws with given selection, hover and reach."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/emphasis.ts
+        symbol: linkEmphasis
+  metadata:
+    created_at: 2026-11-24T19:01:20.528Z
+    updated_at: 2026-11-24T19:01:20.528Z
+    version: 1
+application.applicationfunction.batched-link-path-drawing:
+  id: 76e1a50e-f32c-461d-bbda-bd55d89957af
+  path: application.applicationfunction.batched-link-path-drawing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Batched Link Path Drawing
+  description: "batchLinks(): links that share a style are drawn as one SVG path per bucket, so a frame restyles one element per style."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/linkBatches.ts
+        symbol: batchLinks
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.adjacency-matrix-ordering:
+  id: 5661a701-e2b5-4228-8eb8-0378b2019aa0
+  path: application.applicationfunction.adjacency-matrix-ordering
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Adjacency Matrix Ordering
+  description: "clusterOrder()/matrixCells(): row and column order (Louvain communities per layer) and the cells of the adjacency matrix."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/matrix.ts
+        symbol: clusterOrder
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.painter-depth-reordering:
+  id: 6564b179-3ef8-43a5-8077-546fd24d44e7
+  path: application.applicationfunction.painter-depth-reordering
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Painter Depth Reordering
+  description: "reorder(): restacks projected scene elements in painter's order each frame with the fewest DOM moves."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/layered/domOrder.ts
+        symbol: reorder
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.structural-descendant-lookup:
+  id: 6ebd0132-9a74-4081-9041-ea468427eb51
+  path: application.applicationfunction.structural-descendant-lookup
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Structural Descendant Lookup
+  description: "structuralDescendants(): the nodes under a node in the structural forest, used to hide a collapsed node's subtree."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/graphHierarchy.ts
+        symbol: structuralDescendants
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.dropdown-menu-keyboard-navigation:
+  id: 65c65ba8-3e6c-41f7-a313-58d26cc42fbe
+  path: application.applicationfunction.dropdown-menu-keyboard-navigation
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Dropdown Menu Keyboard Navigation
+  description: "useDropdownMenu(): open state, active item and keyboard navigation shared by Select, FilterDropdown, EntityPicker and RowMenu."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useDropdownMenu.ts
+        symbol: useDropdownMenu
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.layered-graph-state:
+  id: d85e4ede-8298-4edd-b732-566a2cfbaf99
+  path: application.applicationfunction.layered-graph-state
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Graph State
+  description: "useLayeredGraph(): the shared state of a layered graph (index, selection, filters, reach, layout) behind LayeredGraphContext."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: useLayeredGraph
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.async-layer-layout:
+  id: 34f5bcc6-de80-47d5-922b-cc51237636a8
+  path: application.applicationfunction.async-layer-layout
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Async Layer Layout
+  description: "useAsyncLayerLayout(): runs layoutLayersAsync off the main path for graphs over asyncLayoutMinNodes, keeping the last result while it computes."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useAsyncLayerLayout.ts
+        symbol: useAsyncLayerLayout
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.node-pointer-handling:
+  id: 144d6ec6-128c-4fa8-b2dd-a61624b87f59
+  path: application.applicationfunction.node-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Node Pointer Handling
+  description: "GraphCanvas's node pointer handlers: a drag past DRAG_THRESHOLD moves the node and, on release, raises onNodeDragEnd with its id and position; pointer enter and leave update hoveredNodeId and raise onNodeHover."
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleNodePointerUp
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.edge-pointer-handling:
+  id: 725ae284-94b9-42bb-8189-d8b47a7324ce
+  path: application.applicationfunction.edge-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Edge Pointer Handling
+  description: "GraphCanvas's edge hover start and end handlers and an edge's activation: report the hovered edge through onEdgeHover and the selected edge through onEdgeSelect."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleEdgeHoverStart
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.canvas-pointer-handling:
+  id: a6a5dc55-31af-464f-9eee-f00bae228f23
+  path: application.applicationfunction.canvas-pointer-handling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Canvas Pointer Handling
+  description: "GraphCanvas's pointer-up handler on the canvas background: a click that is not a pan reports onBackgroundClick."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: handleCanvasPointerUp
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.collapse-toggling:
+  id: 43266904-5571-464f-8fe9-b8d16a3cb4da
+  path: application.applicationfunction.collapse-toggling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Collapse Toggling
+  description: GraphCanvas hands each node with structural children an onToggleCollapse that reports the node to the consumer's onToggleCollapse; GraphCollapseControl and Shift+Enter call it.
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onToggleCollapse
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+application.applicationfunction.programmatic-viewport-move-reporting:
+  id: b29f8762-36cb-42f5-b182-4e15dad607e9
+  path: application.applicationfunction.programmatic-viewport-move-reporting
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Programmatic Viewport Move Reporting
+  description: "Runs after every viewport move GraphCanvas or the app makes: cancels a running ease, drops a pending dwell and queues onViewportNavigate with the move's cause, reported once the move has rendered."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: afterProgrammaticMove
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
     version: 1

@@ -1,275 +1,3 @@
-application.applicationcomponent.graph-canvas-component:
-  id: 46abcf82-6aff-49ca-85f2-d42625ca97b6
-  path: application.applicationcomponent.graph-canvas-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphCanvas Component
-  description: "The primary orchestrating React component: measures nodes,
-    dispatches to the layout selected by its layout prop (manual, force,
-    organic, orthogonal, galaxy, force-clustered, ux-navigation, radial-tree,
-    layer-lanes), owns pan/zoom, selection, hover, collapse and viewport
-    history, places edge labels jointly (hiding labels with no room until
-    focus), and renders nodes, edges, toolbar, tooltips and popovers."
-  attributes:
-    type: service-component
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphCanvas.tsx
-        symbol: GraphCanvas
-  metadata:
-    created_at: 2026-09-18T14:34:35.709Z
-    updated_at: 2026-09-18T14:34:35.709Z
-    version: 1
-application.applicationcomponent.graph-node-component:
-  id: 5eab1be5-9898-4757-818c-a1378301c471
-  path: application.applicationcomponent.graph-node-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphNode Component
-  description: "Default node renderer: label/kind/domain swatch, click/keyboard
-    select, Shift+Enter collapse toggle, popover trigger."
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphNode.tsx
-        symbol: GraphNode
-  metadata:
-    created_at: 2026-09-18T14:34:35.992Z
-    updated_at: 2026-09-18T14:34:35.992Z
-    version: 1
-application.applicationcomponent.graph-edge-component:
-  id: 2466d906-1d46-405f-a82c-b26d580312c5
-  path: application.applicationcomponent.graph-edge-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphEdge Component
-  description: "Standalone exported edge component (for use outside GraphCanvas's
-    own internal edge renderer): computes its own path with the internal
-    computeEdgePath helper (src/utils/graph.ts, no longer a public export) and
-    delegates drawing to GraphEdgeShape."
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphEdge.tsx
-        symbol: GraphEdge
-  metadata:
-    created_at: 2026-09-18T14:34:36.293Z
-    updated_at: 2026-09-18T14:34:36.293Z
-    version: 1
-application.applicationcomponent.graph-edge-shape-component:
-  id: 64946a5b-15cb-46da-9a3d-2b331c26d2d9
-  path: application.applicationcomponent.graph-edge-shape-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphEdgeShape Component
-  description: "Shared SVG drawing primitive for an edge: line, arrow markers (per
-    variant), hit-target path, and collision-cleared label pill. Used by both
-    GraphEdge and GraphCanvas's internal edge renderer to prevent visual drift
-    between the two."
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphEdgeShape.tsx
-        symbol: GraphEdgeShape
-  metadata:
-    created_at: 2026-09-18T14:34:36.592Z
-    updated_at: 2026-09-18T14:34:36.592Z
-    version: 1
-application.applicationcomponent.graph-toolbar-component:
-  id: 3a96181e-c48f-4641-8468-e3f67b7df38d
-  path: application.applicationcomponent.graph-toolbar-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphToolbar Component
-  description: Floating zoom in/out/fit, pan-lock, fullscreen, and (layout=galaxy
-    only) live-simulation toggle controls, reading/writing GraphCanvasContext.
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphToolbar.tsx
-        symbol: GraphToolbar
-  metadata:
-    created_at: 2026-09-18T14:34:36.881Z
-    updated_at: 2026-09-18T14:34:36.881Z
-    version: 1
-application.applicationcomponent.graph-inspector-component:
-  id: 158661b1-d682-4ba0-984d-b2b955e37094
-  path: application.applicationcomponent.graph-inspector-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphInspector Component
-  description: "Detail panel for a selected node: title/kind/domain badges,
-    description, metadata key-value list, and outgoing/incoming relationship
-    links."
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphInspector.tsx
-        symbol: GraphInspector
-  metadata:
-    created_at: 2026-09-18T14:34:37.175Z
-    updated_at: 2026-09-18T14:34:37.175Z
-    version: 1
-application.applicationcomponent.graph-edge-inspector-component:
-  id: 02df26ef-c374-48e5-bb73-1fcf7e40d607
-  path: application.applicationcomponent.graph-edge-inspector-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphEdgeInspector Component
-  description: "Lighter detail panel for a selected edge: predicate/title,
-    source/target endpoint buttons, weight and scalar metadata."
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphEdgeInspector.tsx
-        symbol: GraphEdgeInspector
-  metadata:
-    created_at: 2026-09-18T14:34:37.466Z
-    updated_at: 2026-09-18T14:34:37.466Z
-    version: 1
-application.applicationcomponent.graph-collapse-control-component:
-  id: 4348422b-9a36-478f-b8b6-d374d35f56b5
-  path: application.applicationcomponent.graph-collapse-control-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: GraphCollapseControl Component
-  description: Floating foreignObject button rendered at a node's right edge for
-    toggling structural collapse/expand, with a hidden-descendant-count badge.
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphCollapseControl.tsx
-        symbol: GraphCollapseControl
-  metadata:
-    created_at: 2026-09-18T14:34:37.787Z
-    updated_at: 2026-09-18T14:34:37.787Z
-    version: 1
-application.applicationcomponent.layer-stack-component:
-  id: 26b7b915-c247-4bc5-b497-3f9663cbb80d
-  path: application.applicationcomponent.layer-stack-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: LayerStack Component
-  description: Renders a layered graph as a 3D stack of translucent layer planes
-    in SVG with a perspective projection, an HTML label overlay,
-    orbit/zoom/preset camera, layer focus and drill-through selection.
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/LayerStack.tsx
-        symbol: LayerStack
-  metadata:
-    created_at: 2026-11-23T16:44:40.172Z
-    updated_at: 2026-11-23T16:44:40.172Z
-    version: 1
-application.applicationcomponent.adjacency-matrix-component:
-  id: 410183f6-4a3d-4459-809a-989ed3dbd638
-  path: application.applicationcomponent.adjacency-matrix-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: AdjacencyMatrix Component
-  description: Renders a layered graph as a directed block adjacency matrix, one
-    row and column per node grouped by layer, windowed for large graphs.
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/AdjacencyMatrix.tsx
-        symbol: AdjacencyMatrix
-  metadata:
-    created_at: 2026-11-23T16:44:40.172Z
-    updated_at: 2026-11-23T16:44:40.172Z
-    version: 1
-application.applicationcomponent.hive-plot-component:
-  id: cb96534c-3c0b-48b9-8d65-a5c472da5d53
-  path: application.applicationcomponent.hive-plot-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: HivePlot Component
-  description: "Renders a layered graph as a hive plot: one radial axis per layer
-    (or per group), nodes along the axis, links as curves between axes."
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/HivePlot.tsx
-        symbol: HivePlot
-  metadata:
-    created_at: 2026-11-23T16:44:40.172Z
-    updated_at: 2026-11-23T16:44:40.172Z
-    version: 1
-application.applicationcomponent.layered-graph-explorer-component:
-  id: 562687bf-e835-40dc-a65f-a6e57edf25bb
-  path: application.applicationcomponent.layered-graph-explorer-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: LayeredGraphExplorer Component
-  description: Hosts every layered view (LayerStack, lanes through GraphCanvas
-    layout="layer-lanes", AdjacencyMatrix, HivePlot) with its chrome over one
-    useLayeredGraph state, with an imperative handle and snapshot save/restore.
-  attributes:
-    type: service-component
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/LayeredGraphExplorer.tsx
-        symbol: LayeredGraphExplorer
-  metadata:
-    created_at: 2026-11-23T16:44:40.172Z
-    updated_at: 2026-11-23T16:44:40.172Z
-    version: 1
-application.applicationcomponent.trace-viewer-component:
-  id: ed944b11-b769-4dc0-aaf0-a1257d42bb1b
-  path: application.applicationcomponent.trace-viewer-component
-  spec_node_id: application.applicationcomponent
-  type: applicationcomponent
-  layer_id: application
-  name: TraceViewer Component
-  description: "Distributed-trace waterfall: builds a trace model from a Trace and
-    renders the span tree, service-coloured timeline, summary strip and span
-    detail panel."
-  attributes:
-    type: internal
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/TraceViewer.tsx
-        symbol: TraceViewer
-  metadata:
-    created_at: 2026-11-23T16:44:40.172Z
-    updated_at: 2026-11-23T16:44:40.172Z
-    version: 1
 application.applicationcomponent.heimdall-ui-library-module:
   id: 2b15e7f7-1810-4c5f-9a55-112e9c3702bd
   path: application.applicationcomponent.heimdall-ui-library-module
@@ -291,4 +19,47 @@ application.applicationcomponent.heimdall-ui-library-module:
   metadata:
     created_at: 2026-11-23T16:47:22.576Z
     updated_at: 2026-11-23T16:47:22.576Z
+    version: 1
+application.applicationcomponent.test-page-host-app:
+  id: 3b2b0a19-0ace-449f-a929-fab89fac3e71
+  path: application.applicationcomponent.test-page-host-app
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: Test Page Host App
+  description: "The repo-root Vite dev app (index.html, src/main.tsx,
+    src/App.tsx): renders one of 52 src/test-pages chosen by the ?example= (and
+    ?test=) query parameter. Playwright's webServer starts it on :5173 and every
+    visual spec navigates to it; the docs site imports the same test pages."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/App.tsx
+        symbol: App
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+application.applicationcomponent.consumer-smoke-test-app:
+  id: 63c2b349-c239-4e01-b4f3-f4b9917c157b
+  path: application.applicationcomponent.consumer-smoke-test-app
+  spec_node_id: application.applicationcomponent
+  type: applicationcomponent
+  layer_id: application
+  name: Consumer Smoke Test App
+  description: "test-app/: a separate Vite app that installs the package as a
+    consumer would (file:..) and renders components from the built dist, so
+    packaging mistakes surface outside the library's own source tree. Not run by
+    CI."
+  attributes:
+    type: internal
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: test-app/package.json
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1

@@ -1,0 +1,21 @@
+navigation.route.test-page-example-route:
+  id: 06fe3490-81ad-46a6-9cd3-a1a9eaccc4d6
+  path: navigation.route.test-page-example-route
+  spec_node_id: navigation.route
+  type: route
+  layer_id: navigation
+  name: Test Page Example Route
+  description: "/?example=<name>: selects which test page the host app renders;
+    the address every Playwright spec opens (e.g. /?example=primitives)."
+  attributes:
+    type: public
+    title: Test page
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/App.tsx
+        symbol: exampleParam
+  metadata:
+    created_at: 2026-11-24T19:01:20.526Z
+    updated_at: 2026-11-24T19:01:20.526Z
+    version: 1

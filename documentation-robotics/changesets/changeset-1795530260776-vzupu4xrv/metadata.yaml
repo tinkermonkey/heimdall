@@ -1,0 +1,356 @@
+id: changeset-1795530260776-vzupu4xrv
+name: heimdall-ui-public-api
+description: "Model @tinkermonkey/heimdall-ui's public API per ruling S1
+  (2026-11-21). The package becomes an application component that realizes one
+  application service per export module with exported functions or hooks (about
+  27), and realizes the UI-family services. The 18 api.operation entries and the
+  graph tag that misfile library exports are retired: their coverage, feature
+  and requirement links move to the matching service or, for the 8 React
+  components, to the ux library component. The four orphaned schema definitions
+  get linked to the code that reads them. The application interface for the
+  package's `.` entry point waits until the spec allows an in-process protocol
+  (Context Studio proposal for ApplicationInterface.protocol). Out of scope: the
+  8 Graph application components that duplicate ux library components (S10, a
+  follow-up changeset), and the CSS and font subpath exports (technology
+  artifacts)."
+created: 2026-11-24T14:24:21.184Z
+modified: 2026-11-24T15:11:54.048Z
+status: committed
+baseSnapshot: v2:sha256:15a18b118307fd738a747f1274ee48b29a03aeabc885cb3725210cafa47c811b
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 162
+  modifications: 0
+  deletions: 148
+lastSequence: 319
+unstaged:
+  - sequence: 0
+    removedAt: 310
+    change:
+      type: add
+      elementId: application.applicationcomponent.heimdall-ui-package
+      layerName: application
+      after:
+        id: 21f78e21-c7b1-474a-b56a-432cc6c764fa
+        path: application.applicationcomponent.heimdall-ui-package
+        spec_node_id: application.applicationcomponent
+        type: applicationcomponent
+        layer_id: application
+        name: Heimdall UI Package
+        description: "The published library @tinkermonkey/heimdall-ui: an ESM package
+          built to dist/ whose public entry point is src/index.ts (the `.`
+          export in package.json). It ships the React UI components (modelled in
+          the ux layer), the layout engines, layered-graph utilities and hooks
+          offered as application services, and the CSS and font assets
+          (technology artifacts)."
+        attributes:
+          type: internal
+        source_reference:
+          provenance: manual
+          locations:
+            - file: package.json
+              symbol: "@tinkermonkey/heimdall-ui"
+        metadata:
+          created_at: 2026-11-24T14:27:00.162Z
+          updated_at: 2026-11-24T14:27:00.162Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true
+  - sequence: 0
+    removedAt: 311
+    change:
+      type: add
+      elementId: application.applicationcomponent.heimdall-ui-package
+      layerName: application
+      after:
+        id: 21f78e21-c7b1-474a-b56a-432cc6c764fa
+        path: application.applicationcomponent.heimdall-ui-package
+        spec_node_id: application.applicationcomponent
+        type: applicationcomponent
+        layer_id: application
+        name: Heimdall UI Package
+        description: "The published library @tinkermonkey/heimdall-ui: an ESM package
+          built to dist/ whose public entry point is src/index.ts (the `.`
+          export in package.json). It ships the React UI components (modelled in
+          the ux layer), the layout engines, layered-graph utilities and hooks
+          offered as application services, and the CSS and font assets
+          (technology artifacts)."
+        attributes:
+          type: internal
+        source_reference:
+          provenance: manual
+          locations:
+            - file: package.json
+              symbol: "@tinkermonkey/heimdall-ui"
+        metadata:
+          created_at: 2026-11-24T14:27:00.162Z
+          updated_at: 2026-11-24T14:27:00.162Z
+          version: 1
+        accepted_gaps:
+          - direction: incoming
+            predicate: covers
+            other_spec_node_id: testing.testcoveragetarget
+            reason: No test file targets the package as a whole; coverage targets cover its
+              export services and ux library components instead. The peers this
+              gap compares with are the 8 Graph application components that
+              duplicate ux library components (S10).
+            decided_by: agent
+            decided_at: 2026-11-24T14:31:59.238Z
+            changeset: changeset-1795530260776-vzupu4xrv
+      timestamp: 2026-11-24T14:31:59.559Z
+    rewritten: true
+  - sequence: 0
+    removedAt: 312
+    change:
+      type: add
+      elementId: application.applicationcomponent.heimdall-ui-package
+      layerName: application
+      after:
+        id: 21f78e21-c7b1-474a-b56a-432cc6c764fa
+        path: application.applicationcomponent.heimdall-ui-package
+        spec_node_id: application.applicationcomponent
+        type: applicationcomponent
+        layer_id: application
+        name: Heimdall UI Package
+        description: "The published library @tinkermonkey/heimdall-ui: an ESM package
+          built to dist/ whose public entry point is src/index.ts (the `.`
+          export in package.json). It ships the React UI components (modelled in
+          the ux layer), the layout engines, layered-graph utilities and hooks
+          offered as application services, and the CSS and font assets
+          (technology artifacts)."
+        attributes:
+          type: internal
+        source_reference:
+          provenance: manual
+          locations:
+            - file: package.json
+              symbol: "@tinkermonkey/heimdall-ui"
+        metadata:
+          created_at: 2026-11-24T14:27:00.162Z
+          updated_at: 2026-11-24T14:27:00.162Z
+          version: 1
+        accepted_gaps:
+          - direction: incoming
+            predicate: covers
+            other_spec_node_id: testing.testcoveragetarget
+            reason: No test file targets the package as a whole; coverage targets cover its
+              export services and ux library components instead. The peers this
+              gap compares with are the 8 Graph application components that
+              duplicate ux library components (S10).
+            decided_by: agent
+            decided_at: 2026-11-24T14:31:59.238Z
+            changeset: changeset-1795530260776-vzupu4xrv
+          - direction: incoming
+            predicate: serves
+            other_spec_node_id: technology.systemsoftware
+            reason: The browser runtime is recorded where the code runs, on the package's ux
+              library components (depends-on web-browser). The peers this gap
+              compares with are the 8 Graph application components that
+              duplicate ux library components (S10).
+            decided_by: agent
+            decided_at: 2026-11-24T14:32:05.284Z
+            changeset: changeset-1795530260776-vzupu4xrv
+      timestamp: 2026-11-24T14:32:05.475Z
+    rewritten: true
+  - sequence: 1
+    removedAt: 313
+    change:
+      type: add
+      elementId: application.applicationservice.dropdown-portal-containment
+      layerName: application
+      after:
+        id: 313bac17-cf67-4010-8a9f-c3c2e6a5d874
+        path: application.applicationservice.dropdown-portal-containment
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Dropdown Portal Containment
+        description: "Exported from the package entry point (src/index.ts) out of
+          src/hooks/useDropdownPortal.ts: containsAcrossPortals."
+        attributes:
+          serviceType: synchronous
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/hooks/useDropdownPortal.ts
+              symbol: containsAcrossPortals
+        metadata:
+          created_at: 2026-11-24T14:27:00.552Z
+          updated_at: 2026-11-24T14:27:00.552Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true
+  - sequence: 2
+    removedAt: 314
+    change:
+      type: add
+      elementId: application.applicationservice.graph-canvas-context-hook
+      layerName: application
+      after:
+        id: e859d2f1-2ac2-48ce-b34a-8e700256cea1
+        path: application.applicationservice.graph-canvas-context-hook
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Graph Canvas Context Hook
+        description: "Exported from the package entry point (src/index.ts) out of
+          src/components/GraphCanvas.tsx: useGraphCanvas."
+        attributes:
+          serviceType: synchronous
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/GraphCanvas.tsx
+              symbol: useGraphCanvas
+        metadata:
+          created_at: 2026-11-24T14:27:00.592Z
+          updated_at: 2026-11-24T14:27:00.592Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true
+  - sequence: 3
+    removedAt: 315
+    change:
+      type: add
+      elementId: application.applicationservice.adjacency-matrix-link-metadata
+      layerName: application
+      after:
+        id: 0ef97e10-f932-4c00-91f0-bbaaa38f9d02
+        path: application.applicationservice.adjacency-matrix-link-metadata
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Adjacency Matrix Link Metadata
+        description: "Exported from the package entry point (src/index.ts) out of
+          src/utils/layered/matrix.ts: linkEdgeMetadata."
+        attributes:
+          serviceType: synchronous
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/utils/layered/matrix.ts
+              symbol: linkEdgeMetadata
+        metadata:
+          created_at: 2026-11-24T14:27:00.592Z
+          updated_at: 2026-11-24T14:27:00.592Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true
+  - sequence: 6
+    removedAt: 316
+    change:
+      type: add
+      elementId: application.applicationservice.layered-graph-control-helpers
+      layerName: application
+      after:
+        id: d6805917-dba3-469f-8f2e-dd6c57767220
+        path: application.applicationservice.layered-graph-control-helpers
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Layered Graph Control Helpers
+        description: "Exported from the package entry point (src/index.ts) out of
+          src/components/LayeredGraphControls.tsx: followOptionLabel,
+          categoryDisplayLabel, useLayeredGraphProp."
+        attributes:
+          serviceType: synchronous
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: followOptionLabel
+        metadata:
+          created_at: 2026-11-24T14:27:00.654Z
+          updated_at: 2026-11-24T14:27:00.654Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true
+  - sequence: 7
+    removedAt: 317
+    change:
+      type: add
+      elementId: application.applicationservice.reach-relationship-helpers
+      layerName: application
+      after:
+        id: f9fc3fb3-f038-4cdd-b99f-de33a27ac685
+        path: application.applicationservice.reach-relationship-helpers
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Reach Relationship Helpers
+        description: "Exported from the package entry point (src/index.ts) out of
+          src/components/ReachInspector.tsx: reachRelationships,
+          reachSummaryText."
+        attributes:
+          serviceType: synchronous
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/ReachInspector.tsx
+              symbol: reachRelationships
+        metadata:
+          created_at: 2026-11-24T14:27:00.655Z
+          updated_at: 2026-11-24T14:27:00.655Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true
+  - sequence: 8
+    removedAt: 318
+    change:
+      type: add
+      elementId: application.applicationservice.layered-graph-explorer-snapshot
+      layerName: application
+      after:
+        id: b9866f7e-2ba9-4172-aec5-fb6daf2c33b4
+        path: application.applicationservice.layered-graph-explorer-snapshot
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Layered Graph Explorer Snapshot
+        description: "Exported from the package entry point (src/index.ts) out of
+          src/components/LayeredGraphExplorer.tsx:
+          sanitizeLayeredGraphExplorerSnapshot, with the constants
+          LAYERED_GRAPH_VIEWS, LAYERED_GRAPH_VIEW_LABELS."
+        attributes:
+          serviceType: synchronous
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/LayeredGraphExplorer.tsx
+              symbol: sanitizeLayeredGraphExplorerSnapshot
+        metadata:
+          created_at: 2026-11-24T14:27:00.657Z
+          updated_at: 2026-11-24T14:27:00.657Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true
+  - sequence: 20
+    removedAt: 319
+    change:
+      type: add
+      elementId: application.applicationservice.pan-and-zoom-hook
+      layerName: application
+      after:
+        id: bef8fdbe-b854-4fad-9765-b3121340d53d
+        path: application.applicationservice.pan-and-zoom-hook
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Pan and Zoom Hook
+        description: "Exported from the package entry point (src/index.ts) out of
+          src/hooks/usePanZoom.ts: usePanZoom."
+        attributes:
+          serviceType: synchronous
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/hooks/usePanZoom.ts
+              symbol: usePanZoom
+        metadata:
+          created_at: 2026-11-24T14:27:00.666Z
+          updated_at: 2026-11-24T14:27:00.666Z
+          version: 1
+      timestamp: 2026-11-24T14:27:00.828Z
+    rewritten: true

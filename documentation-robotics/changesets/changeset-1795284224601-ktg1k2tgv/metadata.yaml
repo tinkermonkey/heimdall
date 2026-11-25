@@ -1,0 +1,3553 @@
+id: changeset-1795284224601-ktg1k2tgv
+name: review-open
+description: "Step B open architect review of the heimdall model: what the base
+  model plus review-questions lacks or gets wrong"
+created: 2026-11-21T18:03:44.602Z
+modified: 2026-11-24T13:25:05.523Z
+status: committed
+baseSnapshot: v2:sha256:173f87c8a3ec4cd70007639fe692daa935bf1d0d7bd4228652f2474931359486
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 186
+  modifications: 4
+  deletions: 3
+lastSequence: 467
+unstagedPrunedThrough: 467
+unstaged:
+  - sequence: 113
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.form-callout
+      layerName: api
+      after:
+        id: 5f1902a7-d6a0-41af-9b60-3e1afabb6686
+        path: api.operation.form-callout
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: FormCallout
+        description: Exported React component FormCallout (src/index.ts).
+        attributes:
+          operationId: FormCallout
+          summary: Render the FormCallout component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/FormCallout.tsx
+              symbol: FormCallout
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 114
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.adjacency-matrix
+      layerName: api
+      after:
+        id: 2ebdc5f5-116f-4851-93f4-dbb576edbcc9
+        path: api.operation.adjacency-matrix
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: AdjacencyMatrix
+        description: Exported React component AdjacencyMatrix (src/index.ts).
+        attributes:
+          operationId: AdjacencyMatrix
+          summary: Render the AdjacencyMatrix component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/AdjacencyMatrix.tsx
+              symbol: AdjacencyMatrix
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 115
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.hive-plot
+      layerName: api
+      after:
+        id: 21d14e2b-e916-459e-9bc5-c71e5f4b32f7
+        path: api.operation.hive-plot
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: HivePlot
+        description: Exported React component HivePlot (src/index.ts).
+        attributes:
+          operationId: HivePlot
+          summary: Render the HivePlot component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/HivePlot.tsx
+              symbol: HivePlot
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 116
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.layer-stack
+      layerName: api
+      after:
+        id: 23ad4be8-8566-4906-99dc-0cfc1c4ee465
+        path: api.operation.layer-stack
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: LayerStack
+        description: Exported React component LayerStack (src/index.ts).
+        attributes:
+          operationId: LayerStack
+          summary: Render the LayerStack component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayerStack.tsx
+              symbol: LayerStack
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 117
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.follow-control
+      layerName: api
+      after:
+        id: d969696a-413e-4481-a0d6-52c59d09b883
+        path: api.operation.follow-control
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: FollowControl
+        description: Exported React component FollowControl (src/index.ts).
+        attributes:
+          operationId: FollowControl
+          summary: Render the FollowControl component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: FollowControl
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 118
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.predicate-label-control
+      layerName: api
+      after:
+        id: e1a4d3ba-d529-4370-a2d0-c1feeb74d11e
+        path: api.operation.predicate-label-control
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: PredicateLabelControl
+        description: Exported React component PredicateLabelControl (src/index.ts).
+        attributes:
+          operationId: PredicateLabelControl
+          summary: Render the PredicateLabelControl component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: PredicateLabelControl
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 119
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.plane-layout-control
+      layerName: api
+      after:
+        id: 5fe6bbba-5e10-4af2-be68-61c75dabd9a4
+        path: api.operation.plane-layout-control
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: PlaneLayoutControl
+        description: Exported React component PlaneLayoutControl (src/index.ts).
+        attributes:
+          operationId: PlaneLayoutControl
+          summary: Render the PlaneLayoutControl component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: PlaneLayoutControl
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 120
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.link-category-filter
+      layerName: api
+      after:
+        id: 25128004-db1b-4f64-a163-64b1e58a1079
+        path: api.operation.link-category-filter
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: LinkCategoryFilter
+        description: Exported React component LinkCategoryFilter (src/index.ts).
+        attributes:
+          operationId: LinkCategoryFilter
+          summary: Render the LinkCategoryFilter component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: LinkCategoryFilter
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 121
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.layer-list
+      layerName: api
+      after:
+        id: aae4999a-289e-443c-a981-384b473038e5
+        path: api.operation.layer-list
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: LayerList
+        description: Exported React component LayerList (src/index.ts).
+        attributes:
+          operationId: LayerList
+          summary: Render the LayerList component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: LayerList
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 122
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.layer-pair-list
+      layerName: api
+      after:
+        id: 9f98d967-3196-4c79-abef-ff1bebade1af
+        path: api.operation.layer-pair-list
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: LayerPairList
+        description: Exported React component LayerPairList (src/index.ts).
+        attributes:
+          operationId: LayerPairList
+          summary: Render the LayerPairList component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: LayerPairList
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 123
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.bridge-node-list
+      layerName: api
+      after:
+        id: 25c87008-9166-46a8-a282-83aba6c22b05
+        path: api.operation.bridge-node-list
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: BridgeNodeList
+        description: Exported React component BridgeNodeList (src/index.ts).
+        attributes:
+          operationId: BridgeNodeList
+          summary: Render the BridgeNodeList component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphControls.tsx
+              symbol: BridgeNodeList
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 124
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.reach-inspector
+      layerName: api
+      after:
+        id: 8f47f7ee-045c-48e5-a32a-81ec0db6d3f9
+        path: api.operation.reach-inspector
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: ReachInspector
+        description: Exported React component ReachInspector (src/index.ts).
+        attributes:
+          operationId: ReachInspector
+          summary: Render the ReachInspector component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/ReachInspector.tsx
+              symbol: ReachInspector
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 125
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.layered-graph-explorer
+      layerName: api
+      after:
+        id: 3f73d07c-2321-49e5-89bc-d0be77b4c402
+        path: api.operation.layered-graph-explorer
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: LayeredGraphExplorer
+        description: Exported React component LayeredGraphExplorer (src/index.ts).
+        attributes:
+          operationId: LayeredGraphExplorer
+          summary: Render the LayeredGraphExplorer component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphExplorer.tsx
+              symbol: LayeredGraphExplorer
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 126
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.view-switcher
+      layerName: api
+      after:
+        id: 37d384e7-91b2-425e-adbd-1374c085cd3f
+        path: api.operation.view-switcher
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: ViewSwitcher
+        description: Exported React component ViewSwitcher (src/index.ts).
+        attributes:
+          operationId: ViewSwitcher
+          summary: Render the ViewSwitcher component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphExplorer.tsx
+              symbol: ViewSwitcher
+        metadata:
+          created_at: 2026-11-21T18:08:04.778Z
+          updated_at: 2026-11-21T18:08:04.778Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 127
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.camera-controls
+      layerName: api
+      after:
+        id: 70095004-64cd-4053-b37a-5b2f0924b1c7
+        path: api.operation.camera-controls
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: CameraControls
+        description: Exported React component CameraControls (src/index.ts).
+        attributes:
+          operationId: CameraControls
+          summary: Render the CameraControls component
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphExplorer.tsx
+              symbol: CameraControls
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 128
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.detail-drawer
+      layerName: api
+      after:
+        id: f12aac7f-fe70-4fdf-8902-7b579940b199
+        path: api.operation.detail-drawer
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: DetailDrawer
+        description: Exported React component DetailDrawer (src/index.ts).
+        attributes:
+          operationId: DetailDrawer
+          summary: Render the DetailDrawer component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/DetailDrawer.tsx
+              symbol: DetailDrawer
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 129
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.topology-node
+      layerName: api
+      after:
+        id: d0d873e6-1942-4e95-b7ed-20aeeb26ba43
+        path: api.operation.topology-node
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: TopologyNode
+        description: Exported React component TopologyNode (src/index.ts).
+        attributes:
+          operationId: TopologyNode
+          summary: Render the TopologyNode component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/TopologyNode.tsx
+              symbol: TopologyNode
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 130
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.hierarchy-row
+      layerName: api
+      after:
+        id: 00f6e516-24f2-4ea6-b8d2-626b30aeab64
+        path: api.operation.hierarchy-row
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: HierarchyRow
+        description: Exported React component HierarchyRow (src/index.ts).
+        attributes:
+          operationId: HierarchyRow
+          summary: Render the HierarchyRow component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/HierarchyRow.tsx
+              symbol: HierarchyRow
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 131
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.hierarchy-tree
+      layerName: api
+      after:
+        id: 0b636e60-61c0-4112-90a4-87ed60457e04
+        path: api.operation.hierarchy-tree
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: HierarchyTree
+        description: Exported React component HierarchyTree (src/index.ts).
+        attributes:
+          operationId: HierarchyTree
+          summary: Render the HierarchyTree component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/HierarchyTree.tsx
+              symbol: HierarchyTree
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 132
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.lineage-rail
+      layerName: api
+      after:
+        id: 8f85cd17-cddd-449b-8142-9eae65f7b8e8
+        path: api.operation.lineage-rail
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: LineageRail
+        description: Exported React component LineageRail (src/index.ts).
+        attributes:
+          operationId: LineageRail
+          summary: Render the LineageRail component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LineageRail.tsx
+              symbol: LineageRail
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 133
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.asset-card
+      layerName: api
+      after:
+        id: 3f4a2455-1620-456e-b960-67f2f34c9e30
+        path: api.operation.asset-card
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: AssetCard
+        description: Exported React component AssetCard (src/index.ts).
+        attributes:
+          operationId: AssetCard
+          summary: Render the AssetCard component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/AssetCard.tsx
+              symbol: AssetCard
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 134
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.asset-grid
+      layerName: api
+      after:
+        id: d0327964-050a-4600-9523-3f3b0629f651
+        path: api.operation.asset-grid
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: AssetGrid
+        description: Exported React component AssetGrid (src/index.ts).
+        attributes:
+          operationId: AssetGrid
+          summary: Render the AssetGrid component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/AssetGrid.tsx
+              symbol: AssetGrid
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 135
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.calendar
+      layerName: api
+      after:
+        id: 80a960d7-1d18-437c-b0bb-f354c5909c5c
+        path: api.operation.calendar
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: Calendar
+        description: Exported React component Calendar (src/index.ts).
+        attributes:
+          operationId: Calendar
+          summary: Render the Calendar component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/Calendar.tsx
+              symbol: Calendar
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 136
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.kanban-board
+      layerName: api
+      after:
+        id: f334afe9-d450-4b18-bd2a-8021bff5874e
+        path: api.operation.kanban-board
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: KanbanBoard
+        description: Exported React component KanbanBoard (src/index.ts).
+        attributes:
+          operationId: KanbanBoard
+          summary: Render the KanbanBoard component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/KanbanBoard.tsx
+              symbol: KanbanBoard
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 137
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.log-stream
+      layerName: api
+      after:
+        id: a957169d-7d61-4c2c-8a58-3281e4a2c27a
+        path: api.operation.log-stream
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: LogStream
+        description: Exported React component LogStream (src/index.ts).
+        attributes:
+          operationId: LogStream
+          summary: Render the LogStream component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LogStream.tsx
+              symbol: LogStream
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 138
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.map-canvas
+      layerName: api
+      after:
+        id: e61252ae-16d9-4ae1-859e-74d157f13f49
+        path: api.operation.map-canvas
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: MapCanvas
+        description: Exported React component MapCanvas (src/index.ts).
+        attributes:
+          operationId: MapCanvas
+          summary: Render the MapCanvas component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/MapCanvas.tsx
+              symbol: MapCanvas
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 139
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.mini-calendar
+      layerName: api
+      after:
+        id: dc4afbad-a75a-4658-a47d-6d5a234b16d9
+        path: api.operation.mini-calendar
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: MiniCalendar
+        description: Exported React component MiniCalendar (src/index.ts).
+        attributes:
+          operationId: MiniCalendar
+          summary: Render the MiniCalendar component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/MiniCalendar.tsx
+              symbol: MiniCalendar
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 140
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.result-card
+      layerName: api
+      after:
+        id: 4cbdbd5f-733e-40ca-8fd8-4b12ad0ceb93
+        path: api.operation.result-card
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: ResultCard
+        description: Exported React component ResultCard (src/index.ts).
+        attributes:
+          operationId: ResultCard
+          summary: Render the ResultCard component
+          tags: components
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/ResultCard.tsx
+              symbol: ResultCard
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 141
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.trace-viewer
+      layerName: api
+      after:
+        id: 72ab72b6-943e-43d7-b358-162e5737ad22
+        path: api.operation.trace-viewer
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: TraceViewer
+        description: Exported React component TraceViewer (src/index.ts).
+        attributes:
+          operationId: TraceViewer
+          summary: Render the TraceViewer component
+          tags: observability
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/TraceViewer.tsx
+              symbol: TraceViewer
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 142
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.use-graph-canvas
+      layerName: api
+      after:
+        id: 06d9263f-5f90-4438-8d53-b4e11be99ff2
+        path: api.operation.use-graph-canvas
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: useGraphCanvas
+        description: "Exported function useGraphCanvas: Read the enclosing GraphCanvas
+          context (viewport, selection, node rects) from a custom child."
+        attributes:
+          operationId: useGraphCanvas
+          summary: Read the enclosing GraphCanvas context (viewport, selection, node
+            rects) from a custom child
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/GraphCanvas.tsx
+              symbol: useGraphCanvas
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 143
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.organic-layout
+      layerName: api
+      after:
+        id: 459380ef-cd28-442d-9984-a98d6974df86
+        path: api.operation.organic-layout
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: organicLayout
+        description: "Exported function organicLayout: Stress-majorization layout with a
+          guaranteed minimum node gap."
+        attributes:
+          operationId: organicLayout
+          summary: Stress-majorization layout with a guaranteed minimum node gap
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/organicLayout.ts
+              symbol: organicLayout
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 144
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.orthogonal-layout
+      layerName: api
+      after:
+        id: dd5b2018-4280-4450-8a26-1d42368a44c5
+        path: api.operation.orthogonal-layout
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: orthogonalLayout
+        description: "Exported function orthogonalLayout: Grid-cell layout with
+          orthogonal edge routing."
+        attributes:
+          operationId: orthogonalLayout
+          summary: Grid-cell layout with orthogonal edge routing
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/orthogonalLayout.ts
+              symbol: orthogonalLayout
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 145
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.layout-lanes
+      layerName: api
+      after:
+        id: 76426ad9-8796-4923-aec3-09ff8697ed4e
+        path: api.operation.layout-lanes
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: layoutLanes
+        description: "Exported function layoutLanes: Lay out nodes in swimlanes, one
+          lane per layer."
+        attributes:
+          operationId: layoutLanes
+          summary: Lay out nodes in swimlanes, one lane per layer
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/laneLayout.ts
+              symbol: layoutLanes
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 146
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.structural-descendants
+      layerName: api
+      after:
+        id: 86a1463b-0bf9-48db-b385-e19d1a9357be
+        path: api.operation.structural-descendants
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: structuralDescendants
+        description: "Exported function structuralDescendants: List the structural
+          descendants of a node."
+        attributes:
+          operationId: structuralDescendants
+          summary: List the structural descendants of a node
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/graphHierarchy.ts
+              symbol: structuralDescendants
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 147
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.bounding-circles-by-group
+      layerName: api
+      after:
+        id: db20174a-8515-40cc-9e49-eab6b603ad3c
+        path: api.operation.bounding-circles-by-group
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: boundingCirclesByGroup
+        description: "Exported function boundingCirclesByGroup: Bounding circle per node
+          group."
+        attributes:
+          operationId: boundingCirclesByGroup
+          summary: Bounding circle per node group
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/graphLayout.ts
+              symbol: boundingCirclesByGroup
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 148
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.find-clear-label-position
+      layerName: api
+      after:
+        id: af910924-515e-4d2c-838a-5f6de6dd9496
+        path: api.operation.find-clear-label-position
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: findClearLabelPosition
+        description: "Exported function findClearLabelPosition: Find an edge label
+          position clear of every node."
+        attributes:
+          operationId: findClearLabelPosition
+          summary: Find an edge label position clear of every node
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/graph.ts
+              symbol: findClearLabelPosition
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 149
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.rect-edge-point
+      layerName: api
+      after:
+        id: 9c50cc00-f254-4009-9491-ea23bb783249
+        path: api.operation.rect-edge-point
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: rectEdgePoint
+        description: "Exported function rectEdgePoint: Point where a ray from a rect
+          centre leaves the rect."
+        attributes:
+          operationId: rectEdgePoint
+          summary: Point where a ray from a rect centre leaves the rect
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/graph.ts
+              symbol: rectEdgePoint
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 150
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.bezier-path
+      layerName: api
+      after:
+        id: c49df366-3a7e-4f99-9516-aa122a1b579e
+        path: api.operation.bezier-path
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: bezierPath
+        description: "Exported function bezierPath: Quadratic bezier path between two
+          points."
+        attributes:
+          operationId: bezierPath
+          summary: Quadratic bezier path between two points
+          tags: graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/graph.ts
+              symbol: bezierPath
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 151
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.use-layered-graph
+      layerName: api
+      after:
+        id: 18a535ee-7ff9-4c74-b297-ecca312491a7
+        path: api.operation.use-layered-graph
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: useLayeredGraph
+        description: "Exported function useLayeredGraph: Shared state for the layered
+          views: index, filters, selection, reach, camera, snapshot."
+        attributes:
+          operationId: useLayeredGraph
+          summary: "Shared state for the layered views: index, filters, selection, reach,
+            camera, snapshot"
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/hooks/useLayeredGraph.ts
+              symbol: useLayeredGraph
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 152
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.use-layered-graph-context
+      layerName: api
+      after:
+        id: 28bf94f4-831c-40f5-a1ab-4e9ed06cc90a
+        path: api.operation.use-layered-graph-context
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: useLayeredGraphContext
+        description: "Exported function useLayeredGraphContext: Read the
+          LayeredGraphContext provided above."
+        attributes:
+          operationId: useLayeredGraphContext
+          summary: Read the LayeredGraphContext provided above
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/hooks/useLayeredGraph.ts
+              symbol: useLayeredGraphContext
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 153
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.build-layered-index
+      layerName: api
+      after:
+        id: da1b1f06-c80c-4fcf-9fa0-045dcb64f96f
+        path: api.operation.build-layered-index
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: buildLayeredIndex
+        description: "Exported function buildLayeredIndex: Index nodes and edges into
+          layers, layer pairs and adjacency."
+        attributes:
+          operationId: buildLayeredIndex
+          summary: Index nodes and edges into layers, layer pairs and adjacency
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/layered/buildLayeredIndex.ts
+              symbol: buildLayeredIndex
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 154
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.compute-reach
+      layerName: api
+      after:
+        id: 96bb6522-c744-4cb7-a468-0ff1d4f2fc03
+        path: api.operation.compute-reach
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: computeReach
+        description: "Exported function computeReach: Nodes and links reachable from a
+          selection, by hop."
+        attributes:
+          operationId: computeReach
+          summary: Nodes and links reachable from a selection, by hop
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/layered/reach.ts
+              symbol: computeReach
+        metadata:
+          created_at: 2026-11-21T18:08:04.779Z
+          updated_at: 2026-11-21T18:08:04.779Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 155
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.layout-layers
+      layerName: api
+      after:
+        id: 81bac825-89d2-4e50-adac-7314a1641dd9
+        path: api.operation.layout-layers
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: layoutLayers
+        description: "Exported function layoutLayers: Place nodes within each layer plane."
+        attributes:
+          operationId: layoutLayers
+          summary: Place nodes within each layer plane
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/layered/layout.ts
+              symbol: layoutLayers
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 156
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.layout-layers-async
+      layerName: api
+      after:
+        id: e3c3a93b-d36d-4792-8a9f-069801d91eb9
+        path: api.operation.layout-layers-async
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: layoutLayersAsync
+        description: "Exported function layoutLayersAsync: layoutLayers, yielding to the
+          browser between layers."
+        attributes:
+          operationId: layoutLayersAsync
+          summary: layoutLayers, yielding to the browser between layers
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/layered/layout.ts
+              symbol: layoutLayersAsync
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 157
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.hive-layout
+      layerName: api
+      after:
+        id: d2975030-8fe5-4009-9809-0728af9a00da
+        path: api.operation.hive-layout
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: hiveLayout
+        description: "Exported function hiveLayout: Hive plot geometry: one axis per layer."
+        attributes:
+          operationId: hiveLayout
+          summary: "Hive plot geometry: one axis per layer"
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/layered/hive.ts
+              symbol: hiveLayout
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 158
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.create-projector
+      layerName: api
+      after:
+        id: bffa3f69-5c61-42e8-ba51-cbc68b3397e8
+        path: api.operation.create-projector
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: createProjector
+        description: "Exported function createProjector: 3D-to-SVG projector for the
+          layer stack camera."
+        attributes:
+          operationId: createProjector
+          summary: 3D-to-SVG projector for the layer stack camera
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/layered/projection.ts
+              symbol: createProjector
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 159
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.sanitize-layered-graph-snapshot
+      layerName: api
+      after:
+        id: 11dcdd67-9291-4783-b74e-ed1cf47b33ea
+        path: api.operation.sanitize-layered-graph-snapshot
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: sanitizeLayeredGraphSnapshot
+        description: "Exported function sanitizeLayeredGraphSnapshot: Validate a
+          persisted layered-graph snapshot against the current graph."
+        attributes:
+          operationId: sanitizeLayeredGraphSnapshot
+          summary: Validate a persisted layered-graph snapshot against the current graph
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/layered/snapshot.ts
+              symbol: sanitizeLayeredGraphSnapshot
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 160
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.sanitize-layered-graph-explorer-snapshot
+      layerName: api
+      after:
+        id: ddbb1d91-92ca-46c2-8681-c719dfd61680
+        path: api.operation.sanitize-layered-graph-explorer-snapshot
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: sanitizeLayeredGraphExplorerSnapshot
+        description: "Exported function sanitizeLayeredGraphExplorerSnapshot: Validate a
+          persisted explorer snapshot (view plus graph snapshot)."
+        attributes:
+          operationId: sanitizeLayeredGraphExplorerSnapshot
+          summary: Validate a persisted explorer snapshot (view plus graph snapshot)
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/LayeredGraphExplorer.tsx
+              symbol: sanitizeLayeredGraphExplorerSnapshot
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 161
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.reach-relationships
+      layerName: api
+      after:
+        id: 25182efe-fa37-4cc3-b6fd-851fb5d21451
+        path: api.operation.reach-relationships
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: reachRelationships
+        description: "Exported function reachRelationships: Relationships along the
+          current reach, for the reach inspector."
+        attributes:
+          operationId: reachRelationships
+          summary: Relationships along the current reach, for the reach inspector
+          tags: layered-graph
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/ReachInspector.tsx
+              symbol: reachRelationships
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 162
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.use-tween
+      layerName: api
+      after:
+        id: ef09289e-78f7-4d5c-aa17-4a9231cd7a8d
+        path: api.operation.use-tween
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: useTween
+        description: "Exported function useTween: Animate numeric values with easing,
+          honouring reduced motion."
+        attributes:
+          operationId: useTween
+          summary: Animate numeric values with easing, honouring reduced motion
+          tags: hooks
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/hooks/useTween.ts
+              symbol: useTween
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 163
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.use-prefers-reduced-motion
+      layerName: api
+      after:
+        id: a7d33e8e-fc2a-43e2-a187-f5702e2e1bee
+        path: api.operation.use-prefers-reduced-motion
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: usePrefersReducedMotion
+        description: "Exported function usePrefersReducedMotion: Whether the user asked
+          for reduced motion."
+        attributes:
+          operationId: usePrefersReducedMotion
+          summary: Whether the user asked for reduced motion
+          tags: hooks
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/hooks/useTween.ts
+              symbol: usePrefersReducedMotion
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 164
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.use-media-query
+      layerName: api
+      after:
+        id: a34af73a-ce22-46d9-abc8-cfbb8e6479a6
+        path: api.operation.use-media-query
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: useMediaQuery
+        description: "Exported function useMediaQuery: Track a CSS media query."
+        attributes:
+          operationId: useMediaQuery
+          summary: Track a CSS media query
+          tags: hooks
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/hooks/useMediaQuery.ts
+              symbol: useMediaQuery
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 165
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.use-controllable
+      layerName: api
+      after:
+        id: ae80d1d5-dcac-4de9-868b-e409ebaf4b01
+        path: api.operation.use-controllable
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: useControllable
+        description: "Exported function useControllable: Controlled or uncontrolled prop
+          state."
+        attributes:
+          operationId: useControllable
+          summary: Controlled or uncontrolled prop state
+          tags: hooks
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/hooks/useControllable.ts
+              symbol: useControllable
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 166
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.contains-across-portals
+      layerName: api
+      after:
+        id: 7dab7fea-0fde-4e23-89a5-f21b9939847b
+        path: api.operation.contains-across-portals
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: containsAcrossPortals
+        description: "Exported function containsAcrossPortals: Whether an event target
+          is inside a component or its portalled panel."
+        attributes:
+          operationId: containsAcrossPortals
+          summary: Whether an event target is inside a component or its portalled panel
+          tags: hooks
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/hooks/useDropdownPortal.ts
+              symbol: containsAcrossPortals
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 167
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.build-trace-model
+      layerName: api
+      after:
+        id: d4d1d2d9-eb00-40bb-8191-fa745e68de41
+        path: api.operation.build-trace-model
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: buildTraceModel
+        description: "Exported function buildTraceModel: Build the span tree and timing
+          model for TraceViewer."
+        attributes:
+          operationId: buildTraceModel
+          summary: Build the span tree and timing model for TraceViewer
+          tags: observability
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/components/traceViewerModel.ts
+              symbol: buildTraceModel
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 168
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.from-otlp
+      layerName: api
+      after:
+        id: 17b37c16-8ef0-4383-94aa-038af6714271
+        path: api.operation.from-otlp
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: fromOTLP
+        description: "Exported function fromOTLP: Convert OTLP/JSON trace data into a
+          heimdall Trace."
+        attributes:
+          operationId: fromOTLP
+          summary: Convert OTLP/JSON trace data into a heimdall Trace
+          tags: observability
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/otlpTrace.ts
+              symbol: fromOTLP
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 169
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.operation.from-xray
+      layerName: api
+      after:
+        id: 92b0857e-acf3-4c47-86fa-969177def9b6
+        path: api.operation.from-xray
+        spec_node_id: api.operation
+        type: operation
+        layer_id: api
+        name: fromXRay
+        description: "Exported function fromXRay: Convert AWS X-Ray segments into a
+          heimdall Trace."
+        attributes:
+          operationId: fromXRay
+          summary: Convert AWS X-Ray segments into a heimdall Trace
+          tags: observability
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/xrayTrace.ts
+              symbol: fromXRay
+        metadata:
+          created_at: 2026-11-21T18:08:04.780Z
+          updated_at: 2026-11-21T18:08:04.780Z
+          version: 1
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 170
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-graph-canvas::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.use-graph-canvas
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 171
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.organic-layout::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.organic-layout
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 172
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.orthogonal-layout::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.orthogonal-layout
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 173
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.structural-descendants::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.structural-descendants
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 174
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.bounding-circles-by-group::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.bounding-circles-by-group
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 175
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.find-clear-label-position::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.find-clear-label-position
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 176
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.rect-edge-point::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.rect-edge-point
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 177
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.bezier-path::references::api.tag.graph
+      layerName: api
+      after:
+        source: api.operation.bezier-path
+        target: api.tag.graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 178
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.find-clear-label-position::realizes::application.applicationfunction.edge-label-clear-position-search
+      layerName: api
+      after:
+        source: api.operation.find-clear-label-position
+        target: application.applicationfunction.edge-label-clear-position-search
+        predicate: realizes
+        layer: api
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 179
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.bezier-path::realizes::application.applicationfunction.bezier-edge-path-computation
+      layerName: api
+      after:
+        source: api.operation.bezier-path
+        target: application.applicationfunction.bezier-edge-path-computation
+        predicate: realizes
+        layer: api
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 180
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.rect-edge-point::realizes::application.applicationfunction.bezier-edge-path-computation
+      layerName: api
+      after:
+        source: api.operation.rect-edge-point
+        target: application.applicationfunction.bezier-edge-path-computation
+        predicate: realizes
+        layer: api
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 181
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.structural-descendants::realizes::application.applicationfunction.structural-forest-construction
+      layerName: api
+      after:
+        source: api.operation.structural-descendants
+        target: application.applicationfunction.structural-forest-construction
+        predicate: realizes
+        layer: api
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-21T18:08:04.805Z
+  - sequence: 182
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.tag.components
+      layerName: api
+      after:
+        id: 3f5e213c-ab4e-4ab0-84d7-a0eef0f4a120
+        path: api.tag.components
+        spec_node_id: api.tag
+        type: tag
+        layer_id: api
+        name: components
+        description: "Exported UI components outside the graph surface: primitives,
+          inputs, data display, navigation, shell, overlays, charts, chat, page
+          patterns, planning, observability views."
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/index.ts
+        metadata:
+          created_at: 2026-11-21T18:08:10.262Z
+          updated_at: 2026-11-21T18:08:10.262Z
+          version: 1
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 183
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.tag.layered-graph
+      layerName: api
+      after:
+        id: bec0cb40-580f-485d-a29a-900dad2eb535
+        path: api.tag.layered-graph
+        spec_node_id: api.tag
+        type: tag
+        layer_id: api
+        name: layered-graph
+        description: "Exported layered-graph framework: LayerStack, lanes, matrix and
+          hive views, their controls, the useLayeredGraph state hook and the
+          layered utilities."
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/index.ts
+        metadata:
+          created_at: 2026-11-21T18:08:10.262Z
+          updated_at: 2026-11-21T18:08:10.262Z
+          version: 1
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 184
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.tag.observability
+      layerName: api
+      after:
+        id: acb2b7b9-2d87-4f42-b684-c7811b2f7539
+        path: api.tag.observability
+        spec_node_id: api.tag
+        type: tag
+        layer_id: api
+        name: observability
+        description: "Exported trace viewing: TraceViewer, the trace model builder and
+          the OTLP and X-Ray adapters."
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/index.ts
+        metadata:
+          created_at: 2026-11-21T18:08:10.262Z
+          updated_at: 2026-11-21T18:08:10.262Z
+          version: 1
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 185
+    removedAt: 467
+    change:
+      type: add
+      elementId: api.tag.hooks
+      layerName: api
+      after:
+        id: b6f79afc-a212-4e8f-b417-ee8aae3d8c72
+        path: api.tag.hooks
+        spec_node_id: api.tag
+        type: tag
+        layer_id: api
+        name: hooks
+        description: Exported general-purpose React hooks and helpers.
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/index.ts
+        metadata:
+          created_at: 2026-11-21T18:08:10.263Z
+          updated_at: 2026-11-21T18:08:10.263Z
+          version: 1
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 186
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.icon::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.icon
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 187
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.avatar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.avatar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 188
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.button::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.button
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 189
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chip::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chip
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 190
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.badge::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.badge
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 191
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.status-badge::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.status-badge
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 192
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.text-input::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.text-input
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 193
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.text-area::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.text-area
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 194
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.number-input::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.number-input
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 195
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.select::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.select
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 196
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.tri-state::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.tri-state
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 197
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.field::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.field
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 198
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.stat-tile::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.stat-tile
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 199
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.stat-grid::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.stat-grid
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 200
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.version-pill::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.version-pill
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 201
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.segmented-control::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.segmented-control
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 202
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.table::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.table
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 203
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.nav-item::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.nav-item
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 204
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.sidebar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.sidebar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 205
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.topbar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.topbar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 206
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.tab-bar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.tab-bar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 207
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.app-title::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.app-title
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 208
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.titlebar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.titlebar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 209
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.statusbar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.statusbar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 210
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.shell-layout::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.shell-layout
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 211
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.modal::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.modal
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 212
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.confirm-dialog::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.confirm-dialog
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 213
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.workspace-switcher-dialog::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.workspace-switcher-dialog
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 214
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.filter-dropdown::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.filter-dropdown
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 215
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.toast::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.toast
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 216
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.tooltip::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.tooltip
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 217
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.popover::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.popover
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 218
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.command-palette::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.command-palette
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 219
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.panel::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.panel
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 220
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.drawer::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.drawer
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 221
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.split-pane::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.split-pane
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 222
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.inspector-panel::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.inspector-panel
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 223
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chart-wrapper::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chart-wrapper
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 224
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.sparkline::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.sparkline
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 225
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.line-chart::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.line-chart
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 226
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.bar-chart::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.bar-chart
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 227
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.bar-v::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.bar-v
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 228
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.bar-h::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.bar-h
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 229
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.stacked-bar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.stacked-bar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 230
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.donut::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.donut
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 231
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.heatmap::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.heatmap
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 232
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.status-timeline::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.status-timeline
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 233
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.progress-bar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.progress-bar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 234
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.metric-row::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.metric-row
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 235
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.page-header::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.page-header
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 236
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.filter-bar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.filter-bar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 237
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.activity-timeline::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.activity-timeline
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 238
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.version-timeline::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.version-timeline
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 239
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.hash-set-diff::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.hash-set-diff
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 240
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.side-by-side-diff::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.side-by-side-diff
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 241
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.diff-viewer::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.diff-viewer
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 242
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.alert-strip::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.alert-strip
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 243
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.quick-access-grid::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.quick-access-grid
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 244
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.quick-access-tile::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.quick-access-tile
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 245
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.config-tile::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.config-tile
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 246
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-message::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chat-message
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 247
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.tool-block::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.tool-block
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 248
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.thinking-block::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.thinking-block
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 249
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-divider::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chat-divider
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 250
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-suggestions::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chat-suggestions
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 251
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-composer::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chat-composer
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 252
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-container::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chat-container
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 253
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-markdown-content::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.chat-markdown-content
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 254
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.entity-picker::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.entity-picker
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 255
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.key-value-editor::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.key-value-editor
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 256
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.ordered-list::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.ordered-list
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 257
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.relationship-builder::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.relationship-builder
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 258
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.row-menu::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.row-menu
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 259
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.pipeline-card::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.pipeline-card
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 260
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.form-callout::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.form-callout
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 261
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.adjacency-matrix::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.adjacency-matrix
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 262
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.hive-plot::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.hive-plot
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 263
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layer-stack::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.layer-stack
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 264
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.follow-control::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.follow-control
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 265
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.predicate-label-control::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.predicate-label-control
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 266
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.plane-layout-control::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.plane-layout-control
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 267
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.link-category-filter::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.link-category-filter
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 268
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layer-list::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.layer-list
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 269
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layer-pair-list::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.layer-pair-list
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 270
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.bridge-node-list::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.bridge-node-list
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 271
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.reach-inspector::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.reach-inspector
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 272
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layered-graph-explorer::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.layered-graph-explorer
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 273
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.view-switcher::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.view-switcher
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 274
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.camera-controls::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.camera-controls
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 275
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.detail-drawer::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.detail-drawer
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 276
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.topology-node::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.topology-node
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 277
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.hierarchy-row::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.hierarchy-row
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 278
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.hierarchy-tree::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.hierarchy-tree
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 279
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.lineage-rail::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.lineage-rail
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 280
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.asset-card::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.asset-card
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 281
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.asset-grid::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.asset-grid
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 282
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.calendar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.calendar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 283
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.kanban-board::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.kanban-board
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 284
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.log-stream::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.log-stream
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 285
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.map-canvas::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.map-canvas
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 286
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.mini-calendar::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.mini-calendar
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 287
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.result-card::references::api.tag.components
+      layerName: api
+      after:
+        source: api.operation.result-card
+        target: api.tag.components
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 288
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.trace-viewer::references::api.tag.observability
+      layerName: api
+      after:
+        source: api.operation.trace-viewer
+        target: api.tag.observability
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 289
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layout-lanes::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.layout-lanes
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 290
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-layered-graph::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.use-layered-graph
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 291
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-layered-graph-context::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.use-layered-graph-context
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 292
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.build-layered-index::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.build-layered-index
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 293
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.compute-reach::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.compute-reach
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 294
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layout-layers::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.layout-layers
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 295
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layout-layers-async::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.layout-layers-async
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 296
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.hive-layout::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.hive-layout
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 297
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.create-projector::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.create-projector
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 298
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.sanitize-layered-graph-snapshot::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.sanitize-layered-graph-snapshot
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 299
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.sanitize-layered-graph-explorer-snapshot::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.sanitize-layered-graph-explorer-snapshot
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 300
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.reach-relationships::references::api.tag.layered-graph
+      layerName: api
+      after:
+        source: api.operation.reach-relationships
+        target: api.tag.layered-graph
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 301
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-tween::references::api.tag.hooks
+      layerName: api
+      after:
+        source: api.operation.use-tween
+        target: api.tag.hooks
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 302
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-prefers-reduced-motion::references::api.tag.hooks
+      layerName: api
+      after:
+        source: api.operation.use-prefers-reduced-motion
+        target: api.tag.hooks
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 303
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-media-query::references::api.tag.hooks
+      layerName: api
+      after:
+        source: api.operation.use-media-query
+        target: api.tag.hooks
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 304
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-controllable::references::api.tag.hooks
+      layerName: api
+      after:
+        source: api.operation.use-controllable
+        target: api.tag.hooks
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 305
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.contains-across-portals::references::api.tag.hooks
+      layerName: api
+      after:
+        source: api.operation.contains-across-portals
+        target: api.tag.hooks
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 306
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.build-trace-model::references::api.tag.observability
+      layerName: api
+      after:
+        source: api.operation.build-trace-model
+        target: api.tag.observability
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 307
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.from-otlp::references::api.tag.observability
+      layerName: api
+      after:
+        source: api.operation.from-otlp
+        target: api.tag.observability
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 308
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.from-xray::references::api.tag.observability
+      layerName: api
+      after:
+        source: api.operation.from-xray
+        target: api.tag.observability
+        predicate: references
+        layer: api
+        category: structural
+      timestamp: 2026-11-21T18:08:10.293Z
+  - sequence: 418
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-markdown-content::realizes::security.countermeasure.markdown-rendered-without-raw-html
+      layerName: api
+      after:
+        source: api.operation.chat-markdown-content
+        target: security.countermeasure.markdown-rendered-without-raw-html
+        predicate: realizes
+        layer: api
+        targetLayer: security
+        category: structural
+      timestamp: 2026-11-21T18:10:35.080Z
+  - sequence: 419
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.chat-markdown-content::realizes::security.countermeasure.new-tab-links-use-noopener-noreferrer
+      layerName: api
+      after:
+        source: api.operation.chat-markdown-content
+        target: security.countermeasure.new-tab-links-use-noopener-noreferrer
+        predicate: realizes
+        layer: api
+        targetLayer: security
+        category: structural
+      timestamp: 2026-11-21T18:10:35.080Z
+  - sequence: 435
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.use-tween::satisfies::motivation.requirement.motion-honours-reduced-motion-preference
+      layerName: api
+      after:
+        source: api.operation.use-tween
+        target: motivation.requirement.motion-honours-reduced-motion-preference
+        predicate: satisfies
+        layer: api
+        targetLayer: motivation
+        category: structural
+      timestamp: 2026-11-21T18:11:14.951Z
+  - sequence: 447
+    removedAt: 467
+    change:
+      type: relationship-add
+      elementId: api.operation.layout-layers-async::satisfies::motivation.requirement.large-layouts-do-not-block-the-first-paint
+      layerName: api
+      after:
+        source: api.operation.layout-layers-async
+        target: motivation.requirement.large-layouts-do-not-block-the-first-paint
+        predicate: satisfies
+        layer: api
+        targetLayer: motivation
+        category: structural
+      timestamp: 2026-11-21T18:11:22.545Z

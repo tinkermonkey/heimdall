@@ -1,0 +1,40 @@
+security.secureresource.rendered-chat-markdown:
+  id: e8eba0f4-dbea-40fb-9c3d-78c9ef9cfbda
+  path: security.secureresource.rendered-chat-markdown
+  spec_node_id: security.secureresource
+  type: secureresource
+  layer_id: security
+  name: Rendered Chat Markdown
+  description: Markdown from chat messages (often model or tool output the
+    consumer does not control) rendered to DOM by ChatMarkdownContent.
+  attributes:
+    resource: ChatMarkdownContent output
+    type: ui
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/ChatMarkdownContent.tsx
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+security.secureresource.published-npm-package:
+  id: bdfdff33-e84d-4d37-939e-0ab707e27aab
+  path: security.secureresource.published-npm-package
+  spec_node_id: security.secureresource
+  type: secureresource
+  layer_id: security
+  name: Published npm Package
+  description: The @tinkermonkey/heimdall-ui tarball on the npm registry that
+    every consumer installs.
+  attributes:
+    resource: "@tinkermonkey/heimdall-ui on registry.npmjs.org"
+    type: file
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: .github/workflows/release.yml
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1

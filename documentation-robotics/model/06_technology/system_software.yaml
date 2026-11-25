@@ -1,0 +1,23 @@
+technology.systemsoftware.web-browser:
+  id: c06bdfa6-6d6f-4479-9caa-ec87d160c0d6
+  path: technology.systemsoftware.web-browser
+  spec_node_id: technology.systemsoftware
+  type: systemsoftware
+  layer_id: technology
+  name: Web Browser
+  description: "The consumer's browser, which runs every Heimdall component: DOM
+    and SVG rendering, ResizeObserver for node measurement,
+    requestAnimationFrame for live simulation and tweens, matchMedia for
+    useMediaQuery. Heimdall itself has no server; it runs inside the host app's
+    page. softwareType is middleware for want of a browser or runtime value in
+    the enum."
+  attributes:
+    softwareType: middleware
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: package.json
+  metadata:
+    created_at: 2026-11-24T19:01:20.531Z
+    updated_at: 2026-11-24T19:01:20.531Z
+    version: 1

@@ -5,10 +5,7 @@ motivation.stakeholder.heimdall-layout-loop-quality-harness:
   type: stakeholder
   layer_id: motivation
   name: heimdall-layout-loop Quality Harness
-  description: Inferred from CHANGELOG.md's reference to 'the project's own
-    layout-quality test loop' — an external, automated regression harness that
-    renders/scores heimdall's layout output and gates which proposed algorithm
-    changes are kept.
+  description: Inferred from CHANGELOG.md's reference to 'the project's own layout-quality test loop' — an external, automated regression harness that renders/scores heimdall's layout output and gates which proposed algorithm changes are kept.
   attributes:
     type: system
   source_reference:
@@ -27,9 +24,7 @@ motivation.stakeholder.embedding-application-developer-npm-consumer:
   type: stakeholder
   layer_id: motivation
   name: Embedding Application Developer (npm consumer)
-  description: "Inferred: the external developer consuming
-    @tinkermonkey/heimdall-ui's public API (src/index.ts) to embed a graph view
-    in their own product."
+  description: "Inferred: the external developer consuming @tinkermonkey/heimdall-ui's public API (src/index.ts) to embed a graph view in their own product."
   attributes:
     type: external
   source_reference:
@@ -45,9 +40,7 @@ motivation.stakeholder.end-user-of-an-embedding-application:
   type: stakeholder
   layer_id: motivation
   name: End User of an Embedding Application
-  description: "Inferred: the person who ultimately interacts with a rendered
-    GraphCanvas inside whatever application embedded it, with no awareness of
-    heimdall itself."
+  description: "Inferred: the person who ultimately interacts with a rendered GraphCanvas inside whatever application embedded it, with no awareness of heimdall itself."
   attributes:
     type: end-user
   source_reference:
@@ -57,18 +50,16 @@ motivation.stakeholder.end-user-of-an-embedding-application:
     updated_at: 2026-09-18T14:44:02.481Z
     version: 1
 motivation.stakeholder.mirror-maintainer:
-  id: 6aeb1f18-6097-4143-965b-2b287eca89a5
+  id: 0273c287-f9b6-4a88-810d-556f8d594150
   path: motivation.stakeholder.mirror-maintainer
   spec_node_id: motivation.stakeholder
   type: stakeholder
   layer_id: motivation
   name: Mirror Maintainer
-  description: A downstream team that keeps a mirror of this repo (not a GitHub
-    fork) with its own brand colors, and takes upstream changes by merging
-    release tags.
+  description: A downstream team that keeps a mirror of this repo (not a GitHub fork) with its own brand colors, and takes upstream changes by merging release tags.
   attributes:
     type: external
   metadata:
-    created_at: 2026-11-24T17:33:21.766Z
-    updated_at: 2026-11-24T17:33:21.766Z
+    created_at: 2026-11-24T21:49:32.044Z
+    updated_at: 2026-11-24T21:49:32.044Z
     version: 1

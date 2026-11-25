@@ -1,0 +1,84 @@
+testing.partitionvalue.chip-sized-node:
+  id: 4de62bc5-9ceb-465f-8038-f0675568c0d8
+  path: testing.partitionvalue.chip-sized-node
+  spec_node_id: testing.partitionvalue
+  type: partitionvalue
+  layer_id: testing
+  name: Chip-Sized Node
+  attributes:
+    label: chip
+    constraint: default GraphNode chip box
+    constraintExpression: width <= 160 && height <= 40
+    category: valid
+    representativeValue: 120x32
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.531Z
+    updated_at: 2026-11-24T19:01:20.531Z
+    version: 1
+testing.partitionvalue.card-sized-node:
+  id: dd523f94-45eb-4178-84b9-a6bf27f604ec
+  path: testing.partitionvalue.card-sized-node
+  spec_node_id: testing.partitionvalue
+  type: partitionvalue
+  layer_id: testing
+  name: Card-Sized Node
+  attributes:
+    label: card
+    constraint: large card box several times the chip
+    constraintExpression: width > 160 || height > 40
+    category: boundary-valid
+    representativeValue: 280x160
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.531Z
+    updated_at: 2026-11-24T19:01:20.531Z
+    version: 1
+testing.partitionvalue.chain-topology:
+  id: 1cedcfa1-42cd-461f-90a4-5dfbde800e0a
+  path: testing.partitionvalue.chain-topology
+  spec_node_id: testing.partitionvalue
+  type: partitionvalue
+  layer_id: testing
+  name: Chain Topology
+  attributes:
+    label: chain
+    constraint: each node has at most two neighbours
+    constraintExpression: maxDegree <= 2
+    category: valid
+    representativeValue: a-b-c-d
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.531Z
+    updated_at: 2026-11-24T19:01:20.531Z
+    version: 1
+testing.partitionvalue.hub-and-spoke-topology:
+  id: 787e93ba-c6fa-4d33-ada5-0ae9775bb902
+  path: testing.partitionvalue.hub-and-spoke-topology
+  spec_node_id: testing.partitionvalue
+  type: partitionvalue
+  layer_id: testing
+  name: Hub-and-Spoke Topology
+  attributes:
+    label: hub-and-spoke
+    constraint: one hub linked to many leaves (bushy star)
+    constraintExpression: maxDegree >= n - 1
+    category: boundary-valid
+    representativeValue: hub + 12 spokes
+  source_reference:
+    provenance: inferred
+    locations:
+      - file: tests/graph-layout.spec.ts
+  metadata:
+    created_at: 2026-11-24T19:01:20.531Z
+    updated_at: 2026-11-24T19:01:20.531Z
+    version: 1

@@ -1,0 +1,143 @@
+id: changeset-1795533873263-0v04j7duj
+name: heimdall-graph-components-s10
+description: "Apply ruling S10 to heimdall's 8 Graph React components: each is
+  modelled once, as a ux library component. The 8 application components that
+  duplicate them are retired. Their tests and coverage move to the ux
+  components, their behaviour (function and process assignments, service
+  realizations, data reads) moves to the package component, and links the ux
+  components already carry (browser, artifact) are dropped. The two ux elements
+  that each modelled a pair (GraphEdge/GraphEdgeShape,
+  GraphInspector/GraphEdgeInspector) are split into one library component per
+  exported component, their links divided by what each file imports. The
+  GraphCanvas layout/viewport collaboration, which aggregated only GraphCanvas,
+  is retired and its links move to the package. The 7 GraphCanvas events get
+  triggers from the code that raises them: new functions for edge pointer
+  handling, canvas pointer handling, collapse toggling and programmatic viewport
+  moves, the existing pan-zoom gesture interaction (viewport dwell) and the
+  existing render pipeline (layout-state change). Coverage links from tests that
+  import only the GraphEdge TypeScript interface, not the GraphEdge component,
+  are dropped."
+created: 2026-11-24T15:24:33.303Z
+modified: 2026-11-24T15:33:35.325Z
+status: committed
+baseSnapshot: v2:sha256:b4803218f26b7a0676deb5582a5dc7209467f238ef7d1ca126f151e4233b6380
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 136
+  modifications: 0
+  deletions: 199
+lastSequence: 338
+unstaged:
+  - sequence: 1
+    removedAt: 335
+    change:
+      type: add
+      elementId: application.applicationfunction.canvas-pointer-handling
+      layerName: application
+      after:
+        id: 67b0b9ba-59c5-4175-ae64-1b957f2db667
+        path: application.applicationfunction.canvas-pointer-handling
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Canvas Pointer Handling
+        description: "GraphCanvas's pointer-up handler on the canvas background: a click
+          that is not a pan reports onBackgroundClick."
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/GraphCanvas.tsx
+              symbol: handleCanvasPointerUp
+        metadata:
+          created_at: 2026-11-24T15:24:34.051Z
+          updated_at: 2026-11-24T15:24:34.051Z
+          version: 1
+      timestamp: 2026-11-24T15:24:34.084Z
+    rewritten: true
+  - sequence: 2
+    removedAt: 336
+    change:
+      type: add
+      elementId: application.applicationfunction.collapse-toggling
+      layerName: application
+      after:
+        id: 69bb6238-46cf-49e2-818d-233af99ca382
+        path: application.applicationfunction.collapse-toggling
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Collapse Toggling
+        description: GraphCanvas hands each node with structural children an
+          onToggleCollapse that reports the node to the consumer's
+          onToggleCollapse; GraphCollapseControl and Shift+Enter call it.
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/GraphCanvas.tsx
+              symbol: onToggleCollapse
+        metadata:
+          created_at: 2026-11-24T15:24:34.051Z
+          updated_at: 2026-11-24T15:24:34.051Z
+          version: 1
+      timestamp: 2026-11-24T15:24:34.084Z
+    rewritten: true
+  - sequence: 5
+    removedAt: 337
+    change:
+      type: add
+      elementId: ux.librarycomponent.graph-edge-shape-ux
+      layerName: ux
+      after:
+        id: bcb149e4-9ea1-415d-9115-64419c814fc9
+        path: ux.librarycomponent.graph-edge-shape-ux
+        spec_node_id: ux.librarycomponent
+        type: librarycomponent
+        layer_id: ux
+        name: GraphEdgeShape (UX)
+        description: "Low-level SVG edge drawing: line or curve, arrow markers per
+          variant, hit-target path and a collision-cleared label pill; used by
+          GraphCanvas and GraphEdge, and by custom renderEdge callbacks."
+        attributes:
+          type: display
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/GraphEdgeShape.tsx
+              symbol: GraphEdgeShape
+        metadata:
+          created_at: 2026-11-24T15:24:34.051Z
+          updated_at: 2026-11-24T15:24:34.051Z
+          version: 1
+      timestamp: 2026-11-24T15:24:34.084Z
+    rewritten: true
+  - sequence: 6
+    removedAt: 338
+    change:
+      type: add
+      elementId: ux.librarycomponent.graph-inspector-ux
+      layerName: ux
+      after:
+        id: 90061690-b689-49a1-b7ef-0f25853a6ffd
+        path: ux.librarycomponent.graph-inspector-ux
+        spec_node_id: ux.librarycomponent
+        type: librarycomponent
+        layer_id: ux
+        name: GraphInspector (UX)
+        description: "Detail panel for a selected node: title, kind and domain badges,
+          description, key-value metadata, and outgoing and incoming
+          relationship links."
+        attributes:
+          type: display
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/GraphInspector.tsx
+              symbol: GraphInspector
+        metadata:
+          created_at: 2026-11-24T15:24:34.051Z
+          updated_at: 2026-11-24T15:24:34.051Z
+          version: 1
+      timestamp: 2026-11-24T15:24:34.084Z
+    rewritten: true

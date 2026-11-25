@@ -1,0 +1,4025 @@
+- type: add
+  elementId: application.applicationfunction.edge-pointer-handling
+  layerName: application
+  after:
+    id: cb22e5d5-8b5a-432c-9545-56ac830a71f1
+    path: application.applicationfunction.edge-pointer-handling
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Edge Pointer Handling
+    description: "GraphCanvas's edge hover start and end handlers and an edge's
+      activation: report the hovered edge through onEdgeHover and the selected
+      edge through onEdgeSelect."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: handleEdgeHoverStart
+    metadata:
+      created_at: 2026-11-24T15:24:34.050Z
+      updated_at: 2026-11-24T15:24:34.050Z
+      version: 1
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 0
+- type: add
+  elementId: application.applicationfunction.canvas-pointer-handling
+  layerName: application
+  after:
+    id: 67b0b9ba-59c5-4175-ae64-1b957f2db667
+    path: application.applicationfunction.canvas-pointer-handling
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Canvas Pointer Handling
+    description: "GraphCanvas's pointer-up handler on the canvas background: a click
+      that is not a pan reports onBackgroundClick."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: handleCanvasPointerUp
+    metadata:
+      created_at: 2026-11-24T15:24:34.051Z
+      updated_at: 2026-11-24T15:24:34.051Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: tests
+        other_spec_node_id: testing.testcasesketch
+        reason: No test in heimdall exercises onBackgroundClick or GraphCanvas's
+          background pointer-up handling.
+        decided_by: agent
+        decided_at: 2026-11-24T15:25:51.800Z
+        changeset: changeset-1795533873263-0v04j7duj
+  timestamp: 2026-11-24T15:25:51.850Z
+  sequenceNumber: 1
+- type: add
+  elementId: application.applicationfunction.collapse-toggling
+  layerName: application
+  after:
+    id: 69bb6238-46cf-49e2-818d-233af99ca382
+    path: application.applicationfunction.collapse-toggling
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Collapse Toggling
+    description: GraphCanvas hands each node with structural children an
+      onToggleCollapse that reports the node to the consumer's onToggleCollapse;
+      GraphCollapseControl and Shift+Enter call it.
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: onToggleCollapse
+    metadata:
+      created_at: 2026-11-24T15:24:34.051Z
+      updated_at: 2026-11-24T15:24:34.051Z
+      version: 1
+    accepted_gaps:
+      - direction: incoming
+        predicate: tests
+        other_spec_node_id: testing.testcasesketch
+        reason: No test exercises the onToggleCollapse callback; the collapse-control
+          tests are visual snapshots of the rendered control.
+        decided_by: agent
+        decided_at: 2026-11-24T15:25:54.238Z
+        changeset: changeset-1795533873263-0v04j7duj
+  timestamp: 2026-11-24T15:25:54.305Z
+  sequenceNumber: 2
+- type: add
+  elementId: application.applicationfunction.programmatic-viewport-move-reporting
+  layerName: application
+  after:
+    id: c511d850-54ab-4d95-923e-db3919f6d3bf
+    path: application.applicationfunction.programmatic-viewport-move-reporting
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Programmatic Viewport Move Reporting
+    description: "Runs after every viewport move GraphCanvas or the app makes:
+      cancels a running ease, drops a pending dwell and queues
+      onViewportNavigate with the move's cause, reported once the move has
+      rendered."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: afterProgrammaticMove
+    metadata:
+      created_at: 2026-11-24T15:24:34.051Z
+      updated_at: 2026-11-24T15:24:34.051Z
+      version: 1
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 3
+- type: add
+  elementId: ux.librarycomponent.graph-edge-ux
+  layerName: ux
+  after:
+    id: 417d5420-c319-4164-bf12-19a62af6ed43
+    path: ux.librarycomponent.graph-edge-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphEdge (UX)
+    description: "Standalone edge component for use outside GraphCanvas's own edge
+      renderer: computes its own path and draws it with GraphEdgeShape."
+    attributes:
+      type: display
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphEdge.tsx
+          symbol: GraphEdge
+    metadata:
+      created_at: 2026-11-24T15:24:34.051Z
+      updated_at: 2026-11-24T15:24:34.051Z
+      version: 1
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 4
+- type: add
+  elementId: ux.librarycomponent.graph-edge-shape-ux
+  layerName: ux
+  after:
+    id: bcb149e4-9ea1-415d-9115-64419c814fc9
+    path: ux.librarycomponent.graph-edge-shape-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphEdgeShape (UX)
+    description: "Low-level SVG edge drawing: line or curve, arrow markers per
+      variant, hit-target path and a collision-cleared label pill; used by
+      GraphCanvas and GraphEdge, and by custom renderEdge callbacks."
+    attributes:
+      type: display
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphEdgeShape.tsx
+          symbol: GraphEdgeShape
+    metadata:
+      created_at: 2026-11-24T15:24:34.051Z
+      updated_at: 2026-11-24T15:24:34.051Z
+      version: 1
+    accepted_gaps:
+      - direction: outgoing
+        predicate: composes
+        other_spec_node_id: ux.librarycomponent
+        reason: GraphEdgeShape draws SVG directly and imports no other library
+          component; it is the leaf GraphCanvas and GraphEdge compose.
+        decided_by: agent
+        decided_at: 2026-11-24T15:25:57.505Z
+        changeset: changeset-1795533873263-0v04j7duj
+  timestamp: 2026-11-24T15:25:57.706Z
+  sequenceNumber: 5
+- type: add
+  elementId: ux.librarycomponent.graph-inspector-ux
+  layerName: ux
+  after:
+    id: 90061690-b689-49a1-b7ef-0f25853a6ffd
+    path: ux.librarycomponent.graph-inspector-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphInspector (UX)
+    description: "Detail panel for a selected node: title, kind and domain badges,
+      description, key-value metadata, and outgoing and incoming relationship
+      links."
+    attributes:
+      type: display
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphInspector.tsx
+          symbol: GraphInspector
+    metadata:
+      created_at: 2026-11-24T15:24:34.051Z
+      updated_at: 2026-11-24T15:24:34.051Z
+      version: 1
+    accepted_gaps:
+      - direction: outgoing
+        predicate: composes
+        other_spec_node_id: ux.librarycomponent
+        reason: GraphInspector imports no other library component (its badges and links
+          are plain markup).
+        decided_by: agent
+        decided_at: 2026-11-24T15:26:01.455Z
+        changeset: changeset-1795533873263-0v04j7duj
+  timestamp: 2026-11-24T15:26:01.521Z
+  sequenceNumber: 6
+- type: add
+  elementId: ux.librarycomponent.graph-edge-inspector-ux
+  layerName: ux
+  after:
+    id: c6bca0de-d5c5-414d-badb-c33daf6e3e5b
+    path: ux.librarycomponent.graph-edge-inspector-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphEdgeInspector (UX)
+    description: "Detail panel for a selected edge: predicate or title, source and
+      target endpoint buttons, weight and scalar metadata."
+    attributes:
+      type: display
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphEdgeInspector.tsx
+          symbol: GraphEdgeInspector
+    metadata:
+      created_at: 2026-11-24T15:24:34.051Z
+      updated_at: 2026-11-24T15:24:34.051Z
+      version: 1
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 7
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.force-directed-layout-algorithm
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.force-directed-layout-algorithm
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 8
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.clustered-force-layout-algorithm
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.clustered-force-layout-algorithm
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 9
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 10
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.galaxy-aspect-ratio-resolution
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.galaxy-aspect-ratio-resolution
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 11
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.ux-navigation-tree-layout-algorithm
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 12
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.radial-tree-layout-algorithm
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.radial-tree-layout-algorithm
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 13
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.structural-forest-construction
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.structural-forest-construction
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 14
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.bezier-edge-path-computation
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.bezier-edge-path-computation
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 15
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.edge-label-clear-position-search
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.edge-label-clear-position-search
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.navigation-edge-orthogonal-routing
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.navigation-edge-orthogonal-routing
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-canvas-ux::composes::ux.librarycomponent.graph-edge-shape-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.librarycomponent.graph-edge-shape-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 18
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-ux::composes::ux.librarycomponent.graph-edge-shape-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-ux
+    target: ux.librarycomponent.graph-edge-shape-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.live-galaxy-simulation-service
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.live-galaxy-simulation-service
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.graph-layout-engine-service
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::application.dataobject.node-position-map
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.dataobject.node-position-map
+    predicate: accesses
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::application.dataobject.node-rect-registry
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.dataobject.node-rect-registry
+    predicate: accesses
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::covers::application.applicationcomponent.heimdall-ui-package
+  layerName: testing
+  after:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: application.applicationcomponent.heimdall-ui-package
+    predicate: covers
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: testing.testcoveragetarget.navigation-edge-channel-routing::covers::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.navigation-edge-channel-routing
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-edge-geometry-utilities::covers::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-edge-geometry-utilities
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 26
+- type: relationship-add
+  elementId: testing.testcoveragetarget.edge-label-placement-and-styling::covers::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.edge-label-placement-and-styling
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 28
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.edge-stroke-styling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.edge-stroke-styling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 29
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.node-pointer-handling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.node-pointer-handling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.graph-node-data
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.graph-node-data
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.graph-edge-data-shape
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.graph-edge-data-shape
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.edge-geometry
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.edge-geometry
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: testing.testcoveragetarget.layered-matrix-tests::covers::ux.librarycomponent.graph-edge-inspector-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.layered-matrix-tests
+    target: ux.librarycomponent.graph-edge-inspector-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-a11y-names-tests::covers::ux.librarycomponent.graph-edge-shape-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-a11y-names-tests
+    target: ux.librarycomponent.graph-edge-shape-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-interactive-edges-are-named-by-node-labels-not-ids::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-interactive-edges-are-named-by-node-labels-not-ids
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-node-popover-dialog-is-named-by-the-node-label::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-node-popover-dialog-is-named-by-the-node-label
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-popover-dialog-for-an-unlabelled-edge-is-named-by-node-labels::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-popover-dialog-for-an-unlabelled-edge-is-named-by-node-labels
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::ux.librarycomponent.graph-inspector-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: ux.librarycomponent.graph-inspector-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::ux.librarycomponent.graph-edge-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: ux.librarycomponent.graph-edge-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-a-custom-nodes-margins-stay-inside-its-foreign-object::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-a-custom-nodes-margins-stay-inside-its-foreign-object
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 46
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 47
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-near-the-canvas-top-tooltip-flips-below-the-2326f2d8::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-near-the-canvas-top-tooltip-flips-below-the-2326f2d8
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 48
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-tooltip-sits-above-the-label-without-a1ce7be4::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-tooltip-sits-above-the-label-without-a1ce7be4
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 49
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-vertical-edge-tooltip-clears-the-label-and-stays-35a5e023::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-vertical-edge-tooltip-clears-the-label-and-stays-35a5e023
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 50
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-node-tooltip-uses-the-same-tooltip-delay::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-node-tooltip-uses-the-same-tooltip-delay
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 51
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-tooltip-stays-clear-of-the-label-while-the-canvas-zooms::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-tooltip-stays-clear-of-the-label-while-the-canvas-zooms
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 52
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-unlabelled-edge-tooltip-anchors-at-the-path-midpoint::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-unlabelled-edge-tooltip-anchors-at-the-path-midpoint
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 53
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-with-a-predicate-pill-tooltip-sits-beside-742ff016::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-with-a-predicate-pill-tooltip-sits-beside-742ff016
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 54
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-without-a-pill-tooltip-anchors-on-the-208a5652::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-without-a-pill-tooltip-anchors-on-the-208a5652
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 55
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-a-cancelled-drag-releases-the-pill-hold::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-a-cancelled-drag-releases-the-pill-hold
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 56
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-a-custom-render-node-is-untouched-by-node-labels-reached::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-a-custom-render-node-is-untouched-by-node-labels-reached
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 57
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-dragging-a-node-holds-the-pill-placement-and-moves-pills-along-their-links-b4f5df03::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-dragging-a-node-holds-the-pill-placement-and-moves-pills-along-their-links-b4f5df03
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 58
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-draws-one-lane-per-layer-every-node-and-every-link::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-draws-one-lane-per-layer-every-node-and-every-link
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 59
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-gutter-mode-a-category-filter-leaves-the-lanes-where-they-are::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-gutter-mode-a-category-filter-leaves-the-lanes-where-they-are
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 60
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-gutter-routes-follow-a-dragged-node-with-the-pill-placement-held::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-gutter-routes-follow-a-dragged-node-with-the-pill-placement-held
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 61
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-hover-pan-and-zoom-do-not-re-run-the-pill-placement::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-hover-pan-and-zoom-do-not-re-run-the-pill-placement
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 62
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-works-with-gutter-routing-and-with-reached-chips-tags-8bfc42f3::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-works-with-gutter-routing-and-with-reached-chips-tags-8bfc42f3
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 63
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-a-drag-keeps-links-bundled-and-holds-the-pill-placement::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-a-drag-keeps-links-bundled-and-holds-the-pill-placement
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 64
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-each-row-shares-one-trunk-the-reach-and-a-hovered-node-70d23eb9::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-each-row-shares-one-trunk-the-reach-and-a-hovered-node-70d23eb9
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 65
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-keyboard-focus-fans-a-node-out-trunk-links-get-no-hit-8e2c2683::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-keyboard-focus-fans-a-node-out-trunk-links-get-no-hit-8e2c2683
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 66
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-none-draws-only-the-cross-layer-links::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-none-draws-only-the-cross-layer-links
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 67
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-in-bundled-mode-arrows-fan-out-the-focused-node-and-fold-the-one-a612b46f::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-in-bundled-mode-arrows-fan-out-the-focused-node-and-fold-the-one-a612b46f
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 68
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-enter-on-a-focused-node-selects-it::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-enter-on-a-focused-node-selects-it
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 69
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-focus-pans-an-off-screen-node-into-view-without-scrolling-the-15c05e96::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-focus-pans-an-off-screen-node-into-view-without-scrolling-the-15c05e96
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 70
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-hiding-the-focused-nodes-layer-moves-focus-to-a-neighbour::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-hiding-the-focused-nodes-layer-moves-focus-to-a-neighbour
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 71
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-home-and-end-in-vertical-lanes::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-home-and-end-in-vertical-lanes
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 72
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-left-right-along-a-lane-home-end-to-its-ends-up-down-to-a-linked-0922f825::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-left-right-along-a-lane-home-end-to-its-ends-up-down-to-a-linked-0922f825
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 73
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-one-tab-stop-for-the-lane-nodes-entering-at-the-first-node-or-the-ac21af87::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-one-tab-stop-for-the-lane-nodes-entering-at-the-first-node-or-the-ac21af87
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 74
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-other-layouts-keep-one-tab-stop-per-node::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-other-layouts-keep-one-tab-stop-per-node
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 75
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-space-selects-shifttab-comes-back-to-the-selection::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-space-selects-shifttab-comes-back-to-the-selection
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 76
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-the-hint-is-visually-hidden-a-1px-box-but-names-space-and-escape::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-the-hint-is-visually-hidden-a-1px-box-but-names-space-and-escape
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 77
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-vertical-lanes-swap-the-axes-left-right-between-lanes-up-down-ba3a9ffc::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-vertical-lanes-swap-the-axes-left-right-between-lanes-up-down-ba3a9ffc
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 78
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-works-with-reached-chips-focus-tag-follows-and-gutter-routing::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-works-with-reached-chips-focus-tag-follows-and-gutter-routing
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 79
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-node-click-selects-through-the-layered-state-again-escape-or-the-b2c38dc0::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-node-click-selects-through-the-layered-state-again-escape-or-the-b2c38dc0
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 80
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-node-labels-follow-the-layered-label-toggle-reached-chips-name-the-cdf74296::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-node-labels-follow-the-layered-label-toggle-reached-chips-name-the-cdf74296
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 81
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-nodes-and-edges-are-optional-when-a-layered-graph-context-supplies-the-71a4fafe::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-nodes-and-edges-are-optional-when-a-layered-graph-context-supplies-the-71a4fafe
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 82
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-reached-dragging-the-selection-carries-its-tag-along::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-reached-dragging-the-selection-carries-its-tag-along
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 83
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-selection-follows-cross-layer-links-per-the-follow-setting-with-pills-and-bb91fe29::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-selection-follows-cross-layer-links-per-the-follow-setting-with-pills-and-bb91fe29
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 84
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-skip-layer-routing-gutter-routes-the-links-that-skip-a-lane-outside-the-9061e8f1::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-skip-layer-routing-gutter-routes-the-links-that-skip-a-lane-outside-the-9061e8f1
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 85
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-bundled-intra-links-light-canvas::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-bundled-intra-links-light-canvas
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 86
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-dark-canvas-with-a-followed-selection::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-dark-canvas-with-a-followed-selection
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 87
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-gutter-routes-with-a-selection-light-canvas::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-gutter-routes-with-a-selection-light-canvas
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 88
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-light-canvas-heimdall-ux-model-with-every-predicate::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-light-canvas-heimdall-ux-model-with-every-predicate
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 89
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-reached-chips-with-a-selection-light-canvas::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-reached-chips-with-a-selection-light-canvas
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 90
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-over-several-columns-dark-canvas::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-over-several-columns-dark-canvas
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 91
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-with-a-selection-dark-canvas::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-with-a-selection-dark-canvas
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 92
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-gutter-routes-with-reached-chips-dark-canvas::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-gutter-routes-with-reached-chips-dark-canvas
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 93
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-lanes-light-canvas-with-a-selection::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-lanes-light-canvas-with-a-selection
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 94
+- type: relationship-add
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-reached-chips-with-a-selection-dark-canvas::tests::ux.librarycomponent.graph-canvas-ux
+  layerName: testing
+  after:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-reached-chips-with-a-selection-dark-canvas
+    target: ux.librarycomponent.graph-canvas-ux
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 95
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.graph-viewport
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.graph-viewport
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 96
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.graph-viewport-snapshot
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.graph-viewport-snapshot
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 97
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.graph-layout-state
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.graph-layout-state
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 98
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.layered-graph-state
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.layered-graph-state
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 99
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::accesses::data-model.schemadefinition.lane-layout
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: data-model.schemadefinition.lane-layout
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 100
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.joint-edge-label-placement
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.joint-edge-label-placement
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 101
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-edge-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-edge-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 102
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-edge-shape-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-edge-shape-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 103
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-ux::satisfies::motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-ux
+    target: motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 104
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-shape-ux::satisfies::motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-shape-ux
+    target: motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 105
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-ux::depends-on::technology.systemsoftware.web-browser
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-ux
+    target: technology.systemsoftware.web-browser
+    predicate: depends-on
+    layer: ux
+    targetLayer: technology
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 106
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-shape-ux::depends-on::technology.systemsoftware.web-browser
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-shape-ux
+    target: technology.systemsoftware.web-browser
+    predicate: depends-on
+    layer: ux
+    targetLayer: technology
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 107
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::ux.librarycomponent.graph-edge-shape-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: ux.librarycomponent.graph-edge-shape-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 108
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-inspector-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-inspector-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 109
+- type: relationship-add
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-edge-inspector-ux
+  layerName: ux
+  after:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-edge-inspector-ux
+    predicate: aggregates
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 110
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-inspector-ux::satisfies::motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-inspector-ux
+    target: motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 111
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-inspector-ux::satisfies::motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-inspector-ux
+    target: motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 112
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-inspector-ux::depends-on::technology.systemsoftware.web-browser
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-inspector-ux
+    target: technology.systemsoftware.web-browser
+    predicate: depends-on
+    layer: ux
+    targetLayer: technology
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 113
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-inspector-ux::depends-on::technology.systemsoftware.web-browser
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-inspector-ux
+    target: technology.systemsoftware.web-browser
+    predicate: depends-on
+    layer: ux
+    targetLayer: technology
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 114
+- type: relationship-add
+  elementId: ux.librarycomponent.adjacency-matrix-ux::composes::ux.librarycomponent.graph-edge-inspector-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.adjacency-matrix-ux
+    target: ux.librarycomponent.graph-edge-inspector-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 115
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-edge-inspector-ux::composes::ux.librarycomponent.icon-ux
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-edge-inspector-ux
+    target: ux.librarycomponent.icon-ux
+    predicate: composes
+    layer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 116
+- type: relationship-add
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::ux.librarycomponent.graph-edge-inspector-ux
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: ux.librarycomponent.graph-edge-inspector-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 117
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.edge-pointer-handling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.edge-pointer-handling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 118
+- type: relationship-add
+  elementId: application.applicationfunction.edge-pointer-handling::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  after:
+    source: application.applicationfunction.edge-pointer-handling
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 119
+- type: relationship-add
+  elementId: application.applicationfunction.edge-pointer-handling::triggers::application.applicationevent.edge-hover-change-event
+  layerName: application
+  after:
+    source: application.applicationfunction.edge-pointer-handling
+    target: application.applicationevent.edge-hover-change-event
+    predicate: triggers
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 120
+- type: relationship-add
+  elementId: application.applicationfunction.edge-pointer-handling::triggers::application.applicationevent.edge-select-event
+  layerName: application
+  after:
+    source: application.applicationfunction.edge-pointer-handling
+    target: application.applicationevent.edge-select-event
+    predicate: triggers
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 121
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.canvas-pointer-handling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.canvas-pointer-handling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 122
+- type: relationship-add
+  elementId: application.applicationfunction.canvas-pointer-handling::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  after:
+    source: application.applicationfunction.canvas-pointer-handling
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 123
+- type: relationship-add
+  elementId: application.applicationfunction.canvas-pointer-handling::triggers::application.applicationevent.background-click-event
+  layerName: application
+  after:
+    source: application.applicationfunction.canvas-pointer-handling
+    target: application.applicationevent.background-click-event
+    predicate: triggers
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 124
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.collapse-toggling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.collapse-toggling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 125
+- type: relationship-add
+  elementId: application.applicationfunction.collapse-toggling::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  after:
+    source: application.applicationfunction.collapse-toggling
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 126
+- type: relationship-add
+  elementId: application.applicationfunction.collapse-toggling::triggers::application.applicationevent.collapse-toggle-event
+  layerName: application
+  after:
+    source: application.applicationfunction.collapse-toggling
+    target: application.applicationevent.collapse-toggle-event
+    predicate: triggers
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 127
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-package::assigned-to::application.applicationfunction.programmatic-viewport-move-reporting
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-package
+    target: application.applicationfunction.programmatic-viewport-move-reporting
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 128
+- type: relationship-add
+  elementId: application.applicationfunction.programmatic-viewport-move-reporting::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  after:
+    source: application.applicationfunction.programmatic-viewport-move-reporting
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 129
+- type: relationship-add
+  elementId: application.applicationfunction.programmatic-viewport-move-reporting::triggers::application.applicationevent.viewport-navigate-event
+  layerName: application
+  after:
+    source: application.applicationfunction.programmatic-viewport-move-reporting
+    target: application.applicationevent.viewport-navigate-event
+    predicate: triggers
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 130
+- type: relationship-add
+  elementId: application.applicationinteraction.panzoom-gesture-handling::triggers::application.applicationevent.viewport-dwell-event
+  layerName: application
+  after:
+    source: application.applicationinteraction.panzoom-gesture-handling
+    target: application.applicationevent.viewport-dwell-event
+    predicate: triggers
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 131
+- type: relationship-add
+  elementId: application.applicationprocess.graph-render-and-layout-recomputation-pipeline::triggers::application.applicationevent.layout-state-change-event
+  layerName: application
+  after:
+    source: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+    target: application.applicationevent.layout-state-change-event
+    predicate: triggers
+    layer: application
+    category: structural
+  timestamp: 2026-11-24T15:24:34.084Z
+  sequenceNumber: 132
+- type: delete
+  elementId: application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    id: 46abcf82-6aff-49ca-85f2-d42625ca97b6
+    path: application.applicationcomponent.graph-canvas-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphCanvas Component
+    description: "The primary orchestrating React component: manages node
+      measurement, dispatches to whichever layout engine is selected, owns
+      pan/zoom/selection/hover/collapse state, and renders nodes, edges,
+      toolbar, tooltips, and popovers."
+    attributes:
+      type: service-component
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: GraphCanvas
+    metadata:
+      created_at: 2026-09-18T14:34:35.709Z
+      updated_at: 2026-09-18T14:34:35.709Z
+      version: 1
+  timestamp: 2026-11-24T15:24:45.209Z
+  sequenceNumber: 133
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.force-directed-layout-algorithm
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.force-directed-layout-algorithm
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.264Z
+  sequenceNumber: 134
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.clustered-force-layout-algorithm
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.clustered-force-layout-algorithm
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.319Z
+  sequenceNumber: 135
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.galaxy-radial-orbit-layout-algorithm
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.384Z
+  sequenceNumber: 136
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.galaxy-aspect-ratio-resolution
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.galaxy-aspect-ratio-resolution
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.444Z
+  sequenceNumber: 137
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.ux-navigation-tree-layout-algorithm
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.ux-navigation-tree-layout-algorithm
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.538Z
+  sequenceNumber: 138
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.radial-tree-layout-algorithm
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.radial-tree-layout-algorithm
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.601Z
+  sequenceNumber: 139
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.structural-forest-construction
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.structural-forest-construction
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.677Z
+  sequenceNumber: 140
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.bezier-edge-path-computation
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.bezier-edge-path-computation
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.745Z
+  sequenceNumber: 141
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.edge-label-clear-position-search
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.edge-label-clear-position-search
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.801Z
+  sequenceNumber: 142
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.navigation-edge-orthogonal-routing
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.navigation-edge-orthogonal-routing
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:45.857Z
+  sequenceNumber: 143
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::uses::application.applicationcomponent.graph-node-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationcomponent.graph-node-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:45.908Z
+  sequenceNumber: 144
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::uses::application.applicationcomponent.graph-edge-shape-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationcomponent.graph-edge-shape-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:45.976Z
+  sequenceNumber: 145
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::uses::application.applicationcomponent.graph-toolbar-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationcomponent.graph-toolbar-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:46.056Z
+  sequenceNumber: 146
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::uses::application.applicationcomponent.graph-collapse-control-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationcomponent.graph-collapse-control-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:46.141Z
+  sequenceNumber: 147
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::realizes::application.applicationservice.live-galaxy-simulation-service
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationservice.live-galaxy-simulation-service
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:24:46.311Z
+  sequenceNumber: 148
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::realizes::application.applicationservice.graph-layout-engine-service
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationservice.graph-layout-engine-service
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:24:46.424Z
+  sequenceNumber: 149
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::application.dataobject.node-position-map
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.dataobject.node-position-map
+    predicate: accesses
+    layer: application
+  timestamp: 2026-11-24T15:24:46.489Z
+  sequenceNumber: 150
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::application.dataobject.node-rect-registry
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.dataobject.node-rect-registry
+    predicate: accesses
+    layer: application
+  timestamp: 2026-11-24T15:24:46.567Z
+  sequenceNumber: 151
+- type: relationship-delete
+  elementId: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration::aggregates::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: aggregates
+    layer: application
+  timestamp: 2026-11-24T15:24:46.646Z
+  sequenceNumber: 152
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-inspector-component::uses::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-inspector-component
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:46.709Z
+  sequenceNumber: 153
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-inspector-component::uses::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-inspector-component
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:46.780Z
+  sequenceNumber: 154
+- type: relationship-delete
+  elementId: testing.testcoveragemodel.heimdall-graph-layout-test-coverage::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragemodel.heimdall-graph-layout-test-coverage
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:46.898Z
+  sequenceNumber: 155
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:47.062Z
+  sequenceNumber: 156
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.navigation-edge-channel-routing::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.navigation-edge-channel-routing
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:47.202Z
+  sequenceNumber: 157
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-edge-geometry-utilities::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-edge-geometry-utilities
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:47.312Z
+  sequenceNumber: 158
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.edge-label-placement-and-styling::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.edge-label-placement-and-styling
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:47.403Z
+  sequenceNumber: 159
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:24:47.462Z
+  sequenceNumber: 160
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-node-component::uses::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-node-component
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:47.542Z
+  sequenceNumber: 161
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:47.604Z
+  sequenceNumber: 162
+- type: relationship-delete
+  elementId: application.applicationservice.graph-layout-engine-service::serves::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationservice.graph-layout-engine-service
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: serves
+    layer: application
+  timestamp: 2026-11-24T15:24:47.672Z
+  sequenceNumber: 163
+- type: relationship-delete
+  elementId: application.applicationservice.live-galaxy-simulation-service::serves::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationservice.live-galaxy-simulation-service
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: serves
+    layer: application
+  timestamp: 2026-11-24T15:24:47.747Z
+  sequenceNumber: 164
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.node-pointer-handling
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.node-pointer-handling
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:47.812Z
+  sequenceNumber: 165
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.graph-node-data
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.graph-node-data
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:47.895Z
+  sequenceNumber: 166
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.graph-edge-data-shape
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.graph-edge-data-shape
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:47.983Z
+  sequenceNumber: 167
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.edge-geometry
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.edge-geometry
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:48.077Z
+  sequenceNumber: 168
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-canvas-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.167Z
+  sequenceNumber: 169
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-canvas-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.266Z
+  sequenceNumber: 170
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.reach-inspector-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.reach-inspector-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.347Z
+  sequenceNumber: 171
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-live-drag-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-live-drag-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.409Z
+  sequenceNumber: 172
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.496Z
+  sequenceNumber: 173
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-async-layout-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-async-layout-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.624Z
+  sequenceNumber: 174
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.organic-layout-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.organic-layout-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.694Z
+  sequenceNumber: 175
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.orthogonal-layout-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.orthogonal-layout-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.752Z
+  sequenceNumber: 176
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.radial-tree-layout-algorithm::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.radial-tree-layout-algorithm
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.804Z
+  sequenceNumber: 177
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.center-on-select-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.center-on-select-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.897Z
+  sequenceNumber: 178
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.channel-router-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.channel-router-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:48.956Z
+  sequenceNumber: 179
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.fullscreen-container-ref-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.fullscreen-container-ref-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.008Z
+  sequenceNumber: 180
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.061Z
+  sequenceNumber: 181
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-a11y-names-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-a11y-names-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.105Z
+  sequenceNumber: 182
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.155Z
+  sequenceNumber: 183
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-interactive-edges-are-named-by-node-labels-not-ids::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-interactive-edges-are-named-by-node-labels-not-ids
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.218Z
+  sequenceNumber: 184
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-node-popover-dialog-is-named-by-the-node-label::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-node-popover-dialog-is-named-by-the-node-label
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.291Z
+  sequenceNumber: 185
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-accessible-names-304-popover-dialog-for-an-unlabelled-edge-is-named-by-node-labels::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-accessible-names-304-popover-dialog-for-an-unlabelled-edge-is-named-by-node-labels
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.377Z
+  sequenceNumber: 186
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-click-tooltip-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-click-tooltip-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.477Z
+  sequenceNumber: 187
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-popover-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-popover-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.547Z
+  sequenceNumber: 188
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-fit-boundaries-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-fit-boundaries-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.617Z
+  sequenceNumber: 189
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-layout-busy-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-layout-busy-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.709Z
+  sequenceNumber: 190
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.871Z
+  sequenceNumber: 191
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-node-measure-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-node-measure-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:49.954Z
+  sequenceNumber: 192
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-a-custom-nodes-margins-stay-inside-its-foreign-object::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-a-custom-nodes-margins-stay-inside-its-foreign-object
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.018Z
+  sequenceNumber: 193
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-each-foreign-object-matches-its-rendered-node-in-world-units
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.082Z
+  sequenceNumber: 194
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-edge-endpoints-land-on-the-node-outline
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.126Z
+  sequenceNumber: 195
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-node-measurement-331-no-node-label-is-ellipsized-as-rendered-or-held-to-its-measured-7cf51b32
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.182Z
+  sequenceNumber: 196
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-tooltip-placement-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-tooltip-placement-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.232Z
+  sequenceNumber: 197
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.289Z
+  sequenceNumber: 198
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-near-the-canvas-top-tooltip-flips-below-the-2326f2d8::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-near-the-canvas-top-tooltip-flips-below-the-2326f2d8
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.364Z
+  sequenceNumber: 199
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-tooltip-sits-above-the-label-without-a1ce7be4::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-tooltip-sits-above-the-label-without-a1ce7be4
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.444Z
+  sequenceNumber: 200
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-vertical-edge-tooltip-clears-the-label-and-stays-35a5e023::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-vertical-edge-tooltip-clears-the-label-and-stays-35a5e023
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.530Z
+  sequenceNumber: 201
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-node-tooltip-uses-the-same-tooltip-delay::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-node-tooltip-uses-the-same-tooltip-delay
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.696Z
+  sequenceNumber: 202
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-tooltip-stays-clear-of-the-label-while-the-canvas-zooms::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-tooltip-stays-clear-of-the-label-while-the-canvas-zooms
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:50.857Z
+  sequenceNumber: 203
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-unlabelled-edge-tooltip-anchors-at-the-path-midpoint::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-unlabelled-edge-tooltip-anchors-at-the-path-midpoint
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.113Z
+  sequenceNumber: 204
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-with-a-predicate-pill-tooltip-sits-beside-742ff016::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-with-a-predicate-pill-tooltip-sits-beside-742ff016
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.237Z
+  sequenceNumber: 205
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-without-a-pill-tooltip-anchors-on-the-208a5652::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-hover-tooltip-placement-layer-lanes-323-link-without-a-pill-tooltip-anchors-on-the-208a5652
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.321Z
+  sequenceNumber: 206
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-viewport-history-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-viewport-history-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.448Z
+  sequenceNumber: 207
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layer-lanes-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layer-lanes-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.525Z
+  sequenceNumber: 208
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-a-cancelled-drag-releases-the-pill-hold::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-a-cancelled-drag-releases-the-pill-hold
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.617Z
+  sequenceNumber: 209
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-a-custom-render-node-is-untouched-by-node-labels-reached::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-a-custom-render-node-is-untouched-by-node-labels-reached
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.701Z
+  sequenceNumber: 210
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-dragging-a-node-holds-the-pill-placement-and-moves-pills-along-their-links-b4f5df03::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-dragging-a-node-holds-the-pill-placement-and-moves-pills-along-their-links-b4f5df03
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.772Z
+  sequenceNumber: 211
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-draws-one-lane-per-layer-every-node-and-every-link::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-draws-one-lane-per-layer-every-node-and-every-link
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.864Z
+  sequenceNumber: 212
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-gutter-mode-a-category-filter-leaves-the-lanes-where-they-are::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-gutter-mode-a-category-filter-leaves-the-lanes-where-they-are
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:51.952Z
+  sequenceNumber: 213
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-gutter-routes-follow-a-dragged-node-with-the-pill-placement-held::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-gutter-routes-follow-a-dragged-node-with-the-pill-placement-held
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.039Z
+  sequenceNumber: 214
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-hover-pan-and-zoom-do-not-re-run-the-pill-placement::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-hover-pan-and-zoom-do-not-re-run-the-pill-placement
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.104Z
+  sequenceNumber: 215
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-works-with-gutter-routing-and-with-reached-chips-tags-8bfc42f3::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-works-with-gutter-routing-and-with-reached-chips-tags-8bfc42f3
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.218Z
+  sequenceNumber: 216
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-a-drag-keeps-links-bundled-and-holds-the-pill-placement::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-a-drag-keeps-links-bundled-and-holds-the-pill-placement
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.305Z
+  sequenceNumber: 217
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-each-row-shares-one-trunk-the-reach-and-a-hovered-node-70d23eb9::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-each-row-shares-one-trunk-the-reach-and-a-hovered-node-70d23eb9
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.379Z
+  sequenceNumber: 218
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-keyboard-focus-fans-a-node-out-trunk-links-get-no-hit-8e2c2683::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-bundled-keyboard-focus-fans-a-node-out-trunk-links-get-no-hit-8e2c2683
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.452Z
+  sequenceNumber: 219
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-none-draws-only-the-cross-layer-links::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-intra-links-none-draws-only-the-cross-layer-links
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.515Z
+  sequenceNumber: 220
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-in-bundled-mode-arrows-fan-out-the-focused-node-and-fold-the-one-a612b46f::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-in-bundled-mode-arrows-fan-out-the-focused-node-and-fold-the-one-a612b46f
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.588Z
+  sequenceNumber: 221
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-enter-on-a-focused-node-selects-it::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-enter-on-a-focused-node-selects-it
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.666Z
+  sequenceNumber: 222
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-focus-pans-an-off-screen-node-into-view-without-scrolling-the-15c05e96::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-focus-pans-an-off-screen-node-into-view-without-scrolling-the-15c05e96
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.802Z
+  sequenceNumber: 223
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-hiding-the-focused-nodes-layer-moves-focus-to-a-neighbour::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-hiding-the-focused-nodes-layer-moves-focus-to-a-neighbour
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.903Z
+  sequenceNumber: 224
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-home-and-end-in-vertical-lanes::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-home-and-end-in-vertical-lanes
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:52.984Z
+  sequenceNumber: 225
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-left-right-along-a-lane-home-end-to-its-ends-up-down-to-a-linked-0922f825::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-left-right-along-a-lane-home-end-to-its-ends-up-down-to-a-linked-0922f825
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.059Z
+  sequenceNumber: 226
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-one-tab-stop-for-the-lane-nodes-entering-at-the-first-node-or-the-ac21af87::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-one-tab-stop-for-the-lane-nodes-entering-at-the-first-node-or-the-ac21af87
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.133Z
+  sequenceNumber: 227
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-other-layouts-keep-one-tab-stop-per-node::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-other-layouts-keep-one-tab-stop-per-node
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.209Z
+  sequenceNumber: 228
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-space-selects-shifttab-comes-back-to-the-selection::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-space-selects-shifttab-comes-back-to-the-selection
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.275Z
+  sequenceNumber: 229
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-the-hint-is-visually-hidden-a-1px-box-but-names-space-and-escape::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-the-hint-is-visually-hidden-a-1px-box-but-names-space-and-escape
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.344Z
+  sequenceNumber: 230
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-vertical-lanes-swap-the-axes-left-right-between-lanes-up-down-ba3a9ffc::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-vertical-lanes-swap-the-axes-left-right-between-lanes-up-down-ba3a9ffc
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.426Z
+  sequenceNumber: 231
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-works-with-reached-chips-focus-tag-follows-and-gutter-routing::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-keyboard-works-with-reached-chips-focus-tag-follows-and-gutter-routing
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.492Z
+  sequenceNumber: 232
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-node-click-selects-through-the-layered-state-again-escape-or-the-b2c38dc0::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-node-click-selects-through-the-layered-state-again-escape-or-the-b2c38dc0
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.579Z
+  sequenceNumber: 233
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-node-labels-follow-the-layered-label-toggle-reached-chips-name-the-cdf74296::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-node-labels-follow-the-layered-label-toggle-reached-chips-name-the-cdf74296
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.656Z
+  sequenceNumber: 234
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-nodes-and-edges-are-optional-when-a-layered-graph-context-supplies-the-71a4fafe::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-nodes-and-edges-are-optional-when-a-layered-graph-context-supplies-the-71a4fafe
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.768Z
+  sequenceNumber: 235
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-reached-dragging-the-selection-carries-its-tag-along::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-reached-dragging-the-selection-carries-its-tag-along
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.863Z
+  sequenceNumber: 236
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-selection-follows-cross-layer-links-per-the-follow-setting-with-pills-and-bb91fe29::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-selection-follows-cross-layer-links-per-the-follow-setting-with-pills-and-bb91fe29
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:53.942Z
+  sequenceNumber: 237
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-skip-layer-routing-gutter-routes-the-links-that-skip-a-lane-outside-the-9061e8f1::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-skip-layer-routing-gutter-routes-the-links-that-skip-a-lane-outside-the-9061e8f1
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.019Z
+  sequenceNumber: 238
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-bundled-intra-links-light-canvas::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-bundled-intra-links-light-canvas
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.087Z
+  sequenceNumber: 239
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-dark-canvas-with-a-followed-selection::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-dark-canvas-with-a-followed-selection
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.153Z
+  sequenceNumber: 240
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-gutter-routes-with-a-selection-light-canvas::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-gutter-routes-with-a-selection-light-canvas
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.240Z
+  sequenceNumber: 241
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-light-canvas-heimdall-ux-model-with-every-predicate::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-light-canvas-heimdall-ux-model-with-every-predicate
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.346Z
+  sequenceNumber: 242
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-reached-chips-with-a-selection-light-canvas::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-reached-chips-with-a-selection-light-canvas
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.481Z
+  sequenceNumber: 243
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-over-several-columns-dark-canvas::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-over-several-columns-dark-canvas
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.589Z
+  sequenceNumber: 244
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-with-a-selection-dark-canvas::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-bundled-intra-links-with-a-selection-dark-canvas
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.682Z
+  sequenceNumber: 245
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-gutter-routes-with-reached-chips-dark-canvas::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-gutter-routes-with-reached-chips-dark-canvas
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.777Z
+  sequenceNumber: 246
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-lanes-light-canvas-with-a-selection::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-lanes-light-canvas-with-a-selection
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.888Z
+  sequenceNumber: 247
+- type: relationship-delete
+  elementId: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-reached-chips-with-a-selection-dark-canvas::tests::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcasesketch.graph-canvas-layer-lanes-visual-vertical-reached-chips-with-a-selection-dark-canvas
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: tests
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:54.962Z
+  sequenceNumber: 248
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.pan-zoom-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.pan-zoom-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:55.048Z
+  sequenceNumber: 249
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:55.186Z
+  sequenceNumber: 250
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-layout-tests::covers::application.applicationcomponent.graph-canvas-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-layout-tests
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:55.282Z
+  sequenceNumber: 251
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.graph-viewport
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.graph-viewport
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:55.381Z
+  sequenceNumber: 252
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.graph-viewport-snapshot
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.graph-viewport-snapshot
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:55.467Z
+  sequenceNumber: 253
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.graph-layout-state
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.graph-layout-state
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:55.556Z
+  sequenceNumber: 254
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.layered-graph-state
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.layered-graph-state
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:55.637Z
+  sequenceNumber: 255
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::accesses::data-model.schemadefinition.lane-layout
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: data-model.schemadefinition.lane-layout
+    predicate: accesses
+    layer: application
+    targetLayer: data-model
+  timestamp: 2026-11-24T15:24:55.721Z
+  sequenceNumber: 256
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-canvas-component::assigned-to::application.applicationfunction.joint-edge-label-placement
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-canvas-component
+    target: application.applicationfunction.joint-edge-label-placement
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:55.830Z
+  sequenceNumber: 257
+- type: relationship-delete
+  elementId: application.applicationcomponent.test-page-host-app::uses::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.test-page-host-app
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:55.909Z
+  sequenceNumber: 258
+- type: relationship-delete
+  elementId: application.applicationcomponent.consumer-smoke-test-app::uses::application.applicationcomponent.graph-canvas-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.consumer-smoke-test-app
+    target: application.applicationcomponent.graph-canvas-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:56.027Z
+  sequenceNumber: 259
+- type: delete
+  elementId: application.applicationcomponent.graph-node-component
+  layerName: application
+  before:
+    id: 5eab1be5-9898-4757-818c-a1378301c471
+    path: application.applicationcomponent.graph-node-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphNode Component
+    description: "Default node renderer: label/kind/domain swatch, click/keyboard
+      select, Shift+Enter collapse toggle, popover trigger."
+    attributes:
+      type: internal
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphNode.tsx
+          symbol: GraphNode
+    metadata:
+      created_at: 2026-09-18T14:34:35.992Z
+      updated_at: 2026-09-18T14:34:35.992Z
+      version: 1
+  timestamp: 2026-11-24T15:24:57.609Z
+  sequenceNumber: 260
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-node-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-node-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:24:57.705Z
+  sequenceNumber: 261
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-node-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-node-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:57.802Z
+  sequenceNumber: 262
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-node-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-node-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:57.883Z
+  sequenceNumber: 263
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.center-on-select-tests::covers::application.applicationcomponent.graph-node-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.center-on-select-tests
+    target: application.applicationcomponent.graph-node-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:57.981Z
+  sequenceNumber: 264
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-collapse-tests::covers::application.applicationcomponent.graph-node-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-collapse-tests
+    target: application.applicationcomponent.graph-node-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:58.060Z
+  sequenceNumber: 265
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationcomponent.graph-node-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationcomponent.graph-node-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:58.137Z
+  sequenceNumber: 266
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-edge-label-tests::covers::application.applicationcomponent.graph-node-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-edge-label-tests
+    target: application.applicationcomponent.graph-node-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:58.215Z
+  sequenceNumber: 267
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.force-force-clustered-layout-algorithms::covers::application.applicationcomponent.graph-node-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.force-force-clustered-layout-algorithms
+    target: application.applicationcomponent.graph-node-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:24:58.287Z
+  sequenceNumber: 268
+- type: delete
+  elementId: application.applicationcomponent.graph-edge-component
+  layerName: application
+  before:
+    id: 2466d906-1d46-405f-a82c-b26d580312c5
+    path: application.applicationcomponent.graph-edge-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphEdge Component
+    description: Standalone exported edge component (for use outside GraphCanvas's
+      own internal edge renderer) — computes its own path via computeEdgePath
+      and delegates drawing to GraphEdgeShape.
+    attributes:
+      type: internal
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphEdge.tsx
+          symbol: GraphEdge
+    metadata:
+      created_at: 2026-09-18T14:34:36.293Z
+      updated_at: 2026-09-18T14:34:36.293Z
+      version: 1
+  timestamp: 2026-11-24T15:24:59.490Z
+  sequenceNumber: 269
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-component::uses::application.applicationcomponent.graph-edge-shape-component
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-component
+    target: application.applicationcomponent.graph-edge-shape-component
+    predicate: uses
+    layer: application
+  timestamp: 2026-11-24T15:24:59.578Z
+  sequenceNumber: 270
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-component::accesses::application.dataobject.node-rect-registry
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-component
+    target: application.dataobject.node-rect-registry
+    predicate: accesses
+    layer: application
+  timestamp: 2026-11-24T15:24:59.656Z
+  sequenceNumber: 271
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:24:59.745Z
+  sequenceNumber: 272
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-component::assigned-to::application.applicationfunction.bezier-edge-path-computation
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-component
+    target: application.applicationfunction.bezier-edge-path-computation
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:59.838Z
+  sequenceNumber: 273
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-component::assigned-to::application.applicationfunction.edge-label-clear-position-search
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-component
+    target: application.applicationfunction.edge-label-clear-position-search
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:24:59.920Z
+  sequenceNumber: 274
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-edge-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-edge-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:00.011Z
+  sequenceNumber: 275
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-edge-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-edge-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:00.127Z
+  sequenceNumber: 276
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.reach-inspector-tests::covers::application.applicationcomponent.graph-edge-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.reach-inspector-tests
+    target: application.applicationcomponent.graph-edge-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:00.202Z
+  sequenceNumber: 277
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-tests::covers::application.applicationcomponent.graph-edge-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-tests
+    target: application.applicationcomponent.graph-edge-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:00.289Z
+  sequenceNumber: 278
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationcomponent.graph-edge-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationcomponent.graph-edge-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:00.377Z
+  sequenceNumber: 279
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::application.applicationcomponent.graph-edge-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: application.applicationcomponent.graph-edge-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:00.497Z
+  sequenceNumber: 280
+- type: delete
+  elementId: application.applicationcomponent.graph-edge-shape-component
+  layerName: application
+  before:
+    id: 64946a5b-15cb-46da-9a3d-2b331c26d2d9
+    path: application.applicationcomponent.graph-edge-shape-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphEdgeShape Component
+    description: "Shared SVG drawing primitive for an edge: line, arrow markers (per
+      variant), hit-target path, and collision-cleared label pill. Used by both
+      GraphEdge and GraphCanvas's internal edge renderer to prevent visual drift
+      between the two."
+    attributes:
+      type: internal
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphEdgeShape.tsx
+          symbol: GraphEdgeShape
+    metadata:
+      created_at: 2026-09-18T14:34:36.592Z
+      updated_at: 2026-09-18T14:34:36.592Z
+      version: 1
+  timestamp: 2026-11-24T15:25:01.636Z
+  sequenceNumber: 281
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-shape-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-shape-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:25:01.711Z
+  sequenceNumber: 282
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-shape-component::assigned-to::application.applicationfunction.bezier-edge-path-computation
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-shape-component
+    target: application.applicationfunction.bezier-edge-path-computation
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:25:01.827Z
+  sequenceNumber: 283
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-shape-component::assigned-to::application.applicationfunction.edge-label-clear-position-search
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-shape-component
+    target: application.applicationfunction.edge-label-clear-position-search
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:25:01.908Z
+  sequenceNumber: 284
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-shape-component::assigned-to::application.applicationfunction.edge-stroke-styling
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-shape-component
+    target: application.applicationfunction.edge-stroke-styling
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:25:01.984Z
+  sequenceNumber: 285
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-edge-shape-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-edge-shape-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:02.055Z
+  sequenceNumber: 286
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-edge-shape-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-edge-shape-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:02.139Z
+  sequenceNumber: 287
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-a11y-names-tests::covers::application.applicationcomponent.graph-edge-shape-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-a11y-names-tests
+    target: application.applicationcomponent.graph-edge-shape-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:02.214Z
+  sequenceNumber: 288
+- type: delete
+  elementId: application.applicationcomponent.graph-toolbar-component
+  layerName: application
+  before:
+    id: 3a96181e-c48f-4641-8468-e3f67b7df38d
+    path: application.applicationcomponent.graph-toolbar-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphToolbar Component
+    description: Floating zoom in/out/fit, pan-lock, fullscreen, and (layout=galaxy
+      only) live-simulation toggle controls, reading/writing GraphCanvasContext.
+    attributes:
+      type: internal
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphToolbar.tsx
+          symbol: GraphToolbar
+    metadata:
+      created_at: 2026-09-18T14:34:36.881Z
+      updated_at: 2026-09-18T14:34:36.881Z
+      version: 1
+  timestamp: 2026-11-24T15:25:03.180Z
+  sequenceNumber: 289
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-toolbar-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-toolbar-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:25:03.251Z
+  sequenceNumber: 290
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-toolbar-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-toolbar-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:03.319Z
+  sequenceNumber: 291
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-toolbar-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-toolbar-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:03.392Z
+  sequenceNumber: 292
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationcomponent.graph-toolbar-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationcomponent.graph-toolbar-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:03.475Z
+  sequenceNumber: 293
+- type: delete
+  elementId: application.applicationcomponent.graph-collapse-control-component
+  layerName: application
+  before:
+    id: 4348422b-9a36-478f-b8b6-d374d35f56b5
+    path: application.applicationcomponent.graph-collapse-control-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphCollapseControl Component
+    description: Floating foreignObject button rendered at a node's right edge for
+      toggling structural collapse/expand, with a hidden-descendant-count badge.
+    attributes:
+      type: internal
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCollapseControl.tsx
+          symbol: GraphCollapseControl
+    metadata:
+      created_at: 2026-09-18T14:34:37.787Z
+      updated_at: 2026-09-18T14:34:37.787Z
+      version: 1
+  timestamp: 2026-11-24T15:25:04.493Z
+  sequenceNumber: 294
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-collapse-control-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-collapse-control-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:25:04.578Z
+  sequenceNumber: 295
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-collapse-control-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-collapse-control-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:04.654Z
+  sequenceNumber: 296
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-collapse-control-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-collapse-control-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:04.732Z
+  sequenceNumber: 297
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.galaxy-layout-collapse-tests::covers::application.applicationcomponent.graph-collapse-control-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.galaxy-layout-collapse-tests
+    target: application.applicationcomponent.graph-collapse-control-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:04.802Z
+  sequenceNumber: 298
+- type: delete
+  elementId: application.applicationcomponent.graph-inspector-component
+  layerName: application
+  before:
+    id: 158661b1-d682-4ba0-984d-b2b955e37094
+    path: application.applicationcomponent.graph-inspector-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphInspector Component
+    description: "Detail panel for a selected node: title/kind/domain badges,
+      description, metadata key-value list, and outgoing/incoming relationship
+      links."
+    attributes:
+      type: internal
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphInspector.tsx
+          symbol: GraphInspector
+    metadata:
+      created_at: 2026-09-18T14:34:37.175Z
+      updated_at: 2026-09-18T14:34:37.175Z
+      version: 1
+  timestamp: 2026-11-24T15:25:05.680Z
+  sequenceNumber: 299
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-inspector-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-inspector-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:25:05.747Z
+  sequenceNumber: 300
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-inspector-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-inspector-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:05.818Z
+  sequenceNumber: 301
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-inspector-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-inspector-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:05.881Z
+  sequenceNumber: 302
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::application.applicationcomponent.graph-inspector-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: application.applicationcomponent.graph-inspector-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:05.949Z
+  sequenceNumber: 303
+- type: delete
+  elementId: application.applicationcomponent.graph-edge-inspector-component
+  layerName: application
+  before:
+    id: 02df26ef-c374-48e5-bb73-1fcf7e40d607
+    path: application.applicationcomponent.graph-edge-inspector-component
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: GraphEdgeInspector Component
+    description: "Lighter detail panel for a selected edge: predicate/title,
+      source/target endpoint buttons, weight and scalar metadata."
+    attributes:
+      type: internal
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphEdgeInspector.tsx
+          symbol: GraphEdgeInspector
+    metadata:
+      created_at: 2026-09-18T14:34:37.466Z
+      updated_at: 2026-09-18T14:34:37.466Z
+      version: 1
+  timestamp: 2026-11-24T15:25:06.825Z
+  sequenceNumber: 304
+- type: relationship-delete
+  elementId: application.applicationcomponent.graph-edge-inspector-component::realizes::application.applicationservice.interactive-graph-rendering
+  layerName: application
+  before:
+    source: application.applicationcomponent.graph-edge-inspector-component
+    target: application.applicationservice.interactive-graph-rendering
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:25:06.913Z
+  sequenceNumber: 305
+- type: relationship-delete
+  elementId: technology.artifact.heimdall-ui-package::realizes::application.applicationcomponent.graph-edge-inspector-component
+  layerName: technology
+  before:
+    source: technology.artifact.heimdall-ui-package
+    target: application.applicationcomponent.graph-edge-inspector-component
+    predicate: realizes
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:06.995Z
+  sequenceNumber: 306
+- type: relationship-delete
+  elementId: technology.systemsoftware.web-browser::serves::application.applicationcomponent.graph-edge-inspector-component
+  layerName: technology
+  before:
+    source: technology.systemsoftware.web-browser
+    target: application.applicationcomponent.graph-edge-inspector-component
+    predicate: serves
+    layer: technology
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:07.065Z
+  sequenceNumber: 307
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-matrix-tests::covers::application.applicationcomponent.graph-edge-inspector-component
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-matrix-tests
+    target: application.applicationcomponent.graph-edge-inspector-component
+    predicate: covers
+    layer: testing
+    targetLayer: application
+  timestamp: 2026-11-24T15:25:07.140Z
+  sequenceNumber: 308
+- type: delete
+  elementId: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: ux
+  before:
+    id: c0aeda3c-e6f2-4e47-aefc-bdc655fe2808
+    path: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphEdge/GraphEdgeShape (UX)
+    description: "Default edge visual: curved or orthogonal line, directional arrow
+      marker, optional collision-cleared label pill, variant-based
+      (default/hot/irrelevant) styling."
+    attributes:
+      type: display
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphEdgeShape.tsx
+          symbol: GraphEdgeShape
+    metadata:
+      created_at: 2026-09-18T14:39:45.631Z
+      updated_at: 2026-09-18T14:39:45.631Z
+      version: 1
+  timestamp: 2026-11-24T15:25:08.171Z
+  sequenceNumber: 309
+- type: relationship-delete
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: ux
+  before:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: aggregates
+    layer: ux
+  timestamp: 2026-11-24T15:25:08.236Z
+  sequenceNumber: 310
+- type: relationship-delete
+  elementId: ux.librarycomponent.graph-canvas-ux::composes::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: ux
+  before:
+    source: ux.librarycomponent.graph-canvas-ux
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: composes
+    layer: ux
+  timestamp: 2026-11-24T15:25:08.302Z
+  sequenceNumber: 311
+- type: relationship-delete
+  elementId: ux.librarycomponent.graph-edgegraph-edge-shape-ux::satisfies::motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+  layerName: ux
+  before:
+    source: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    target: motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+  timestamp: 2026-11-24T15:25:08.378Z
+  sequenceNumber: 312
+- type: relationship-delete
+  elementId: ux.librarycomponent.graph-edgegraph-edge-shape-ux::depends-on::technology.systemsoftware.web-browser
+  layerName: ux
+  before:
+    source: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    target: technology.systemsoftware.web-browser
+    predicate: depends-on
+    layer: ux
+    targetLayer: technology
+  timestamp: 2026-11-24T15:25:08.455Z
+  sequenceNumber: 313
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.reach-inspector-tests::covers::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.reach-inspector-tests
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+  timestamp: 2026-11-24T15:25:08.526Z
+  sequenceNumber: 314
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-tests::covers::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-tests
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+  timestamp: 2026-11-24T15:25:08.592Z
+  sequenceNumber: 315
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-a11y-names-tests::covers::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-a11y-names-tests
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+  timestamp: 2026-11-24T15:25:08.669Z
+  sequenceNumber: 316
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+  timestamp: 2026-11-24T15:25:08.740Z
+  sequenceNumber: 317
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.ux-nav-edge-visibility-tests::covers::ux.librarycomponent.graph-edgegraph-edge-shape-ux
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.ux-nav-edge-visibility-tests
+    target: ux.librarycomponent.graph-edgegraph-edge-shape-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+  timestamp: 2026-11-24T15:25:08.824Z
+  sequenceNumber: 318
+- type: delete
+  elementId: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: ux
+  before:
+    id: 49c60c71-678a-42bf-9716-90cd286e348e
+    path: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphInspector / GraphEdgeInspector (UX)
+    description: "Detail-panel pair for a selected node or edge: title/badges,
+      description, key-value metadata, and (node) outgoing/incoming relationship
+      navigation links."
+    attributes:
+      type: display
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphInspector.tsx
+          symbol: GraphInspector
+    metadata:
+      created_at: 2026-09-18T14:39:46.233Z
+      updated_at: 2026-09-18T14:39:46.233Z
+      version: 1
+  timestamp: 2026-11-24T15:25:10.045Z
+  sequenceNumber: 319
+- type: relationship-delete
+  elementId: ux.uxlibrary.heimdall-graph-visualization-ux-library::aggregates::ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: ux
+  before:
+    source: ux.uxlibrary.heimdall-graph-visualization-ux-library
+    target: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    predicate: aggregates
+    layer: ux
+  timestamp: 2026-11-24T15:25:10.165Z
+  sequenceNumber: 320
+- type: relationship-delete
+  elementId: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux::satisfies::motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+  layerName: ux
+  before:
+    source: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    target: motivation.principle.theme-through-tokens-on-two-surfaces-never-color-filters
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+  timestamp: 2026-11-24T15:25:10.302Z
+  sequenceNumber: 321
+- type: relationship-delete
+  elementId: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux::depends-on::technology.systemsoftware.web-browser
+  layerName: ux
+  before:
+    source: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    target: technology.systemsoftware.web-browser
+    predicate: depends-on
+    layer: ux
+    targetLayer: technology
+  timestamp: 2026-11-24T15:25:10.443Z
+  sequenceNumber: 322
+- type: relationship-delete
+  elementId: ux.librarycomponent.adjacency-matrix-ux::composes::ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: ux
+  before:
+    source: ux.librarycomponent.adjacency-matrix-ux
+    target: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    predicate: composes
+    layer: ux
+  timestamp: 2026-11-24T15:25:10.549Z
+  sequenceNumber: 323
+- type: relationship-delete
+  elementId: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux::composes::ux.librarycomponent.icon-ux
+  layerName: ux
+  before:
+    source: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    target: ux.librarycomponent.icon-ux
+    predicate: composes
+    layer: ux
+  timestamp: 2026-11-24T15:25:10.653Z
+  sequenceNumber: 324
+- type: relationship-delete
+  elementId: ux.librarycomponent.reach-inspector-ux::composes::ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: ux
+  before:
+    source: ux.librarycomponent.reach-inspector-ux
+    target: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    predicate: composes
+    layer: ux
+  timestamp: 2026-11-24T15:25:10.768Z
+  sequenceNumber: 325
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.layered-matrix-tests::covers::ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.layered-matrix-tests
+    target: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+  timestamp: 2026-11-24T15:25:10.879Z
+  sequenceNumber: 326
+- type: relationship-delete
+  elementId: testing.testcoveragetarget.graph-canvas-rendering-and-interaction::covers::ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+  layerName: testing
+  before:
+    source: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    target: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
+    predicate: covers
+    layer: testing
+    targetLayer: ux
+  timestamp: 2026-11-24T15:25:10.979Z
+  sequenceNumber: 327
+- type: delete
+  elementId: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
+  layerName: application
+  before:
+    id: bcfa9365-11eb-4f3d-9720-c6a039e5d979
+    path: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
+    spec_node_id: application.applicationcollaboration
+    type: applicationcollaboration
+    layer_id: application
+    name: GraphCanvas Layout/Viewport Collaboration
+    description: The runtime collaboration between GraphCanvas, its selected layout
+      engine, usePanZoom, and (layout=galaxy) useGalaxySimulation — GraphCanvas
+      owns state and orchestrates calls into the others each render/frame.
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/components/GraphCanvas.tsx
+          symbol: GraphCanvas
+    metadata:
+      created_at: 2026-09-18T14:35:21.827Z
+      updated_at: 2026-09-18T14:35:21.827Z
+      version: 1
+  timestamp: 2026-11-24T15:25:12.978Z
+  sequenceNumber: 328
+- type: relationship-delete
+  elementId: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration::assigned-to::application.applicationinteraction.panzoom-gesture-handling
+  layerName: application
+  before:
+    source: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
+    target: application.applicationinteraction.panzoom-gesture-handling
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:25:13.230Z
+  sequenceNumber: 329
+- type: relationship-delete
+  elementId: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration::realizes::application.applicationservice.live-galaxy-simulation-service
+  layerName: application
+  before:
+    source: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
+    target: application.applicationservice.live-galaxy-simulation-service
+    predicate: realizes
+    layer: application
+  timestamp: 2026-11-24T15:25:13.371Z
+  sequenceNumber: 330
+- type: relationship-delete
+  elementId: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration::assigned-to::application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+  layerName: application
+  before:
+    source: application.applicationcollaboration.graph-canvas-layoutviewport-collaboration
+    target: application.applicationprocess.graph-render-and-layout-recomputation-pipeline
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T15:25:13.512Z
+  sequenceNumber: 331
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-graph-canvas-components-hover-state-cleanup-on-edge-hover-fires-with-undefined-when-a-b8d380eb::tests::application.applicationfunction.edge-pointer-handling
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-graph-canvas-components-hover-state-cleanup-on-edge-hover-fires-with-undefined-when-a-b8d380eb
+    target: application.applicationfunction.edge-pointer-handling
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T15:25:49.692Z
+  sequenceNumber: 332
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-graph-canvas-viewport-history-center-on-select-reports-a-center-on-select-navigation-a4796f46::tests::application.applicationfunction.programmatic-viewport-move-reporting
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-graph-canvas-viewport-history-center-on-select-reports-a-center-on-select-navigation-a4796f46
+    target: application.applicationfunction.programmatic-viewport-move-reporting
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T15:25:49.692Z
+  sequenceNumber: 333
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-graph-canvas-viewport-history-set-viewport-moves-the-view-silent-suppresses-the-08cbf9f6::tests::application.applicationfunction.programmatic-viewport-move-reporting
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-graph-canvas-viewport-history-set-viewport-moves-the-view-silent-suppresses-the-08cbf9f6
+    target: application.applicationfunction.programmatic-viewport-move-reporting
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-24T15:25:49.692Z
+  sequenceNumber: 334

@@ -5,9 +5,7 @@ product.feature.live-draggable-galaxy-simulation:
   type: feature
   layer_id: product
   name: Live Draggable Galaxy Simulation
-  description: Opt-in continuous elastic simulation for galaxy layout, so dragging
-    a node repositions its subtree in real time instead of freezing after one
-    computed layout.
+  description: Opt-in continuous elastic simulation for galaxy layout, so dragging a node repositions its subtree in real time instead of freezing after one computed layout.
   attributes:
     priority: medium
     status: delivered
@@ -28,8 +26,7 @@ product.feature.progressive-disclosure-via-node-collapseexpand:
   type: feature
   layer_id: product
   name: Progressive Disclosure via Node Collapse/Expand
-  description: Collapse a node to hide its structural descendants (and their
-    edges) for dense hierarchies, with a hidden-descendant-count badge.
+  description: Collapse a node to hide its structural descendants (and their edges) for dense hierarchies, with a hidden-descendant-count badge.
   attributes:
     priority: medium
     status: delivered
@@ -50,8 +47,7 @@ product.feature.node-and-edge-tooltips-and-popovers:
   type: feature
   layer_id: product
   name: Node and Edge Tooltips and Popovers
-  description: Render-prop tooltip/popover overlays anchored to a hovered/clicked
-    node or edge, positioned via the canvas's own pan/zoom transform.
+  description: Render-prop tooltip/popover overlays anchored to a hovered/clicked node or edge, positioned via the canvas's own pan/zoom transform.
   attributes:
     priority: low
     status: delivered
@@ -72,10 +68,7 @@ product.feature.joint-edge-label-placement:
   type: feature
   layer_id: product
   name: Joint Edge-Label Placement
-  description: "GraphCanvas places every edge label at once so labels do not print
-    over each other or the cards; a label with no clear spot is hidden until its
-    edge or an endpoint is in focus, and renderEdge receives
-    EdgeGeometry.labelHidden (PR #396, Unreleased in CHANGELOG.md)."
+  description: "GraphCanvas places every edge label at once so labels do not print over each other or the cards; a label with no clear spot is hidden until its edge or an endpoint is in focus, and renderEdge receives EdgeGeometry.labelHidden (PR #396, Unreleased in CHANGELOG.md)."
   attributes:
     priority: high
     status: delivered
@@ -90,9 +83,7 @@ product.feature.link-navigation-with-href:
   type: feature
   layer_id: product
   name: Link Navigation with href
-  description: Sidebar items, NavItem, QuickAccessTile and QuickAccessGrid items
-    take href and render real anchors (modified clicks open in a new tab), so
-    static and server-rendered sites navigate without client routing (0.13.0).
+  description: Sidebar items, NavItem, QuickAccessTile and QuickAccessGrid items take href and render real anchors (modified clicks open in a new tab), so static and server-rendered sites navigate without client routing (0.13.0).
   attributes:
     priority: medium
     status: delivered
@@ -107,10 +98,7 @@ product.feature.server-side-rendering-support:
   type: feature
   layer_id: product
   name: Server-Side Rendering Support
-  description: "Components render on a server and hydrate without mismatches:
-    useMediaQuery takes a serverValue and resolves after mount, ShellLayout,
-    Topbar and Statusbar leave data-mobile off until the client knows the
-    viewport, and timelines and calendars take a fixed now/today (0.13.0)."
+  description: "Components render on a server and hydrate without mismatches: useMediaQuery takes a serverValue and resolves after mount, ShellLayout, Topbar and Statusbar leave data-mobile off until the client knows the viewport, and timelines and calendars take a fixed now/today (0.13.0)."
   attributes:
     priority: high
     status: delivered
@@ -125,10 +113,7 @@ product.feature.per-component-imports:
   type: feature
   layer_id: product
   name: Per-Component Imports
-  description: The package is one module per source file and its JS imports no
-    CSS, so a bundler keeps only the imported components; a base stylesheet plus
-    per-component sheets are an opt-in alternative to the full stylesheet
-    (0.13.0).
+  description: The package is one module per source file and its JS imports no CSS, so a bundler keeps only the imported components; a base stylesheet plus per-component sheets are an opt-in alternative to the full stylesheet (0.13.0).
   attributes:
     priority: high
     status: delivered
@@ -143,10 +128,7 @@ product.feature.layered-graph-explorer:
   type: feature
   layer_id: product
   name: Layered Graph Explorer
-  description: A ready-made explorer (LayeredGraphExplorer) that switches between
-    the 3D stack, lanes, matrix and hive views with shared selection, reach
-    following, link-category filters, layer focus, camera presets and snapshot
-    save/restore.
+  description: A ready-made explorer (LayeredGraphExplorer) that switches between the 3D stack, lanes, matrix and hive views with shared selection, reach following, link-category filters, layer focus, camera presets and snapshot save/restore.
   attributes:
     priority: high
     status: delivered
@@ -154,25 +136,98 @@ product.feature.layered-graph-explorer:
     created_at: 2026-11-23T16:44:40.172Z
     updated_at: 2026-11-23T16:44:40.172Z
     version: 1
+product.feature.layout-progress-indicator:
+  id: fc1857ef-3fea-42b5-9383-1ddd1aacf9e9
+  path: product.feature.layout-progress-indicator
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Layout Progress Indicator
+  description: GraphCanvas reports idle/computing/simulating through onLayoutStateChange and can show a built-in indicator (showLayoutIndicator) while a large layout computes.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: showLayoutIndicator
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+product.feature.viewport-history-and-restore:
+  id: 68f9b1d6-934d-4e41-bf81-f7ea1333120d
+  path: product.feature.viewport-history-and-restore
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Viewport History and Restore
+  description: Callers can restore a viewport (initialViewport), drive it imperatively (viewportRef handle) and keep back/forward history from dwell and navigate events.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onViewportDwell
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+product.feature.edge-selection-and-inspection:
+  id: be64eca5-4eb5-4fbb-916f-ba92b1fac97e
+  path: product.feature.edge-selection-and-inspection
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Edge Selection and Inspection
+  description: Edges are hoverable and selectable like nodes, with tooltips and GraphEdgeInspector for the selected edge.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphCanvas.tsx
+        symbol: onEdgeSelect
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+product.feature.fullscreen-canvas:
+  id: 7774152b-f870-45d0-8581-4d2feff6803e
+  path: product.feature.fullscreen-canvas
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Fullscreen Canvas
+  description: GraphToolbar toggles fullscreen on the canvas or on a caller-chosen container (fullscreenContainerRef), refitting the view after the change.
+  attributes:
+    status: delivered
+    priority: medium
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/components/GraphToolbar.tsx
+  metadata:
+    created_at: 2026-11-24T19:01:20.529Z
+    updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
 product.feature.theme-slot:
-  id: 98ac34d7-f2b9-4c58-976a-74eab4a5f086
+  id: 4fa03e83-f450-46be-8fce-096cf95667df
   path: product.feature.theme-slot
   spec_node_id: product.feature
   type: feature
   layer_id: product
   name: Theme Slot
-  description: "An empty src/tokens/theme.css loaded after tokens.css in every
-    stylesheet entry point (index.ts, index.css, dist/style.css,
-    dist/css/base.css); accent-derived tokens (focus ring, accent alpha tints);
-    new token families for colors that were hard-coded (chart series and tones,
-    trace services, accent ink, shadow tint); TS and CSS color literals replaced
-    by token references; check:colors in CI; repo-guarded release, docs deploy
-    and visual regression. Issue #402."
+  description: "An empty src/tokens/theme.css loaded after tokens.css in every stylesheet entry point (index.ts, index.css, dist/style.css, dist/css/base.css); accent-derived tokens (focus ring, accent alpha tints); new token families for colors that were hard-coded (chart series and tones, trace services, accent ink, shadow tint); TS and CSS color literals replaced by token references; check:colors in CI; repo-guarded release, docs deploy and visual regression. Issue #402."
   attributes:
     priority: high
     status: delivered
     size: l
   metadata:
-    created_at: 2026-11-24T17:33:21.790Z
-    updated_at: 2026-11-24T17:33:21.790Z
+    created_at: 2026-11-24T21:49:32.045Z
+    updated_at: 2026-11-24T21:49:32.045Z
     version: 1

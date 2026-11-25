@@ -41,27 +41,6 @@ ux.librarycomponent.graph-node-ux:
     created_at: 2026-09-18T14:39:45.326Z
     updated_at: 2026-09-18T14:39:45.326Z
     version: 1
-ux.librarycomponent.graph-edgegraph-edge-shape-ux:
-  id: c0aeda3c-e6f2-4e47-aefc-bdc655fe2808
-  path: ux.librarycomponent.graph-edgegraph-edge-shape-ux
-  spec_node_id: ux.librarycomponent
-  type: librarycomponent
-  layer_id: ux
-  name: GraphEdge/GraphEdgeShape (UX)
-  description: "Default edge visual: curved or orthogonal line, directional arrow
-    marker, optional collision-cleared label pill, variant-based
-    (default/hot/irrelevant) styling."
-  attributes:
-    type: display
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphEdgeShape.tsx
-        symbol: GraphEdgeShape
-  metadata:
-    created_at: 2026-09-18T14:39:45.631Z
-    updated_at: 2026-09-18T14:39:45.631Z
-    version: 1
 ux.librarycomponent.graph-toolbar-ux:
   id: 6bcb4d41-f2b0-45a8-ab54-e86eb6ec3533
   path: ux.librarycomponent.graph-toolbar-ux
@@ -81,27 +60,6 @@ ux.librarycomponent.graph-toolbar-ux:
   metadata:
     created_at: 2026-09-18T14:39:45.933Z
     updated_at: 2026-09-18T14:39:45.933Z
-    version: 1
-ux.librarycomponent.graph-inspector-graph-edge-inspector-ux:
-  id: 49c60c71-678a-42bf-9716-90cd286e348e
-  path: ux.librarycomponent.graph-inspector-graph-edge-inspector-ux
-  spec_node_id: ux.librarycomponent
-  type: librarycomponent
-  layer_id: ux
-  name: GraphInspector / GraphEdgeInspector (UX)
-  description: "Detail-panel pair for a selected node or edge: title/badges,
-    description, key-value metadata, and (node) outgoing/incoming relationship
-    navigation links."
-  attributes:
-    type: display
-  source_reference:
-    provenance: extracted
-    locations:
-      - file: src/components/GraphInspector.tsx
-        symbol: GraphInspector
-  metadata:
-    created_at: 2026-09-18T14:39:46.233Z
-    updated_at: 2026-09-18T14:39:46.233Z
     version: 1
 ux.librarycomponent.graph-collapse-control-ux:
   id: 7bb0aa42-8b6c-441d-bf64-a25f868a86c3
@@ -2424,4 +2382,107 @@ ux.librarycomponent.trace-viewer:
   metadata:
     created_at: 2026-11-23T16:44:48.925Z
     updated_at: 2026-11-23T16:44:48.925Z
+    version: 1
+ux.librarycomponent.layered-graph-context-ux:
+  id: 18da62e9-e7fe-4d67-b9d4-ef4cea60a386
+  path: ux.librarycomponent.layered-graph-context-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: LayeredGraphContext (UX)
+  description: A React context that shares one useLayeredGraph result with every
+    layered view and control below it, so they show the same selection, filters
+    and follow depth.
+  attributes:
+    type: display
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/hooks/useLayeredGraph.ts
+        symbol: LayeredGraphContext
+  metadata:
+    created_at: 2026-11-24T19:01:20.526Z
+    updated_at: 2026-11-24T19:01:20.526Z
+    version: 1
+ux.librarycomponent.graph-edge-ux:
+  id: 5c847a7e-73c0-4c53-812c-3a7755a9087a
+  path: ux.librarycomponent.graph-edge-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphEdge (UX)
+  description: "Standalone edge component for use outside GraphCanvas's own edge
+    renderer: computes its own path and draws it with GraphEdgeShape."
+  attributes:
+    type: display
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphEdge.tsx
+        symbol: GraphEdge
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+ux.librarycomponent.graph-edge-shape-ux:
+  id: 504322a0-c88e-479e-b885-1ce229838f23
+  path: ux.librarycomponent.graph-edge-shape-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphEdgeShape (UX)
+  description: "Low-level SVG edge drawing: line or curve, arrow markers per
+    variant, hit-target path and a collision-cleared label pill; used by
+    GraphCanvas and GraphEdge, and by custom renderEdge callbacks."
+  attributes:
+    type: display
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphEdgeShape.tsx
+        symbol: GraphEdgeShape
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+ux.librarycomponent.graph-inspector-ux:
+  id: 82403aaf-8d74-43be-9c2d-9363e9024dc6
+  path: ux.librarycomponent.graph-inspector-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphInspector (UX)
+  description: "Detail panel for a selected node: title, kind and domain badges,
+    description, key-value metadata, and outgoing and incoming relationship
+    links."
+  attributes:
+    type: display
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphInspector.tsx
+        symbol: GraphInspector
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+ux.librarycomponent.graph-edge-inspector-ux:
+  id: a075762a-2a74-4fdc-b288-f69b417412e6
+  path: ux.librarycomponent.graph-edge-inspector-ux
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: GraphEdgeInspector (UX)
+  description: "Detail panel for a selected edge: predicate or title, source and
+    target endpoint buttons, weight and scalar metadata."
+  attributes:
+    type: display
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphEdgeInspector.tsx
+        symbol: GraphEdgeInspector
+  metadata:
+    created_at: 2026-11-24T19:01:20.527Z
+    updated_at: 2026-11-24T19:01:20.527Z
     version: 1
