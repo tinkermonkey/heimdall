@@ -247,9 +247,7 @@ function overlapsIn(scene: BranchMapScene): string[] {
   return found
 }
 
-// Needs piece 1's layout (tinkermonkey/heimdall#412): the piece 0 stub places no labels, so this
-// would pass without checking them. Turn it on when the real layoutBranchMap is merged.
-describe.skip('branch map layout > no stations, labels or groups overlap on the House snapshot', () => {
+describe('branch map layout > no stations, labels or groups overlap on the House snapshot', () => {
   for (const horizon of ['forward', 'all'] as const) {
     it(`all seven projects, ${horizon === 'forward' ? 'from now' : 'whole history'}`, () => {
       const scene = branchMapScene(houseToBranchMap(SNAPSHOT, { horizon }))
@@ -258,6 +256,7 @@ describe.skip('branch map layout > no stations, labels or groups overlap on the 
       const named = new Set([...scene.labels, ...scene.unplacedLabels].map((l) => `${l.role}:${l.target}`))
       for (const s of scene.stations) expect(named.has(`station:${s.id}`)).toBe(true)
       for (const g of scene.groups) expect(named.has(`group:${g.id}`)).toBe(true)
+      expect(scene.labels.length).toBeGreaterThan(scene.stations.length / 2)
       expect(scene.groups.every((g) => g.lanes <= scene.options.maxLanes)).toBe(true)
       expect(overlapsIn(scene)).toEqual([])
     })

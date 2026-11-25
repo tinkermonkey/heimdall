@@ -96,13 +96,19 @@ test.describe('BranchMap on House data', () => {
     await expect(selection(page)).toHaveText('selected none')
     await expect(map(page).locator(`[data-line-id="${id}"]`)).toHaveCount(0)
 
+    // With anything of the group expanded, its toggle collapses it all again.
+    const collapse = map(page).getByRole('button', { name: /^Collapse Documentation Robotics:/ })
+    await collapse.click()
+    await expect(expandedIds(page)).toHaveText('expanded none')
+    await expect(bundles(page)).toHaveCount(before)
+
     // The group toggle draws every line, and collapses again.
     await map(page).getByRole('button', { name: /^Expand Documentation Robotics:/ }).click()
-    await expect(expandedIds(page)).toContainText('documentation_robotics')
+    await expect(expandedIds(page)).toHaveText('expanded documentation_robotics')
     await expect(bundles(page)).toHaveCount(0)
     await expect(page.getByTestId('branch-map-caption')).toContainText(' 0 bundled')
-    await map(page).getByRole('button', { name: /^Collapse Documentation Robotics:/ }).click()
-    await expect(expandedIds(page)).not.toContainText('documentation_robotics')
+    await collapse.click()
+    await expect(expandedIds(page)).toHaveText('expanded none')
   })
 
   test('the inspector links to what a station waits on, in another project', async ({ page }) => {
@@ -116,6 +122,9 @@ test.describe('BranchMap on House data', () => {
 })
 
 test.describe('BranchMap on House data: visual', () => {
+  // Room for three projects side by side without panning.
+  test.use({ viewport: { width: 1680, height: 1200 } })
+
   for (const dark of [false, true]) {
     test(`three projects from now, ${dark ? 'dark' : 'light'} canvas`, async ({ page }) => {
       await open(page, THREE + (dark ? '&dark=1' : ''))

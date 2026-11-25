@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-// @ts-expect-error -- BranchMap is piece 2 of the branch map POC (tinkermonkey/heimdall#413), not in this branch yet. Remove this line when it merges.
 import { BranchMap } from '../../components/BranchMap'
 import { Chip, type ChipVariant } from '../../components/Chip'
 import { KVGrid } from '../../components/KVGrid'
