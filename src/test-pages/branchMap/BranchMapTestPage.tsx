@@ -27,8 +27,8 @@ const ALL = DATA.projects.map((p) => p.id)
 const DEFAULT_PROJECTS = ['heimdall', 'dr_viewer', 'context_studio']
 const csv = (key: string) => params.get(key)?.split(',').filter(Boolean)
 
-/** What BranchMap passes with a selection. A bundle or "N more" line is not in the input, so its members come from here. */
-interface SelectedItem {
+/** The part of BranchMapItem the page reads. A bundle or "N more" line is not in the input, so the tooltip takes its members from here. */
+interface MapItem {
   kind: 'station' | 'line' | 'link' | 'group'
   id: string
   line?: { kind: string; label: string; members: string[] }
@@ -52,7 +52,6 @@ export default function BranchMapTestPage() {
   })
   const [expanded, setExpanded] = useState<string[]>(csv('expand') ?? [])
   const [selected, setSelected] = useState<string | null>(params.get('select'))
-  const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null)
   const [dark, setDark] = useState(params.get('dark') === '1')
 
   useEffect(() => {
@@ -77,10 +76,6 @@ export default function BranchMapTestPage() {
 
   const toggleProject = (p: string) =>
     setProjects((cur) => (cur.includes(p) ? (cur.length > 1 ? cur.filter((q) => q !== p) : cur) : ALL.filter((q) => cur.includes(q) || q === p)))
-  const select = (id: string | null, item?: SelectedItem | null) => {
-    setSelected(id)
-    setSelectedItem(item ?? null)
-  }
   const bundled = layout.groups.reduce((a, g) => a + g.counts.bundled, 0)
 
   return (
@@ -132,10 +127,10 @@ export default function BranchMapTestPage() {
           expanded={expanded}
           onExpandedChange={setExpanded}
           selectedId={selected}
-          onSelect={(id: string | null, item: SelectedItem | null) => select(id, item)}
-          renderTooltip={(item: SelectedItem) => <Tooltip item={item} index={index} />}
+          onSelect={(id: string | null) => setSelected(id)}
+          renderTooltip={(item: MapItem) => <Tooltip item={item} index={index} />}
         />
-        <Inspector selected={selected} item={selectedItem} index={index} expanded={expanded} onExpand={setExpanded} onSelect={(id) => select(id)} />
+        <Inspector selected={selected} index={index} expanded={expanded} onSelect={setSelected} />
       </div>
       {layout.issues.length > 0 && (
         <details className="bmt__issues">
@@ -169,7 +164,7 @@ function nameOf(index: Index, id: string): string {
   return index.stations.get(id)?.label ?? index.lines.get(id)?.label ?? (ALL.includes(id) ? `${projectName(id)} start` : DATA.milestones.find((m) => m.ref === id)?.name ?? DATA.gates.find((g) => g.ref === id)?.name ?? id)
 }
 
-function Tooltip({ item, index }: { item: SelectedItem; index: Index }) {
+function Tooltip({ item, index }: { item: MapItem; index: Index }) {
   const st = index.stations.get(item.id)
   const ws = lineRecord(index.lines.get(item.id))
   if (st) {
@@ -196,7 +191,7 @@ function Tooltip({ item, index }: { item: SelectedItem; index: Index }) {
       <div className="bmt__tip">
         <span className="bmt__eyebrow">{item.line.kind === 'more' ? 'MORE LINES' : 'BUNDLE'}</span>
         <strong>{item.line.label}</strong>
-        <span>{`${item.line.members.length} workstreams; select to expand`}</span>
+        <span>{`${item.line.members.length} workstreams; click or Enter to draw them`}</span>
       </div>
     )
   }
@@ -209,14 +204,12 @@ function Tooltip({ item, index }: { item: SelectedItem; index: Index }) {
 
 interface InspectorProps {
   selected: string | null
-  item: SelectedItem | null
   index: Index
   expanded: string[]
-  onExpand: (ids: string[]) => void
   onSelect: (id: string) => void
 }
 
-function Inspector({ selected, item, index, expanded, onExpand, onSelect }: InspectorProps) {
+function Inspector({ selected, index, expanded, onSelect }: InspectorProps) {
   const st = selected ? index.stations.get(selected) : undefined
   const line = selected ? index.lines.get(selected) : undefined
   const link = selected ? index.links.get(selected) : undefined
@@ -304,17 +297,6 @@ function Inspector({ selected, item, index, expanded, onExpand, onSelect }: Insp
             { key: 'DRAWN', value: expanded.includes(selected) ? 'every line' : 'bundled past the lane budget' },
           ]}
         />
-      </>
-    )
-  } else if (selected && item?.line) {
-    const members = item.line.members
-    body = (
-      <>
-        <div className="bmt__eyebrow">{item.line.kind === 'more' ? 'MORE LINES' : 'BUNDLE'}</div>
-        <h2 className="bmt__ititle">{item.line.label}</h2>
-        <p className="bmt__muted">{`${members.length} workstreams drawn as one line.`}</p>
-        <button type="button" className="bmt__ref" onClick={() => onExpand([...new Set([...expanded, selected])])}>Draw them all</button>
-        <div className="bmt__refs">{members.map(refLink)}</div>
       </>
     )
   } else {

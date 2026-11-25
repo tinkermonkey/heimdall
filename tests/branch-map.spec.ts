@@ -5,15 +5,18 @@ import { test, expect, type Page } from '@playwright/test'
 // houseBranchMapAdapter.test.ts and the layout in src/utils/__tests__/branchMap.test.ts; this
 // checks selection, the keyboard, expanding bundles, and both canvases.
 //
-// Accessible names follow BranchMap's: a station is "<label>, <kind>, <status>, …", a line
-// "<label>, line, <status>, …", a bundle "<label>, <n> lines, <group>; Enter expands", a group's
-// toggle "Expand <group>: …" / "Collapse <group>: …".
+// Hooks follow BranchMap's: stations and lines are role="button" with accessible names
+// "<label>, <stop|decision>, <status>, …" and "<label>, line, <status>, …"; lines carry
+// data-line-id and data-kind (line | bundle | more | spur), links data-link-id; a bundle or
+// "N more" line expands when activated instead of selecting; a group's toggle is named
+// "Expand <group>: …" / "Collapse <group>: …". The page passes data-testid through to the root.
 
 const BASE = '/?example=branch-map'
 const THREE = '&projects=heimdall,dr_viewer,context_studio'
 const DR = '&projects=documentation_robotics'
 
 async function open(page: Page, query = '') {
+  // Labels are measured in the map's fonts and re-measured when they load.
   const errors: string[] = []
   page.on('console', (msg) => { if (msg.type() === 'error') errors.push(msg.text()) })
   page.on('pageerror', (err) => errors.push(String(err)))
@@ -21,6 +24,7 @@ async function open(page: Page, query = '') {
   await page.waitForLoadState('networkidle')
   await expect(map(page)).toBeVisible()
   await expect(map(page).getByRole('button').first()).toBeVisible()
+  await page.evaluate(() => document.fonts.ready)
   return errors
 }
 
@@ -29,7 +33,7 @@ const selection = (page: Page) => page.getByTestId('branch-map-selection')
 const expandedIds = (page: Page) => page.getByTestId('branch-map-expanded')
 const station = (page: Page, label: string) => map(page).getByRole('button', { name: new RegExp(`^${label}, (stop|decision),`) })
 const line = (page: Page, label: string) => map(page).getByRole('button', { name: new RegExp(`^${label}, line,`) })
-const bundles = (page: Page) => map(page).getByRole('button', { name: /, \d+ lines, .*; Enter expands$/ })
+const bundles = (page: Page) => map(page).locator('[data-kind="bundle"], [data-kind="more"]')
 
 test.describe('BranchMap on House data', () => {
   test('draws the three projects from now with no console errors', async ({ page }) => {
@@ -40,23 +44,21 @@ test.describe('BranchMap on House data', () => {
     expect(errors).toEqual([])
   })
 
-  test('click selects a station and a line, again clears; the inspector shows the House record', async ({ page }) => {
+  // Stations are clicked (the centre of their box is the mark); lines are reached by keyboard,
+  // since the centre of a line's box is usually off its stroke.
+  test('click selects a station, again clears; the inspector shows the House record', async ({ page }) => {
     await open(page, THREE)
-    await station(page, 'DR model gaps closed').click()
+    const target = station(page, 'DR model gaps closed')
+    await target.click()
     await expect(selection(page)).toHaveText('selected 2:01a21304-8568-7764-8fd8-9e59109b856b')
     const inspector = page.getByRole('complementary', { name: 'Inspector' })
     await expect(inspector.getByRole('heading', { name: 'DR model gaps closed' })).toBeVisible()
     await expect(inspector).toContainText('MILESTONE')
-
-    await line(page, 'Close the DR model gaps').click()
-    await expect(inspector).toContainText('WORKSTREAM')
-    await expect(inspector.getByRole('heading', { name: 'Close the DR model gaps' })).toBeVisible()
-
-    await line(page, 'Close the DR model gaps').click()
+    await target.click()
     await expect(selection(page)).toHaveText('selected none')
   })
 
-  test('keyboard: Tab reaches the map items, Enter selects, Escape clears', async ({ page }) => {
+  test('keyboard: Enter selects a station, Space a line, Escape clears', async ({ page }) => {
     await open(page, THREE)
     const target = station(page, 'DR model gaps closed')
     await target.focus()
@@ -64,6 +66,15 @@ test.describe('BranchMap on House data', () => {
     await page.keyboard.press('Enter')
     await expect(selection(page)).toHaveText('selected 2:01a21304-8568-7764-8fd8-9e59109b856b')
     await expect(target).toHaveAttribute('aria-pressed', 'true')
+
+    const stream = line(page, 'Close the DR model gaps')
+    await stream.focus()
+    await page.keyboard.press('Space')
+    await expect(stream).toHaveAttribute('aria-pressed', 'true')
+    const inspector = page.getByRole('complementary', { name: 'Inspector' })
+    await expect(inspector).toContainText('WORKSTREAM')
+    await expect(inspector.getByRole('heading', { name: 'Close the DR model gaps' })).toBeVisible()
+
     await page.keyboard.press('Escape')
     await expect(selection(page)).toHaveText('selected none')
   })
@@ -75,11 +86,15 @@ test.describe('BranchMap on House data', () => {
     const before = await bundles(page).count()
     expect(before).toBeGreaterThan(0)
 
-    // Activating a bundle draws its lines.
-    await bundles(page).first().focus()
+    // Activating a bundle draws its lines instead of selecting it.
+    const first = bundles(page).first()
+    const id = await first.getAttribute('data-line-id')
+    await expect(first).toHaveAttribute('aria-expanded', 'false')
+    await first.focus()
     await page.keyboard.press('Enter')
-    await expect(expandedIds(page)).not.toHaveText('expanded none')
-    await expect(bundles(page)).toHaveCount(before - 1)
+    await expect(expandedIds(page)).toHaveText(`expanded ${id}`)
+    await expect(selection(page)).toHaveText('selected none')
+    await expect(map(page).locator(`[data-line-id="${id}"]`)).toHaveCount(0)
 
     // The group toggle draws every line, and collapses again.
     await map(page).getByRole('button', { name: /^Expand Documentation Robotics:/ }).click()
