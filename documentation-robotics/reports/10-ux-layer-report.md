@@ -18,9 +18,9 @@ User interface components, screens, and user experience elements.
 | ------------------------- | ----- |
 | Elements                  | 126   |
 | Intra-Layer Relationships | 317   |
-| Inter-Layer Relationships | 549   |
-| Inbound Relationships     | 305   |
-| Outbound Relationships    | 244   |
+| Inter-Layer Relationships | 572   |
+| Inbound Relationships     | 308   |
+| Outbound Relationships    | 264   |
 
 **Cross-Layer References**:
 
@@ -188,6 +188,9 @@ flowchart TB
 
 | Relationship ID                                            | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer   | Predicate    | Cardinality  | Strength |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.heatmap`                                                               | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.line-chart`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.status-timeline`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-accessible-names-304-edge-popover-dialog-is-named-by-edge-and-node-labels`                       | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-accessible-names-304-interactive-edges-are-named-by-node-labels-not-ids`                         | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.graph-canvas-accessible-names-304-node-popover-dialog-is-named-by-the-node-label`                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `tests`      | many-to-many | medium   |
@@ -501,6 +504,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.alert-strip`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.alert-strip`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.app-title`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.app-title`                                                                                                       | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.app-title`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.asset-card`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.asset-card`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -511,8 +515,10 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.badge`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.badge`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-chart`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-chart`                                                                                                       | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-chart`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-h`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-v`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-v`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -528,16 +534,21 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chart-wrapper`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chart-wrapper`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-composer`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-composer`                                                                                                   | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-composer`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-container`                                                                                                  | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-container`                                                                                                  | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-container`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-divider`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-divider`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-divider`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-markdown-content`                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-markdown-content`                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-message`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-message`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-message`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chat-suggestions`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-suggestions`                                                                                                | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chat-suggestions`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.chip`                                                                                                            | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.chip`                                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -550,8 +561,10 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.detail-drawer`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.detail-drawer`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.diff-viewer`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.diff-viewer`                                                                                                     | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.diff-viewer`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.donut`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.donut`                                                                                                           | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.donut`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.drawer`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.drawer`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -586,6 +599,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-node-ux`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
@@ -593,6 +607,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hash-set-diff`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hash-set-diff`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.heatmap`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.heatmap`                                                                                                         | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.heatmap`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.hierarchy-row`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.hierarchy-row`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -606,6 +621,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.inspector-panel`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.inspector-panel`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.kanban-board`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.kanban-board`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.kanban-board`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.key-value-editor`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.key-value-editor`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -622,6 +638,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.line-chart`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.line-chart`                                                                                                      | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.line-chart`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.lineage-rail`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.lineage-rail`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -630,6 +647,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.log-stream`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.log-stream`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.map-canvas`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.map-canvas`                                                                                                      | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.map-canvas`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.metric-row`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.metric-row`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -685,10 +703,12 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.sidebar`                                                                                                         | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.sidebar`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.sparkline`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.sparkline`                                                                                                       | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.sparkline`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.split-pane`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.split-pane`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stacked-bar`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stacked-bar`                                                                                                     | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stacked-bar`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.stat-grid`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.stat-grid`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -697,6 +717,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.status-badge`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.status-badge`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.status-timeline`                                                                                                 | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.status-timeline`                                                                                                 | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.status-timeline`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.statusbar`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.statusbar`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -723,8 +744,10 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.topbar`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.topbar`                                                                                                          | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.topology-node`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.topology-node`                                                                                                   | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.topology-node`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.trace-viewer`                                                                                                    | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.trace-viewer`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.trace-viewer`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.tri-state`                                                                                                       | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.tri-state`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -975,14 +998,15 @@ Brand row with the amber mark, application name, optional version tag, and an op
 
 #### Relationships
 
-| Type        | Related Element                                         | Predicate    | Direction |
-| ----------- | ------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.shell-framework-components` | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`                 | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas`     | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.shell-layout`                      | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.sidebar`                           | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                              | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.shell-framework-components`         | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.shell-layout`                              | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.sidebar`                                   | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### AssetCard {#assetcard}
 
@@ -1108,12 +1132,13 @@ Grouped multi-series vertical bar chart with built-in axes and an optional legen
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### BarH {#barh}
 
@@ -1133,12 +1158,13 @@ Horizontal bar chart for ranked categories: a label column, an inset track and a
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### BarV {#barv}
 
@@ -1358,14 +1384,15 @@ Controlled message input with context chips, attachment chips, a file picker and
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.button`                        | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.button`                                    | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatContainer {#chatcontainer}
 
@@ -1385,12 +1412,13 @@ Chat panel composing optional bot tabs, a scrolling message thread and a compose
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatDivider {#chatdivider}
 
@@ -1410,12 +1438,13 @@ Horizontal rule with a centered label for separating conversation sections (date
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatMarkdownContent {#chatmarkdowncontent}
 
@@ -1460,13 +1489,14 @@ A single chat turn (user or bot) with an optional inline tool call and reasoning
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### ChatSuggestions {#chatsuggestions}
 
@@ -1486,12 +1516,13 @@ Row of quick-reply chips. Once one is selected, the others are disabled.
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chat-components`        | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chat-components`                    | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Chip {#chip}
 
@@ -1653,15 +1684,16 @@ Tabbed diff panel that switches between a set diff (`DiffViewer.HashSet`, added 
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.diff-viewer-components` | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.hash-set-diff`                 | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.side-by-side-diff`             | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.diff-viewer-components`             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.hash-set-diff`                             | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.side-by-side-diff`                         | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                              | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Donut {#donut}
 
@@ -1681,12 +1713,13 @@ Ring chart for composition, with optional center value and eyebrow label. No leg
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Drawer {#drawer}
 
@@ -2177,6 +2210,7 @@ Default node visual: label, kind badge, domain-color swatch, selection ring, and
 | inter-layer | `testing.testcoveragetarget.graph-canvas-center-on-select`           | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `covers`     | inbound   |
 | inter-layer | `technology.systemsoftware.web-browser`                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`      | `satisfies`  | outbound  |
 | inter-layer | `motivation.principle.two-surface-shell-and-canvas`                  | `satisfies`  | outbound  |
 | inter-layer | `motivation.requirement.graph-nodes-and-edges-have-accessible-names` | `satisfies`  | outbound  |
 | intra-layer | `ux.librarycomponent.graph-canvas-ux`                                | `composes`   | inbound   |
@@ -2254,13 +2288,15 @@ Three-column set diff (Added / Removed / Kept, with counts) for comparing two ve
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.map-canvas`             | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.map-canvas`                         | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### HierarchyRow {#hierarchyrow}
 
@@ -2464,16 +2500,17 @@ Column board of cards with pointer drag-and-drop, keyboard moves, per-column cou
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.kanban-board`           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.chip`                          | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.panel`                         | `composes`   | outbound  |
-| intra-layer | `ux.librarycomponent.version-pill`                  | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.kanban-board`                       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.chip`                                      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.panel`                                     | `composes`   | outbound  |
+| intra-layer | `ux.librarycomponent.version-pill`                              | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### KeyValueEditor {#keyvalueeditor}
 
@@ -2729,13 +2766,15 @@ Multi-series line chart with optional area fill, axes, grid, threshold line, eve
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle` | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.line-chart-data-toggle`             | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### LineageRail {#lineagerail}
 
@@ -2839,13 +2878,14 @@ Pan/zoom Web Mercator map that renders pins, a track polyline, or a heatmap, ove
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.map-canvas`             | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.pan-and-zoom`           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.map-canvas`                         | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pan-and-zoom`                       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### MetricRow {#metricrow}
 
@@ -3587,14 +3627,15 @@ Shape-only trend line (88 × 28 by default) for tiles, table cells and cards. No
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.metric-row`                    | `composes`   | inbound   |
-| intra-layer | `ux.librarycomponent.stat-tile`                     | `composes`   | inbound   |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.metric-row`                                | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.stat-tile`                                 | `composes`   | inbound   |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### SplitPane {#splitpane}
 
@@ -3640,12 +3681,13 @@ Vertical stacked bars, one stack per category, with optional 100% normalized mod
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### StatGrid {#statgrid}
 
@@ -3743,12 +3785,14 @@ Gantt-style status history: one horizontal track per service, colored segments a
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.chart-components`       | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`        | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.chart-components`                   | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### Statusbar {#statusbar}
 
@@ -4071,6 +4115,7 @@ Infrastructure/service node card with status dot and metric progress bars. Suppo
 | inter-layer | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`       | `covers`     | inbound   |
 | inter-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `covers`     | inbound   |
 | inter-layer | `technology.systemsoftware.web-browser`                              | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`      | `satisfies`  | outbound  |
 | inter-layer | `motivation.principle.two-surface-shell-and-canvas`                  | `satisfies`  | outbound  |
 | intra-layer | `ux.uxlibrary.heimdall-ui`                                           | `aggregates` | inbound   |
 
@@ -4092,14 +4137,15 @@ Distributed-trace waterfall: span tree, service-colored timeline with parent-to-
 
 #### Relationships
 
-| Type        | Related Element                                     | Predicate    | Direction |
-| ----------- | --------------------------------------------------- | ------------ | --------- |
-| inter-layer | `testing.testcoveragetarget.trace-adapters`         | `covers`     | inbound   |
-| inter-layer | `testing.testcoveragetarget.trace-viewer`           | `covers`     | inbound   |
-| inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
-| inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
-| intra-layer | `ux.librarycomponent.icon`                          | `composes`   | outbound  |
-| intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+| Type        | Related Element                                                 | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.trace-adapters`                     | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.trace-viewer`                       | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                         | `depends-on` | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token` | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`             | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                      | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                      | `aggregates` | inbound   |
 
 ### TriState {#tristate}
 
@@ -4506,4 +4552,4 @@ The @tinkermonkey/heimdall-ui package: the full public component inventory expor
 
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0

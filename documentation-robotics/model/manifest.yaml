@@ -1,9 +1,9 @@
 version: 0.1.0
 schema: documentation-robotics-v1
-cli_version: 0.7.1
+cli_version: 0.8.0
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-24T20:12:20.893Z
+updated: 2026-11-25T02:07:35.719Z
 project:
   name: heimdall-ux
   description: ""
@@ -16,12 +16,12 @@ layers:
     path: documentation-robotics/model/01_motivation/
     enabled: true
     elements:
+      constraint: 4
       driver: 1
       goal: 5
-      principle: 4
-      requirement: 17
-      stakeholder: 3
-      constraint: 4
+      principle: 5
+      requirement: 19
+      stakeholder: 4
   business:
     order: 2
     name: Business
@@ -38,8 +38,8 @@ layers:
     path: documentation-robotics/model/03_product/
     enabled: true
     elements:
-      feature: 12
-      persona: 2
+      feature: 13
+      persona: 3
       softwarecapability: 22
   security:
     order: 4
@@ -48,9 +48,9 @@ layers:
     enabled: true
     elements:
       countermeasure: 3
-      threat: 3
-      securitymodel: 1
       secureresource: 2
+      securitymodel: 1
+      threat: 3
   application:
     order: 5
     name: Application
@@ -59,7 +59,7 @@ layers:
     elements:
       applicationcomponent: 3
       applicationevent: 9
-      applicationfunction: 59
+      applicationfunction: 58
       applicationinteraction: 1
       applicationprocess: 1
       applicationservice: 44
@@ -70,18 +70,17 @@ layers:
     path: documentation-robotics/model/06_technology/
     enabled: true
     elements:
-      artifact: 32
+      artifact: 34
+      node: 1
+      systemsoftware: 1
       technologyfunction: 6
       technologyprocess: 6
       technologyservice: 2
-      node: 1
-      systemsoftware: 1
   api:
     order: 7
     name: Api
     path: documentation-robotics/model/07_api/
     enabled: true
-    elements: {}
   data-model:
     order: 8
     name: Data model
@@ -122,17 +121,17 @@ layers:
     path: documentation-robotics/model/13_testing/
     enabled: true
     elements:
+      contextvariation: 1
       coveragerequirement: 6
       coveragesummary: 1
-      testcasesketch: 1690
-      testcoveragemodel: 2
-      testcoveragetarget: 85
+      environmentfactor: 1
       inputpartitionselection: 2
+      inputspacepartition: 2
       partitionvalue: 4
       targetinputfield: 2
-      contextvariation: 1
-      environmentfactor: 1
-      inputspacepartition: 2
+      testcasesketch: 1693
+      testcoveragemodel: 2
+      testcoveragetarget: 85
 changeset_history:
   - name: wire-technology-orphans
     committed_at: 2026-09-18T14:45:21.201Z
@@ -142,4 +141,7 @@ changeset_history:
     action: committed
   - name: reconcile-pilot-with-model-audit
     committed_at: 2026-11-24T20:12:20.893Z
+    action: committed
+  - name: replay-theme-slot-onto-pilot
+    committed_at: 2026-11-25T02:07:35.719Z
     action: committed

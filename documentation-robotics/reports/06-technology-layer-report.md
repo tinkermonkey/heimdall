@@ -16,8 +16,8 @@ Infrastructure, platforms, systems, and technology components.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 48    |
-| Intra-Layer Relationships | 58    |
+| Elements                  | 50    |
+| Intra-Layer Relationships | 65    |
 | Inter-Layer Relationships | 117   |
 | Inbound Relationships     | 115   |
 | Outbound Relationships    | 2     |
@@ -38,16 +38,17 @@ Infrastructure, platforms, systems, and technology components.
 | `technology.artifact.base-stylesheet`                                            | `artifact`           | 4             |
 | `technology.artifact.bundled-stylesheet`                                         | `artifact`           | 3             |
 | `technology.artifact.ci-dev-server-script`                                       | `artifact`           | 1             |
+| `technology.artifact.color-literal-check-script`                                 | `artifact`           | 1             |
 | `technology.artifact.d3-delaunay`                                                | `artifact`           | 1             |
 | `technology.artifact.d3-hierarchy`                                               | `artifact`           | 1             |
-| `technology.artifact.design-token-stylesheet`                                    | `artifact`           | 1             |
+| `technology.artifact.design-token-stylesheet`                                    | `artifact`           | 4             |
 | `technology.artifact.docs-showcase-site`                                         | `artifact`           | 2             |
 | `technology.artifact.eslint`                                                     | `artifact`           | 1             |
 | `technology.artifact.font-bundle`                                                | `artifact`           | 2             |
 | `technology.artifact.font-download-script`                                       | `artifact`           | 1             |
 | `technology.artifact.galaxy-drag-benchmark-script`                               | `artifact`           | 1             |
 | `technology.artifact.heimdall-agent-environment-image`                           | `artifact`           | 2             |
-| `technology.artifact.heimdall-ui-package`                                        | `artifact`           | 19            |
+| `technology.artifact.heimdall-ui-package`                                        | `artifact`           | 22            |
 | `technology.artifact.layered-graph-fixture-builder`                              | `artifact`           | 1             |
 | `technology.artifact.legacy-css-forwarder`                                       | `artifact`           | 2             |
 | `technology.artifact.per-component-stylesheets`                                  | `artifact`           | 4             |
@@ -61,6 +62,7 @@ Infrastructure, platforms, systems, and technology components.
 | `technology.artifact.router-benchmark-script`                                    | `artifact`           | 1             |
 | `technology.artifact.switchyard-orchestrator`                                    | `artifact`           | 1             |
 | `technology.artifact.tailwind-css`                                               | `artifact`           | 2             |
+| `technology.artifact.theme-stylesheet`                                           | `artifact`           | 3             |
 | `technology.artifact.type-declarations`                                          | `artifact`           | 2             |
 | `technology.artifact.type-script-compiler-configuration`                         | `artifact`           | 2             |
 | `technology.artifact.vite`                                                       | `artifact`           | 2             |
@@ -73,9 +75,9 @@ Infrastructure, platforms, systems, and technology components.
 | `technology.technologyfunction.published-package-verification`                   | `technologyfunction` | 1             |
 | `technology.technologyfunction.stylesheet-load-order-check`                      | `technologyfunction` | 1             |
 | `technology.technologyfunction.stylesheet-splitting-and-ordering`                | `technologyfunction` | 3             |
-| `technology.technologyprocess.ci-checks-workflow`                                | `technologyprocess`  | 4             |
-| `technology.technologyprocess.deploy-docs-to-git-hub-pages`                      | `technologyprocess`  | 1             |
-| `technology.technologyprocess.npm-run-build-vite-build`                          | `technologyprocess`  | 5             |
+| `technology.technologyprocess.ci-checks-workflow`                                | `technologyprocess`  | 5             |
+| `technology.technologyprocess.deploy-docs-to-git-hub-pages`                      | `technologyprocess`  | 2             |
+| `technology.technologyprocess.npm-run-build-vite-build`                          | `technologyprocess`  | 7             |
 | `technology.technologyprocess.npm-test-npm-run-testunit`                         | `technologyprocess`  | 4             |
 | `technology.technologyprocess.release-to-npm`                                    | `technologyprocess`  | 3             |
 | `technology.technologyprocess.update-visual-snapshots-workflow`                  | `technologyprocess`  | 1             |
@@ -336,6 +338,26 @@ scripts/ci-dev-server.sh: starts the Vite dev server for Playwright in CI from a
 | ----------- | -------------------------------------------------------- | ---------- | --------- |
 | intra-layer | `technology.technologyfunction.automated-test-execution` | `accesses` | inbound   |
 
+### Color Literal Check Script {#color-literal-check-script}
+
+**ID**: `technology.artifact.color-literal-check-script`
+
+**Type**: `artifact`
+
+scripts/check-color-literals.mjs (npm run check:colors): scans src/\*\*/\*.\{css,ts,tsx\} except src/tokens/, src/test-pages/ and \*.test.\*, comments stripped; fails on hex colors (3/4/6/8 digits, not after /), rgb/rgba/hsl/hsla with numeric arguments, and var(--x, N, N, N) fallbacks; allows pure black and white at any alpha.
+
+#### Attributes
+
+| Name         | Value  |
+| ------------ | ------ |
+| artifactType | script |
+
+#### Relationships
+
+| Type        | Related Element                                   | Predicate  | Direction |
+| ----------- | ------------------------------------------------- | ---------- | --------- |
+| intra-layer | `technology.technologyprocess.ci-checks-workflow` | `accesses` | inbound   |
+
 ### d3-delaunay {#d3-delaunay}
 
 **ID**: `technology.artifact.d3-delaunay`
@@ -392,9 +414,12 @@ src/tokens/tokens.css: about 260 CSS custom properties (shell and canvas surface
 
 #### Relationships
 
-| Type        | Related Element                       | Predicate  | Direction |
-| ----------- | ------------------------------------- | ---------- | --------- |
-| intra-layer | `technology.artifact.base-stylesheet` | `composes` | inbound   |
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| intra-layer | `technology.artifact.base-stylesheet`                   | `composes`   | inbound   |
+| intra-layer | `technology.artifact.heimdall-ui-package`               | `aggregates` | inbound   |
+| intra-layer | `technology.artifact.theme-stylesheet`                  | `depends-on` | inbound   |
+| intra-layer | `technology.technologyprocess.npm-run-build-vite-build` | `accesses`   | inbound   |
 
 ### Docs Showcase Site {#docs-showcase-site}
 
@@ -539,6 +564,8 @@ The published @tinkermonkey/heimdall-ui npm package (0.13.0): the full component
 | ----------- | -------------------------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `application.applicationcomponent.heimdall-ui-library-module`                    | `realizes`   | outbound  |
 | intra-layer | `technology.artifact.docs-showcase-site`                                         | `depends-on` | inbound   |
+| intra-layer | `technology.artifact.design-token-stylesheet`                                    | `aggregates` | outbound  |
+| intra-layer | `technology.artifact.theme-stylesheet`                                           | `aggregates` | outbound  |
 | intra-layer | `technology.artifact.agent-skills-bundle`                                        | `composes`   | outbound  |
 | intra-layer | `technology.artifact.base-stylesheet`                                            | `composes`   | outbound  |
 | intra-layer | `technology.artifact.bundled-stylesheet`                                         | `composes`   | outbound  |
@@ -556,6 +583,7 @@ The published @tinkermonkey/heimdall-ui npm package (0.13.0): the full component
 | intra-layer | `technology.technologyfunction.library-bundling-and-type-declaration-generation` | `accesses`   | inbound   |
 | intra-layer | `technology.technologyfunction.npm-oidc-trusted-publishing`                      | `accesses`   | inbound   |
 | intra-layer | `technology.technologyfunction.published-package-verification`                   | `accesses`   | inbound   |
+| intra-layer | `technology.technologyprocess.deploy-docs-to-git-hub-pages`                      | `accesses`   | inbound   |
 | intra-layer | `technology.technologyprocess.release-to-npm`                                    | `accesses`   | inbound   |
 
 ### Layered Graph Fixture Builder {#layered-graph-fixture-builder}
@@ -825,6 +853,28 @@ devDependency: utility CSS whose theme is wired to the design tokens in src/toke
 | ----------- | -------------------------------------------------------------------------------- | ---------- | --------- |
 | intra-layer | `technology.technologyfunction.library-bundling-and-type-declaration-generation` | `accesses` | inbound   |
 | intra-layer | `technology.technologyprocess.ci-checks-workflow`                                | `accesses` | inbound   |
+
+### Theme Stylesheet {#theme-stylesheet}
+
+**ID**: `technology.artifact.theme-stylesheet`
+
+**Type**: `artifact`
+
+src/tokens/theme.css: an override layer that is empty upstream (header comment with an example and the caveat that derived tokens resolve on :root, so a theme that changes --accent-primary only under body.dark-canvas must redeclare them there). Loaded after tokens.css from src/index.ts, src/index.css and vite.config.mjs BASE_SHEETS (last), so it ships after the tokens in dist/style.css and dist/css/base.css.
+
+#### Attributes
+
+| Name         | Value |
+| ------------ | ----- |
+| artifactType | file  |
+
+#### Relationships
+
+| Type        | Related Element                                         | Predicate    | Direction |
+| ----------- | ------------------------------------------------------- | ------------ | --------- |
+| intra-layer | `technology.artifact.heimdall-ui-package`               | `aggregates` | inbound   |
+| intra-layer | `technology.artifact.design-token-stylesheet`           | `depends-on` | outbound  |
+| intra-layer | `technology.technologyprocess.npm-run-build-vite-build` | `accesses`   | inbound   |
 
 ### Type Declarations {#type-declarations}
 
@@ -1180,6 +1230,7 @@ The heimdall-css-sheets Vite plugin: reads where each module's CSS sat in ESM ev
 
 | Type        | Related Element                                          | Predicate  | Direction |
 | ----------- | -------------------------------------------------------- | ---------- | --------- |
+| intra-layer | `technology.artifact.color-literal-check-script`         | `accesses` | outbound  |
 | intra-layer | `technology.artifact.eslint`                             | `accesses` | outbound  |
 | intra-layer | `technology.artifact.tailwind-css`                       | `accesses` | outbound  |
 | intra-layer | `technology.technologyprocess.npm-run-build-vite-build`  | `composes` | outbound  |
@@ -1195,9 +1246,10 @@ The heimdall-css-sheets Vite plugin: reads where each module's CSS sat in ESM ev
 
 #### Relationships
 
-| Type        | Related Element                          | Predicate  | Direction |
-| ----------- | ---------------------------------------- | ---------- | --------- |
-| intra-layer | `technology.artifact.docs-showcase-site` | `accesses` | outbound  |
+| Type        | Related Element                           | Predicate  | Direction |
+| ----------- | ----------------------------------------- | ---------- | --------- |
+| intra-layer | `technology.artifact.docs-showcase-site`  | `accesses` | outbound  |
+| intra-layer | `technology.artifact.heimdall-ui-package` | `accesses` | outbound  |
 
 ### npm run build (vite build) {#npm-run-build-vite-build}
 
@@ -1213,6 +1265,8 @@ The package.json 'build'/'prepare' script that invokes the Vite build — runs a
 | ----------- | -------------------------------------------------------------------------------- | ---------- | --------- |
 | intra-layer | `technology.technologyfunction.library-bundling-and-type-declaration-generation` | `flows-to` | inbound   |
 | intra-layer | `technology.technologyprocess.ci-checks-workflow`                                | `composes` | inbound   |
+| intra-layer | `technology.artifact.design-token-stylesheet`                                    | `accesses` | outbound  |
+| intra-layer | `technology.artifact.theme-stylesheet`                                           | `accesses` | outbound  |
 | intra-layer | `technology.artifact.type-script-compiler-configuration`                         | `accesses` | outbound  |
 | intra-layer | `technology.artifact.vite`                                                       | `accesses` | outbound  |
 | intra-layer | `technology.technologyprocess.release-to-npm`                                    | `composes` | inbound   |
@@ -1306,4 +1360,4 @@ External package registry the release publishes @tinkermonkey/heimdall-ui to and
 
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0

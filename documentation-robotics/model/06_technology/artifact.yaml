@@ -5,10 +5,7 @@ technology.artifact.heimdall-ui-package:
   type: artifact
   layer_id: technology
   name: Heimdall UI Package
-  description: "The published @tinkermonkey/heimdall-ui npm package (0.13.0): the
-    full component library exported from src/index.ts, built one module per
-    source file (dist/, with type declarations) plus the default full stylesheet
-    and opt-in base and per-component sheets."
+  description: "The published @tinkermonkey/heimdall-ui npm package (0.13.0): the full component library exported from src/index.ts, built one module per source file (dist/, with type declarations) plus the default full stylesheet and opt-in base and per-component sheets."
   attributes:
     artifactType: library
   source_reference:
@@ -27,8 +24,7 @@ technology.artifact.react-peer-dependency:
   type: artifact
   layer_id: technology
   name: React (peer dependency)
-  description: React and react-dom 18 or 19 peer dependencies every component is
-    built against.
+  description: React and react-dom 18 or 19 peer dependencies every component is built against.
   attributes:
     artifactType: library
   source_reference:
@@ -47,9 +43,7 @@ technology.artifact.d3-hierarchy:
   type: artifact
   layer_id: technology
   name: d3-hierarchy
-  description: Real runtime dependency used directly by uxNavLayout (tree),
-    radialTreeLayout (tree, packSiblings), and graphPacking (pack, hierarchy)
-    for tree layout and circle packing.
+  description: Real runtime dependency used directly by uxNavLayout (tree), radialTreeLayout (tree, packSiblings), and graphPacking (pack, hierarchy) for tree layout and circle packing.
   attributes:
     artifactType: library
   source_reference:
@@ -68,10 +62,7 @@ technology.artifact.type-script-compiler-configuration:
   type: artifact
   layer_id: technology
   name: TypeScript Compiler Configuration
-  description: tsconfig.json — strict TypeScript configuration, including
-    allowImportingTsExtensions so scripts/render-and-score.mjs (in the sibling
-    layout-loop harness) can import graphLayout.ts directly via Node's
-    --experimental-strip-types without a build step.
+  description: tsconfig.json — strict TypeScript configuration, including allowImportingTsExtensions so scripts/render-and-score.mjs (in the sibling layout-loop harness) can import graphLayout.ts directly via Node's --experimental-strip-types without a build step.
   attributes:
     artifactType: configuration
   source_reference:
@@ -90,9 +81,7 @@ technology.artifact.playwright-test-runner:
   type: artifact
   layer_id: technology
   name: Playwright Test Runner
-  description: "@playwright/test devDependency driving the browser-based
-    visual/behavioral regression suite in tests/, including all graph-*.spec.ts
-    files."
+  description: "@playwright/test devDependency driving the browser-based visual/behavioral regression suite in tests/, including all graph-*.spec.ts files."
   attributes:
     artifactType: library
   source_reference:
@@ -111,9 +100,7 @@ technology.artifact.vitest:
   type: artifact
   layer_id: technology
   name: Vitest
-  description: "vitest devDependency running the pure-function and server-render
-    unit tests (src/**/*.test.ts: layout engines, layered framework, placement,
-    date and trace utilities) via npm run test:unit."
+  description: "vitest devDependency running the pure-function and server-render unit tests (src/**/*.test.ts: layout engines, layered framework, placement, date and trace utilities) via npm run test:unit."
   attributes:
     artifactType: library
   source_reference:
@@ -132,8 +119,7 @@ technology.artifact.d3-delaunay:
   type: artifact
   layer_id: technology
   name: d3-delaunay
-  description: Runtime dependency used by organicLayout
-    (src/utils/organicLayout.ts) for Delaunay triangulation of node positions.
+  description: Runtime dependency used by organicLayout (src/utils/organicLayout.ts) for Delaunay triangulation of node positions.
   attributes:
     artifactType: library
   source_reference:
@@ -152,8 +138,7 @@ technology.artifact.react-markdown:
   type: artifact
   layer_id: technology
   name: react-markdown
-  description: Runtime dependency used by ChatMarkdownContent to render model
-    output as markdown, with remark-gfm for GitHub-flavored markdown.
+  description: Runtime dependency used by ChatMarkdownContent to render model output as markdown, with remark-gfm for GitHub-flavored markdown.
   attributes:
     artifactType: library
   source_reference:
@@ -172,8 +157,7 @@ technology.artifact.remark-gfm:
   type: artifact
   layer_id: technology
   name: remark-gfm
-  description: "Runtime dependency: the GitHub-flavored markdown plugin
-    ChatMarkdownContent passes to react-markdown."
+  description: "Runtime dependency: the GitHub-flavored markdown plugin ChatMarkdownContent passes to react-markdown."
   attributes:
     artifactType: library
   source_reference:
@@ -192,8 +176,7 @@ technology.artifact.vite:
   type: artifact
   layer_id: technology
   name: Vite
-  description: "Build tool (devDependency): dev server, library-mode build of
-    dist/, and the docs site build."
+  description: "Build tool (devDependency): dev server, library-mode build of dist/, and the docs site build."
   attributes:
     artifactType: library
   source_reference:
@@ -211,8 +194,7 @@ technology.artifact.tailwind-css:
   type: artifact
   layer_id: technology
   name: Tailwind CSS
-  description: "devDependency: utility CSS whose theme is wired to the design
-    tokens in src/tokens/tokens.css (tailwind.config.ts)."
+  description: "devDependency: utility CSS whose theme is wired to the design tokens in src/tokens/tokens.css (tailwind.config.ts)."
   attributes:
     artifactType: library
   source_reference:
@@ -230,8 +212,7 @@ technology.artifact.eslint:
   type: artifact
   layer_id: technology
   name: ESLint
-  description: "devDependency: lint gate in CI (npm run lint over src/, docs/src/,
-    scripts/)."
+  description: "devDependency: lint gate in CI (npm run lint over src/, docs/src/, scripts/)."
   attributes:
     artifactType: library
   source_reference:
@@ -249,9 +230,7 @@ technology.artifact.agent-skills-bundle:
   type: artifact
   layer_id: technology
   name: Agent Skills Bundle
-  description: "agent-skills/: Claude Code skills documenting every exported
-    component for coding agents in consumer repos; shipped inside the npm
-    package (files: dist, agent-skills)."
+  description: "agent-skills/: Claude Code skills documenting every exported component for coding agents in consumer repos; shipped inside the npm package (files: dist, agent-skills)."
   attributes:
     artifactType: file
   source_reference:
@@ -269,8 +248,7 @@ technology.artifact.docs-showcase-site:
   type: artifact
   layer_id: technology
   name: Docs Showcase Site
-  description: "docs/: the Vite + React showcase app built to docs/dist and
-    published to GitHub Pages (tinkermonkey.github.io/heimdall)."
+  description: "docs/: the Vite + React showcase app built to docs/dist and published to GitHub Pages (tinkermonkey.github.io/heimdall)."
   attributes:
     artifactType: archive
   source_reference:
@@ -288,9 +266,7 @@ technology.artifact.heimdall-agent-environment-image:
   type: artifact
   layer_id: technology
   name: Heimdall Agent Environment Image
-  description: "Dockerfile.agent: container image for coding agents working on
-    this repo, with Playwright/Chromium system libraries, fonts and pinned
-    locale and TZ for consistent screenshots."
+  description: "Dockerfile.agent: container image for coding agents working on this repo, with Playwright/Chromium system libraries, fonts and pinned locale and TZ for consistent screenshots."
   attributes:
     artifactType: container-image
   source_reference:
@@ -308,8 +284,7 @@ technology.artifact.switchyard-orchestrator:
   type: artifact
   layer_id: technology
   name: switchyard-orchestrator
-  description: Base image of Dockerfile.agent (FROM
-    switchyard-orchestrator:latest), built elsewhere.
+  description: Base image of Dockerfile.agent (FROM switchyard-orchestrator:latest), built elsewhere.
   attributes:
     artifactType: container-image
   source_reference:
@@ -327,8 +302,7 @@ technology.artifact.agent-environment-entrypoint:
   type: artifact
   layer_id: technology
   name: Agent Environment Entrypoint
-  description: "heimdall-docker-entrypoint.sh: links the image's pre-installed
-    node_modules into the bind-mounted /workspace at container start."
+  description: "heimdall-docker-entrypoint.sh: links the image's pre-installed node_modules into the bind-mounted /workspace at container start."
   attributes:
     artifactType: script
   source_reference:
@@ -346,9 +320,7 @@ technology.artifact.react-dom-peer-dependency:
   type: artifact
   layer_id: technology
   name: react-dom (peer dependency)
-  description: react-dom ^18 || ^19 peer dependency. The library renders through
-    it (createPortal for dropdown panels, server rendering in tests) and leaves
-    it external in the build.
+  description: react-dom ^18 || ^19 peer dependency. The library renders through it (createPortal for dropdown panels, server rendering in tests) and leaves it external in the build.
   attributes:
     artifactType: library
   source_reference:
@@ -366,10 +338,7 @@ technology.artifact.per-module-esm-build-output:
   type: artifact
   layer_id: technology
   name: Per-Module ESM Build Output
-  description: "dist/<module>.js: one ESM file per source module (rollup
-    preserveModules, root src), CJS dropped (#343), so a consumer's bundler
-    drops the modules of components it never imports. No JS module imports CSS,
-    so Node, SSR builds and test runners load it as plain ESM."
+  description: "dist/<module>.js: one ESM file per source module (rollup preserveModules, root src), CJS dropped (#343), so a consumer's bundler drops the modules of components it never imports. No JS module imports CSS, so Node, SSR builds and test runners load it as plain ESM."
   attributes:
     artifactType: library
   source_reference:
@@ -387,8 +356,7 @@ technology.artifact.type-declarations:
   type: artifact
   layer_id: technology
   name: Type Declarations
-  description: dist/**/*.d.ts generated by vite-plugin-dts for the public API only
-    (the dev app, test pages and tests are excluded); the package's types entry.
+  description: dist/**/*.d.ts generated by vite-plugin-dts for the public API only (the dev app, test pages and tests are excluded); the package's types entry.
   attributes:
     artifactType: file
   source_reference:
@@ -406,8 +374,7 @@ technology.artifact.bundled-stylesheet:
   type: artifact
   layer_id: technology
   name: Bundled Stylesheet
-  description: "dist/style.css, the './css' export: every stylesheet (tokens,
-    utilities, all components) in ESM evaluation order, minified as one file."
+  description: "dist/style.css, the './css' export: every stylesheet (tokens, utilities, all components) in ESM evaluation order, minified as one file."
   attributes:
     artifactType: file
   source_reference:
@@ -425,8 +392,7 @@ technology.artifact.base-stylesheet:
   type: artifact
   layer_id: technology
   name: Base Stylesheet
-  description: "dist/css/base.css, the './css/base' export: tokens.css plus
-    styles/utilities.css, the sheet every opt-in component sheet assumes."
+  description: "dist/css/base.css, the './css/base' export: tokens.css plus styles/utilities.css, the sheet every opt-in component sheet assumes."
   attributes:
     artifactType: file
   source_reference:
@@ -444,9 +410,7 @@ technology.artifact.per-component-stylesheets:
   type: artifact
   layer_id: technology
   name: Per-Component Stylesheets
-  description: "dist/css/<Name>.css, the './css/*' exports (0.13.0): one sheet per
-    component module holding its own CSS and that of every component it renders,
-    minus base, so an app can load only the CSS it uses."
+  description: "dist/css/<Name>.css, the './css/*' exports (0.13.0): one sheet per component module holding its own CSS and that of every component it renders, minus base, so an app can load only the CSS it uses."
   attributes:
     artifactType: file
   source_reference:
@@ -464,8 +428,7 @@ technology.artifact.legacy-css-forwarder:
   type: artifact
   layer_id: technology
   name: Legacy CSS Forwarder
-  description: dist/heimdall-ui.css, a one-line @import of style.css kept for
-    consumers who pointed at the 0.9.0/0.9.1 file name directly. Deprecated.
+  description: dist/heimdall-ui.css, a one-line @import of style.css kept for consumers who pointed at the 0.9.0/0.9.1 file name directly. Deprecated.
   attributes:
     artifactType: file
   source_reference:
@@ -484,9 +447,7 @@ technology.artifact.font-bundle:
   type: artifact
   layer_id: technology
   name: Font Bundle
-  description: Inter and JetBrains Mono font files with fonts.css, kept in
-    public/fonts (fetched by scripts/download-fonts.js) and copied to
-    dist/fonts; the './fonts' export.
+  description: Inter and JetBrains Mono font files with fonts.css, kept in public/fonts (fetched by scripts/download-fonts.js) and copied to dist/fonts; the './fonts' export.
   attributes:
     artifactType: archive
   source_reference:
@@ -504,9 +465,7 @@ technology.artifact.router-benchmark-script:
   type: artifact
   layer_id: technology
   name: Router Benchmark Script
-  description: "scripts/bench-router.mjs (npm run bench:router): seeded grid
-    benchmark of routeNavigationEdges with a route fingerprint and per-size
-    budgets."
+  description: "scripts/bench-router.mjs (npm run bench:router): seeded grid benchmark of routeNavigationEdges with a route fingerprint and per-size budgets."
   attributes:
     artifactType: script
   source_reference:
@@ -524,8 +483,7 @@ technology.artifact.galaxy-drag-benchmark-script:
   type: artifact
   layer_id: technology
   name: Galaxy Drag Benchmark Script
-  description: "scripts/bench-galaxy-drag.mjs: headless live-simulation drag
-    benchmark for galaxySimulationStep."
+  description: "scripts/bench-galaxy-drag.mjs: headless live-simulation drag benchmark for galaxySimulationStep."
   attributes:
     artifactType: script
   source_reference:
@@ -543,9 +501,7 @@ technology.artifact.performance-baseline:
   type: artifact
   layer_id: technology
   name: Performance Baseline
-  description: "performance-baseline.json from scripts/measure-performance.js:
-    bundle sizes and render times recorded 2026-05-17 for the single-bundle
-    build. Stale since the 0.13.0 per-module build and not checked by anything."
+  description: "performance-baseline.json from scripts/measure-performance.js: bundle sizes and render times recorded 2026-05-17 for the single-bundle build. Stale since the 0.13.0 per-module build and not checked by anything."
   attributes:
     artifactType: configuration
   source_reference:
@@ -563,11 +519,7 @@ technology.artifact.layered-graph-fixture-builder:
   type: artifact
   layer_id: technology
   name: Layered Graph Fixture Builder
-  description: "scripts/build-layered-fixtures.mjs: generates
-    src/test-pages/fixtures from Documentation Robotics data, the DR spec
-    meta-model (read from the sibling ../documentation_robotics/spec checkout)
-    and this repo's own documentation-robotics/model. The layered-graph test
-    fixtures therefore depend on the DR model and on a second repository."
+  description: "scripts/build-layered-fixtures.mjs: generates src/test-pages/fixtures from Documentation Robotics data, the DR spec meta-model (read from the sibling ../documentation_robotics/spec checkout) and this repo's own documentation-robotics/model. The layered-graph test fixtures therefore depend on the DR model and on a second repository."
   attributes:
     artifactType: script
   source_reference:
@@ -585,9 +537,7 @@ technology.artifact.ci-dev-server-script:
   type: artifact
   layer_id: technology
   name: CI Dev Server Script
-  description: "scripts/ci-dev-server.sh: starts the Vite dev server for
-    Playwright in CI from a copy of the config in /tmp, for runners where the
-    checkout is not writable."
+  description: "scripts/ci-dev-server.sh: starts the Vite dev server for Playwright in CI from a copy of the config in /tmp, for runners where the checkout is not writable."
   attributes:
     artifactType: script
   source_reference:
@@ -605,9 +555,7 @@ technology.artifact.font-download-script:
   type: artifact
   layer_id: technology
   name: Font Download Script
-  description: "scripts/download-fonts.js (npm run setup): fetches the Inter and
-    JetBrains Mono files into public/fonts, the only copy, which the build
-    copies to dist/fonts."
+  description: "scripts/download-fonts.js (npm run setup): fetches the Inter and JetBrains Mono files into public/fonts, the only copy, which the build copies to dist/fonts."
   attributes:
     artifactType: script
   source_reference:
@@ -625,10 +573,7 @@ technology.artifact.design-token-stylesheet:
   type: artifact
   layer_id: technology
   name: Design Token Stylesheet
-  description: "src/tokens/tokens.css: about 260 CSS custom properties (shell and
-    canvas surfaces, accent, status colors, radius, shadow, fonts, spacing) that
-    tailwind.config.ts maps every theme key to; .dark-canvas on body overrides
-    every --canvas-* value. Shipped inside base.css and style.css."
+  description: "src/tokens/tokens.css: about 260 CSS custom properties (shell and canvas surfaces, accent, status colors, radius, shadow, fonts, spacing) that tailwind.config.ts maps every theme key to; .dark-canvas on body overrides every --canvas-* value. Shipped inside base.css and style.css."
   attributes:
     artifactType: file
   source_reference:
@@ -638,4 +583,40 @@ technology.artifact.design-token-stylesheet:
   metadata:
     created_at: 2026-11-24T19:01:20.531Z
     updated_at: 2026-11-24T19:01:20.531Z
+    version: 1
+technology.artifact.theme-stylesheet:
+  id: e9c47e3c-51d7-42b5-8fa6-d465421f426e
+  path: technology.artifact.theme-stylesheet
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Theme Stylesheet
+  description: "src/tokens/theme.css: an override layer that is empty upstream (header comment with an example and the caveat that derived tokens resolve on :root, so a theme that changes --accent-primary only under body.dark-canvas must redeclare them there). Loaded after tokens.css from src/index.ts, src/index.css and vite.config.mjs BASE_SHEETS (last), so it ships after the tokens in dist/style.css and dist/css/base.css."
+  attributes:
+    artifactType: file
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/tokens/theme.css
+  metadata:
+    created_at: 2026-11-24T21:49:32.045Z
+    updated_at: 2026-11-24T21:49:32.045Z
+    version: 1
+technology.artifact.color-literal-check-script:
+  id: 498b22c7-d6d4-4fa2-9c83-794c05dd896a
+  path: technology.artifact.color-literal-check-script
+  spec_node_id: technology.artifact
+  type: artifact
+  layer_id: technology
+  name: Color Literal Check Script
+  description: "scripts/check-color-literals.mjs (npm run check:colors): scans src/**/*.{css,ts,tsx} except src/tokens/, src/test-pages/ and *.test.*, comments stripped; fails on hex colors (3/4/6/8 digits, not after /), rgb/rgba/hsl/hsla with numeric arguments, and var(--x, N, N, N) fallbacks; allows pure black and white at any alpha."
+  attributes:
+    artifactType: script
+  source_reference:
+    provenance: manual
+    locations:
+      - file: scripts/check-color-literals.mjs
+  metadata:
+    created_at: 2026-11-24T21:49:32.045Z
+    updated_at: 2026-11-24T21:49:32.045Z
     version: 1

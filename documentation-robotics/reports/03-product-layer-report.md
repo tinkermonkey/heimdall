@@ -16,11 +16,11 @@ Product features, capabilities, personas, and milestones.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 36    |
-| Intra-Layer Relationships | 21    |
-| Inter-Layer Relationships | 174   |
-| Inbound Relationships     | 126   |
-| Outbound Relationships    | 48    |
+| Elements                  | 38    |
+| Intra-Layer Relationships | 23    |
+| Inter-Layer Relationships | 181   |
+| Inbound Relationships     | 129   |
+| Outbound Relationships    | 52    |
 
 **Cross-Layer References**:
 
@@ -44,9 +44,11 @@ Product features, capabilities, personas, and milestones.
 | `product.feature.per-component-imports`                               | `feature`            | 2             |
 | `product.feature.progressive-disclosure-via-node-collapseexpand`      | `feature`            | 2             |
 | `product.feature.server-side-rendering-support`                       | `feature`            | 3             |
+| `product.feature.theme-slot`                                          | `feature`            | 2             |
 | `product.feature.viewport-history-and-restore`                        | `feature`            | 0             |
 | `product.persona.application-developer-embedding-a-graph-view`        | `persona`            | 4             |
 | `product.persona.end-user-exploring-a-rendered-graph`                 | `persona`            | 4             |
+| `product.persona.mirror-maintainer-restyling-the-library`             | `persona`            | 1             |
 | `product.softwarecapability.app-navigation`                           | `softwarecapability` | 2             |
 | `product.softwarecapability.app-shell`                                | `softwarecapability` | 2             |
 | `product.softwarecapability.charting`                                 | `softwarecapability` | 0             |
@@ -67,7 +69,7 @@ Product features, capabilities, personas, and milestones.
 | `product.softwarecapability.radial-tree-layout`                       | `softwarecapability` | 0             |
 | `product.softwarecapability.responsive-layout`                        | `softwarecapability` | 0             |
 | `product.softwarecapability.run-history-and-observability-views`      | `softwarecapability` | 0             |
-| `product.softwarecapability.ui-primitives`                            | `softwarecapability` | 1             |
+| `product.softwarecapability.ui-primitives`                            | `softwarecapability` | 2             |
 | `product.softwarecapability.ux-navigation-tree-layout`                | `softwarecapability` | 0             |
 
 ## Inter-Layer Dependencies
@@ -160,8 +162,11 @@ flowchart TB
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.x-ray-trace-adapter`                                                                                  | `product.softwarecapability.run-history-and-observability-views`                            | `product`    | `realizes`   | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                   | `product.feature.per-component-imports`                                                                                               | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                   | `product.feature.server-side-rendering-support`                                                                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.theme-slot`                                                                                                          | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.theme-slot`                                                                                                          | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror`                | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                  | `product.persona.application-developer-embedding-a-graph-view`                                                                        | `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `motivation` | `references` | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                  | `product.persona.end-user-exploring-a-rendered-graph`                                                                                 | `motivation.stakeholder.end-user-of-an-embedding-application`                               | `motivation` | `references` | many-to-many | medium   |
+| `product.persona.references.motivation.stakeholder`                  | `product.persona.mirror-maintainer-restyling-the-library`                                                                             | `motivation.stakeholder.mirror-maintainer`                                                  | `motivation` | `references` | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.app-navigation`                                                                                           | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-navigation`                                                                                           | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.app-shell`                                                                                                | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
@@ -203,9 +208,12 @@ flowchart TB
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.run-history-and-observability-views`                                                                      | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.run-history-and-observability-views`                                                                      | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ui-primitives`                                                                                            | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.satisfies.motivation.requirement`        | `product.softwarecapability.ui-primitives`                                                                                            | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ui-primitives`                                                                                            | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-edge-tooltip-waits-for-tooltip-delay-before-showing`                 | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-near-the-canvas-top-tooltip-flips-below-the-2326f2d8`  | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.graph-canvas-hover-tooltip-placement-323-labelled-edge-tooltip-sits-above-the-label-without-a1ce7be4`         | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
@@ -267,6 +275,7 @@ flowchart TB
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-edge-popover-open-state-5d301594`  | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-node-popover-open-state-edd72184`  | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-popover-with-interactive-505b383d` | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `product.feature.live-draggable-galaxy-simulation`                                          | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement`                                                                 | `product.feature.joint-edge-label-placement`                                                | `product`    | `covers`     | many-to-many | medium   |
@@ -594,6 +603,34 @@ Components render on a server and hydrate without mismatches: useMediaQuery take
 | intra-layer | `product.softwarecapability.app-shell`                                    | `realizes`  | outbound  |
 | intra-layer | `product.persona.application-developer-embedding-a-graph-view`            | `serves`    | outbound  |
 
+### Theme Slot {#theme-slot}
+
+**ID**: `product.feature.theme-slot`
+
+**Type**: `feature`
+
+An empty src/tokens/theme.css loaded after tokens.css in every stylesheet entry point (index.ts, index.css, dist/style.css, dist/css/base.css); accent-derived tokens (focus ring, accent alpha tints); new token families for colors that were hard-coded (chart series and tones, trace services, accent ink, shadow tint); TS and CSS color literals replaced by token references; check:colors in CI; repo-guarded release, docs deploy and visual regression. Issue #402.
+
+#### Attributes
+
+| Name     | Value     |
+| -------- | --------- |
+| priority | high      |
+| size     | l         |
+| status   | delivered |
+
+#### Relationships
+
+| Type        | Related Element                                                              | Predicate   | Direction |
+| ----------- | ---------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`      | `satisfies` | outbound  |
+| inter-layer | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror` | `satisfies` | outbound  |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`                     | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`     | `tests`     | inbound   |
+| inter-layer | `testing.testcasesketch.theme-override-ships-after-the-tokens`               | `tests`     | inbound   |
+| intra-layer | `product.softwarecapability.ui-primitives`                                   | `realizes`  | outbound  |
+| intra-layer | `product.persona.mirror-maintainer-restyling-the-library`                    | `serves`    | outbound  |
+
 ### Viewport History and Restore {#viewport-history-and-restore}
 
 **ID**: `product.feature.viewport-history-and-restore`
@@ -664,6 +701,28 @@ Inferred persona: the person who ultimately interacts with the rendered graph (p
 | intra-layer | `product.feature.layered-graph-explorer`                         | `serves`     | inbound   |
 | intra-layer | `product.feature.node-and-edge-tooltips-and-popovers`            | `serves`     | inbound   |
 | intra-layer | `product.feature.progressive-disclosure-via-node-collapseexpand` | `serves`     | inbound   |
+
+### Mirror Maintainer Restyling the Library {#mirror-maintainer-restyling-the-library}
+
+**ID**: `product.persona.mirror-maintainer-restyling-the-library`
+
+**Type**: `persona`
+
+A developer on a downstream team who applies the team's brand palette in theme.css and merges upstream release tags into the mirror.
+
+#### Attributes
+
+| Name        | Value     |
+| ----------- | --------- |
+| category    | secondary |
+| proficiency | advanced  |
+
+#### Relationships
+
+| Type        | Related Element                            | Predicate    | Direction |
+| ----------- | ------------------------------------------ | ------------ | --------- |
+| inter-layer | `motivation.stakeholder.mirror-maintainer` | `references` | outbound  |
+| intra-layer | `product.feature.theme-slot`               | `serves`     | inbound   |
 
 ### App Navigation {#app-navigation}
 
@@ -1162,12 +1221,14 @@ Shipped capability: Icons, buttons, chips, badges, avatars and segmented control
 
 #### Relationships
 
-| Type        | Related Element                                                                      | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
-| inter-layer | `application.applicationservice.primitive-components`                                | `realizes` | inbound   |
-| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes` | outbound  |
-| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
-| intra-layer | `product.feature.per-component-imports`                                              | `realizes` | inbound   |
+| Type        | Related Element                                                                      | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ----------- | --------- |
+| inter-layer | `application.applicationservice.primitive-components`                                | `realizes`  | inbound   |
+| inter-layer | `business.businessfunction.assemble-application-screens-from-library-components`     | `realizes`  | outbound  |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `satisfies` | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports`  | outbound  |
+| intra-layer | `product.feature.per-component-imports`                                              | `realizes`  | inbound   |
+| intra-layer | `product.feature.theme-slot`                                                         | `realizes`  | inbound   |
 
 ### UX Navigation Tree Layout {#ux-navigation-tree-layout}
 
@@ -1195,4 +1256,4 @@ Shipped capability: page-tree + view-fan layout for visualizing page/view naviga
 
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0

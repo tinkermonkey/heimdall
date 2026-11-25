@@ -16,8 +16,8 @@ Application components, services, and interactions.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 119   |
-| Intra-Layer Relationships | 234   |
+| Elements                  | 118   |
+| Intra-Layer Relationships | 232   |
 | Inter-Layer Relationships | 296   |
 | Inbound Relationships     | 165   |
 | Outbound Relationships    | 131   |
@@ -34,7 +34,7 @@ Application components, services, and interactions.
 | Element                                                                         | Type                     | Relationships |
 | ------------------------------------------------------------------------------- | ------------------------ | ------------- |
 | `application.applicationcomponent.consumer-smoke-test-app`                      | `applicationcomponent`   | 1             |
-| `application.applicationcomponent.heimdall-ui-library-module`                   | `applicationcomponent`   | 90            |
+| `application.applicationcomponent.heimdall-ui-library-module`                   | `applicationcomponent`   | 89            |
 | `application.applicationcomponent.test-page-host-app`                           | `applicationcomponent`   | 1             |
 | `application.applicationevent.background-click-event`                           | `applicationevent`       | 1             |
 | `application.applicationevent.collapse-toggle-event`                            | `applicationevent`       | 1             |
@@ -69,7 +69,6 @@ Application components, services, and interactions.
 | `application.applicationfunction.galaxy-aspect-ratio-resolution`                | `applicationfunction`    | 3             |
 | `application.applicationfunction.galaxy-live-simulation-step`                   | `applicationfunction`    | 4             |
 | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`          | `applicationfunction`    | 6             |
-| `application.applicationfunction.heatmap-colour-scale`                          | `applicationfunction`    | 2             |
 | `application.applicationfunction.hive-plot-layout`                              | `applicationfunction`    | 5             |
 | `application.applicationfunction.joint-edge-label-placement`                    | `applicationfunction`    | 3             |
 | `application.applicationfunction.lane-layout-and-gutter-routing`                | `applicationfunction`    | 6             |
@@ -112,7 +111,7 @@ Application components, services, and interactions.
 | `application.applicationservice.chat-components`                                | `applicationservice`     | 1             |
 | `application.applicationservice.cluster-packing`                                | `applicationservice`     | 2             |
 | `application.applicationservice.controllable-state-hook`                        | `applicationservice`     | 2             |
-| `application.applicationservice.data-display-components`                        | `applicationservice`     | 2             |
+| `application.applicationservice.data-display-components`                        | `applicationservice`     | 1             |
 | `application.applicationservice.dropdown-portal-containment`                    | `applicationservice`     | 1             |
 | `application.applicationservice.edge-geometry`                                  | `applicationservice`     | 3             |
 | `application.applicationservice.force-layout`                                   | `applicationservice`     | 3             |
@@ -554,7 +553,6 @@ The package's public module (src/index.ts barrel over one module per source file
 | intra-layer | `application.applicationfunction.force-directed-layout-algorithm`               | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.galaxy-aspect-ratio-resolution`                | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`          | `assigned-to` | outbound  |
-| intra-layer | `application.applicationfunction.heatmap-colour-scale`                          | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.hive-plot-layout`                              | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.joint-edge-label-placement`                    | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.lane-layout-and-gutter-routing`                | `assigned-to` | outbound  |
@@ -1267,21 +1265,6 @@ galaxyLayout(): positions nodes as a radial hierarchy of orbits from structural 
 | intra-layer | `application.applicationfunction.node-overlap-separation-pass`                  | `depends-on`  | outbound  |
 | intra-layer | `application.applicationservice.galaxy-layout`                                  | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`                    | `realizes`    | outbound  |
-
-### Heatmap Colour Scale {#heatmap-colour-scale}
-
-**ID**: `application.applicationfunction.heatmap-colour-scale`
-
-**Type**: `applicationfunction`
-
-getHeatmapColor() and normalizeColorToHex(): single-hue alpha scale for Heatmap and MapCanvas heatmap cells.
-
-#### Relationships
-
-| Type        | Related Element                                               | Predicate     | Direction |
-| ----------- | ------------------------------------------------------------- | ------------- | --------- |
-| intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `assigned-to` | inbound   |
-| intra-layer | `application.applicationservice.data-display-components`      | `realizes`    | outbound  |
 
 ### Hive Plot Layout {#hive-plot-layout}
 
@@ -2164,7 +2147,6 @@ Stat tiles and grids, tables, key-value grids, inspector panels, result and asse
 | ----------- | ------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `product.softwarecapability.data-display`                     | `realizes` | outbound  |
 | intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `realizes` | inbound   |
-| intra-layer | `application.applicationfunction.heatmap-colour-scale`        | `realizes` | inbound   |
 
 ### Dropdown Portal Containment {#dropdown-portal-containment}
 
@@ -3140,4 +3122,4 @@ GraphCanvasContext's nodeRects/getNodeRect — every currently-visible node's me
 
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0

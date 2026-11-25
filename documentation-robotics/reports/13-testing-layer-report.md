@@ -16,11 +16,11 @@ Test strategies, test cases, test data, and test coverage.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 1796  |
-| Intra-Layer Relationships | 1882  |
-| Inter-Layer Relationships | 576   |
+| Elements                  | 1799  |
+| Intra-Layer Relationships | 1883  |
+| Inter-Layer Relationships | 585   |
 | Inbound Relationships     | 0     |
-| Outbound Relationships    | 576   |
+| Outbound Relationships    | 585   |
 
 **Cross-Layer References**:
 
@@ -149,11 +149,13 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-breaking-polylines`                       | `testcasesketch`          | 1             |
 | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-obstacles`                                | `testcasesketch`          | 1             |
 | `testing.testcasesketch.channel-router-route-navigation-edges-routes-single-edge-with-specified-trace-spacing`                        | `testcasesketch`          | 1             |
+| `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `testcasesketch`          | 1             |
 | `testing.testcasesketch.cluster-order-breaks-degree-and-label-ties-by-id-not-input-order`                                             | `testcasesketch`          | 1             |
 | `testing.testcasesketch.cluster-order-is-a-permutation-of-every-node-grouped-by-layer`                                                | `testcasesketch`          | 1             |
 | `testing.testcasesketch.cluster-order-is-deterministic-same-result-on-every-run-and-for-any-input-order`                              | `testcasesketch`          | 1             |
 | `testing.testcasesketch.cluster-order-keeps-each-community-together-within-its-layer-layers-in-rank-order`                            | `testcasesketch`          | 1             |
 | `testing.testcasesketch.clustered-view-bubble-packing-integration`                                                                    | `testcasesketch`          | 2             |
+| `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `testcasesketch`          | 0             |
 | `testing.testcasesketch.compute-dropdown-position-anchors-a-top-panel-that-is-shorter-than-its-content-to-the-available-de6cb29b`     | `testcasesketch`          | 1             |
 | `testing.testcasesketch.compute-dropdown-position-clamps-inside-the-viewport-when-neither-alignment-fits`                             | `testcasesketch`          | 1             |
 | `testing.testcasesketch.compute-dropdown-position-clamps-to-the-margin-when-the-trigger-is-scrolled-past-the-left-edge`               | `testcasesketch`          | 1             |
@@ -1672,6 +1674,7 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.static-sites-server-render-hydration-desktop-hydrates-without-mismatches-with-fixed-relative-times`           | `testcasesketch`          | 1             |
 | `testing.testcasesketch.static-sites-server-render-hydration-mobile-before-hydration-css-alone-hides-the-desktop-sidebar-cc86453e`    | `testcasesketch`          | 1             |
 | `testing.testcasesketch.static-sites-server-render-hydration-mobile-hydrates-without-mismatches-then-switches-to-the-drawer-4443b6e2` | `testcasesketch`          | 1             |
+| `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `testcasesketch`          | 0             |
 | `testing.testcasesketch.tween-math-ease-in-out-cubic-is-symmetric-and-pinned-at-the-ends`                                             | `testcasesketch`          | 1             |
 | `testing.testcasesketch.tween-math-interpolate-values-moves-only-the-keys-in-to`                                                      | `testcasesketch`          | 1             |
 | `testing.testcasesketch.use-controllable-holds-its-own-state-seeded-from-the-default-when-uncontrolled`                               | `testcasesketch`          | 1             |
@@ -1748,7 +1751,7 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcoveragetarget.avatar`                                                                                                   | `testcoveragetarget`      | 13            |
 | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `testcoveragetarget`      | 18            |
 | `testing.testcoveragetarget.cards-and-lists`                                                                                          | `testcoveragetarget`      | 64            |
-| `testing.testcoveragetarget.chart-components`                                                                                         | `testcoveragetarget`      | 82            |
+| `testing.testcoveragetarget.chart-components`                                                                                         | `testcoveragetarget`      | 83            |
 | `testing.testcoveragetarget.chat-components`                                                                                          | `testcoveragetarget`      | 41            |
 | `testing.testcoveragetarget.dark-canvas-semantic-tokens`                                                                              | `testcoveragetarget`      | 6             |
 | `testing.testcoveragetarget.data-display-components`                                                                                  | `testcoveragetarget`      | 28            |
@@ -1901,7 +1904,14 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-breaking-polylines`                       | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.channel-router-route-navigation-edges-routes-multiple-edges-without-obstacles`                                | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.channel-router-route-navigation-edges-routes-single-edge-with-specified-trace-spacing`                        | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.product.feature`                      | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                  | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.heatmap`                                                        | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                  | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.line-chart`                                                     | `ux`          | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`                  | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.status-timeline`                                                | `ux`          | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.clustered-view-bubble-packing-integration`                                                                    | `application.applicationfunction.clustered-force-layout-algorithm`                   | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.product.feature`                      | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.find-clear-label-position-clears-an-obstacle-sitting-on-the-midpoint-of-a-cubic-anchored-edge`                | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.find-clear-label-position-falls-back-to-the-exact-midpoint-when-every-candidate-collides`                     | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.find-clear-label-position-handles-orthogonal-polyline-paths-5-waypoints-for-navigation-edges`                 | `application.applicationfunction.edge-label-clear-position-search`                   | `application` | `tests`      | many-to-many | medium   |
@@ -2111,6 +2121,8 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.route-navigation-edge-avoids-obstacles`                                                                       | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.separation-job-falls-back-to-separation-pass-for-positions-the-grid-cannot-hold`                              | `application.applicationfunction.node-overlap-separation-pass`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.separation-job-matches-the-plain-separation-pass-loop-bit-for-bit-s-label`                                    | `application.applicationfunction.node-overlap-separation-pass`                       | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.product.feature`                      | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `product.feature.theme-slot`                                                         | `product`     | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.ux-nav-layout-handles-complex-multi-parent-view-scenario`                                                     | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.ux-nav-layout-handles-custom-dimensions`                                                                      | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.ux-nav-layout-handles-deeply-nested-page-hierarchies`                                                         | `application.applicationfunction.ux-navigation-tree-layout-algorithm`                | `application` | `tests`      | many-to-many | medium   |
@@ -4658,6 +4670,31 @@ Node box size the overlap tests vary: default chip-sized nodes versus large card
 | inter-layer | `application.applicationfunction.navigation-edge-orthogonal-routing` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.navigation-edge-channel-routing`         | `composes` | inbound   |
 
+### Chart Fills Resolve From Tokens {#chart-fills-resolve-from-tokens}
+
+**ID**: `testing.testcasesketch.chart-fills-resolve-from-tokens`
+
+**Type**: `testcasesketch`
+
+tests/charts-showcase.spec.ts, updated: the LineChart and StatusTimeline marker circles carry rgb(var(--accent-primary-hover)) instead of #F59E0B; StatusTimeline segment fills are status-token references; Heatmap cells fill with the base color and a fill-opacity in \[0.12, 1\] (was: non-empty hex fills). Screenshots stay identical to the existing baselines.
+
+#### Attributes
+
+| Name   | Value     |
+| ------ | --------- |
+| status | automated |
+
+#### Relationships
+
+| Type        | Related Element                                                         | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
+| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
+| inter-layer | `ux.librarycomponent.heatmap`                                           | `tests`     | outbound  |
+| inter-layer | `ux.librarycomponent.line-chart`                                        | `tests`     | outbound  |
+| inter-layer | `ux.librarycomponent.status-timeline`                                   | `tests`     | outbound  |
+| intra-layer | `testing.testcoveragetarget.chart-components`                           | `composes`  | inbound   |
+
 ### clusterOrder &gt; breaks degree and label ties by id, not input order {#clusterorder-breaks-degree-and-label-ties-by-id-not-input-order}
 
 **ID**: `testing.testcasesketch.cluster-order-breaks-degree-and-label-ties-by-id-not-input-order`
@@ -4752,6 +4789,27 @@ Integration test suite for layout="force-clustered": nested bubble boundaries re
 | inter-layer | `application.applicationfunction.clustered-force-layout-algorithm`   | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.force-force-clustered-layout-algorithms` | `composes` | inbound   |
 | intra-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`  | `composes` | inbound   |
+
+### Color Literal Check Rejects a Component Literal {#color-literal-check-rejects-a-component-literal}
+
+**ID**: `testing.testcasesketch.color-literal-check-rejects-a-component-literal`
+
+**Type**: `testcasesketch`
+
+npm run check:colors passes on the branch and fails when a literal such as #f59e0b is added to any component file; pure black and white, URL fragments and issue references in comments (#320) pass.
+
+#### Attributes
+
+| Name   | Value |
+| ------ | ----- |
+| status | draft |
+
+#### Relationships
+
+| Type        | Related Element                                                         | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
+| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
 
 ### computeDropdownPosition &gt; anchors a top panel that is shorter than its content to the available space {#computedropdownposition-anchors-a-top-panel-that-is-shorter-than-its-content-to-the-available-space}
 
@@ -32299,6 +32357,27 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 | ----------- | ------------------------------------------------------ | ---------- | --------- |
 | intra-layer | `testing.testcoveragetarget.static-site-link-variants` | `composes` | inbound   |
 
+### Theme Override Ships After the Tokens {#theme-override-ships-after-the-tokens}
+
+**ID**: `testing.testcasesketch.theme-override-ships-after-the-tokens`
+
+**Type**: `testcasesketch`
+
+With :root \{ --accent-primary: 37 99 235; \} in src/tokens/theme.css, npm run build puts that declaration after --accent-primary: 251 191 36 in dist/style.css and dist/css/base.css; check:sheets passes.
+
+#### Attributes
+
+| Name   | Value |
+| ------ | ----- |
+| status | draft |
+
+#### Relationships
+
+| Type        | Related Element                                                         | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `satisfies` | outbound  |
+| inter-layer | `product.feature.theme-slot`                                            | `tests`     | outbound  |
+
 ### tween math &gt; easeInOutCubic is symmetric and pinned at the ends {#tween-math-easeinoutcubic-is-symmetric-and-pinned-at-the-ends}
 
 **ID**: `testing.testcasesketch.tween-math-ease-in-out-cubic-is-symmetric-and-pinned-at-the-ends`
@@ -34097,6 +34176,7 @@ Playwright spec tests/charts-showcase.spec.ts.
 | inter-layer | `ux.librarycomponent.status-timeline`                                                                                                 | `covers`   | outbound  |
 | intra-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `composes` | inbound   |
 | intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                                                 | `composes` | inbound   |
+| intra-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-bar-h-feature-renders-wider-than-standard`                                       | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-bar-h-standard-renders-with-bars-and-labels`                                     | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.integration-chart-components-bar-v-bar-rects-have-non-zero-height`                                            | `composes` | outbound  |
@@ -37639,4 +37719,4 @@ Vitest unit test src/utils/__tests__/yieldToPaint.test.ts.
 
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0

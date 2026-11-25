@@ -5,9 +5,7 @@ product.persona.application-developer-embedding-a-graph-view:
   type: persona
   layer_id: product
   name: Application Developer Embedding a Graph View
-  description: "Inferred persona: a React/TypeScript developer integrating
-    GraphCanvas into their own product, choosing layout mode and supplying
-    data/callbacks."
+  description: "Inferred persona: a React/TypeScript developer integrating GraphCanvas into their own product, choosing layout mode and supplying data/callbacks."
   attributes:
     category: primary
     proficiency: advanced
@@ -24,9 +22,7 @@ product.persona.end-user-exploring-a-rendered-graph:
   type: persona
   layer_id: product
   name: End User Exploring a Rendered Graph
-  description: "Inferred persona: the person who ultimately interacts with the
-    rendered graph (pan/zoom/select/hover/drag/collapse) without knowledge of
-    the underlying library."
+  description: "Inferred persona: the person who ultimately interacts with the rendered graph (pan/zoom/select/hover/drag/collapse) without knowledge of the underlying library."
   attributes:
     category: served
     proficiency: novice
@@ -35,4 +31,19 @@ product.persona.end-user-exploring-a-rendered-graph:
   metadata:
     created_at: 2026-09-18T14:42:17.764Z
     updated_at: 2026-09-18T14:42:17.764Z
+    version: 1
+product.persona.mirror-maintainer-restyling-the-library:
+  id: 30f34619-f60e-4828-952f-7ed29c43165b
+  path: product.persona.mirror-maintainer-restyling-the-library
+  spec_node_id: product.persona
+  type: persona
+  layer_id: product
+  name: Mirror Maintainer Restyling the Library
+  description: A developer on a downstream team who applies the team's brand palette in theme.css and merges upstream release tags into the mirror.
+  attributes:
+    category: secondary
+    proficiency: advanced
+  metadata:
+    created_at: 2026-11-24T21:49:32.045Z
+    updated_at: 2026-11-24T21:49:32.045Z
     version: 1

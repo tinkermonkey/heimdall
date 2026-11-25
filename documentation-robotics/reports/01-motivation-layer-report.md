@@ -16,10 +16,10 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 34    |
-| Intra-Layer Relationships | 36    |
-| Inter-Layer Relationships | 225   |
-| Inbound Relationships     | 225   |
+| Elements                  | 38    |
+| Intra-Layer Relationships | 42    |
+| Inter-Layer Relationships | 252   |
+| Inbound Relationships     | 252   |
 | Outbound Relationships    | 0     |
 
 **Cross-Layer References**:
@@ -37,15 +37,17 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | `motivation.constraint.package-ships-esm-dist-and-agent-skills-only`                        | `constraint`  | 1             |
 | `motivation.constraint.visual-changes-pass-per-os-screenshot-baselines`                     | `constraint`  | 0             |
 | `motivation.driver.external-regression-gated-layout-quality-loop`                           | `driver`      | 5             |
-| `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `goal`        | 6             |
+| `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `goal`        | 8             |
 | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `goal`        | 5             |
 | `motivation.goal.low-friction-adoption-in-any-react-toolchain`                              | `goal`        | 6             |
 | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `goal`        | 5             |
 | `motivation.goal.usable-by-every-end-user`                                                  | `goal`        | 3             |
 | `motivation.principle.deterministic-reproducible-layout-output`                             | `principle`   | 2             |
+| `motivation.principle.every-component-color-comes-from-a-token`                             | `principle`   | 2             |
 | `motivation.principle.ide-density-and-terse-voice`                                          | `principle`   | 1             |
 | `motivation.principle.two-surface-shell-and-canvas`                                         | `principle`   | 1             |
 | `motivation.principle.zero-literal-node-overlap-guarantee`                                  | `principle`   | 4             |
+| `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `requirement` | 3             |
 | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `requirement` | 3             |
 | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `requirement` | 0             |
 | `motivation.requirement.every-exported-path-resolves-in-the-published-tarball`              | `requirement` | 1             |
@@ -63,9 +65,11 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | `motivation.requirement.opt-in-component-stylesheets-are-load-order-independent`            | `requirement` | 1             |
 | `motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners`            | `requirement` | 1             |
 | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `requirement` | 3             |
+| `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror`                | `requirement` | 2             |
 | `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `stakeholder` | 7             |
 | `motivation.stakeholder.end-user-of-an-embedding-application`                               | `stakeholder` | 2             |
 | `motivation.stakeholder.heimdall-layout-loop-quality-harness`                               | `stakeholder` | 2             |
+| `motivation.stakeholder.mirror-maintainer`                                                  | `stakeholder` | 3             |
 
 ## Inter-Layer Dependencies
 
@@ -123,8 +127,11 @@ flowchart TB
 | `business.businessservice.realizes.motivation.goal`                | `business.businessservice.large-graph-visualization`                                                                                  | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `motivation` | `realizes`   | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                 | `product.feature.per-component-imports`                                                                                               | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                 | `product.feature.server-side-rendering-support`                                                                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                 | `product.feature.theme-slot`                                                                                                          | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                 | `product.feature.theme-slot`                                                                                                          | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror`                | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                | `product.persona.application-developer-embedding-a-graph-view`                                                                        | `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `motivation` | `references` | many-to-many | medium   |
 | `product.persona.references.motivation.stakeholder`                | `product.persona.end-user-exploring-a-rendered-graph`                                                                                 | `motivation.stakeholder.end-user-of-an-embedding-application`                               | `motivation` | `references` | many-to-many | medium   |
+| `product.persona.references.motivation.stakeholder`                | `product.persona.mirror-maintainer-restyling-the-library`                                                                             | `motivation.stakeholder.mirror-maintainer`                                                  | `motivation` | `references` | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.app-navigation`                                                                                           | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.app-shell`                                                                                                | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.charting`                                                                                                 | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
@@ -147,12 +154,15 @@ flowchart TB
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.radial-tree-layout`                                                                                       | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.responsive-layout`                                                                                        | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.run-history-and-observability-views`                                                                      | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.satisfies.motivation.requirement`      | `product.softwarecapability.ui-primitives`                                                                                            | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.ui-primitives`                                                                                            | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d`    | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap`                              | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.channel-router-route-navigation-edges-applies-nudge-pass-to-spread-overlapping-segments`                      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.channel-router-route-navigation-edges-nudges-overlapping-segments-while-maintaining-orthogonality`            | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.force-layout-keeps-default-sized-chip-nodes-non-overlapping-in-a-simple-chain`                                | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-layout-galaxies-in-a-busy-forest-never-overlap-packed-by-system-circles`                               | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-layout-independent-galaxies-never-overlap-whatever-their-depth`                                        | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
@@ -185,6 +195,7 @@ flowchart TB
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.radial-tree-layout-trunk-boundaries-does-not-overlap-boundaries-of-packed-trunks`                             | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-orientation-uses-about-as-many-gutter-tracks-as-997b2fe9`   | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.route-lane-gutters-gives-each-stub-its-own-gap-track-and-overlapping-routes-their-own-gutter-tracks-51c767b0` | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.ux-nav-layout-two-page-disconnected-views-do-not-overlap-each-other`                                          | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.ux-nav-layout-view-wider-than-2x-view-fan-gap-does-not-overlap-its-parent-page`                               | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcoveragemodel.satisfies.motivation.constraint`        | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `motivation.constraint.visual-changes-pass-per-os-screenshot-baselines`                     | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -195,12 +206,15 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.activity-timeline`                                                                                               | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.adjacency-matrix`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.alert-strip`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.app-title`                                                                                                       | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.app-title`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.asset-card`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.asset-grid`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.avatar`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.badge`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-chart`                                                                                                       | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-chart`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-v`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bridge-node-list`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -209,18 +223,25 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.calendar`                                                                                                        | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.camera-controls`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chart-wrapper`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-composer`                                                                                                   | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-composer`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-container`                                                                                                  | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-container`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-divider`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-divider`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-markdown-content`                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-message`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-message`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-suggestions`                                                                                                | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chat-suggestions`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.chip`                                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.command-palette`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.config-tile`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.confirm-dialog`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.detail-drawer`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.diff-viewer`                                                                                                     | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.diff-viewer`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.donut`                                                                                                           | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.donut`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.drawer`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.entity-picker`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -241,10 +262,12 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-edge-ux`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.graph-node-ux`                                                                                                   | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.hash-set-diff`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.heatmap`                                                                                                         | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.heatmap`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.hierarchy-row`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.hierarchy-tree`                                                                                                  | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -252,6 +275,7 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.hive-plot`                                                                                                       | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden`          | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.icon`                                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.inspector-panel`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.kanban-board`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.kanban-board`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.key-value-editor`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.kvgrid`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -260,10 +284,12 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.layer-stack`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.layered-graph-context-ux`                                                                                        | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.layered-graph-explorer`                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.line-chart`                                                                                                      | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.line-chart`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.lineage-rail`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.link-category-filter`                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.log-stream`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.map-canvas`                                                                                                      | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.map-canvas`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.metric-row`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.mini-calendar`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -294,12 +320,15 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.shell-layout`                                                                                                    | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.side-by-side-diff`                                                                                               | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.sidebar`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.sparkline`                                                                                                       | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.sparkline`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.split-pane`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.stacked-bar`                                                                                                     | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.stacked-bar`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.stat-grid`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.stat-tile`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.status-badge`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.status-timeline`                                                                                                 | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.status-timeline`                                                                                                 | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.statusbar`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.statusbar`                                                                                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -314,7 +343,9 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.tooltip`                                                                                                         | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.topbar`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.topbar`                                                                                                          | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.topology-node`                                                                                                   | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.topology-node`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.trace-viewer`                                                                                                    | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.trace-viewer`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.tri-state`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.version-pill`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -445,28 +476,30 @@ One React component library, published as @tinkermonkey/heimdall-ui, that gives 
 
 #### Relationships
 
-| Type        | Related Element                                                           | Predicate   | Direction |
-| ----------- | ------------------------------------------------------------------------- | ----------- | --------- |
-| inter-layer | `product.softwarecapability.app-navigation`                               | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.app-shell`                                    | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.charting`                                     | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.chat-ui`                                      | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.data-display`                                 | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.form-input`                                   | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.layered-graph-visualization`                  | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.overlays-and-dialogs`                         | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.page-patterns`                                | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.planning-and-scheduling`                      | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.responsive-layout`                            | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.run-history-and-observability-views`          | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.ui-primitives`                                | `supports`  | inbound   |
-| inter-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`           | `supports`  | inbound   |
-| intra-layer | `motivation.principle.ide-density-and-terse-voice`                        | `influence` | inbound   |
-| intra-layer | `motivation.principle.two-surface-shell-and-canvas`                       | `influence` | inbound   |
-| intra-layer | `motivation.requirement.consumers-bundle-only-the-components-they-import` | `realizes`  | inbound   |
-| intra-layer | `motivation.requirement.every-public-export-is-documented-for-agents`     | `realizes`  | inbound   |
-| intra-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch` | `realizes`  | inbound   |
-| intra-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer`     | `influence` | inbound   |
+| Type        | Related Element                                                              | Predicate   | Direction |
+| ----------- | ---------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `product.softwarecapability.app-navigation`                                  | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.app-shell`                                       | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.charting`                                        | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.chat-ui`                                         | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.data-display`                                    | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.form-input`                                      | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.layered-graph-visualization`                     | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.overlays-and-dialogs`                            | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.page-patterns`                                   | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.planning-and-scheduling`                         | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.responsive-layout`                               | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.run-history-and-observability-views`             | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.ui-primitives`                                   | `supports`  | inbound   |
+| inter-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`              | `supports`  | inbound   |
+| intra-layer | `motivation.principle.ide-density-and-terse-voice`                           | `influence` | inbound   |
+| intra-layer | `motivation.principle.two-surface-shell-and-canvas`                          | `influence` | inbound   |
+| intra-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`      | `realizes`  | inbound   |
+| intra-layer | `motivation.requirement.consumers-bundle-only-the-components-they-import`    | `realizes`  | inbound   |
+| intra-layer | `motivation.requirement.every-public-export-is-documented-for-agents`        | `realizes`  | inbound   |
+| intra-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`    | `realizes`  | inbound   |
+| intra-layer | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror` | `realizes`  | inbound   |
+| intra-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer`        | `influence` | inbound   |
 
 ### Layout Algorithms That Scale to Large, Dense, and Pathological Graphs {#layout-algorithms-that-scale-to-large-dense-and-pathological-graphs}
 
@@ -595,6 +628,47 @@ Inferred from graphClustering.ts's header comment: louvainCluster never uses Mat
 | ----------- | ------------------------------------------------------------------------------------- | ----------- | --------- |
 | intra-layer | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `influence` | outbound  |
 | intra-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`             | `realizes`  | inbound   |
+
+### Every Component Color Comes From a Token {#every-component-color-comes-from-a-token}
+
+**ID**: `motivation.principle.every-component-color-comes-from-a-token`
+
+**Type**: `principle`
+
+Component CSS and TypeScript take colors only from design tokens (rgb(var(--token)) in both); no color literals outside src/tokens/, except pure black and white. npm run check:colors enforces it.
+
+#### Attributes
+
+| Name     | Value        |
+| -------- | ------------ |
+| category | architecture |
+
+#### Relationships
+
+| Type        | Related Element                                                         | Predicate         | Direction |
+| ----------- | ----------------------------------------------------------------------- | ----------------- | --------- |
+| inter-layer | `ux.librarycomponent.app-title`                                         | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.bar-chart`                                         | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.bar-h`                                             | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.chat-composer`                                     | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.chat-container`                                    | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.chat-divider`                                      | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.chat-message`                                      | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.chat-suggestions`                                  | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.diff-viewer`                                       | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.donut`                                             | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.graph-node-ux`                                     | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.heatmap`                                           | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.kanban-board`                                      | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.line-chart`                                        | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.map-canvas`                                        | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.sparkline`                                         | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.stacked-bar`                                       | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.status-timeline`                                   | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.topology-node`                                     | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.trace-viewer`                                      | `satisfies`       | inbound   |
+| intra-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file` | `realizes`        | inbound   |
+| intra-layer | `motivation.stakeholder.mirror-maintainer`                              | `associated-with` | inbound   |
 
 ### IDE Density and Terse Voice {#ide-density-and-terse-voice}
 
@@ -773,6 +847,34 @@ Inferred from repeated 'zero literal overlap' language across graphLayout.ts/gal
 | intra-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`               | `influence`       | outbound  |
 | intra-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs` | `realizes`        | inbound   |
 | intra-layer | `motivation.stakeholder.heimdall-layout-loop-quality-harness`                   | `associated-with` | inbound   |
+
+### A Mirror Can Restyle the Library From One File {#a-mirror-can-restyle-the-library-from-one-file}
+
+**ID**: `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`
+
+**Type**: `requirement`
+
+Every color the library paints must be reachable from one override file that upstream never edits (src/tokens/theme.css), so a mirror's palette survives each release-tag merge without conflicts. Default rendering stays pixel-identical upstream.
+
+#### Attributes
+
+| Name            | Value      |
+| --------------- | ---------- |
+| priority        | high       |
+| requirementType | functional |
+
+#### Relationships
+
+| Type        | Related Element                                                                      | Predicate         | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ----------------- | --------- |
+| inter-layer | `product.feature.theme-slot`                                                         | `satisfies`       | inbound   |
+| inter-layer | `product.softwarecapability.ui-primitives`                                           | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.chart-fills-resolve-from-tokens`                             | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.color-literal-check-rejects-a-component-literal`             | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.theme-override-ships-after-the-tokens`                       | `satisfies`       | inbound   |
+| intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `realizes`        | outbound  |
+| intra-layer | `motivation.principle.every-component-color-comes-from-a-token`                      | `realizes`        | outbound  |
+| intra-layer | `motivation.stakeholder.mirror-maintainer`                                           | `associated-with` | inbound   |
 
 ### Consumers Bundle Only the Components They Import {#consumers-bundle-only-the-components-they-import}
 
@@ -1213,6 +1315,29 @@ Components must render on a server (Astro, Next, vite build --ssr, Vitest) witho
 | intra-layer | `motivation.goal.low-friction-adoption-in-any-react-toolchain`                       | `realizes`        | outbound  |
 | intra-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer`                | `associated-with` | inbound   |
 
+### Upstream Publishing Workflows Are Inert in a Mirror {#upstream-publishing-workflows-are-inert-in-a-mirror}
+
+**ID**: `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror`
+
+**Type**: `requirement`
+
+release.yml, deploy-docs.yml and the CI visual-regression shards must run only in tinkermonkey/heimdall: in any other repo a v\* tag publishes nothing, a push to main deploys no docs, and the Visual regression check is green with its shards skipped.
+
+#### Attributes
+
+| Name            | Value      |
+| --------------- | ---------- |
+| priority        | high       |
+| requirementType | functional |
+
+#### Relationships
+
+| Type        | Related Element                                                                      | Predicate         | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ----------------- | --------- |
+| inter-layer | `product.feature.theme-slot`                                                         | `satisfies`       | inbound   |
+| intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `realizes`        | outbound  |
+| intra-layer | `motivation.stakeholder.mirror-maintainer`                                           | `associated-with` | inbound   |
+
 ### Embedding Application Developer (npm consumer) {#embedding-application-developer-npm-consumer}
 
 **ID**: `motivation.stakeholder.embedding-application-developer-npm-consumer`
@@ -1285,6 +1410,29 @@ Inferred from CHANGELOG.md's reference to 'the project's own layout-quality test
 | intra-layer | `motivation.driver.external-regression-gated-layout-quality-loop` | `associated-with` | outbound  |
 | intra-layer | `motivation.principle.zero-literal-node-overlap-guarantee`        | `associated-with` | outbound  |
 
+### Mirror Maintainer {#mirror-maintainer}
+
+**ID**: `motivation.stakeholder.mirror-maintainer`
+
+**Type**: `stakeholder`
+
+A downstream team that keeps a mirror of this repo (not a GitHub fork) with its own brand colors, and takes upstream changes by merging release tags.
+
+#### Attributes
+
+| Name | Value    |
+| ---- | -------- |
+| type | external |
+
+#### Relationships
+
+| Type        | Related Element                                                              | Predicate         | Direction |
+| ----------- | ---------------------------------------------------------------------------- | ----------------- | --------- |
+| inter-layer | `product.persona.mirror-maintainer-restyling-the-library`                    | `references`      | inbound   |
+| intra-layer | `motivation.principle.every-component-color-comes-from-a-token`              | `associated-with` | outbound  |
+| intra-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`      | `associated-with` | outbound  |
+| intra-layer | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror` | `associated-with` | outbound  |
+
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0

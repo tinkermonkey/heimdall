@@ -5,12 +5,7 @@ motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existin
   type: requirement
   layer_id: motivation
   name: Layout Engines Must Be Pluggable Without Breaking Existing Callers
-  description: "Inferred from clusteredForceLayout's own docs ('strictly
-    additive/opt-in: it doesn't change forceLayout's behavior for any existing
-    caller, and is only reached if a caller explicitly chooses it') and
-    GraphCanvas's layout prop union growing over multiple CHANGELOG releases
-    (force -> galaxy -> force-clustered -> ux-navigation -> radial-tree) without
-    breaking earlier modes."
+  description: "Inferred from clusteredForceLayout's own docs ('strictly additive/opt-in: it doesn't change forceLayout's behavior for any existing caller, and is only reached if a caller explicitly chooses it') and GraphCanvas's layout prop union growing over multiple CHANGELOG releases (force -> galaxy -> force-clustered -> ux-navigation -> radial-tree) without breaking earlier modes."
   attributes:
     requirementType: non-functional
     priority: high
@@ -30,10 +25,7 @@ motivation.requirement.server-rendered-output-hydrates-without-mismatch:
   type: requirement
   layer_id: motivation
   name: Server-Rendered Output Hydrates Without Mismatch
-  description: "Components must render on a server (Astro, Next, vite build --ssr,
-    Vitest) without touching window during render, and hydrate without text or
-    attribute mismatches: media queries resolve after mount and time-relative
-    text takes a fixed now/today. Shipped in 0.13.0 (CHANGELOG.md)."
+  description: "Components must render on a server (Astro, Next, vite build --ssr, Vitest) without touching window during render, and hydrate without text or attribute mismatches: media queries resolve after mount and time-relative text takes a fixed now/today. Shipped in 0.13.0 (CHANGELOG.md)."
   attributes:
     requirementType: non-functional
     priority: high
@@ -48,10 +40,7 @@ motivation.requirement.consumers-bundle-only-the-components-they-import:
   type: requirement
   layer_id: motivation
   name: Consumers Bundle Only the Components They Import
-  description: "An application that imports one component must bundle only that
-    component and what it uses: the package is built one module per source file
-    and its JS imports no CSS. Shipped in 0.13.0 (CHANGELOG.md: import { Button
-    } yields 365 B where 0.12 yielded 669 KB)."
+  description: "An application that imports one component must bundle only that component and what it uses: the package is built one module per source file and its JS imports no CSS. Shipped in 0.13.0 (CHANGELOG.md: import { Button } yields 365 B where 0.12 yielded 669 KB)."
   attributes:
     requirementType: non-functional
     priority: high
@@ -66,10 +55,7 @@ motivation.requirement.every-public-export-is-documented-for-agents:
   type: requirement
   layer_id: motivation
   name: Every Public Export Is Documented for Agents
-  description: Every component and non-component value exported from src/index.ts
-    must have a section in its category skill under agent-skills/, with props
-    tables that match the component types. Enforced in CI by npm run
-    check:skills (scripts/check-skill-coverage.mjs).
+  description: Every component and non-component value exported from src/index.ts must have a section in its category skill under agent-skills/, with props tables that match the component types. Enforced in CI by npm run check:skills (scripts/check-skill-coverage.mjs).
   attributes:
     requirementType: quality
     priority: medium
@@ -84,10 +70,7 @@ motivation.requirement.layout-output-is-deterministic-for-a-given-input:
   type: requirement
   layer_id: motivation
   name: Layout Output Is Deterministic for a Given Input
-  description: "The same nodes and edges produce the same positions on every run:
-    no Math.random, no wall-clock stopping, fixed iteration order and tie-breaks
-    (graphClustering.ts, organicLayout.ts headers; galaxyLayout.ts drag
-    frames)."
+  description: "The same nodes and edges produce the same positions on every run: no Math.random, no wall-clock stopping, fixed iteration order and tie-breaks (graphClustering.ts, organicLayout.ts headers; galaxyLayout.ts drag frames)."
   attributes:
     requirementType: non-functional
     priority: high
@@ -106,9 +89,7 @@ motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs:
   type: requirement
   layer_id: motivation
   name: No Two Node Boxes Overlap After Any Layout Engine Runs
-  description: Every engine finishes with a separation pass so rendered node
-    rectangles do not overlap (resolveOverlaps / separationPass /
-    FINAL_CLEANUP_MAX_PASSES in graphLayout.ts and galaxyLayout.ts).
+  description: Every engine finishes with a separation pass so rendered node rectangles do not overlap (resolveOverlaps / separationPass / FINAL_CLEANUP_MAX_PASSES in graphLayout.ts and galaxyLayout.ts).
   attributes:
     requirementType: quality
     priority: high
@@ -127,10 +108,7 @@ motivation.requirement.galaxy-keeps-orbits-even-over-round-systems:
   type: requirement
   layer_id: motivation
   name: Galaxy Keeps Orbits Even Over Round Systems
-  description: "Decision #288 (2026-11-09): for parents with many satellites or
-    one dominant branch, even orbit slots win over round systems; the trade-off
-    is documented next to SLOT_EVENNESS_BAND and the layout-loop gate is
-    relaxed."
+  description: "Decision #288 (2026-11-09): for parents with many satellites or one dominant branch, even orbit slots win over round systems; the trade-off is documented next to SLOT_EVENNESS_BAND and the layout-loop gate is relaxed."
   attributes:
     requirementType: quality
     priority: medium
@@ -149,11 +127,7 @@ motivation.requirement.dropdown-panels-render-in-a-portal-by-default:
   type: requirement
   layer_id: motivation
   name: Dropdown Panels Render in a Portal by Default
-  description: "Decision #328: every .dropdown-panel user (RowMenu,
-    FilterDropdown, Select, EntityPicker) renders its panel in a portal
-    positioned from the trigger rect, flipping when there is no room and
-    repositioning or closing on scroll; portal={false} keeps in-place
-    rendering."
+  description: "Decision #328: every .dropdown-panel user (RowMenu, FilterDropdown, Select, EntityPicker) renders its panel in a portal positioned from the trigger rect, flipping when there is no room and repositioning or closing on scroll; portal={false} keeps in-place rendering."
   attributes:
     requirementType: functional
     priority: medium
@@ -191,9 +165,7 @@ motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners:
   type: requirement
   layer_id: motivation
   name: Package Loads as Plain ESM in Node, SSR and Test Runners
-  description: No JS module in dist imports CSS, so the package can be imported
-    where CSS imports fail (Node, SSR, Vitest). Checked by check:package and
-    src/components/__tests__/serverRender.test.ts.
+  description: No JS module in dist imports CSS, so the package can be imported where CSS imports fail (Node, SSR, Vitest). Checked by check:package and src/components/__tests__/serverRender.test.ts.
   attributes:
     requirementType: non-functional
     priority: high
@@ -212,8 +184,7 @@ motivation.requirement.opt-in-component-stylesheets-are-load-order-independent:
   type: requirement
   layer_id: motivation
   name: Opt-In Component Stylesheets Are Load-Order Independent
-  description: Any combination of dist/css/<Name>.css sheets, in any order,
-    renders as dist/style.css does.
+  description: Any combination of dist/css/<Name>.css sheets, in any order, renders as dist/style.css does.
   attributes:
     requirementType: non-functional
     priority: medium
@@ -232,9 +203,7 @@ motivation.requirement.every-exported-path-resolves-in-the-published-tarball:
   type: requirement
   layer_id: motivation
   name: Every Exported Path Resolves in the Published Tarball
-  description: Every path package.json gives consumers (exports, main, types)
-    exists in what npm publishes; 0.9.0 and 0.9.1 shipped a './css' export that
-    pointed at nothing (#303).
+  description: Every path package.json gives consumers (exports, main, types) exists in what npm publishes; 0.9.0 and 0.9.1 shipped a './css' export that pointed at nothing (#303).
   attributes:
     requirementType: non-functional
     priority: high
@@ -253,10 +222,7 @@ motivation.requirement.graph-nodes-and-edges-have-accessible-names:
   type: requirement
   layer_id: motivation
   name: Graph Nodes and Edges Have Accessible Names
-  description: Every focusable node, edge and control in a graph has an accessible
-    name (edgeAccessibleName, aria-labels on collapse and toolbar buttons) and
-    can be operated from the keyboard. Checked by
-    tests/graph-a11y-names.spec.ts.
+  description: Every focusable node, edge and control in a graph has an accessible name (edgeAccessibleName, aria-labels on collapse and toolbar buttons) and can be operated from the keyboard. Checked by tests/graph-a11y-names.spec.ts.
   attributes:
     requirementType: non-functional
     priority: high
@@ -276,9 +242,7 @@ motivation.requirement.motion-honours-reduced-motion-preference:
   type: requirement
   layer_id: motivation
   name: Motion Honours Reduced-Motion Preference
-  description: Animated transitions (useTween, viewport easing) skip or shorten
-    motion when the user prefers reduced motion (REDUCED_MOTION_QUERY,
-    usePrefersReducedMotion).
+  description: Animated transitions (useTween, viewport easing) skip or shorten motion when the user prefers reduced motion (REDUCED_MOTION_QUERY, usePrefersReducedMotion).
   attributes:
     requirementType: non-functional
     priority: medium
@@ -298,9 +262,7 @@ motivation.requirement.navigation-routing-stays-within-its-time-budget:
   type: requirement
   layer_id: motivation
   name: Navigation Routing Stays Within Its Time Budget
-  description: routeNavigationEdges reruns on every re-measure and drag, so its
-    median batch time must stay under 20/40/100/250 ms for 50/100/200/400 boxes
-    with as many edges (bench:router --check). Not run in CI.
+  description: routeNavigationEdges reruns on every re-measure and drag, so its median batch time must stay under 20/40/100/250 ms for 50/100/200/400 boxes with as many edges (bench:router --check). Not run in CI.
   attributes:
     requirementType: quality
     priority: medium
@@ -320,9 +282,7 @@ motivation.requirement.live-galaxy-drag-stays-interactive:
   type: requirement
   layer_id: motivation
   name: Live Galaxy Drag Stays Interactive
-  description: Dragging a satellite in live galaxy mode must keep per-frame layout
-    time low and settle in few ticks after release, measured by
-    scripts/bench-galaxy-drag.mjs (#287). No pass/fail threshold is encoded.
+  description: Dragging a satellite in live galaxy mode must keep per-frame layout time low and settle in few ticks after release, measured by scripts/bench-galaxy-drag.mjs (#287). No pass/fail threshold is encoded.
   attributes:
     requirementType: quality
     priority: medium
@@ -341,10 +301,7 @@ motivation.requirement.large-layouts-do-not-block-the-first-paint:
   type: requirement
   layer_id: motivation
   name: Large Layouts Do Not Block the First Paint
-  description: Engine layouts run only after the computing state has painted
-    (yieldToPaint), and layered layouts above ASYNC_LAYOUT_MIN_NODES run in
-    chunks (layoutLayersAsync), so the canvas and its busy indicator appear
-    before heavy work.
+  description: Engine layouts run only after the computing state has painted (yieldToPaint), and layered layouts above ASYNC_LAYOUT_MIN_NODES run in chunks (layoutLayersAsync), so the canvas and its busy indicator appear before heavy work.
   attributes:
     requirementType: quality
     priority: high
@@ -355,4 +312,34 @@ motivation.requirement.large-layouts-do-not-block-the-first-paint:
   metadata:
     created_at: 2026-11-24T19:01:20.527Z
     updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+motivation.requirement.a-mirror-can-restyle-the-library-from-one-file:
+  id: 6ad81cba-553c-445f-b87b-2a2e9613e926
+  path: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: A Mirror Can Restyle the Library From One File
+  description: Every color the library paints must be reachable from one override file that upstream never edits (src/tokens/theme.css), so a mirror's palette survives each release-tag merge without conflicts. Default rendering stays pixel-identical upstream.
+  attributes:
+    requirementType: functional
+    priority: high
+  metadata:
+    created_at: 2026-11-24T21:49:32.044Z
+    updated_at: 2026-11-24T21:49:32.044Z
+    version: 1
+motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror:
+  id: 3de7e031-6424-4600-8f90-4f9023e62e48
+  path: motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Upstream Publishing Workflows Are Inert in a Mirror
+  description: "release.yml, deploy-docs.yml and the CI visual-regression shards must run only in tinkermonkey/heimdall: in any other repo a v* tag publishes nothing, a push to main deploys no docs, and the Visual regression check is green with its shards skipped."
+  attributes:
+    requirementType: functional
+    priority: high
+  metadata:
+    created_at: 2026-11-24T21:49:32.045Z
+    updated_at: 2026-11-24T21:49:32.045Z
     version: 1
