@@ -2,7 +2,7 @@ id: changeset-1795628359757-v0v6gnap1
 name: branch-map-poc
 description: 'Proof of concept for the Metro bands branch map (direction decided 2026-11-25, House gate "Branch map direction"; House milestone "Branch map POC"; GitHub milestone tinkermonkey/heimdall milestone 1). Promotes the prototype in src/test-pages/branchMap/ into a vocabulary-free heimdall view: a generic input model (groups, stations with kind, status and optional date, lines with from, to, weight and style, links between groups), a pure deterministic layout under src/utils/branchMap/ with placement, label placement and routing as separate stages, a standalone BranchMap view component, and a House adapter that stays in the test pages. Built in four pieces that do not share files: #411 model types, stubs and sample fixture (first; the others wait for it), then in parallel #412 layout and its unit tests, #413 BranchMap view plus src/index.ts exports and the graph agent skill, #414 House adapter, test page, App.tsx route, Playwright spec and baselines, docs showcase, README, and verifying and landing this changeset. Done when: no two stations, labels or groups overlap on the 2026-11-25 House snapshot (unit-tested); every group stays within its lane budget (Documentation Robotics'' 20 streams and Claude Plugins'' 17 fit in 8 lanes, expandable); labels sit beside their stations with no fixed label column and no rotated lane names; the test page ?example=branch-map renders the snapshot through the adapter; tests/branch-map.spec.ts has light and dark baselines; BranchMap is exported, documented in agent-skills/heimdall-graph and passes check:skills and check:colors. Proposed defaults for the open decisions, pending Austin''s confirmation: (3) width off by default, weight-based width available as an option; (4) a group may state its trunk, otherwise the heaviest milestone chain is derived; (5) bundle lines by destination, then collapse the rest into one ''N more'' line per group past maxLanes (8), expandable per group or bundle; (6) a standalone view component sharing usePanZoom and the controlled-selection convention, not a GraphCanvas layout mode.'
 created: 2026-11-25T17:39:19.784Z
-modified: 2026-11-25T17:44:47.944Z
+modified: 2026-11-25T22:32:39.804Z
 status: staged
 baseSnapshot: v2:sha256:5fd5c92961fe57efafd93591e0b1155d87748161008e8257a820df0ca6b40872
 origin:
@@ -12,7 +12,7 @@ stats:
   additions: 157
   modifications: 0
   deletions: 0
-lastSequence: 163
+lastSequence: 197
 unstaged:
   - sequence: 23
     removedAt: 156
@@ -150,4 +150,808 @@ unstaged:
           updated_at: 2026-11-25T17:41:12.937Z
           version: 1
       timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 14
+    removedAt: 164
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-data
+      layerName: data-model
+      after:
+        id: 4b3e4812-a62a-4e77-9fd6-565c81c38692
+        path: data-model.schemadefinition.branch-map-data
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapData
+        description: "The branch map's input: groups, stations, lines and links. Vocabulary-free; ids are unique across groups and stations."
+        attributes:
+          title: BranchMapData
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 15
+    removedAt: 165
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-group
+      layerName: data-model
+      after:
+        id: 17c75b89-3611-4ed7-b4cf-2148de69fb8f
+        path: data-model.schemadefinition.branch-map-group
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapGroup
+        description: "One group (a column with its own trunk): id, label, optional color (a --graph-layer-<n> palette index, else by order), optional trunk (station ids, in order) that overrides the derived trunk."
+        attributes:
+          title: BranchMapGroup
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 20
+    removedAt: 166
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-layout
+      layerName: data-model
+      after:
+        id: 324b791c-5f3f-4005-9c58-7f9c51743798
+        path: data-model.schemadefinition.branch-map-layout
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapLayout
+        description: "Output of layoutBranchMap: groups (x, width, trunk x, lane count, counts), stations (x, y, rank, lane, onTrunk), lines before routing (lane, from, to, members when bundled), label boxes (placed and unplaced), bounds and issues."
+        attributes:
+          title: BranchMapLayout
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 17
+    removedAt: 167
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-line
+      layerName: data-model
+      after:
+        id: cf922bb8-78df-4c96-9f51-dfe21af8709a
+        path: data-model.schemadefinition.branch-map-line
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapLine
+        description: "A line (a branch): id, group, label, from (a station id, or null for the group's start), to (a station id, or null for an open end), status ('active', 'done', 'set-aside', 'dropped': dropped ends with a bar), style ('solid', 'dashed', 'dotted'), weight (for width and bundling), marks ({ total, emphasized }: ticks along the run) and data."
+        attributes:
+          title: BranchMapLine
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 18
+    removedAt: 168
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-link
+      layerName: data-model
+      after:
+        id: 29b054bd-ac39-41ca-885e-f67163009c73
+        path: data-model.schemadefinition.branch-map-link
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapLink
+        description: "A link between groups: id, kind ('dependency': an arrow from the station waited on to the waiting one, which also orders ranks; 'provides': a dotted arch from a provider station to another group's start), from, to (station or group ids; a group id means its start marker) and optional label."
+        attributes:
+          title: BranchMapLink
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 19
+    removedAt: 169
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-options
+      layerName: data-model
+      after:
+        id: b5d1e2d6-09a8-4b3f-aa9f-7bed3adca924
+        path: data-model.schemadefinition.branch-map-options
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapOptions
+        description: "Layout options: rowGap, rankGap, laneGap (default 24), groupGap, minBranchRanks, maxLanes (default 8), expanded (group or bundle ids), width ('off' default, or 'weight'), maxLabelWidth (default 180), measureText (optional, injected so layout stays headless), looseStations ('spur': stations no line leads to sit on one dotted planned line per group)."
+        attributes:
+          title: BranchMapOptions
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 21
+    removedAt: 170
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-scene
+      layerName: data-model
+      after:
+        id: 497ba143-cec6-4aff-8a0b-45a1878e6748
+        path: data-model.schemadefinition.branch-map-scene
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapScene
+        description: "Output of routeBranchMap: the layout plus each line's points, path, run and end, trunk segments with width and weight, and link paths with a mid point for labels."
+        attributes:
+          title: BranchMapScene
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 16
+    removedAt: 171
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-station
+      layerName: data-model
+      after:
+        id: a71859ab-a10d-4076-9ada-a332d47634b1
+        path: data-model.schemadefinition.branch-map-station
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapStation
+        description: "A station on a group's map: id, group, label, kind ('stop' drawn as a circle, 'decision' drawn as a diamond), status ('planned', 'active', 'done', 'set-aside', 'dropped'), optional date (ISO; places a done station above the start), optional after (station ids it follows), progress ([met, total]), blocked flag and data (passed through to callbacks)."
+        attributes:
+          title: BranchMapStation
+          type: object
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 8
+    removedAt: 172
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-placement
+      layerName: application
+      after:
+        id: 05923b0b-b2d5-4d23-9045-f625886d93e0
+        path: application.applicationfunction.branch-map-placement
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Placement
+        description: "layoutBranchMap(): validate the input (duplicate ids, dangling references and cycles go to issues, never throw), rank stations (dated done stations above the start marker by date; open stations below it by longest path over station.after, line from-to with a minimum span, and dependency links, solved across all groups so cross-group links point down), choose each trunk, bundle lines, assign rank bands with one sub-row per station per group, assign lanes by interval colouring (trunk on lane 0, freed lanes reused), place the labels, then pack groups left to right by their measured width. Output is BranchMapLayout: positions only."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 9
+    removedAt: 173
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-trunk-selection
+      layerName: application
+      after:
+        id: ad8dade0-8030-4fab-83c1-dbb035b79f9a
+        path: application.applicationfunction.branch-map-trunk-selection
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Trunk Selection
+        description: "chooseBranchMapTrunk(): a group's stated trunk (group.trunk, station ids) when given, else the heaviest chain of stops in rank order (weight from arriving lines and their weight, a bonus for consecutive stops linked by after). Decision stations sit on the trunk when nothing leads to them and their row is free. Promoted from the prototype's trunk stage."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 10
+    removedAt: 174
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-line-bundling
+      layerName: application
+      after:
+        id: 0412909b-c3f8-4759-979e-0379924e3ea1
+        path: application.applicationfunction.branch-map-line-bundling
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Line Bundling
+        description: "bundleBranchLines(): keeps a group within maxLanes. Merges lines with the same from-rank and destination into one bundle line (members, count, summed weight), largest sets first; if still over budget, collapses the lightest remaining lines into one 'N more' line per group. Groups and bundles named in expanded are left whole. Deterministic tie-breaks by id."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 11
+    removedAt: 175
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-label-placement
+      layerName: application
+      after:
+        id: 32362735-cf60-4334-96a5-14153be11cfb
+        path: application.applicationfunction.branch-map-label-placement
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Label Placement
+        description: "placeBranchMapLabels(): per group, candidate boxes for each station label (right of the station on its sub-row, then left when the station is off the trunk and the side is free) and each line label (horizontal, at the fork, right of the run), placed greedily by priority (trunk stations, then other stations, then line names) so no box overlaps another box or a station mark. Text width from options.measureText or a character-width estimate; wraps to two lines at maxLabelWidth, then ellipsis. Unplaced labels are listed. Returns the group's label extent, which sets its width."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 12
+    removedAt: 176
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-routing
+      layerName: application
+      after:
+        id: 71bed825-1608-4b2e-90a8-4f8dd472aef6
+        path: application.applicationfunction.branch-map-routing
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Routing
+        description: "routeBranchMap(): from a BranchMapLayout only, each line's polyline (fork at 45 degrees, straight run along its lane, rejoin at 45 degrees, corners rounded with polylineCurve from laneLayout.ts) with its run for ticks, how it ends (join, station, open, dead), the trunk as straight segments with per-segment width when width is on (fork takes weight off, join gives it back, a dead end never returns it), and link curves (dependency arrows between stations, arches from a provider station to a group's start). Output is BranchMapScene."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 13
+    removedAt: 177
+    change:
+      type: add
+      elementId: application.applicationfunction.house-branch-map-adapter
+      layerName: application
+      after:
+        id: 11d91168-d6cb-4614-b857-4e854dfa5410
+        path: application.applicationfunction.house-branch-map-adapter
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: House Branch Map Adapter
+        description: "houseToBranchMap() in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups, milestones stops and gates decisions (status proposed to planned, reached and decided to done), workstreams lines (from: the latest gate that opened it or station it waits on, else the start; style dashed for explorations, dotted for set aside; weight from streams or tasks), depends_on across projects dependency links, interfaces arches from the provider's next delivering milestone to each user's start, blocked derived as House derives it. Horizon (from now, whole history) is the adapter's filter. Stays out of the library."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 7
+    removedAt: 178
+    change:
+      type: add
+      elementId: application.applicationservice.branch-map-layout
+      layerName: application
+      after:
+        id: a8e4c971-82cf-4393-9415-21739b08c45c
+        path: application.applicationservice.branch-map-layout
+        spec_node_id: application.applicationservice
+        type: applicationservice
+        layer_id: application
+        name: Branch Map Layout
+        description: "Exported from the package entry point out of src/utils/branchMap/: layoutBranchMap (placement and label placement), routeBranchMap (line and link routing) and branchMapScene (both, memoizable), with the BranchMap* types."
+        attributes:
+          serviceType: synchronous
+        metadata:
+          created_at: 2026-11-25T17:41:12.932Z
+          updated_at: 2026-11-25T17:41:12.932Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 23
+    removedAt: 179
+    change:
+      type: add
+      elementId: ux.librarycomponent.branch-map
+      layerName: ux
+      after:
+        id: 93a52678-8b62-4a21-8f09-b10723be3a48
+        path: ux.librarycomponent.branch-map
+        spec_node_id: ux.librarycomponent
+        type: librarycomponent
+        layer_id: ux
+        name: BranchMap
+        description: "A standalone SVG view of a branch map: it runs branchMapScene, draws groups, trunks, lines, stations, ticks, links and placed labels in --graph-layer-* colours, and handles direct manipulation only (no chrome). Selection is controlled (selectedId, onSelect; Escape clears), hover sets hoveredId, pan and zoom come from usePanZoom, stations and lines are focusable with accessible names, bundles expand through expanded and onExpandedChange, and renderTooltip draws hover detail. Layout options are props."
+        attributes:
+          type: display
+          category: heimdall-graph
+          label: BranchMap
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        accepted_gaps:
+          - direction: outgoing
+            predicate: composes
+            other_spec_node_id: ux.librarycomponent
+            reason: BranchMap draws its own SVG scene and has no chrome (the layered-graph precedent); hover detail comes through the caller's renderTooltip, so it composes no other library component.
+            decided_by: agent
+            decided_at: 2026-11-25T17:41:34.543Z
+            changeset: changeset-1795628359757-v0v6gnap1
+      timestamp: 2026-11-25T17:41:34.556Z
+    rewritten: true
+  - sequence: 25
+    removedAt: 180
+    change:
+      type: add
+      elementId: testing.testcoveragetarget.branch-map-layout-tests
+      layerName: testing
+      after:
+        id: 28282f0b-4874-45c1-965c-0935b77dbeef
+        path: testing.testcoveragetarget.branch-map-layout-tests
+        spec_node_id: testing.testcoveragetarget
+        type: testcoveragetarget
+        layer_id: testing
+        name: Branch Map Layout Tests
+        description: "Vitest unit tests src/utils/__tests__/branchMap.test.ts on the vocabulary-free sample (src/test-pages/fixtures/branchMapSample.ts, which mirrors the snapshot's 20- and 17-line projects): overlap, determinism, lane budget, trunk, label placement and stage separation."
+        attributes:
+          targetType: library
+          priority: high
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:44:36.894Z
+    rewritten: true
+  - sequence: 26
+    removedAt: 181
+    change:
+      type: add
+      elementId: testing.testcoveragetarget.house-branch-map-adapter-tests
+      layerName: testing
+      after:
+        id: e31c037a-7df8-4f38-80ff-0e7069d9958a
+        path: testing.testcoveragetarget.house-branch-map-adapter-tests
+        spec_node_id: testing.testcoveragetarget
+        type: testcoveragetarget
+        layer_id: testing
+        name: House Branch Map Adapter Tests
+        description: "Vitest unit test src/test-pages/branchMap/houseBranchMapAdapter.test.ts: the adapter's mapping, and the whole House snapshot run through the adapter and the layout with no overlapping stations, labels or groups."
+        attributes:
+          targetType: application-component
+          priority: medium
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+        accepted_gaps:
+          - direction: outgoing
+            predicate: covers
+            other_spec_node_id: ux.librarycomponent
+            reason: The House adapter is test-page code that maps a fixture to the generic model; it covers no library component, by design (the library stays vocabulary-free).
+            decided_by: agent
+            decided_at: 2026-11-25T17:41:35.356Z
+            changeset: changeset-1795628359757-v0v6gnap1
+      timestamp: 2026-11-25T17:44:36.986Z
+    rewritten: true
+  - sequence: 24
+    removedAt: 182
+    change:
+      type: add
+      elementId: testing.testcoveragetarget.branch-map-view
+      layerName: testing
+      after:
+        id: cae58113-f2c2-49ef-a1ce-f1bb69a80c59
+        path: testing.testcoveragetarget.branch-map-view
+        spec_node_id: testing.testcoveragetarget
+        type: testcoveragetarget
+        layer_id: testing
+        name: Branch Map View
+        description: "Playwright spec tests/branch-map.spec.ts against ?example=branch-map: selection, keyboard, expand, and visual baselines."
+        attributes:
+          targetType: ui-component
+          priority: high
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 27
+    removedAt: 183
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+      layerName: testing
+      after:
+        id: d5a707fa-d98f-4698-9df0-e4aa0b783dcf
+        path: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: branch map layout > no stations, labels or groups overlap on the House snapshot
+        description: "All seven projects of the 2026-11-25 snapshot, both horizons: every pair of station marks, placed label boxes and group extents is disjoint."
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 32
+    removedAt: 184
+    change:
+      type: add
+      elementId: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+      layerName: testing
+      after:
+        id: 199d59b7-7c34-4e26-8890-5637f58cf51a
+        path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: house branch map adapter > maps workstreams, interfaces and blocked as House does
+        description: Open workstreams become lines from their opening gate or the start; interfaces become provides links; depends_on across projects become dependency links; blocked matches House's rule.
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 28
+    removedAt: 185
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+      layerName: testing
+      after:
+        id: e9a92e6f-e5fc-4c32-8573-e6cb85dd6311
+        path: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: branch map layout > the same input gives the same scene
+        description: Two runs, and a run on shuffled input arrays, give deep-equal scenes.
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 29
+    removedAt: 186
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+      layerName: testing
+      after:
+        id: 6aa25c5d-2666-4f92-9ced-1d85fa4a68f6
+        path: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: branch map layout > a group past its lane budget bundles by destination, then into N more
+        description: The sample's 20-line group (9 destinations) and 17-line group (15 destinations), shaped like Documentation Robotics and Claude Plugins, lay out in at most 8 lanes; expanding the group draws every line.
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:44:37.067Z
+    rewritten: true
+  - sequence: 30
+    removedAt: 187
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+      layerName: testing
+      after:
+        id: cac50748-04c4-46ef-85ad-c5b7844f28ff
+        path: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: branch map layout > a stated trunk wins over the derived chain
+        description: group.trunk puts exactly those stations on lane 0; without it the heaviest chain is chosen.
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 31
+    removedAt: 188
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+      layerName: testing
+      after:
+        id: 53822c85-511f-43c1-ac64-55a0a912f59a
+        path: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: branch map layout > routing reads only the placement
+        description: routeBranchMap on a serialized and parsed BranchMapLayout gives the same scene as branchMapScene; every line starts and ends on its stations' positions.
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 33
+    removedAt: 189
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+      layerName: testing
+      after:
+        id: c3bb1834-bf04-4fd4-8d2b-c09d718bed5e
+        path: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: BranchMap > click and keyboard select stations and lines, Escape clears
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 34
+    removedAt: 190
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+      layerName: testing
+      after:
+        id: acba5c88-fda7-4f45-8b67-4a38c8551801
+        path: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: "BranchMap > visual: theme canvas, three projects from now"
+        description: Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 35
+    removedAt: 191
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+      layerName: testing
+      after:
+        id: ed329dce-f379-4d83-b675-c7fa5772f705
+        path: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: "BranchMap > visual: Documentation Robotics bundled and expanded"
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+      timestamp: 2026-11-25T17:41:12.958Z
+    rewritten: true
+  - sequence: 10
+    removedAt: 192
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-line-bundling
+      layerName: application
+      after:
+        id: 0412909b-c3f8-4759-979e-0379924e3ea1
+        path: application.applicationfunction.branch-map-line-bundling
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Line Bundling
+        description: "bundleBranchLines(): keeps a group within maxLanes. Merges lines with the same from-rank and destination into one bundle line (members, count, summed weight), largest sets first; if still over budget, collapses the lightest remaining lines into one 'N more' line per group. Groups and bundles named in expanded are left whole. Deterministic tie-breaks by id."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/utils/branchMap/bundle.ts
+              symbol: bundleBranchLines
+      timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 8
+    removedAt: 193
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-placement
+      layerName: application
+      after:
+        id: 05923b0b-b2d5-4d23-9045-f625886d93e0
+        path: application.applicationfunction.branch-map-placement
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Placement
+        description: "layoutBranchMap(): validate the input (duplicate ids, dangling references and cycles go to issues, never throw), rank stations (dated done stations above the start marker by date; open stations below it by longest path over station.after, line from-to with a minimum span, and dependency links, solved across all groups so cross-group links point down), choose each trunk, bundle lines, assign rank bands with one sub-row per station per group, assign lanes by interval colouring (trunk on lane 0, freed lanes reused), place the labels, then pack groups left to right by their measured width. Output is BranchMapLayout: positions only."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/utils/branchMap/layout.ts
+              symbol: layoutBranchMap
+      timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 11
+    removedAt: 194
+    change:
+      type: add
+      elementId: application.applicationfunction.branch-map-label-placement
+      layerName: application
+      after:
+        id: 32362735-cf60-4334-96a5-14153be11cfb
+        path: application.applicationfunction.branch-map-label-placement
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: Branch Map Label Placement
+        description: "placeBranchMapLabels(): per group, candidate boxes for each station label (right of the station on its sub-row, then left when the station is off the trunk and the side is free) and each line label (horizontal, at the fork, right of the run), placed greedily by priority (trunk stations, then other stations, then line names) so no box overlaps another box or a station mark. Text width from options.measureText or a character-width estimate; wraps to two lines at maxLabelWidth, then ellipsis. Unplaced labels are listed. Returns the group's label extent, which sets its width."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/utils/branchMap/labels.ts
+              symbol: placeBranchMapLabels
+      timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 13
+    removedAt: 195
+    change:
+      type: add
+      elementId: application.applicationfunction.house-branch-map-adapter
+      layerName: application
+      after:
+        id: 11d91168-d6cb-4614-b857-4e854dfa5410
+        path: application.applicationfunction.house-branch-map-adapter
+        spec_node_id: application.applicationfunction
+        type: applicationfunction
+        layer_id: application
+        name: House Branch Map Adapter
+        description: "houseToBranchMap() in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups, milestones stops and gates decisions (status proposed to planned, reached and decided to done), workstreams lines (from: the latest gate that opened it or station it waits on, else the start; style dashed for explorations, dotted for set aside; weight from streams or tasks), depends_on across projects dependency links, interfaces arches from the provider's next delivering milestone to each user's start, blocked derived as House derives it. Horizon (from now, whole history) is the adapter's filter. Stays out of the library."
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/test-pages/branchMap/houseBranchMapAdapter.ts
+              symbol: houseToBranchMap
+      timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 23
+    removedAt: 196
+    change:
+      type: add
+      elementId: ux.librarycomponent.branch-map
+      layerName: ux
+      after:
+        id: 93a52678-8b62-4a21-8f09-b10723be3a48
+        path: ux.librarycomponent.branch-map
+        spec_node_id: ux.librarycomponent
+        type: librarycomponent
+        layer_id: ux
+        name: BranchMap
+        description: "A standalone SVG view of a branch map: it runs branchMapScene, draws groups, trunks, lines, stations, ticks, links and placed labels in --graph-layer-* colours, and handles direct manipulation only (no chrome). Selection is controlled (selectedId, onSelect; Escape clears), hover sets hoveredId, pan and zoom come from usePanZoom, stations and lines are focusable with accessible names, bundles expand through expanded and onExpandedChange, and renderTooltip draws hover detail. Layout options are props."
+        attributes:
+          type: display
+          category: heimdall-graph
+          label: BranchMap
+        metadata:
+          created_at: 2026-11-25T17:41:12.936Z
+          updated_at: 2026-11-25T17:41:12.936Z
+          version: 1
+        accepted_gaps:
+          - direction: outgoing
+            predicate: composes
+            other_spec_node_id: ux.librarycomponent
+            reason: BranchMap draws its own SVG scene and has no chrome (the layered-graph precedent); hover detail comes through the caller's renderTooltip, so it composes no other library component.
+            decided_by: agent
+            decided_at: 2026-11-25T17:41:34.543Z
+            changeset: changeset-1795628359757-v0v6gnap1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: src/components/BranchMap.tsx
+              symbol: BranchMap
+      timestamp: 2026-11-25T22:32:22.572Z
+    rewritten: true
+  - sequence: 33
+    removedAt: 197
+    change:
+      type: add
+      elementId: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+      layerName: testing
+      after:
+        id: c3bb1834-bf04-4fd4-8d2b-c09d718bed5e
+        path: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: BranchMap > click and keyboard select stations and lines, Escape clears
+        attributes:
+          status: draft
+          implementationFormat: automated
+        metadata:
+          created_at: 2026-11-25T17:41:12.937Z
+          updated_at: 2026-11-25T17:41:12.937Z
+          version: 1
+        source_reference:
+          provenance: manual
+          locations:
+            - file: tests/branch-map.spec.ts
+              symbol: "keyboard: Enter selects a station, Space a line, Escape clears"
+      timestamp: 2026-11-25T22:32:22.572Z
     rewritten: true

@@ -260,6 +260,11 @@ Known limits of the POC:
 - A project that uses its own interface (Documentation Robotics' "Post-extraction review") draws
   no link.
 - The House data is a fixture taken on 2026-11-25, not read live.
+- Label boxes never overlap each other, a station or another group, but links do not take part:
+  a provides arch or a dependency curve can cross a label.
+- With many lines expanded (all 20 of Documentation Robotics), some line names find room only
+  well below their fork, away from the line they name.
+- The map opens at zoom 1 with no fit-to-view, and links are reached by mouse only.
 
 ## Files
 
