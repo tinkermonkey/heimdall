@@ -1,9 +1,9 @@
 version: 0.1.0
 schema: documentation-robotics-v1
 cli_version: 0.8.0
-spec_version: 0.14.0
+spec_version: 0.15.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-25T10:55:49.801Z
+updated: 2026-11-25T14:41:17.479Z
 project:
   name: heimdall-ux
   description: ""
@@ -122,6 +122,7 @@ layers:
     enabled: true
     elements:
       contextvariation: 1
+      coveragegap: 2
       coveragerequirement: 6
       coveragesummary: 1
       environmentfactor: 1
@@ -132,7 +133,6 @@ layers:
       testcasesketch: 1693
       testcoveragemodel: 2
       testcoveragetarget: 87
-      coveragegap: 2
 changeset_history:
   - name: wire-technology-orphans
     committed_at: 2026-09-18T14:45:21.201Z
