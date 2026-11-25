@@ -3,7 +3,7 @@ schema: documentation-robotics-v1
 cli_version: 0.8.0
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-25T10:08:47.648Z
+updated: 2026-11-25T10:55:49.801Z
 project:
   name: heimdall-ux
   description: ""
@@ -59,7 +59,7 @@ layers:
     elements:
       applicationcomponent: 3
       applicationevent: 9
-      applicationfunction: 59
+      applicationfunction: 68
       applicationinteraction: 1
       applicationprocess: 1
       applicationservice: 44
@@ -132,6 +132,7 @@ layers:
       testcasesketch: 1693
       testcoveragemodel: 2
       testcoveragetarget: 87
+      coveragegap: 2
 changeset_history:
   - name: wire-technology-orphans
     committed_at: 2026-09-18T14:45:21.201Z
@@ -147,4 +148,7 @@ changeset_history:
     action: committed
   - name: pane-rail
     committed_at: 2026-11-25T10:08:47.647Z
+    action: committed
+  - name: gap-treatment-after-reconcile
+    committed_at: 2026-11-25T10:55:49.801Z
     action: committed

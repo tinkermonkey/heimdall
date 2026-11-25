@@ -631,6 +631,8 @@ application.applicationfunction.dropdown-portal-and-outside-click-containment:
     locations:
       - file: src/hooks/useDropdownPortal.ts
         symbol: useDropdownPortal
+      - file: src/hooks/useDropdownPortal.ts
+        symbol: containsAcrossPortals
   metadata:
     created_at: 2026-11-23T16:44:40.173Z
     updated_at: 2026-11-23T16:44:40.173Z
@@ -1008,4 +1010,157 @@ application.applicationfunction.pane-rail-marks:
   metadata:
     created_at: 2026-11-24T13:49:47.543Z
     updated_at: 2026-11-24T13:49:47.543Z
+    version: 1
+application.applicationfunction.graph-canvas-context-lookup:
+  id: ab921037-2870-463c-a874-05bad7833415
+  path: application.applicationfunction.graph-canvas-context-lookup
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Graph Canvas Context Lookup
+  description: "useGraphCanvas(): returns the enclosing GraphCanvas's context (viewport, selection and the canvas's imperative actions) for chrome rendered inside it, and throws when called outside a GraphCanvas."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/GraphCanvasContext.tsx
+        symbol: useGraphCanvas
+  metadata:
+    created_at: 2026-11-25T10:42:22.991Z
+    updated_at: 2026-11-25T10:42:22.991Z
+    version: 1
+application.applicationfunction.link-edge-metadata-formatting:
+  id: f76b1647-eaed-4700-98ad-9e546ac02bc4
+  path: application.applicationfunction.link-edge-metadata-formatting
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Link Edge Metadata Formatting
+  description: "linkEdgeMetadata(): turns an indexed layered-graph link into GraphEdgeInspector metadata: its predicates as the title ('No predicate' without), source and target titles, and the layers it spans and its category as rows."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/layered/matrix.ts
+        symbol: linkEdgeMetadata
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
+    version: 1
+application.applicationfunction.layered-graph-state-resolution:
+  id: 31be0d36-2249-41de-ad51-618cd3c4956c
+  path: application.applicationfunction.layered-graph-state-resolution
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Layered Graph State Resolution
+  description: "useLayeredGraphProp(): resolves the layered-graph state a control works on, the graph prop or else the enclosing LayeredGraphContext, and throws naming the component when there is neither."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: useLayeredGraphProp
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
+    version: 1
+application.applicationfunction.follow-depth-labelling:
+  id: f3528192-a1be-406c-a226-4fa8ad6240d0
+  path: application.applicationfunction.follow-depth-labelling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Follow Depth Labelling
+  description: "followOptionLabel(): labels a follow depth for the Follow control: 0 is 'Direct', n is '+n layer(s)'."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: followOptionLabel
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
+    version: 1
+application.applicationfunction.link-category-labelling:
+  id: 38cf5266-a7e2-4d8c-a1a2-07bda39b3e86
+  path: application.applicationfunction.link-category-labelling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Link Category Labelling
+  description: "categoryDisplayLabel(): turns a link category key into display text ('data_flow' to 'Data flow'), 'Uncategorized' when empty."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/LayeredGraphControls.tsx
+        symbol: categoryDisplayLabel
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
+    version: 1
+application.applicationfunction.reach-relationship-listing:
+  id: 0ef98053-db97-45ec-bf8e-efd56cb7e241
+  path: application.applicationfunction.reach-relationship-listing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Reach Relationship Listing
+  description: "reachRelationships(): lists the selected node's cross-layer and intra-layer relationships that the filters leave traversable, labelled with their visible predicates and carrying hop, via and layer, with the reach's node and layer counts; null without a selection. Feeds ReachInspector or a GraphInspector."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/ReachInspector.tsx
+        symbol: reachRelationships
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
+    version: 1
+application.applicationfunction.reach-summary-formatting:
+  id: bc8a7ee0-55b0-40e8-a8d9-be1db9e521e1
+  path: application.applicationfunction.reach-summary-formatting
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Reach Summary Formatting
+  description: "reachSummaryText(): formats a reach as one line, e.g. 'reach 13 nodes across 3 layers · follow +1 layer'."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/ReachInspector.tsx
+        symbol: reachSummaryText
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
+    version: 1
+application.applicationfunction.explorer-snapshot-sanitizing:
+  id: 6811eced-a8bb-4ff9-b077-aa13ccc128f1
+  path: application.applicationfunction.explorer-snapshot-sanitizing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Explorer Snapshot Sanitizing
+  description: "sanitizeLayeredGraphExplorerSnapshot(): reduces an untrusted explorer snapshot (from a URL, storage or a message) to well-formed fields: the graph fields through sanitizeLayeredGraphSnapshot, a known view, a boolean nodeLabels, a known camera preset, finite camera fields and a positive layer gap; anything else is dropped. Every explorer entry point runs its input through it."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/LayeredGraphExplorer.tsx
+        symbol: sanitizeLayeredGraphExplorerSnapshot
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
+    version: 1
+application.applicationfunction.pan-and-zoom-viewport-control:
+  id: 8876a78c-c6d0-49a9-b479-2d01b12c265a
+  path: application.applicationfunction.pan-and-zoom-viewport-control
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Pan and Zoom Viewport Control
+  description: "usePanZoom(): the viewport transform for a pannable, zoomable surface: wheel and pinch zoom through a non-passive native listener, drag-to-pan with inertial glide, keyboard zoom and pan, imperative zoomTo/panTo/reset, a lock that freezes user input, and start/change/end reports of user-driven viewport input only."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/hooks/usePanZoom.ts
+        symbol: usePanZoom
+  metadata:
+    created_at: 2026-11-25T10:42:22.992Z
+    updated_at: 2026-11-25T10:42:22.992Z
     version: 1

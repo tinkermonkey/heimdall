@@ -2311,6 +2311,14 @@ ux.librarycomponent.graph-edge-shape-ux:
     locations:
       - file: src/components/GraphEdgeShape.tsx
         symbol: GraphEdgeShape
+  accepted_gaps:
+    - direction: outgoing
+      predicate: composes
+      other_spec_node_id: ux.librarycomponent
+      reason: GraphEdgeShape draws the edge's SVG path, marker and label itself and imports only graph utilities. It is the leaf piece GraphEdge and GraphCanvas compose, so it composes no other library component.
+      decided_by: maintainer
+      decided_at: 2026-11-25T10:42:49.087Z
+      changeset: changeset-1795603318372-1h53bc45b
   metadata:
     created_at: 2026-11-24T19:01:20.527Z
     updated_at: 2026-11-24T19:01:20.527Z

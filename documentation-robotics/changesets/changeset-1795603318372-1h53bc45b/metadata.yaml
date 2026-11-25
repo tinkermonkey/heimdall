@@ -1,0 +1,66 @@
+id: changeset-1795603318372-1h53bc45b
+name: gap-treatment-after-reconcile
+description: "Treat the 14 accepted gaps the #404 reconciliation dropped: close the 7 service gaps by modelling the exported functions that realize them (9 new, 1 existing); record the 2 untested callbacks as open coverage gaps; re-accept the 2 links that truly don't apply (library module uses no component; GraphEdgeShape is a leaf); flag GraphInspector's missing composition for review."
+created: 2026-11-25T10:41:58.394Z
+modified: 2026-11-25T10:55:49.732Z
+status: committed
+baseSnapshot: v2:sha256:2f5c5af8dc60da2995cd040bf3f4a23a58f2d4f00cde74a0bf83457f55250a75
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 47
+  modifications: 3
+  deletions: 0
+lastSequence: 51
+unstaged:
+  - sequence: 29
+    removedAt: 35
+    change:
+      type: add
+      elementId: testing.coveragegap.background-click-has-no-test
+      layerName: testing
+      after:
+        id: de6a95d9-97d0-4aa1-8696-5ced727aba21
+        path: testing.coveragegap.background-click-has-no-test
+        spec_node_id: testing.coveragegap
+        type: coveragegap
+        layer_id: testing
+        name: Background Click Has No Test
+        description: No test exercises GraphCanvas's onBackgroundClick callback or its background pointer-up handling (application.applicationfunction.canvas-pointer-handling). The Graph canvas specs click nodes, edges and toolbar controls, never empty canvas. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+        attributes:
+          severity: medium
+          affectedRequirements: "application.applicationfunction.canvas-pointer-handling: GraphCanvas calls onBackgroundClick when a pointer-up on empty canvas ends no drag"
+          remediationStatus: open
+          targetRef: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+        metadata:
+          created_at: 2026-11-25T10:42:42.768Z
+          updated_at: 2026-11-25T10:42:42.768Z
+          version: 1
+      timestamp: 2026-11-25T10:42:42.776Z
+    rewritten: true
+  - sequence: 30
+    removedAt: 36
+    change:
+      type: add
+      elementId: testing.coveragegap.collapse-toggle-callback-has-no-test
+      layerName: testing
+      after:
+        id: 5e8f6c44-c4c7-4744-95c4-dce2c8fc030e
+        path: testing.coveragegap.collapse-toggle-callback-has-no-test
+        spec_node_id: testing.coveragegap
+        type: coveragegap
+        layer_id: testing
+        name: Collapse Toggle Callback Has No Test
+        description: No test exercises the onToggleCollapse callback (application.applicationfunction.collapse-toggling). The collapse-control tests are visual snapshots of the rendered control, not of what a toggle reports. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+        attributes:
+          severity: medium
+          affectedRequirements: "application.applicationfunction.collapse-toggling: GraphCollapseControl and GraphCanvas call onToggleCollapse with the node and its new collapsed state"
+          remediationStatus: open
+          targetRef: testing.testcoveragetarget.galaxy-layout-collapse-and-expand
+        metadata:
+          created_at: 2026-11-25T10:42:42.768Z
+          updated_at: 2026-11-25T10:42:42.768Z
+          version: 1
+      timestamp: 2026-11-25T10:42:42.776Z
+    rewritten: true
