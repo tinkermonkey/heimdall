@@ -5,9 +5,7 @@ data-model.schemadefinition.graph-node-data:
   type: schemadefinition
   layer_id: data-model
   name: GraphNodeData
-  description: "Public data shape for a graph node passed to GraphCanvas: id,
-    label, optional kind/domainColor, optional explicit x/y (pins the node under
-    any engine layout)."
+  description: "Public data shape for a graph node passed to GraphCanvas: id, label, optional kind/domainColor, optional explicit x/y (pins the node under any engine layout)."
   attributes:
     title: GraphNodeData
     type: object
@@ -27,9 +25,7 @@ data-model.schemadefinition.graph-edge-data-shape:
   type: schemadefinition
   layer_id: data-model
   name: GraphEdge (data shape)
-  description: "Public data shape for a graph edge: id/sourceId/targetId plus
-    optional label, variant, weight (0-100, mapped to stroke width), opacity,
-    strokeDash, per-endpoint anchor, and curvature."
+  description: "Public data shape for a graph edge: id/sourceId/targetId plus optional label, variant, weight (0-100, mapped to stroke width), opacity, strokeDash, per-endpoint anchor, and curvature."
   attributes:
     title: GraphEdge
     type: object
@@ -49,9 +45,7 @@ data-model.schemadefinition.layout-node:
   type: schemadefinition
   layer_id: data-model
   name: LayoutNode
-  description: "Internal layout-engine node shape shared by
-    forceLayout/clusteredForceLayout/separationPass: id, x/y, width/height,
-    optional pinned, gravityTarget, gravityStrength."
+  description: "Internal layout-engine node shape shared by forceLayout/clusteredForceLayout/separationPass: id, x/y, width/height, optional pinned, gravityTarget, gravityStrength."
   attributes:
     title: LayoutNode
     type: object
@@ -71,8 +65,7 @@ data-model.schemadefinition.layout-edge:
   type: schemadefinition
   layer_id: data-model
   name: LayoutEdge
-  description: "Internal layout-engine edge shape: source/target node ids, used by
-    forceLayout's spring-force pass."
+  description: "Internal layout-engine edge shape: source/target node ids, used by forceLayout's spring-force pass."
   attributes:
     title: LayoutEdge
     type: object
@@ -92,9 +85,7 @@ data-model.schemadefinition.force-layout-options:
   type: schemadefinition
   layer_id: data-model
   name: ForceLayoutOptions
-  description: "Tuning parameters for forceLayout: iterations,
-    springLength/Strength, repulsion, damping, centerStrength,
-    collisionStrength, nodeMargin."
+  description: "Tuning parameters for forceLayout: iterations, springLength/Strength, repulsion, damping, centerStrength, collisionStrength, nodeMargin."
   attributes:
     title: ForceLayoutOptions
     type: object
@@ -114,8 +105,7 @@ data-model.schemadefinition.clustered-layout-options:
   type: schemadefinition
   layer_id: data-model
   name: ClusteredLayoutOptions
-  description: Extends ForceLayoutOptions with clusterPadding and macro-pass
-    overrides for clusteredForceLayout's cluster-to-cluster force pass.
+  description: Extends ForceLayoutOptions with clusterPadding and macro-pass overrides for clusteredForceLayout's cluster-to-cluster force pass.
   attributes:
     title: ClusteredLayoutOptions
     type: object
@@ -135,8 +125,7 @@ data-model.schemadefinition.clustered-layout-result:
   type: schemadefinition
   layer_id: data-model
   name: ClusteredLayoutResult
-  description: "Return shape of clusteredForceLayout: final node positions plus an
-    approximate bounding circle per top-level Louvain cluster."
+  description: "Return shape of clusteredForceLayout: final node positions plus an approximate bounding circle per top-level Louvain cluster."
   attributes:
     title: ClusteredLayoutResult
     type: object
@@ -156,9 +145,7 @@ data-model.schemadefinition.galaxy-layout-node:
   type: schemadefinition
   layer_id: data-model
   name: GalaxyLayoutNode
-  description: "Node shape for galaxyLayout/galaxySimulationStep: id,
-    width/height, optional explicit x/y and pinned (cascades to the whole
-    structural subtree)."
+  description: "Node shape for galaxyLayout/galaxySimulationStep: id, width/height, optional explicit x/y and pinned (cascades to the whole structural subtree)."
   attributes:
     title: GalaxyLayoutNode
     type: object
@@ -178,8 +165,7 @@ data-model.schemadefinition.galaxy-layout-edge:
   type: schemadefinition
   layer_id: data-model
   name: GalaxyLayoutEdge
-  description: Extends HierarchyEdge with a structural flag distinguishing
-    orbit-defining edges from layout-irrelevant relational edges.
+  description: Extends HierarchyEdge with a structural flag distinguishing orbit-defining edges from layout-irrelevant relational edges.
   attributes:
     title: GalaxyLayoutEdge
     type: object
@@ -199,10 +185,7 @@ data-model.schemadefinition.galaxy-layout-options:
   type: schemadefinition
   layer_id: data-model
   name: GalaxyLayoutOptions
-  description: "Tuning parameters for galaxyLayout: nodeSpread (multiple of the
-    median body radius), nodeMargin, startAngle, aspectRatio and homeStrength.
-    settleCycles, separateGroups and resolvedAspectScale are deprecated and
-    ignored."
+  description: "Tuning parameters for galaxyLayout: nodeSpread (multiple of the median body radius), nodeMargin, startAngle, aspectRatio and homeStrength. settleCycles, separateGroups and resolvedAspectScale are deprecated and ignored."
   attributes:
     title: GalaxyLayoutOptions
     type: object
@@ -222,9 +205,7 @@ data-model.schemadefinition.hierarchy-edge:
   type: schemadefinition
   layer_id: data-model
   name: HierarchyEdge
-  description: Shared structural-edge shape (source=parent, target=child,
-    structural flag) consumed by buildStructuralForest and reused by
-    galaxyLayout/radialTreeLayout/uxNavLayout.
+  description: Shared structural-edge shape (source=parent, target=child, structural flag) consumed by buildStructuralForest and reused by galaxyLayout/radialTreeLayout/uxNavLayout.
   attributes:
     title: HierarchyEdge
     type: object
@@ -244,9 +225,7 @@ data-model.schemadefinition.structural-forest:
   type: schemadefinition
   layer_id: data-model
   name: StructuralForest
-  description: "Output of buildStructuralForest: parentOf map, childrenOf map, and
-    roots array describing the parent/child forest derived from structural
-    edges."
+  description: "Output of buildStructuralForest: parentOf map, childrenOf map, and roots array describing the parent/child forest derived from structural edges."
   attributes:
     title: StructuralForest
     type: object
@@ -266,9 +245,7 @@ data-model.schemadefinition.cluster-tree-node:
   type: schemadefinition
   layer_id: data-model
   name: ClusterTreeNode
-  description: "d3-hierarchy-compatible dendrogram node produced by
-    louvainCluster: leaves are real node ids, internal nodes are synthetic
-    cluster ids with children."
+  description: "d3-hierarchy-compatible dendrogram node produced by louvainCluster: leaves are real node ids, internal nodes are synthetic cluster ids with children."
   attributes:
     title: ClusterTreeNode
     type: object
@@ -288,10 +265,7 @@ data-model.schemadefinition.edge-geometry:
   type: schemadefinition
   layer_id: data-model
   name: EdgeGeometry
-  description: "Computed rendering geometry passed to a custom renderEdge
-    callback: SVG path string, curve midpoint, collision-cleared label position,
-    tangent angle and, since PR #396, labelHidden: true when GraphCanvas would
-    not draw the label now (no clear spot and not in focus, or mid-drag)."
+  description: "Computed rendering geometry passed to a custom renderEdge callback: SVG path string, curve midpoint, collision-cleared label position, tangent angle and, since PR #396, labelHidden: true when GraphCanvas would not draw the label now (no clear spot and not in focus, or mid-drag)."
   attributes:
     title: EdgeGeometry
     type: object
@@ -311,9 +285,7 @@ data-model.schemadefinition.radial-tree-layout-result:
   type: schemadefinition
   layer_id: data-model
   name: RadialTreeLayoutResult
-  description: "Return shape of radialTreeLayout: node positions, per-trunk
-    boundary circles, and ring geometry for the optional depth-ring
-    visualization."
+  description: "Return shape of radialTreeLayout: node positions, per-trunk boundary circles, and ring geometry for the optional depth-ring visualization."
   attributes:
     title: RadialTreeLayoutResult
     type: object
@@ -333,9 +305,7 @@ data-model.schemadefinition.orthogonal-layout-options:
   type: schemadefinition
   layer_id: data-model
   name: OrthogonalLayoutOptions
-  description: "Tuning for orthogonalLayout: clearance, laneSpacing, lanes,
-    bendPenalty, crossingPenalty, componentGap, orderingSweeps, isPageNode,
-    busTreeEdges, scope (auto, cold, sketch)."
+  description: "Tuning for orthogonalLayout: clearance, laneSpacing, lanes, bendPenalty, crossingPenalty, componentGap, orderingSweeps, isPageNode, busTreeEdges, scope (auto, cold, sketch)."
   attributes:
     title: OrthogonalLayoutOptions
     type: object
@@ -355,9 +325,7 @@ data-model.schemadefinition.orthogonal-layout-stats:
   type: schemadefinition
   layer_id: data-model
   name: OrthogonalLayoutStats
-  description: 'Diagnostics returned with an orthogonal layout, including router:
-    "lattice" (exact, graphs up to 150 edges) or "channel"
-    (orthogonalChannelRouter, larger graphs), plus fallback and pitch counts.'
+  description: 'Diagnostics returned with an orthogonal layout, including router: "lattice" (exact, graphs up to 150 edges) or "channel" (orthogonalChannelRouter, larger graphs), plus fallback and pitch counts.'
   attributes:
     title: OrthogonalLayoutStats
     type: object
@@ -377,9 +345,7 @@ data-model.schemadefinition.orthogonal-layout-result:
   type: schemadefinition
   layer_id: data-model
   name: OrthogonalLayoutResult
-  description: "Return shape of orthogonalLayout: positions, routes (one polyline
-    per input edge, box boundary to box boundary), groups, cell pitch, origin
-    and stats."
+  description: "Return shape of orthogonalLayout: positions, routes (one polyline per input edge, box boundary to box boundary), groups, cell pitch, origin and stats."
   attributes:
     title: OrthogonalLayoutResult
     type: object
@@ -399,9 +365,7 @@ data-model.schemadefinition.organic-layout-options:
   type: schemadefinition
   layer_id: data-model
   name: OrganicLayoutOptions
-  description: "Tuning for organicLayout: preferredEdgeLength,
-    minimumNodeDistance, compactness, componentSpacing, maxIterations,
-    tolerance, scope (auto, all, affected) and affectedIds."
+  description: "Tuning for organicLayout: preferredEdgeLength, minimumNodeDistance, compactness, componentSpacing, maxIterations, tolerance, scope (auto, all, affected) and affectedIds."
   attributes:
     title: OrganicLayoutOptions
     type: object
@@ -421,8 +385,7 @@ data-model.schemadefinition.organic-layout-stats:
   type: schemadefinition
   layer_id: data-model
   name: OrganicLayoutStats
-  description: Diagnostics returned with an organic layout (iterations run, final
-    stress, convergence).
+  description: Diagnostics returned with an organic layout (iterations run, final stress, convergence).
   attributes:
     title: OrganicLayoutStats
     type: object
@@ -462,9 +425,7 @@ data-model.schemadefinition.layered-index:
   type: schemadefinition
   layer_id: data-model
   name: LayeredIndex
-  description: "The indexed layered graph built by buildLayeredIndex: layers,
-    nodes, links, adjacency, layer-pair summaries, predicate catalog and
-    indexing issues."
+  description: "The indexed layered graph built by buildLayeredIndex: layers, nodes, links, adjacency, layer-pair summaries, predicate catalog and indexing issues."
   attributes:
     title: LayeredIndex
     type: object
@@ -484,9 +445,7 @@ data-model.schemadefinition.layered-graph-snapshot:
   type: schemadefinition
   layer_id: data-model
   name: LayeredGraphSnapshot
-  description: Serializable view state of the layered views (selection, follow
-    depth, link filters, focused and hidden layers, predicate label mode, plane
-    layout), saved and restored by LayeredGraphExplorer.
+  description: Serializable view state of the layered views (selection, follow depth, link filters, focused and hidden layers, predicate label mode, plane layout), saved and restored by LayeredGraphExplorer.
   attributes:
     title: LayeredGraphSnapshot
     type: object
@@ -506,9 +465,7 @@ data-model.schemadefinition.trace:
   type: schemadefinition
   layer_id: data-model
   name: Trace
-  description: "A distributed trace as TraceViewer reads it: spans (id, parent,
-    service, name, kind, start, duration, status, attributes, events) plus trace
-    metadata and service info; produced by fromOTLP and fromXRay."
+  description: "A distributed trace as TraceViewer reads it: spans (id, parent, service, name, kind, start, duration, status, attributes, events) plus trace metadata and service info; produced by fromOTLP and fromXRay."
   attributes:
     title: Trace
     type: object
@@ -528,9 +485,7 @@ data-model.schemadefinition.layer-def:
   type: schemadefinition
   layer_id: data-model
   name: LayerDef
-  description: "One layer of a layered graph: id, label, order and optional color;
-    supplied through BuildLayeredIndexOptions or derived from node attribute
-    values."
+  description: "One layer of a layered graph: id, label, order and optional color; supplied through BuildLayeredIndexOptions or derived from node attribute values."
   attributes:
     title: LayerDef
     type: object
@@ -550,9 +505,7 @@ data-model.schemadefinition.build-layered-index-options:
   type: schemadefinition
   layer_id: data-model
   name: BuildLayeredIndexOptions
-  description: How to read a layer from each node (attribute name or accessor),
-    multi- and missing-value policies, layer order and the predicate catalog of
-    link categories.
+  description: How to read a layer from each node (attribute name or accessor), multi- and missing-value policies, layer order and the predicate catalog of link categories.
   attributes:
     title: BuildLayeredIndexOptions
     type: object
@@ -572,9 +525,7 @@ data-model.schemadefinition.predicate-catalog:
   type: schemadefinition
   layer_id: data-model
   name: PredicateCatalog
-  description: "Map from edge predicate to LinkCategoryInfo (category, label,
-    direction): drives link coloring, category filters and predicate labels in
-    every layered view."
+  description: "Map from edge predicate to LinkCategoryInfo (category, label, direction): drives link coloring, category filters and predicate labels in every layered view."
   attributes:
     title: PredicateCatalog
     type: object
@@ -594,9 +545,7 @@ data-model.schemadefinition.layered-index-issue:
   type: schemadefinition
   layer_id: data-model
   name: LayeredIndexIssue
-  description: "A data problem buildLayeredIndex found and skipped instead of
-    throwing: missing-layer-value, multi-value-excluded, dangling-edge,
-    self-loop, duplicate."
+  description: "A data problem buildLayeredIndex found and skipped instead of throwing: missing-layer-value, multi-value-excluded, dangling-edge, self-loop, duplicate."
   attributes:
     title: LayeredIndexIssue
     type: object
@@ -616,8 +565,7 @@ data-model.schemadefinition.link-filter-state:
   type: schemadefinition
   layer_id: data-model
   name: LinkFilterState
-  description: Which link categories, predicates and layer pairs are shown;
-    DEFAULT_LINK_FILTERS is its initial value.
+  description: Which link categories, predicates and layer pairs are shown; DEFAULT_LINK_FILTERS is its initial value.
   attributes:
     title: LinkFilterState
     type: object
@@ -637,8 +585,7 @@ data-model.schemadefinition.reach-result:
   type: schemadefinition
   layer_id: data-model
   name: ReachResult
-  description: Nodes and links reachable from the selection with the hop at which
-    each was reached and the link it came through (ReachVia).
+  description: Nodes and links reachable from the selection with the hop at which each was reached and the link it came through (ReachVia).
   attributes:
     title: ReachResult
     type: object
@@ -658,9 +605,7 @@ data-model.schemadefinition.layered-graph-state:
   type: schemadefinition
   layer_id: data-model
   name: LayeredGraphState
-  description: "Return value of useLayeredGraph, shared through
-    LayeredGraphContext: the index, current filters, selection, reach, camera,
-    async layout state and setters."
+  description: "Return value of useLayeredGraph, shared through LayeredGraphContext: the index, current filters, selection, reach, camera, async layout state and setters."
   attributes:
     title: LayeredGraphState
     type: object
@@ -680,8 +625,7 @@ data-model.schemadefinition.lane-layout:
   type: schemadefinition
   layer_id: data-model
   name: LaneLayout
-  description: "Output of layoutLanes: lane bands and node boxes for the swimlane
-    view (orientation, label policy) used by GraphCanvas layout layer-lanes."
+  description: "Output of layoutLanes: lane bands and node boxes for the swimlane view (orientation, label policy) used by GraphCanvas layout layer-lanes."
   attributes:
     title: LaneLayout
     type: object
@@ -701,8 +645,7 @@ data-model.schemadefinition.trace-span:
   type: schemadefinition
   layer_id: data-model
   name: TraceSpan
-  description: "One span of a Trace: ids, service, name, SpanKind, SpanStatus
-    (ok/warn/error), timing, attributes and SpanEvents."
+  description: "One span of a Trace: ids, service, name, SpanKind, SpanStatus (ok/warn/error), timing, attributes and SpanEvents."
   attributes:
     title: TraceSpan
     type: object
@@ -722,9 +665,7 @@ data-model.schemadefinition.trace-model:
   type: schemadefinition
   layer_id: data-model
   name: TraceModel
-  description: "Output of buildTraceModel: the span tree (TraceModelNode with
-    depth and self time), time bounds and services, from which TraceViewer
-    derives visible rows and its time scale."
+  description: "Output of buildTraceModel: the span tree (TraceModelNode with depth and self time), time bounds and services, from which TraceViewer derives visible rows and its time scale."
   attributes:
     title: TraceModel
     type: object
@@ -744,8 +685,7 @@ data-model.schemadefinition.otlp-traces-data:
   type: schemadefinition
   layer_id: data-model
   name: OtlpTracesData
-  description: OpenTelemetry OTLP/JSON trace export (resourceSpans > scopeSpans >
-    spans with key-value attributes), the input of fromOTLP.
+  description: OpenTelemetry OTLP/JSON trace export (resourceSpans > scopeSpans > spans with key-value attributes), the input of fromOTLP.
   attributes:
     title: OtlpTracesData
     type: object
@@ -765,8 +705,7 @@ data-model.schemadefinition.xray-segment:
   type: schemadefinition
   layer_id: data-model
   name: XRaySegment
-  description: AWS X-Ray segment document with nested subsegments, http, sql,
-    cause and exception blocks, the input of fromXRay.
+  description: AWS X-Ray segment document with nested subsegments, http, sql, cause and exception blocks, the input of fromXRay.
   attributes:
     title: XRaySegment
     type: object
@@ -786,8 +725,7 @@ data-model.schemadefinition.graph-viewport:
   type: schemadefinition
   layer_id: data-model
   name: GraphViewport
-  description: A GraphCanvas viewport (pan x/y and zoom) a caller can restore
-    through initialViewport or read and set through the GraphViewportHandle ref.
+  description: A GraphCanvas viewport (pan x/y and zoom) a caller can restore through initialViewport or read and set through the GraphViewportHandle ref.
   attributes:
     title: GraphViewport
     type: object
@@ -807,9 +745,7 @@ data-model.schemadefinition.graph-viewport-snapshot:
   type: schemadefinition
   layer_id: data-model
   name: GraphViewportSnapshot
-  description: Viewport plus selection and the cause of the change
-    (GraphViewportCause), passed to onViewportDwell and onViewportNavigate so a
-    caller can keep back/forward history.
+  description: Viewport plus selection and the cause of the change (GraphViewportCause), passed to onViewportDwell and onViewportNavigate so a caller can keep back/forward history.
   attributes:
     title: GraphViewportSnapshot
     type: object
@@ -829,9 +765,7 @@ data-model.schemadefinition.graph-layout-state:
   type: schemadefinition
   layer_id: data-model
   name: GraphLayoutState
-  description: "idle | computing | simulating: whether GraphCanvas is waiting on a
-    layout engine, reported by onLayoutStateChange and shown by the layout
-    indicator."
+  description: "idle | computing | simulating: whether GraphCanvas is waiting on a layout engine, reported by onLayoutStateChange and shown by the layout indicator."
   attributes:
     title: GraphLayoutState
     type: string
@@ -847,4 +781,184 @@ data-model.schemadefinition.graph-layout-state:
   metadata:
     created_at: 2026-11-24T19:01:20.530Z
     updated_at: 2026-11-24T19:01:20.530Z
+    version: 1
+data-model.schemadefinition.branch-map-data:
+  id: 4b3e4812-a62a-4e77-9fd6-565c81c38692
+  path: data-model.schemadefinition.branch-map-data
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapData
+  description: "The branch map's input: groups, stations, lines and links. Vocabulary-free; ids are unique across groups, stations, lines and links, and a duplicate or a reference to an unknown id is reported in the layout's issues, never thrown."
+  attributes:
+    title: BranchMapData
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapData
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.branch-map-group:
+  id: 17c75b89-3611-4ed7-b4cf-2148de69fb8f
+  path: data-model.schemadefinition.branch-map-group
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapGroup
+  description: "One group (a column with its own trunk): id, label, optional color (a --graph-layer-<n> palette index, else by order), optional trunk: waypoints, station ids of this group top to bottom that the derived trunk must pass through (decision 4, 2026-11-25)."
+  attributes:
+    title: BranchMapGroup
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapGroup
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.branch-map-station:
+  id: a71859ab-a10d-4076-9ada-a332d47634b1
+  path: data-model.schemadefinition.branch-map-station
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapStation
+  description: "A station on a group's map: id, group, label, kind ('stop' drawn as a circle, 'decision' drawn as a diamond), status ('planned', 'active', 'done', 'set-aside', 'dropped'), optional date (ISO; places a done station above the start), optional after (station ids it follows), progress ([met, total]), blocked flag and data (passed through to callbacks)."
+  attributes:
+    title: BranchMapStation
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapStation
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.branch-map-line:
+  id: cf922bb8-78df-4c96-9f51-dfe21af8709a
+  path: data-model.schemadefinition.branch-map-line
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapLine
+  description: "A line (a branch): id, group, label, from (a station id, or null for the group's start), to (a station id, or null for an open end), status ('active', 'done', 'set-aside', 'dropped': dropped ends with a bar), style ('solid', 'dashed', 'dotted'), weight (for width and bundling), marks ({ total, emphasized }: ticks along the run) and data."
+  attributes:
+    title: BranchMapLine
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapLine
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.branch-map-link:
+  id: 29b054bd-ac39-41ca-885e-f67163009c73
+  path: data-model.schemadefinition.branch-map-link
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapLink
+  description: "A link between groups: id, kind ('dependency': an arrow from the station waited on to the waiting one, which also orders ranks; 'provides': a dotted arch from a provider station to another group's start), from, to (station or group ids; a group id means its start marker) and optional label."
+  attributes:
+    title: BranchMapLink
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapLink
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.branch-map-options:
+  id: b5d1e2d6-09a8-4b3f-aa9f-7bed3adca924
+  path: data-model.schemadefinition.branch-map-options
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapOptions
+  description: "Layout options: rowGap, rankGap, laneGap (default 24), groupGap, minBranchRanks, maxLanes (default 8), expanded (group, bundle or more:<group> ids), width ('off' default, or 'weight'), maxLabelWidth (default 180), measureText (optional, injected so layout stays headless), looseStations ('spur': stations no line leads to sit on one dotted planned line per group)."
+  attributes:
+    title: BranchMapOptions
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapOptions
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.branch-map-layout:
+  id: 324b791c-5f3f-4005-9c58-7f9c51743798
+  path: data-model.schemadefinition.branch-map-layout
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapLayout
+  description: "Output of layoutBranchMap: groups (x, width, trunk x, lane count, counts), stations (x, y, rank, lane, onTrunk), lines before routing (lane, from, to, members when bundled), label boxes (placed and unplaced), bounds and issues."
+  attributes:
+    title: BranchMapLayout
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapLayout
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.branch-map-scene:
+  id: 497ba143-cec6-4aff-8a0b-45a1878e6748
+  path: data-model.schemadefinition.branch-map-scene
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: BranchMapScene
+  description: "Output of routeBranchMap: the layout plus each line's points, path, run and end, trunk segments with width and weight, and link paths with a mid point for labels."
+  attributes:
+    title: BranchMapScene
+    type: object
+  source_reference:
+    provenance: extracted
+    locations:
+      - file: src/utils/branchMap/types.ts
+        symbol: BranchMapScene
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+data-model.schemadefinition.house-organizing-snapshot:
+  id: f6c070bf-54be-4bab-bf3c-5acdbe3472f6
+  path: data-model.schemadefinition.house-organizing-snapshot
+  spec_node_id: data-model.schemadefinition
+  type: schemadefinition
+  layer_id: data-model
+  name: HouseOrganizingSnapshot
+  description: The House organizing snapshot fixture's shape (projects, milestones, gates, workstreams, interfaces), named after the House ontology. Test-page data only; the library never imports it.
+  attributes:
+    title: HouseOrganizingSnapshot
+    type: object
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/fixtures/houseOrganizingTypes.ts
+        symbol: HouseOrganizingSnapshot
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
     version: 1

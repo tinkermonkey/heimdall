@@ -16,15 +16,15 @@ Product features, capabilities, personas, and milestones.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 38    |
-| Intra-Layer Relationships | 23    |
-| Inter-Layer Relationships | 181   |
-| Inbound Relationships     | 129   |
-| Outbound Relationships    | 52    |
+| Elements                  | 41    |
+| Intra-Layer Relationships | 28    |
+| Inter-Layer Relationships | 191   |
+| Inbound Relationships     | 133   |
+| Outbound Relationships    | 58    |
 
 **Cross-Layer References**:
 
-- **Upstream layers**: [Application](./05-application-layer-report.md), [Testing](./13-testing-layer-report.md)
+- **Upstream layers**: [Application](./05-application-layer-report.md), [Testing](./13-testing-layer-report.md), [UX](./10-ux-layer-report.md)
 - **Downstream layers**: [Business](./02-business-layer-report.md), [Motivation](./01-motivation-layer-report.md)
 
 ## Intra-Layer Relationships
@@ -33,6 +33,7 @@ Product features, capabilities, personas, and milestones.
 
 | Element                                                               | Type                 | Relationships |
 | --------------------------------------------------------------------- | -------------------- | ------------- |
+| `product.feature.branch-map`                                          | `feature`            | 4             |
 | `product.feature.edge-selection-and-inspection`                       | `feature`            | 0             |
 | `product.feature.fullscreen-canvas`                                   | `feature`            | 0             |
 | `product.feature.joint-edge-label-placement`                          | `feature`            | 3             |
@@ -46,11 +47,13 @@ Product features, capabilities, personas, and milestones.
 | `product.feature.server-side-rendering-support`                       | `feature`            | 3             |
 | `product.feature.theme-slot`                                          | `feature`            | 2             |
 | `product.feature.viewport-history-and-restore`                        | `feature`            | 0             |
-| `product.persona.application-developer-embedding-a-graph-view`        | `persona`            | 4             |
-| `product.persona.end-user-exploring-a-rendered-graph`                 | `persona`            | 4             |
+| `product.milestone.branch-map-poc`                                    | `milestone`          | 2             |
+| `product.persona.application-developer-embedding-a-graph-view`        | `persona`            | 5             |
+| `product.persona.end-user-exploring-a-rendered-graph`                 | `persona`            | 5             |
 | `product.persona.mirror-maintainer-restyling-the-library`             | `persona`            | 1             |
 | `product.softwarecapability.app-navigation`                           | `softwarecapability` | 2             |
 | `product.softwarecapability.app-shell`                                | `softwarecapability` | 2             |
+| `product.softwarecapability.branch-map-visualization`                 | `softwarecapability` | 2             |
 | `product.softwarecapability.charting`                                 | `softwarecapability` | 0             |
 | `product.softwarecapability.chat-ui`                                  | `softwarecapability` | 0             |
 | `product.softwarecapability.clustered-force-layout-community-bubbles` | `softwarecapability` | 2             |
@@ -94,6 +97,7 @@ flowchart TB
   product --> business
   product --> motivation
   testing --> product
+  ux --> product
   class product current
 ```
 
@@ -103,6 +107,8 @@ flowchart TB
 | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.adjacency-matrix-link-metadata`                                                                       | `product.softwarecapability.layered-graph-visualization`                                    | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.app-shell-components`                                                                                 | `product.softwarecapability.app-shell`                                                      | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`            | `application.applicationservice.branch-map-layout`                                                                                    | `product.feature.branch-map`                                                                | `product`    | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.branch-map-layout`                                                                                    | `product.softwarecapability.branch-map-visualization`                                       | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.chart-components`                                                                                     | `product.softwarecapability.charting`                                                       | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.chat-components`                                                                                      | `product.softwarecapability.chat-ui`                                                        | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.cluster-packing`                                                                                      | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`    | `realizes`   | many-to-many | medium   |
@@ -160,6 +166,9 @@ flowchart TB
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.ux-navigation-edge-visibility`                                                                        | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.ux-navigation-layout`                                                                                 | `product.softwarecapability.ux-navigation-tree-layout`                                      | `product`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability` | `application.applicationservice.x-ray-trace-adapter`                                                                                  | `product.softwarecapability.run-history-and-observability-views`                            | `product`    | `realizes`   | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.branch-map`                                                                                                          | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.branch-map`                                                                                                          | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                   | `product.feature.branch-map`                                                                                                          | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                   | `product.feature.per-component-imports`                                                                                               | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                   | `product.feature.server-side-rendering-support`                                                                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                   | `product.feature.theme-slot`                                                                                                          | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -171,6 +180,9 @@ flowchart TB
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-navigation`                                                                                           | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.app-shell`                                                                                                | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.app-shell`                                                                                                | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.branch-map-visualization`                                                                                 | `business.businessfunction.automatic-node-layout-computation`                               | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.branch-map-visualization`                                                                                 | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.branch-map-visualization`                                                                                 | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.charting`                                                                                                 | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`                | `product.softwarecapability.charting`                                                                                                 | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.chat-ui`                                                                                                  | `business.businessfunction.assemble-application-screens-from-library-components`            | `business`   | `realizes`   | many-to-many | medium   |
@@ -276,14 +288,47 @@ flowchart TB
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-node-popover-open-state-edd72184`  | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-popover-with-interactive-505b383d` | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.product.feature`                       | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `product.feature.theme-slot`                                                                | `product`    | `tests`      | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.branch-map-view`                                                                                          | `product.feature.branch-map`                                                                | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `product.feature.live-draggable-galaxy-simulation`                                          | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `product.feature.node-and-edge-tooltips-and-popovers`                                       | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.graph-geometry-and-joint-label-placement`                                                                 | `product.feature.joint-edge-label-placement`                                                | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.layered-graph-explorer`                                                                                   | `product.feature.layered-graph-explorer`                                                    | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.server-rendering`                                                                                         | `product.feature.server-side-rendering-support`                                             | `product`    | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.product.feature`                  | `testing.testcoveragetarget.static-site-link-variants`                                                                                | `product.feature.link-navigation-with-href`                                                 | `product`    | `covers`     | many-to-many | medium   |
+| `ux.librarycomponent.realizes.product.feature`                       | `ux.librarycomponent.branch-map`                                                                                                      | `product.feature.branch-map`                                                                | `product`    | `realizes`   | many-to-many | medium   |
 
 ## Element Reference
+
+### Branch Map {#branch-map}
+
+**ID**: `product.feature.branch-map`
+
+**Type**: `feature`
+
+BranchMap: draws a set of groups as Metro bands (stations of one rank share a band with a sub-row each, 45-degree rounded branches, labels beside their stations), with selection, pan and zoom, bundled lines that expand, and optional width by weight.
+
+#### Attributes
+
+| Name     | Value   |
+| -------- | ------- |
+| priority | medium  |
+| size     | l       |
+| status   | planned |
+
+#### Relationships
+
+| Type        | Related Element                                                                      | Predicate       | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | --------------- | --------- |
+| inter-layer | `application.applicationservice.branch-map-layout`                                   | `realizes`      | inbound   |
+| inter-layer | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                 | `satisfies`     | outbound  |
+| inter-layer | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap` | `satisfies`     | outbound  |
+| inter-layer | `motivation.requirement.branch-map-library-stays-vocabulary-free`                    | `satisfies`     | outbound  |
+| inter-layer | `testing.testcoveragetarget.branch-map-view`                                         | `covers`        | inbound   |
+| inter-layer | `ux.librarycomponent.branch-map`                                                     | `realizes`      | inbound   |
+| intra-layer | `product.softwarecapability.branch-map-visualization`                                | `realizes`      | outbound  |
+| intra-layer | `product.milestone.branch-map-poc`                                                   | `scheduled-for` | outbound  |
+| intra-layer | `product.persona.application-developer-embedding-a-graph-view`                       | `serves`        | outbound  |
+| intra-layer | `product.persona.end-user-exploring-a-rendered-graph`                                | `serves`        | outbound  |
 
 ### Edge Selection and Inspection {#edge-selection-and-inspection}
 
@@ -652,6 +697,27 @@ Callers can restore a viewport (initialViewport), drive it imperatively (viewpor
 | ----------- | ------------------------------------------------------------ | ---------- | --------- |
 | inter-layer | `application.applicationservice.interactive-graph-rendering` | `realizes` | inbound   |
 
+### Branch Map POC {#branch-map-poc}
+
+**ID**: `product.milestone.branch-map-poc`
+
+**Type**: `milestone`
+
+The Metro bands branch map proof of concept: generic model, hardened layout, BranchMap view, House adapter, test page and visual spec. Mirrors the House milestone of the same name on the Heimdall project.
+
+#### Attributes
+
+| Name   | Value  |
+| ------ | ------ |
+| status | active |
+
+#### Relationships
+
+| Type        | Related Element                                       | Predicate       | Direction |
+| ----------- | ----------------------------------------------------- | --------------- | --------- |
+| intra-layer | `product.feature.branch-map`                          | `scheduled-for` | inbound   |
+| intra-layer | `product.softwarecapability.branch-map-visualization` | `scheduled-for` | inbound   |
+
 ### Application Developer Embedding a Graph View {#application-developer-embedding-a-graph-view}
 
 **ID**: `product.persona.application-developer-embedding-a-graph-view`
@@ -672,6 +738,7 @@ Inferred persona: a React/TypeScript developer integrating GraphCanvas into thei
 | Type        | Related Element                                                       | Predicate    | Direction |
 | ----------- | --------------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer` | `references` | outbound  |
+| intra-layer | `product.feature.branch-map`                                          | `serves`     | inbound   |
 | intra-layer | `product.feature.link-navigation-with-href`                           | `serves`     | inbound   |
 | intra-layer | `product.feature.live-draggable-galaxy-simulation`                    | `serves`     | inbound   |
 | intra-layer | `product.feature.per-component-imports`                               | `serves`     | inbound   |
@@ -697,6 +764,7 @@ Inferred persona: the person who ultimately interacts with the rendered graph (p
 | Type        | Related Element                                                  | Predicate    | Direction |
 | ----------- | ---------------------------------------------------------------- | ------------ | --------- |
 | inter-layer | `motivation.stakeholder.end-user-of-an-embedding-application`    | `references` | outbound  |
+| intra-layer | `product.feature.branch-map`                                     | `serves`     | inbound   |
 | intra-layer | `product.feature.joint-edge-label-placement`                     | `serves`     | inbound   |
 | intra-layer | `product.feature.layered-graph-explorer`                         | `serves`     | inbound   |
 | intra-layer | `product.feature.node-and-edge-tooltips-and-popovers`            | `serves`     | inbound   |
@@ -771,6 +839,31 @@ Shipped capability: Titlebar, statusbar, app title and the ShellLayout that comp
 | inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports` | outbound  |
 | intra-layer | `product.feature.link-navigation-with-href`                                          | `realizes` | inbound   |
 | intra-layer | `product.feature.server-side-rendering-support`                                      | `realizes` | inbound   |
+
+### Branch Map Visualization {#branch-map-visualization}
+
+**ID**: `product.softwarecapability.branch-map-visualization`
+
+**Type**: `softwarecapability`
+
+A vertical metro-map view of how groups of work are organized: per group a trunk running down from a start marker, a branch per line from where it starts to the station it delivers to, stations along the lines, ticks for the work on a line, and links between groups (dependency arrows and provider arches). Prior art: Nesbitt's metro map metaphor (IV 2004), Stott et al.'s project plans as metro maps (IV 2005), commit-graph lane assignment (pvigier 2019).
+
+#### Attributes
+
+| Name   | Value   |
+| ------ | ------- |
+| status | planned |
+
+#### Relationships
+
+| Type        | Related Element                                                                      | Predicate       | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | --------------- | --------- |
+| inter-layer | `application.applicationservice.branch-map-layout`                                   | `realizes`      | inbound   |
+| inter-layer | `business.businessfunction.automatic-node-layout-computation`                        | `realizes`      | outbound  |
+| inter-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `supports`      | outbound  |
+| inter-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`                    | `supports`      | outbound  |
+| intra-layer | `product.feature.branch-map`                                                         | `realizes`      | inbound   |
+| intra-layer | `product.milestone.branch-map-poc`                                                   | `scheduled-for` | outbound  |
 
 ### Charting {#charting}
 
@@ -1256,4 +1349,4 @@ Shipped capability: page-tree + view-fan layout for visualizing page/view naviga
 
 ---
 
-Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0
+Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0

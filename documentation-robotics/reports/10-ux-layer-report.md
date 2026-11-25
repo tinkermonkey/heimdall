@@ -16,16 +16,16 @@ User interface components, screens, and user experience elements.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 127   |
-| Intra-Layer Relationships | 319   |
-| Inter-Layer Relationships | 577   |
-| Inbound Relationships     | 310   |
-| Outbound Relationships    | 267   |
+| Elements                  | 128   |
+| Intra-Layer Relationships | 323   |
+| Inter-Layer Relationships | 595   |
+| Inbound Relationships     | 321   |
+| Outbound Relationships    | 274   |
 
 **Cross-Layer References**:
 
 - **Upstream layers**: [Testing](./13-testing-layer-report.md)
-- **Downstream layers**: [Motivation](./01-motivation-layer-report.md), [Technology](./06-technology-layer-report.md)
+- **Downstream layers**: [Motivation](./01-motivation-layer-report.md), [Product](./03-product-layer-report.md), [Technology](./06-technology-layer-report.md)
 
 ## Intra-Layer Relationships
 
@@ -37,8 +37,8 @@ User interface components, screens, and user experience elements.
 | `ux.actionpattern.layer-stack-camera-orbit-and-presets`              | `actionpattern`    | 2             |
 | `ux.actionpattern.link-navigation`                                   | `actionpattern`    | 4             |
 | `ux.actionpattern.node-drag-reposition`                              | `actionpattern`    | 2             |
-| `ux.actionpattern.node-select-on-click-or-enterspace`                | `actionpattern`    | 2             |
-| `ux.actionpattern.panzoom-viewport-gesture`                          | `actionpattern`    | 1             |
+| `ux.actionpattern.node-select-on-click-or-enterspace`                | `actionpattern`    | 3             |
+| `ux.actionpattern.panzoom-viewport-gesture`                          | `actionpattern`    | 2             |
 | `ux.librarycomponent.activity-timeline`                              | `librarycomponent` | 2             |
 | `ux.librarycomponent.adjacency-matrix`                               | `librarycomponent` | 9             |
 | `ux.librarycomponent.alert-strip`                                    | `librarycomponent` | 3             |
@@ -50,6 +50,7 @@ User interface components, screens, and user experience elements.
 | `ux.librarycomponent.bar-chart`                                      | `librarycomponent` | 1             |
 | `ux.librarycomponent.bar-h`                                          | `librarycomponent` | 1             |
 | `ux.librarycomponent.bar-v`                                          | `librarycomponent` | 1             |
+| `ux.librarycomponent.branch-map`                                     | `librarycomponent` | 4             |
 | `ux.librarycomponent.bridge-node-list`                               | `librarycomponent` | 8             |
 | `ux.librarycomponent.button`                                         | `librarycomponent` | 19            |
 | `ux.librarycomponent.calendar`                                       | `librarycomponent` | 5             |
@@ -153,13 +154,13 @@ User interface components, screens, and user experience elements.
 | `ux.librarycomponent.version-timeline`                               | `librarycomponent` | 3             |
 | `ux.librarycomponent.view-switcher`                                  | `librarycomponent` | 18            |
 | `ux.librarycomponent.workspace-switcher-dialog`                      | `librarycomponent` | 4             |
-| `ux.statepattern.canvas-theme-light-or-dark-canvas`                  | `statepattern`     | 1             |
+| `ux.statepattern.canvas-theme-light-or-dark-canvas`                  | `statepattern`     | 2             |
 | `ux.statepattern.collapsed-node-set-progressive-disclosure`          | `statepattern`     | 2             |
 | `ux.statepattern.layered-selection-and-reach`                        | `statepattern`     | 5             |
 | `ux.statepattern.layout-computation-state`                           | `statepattern`     | 1             |
 | `ux.statepattern.live-simulation-vs-static-layout-state`             | `statepattern`     | 1             |
 | `ux.statepattern.node-hover-and-selection-state`                     | `statepattern`     | 3             |
-| `ux.uxlibrary.heimdall-ui`                                           | `uxlibrary`        | 114           |
+| `ux.uxlibrary.heimdall-ui`                                           | `uxlibrary`        | 115           |
 
 ## Inter-Layer Dependencies
 
@@ -181,6 +182,7 @@ flowchart TB
   testing["Testing"]
   testing --> ux
   ux --> motivation
+  ux --> product
   ux --> technology
   class ux current
 ```
@@ -189,6 +191,15 @@ flowchart TB
 
 | Relationship ID                                            | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer   | Predicate    | Cardinality  | Strength |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears`                                        | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-a-bundle-expanded-through-the-expanded-prop-gets-a-collapse-that-re-44d61a7d`        | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-click-selects-a-station-again-clears-the-inspector-shows-the-house-record`           | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-documentation-robotics-bundles-past-the-lane-budget-a-bundle-and-the-group-84657fef` | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-draws-the-three-projects-from-now-with-no-console-errors`                            | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-the-inspector-links-to-what-a-station-waits-on-in-another-project`                   | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-on-house-data-visual-documentation-robotics-expanded`                                              | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                                                | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now`                                                       | `ux.librarycomponent.branch-map`                                                            | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.heatmap`                                                               | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.line-chart`                                                            | `ux`         | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.ux.librarycomponent`         | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `ux.librarycomponent.status-timeline`                                                       | `ux`         | `tests`      | many-to-many | medium   |
@@ -259,6 +270,8 @@ flowchart TB
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.split-pane`                                                            | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `ux.librarycomponent.tooltip`                                                               | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.avatar`                                                                                                   | `ux.librarycomponent.avatar`                                                                | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.branch-map-layout-tests`                                                                                  | `ux.librarycomponent.branch-map`                                                            | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.branch-map-view`                                                                                          | `ux.librarycomponent.branch-map`                                                            | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `ux.librarycomponent.calendar`                                                              | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `ux.librarycomponent.mini-calendar`                                                         | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.calendar-and-mini-calendar`                                                                               | `ux.librarycomponent.select`                                                                | `ux`         | `covers`     | many-to-many | medium   |
@@ -525,6 +538,13 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bar-v`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bar-v`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.branch-map`                                                                                                      | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.realizes.product.feature`             | `ux.librarycomponent.branch-map`                                                                                                      | `product.feature.branch-map`                                                                | `product`    | `realizes`   | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.bridge-node-list`                                                                                                | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.bridge-node-list`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.button`                                                                                                          | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
@@ -869,6 +889,7 @@ Clicking a node, or pressing Enter/Space while it's focused, fires onSelect — 
 | Type        | Related Element                                  | Predicate         | Direction |
 | ----------- | ------------------------------------------------ | ----------------- | --------- |
 | intra-layer | `ux.statepattern.node-hover-and-selection-state` | `associated-with` | outbound  |
+| intra-layer | `ux.librarycomponent.branch-map`                 | `uses`            | inbound   |
 | intra-layer | `ux.librarycomponent.graph-node-ux`              | `uses`            | inbound   |
 
 ### Pan/Zoom Viewport Gesture {#pan-zoom-viewport-gesture}
@@ -891,6 +912,7 @@ Wheel/pinch zoom (anchored under the cursor), pointer-drag pan with release iner
 
 | Type        | Related Element                       | Predicate | Direction |
 | ----------- | ------------------------------------- | --------- | --------- |
+| intra-layer | `ux.librarycomponent.branch-map`      | `uses`    | inbound   |
 | intra-layer | `ux.librarycomponent.graph-canvas-ux` | `uses`    | inbound   |
 
 ### ActivityTimeline {#activitytimeline}
@@ -1196,6 +1218,49 @@ Single-series vertical bar chart with a zero baseline.
 | inter-layer | `technology.systemsoftware.web-browser`             | `depends-on` | outbound  |
 | inter-layer | `motivation.principle.two-surface-shell-and-canvas` | `satisfies`  | outbound  |
 | intra-layer | `ux.uxlibrary.heimdall-ui`                          | `aggregates` | inbound   |
+
+### BranchMap {#branchmap}
+
+**ID**: `ux.librarycomponent.branch-map`
+
+**Type**: `librarycomponent`
+
+A standalone SVG view of a branch map: it runs branchMapScene, draws groups, trunks, lines, stations, ticks, links and placed labels in --graph-layer-\* colours, and handles direct manipulation only (no chrome). Selection is controllable (selectedId, onSelect(id, item); uncontrolled when selectedId is unset; Escape clears), hover and keyboard focus set hoveredId (onHoverChange), pan and zoom come from usePanZoom, stations and lines are one roving tab stop with accessible names, a bundle or 'N more' line expands when activated (expanded, defaultExpanded, onExpandedChange) and a group with bundled or expanded lines has an expand or collapse toggle, startLabel names the start markers, and renderTooltip draws hover detail. Layout options are individual props. Links are mouse-only.
+
+#### Attributes
+
+| Name     | Value          |
+| -------- | -------------- |
+| category | heimdall-graph |
+| label    | BranchMap      |
+| type     | display        |
+
+#### Relationships
+
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears`                                        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-on-house-data-a-bundle-expanded-through-the-expanded-prop-gets-a-collapse-that-re-44d61a7d`        | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-on-house-data-click-selects-a-station-again-clears-the-inspector-shows-the-house-record`           | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-on-house-data-documentation-robotics-bundles-past-the-lane-budget-a-bundle-and-the-group-84657fef` | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-on-house-data-draws-the-three-projects-from-now-with-no-console-errors`                            | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-on-house-data-the-inspector-links-to-what-a-station-waits-on-in-another-project`                   | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-on-house-data-visual-documentation-robotics-expanded`                                              | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                                                | `tests`      | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now`                                                       | `tests`      | inbound   |
+| inter-layer | `testing.testcoveragetarget.branch-map-layout-tests`                                                                                  | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.branch-map-view`                                                                                          | `covers`     | inbound   |
+| inter-layer | `technology.systemsoftware.web-browser`                                                                                               | `depends-on` | outbound  |
+| inter-layer | `product.feature.branch-map`                                                                                                          | `realizes`   | outbound  |
+| inter-layer | `motivation.principle.every-component-color-comes-from-a-token`                                                                       | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                                                                                   | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`                                                  | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.branch-map-library-stays-vocabulary-free`                                                                     | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                                                                  | `satisfies`  | outbound  |
+| intra-layer | `ux.actionpattern.node-select-on-click-or-enterspace`                                                                                 | `uses`       | outbound  |
+| intra-layer | `ux.actionpattern.panzoom-viewport-gesture`                                                                                           | `uses`       | outbound  |
+| intra-layer | `ux.statepattern.canvas-theme-light-or-dark-canvas`                                                                                   | `uses`       | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                                                                                            | `aggregates` | inbound   |
 
 ### BridgeNodeList {#bridgenodelist}
 
@@ -4355,6 +4420,7 @@ Light canvas by default; the consumer adds dark-canvas to body and every --canva
 
 | Type        | Related Element                       | Predicate | Direction |
 | ----------- | ------------------------------------- | --------- | --------- |
+| intra-layer | `ux.librarycomponent.branch-map`      | `uses`    | inbound   |
 | intra-layer | `ux.librarycomponent.graph-canvas-ux` | `uses`    | inbound   |
 
 ### Collapsed Node Set (Progressive Disclosure) {#collapsed-node-set-progressive-disclosure}
@@ -4482,6 +4548,7 @@ The @tinkermonkey/heimdall-ui package: the full public component inventory expor
 | intra-layer | `ux.librarycomponent.bar-chart`                 | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.bar-h`                     | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.bar-v`                     | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.branch-map`                | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.bridge-node-list`          | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.button`                    | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.calendar`                  | `aggregates` | outbound  |
@@ -4588,4 +4655,4 @@ The @tinkermonkey/heimdall-ui package: the full public component inventory expor
 
 ---
 
-Generated: 2026-11-25T10:08:47.649Z | Model Version: 0.1.0
+Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0

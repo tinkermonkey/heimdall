@@ -16,11 +16,11 @@ Application components, services, and interactions.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 128   |
-| Intra-Layer Relationships | 252   |
-| Inter-Layer Relationships | 311   |
-| Inbound Relationships     | 180   |
-| Outbound Relationships    | 131   |
+| Elements                  | 135   |
+| Intra-Layer Relationships | 269   |
+| Inter-Layer Relationships | 386   |
+| Inbound Relationships     | 228   |
+| Outbound Relationships    | 158   |
 
 **Cross-Layer References**:
 
@@ -34,8 +34,8 @@ Application components, services, and interactions.
 | Element                                                                         | Type                     | Relationships |
 | ------------------------------------------------------------------------------- | ------------------------ | ------------- |
 | `application.applicationcomponent.consumer-smoke-test-app`                      | `applicationcomponent`   | 1             |
-| `application.applicationcomponent.heimdall-ui-library-module`                   | `applicationcomponent`   | 99            |
-| `application.applicationcomponent.test-page-host-app`                           | `applicationcomponent`   | 1             |
+| `application.applicationcomponent.heimdall-ui-library-module`                   | `applicationcomponent`   | 105           |
+| `application.applicationcomponent.test-page-host-app`                           | `applicationcomponent`   | 2             |
 | `application.applicationevent.background-click-event`                           | `applicationevent`       | 1             |
 | `application.applicationevent.collapse-toggle-event`                            | `applicationevent`       | 1             |
 | `application.applicationevent.edge-hover-change-event`                          | `applicationevent`       | 1             |
@@ -52,6 +52,11 @@ Application components, services, and interactions.
 | `application.applicationfunction.batched-link-path-drawing`                     | `applicationfunction`    | 1             |
 | `application.applicationfunction.bezier-edge-path-computation`                  | `applicationfunction`    | 3             |
 | `application.applicationfunction.body-scroll-lock`                              | `applicationfunction`    | 2             |
+| `application.applicationfunction.branch-map-label-placement`                    | `applicationfunction`    | 3             |
+| `application.applicationfunction.branch-map-line-bundling`                      | `applicationfunction`    | 3             |
+| `application.applicationfunction.branch-map-placement`                          | `applicationfunction`    | 6             |
+| `application.applicationfunction.branch-map-routing`                            | `applicationfunction`    | 4             |
+| `application.applicationfunction.branch-map-trunk-selection`                    | `applicationfunction`    | 3             |
 | `application.applicationfunction.canvas-pointer-handling`                       | `applicationfunction`    | 3             |
 | `application.applicationfunction.cluster-circle-packing`                        | `applicationfunction`    | 3             |
 | `application.applicationfunction.clustered-force-layout-algorithm`              | `applicationfunction`    | 6             |
@@ -73,8 +78,9 @@ Application components, services, and interactions.
 | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`          | `applicationfunction`    | 6             |
 | `application.applicationfunction.graph-canvas-context-lookup`                   | `applicationfunction`    | 2             |
 | `application.applicationfunction.hive-plot-layout`                              | `applicationfunction`    | 5             |
+| `application.applicationfunction.house-branch-map-adapter`                      | `applicationfunction`    | 1             |
 | `application.applicationfunction.joint-edge-label-placement`                    | `applicationfunction`    | 3             |
-| `application.applicationfunction.lane-layout-and-gutter-routing`                | `applicationfunction`    | 6             |
+| `application.applicationfunction.lane-layout-and-gutter-routing`                | `applicationfunction`    | 7             |
 | `application.applicationfunction.layer-plane-layout`                            | `applicationfunction`    | 7             |
 | `application.applicationfunction.layer-stack-3d-projection`                     | `applicationfunction`    | 4             |
 | `application.applicationfunction.layered-edge-label-placement`                  | `applicationfunction`    | 5             |
@@ -117,6 +123,7 @@ Application components, services, and interactions.
 | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline` | `applicationprocess`     | 8             |
 | `application.applicationservice.adjacency-matrix-link-metadata`                 | `applicationservice`     | 2             |
 | `application.applicationservice.app-shell-components`                           | `applicationservice`     | 1             |
+| `application.applicationservice.branch-map-layout`                              | `applicationservice`     | 6             |
 | `application.applicationservice.chart-components`                               | `applicationservice`     | 1             |
 | `application.applicationservice.chat-components`                                | `applicationservice`     | 1             |
 | `application.applicationservice.cluster-packing`                                | `applicationservice`     | 2             |
@@ -195,6 +202,8 @@ flowchart TB
 
 | Relationship ID                                                         | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer    | Predicate    | Cardinality  | Strength |
 | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------- | ------------ | ------------ | -------- |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`                                                                         | `data-model.schemadefinition.branch-map-data`                                               | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`                                                                         | `data-model.schemadefinition.branch-map-scene`                                              | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`                                                                         | `data-model.schemadefinition.edge-geometry`                                                 | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`                                                                         | `data-model.schemadefinition.graph-edge-data-shape`                                         | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`                                                                         | `data-model.schemadefinition.graph-layout-state`                                            | `data-model`  | `accesses`   | many-to-many | medium   |
@@ -208,6 +217,24 @@ flowchart TB
 | `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-navigate-event`                                                                                | `data-model.schemadefinition.graph-viewport-snapshot`                                       | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`                                                                          | `data-model.schemadefinition.trace`                                                         | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`                                                                          | `data-model.schemadefinition.xray-segment`                                                  | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-label-placement`                                                                          | `data-model.schemadefinition.branch-map-layout`                                             | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-label-placement`                                                                          | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-label-placement`                                                                          | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-line-bundling`                                                                            | `data-model.schemadefinition.branch-map-line`                                               | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-line-bundling`                                                                            | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-line-bundling`                                                                            | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-placement`                                                                                | `data-model.schemadefinition.branch-map-data`                                               | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-placement`                                                                                | `data-model.schemadefinition.branch-map-layout`                                             | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-placement`                                                                                | `data-model.schemadefinition.branch-map-options`                                            | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-placement`                                                                                | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-placement`                                                                                | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-placement`                                                                                | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-routing`                                                                                  | `data-model.schemadefinition.branch-map-layout`                                             | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-routing`                                                                                  | `data-model.schemadefinition.branch-map-scene`                                              | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-routing`                                                                                  | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-routing`                                                                                  | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-trunk-selection`                                                                          | `data-model.schemadefinition.branch-map-group`                                              | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.branch-map-trunk-selection`                                                                          | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.cluster-circle-packing`                                                                              | `data-model.schemadefinition.cluster-tree-node`                                             | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`                                                                    | `data-model.schemadefinition.clustered-layout-options`                                      | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`                                                                    | `data-model.schemadefinition.clustered-layout-result`                                       | `data-model`  | `accesses`   | many-to-many | medium   |
@@ -235,6 +262,9 @@ flowchart TB
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`                                                                | `motivation.requirement.galaxy-keeps-orbits-even-over-round-systems`                        | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`                                                                | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.hive-plot-layout`                                                                                    | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden`          | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.house-branch-map-adapter`                                                                            | `data-model.schemadefinition.branch-map-data`                                               | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.house-branch-map-adapter`                                                                            | `data-model.schemadefinition.house-organizing-snapshot`                                     | `data-model`  | `accesses`   | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement`      | `application.applicationfunction.house-branch-map-adapter`                                                                            | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.joint-edge-label-placement`                                                                          | `data-model.schemadefinition.edge-geometry`                                                 | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-index-construction`                                                                    | `data-model.schemadefinition.layered-index`                                                 | `data-model`  | `accesses`   | many-to-many | medium   |
 | `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-snapshot-sanitization`                                                                 | `data-model.schemadefinition.layered-graph-snapshot`                                        | `data-model`  | `accesses`   | many-to-many | medium   |
@@ -264,6 +294,10 @@ flowchart TB
 | `application.applicationprocess.realizes.business.businessprocess`      | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline`                                                       | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`                | `business`    | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.adjacency-matrix-link-metadata`                                                                       | `product.softwarecapability.layered-graph-visualization`                                    | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.app-shell-components`                                                                                 | `product.softwarecapability.app-shell`                                                      | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.feature`               | `application.applicationservice.branch-map-layout`                                                                                    | `product.feature.branch-map`                                                                | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.branch-map-layout`                                                                                    | `product.softwarecapability.branch-map-visualization`                                       | `product`     | `realizes`   | many-to-many | medium   |
+| `application.applicationservice.satisfies.motivation.requirement`       | `application.applicationservice.branch-map-layout`                                                                                    | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation`  | `satisfies`  | many-to-many | medium   |
+| `application.applicationservice.satisfies.motivation.requirement`       | `application.applicationservice.branch-map-layout`                                                                                    | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `motivation`  | `satisfies`  | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.chart-components`                                                                                     | `product.softwarecapability.charting`                                                       | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.chat-components`                                                                                      | `product.softwarecapability.chat-ui`                                                        | `product`     | `realizes`   | many-to-many | medium   |
 | `application.applicationservice.realizes.product.softwarecapability`    | `application.applicationservice.cluster-packing`                                                                                      | `product.softwarecapability.clustered-force-layout-community-bubbles`                       | `product`     | `realizes`   | many-to-many | medium   |
@@ -336,6 +370,14 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d`    | `application.applicationfunction.structural-forest-construction`                            | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.aspect-ratio-elliptical-warp-formula-the-warp-scales-the-root-ring-offset-by-resolve-aspect-ratio-726fb4bc`   | `application.applicationfunction.galaxy-aspect-ratio-resolution`                            | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap`                              | `application.applicationfunction.structural-forest-construction`                            | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more`                       | `application.applicationfunction.branch-map-line-bundling`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain`                                                 | `application.applicationfunction.branch-map-trunk-selection`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot-all-seven-projects-75b1ed12`     | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `application.applicationfunction.branch-map-label-placement`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement`                                                           | `application.applicationfunction.branch-map-routing`                                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationservice`           | `testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene`                                                        | `application.applicationservice.branch-map-layout`                                          | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.branch-map-stays-headless-touches-no-dom-in-src-utils-branch-map`                                             | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.channel-router-batch-cost-400-boxes-and-400-routes-route-in-well-under-1-5-s-of-cpu-time`                     | `application.applicationfunction.navigation-edge-orthogonal-routing`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.channel-router-edge-cases-large-rectangles`                                                                   | `application.applicationfunction.navigation-edge-orthogonal-routing`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.channel-router-edge-cases-small-rectangles`                                                                   | `application.applicationfunction.navigation-edge-orthogonal-routing`                        | `application` | `tests`      | many-to-many | medium   |
@@ -392,6 +434,22 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.graph-utilities-compute-edge-path-auto-auto-with-no-curvature-override-matches-todays-quadratic-a49774f4`     | `application.applicationfunction.bezier-edge-path-computation`                              | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.graph-utilities-compute-edge-path-both-anchors-fixed-pin-endpoints-regardless-of-vertical-offset`             | `application.applicationfunction.bezier-edge-path-computation`                              | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.graph-utilities-compute-edge-path-either-anchor-being-fixed-selects-the-cubic-bezier-renderer`                | `application.applicationfunction.bezier-edge-path-computation`                              | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-derives-blocked-as-0c668edc`   | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d` | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-depends-on-97d4b30d`      | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-every-house-8299268f`     | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-interfaces-to-8d730441`   | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-milestones-to-77ffbbd0`   | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-projects-to-6a122fb5`     | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-orders-stations-by-084260ac`   | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-passes-the-house-ac8881d0`     | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-starts-a-line-at-the-ffb710b1` | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-styles-explorations-d5e7ec81`  | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does`                               | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-weighs-lines-by-c2c8647a`      | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-draws-the-cross-project-waits-and-the-interfaces-cc86bef3`   | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-keeps-only-open-work-from-now-on`                            | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-maps-every-milestone-gate-and-workstream-over-the-ed1f4b3b`  | `application.applicationfunction.house-branch-map-adapter`                                  | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.integration-graph-canvas-components-hover-state-cleanup-on-edge-hover-fires-with-undefined-when-a-b8d380eb`   | `application.applicationfunction.edge-pointer-handling`                                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.integration-graph-canvas-viewport-history-center-on-select-reports-a-center-on-select-navigation-a4796f46`    | `application.applicationfunction.programmatic-viewport-move-reporting`                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.integration-graph-canvas-viewport-history-set-viewport-moves-the-view-silent-suppresses-the-08cbf9f6`         | `application.applicationfunction.programmatic-viewport-move-reporting`                      | `application` | `tests`      | many-to-many | medium   |
@@ -401,6 +459,24 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-zoom-during-pan-inertia-keeps-the-point-under-the-7a0c359c`       | `application.applicationfunction.pan-and-zoom-viewport-control`                             | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.integration-use-pan-zoom-map-canvas-and-keep-the-reported-centre-fixed`                                       | `application.applicationfunction.pan-and-zoom-viewport-control`                             | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology`                                      | `application.applicationfunction.force-directed-layout-algorithm`                           | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-lane-budget-draws-every-line-of-an-expanded-group-and-of-an-expanded-bundle`                | `application.applicationfunction.branch-map-line-bundling`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget`                     | `application.applicationfunction.branch-map-line-bundling`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-lane-budget-honours-a-smaller-budget`                                                       | `application.applicationfunction.branch-map-line-bundling`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-lane-budget-puts-stations-no-line-leads-to-on-one-dotted-spur-per-group-in-rank-318cc046`   | `application.applicationfunction.branch-map-line-bundling`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-lanes-reuses-a-lane-once-it-is-free-and-continues-a-line-straight-on-from-its-4d677d55`     | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-lays-the-sample-out-with-no-issues`                                                         | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-never-overlaps-station-marks-label-boxes-or-groups-name`                                    | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-places-every-label-of-the-sample-each-station-label-on-its-own-row`                         | `application.applicationfunction.branch-map-label-placement`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-ranks-and-bands-gives-every-station-of-a-group-its-own-row-and-a-rank-one-band-85af82af`    | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-ranks-and-bands-orders-open-stations-by-longest-path-over-after-lines-and-1aab84d3`         | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-ranks-and-bands-places-dated-done-stations-above-the-start-in-date-order`                   | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-takes-text-widths-from-measure-text-when-given`                                             | `application.applicationfunction.branch-map-label-placement`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409`  | `application.applicationfunction.branch-map-trunk-selection`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest`          | `application.applicationfunction.branch-map-trunk-selection`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-trunk-without-one-takes-the-heaviest-chain-of-stops`                                        | `application.applicationfunction.branch-map-trunk-selection`                                | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-validation-lays-out-an-empty-map`                                                           | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-validation-reports-duplicates-dangling-references-and-cycles-without-throwing`              | `application.applicationfunction.branch-map-placement`                                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.layout-branch-map-wraps-labels-to-two-lines-at-max-label-width-then-ends-them-with-an-ellipsis`               | `application.applicationfunction.branch-map-label-placement`                                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.link-edge-metadata-maps-a-link-to-graph-edge-inspector-metadata`                                              | `application.applicationfunction.link-edge-metadata-formatting`                             | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.nudge-overlapping-segments-does-not-move-a-segment-onto-another-routes-line`                                  | `application.applicationfunction.navigation-edge-orthogonal-routing`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.place-edge-labels-jointly-puts-a-label-that-collides-with-nothing-where-find-clear-label-position-16f07cc2`   | `application.applicationfunction.edge-label-clear-position-search`                          | `application` | `tests`      | many-to-many | medium   |
@@ -438,6 +514,10 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.reach-relationships-orders-followed-nodes-by-hop-then-layer-then-name-spec-fixture`                           | `application.applicationfunction.reach-relationship-listing`                                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.reach-relationships-splits-direct-links-into-cross-layer-and-intra-layer-rows-with-direction-7cc209eb`        | `application.applicationfunction.reach-relationship-listing`                                | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.reach-summary-text-counts-nodes-and-layers-and-names-the-follow-depth`                                        | `application.applicationfunction.reach-summary-formatting`                                  | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.route-branch-map-draws-one-width-for-every-line-and-one-trunk-segment-with-width-off`                         | `application.applicationfunction.branch-map-routing`                                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.route-branch-map-routes-dependency-arrows-down-to-the-waiting-station-and-provides-arches-to-a-38c78d5a`      | `application.applicationfunction.branch-map-routing`                                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.route-branch-map-runs-every-line-from-its-fork-to-its-station-along-45-degree-horizontal-and-1aa8c846`        | `application.applicationfunction.branch-map-routing`                                        | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.route-branch-map-with-width-by-weight-a-fork-takes-weight-off-the-trunk-a-join-gives-it-back-and-a-0e3ca7f8`  | `application.applicationfunction.branch-map-routing`                                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.route-navigation-edge-avoids-obstacles`                                                                       | `application.applicationfunction.navigation-edge-orthogonal-routing`                        | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.sanitize-layered-graph-explorer-snapshot-checks-the-view-labels-and-stack-camera`                             | `application.applicationfunction.explorer-snapshot-sanitizing`                              | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.separation-job-falls-back-to-separation-pass-for-positions-the-grid-cannot-hold`                              | `application.applicationfunction.node-overlap-separation-pass`                              | `application` | `tests`      | many-to-many | medium   |
@@ -472,6 +552,7 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.visible-navigation-edge-ids-no-hover-no-navigation-routes-are-visible`                                        | `application.applicationfunction.structural-forest-construction`                            | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`          | `testing.testcasesketch.visible-navigation-edge-ids-only-edges-matching-is-navigation-route-predicate-are-considered`                 | `application.applicationfunction.structural-forest-construction`                            | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcoveragemodel.covers.application.applicationcomponent`     | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `application.applicationcomponent.heimdall-ui-library-module`                               | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.branch-map-layout-tests`                                                                                  | `application.applicationservice.branch-map-layout`                                          | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.edge-label-placement-and-styling`                                                                         | `application.applicationservice.force-layout`                                               | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `application.applicationservice.force-layout`                                               | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.force-force-clustered-layout-algorithms`                                                                  | `application.applicationservice.graph-layout-engine-service`                                | `application` | `covers`     | many-to-many | medium   |
@@ -485,6 +566,7 @@ flowchart TB
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.galaxy-live-drag`                                                                                         | `application.applicationservice.live-galaxy-simulation-service`                             | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `application.applicationservice.force-layout`                                               | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `application.applicationservice.galaxy-layout`                                              | `application` | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.application.applicationcomponent`    | `testing.testcoveragetarget.house-branch-map-adapter-tests`                                                                           | `application.applicationcomponent.test-page-host-app`                                       | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.lane-layout-and-gutter-routing`                                                                           | `application.applicationservice.graph-layout-engine-service`                                | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.layered-async-layout`                                                                                     | `application.applicationservice.layered-graph-framework-service`                            | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`      | `testing.testcoveragetarget.layered-graph-index-and-reach`                                                                            | `application.applicationservice.layered-graph-framework-service`                            | `application` | `covers`     | many-to-many | medium   |
@@ -547,6 +629,8 @@ The package's public module (src/index.ts barrel over one module per source file
 
 | Type        | Related Element                                                                 | Predicate     | Direction |
 | ----------- | ------------------------------------------------------------------------------- | ------------- | --------- |
+| inter-layer | `data-model.schemadefinition.branch-map-data`                                   | `accesses`    | outbound  |
+| inter-layer | `data-model.schemadefinition.branch-map-scene`                                  | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.edge-geometry`                                     | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.graph-edge-data-shape`                             | `accesses`    | outbound  |
 | inter-layer | `data-model.schemadefinition.graph-layout-state`                                | `accesses`    | outbound  |
@@ -564,6 +648,11 @@ The package's public module (src/index.ts barrel over one module per source file
 | intra-layer | `application.applicationfunction.aws-x-ray-trace-adaptation`                    | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.bezier-edge-path-computation`                  | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.body-scroll-lock`                              | `assigned-to` | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-label-placement`                    | `assigned-to` | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-line-bundling`                      | `assigned-to` | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-placement`                          | `assigned-to` | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-routing`                            | `assigned-to` | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-trunk-selection`                    | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.canvas-pointer-handling`                       | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.clustered-force-layout-algorithm`              | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.collapse-toggling`                             | `assigned-to` | outbound  |
@@ -614,6 +703,7 @@ The package's public module (src/index.ts barrel over one module per source file
 | intra-layer | `application.applicationprocess.graph-render-and-layout-recomputation-pipeline` | `assigned-to` | outbound  |
 | intra-layer | `application.applicationservice.adjacency-matrix-link-metadata`                 | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.app-shell-components`                           | `realizes`    | outbound  |
+| intra-layer | `application.applicationservice.branch-map-layout`                              | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.chart-components`                               | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.chat-components`                                | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.cluster-packing`                                | `realizes`    | outbound  |
@@ -673,10 +763,12 @@ The repo-root Vite dev app (index.html, src/main.tsx, src/App.tsx): renders one 
 
 #### Relationships
 
-| Type        | Related Element                                               | Predicate    | Direction |
-| ----------- | ------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `navigation.route.test-page-example-route`                    | `depends-on` | inbound   |
-| intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `uses`       | outbound  |
+| Type        | Related Element                                               | Predicate     | Direction |
+| ----------- | ------------------------------------------------------------- | ------------- | --------- |
+| inter-layer | `navigation.route.test-page-example-route`                    | `depends-on`  | inbound   |
+| inter-layer | `testing.testcoveragetarget.house-branch-map-adapter-tests`   | `covers`      | inbound   |
+| intra-layer | `application.applicationfunction.house-branch-map-adapter`    | `assigned-to` | outbound  |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `uses`        | outbound  |
 
 ### Background Click Event {#background-click-event}
 
@@ -972,6 +1064,136 @@ useBodyOverflow(): locks body scrolling while a modal overlay is open.
 | ----------- | ------------------------------------------------------------- | ------------- | --------- |
 | intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `assigned-to` | inbound   |
 | intra-layer | `application.applicationservice.overlay-components`           | `realizes`    | outbound  |
+
+### Branch Map Label Placement {#branch-map-label-placement}
+
+**ID**: `application.applicationfunction.branch-map-label-placement`
+
+**Type**: `applicationfunction`
+
+placeBranchMapLabels() in src/utils/branchMap/labels.ts: per group, candidate boxes for each station label on its own sub-row (right of the station, right of the lines running past that row, or left of a station off the trunk) and each line label (horizontal, right of the line's run near its fork, sliding down the run when taken), placed greedily by priority (trunk stations, then other stations, then line names) so no box overlaps another box or a station mark; crossing a line and distance from the anchor are soft costs. Text width from options.measureText or a character-width estimate; wraps to two lines at maxLabelWidth, then ellipsis. Returns placed and unplaced labels; layoutBranchMap sets the group's width from the placed boxes.
+
+#### Relationships
+
+| Type        | Related Element                                                                                                         | Predicate     | Direction |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------- | ------------- | --------- |
+| inter-layer | `data-model.schemadefinition.branch-map-layout`                                                                         | `accesses`    | outbound  |
+| inter-layer | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`                                    | `satisfies`   | outbound  |
+| inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`                                         | `satisfies`   | outbound  |
+| inter-layer | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-places-every-label-of-the-sample-each-station-label-on-its-own-row`           | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-takes-text-widths-from-measure-text-when-given`                               | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-wraps-labels-to-two-lines-at-max-label-width-then-ends-them-with-an-ellipsis` | `tests`       | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module`                                                           | `assigned-to` | inbound   |
+| intra-layer | `application.applicationservice.branch-map-layout`                                                                      | `realizes`    | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-placement`                                                                  | `depends-on`  | inbound   |
+
+### Branch Map Line Bundling {#branch-map-line-bundling}
+
+**ID**: `application.applicationfunction.branch-map-line-bundling`
+
+**Type**: `applicationfunction`
+
+bundleBranchLines() in src/utils/branchMap/bundle.ts: keeps a group within maxLanes. Merges lines that fork from the same place (a station, or the group's start) and deliver to the same station into one bundle line (members, count, summed weight; id bundle:&lt;group&gt;:&lt;from\|start&gt;:&lt;to&gt;), largest sets first; if still over budget, collapses the lightest remaining lines and bundles into one 'N more' line per group (more:&lt;group&gt;). Groups and bundles named in expanded are left whole, and an expanded more:&lt;group&gt; draws the lines and bundles it would have held, past the budget. Deterministic tie-breaks by id. As built, the bundle key is the exact fork plus destination, not the fork's rank as first planned.
+
+#### Relationships
+
+| Type        | Related Element                                                                                                                     | Predicate     | Direction |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------- | --------- |
+| inter-layer | `data-model.schemadefinition.branch-map-line`                                                                                       | `accesses`    | outbound  |
+| inter-layer | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                                                                | `satisfies`   | outbound  |
+| inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                                                           | `satisfies`   | outbound  |
+| inter-layer | `testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more`                     | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-lane-budget-draws-every-line-of-an-expanded-group-and-of-an-expanded-bundle`              | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget`                   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-lane-budget-honours-a-smaller-budget`                                                     | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-lane-budget-puts-stations-no-line-leads-to-on-one-dotted-spur-per-group-in-rank-318cc046` | `tests`       | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module`                                                                       | `assigned-to` | inbound   |
+| intra-layer | `application.applicationservice.branch-map-layout`                                                                                  | `realizes`    | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-placement`                                                                              | `depends-on`  | inbound   |
+
+### Branch Map Placement {#branch-map-placement}
+
+**ID**: `application.applicationfunction.branch-map-placement`
+
+**Type**: `applicationfunction`
+
+layoutBranchMap() in src/utils/branchMap/layout.ts: validate the input (duplicate ids, dangling references and cycles go to issues, never throw), rank stations (rank.ts: dated done stations above the start marker by date; open stations below it by longest path over station.after, line from-to with a minimum span, and dependency links, solved across all groups so cross-group links point down), choose each trunk (dated done stations no live line leads to join it), bundle lines, assign rank bands with one sub-row per station per group, assign lanes by interval colouring (lanes.ts: trunk on lane 0, freed lanes reused; lines from the start leave the trunk one row apart as a staggered fan), place the labels, then pack groups left to right by their measured width. Output is BranchMapLayout: positions only.
+
+#### Relationships
+
+| Type        | Related Element                                                                                                                    | Predicate     | Direction |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------- | --------- |
+| inter-layer | `data-model.schemadefinition.branch-map-data`                                                                                      | `accesses`    | outbound  |
+| inter-layer | `data-model.schemadefinition.branch-map-layout`                                                                                    | `accesses`    | outbound  |
+| inter-layer | `data-model.schemadefinition.branch-map-options`                                                                                   | `accesses`    | outbound  |
+| inter-layer | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`                                                | `satisfies`   | outbound  |
+| inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                                                          | `satisfies`   | outbound  |
+| inter-layer | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`                                                    | `satisfies`   | outbound  |
+| inter-layer | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                              | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-stays-headless-touches-no-dom-in-src-utils-branch-map`                                          | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-lanes-reuses-a-lane-once-it-is-free-and-continues-a-line-straight-on-from-its-4d677d55`  | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-lays-the-sample-out-with-no-issues`                                                      | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-never-overlaps-station-marks-label-boxes-or-groups-name`                                 | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-ranks-and-bands-gives-every-station-of-a-group-its-own-row-and-a-rank-one-band-85af82af` | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-ranks-and-bands-orders-open-stations-by-longest-path-over-after-lines-and-1aab84d3`      | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-ranks-and-bands-places-dated-done-stations-above-the-start-in-date-order`                | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-validation-lays-out-an-empty-map`                                                        | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-validation-reports-duplicates-dangling-references-and-cycles-without-throwing`           | `tests`       | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module`                                                                      | `assigned-to` | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-label-placement`                                                                       | `depends-on`  | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-line-bundling`                                                                         | `depends-on`  | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-trunk-selection`                                                                       | `depends-on`  | outbound  |
+| intra-layer | `application.applicationfunction.branch-map-routing`                                                                               | `flows-to`    | outbound  |
+| intra-layer | `application.applicationservice.branch-map-layout`                                                                                 | `realizes`    | outbound  |
+
+### Branch Map Routing {#branch-map-routing}
+
+**ID**: `application.applicationfunction.branch-map-routing`
+
+**Type**: `applicationfunction`
+
+routeBranchMap(): from a BranchMapLayout only, each line's polyline (fork at 45 degrees, straight run along its lane, rejoin at 45 degrees, corners rounded with polylineCurve from laneLayout.ts) with its run for ticks, how it ends (join, station, open, dead), the trunk as straight segments with per-segment width when width is on (fork takes weight off, join gives it back, a dead end never returns it), and link curves (dependency arrows between stations, arches from a provider station to a group's start). Output is BranchMapScene.
+
+#### Relationships
+
+| Type        | Related Element                                                                                                                      | Predicate     | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------- | --------- |
+| inter-layer | `data-model.schemadefinition.branch-map-layout`                                                                                      | `accesses`    | outbound  |
+| inter-layer | `data-model.schemadefinition.branch-map-scene`                                                                                       | `accesses`    | outbound  |
+| inter-layer | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`                                                  | `satisfies`   | outbound  |
+| inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                                                            | `satisfies`   | outbound  |
+| inter-layer | `testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement`                                                          | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.route-branch-map-draws-one-width-for-every-line-and-one-trunk-segment-with-width-off`                        | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.route-branch-map-routes-dependency-arrows-down-to-the-waiting-station-and-provides-arches-to-a-38c78d5a`     | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.route-branch-map-runs-every-line-from-its-fork-to-its-station-along-45-degree-horizontal-and-1aa8c846`       | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.route-branch-map-with-width-by-weight-a-fork-takes-weight-off-the-trunk-a-join-gives-it-back-and-a-0e3ca7f8` | `tests`       | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module`                                                                        | `assigned-to` | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-placement`                                                                               | `flows-to`    | inbound   |
+| intra-layer | `application.applicationfunction.lane-layout-and-gutter-routing`                                                                     | `depends-on`  | outbound  |
+| intra-layer | `application.applicationservice.branch-map-layout`                                                                                   | `realizes`    | outbound  |
+
+### Branch Map Trunk Selection {#branch-map-trunk-selection}
+
+**ID**: `application.applicationfunction.branch-map-trunk-selection`
+
+**Type**: `applicationfunction`
+
+chooseBranchMapTrunk(): the heaviest chain of stops in rank order (weight from arriving lines and their weight, a bonus for consecutive stops linked by after). A stated trunk (group.trunk) names waypoints the chain must pass through; each stretch between waypoints, and before the first and after the last, is chosen on its own. Waypoints of one rank are a tie, not an inversion; ids outside the group or a later rank given before an earlier one are reported as invalid-trunk. Decision stations sit on the trunk when nothing leads to them and their row is free. Decided 2026-11-25 (decision 4): waypoints rather than an exact trunk, so a stated trunk stays a long main line.
+
+#### Relationships
+
+| Type        | Related Element                                                                                                                      | Predicate     | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------ | ------------- | --------- |
+| inter-layer | `data-model.schemadefinition.branch-map-group`                                                                                       | `accesses`    | outbound  |
+| inter-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                                                            | `satisfies`   | outbound  |
+| inter-layer | `testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain`                                                | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409` | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest`         | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.layout-branch-map-trunk-without-one-takes-the-heaviest-chain-of-stops`                                       | `tests`       | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module`                                                                        | `assigned-to` | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-placement`                                                                               | `depends-on`  | inbound   |
+| intra-layer | `application.applicationservice.branch-map-layout`                                                                                   | `realizes`    | outbound  |
 
 ### Canvas Pointer Handling {#canvas-pointer-handling}
 
@@ -1367,6 +1589,40 @@ hiveLayout(), hiveLinkGeometry() and hiveAxisGroups(): axis angles per layer or 
 | intra-layer | `application.applicationservice.layered-graph-utilities`                           | `realizes`    | outbound  |
 | intra-layer | `application.applicationservice.layered-graph-visualization`                       | `realizes`    | outbound  |
 
+### House Branch Map Adapter {#house-branch-map-adapter}
+
+**ID**: `application.applicationfunction.house-branch-map-adapter`
+
+**Type**: `applicationfunction`
+
+houseToBranchMap(snapshot, \{ projects, horizon, widthBy \}) in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups (fixed palette colour per project), milestones stops and gates decisions (proposed to planned, open gate to active, reached and decided to done, with reached_on or decided_on as the date), depends_on and opens within a project become station after; workstreams become lines (from: the latest station in its own project that opened it or that it waits on, else the start; style dashed for explorations, dotted for set aside, set aside winning; weight 1 or open plus done tasks; open tasks as marks, in progress emphasized), depends_on across projects dependency links (a workstream's wait lands on its destination), interfaces provides links from the provider's next open delivering milestone (else its start) to each other user's start, blocked derived as House derives it over the whole snapshot. A project's milestones that deliver an active interface become its trunk waypoints in depends_on order (decision 4, 2026-11-25); a project delivering none states none. Visible projects and the horizon (from now, whole history) are the adapter's filter. Stays out of the library.
+
+#### Relationships
+
+| Type        | Related Element                                                                                                                       | Predicate     | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------- | --------- |
+| inter-layer | `data-model.schemadefinition.branch-map-data`                                                                                         | `accesses`    | outbound  |
+| inter-layer | `data-model.schemadefinition.house-organizing-snapshot`                                                                               | `accesses`    | outbound  |
+| inter-layer | `motivation.requirement.branch-map-library-stays-vocabulary-free`                                                                     | `satisfies`   | outbound  |
+| inter-layer | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot-all-seven-projects-75b1ed12`     | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-derives-blocked-as-0c668edc`   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d` | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-depends-on-97d4b30d`      | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-every-house-8299268f`     | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-interfaces-to-8d730441`   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-milestones-to-77ffbbd0`   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-projects-to-6a122fb5`     | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-orders-stations-by-084260ac`   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-passes-the-house-ac8881d0`     | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-starts-a-line-at-the-ffb710b1` | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-styles-explorations-d5e7ec81`  | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does`                               | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-weighs-lines-by-c2c8647a`      | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-draws-the-cross-project-waits-and-the-interfaces-cc86bef3`   | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-keeps-only-open-work-from-now-on`                            | `tests`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-maps-every-milestone-gate-and-workstream-over-the-ed1f4b3b`  | `tests`       | inbound   |
+| intra-layer | `application.applicationcomponent.test-page-host-app`                                                                                 | `assigned-to` | inbound   |
+
 ### Joint Edge-Label Placement {#joint-edge-label-placement}
 
 **ID**: `application.applicationfunction.joint-edge-label-placement`
@@ -1397,6 +1653,7 @@ layoutLanes(), routeLaneGutters() and laneBundler(): lays out layers as swim lan
 | Type        | Related Element                                                      | Predicate     | Direction |
 | ----------- | -------------------------------------------------------------------- | ------------- | --------- |
 | intra-layer | `application.applicationcomponent.heimdall-ui-library-module`        | `assigned-to` | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-routing`                 | `depends-on`  | inbound   |
 | intra-layer | `application.dataobject.node-position-map`                           | `accesses`    | outbound  |
 | intra-layer | `application.applicationfunction.navigation-edge-orthogonal-routing` | `depends-on`  | outbound  |
 | intra-layer | `application.applicationservice.graph-layout-engine-service`         | `realizes`    | outbound  |
@@ -2241,6 +2498,37 @@ Titlebar, statusbar, app title and the ShellLayout that composes the IDE chrome.
 | ----------- | ------------------------------------------------------------- | ---------- | --------- |
 | inter-layer | `product.softwarecapability.app-shell`                        | `realizes` | outbound  |
 | intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `realizes` | inbound   |
+
+### Branch Map Layout {#branch-map-layout}
+
+**ID**: `application.applicationservice.branch-map-layout`
+
+**Type**: `applicationservice`
+
+Exported from the package entry point out of src/utils/branchMap/: layoutBranchMap (placement and label placement), routeBranchMap (line and link routing) and branchMapScene (both, memoizable), with the BranchMap\* types.
+
+#### Attributes
+
+| Name        | Value       |
+| ----------- | ----------- |
+| serviceType | synchronous |
+
+#### Relationships
+
+| Type        | Related Element                                                                     | Predicate   | Direction |
+| ----------- | ----------------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `product.feature.branch-map`                                                        | `realizes`  | outbound  |
+| inter-layer | `product.softwarecapability.branch-map-visualization`                               | `realizes`  | outbound  |
+| inter-layer | `motivation.requirement.branch-map-library-stays-vocabulary-free`                   | `satisfies` | outbound  |
+| inter-layer | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages` | `satisfies` | outbound  |
+| inter-layer | `testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene`      | `tests`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.branch-map-layout-tests`                                | `covers`    | inbound   |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module`                       | `realizes`  | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-label-placement`                        | `realizes`  | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-line-bundling`                          | `realizes`  | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-placement`                              | `realizes`  | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-routing`                                | `realizes`  | inbound   |
+| intra-layer | `application.applicationfunction.branch-map-trunk-selection`                        | `realizes`  | inbound   |
 
 ### Chart Components {#chart-components}
 
@@ -3332,4 +3620,4 @@ GraphCanvasContext's nodeRects/getNodeRect — every currently-visible node's me
 
 ---
 
-Generated: 2026-11-25T10:55:49.871Z | Model Version: 0.1.0
+Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0

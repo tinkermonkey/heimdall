@@ -1657,3 +1657,68 @@ testing.testcoveragetarget.pane-rail-marks:
     created_at: 2026-11-24T13:49:47.548Z
     updated_at: 2026-11-24T13:49:47.548Z
     version: 1
+testing.testcoveragetarget.branch-map-view:
+  id: cae58113-f2c2-49ef-a1ce-f1bb69a80c59
+  path: testing.testcoveragetarget.branch-map-view
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Branch Map View
+  description: "Playwright spec tests/branch-map.spec.ts against ?example=branch-map: selection, keyboard, expand, and visual baselines."
+  attributes:
+    targetType: ui-component
+    priority: high
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcoveragetarget.branch-map-layout-tests:
+  id: 28282f0b-4874-45c1-965c-0935b77dbeef
+  path: testing.testcoveragetarget.branch-map-layout-tests
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: Branch Map Layout Tests
+  description: "Vitest unit tests src/utils/__tests__/branchMap.test.ts on the vocabulary-free sample (src/test-pages/fixtures/branchMapSample.ts, which mirrors the snapshot's 20- and 17-line projects): overlap, determinism, lane budget, trunk, label placement and stage separation."
+  attributes:
+    targetType: library
+    priority: high
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcoveragetarget.house-branch-map-adapter-tests:
+  id: e31c037a-7df8-4f38-80ff-0e7069d9958a
+  path: testing.testcoveragetarget.house-branch-map-adapter-tests
+  spec_node_id: testing.testcoveragetarget
+  type: testcoveragetarget
+  layer_id: testing
+  name: House Branch Map Adapter Tests
+  description: "Vitest unit test src/test-pages/branchMap/houseBranchMapAdapter.test.ts: the adapter's mapping, and the whole House snapshot run through the adapter and the layout with no overlapping stations, labels or groups."
+  attributes:
+    targetType: application-component
+    priority: medium
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+  accepted_gaps:
+    - direction: outgoing
+      predicate: covers
+      other_spec_node_id: ux.librarycomponent
+      reason: The House adapter is test-page code that maps a fixture to the generic model; it covers no library component, by design (the library stays vocabulary-free).
+      decided_by: agent
+      decided_at: 2026-11-25T17:41:35.356Z
+      changeset: changeset-1795628359757-v0v6gnap1
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1

@@ -16,15 +16,15 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 38    |
-| Intra-Layer Relationships | 42    |
-| Inter-Layer Relationships | 255   |
-| Inbound Relationships     | 255   |
+| Elements                  | 42    |
+| Intra-Layer Relationships | 51    |
+| Inter-Layer Relationships | 287   |
+| Inbound Relationships     | 287   |
 | Outbound Relationships    | 0     |
 
 **Cross-Layer References**:
 
-- **Upstream layers**: [Application](./05-application-layer-report.md), [Business](./02-business-layer-report.md), [Product](./03-product-layer-report.md), [Testing](./13-testing-layer-report.md), [UX](./10-ux-layer-report.md)
+- **Upstream layers**: [Application](./05-application-layer-report.md), [Business](./02-business-layer-report.md), [Data Model](./08-data-model-layer-report.md), [Product](./03-product-layer-report.md), [Testing](./13-testing-layer-report.md), [UX](./10-ux-layer-report.md)
 
 ## Intra-Layer Relationships
 
@@ -37,22 +37,26 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | `motivation.constraint.package-ships-esm-dist-and-agent-skills-only`                        | `constraint`  | 1             |
 | `motivation.constraint.visual-changes-pass-per-os-screenshot-baselines`                     | `constraint`  | 0             |
 | `motivation.driver.external-regression-gated-layout-quality-loop`                           | `driver`      | 5             |
-| `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `goal`        | 8             |
-| `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `goal`        | 5             |
+| `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `goal`        | 9             |
+| `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `goal`        | 6             |
 | `motivation.goal.low-friction-adoption-in-any-react-toolchain`                              | `goal`        | 6             |
-| `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `goal`        | 5             |
+| `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `goal`        | 7             |
 | `motivation.goal.usable-by-every-end-user`                                                  | `goal`        | 3             |
-| `motivation.principle.deterministic-reproducible-layout-output`                             | `principle`   | 2             |
+| `motivation.principle.deterministic-reproducible-layout-output`                             | `principle`   | 3             |
 | `motivation.principle.every-component-color-comes-from-a-token`                             | `principle`   | 2             |
 | `motivation.principle.ide-density-and-terse-voice`                                          | `principle`   | 1             |
 | `motivation.principle.two-surface-shell-and-canvas`                                         | `principle`   | 1             |
 | `motivation.principle.zero-literal-node-overlap-guarantee`                                  | `principle`   | 4             |
 | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `requirement` | 3             |
+| `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `requirement` | 2             |
+| `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `requirement` | 2             |
+| `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `requirement` | 2             |
 | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `requirement` | 3             |
 | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `requirement` | 0             |
 | `motivation.requirement.every-exported-path-resolves-in-the-published-tarball`              | `requirement` | 1             |
 | `motivation.requirement.every-public-export-is-documented-for-agents`                       | `requirement` | 1             |
 | `motivation.requirement.galaxy-keeps-orbits-even-over-round-systems`                        | `requirement` | 2             |
+| `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `requirement` | 3             |
 | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `requirement` | 1             |
 | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden`          | `requirement` | 0             |
 | `motivation.requirement.large-layouts-do-not-block-the-first-paint`                         | `requirement` | 1             |
@@ -66,9 +70,9 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | `motivation.requirement.package-loads-as-plain-esm-in-node-ssr-and-test-runners`            | `requirement` | 1             |
 | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `requirement` | 3             |
 | `motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror`                | `requirement` | 2             |
-| `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `stakeholder` | 7             |
-| `motivation.stakeholder.end-user-of-an-embedding-application`                               | `stakeholder` | 2             |
-| `motivation.stakeholder.heimdall-layout-loop-quality-harness`                               | `stakeholder` | 2             |
+| `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `stakeholder` | 8             |
+| `motivation.stakeholder.end-user-of-an-embedding-application`                               | `stakeholder` | 4             |
+| `motivation.stakeholder.heimdall-layout-loop-quality-harness`                               | `stakeholder` | 3             |
 | `motivation.stakeholder.mirror-maintainer`                                                  | `stakeholder` | 3             |
 
 ## Inter-Layer Dependencies
@@ -91,6 +95,7 @@ flowchart TB
   testing["Testing"]
   application --> motivation
   business --> motivation
+  data_model --> motivation
   product --> motivation
   testing --> motivation
   ux --> motivation
@@ -101,6 +106,16 @@ flowchart TB
 
 | Relationship ID                                                    | Source Node                                                                                                                           | Dest Node                                                                                   | Dest Layer   | Predicate    | Cardinality  | Strength |
 | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------ | -------- |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-label-placement`                                                                          | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-label-placement`                                                                          | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-line-bundling`                                                                            | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-line-bundling`                                                                            | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-placement`                                                                                | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-placement`                                                                                | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-placement`                                                                                | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-routing`                                                                                  | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-routing`                                                                                  | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.branch-map-trunk-selection`                                                                          | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.clustered-force-layout-algorithm`                                                                    | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.dropdown-portal-and-outside-click-containment`                                                       | `motivation.requirement.dropdown-panels-render-in-a-portal-by-default`                      | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.fixed-clock-date-formatting`                                                                         | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -111,6 +126,7 @@ flowchart TB
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`                                                                | `motivation.requirement.galaxy-keeps-orbits-even-over-round-systems`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`                                                                | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.hive-plot-layout`                                                                                    | `motivation.requirement.hive-plot-keeps-axis-angles-stable-when-a-layer-is-hidden`          | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.house-branch-map-adapter`                                                                            | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.louvain-community-clustering`                                                                        | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.navigation-edge-orthogonal-routing`                                                                  | `motivation.requirement.navigation-routing-stays-within-its-time-budget`                    | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.node-overlap-separation-pass`                                                                        | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -119,12 +135,18 @@ flowchart TB
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.orthogonal-layout-algorithm`                                                                         | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.radial-tree-layout-algorithm`                                                                        | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationfunction.satisfies.motivation.requirement` | `application.applicationfunction.ssr-safe-media-query`                                                                                | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationservice.satisfies.motivation.requirement`  | `application.applicationservice.branch-map-layout`                                                                                    | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | medium   |
+| `application.applicationservice.satisfies.motivation.requirement`  | `application.applicationservice.branch-map-layout`                                                                                    | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationservice.satisfies.motivation.requirement`  | `application.applicationservice.graph-layout-engine-service`                                                                          | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
 | `application.applicationservice.satisfies.motivation.constraint`   | `application.applicationservice.layered-graph-visualization`                                                                          | `motivation.constraint.layer-stack-draws-links-as-batched-svg-paths-not-canvas`             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `business.businessactor.references.motivation.stakeholder`         | `business.businessactor.embedding-application-developer`                                                                              | `motivation.stakeholder.embedding-application-developer-npm-consumer`                       | `motivation` | `references` | many-to-many | medium   |
 | `business.businessactor.references.motivation.stakeholder`         | `business.businessactor.end-user-exploring-a-graph-view`                                                                              | `motivation.stakeholder.end-user-of-an-embedding-application`                               | `motivation` | `references` | many-to-many | medium   |
 | `business.businessservice.realizes.motivation.goal`                | `business.businessservice.hierarchical-and-navigation-structure-visualization`                                                        | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `realizes`   | many-to-many | medium   |
 | `business.businessservice.realizes.motivation.goal`                | `business.businessservice.large-graph-visualization`                                                                                  | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`       | `motivation` | `realizes`   | many-to-many | medium   |
+| `data-model.schemadefinition.satisfies.motivation.requirement`     | `data-model.schemadefinition.branch-map-data`                                                                                         | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                 | `product.feature.branch-map`                                                                                                          | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                 | `product.feature.branch-map`                                                                                                          | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `product.feature.satisfies.motivation.requirement`                 | `product.feature.branch-map`                                                                                                          | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                 | `product.feature.per-component-imports`                                                                                               | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                 | `product.feature.server-side-rendering-support`                                                                                       | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `motivation` | `satisfies`  | many-to-many | medium   |
 | `product.feature.satisfies.motivation.requirement`                 | `product.feature.theme-slot`                                                                                                          | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -134,6 +156,8 @@ flowchart TB
 | `product.persona.references.motivation.stakeholder`                | `product.persona.mirror-maintainer-restyling-the-library`                                                                             | `motivation.stakeholder.mirror-maintainer`                                                  | `motivation` | `references` | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.app-navigation`                                                                                           | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.app-shell`                                                                                                | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.branch-map-visualization`                                                                                 | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
+| `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.branch-map-visualization`                                                                                 | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.charting`                                                                                                 | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.chat-ui`                                                                                                  | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`        | `motivation` | `supports`   | many-to-many | medium   |
 | `product.softwarecapability.satisfies.motivation.requirement`      | `product.softwarecapability.clustered-force-layout-community-bubbles`                                                                 | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -159,6 +183,13 @@ flowchart TB
 | `product.softwarecapability.supports.motivation.goal`              | `product.softwarecapability.ux-navigation-tree-layout`                                                                                | `motivation.goal.readable-layout-for-structurally-complex-graphs`                           | `motivation` | `supports`   | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d`    | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap`                              | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears`                                        | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more`                       | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement`                                                           | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`         | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene`                                                        | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`                   | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                                                | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                        | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.channel-router-route-navigation-edges-applies-nudge-pass-to-spread-overlapping-segments`                      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.channel-router-route-navigation-edges-nudges-overlapping-segments-while-maintaining-orthogonality`            | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.chart-fills-resolve-from-tokens`                                                                              | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`                     | `motivation` | `satisfies`  | many-to-many | high     |
@@ -169,6 +200,7 @@ flowchart TB
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-live-drag-287-a-flare-drag-frame-resolves-overlaps-with-grid-local-work-not-all-pairs-every-d4f70636`  | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-live-drag-287-settles-with-no-overlapping-bodies-the-dropped-node-exactly-on-its-pin-its-e250ab4d`     | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.galaxy-simulation-step-a-held-drag-carries-its-subtree-settles-and-leaves-no-overlap`                         | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does`                               | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-cards-mode-renders-without-overlaps-after-collapse`                 | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapse-maintains-zero-overlap-guarantee-for-galaxy-f1dd0343`      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`          | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-expand-after-collapse-maintains-zero-overlap-guarantee`             | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`             | `motivation` | `satisfies`  | many-to-many | high     |
@@ -217,6 +249,11 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-h`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bar-v`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.principle.every-component-color-comes-from-a-token`                             | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`        | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.branch-map`                                                                                                      | `motivation.requirement.graph-nodes-and-edges-have-accessible-names`                        | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.bridge-node-list`                                                                                                | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.button`                                                                                                          | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.calendar`                                                                                                        | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -483,6 +520,7 @@ One React component library, published as @tinkermonkey/heimdall-ui, that gives 
 | ----------- | ---------------------------------------------------------------------------- | ----------- | --------- |
 | inter-layer | `product.softwarecapability.app-navigation`                                  | `supports`  | inbound   |
 | inter-layer | `product.softwarecapability.app-shell`                                       | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.branch-map-visualization`                        | `supports`  | inbound   |
 | inter-layer | `product.softwarecapability.charting`                                        | `supports`  | inbound   |
 | inter-layer | `product.softwarecapability.chat-ui`                                         | `supports`  | inbound   |
 | inter-layer | `product.softwarecapability.data-display`                                    | `supports`  | inbound   |
@@ -498,6 +536,7 @@ One React component library, published as @tinkermonkey/heimdall-ui, that gives 
 | intra-layer | `motivation.principle.ide-density-and-terse-voice`                           | `influence` | inbound   |
 | intra-layer | `motivation.principle.two-surface-shell-and-canvas`                          | `influence` | inbound   |
 | intra-layer | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`      | `realizes`  | inbound   |
+| intra-layer | `motivation.requirement.branch-map-library-stays-vocabulary-free`            | `realizes`  | inbound   |
 | intra-layer | `motivation.requirement.consumers-bundle-only-the-components-they-import`    | `realizes`  | inbound   |
 | intra-layer | `motivation.requirement.every-public-export-is-documented-for-agents`        | `realizes`  | inbound   |
 | intra-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`    | `realizes`  | inbound   |
@@ -527,6 +566,7 @@ Inferred from graphLayout.ts's MACRO_EDGE_CAP handling of a measured 564-duplica
 | inter-layer | `product.softwarecapability.layered-graph-visualization`                 | `supports`  | inbound   |
 | intra-layer | `motivation.driver.external-regression-gated-layout-quality-loop`        | `influence` | inbound   |
 | intra-layer | `motivation.principle.deterministic-reproducible-layout-output`          | `influence` | inbound   |
+| intra-layer | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`     | `realizes`  | inbound   |
 | intra-layer | `motivation.requirement.large-layouts-do-not-block-the-first-paint`      | `realizes`  | inbound   |
 | intra-layer | `motivation.requirement.live-galaxy-drag-stays-interactive`              | `realizes`  | inbound   |
 | intra-layer | `motivation.requirement.navigation-routing-stays-within-its-time-budget` | `realizes`  | inbound   |
@@ -572,22 +612,25 @@ Inferred from graphLayout.ts's resolveOverlaps/separationPass documentation and 
 
 #### Relationships
 
-| Type        | Related Element                                                                | Predicate   | Direction |
-| ----------- | ------------------------------------------------------------------------------ | ----------- | --------- |
-| inter-layer | `business.businessservice.hierarchical-and-navigation-structure-visualization` | `realizes`  | inbound   |
-| inter-layer | `product.softwarecapability.force-directed-graph-layout`                       | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.galaxy-radial-orbit-layout`                        | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.interactive-graph-exploration`                     | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.layered-graph-visualization`                       | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.organic-graph-layout`                              | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.orthogonal-graph-layout`                           | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.radial-tree-layout`                                | `supports`  | inbound   |
-| inter-layer | `product.softwarecapability.ux-navigation-tree-layout`                         | `supports`  | inbound   |
-| intra-layer | `motivation.driver.external-regression-gated-layout-quality-loop`              | `influence` | inbound   |
-| intra-layer | `motivation.requirement.galaxy-keeps-orbits-even-over-round-systems`           | `influence` | outbound  |
-| intra-layer | `motivation.principle.zero-literal-node-overlap-guarantee`                     | `influence` | inbound   |
-| intra-layer | `motivation.requirement.galaxy-keeps-orbits-even-over-round-systems`           | `realizes`  | inbound   |
-| intra-layer | `motivation.stakeholder.end-user-of-an-embedding-application`                  | `influence` | inbound   |
+| Type        | Related Element                                                                      | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ----------- | --------- |
+| inter-layer | `business.businessservice.hierarchical-and-navigation-structure-visualization`       | `realizes`  | inbound   |
+| inter-layer | `product.softwarecapability.branch-map-visualization`                                | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.force-directed-graph-layout`                             | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.galaxy-radial-orbit-layout`                              | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.interactive-graph-exploration`                           | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.layered-graph-visualization`                             | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.organic-graph-layout`                                    | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.orthogonal-graph-layout`                                 | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.radial-tree-layout`                                      | `supports`  | inbound   |
+| inter-layer | `product.softwarecapability.ux-navigation-tree-layout`                               | `supports`  | inbound   |
+| intra-layer | `motivation.driver.external-regression-gated-layout-quality-loop`                    | `influence` | inbound   |
+| intra-layer | `motivation.requirement.galaxy-keeps-orbits-even-over-round-systems`                 | `influence` | outbound  |
+| intra-layer | `motivation.principle.zero-literal-node-overlap-guarantee`                           | `influence` | inbound   |
+| intra-layer | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap` | `realizes`  | inbound   |
+| intra-layer | `motivation.requirement.galaxy-keeps-orbits-even-over-round-systems`                 | `realizes`  | inbound   |
+| intra-layer | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`  | `realizes`  | inbound   |
+| intra-layer | `motivation.stakeholder.end-user-of-an-embedding-application`                        | `influence` | inbound   |
 
 ### Usable by Every End User {#usable-by-every-end-user}
 
@@ -630,6 +673,7 @@ Inferred from graphClustering.ts's header comment: louvainCluster never uses Mat
 | Type        | Related Element                                                                       | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------------- | ----------- | --------- |
 | intra-layer | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `influence` | outbound  |
+| intra-layer | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`   | `realizes`  | inbound   |
 | intra-layer | `motivation.requirement.layout-output-is-deterministic-for-a-given-input`             | `realizes`  | inbound   |
 
 ### Every Component Color Comes From a Token {#every-component-color-comes-from-a-token}
@@ -653,6 +697,7 @@ Component CSS and TypeScript take colors only from design tokens (rgb(var(--toke
 | inter-layer | `ux.librarycomponent.app-title`                                         | `satisfies`       | inbound   |
 | inter-layer | `ux.librarycomponent.bar-chart`                                         | `satisfies`       | inbound   |
 | inter-layer | `ux.librarycomponent.bar-h`                                             | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.branch-map`                                        | `satisfies`       | inbound   |
 | inter-layer | `ux.librarycomponent.chat-composer`                                     | `satisfies`       | inbound   |
 | inter-layer | `ux.librarycomponent.chat-container`                                    | `satisfies`       | inbound   |
 | inter-layer | `ux.librarycomponent.chat-divider`                                      | `satisfies`       | inbound   |
@@ -724,6 +769,7 @@ Every screen is built from two surfaces: an always-dark slate-navy shell and a c
 | inter-layer | `ux.librarycomponent.bar-chart`                                                      | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.bar-h`                                                          | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.bar-v`                                                          | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.branch-map`                                                     | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.bridge-node-list`                                               | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.button`                                                         | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.calendar`                                                       | `satisfies` | inbound   |
@@ -881,6 +927,86 @@ Every color the library paints must be reachable from one override file that ups
 | intra-layer | `motivation.principle.every-component-color-comes-from-a-token`                      | `realizes`        | outbound  |
 | intra-layer | `motivation.stakeholder.mirror-maintainer`                                           | `associated-with` | inbound   |
 
+### Branch Map Groups Stay Within a Lane Budget {#branch-map-groups-stay-within-a-lane-budget}
+
+**ID**: `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`
+
+**Type**: `requirement`
+
+A group never draws more than maxLanes branch lanes (default 8; decision 5, confirmed 2026-11-25). Past it, lines that share a fork and a destination merge into one bundle line with a count; if that is still over budget, the lightest remaining lines collapse into one 'N more' line per group. Expanding a group, a bundle or the 'N more' line (a controlled prop) draws its lines again. On the 2026-11-25 House snapshot, Documentation Robotics (20 open streams, 9 destinations) and Claude Plugins (17 streams, 15 destinations) both fit.
+
+#### Attributes
+
+| Name            | Value      |
+| --------------- | ---------- |
+| priority        | high       |
+| requirementType | functional |
+
+#### Relationships
+
+| Type        | Related Element                                                                                                 | Predicate         | Direction |
+| ----------- | --------------------------------------------------------------------------------------------------------------- | ----------------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-line-bundling`                                                      | `satisfies`       | inbound   |
+| inter-layer | `product.feature.branch-map`                                                                                    | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more` | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded`                          | `satisfies`       | inbound   |
+| intra-layer | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs`                           | `realizes`        | outbound  |
+| intra-layer | `motivation.stakeholder.end-user-of-an-embedding-application`                                                   | `associated-with` | inbound   |
+
+### Branch Map Labels Sit Beside Their Stations Without Overlap {#branch-map-labels-sit-beside-their-stations-without-overlap}
+
+**ID**: `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap`
+
+**Type**: `requirement`
+
+Station labels are placed per station beside its own sub-row, not in a fixed label column, and a group is as wide as its lanes plus its widest placed label (maxLabelWidth, default 180 px, wrapping to two lines then ellipsis). Line names run horizontally at the fork, not rotated along an 18 px lane. Every placed label box clears every other label, every station and every other group; a label with no clear spot is left unplaced and reported, shown on hover and in the inspector. Fixes the two weaknesses Metro bands showed in the concepts.
+
+#### Attributes
+
+| Name            | Value      |
+| --------------- | ---------- |
+| priority        | high       |
+| requirementType | functional |
+
+#### Relationships
+
+| Type        | Related Element                                                                                       | Predicate         | Direction |
+| ----------- | ----------------------------------------------------------------------------------------------------- | ----------------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-label-placement`                                          | `satisfies`       | inbound   |
+| inter-layer | `product.feature.branch-map`                                                                          | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot` | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.branch-map`                                                                      | `satisfies`       | inbound   |
+| intra-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`                                     | `realizes`        | outbound  |
+| intra-layer | `motivation.stakeholder.end-user-of-an-embedding-application`                                         | `associated-with` | inbound   |
+
+### Branch Map Library Stays Vocabulary-Free {#branch-map-library-stays-vocabulary-free}
+
+**ID**: `motivation.requirement.branch-map-library-stays-vocabulary-free`
+
+**Type**: `requirement`
+
+The branch map takes a generic model (groups, stations, lines, links) and knows nothing of House or any other source. Mapping a source onto it is the consuming app's job; in this repo the House adapter lives in src/test-pages/, never in src/utils/ or src/components/. Follows the layered-graph precedent (design-reference/layered-graph/breakdown.md §1.1).
+
+#### Attributes
+
+| Name            | Value   |
+| --------------- | ------- |
+| priority        | high    |
+| requirementType | quality |
+
+#### Relationships
+
+| Type        | Related Element                                                                                         | Predicate         | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------- | ----------------- | --------- |
+| inter-layer | `application.applicationfunction.house-branch-map-adapter`                                              | `satisfies`       | inbound   |
+| inter-layer | `application.applicationservice.branch-map-layout`                                                      | `satisfies`       | inbound   |
+| inter-layer | `data-model.schemadefinition.branch-map-data`                                                           | `satisfies`       | inbound   |
+| inter-layer | `product.feature.branch-map`                                                                            | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does` | `satisfies`       | inbound   |
+| inter-layer | `ux.librarycomponent.branch-map`                                                                        | `satisfies`       | inbound   |
+| intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications`                    | `realizes`        | outbound  |
+| intra-layer | `motivation.stakeholder.embedding-application-developer-npm-consumer`                                   | `associated-with` | inbound   |
+
 ### Consumers Bundle Only the Components They Import {#consumers-bundle-only-the-components-they-import}
 
 **ID**: `motivation.requirement.consumers-bundle-only-the-components-they-import`
@@ -996,6 +1122,33 @@ Decision #288 (2026-11-09): for parents with many satellites or one dominant bra
 | intra-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`      | `influence` | inbound   |
 | intra-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`      | `realizes`  | outbound  |
 
+### Graph Layout and Edge Routing Are Separate Headless Stages {#graph-layout-and-edge-routing-are-separate-headless-stages}
+
+**ID**: `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages`
+
+**Type**: `requirement`
+
+A graph layout mode is a pure, headless function: placement emits positions, and edge or line routing is a separate stage that reads only the placement and emits polylines per edge or line. No DOM, no measurement during layout (text widths come from an injected measure function or a character-width estimate). From the graph layout foundation's hard requirements.
+
+#### Attributes
+
+| Name            | Value   |
+| --------------- | ------- |
+| priority        | high    |
+| requirementType | quality |
+
+#### Relationships
+
+| Type        | Related Element                                                             | Predicate         | Direction |
+| ----------- | --------------------------------------------------------------------------- | ----------------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-placement`                      | `satisfies`       | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-routing`                        | `satisfies`       | inbound   |
+| inter-layer | `application.applicationservice.branch-map-layout`                          | `satisfies`       | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement` | `satisfies`       | inbound   |
+| intra-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`           | `realizes`        | outbound  |
+| intra-layer | `motivation.principle.deterministic-reproducible-layout-output`             | `realizes`        | outbound  |
+| intra-layer | `motivation.stakeholder.heimdall-layout-loop-quality-harness`               | `associated-with` | inbound   |
+
 ### Graph Nodes and Edges Have Accessible Names {#graph-nodes-and-edges-have-accessible-names}
 
 **ID**: `motivation.requirement.graph-nodes-and-edges-have-accessible-names`
@@ -1013,11 +1166,13 @@ Every focusable node, edge and control in a graph has an accessible name (edgeAc
 
 #### Relationships
 
-| Type        | Related Element                            | Predicate   | Direction |
-| ----------- | ------------------------------------------ | ----------- | --------- |
-| inter-layer | `ux.librarycomponent.graph-canvas-ux`      | `satisfies` | inbound   |
-| inter-layer | `ux.librarycomponent.graph-node-ux`        | `satisfies` | inbound   |
-| intra-layer | `motivation.goal.usable-by-every-end-user` | `realizes`  | outbound  |
+| Type        | Related Element                                                                                | Predicate   | Direction |
+| ----------- | ---------------------------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears` | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.branch-map`                                                               | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-canvas-ux`                                                          | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.graph-node-ux`                                                            | `satisfies` | inbound   |
+| intra-layer | `motivation.goal.usable-by-every-end-user`                                                     | `realizes`  | outbound  |
 
 ### HivePlot Keeps Axis Angles Stable When a Layer Is Hidden {#hiveplot-keeps-axis-angles-stable-when-a-layer-is-hidden}
 
@@ -1107,13 +1262,18 @@ The same nodes and edges produce the same positions on every run: no Math.random
 
 #### Relationships
 
-| Type        | Related Element                                                 | Predicate   | Direction |
-| ----------- | --------------------------------------------------------------- | ----------- | --------- |
-| inter-layer | `application.applicationfunction.galaxy-live-simulation-step`   | `satisfies` | inbound   |
-| inter-layer | `application.applicationfunction.louvain-community-clustering`  | `satisfies` | inbound   |
-| inter-layer | `application.applicationfunction.organic-layout-algorithm`      | `satisfies` | inbound   |
-| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`   | `satisfies` | inbound   |
-| intra-layer | `motivation.principle.deterministic-reproducible-layout-output` | `realizes`  | outbound  |
+| Type        | Related Element                                                                | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------------ | ----------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-line-bundling`                     | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-placement`                         | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-routing`                           | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-trunk-selection`                   | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.galaxy-live-simulation-step`                  | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.louvain-community-clustering`                 | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.organic-layout-algorithm`                     | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.orthogonal-layout-algorithm`                  | `satisfies` | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene` | `satisfies` | inbound   |
+| intra-layer | `motivation.principle.deterministic-reproducible-layout-output`                | `realizes`  | outbound  |
 
 ### Live Galaxy Drag Stays Interactive {#live-galaxy-drag-stays-interactive}
 
@@ -1200,6 +1360,8 @@ Every engine finishes with a separation pass so rendered node rectangles do not 
 
 | Type        | Related Element                                                                                                                       | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------- | --------- |
+| inter-layer | `application.applicationfunction.branch-map-label-placement`                                                                          | `satisfies` | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-placement`                                                                                | `satisfies` | inbound   |
 | inter-layer | `application.applicationfunction.force-directed-layout-algorithm`                                                                     | `satisfies` | inbound   |
 | inter-layer | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`                                                                | `satisfies` | inbound   |
 | inter-layer | `application.applicationfunction.node-overlap-separation-pass`                                                                        | `satisfies` | inbound   |
@@ -1207,6 +1369,7 @@ Every engine finishes with a separation pass so rendered node rectangles do not 
 | inter-layer | `application.applicationfunction.radial-tree-layout-algorithm`                                                                        | `satisfies` | inbound   |
 | inter-layer | `testing.testcasesketch.aspect-ratio-elliptical-warp-composes-with-separate-groups-group-boundaries-stay-non-overlapping-ff23cd4d`    | `satisfies` | inbound   |
 | inter-layer | `testing.testcasesketch.aspect-ratio-elliptical-warp-leaning-a-forest-wide-never-makes-galaxies-overlap`                              | `satisfies` | inbound   |
+| inter-layer | `testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot`                                 | `satisfies` | inbound   |
 | inter-layer | `testing.testcasesketch.channel-router-route-navigation-edges-applies-nudge-pass-to-spread-overlapping-segments`                      | `satisfies` | inbound   |
 | inter-layer | `testing.testcasesketch.channel-router-route-navigation-edges-nudges-overlapping-segments-while-maintaining-orthogonality`            | `satisfies` | inbound   |
 | inter-layer | `testing.testcasesketch.force-layout-keeps-default-sized-chip-nodes-non-overlapping-in-a-simple-chain`                                | `satisfies` | inbound   |
@@ -1366,6 +1529,7 @@ Inferred: the external developer consuming @tinkermonkey/heimdall-ui's public AP
 | inter-layer | `product.persona.application-developer-embedding-a-graph-view`                              | `references`      | inbound   |
 | intra-layer | `motivation.constraint.every-exported-component-is-covered-by-an-agent-skill`               | `associated-with` | outbound  |
 | intra-layer | `motivation.constraint.package-ships-esm-dist-and-agent-skills-only`                        | `associated-with` | outbound  |
+| intra-layer | `motivation.requirement.branch-map-library-stays-vocabulary-free`                           | `associated-with` | outbound  |
 | intra-layer | `motivation.requirement.consumers-bundle-only-the-components-they-import`                   | `associated-with` | outbound  |
 | intra-layer | `motivation.requirement.layout-engines-must-be-pluggable-without-breaking-existing-callers` | `associated-with` | outbound  |
 | intra-layer | `motivation.requirement.server-rendered-output-hydrates-without-mismatch`                   | `associated-with` | outbound  |
@@ -1388,12 +1552,14 @@ Inferred: the person who ultimately interacts with a rendered GraphCanvas inside
 
 #### Relationships
 
-| Type        | Related Element                                                   | Predicate    | Direction |
-| ----------- | ----------------------------------------------------------------- | ------------ | --------- |
-| inter-layer | `business.businessactor.end-user-exploring-a-graph-view`          | `references` | inbound   |
-| inter-layer | `product.persona.end-user-exploring-a-rendered-graph`             | `references` | inbound   |
-| intra-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs` | `influence`  | outbound  |
-| intra-layer | `motivation.goal.usable-by-every-end-user`                        | `influence`  | outbound  |
+| Type        | Related Element                                                                      | Predicate         | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ----------------- | --------- |
+| inter-layer | `business.businessactor.end-user-exploring-a-graph-view`                             | `references`      | inbound   |
+| inter-layer | `product.persona.end-user-exploring-a-rendered-graph`                                | `references`      | inbound   |
+| intra-layer | `motivation.requirement.branch-map-groups-stay-within-a-lane-budget`                 | `associated-with` | outbound  |
+| intra-layer | `motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap` | `associated-with` | outbound  |
+| intra-layer | `motivation.goal.readable-layout-for-structurally-complex-graphs`                    | `influence`       | outbound  |
+| intra-layer | `motivation.goal.usable-by-every-end-user`                                           | `influence`       | outbound  |
 
 ### heimdall-layout-loop Quality Harness {#heimdall-layout-loop-quality-harness}
 
@@ -1411,10 +1577,11 @@ Inferred from CHANGELOG.md's reference to 'the project's own layout-quality test
 
 #### Relationships
 
-| Type        | Related Element                                                   | Predicate         | Direction |
-| ----------- | ----------------------------------------------------------------- | ----------------- | --------- |
-| intra-layer | `motivation.driver.external-regression-gated-layout-quality-loop` | `associated-with` | outbound  |
-| intra-layer | `motivation.principle.zero-literal-node-overlap-guarantee`        | `associated-with` | outbound  |
+| Type        | Related Element                                                                     | Predicate         | Direction |
+| ----------- | ----------------------------------------------------------------------------------- | ----------------- | --------- |
+| intra-layer | `motivation.driver.external-regression-gated-layout-quality-loop`                   | `associated-with` | outbound  |
+| intra-layer | `motivation.principle.zero-literal-node-overlap-guarantee`                          | `associated-with` | outbound  |
+| intra-layer | `motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages` | `associated-with` | outbound  |
 
 ### Mirror Maintainer {#mirror-maintainer}
 
@@ -1441,4 +1608,4 @@ A downstream team that keeps a mirror of this repo (not a GitHub fork) with its 
 
 ---
 
-Generated: 2026-11-25T10:08:47.649Z | Model Version: 0.1.0
+Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0

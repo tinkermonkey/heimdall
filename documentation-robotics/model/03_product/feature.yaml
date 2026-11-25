@@ -231,3 +231,19 @@ product.feature.theme-slot:
     created_at: 2026-11-24T21:49:32.045Z
     updated_at: 2026-11-24T21:49:32.045Z
     version: 1
+product.feature.branch-map:
+  id: 833573f9-83ea-4b34-8d3a-4020b3d31346
+  path: product.feature.branch-map
+  spec_node_id: product.feature
+  type: feature
+  layer_id: product
+  name: Branch Map
+  description: "BranchMap: draws a set of groups as Metro bands (stations of one rank share a band with a sub-row each, 45-degree rounded branches, labels beside their stations), with selection, pan and zoom, bundled lines that expand, and optional width by weight."
+  attributes:
+    priority: medium
+    status: planned
+    size: l
+  metadata:
+    created_at: 2026-11-25T17:41:12.931Z
+    updated_at: 2026-11-25T17:41:12.931Z
+    version: 1

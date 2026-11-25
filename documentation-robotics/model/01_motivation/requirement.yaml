@@ -343,3 +343,63 @@ motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror:
     created_at: 2026-11-24T21:49:32.045Z
     updated_at: 2026-11-24T21:49:32.045Z
     version: 1
+motivation.requirement.branch-map-library-stays-vocabulary-free:
+  id: 27d3e563-1442-4b90-bb56-0a923fdecbe8
+  path: motivation.requirement.branch-map-library-stays-vocabulary-free
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Branch Map Library Stays Vocabulary-Free
+  description: The branch map takes a generic model (groups, stations, lines, links) and knows nothing of House or any other source. Mapping a source onto it is the consuming app's job; in this repo the House adapter lives in src/test-pages/, never in src/utils/ or src/components/. Follows the layered-graph precedent (design-reference/layered-graph/breakdown.md §1.1).
+  attributes:
+    requirementType: quality
+    priority: high
+  metadata:
+    created_at: 2026-11-25T17:41:12.931Z
+    updated_at: 2026-11-25T17:41:12.931Z
+    version: 1
+motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap:
+  id: 88cf5f1d-fcd6-4249-b289-55c12162b0a9
+  path: motivation.requirement.branch-map-labels-sit-beside-their-stations-without-overlap
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Branch Map Labels Sit Beside Their Stations Without Overlap
+  description: Station labels are placed per station beside its own sub-row, not in a fixed label column, and a group is as wide as its lanes plus its widest placed label (maxLabelWidth, default 180 px, wrapping to two lines then ellipsis). Line names run horizontally at the fork, not rotated along an 18 px lane. Every placed label box clears every other label, every station and every other group; a label with no clear spot is left unplaced and reported, shown on hover and in the inspector. Fixes the two weaknesses Metro bands showed in the concepts.
+  attributes:
+    requirementType: functional
+    priority: high
+  metadata:
+    created_at: 2026-11-25T17:41:12.931Z
+    updated_at: 2026-11-25T17:41:12.931Z
+    version: 1
+motivation.requirement.branch-map-groups-stay-within-a-lane-budget:
+  id: fb6bf071-96f3-4bc0-aaab-d5f0f35dae7a
+  path: motivation.requirement.branch-map-groups-stay-within-a-lane-budget
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Branch Map Groups Stay Within a Lane Budget
+  description: A group never draws more than maxLanes branch lanes (default 8; decision 5, confirmed 2026-11-25). Past it, lines that share a fork and a destination merge into one bundle line with a count; if that is still over budget, the lightest remaining lines collapse into one 'N more' line per group. Expanding a group, a bundle or the 'N more' line (a controlled prop) draws its lines again. On the 2026-11-25 House snapshot, Documentation Robotics (20 open streams, 9 destinations) and Claude Plugins (17 streams, 15 destinations) both fit.
+  attributes:
+    requirementType: functional
+    priority: high
+  metadata:
+    created_at: 2026-11-25T17:41:12.931Z
+    updated_at: 2026-11-25T17:41:12.931Z
+    version: 1
+motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages:
+  id: aef0f0aa-8629-4723-b7a3-232920bc9d15
+  path: motivation.requirement.graph-layout-and-edge-routing-are-separate-headless-stages
+  spec_node_id: motivation.requirement
+  type: requirement
+  layer_id: motivation
+  name: Graph Layout and Edge Routing Are Separate Headless Stages
+  description: "A graph layout mode is a pure, headless function: placement emits positions, and edge or line routing is a separate stage that reads only the placement and emits polylines per edge or line. No DOM, no measurement during layout (text widths come from an injected measure function or a character-width estimate). From the graph layout foundation's hard requirements."
+  attributes:
+    requirementType: quality
+    priority: high
+  metadata:
+    created_at: 2026-11-25T17:41:12.931Z
+    updated_at: 2026-11-25T17:41:12.931Z
+    version: 1
