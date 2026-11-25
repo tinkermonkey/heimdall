@@ -162,7 +162,7 @@ export function routeBranchMap(layout: BranchMapLayout): BranchMapScene {
 
   const lines: BranchMapRoutedLine[] = layout.lines.map((l) => {
     const geo = geometry.get(l.id) ?? { points: [], run: null, end: 'open' as const }
-    const width = l.kind === 'spur' ? FLAT.spur : weighted ? Math.min(opts.laneGap - 6, px(l.weight)) : FLAT.line
+    const width = l.kind === 'spur' ? FLAT.spur : weighted ? Math.max(1, Math.min(opts.laneGap - 6, px(l.weight))) : FLAT.line
     return { ...l, points: geo.points, path: geo.points.length ? polylineCurve(geo.points, CORNER).d : '', run: geo.run, end: geo.end, width: r1(width) }
   })
 

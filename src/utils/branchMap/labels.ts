@@ -31,7 +31,7 @@ import type {
  */
 export const BRANCH_MAP_TEXT: Readonly<Record<BranchMapLabelRole, { fontSize: number; lineHeight: number; charWidth: number }>> = {
   station: { fontSize: 12, lineHeight: 13, charWidth: 6.4 },
-  line: { fontSize: 11, lineHeight: 12, charWidth: 5.9 },
+  line: { fontSize: 10, lineHeight: 12, charWidth: 6 },
   group: { fontSize: 13, lineHeight: 16, charWidth: 7.4 },
 }
 

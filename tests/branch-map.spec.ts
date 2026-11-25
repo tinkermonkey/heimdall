@@ -119,6 +119,18 @@ test.describe('BranchMap on House data', () => {
     await inspector.getByRole('button', { name: 'C4 mapping in the DR spec' }).click()
     await expect(selection(page)).toHaveText('selected 2:01a2126b-8f64-7118-bd9a-b2ab16732148')
   })
+
+  test('a bundle expanded through the expanded prop gets a COLLAPSE that re-bundles it', async ({ page }) => {
+    await open(page, DR)
+    const id = await map(page).locator('[data-kind="bundle"]').first().getAttribute('data-line-id')
+    expect(id).toBeTruthy()
+    await open(page, `${DR}&expand=${encodeURIComponent(id!)}`)
+    await expect(expandedIds(page)).toHaveText(`expanded ${id}`)
+    await expect(map(page).locator(`[data-line-id="${id}"]`)).toHaveCount(0)
+    await map(page).getByRole('button', { name: /^Collapse Documentation Robotics:/ }).click()
+    await expect(expandedIds(page)).toHaveText('expanded none')
+    await expect(map(page).locator(`[data-line-id="${id}"]`)).toHaveCount(1)
+  })
 })
 
 test.describe('BranchMap on House data: visual', () => {

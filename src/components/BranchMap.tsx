@@ -3,6 +3,7 @@ import { usePanZoom } from '../hooks/usePanZoom'
 import { useControllable } from '../hooks/useControllable'
 import { layerPaletteColor } from '../utils/layered/buildLayeredIndex'
 import { branchMapScene } from '../utils/branchMap'
+import { moreIdOf } from '../utils/branchMap/bundle'
 import type {
   BranchMapData,
   BranchMapGroupLayout,
@@ -250,11 +251,21 @@ export const BranchMap = React.forwardRef<HTMLDivElement, BranchMapProps>(
     const selected = resolve(rawSelected)
     const hovered = resolve(rawHovered)
 
-    // Which group a bundle the user expanded belonged to, so the group toggle can collapse it.
-    const bundleGroup = useRef(new Map<string, string>())
-    useEffect(() => {
-      for (const l of scene.lines) if (l.kind === 'bundle' || l.kind === 'more') bundleGroup.current.set(l.id, l.group)
-    }, [scene])
+    // Which group an expanded id belongs to, read from the id itself (a group id, `more:<group>` or
+    // `bundle:<group>:<from>:<to>`), so the group toggle also collapses bundles that arrived through
+    // `expanded` or `defaultExpanded` and were never drawn as a bundle here.
+    const groupOfExpanded = useCallback(
+      (id: string): string | null => {
+        let best: string | null = null
+        for (const g of scene.groups) {
+          if (id === g.id || id === moreIdOf(g.id) || id.startsWith(`bundle:${g.id}:`)) {
+            if (best === null || g.id.length > best.length) best = g.id
+          }
+        }
+        return best
+      },
+      [scene.groups],
+    )
 
     // ---- Selection context: everything not in it is dimmed -----------------------------------
 
@@ -335,7 +346,7 @@ export const BranchMap = React.forwardRef<HTMLDivElement, BranchMapProps>(
           ...(c.blocked ? [`${c.blocked} BLOCKED`] : []),
           ...(c.bundled ? [`${c.bundled} BUNDLED`] : []),
         ].join(' · ')
-        const expandedIds = expanded.filter((e) => e === g.id || bundleGroup.current.get(e) === g.id)
+        const expandedIds = expanded.filter((e) => groupOfExpanded(e) === g.id)
         const toggle = expandedIds.length ? 'collapse' : c.bundled > 0 ? 'expand' : null
         const toggleX = g.x + meta.length * EYEBROW_CHAR + 10
         const nameW = nameBox ? nameBox.width : (measure?.(g.label, 'group') ?? g.label.length * NAME_FS * 0.55)
@@ -345,7 +356,7 @@ export const BranchMap = React.forwardRef<HTMLDivElement, BranchMapProps>(
       })
       if (!Number.isFinite(minX)) return { headers: hs, frame: { x: 0, y: 0, w: 0, h: 0 } }
       return { headers: hs, frame: { x: minX - PAD, y: minY - PAD, w: maxX - minX + 2 * PAD, h: maxY - minY + 2 * PAD } }
-    }, [scene, expanded, measure])
+    }, [scene, expanded, measure, groupOfExpanded])
 
     // ---- Pan and zoom -------------------------------------------------------------------------
 
@@ -421,8 +432,7 @@ export const BranchMap = React.forwardRef<HTMLDivElement, BranchMapProps>(
     const down = useRef<{ x: number; y: number } | null>(null)
     const dragged = (e: React.MouseEvent) => !!down.current && Math.hypot(e.clientX - down.current.x, e.clientY - down.current.y) > DRAG_PX
 
-    const expand = (id: string, group: string) => {
-      bundleGroup.current.set(id, group)
+    const expand = (id: string) => {
       if (!expanded.includes(id)) setExpanded([...expanded, id])
     }
     const toggleGroup = (h: Header) => {
@@ -432,7 +442,7 @@ export const BranchMap = React.forwardRef<HTMLDivElement, BranchMapProps>(
     const activate = (id: string) => {
       const item = index.items.get(id)
       if (item?.kind === 'line' && (item.line.kind === 'bundle' || item.line.kind === 'more')) {
-        expand(id, item.line.group)
+        expand(id)
         return
       }
       setSelected(selected === id ? null : id)
@@ -696,7 +706,9 @@ export const BranchMap = React.forwardRef<HTMLDivElement, BranchMapProps>(
                         setFocusId(l.id)
                         setHovered(l.id)
                       }}
-                      onBlur={() => setHovered(null)}
+                      onBlur={() => {
+                        if (hovered === l.id) setHovered(null)
+                      }}
                       onKeyDown={(e) => onItemKey(e, l.id)}
                       {...hoverProps(l.id)}
                     >
@@ -758,7 +770,9 @@ export const BranchMap = React.forwardRef<HTMLDivElement, BranchMapProps>(
                         setFocusId(s.id)
                         setHovered(s.id)
                       }}
-                      onBlur={() => setHovered(null)}
+                      onBlur={() => {
+                        if (hovered === s.id) setHovered(null)
+                      }}
                       onKeyDown={(e) => onItemKey(e, s.id)}
                       {...hoverProps(s.id)}
                     >

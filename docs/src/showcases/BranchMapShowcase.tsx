@@ -122,7 +122,7 @@ export function BranchMapShowcase() {
 
       <ShowcaseSection
         label="Scale: the lane budget"
-        description="A group draws at most maxLanes branch lanes (default 8). Past it, lines with the same fork rank and destination merge into one bundle with a count; if that is still over budget, the lightest lines left collapse into one 'N more' line. Activating a bundle adds its id to expanded and draws its lines; the group toggle beside its name expands or collapses the whole group."
+        description="A group draws at most maxLanes branch lanes (default 8). Past it, lines with the same fork (a station, or the start) and destination merge into one bundle with a count; if that is still over budget, the lightest lines left collapse into one 'N more' line. Activating a bundle or the 'N more' line adds its id to expanded and draws its lines ('N more' past the budget); the group toggle beside its name expands or collapses the whole group."
       >
         <Code>{VIEW_CODE}</Code>
       </ShowcaseSection>
@@ -134,7 +134,7 @@ export function BranchMapShowcase() {
           <PropRow name="onSelect" type="(id, item) => void" description="Click, Enter or Space selects; again clears. Escape and a click on empty canvas clear." />
           <PropRow name="hoveredId" type="string | null" description="The hovered or keyboard-focused item (controlled)." />
           <PropRow name="onHoverChange" type="(id, item) => void" description="Hover and keyboard focus." />
-          <PropRow name="expanded" type="string[]" description="Group and bundle ids drawn whole (controlled)." />
+          <PropRow name="expanded" type="string[]" description="Group, bundle and 'N more' (more:<group>) ids drawn whole (controlled)." />
           <PropRow name="defaultExpanded" type="string[]" def="[]" description="Initial expanded when uncontrolled." />
           <PropRow name="onExpandedChange" type="(ids) => void" description="A bundle was activated, or a group toggled." />
           <PropRow name="renderTooltip" type="(item) => ReactNode" description="Hover detail in a floating box. Unset: native tooltips." />
