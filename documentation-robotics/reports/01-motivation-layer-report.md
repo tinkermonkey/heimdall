@@ -18,8 +18,8 @@ Goals, requirements, drivers, and strategic outcomes of the architecture.
 | ------------------------- | ----- |
 | Elements                  | 38    |
 | Intra-Layer Relationships | 42    |
-| Inter-Layer Relationships | 252   |
-| Inbound Relationships     | 252   |
+| Inter-Layer Relationships | 255   |
+| Inbound Relationships     | 255   |
 | Outbound Relationships    | 0     |
 
 **Cross-Layer References**:
@@ -299,6 +299,9 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.number-input`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.ordered-list`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.page-header`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.pane-rail`                                                                                                       | `motivation.principle.ide-density-and-terse-voice`                                          | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.pane-rail`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`             | `ux.librarycomponent.pane-rail`                                                                                                       | `motivation.requirement.every-public-export-is-documented-for-agents`                       | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.panel`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.pipeline-card`                                                                                                   | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`               | `ux.librarycomponent.plane-layout-control`                                                                                            | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
@@ -688,6 +691,7 @@ Components default to IDE density (14px body, 24px page H1, monospace identifier
 
 | Type        | Related Element                                                                      | Predicate   | Direction |
 | ----------- | ------------------------------------------------------------------------------------ | ----------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`                                                      | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.shell-layout`                                                   | `satisfies` | inbound   |
 | intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `influence` | outbound  |
 
@@ -780,6 +784,7 @@ Every screen is built from two surfaces: an always-dark slate-navy shell and a c
 | inter-layer | `ux.librarycomponent.number-input`                                                   | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.ordered-list`                                                   | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.page-header`                                                    | `satisfies` | inbound   |
+| inter-layer | `ux.librarycomponent.pane-rail`                                                      | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.panel`                                                          | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.pipeline-card`                                                  | `satisfies` | inbound   |
 | inter-layer | `ux.librarycomponent.plane-layout-control`                                           | `satisfies` | inbound   |
@@ -963,9 +968,10 @@ Every component and non-component value exported from src/index.ts must have a s
 
 #### Relationships
 
-| Type        | Related Element                                                                      | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------------------------------ | ---------- | --------- |
-| intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `realizes` | outbound  |
+| Type        | Related Element                                                                      | Predicate   | Direction |
+| ----------- | ------------------------------------------------------------------------------------ | ----------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`                                                      | `satisfies` | inbound   |
+| intra-layer | `motivation.goal.consistent-component-library-for-data-dense-ide-style-applications` | `realizes`  | outbound  |
 
 ### Galaxy Keeps Orbits Even Over Round Systems {#galaxy-keeps-orbits-even-over-round-systems}
 
@@ -1435,4 +1441,4 @@ A downstream team that keeps a mirror of this repo (not a GitHub fork) with its 
 
 ---
 
-Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0
+Generated: 2026-11-25T10:08:47.649Z | Model Version: 0.1.0

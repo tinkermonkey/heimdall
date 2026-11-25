@@ -3,7 +3,7 @@ schema: documentation-robotics-v1
 cli_version: 0.8.0
 spec_version: 0.14.0
 created: 2026-09-18T14:21:24.388Z
-updated: 2026-11-25T02:07:35.719Z
+updated: 2026-11-25T10:08:47.648Z
 project:
   name: heimdall-ux
   description: ""
@@ -59,7 +59,7 @@ layers:
     elements:
       applicationcomponent: 3
       applicationevent: 9
-      applicationfunction: 58
+      applicationfunction: 59
       applicationinteraction: 1
       applicationprocess: 1
       applicationservice: 44
@@ -100,7 +100,7 @@ layers:
     enabled: true
     elements:
       actionpattern: 6
-      librarycomponent: 113
+      librarycomponent: 114
       statepattern: 6
       uxlibrary: 1
   navigation:
@@ -131,7 +131,7 @@ layers:
       targetinputfield: 2
       testcasesketch: 1693
       testcoveragemodel: 2
-      testcoveragetarget: 85
+      testcoveragetarget: 87
 changeset_history:
   - name: wire-technology-orphans
     committed_at: 2026-09-18T14:45:21.201Z
@@ -144,4 +144,7 @@ changeset_history:
     action: committed
   - name: replay-theme-slot-onto-pilot
     committed_at: 2026-11-25T02:07:35.719Z
+    action: committed
+  - name: pane-rail
+    committed_at: 2026-11-25T10:08:47.647Z
     action: committed

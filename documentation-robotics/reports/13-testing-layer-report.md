@@ -16,11 +16,11 @@ Test strategies, test cases, test data, and test coverage.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 1799  |
-| Intra-Layer Relationships | 1883  |
-| Inter-Layer Relationships | 585   |
+| Elements                  | 1801  |
+| Intra-Layer Relationships | 1885  |
+| Inter-Layer Relationships | 587   |
 | Inbound Relationships     | 0     |
-| Outbound Relationships    | 585   |
+| Outbound Relationships    | 587   |
 
 **Cross-Layer References**:
 
@@ -1745,7 +1745,7 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcasesketch.yield-to-paint-runs-only-after-an-animation-frame-and-one-more-macrotask`                                     | `testcasesketch`          | 1             |
 | `testing.testcasesketch.yield-to-paint-still-runs-when-no-frame-arrives-a-background-tab-pauses-r-af`                                 | `testcasesketch`          | 1             |
 | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `testcoveragemodel`       | 90            |
-| `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                                                 | `testcoveragemodel`       | 78            |
+| `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                                                 | `testcoveragemodel`       | 80            |
 | `testing.testcoveragetarget.adjacency-matrix-view`                                                                                    | `testcoveragetarget`      | 41            |
 | `testing.testcoveragetarget.advanced-overlays`                                                                                        | `testcoveragetarget`      | 23            |
 | `testing.testcoveragetarget.avatar`                                                                                                   | `testcoveragetarget`      | 13            |
@@ -1814,6 +1814,8 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcoveragetarget.page-pattern-components`                                                                                  | `testcoveragetarget`      | 48            |
 | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `testcoveragetarget`      | 6             |
 | `testing.testcoveragetarget.pan-inertia`                                                                                              | `testcoveragetarget`      | 13            |
+| `testing.testcoveragetarget.pane-rail`                                                                                                | `testcoveragetarget`      | 1             |
+| `testing.testcoveragetarget.pane-rail-marks`                                                                                          | `testcoveragetarget`      | 1             |
 | `testing.testcoveragetarget.primitive-components`                                                                                     | `testcoveragetarget`      | 32            |
 | `testing.testcoveragetarget.radial-tree-layout-algorithm`                                                                             | `testcoveragetarget`      | 19            |
 | `testing.testcoveragetarget.radial-tree-layout-browser`                                                                               | `testcoveragetarget`      | 18            |
@@ -2379,6 +2381,8 @@ flowchart TB
 | `testing.testcoveragetarget.covers.ux.librarycomponent`             | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `ux.librarycomponent.map-canvas`                                                     | `ux`          | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.application.applicationservice`  | `testing.testcoveragetarget.pan-inertia`                                                                                              | `application.applicationservice.pan-and-zoom-hook`                                   | `application` | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`             | `testing.testcoveragetarget.pan-inertia`                                                                                              | `ux.librarycomponent.graph-canvas-ux`                                                | `ux`          | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`             | `testing.testcoveragetarget.pane-rail`                                                                                                | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`             | `testing.testcoveragetarget.pane-rail-marks`                                                                                          | `ux.librarycomponent.pane-rail`                                                      | `ux`          | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`             | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.avatar`                                                         | `ux`          | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`             | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.badge`                                                          | `ux`          | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`             | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.button`                                                         | `ux`          | `covers`     | many-to-many | medium   |
@@ -33847,6 +33851,8 @@ Coverage model for the whole @tinkermonkey/heimdall-ui package beyond the graph-
 | intra-layer | `testing.testcoveragetarget.page-pattern-components`                  | `composes` | outbound  |
 | intra-layer | `testing.testcoveragetarget.pan-and-zoom`                             | `composes` | outbound  |
 | intra-layer | `testing.testcoveragetarget.pan-inertia`                              | `composes` | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail`                                | `composes` | outbound  |
+| intra-layer | `testing.testcoveragetarget.pane-rail-marks`                          | `composes` | outbound  |
 | intra-layer | `testing.testcoveragetarget.primitive-components`                     | `composes` | outbound  |
 | intra-layer | `testing.testcoveragetarget.radial-tree-layout-browser`               | `composes` | outbound  |
 | intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`            | `composes` | outbound  |
@@ -37033,6 +37039,50 @@ Vitest unit test src/utils/__tests__/panInertia.test.ts.
 | intra-layer | `testing.testcasesketch.release-velocity-measures-a-steady-drag-released-straight-away`                              | `composes` | outbound  |
 | intra-layer | `testing.testcasesketch.release-velocity-uses-the-press-as-the-start-of-a-drag-shorter-than-the-window`              | `composes` | outbound  |
 
+### PaneRail {#panerail}
+
+**ID**: `testing.testcoveragetarget.pane-rail`
+
+**Type**: `testcoveragetarget`
+
+Playwright spec tests/pane-rail.spec.ts: a source-style rail with toned marks and a notch, a list-style rail with a position label, callbacks and ARIA, on light and dark canvas.
+
+#### Attributes
+
+| Name       | Value        |
+| ---------- | ------------ |
+| priority   | medium       |
+| targetType | ui-component |
+
+#### Relationships
+
+| Type        | Related Element                                       | Predicate  | Direction |
+| ----------- | ----------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`                       | `covers`   | outbound  |
+| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage` | `composes` | inbound   |
+
+### Pane Rail Marks {#pane-rail-marks}
+
+**ID**: `testing.testcoveragetarget.pane-rail-marks`
+
+**Type**: `testcoveragetarget`
+
+Vitest unit test src/components/paneRailMarks.test.ts.
+
+#### Attributes
+
+| Name       | Value                 |
+| ---------- | --------------------- |
+| priority   | medium                |
+| targetType | application-component |
+
+#### Relationships
+
+| Type        | Related Element                                       | Predicate  | Direction |
+| ----------- | ----------------------------------------------------- | ---------- | --------- |
+| inter-layer | `ux.librarycomponent.pane-rail`                       | `covers`   | outbound  |
+| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage` | `composes` | inbound   |
+
 ### Primitive Components {#primitive-components}
 
 **ID**: `testing.testcoveragetarget.primitive-components`
@@ -37719,4 +37769,4 @@ Vitest unit test src/utils/__tests__/yieldToPaint.test.ts.
 
 ---
 
-Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0
+Generated: 2026-11-25T10:08:47.649Z | Model Version: 0.1.0

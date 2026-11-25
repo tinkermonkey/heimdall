@@ -8,16 +8,7 @@
     type: librarycomponent
     layer_id: ux
     name: PaneRail
-    description: "A folded pane shown as a 40px vertical rail: an expand button
-      (aria-expanded false, aria-keyshortcuts when a key is given), a map of the
-      pane's items as toned marks at 0..1 positions (buttons with accessible
-      names, one tab stop with arrow-key roving), an amber notch at the
-      selection's position, an optional position label, the pane's name written
-      up the rail and its key hint. Clicking the button or the rail's empty area
-      calls onExpand; a mark calls onMarkClick, and hover/focus call
-      onMarkHover/onMarkLeave with the mark's anchor element so the app can show
-      its own hover card. Holds no folding state: the app decides when to show
-      it."
+    description: "A folded pane shown as a 40px vertical rail: an expand button (aria-expanded false, aria-keyshortcuts when a key is given), a map of the pane's items as toned marks at 0..1 positions (buttons with accessible names, one tab stop with arrow-key roving), an amber notch at the selection's position, an optional position label, the pane's name written up the rail and its key hint. Clicking the button or the rail's empty area calls onExpand; a mark calls onMarkClick, and hover/focus call onMarkHover/onMarkLeave with the mark's anchor element so the app can show its own hover card. Holds no folding state: the app decides when to show it."
     attributes:
       type: layout
       category: heimdall-layout
@@ -43,10 +34,7 @@
     type: applicationfunction
     layer_id: application
     name: Pane Rail Marks
-    description: orderPaneRailMarks() clamps each mark's position to 0..1 and sorts
-      the marks by position (stable), so the rail renders them top to bottom in
-      reading order; nextPaneRailMarkIndex() maps ArrowUp/ArrowDown/Home/End to
-      the next focused mark for the rail's roving tab stop.
+    description: orderPaneRailMarks() clamps each mark's position to 0..1 and sorts the marks by position (stable), so the rail renders them top to bottom in reading order; nextPaneRailMarkIndex() maps ArrowUp/ArrowDown/Home/End to the next focused mark for the rail's roving tab stop.
     metadata:
       created_at: 2026-11-24T13:49:47.543Z
       updated_at: 2026-11-24T13:49:47.543Z
@@ -68,9 +56,7 @@
     type: testcoveragetarget
     layer_id: testing
     name: PaneRail
-    description: "Playwright spec tests/pane-rail.spec.ts: a source-style rail with
-      toned marks and a notch, a list-style rail with a position label,
-      callbacks and ARIA, on light and dark canvas."
+    description: "Playwright spec tests/pane-rail.spec.ts: a source-style rail with toned marks and a notch, a list-style rail with a position label, callbacks and ARIA, on light and dark canvas."
     attributes:
       targetType: ui-component
       priority: medium

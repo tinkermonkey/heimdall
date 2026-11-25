@@ -1,6 +1,6 @@
 # Intra-layer relationships
 # Format: source_id -> predicate -> target_id
-# Last updated: 2026-11-25T02:07:35.630Z
+# Last updated: 2026-11-25T10:08:47.599Z
 
 - source: technology.artifact.heimdall-ui-package
   target: technology.artifact.react-peer-dependency
@@ -19348,5 +19348,60 @@
   target: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
   predicate: satisfies
   layer: product
+  targetLayer: motivation
+  category: structural
+- source: ux.uxlibrary.heimdall-ui
+  target: ux.librarycomponent.pane-rail
+  predicate: aggregates
+  layer: ux
+  category: structural
+- source: ux.librarycomponent.pane-rail
+  target: ux.librarycomponent.icon
+  predicate: composes
+  layer: ux
+  category: structural
+- source: ux.librarycomponent.pane-rail
+  target: motivation.principle.two-surface-shell-and-canvas
+  predicate: satisfies
+  layer: ux
+  targetLayer: motivation
+  category: structural
+- source: ux.librarycomponent.pane-rail
+  target: motivation.principle.ide-density-and-terse-voice
+  predicate: satisfies
+  layer: ux
+  targetLayer: motivation
+  category: structural
+- source: application.applicationcomponent.heimdall-ui-library-module
+  target: application.applicationfunction.pane-rail-marks
+  predicate: assigned-to
+  layer: application
+  category: structural
+- source: testing.testcoveragemodel.heimdall-ui-test-coverage
+  target: testing.testcoveragetarget.pane-rail
+  predicate: composes
+  layer: testing
+  category: structural
+- source: testing.testcoveragemodel.heimdall-ui-test-coverage
+  target: testing.testcoveragetarget.pane-rail-marks
+  predicate: composes
+  layer: testing
+  category: structural
+- source: testing.testcoveragetarget.pane-rail
+  target: ux.librarycomponent.pane-rail
+  predicate: covers
+  layer: testing
+  targetLayer: ux
+  category: structural
+- source: testing.testcoveragetarget.pane-rail-marks
+  target: ux.librarycomponent.pane-rail
+  predicate: covers
+  layer: testing
+  targetLayer: ux
+  category: structural
+- source: ux.librarycomponent.pane-rail
+  target: motivation.requirement.every-public-export-is-documented-for-agents
+  predicate: satisfies
+  layer: ux
   targetLayer: motivation
   category: structural
