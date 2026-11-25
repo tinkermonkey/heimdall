@@ -27,12 +27,12 @@
 }
 
 .chat-message--bot .chat-message__avatar {
-  background: linear-gradient(135deg, rgb(var(--status-cyan)), rgb(var(--status-cyan-deep, 34, 211, 238)));
+  background: linear-gradient(135deg, rgb(var(--status-cyan)), rgb(var(--status-cyan-deep)));
   color: rgb(var(--canvas-bg));
 }
 
 .chat-message--user .chat-message__avatar {
-  background: rgb(var(--canvas-surface, 20, 32, 58));
+  background: rgb(var(--canvas-surface));
   border: 1px solid rgb(var(--canvas-border-2));
   color: rgb(var(--canvas-fg-1));
 }
@@ -56,7 +56,7 @@
 }
 
 .chat-message--user .chat-message__sender {
-  color: rgb(var(--canvas-fg-2, 156, 163, 175));
+  color: rgb(var(--canvas-fg-2));
 }
 
 .chat-message__badge {
@@ -64,14 +64,14 @@
   font-size: 9px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(var(--accent-primary, 245, 158, 11));
+  color: rgb(var(--accent-primary));
   font-weight: 500;
 }
 
 .chat-message__timestamp {
   font-family: var(--font-mono);
   font-size: 10px;
-  color: rgb(var(--canvas-fg-4, 107, 114, 128));
+  color: rgb(var(--canvas-fg-4));
   margin-left: auto;
 }
 
@@ -82,14 +82,14 @@
 }
 
 .chat-message--user .chat-message__body {
-  color: rgb(var(--canvas-fg-2, 156, 163, 175));
+  color: rgb(var(--canvas-fg-2));
 }
 
 /* ToolBlock */
 .tool-block {
   margin-top: 8px;
-  background: rgb(var(--canvas-bg, 15, 23, 41));
-  border: 1px solid rgb(var(--canvas-border, 30, 42, 68));
+  background: rgb(var(--canvas-bg));
+  border: 1px solid rgb(var(--canvas-border));
   border-radius: 6px;
   overflow: hidden;
 }
@@ -100,20 +100,20 @@
   gap: 8px;
   padding: 8px 10px;
   width: 100%;
-  background: rgb(var(--canvas-bg-2, 20, 32, 58));
+  background: rgb(var(--canvas-bg-2));
   border: none;
-  border-bottom: 1px solid rgb(var(--canvas-border, 30, 42, 68));
+  border-bottom: 1px solid rgb(var(--canvas-border));
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(var(--canvas-fg-3, 107, 114, 128));
+  color: rgb(var(--canvas-fg-3));
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .tool-block__header:hover {
-  background: rgb(var(--canvas-surface, 36, 55, 99));
+  background: rgb(var(--canvas-surface));
 }
 
 .tool-block__header:focus-visible {
@@ -138,22 +138,22 @@
 }
 
 .tool-block__status--amber {
-  color: rgb(var(--status-amber, 245, 158, 11));
+  color: rgb(var(--status-amber));
 }
 
 .tool-block__status--emerald {
-  color: rgb(var(--status-emerald, 34, 197, 94));
+  color: rgb(var(--status-emerald));
 }
 
 .tool-block__status--rose {
-  color: rgb(var(--status-rose, 244, 63, 94));
+  color: rgb(var(--status-rose));
 }
 
 .tool-block__output {
   padding: 8px 10px;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: rgb(var(--canvas-fg-2, 156, 163, 175));
+  color: rgb(var(--canvas-fg-2));
   line-height: 1.5;
 }
 
@@ -168,7 +168,7 @@
 }
 
 .tool-block__key {
-  color: rgb(var(--canvas-fg-4, 107, 114, 128));
+  color: rgb(var(--canvas-fg-4));
   white-space: nowrap;
   flex: 0 0 auto;
 }
@@ -181,9 +181,9 @@
 /* ThinkingBlock */
 .thinking-block {
   margin-top: 8px;
-  background: rgb(var(--canvas-bg, 15, 23, 41));
-  border: 1px solid rgb(var(--canvas-border, 30, 42, 68));
-  border-left: 3px solid rgb(var(--status-violet, 168, 85, 247));
+  background: rgb(var(--canvas-bg));
+  border: 1px solid rgb(var(--canvas-border));
+  border-left: 3px solid rgb(var(--status-violet));
   border-radius: 6px;
   overflow: hidden;
 }
@@ -194,20 +194,20 @@
   gap: 8px;
   padding: 8px 10px;
   width: 100%;
-  background: rgb(var(--canvas-bg-2, 20, 32, 58));
+  background: rgb(var(--canvas-bg-2));
   border: none;
-  border-bottom: 1px solid rgb(var(--canvas-border, 30, 42, 68));
+  border-bottom: 1px solid rgb(var(--canvas-border));
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgb(var(--canvas-fg-3, 107, 114, 128));
+  color: rgb(var(--canvas-fg-3));
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .thinking-block__header:hover {
-  background: rgb(var(--canvas-surface, 36, 55, 99));
+  background: rgb(var(--canvas-surface));
 }
 
 .thinking-block__header:focus-visible {
@@ -228,7 +228,7 @@
   padding: 8px 10px;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: rgb(var(--canvas-fg-2, 156, 163, 175));
+  color: rgb(var(--canvas-fg-2));
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-word;

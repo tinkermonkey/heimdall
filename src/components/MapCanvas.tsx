@@ -1,7 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useId } from 'react'
 import { usePanZoom } from '../hooks/usePanZoom'
 import { useFocusTrap } from '../hooks/useFocusTrap'
-import { getHeatmapColor, normalizeColorToHex } from '../utils/heatmapUtils'
 import './MapCanvas.css'
 
 // ─── Mercator Projection ──────────────────────────────────────────────────────
@@ -180,7 +179,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
       onSelectPin,
       trackPoints = [],
       heatmapData = [],
-      heatmapColor = '#10b981',
+      heatmapColor = 'rgb(var(--status-emerald))',
       tileUrl,
       bounds,
       scaleBar = false,
@@ -369,7 +368,6 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
           {heatmapData.map((point, i) => {
             const pixel = latLngToPixels(point.lat, point.lng, baseZoom)
             const t = (point.value - minValue) / (maxValue - minValue || 1)
-            const fill = getHeatmapColor(point.value, minValue, maxValue, heatmapColor)
 
             return (
               <circle
@@ -377,7 +375,8 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
                 cx={pixel.x}
                 cy={pixel.y}
                 r={8 + t * 4}
-                fill={fill}
+                fill={heatmapColor}
+                fillOpacity={Math.round((0.12 + t * 0.88) * 255) / 255}
                 opacity={0.6}
                 data-testid={`heatmap-point-${i}`}
               />
@@ -493,7 +492,7 @@ export const MapCanvas = React.forwardRef<HTMLDivElement, MapCanvasProps>(
                 <div
                   className="map-legend__gradient"
                   style={{
-                    backgroundImage: `linear-gradient(to right, ${normalizeColorToHex(heatmapColor)}20, ${normalizeColorToHex(heatmapColor)}cc)`,
+                    backgroundImage: `linear-gradient(to right, color-mix(in srgb, ${heatmapColor} 12.5%, transparent), color-mix(in srgb, ${heatmapColor} 80%, transparent))`,
                   }}
                 />
                 Density

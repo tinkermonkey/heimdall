@@ -5,7 +5,7 @@ import { TONE, fmt, type ChartTone } from './chartTone'
 export interface BarVProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'children' | 'values'> {
   values: number[]
   xLabels?: string[]
-  /** Hex color. Defaults to amber (SERIES_COLORS[2]). */
+  /** CSS color. Defaults to amber (SERIES_COLORS[2]). */
   color?: string
   width?: number
   height?: number

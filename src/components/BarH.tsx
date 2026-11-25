@@ -2,7 +2,7 @@ import React from 'react'
 import { TONE, fmt, type ChartTone } from './chartTone'
 
 // Design paints all bars a single hue; callers override per-item via `color`.
-const DEFAULT_BAR_COLOR = '#22D3EE' // status-cyan
+const DEFAULT_BAR_COLOR = 'rgb(var(--status-cyan))'
 
 export interface BarHItem {
   label: string

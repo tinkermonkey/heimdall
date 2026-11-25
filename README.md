@@ -197,6 +197,63 @@ import '@tinkermonkey/heimdall-ui/css/Sidebar'
   page with base + all component sheets in several orders and fails if any element's computed
   style differs from `/css`.
 
+### Theming
+
+A team that mirrors this repo with its own brand colors keeps every difference in one file,
+`src/tokens/theme.css`. It is empty upstream (a header comment and an example), so merging a
+release tag never conflicts with it. It loads right after `tokens.css` everywhere `tokens.css`
+loads (`src/index.ts`, `src/index.css`, and last in `BASE_SHEETS` in `vite.config.mjs`), so it
+ships in both `dist/style.css` and `dist/css/base.css`.
+
+Use the same selectors as `tokens.css`: `:root` and `body.dark-canvas`. The theme loads later, so
+rules of equal specificity win.
+
+```css
+/* src/tokens/theme.css */
+:root {
+  --accent-primary: 37 99 235; /* RGB triplet, space-separated, no rgb() */
+}
+```
+
+Color tokens are bare RGB triplets; components read them as `rgb(var(--token))`.
+
+**Derived tokens.** These follow `--accent-primary`, so changing it recolors them with no further
+work: `--focus-ring`, `--accent-primary-bg-alpha-xs/sm/md` and
+`--accent-primary-border-alpha-sm/md/lg`. They resolve on `:root`. A theme that changes
+`--accent-primary` only under `body.dark-canvas` must redeclare the derived tokens there too, or
+they keep the `:root` value.
+
+**Token families for colors that were hard-coded.** Defaults match what the code painted before.
+
+| Tokens | Used by |
+| ------ | ------- |
+| `--chart-series-1` to `--chart-series-6` | Chart series palette: cyan, emerald, amber, indigo, violet, rose |
+| `--chart-light-*` and `--chart-dark-*` (`fg-1` to `fg-4`, `grid`, `border`, `card`, `inset`) | Chart text, grid, border and inset colors per `tone` |
+| `--trace-service-1` to `--trace-service-10` | `TraceViewer` default service colors |
+| `--accent-primary-ink` | Marks drawn on an accent fill (the `AppTitle` glyph) |
+| `--shadow-tint` | The slate tint in the `GraphNode` and `TopologyNode` shadows |
+
+Both chart sets are defined on `:root` and are not overridden under `.dark-canvas`: charts pick a
+palette with their `tone` prop, not the body class.
+
+**Charts need the tokens on the page.** Chart colors, status colors and the trace service palette
+are `rgb(var(--…))` strings, so load `@tinkermonkey/heimdall-ui/css` or `…/css/base`. Code that
+parses the exported `DEFAULT_SERVICE_PALETTE` as hex, or uses it in a canvas 2D context, must resolve
+it first with `getComputedStyle`. `Heatmap.baseColor` and `MapCanvas.heatmapColor` default to
+`rgb(var(--status-emerald))` and accept any CSS color.
+
+**Keeping literals out.** `npm run check:colors` scans `src/**/*.{css,ts,tsx}` (not `src/tokens/`,
+`src/test-pages/` or tests) and fails on hex colors, numeric `rgb()`, `rgba()`, `hsl()` and
+`hsla()`, and `var(--x, N, N, N)` fallbacks. Pure black and white at any alpha are allowed. It
+runs in CI after `check:skills`.
+
+**Workflows that run only here.** `release.yml` (npm publish on `v*` tags) and `deploy-docs.yml`
+(GitHub Pages) are guarded with `github.repository == 'tinkermonkey/heimdall'`, so a mirror that
+receives upstream's tags publishes nothing. In the same way the CI visual regression shards skip
+in any other repository, since they check this palette's baselines; the `Visual regression`
+summary job treats the skipped shards as passing, so branch protection stays green. A pull
+request from a GitHub fork runs in this repo's context and is unaffected.
+
 ### Testing
 
 Tests validate:

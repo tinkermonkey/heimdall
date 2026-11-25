@@ -1,0 +1,39 @@
+/* =========================================================================
+  Heimdall Design System — Theme Layer
+
+  Empty upstream, on purpose. A copy of this repo that restyles the library puts
+  every override here, so merging upstream release tags never conflicts:
+  upstream never edits this file.
+
+  It loads right after tokens.css everywhere tokens.css loads (src/index.ts,
+  src/index.css, and the base sheets in dist/style.css and dist/css/base.css).
+  Override tokens with the same selectors tokens.css uses (:root for the
+  defaults, body.dark-canvas for the dark canvas). With equal specificity the
+  later rule wins, so these overrides take effect.
+
+  Color tokens are space-separated RGB triplets, read as rgb(var(--token)).
+
+  Example: a blue accent.
+
+    :root {
+      --accent-primary: 37 99 235;
+      --accent-primary-hover: 29 78 216;
+      --accent-primary-deep: 30 64 175;
+    }
+
+  Derived tokens: --focus-ring and the --accent-primary-bg-alpha-* /
+  --accent-primary-border-alpha-* tints are computed from --accent-primary on
+  :root. A theme that changes --accent-primary only under body.dark-canvas
+  must redeclare those derived tokens under body.dark-canvas as well, for
+  example:
+
+    body.dark-canvas {
+      --accent-primary: 96 165 250;
+      --focus-ring: 0 0 0 3px rgb(var(--accent-primary) / 0.18);
+      --accent-primary-bg-alpha-xs: rgb(var(--accent-primary) / 0.05);
+      ...
+    }
+
+  Charts choose their palette with the tone prop, not body.dark-canvas: set
+  --chart-light-* and --chart-dark-* on :root.
+  ========================================================================= */

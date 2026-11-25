@@ -94,9 +94,9 @@ test.describe('integration: Chart Components', () => {
     test('feature renders multi-series with markers', async ({ page }) => {
       const el = page.locator('svg[data-testid="linechart-feature"]')
       await expect(el).toBeVisible()
-      // amber marker dot
-      const dots = el.locator('circle[fill="#F59E0B"]')
-      expect(await dots.count()).toBeGreaterThan(0)
+      // amber marker dot (--accent-primary-hover, #F59E0B)
+      const fills = await el.locator('circle').evaluateAll(cs => cs.map(c => getComputedStyle(c).fill))
+      expect(fills).toContain('rgb(245, 158, 11)')
     })
 
     test('area fill uses linearGradient', async ({ page }) => {
@@ -350,11 +350,16 @@ test.describe('integration: Chart Components', () => {
       expect(await el.locator('text').count()).toBeGreaterThan(0)
     })
 
-    test('cell fills are non-empty hex colors', async ({ page }) => {
+    test('cell fill is the base color, fill-opacity is in [0.12, 1]', async ({ page }) => {
       const el = page.locator('svg[data-testid="heatmap-standard"]')
-      const cells = el.locator('rect')
-      const fill = await cells.first().getAttribute('fill') ?? ''
-      expect(fill).toMatch(/^#[0-9a-fA-F]{8}$/)
+      const cells = await el.locator('rect[fill-opacity]').evaluateAll(rs =>
+        rs.map(r => ({ fill: r.getAttribute('fill'), opacity: Number(r.getAttribute('fill-opacity')) })))
+      expect(cells.length).toBeGreaterThan(0)
+      for (const { fill, opacity } of cells) {
+        expect(fill).toBe('#10B981')
+        expect(opacity).toBeGreaterThanOrEqual(0.12)
+        expect(opacity).toBeLessThanOrEqual(1)
+      }
     })
 
     test('showValues renders numeric values in cells', async ({ page }) => {
@@ -431,22 +436,18 @@ test.describe('integration: Chart Components', () => {
     test('feature renders amber event marker', async ({ page }) => {
       const el = page.locator('svg[data-testid="timeline-feature"]')
       await expect(el).toBeVisible()
-      const markerDot = el.locator('circle[fill="#F59E0B"]')
-      expect(await markerDot.count()).toBeGreaterThan(0)
+      // --status-amber, #F59E0B
+      const fills = await el.locator('circle').evaluateAll(cs => cs.map(c => getComputedStyle(c).fill))
+      expect(fills).toContain('rgb(245, 158, 11)')
     })
 
     test('segment rects use semantic status colors', async ({ page }) => {
       const el = page.locator('svg[data-testid="timeline-standard"]')
-      const rects = el.locator('rect')
-      const fills = new Set<string>()
-      for (let i = 0; i < await rects.count(); i++) {
-        const f = await rects.nth(i).getAttribute('fill') ?? ''
-        if (f) fills.add(f)
-      }
-      // Should include ok (#10B981), warn (#F59E0B), error (#F43F5E)
-      expect([...fills].some(f => f === '#10B981')).toBe(true)
-      expect([...fills].some(f => f === '#F59E0B')).toBe(true)
-      expect([...fills].some(f => f === '#F43F5E')).toBe(true)
+      const fills = new Set(await el.locator('rect').evaluateAll(rs => rs.map(r => getComputedStyle(r).fill)))
+      // Should include ok (emerald #10B981), warn (amber #F59E0B), error (rose #F43F5E)
+      expect(fills.has('rgb(16, 185, 129)')).toBe(true)
+      expect(fills.has('rgb(245, 158, 11)')).toBe(true)
+      expect(fills.has('rgb(244, 63, 94)')).toBe(true)
     })
   })
 

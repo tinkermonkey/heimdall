@@ -1,0 +1,1000 @@
+- type: add
+  elementId: motivation.stakeholder.mirror-maintainer
+  layerName: motivation
+  after:
+    id: 6aeb1f18-6097-4143-965b-2b287eca89a5
+    path: motivation.stakeholder.mirror-maintainer
+    spec_node_id: motivation.stakeholder
+    type: stakeholder
+    layer_id: motivation
+    name: Mirror Maintainer
+    description: A downstream team that keeps a mirror of this repo (not a GitHub
+      fork) with its own brand colors, and takes upstream changes by merging
+      release tags.
+    attributes:
+      type: external
+    metadata:
+      created_at: 2026-11-24T17:33:21.766Z
+      updated_at: 2026-11-24T17:33:21.766Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 0
+- type: add
+  elementId: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  layerName: motivation
+  after:
+    id: 265aa169-c6e3-4f53-8bd5-dc3899211978
+    path: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    spec_node_id: motivation.requirement
+    type: requirement
+    layer_id: motivation
+    name: A Mirror Can Restyle the Library From One File
+    description: Every color the library paints must be reachable from one override
+      file that upstream never edits (src/tokens/theme.css), so a mirror's
+      palette survives each release-tag merge without conflicts. Default
+      rendering stays pixel-identical upstream.
+    attributes:
+      requirementType: functional
+      priority: high
+    metadata:
+      created_at: 2026-11-24T17:33:21.785Z
+      updated_at: 2026-11-24T17:33:21.785Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 1
+- type: add
+  elementId: motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+  layerName: motivation
+  after:
+    id: 7c91cc9c-51aa-4b46-88cd-2afda4f9a6c5
+    path: motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+    spec_node_id: motivation.requirement
+    type: requirement
+    layer_id: motivation
+    name: Upstream Publishing Workflows Are Inert in a Mirror
+    description: "release.yml, deploy-docs.yml and the CI visual-regression shards
+      must run only in tinkermonkey/heimdall: in any other repo a v* tag
+      publishes nothing, a push to main deploys no docs, and the Visual
+      regression check is green with its shards skipped."
+    attributes:
+      requirementType: functional
+      priority: high
+    metadata:
+      created_at: 2026-11-24T17:33:21.786Z
+      updated_at: 2026-11-24T17:33:21.786Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 2
+- type: add
+  elementId: motivation.principle.every-component-color-comes-from-a-token
+  layerName: motivation
+  after:
+    id: 005b60a0-7bfe-4cfc-831b-25de5872c307
+    path: motivation.principle.every-component-color-comes-from-a-token
+    spec_node_id: motivation.principle
+    type: principle
+    layer_id: motivation
+    name: Every Component Color Comes From a Token
+    description: Component CSS and TypeScript take colors only from design tokens
+      (rgb(var(--token)) in both); no color literals outside src/tokens/, except
+      pure black and white. npm run check:colors enforces it.
+    attributes:
+      category: architecture
+    metadata:
+      created_at: 2026-11-24T17:33:21.786Z
+      updated_at: 2026-11-24T17:33:21.786Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 3
+- type: add
+  elementId: product.feature.theme-slot
+  layerName: product
+  after:
+    id: 98ac34d7-f2b9-4c58-976a-74eab4a5f086
+    path: product.feature.theme-slot
+    spec_node_id: product.feature
+    type: feature
+    layer_id: product
+    name: Theme Slot
+    description: "An empty src/tokens/theme.css loaded after tokens.css in every
+      stylesheet entry point (index.ts, index.css, dist/style.css,
+      dist/css/base.css); accent-derived tokens (focus ring, accent alpha
+      tints); new token families for colors that were hard-coded (chart series
+      and tones, trace services, accent ink, shadow tint); TS and CSS color
+      literals replaced by token references; check:colors in CI; repo-guarded
+      release, docs deploy and visual regression. Issue #402."
+    attributes:
+      priority: high
+      status: delivered
+      size: l
+    metadata:
+      created_at: 2026-11-24T17:33:21.790Z
+      updated_at: 2026-11-24T17:33:21.790Z
+      version: 1
+  timestamp: 2026-11-24T18:12:45.041Z
+  sequenceNumber: 4
+- type: add
+  elementId: technology.artifact.design-token-stylesheet
+  layerName: technology
+  after:
+    id: f50c2bbc-e90f-4805-b972-898850e18c47
+    path: technology.artifact.design-token-stylesheet
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: Design Token Stylesheet
+    description: "src/tokens/tokens.css: every design token as a CSS custom
+      property. This change derives the accent-alpha tokens and --focus-ring
+      from --accent-primary, and adds --chart-series-1..6,
+      --chart-light-*/--chart-dark-* (fg-1..4, grid, border, card, inset; both
+      on :root), --trace-service-1..10, --accent-primary-ink and --shadow-tint,
+      each set to the literal it replaces."
+    attributes:
+      artifactType: file
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/tokens/tokens.css
+    metadata:
+      created_at: 2026-11-24T17:33:21.792Z
+      updated_at: 2026-11-24T17:33:21.792Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 5
+- type: add
+  elementId: technology.artifact.theme-stylesheet
+  layerName: technology
+  after:
+    id: c06f3dbb-7022-4f5a-ac1b-ac813ceb1abd
+    path: technology.artifact.theme-stylesheet
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: Theme Stylesheet
+    description: "src/tokens/theme.css: an override layer that is empty upstream
+      (header comment with an example and the caveat that derived tokens resolve
+      on :root, so a theme that changes --accent-primary only under
+      body.dark-canvas must redeclare them there). Loaded after tokens.css from
+      src/index.ts, src/index.css and vite.config.mjs BASE_SHEETS (last), so it
+      ships after the tokens in dist/style.css and dist/css/base.css."
+    attributes:
+      artifactType: file
+    metadata:
+      created_at: 2026-11-24T17:33:21.794Z
+      updated_at: 2026-11-24T17:33:21.794Z
+      version: 1
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/tokens/theme.css
+  timestamp: 2026-11-24T18:12:39.276Z
+  sequenceNumber: 6
+- type: add
+  elementId: technology.artifact.color-literal-check-script
+  layerName: technology
+  after:
+    id: 779cd254-a17f-4306-9bec-90a28f6e081b
+    path: technology.artifact.color-literal-check-script
+    spec_node_id: technology.artifact
+    type: artifact
+    layer_id: technology
+    name: Color Literal Check Script
+    description: "scripts/check-color-literals.mjs (npm run check:colors): scans
+      src/**/*.{css,ts,tsx} except src/tokens/, src/test-pages/ and *.test.*,
+      comments stripped; fails on hex colors (3/4/6/8 digits, not after /),
+      rgb/rgba/hsl/hsla with numeric arguments, and var(--x, N, N, N) fallbacks;
+      allows pure black and white at any alpha."
+    attributes:
+      artifactType: script
+    metadata:
+      created_at: 2026-11-24T17:33:21.794Z
+      updated_at: 2026-11-24T17:33:21.794Z
+      version: 1
+    source_reference:
+      provenance: manual
+      locations:
+        - file: scripts/check-color-literals.mjs
+  timestamp: 2026-11-24T18:12:39.276Z
+  sequenceNumber: 7
+- type: add
+  elementId: technology.technologyprocess.pr-ci-workflow
+  layerName: technology
+  after:
+    id: df8e82bf-007e-492c-a16b-5d75b2a74ed7
+    path: technology.technologyprocess.pr-ci-workflow
+    spec_node_id: technology.technologyprocess
+    type: technologyprocess
+    layer_id: technology
+    name: PR CI Workflow
+    description: ".github/workflows/ci.yml: Checks job (tsc, lint, unit tests,
+      check:skills, check:colors after it, build + check:package) and the
+      sharded Visual regression job. The changes job outputs visual=false when
+      github.repository is not tinkermonkey/heimdall, so a mirror's shards skip
+      and the summary check stays green."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: .github/workflows/ci.yml
+    metadata:
+      created_at: 2026-11-24T17:33:21.795Z
+      updated_at: 2026-11-24T17:33:21.795Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 8
+- type: add
+  elementId: technology.technologyprocess.release-workflow
+  layerName: technology
+  after:
+    id: 7d2581b0-f810-42a2-8547-27f586e22f8a
+    path: technology.technologyprocess.release-workflow
+    spec_node_id: technology.technologyprocess
+    type: technologyprocess
+    layer_id: technology
+    name: Release Workflow
+    description: ".github/workflows/release.yml: on a v* tag, tests and publishes
+      @tinkermonkey/heimdall-ui to npm. Its test and release jobs gain if:
+      github.repository == 'tinkermonkey/heimdall'."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: .github/workflows/release.yml
+    metadata:
+      created_at: 2026-11-24T17:33:21.795Z
+      updated_at: 2026-11-24T17:33:21.795Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 9
+- type: add
+  elementId: technology.technologyprocess.docs-deploy-workflow
+  layerName: technology
+  after:
+    id: 414f4e69-eaaf-48f0-b1c8-057078f4142e
+    path: technology.technologyprocess.docs-deploy-workflow
+    spec_node_id: technology.technologyprocess
+    type: technologyprocess
+    layer_id: technology
+    name: Docs Deploy Workflow
+    description: ".github/workflows/deploy-docs.yml: builds the docs app and deploys
+      it to GitHub Pages. Its build job gains if: github.repository ==
+      'tinkermonkey/heimdall' (deploy needs build, so it skips too)."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: .github/workflows/deploy-docs.yml
+    metadata:
+      created_at: 2026-11-24T17:33:21.795Z
+      updated_at: 2026-11-24T17:33:21.795Z
+      version: 1
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 10
+- type: relationship-add
+  elementId: motivation.stakeholder.mirror-maintainer::associated-with::motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.mirror-maintainer
+    target: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 11
+- type: relationship-add
+  elementId: motivation.stakeholder.mirror-maintainer::associated-with::motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.mirror-maintainer
+    target: motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 12
+- type: relationship-add
+  elementId: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file::realizes::motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+  layerName: motivation
+  after:
+    source: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    target: motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 13
+- type: relationship-add
+  elementId: motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror::realizes::motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+  layerName: motivation
+  after:
+    source: motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+    target: motivation.goal.consistent-component-library-for-data-dense-ide-style-applications
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 14
+- type: relationship-add
+  elementId: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file::realizes::motivation.principle.every-component-color-comes-from-a-token
+  layerName: motivation
+  after:
+    source: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: realizes
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 15
+- type: relationship-add
+  elementId: product.feature.theme-slot::realizes::product.softwarecapability.design-primitives-and-tokens
+  layerName: product
+  after:
+    source: product.feature.theme-slot
+    target: product.softwarecapability.design-primitives-and-tokens
+    predicate: realizes
+    layer: product
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: product.feature.theme-slot::satisfies::motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  layerName: product
+  after:
+    source: product.feature.theme-slot
+    target: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    predicate: satisfies
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: product.feature.theme-slot::satisfies::motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+  layerName: product
+  after:
+    source: product.feature.theme-slot
+    target: motivation.requirement.upstream-publishing-workflows-are-inert-in-a-mirror
+    predicate: satisfies
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 18
+- type: relationship-add
+  elementId: technology.artifact.theme-stylesheet::depends-on::technology.artifact.design-token-stylesheet
+  layerName: technology
+  after:
+    source: technology.artifact.theme-stylesheet
+    target: technology.artifact.design-token-stylesheet
+    predicate: depends-on
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: technology.artifact.heimdall-ui-package::aggregates::technology.artifact.design-token-stylesheet
+  layerName: technology
+  after:
+    source: technology.artifact.heimdall-ui-package
+    target: technology.artifact.design-token-stylesheet
+    predicate: aggregates
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: technology.artifact.heimdall-ui-package::aggregates::technology.artifact.theme-stylesheet
+  layerName: technology
+  after:
+    source: technology.artifact.heimdall-ui-package
+    target: technology.artifact.theme-stylesheet
+    predicate: aggregates
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: technology.technologyprocess.npm-run-build-vite-build::accesses::technology.artifact.theme-stylesheet
+  layerName: technology
+  after:
+    source: technology.technologyprocess.npm-run-build-vite-build
+    target: technology.artifact.theme-stylesheet
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: technology.technologyprocess.pr-ci-workflow::accesses::technology.artifact.color-literal-check-script
+  layerName: technology
+  after:
+    source: technology.technologyprocess.pr-ci-workflow
+    target: technology.artifact.color-literal-check-script
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: technology.technologyprocess.pr-ci-workflow::composes::technology.technologyprocess.npm-test-npm-run-testunit
+  layerName: technology
+  after:
+    source: technology.technologyprocess.pr-ci-workflow
+    target: technology.technologyprocess.npm-test-npm-run-testunit
+    predicate: composes
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: technology.technologyprocess.release-workflow::accesses::technology.artifact.heimdall-ui-package
+  layerName: technology
+  after:
+    source: technology.technologyprocess.release-workflow
+    target: technology.artifact.heimdall-ui-package
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: technology.technologyprocess.release-workflow::composes::technology.technologyprocess.npm-run-build-vite-build
+  layerName: technology
+  after:
+    source: technology.technologyprocess.release-workflow
+    target: technology.technologyprocess.npm-run-build-vite-build
+    predicate: composes
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:21.807Z
+  sequenceNumber: 26
+- type: add
+  elementId: product.persona.mirror-maintainer-restyling-the-library
+  layerName: product
+  after:
+    id: f7a3016a-e051-4af3-9cc0-c61a95a49146
+    path: product.persona.mirror-maintainer-restyling-the-library
+    spec_node_id: product.persona
+    type: persona
+    layer_id: product
+    name: Mirror Maintainer Restyling the Library
+    description: A developer on a downstream team who applies the team's brand
+      palette in theme.css and merges upstream release tags into the mirror.
+    attributes:
+      category: secondary
+      proficiency: advanced
+    metadata:
+      created_at: 2026-11-24T17:33:34.091Z
+      updated_at: 2026-11-24T17:33:34.091Z
+      version: 1
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 27
+- type: relationship-add
+  elementId: product.persona.mirror-maintainer-restyling-the-library::references::motivation.stakeholder.mirror-maintainer
+  layerName: product
+  after:
+    source: product.persona.mirror-maintainer-restyling-the-library
+    target: motivation.stakeholder.mirror-maintainer
+    predicate: references
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 28
+- type: relationship-add
+  elementId: product.feature.theme-slot::serves::product.persona.mirror-maintainer-restyling-the-library
+  layerName: product
+  after:
+    source: product.feature.theme-slot
+    target: product.persona.mirror-maintainer-restyling-the-library
+    predicate: serves
+    layer: product
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 29
+- type: relationship-add
+  elementId: ux.librarycomponent.line-chart::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.line-chart
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: ux.librarycomponent.bar-h::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.bar-h
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: ux.librarycomponent.bar-chart::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.bar-chart
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 32
+- type: relationship-add
+  elementId: ux.librarycomponent.stacked-bar::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.stacked-bar
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 33
+- type: relationship-add
+  elementId: ux.librarycomponent.donut::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.donut
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: ux.librarycomponent.sparkline::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.sparkline
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 35
+- type: relationship-add
+  elementId: ux.librarycomponent.heatmap::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.heatmap
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 36
+- type: relationship-add
+  elementId: ux.librarycomponent.status-timeline::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.status-timeline
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: ux.librarycomponent.map-canvas::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.map-canvas
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: ux.librarycomponent.trace-viewer::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.trace-viewer
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: ux.librarycomponent.chat-composer::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.chat-composer
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: ux.librarycomponent.chat-container::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.chat-container
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: ux.librarycomponent.chat-divider::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.chat-divider
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: ux.librarycomponent.chat-message::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.chat-message
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: ux.librarycomponent.chat-suggestions::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.chat-suggestions
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: ux.librarycomponent.kanban-board::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.kanban-board
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: ux.librarycomponent.diff-viewer::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.diff-viewer
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 46
+- type: relationship-add
+  elementId: ux.librarycomponent.app-title::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.app-title
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 47
+- type: relationship-add
+  elementId: ux.librarycomponent.graph-node-ux::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.graph-node-ux
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 48
+- type: relationship-add
+  elementId: ux.librarycomponent.topology-node::satisfies::motivation.principle.every-component-color-comes-from-a-token
+  layerName: ux
+  after:
+    source: ux.librarycomponent.topology-node
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: satisfies
+    layer: ux
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:34.110Z
+  sequenceNumber: 49
+- type: delete
+  elementId: application.applicationfunction.heatmap-colour-scale
+  layerName: application
+  before:
+    id: 64c28092-2e38-43ed-ad27-2e0ec59c91ee
+    path: application.applicationfunction.heatmap-colour-scale
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Heatmap Colour Scale
+    description: "getHeatmapColor() and normalizeColorToHex(): single-hue alpha
+      scale for Heatmap and MapCanvas heatmap cells."
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/utils/heatmapUtils.ts
+          symbol: getHeatmapColor
+    metadata:
+      created_at: 2026-11-23T16:44:40.174Z
+      updated_at: 2026-11-23T16:44:40.174Z
+      version: 1
+  timestamp: 2026-11-24T17:33:47.309Z
+  sequenceNumber: 50
+- type: relationship-delete
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.heatmap-colour-scale
+  layerName: application
+  before:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.heatmap-colour-scale
+    predicate: assigned-to
+    layer: application
+  timestamp: 2026-11-24T17:33:47.328Z
+  sequenceNumber: 51
+- type: add
+  elementId: testing.testcasesketch.chart-fills-resolve-from-tokens
+  layerName: testing
+  after:
+    id: 057a47a5-52fc-4408-a598-431a35d0ea45
+    path: testing.testcasesketch.chart-fills-resolve-from-tokens
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: Chart Fills Resolve From Tokens
+    description: "tests/charts-showcase.spec.ts, updated: the LineChart and
+      StatusTimeline marker circles carry rgb(var(--accent-primary-hover))
+      instead of #F59E0B; StatusTimeline segment fills are status-token
+      references; Heatmap cells fill with the base color and a fill-opacity in
+      [0.12, 1] (was: non-empty hex fills). Screenshots stay identical to the
+      existing baselines."
+    attributes:
+      status: automated
+    metadata:
+      created_at: 2026-11-24T17:33:47.451Z
+      updated_at: 2026-11-24T17:33:47.451Z
+      version: 1
+    source_reference:
+      provenance: manual
+      locations:
+        - file: tests/charts-showcase.spec.ts
+          symbol: cell fill is the base color, fill-opacity is in [0.12, 1]
+  timestamp: 2026-11-24T18:12:45.004Z
+  sequenceNumber: 52
+- type: add
+  elementId: testing.testcasesketch.theme-override-ships-after-the-tokens
+  layerName: testing
+  after:
+    id: 67a88b14-170a-4c8d-8296-91d1e341909d
+    path: testing.testcasesketch.theme-override-ships-after-the-tokens
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: Theme Override Ships After the Tokens
+    description: "With :root { --accent-primary: 37 99 235; } in
+      src/tokens/theme.css, npm run build puts that declaration after
+      --accent-primary: 251 191 36 in dist/style.css and dist/css/base.css;
+      check:sheets passes."
+    attributes:
+      status: draft
+    metadata:
+      created_at: 2026-11-24T17:33:47.454Z
+      updated_at: 2026-11-24T17:33:47.454Z
+      version: 1
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 53
+- type: add
+  elementId: testing.testcasesketch.color-literal-check-rejects-a-component-literal
+  layerName: testing
+  after:
+    id: 9f417791-a778-4f81-ae5b-65808781dc59
+    path: testing.testcasesketch.color-literal-check-rejects-a-component-literal
+    spec_node_id: testing.testcasesketch
+    type: testcasesketch
+    layer_id: testing
+    name: Color Literal Check Rejects a Component Literal
+    description: "npm run check:colors passes on the branch and fails when a literal
+      such as #f59e0b is added to any component file; pure black and white, URL
+      fragments and issue references in comments (#320) pass."
+    attributes:
+      status: draft
+    metadata:
+      created_at: 2026-11-24T17:33:47.454Z
+      updated_at: 2026-11-24T17:33:47.454Z
+      version: 1
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 54
+- type: relationship-add
+  elementId: testing.testcoveragetarget.chart-components::composes::testing.testcasesketch.chart-fills-resolve-from-tokens
+  layerName: testing
+  after:
+    source: testing.testcoveragetarget.chart-components
+    target: testing.testcasesketch.chart-fills-resolve-from-tokens
+    predicate: composes
+    layer: testing
+    category: structural
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 55
+- type: relationship-add
+  elementId: testing.testcasesketch.chart-fills-resolve-from-tokens::tests::product.feature.theme-slot
+  layerName: testing
+  after:
+    source: testing.testcasesketch.chart-fills-resolve-from-tokens
+    target: product.feature.theme-slot
+    predicate: tests
+    layer: testing
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 56
+- type: relationship-add
+  elementId: testing.testcasesketch.chart-fills-resolve-from-tokens::satisfies::motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  layerName: testing
+  after:
+    source: testing.testcasesketch.chart-fills-resolve-from-tokens
+    target: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 57
+- type: relationship-add
+  elementId: testing.testcasesketch.theme-override-ships-after-the-tokens::tests::product.feature.theme-slot
+  layerName: testing
+  after:
+    source: testing.testcasesketch.theme-override-ships-after-the-tokens
+    target: product.feature.theme-slot
+    predicate: tests
+    layer: testing
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 58
+- type: relationship-add
+  elementId: testing.testcasesketch.theme-override-ships-after-the-tokens::satisfies::motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  layerName: testing
+  after:
+    source: testing.testcasesketch.theme-override-ships-after-the-tokens
+    target: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 59
+- type: relationship-add
+  elementId: testing.testcasesketch.color-literal-check-rejects-a-component-literal::tests::product.feature.theme-slot
+  layerName: testing
+  after:
+    source: testing.testcasesketch.color-literal-check-rejects-a-component-literal
+    target: product.feature.theme-slot
+    predicate: tests
+    layer: testing
+    targetLayer: product
+    category: structural
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 60
+- type: relationship-add
+  elementId: testing.testcasesketch.color-literal-check-rejects-a-component-literal::satisfies::motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  layerName: testing
+  after:
+    source: testing.testcasesketch.color-literal-check-rejects-a-component-literal
+    target: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    predicate: satisfies
+    layer: testing
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:33:47.469Z
+  sequenceNumber: 61
+- type: relationship-add
+  elementId: technology.technologyprocess.docs-deploy-workflow::accesses::technology.artifact.heimdall-ui-package
+  layerName: technology
+  after:
+    source: technology.technologyprocess.docs-deploy-workflow
+    target: technology.artifact.heimdall-ui-package
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:33:53.860Z
+  sequenceNumber: 62
+- type: relationship-add
+  elementId: motivation.stakeholder.mirror-maintainer::associated-with::motivation.principle.every-component-color-comes-from-a-token
+  layerName: motivation
+  after:
+    source: motivation.stakeholder.mirror-maintainer
+    target: motivation.principle.every-component-color-comes-from-a-token
+    predicate: associated-with
+    layer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:34:00.375Z
+  sequenceNumber: 63
+- type: relationship-add
+  elementId: product.softwarecapability.design-primitives-and-tokens::satisfies::motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+  layerName: product
+  after:
+    source: product.softwarecapability.design-primitives-and-tokens
+    target: motivation.requirement.a-mirror-can-restyle-the-library-from-one-file
+    predicate: satisfies
+    layer: product
+    targetLayer: motivation
+    category: structural
+  timestamp: 2026-11-24T17:34:00.375Z
+  sequenceNumber: 64
+- type: relationship-add
+  elementId: testing.testcasesketch.chart-fills-resolve-from-tokens::tests::ux.librarycomponent.line-chart
+  layerName: testing
+  after:
+    source: testing.testcasesketch.chart-fills-resolve-from-tokens
+    target: ux.librarycomponent.line-chart
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T17:34:00.375Z
+  sequenceNumber: 65
+- type: relationship-add
+  elementId: testing.testcasesketch.chart-fills-resolve-from-tokens::tests::ux.librarycomponent.status-timeline
+  layerName: testing
+  after:
+    source: testing.testcasesketch.chart-fills-resolve-from-tokens
+    target: ux.librarycomponent.status-timeline
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T17:34:00.375Z
+  sequenceNumber: 66
+- type: relationship-add
+  elementId: testing.testcasesketch.chart-fills-resolve-from-tokens::tests::ux.librarycomponent.heatmap
+  layerName: testing
+  after:
+    source: testing.testcasesketch.chart-fills-resolve-from-tokens
+    target: ux.librarycomponent.heatmap
+    predicate: tests
+    layer: testing
+    targetLayer: ux
+    category: structural
+  timestamp: 2026-11-24T17:34:00.375Z
+  sequenceNumber: 67
+- type: relationship-add
+  elementId: technology.technologyprocess.npm-run-build-vite-build::accesses::technology.artifact.design-token-stylesheet
+  layerName: technology
+  after:
+    source: technology.technologyprocess.npm-run-build-vite-build
+    target: technology.artifact.design-token-stylesheet
+    predicate: accesses
+    layer: technology
+    category: structural
+  timestamp: 2026-11-24T17:34:00.375Z
+  sequenceNumber: 68

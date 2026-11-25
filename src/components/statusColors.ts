@@ -1,11 +1,11 @@
 export type StatusColor = 'emerald' | 'amber' | 'rose' | 'cyan' | 'violet' | 'neutral'
 
 export const statusColorMap: Record<StatusColor, string> = {
-  emerald: 'rgb(16 185 129)',
-  amber: 'rgb(245 158 11)',
-  rose: 'rgb(244 63 94)',
-  cyan: 'rgb(34 211 238)',
-  violet: 'rgb(139 92 246)',
+  emerald: 'rgb(var(--status-emerald))',
+  amber: 'rgb(var(--status-amber))',
+  rose: 'rgb(var(--status-rose))',
+  cyan: 'rgb(var(--status-cyan))',
+  violet: 'rgb(var(--status-violet))',
   neutral: 'rgb(var(--canvas-fg-2))',
 }
 
