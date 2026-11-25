@@ -1,9 +1,10 @@
 /**
  * Branch map trunk selection: which of a group's stations run down its trunk (lane 0).
  *
- * A stated trunk (`group.trunk`) wins: its stations, in rank order. Ids that are not stations of
- * the group are reported as `invalid-trunk` and skipped, and so is an order that disagrees with
- * the ranks; with nothing valid left, the trunk is derived.
+ * A stated trunk (`group.trunk`) wins: its stations, in rank order (stations of one rank in
+ * their band's row order). Ids that are not stations of the group are reported as
+ * `invalid-trunk` and skipped, and so is an order that puts a later rank before an earlier one;
+ * with nothing valid left, the trunk is derived.
  *
  * The derived trunk is the heaviest chain of stops in strictly increasing rank. A stop weighs
  * what arrives at it (each line 1 plus the square root of its weight) and one more when it is
@@ -46,7 +47,10 @@ export function chooseBranchMapTrunk(
       issues.push({ kind: 'invalid-trunk', message: `Trunk of ${group.id} names stations that are not in the group: ${unknown.join(', ')}.`, ids: [group.id, ...unknown] })
     }
     const valid = [...new Set(group.trunk.filter((id) => mine.has(id)))]
-    const sorted = [...valid].sort(byRank)
+    // Stations that share a rank are not out of order whichever way they were given: a tie is not
+    // a contradiction. Their final top-to-bottom order is their band's row order.
+    const given = new Map(valid.map((id, i) => [id, i]))
+    const sorted = [...valid].sort((a, b) => rank.get(a)! - rank.get(b)! || given.get(a)! - given.get(b)!)
     if (sorted.some((id, i) => id !== valid[i])) {
       issues.push({ kind: 'invalid-trunk', message: `Trunk of ${group.id} is not in rank order; drawn in rank order.`, ids: [group.id, ...valid] })
     }

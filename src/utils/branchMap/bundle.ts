@@ -5,7 +5,9 @@
  * the same station merge into one bundle, the largest sets first, until the group fits. If it
  * still does not fit, the lightest of what is left (lines, then bundles, by weight, then id)
  * collapse one at a time into a single "N more" line for the group. A group id in `expanded`
- * leaves the group whole; a bundle id leaves that set of lines unbundled and out of "N more".
+ * leaves the group whole; a bundle id leaves that set of lines unbundled and out of "N more"; the
+ * group's "N more" id (`more:<group>`) draws the lines and bundles it would have held, past the
+ * budget.
  *
  * How many lanes a set of lines needs depends on where they sit, which the caller knows, so it
  * is passed in as `laneCount`.
@@ -64,6 +66,8 @@ export function bundleBranchLines(
   }
 
   // ---- The lightest into "N more" ---------------------------------------------------------
+  // An expanded "N more" draws what it held as lines and bundles, past the budget.
+  if (options.expanded.has(moreIdOf(group))) return order(sets)
   const pool = sets
     .filter((s) => !s.members.some((l) => held.has(l.id)))
     .sort((a, b) => Number(a.kind === 'bundle') - Number(b.kind === 'bundle') || weightOf(a) - weightOf(b) || cmp(a.id, b.id))

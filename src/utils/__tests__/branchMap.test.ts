@@ -195,6 +195,25 @@ describe('layoutBranchMap', () => {
       expect(layout.issues.map((i) => i.kind)).toEqual(['invalid-trunk'])
       expect(layout.groups[0].trunk).toEqual(['a-s0', 'a-s1', 'a-s2', 'a-s3']) // dated stations join the trunk too
     })
+
+    it('keeps the given order among stated stations of one rank, and reports only a real inversion', () => {
+      const tie = (trunk: string[]): BranchMapData => ({
+        groups: [{ id: 'g', label: 'G', trunk }],
+        stations: [
+          { id: 's-b', group: 'g', label: 'B', kind: 'stop', status: 'planned' },
+          { id: 's-a', group: 'g', label: 'A', kind: 'stop', status: 'planned' },
+          { id: 's-c', group: 'g', label: 'C', kind: 'stop', status: 'planned', after: ['s-a', 's-b'] },
+        ],
+        lines: [],
+      })
+      const tied = layoutBranchMap(tie(['s-b', 's-a', 's-c'])) // s-a and s-b share a rank
+      expect(tied.issues).toEqual([])
+      expect(tied.groups[0].trunk.slice(0, 2).sort()).toEqual(['s-a', 's-b']) // drawn in their band's row order
+      expect(tied.groups[0].trunk[2]).toBe('s-c')
+      const inverted = layoutBranchMap(tie(['s-c', 's-a', 's-b']))
+      expect(inverted.issues.map((i) => i.kind)).toEqual(['invalid-trunk'])
+      expect(inverted.groups[0].trunk).toEqual(['s-a', 's-b', 's-c'])
+    })
   })
 
   describe('lane budget', () => {
@@ -241,6 +260,17 @@ describe('layoutBranchMap', () => {
       const one = layoutBranchMap(branchMapSample, { expanded: [bundleIdOf('borealis', null, 'b-s1')] })
       const kinds = one.lines.filter((l) => ['b-l1', 'b-l2', 'b-l3', 'b-l4', 'b-l5'].includes(l.id)).map((l) => l.kind)
       expect(kinds).toEqual(['line', 'line', 'line', 'line', 'line'])
+    })
+
+    it('draws what "N more" held when it is expanded, past the budget', () => {
+      const held = layoutBranchMap(branchMapSample).lines.find((l) => l.id === moreIdOf('cirrus'))!.members.map((l) => l.id)
+      expect(held.length).toBeGreaterThan(1)
+      const layout = layoutBranchMap(branchMapSample, { expanded: [moreIdOf('cirrus')] })
+      expect(layout.lines.find((l) => l.id === moreIdOf('cirrus'))).toBeUndefined()
+      const drawn = layout.lines.filter((l) => l.group === 'cirrus' && l.kind !== 'spur').flatMap((l) => l.members.map((m) => m.id))
+      for (const id of held) expect(drawn).toContain(id)
+      expect(lanesOf(layout, 'cirrus')).toBeGreaterThan(8)
+      expectNoOverlaps(layout)
     })
 
     it('honours a smaller budget', () => {
