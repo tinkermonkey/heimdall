@@ -16,8 +16,8 @@ Application components, services, and interactions.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 118   |
-| Intra-Layer Relationships | 232   |
+| Elements                  | 119   |
+| Intra-Layer Relationships | 233   |
 | Inter-Layer Relationships | 296   |
 | Inbound Relationships     | 165   |
 | Outbound Relationships    | 131   |
@@ -34,7 +34,7 @@ Application components, services, and interactions.
 | Element                                                                         | Type                     | Relationships |
 | ------------------------------------------------------------------------------- | ------------------------ | ------------- |
 | `application.applicationcomponent.consumer-smoke-test-app`                      | `applicationcomponent`   | 1             |
-| `application.applicationcomponent.heimdall-ui-library-module`                   | `applicationcomponent`   | 89            |
+| `application.applicationcomponent.heimdall-ui-library-module`                   | `applicationcomponent`   | 90            |
 | `application.applicationcomponent.test-page-host-app`                           | `applicationcomponent`   | 1             |
 | `application.applicationevent.background-click-event`                           | `applicationevent`       | 1             |
 | `application.applicationevent.collapse-toggle-event`                            | `applicationevent`       | 1             |
@@ -91,6 +91,7 @@ Application components, services, and interactions.
 | `application.applicationfunction.otlp-trace-adaptation`                         | `applicationfunction`    | 4             |
 | `application.applicationfunction.painter-depth-reordering`                      | `applicationfunction`    | 1             |
 | `application.applicationfunction.pan-inertia-glide`                             | `applicationfunction`    | 2             |
+| `application.applicationfunction.pane-rail-marks`                               | `applicationfunction`    | 1             |
 | `application.applicationfunction.plain-link-click-detection`                    | `applicationfunction`    | 2             |
 | `application.applicationfunction.programmatic-viewport-move-reporting`          | `applicationfunction`    | 3             |
 | `application.applicationfunction.radial-tree-layout-algorithm`                  | `applicationfunction`    | 4             |
@@ -565,6 +566,7 @@ The package's public module (src/index.ts barrel over one module per source file
 | intra-layer | `application.applicationfunction.orthogonal-layout-algorithm`                   | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.otlp-trace-adaptation`                         | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.pan-inertia-glide`                             | `assigned-to` | outbound  |
+| intra-layer | `application.applicationfunction.pane-rail-marks`                               | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.plain-link-click-detection`                    | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.programmatic-viewport-move-reporting`          | `assigned-to` | outbound  |
 | intra-layer | `application.applicationfunction.radial-tree-layout-algorithm`                  | `assigned-to` | outbound  |
@@ -1699,6 +1701,20 @@ releaseVelocity(), decayVelocity() and glideHasSettled(): pointer-release veloci
 | ----------- | ------------------------------------------------------------- | ------------- | --------- |
 | intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `assigned-to` | inbound   |
 | intra-layer | `application.applicationservice.interactive-graph-rendering`  | `realizes`    | outbound  |
+
+### Pane Rail Marks {#pane-rail-marks}
+
+**ID**: `application.applicationfunction.pane-rail-marks`
+
+**Type**: `applicationfunction`
+
+orderPaneRailMarks() clamps each mark's position to 0..1 and sorts the marks by position (stable), so the rail renders them top to bottom in reading order; nextPaneRailMarkIndex() maps ArrowUp/ArrowDown/Home/End to the next focused mark for the rail's roving tab stop.
+
+#### Relationships
+
+| Type        | Related Element                                               | Predicate     | Direction |
+| ----------- | ------------------------------------------------------------- | ------------- | --------- |
+| intra-layer | `application.applicationcomponent.heimdall-ui-library-module` | `assigned-to` | inbound   |
 
 ### Plain Link Click Detection {#plain-link-click-detection}
 
@@ -3122,4 +3138,4 @@ GraphCanvasContext's nodeRects/getNodeRect — every currently-visible node's me
 
 ---
 
-Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0
+Generated: 2026-11-25T10:08:47.649Z | Model Version: 0.1.0

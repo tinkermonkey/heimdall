@@ -992,3 +992,20 @@ application.applicationfunction.programmatic-viewport-move-reporting:
     created_at: 2026-11-24T19:01:20.529Z
     updated_at: 2026-11-24T19:01:20.529Z
     version: 1
+application.applicationfunction.pane-rail-marks:
+  id: f5cc3caa-67ab-4250-ba0f-f75be43fe651
+  path: application.applicationfunction.pane-rail-marks
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Pane Rail Marks
+  description: orderPaneRailMarks() clamps each mark's position to 0..1 and sorts the marks by position (stable), so the rail renders them top to bottom in reading order; nextPaneRailMarkIndex() maps ArrowUp/ArrowDown/Home/End to the next focused mark for the rail's roving tab stop.
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/paneRailMarks.ts
+        symbol: orderPaneRailMarks
+  metadata:
+    created_at: 2026-11-24T13:49:47.543Z
+    updated_at: 2026-11-24T13:49:47.543Z
+    version: 1

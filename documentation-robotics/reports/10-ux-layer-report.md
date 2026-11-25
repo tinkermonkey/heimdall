@@ -16,11 +16,11 @@ User interface components, screens, and user experience elements.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 126   |
-| Intra-Layer Relationships | 317   |
-| Inter-Layer Relationships | 572   |
-| Inbound Relationships     | 308   |
-| Outbound Relationships    | 264   |
+| Elements                  | 127   |
+| Intra-Layer Relationships | 319   |
+| Inter-Layer Relationships | 577   |
+| Inbound Relationships     | 310   |
+| Outbound Relationships    | 267   |
 
 **Cross-Layer References**:
 
@@ -88,7 +88,7 @@ User interface components, screens, and user experience elements.
 | `ux.librarycomponent.hierarchy-row`                                  | `librarycomponent` | 1             |
 | `ux.librarycomponent.hierarchy-tree`                                 | `librarycomponent` | 1             |
 | `ux.librarycomponent.hive-plot`                                      | `librarycomponent` | 6             |
-| `ux.librarycomponent.icon`                                           | `librarycomponent` | 50            |
+| `ux.librarycomponent.icon`                                           | `librarycomponent` | 51            |
 | `ux.librarycomponent.inspector-panel`                                | `librarycomponent` | 2             |
 | `ux.librarycomponent.kanban-board`                                   | `librarycomponent` | 5             |
 | `ux.librarycomponent.key-value-editor`                               | `librarycomponent` | 5             |
@@ -110,6 +110,7 @@ User interface components, screens, and user experience elements.
 | `ux.librarycomponent.number-input`                                   | `librarycomponent` | 1             |
 | `ux.librarycomponent.ordered-list`                                   | `librarycomponent` | 3             |
 | `ux.librarycomponent.page-header`                                    | `librarycomponent` | 2             |
+| `ux.librarycomponent.pane-rail`                                      | `librarycomponent` | 2             |
 | `ux.librarycomponent.panel`                                          | `librarycomponent` | 2             |
 | `ux.librarycomponent.pipeline-card`                                  | `librarycomponent` | 3             |
 | `ux.librarycomponent.plane-layout-control`                           | `librarycomponent` | 8             |
@@ -158,7 +159,7 @@ User interface components, screens, and user experience elements.
 | `ux.statepattern.layout-computation-state`                           | `statepattern`     | 1             |
 | `ux.statepattern.live-simulation-vs-static-layout-state`             | `statepattern`     | 1             |
 | `ux.statepattern.node-hover-and-selection-state`                     | `statepattern`     | 3             |
-| `ux.uxlibrary.heimdall-ui`                                           | `uxlibrary`        | 113           |
+| `ux.uxlibrary.heimdall-ui`                                           | `uxlibrary`        | 114           |
 
 ## Inter-Layer Dependencies
 
@@ -438,6 +439,8 @@ flowchart TB
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-and-zoom`                                                                                             | `ux.librarycomponent.map-canvas`                                                            | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pan-inertia`                                                                                              | `ux.librarycomponent.graph-canvas-ux`                                                       | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pane-rail`                                                                                                | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `covers`     | many-to-many | medium   |
+| `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.pane-rail-marks`                                                                                          | `ux.librarycomponent.pane-rail`                                                             | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.avatar`                                                                | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.badge`                                                                 | `ux`         | `covers`     | many-to-many | medium   |
 | `testing.testcoveragetarget.covers.ux.librarycomponent`    | `testing.testcoveragetarget.primitive-components`                                                                                     | `ux.librarycomponent.button`                                                                | `ux`         | `covers`     | many-to-many | medium   |
@@ -664,6 +667,9 @@ flowchart TB
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.ordered-list`                                                                                                    | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.page-header`                                                                                                     | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.page-header`                                                                                                     | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.pane-rail`                                                                                                       | `motivation.principle.ide-density-and-terse-voice`                                          | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.pane-rail`                                                                                                       | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
+| `ux.librarycomponent.satisfies.motivation.requirement`     | `ux.librarycomponent.pane-rail`                                                                                                       | `motivation.requirement.every-public-export-is-documented-for-agents`                       | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.panel`                                                                                                           | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.satisfies.motivation.principle`       | `ux.librarycomponent.panel`                                                                                                           | `motivation.principle.two-surface-shell-and-canvas`                                         | `motivation` | `satisfies`  | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware` | `ux.librarycomponent.pipeline-card`                                                                                                   | `technology.systemsoftware.web-browser`                                                     | `technology` | `depends-on` | many-to-many | medium   |
@@ -2434,6 +2440,7 @@ Renders a named outline icon from the Heimdall icon set. Use it for every icon; 
 | intra-layer | `ux.librarycomponent.modal`                                          | `composes`   | inbound   |
 | intra-layer | `ux.librarycomponent.nav-item`                                       | `composes`   | inbound   |
 | intra-layer | `ux.librarycomponent.ordered-list`                                   | `composes`   | inbound   |
+| intra-layer | `ux.librarycomponent.pane-rail`                                      | `composes`   | inbound   |
 | intra-layer | `ux.librarycomponent.pipeline-card`                                  | `composes`   | inbound   |
 | intra-layer | `ux.librarycomponent.plane-layout-control`                           | `composes`   | inbound   |
 | intra-layer | `ux.librarycomponent.predicate-label-control`                        | `composes`   | inbound   |
@@ -3081,6 +3088,34 @@ Page title block: `&lt;h1&gt;` title with optional eyebrow row, identifier chip,
 | inter-layer | `motivation.principle.two-surface-shell-and-canvas`  | `satisfies`  | outbound  |
 | intra-layer | `ux.librarycomponent.chip`                           | `composes`   | outbound  |
 | intra-layer | `ux.uxlibrary.heimdall-ui`                           | `aggregates` | inbound   |
+
+### PaneRail {#panerail}
+
+**ID**: `ux.librarycomponent.pane-rail`
+
+**Type**: `librarycomponent`
+
+A folded pane shown as a 40px vertical rail: an expand button (aria-expanded false, aria-keyshortcuts when a key is given), a map of the pane's items as toned marks at 0..1 positions (buttons with accessible names, one tab stop with arrow-key roving), an amber notch at the selection's position, an optional position label, the pane's name written up the rail and its key hint. Clicking the button or the rail's empty area calls onExpand; a mark calls onMarkClick, and hover/focus call onMarkHover/onMarkLeave with the mark's anchor element so the app can show its own hover card. Holds no folding state: the app decides when to show it.
+
+#### Attributes
+
+| Name     | Value           |
+| -------- | --------------- |
+| category | heimdall-layout |
+| label    | PaneRail        |
+| type     | layout          |
+
+#### Relationships
+
+| Type        | Related Element                                                       | Predicate    | Direction |
+| ----------- | --------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `testing.testcoveragetarget.pane-rail`                                | `covers`     | inbound   |
+| inter-layer | `testing.testcoveragetarget.pane-rail-marks`                          | `covers`     | inbound   |
+| inter-layer | `motivation.principle.ide-density-and-terse-voice`                    | `satisfies`  | outbound  |
+| inter-layer | `motivation.principle.two-surface-shell-and-canvas`                   | `satisfies`  | outbound  |
+| inter-layer | `motivation.requirement.every-public-export-is-documented-for-agents` | `satisfies`  | outbound  |
+| intra-layer | `ux.librarycomponent.icon`                                            | `composes`   | outbound  |
+| intra-layer | `ux.uxlibrary.heimdall-ui`                                            | `aggregates` | inbound   |
 
 ### Panel {#panel}
 
@@ -4507,6 +4542,7 @@ The @tinkermonkey/heimdall-ui package: the full public component inventory expor
 | intra-layer | `ux.librarycomponent.number-input`              | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.ordered-list`              | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.page-header`               | `aggregates` | outbound  |
+| intra-layer | `ux.librarycomponent.pane-rail`                 | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.panel`                     | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.pipeline-card`             | `aggregates` | outbound  |
 | intra-layer | `ux.librarycomponent.plane-layout-control`      | `aggregates` | outbound  |
@@ -4552,4 +4588,4 @@ The @tinkermonkey/heimdall-ui package: the full public component inventory expor
 
 ---
 
-Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0
+Generated: 2026-11-25T10:08:47.649Z | Model Version: 0.1.0

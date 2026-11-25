@@ -5,10 +5,7 @@ ux.librarycomponent.graph-canvas-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphCanvas (UX)
-  description: "Interactive graph canvas: pan/zoom viewport with history,
-    selectable, hoverable and draggable nodes and edges, jointly placed edge
-    labels, tooltips and popovers, toolbar, and progressive-disclosure collapse
-    controls, over nine layouts."
+  description: "Interactive graph canvas: pan/zoom viewport with history, selectable, hoverable and draggable nodes and edges, jointly placed edge labels, tooltips and popovers, toolbar, and progressive-disclosure collapse controls, over nine layouts."
   attributes:
     type: display
   source_reference:
@@ -27,9 +24,7 @@ ux.librarycomponent.graph-node-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphNode (UX)
-  description: "Default node visual: label, kind badge, domain-color swatch,
-    selection ring, and (when hierarchical) a collapse/expand chevron with
-    hidden-descendant-count badge."
+  description: "Default node visual: label, kind badge, domain-color swatch, selection ring, and (when hierarchical) a collapse/expand chevron with hidden-descendant-count badge."
   attributes:
     type: display
   source_reference:
@@ -48,8 +43,7 @@ ux.librarycomponent.graph-toolbar-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphToolbar (UX)
-  description: "Floating control cluster: zoom in/out/fit, pan-lock toggle,
-    fullscreen toggle, and (galaxy layout only) live-simulation toggle."
+  description: "Floating control cluster: zoom in/out/fit, pan-lock toggle, fullscreen toggle, and (galaxy layout only) live-simulation toggle."
   attributes:
     type: navigation
   source_reference:
@@ -68,9 +62,7 @@ ux.librarycomponent.graph-collapse-control-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphCollapseControl (UX)
-  description: Small floating button anchored to a node's right edge for toggling
-    structural collapse/expand, with a hidden-descendant-count badge when
-    collapsed.
+  description: Small floating button anchored to a node's right edge for toggling structural collapse/expand, with a hidden-descendant-count badge when collapsed.
   attributes:
     type: feedback
   source_reference:
@@ -89,8 +81,7 @@ ux.librarycomponent.icon:
   type: librarycomponent
   layer_id: ux
   name: Icon
-  description: Renders a named outline icon from the Heimdall icon set. Use it for
-    every icon; never paste raw SVG.
+  description: Renders a named outline icon from the Heimdall icon set. Use it for every icon; never paste raw SVG.
   attributes:
     type: display
     category: heimdall-primitives
@@ -111,8 +102,7 @@ ux.librarycomponent.avatar:
   type: librarycomponent
   layer_id: ux
   name: Avatar
-  description: "People identifier: renders a photo, or initials on a deterministic
-    gradient, with an optional presence dot."
+  description: "People identifier: renders a photo, or initials on a deterministic gradient, with an optional presence dot."
   attributes:
     type: display
     category: heimdall-primitives
@@ -154,8 +144,7 @@ ux.librarycomponent.chip:
   type: librarycomponent
   layer_id: ux
   name: Chip
-  description: Inline tag for statuses, identifiers, versions, environments and
-    inferred values.
+  description: Inline tag for statuses, identifiers, versions, environments and inferred values.
   attributes:
     type: display
     category: heimdall-primitives
@@ -281,9 +270,7 @@ ux.librarycomponent.select:
   type: librarycomponent
   layer_id: ux
   name: Select
-  description: Custom dropdown (not a native `<select>`) with single and
-    multi-select modes, compound item children, icons, descriptions, separators
-    and section titles.
+  description: Custom dropdown (not a native `<select>`) with single and multi-select modes, compound item children, icons, descriptions, separators and section titles.
   attributes:
     type: input
     category: heimdall-inputs
@@ -304,8 +291,7 @@ ux.librarycomponent.tri-state:
   type: librarycomponent
   layer_id: ux
   name: TriState
-  description: "Checkbox with three visual states: unchecked, indeterminate (dash)
-    and checked. Used for select-all rows."
+  description: "Checkbox with three visual states: unchecked, indeterminate (dash) and checked. Used for select-all rows."
   attributes:
     type: input
     category: heimdall-inputs
@@ -326,8 +312,7 @@ ux.librarycomponent.field:
   type: librarycomponent
   layer_id: ux
   name: Field
-  description: Layout wrapper that adds a label, required marker, inline hint and
-    error message around any input.
+  description: Layout wrapper that adds a label, required marker, inline hint and error message around any input.
   attributes:
     type: form
     category: heimdall-inputs
@@ -348,8 +333,7 @@ ux.librarycomponent.stat-tile:
   type: librarycomponent
   layer_id: ux
   name: StatTile
-  description: KPI tile with a colored left bar, optional delta, sparkline, icon
-    and meta line.
+  description: KPI tile with a colored left bar, optional delta, sparkline, icon and meta line.
   attributes:
     type: display
     category: heimdall-data-display
@@ -412,8 +396,7 @@ ux.librarycomponent.segmented-control:
   type: librarycomponent
   layer_id: ux
   name: SegmentedControl
-  description: Radio group rendered as a connected row of segments, for mutually
-    exclusive view or filter selection.
+  description: Radio group rendered as a connected row of segments, for mutually exclusive view or filter selection.
   attributes:
     type: input
     category: heimdall-primitives
@@ -434,8 +417,7 @@ ux.librarycomponent.table:
   type: librarycomponent
   layer_id: ux
   name: Table
-  description: Generic data table with sortable headers, checkbox selection,
-    clickable rows and custom cell rendering.
+  description: Generic data table with sortable headers, checkbox selection, clickable rows and custom cell rendering.
   attributes:
     type: table
     category: heimdall-data-display
@@ -456,9 +438,7 @@ ux.librarycomponent.nav-item:
   type: librarycomponent
   layer_id: ux
   name: NavItem
-  description: Single shell-surface navigation button (or link, with `href`) with
-    optional icon, count, and active marker; use it to build a custom nav column
-    when `Sidebar` does not fit.
+  description: Single shell-surface navigation button (or link, with `href`) with optional icon, count, and active marker; use it to build a custom nav column when `Sidebar` does not fit.
   attributes:
     type: navigation
     category: heimdall-navigation
@@ -479,9 +459,7 @@ ux.librarycomponent.sidebar:
   type: librarycomponent
   layer_id: ux
   name: Sidebar
-  description: Left navigation column with titled sections, expandable parent
-    items, a 256px/64px collapse toggle, an optional `AppTitle` header, and a
-    footer slot.
+  description: Left navigation column with titled sections, expandable parent items, a 256px/64px collapse toggle, an optional `AppTitle` header, and a footer slot.
   attributes:
     type: navigation
     category: heimdall-navigation
@@ -502,8 +480,7 @@ ux.librarycomponent.topbar:
   type: librarycomponent
   layer_id: ux
   name: Topbar
-  description: 48px bar above the canvas with breadcrumbs, a leading slot, an
-    optional search box with a shortcut hint, and a right-side actions slot.
+  description: 48px bar above the canvas with breadcrumbs, a leading slot, an optional search box with a shortcut hint, and a right-side actions slot.
   attributes:
     type: navigation
     category: heimdall-navigation
@@ -524,8 +501,7 @@ ux.librarycomponent.tab-bar:
   type: librarycomponent
   layer_id: ux
   name: TabBar
-  description: Canvas-surface horizontal tab strip with an amber underline on the
-    active tab, optional count chips, and roving-focus keyboard navigation.
+  description: Canvas-surface horizontal tab strip with an amber underline on the active tab, optional count chips, and roving-focus keyboard navigation.
   attributes:
     type: navigation
     category: heimdall-navigation
@@ -546,8 +522,7 @@ ux.librarycomponent.app-title:
   type: librarycomponent
   layer_id: ux
   name: AppTitle
-  description: Brand row with the amber mark, application name, optional version
-    tag, and an optional trailing action; sits at the top of the sidebar column.
+  description: Brand row with the amber mark, application name, optional version tag, and an optional trailing action; sits at the top of the sidebar column.
   attributes:
     type: display
     category: heimdall-shell
@@ -568,8 +543,7 @@ ux.librarycomponent.titlebar:
   type: librarycomponent
   layer_id: ux
   name: Titlebar
-  description: 48px full-width chrome bar with left, center, and right slots,
-    rendered above the sidebar and content.
+  description: 48px full-width chrome bar with left, center, and right slots, rendered above the sidebar and content.
   attributes:
     type: layout
     category: heimdall-shell
@@ -590,8 +564,7 @@ ux.librarycomponent.statusbar:
   type: librarycomponent
   layer_id: ux
   name: Statusbar
-  description: 27px bottom bar with left, center, and right slots; each slot takes
-    React nodes or a typed `StatusbarItem[]` of pulses, icons, and dividers.
+  description: 27px bottom bar with left, center, and right slots; each slot takes React nodes or a typed `StatusbarItem[]` of pulses, icons, and dividers.
   attributes:
     type: layout
     category: heimdall-shell
@@ -612,10 +585,7 @@ ux.librarycomponent.shell-layout:
   type: librarycomponent
   layer_id: ux
   name: ShellLayout
-  description: "Full-viewport IDE chrome: optional Titlebar on top, Sidebar (with
-    AppTitle) on the left, Topbar above a scrolling canvas `<main>`, optional
-    Statusbar at the bottom, and a drawer-based sidebar below a mobile
-    breakpoint."
+  description: "Full-viewport IDE chrome: optional Titlebar on top, Sidebar (with AppTitle) on the left, Topbar above a scrolling canvas `<main>`, optional Statusbar at the bottom, and a drawer-based sidebar below a mobile breakpoint."
   attributes:
     type: layout
     category: heimdall-shell
@@ -678,8 +648,7 @@ ux.librarycomponent.workspace-switcher-dialog:
   type: librarycomponent
   layer_id: ux
   name: WorkspaceSwitcherDialog
-  description: "Modal for switching workspaces: optional action tiles plus a
-    recent-workspace list."
+  description: "Modal for switching workspaces: optional action tiles plus a recent-workspace list."
   attributes:
     type: layout
     category: heimdall-overlays
@@ -700,8 +669,7 @@ ux.librarycomponent.filter-dropdown:
   type: librarycomponent
   layer_id: ux
   name: FilterDropdown
-  description: "Compound dropdown for filter bars: a trigger with an eyebrow label
-    and summary, and a panel of checkbox (multi) or radio (single) options."
+  description: "Compound dropdown for filter bars: a trigger with an eyebrow label and summary, and a panel of checkbox (multi) or radio (single) options."
   attributes:
     type: input
     category: heimdall-inputs
@@ -722,8 +690,7 @@ ux.librarycomponent.toast:
   type: librarycomponent
   layer_id: ux
   name: Toast
-  description: Single dismissible notification with optional auto-dismiss. Does
-    not position itself.
+  description: Single dismissible notification with optional auto-dismiss. Does not position itself.
   attributes:
     type: feedback
     category: heimdall-overlays
@@ -765,8 +732,7 @@ ux.librarycomponent.popover:
   type: librarycomponent
   layer_id: ux
   name: Popover
-  description: "Click-to-open non-modal panel anchored to a trigger. Compound
-    component: `Popover` + `Popover.Trigger` + `Popover.Panel`."
+  description: "Click-to-open non-modal panel anchored to a trigger. Compound component: `Popover` + `Popover.Trigger` + `Popover.Panel`."
   attributes:
     type: layout
     category: heimdall-overlays
@@ -808,8 +774,7 @@ ux.librarycomponent.panel:
   type: librarycomponent
   layer_id: ux
   name: Panel
-  description: Bordered content card with optional header (title, subtitle,
-    trailing action) and footer.
+  description: Bordered content card with optional header (title, subtitle, trailing action) and footer.
   attributes:
     type: layout
     category: heimdall-layout
@@ -830,8 +795,7 @@ ux.librarycomponent.drawer:
   type: librarycomponent
   layer_id: ux
   name: Drawer
-  description: Modal slide-in side panel with backdrop, optional title, and
-    configurable edge and width.
+  description: Modal slide-in side panel with backdrop, optional title, and configurable edge and width.
   attributes:
     type: layout
     category: heimdall-overlays
@@ -852,8 +816,7 @@ ux.librarycomponent.split-pane:
   type: librarycomponent
   layer_id: ux
   name: SplitPane
-  description: Resizable two-pane split with a draggable, keyboard-focusable
-    divider. Controlled or uncontrolled.
+  description: Resizable two-pane split with a draggable, keyboard-focusable divider. Controlled or uncontrolled.
   attributes:
     type: layout
     category: heimdall-layout
@@ -874,8 +837,7 @@ ux.librarycomponent.inspector-panel:
   type: librarycomponent
   layer_id: ux
   name: InspectorPanel
-  description: "Full-height details panel for one entity: eyebrow, title, id,
-    version pill, header actions, and a scrolling body of sections."
+  description: "Full-height details panel for one entity: eyebrow, title, id, version pill, header actions, and a scrolling body of sections."
   attributes:
     type: display
     category: heimdall-data-display
@@ -896,8 +858,7 @@ ux.librarycomponent.kvgrid:
   type: librarycomponent
   layer_id: ux
   name: KVGrid
-  description: Two-column key/value list for entity metadata, rendered as
-    `<dl>`/`<dt>`/`<dd>`.
+  description: Two-column key/value list for entity metadata, rendered as `<dl>`/`<dt>`/`<dd>`.
   attributes:
     type: display
     category: heimdall-data-display
@@ -918,8 +879,7 @@ ux.librarycomponent.chart-wrapper:
   type: librarycomponent
   layer_id: ux
   name: ChartWrapper
-  description: Accessible `<svg>` container (`role="img"` plus `aria-label`) for
-    hand-drawn custom charts.
+  description: Accessible `<svg>` container (`role="img"` plus `aria-label`) for hand-drawn custom charts.
   attributes:
     type: chart
     category: heimdall-charts
@@ -940,8 +900,7 @@ ux.librarycomponent.sparkline:
   type: librarycomponent
   layer_id: ux
   name: Sparkline
-  description: Shape-only trend line (88 × 28 by default) for tiles, table cells
-    and cards. No axes, labels or tooltip.
+  description: Shape-only trend line (88 × 28 by default) for tiles, table cells and cards. No axes, labels or tooltip.
   attributes:
     type: chart
     category: heimdall-charts
@@ -962,8 +921,7 @@ ux.librarycomponent.line-chart:
   type: librarycomponent
   layer_id: ux
   name: LineChart
-  description: Multi-series line chart with optional area fill, axes, grid,
-    threshold line, event markers and hover tooltip.
+  description: Multi-series line chart with optional area fill, axes, grid, threshold line, event markers and hover tooltip.
   attributes:
     type: chart
     category: heimdall-charts
@@ -984,9 +942,7 @@ ux.librarycomponent.bar-chart:
   type: librarycomponent
   layer_id: ux
   name: BarChart
-  description: Grouped multi-series vertical bar chart with built-in axes and an
-    optional legend. Older API; for a single series prefer `BarV`, for
-    composition `StackedBar`.
+  description: Grouped multi-series vertical bar chart with built-in axes and an optional legend. Older API; for a single series prefer `BarV`, for composition `StackedBar`.
   attributes:
     type: chart
     category: heimdall-charts
@@ -1028,9 +984,7 @@ ux.librarycomponent.bar-h:
   type: librarycomponent
   layer_id: ux
   name: BarH
-  description: "Horizontal bar chart for ranked categories: a label column, an
-    inset track and a filled bar per item, with an optional value at the bar's
-    end."
+  description: "Horizontal bar chart for ranked categories: a label column, an inset track and a filled bar per item, with an optional value at the bar's end."
   attributes:
     type: chart
     category: heimdall-charts
@@ -1051,8 +1005,7 @@ ux.librarycomponent.stacked-bar:
   type: librarycomponent
   layer_id: ux
   name: StackedBar
-  description: Vertical stacked bars, one stack per category, with optional 100%
-    normalized mode and per-stack labels.
+  description: Vertical stacked bars, one stack per category, with optional 100% normalized mode and per-stack labels.
   attributes:
     type: chart
     category: heimdall-charts
@@ -1073,8 +1026,7 @@ ux.librarycomponent.donut:
   type: librarycomponent
   layer_id: ux
   name: Donut
-  description: Ring chart for composition, with optional center value and eyebrow
-    label. No legend.
+  description: Ring chart for composition, with optional center value and eyebrow label. No legend.
   attributes:
     type: chart
     category: heimdall-charts
@@ -1095,8 +1047,7 @@ ux.librarycomponent.heatmap:
   type: librarycomponent
   layer_id: ux
   name: Heatmap
-  description: 2-D density grid on a single-hue alpha scale, for hour-by-day
-    activity or host-by-metric matrices.
+  description: 2-D density grid on a single-hue alpha scale, for hour-by-day activity or host-by-metric matrices.
   attributes:
     type: chart
     category: heimdall-charts
@@ -1117,8 +1068,7 @@ ux.librarycomponent.status-timeline:
   type: librarycomponent
   layer_id: ux
   name: StatusTimeline
-  description: "Gantt-style status history: one horizontal track per service,
-    colored segments across a time window, optional amber event marker."
+  description: "Gantt-style status history: one horizontal track per service, colored segments across a time window, optional amber event marker."
   attributes:
     type: chart
     category: heimdall-charts
@@ -1139,8 +1089,7 @@ ux.librarycomponent.progress-bar:
   type: librarycomponent
   layer_id: ux
   name: ProgressBar
-  description: Thin horizontal fill bar for progress, quota or utilization, with
-    `role="progressbar"`.
+  description: Thin horizontal fill bar for progress, quota or utilization, with `role="progressbar"`.
   attributes:
     type: chart
     category: heimdall-charts
@@ -1161,8 +1110,7 @@ ux.librarycomponent.metric-row:
   type: librarycomponent
   layer_id: ux
   name: MetricRow
-  description: One dashboard row combining a label, a progress bar, a 60 × 18
-    sparkline and a value with unit.
+  description: One dashboard row combining a label, a progress bar, a 60 × 18 sparkline and a value with unit.
   attributes:
     type: chart
     category: heimdall-charts
@@ -1183,8 +1131,7 @@ ux.librarycomponent.page-header:
   type: librarycomponent
   layer_id: ux
   name: PageHeader
-  description: "Page title block: `<h1>` title with optional eyebrow row,
-    identifier chip, subtitle, and right-aligned action slot."
+  description: "Page title block: `<h1>` title with optional eyebrow row, identifier chip, subtitle, and right-aligned action slot."
   attributes:
     type: layout
     category: heimdall-page-patterns
@@ -1205,8 +1152,7 @@ ux.librarycomponent.filter-bar:
   type: librarycomponent
   layer_id: ux
   name: FilterBar
-  description: Search input with optional inline controls, a "Showing X of Y"
-    caption, and a row of removable filter chips.
+  description: Search input with optional inline controls, a "Showing X of Y" caption, and a row of removable filter chips.
   attributes:
     type: input
     category: heimdall-page-patterns
@@ -1227,8 +1173,7 @@ ux.librarycomponent.activity-timeline:
   type: librarycomponent
   layer_id: ux
   name: ActivityTimeline
-  description: Vertical feed of timestamped events with type-colored dots,
-    optional kind tags, meta lines, and clickable rows.
+  description: Vertical feed of timestamped events with type-colored dots, optional kind tags, meta lines, and clickable rows.
   attributes:
     type: display
     category: heimdall-page-patterns
@@ -1249,9 +1194,7 @@ ux.librarycomponent.version-timeline:
   type: librarycomponent
   layer_id: ux
   name: VersionTimeline
-  description: "Vertical, selectable version history: amber version pill, optional
-    headline, diff stats or a state transition, and a relative timestamp per
-    entry, with a filled dot and `head` chip on the current version."
+  description: "Vertical, selectable version history: amber version pill, optional headline, diff stats or a state transition, and a relative timestamp per entry, with a filled dot and `head` chip on the current version."
   attributes:
     type: display
     category: heimdall-observability
@@ -1272,9 +1215,7 @@ ux.librarycomponent.hash-set-diff:
   type: librarycomponent
   layer_id: ux
   name: HashSetDiff
-  description: Three-column set diff (Added / Removed / Kept, with counts) for
-    comparing two versions of a set of identifiers. Standalone version of
-    `DiffViewer.HashSet` without the label pill.
+  description: Three-column set diff (Added / Removed / Kept, with counts) for comparing two versions of a set of identifiers. Standalone version of `DiffViewer.HashSet` without the label pill.
   attributes:
     type: display
     category: heimdall-observability
@@ -1295,10 +1236,7 @@ ux.librarycomponent.side-by-side-diff:
   type: librarycomponent
   layer_id: ux
   name: SideBySideDiff
-  description: Virtualized line diff with +/− gutter markers, tinted added and
-    removed rows, and full-width hunk headers. Lines render in one column in the
-    order given (a unified diff), under a fixed "Version 2 (Added)" / "Version 1
-    (Removed)" header.
+  description: Virtualized line diff with +/− gutter markers, tinted added and removed rows, and full-width hunk headers. Lines render in one column in the order given (a unified diff), under a fixed "Version 2 (Added)" / "Version 1 (Removed)" header.
   attributes:
     type: display
     category: heimdall-observability
@@ -1319,9 +1257,7 @@ ux.librarycomponent.diff-viewer:
   type: librarycomponent
   layer_id: ux
   name: DiffViewer
-  description: Tabbed diff panel that switches between a set diff
-    (`DiffViewer.HashSet`, added / removed / kept items) and a line diff
-    (`DiffViewer.SideBySide`).
+  description: Tabbed diff panel that switches between a set diff (`DiffViewer.HashSet`, added / removed / kept items) and a line diff (`DiffViewer.SideBySide`).
   attributes:
     type: display
     category: heimdall-observability
@@ -1342,8 +1278,7 @@ ux.librarycomponent.alert-strip:
   type: librarycomponent
   layer_id: ux
   name: AlertStrip
-  description: Stacked list of compact severity alerts, each with a colored dot,
-    message, and optional dismiss button.
+  description: Stacked list of compact severity alerts, each with a colored dot, message, and optional dismiss button.
   attributes:
     type: feedback
     category: heimdall-page-patterns
@@ -1364,8 +1299,7 @@ ux.librarycomponent.quick-access-grid:
   type: librarycomponent
   layer_id: ux
   name: QuickAccessGrid
-  description: Grid of `QuickAccessTile` buttons (or links, with `href`) driven by
-    a data array, for landing-page shortcuts.
+  description: Grid of `QuickAccessTile` buttons (or links, with `href`) driven by a data array, for landing-page shortcuts.
   attributes:
     type: display
     category: heimdall-page-patterns
@@ -1386,8 +1320,7 @@ ux.librarycomponent.quick-access-tile:
   type: librarycomponent
   layer_id: ux
   name: QuickAccessTile
-  description: Single shortcut button (or link, with `href`) with an icon tile,
-    title, optional description, and trailing chevron.
+  description: Single shortcut button (or link, with `href`) with an icon tile, title, optional description, and trailing chevron.
   attributes:
     type: display
     category: heimdall-page-patterns
@@ -1408,8 +1341,7 @@ ux.librarycomponent.config-tile:
   type: librarycomponent
   layer_id: ux
   name: ConfigTile
-  description: Settings-page tile button with a 24px icon, title, description, a
-    key/value summary grid, and trailing chevron.
+  description: Settings-page tile button with a 24px icon, title, description, a key/value summary grid, and trailing chevron.
   attributes:
     type: display
     category: heimdall-page-patterns
@@ -1430,8 +1362,7 @@ ux.librarycomponent.chat-message:
   type: librarycomponent
   layer_id: ux
   name: ChatMessage
-  description: A single chat turn (user or bot) with an optional inline tool call
-    and reasoning block.
+  description: A single chat turn (user or bot) with an optional inline tool call and reasoning block.
   attributes:
     type: display
     category: heimdall-chat
@@ -1452,8 +1383,7 @@ ux.librarycomponent.tool-block:
   type: librarycomponent
   layer_id: ux
   name: ToolBlock
-  description: Collapsible block showing a tool call name, execution status, and
-    optional key/value output rows.
+  description: Collapsible block showing a tool call name, execution status, and optional key/value output rows.
   attributes:
     type: display
     category: heimdall-chat
@@ -1495,8 +1425,7 @@ ux.librarycomponent.chat-divider:
   type: librarycomponent
   layer_id: ux
   name: ChatDivider
-  description: Horizontal rule with a centered label for separating conversation
-    sections (dates, sessions).
+  description: Horizontal rule with a centered label for separating conversation sections (dates, sessions).
   attributes:
     type: display
     category: heimdall-chat
@@ -1538,8 +1467,7 @@ ux.librarycomponent.chat-composer:
   type: librarycomponent
   layer_id: ux
   name: ChatComposer
-  description: Controlled message input with context chips, attachment chips, a
-    file picker and a send button.
+  description: Controlled message input with context chips, attachment chips, a file picker and a send button.
   attributes:
     type: input
     category: heimdall-chat
@@ -1560,8 +1488,7 @@ ux.librarycomponent.chat-container:
   type: librarycomponent
   layer_id: ux
   name: ChatContainer
-  description: Chat panel composing optional bot tabs, a scrolling message thread
-    and a composer slot.
+  description: Chat panel composing optional bot tabs, a scrolling message thread and a composer slot.
   attributes:
     type: layout
     category: heimdall-chat
@@ -1582,8 +1509,7 @@ ux.librarycomponent.chat-markdown-content:
   type: librarycomponent
   layer_id: ux
   name: ChatMarkdownContent
-  description: Renders a markdown string (GitHub-flavored) with Heimdall chat
-    typography; the standard renderer for model output in a message body.
+  description: Renders a markdown string (GitHub-flavored) with Heimdall chat typography; the standard renderer for model output in a message body.
   attributes:
     type: display
     category: heimdall-chat
@@ -1604,8 +1530,7 @@ ux.librarycomponent.entity-picker:
   type: librarycomponent
   layer_id: ux
   name: EntityPicker
-  description: Search-as-you-type combobox that lists entity results with optional
-    domain chips. The parent owns the query and does the filtering.
+  description: Search-as-you-type combobox that lists entity results with optional domain chips. The parent owns the query and does the filtering.
   attributes:
     type: input
     category: heimdall-inputs
@@ -1626,8 +1551,7 @@ ux.librarycomponent.key-value-editor:
   type: librarycomponent
   layer_id: ux
   name: KeyValueEditor
-  description: Editable table of key/value rows with an optional datatype column
-    and add/remove controls.
+  description: Editable table of key/value rows with an optional datatype column and add/remove controls.
   attributes:
     type: form
     category: heimdall-inputs
@@ -1648,8 +1572,7 @@ ux.librarycomponent.ordered-list:
   type: librarycomponent
   layer_id: ux
   name: OrderedList
-  description: Ranked list with move-up / move-down buttons and an optional star
-    marker on a primary item.
+  description: Ranked list with move-up / move-down buttons and an optional star marker on a primary item.
   attributes:
     type: form
     category: heimdall-inputs
@@ -1670,8 +1593,7 @@ ux.librarycomponent.relationship-builder:
   type: librarycomponent
   layer_id: ux
   name: RelationshipBuilder
-  description: Three-column form (Source / Predicate / Target) composing two
-    `EntityPicker`s and a `Select` into one relationship value.
+  description: Three-column form (Source / Predicate / Target) composing two `EntityPicker`s and a `Select` into one relationship value.
   attributes:
     type: form
     category: heimdall-inputs
@@ -1692,8 +1614,7 @@ ux.librarycomponent.row-menu:
   type: librarycomponent
   layer_id: ux
   name: RowMenu
-  description: Kebab trigger that opens a dropdown of row actions, with
-    separators, danger and disabled items, and full keyboard navigation.
+  description: Kebab trigger that opens a dropdown of row actions, with separators, danger and disabled items, and full keyboard navigation.
   attributes:
     type: navigation
     category: heimdall-page-patterns
@@ -1714,8 +1635,7 @@ ux.librarycomponent.pipeline-card:
   type: librarycomponent
   layer_id: ux
   name: PipelineCard
-  description: "Pipeline status card: name, id, status/target/tag chips, run
-    controls, a stage flow strip, and a recent-stats footer."
+  description: "Pipeline status card: name, id, status/target/tag chips, run controls, a stage flow strip, and a recent-stats footer."
   attributes:
     type: display
     category: heimdall-page-patterns
@@ -1736,8 +1656,7 @@ ux.librarycomponent.form-callout:
   type: librarycomponent
   layer_id: ux
   name: FormCallout
-  description: Inline info, warning, or error block inside forms, with
-    backtick-delimited code rendered as `<code>`.
+  description: Inline info, warning, or error block inside forms, with backtick-delimited code rendered as `<code>`.
   attributes:
     type: feedback
     category: heimdall-page-patterns
@@ -1758,9 +1677,7 @@ ux.librarycomponent.adjacency-matrix:
   type: librarycomponent
   layer_id: ux
   name: AdjacencyMatrix
-  description: A directed block adjacency matrix of a layered graph. There is one
-    row and one column per node, grouped by layer, and one cell per link (row =
-    source, column = target).
+  description: A directed block adjacency matrix of a layered graph. There is one row and one column per node, grouped by layer, and one cell per link (row = source, column = target).
   attributes:
     type: display
     category: heimdall-graph
@@ -1781,9 +1698,7 @@ ux.librarycomponent.hive-plot:
   type: librarycomponent
   layer_id: ux
   name: HivePlot
-  description: "A hive plot of a layered graph: one radial axis per layer at
-    evenly divided angles, nodes placed outward along their axis by rank (degree
-    by default, busiest farthest out), and links drawn as curves between axes."
+  description: "A hive plot of a layered graph: one radial axis per layer at evenly divided angles, nodes placed outward along their axis by rank (degree by default, busiest farthest out), and links drawn as curves between axes."
   attributes:
     type: display
     category: heimdall-graph
@@ -1804,10 +1719,7 @@ ux.librarycomponent.layer-stack:
   type: librarycomponent
   layer_id: ux
   name: LayerStack
-  description: "The layered graph as a 3D stack: one translucent plane per layer
-    (with a grid and a clickable title showing node and link counts), nodes as
-    layer-coloured discs sized by degree, intra-layer links on their plane and
-    cross-layer links between planes."
+  description: "The layered graph as a 3D stack: one translucent plane per layer (with a grid and a clickable title showing node and link counts), nodes as layer-coloured discs sized by degree, intra-layer links on their plane and cross-layer links between planes."
   attributes:
     type: display
     category: heimdall-graph
@@ -1828,9 +1740,7 @@ ux.librarycomponent.follow-control:
   type: librarycomponent
   layer_id: ux
   name: FollowControl
-  description: "Segmented control for how far the selection's reach follows
-    cross-layer links: Direct / +1 layer / +2 layers. Writes `follow` on the
-    shared `useLayeredGraph` state."
+  description: "Segmented control for how far the selection's reach follows cross-layer links: Direct / +1 layer / +2 layers. Writes `follow` on the shared `useLayeredGraph` state."
   attributes:
     type: input
     category: heimdall-graph
@@ -1851,8 +1761,7 @@ ux.librarycomponent.predicate-label-control:
   type: librarycomponent
   layer_id: ux
   name: PredicateLabelControl
-  description: "Segmented control for which links show predicate labels: Off /
-    Highlighted (reached links and the active layer pair) / All."
+  description: "Segmented control for which links show predicate labels: Off / Highlighted (reached links and the active layer pair) / All."
   attributes:
     type: input
     category: heimdall-graph
@@ -1873,9 +1782,7 @@ ux.librarycomponent.plane-layout-control:
   type: librarycomponent
   layer_id: ux
   name: PlaneLayoutControl
-  description: Segmented control for Independent (each layer laid out on its own)
-    or Coupled (cross-layer neighbours aligned). Writes `planeLayout`; views
-    that position nodes per layer read it.
+  description: Segmented control for Independent (each layer laid out on its own) or Coupled (cross-layer neighbours aligned). Writes `planeLayout`; views that position nodes per layer read it.
   attributes:
     type: input
     category: heimdall-graph
@@ -1896,9 +1803,7 @@ ux.librarycomponent.link-category-filter:
   type: librarycomponent
   layer_id: ux
   name: LinkCategoryFilter
-  description: "The link bar: one toggle button per link category, each with its
-    dash sample (from `linkCategoryStyle`) and link count, then optional
-    intra-layer and node-label toggles."
+  description: "The link bar: one toggle button per link category, each with its dash sample (from `linkCategoryStyle`) and link count, then optional intra-layer and node-label toggles."
   attributes:
     type: input
     category: heimdall-graph
@@ -1919,9 +1824,7 @@ ux.librarycomponent.layer-list:
   type: librarycomponent
   layer_id: ux
   name: LayerList
-  description: "One row per layer: colour swatch, name, and `nodes · links within`
-    counts. The row is a button that focuses the layer (again to clear); the eye
-    button hides or shows it."
+  description: "One row per layer: colour swatch, name, and `nodes · links within` counts. The row is a button that focuses the layer (again to clear); the eye button hides or shows it."
   attributes:
     type: navigation
     category: heimdall-graph
@@ -1942,9 +1845,7 @@ ux.librarycomponent.layer-pair-list:
   type: librarycomponent
   layer_id: ux
   name: LayerPairList
-  description: "One row per layer pair with cross-layer links: both swatches, the
-    names and the link count. A row toggles layer-pair focus (only that pair's
-    cross-layer links show) and by default clears the selection."
+  description: "One row per layer pair with cross-layer links: both swatches, the names and the link count. A row toggles layer-pair focus (only that pair's cross-layer links show) and by default clears the selection."
   attributes:
     type: navigation
     category: heimdall-graph
@@ -1965,8 +1866,7 @@ ux.librarycomponent.bridge-node-list:
   type: librarycomponent
   layer_id: ux
   name: BridgeNodeList
-  description: The nodes with the most cross-layer links (ties by total degree),
-    skipping hidden layers. A row selects the node.
+  description: The nodes with the most cross-layer links (ties by total degree), skipping hidden layers. A row selects the node.
   attributes:
     type: navigation
     category: heimdall-graph
@@ -1987,11 +1887,7 @@ ux.librarycomponent.reach-inspector:
   type: librarycomponent
   layer_id: ux
   name: ReachInspector
-  description: "Inspector for the layered views' selection: the selected node's
-    direct links split into cross-layer and intra-layer rows (direction,
-    predicate, layer) and the nodes its reach followed, with hop and the node
-    and predicate each came through; reads the enclosing LayeredGraphContext or
-    a graph prop."
+  description: "Inspector for the layered views' selection: the selected node's direct links split into cross-layer and intra-layer rows (direction, predicate, layer) and the nodes its reach followed, with hop and the node and predicate each came through; reads the enclosing LayeredGraphContext or a graph prop."
   attributes:
     type: display
     category: heimdall-graph
@@ -2012,8 +1908,7 @@ ux.librarycomponent.layered-graph-explorer:
   type: librarycomponent
   layer_id: ux
   name: LayeredGraphExplorer
-  description: "The ready-made layered graph explorer: every layered view and its
-    chrome in one component."
+  description: "The ready-made layered graph explorer: every layered view and its chrome in one component."
   attributes:
     type: display
     category: heimdall-graph
@@ -2034,9 +1929,7 @@ ux.librarycomponent.view-switcher:
   type: librarycomponent
   layer_id: ux
   name: ViewSwitcher
-  description: Segmented control for the explorer's view (3D stack, Lanes, Matrix,
-    Hive). Use it to build your own explorer layout; `LAYERED_GRAPH_VIEWS` and
-    `LAYERED_GRAPH_VIEW_LABELS` list the views and their default labels.
+  description: Segmented control for the explorer's view (3D stack, Lanes, Matrix, Hive). Use it to build your own explorer layout; `LAYERED_GRAPH_VIEWS` and `LAYERED_GRAPH_VIEW_LABELS` list the views and their default labels.
   attributes:
     type: input
     category: heimdall-graph
@@ -2057,9 +1950,7 @@ ux.librarycomponent.camera-controls:
   type: librarycomponent
   layer_id: ux
   name: CameraControls
-  description: "Camera chrome for `LayerStack`: preset segmented control, zoom in
-    and out, fit and the turntable toggle, driven by a LayerStack ref or
-    controlled props."
+  description: "Camera chrome for `LayerStack`: preset segmented control, zoom in and out, fit and the turntable toggle, driven by a LayerStack ref or controlled props."
   attributes:
     type: input
     category: heimdall-graph
@@ -2080,9 +1971,7 @@ ux.librarycomponent.detail-drawer:
   type: librarycomponent
   layer_id: ux
   name: DetailDrawer
-  description: Non-modal translucent panel that slides over the right edge of its
-    nearest positioned ancestor, opening when `open` is true and collapsing to
-    zero width otherwise.
+  description: Non-modal translucent panel that slides over the right edge of its nearest positioned ancestor, opening when `open` is true and collapsing to zero width otherwise.
   attributes:
     type: layout
     category: heimdall-graph
@@ -2103,9 +1992,7 @@ ux.librarycomponent.topology-node:
   type: librarycomponent
   layer_id: ux
   name: TopologyNode
-  description: Infrastructure/service node card with status dot and metric
-    progress bars. Supports absolute positioning for hand-placed diagrams, and
-    works as `renderNode` content in `GraphCanvas`.
+  description: Infrastructure/service node card with status dot and metric progress bars. Supports absolute positioning for hand-placed diagrams, and works as `renderNode` content in `GraphCanvas`.
   attributes:
     type: display
     category: heimdall-graph
@@ -2126,8 +2013,7 @@ ux.librarycomponent.hierarchy-row:
   type: librarycomponent
   layer_id: ux
   name: HierarchyRow
-  description: A single row in a taxonomy/hierarchy list with depth indentation,
-    connector, domain color swatch, kind badge and right-hand description.
+  description: A single row in a taxonomy/hierarchy list with depth indentation, connector, domain color swatch, kind badge and right-hand description.
   attributes:
     type: display
     category: heimdall-graph
@@ -2169,8 +2055,7 @@ ux.librarycomponent.lineage-rail:
   type: librarycomponent
   layer_id: ux
   name: LineageRail
-  description: Horizontal chain of chips joined by arrows, showing the lineage of
-    a dataset, run, or entity. The first node is styled as the head.
+  description: Horizontal chain of chips joined by arrows, showing the lineage of a dataset, run, or entity. The first node is styled as the head.
   attributes:
     type: display
     category: heimdall-observability
@@ -2191,8 +2076,7 @@ ux.librarycomponent.asset-card:
   type: librarycomponent
   layer_id: ux
   name: AssetCard
-  description: Thumbnail card for a document, image or cover asset, with title,
-    subtitle, meta and an optional corner badge.
+  description: Thumbnail card for a document, image or cover asset, with title, subtitle, meta and an optional corner badge.
   attributes:
     type: display
     category: heimdall-data-display
@@ -2234,9 +2118,7 @@ ux.librarycomponent.calendar:
   type: librarycomponent
   layer_id: ux
   name: Calendar
-  description: Controlled date-based event calendar with month, week, day and
-    agenda views, a header with previous / Today / next buttons, and a view
-    switcher.
+  description: Controlled date-based event calendar with month, week, day and agenda views, a header with previous / Today / next buttons, and a view switcher.
   attributes:
     type: display
     category: heimdall-planning
@@ -2257,8 +2139,7 @@ ux.librarycomponent.kanban-board:
   type: librarycomponent
   layer_id: ux
   name: KanbanBoard
-  description: Column board of cards with pointer drag-and-drop, keyboard moves,
-    per-column counts, WIP-limit warnings and controlled selection.
+  description: Column board of cards with pointer drag-and-drop, keyboard moves, per-column counts, WIP-limit warnings and controlled selection.
   attributes:
     type: display
     category: heimdall-planning
@@ -2279,8 +2160,7 @@ ux.librarycomponent.log-stream:
   type: librarycomponent
   layer_id: ux
   name: LogStream
-  description: Monospace, auto-following log tail with timestamp and level
-    columns, and optional operation / target columns.
+  description: Monospace, auto-following log tail with timestamp and level columns, and optional operation / target columns.
   attributes:
     type: display
     category: heimdall-observability
@@ -2301,8 +2181,7 @@ ux.librarycomponent.map-canvas:
   type: librarycomponent
   layer_id: ux
   name: MapCanvas
-  description: Pan/zoom Web Mercator map that renders pins, a track polyline, or a
-    heatmap, over a grid or optional raster tiles.
+  description: Pan/zoom Web Mercator map that renders pins, a track polyline, or a heatmap, over a grid or optional raster tiles.
   attributes:
     type: display
     category: heimdall-data-display
@@ -2323,8 +2202,7 @@ ux.librarycomponent.mini-calendar:
   type: librarycomponent
   layer_id: ux
   name: MiniCalendar
-  description: Compact single-month date picker for sidebars, with today and
-    selected-day highlighting and dot markers for days that have events.
+  description: Compact single-month date picker for sidebars, with today and selected-day highlighting and dot markers for days that have events.
   attributes:
     type: display
     category: heimdall-planning
@@ -2345,8 +2223,7 @@ ux.librarycomponent.result-card:
   type: librarycomponent
   layer_id: ux
   name: ResultCard
-  description: "Search or retrieval result: source, version, relevance score bar,
-    snippet, provenance and row actions."
+  description: "Search or retrieval result: source, version, relevance score bar, snippet, provenance and row actions."
   attributes:
     type: display
     category: heimdall-data-display
@@ -2367,9 +2244,7 @@ ux.librarycomponent.trace-viewer:
   type: librarycomponent
   layer_id: ux
   name: TraceViewer
-  description: "Distributed-trace waterfall: span tree, service-colored timeline
-    with parent-to-child connectors, summary strip, toolbar, and a fly-out span
-    detail panel."
+  description: "Distributed-trace waterfall: span tree, service-colored timeline with parent-to-child connectors, summary strip, toolbar, and a fly-out span detail panel."
   attributes:
     type: display
     category: heimdall-observability
@@ -2390,9 +2265,7 @@ ux.librarycomponent.layered-graph-context-ux:
   type: librarycomponent
   layer_id: ux
   name: LayeredGraphContext (UX)
-  description: A React context that shares one useLayeredGraph result with every
-    layered view and control below it, so they show the same selection, filters
-    and follow depth.
+  description: A React context that shares one useLayeredGraph result with every layered view and control below it, so they show the same selection, filters and follow depth.
   attributes:
     type: display
   source_reference:
@@ -2411,8 +2284,7 @@ ux.librarycomponent.graph-edge-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphEdge (UX)
-  description: "Standalone edge component for use outside GraphCanvas's own edge
-    renderer: computes its own path and draws it with GraphEdgeShape."
+  description: "Standalone edge component for use outside GraphCanvas's own edge renderer: computes its own path and draws it with GraphEdgeShape."
   attributes:
     type: display
   source_reference:
@@ -2431,9 +2303,7 @@ ux.librarycomponent.graph-edge-shape-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphEdgeShape (UX)
-  description: "Low-level SVG edge drawing: line or curve, arrow markers per
-    variant, hit-target path and a collision-cleared label pill; used by
-    GraphCanvas and GraphEdge, and by custom renderEdge callbacks."
+  description: "Low-level SVG edge drawing: line or curve, arrow markers per variant, hit-target path and a collision-cleared label pill; used by GraphCanvas and GraphEdge, and by custom renderEdge callbacks."
   attributes:
     type: display
   source_reference:
@@ -2452,9 +2322,7 @@ ux.librarycomponent.graph-inspector-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphInspector (UX)
-  description: "Detail panel for a selected node: title, kind and domain badges,
-    description, key-value metadata, and outgoing and incoming relationship
-    links."
+  description: "Detail panel for a selected node: title, kind and domain badges, description, key-value metadata, and outgoing and incoming relationship links."
   attributes:
     type: display
   source_reference:
@@ -2473,8 +2341,7 @@ ux.librarycomponent.graph-edge-inspector-ux:
   type: librarycomponent
   layer_id: ux
   name: GraphEdgeInspector (UX)
-  description: "Detail panel for a selected edge: predicate or title, source and
-    target endpoint buttons, weight and scalar metadata."
+  description: "Detail panel for a selected edge: predicate or title, source and target endpoint buttons, weight and scalar metadata."
   attributes:
     type: display
   source_reference:
@@ -2485,4 +2352,25 @@ ux.librarycomponent.graph-edge-inspector-ux:
   metadata:
     created_at: 2026-11-24T19:01:20.527Z
     updated_at: 2026-11-24T19:01:20.527Z
+    version: 1
+ux.librarycomponent.pane-rail:
+  id: c24aeb60-0dfb-4896-858c-74b8afc887aa
+  path: ux.librarycomponent.pane-rail
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: PaneRail
+  description: "A folded pane shown as a 40px vertical rail: an expand button (aria-expanded false, aria-keyshortcuts when a key is given), a map of the pane's items as toned marks at 0..1 positions (buttons with accessible names, one tab stop with arrow-key roving), an amber notch at the selection's position, an optional position label, the pane's name written up the rail and its key hint. Clicking the button or the rail's empty area calls onExpand; a mark calls onMarkClick, and hover/focus call onMarkHover/onMarkLeave with the mark's anchor element so the app can show its own hover card. Holds no folding state: the app decides when to show it."
+  attributes:
+    type: layout
+    category: heimdall-layout
+    label: PaneRail
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/PaneRail.tsx
+        symbol: PaneRail
+  metadata:
+    created_at: 2026-11-24T13:49:47.537Z
+    updated_at: 2026-11-24T13:49:47.537Z
     version: 1

@@ -1,17 +1,9 @@
 id: changeset-1795528173295-iotjmqyde
 name: pane-rail
-description: "Add PaneRail, a layout component: a folded pane shown as a 40px
-  vertical rail with an expand button, a toned map of the pane's items (marks at
-  0..1 positions, clickable, hover/focus callbacks for the app's hover card), an
-  amber notch at the selection, the pane's name written up the rail and its key
-  hint. For Context Studio #1635 step 8 (context-studio#1665): either left pane
-  of the review page folds to a rail. Done when PaneRail is exported with its
-  props, documented (docs showcase, heimdall-layout skill), covered by a
-  Playwright visual spec (light and dark canvas) and unit tests of its pure
-  mark-ordering helper."
+description: "Add PaneRail, a layout component: a folded pane shown as a 40px vertical rail with an expand button, a toned map of the pane's items (marks at 0..1 positions, clickable, hover/focus callbacks for the app's hover card), an amber notch at the selection, the pane's name written up the rail and its key hint. For Context Studio #1635 step 8 (context-studio#1665): either left pane of the review page folds to a rail. Done when PaneRail is exported with its props, documented (docs showcase, heimdall-layout skill), covered by a Playwright visual spec (light and dark canvas) and unit tests of its pure mark-ordering helper."
 created: 2026-11-24T13:49:33.301Z
-modified: 2026-11-24T13:57:07.216Z
-status: staged
+modified: 2026-11-25T10:08:47.646Z
+status: committed
 baseSnapshot: v2:sha256:39b64040e976fa94f57b509a0e0f15d7359a083d8ba60b960b80036d9ee782db
 origin:
   kind: plan
@@ -35,16 +27,7 @@ unstaged:
         type: librarycomponent
         layer_id: ux
         name: PaneRail
-        description: "A folded pane shown as a 40px vertical rail: an expand button
-          (aria-expanded false, aria-keyshortcuts when a key is given), a map of
-          the pane's items as toned marks at 0..1 positions (buttons with
-          accessible names, one tab stop with arrow-key roving), an amber notch
-          at the selection's position, an optional position label, the pane's
-          name written up the rail and its key hint. Clicking the button or the
-          rail's empty area calls onExpand; a mark calls onMarkClick, and
-          hover/focus call onMarkHover/onMarkLeave with the mark's anchor
-          element so the app can show its own hover card. Holds no folding
-          state: the app decides when to show it."
+        description: "A folded pane shown as a 40px vertical rail: an expand button (aria-expanded false, aria-keyshortcuts when a key is given), a map of the pane's items as toned marks at 0..1 positions (buttons with accessible names, one tab stop with arrow-key roving), an amber notch at the selection's position, an optional position label, the pane's name written up the rail and its key hint. Clicking the button or the rail's empty area calls onExpand; a mark calls onMarkClick, and hover/focus call onMarkHover/onMarkLeave with the mark's anchor element so the app can show its own hover card. Holds no folding state: the app decides when to show it."
         attributes:
           type: layout
           category: heimdall-layout
@@ -68,11 +51,7 @@ unstaged:
         type: applicationfunction
         layer_id: application
         name: Pane Rail Marks
-        description: orderPaneRailMarks() clamps each mark's position to 0..1 and sorts
-          the marks by position (stable), so the rail renders them top to bottom
-          in reading order; nextPaneRailMarkIndex() maps
-          ArrowUp/ArrowDown/Home/End to the next focused mark for the rail's
-          roving tab stop.
+        description: orderPaneRailMarks() clamps each mark's position to 0..1 and sorts the marks by position (stable), so the rail renders them top to bottom in reading order; nextPaneRailMarkIndex() maps ArrowUp/ArrowDown/Home/End to the next focused mark for the rail's roving tab stop.
         metadata:
           created_at: 2026-11-24T13:49:47.543Z
           updated_at: 2026-11-24T13:49:47.543Z
@@ -92,9 +71,7 @@ unstaged:
         type: testcoveragetarget
         layer_id: testing
         name: PaneRail
-        description: "Playwright spec tests/pane-rail.spec.ts: a source-style rail with
-          toned marks and a notch, a list-style rail with a position label,
-          callbacks and ARIA, on light and dark canvas."
+        description: "Playwright spec tests/pane-rail.spec.ts: a source-style rail with toned marks and a notch, a list-style rail with a position label, callbacks and ARIA, on light and dark canvas."
         attributes:
           targetType: ui-component
           priority: medium
