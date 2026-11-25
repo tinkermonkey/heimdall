@@ -5,17 +5,21 @@ application.applicationcomponent.heimdall-ui-library-module:
   type: applicationcomponent
   layer_id: application
   name: Heimdall UI Library Module
-  description: "The package's public module (src/index.ts barrel over one module
-    per source file) taken as the owner of the shared, component-independent
-    behaviour its hooks and utilities perform: placement, focus and scroll
-    management, controllable state, SSR-safe media queries, fixed-clock dates,
-    link-click handling, virtualization and trace adapters."
+  description: "The package's public module (src/index.ts barrel over one module per source file) taken as the owner of the shared, component-independent behaviour its hooks and utilities perform: placement, focus and scroll management, controllable state, SSR-safe media queries, fixed-clock dates, link-click handling, virtualization and trace adapters."
   attributes:
     type: service-component
   source_reference:
     provenance: manual
     locations:
       - file: src/index.ts
+  accepted_gaps:
+    - direction: outgoing
+      predicate: uses
+      other_spec_node_id: application.applicationcomponent
+      reason: The package uses no other application component. Its runtime dependencies (d3, react-markdown, remark-gfm, React as a peer) are technology artifacts. Its two peers use it, not the other way round.
+      decided_by: maintainer
+      decided_at: 2026-11-25T10:42:44.225Z
+      changeset: changeset-1795603318372-1h53bc45b
   metadata:
     created_at: 2026-11-23T16:47:22.576Z
     updated_at: 2026-11-23T16:47:22.576Z
@@ -27,10 +31,7 @@ application.applicationcomponent.test-page-host-app:
   type: applicationcomponent
   layer_id: application
   name: Test Page Host App
-  description: "The repo-root Vite dev app (index.html, src/main.tsx,
-    src/App.tsx): renders one of 52 src/test-pages chosen by the ?example= (and
-    ?test=) query parameter. Playwright's webServer starts it on :5173 and every
-    visual spec navigates to it; the docs site imports the same test pages."
+  description: "The repo-root Vite dev app (index.html, src/main.tsx, src/App.tsx): renders one of 52 src/test-pages chosen by the ?example= (and ?test=) query parameter. Playwright's webServer starts it on :5173 and every visual spec navigates to it; the docs site imports the same test pages."
   attributes:
     type: internal
   source_reference:
@@ -49,10 +50,7 @@ application.applicationcomponent.consumer-smoke-test-app:
   type: applicationcomponent
   layer_id: application
   name: Consumer Smoke Test App
-  description: "test-app/: a separate Vite app that installs the package as a
-    consumer would (file:..) and renders components from the built dist, so
-    packaging mistakes surface outside the library's own source tree. Not run by
-    CI."
+  description: "test-app/: a separate Vite app that installs the package as a consumer would (file:..) and renders components from the built dist, so packaging mistakes surface outside the library's own source tree. Not run by CI."
   attributes:
     type: internal
   source_reference:

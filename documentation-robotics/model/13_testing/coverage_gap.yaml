@@ -1,0 +1,34 @@
+testing.coveragegap.background-click-has-no-test:
+  id: de6a95d9-97d0-4aa1-8696-5ced727aba21
+  path: testing.coveragegap.background-click-has-no-test
+  spec_node_id: testing.coveragegap
+  type: coveragegap
+  layer_id: testing
+  name: Background Click Has No Test
+  description: No test exercises GraphCanvas's onBackgroundClick callback or its background pointer-up handling (application.applicationfunction.canvas-pointer-handling). The Graph canvas specs click nodes, edges and toolbar controls, never empty canvas. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+  attributes:
+    severity: medium
+    affectedRequirements: "application.applicationfunction.canvas-pointer-handling: GraphCanvas calls onBackgroundClick when a press and release on empty canvas stay within the drag threshold; a pan drag never fires it, and it keeps working while pan/zoom is locked"
+    remediationStatus: open
+    targetRef: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+  metadata:
+    created_at: 2026-11-25T10:42:42.768Z
+    updated_at: 2026-11-25T10:42:42.768Z
+    version: 1
+testing.coveragegap.collapse-toggle-callback-has-no-test:
+  id: 5e8f6c44-c4c7-4744-95c4-dce2c8fc030e
+  path: testing.coveragegap.collapse-toggle-callback-has-no-test
+  spec_node_id: testing.coveragegap
+  type: coveragegap
+  layer_id: testing
+  name: Collapse Toggle Callback Has No Test
+  description: No test exercises GraphCanvas's onToggleCollapse callback (application.applicationfunction.collapse-toggling). The collapse tests are visual snapshots of the rendered control and of collapsed layouts, not of what a toggle reports. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+  attributes:
+    severity: medium
+    affectedRequirements: "application.applicationfunction.collapse-toggling: GraphCanvas reports a node's collapse toggle to the consumer's onToggleCollapse(nodeId); GraphCollapseControl and Shift+Enter call it"
+    remediationStatus: open
+    targetRef: testing.testcoveragetarget.galaxy-layout-collapse-and-expand
+  metadata:
+    created_at: 2026-11-25T10:42:42.768Z
+    updated_at: 2026-11-25T10:42:42.768Z
+    version: 1

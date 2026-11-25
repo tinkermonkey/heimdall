@@ -1,0 +1,776 @@
+- type: add
+  elementId: application.applicationfunction.graph-canvas-context-lookup
+  layerName: application
+  after:
+    id: ab921037-2870-463c-a874-05bad7833415
+    path: application.applicationfunction.graph-canvas-context-lookup
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Graph Canvas Context Lookup
+    description: "useGraphCanvas(): returns the enclosing GraphCanvas's context (viewport, selection and the canvas's imperative actions) for chrome rendered inside it, and throws when called outside a GraphCanvas."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/GraphCanvasContext.tsx
+          symbol: useGraphCanvas
+    metadata:
+      created_at: 2026-11-25T10:42:22.991Z
+      updated_at: 2026-11-25T10:42:22.991Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 0
+- type: add
+  elementId: application.applicationfunction.link-edge-metadata-formatting
+  layerName: application
+  after:
+    id: f76b1647-eaed-4700-98ad-9e546ac02bc4
+    path: application.applicationfunction.link-edge-metadata-formatting
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Link Edge Metadata Formatting
+    description: "linkEdgeMetadata(): turns an indexed layered-graph link into GraphEdgeInspector metadata: its predicates as the title ('No predicate' without), source and target titles, and the layers it spans and its category as rows."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/utils/layered/matrix.ts
+          symbol: linkEdgeMetadata
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 1
+- type: add
+  elementId: application.applicationfunction.layered-graph-state-resolution
+  layerName: application
+  after:
+    id: 31be0d36-2249-41de-ad51-618cd3c4956c
+    path: application.applicationfunction.layered-graph-state-resolution
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Layered Graph State Resolution
+    description: "useLayeredGraphProp(): resolves the layered-graph state a control works on, the graph prop or else the enclosing LayeredGraphContext, and throws naming the component when there is neither."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/LayeredGraphControls.tsx
+          symbol: useLayeredGraphProp
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 2
+- type: add
+  elementId: application.applicationfunction.follow-depth-labelling
+  layerName: application
+  after:
+    id: f3528192-a1be-406c-a226-4fa8ad6240d0
+    path: application.applicationfunction.follow-depth-labelling
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Follow Depth Labelling
+    description: "followOptionLabel(): labels a follow depth for the Follow control: 0 is 'Direct', n is '+n layer(s)'."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/LayeredGraphControls.tsx
+          symbol: followOptionLabel
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 3
+- type: add
+  elementId: application.applicationfunction.link-category-labelling
+  layerName: application
+  after:
+    id: 38cf5266-a7e2-4d8c-a1a2-07bda39b3e86
+    path: application.applicationfunction.link-category-labelling
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Link Category Labelling
+    description: "categoryDisplayLabel(): turns a link category key into display text ('data_flow' to 'Data flow'), 'Uncategorized' when empty."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/LayeredGraphControls.tsx
+          symbol: categoryDisplayLabel
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 4
+- type: add
+  elementId: application.applicationfunction.reach-relationship-listing
+  layerName: application
+  after:
+    id: 0ef98053-db97-45ec-bf8e-efd56cb7e241
+    path: application.applicationfunction.reach-relationship-listing
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Reach Relationship Listing
+    description: "reachRelationships(): lists the selected node's cross-layer and intra-layer relationships that the filters leave traversable, labelled with their visible predicates and carrying hop, via and layer, with the reach's node and layer counts; null without a selection. Feeds ReachInspector or a GraphInspector."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/ReachInspector.tsx
+          symbol: reachRelationships
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 5
+- type: add
+  elementId: application.applicationfunction.reach-summary-formatting
+  layerName: application
+  after:
+    id: bc8a7ee0-55b0-40e8-a8d9-be1db9e521e1
+    path: application.applicationfunction.reach-summary-formatting
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Reach Summary Formatting
+    description: "reachSummaryText(): formats a reach as one line, e.g. 'reach 13 nodes across 3 layers · follow +1 layer'."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/ReachInspector.tsx
+          symbol: reachSummaryText
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 6
+- type: add
+  elementId: application.applicationfunction.explorer-snapshot-sanitizing
+  layerName: application
+  after:
+    id: 6811eced-a8bb-4ff9-b077-aa13ccc128f1
+    path: application.applicationfunction.explorer-snapshot-sanitizing
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Explorer Snapshot Sanitizing
+    description: "sanitizeLayeredGraphExplorerSnapshot(): reduces an untrusted explorer snapshot (from a URL, storage or a message) to well-formed fields: the graph fields through sanitizeLayeredGraphSnapshot, a known view, a boolean nodeLabels, a known camera preset, finite camera fields and a positive layer gap; anything else is dropped. Every explorer entry point runs its input through it."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/components/LayeredGraphExplorer.tsx
+          symbol: sanitizeLayeredGraphExplorerSnapshot
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 7
+- type: add
+  elementId: application.applicationfunction.pan-and-zoom-viewport-control
+  layerName: application
+  after:
+    id: 8876a78c-c6d0-49a9-b479-2d01b12c265a
+    path: application.applicationfunction.pan-and-zoom-viewport-control
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Pan and Zoom Viewport Control
+    description: "usePanZoom(): the viewport transform for a pannable, zoomable surface: wheel and pinch zoom through a non-passive native listener, drag-to-pan with inertial glide, keyboard zoom and pan, imperative zoomTo/panTo/reset, a lock that freezes user input, and start/change/end reports of user-driven viewport input only."
+    source_reference:
+      provenance: manual
+      locations:
+        - file: src/hooks/usePanZoom.ts
+          symbol: usePanZoom
+    metadata:
+      created_at: 2026-11-25T10:42:22.992Z
+      updated_at: 2026-11-25T10:42:22.992Z
+      version: 1
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 8
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.graph-canvas-context-lookup
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.graph-canvas-context-lookup
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 9
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.link-edge-metadata-formatting
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.link-edge-metadata-formatting
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 10
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.layered-graph-state-resolution
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.layered-graph-state-resolution
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 11
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.follow-depth-labelling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.follow-depth-labelling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 12
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.link-category-labelling
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.link-category-labelling
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 13
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.reach-relationship-listing
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 14
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.reach-summary-formatting
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.reach-summary-formatting
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 15
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.explorer-snapshot-sanitizing
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.explorer-snapshot-sanitizing
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 16
+- type: relationship-add
+  elementId: application.applicationcomponent.heimdall-ui-library-module::assigned-to::application.applicationfunction.pan-and-zoom-viewport-control
+  layerName: application
+  after:
+    source: application.applicationcomponent.heimdall-ui-library-module
+    target: application.applicationfunction.pan-and-zoom-viewport-control
+    predicate: assigned-to
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 17
+- type: relationship-add
+  elementId: application.applicationfunction.graph-canvas-context-lookup::realizes::application.applicationservice.graph-canvas-context-hook
+  layerName: application
+  after:
+    source: application.applicationfunction.graph-canvas-context-lookup
+    target: application.applicationservice.graph-canvas-context-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 18
+- type: relationship-add
+  elementId: application.applicationfunction.link-edge-metadata-formatting::realizes::application.applicationservice.adjacency-matrix-link-metadata
+  layerName: application
+  after:
+    source: application.applicationfunction.link-edge-metadata-formatting
+    target: application.applicationservice.adjacency-matrix-link-metadata
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 19
+- type: relationship-add
+  elementId: application.applicationfunction.layered-graph-state-resolution::realizes::application.applicationservice.layered-graph-control-helpers
+  layerName: application
+  after:
+    source: application.applicationfunction.layered-graph-state-resolution
+    target: application.applicationservice.layered-graph-control-helpers
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 20
+- type: relationship-add
+  elementId: application.applicationfunction.follow-depth-labelling::realizes::application.applicationservice.layered-graph-control-helpers
+  layerName: application
+  after:
+    source: application.applicationfunction.follow-depth-labelling
+    target: application.applicationservice.layered-graph-control-helpers
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 21
+- type: relationship-add
+  elementId: application.applicationfunction.link-category-labelling::realizes::application.applicationservice.layered-graph-control-helpers
+  layerName: application
+  after:
+    source: application.applicationfunction.link-category-labelling
+    target: application.applicationservice.layered-graph-control-helpers
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 22
+- type: relationship-add
+  elementId: application.applicationfunction.reach-relationship-listing::realizes::application.applicationservice.reach-relationship-helpers
+  layerName: application
+  after:
+    source: application.applicationfunction.reach-relationship-listing
+    target: application.applicationservice.reach-relationship-helpers
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 23
+- type: relationship-add
+  elementId: application.applicationfunction.reach-summary-formatting::realizes::application.applicationservice.reach-relationship-helpers
+  layerName: application
+  after:
+    source: application.applicationfunction.reach-summary-formatting
+    target: application.applicationservice.reach-relationship-helpers
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 24
+- type: relationship-add
+  elementId: application.applicationfunction.explorer-snapshot-sanitizing::realizes::application.applicationservice.layered-graph-explorer-snapshot
+  layerName: application
+  after:
+    source: application.applicationfunction.explorer-snapshot-sanitizing
+    target: application.applicationservice.layered-graph-explorer-snapshot
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 25
+- type: relationship-add
+  elementId: application.applicationfunction.pan-and-zoom-viewport-control::realizes::application.applicationservice.pan-and-zoom-hook
+  layerName: application
+  after:
+    source: application.applicationfunction.pan-and-zoom-viewport-control
+    target: application.applicationservice.pan-and-zoom-hook
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 26
+- type: relationship-add
+  elementId: application.applicationfunction.dropdown-portal-and-outside-click-containment::realizes::application.applicationservice.dropdown-portal-containment
+  layerName: application
+  after:
+    source: application.applicationfunction.dropdown-portal-and-outside-click-containment
+    target: application.applicationservice.dropdown-portal-containment
+    predicate: realizes
+    layer: application
+    category: structural
+  timestamp: 2026-11-25T10:42:23.004Z
+  sequenceNumber: 27
+- type: update
+  elementId: application.applicationfunction.dropdown-portal-and-outside-click-containment
+  layerName: application
+  before:
+    id: 3dfe65b5-c738-4f8d-b2ca-4db21e0df075
+    path: application.applicationfunction.dropdown-portal-and-outside-click-containment
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Dropdown Portal and Outside-Click Containment
+    description: "useDropdownPortal() and containsAcrossPortals(): renders dropdown panels in a body portal and treats clicks inside any nested portal as inside the owning control."
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/hooks/useDropdownPortal.ts
+          symbol: useDropdownPortal
+    metadata: &a1
+      created_at: 2026-11-23T16:44:40.173Z
+      updated_at: 2026-11-23T16:44:40.173Z
+      version: 1
+  after:
+    id: 3dfe65b5-c738-4f8d-b2ca-4db21e0df075
+    path: application.applicationfunction.dropdown-portal-and-outside-click-containment
+    spec_node_id: application.applicationfunction
+    type: applicationfunction
+    layer_id: application
+    name: Dropdown Portal and Outside-Click Containment
+    description: "useDropdownPortal() and containsAcrossPortals(): renders dropdown panels in a body portal and treats clicks inside any nested portal as inside the owning control."
+    source_reference:
+      provenance: extracted
+      locations:
+        - file: src/hooks/useDropdownPortal.ts
+          symbol: useDropdownPortal
+        - file: src/hooks/useDropdownPortal.ts
+          symbol: containsAcrossPortals
+    metadata: *a1
+  timestamp: 2026-11-25T10:42:24.604Z
+  sequenceNumber: 28
+- type: add
+  elementId: testing.coveragegap.background-click-has-no-test
+  layerName: testing
+  after:
+    id: de6a95d9-97d0-4aa1-8696-5ced727aba21
+    path: testing.coveragegap.background-click-has-no-test
+    spec_node_id: testing.coveragegap
+    type: coveragegap
+    layer_id: testing
+    name: Background Click Has No Test
+    description: No test exercises GraphCanvas's onBackgroundClick callback or its background pointer-up handling (application.applicationfunction.canvas-pointer-handling). The Graph canvas specs click nodes, edges and toolbar controls, never empty canvas. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+    attributes:
+      severity: medium
+      affectedRequirements: "application.applicationfunction.canvas-pointer-handling: GraphCanvas calls onBackgroundClick when a press and release on empty canvas stay within the drag threshold; a pan drag never fires it, and it keeps working while pan/zoom is locked"
+      remediationStatus: open
+      targetRef: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    metadata:
+      created_at: 2026-11-25T10:42:42.768Z
+      updated_at: 2026-11-25T10:42:42.768Z
+      version: 1
+  timestamp: 2026-11-25T10:43:06.858Z
+  sequenceNumber: 29
+- type: add
+  elementId: testing.coveragegap.collapse-toggle-callback-has-no-test
+  layerName: testing
+  after:
+    id: 5e8f6c44-c4c7-4744-95c4-dce2c8fc030e
+    path: testing.coveragegap.collapse-toggle-callback-has-no-test
+    spec_node_id: testing.coveragegap
+    type: coveragegap
+    layer_id: testing
+    name: Collapse Toggle Callback Has No Test
+    description: No test exercises GraphCanvas's onToggleCollapse callback (application.applicationfunction.collapse-toggling). The collapse tests are visual snapshots of the rendered control and of collapsed layouts, not of what a toggle reports. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+    attributes:
+      severity: medium
+      affectedRequirements: "application.applicationfunction.collapse-toggling: GraphCanvas reports a node's collapse toggle to the consumer's onToggleCollapse(nodeId); GraphCollapseControl and Shift+Enter call it"
+      remediationStatus: open
+      targetRef: testing.testcoveragetarget.galaxy-layout-collapse-and-expand
+    metadata:
+      created_at: 2026-11-25T10:42:42.768Z
+      updated_at: 2026-11-25T10:42:42.768Z
+      version: 1
+  timestamp: 2026-11-25T10:43:06.887Z
+  sequenceNumber: 30
+- type: relationship-add
+  elementId: testing.coveragegap.background-click-has-no-test::references::testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+  layerName: testing
+  after:
+    source: testing.coveragegap.background-click-has-no-test
+    target: testing.testcoveragetarget.graph-canvas-rendering-and-interaction
+    predicate: references
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T10:42:42.776Z
+  sequenceNumber: 31
+- type: relationship-add
+  elementId: testing.coveragegap.collapse-toggle-callback-has-no-test::references::testing.testcoveragetarget.galaxy-layout-collapse-and-expand
+  layerName: testing
+  after:
+    source: testing.coveragegap.collapse-toggle-callback-has-no-test
+    target: testing.testcoveragetarget.galaxy-layout-collapse-and-expand
+    predicate: references
+    layer: testing
+    category: structural
+  timestamp: 2026-11-25T10:42:42.776Z
+  sequenceNumber: 32
+- type: update
+  elementId: application.applicationcomponent.heimdall-ui-library-module
+  layerName: application
+  before:
+    id: 2b15e7f7-1810-4c5f-9a55-112e9c3702bd
+    path: application.applicationcomponent.heimdall-ui-library-module
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: Heimdall UI Library Module
+    description: "The package's public module (src/index.ts barrel over one module per source file) taken as the owner of the shared, component-independent behaviour its hooks and utilities perform: placement, focus and scroll management, controllable state, SSR-safe media queries, fixed-clock dates, link-click handling, virtualization and trace adapters."
+    attributes: &a2
+      type: service-component
+    source_reference: &a3
+      provenance: manual
+      locations:
+        - file: src/index.ts
+    metadata: &a4
+      created_at: 2026-11-23T16:47:22.576Z
+      updated_at: 2026-11-23T16:47:22.576Z
+      version: 1
+  after:
+    id: 2b15e7f7-1810-4c5f-9a55-112e9c3702bd
+    path: application.applicationcomponent.heimdall-ui-library-module
+    spec_node_id: application.applicationcomponent
+    type: applicationcomponent
+    layer_id: application
+    name: Heimdall UI Library Module
+    description: "The package's public module (src/index.ts barrel over one module per source file) taken as the owner of the shared, component-independent behaviour its hooks and utilities perform: placement, focus and scroll management, controllable state, SSR-safe media queries, fixed-clock dates, link-click handling, virtualization and trace adapters."
+    attributes: *a2
+    source_reference: *a3
+    metadata: *a4
+    accepted_gaps:
+      - direction: outgoing
+        predicate: uses
+        other_spec_node_id: application.applicationcomponent
+        reason: The package uses no other application component. Its runtime dependencies (d3, react-markdown, remark-gfm, React as a peer) are technology artifacts. Its two peers use it, not the other way round.
+        decided_by: maintainer
+        decided_at: 2026-11-25T10:42:44.225Z
+        changeset: changeset-1795603318372-1h53bc45b
+  timestamp: 2026-11-25T10:42:44.229Z
+  sequenceNumber: 33
+- type: update
+  elementId: ux.librarycomponent.graph-edge-shape-ux
+  layerName: ux
+  before:
+    id: 504322a0-c88e-479e-b885-1ce229838f23
+    path: ux.librarycomponent.graph-edge-shape-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphEdgeShape (UX)
+    description: "Low-level SVG edge drawing: line or curve, arrow markers per variant, hit-target path and a collision-cleared label pill; used by GraphCanvas and GraphEdge, and by custom renderEdge callbacks."
+    attributes: &a5
+      type: display
+    source_reference: &a6
+      provenance: manual
+      locations:
+        - file: src/components/GraphEdgeShape.tsx
+          symbol: GraphEdgeShape
+    metadata: &a7
+      created_at: 2026-11-24T19:01:20.527Z
+      updated_at: 2026-11-24T19:01:20.527Z
+      version: 1
+  after:
+    id: 504322a0-c88e-479e-b885-1ce229838f23
+    path: ux.librarycomponent.graph-edge-shape-ux
+    spec_node_id: ux.librarycomponent
+    type: librarycomponent
+    layer_id: ux
+    name: GraphEdgeShape (UX)
+    description: "Low-level SVG edge drawing: line or curve, arrow markers per variant, hit-target path and a collision-cleared label pill; used by GraphCanvas and GraphEdge, and by custom renderEdge callbacks."
+    attributes: *a5
+    source_reference: *a6
+    metadata: *a7
+    accepted_gaps:
+      - direction: outgoing
+        predicate: composes
+        other_spec_node_id: ux.librarycomponent
+        reason: GraphEdgeShape draws the edge's SVG path, marker and label itself and imports only graph utilities. It is the leaf piece GraphEdge and GraphCanvas compose, so it composes no other library component.
+        decided_by: maintainer
+        decided_at: 2026-11-25T10:42:49.087Z
+        changeset: changeset-1795603318372-1h53bc45b
+  timestamp: 2026-11-25T10:42:49.097Z
+  sequenceNumber: 34
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-relationships-is-null-without-a-selection-or-with-an-unknown-one::tests::application.applicationfunction.reach-relationship-listing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-relationships-is-null-without-a-selection-or-with-an-unknown-one
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 37
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-relationships-splits-direct-links-into-cross-layer-and-intra-layer-rows-with-direction-7cc209eb::tests::application.applicationfunction.reach-relationship-listing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-relationships-splits-direct-links-into-cross-layer-and-intra-layer-rows-with-direction-7cc209eb
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 38
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-relationships-lists-followed-nodes-with-their-hop-and-the-node-and-predicate-they-came-through::tests::application.applicationfunction.reach-relationship-listing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-relationships-lists-followed-nodes-with-their-hop-and-the-node-and-predicate-they-came-through
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 39
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-relationships-leaves-out-links-the-filters-make-untraversable::tests::application.applicationfunction.reach-relationship-listing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-relationships-leaves-out-links-the-filters-make-untraversable
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 40
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-relationships-labels-a-bundled-link-with-its-visible-predicates-only::tests::application.applicationfunction.reach-relationship-listing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-relationships-labels-a-bundled-link-with-its-visible-predicates-only
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 41
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-relationships-lists-no-followed-nodes-when-the-reach-belongs-to-another-node::tests::application.applicationfunction.reach-relationship-listing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-relationships-lists-no-followed-nodes-when-the-reach-belongs-to-another-node
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 42
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-relationships-orders-followed-nodes-by-hop-then-layer-then-name-spec-fixture::tests::application.applicationfunction.reach-relationship-listing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-relationships-orders-followed-nodes-by-hop-then-layer-then-name-spec-fixture
+    target: application.applicationfunction.reach-relationship-listing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 43
+- type: relationship-add
+  elementId: testing.testcasesketch.reach-summary-text-counts-nodes-and-layers-and-names-the-follow-depth::tests::application.applicationfunction.reach-summary-formatting
+  layerName: testing
+  after:
+    source: testing.testcasesketch.reach-summary-text-counts-nodes-and-layers-and-names-the-follow-depth
+    target: application.applicationfunction.reach-summary-formatting
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 44
+- type: relationship-add
+  elementId: testing.testcasesketch.link-edge-metadata-maps-a-link-to-graph-edge-inspector-metadata::tests::application.applicationfunction.link-edge-metadata-formatting
+  layerName: testing
+  after:
+    source: testing.testcasesketch.link-edge-metadata-maps-a-link-to-graph-edge-inspector-metadata
+    target: application.applicationfunction.link-edge-metadata-formatting
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 45
+- type: relationship-add
+  elementId: testing.testcasesketch.sanitize-layered-graph-explorer-snapshot-checks-the-view-labels-and-stack-camera::tests::application.applicationfunction.explorer-snapshot-sanitizing
+  layerName: testing
+  after:
+    source: testing.testcasesketch.sanitize-layered-graph-explorer-snapshot-checks-the-view-labels-and-stack-camera
+    target: application.applicationfunction.explorer-snapshot-sanitizing
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 46
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-zoom-during-pan-inertia-keeps-the-point-under-the-7a0c359c::tests::application.applicationfunction.pan-and-zoom-viewport-control
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-zoom-during-pan-inertia-keeps-the-point-under-the-7a0c359c
+    target: application.applicationfunction.pan-and-zoom-viewport-control
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 47
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-events-within-one-frame-compound::tests::application.applicationfunction.pan-and-zoom-viewport-control
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-events-within-one-frame-compound
+    target: application.applicationfunction.pan-and-zoom-viewport-control
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 48
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-use-pan-zoom-graph-canvas-and-zoom-about-the-view-centre-by-a-fixed-factor::tests::application.applicationfunction.pan-and-zoom-viewport-control
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-use-pan-zoom-graph-canvas-and-zoom-about-the-view-centre-by-a-fixed-factor
+    target: application.applicationfunction.pan-and-zoom-viewport-control
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 49
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-use-pan-zoom-map-canvas-and-keep-the-reported-centre-fixed::tests::application.applicationfunction.pan-and-zoom-viewport-control
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-use-pan-zoom-map-canvas-and-keep-the-reported-centre-fixed
+    target: application.applicationfunction.pan-and-zoom-viewport-control
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 50
+- type: relationship-add
+  elementId: testing.testcasesketch.integration-map-canvas-component-initial-fit-a-caller-re-rendering-from-on-viewport-change-does-not-95d47740::tests::application.applicationfunction.pan-and-zoom-viewport-control
+  layerName: testing
+  after:
+    source: testing.testcasesketch.integration-map-canvas-component-initial-fit-a-caller-re-rendering-from-on-viewport-change-does-not-95d47740
+    target: application.applicationfunction.pan-and-zoom-viewport-control
+    predicate: tests
+    layer: testing
+    targetLayer: application
+    category: structural
+  timestamp: 2026-11-25T10:44:13.636Z
+  sequenceNumber: 51

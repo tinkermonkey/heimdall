@@ -16,11 +16,11 @@ Test strategies, test cases, test data, and test coverage.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 1801  |
-| Intra-Layer Relationships | 1885  |
-| Inter-Layer Relationships | 587   |
+| Elements                  | 1803  |
+| Intra-Layer Relationships | 1887  |
+| Inter-Layer Relationships | 602   |
 | Inbound Relationships     | 0     |
-| Outbound Relationships    | 587   |
+| Outbound Relationships    | 602   |
 
 **Cross-Layer References**:
 
@@ -33,6 +33,8 @@ Test strategies, test cases, test data, and test coverage.
 | Element                                                                                                                               | Type                      | Relationships |
 | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ------------- |
 | `testing.contextvariation.visual-regression`                                                                                          | `contextvariation`        | 2             |
+| `testing.coveragegap.background-click-has-no-test`                                                                                    | `coveragegap`             | 1             |
+| `testing.coveragegap.collapse-toggle-callback-has-no-test`                                                                            | `coveragegap`             | 1             |
 | `testing.coveragerequirement.edge-endpoints-at-rect-sides-and-corners`                                                                | `coveragerequirement`     | 1             |
 | `testing.coveragerequirement.every-canvas-control-and-overlay-exercised`                                                              | `coveragerequirement`     | 1             |
 | `testing.coveragerequirement.galaxy-across-relation-aspect-and-live-modes`                                                            | `coveragerequirement`     | 1             |
@@ -1767,7 +1769,7 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcoveragetarget.form-components`                                                                                          | `testcoveragetarget`      | 72            |
 | `testing.testcoveragetarget.galaxy-layout-algorithm-unit`                                                                             | `testcoveragetarget`      | 11            |
 | `testing.testcoveragetarget.galaxy-layout-and-live-simulation`                                                                        | `testcoveragetarget`      | 27            |
-| `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `testcoveragetarget`      | 21            |
+| `testing.testcoveragetarget.galaxy-layout-collapse-and-expand`                                                                        | `testcoveragetarget`      | 22            |
 | `testing.testcoveragetarget.galaxy-live-drag`                                                                                         | `testcoveragetarget`      | 9             |
 | `testing.testcoveragetarget.graph-canvas-accessible-names`                                                                            | `testcoveragetarget`      | 6             |
 | `testing.testcoveragetarget.graph-canvas-center-on-select`                                                                            | `testcoveragetarget`      | 11            |
@@ -1779,7 +1781,7 @@ Test strategies, test cases, test data, and test coverage.
 | `testing.testcoveragetarget.graph-canvas-layout-busy-state`                                                                           | `testcoveragetarget`      | 8             |
 | `testing.testcoveragetarget.graph-canvas-node-measurement`                                                                            | `testcoveragetarget`      | 6             |
 | `testing.testcoveragetarget.graph-canvas-popovers`                                                                                    | `testcoveragetarget`      | 33            |
-| `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `testcoveragetarget`      | 103           |
+| `testing.testcoveragetarget.graph-canvas-rendering-and-interaction`                                                                   | `testcoveragetarget`      | 104           |
 | `testing.testcoveragetarget.graph-canvas-viewport-history`                                                                            | `testcoveragetarget`      | 14            |
 | `testing.testcoveragetarget.graph-edge-geometry-utilities`                                                                            | `testcoveragetarget`      | 48            |
 | `testing.testcoveragetarget.graph-edge-style-utilities`                                                                               | `testcoveragetarget`      | 14            |
@@ -2074,12 +2076,18 @@ flowchart TB
 | `testing.testcasesketch.tests.product.feature`                      | `testing.testcasesketch.integration-graph-canvas-popover-components-visual-regression-light-canvas-popover-with-interactive-505b383d` | `product.feature.node-and-edge-tooltips-and-popovers`                                | `product`     | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.integration-graph-canvas-viewport-history-center-on-select-reports-a-center-on-select-navigation-a4796f46`    | `application.applicationfunction.programmatic-viewport-move-reporting`               | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.integration-graph-canvas-viewport-history-set-viewport-moves-the-view-silent-suppresses-the-08cbf9f6`         | `application.applicationfunction.programmatic-viewport-move-reporting`               | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.integration-map-canvas-component-initial-fit-a-caller-re-rendering-from-on-viewport-change-does-not-95d47740` | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.integration-organic-layout-renders-every-node-without-overlapping-bounding-boxes`                             | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.integration-orthogonal-layout-renders-every-node-without-overlapping-bounding-boxes`                          | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.integration-trace-viewer-interactions-long-attribute-keys-values-truncate-no-overlap-with-a-hover-35742fa3`   | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.integration-use-pan-zoom-graph-canvas-and-zoom-about-the-view-centre-by-a-fixed-factor`                       | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-events-within-one-frame-compound`                                 | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.integration-use-pan-zoom-graph-canvas-wheel-zoom-during-pan-inertia-keeps-the-point-under-the-7a0c359c`       | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.integration-use-pan-zoom-map-canvas-and-keep-the-reported-centre-fixed`                                       | `application.applicationfunction.pan-and-zoom-viewport-control`                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology`                                      | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.large-card-nodes-stay-non-overlapping-in-a-bushy-hub-and-spoke-topology`                                      | `application.applicationfunction.force-directed-layout-algorithm`                    | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.layout-lanes-stacks-bands-without-overlap-and-no-two-nodes-overlap`                                           | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.link-edge-metadata-maps-a-link-to-graph-edge-inspector-metadata`                                              | `application.applicationfunction.link-edge-metadata-formatting`                      | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.nudge-overlapping-segments-does-not-move-a-segment-onto-another-routes-line`                                  | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.nudge-overlapping-segments-does-not-move-a-segment-onto-another-routes-line`                                  | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.organic-layout-never-overlaps-nodes-and-honors-minimum-node-distance-as-a-post-condition`                     | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
@@ -2118,9 +2126,18 @@ flowchart TB
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.radial-tree-layout-single-node-trunk-places-a-single-orphan-node-at-its-trunk-origin`                         | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.radial-tree-layout-trunk-boundaries-does-not-overlap-boundaries-of-packed-trunks`                             | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.radial-tree-layout-trunk-boundaries-does-not-overlap-boundaries-of-packed-trunks`                             | `application.applicationfunction.structural-forest-construction`                     | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-relationships-is-null-without-a-selection-or-with-an-unknown-one`                                       | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-relationships-labels-a-bundled-link-with-its-visible-predicates-only`                                   | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-relationships-leaves-out-links-the-filters-make-untraversable`                                          | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-relationships-lists-followed-nodes-with-their-hop-and-the-node-and-predicate-they-came-through`         | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-relationships-lists-no-followed-nodes-when-the-reach-belongs-to-another-node`                           | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-relationships-orders-followed-nodes-by-hop-then-layer-then-name-spec-fixture`                           | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-relationships-splits-direct-links-into-cross-layer-and-intra-layer-rows-with-direction-7cc209eb`        | `application.applicationfunction.reach-relationship-listing`                         | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.reach-summary-text-counts-nodes-and-layers-and-names-the-follow-depth`                                        | `application.applicationfunction.reach-summary-formatting`                           | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.route-lane-gutters-at-dr-scale-synthetic-13-lanes-orientation-uses-about-as-many-gutter-tracks-as-997b2fe9`   | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.route-lane-gutters-gives-each-stub-its-own-gap-track-and-overlapping-routes-their-own-gutter-tracks-51c767b0` | `motivation.requirement.no-two-node-boxes-overlap-after-any-layout-engine-runs`      | `motivation`  | `satisfies`  | many-to-many | high     |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.route-navigation-edge-avoids-obstacles`                                                                       | `application.applicationfunction.navigation-edge-orthogonal-routing`                 | `application` | `tests`      | many-to-many | medium   |
+| `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.sanitize-layered-graph-explorer-snapshot-checks-the-view-labels-and-stack-camera`                             | `application.applicationfunction.explorer-snapshot-sanitizing`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.separation-job-falls-back-to-separation-pass-for-positions-the-grid-cannot-hold`                              | `application.applicationfunction.node-overlap-separation-pass`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.tests.application.applicationfunction`      | `testing.testcasesketch.separation-job-matches-the-plain-separation-pass-loop-bit-for-bit-s-label`                                    | `application.applicationfunction.node-overlap-separation-pass`                       | `application` | `tests`      | many-to-many | medium   |
 | `testing.testcasesketch.satisfies.motivation.requirement`           | `testing.testcasesketch.theme-override-ships-after-the-tokens`                                                                        | `motivation.requirement.a-mirror-can-restyle-the-library-from-one-file`              | `motivation`  | `satisfies`  | many-to-many | high     |
@@ -2475,6 +2492,52 @@ Playwright toHaveScreenshot comparisons with maxDiffPixelRatio 1%, single worker
 | ----------- | --------------------------------------------------------------- | ------------ | --------- |
 | intra-layer | `testing.environmentfactor.ci-chromium-rendering-environment`   | `references` | outbound  |
 | intra-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage` | `composes`   | inbound   |
+
+### Background Click Has No Test {#background-click-has-no-test}
+
+**ID**: `testing.coveragegap.background-click-has-no-test`
+
+**Type**: `coveragegap`
+
+No test exercises GraphCanvas's onBackgroundClick callback or its background pointer-up handling (application.applicationfunction.canvas-pointer-handling). The Graph canvas specs click nodes, edges and toolbar controls, never empty canvas. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+
+#### Attributes
+
+| Name                 | Value                                                                                                                                                                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| affectedRequirements | application.applicationfunction.canvas-pointer-handling: GraphCanvas calls onBackgroundClick when a press and release on empty canvas stay within the drag threshold; a pan drag never fires it, and it keeps working while pan/zoom is locked |
+| remediationStatus    | open                                                                                                                                                                                                                                           |
+| severity             | medium                                                                                                                                                                                                                                         |
+| targetRef            | testing.testcoveragetarget.graph-canvas-rendering-and-interaction                                                                                                                                                                              |
+
+#### Relationships
+
+| Type        | Related Element                                                     | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------- | ------------ | --------- |
+| intra-layer | `testing.testcoveragetarget.graph-canvas-rendering-and-interaction` | `references` | outbound  |
+
+### Collapse Toggle Callback Has No Test {#collapse-toggle-callback-has-no-test}
+
+**ID**: `testing.coveragegap.collapse-toggle-callback-has-no-test`
+
+**Type**: `coveragegap`
+
+No test exercises GraphCanvas's onToggleCollapse callback (application.applicationfunction.collapse-toggling). The collapse tests are visual snapshots of the rendered control and of collapsed layouts, not of what a toggle reports. Found 2026-11-24 when S1/S10 recorded it as an accepted gap; it is a real gap, recorded here until a test covers it.
+
+#### Attributes
+
+| Name                 | Value                                                                                                                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| affectedRequirements | application.applicationfunction.collapse-toggling: GraphCanvas reports a node's collapse toggle to the consumer's onToggleCollapse(nodeId); GraphCollapseControl and Shift+Enter call it |
+| remediationStatus    | open                                                                                                                                                                                     |
+| severity             | medium                                                                                                                                                                                   |
+| targetRef            | testing.testcoveragetarget.galaxy-layout-collapse-and-expand                                                                                                                             |
+
+#### Relationships
+
+| Type        | Related Element                                                | Predicate    | Direction |
+| ----------- | -------------------------------------------------------------- | ------------ | --------- |
+| intra-layer | `testing.testcoveragetarget.galaxy-layout-collapse-and-expand` | `references` | outbound  |
 
 ### Edge Endpoints at Rect Sides and Corners {#edge-endpoints-at-rect-sides-and-corners}
 
@@ -21444,9 +21507,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                         | Predicate  | Direction |
-| ----------- | --------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.map-canvas` | `composes` | inbound   |
+| Type        | Related Element                                                 | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-and-zoom-viewport-control` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.map-canvas`                         | `composes` | inbound   |
 
 ### integration: MapCanvas Component &gt; Initial fit &gt; heatmap mode frames every point {#integration-mapcanvas-component-initial-fit-heatmap-mode-frames-every-point}
 
@@ -25803,9 +25867,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                           | Predicate  | Direction |
-| ----------- | ----------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-and-zoom` | `composes` | inbound   |
+| Type        | Related Element                                                 | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-and-zoom-viewport-control` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-and-zoom`                       | `composes` | inbound   |
 
 ### integration: usePanZoom &gt; GraphCanvas &gt; wheel events within one frame compound {#integration-usepanzoom-graphcanvas-wheel-events-within-one-frame-compound}
 
@@ -25821,9 +25886,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                           | Predicate  | Direction |
-| ----------- | ----------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-and-zoom` | `composes` | inbound   |
+| Type        | Related Element                                                 | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-and-zoom-viewport-control` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-and-zoom`                       | `composes` | inbound   |
 
 ### integration: usePanZoom &gt; GraphCanvas &gt; wheel zoom during pan inertia keeps the point under the cursor fixed {#integration-usepanzoom-graphcanvas-wheel-zoom-during-pan-inertia-keeps-the-point-under-the-cursor-fixed}
 
@@ -25839,9 +25905,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                           | Predicate  | Direction |
-| ----------- | ----------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-and-zoom` | `composes` | inbound   |
+| Type        | Related Element                                                 | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-and-zoom-viewport-control` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-and-zoom`                       | `composes` | inbound   |
 
 ### integration: usePanZoom &gt; MapCanvas &gt; + and - keep the reported centre fixed {#integration-usepanzoom-mapcanvas-and-keep-the-reported-centre-fixed}
 
@@ -25857,9 +25924,10 @@ Integration stress test exercising galaxy layout against a larger proof-of-conce
 
 #### Relationships
 
-| Type        | Related Element                           | Predicate  | Direction |
-| ----------- | ----------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.pan-and-zoom` | `composes` | inbound   |
+| Type        | Related Element                                                 | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.pan-and-zoom-viewport-control` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.pan-and-zoom`                       | `composes` | inbound   |
 
 ### integration: UX Navigation Layout &gt; dark canvas mode {#integration-ux-navigation-layout-dark-canvas-mode}
 
@@ -28618,9 +28686,10 @@ forceLayout regression test verifying card-sized (not just default chip-sized) n
 
 #### Relationships
 
-| Type        | Related Element                                             | Predicate  | Direction |
-| ----------- | ----------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells` | `composes` | inbound   |
+| Type        | Related Element                                                 | Predicate  | Direction |
+| ----------- | --------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.link-edge-metadata-formatting` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-adjacency-matrix-cells`     | `composes` | inbound   |
 
 ### longestIncreasing &gt; a reversed sequence keeps one element {#longestincreasing-a-reversed-sequence-keeps-one-element}
 
@@ -31089,9 +31158,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-relationship-listing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`   | `composes` | inbound   |
 
 ### reachRelationships &gt; labels a bundled link with its visible predicates only {#reachrelationships-labels-a-bundled-link-with-its-visible-predicates-only}
 
@@ -31107,9 +31177,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-relationship-listing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`   | `composes` | inbound   |
 
 ### reachRelationships &gt; leaves out links the filters make untraversable {#reachrelationships-leaves-out-links-the-filters-make-untraversable}
 
@@ -31125,9 +31196,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-relationship-listing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`   | `composes` | inbound   |
 
 ### reachRelationships &gt; lists followed nodes with their hop and the node and predicate they came through {#reachrelationships-lists-followed-nodes-with-their-hop-and-the-node-and-predicate-they-came-through}
 
@@ -31143,9 +31215,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-relationship-listing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`   | `composes` | inbound   |
 
 ### reachRelationships &gt; lists no followed nodes when the reach belongs to another node {#reachrelationships-lists-no-followed-nodes-when-the-reach-belongs-to-another-node}
 
@@ -31161,9 +31234,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-relationship-listing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`   | `composes` | inbound   |
 
 ### reachRelationships &gt; orders followed nodes by hop, then layer, then name (spec fixture) {#reachrelationships-orders-followed-nodes-by-hop-then-layer-then-name-spec-fixture}
 
@@ -31179,9 +31253,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-relationship-listing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`   | `composes` | inbound   |
 
 ### reachRelationships &gt; splits direct links into cross-layer and intra-layer rows, with direction, predicate and layer {#reachrelationships-splits-direct-links-into-cross-layer-and-intra-layer-rows-with-direction-predicate-and-layer}
 
@@ -31197,9 +31272,10 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
+| Type        | Related Element                                              | Predicate  | Direction |
+| ----------- | ------------------------------------------------------------ | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-relationship-listing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.reach-inspector-relationships`   | `composes` | inbound   |
 
 ### reachSummaryText &gt; counts nodes and layers and names the follow depth {#reachsummarytext-counts-nodes-and-layers-and-names-the-follow-depth}
 
@@ -31217,6 +31293,7 @@ Verifies radialTreeLayout positions only currently-visible (non-collapsed) nodes
 
 | Type        | Related Element                                            | Predicate  | Direction |
 | ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.reach-summary-formatting` | `tests`    | outbound  |
 | intra-layer | `testing.testcoveragetarget.reach-inspector-relationships` | `composes` | inbound   |
 
 ### releaseVelocity &gt; counts a short hold against the velocity {#releasevelocity-counts-a-short-hold-against-the-velocity}
@@ -31725,9 +31802,10 @@ Verifies orthogonal navigation-edge routing detours around obstacle rectangles i
 
 #### Relationships
 
-| Type        | Related Element                                            | Predicate  | Direction |
-| ----------- | ---------------------------------------------------------- | ---------- | --------- |
-| intra-layer | `testing.testcoveragetarget.layered-snapshot-sanitization` | `composes` | inbound   |
+| Type        | Related Element                                                | Predicate  | Direction |
+| ----------- | -------------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.explorer-snapshot-sanitizing` | `tests`    | outbound  |
+| intra-layer | `testing.testcoveragetarget.layered-snapshot-sanitization`     | `composes` | inbound   |
 
 ### sanitizeLayeredGraphSnapshot &gt; completes partial filters from the defaults and type-checks each field {#sanitizelayeredgraphsnapshot-completes-partial-filters-from-the-defaults-and-type-checks-each-field}
 
@@ -34941,34 +35019,35 @@ Playwright spec tests/galaxy-layout-collapse.spec.ts.
 
 #### Relationships
 
-| Type        | Related Element                                                                                                                       | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `ux.librarycomponent.badge`                                                                                                           | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-node-ux`                                                                                                   | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.topology-node`                                                                                                   | `covers`   | outbound  |
-| intra-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `composes` | inbound   |
-| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                                                 | `composes` | inbound   |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-cards-mode-renders-without-overlaps-after-collapse`                 | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapse-maintains-zero-overlap-guarantee-for-galaxy-f1dd0343`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapse-toggle-is-visible-and-functional-for-parent-nodes`         | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapsing-a-node-hides-its-structural-descendants-and-113521f3`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-edges-connected-to-collapsed-subtree-are-not-rendered`              | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-expand-after-collapse-maintains-zero-overlap-guarantee`             | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-expanding-a-collapsed-node-restores-its-structural-e8c5dd9e`        | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-galaxy-layout-collapse-visual-snapshot`                             | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-galaxy-layout-collapse-works-in-dark-mode`                          | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-galaxy-layout-expand-visual-snapshot`                               | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-hidden-badge-shows-correct-descendant-count`                        | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-chevron-icon-points-right-when-collapsed-and-down-ace90c94`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-collapse-toggle-has-correct-aria-expanded-and-aria-73cde9e1` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-collapse-toggle-updates-aria-expanded-and-aria-80bf398c`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-hidden-badge-displays-with-correct-count-when-5959e4e8`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-multiple-collapses-maintain-zero-overlap-guarantee`                 | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-nodes-without-structural-children-render-no-collapse-b051d33e`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-renders-every-node-with-no-overlapping-bounding-boxes`              | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-restored-features-work-in-dark-canvas-mode`                         | `composes` | outbound  |
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `ux.librarycomponent.badge`                                                                                                           | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-collapse-control-ux`                                                                                       | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-node-ux`                                                                                                   | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.topology-node`                                                                                                   | `covers`     | outbound  |
+| intra-layer | `testing.coveragegap.collapse-toggle-callback-has-no-test`                                                                            | `references` | inbound   |
+| intra-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `composes`   | inbound   |
+| intra-layer | `testing.testcoveragemodel.heimdall-ui-test-coverage`                                                                                 | `composes`   | inbound   |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-cards-mode-renders-without-overlaps-after-collapse`                 | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapse-maintains-zero-overlap-guarantee-for-galaxy-f1dd0343`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapse-toggle-is-visible-and-functional-for-parent-nodes`         | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-collapsing-a-node-hides-its-structural-descendants-and-113521f3`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-edges-connected-to-collapsed-subtree-are-not-rendered`              | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-expand-after-collapse-maintains-zero-overlap-guarantee`             | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-expanding-a-collapsed-node-restores-its-structural-e8c5dd9e`        | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-galaxy-layout-collapse-visual-snapshot`                             | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-galaxy-layout-collapse-works-in-dark-mode`                          | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-galaxy-layout-expand-visual-snapshot`                               | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-hidden-badge-shows-correct-descendant-count`                        | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-chevron-icon-points-right-when-collapsed-and-down-ace90c94`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-collapse-toggle-has-correct-aria-expanded-and-aria-73cde9e1` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-collapse-toggle-updates-aria-expanded-and-aria-80bf398c`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-inline-hidden-badge-displays-with-correct-count-when-5959e4e8`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-multiple-collapses-maintain-zero-overlap-guarantee`                 | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-nodes-without-structural-children-render-no-collapse-b051d33e`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-renders-every-node-with-no-overlapping-bounding-boxes`              | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-collapse-expand-restored-features-work-in-dark-canvas-mode`                         | `composes`   | outbound  |
 
 ### Galaxy Live Drag {#galaxy-live-drag}
 
@@ -35391,124 +35470,125 @@ Integration coverage for GraphCanvas: fit-view/viewport controls, tooltips/popov
 
 #### Relationships
 
-| Type        | Related Element                                                                                                                       | Predicate  | Direction |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------- |
-| inter-layer | `application.applicationservice.force-layout`                                                                                         | `covers`   | outbound  |
-| inter-layer | `application.applicationservice.galaxy-layout`                                                                                        | `covers`   | outbound  |
-| inter-layer | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`                                                          | `covers`   | outbound  |
-| inter-layer | `product.feature.node-and-edge-tooltips-and-popovers`                                                                                 | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-edge-inspector-ux`                                                                                         | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-edge-ux`                                                                                                   | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-node-ux`                                                                                                   | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.tooltip`                                                                                                         | `covers`   | outbound  |
-| inter-layer | `ux.librarycomponent.topology-node`                                                                                                   | `covers`   | outbound  |
-| intra-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `composes` | inbound   |
-| intra-layer | `testing.coveragerequirement.every-canvas-control-and-overlay-exercised`                                                              | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.clustered-view-bubble-packing-integration`                                                                    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-galaxy-layout-lab-poc-dataset-stress-test-renders-every-node-with-no-overlapping-7d5e01b7`        | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-background-pan-drag-does-not-deselect-the-node-or-close-the-de0bc2ee`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-drag-interrupted-by-pointercancel-does-not-swallow-the-next-7e328c5a`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-label-with-no-clear-spot-hides-during-the-drag-stays-hidden-82a8c24a`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-real-drag-does-not-also-fire-node-selection`                            | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-anchored-edges-enter-the-target-d19b337f` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-anchored-edges-exit-the-source-45f0fc49`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-bus-view-visual-snapshot`                 | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-bus-view-visual-snapshot-in-6c3f29d7`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-labeled-anchored-edge-places-ac778be6`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-mixed-anchors-pin-only-the-e4bade07`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-two-edges-between-the-same-node-0c36bb99` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-canvas-background-grid-is-visible`                                        | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clicking-an-edge-label-selects-the-same-edge-as-clicking-its-b5f85cd9`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clicking-an-edge-line-selects-it-and-shows-the-source-edge-e4988ded`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clicking-the-canvas-background-deselects-the-node-and-closes-f3ef1ad7`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clustered-view-bubble-packing-layoutforce-clustered-clustered-aefe75c3`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clustered-view-bubble-packing-layoutforce-clustered-clustered-bced0dcf`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clustered-view-bubble-packing-layoutforce-clustered-the-two-44d0f9bb`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-detail-drawer-is-hidden-until-a-node-is-selected`                         | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-draggablefalse-disables-node-dragging-without-affecting-click-5f75a55a`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-fit-view-demo-visual-snapshot`             | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-fit-zoom-is-clamped-within-min-e4b3ba3c`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-fits-the-full-node-bounding-box-fa8341e3`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-set-pan-changes-only-pan-leaving-68cd0b41` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-set-zoom-changes-only-zoom-dcd71cbb`       | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-zoom-to-fit-recomputes-and-0d70e48a`       | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-an-orphan-node-renders-on-its-own-e58606d6`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-ca3d390e`          | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-live-dde0e8ae`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-locking-a28e4430`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-the-ab54c9a4`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-cards-mode-renders-substantial-13266211`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-cards-mode-supports-collapse-cc94f7f2`       | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-collapse-toggle-is-keyboard-9005fd41`        | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-galaxy-view-cards-mode-visual-688b79b5`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-galaxy-view-visual-snapshot`                 | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-galaxy-view-visual-snapshot-in-254c6b51`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-hovering-a-node-reveals-its-hidden-3533bd52` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-hovering-any-body-shows-its-orbit-378f0ade`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-live-simulation-the-simulation-5a5e51f9`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-nodes-without-structural-children-83a54773`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-non-structural-edges-are-hidden-by-b07587b4` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-show-all-relations-renders-every-7f4962cb`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-structural-edges-render-at-full-5c023c68`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-toolbar-zoom-in-out-buttons-anchor-e1575089` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-canvas-panning-works-on-mouse-drag`                                 | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-canvas-renders-with-nodes`                                          | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-canvas-zoom-works-with-scroll`                                      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-opacity-applies-to-the-line-and-marker-not-the-label-ae6018a2` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-renders-with-correct-path`                                     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-stroke-dash-overrides-variant-based-dashing`                   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-weight-maps-to-stroke-width-via-the-sqrt-curve`                | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-inspector-shows-node-metadata`                                      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-inspector-shows-relationships`                                      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-node-domain-color-is-applied-correctly`                             | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-node-selection-applies-selected-state`                              | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-nodes-are-positioned-correctly`                                     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-hover-state-cleanup-on-edge-hover-fires-with-undefined-when-a-b8d380eb`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-hover-state-cleanup-on-node-hover-fires-with-undefined-when-a-bd987714`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-aria-describedby-is-present-only-while-9e2e4afa`       | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-edge-tooltip-aria-describedby-points-to-c0879e90`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-edge-tooltip-shows-content-near-the-hovered-0a4d2cf4`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-node-tooltip-aria-describedby-points-to-3c57563c`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-node-tooltip-shows-content-near-the-hovered-9c851af1`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-only-one-tooltip-renders-at-a-time`                    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-tooltip-position-tracks-pan-and-zoom-while-41225bd2`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-selection-persists-across-canvas-interactions`                       | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-angle-indicator-e136f2f1`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-receives-correct-eb860c63` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-renders-hovered-3dbb875a`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-renders-svg-024b58c2`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-hit-target-remains-interactive-with-5707e066` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-selecting-a-different-edge-deselects-the-previous-one`                    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-selecting-a-node-clears-any-selected-edge`                                | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-the-toolbar-fullscreen-button-toggles-the-canvas-into-and-out-eb2b5938`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-the-toolbar-live-simulation-button-only-appears-for-0dc4810c`             | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-toggling-draggable-off-mid-drag-leaves-the-node-in-a-normal-c909b1b1`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-displays-status-dot`                                        | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-renders-in-topology-view`                                   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-error-4c733023`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-idle-11c8bc05`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-ok-3c0d2ecf`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-warning-6eae66a1` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-error-status-visual-fb593623` | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-idle-status-visual-89b71e24`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-ok-status-visual-9c21eca8`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-warning-status-99080e1d`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-canvas-with-nodes-visual-78db1273`    | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-edge-component-visual-b07d6085`       | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-inspector-panel-visual-c23e69c7`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-node-component-visual-efdbe45d`       | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-node-hover-border-color-still-78a99130`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-node-selected-border-color-still-ed12ae0a`  | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-weighted-graph-edge-visual-30c6fdf8`        | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-canvas-with-nodes-visual-ccdfa533`   | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-edge-component-visual-0aa182d4`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-inspector-panel-visual-fe3bddeb`     | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-node-component-visual-80b2a66a`      | `composes` | outbound  |
-| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-weighted-graph-edge-visual-4beebb99`       | `composes` | outbound  |
+| Type        | Related Element                                                                                                                       | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationservice.force-layout`                                                                                         | `covers`     | outbound  |
+| inter-layer | `application.applicationservice.galaxy-layout`                                                                                        | `covers`     | outbound  |
+| inter-layer | `business.businessprocess.render-graph-from-domain-data-to-interactive-view`                                                          | `covers`     | outbound  |
+| inter-layer | `product.feature.node-and-edge-tooltips-and-popovers`                                                                                 | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-canvas-ux`                                                                                                 | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-edge-inspector-ux`                                                                                         | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-edge-shape-ux`                                                                                             | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-edge-ux`                                                                                                   | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-inspector-ux`                                                                                              | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-node-ux`                                                                                                   | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.graph-toolbar-ux`                                                                                                | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.tooltip`                                                                                                         | `covers`     | outbound  |
+| inter-layer | `ux.librarycomponent.topology-node`                                                                                                   | `covers`     | outbound  |
+| intra-layer | `testing.coveragegap.background-click-has-no-test`                                                                                    | `references` | inbound   |
+| intra-layer | `testing.testcoveragemodel.heimdall-graph-layout-test-coverage`                                                                       | `composes`   | inbound   |
+| intra-layer | `testing.coveragerequirement.every-canvas-control-and-overlay-exercised`                                                              | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.clustered-view-bubble-packing-integration`                                                                    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-galaxy-layout-lab-poc-dataset-stress-test-renders-every-node-with-no-overlapping-7d5e01b7`        | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-background-pan-drag-does-not-deselect-the-node-or-close-the-de0bc2ee`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-drag-interrupted-by-pointercancel-does-not-swallow-the-next-7e328c5a`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-label-with-no-clear-spot-hides-during-the-drag-stays-hidden-82a8c24a`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-a-real-drag-does-not-also-fire-node-selection`                            | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-anchored-edges-enter-the-target-d19b337f` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-anchored-edges-exit-the-source-45f0fc49`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-bus-view-visual-snapshot`                 | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-bus-view-visual-snapshot-in-6c3f29d7`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-labeled-anchored-edge-places-ac778be6`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-mixed-anchors-pin-only-the-e4bade07`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-bus-view-edge-anchors-curvature-two-edges-between-the-same-node-0c36bb99` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-canvas-background-grid-is-visible`                                        | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clicking-an-edge-label-selects-the-same-edge-as-clicking-its-b5f85cd9`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clicking-an-edge-line-selects-it-and-shows-the-source-edge-e4988ded`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clicking-the-canvas-background-deselects-the-node-and-closes-f3ef1ad7`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clustered-view-bubble-packing-layoutforce-clustered-clustered-aefe75c3`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clustered-view-bubble-packing-layoutforce-clustered-clustered-bced0dcf`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-clustered-view-bubble-packing-layoutforce-clustered-the-two-44d0f9bb`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-detail-drawer-is-hidden-until-a-node-is-selected`                         | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-draggablefalse-disables-node-dragging-without-affecting-click-5f75a55a`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-fit-view-demo-visual-snapshot`             | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-fit-zoom-is-clamped-within-min-e4b3ba3c`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-fits-the-full-node-bounding-box-fa8341e3`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-set-pan-changes-only-pan-leaving-68cd0b41` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-set-zoom-changes-only-zoom-dcd71cbb`       | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-fit-view-and-viewport-controls-zoom-to-fit-recomputes-and-0d70e48a`       | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-an-orphan-node-renders-on-its-own-e58606d6`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-ca3d390e`          | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-live-dde0e8ae`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-locking-a28e4430`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-aspect-ratio-aware-layout-the-ab54c9a4`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-cards-mode-renders-substantial-13266211`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-cards-mode-supports-collapse-cc94f7f2`       | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-collapse-toggle-is-keyboard-9005fd41`        | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-galaxy-view-cards-mode-visual-688b79b5`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-galaxy-view-visual-snapshot`                 | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-galaxy-view-visual-snapshot-in-254c6b51`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-hovering-a-node-reveals-its-hidden-3533bd52` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-hovering-any-body-shows-its-orbit-378f0ade`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-live-simulation-the-simulation-5a5e51f9`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-nodes-without-structural-children-83a54773`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-non-structural-edges-are-hidden-by-b07587b4` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-show-all-relations-renders-every-7f4962cb`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-structural-edges-render-at-full-5c023c68`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-galaxy-view-layout-relations-toolbar-zoom-in-out-buttons-anchor-e1575089` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-canvas-panning-works-on-mouse-drag`                                 | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-canvas-renders-with-nodes`                                          | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-canvas-zoom-works-with-scroll`                                      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-opacity-applies-to-the-line-and-marker-not-the-label-ae6018a2` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-renders-with-correct-path`                                     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-stroke-dash-overrides-variant-based-dashing`                   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-edge-weight-maps-to-stroke-width-via-the-sqrt-curve`                | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-inspector-shows-node-metadata`                                      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-inspector-shows-relationships`                                      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-node-domain-color-is-applied-correctly`                             | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-node-selection-applies-selected-state`                              | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-graph-nodes-are-positioned-correctly`                                     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-hover-state-cleanup-on-edge-hover-fires-with-undefined-when-a-b8d380eb`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-hover-state-cleanup-on-node-hover-fires-with-undefined-when-a-bd987714`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-aria-describedby-is-present-only-while-9e2e4afa`       | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-edge-tooltip-aria-describedby-points-to-c0879e90`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-edge-tooltip-shows-content-near-the-hovered-0a4d2cf4`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-node-tooltip-aria-describedby-points-to-3c57563c`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-node-tooltip-shows-content-near-the-hovered-9c851af1`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-only-one-tooltip-renders-at-a-time`                    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-edge-tooltips-tooltip-position-tracks-pan-and-zoom-while-41225bd2`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-node-selection-persists-across-canvas-interactions`                       | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-angle-indicator-e136f2f1`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-receives-correct-eb860c63` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-renders-hovered-3dbb875a`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-custom-render-edge-renders-svg-024b58c2`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-render-edge-custom-callback-hit-target-remains-interactive-with-5707e066` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-selecting-a-different-edge-deselects-the-previous-one`                    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-selecting-a-node-clears-any-selected-edge`                                | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-the-toolbar-fullscreen-button-toggles-the-canvas-into-and-out-eb2b5938`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-the-toolbar-live-simulation-button-only-appears-for-0dc4810c`             | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-toggling-draggable-off-mid-drag-leaves-the-node-in-a-normal-c909b1b1`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-displays-status-dot`                                        | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-renders-in-topology-view`                                   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-error-4c733023`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-idle-11c8bc05`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-ok-3c0d2ecf`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-dark-canvas-topology-node-warning-6eae66a1` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-error-status-visual-fb593623` | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-idle-status-visual-89b71e24`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-ok-status-visual-9c21eca8`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-topology-node-status-variants-topology-node-warning-status-99080e1d`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-canvas-with-nodes-visual-78db1273`    | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-edge-component-visual-b07d6085`       | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-inspector-panel-visual-c23e69c7`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-graph-node-component-visual-efdbe45d`       | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-node-hover-border-color-still-78a99130`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-node-selected-border-color-still-ed12ae0a`  | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-dark-canvas-weighted-graph-edge-visual-30c6fdf8`        | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-canvas-with-nodes-visual-ccdfa533`   | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-edge-component-visual-0aa182d4`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-inspector-panel-visual-fe3bddeb`     | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-graph-node-component-visual-80b2a66a`      | `composes`   | outbound  |
+| intra-layer | `testing.testcasesketch.integration-graph-canvas-components-visual-regression-light-canvas-weighted-graph-edge-visual-4beebb99`       | `composes`   | outbound  |
 
 ### GraphCanvas Viewport History {#graphcanvas-viewport-history}
 
@@ -37769,4 +37849,4 @@ Vitest unit test src/utils/__tests__/yieldToPaint.test.ts.
 
 ---
 
-Generated: 2026-11-25T10:08:47.649Z | Model Version: 0.1.0
+Generated: 2026-11-25T10:55:49.871Z | Model Version: 0.1.0

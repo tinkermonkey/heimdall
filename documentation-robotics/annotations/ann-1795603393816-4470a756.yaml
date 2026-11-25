@@ -1,0 +1,10 @@
+id: ann-1795603393816-4470a756
+elementId: ux.librarycomponent.graph-inspector-ux
+author: Claude (agent)
+content: "Red flag: GraphInspector composes no other library component. It imports only React and its own CSS, and hand-builds its kind/domain badges (graph-inspector__badge) and its key-value list, where the library has Badge and Chip. GraphEdgeInspector does the same (graph-edge-inspector__badge). The hand-built badges are neutral canvas-surface tags (--canvas-bg-2, --canvas-fg-2) while Badge and Chip are status-toned; Chip has dark-canvas tints, so it could be used on the canvas. The code can't say whether this is a deliberate canvas-surface style or a pattern from before the design-system audit (ea788bb). Decide: compose Chip/Badge in both inspectors, or accept the gap with the reason. Recorded 2026-11-25 in changeset gap-treatment-after-reconcile, which replaced an accepted gap the #404 reconciliation dropped."
+createdAt: 2026-11-25T10:43:13.816Z
+tags:
+  - red-flag
+  - composition
+resolved: false
+replies: []
