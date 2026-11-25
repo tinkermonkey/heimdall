@@ -1,8 +1,9 @@
-# Branch map: concept designs
+# Branch map: concept designs and proof of concept
 
-Status: concepts, 2026-11-25. Nothing here is public API. **Direction chosen 2026-11-25:
-Metro bands** (see [Decisions for the POC](#decisions-for-the-poc)); the proof of concept builds
-on it.
+Five concepts were drawn on 2026-11-25 and **Metro bands** was chosen (see
+[Decisions for the POC](#decisions-for-the-poc)). The proof of concept that builds on it is
+described in [The proof of concept](#the-proof-of-concept): a vocabulary-free model, a headless
+layout, the `BranchMap` view, and a House adapter that lives in the test pages.
 
 The idea is a vertical map of how a project is organized, read the way you read a git history
 graph or a subway map. Each project has a trunk that runs down from **now**. A branch forks off
@@ -96,8 +97,9 @@ From the 2026-11-25 snapshot of Context Studio, DR, DR Viewer, Heimdall, Referen
 House MCP and Claude Plugins (142 milestones, 37 gates, 78 workstreams, 7 interfaces):
 
 - **Interfaces carry the inter-project story, not `depends_on`.** Only 4 `depends_on` links
-  cross between these projects, against 7 interfaces with 13 provider-to-user pairs. Drawing only
-  `depends_on` would make the projects look nearly independent.
+  cross between these projects, against 7 interfaces with 10 provider-to-user pairs (one of them a
+  project that uses its own interface). Drawing only `depends_on` would make the projects look
+  nearly independent.
 - **One project can need 20 lanes.** Documentation Robotics has 20 active workstreams, so its
   "from now" view is 20 parallel branches. Claude Plugins has 17. The POC needs a way to collapse
   or bundle branches: by destination, by sub-project, or "N more" stubs.
@@ -186,30 +188,84 @@ gates, then the open branches.
    as a list.
 2. **Geometry. Decided 2026-11-25 with the row model: 45° octilinear with rounded corners.**
    Set aside: S-curves (git).
-3. **Width.** Off, `Streams` or `Tasks` as the default. The conservation rule above is
-   implemented. The open question is whether a dead end should visibly thin the trunk; it does
-   today.
-4. **The trunk.** Keep deriving it (heaviest milestone chain), or let a project state it: for
-   example, the milestones that deliver an interface, or a House tag. The data has few
-   `depends_on` chains, so a stated trunk may matter more than a better heuristic.
-5. **Scale.** How to draw a project with 20 open streams: bundle by destination, by sub-project,
-   or collapse to "N streams" until focused.
-6. **Where it lives in heimdall.** Following the layered-graph precedent
-   ([breakdown](../layered-graph/breakdown.md) §1.1), heimdall stays ignorant of House. The POC
-   would take a generic input (groups, stations with kind, status and optional date, lines with
-   from, to, weight and style, and links), with a House adapter in the consuming app. The
-   choice is between a `GraphCanvas` layout mode (`layout="branch-map"`, positions plus routed
-   polylines, like `layer-lanes`) and a standalone view component that shares GraphCanvas's
-   viewport and selection. Lines with their own width and stations on lines are not GraphCanvas
-   edges and nodes, which argues for a standalone view.
+3. **Width. Default chosen for the POC: off**, with `width: 'weight'` as an option. With weight
+   on, width is the square root of weight; a fork takes a line's weight off the trunk and a join
+   gives it back, and a dead end never returns it, so the trunk is visibly thinner after one. The
+   House adapter weighs a workstream as 1 (`Streams`, the steadier choice) or by its open and
+   done tasks (`Tasks`).
+4. **The trunk. Default chosen for the POC: derived unless stated.** A group may state its trunk
+   (`group.trunk`, station ids); otherwise the layout takes the heaviest chain of stops. The House
+   adapter states none yet, since House has no field for it.
+5. **Scale. Default chosen for the POC: a lane budget.** A group draws at most `maxLanes` (8)
+   branch lanes. Past it, lines with the same fork and destination bundle into one line with a
+   count, then the lightest lines left collapse into one "N more" line. A bundle or a whole group
+   can be expanded.
+6. **Where it lives. Default chosen for the POC: a standalone `BranchMap` view**, with pan and
+   zoom from `usePanZoom` and controlled selection, rather than a `GraphCanvas` layout mode.
+   Heimdall stays ignorant of House: the adapter is in the test pages.
 
-Decisions 3 to 6 are still open. Metro bands' known weaknesses carry into the POC: the label
-column makes each project wide, and workstream names along 18 px lanes get cramped, so label
-placement belongs in the POC's scope alongside scale (decision 5).
+Decisions 3 to 6 are defaults for the POC, to be confirmed once it runs on real data. The two
+weaknesses Metro bands showed in the concepts (a wide label column, cramped names along 18 px
+lanes) are addressed in the POC by placing labels beside their own stations and running line
+names horizontally at the fork.
+
+## The proof of concept
+
+The POC is planned in the DR changeset `branch-map-poc` and tracked in the House milestone
+"Branch map POC" (GitHub milestone "Branch map POC", issues #411 to #414). It has four parts:
+
+- **The model** (`src/utils/branchMap/types.ts`): groups, stations (`stop` or `decision`, with a
+  status, an optional date, `after`, progress and blocked), lines (from a station or the start
+  marker to a station or an open end, with status, style, weight and marks) and links
+  (`dependency`, `provides`). It knows nothing of House.
+- **The layout** (`src/utils/branchMap/`): `layoutBranchMap` places stations in rank bands, picks
+  the trunk, bundles lines past the lane budget, assigns lanes and places labels; `routeBranchMap`
+  draws lines, trunks and links from the placement alone. Both are pure and headless.
+- **The view** (`src/components/BranchMap.tsx`): draws the scene in SVG with `--graph-layer-*`
+  colours, with selection, keyboard focus, hover, pan and zoom, and expandable bundles.
+- **The House adapter** (`src/test-pages/branchMap/houseBranchMapAdapter.ts`):
+  `houseToBranchMap(snapshot, { projects, horizon, widthBy })` maps the snapshot onto the model.
+
+```bash
+npm run dev
+# then open http://localhost:5173/?example=branch-map
+```
+
+URL parameters: `projects=heimdall,dr_viewer`, `horizon=forward|all`,
+`width=off|streams|tasks`, `expand=<group or bundle ids>`, `select=<id>` and `dark=1`. The page
+has project toggles, horizon, width and canvas controls, an inspector that shows the House
+record behind a selection, and a legend. The docs app has a `BranchMap` page on the
+vocabulary-free sample (`src/test-pages/fixtures/branchMapSample.ts`).
+
+How the adapter maps House:
+
+| House | Branch map |
+|---|---|
+| project | group, with a fixed palette colour per project |
+| milestone | `stop`: proposed → planned, active → active, reached → done, set_aside → set-aside, dropped → dropped |
+| gate | `decision`: open → active, decided → done, set_aside → set-aside, dropped → dropped |
+| reached_on, decided_on | the station's `date` (whole history only) |
+| `depends_on` and `opens`, within a project | the station's `after` |
+| workstream | a line to its `leads_to`, from the latest station in its project that opened it or that it waits on, else from the start marker. Explorations are dashed, set-aside workstreams dotted (set aside wins). Open tasks are marks, in progress emphasized. |
+| `depends_on` across projects | a `dependency` link from the station waited on; a workstream's wait lands on its destination |
+| interface | a `provides` link from the provider's next open milestone that delivers it, else its start marker, to each other project that uses it |
+| blocked | an open station that waits on a milestone or gate still open (in any project, shown or not) or on a task |
+
+Known limits of the POC:
+
+- House stores no start for a workstream, so a line's start is derived. Closed work with no
+  recorded start forks from the start marker.
+- A workstream waiting on another project is drawn as a dependency into the station it
+  delivers to, since a line is not a link endpoint.
+- A project that uses its own interface (Documentation Robotics' "Post-extraction review") draws
+  no link.
+- The House data is a fixture taken on 2026-11-25, not read live.
 
 ## Files
 
-- `src/test-pages/branchMap/branchMapLayout.ts`: the layout. It is a pure function from the
+The concepts:
+
+- `src/test-pages/branchMap/branchMapLayout.ts`: the concept layout. It is a pure function from the
   snapshot and options to a scene of stations, lines (paths, run, width per trunk segment) and
   links. Its stages are filter, rank, trunk, branches, rows, lanes, routes, widths and links.
   Rounded octilinear routes reuse `polylineCurve` from `src/utils/laneLayout.ts`.
@@ -219,3 +275,12 @@ placement belongs in the POC's scope alongside scale (decision 5).
 - `src/test-pages/fixtures/houseOrganizingSnapshot.ts`: the data. It was generated from House
   `list_nodes` (milestone, gate, workstream, interface, with `include_closed`) on 2026-11-25.
   Definitions, readings and links are left out, and only edges between kept nodes are kept.
+
+The proof of concept:
+
+- `src/utils/branchMap/`: the model, layout and routing (exported from the package).
+- `src/components/BranchMap.tsx` and `.css`: the view.
+- `src/test-pages/branchMap/houseBranchMapAdapter.ts`: House to the model, with its unit test.
+- `src/test-pages/branchMap/BranchMapTestPage.tsx` and `.css`: the test page (`?example=branch-map`).
+- `tests/branch-map.spec.ts`: selection, keyboard, expanding bundles and visual baselines.
+- `docs/src/showcases/BranchMapShowcase.tsx`: the docs page, on the vocabulary-free sample.
