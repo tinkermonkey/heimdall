@@ -172,6 +172,47 @@ export { GraphCollapseControl, type GraphCollapseControlProps } from './componen
 export { AdjacencyMatrix, type AdjacencyMatrixProps, type LayerMatrixCell } from './components/AdjacencyMatrix'
 export { linkEdgeMetadata } from './utils/layered/matrix'
 export { HivePlot, type HivePlotProps, type HivePlotInteractions } from './components/HivePlot'
+// Branch map: a vertical metro map of how groups of work are organized (headless layout + view)
+export { BranchMap, type BranchMapProps, type BranchMapItem } from './components/BranchMap'
+export { layoutBranchMap, routeBranchMap, branchMapScene, resolveBranchMapOptions, BRANCH_MAP_DEFAULTS } from './utils/branchMap'
+export type {
+  BranchMapData,
+  BranchMapGroup,
+  BranchMapStation,
+  BranchMapStationKind,
+  BranchMapStationStatus,
+  BranchMapLine,
+  BranchMapLineStatus,
+  BranchMapLineStyle,
+  BranchMapLineMarks,
+  BranchMapLink,
+  BranchMapLinkKind,
+  BranchMapOptions,
+  BranchMapResolvedOptions,
+  BranchMapWidthMode,
+  BranchMapLooseStations,
+  BranchMapLabelRole,
+  BranchMapMeasureText,
+  BranchMapLayout,
+  BranchMapGroupLayout,
+  BranchMapGroupCounts,
+  BranchMapStationLayout,
+  BranchMapLineKind,
+  BranchMapLineLayout,
+  BranchMapLabelBox,
+  BranchMapUnplacedLabel,
+  BranchMapLinkLayout,
+  BranchMapIssue,
+  BranchMapIssueKind,
+  BranchMapBounds,
+  BranchMapScene,
+  BranchMapLineEnd,
+  BranchMapRun,
+  BranchMapRoutedLine,
+  BranchMapTrunk,
+  BranchMapTrunkSegment,
+  BranchMapRoutedLink,
+} from './utils/branchMap'
 export {
   LayerStack,
   type LayerStackProps,
