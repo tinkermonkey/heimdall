@@ -7,9 +7,9 @@
 | Total Elements      | 2242                     |
 | Total Relationships | 3707                     |
 | Populated Layers    | 10                       |
-| Last Updated        | 2026-11-25T10:55:49.801Z |
+| Last Updated        | 2026-11-25T14:41:17.479Z |
 | CLI Version         | 0.8.0                    |
-| Spec Version        | 0.14.0                   |
+| Spec Version        | 0.15.0                   |
 
 ## Project Summary
 
