@@ -17,6 +17,7 @@ import { EntityPickerShowcase, KeyValueEditorShowcase, OrderedListShowcase, Rela
 import { GraphNodeShowcase, GraphCanvasShowcase, GraphInspectorShowcase, GraphEdgeInspectorShowcase, TopologyNodeShowcase, GraphEdgeShowcase } from './showcases/GraphShowcase'
 import { GraphLayoutsShowcase } from './showcases/GraphLayoutsShowcase'
 import { LayeredGraphsShowcase } from './showcases/LayeredGraphsShowcase'
+import { BranchMapShowcase } from './showcases/BranchMapShowcase'
 import { LayerStackShowcase } from './showcases/layered/LayerStackShowcase'
 import { LayerLanesShowcase } from './showcases/layered/LayerLanesShowcase'
 import { HivePlotShowcase } from './showcases/layered/HivePlotShowcase'
@@ -186,6 +187,7 @@ const SHOWCASE_MAP: Record<string, React.ComponentType> = {
   forms: FormsShowcase,
   // Graph
   'graph-layouts': GraphLayoutsShowcase,
+  'branch-map': BranchMapShowcase,
   'layered-graphs': LayeredGraphsShowcase,
   'layer-stack': LayerStackShowcase,
   'layer-lanes': LayerLanesShowcase,
@@ -353,6 +355,7 @@ const NAV_SECTIONS: NavSection[] = [
     title: 'Graph',
     items: [
       { id: 'graph-layouts', label: 'Layouts', icon: 'graph' },
+      { id: 'branch-map', label: 'BranchMap', icon: 'gitBranch' },
       { id: 'graph-edge', label: 'GraphEdge', icon: 'arrowRight' },
       { id: 'graph-node', label: 'GraphNode', icon: 'component' },
       { id: 'graph-canvas', label: 'GraphCanvas', icon: 'schema' },

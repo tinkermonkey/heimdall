@@ -1164,3 +1164,105 @@ application.applicationfunction.pan-and-zoom-viewport-control:
     created_at: 2026-11-25T10:42:22.992Z
     updated_at: 2026-11-25T10:42:22.992Z
     version: 1
+application.applicationfunction.branch-map-placement:
+  id: 05923b0b-b2d5-4d23-9045-f625886d93e0
+  path: application.applicationfunction.branch-map-placement
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Branch Map Placement
+  description: "layoutBranchMap() in src/utils/branchMap/layout.ts: validate the input (duplicate ids, dangling references and cycles go to issues, never throw), rank stations (rank.ts: dated done stations above the start marker by date; open stations below it by longest path over station.after, line from-to with a minimum span, and dependency links, solved across all groups so cross-group links point down), choose each trunk (dated done stations no live line leads to join it), bundle lines, assign rank bands with one sub-row per station per group, assign lanes by interval colouring (lanes.ts: trunk on lane 0, freed lanes reused; lines from the start leave the trunk one row apart as a staggered fan), place the labels, then pack groups left to right by their measured width. Output is BranchMapLayout: positions only."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/branchMap/layout.ts
+        symbol: layoutBranchMap
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+application.applicationfunction.branch-map-trunk-selection:
+  id: ad8dade0-8030-4fab-83c1-dbb035b79f9a
+  path: application.applicationfunction.branch-map-trunk-selection
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Branch Map Trunk Selection
+  description: "chooseBranchMapTrunk(): the heaviest chain of stops in rank order (weight from arriving lines and their weight, a bonus for consecutive stops linked by after). A stated trunk (group.trunk) names waypoints the chain must pass through; each stretch between waypoints, and before the first and after the last, is chosen on its own. Waypoints of one rank are a tie, not an inversion; ids outside the group or a later rank given before an earlier one are reported as invalid-trunk. Decision stations sit on the trunk when nothing leads to them and their row is free. Decided 2026-11-25 (decision 4): waypoints rather than an exact trunk, so a stated trunk stays a long main line."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/branchMap/trunk.ts
+        symbol: chooseBranchMapTrunk
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+application.applicationfunction.branch-map-line-bundling:
+  id: 0412909b-c3f8-4759-979e-0379924e3ea1
+  path: application.applicationfunction.branch-map-line-bundling
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Branch Map Line Bundling
+  description: "bundleBranchLines() in src/utils/branchMap/bundle.ts: keeps a group within maxLanes. Merges lines that fork from the same place (a station, or the group's start) and deliver to the same station into one bundle line (members, count, summed weight; id bundle:<group>:<from|start>:<to>), largest sets first; if still over budget, collapses the lightest remaining lines and bundles into one 'N more' line per group (more:<group>). Groups and bundles named in expanded are left whole, and an expanded more:<group> draws the lines and bundles it would have held, past the budget. Deterministic tie-breaks by id. As built, the bundle key is the exact fork plus destination, not the fork's rank as first planned."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/branchMap/bundle.ts
+        symbol: bundleBranchLines
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+application.applicationfunction.branch-map-label-placement:
+  id: 32362735-cf60-4334-96a5-14153be11cfb
+  path: application.applicationfunction.branch-map-label-placement
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Branch Map Label Placement
+  description: "placeBranchMapLabels() in src/utils/branchMap/labels.ts: per group, candidate boxes for each station label on its own sub-row (right of the station, right of the lines running past that row, or left of a station off the trunk) and each line label (horizontal, right of the line's run near its fork, sliding down the run when taken), placed greedily by priority (trunk stations, then other stations, then line names) so no box overlaps another box or a station mark; crossing a line and distance from the anchor are soft costs. Text width from options.measureText or a character-width estimate; wraps to two lines at maxLabelWidth, then ellipsis. Returns placed and unplaced labels; layoutBranchMap sets the group's width from the placed boxes."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/branchMap/labels.ts
+        symbol: placeBranchMapLabels
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+application.applicationfunction.branch-map-routing:
+  id: 71bed825-1608-4b2e-90a8-4f8dd472aef6
+  path: application.applicationfunction.branch-map-routing
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: Branch Map Routing
+  description: "routeBranchMap(): from a BranchMapLayout only, each line's polyline (fork at 45 degrees, straight run along its lane, rejoin at 45 degrees, corners rounded with polylineCurve from laneLayout.ts) with its run for ticks, how it ends (join, station, open, dead), the trunk as straight segments with per-segment width when width is on (fork takes weight off, join gives it back, a dead end never returns it), and link curves (dependency arrows between stations, arches from a provider station to a group's start). Output is BranchMapScene."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/branchMap/route.ts
+        symbol: routeBranchMap
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1
+application.applicationfunction.house-branch-map-adapter:
+  id: 11d91168-d6cb-4614-b857-4e854dfa5410
+  path: application.applicationfunction.house-branch-map-adapter
+  spec_node_id: application.applicationfunction
+  type: applicationfunction
+  layer_id: application
+  name: House Branch Map Adapter
+  description: "houseToBranchMap(snapshot, { projects, horizon, widthBy }) in src/test-pages/branchMap/houseBranchMapAdapter.ts: maps the House organizing snapshot to BranchMapData. Projects become groups (fixed palette colour per project), milestones stops and gates decisions (proposed to planned, open gate to active, reached and decided to done, with reached_on or decided_on as the date), depends_on and opens within a project become station after; workstreams become lines (from: the latest station in its own project that opened it or that it waits on, else the start; style dashed for explorations, dotted for set aside, set aside winning; weight 1 or open plus done tasks; open tasks as marks, in progress emphasized), depends_on across projects dependency links (a workstream's wait lands on its destination), interfaces provides links from the provider's next open delivering milestone (else its start) to each other user's start, blocked derived as House derives it over the whole snapshot. A project's milestones that deliver an active interface become its trunk waypoints in depends_on order (decision 4, 2026-11-25); a project delivering none states none. Visible projects and the horizon (from now, whole history) are the adapter's filter. Stays out of the library."
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.ts
+        symbol: houseToBranchMap
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1

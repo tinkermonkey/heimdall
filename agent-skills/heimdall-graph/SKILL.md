@@ -1,6 +1,6 @@
 ---
 name: heimdall-graph
-description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, LayeredGraphContext, LayerStack, AdjacencyMatrix, HivePlot, FollowControl, PredicateLabelControl, PlaneLayoutControl, LinkCategoryFilter, LayerList, LayerPairList, BridgeNodeList, ReachInspector, LayeredGraphExplorer, ViewSwitcher, CameraControls, plus useGraphCanvas, usePanZoom, useLayeredGraph, the headless layout engines, the edge geometry utilities and the layered graph framework
+description: Heimdall component guide for Graph: GraphCanvas (layout modes, popovers, tooltips, custom node and edge renderers), GraphNode, GraphEdge, GraphEdgeShape, GraphToolbar, GraphCollapseControl, GraphInspector, GraphEdgeInspector, DetailDrawer, TopologyNode, HierarchyRow, HierarchyTree, LayeredGraphContext, LayerStack, AdjacencyMatrix, HivePlot, BranchMap, FollowControl, PredicateLabelControl, PlaneLayoutControl, LinkCategoryFilter, LayerList, LayerPairList, BridgeNodeList, ReachInspector, LayeredGraphExplorer, ViewSwitcher, CameraControls, plus useGraphCanvas, usePanZoom, useLayeredGraph, the headless layout engines, the edge geometry utilities and the layered graph framework
 ---
 
 Import all components from `@tinkermonkey/heimdall-ui`. Import the CSS once at your app entry point:
@@ -1744,6 +1744,76 @@ const graph = useLayeredGraph({ nodes, edges, layering, layout: false })
 | `startAngle` | `number` | `-90` | First axis angle, degrees clockwise from the right (−90 = up) |
 | `interactions` | `HivePlotInteractions` | both on | `{ select?: boolean; hover?: boolean }`: node selection (click, Enter, Space, Escape) and hover lift |
 | `onLinkSelect` | `(link: IndexedLink) => void` | — | Link click handler. Unset: selects the link's source. Unchanged for now; only `AdjacencyMatrix.onLinkSelect` is deprecated (for `onCellSelect`) |
+
+## BranchMap
+
+A vertical branch map, drawn as Metro bands: how groups of work are organized, read like a subway map or a `git log --graph`. Each group is a column with a trunk running down from its start marker; lines (branches) fork off at 45°, run along their own lane and rejoin at the station they deliver to; stations sit in dependency-rank bands with their labels beside them; links cross between groups. It interprets the metro map metaphor for project plans (Nesbitt, IV 2004; Stott et al., IV 2005) and commit-graph lane assignment.
+
+The model is vocabulary-free: groups, stations (`stop` or `decision`), lines and links (`dependency` or `provides`). Mapping a source such as a project tracker onto `BranchMapData` is the consuming app's job. It is a scene component without chrome: put toolbars, legends and an inspector around it.
+
+- **Layout:** the map runs `branchMapScene(data, options)` (memoized on `data` and the layout props). The headless stages are exported for custom renderers and tests: `layoutBranchMap(data, options)` places groups, stations, lines, bundles and label boxes (`BranchMapLayout`, with `issues` for duplicate ids, dangling references, cycles and invalid trunks, never thrown); `routeBranchMap(layout)` adds line, trunk and link geometry from the layout alone (`BranchMapScene`). `resolveBranchMapOptions(options)` fills in `BRANCH_MAP_DEFAULTS`. Input issues are logged once per scene as a dev-mode warning.
+- **Trunk:** each group's trunk is the heaviest chain of stops in rank order (weighted by the lines arriving at each). `group.trunk` names waypoints the trunk must pass through, top to bottom, for stations that matter whatever their weight (what a group promises other groups, say); the rest of the trunk is still derived around them. Waypoints that put a later rank before an earlier one are an `invalid-trunk` issue.
+- **Glyphs:** a circle per stop, a diamond per decision, both in the group's `--graph-layer-<n>` colour (`group.color`, else group order). Done is filled, planned has a dashed outline, set aside and dropped are grey, and blocked adds an amber dot. Lines are solid, dashed or dotted (`style`); done lines are faded, set-aside lines dotted grey, and a dropped line ends with a bar. `marks` draws ticks along a line's run, the first `emphasized` in amber. Dependency links are dashed arrows; provides links are violet dotted arches to a group's start.
+- **Labels:** drawn where the layout placed them (`BranchMapLayout.labels`), with a canvas halo. A label the layout could not place is still the item's tooltip and accessible name. Label widths are measured with a 2D canvas in the map's fonts (re-measured once web fonts load); pass `measureText` to supply your own.
+- **Selection:** controlled with `selectedId` and `onSelect` (uncontrolled when `selectedId` is unset). Click, Enter or Space selects a station, line, link or group name; again clears; Escape or a click on empty canvas clears. Everything unrelated to the selection is dimmed: a station keeps the lines that start, end or stop at it, its links and the stations it follows or that follow it; a line keeps its end stations; a group keeps all of its items. An input line drawn inside a bundle selects that bundle.
+- **Bundles:** past `maxLanes`, the layout bundles lines with the same fork and destination and then folds the lightest into one "N more" line; both carry a count badge. Clicking (or Enter on) a bundle or "N more" adds its id to `expanded`, which draws its lines ("N more" draws them past the lane budget). A group's header shows EXPAND (draw every line) or COLLAPSE (bundle again, removing the group's id and the bundles expanded in it). `expanded` is controlled with `onExpandedChange`, or seeded with `defaultExpanded`.
+- **Pan and zoom:** `usePanZoom`: drag to pan, wheel or pinch to zoom, and with the map focused, arrow keys pan and plus and minus zoom. A press that moves more than 4 px is a pan, not a click.
+- **Keyboard:** stations and lines are one tab stop (the last focused, else the selection, else the first). Arrow Up and Down move through a group's items top to bottom, Home and End jump to its ends, Arrow Left and Right move to the nearest item in the next group. Focus pans the map to keep the item on screen. Focus also sets the hovered item.
+- **Hover and tooltips:** hover (or focus) sets `hoveredId` (controlled with `onHoverChange`) and lifts the item a neutral step. Without `renderTooltip`, each item's SVG `<title>` is its native tooltip; with it, the returned node is drawn in a floating box beside the item.
+- **Sizing:** the map fills its container; give the container a height.
+
+```tsx
+import { BranchMap, type BranchMapData, type BranchMapItem } from '@tinkermonkey/heimdall-ui'
+
+const data: BranchMapData = useMemo(() => toBranchMap(snapshot), [snapshot])
+const [selected, setSelected] = useState<string | null>(null)
+const [expanded, setExpanded] = useState<string[]>([])
+
+<div style={{ height: 640 }}>
+  <BranchMap
+    data={data}
+    startLabel="NOW"
+    selectedId={selected}
+    onSelect={(id) => setSelected(id)}
+    expanded={expanded}
+    onExpandedChange={setExpanded}
+    renderTooltip={(item: BranchMapItem) => (item.kind === 'station' ? item.station.station.label : item.id)}
+  />
+</div>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+| ---- | ---- | ------- | ----------- |
+| `data` | `BranchMapData` | — | `groups`, `stations`, `lines` and optional `links`. Memoize it: a new object re-runs the layout |
+| `selectedId` | `string \| null` | uncontrolled | Selected station, line, link or group id. An input line inside a bundle selects the bundle |
+| `onSelect` | `(id: string \| null, item: BranchMapItem \| null) => void` | — | Click, Enter or Space selects (again clears); Escape and an empty-canvas click clear |
+| `hoveredId` | `string \| null` | uncontrolled | Hovered or keyboard-focused item |
+| `onHoverChange` | `(id: string \| null, item: BranchMapItem \| null) => void` | — | Called as the pointer or focus moves between items |
+| `expanded` | `readonly string[]` | uncontrolled | Group and bundle ids drawn whole |
+| `defaultExpanded` | `readonly string[]` | `[]` | Initial `expanded` when uncontrolled |
+| `onExpandedChange` | `(expanded: string[]) => void` | — | Called when a bundle is clicked or a group toggled |
+| `renderTooltip` | `(item: BranchMapItem) => ReactNode` | native `<title>` | Hover detail in a floating box beside the item |
+| `startLabel` | `string` | — | Text beside each group's start marker, e.g. `NOW` |
+| `rowGap` | `number` | `BRANCH_MAP_DEFAULTS` (26) | Layout: between the sub-rows of one rank band |
+| `rankGap` | `number` | `18` | Layout: between rank bands |
+| `laneGap` | `number` | `24` | Layout: between lanes |
+| `groupGap` | `number` | `40` | Layout: between groups |
+| `minBranchRanks` | `number` | `2` | Layout: ranks a line spans at least |
+| `maxLanes` | `number` | `8` | Layout: branch lanes per group before lines bundle |
+| `width` | `'off' \| 'weight'` | `'off'` | Layout: `'weight'` widens lines and the trunk by the square root of weight |
+| `maxLabelWidth` | `number` | `180` | Layout: labels wrap to two lines at this width, then end with an ellipsis |
+| `measureText` | `(text: string, role: BranchMapLabelRole) => number` | canvas measure | Layout: label width in px |
+| `looseStations` | `'spur'` | `'spur'` | Layout: stations no line leads to sit on one dotted planned line per group |
+
+`BranchMapItem` is `{ kind: 'station', id, station: BranchMapStationLayout } | { kind: 'line', id, line: BranchMapRoutedLine } | { kind: 'link', id, link: BranchMapRoutedLink } | { kind: 'group', id, group: BranchMapGroupLayout }`. The input record is on `station.station` and, for an unbundled line, `line.line`; `data` passes through untouched.
+
+### Gotchas
+
+- Ids are unique across groups, stations, lines and links. Bundle and "N more" ids are generated by the layout; they are stable for the same input and usable in `expanded`.
+- Links are clickable but not in the keyboard order; group names are clickable, and the EXPAND and COLLAPSE toggles are focusable.
+- Rows come from dependency rank (`after`, line `from` and `to`, and dependency links), not dates; only done stations with a `date` sit above the start marker, in date order.
 
 ## FollowControl
 

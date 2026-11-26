@@ -5,8 +5,7 @@ product.softwarecapability.force-directed-graph-layout:
   type: softwarecapability
   layer_id: product
   name: Force-Directed Graph Layout
-  description: "Shipped capability: spring/repulsion-based automatic layout for
-    arbitrary node/edge graphs."
+  description: "Shipped capability: spring/repulsion-based automatic layout for arbitrary node/edge graphs."
   attributes:
     status: delivered
   source_reference:
@@ -25,8 +24,7 @@ product.softwarecapability.clustered-force-layout-community-bubbles:
   type: softwarecapability
   layer_id: product
   name: Clustered Force Layout (Community Bubbles)
-  description: "Shipped capability: nested-bubble layout grouping nodes by Louvain
-    community structure."
+  description: "Shipped capability: nested-bubble layout grouping nodes by Louvain community structure."
   attributes:
     status: delivered
   source_reference:
@@ -45,8 +43,7 @@ product.softwarecapability.galaxy-radial-orbit-layout:
   type: softwarecapability
   layer_id: product
   name: Galaxy Radial Orbit Layout
-  description: "Shipped capability: radial hierarchy-of-orbits layout for
-    structural trees/forests."
+  description: "Shipped capability: radial hierarchy-of-orbits layout for structural trees/forests."
   attributes:
     status: delivered
   source_reference:
@@ -65,8 +62,7 @@ product.softwarecapability.ux-navigation-tree-layout:
   type: softwarecapability
   layer_id: product
   name: UX Navigation Tree Layout
-  description: "Shipped capability: page-tree + view-fan layout for visualizing
-    page/view navigation structures."
+  description: "Shipped capability: page-tree + view-fan layout for visualizing page/view navigation structures."
   attributes:
     status: delivered
   source_reference:
@@ -85,8 +81,7 @@ product.softwarecapability.radial-tree-layout:
   type: softwarecapability
   layer_id: product
   name: Radial Tree Layout
-  description: "Shipped capability: concentric-ring radial tree layout with
-    multi-trunk packing."
+  description: "Shipped capability: concentric-ring radial tree layout with multi-trunk packing."
   attributes:
     status: delivered
   source_reference:
@@ -105,18 +100,14 @@ product.softwarecapability.organic-graph-layout:
   type: softwarecapability
   layer_id: product
   name: Organic Graph Layout
-  description: 'Shipped capability: stress-majorization layout (organicLayout,
-    layout="organic") with preferred edge length, minimum node distance,
-    compactness, label-box reservation and incremental affected-node scope.'
+  description: 'Shipped capability: stress-majorization layout (organicLayout, layout="organic") with preferred edge length, minimum node distance, compactness, label-box reservation and incremental affected-node scope.'
   attributes:
     status: delivered
   accepted_gaps:
     - direction: incoming
       predicate: realizes
       other_spec_node_id: product.feature
-      reason: Organic layout ships as a layout mode (layout="organic") and a headless
-        function, with no separate user-facing feature beyond the capability
-        itself, like force-directed and radial-tree.
+      reason: Organic layout ships as a layout mode (layout="organic") and a headless function, with no separate user-facing feature beyond the capability itself, like force-directed and radial-tree.
       decided_by: agent
       decided_at: 2026-11-23T16:49:05.355Z
       changeset: changeset-1795451983730-m826idq0t
@@ -131,10 +122,7 @@ product.softwarecapability.orthogonal-graph-layout:
   type: softwarecapability
   layer_id: product
   name: Orthogonal Graph Layout
-  description: 'Shipped capability: grid-snapped layout with right-angle edge
-    routes (orthogonalLayout, layout="orthogonal"): a lattice router for graphs
-    up to 150 edges and a channel router for larger ones, so no route passes
-    through a node.'
+  description: 'Shipped capability: grid-snapped layout with right-angle edge routes (orthogonalLayout, layout="orthogonal"): a lattice router for graphs up to 150 edges and a channel router for larger ones, so no route passes through a node.'
   attributes:
     status: delivered
   metadata:
@@ -148,9 +136,7 @@ product.softwarecapability.overlays-and-dialogs:
   type: softwarecapability
   layer_id: product
   name: Overlays and Dialogs
-  description: "Shipped capability: modal, confirm dialog, drawer, toast, tooltip,
-    popover, command palette and workspace switcher, with focus trapping and
-    portal-aware dismissal."
+  description: "Shipped capability: modal, confirm dialog, drawer, toast, tooltip, popover, command palette and workspace switcher, with focus trapping and portal-aware dismissal."
   attributes:
     status: delivered
   metadata:
@@ -164,9 +150,7 @@ product.softwarecapability.page-patterns:
   type: softwarecapability
   layer_id: product
   name: Page Patterns
-  description: "Shipped capability: page headers, filter bars, activity timelines,
-    alert strips, quick-access grids and tiles, config tiles, pipeline cards,
-    form callouts and row menus."
+  description: "Shipped capability: page headers, filter bars, activity timelines, alert strips, quick-access grids and tiles, config tiles, pipeline cards, form callouts and row menus."
   attributes:
     status: delivered
   metadata:
@@ -180,10 +164,7 @@ product.softwarecapability.interactive-graph-exploration:
   type: softwarecapability
   layer_id: product
   name: Interactive Graph Exploration
-  description: "What the canvas lets an end user do with a laid-out graph in
-    place: hide and reveal structural descendants, and read node and edge detail
-    on demand through tooltips and popovers. Inferred from GraphCanvas's
-    collapsedNodeIds and renderTooltip/renderPopover props."
+  description: "What the canvas lets an end user do with a laid-out graph in place: hide and reveal structural descendants, and read node and edge detail on demand through tooltips and popovers. Inferred from GraphCanvas's collapsedNodeIds and renderTooltip/renderPopover props."
   attributes:
     status: delivered
   source_reference:
@@ -201,8 +182,7 @@ product.softwarecapability.ui-primitives:
   type: softwarecapability
   layer_id: product
   name: UI Primitives
-  description: "Shipped capability: Icons, buttons, chips, badges, avatars and
-    segmented controls every other component builds on."
+  description: "Shipped capability: Icons, buttons, chips, badges, avatars and segmented controls every other component builds on."
   attributes:
     status: delivered
   source_reference:
@@ -220,9 +200,7 @@ product.softwarecapability.form-input:
   type: softwarecapability
   layer_id: product
   name: Form Input
-  description: "Shipped capability: Text, number, select, tri-state and structured
-    inputs (pickers, key-value and relationship editors) with field labels and
-    errors."
+  description: "Shipped capability: Text, number, select, tri-state and structured inputs (pickers, key-value and relationship editors) with field labels and errors."
   attributes:
     status: delivered
   source_reference:
@@ -240,8 +218,7 @@ product.softwarecapability.data-display:
   type: softwarecapability
   layer_id: product
   name: Data Display
-  description: "Shipped capability: Stat tiles and grids, tables, key-value grids,
-    inspector panels, result and asset cards, and the map canvas."
+  description: "Shipped capability: Stat tiles and grids, tables, key-value grids, inspector panels, result and asset cards, and the map canvas."
   attributes:
     status: delivered
   source_reference:
@@ -259,8 +236,7 @@ product.softwarecapability.app-navigation:
   type: softwarecapability
   layer_id: product
   name: App Navigation
-  description: "Shipped capability: Nav items, sidebar, topbar and tab bar for
-    moving between an app's areas."
+  description: "Shipped capability: Nav items, sidebar, topbar and tab bar for moving between an app's areas."
   attributes:
     status: delivered
   source_reference:
@@ -278,8 +254,7 @@ product.softwarecapability.app-shell:
   type: softwarecapability
   layer_id: product
   name: App Shell
-  description: "Shipped capability: Titlebar, statusbar, app title and the
-    ShellLayout that composes the IDE chrome."
+  description: "Shipped capability: Titlebar, statusbar, app title and the ShellLayout that composes the IDE chrome."
   attributes:
     status: delivered
   source_reference:
@@ -297,8 +272,7 @@ product.softwarecapability.responsive-layout:
   type: softwarecapability
   layer_id: product
   name: Responsive Layout
-  description: "Shipped capability: Panels, resizable split panes and media-query
-    driven layout."
+  description: "Shipped capability: Panels, resizable split panes and media-query driven layout."
   attributes:
     status: delivered
   source_reference:
@@ -316,8 +290,7 @@ product.softwarecapability.charting:
   type: softwarecapability
   layer_id: product
   name: Charting
-  description: "Shipped capability: Sparklines, line, bar, stacked and donut
-    charts, heatmaps, status timelines, progress bars and metric rows."
+  description: "Shipped capability: Sparklines, line, bar, stacked and donut charts, heatmaps, status timelines, progress bars and metric rows."
   attributes:
     status: delivered
   source_reference:
@@ -335,8 +308,7 @@ product.softwarecapability.chat-ui:
   type: softwarecapability
   layer_id: product
   name: Chat UI
-  description: "Shipped capability: Chat messages with tool and thinking blocks,
-    markdown content, suggestions, composer and container."
+  description: "Shipped capability: Chat messages with tool and thinking blocks, markdown content, suggestions, composer and container."
   attributes:
     status: delivered
   source_reference:
@@ -372,8 +344,7 @@ product.softwarecapability.run-history-and-observability-views:
   type: softwarecapability
   layer_id: product
   name: Run History and Observability Views
-  description: "Shipped capability: Trace viewer, log stream, diff viewers,
-    version timeline and lineage rail, with OTLP and X-Ray trace adapters."
+  description: "Shipped capability: Trace viewer, log stream, diff viewers, version timeline and lineage rail, with OTLP and X-Ray trace adapters."
   attributes:
     status: delivered
   source_reference:
@@ -391,9 +362,7 @@ product.softwarecapability.layered-graph-visualization:
   type: softwarecapability
   layer_id: product
   name: Layered Graph Visualization
-  description: "Shipped capability: Views of a graph whose nodes belong to layers:
-    a 3D layer stack, swimlanes, adjacency matrix and hive plot, with reach,
-    filtering and camera controls."
+  description: "Shipped capability: Views of a graph whose nodes belong to layers: a 3D layer stack, swimlanes, adjacency matrix and hive plot, with reach, filtering and camera controls."
   attributes:
     status: delivered
   source_reference:
@@ -411,8 +380,7 @@ product.softwarecapability.layer-lanes-layout:
   type: softwarecapability
   layer_id: product
   name: Layer Lanes Layout
-  description: "GraphCanvas layout layer-lanes: the layered-graph swimlane view
-    inside GraphCanvas, one lane per layer, driven by useLayeredGraph."
+  description: "GraphCanvas layout layer-lanes: the layered-graph swimlane view inside GraphCanvas, one lane per layer, driven by useLayeredGraph."
   attributes:
     status: delivered
   source_reference:
@@ -422,4 +390,18 @@ product.softwarecapability.layer-lanes-layout:
   metadata:
     created_at: 2026-11-24T19:01:20.529Z
     updated_at: 2026-11-24T19:01:20.529Z
+    version: 1
+product.softwarecapability.branch-map-visualization:
+  id: b9ea123a-40d0-4973-ac17-c8c928e15e92
+  path: product.softwarecapability.branch-map-visualization
+  spec_node_id: product.softwarecapability
+  type: softwarecapability
+  layer_id: product
+  name: Branch Map Visualization
+  description: "A vertical metro-map view of how groups of work are organized: per group a trunk running down from a start marker, a branch per line from where it starts to the station it delivers to, stations along the lines, ticks for the work on a line, and links between groups (dependency arrows and provider arches). Prior art: Nesbitt's metro map metaphor (IV 2004), Stott et al.'s project plans as metro maps (IV 2005), commit-graph lane assignment (pvigier 2019)."
+  attributes:
+    status: planned
+  metadata:
+    created_at: 2026-11-25T17:41:12.931Z
+    updated_at: 2026-11-25T17:41:12.931Z
     version: 1

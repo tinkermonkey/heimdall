@@ -1,0 +1,480 @@
+.bmc {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: rgb(var(--canvas-bg));
+  color: rgb(var(--canvas-fg-1));
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+.bmc__head {
+  padding: 18px 26px 12px;
+  border-bottom: 1px solid rgb(var(--canvas-border));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bmc__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(var(--canvas-fg-3));
+}
+
+.bmc__title {
+  margin: 4px 0 2px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.bmc__blurb {
+  margin: 0;
+  color: rgb(var(--canvas-fg-2));
+  font-size: 13px;
+}
+
+.bmc__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+}
+
+.bmc__control {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bmc__projects {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.bmc__projects > .bmc__eyebrow {
+  margin-right: 6px;
+}
+
+.bmc__project {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 9px;
+  border: 1px solid rgb(var(--canvas-border-2));
+  border-radius: 4px;
+  background: transparent;
+  color: rgb(var(--canvas-fg-3));
+  font: 12px var(--font-sans);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.bmc__project:hover {
+  background: rgb(var(--canvas-bg-2));
+}
+
+.bmc__project.is-on {
+  color: rgb(var(--canvas-fg-1));
+  border-color: rgb(var(--canvas-border-strong));
+  background: rgb(var(--canvas-surface-2));
+}
+
+.bmc__project:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.bmc__swatch {
+  width: 10px;
+  height: 3px;
+  border-radius: 1px;
+  opacity: 0.35;
+}
+
+.bmc__project.is-on .bmc__swatch {
+  opacity: 1;
+}
+
+.bmc__body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+}
+
+.bmc__scroll {
+  overflow: auto;
+  padding: 8px 8px 24px;
+}
+
+.bmc__inspector {
+  border-left: 1px solid rgb(var(--canvas-border));
+  padding: 18px 18px 24px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bmc__ititle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bmc__chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.bmc__muted {
+  margin: 0;
+  color: rgb(var(--canvas-fg-3));
+  font-size: 13px;
+}
+
+.bmc__mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.bmc__refs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.bmc__ref {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgb(var(--accent-primary-deep));
+  font: 13px var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+}
+
+.bmc__ref:hover {
+  text-decoration: underline;
+}
+
+body.dark-canvas .bmc__ref {
+  color: rgb(var(--accent-primary));
+}
+
+.bmc__list {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12.5px;
+  color: rgb(var(--canvas-fg-2));
+}
+
+.bmc__legend {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgb(var(--canvas-border));
+  display: grid;
+  gap: 3px;
+}
+
+.bmc__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgb(var(--canvas-fg-2));
+}
+
+.bmc__issues summary {
+  cursor: pointer;
+}
+
+/* ---- SVG scene ---------------------------------------------------------------------------- */
+
+.bmc__svg {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+.bmc__colname {
+  font-size: 13px;
+  font-weight: 600;
+  fill: rgb(var(--canvas-fg-1));
+}
+
+.bmc__colmeta {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  fill: rgb(var(--canvas-fg-3));
+}
+
+.bmc__row {
+  fill: transparent;
+}
+
+.bmc__row.is-odd {
+  fill: rgb(var(--canvas-bg-2));
+}
+
+.bmc__row.is-selected {
+  fill: var(--accent-primary-bg-alpha-sm);
+}
+
+.bmc__trunk line {
+  stroke: currentColor;
+  stroke-linecap: butt;
+}
+
+.bmc__trunk line.is-tail {
+  stroke-dasharray: 2 4;
+  opacity: 0.55;
+}
+
+.bmc__branch {
+  cursor: pointer;
+}
+
+.bmc__halo {
+  fill: none;
+  stroke: rgb(var(--canvas-bg));
+}
+
+.bmc__stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bmc__hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 10;
+}
+
+.bmc__branch.is-exploration .bmc__stroke {
+  stroke-dasharray: 7 4;
+}
+
+.bmc__branch.is-aside .bmc__stroke {
+  stroke: rgb(var(--canvas-fg-4));
+  stroke-dasharray: 1 4;
+}
+
+.bmc__branch.is-done .bmc__stroke {
+  opacity: 0.45;
+}
+
+.bmc__branch--spur .bmc__stroke {
+  stroke-dasharray: 1 3;
+  opacity: 0.7;
+}
+
+.bmc__branch.is-selected .bmc__stroke {
+  filter: none;
+  stroke-width: 4;
+}
+
+.bmc__cap {
+  stroke: currentColor;
+  stroke-width: 2.5;
+}
+
+.bmc__fade {
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-dasharray: 2 3;
+  opacity: 0.6;
+}
+
+.bmc__tick {
+  fill: rgb(var(--canvas-bg));
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.bmc__tick.is-progress {
+  fill: rgb(var(--accent-primary));
+  stroke: rgb(var(--accent-primary-deep));
+}
+
+.bmc__lane-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.02em;
+  fill: rgb(var(--canvas-fg-3));
+  pointer-events: none;
+}
+
+.bmc__station {
+  cursor: pointer;
+  outline: none;
+}
+
+.bmc__shape {
+  fill: rgb(var(--canvas-bg));
+  stroke: currentColor;
+  stroke-width: 2.25;
+}
+
+.bmc__station.is-reached .bmc__shape,
+.bmc__station.is-decided .bmc__shape {
+  fill: currentColor;
+}
+
+.bmc__station.is-proposed .bmc__shape {
+  stroke-dasharray: 2.5 2;
+}
+
+.bmc__station.is-set_aside .bmc__shape,
+.bmc__station.is-dropped .bmc__shape {
+  stroke: rgb(var(--canvas-fg-4));
+}
+
+.bmc__station.on-trunk .bmc__shape {
+  stroke-width: 2.75;
+}
+
+.bmc__station:focus-visible .bmc__shape {
+  stroke: rgb(var(--accent-primary-deep));
+}
+
+.bmc__ring {
+  fill: var(--accent-primary-bg-alpha-md);
+  stroke: rgb(var(--accent-primary));
+  stroke-width: 1.5;
+}
+
+.bmc__blocked {
+  fill: rgb(var(--status-amber));
+  stroke: rgb(var(--canvas-bg));
+  stroke-width: 1.2;
+}
+
+.bmc__now rect {
+  fill: rgb(var(--accent-primary));
+}
+
+.bmc__now text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  fill: rgb(var(--accent-primary-deep));
+}
+
+body.dark-canvas .bmc__now text {
+  fill: rgb(var(--accent-primary));
+}
+
+.bmc__label {
+  cursor: pointer;
+}
+
+.bmc__label text {
+  font-size: 12px;
+  fill: rgb(var(--canvas-fg-1));
+}
+
+.bmc__label.is-closed text {
+  fill: rgb(var(--canvas-fg-3));
+}
+
+.bmc__crit {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: rgb(var(--canvas-fg-3));
+}
+
+.bmc__leader {
+  stroke: rgb(var(--canvas-border-strong));
+  stroke-dasharray: 1 3;
+}
+
+.bmc__tiny {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  fill: rgb(var(--canvas-fg-3));
+}
+
+.bmc__link {
+  cursor: pointer;
+}
+
+.bmc__link path {
+  fill: none;
+}
+
+.bmc__link--depends path {
+  stroke: rgb(var(--canvas-fg-2));
+  stroke-width: 1.4;
+  stroke-dasharray: 4 3;
+}
+
+.bmc__link--interface path {
+  stroke: rgb(var(--status-violet));
+  stroke-width: 1.5;
+  stroke-dasharray: 1 3;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.bmc__link--interface text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: rgb(var(--status-violet));
+}
+
+.bmc__arrow {
+  fill: rgb(var(--canvas-fg-2));
+}
+
+.bmc__th {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: rgb(var(--canvas-fg-3));
+}
+
+.bmc__tr {
+  cursor: pointer;
+}
+
+.bmc__td {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: rgb(var(--canvas-fg-2));
+}
+
+.bmc__td--name {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  fill: rgb(var(--canvas-fg-1));
+}
+
+.is-dim {
+  opacity: 0.16;
+  transition: opacity 120ms ease;
+}
+
+/* Legend glyphs */
+.bmc__lg-open { fill: rgb(var(--canvas-bg)); stroke: currentColor; stroke-width: 2.25; }
+.bmc__lg-proposed { fill: rgb(var(--canvas-bg)); stroke: currentColor; stroke-width: 2.25; stroke-dasharray: 2.5 2; }
+.bmc__lg-filled { fill: currentColor; stroke: currentColor; stroke-width: 2.25; }
+.bmc__lg-line { stroke: currentColor; stroke-width: 2.5; }
+.bmc__lg-line.is-exploration { stroke-dasharray: 7 4; }
+.bmc__lg-line.is-aside { stroke: rgb(var(--canvas-fg-4)); stroke-dasharray: 1 4; }
+.bmc__lg-line.is-spur { stroke-width: 1.5; stroke-dasharray: 1 3; }
+.bmc__lg-dep { fill: none; stroke: rgb(var(--canvas-fg-2)); stroke-width: 1.4; stroke-dasharray: 4 3; }
+.bmc__lg-if { fill: none; stroke: rgb(var(--status-violet)); stroke-width: 1.5; stroke-dasharray: 1 3; stroke-linecap: round; }

@@ -18,8 +18,8 @@ Business processes, functions, roles, and services.
 | ------------------------- | ----- |
 | Elements                  | 9     |
 | Intra-Layer Relationships | 10    |
-| Inter-Layer Relationships | 34    |
-| Inbound Relationships     | 30    |
+| Inter-Layer Relationships | 35    |
+| Inbound Relationships     | 31    |
 | Outbound Relationships    | 4     |
 
 **Cross-Layer References**:
@@ -98,6 +98,7 @@ flowchart TB
 | `business.businessservice.realizes.motivation.goal`                  | `business.businessservice.large-graph-visualization`                            | `motivation.goal.layout-algorithms-that-scale-to-large-dense-and-pathological-graphs` | `motivation` | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.app-navigation`                                     | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.app-shell`                                          | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
+| `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.branch-map-visualization`                           | `business.businessfunction.automatic-node-layout-computation`                         | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.charting`                                           | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.chat-ui`                                            | `business.businessfunction.assemble-application-screens-from-library-components`      | `business`   | `realizes`   | many-to-many | medium   |
 | `product.softwarecapability.realizes.business.businessfunction`      | `product.softwarecapability.clustered-force-layout-community-bubbles`           | `business.businessfunction.community-and-cluster-discovery-in-relationship-graphs`    | `business`   | `realizes`   | many-to-many | medium   |
@@ -192,6 +193,7 @@ Inferred business function: given arbitrary node/edge data with no pre-set posit
 | inter-layer | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm`             | `realizes` | inbound   |
 | inter-layer | `application.applicationfunction.radial-tree-layout-algorithm`                     | `realizes` | inbound   |
 | inter-layer | `application.applicationfunction.ux-navigation-tree-layout-algorithm`              | `realizes` | inbound   |
+| inter-layer | `product.softwarecapability.branch-map-visualization`                              | `realizes` | inbound   |
 | inter-layer | `product.softwarecapability.force-directed-graph-layout`                           | `realizes` | inbound   |
 | inter-layer | `product.softwarecapability.galaxy-radial-orbit-layout`                            | `realizes` | inbound   |
 | inter-layer | `product.softwarecapability.layer-lanes-layout`                                    | `realizes` | inbound   |
@@ -293,4 +295,4 @@ Inferred business capability: enable consumers to render and let end users navig
 
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0

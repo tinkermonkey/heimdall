@@ -16,16 +16,16 @@ Data entities, relationships, and data structure definitions.
 
 | Metric                    | Count |
 | ------------------------- | ----- |
-| Elements                  | 39    |
-| Intra-Layer Relationships | 32    |
-| Inter-Layer Relationships | 47    |
-| Inbound Relationships     | 43    |
-| Outbound Relationships    | 4     |
+| Elements                  | 48    |
+| Intra-Layer Relationships | 42    |
+| Inter-Layer Relationships | 60    |
+| Inbound Relationships     | 55    |
+| Outbound Relationships    | 5     |
 
 **Cross-Layer References**:
 
 - **Upstream layers**: [Application](./05-application-layer-report.md)
-- **Downstream layers**: [Application](./05-application-layer-report.md)
+- **Downstream layers**: [Application](./05-application-layer-report.md), [Motivation](./01-motivation-layer-report.md)
 
 ## Intra-Layer Relationships
 
@@ -33,6 +33,14 @@ Data entities, relationships, and data structure definitions.
 
 | Element                                                   | Type               | Relationships |
 | --------------------------------------------------------- | ------------------ | ------------- |
+| `data-model.schemadefinition.branch-map-data`             | `schemadefinition` | 5             |
+| `data-model.schemadefinition.branch-map-group`            | `schemadefinition` | 2             |
+| `data-model.schemadefinition.branch-map-layout`           | `schemadefinition` | 3             |
+| `data-model.schemadefinition.branch-map-line`             | `schemadefinition` | 2             |
+| `data-model.schemadefinition.branch-map-link`             | `schemadefinition` | 2             |
+| `data-model.schemadefinition.branch-map-options`          | `schemadefinition` | 1             |
+| `data-model.schemadefinition.branch-map-scene`            | `schemadefinition` | 1             |
+| `data-model.schemadefinition.branch-map-station`          | `schemadefinition` | 4             |
 | `data-model.schemadefinition.build-layered-index-options` | `schemadefinition` | 2             |
 | `data-model.schemadefinition.cluster-tree-node`           | `schemadefinition` | 1             |
 | `data-model.schemadefinition.clustered-layout-options`    | `schemadefinition` | 2             |
@@ -48,6 +56,7 @@ Data entities, relationships, and data structure definitions.
 | `data-model.schemadefinition.graph-viewport`              | `schemadefinition` | 1             |
 | `data-model.schemadefinition.graph-viewport-snapshot`     | `schemadefinition` | 1             |
 | `data-model.schemadefinition.hierarchy-edge`              | `schemadefinition` | 3             |
+| `data-model.schemadefinition.house-organizing-snapshot`   | `schemadefinition` | 0             |
 | `data-model.schemadefinition.lane-layout`                 | `schemadefinition` | 1             |
 | `data-model.schemadefinition.layer-def`                   | `schemadefinition` | 1             |
 | `data-model.schemadefinition.layered-graph-snapshot`      | `schemadefinition` | 2             |
@@ -93,62 +102,268 @@ flowchart TB
   testing["Testing"]
   application --> data_model
   data_model --> application
+  data_model --> motivation
   class data_model current
 ```
 
 ## Inter-Layer Relationships Table
 
-| Relationship ID                                                         | Source Node                                                            | Dest Node                                               | Dest Layer    | Predicate  | Cardinality  | Strength |
-| ----------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------- | ------------- | ---------- | ------------ | -------- |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.edge-geometry`             | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-edge-data-shape`     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-node-data`           | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-viewport`            | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.lane-layout`               | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.layered-graph-state`       | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.layout-state-change-event`               | `data-model.schemadefinition.graph-layout-state`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-dwell-event`                    | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-navigate-event`                 | `data-model.schemadefinition.graph-viewport-snapshot`   | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`           | `data-model.schemadefinition.trace`                     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`           | `data-model.schemadefinition.xray-segment`              | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.cluster-circle-packing`               | `data-model.schemadefinition.cluster-tree-node`         | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`     | `data-model.schemadefinition.clustered-layout-options`  | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`     | `data-model.schemadefinition.clustered-layout-result`   | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.force-directed-layout-algorithm`      | `data-model.schemadefinition.force-layout-options`      | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.force-directed-layout-algorithm`      | `data-model.schemadefinition.layout-edge`               | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.force-directed-layout-algorithm`      | `data-model.schemadefinition.layout-node`               | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-aspect-ratio-resolution`       | `data-model.schemadefinition.galaxy-layout-edge`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-aspect-ratio-resolution`       | `data-model.schemadefinition.galaxy-layout-node`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-aspect-ratio-resolution`       | `data-model.schemadefinition.galaxy-layout-options`     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-live-simulation-step`          | `data-model.schemadefinition.galaxy-layout-edge`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-live-simulation-step`          | `data-model.schemadefinition.galaxy-layout-node`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-live-simulation-step`          | `data-model.schemadefinition.galaxy-layout-options`     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-edge`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-node`        | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-options`     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.joint-edge-label-placement`           | `data-model.schemadefinition.edge-geometry`             | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-index-construction`     | `data-model.schemadefinition.layered-index`             | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-snapshot-sanitization`  | `data-model.schemadefinition.layered-graph-snapshot`    | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.louvain-community-clustering`         | `data-model.schemadefinition.cluster-tree-node`         | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.node-overlap-separation-pass`         | `data-model.schemadefinition.layout-node`               | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`             | `data-model.schemadefinition.organic-layout-options`    | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`             | `data-model.schemadefinition.organic-layout-result`     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`          | `data-model.schemadefinition.orthogonal-layout-options` | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`          | `data-model.schemadefinition.orthogonal-layout-result`  | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adaptation`                | `data-model.schemadefinition.otlp-traces-data`          | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adaptation`                | `data-model.schemadefinition.trace`                     | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.radial-tree-layout-algorithm`         | `data-model.schemadefinition.radial-tree-layout-result` | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.hierarchy-edge`            | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.structural-forest`         | `data-model`  | `accesses` | many-to-many | medium   |
-| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.trace-model-construction`             | `data-model.schemadefinition.trace`                     | `data-model`  | `accesses` | many-to-many | medium   |
-| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.graph-node-data`                          | `application.dataobject.node-rect-registry`             | `application` | `realizes` | many-to-many | medium   |
-| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.layout-node`                              | `application.dataobject.node-position-map`              | `application` | `realizes` | many-to-many | medium   |
-| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.organic-layout-result`                    | `application.dataobject.node-position-map`              | `application` | `realizes` | many-to-many | medium   |
-| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.orthogonal-layout-result`                 | `application.dataobject.node-position-map`              | `application` | `realizes` | many-to-many | medium   |
+| Relationship ID                                                         | Source Node                                                            | Dest Node                                                         | Dest Layer    | Predicate   | Cardinality  | Strength |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------- | ------------- | ----------- | ------------ | -------- |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.branch-map-data`                     | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.branch-map-scene`                    | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.edge-geometry`                       | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-edge-data-shape`               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-layout-state`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-node-data`                     | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-viewport`                      | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.graph-viewport-snapshot`             | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.lane-layout`                         | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationcomponent.accesses.data-model.schemadefinition` | `application.applicationcomponent.heimdall-ui-library-module`          | `data-model.schemadefinition.layered-graph-state`                 | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.layout-state-change-event`               | `data-model.schemadefinition.graph-layout-state`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-dwell-event`                    | `data-model.schemadefinition.graph-viewport-snapshot`             | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationevent.accesses.data-model.schemadefinition`     | `application.applicationevent.viewport-navigate-event`                 | `data-model.schemadefinition.graph-viewport-snapshot`             | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`           | `data-model.schemadefinition.trace`                               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.aws-x-ray-trace-adaptation`           | `data-model.schemadefinition.xray-segment`                        | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-label-placement`           | `data-model.schemadefinition.branch-map-layout`                   | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-line-bundling`             | `data-model.schemadefinition.branch-map-line`                     | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-placement`                 | `data-model.schemadefinition.branch-map-data`                     | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-placement`                 | `data-model.schemadefinition.branch-map-layout`                   | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-placement`                 | `data-model.schemadefinition.branch-map-options`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-routing`                   | `data-model.schemadefinition.branch-map-layout`                   | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-routing`                   | `data-model.schemadefinition.branch-map-scene`                    | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.branch-map-trunk-selection`           | `data-model.schemadefinition.branch-map-group`                    | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.cluster-circle-packing`               | `data-model.schemadefinition.cluster-tree-node`                   | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`     | `data-model.schemadefinition.clustered-layout-options`            | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.clustered-force-layout-algorithm`     | `data-model.schemadefinition.clustered-layout-result`             | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.force-directed-layout-algorithm`      | `data-model.schemadefinition.force-layout-options`                | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.force-directed-layout-algorithm`      | `data-model.schemadefinition.layout-edge`                         | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.force-directed-layout-algorithm`      | `data-model.schemadefinition.layout-node`                         | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-aspect-ratio-resolution`       | `data-model.schemadefinition.galaxy-layout-edge`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-aspect-ratio-resolution`       | `data-model.schemadefinition.galaxy-layout-node`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-aspect-ratio-resolution`       | `data-model.schemadefinition.galaxy-layout-options`               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-live-simulation-step`          | `data-model.schemadefinition.galaxy-layout-edge`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-live-simulation-step`          | `data-model.schemadefinition.galaxy-layout-node`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-live-simulation-step`          | `data-model.schemadefinition.galaxy-layout-options`               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-edge`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-node`                  | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.galaxy-radial-orbit-layout-algorithm` | `data-model.schemadefinition.galaxy-layout-options`               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.house-branch-map-adapter`             | `data-model.schemadefinition.branch-map-data`                     | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.house-branch-map-adapter`             | `data-model.schemadefinition.house-organizing-snapshot`           | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.joint-edge-label-placement`           | `data-model.schemadefinition.edge-geometry`                       | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-index-construction`     | `data-model.schemadefinition.layered-index`                       | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.layered-graph-snapshot-sanitization`  | `data-model.schemadefinition.layered-graph-snapshot`              | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.louvain-community-clustering`         | `data-model.schemadefinition.cluster-tree-node`                   | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.node-overlap-separation-pass`         | `data-model.schemadefinition.layout-node`                         | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`             | `data-model.schemadefinition.organic-layout-options`              | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.organic-layout-algorithm`             | `data-model.schemadefinition.organic-layout-result`               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`          | `data-model.schemadefinition.orthogonal-layout-options`           | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.orthogonal-layout-algorithm`          | `data-model.schemadefinition.orthogonal-layout-result`            | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adaptation`                | `data-model.schemadefinition.otlp-traces-data`                    | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.otlp-trace-adaptation`                | `data-model.schemadefinition.trace`                               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.radial-tree-layout-algorithm`         | `data-model.schemadefinition.radial-tree-layout-result`           | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.hierarchy-edge`                      | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.structural-forest-construction`       | `data-model.schemadefinition.structural-forest`                   | `data-model`  | `accesses`  | many-to-many | medium   |
+| `application.applicationfunction.accesses.data-model.schemadefinition`  | `application.applicationfunction.trace-model-construction`             | `data-model.schemadefinition.trace`                               | `data-model`  | `accesses`  | many-to-many | medium   |
+| `data-model.schemadefinition.satisfies.motivation.requirement`          | `data-model.schemadefinition.branch-map-data`                          | `motivation.requirement.branch-map-library-stays-vocabulary-free` | `motivation`  | `satisfies` | many-to-many | medium   |
+| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.graph-node-data`                          | `application.dataobject.node-rect-registry`                       | `application` | `realizes`  | many-to-many | medium   |
+| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.layout-node`                              | `application.dataobject.node-position-map`                        | `application` | `realizes`  | many-to-many | medium   |
+| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.organic-layout-result`                    | `application.dataobject.node-position-map`                        | `application` | `realizes`  | many-to-many | medium   |
+| `data-model.schemadefinition.realizes.application.dataobject`           | `data-model.schemadefinition.orthogonal-layout-result`                 | `application.dataobject.node-position-map`                        | `application` | `realizes`  | many-to-many | medium   |
 
 ## Element Reference
+
+### BranchMapData {#branchmapdata}
+
+**ID**: `data-model.schemadefinition.branch-map-data`
+
+**Type**: `schemadefinition`
+
+The branch map's input: groups, stations, lines and links. Vocabulary-free; ids are unique across groups, stations, lines and links, and a duplicate or a reference to an unknown id is reported in the layout's issues, never thrown.
+
+#### Attributes
+
+| Name  | Value         |
+| ----- | ------------- |
+| title | BranchMapData |
+| type  | object        |
+
+#### Relationships
+
+| Type        | Related Element                                                   | Predicate    | Direction |
+| ----------- | ----------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module`     | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-placement`            | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.house-branch-map-adapter`        | `accesses`   | inbound   |
+| inter-layer | `motivation.requirement.branch-map-library-stays-vocabulary-free` | `satisfies`  | outbound  |
+| intra-layer | `data-model.schemadefinition.branch-map-group`                    | `composes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.branch-map-line`                     | `composes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.branch-map-link`                     | `composes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.branch-map-station`                  | `composes`   | outbound  |
+| intra-layer | `data-model.schemadefinition.branch-map-layout`                   | `references` | inbound   |
+
+### BranchMapGroup {#branchmapgroup}
+
+**ID**: `data-model.schemadefinition.branch-map-group`
+
+**Type**: `schemadefinition`
+
+One group (a column with its own trunk): id, label, optional color (a --graph-layer-&lt;n&gt; palette index, else by order), optional trunk: waypoints, station ids of this group top to bottom that the derived trunk must pass through (decision 4, 2026-11-25).
+
+#### Attributes
+
+| Name  | Value          |
+| ----- | -------------- |
+| title | BranchMapGroup |
+| type  | object         |
+
+#### Relationships
+
+| Type        | Related Element                                              | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationfunction.branch-map-trunk-selection` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-data`                | `composes`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-station`             | `references` | inbound   |
+
+### BranchMapLayout {#branchmaplayout}
+
+**ID**: `data-model.schemadefinition.branch-map-layout`
+
+**Type**: `schemadefinition`
+
+Output of layoutBranchMap: groups (x, width, trunk x, lane count, counts), stations (x, y, rank, lane, onTrunk), lines before routing (lane, from, to, members when bundled), label boxes (placed and unplaced), bounds and issues.
+
+#### Attributes
+
+| Name  | Value           |
+| ----- | --------------- |
+| title | BranchMapLayout |
+| type  | object          |
+
+#### Relationships
+
+| Type        | Related Element                                              | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationfunction.branch-map-label-placement` | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-placement`       | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-routing`         | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-data`                | `references` | outbound  |
+| intra-layer | `data-model.schemadefinition.branch-map-options`             | `references` | outbound  |
+| intra-layer | `data-model.schemadefinition.branch-map-scene`               | `references` | inbound   |
+
+### BranchMapLine {#branchmapline}
+
+**ID**: `data-model.schemadefinition.branch-map-line`
+
+**Type**: `schemadefinition`
+
+A line (a branch): id, group, label, from (a station id, or null for the group's start), to (a station id, or null for an open end), status ('active', 'done', 'set-aside', 'dropped': dropped ends with a bar), style ('solid', 'dashed', 'dotted'), weight (for width and bundling), marks (\{ total, emphasized \}: ticks along the run) and data.
+
+#### Attributes
+
+| Name  | Value         |
+| ----- | ------------- |
+| title | BranchMapLine |
+| type  | object        |
+
+#### Relationships
+
+| Type        | Related Element                                            | Predicate    | Direction |
+| ----------- | ---------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationfunction.branch-map-line-bundling` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-data`              | `composes`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-station`           | `references` | outbound  |
+
+### BranchMapLink {#branchmaplink}
+
+**ID**: `data-model.schemadefinition.branch-map-link`
+
+**Type**: `schemadefinition`
+
+A link between groups: id, kind ('dependency': an arrow from the station waited on to the waiting one, which also orders ranks; 'provides': a dotted arch from a provider station to another group's start), from, to (station or group ids; a group id means its start marker) and optional label.
+
+#### Attributes
+
+| Name  | Value         |
+| ----- | ------------- |
+| title | BranchMapLink |
+| type  | object        |
+
+#### Relationships
+
+| Type        | Related Element                                  | Predicate    | Direction |
+| ----------- | ------------------------------------------------ | ------------ | --------- |
+| intra-layer | `data-model.schemadefinition.branch-map-data`    | `composes`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-station` | `references` | outbound  |
+
+### BranchMapOptions {#branchmapoptions}
+
+**ID**: `data-model.schemadefinition.branch-map-options`
+
+**Type**: `schemadefinition`
+
+Layout options: rowGap, rankGap, laneGap (default 24), groupGap, minBranchRanks, maxLanes (default 8), expanded (group, bundle or more:&lt;group&gt; ids), width ('off' default, or 'weight'), maxLabelWidth (default 180), measureText (optional, injected so layout stays headless), looseStations ('spur': stations no line leads to sit on one dotted planned line per group).
+
+#### Attributes
+
+| Name  | Value            |
+| ----- | ---------------- |
+| title | BranchMapOptions |
+| type  | object           |
+
+#### Relationships
+
+| Type        | Related Element                                        | Predicate    | Direction |
+| ----------- | ------------------------------------------------------ | ------------ | --------- |
+| inter-layer | `application.applicationfunction.branch-map-placement` | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-layout`        | `references` | inbound   |
+
+### BranchMapScene {#branchmapscene}
+
+**ID**: `data-model.schemadefinition.branch-map-scene`
+
+**Type**: `schemadefinition`
+
+Output of routeBranchMap: the layout plus each line's points, path, run and end, trunk segments with width and weight, and link paths with a mid point for labels.
+
+#### Attributes
+
+| Name  | Value          |
+| ----- | -------------- |
+| title | BranchMapScene |
+| type  | object         |
+
+#### Relationships
+
+| Type        | Related Element                                               | Predicate    | Direction |
+| ----------- | ------------------------------------------------------------- | ------------ | --------- |
+| inter-layer | `application.applicationcomponent.heimdall-ui-library-module` | `accesses`   | inbound   |
+| inter-layer | `application.applicationfunction.branch-map-routing`          | `accesses`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-layout`               | `references` | outbound  |
+
+### BranchMapStation {#branchmapstation}
+
+**ID**: `data-model.schemadefinition.branch-map-station`
+
+**Type**: `schemadefinition`
+
+A station on a group's map: id, group, label, kind ('stop' drawn as a circle, 'decision' drawn as a diamond), status ('planned', 'active', 'done', 'set-aside', 'dropped'), optional date (ISO; places a done station above the start), optional after (station ids it follows), progress (\[met, total\]), blocked flag and data (passed through to callbacks).
+
+#### Attributes
+
+| Name  | Value            |
+| ----- | ---------------- |
+| title | BranchMapStation |
+| type  | object           |
+
+#### Relationships
+
+| Type        | Related Element                                | Predicate    | Direction |
+| ----------- | ---------------------------------------------- | ------------ | --------- |
+| intra-layer | `data-model.schemadefinition.branch-map-data`  | `composes`   | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-line`  | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-link`  | `references` | inbound   |
+| intra-layer | `data-model.schemadefinition.branch-map-group` | `references` | outbound  |
 
 ### BuildLayeredIndexOptions {#buildlayeredindexoptions}
 
@@ -500,6 +715,27 @@ Shared structural-edge shape (source=parent, target=child, structural flag) cons
 | intra-layer | `data-model.schemadefinition.galaxy-layout-edge`                 | `specializes` | inbound   |
 | intra-layer | `data-model.schemadefinition.layout-edge`                        | `references`  | inbound   |
 | intra-layer | `data-model.schemadefinition.structural-forest`                  | `references`  | inbound   |
+
+### HouseOrganizingSnapshot {#houseorganizingsnapshot}
+
+**ID**: `data-model.schemadefinition.house-organizing-snapshot`
+
+**Type**: `schemadefinition`
+
+The House organizing snapshot fixture's shape (projects, milestones, gates, workstreams, interfaces), named after the House ontology. Test-page data only; the library never imports it.
+
+#### Attributes
+
+| Name  | Value                   |
+| ----- | ----------------------- |
+| title | HouseOrganizingSnapshot |
+| type  | object                  |
+
+#### Relationships
+
+| Type        | Related Element                                            | Predicate  | Direction |
+| ----------- | ---------------------------------------------------------- | ---------- | --------- |
+| inter-layer | `application.applicationfunction.house-branch-map-adapter` | `accesses` | inbound   |
 
 ### LaneLayout {#lanelayout}
 
@@ -1044,4 +1280,4 @@ AWS X-Ray segment document with nested subsegments, http, sql, cause and excepti
 
 ---
 
-Generated: 2026-11-24T20:12:21.374Z | Model Version: 0.1.0
+Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0

@@ -30475,3 +30475,1039 @@ testing.testcasesketch.color-literal-check-rejects-a-component-literal:
     created_at: 2026-11-24T21:49:32.045Z
     updated_at: 2026-11-24T21:49:32.045Z
     version: 1
+testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot:
+  id: d5a707fa-d98f-4698-9df0-e4aa0b783dcf
+  path: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: branch map layout > no stations, labels or groups overlap on the House snapshot
+  description: "All seven projects of the 2026-11-25 snapshot, both horizons: every pair of station marks, placed label boxes and group extents is disjoint."
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: branch map layout > no stations, labels or groups overlap on the House snapshot
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene:
+  id: e9a92e6f-e5fc-4c32-8573-e6cb85dd6311
+  path: testing.testcasesketch.branch-map-layout-the-same-input-gives-the-same-scene
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: branch map layout > the same input gives the same scene
+  description: Two runs, and a run on shuffled input arrays, give deep-equal scenes.
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > gives the same layout and scene for the same input, and for shuffled input
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more:
+  id: 6aa25c5d-2666-4f92-9ced-1d85fa4a68f6
+  path: testing.testcasesketch.branch-map-layout-a-group-past-its-lane-budget-bundles-by-destination-then-into-n-more
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: branch map layout > a group past its lane budget bundles by destination, then into N more
+  description: The sample's 20-line group (9 destinations) and 17-line group (15 destinations), shaped like Documentation Robotics and Claude Plugins, lay out in at most 8 lanes; expanding the group draws every line.
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > lane budget > fits the 20-line and 17-line groups in 8 lanes, bundling by destination, then "N more"
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain:
+  id: cac50748-04c4-46ef-85ad-c5b7844f28ff
+  path: testing.testcasesketch.branch-map-layout-a-stated-trunk-wins-over-the-derived-chain
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: branch map layout > a stated trunk names waypoints
+  description: "group.trunk names waypoints: the trunk passes through every one, in rank order, and stays derived around them; a tie in rank among waypoints is not reported, an inversion is."
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: "layoutBranchMap > trunk > a stated trunk names waypoints: the trunk passes through every one, and stays derived around them"
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement:
+  id: 53822c85-511f-43c1-ac64-55a0a912f59a
+  path: testing.testcasesketch.branch-map-layout-routing-reads-only-the-placement
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: branch map layout > routing reads only the placement
+  description: routeBranchMap on a serialized and parsed BranchMapLayout gives the same scene as branchMapScene; every line starts and ends on its stations' positions.
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: "routeBranchMap > reads only the placement: a JSON round-tripped layout routes the same"
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does:
+  id: 199d59b7-7c34-4e26-8890-5637f58cf51a
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does
+  description: Open workstreams become lines from their opening gate or the start; interfaces become provides links; depends_on across projects become dependency links; blocked matches House's rule.
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears:
+  id: c3bb1834-bf04-4fd4-8d2b-c09d718bed5e
+  path: testing.testcasesketch.branch-map-click-and-keyboard-select-stations-and-lines-escape-clears
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: BranchMap > click and keyboard select stations and lines, Escape clears
+  description: "tests/branch-map.spec.ts on ?example=branch-map: a click selects a station and a second click clears it; Enter selects a station, Space a line, Escape clears; the inspector shows the House record. Lines are reached by keyboard because the centre of a line's box is usually off its stroke."
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: "BranchMap on House data > keyboard: Enter selects a station, Space a line, Escape clears"
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now:
+  id: acba5c88-fda7-4f45-8b67-4a38c8551801
+  path: testing.testcasesketch.branch-map-visual-theme-canvas-three-projects-from-now
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "BranchMap > visual: theme canvas, three projects from now"
+  description: Light and dark canvas baselines of Heimdall, DR Viewer and Context Studio.
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: "BranchMap on House data: visual > three projects from now, ${dark ? 'dark' : 'light'} canvas"
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded:
+  id: ed329dce-f379-4d83-b675-c7fa5772f705
+  path: testing.testcasesketch.branch-map-visual-documentation-robotics-bundled-and-expanded
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "BranchMap > visual: Documentation Robotics bundled and expanded"
+  attributes:
+    status: draft
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: "BranchMap on House data: visual > Documentation Robotics, bundled"
+  metadata:
+    created_at: 2026-11-25T17:41:12.937Z
+    updated_at: 2026-11-25T17:41:12.937Z
+    version: 1
+testing.testcasesketch.layout-branch-map-lays-the-sample-out-with-no-issues:
+  id: 9fb20332-9901-4c34-a09b-9ca794d9a041
+  path: testing.testcasesketch.layout-branch-map-lays-the-sample-out-with-no-issues
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > lays the sample out with no issues
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > lays the sample out with no issues
+  metadata:
+    created_at: 2026-11-25T23:24:53.585Z
+    updated_at: 2026-11-25T23:24:53.585Z
+    version: 1
+testing.testcasesketch.layout-branch-map-places-every-label-of-the-sample-each-station-label-on-its-own-row:
+  id: a80ff0fa-438e-4860-8867-971188765e9e
+  path: testing.testcasesketch.layout-branch-map-places-every-label-of-the-sample-each-station-label-on-its-own-row
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > places every label of the sample, each station label on its own row
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > places every label of the sample, each station label on its own row
+  metadata:
+    created_at: 2026-11-25T23:24:53.585Z
+    updated_at: 2026-11-25T23:24:53.585Z
+    version: 1
+testing.testcasesketch.layout-branch-map-wraps-labels-to-two-lines-at-max-label-width-then-ends-them-with-an-ellipsis:
+  id: 3b8f616e-cadf-4f74-b403-d57cb72bbd17
+  path: testing.testcasesketch.layout-branch-map-wraps-labels-to-two-lines-at-max-label-width-then-ends-them-with-an-ellipsis
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > wraps labels to two lines at maxLabelWidth, then ends them with an ellipsis
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > wraps labels to two lines at maxLabelWidth, then ends them with an ellipsis
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-takes-text-widths-from-measure-text-when-given:
+  id: 98ca5a71-ea0d-48d7-ab42-3726e155f5fa
+  path: testing.testcasesketch.layout-branch-map-takes-text-widths-from-measure-text-when-given
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > takes text widths from measureText when given
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > takes text widths from measureText when given
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-ranks-and-bands-places-dated-done-stations-above-the-start-in-date-order:
+  id: 6a626fcb-24d4-4b58-be3e-8f52a719e9c9
+  path: testing.testcasesketch.layout-branch-map-ranks-and-bands-places-dated-done-stations-above-the-start-in-date-order
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > ranks and bands > places dated done stations above the start, in date order
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > ranks and bands > places dated done stations above the start, in date order
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-ranks-and-bands-orders-open-stations-by-longest-path-over-after-lines-and-1aab84d3:
+  id: 76f5348b-d5cc-4e6a-a82f-c061048cc1e5
+  path: testing.testcasesketch.layout-branch-map-ranks-and-bands-orders-open-stations-by-longest-path-over-after-lines-and-1aab84d3
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > ranks and bands > orders open stations by longest path over after, lines and dependency links
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > ranks and bands > orders open stations by longest path over after, lines and dependency links
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-ranks-and-bands-gives-every-station-of-a-group-its-own-row-and-a-rank-one-band-85af82af:
+  id: a9dc28e9-3b34-4b7b-badf-c620ce2748f2
+  path: testing.testcasesketch.layout-branch-map-ranks-and-bands-gives-every-station-of-a-group-its-own-row-and-a-rank-one-band-85af82af
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > ranks and bands > gives every station of a group its own row, and a rank one band across groups
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > ranks and bands > gives every station of a group its own row, and a rank one band across groups
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-trunk-without-one-takes-the-heaviest-chain-of-stops:
+  id: f0721a60-1017-41ef-abfe-15d9db06b9d2
+  path: testing.testcasesketch.layout-branch-map-trunk-without-one-takes-the-heaviest-chain-of-stops
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > trunk > without one, takes the heaviest chain of stops
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > trunk > without one, takes the heaviest chain of stops
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest:
+  id: 5ee71ee0-5e61-48d6-8222-06a7f3b73a11
+  path: testing.testcasesketch.layout-branch-map-trunk-reports-a-stated-trunk-naming-stations-outside-the-group-and-keeps-the-rest
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > trunk > reports a stated trunk naming stations outside the group, and keeps the rest
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > trunk > reports a stated trunk naming stations outside the group, and keeps the rest
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409:
+  id: 62144c83-9bba-449d-9d81-e46f729863de
+  path: testing.testcasesketch.layout-branch-map-trunk-keeps-the-given-order-among-stated-stations-of-one-rank-and-reports-only-a-9a8e1409
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > trunk > keeps the given order among stated stations of one rank, and reports only a real inversion
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > trunk > keeps the given order among stated stations of one rank, and reports only a real inversion
+  metadata:
+    created_at: 2026-11-25T23:24:53.586Z
+    updated_at: 2026-11-25T23:24:53.586Z
+    version: 1
+testing.testcasesketch.layout-branch-map-lane-budget-draws-every-line-of-an-expanded-group-and-of-an-expanded-bundle:
+  id: 2040c8f4-1758-449e-8eeb-def27f52559a
+  path: testing.testcasesketch.layout-branch-map-lane-budget-draws-every-line-of-an-expanded-group-and-of-an-expanded-bundle
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > lane budget > draws every line of an expanded group, and of an expanded bundle
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > lane budget > draws every line of an expanded group, and of an expanded bundle
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget:
+  id: 5c15ae30-fe57-482c-9434-259428792761
+  path: testing.testcasesketch.layout-branch-map-lane-budget-draws-what-n-more-held-when-it-is-expanded-past-the-budget
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > lane budget > draws what "N more" held when it is expanded, past the budget
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > lane budget > draws what "N more" held when it is expanded, past the budget
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.layout-branch-map-lane-budget-honours-a-smaller-budget:
+  id: a225ddf5-3238-46b0-8348-1a49ef2d51dc
+  path: testing.testcasesketch.layout-branch-map-lane-budget-honours-a-smaller-budget
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > lane budget > honours a smaller budget
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > lane budget > honours a smaller budget
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.layout-branch-map-lane-budget-puts-stations-no-line-leads-to-on-one-dotted-spur-per-group-in-rank-318cc046:
+  id: 97b90d1c-b10a-4787-a175-42409b43fd3b
+  path: testing.testcasesketch.layout-branch-map-lane-budget-puts-stations-no-line-leads-to-on-one-dotted-spur-per-group-in-rank-318cc046
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > lane budget > puts stations no line leads to on one dotted spur per group, in rank order
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > lane budget > puts stations no line leads to on one dotted spur per group, in rank order
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.layout-branch-map-lanes-reuses-a-lane-once-it-is-free-and-continues-a-line-straight-on-from-its-4d677d55:
+  id: 1bc86b0b-e224-44ea-bb27-4b8e0aa061ef
+  path: testing.testcasesketch.layout-branch-map-lanes-reuses-a-lane-once-it-is-free-and-continues-a-line-straight-on-from-its-4d677d55
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > lanes > reuses a lane once it is free and continues a line straight on from its station
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > lanes > reuses a lane once it is free and continues a line straight on from its station
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.layout-branch-map-validation-reports-duplicates-dangling-references-and-cycles-without-throwing:
+  id: 47262652-5ac8-40c1-9947-eab294453dc4
+  path: testing.testcasesketch.layout-branch-map-validation-reports-duplicates-dangling-references-and-cycles-without-throwing
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > validation > reports duplicates, dangling references and cycles without throwing
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > validation > reports duplicates, dangling references and cycles without throwing
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.layout-branch-map-validation-lays-out-an-empty-map:
+  id: 3a4d9557-6cf6-41c0-9606-e796705b992f
+  path: testing.testcasesketch.layout-branch-map-validation-lays-out-an-empty-map
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > validation > lays out an empty map
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > validation > lays out an empty map
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.route-branch-map-runs-every-line-from-its-fork-to-its-station-along-45-degree-horizontal-and-1aa8c846:
+  id: a672970f-1b45-4bde-b85f-126490f38001
+  path: testing.testcasesketch.route-branch-map-runs-every-line-from-its-fork-to-its-station-along-45-degree-horizontal-and-1aa8c846
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: routeBranchMap > runs every line from its fork to its station along 45-degree, horizontal and vertical pieces
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: routeBranchMap > runs every line from its fork to its station along 45-degree, horizontal and vertical pieces
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.route-branch-map-draws-one-width-for-every-line-and-one-trunk-segment-with-width-off:
+  id: bcee248b-3351-4203-82c7-440a0ca804b6
+  path: testing.testcasesketch.route-branch-map-draws-one-width-for-every-line-and-one-trunk-segment-with-width-off
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: routeBranchMap > draws one width for every line and one trunk segment with width off
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: routeBranchMap > draws one width for every line and one trunk segment with width off
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.route-branch-map-with-width-by-weight-a-fork-takes-weight-off-the-trunk-a-join-gives-it-back-and-a-0e3ca7f8:
+  id: cc1be5d1-63ab-4418-9494-df97ff33f4f9
+  path: testing.testcasesketch.route-branch-map-with-width-by-weight-a-fork-takes-weight-off-the-trunk-a-join-gives-it-back-and-a-0e3ca7f8
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: routeBranchMap > with width by weight, a fork takes weight off the trunk, a join gives it back and a dead end never does
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: routeBranchMap > with width by weight, a fork takes weight off the trunk, a join gives it back and a dead end never does
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.route-branch-map-routes-dependency-arrows-down-to-the-waiting-station-and-provides-arches-to-a-38c78d5a:
+  id: c8695507-fe16-4e63-a751-19009c72e689
+  path: testing.testcasesketch.route-branch-map-routes-dependency-arrows-down-to-the-waiting-station-and-provides-arches-to-a-38c78d5a
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: routeBranchMap > routes dependency arrows down to the waiting station and provides arches to a group start
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: routeBranchMap > routes dependency arrows down to the waiting station and provides arches to a group start
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.branch-map-stays-headless-touches-no-dom-in-src-utils-branch-map:
+  id: cf40e865-52a1-4b08-8d89-bd2b7e9a5143
+  path: testing.testcasesketch.branch-map-stays-headless-touches-no-dom-in-src-utils-branch-map
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: branch map stays headless > touches no DOM in src/utils/branchMap
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: branch map stays headless > touches no DOM in src/utils/branchMap
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-projects-to-6a122fb5:
+  id: 78d7253a-c562-4f0d-b3f0-028925fd3753
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-projects-to-6a122fb5
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps projects to groups with stable colours, in the order asked
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps projects to groups with stable colours, in the order asked
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d:
+  id: d9f77bd4-d5a2-400a-81e2-3b7a351811a7
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-gives-the-milestones-abe8288d
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > gives the milestones that deliver an interface as trunk waypoints, in depends_on order, else none
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > gives the milestones that deliver an interface as trunk waypoints, in depends_on order, else none
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-milestones-to-77ffbbd0:
+  id: 079d94f3-864e-4c84-83b6-723589b13cec
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-milestones-to-77ffbbd0
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps milestones to stops and gates to decisions; the forward horizon keeps open work only
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps milestones to stops and gates to decisions; the forward horizon keeps open work only
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-every-house-8299268f:
+  id: c2721895-c85f-4b3b-be91-6a385c727f77
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-every-house-8299268f
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps every House status
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps every House status
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-orders-stations-by-084260ac:
+  id: 8096aff1-c9a2-4691-93ab-9d6b2b6a7539
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-orders-stations-by-084260ac
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > orders stations by depends_on and opens within a project, never across
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > orders stations by depends_on and opens within a project, never across
+  metadata:
+    created_at: 2026-11-25T23:24:53.587Z
+    updated_at: 2026-11-25T23:24:53.587Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-starts-a-line-at-the-ffb710b1:
+  id: 308209ff-02f7-43e6-b098-5e64ffbf6cfe
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-starts-a-line-at-the-ffb710b1
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > starts a line at the latest gate that opened it or station it waits on, else at the start
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > starts a line at the latest gate that opened it or station it waits on, else at the start
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-styles-explorations-d5e7ec81:
+  id: dd1799fa-b273-4d85-9984-4b4cf7311c9c
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-styles-explorations-d5e7ec81
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > styles explorations dashed and set-aside lines dotted, and carries tasks as marks
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > styles explorations dashed and set-aside lines dotted, and carries tasks as marks
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-weighs-lines-by-c2c8647a:
+  id: 03ce7596-6172-4461-9382-a5fbc6b8597d
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-weighs-lines-by-c2c8647a
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > weighs lines by streams or by tasks
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > weighs lines by streams or by tasks
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-depends-on-97d4b30d:
+  id: 857955d5-4a74-4f7f-a28d-4f425ae8a070
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-depends-on-97d4b30d
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps depends_on across projects to dependency links, from what is waited on
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps depends_on across projects to dependency links, from what is waited on
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-interfaces-to-8d730441:
+  id: 5e737258-41b7-4bfa-9498-c7a3e973f62e
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-maps-interfaces-to-8d730441
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps interfaces to provides links from the next open delivering milestone to each user
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > maps interfaces to provides links from the next open delivering milestone to each user
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-derives-blocked-as-0c668edc:
+  id: 06e286aa-88aa-44a4-aa8d-437892a27df8
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-derives-blocked-as-0c668edc
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "house branch map adapter > maps workstreams, interfaces and blocked as House does > derives blocked as House does: waits on open work or on a task"
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: "house branch map adapter > maps workstreams, interfaces and blocked as House does > derives blocked as House does: waits on open work or on a task"
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-passes-the-house-ac8881d0:
+  id: 8e8c9129-046f-46d6-802a-eb5a8edca655
+  path: testing.testcasesketch.house-branch-map-adapter-maps-workstreams-interfaces-and-blocked-as-house-does-passes-the-house-ac8881d0
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > maps workstreams, interfaces and blocked as House does > passes the House record through as data
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > maps workstreams, interfaces and blocked as House does > passes the House record through as data
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-maps-every-milestone-gate-and-workstream-over-the-ed1f4b3b:
+  id: 004e2f52-d4e8-41ab-bfc7-be029423ed72
+  path: testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-maps-every-milestone-gate-and-workstream-over-the-ed1f4b3b
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > the 2026-11-25 snapshot > maps every milestone, gate and workstream over the whole history
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > the 2026-11-25 snapshot > maps every milestone, gate and workstream over the whole history
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-keeps-only-open-work-from-now-on:
+  id: e791b1b1-94c7-47c0-a57e-5f0830962e16
+  path: testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-keeps-only-open-work-from-now-on
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > the 2026-11-25 snapshot > keeps only open work from now on
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > the 2026-11-25 snapshot > keeps only open work from now on
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-draws-the-cross-project-waits-and-the-interfaces-cc86bef3:
+  id: 2e55d3bd-c0f8-42a1-a660-9a13a97c4eb0
+  path: testing.testcasesketch.house-branch-map-adapter-the-2026-11-25-snapshot-draws-the-cross-project-waits-and-the-interfaces-cc86bef3
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: house branch map adapter > the 2026-11-25 snapshot > draws the cross-project waits and the interfaces between different projects
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: house branch map adapter > the 2026-11-25 snapshot > draws the cross-project waits and the interfaces between different projects
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.branch-map-on-house-data-draws-the-three-projects-from-now-with-no-console-errors:
+  id: 07fc8f7d-7afd-4ee5-a42c-9cd899934b73
+  path: testing.testcasesketch.branch-map-on-house-data-draws-the-three-projects-from-now-with-no-console-errors
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: BranchMap on House data > draws the three projects from now with no console errors
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: BranchMap on House data > draws the three projects from now with no console errors
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.branch-map-on-house-data-click-selects-a-station-again-clears-the-inspector-shows-the-house-record:
+  id: 3bc98803-2a8f-488b-8924-6d596984e2a6
+  path: testing.testcasesketch.branch-map-on-house-data-click-selects-a-station-again-clears-the-inspector-shows-the-house-record
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: BranchMap on House data > click selects a station, again clears; the inspector shows the House record
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: BranchMap on House data > click selects a station, again clears; the inspector shows the House record
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.branch-map-on-house-data-documentation-robotics-bundles-past-the-lane-budget-a-bundle-and-the-group-84657fef:
+  id: f1dd608b-5104-4c79-9f25-92c678bd2915
+  path: testing.testcasesketch.branch-map-on-house-data-documentation-robotics-bundles-past-the-lane-budget-a-bundle-and-the-group-84657fef
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: BranchMap on House data > Documentation Robotics bundles past the lane budget; a bundle and the group expand
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: BranchMap on House data > Documentation Robotics bundles past the lane budget; a bundle and the group expand
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.branch-map-on-house-data-the-inspector-links-to-what-a-station-waits-on-in-another-project:
+  id: 2304721c-7ee2-480f-9c4f-d5b712ff2ba9
+  path: testing.testcasesketch.branch-map-on-house-data-the-inspector-links-to-what-a-station-waits-on-in-another-project
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: BranchMap on House data > the inspector links to what a station waits on, in another project
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: BranchMap on House data > the inspector links to what a station waits on, in another project
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.branch-map-on-house-data-a-bundle-expanded-through-the-expanded-prop-gets-a-collapse-that-re-44d61a7d:
+  id: f4b30b1b-a08a-4c06-b0c9-d0da8b41bfe5
+  path: testing.testcasesketch.branch-map-on-house-data-a-bundle-expanded-through-the-expanded-prop-gets-a-collapse-that-re-44d61a7d
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: BranchMap on House data > a bundle expanded through the expanded prop gets a COLLAPSE that re-bundles it
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: BranchMap on House data > a bundle expanded through the expanded prop gets a COLLAPSE that re-bundles it
+  metadata:
+    created_at: 2026-11-25T23:24:53.588Z
+    updated_at: 2026-11-25T23:24:53.588Z
+    version: 1
+testing.testcasesketch.branch-map-on-house-data-visual-documentation-robotics-expanded:
+  id: 50e35b6a-0b2c-480d-87e5-58c981fbf1bd
+  path: testing.testcasesketch.branch-map-on-house-data-visual-documentation-robotics-expanded
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "BranchMap on House data: visual > Documentation Robotics, expanded"
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: tests/branch-map.spec.ts
+        symbol: "BranchMap on House data: visual > Documentation Robotics, expanded"
+  metadata:
+    created_at: 2026-11-25T23:24:53.589Z
+    updated_at: 2026-11-25T23:24:53.589Z
+    version: 1
+testing.testcasesketch.layout-branch-map-never-overlaps-station-marks-label-boxes-or-groups-name:
+  id: 4ce9fa1b-9d2a-40a7-83ce-41858fabdf1d
+  path: testing.testcasesketch.layout-branch-map-never-overlaps-station-marks-label-boxes-or-groups-name
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: layoutBranchMap > never overlaps station marks, label boxes or groups (${name})
+  description: "Run for five option sets (defaults, expanded, weight, narrow labels, tight lanes): no station marks, label boxes or groups overlap."
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/__tests__/branchMap.test.ts
+        symbol: layoutBranchMap > never overlaps station marks, label boxes or groups (${name})
+  metadata:
+    created_at: 2026-11-25T23:25:45.664Z
+    updated_at: 2026-11-25T23:25:45.664Z
+    version: 1
+testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot-all-seven-projects-75b1ed12:
+  id: d97b6f8a-0d43-44dc-91ed-0cd96bf79abb
+  path: testing.testcasesketch.branch-map-layout-no-stations-labels-or-groups-overlap-on-the-house-snapshot-all-seven-projects-75b1ed12
+  spec_node_id: testing.testcasesketch
+  type: testcasesketch
+  layer_id: testing
+  name: "branch map layout > no stations, labels or groups overlap on the House snapshot > all seven projects, ${horizon === 'forward' ? 'from now' : 'whole history'}"
+  description: "The House snapshot through the adapter, both horizons: no overlaps, every label placed or reported, every group within 8 lanes."
+  attributes:
+    status: automated
+    implementationFormat: automated
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/test-pages/branchMap/houseBranchMapAdapter.test.ts
+        symbol: "branch map layout > no stations, labels or groups overlap on the House snapshot > all seven projects, ${horizon === 'forward' ? 'from now' : 'whole history'}"
+  metadata:
+    created_at: 2026-11-25T23:25:45.664Z
+    updated_at: 2026-11-25T23:25:45.664Z
+    version: 1

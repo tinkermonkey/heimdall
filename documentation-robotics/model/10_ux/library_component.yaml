@@ -2382,3 +2382,32 @@ ux.librarycomponent.pane-rail:
     created_at: 2026-11-24T13:49:47.537Z
     updated_at: 2026-11-24T13:49:47.537Z
     version: 1
+ux.librarycomponent.branch-map:
+  id: 93a52678-8b62-4a21-8f09-b10723be3a48
+  path: ux.librarycomponent.branch-map
+  spec_node_id: ux.librarycomponent
+  type: librarycomponent
+  layer_id: ux
+  name: BranchMap
+  description: "A standalone SVG view of a branch map: it runs branchMapScene, draws groups, trunks, lines, stations, ticks, links and placed labels in --graph-layer-* colours, and handles direct manipulation only (no chrome). Selection is controllable (selectedId, onSelect(id, item); uncontrolled when selectedId is unset; Escape clears), hover and keyboard focus set hoveredId (onHoverChange), pan and zoom come from usePanZoom, stations and lines are one roving tab stop with accessible names, a bundle or 'N more' line expands when activated (expanded, defaultExpanded, onExpandedChange) and a group with bundled or expanded lines has an expand or collapse toggle, startLabel names the start markers, and renderTooltip draws hover detail. Layout options are individual props. Links are mouse-only."
+  attributes:
+    type: display
+    category: heimdall-graph
+    label: BranchMap
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/components/BranchMap.tsx
+        symbol: BranchMap
+  accepted_gaps:
+    - direction: outgoing
+      predicate: composes
+      other_spec_node_id: ux.librarycomponent
+      reason: BranchMap draws its own SVG scene and has no chrome (the layered-graph precedent); hover detail comes through the caller's renderTooltip, so it composes no other library component.
+      decided_by: agent
+      decided_at: 2026-11-25T17:41:34.543Z
+      changeset: changeset-1795628359757-v0v6gnap1
+  metadata:
+    created_at: 2026-11-25T17:41:12.936Z
+    updated_at: 2026-11-25T17:41:12.936Z
+    version: 1

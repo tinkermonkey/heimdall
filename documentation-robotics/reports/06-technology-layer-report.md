@@ -18,8 +18,8 @@ Infrastructure, platforms, systems, and technology components.
 | ------------------------- | ----- |
 | Elements                  | 50    |
 | Intra-Layer Relationships | 65    |
-| Inter-Layer Relationships | 117   |
-| Inbound Relationships     | 115   |
+| Inter-Layer Relationships | 118   |
+| Inbound Relationships     | 116   |
 | Outbound Relationships    | 2     |
 
 **Cross-Layer References**:
@@ -128,6 +128,7 @@ flowchart TB
 | `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bar-chart`                               | `technology.systemsoftware.web-browser`                       | `technology`  | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bar-h`                                   | `technology.systemsoftware.web-browser`                       | `technology`  | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bar-v`                                   | `technology.systemsoftware.web-browser`                       | `technology`  | `depends-on` | many-to-many | medium   |
+| `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.branch-map`                              | `technology.systemsoftware.web-browser`                       | `technology`  | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.bridge-node-list`                        | `technology.systemsoftware.web-browser`                       | `technology`  | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.button`                                  | `technology.systemsoftware.web-browser`                       | `technology`  | `depends-on` | many-to-many | medium   |
 | `ux.librarycomponent.depends-on.technology.systemsoftware`       | `ux.librarycomponent.calendar`                                | `technology.systemsoftware.web-browser`                       | `technology`  | `depends-on` | many-to-many | medium   |
@@ -1013,6 +1014,7 @@ The consumer's browser, which runs every Heimdall component: DOM and SVG renderi
 | inter-layer | `ux.librarycomponent.bar-chart`                               | `depends-on` | inbound   |
 | inter-layer | `ux.librarycomponent.bar-h`                                   | `depends-on` | inbound   |
 | inter-layer | `ux.librarycomponent.bar-v`                                   | `depends-on` | inbound   |
+| inter-layer | `ux.librarycomponent.branch-map`                              | `depends-on` | inbound   |
 | inter-layer | `ux.librarycomponent.bridge-node-list`                        | `depends-on` | inbound   |
 | inter-layer | `ux.librarycomponent.button`                                  | `depends-on` | inbound   |
 | inter-layer | `ux.librarycomponent.calendar`                                | `depends-on` | inbound   |
@@ -1360,4 +1362,4 @@ External package registry the release publishes @tinkermonkey/heimdall-ui to and
 
 ---
 
-Generated: 2026-11-25T02:07:35.740Z | Model Version: 0.1.0
+Generated: 2026-11-25T23:27:05.105Z | Model Version: 0.1.0

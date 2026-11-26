@@ -5,11 +5,7 @@ application.applicationservice.graph-layout-engine-service:
   type: applicationservice
   layer_id: application
   name: Graph Layout Engine Service
-  description: "The set of one-shot layout engines GraphCanvas dispatches to by
-    its layout prop: forceLayout, clusteredForceLayout, organicLayout,
-    orthogonalLayout, galaxyLayout, uxNavLayout, radialTreeLayout and
-    layoutLanes (layer-lanes). Each is also exported for headless use; all are
-    deterministic and return node centres."
+  description: "The set of one-shot layout engines GraphCanvas dispatches to by its layout prop: forceLayout, clusteredForceLayout, organicLayout, orthogonalLayout, galaxyLayout, uxNavLayout, radialTreeLayout and layoutLanes (layer-lanes). Each is also exported for headless use; all are deterministic and return node centres."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -28,10 +24,7 @@ application.applicationservice.live-galaxy-simulation-service:
   type: applicationservice
   layer_id: application
   name: Live Galaxy Simulation Service
-  description: "useGalaxySimulation(): a continuous, self-scheduling
-    requestAnimationFrame loop over galaxySimulationStep — the 'live'
-    counterpart to galaxyLayout's bounded one-shot settle loop, coalescing input
-    changes into at most one commit per frame."
+  description: "useGalaxySimulation(): a continuous, self-scheduling requestAnimationFrame loop over galaxySimulationStep — the 'live' counterpart to galaxyLayout's bounded one-shot settle loop, coalescing input changes into at most one commit per frame."
   attributes:
     serviceType: event-driven
   source_reference:
@@ -50,9 +43,7 @@ application.applicationservice.layered-graph-framework-service:
   type: applicationservice
   layer_id: application
   name: Layered Graph Framework Service
-  description: "useLayeredGraph(): the shared state behind the layered views: an
-    indexed graph, selection, reach, link and layer filters, focus, predicate
-    labels and plane layout, offered to views through LayeredGraphContext."
+  description: "useLayeredGraph(): the shared state behind the layered views: an indexed graph, selection, reach, link and layer filters, focus, predicate labels and plane layout, offered to views through LayeredGraphContext."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -71,8 +62,7 @@ application.applicationservice.primitive-components:
   type: applicationservice
   layer_id: application
   name: Primitive Components
-  description: Icons, buttons, chips, badges, avatars and segmented controls every
-    other component builds on.
+  description: Icons, buttons, chips, badges, avatars and segmented controls every other component builds on.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -90,8 +80,7 @@ application.applicationservice.form-input-components:
   type: applicationservice
   layer_id: application
   name: Form Input Components
-  description: Text, number, select, tri-state and structured inputs (pickers,
-    key-value and relationship editors) with field labels and errors.
+  description: Text, number, select, tri-state and structured inputs (pickers, key-value and relationship editors) with field labels and errors.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -109,8 +98,7 @@ application.applicationservice.data-display-components:
   type: applicationservice
   layer_id: application
   name: Data Display Components
-  description: Stat tiles and grids, tables, key-value grids, inspector panels,
-    result and asset cards, and the map canvas.
+  description: Stat tiles and grids, tables, key-value grids, inspector panels, result and asset cards, and the map canvas.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -146,8 +134,7 @@ application.applicationservice.app-shell-components:
   type: applicationservice
   layer_id: application
   name: App Shell Components
-  description: Titlebar, statusbar, app title and the ShellLayout that composes
-    the IDE chrome.
+  description: Titlebar, statusbar, app title and the ShellLayout that composes the IDE chrome.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -165,8 +152,7 @@ application.applicationservice.overlay-components:
   type: applicationservice
   layer_id: application
   name: Overlay Components
-  description: Modals, confirm dialogs, toasts, tooltips, popovers, drawers, the
-    command palette and the workspace switcher.
+  description: Modals, confirm dialogs, toasts, tooltips, popovers, drawers, the command palette and the workspace switcher.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -202,8 +188,7 @@ application.applicationservice.chart-components:
   type: applicationservice
   layer_id: application
   name: Chart Components
-  description: Sparklines, line, bar, stacked and donut charts, heatmaps, status
-    timelines, progress bars and metric rows.
+  description: Sparklines, line, bar, stacked and donut charts, heatmaps, status timelines, progress bars and metric rows.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -221,8 +206,7 @@ application.applicationservice.page-pattern-components:
   type: applicationservice
   layer_id: application
   name: Page Pattern Components
-  description: Page headers, filter bars, activity timelines, alert strips,
-    quick-access tiles, config and pipeline cards, row menus.
+  description: Page headers, filter bars, activity timelines, alert strips, quick-access tiles, config and pipeline cards, row menus.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -240,8 +224,7 @@ application.applicationservice.chat-components:
   type: applicationservice
   layer_id: application
   name: Chat Components
-  description: Chat messages with tool and thinking blocks, markdown content,
-    suggestions, composer and container.
+  description: Chat messages with tool and thinking blocks, markdown content, suggestions, composer and container.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -277,8 +260,7 @@ application.applicationservice.observability-view-components:
   type: applicationservice
   layer_id: application
   name: Observability View Components
-  description: Trace viewer, log stream, diff viewers, version timeline and
-    lineage rail, with OTLP and X-Ray trace adapters.
+  description: Trace viewer, log stream, diff viewers, version timeline and lineage rail, with OTLP and X-Ray trace adapters.
   attributes:
     serviceType: synchronous
   source_reference:
@@ -296,10 +278,7 @@ application.applicationservice.interactive-graph-rendering:
   type: applicationservice
   layer_id: application
   name: Interactive Graph Rendering
-  description: "Rendering and in-place interaction for a laid-out graph:
-    GraphCanvas and its node, edge, toolbar, inspector and collapse components,
-    edge geometry and styling, plus the detail drawer, topology node and
-    hierarchy tree."
+  description: "Rendering and in-place interaction for a laid-out graph: GraphCanvas and its node, edge, toolbar, inspector and collapse components, edge geometry and styling, plus the detail drawer, topology node and hierarchy tree."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -317,9 +296,7 @@ application.applicationservice.layered-graph-visualization:
   type: applicationservice
   layer_id: application
   name: Layered Graph Visualization
-  description: "Views of a graph whose nodes belong to layers: a 3D layer stack,
-    swimlanes, adjacency matrix and hive plot, with reach, filtering and camera
-    controls."
+  description: "Views of a graph whose nodes belong to layers: a 3D layer stack, swimlanes, adjacency matrix and hive plot, with reach, filtering and camera controls."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -337,8 +314,7 @@ application.applicationservice.dropdown-portal-containment:
   type: applicationservice
   layer_id: application
   name: Dropdown Portal Containment
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/hooks/useDropdownPortal.ts: containsAcrossPortals."
+  description: "Exported from the package entry point (src/index.ts) out of src/hooks/useDropdownPortal.ts: containsAcrossPortals."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -357,8 +333,7 @@ application.applicationservice.graph-canvas-context-hook:
   type: applicationservice
   layer_id: application
   name: Graph Canvas Context Hook
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/components/GraphCanvas.tsx: useGraphCanvas."
+  description: "Exported from the package entry point (src/index.ts) out of src/components/GraphCanvas.tsx: useGraphCanvas."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -377,8 +352,7 @@ application.applicationservice.adjacency-matrix-link-metadata:
   type: applicationservice
   layer_id: application
   name: Adjacency Matrix Link Metadata
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/layered/matrix.ts: linkEdgeMetadata."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/layered/matrix.ts: linkEdgeMetadata."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -397,9 +371,7 @@ application.applicationservice.tween-animation-hooks:
   type: applicationservice
   layer_id: application
   name: Tween Animation Hooks
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/hooks/useTween.ts: easeInOutCubic, interpolateValues, useTween,
-    usePrefersReducedMotion, with the constants REDUCED_MOTION_QUERY."
+  description: "Exported from the package entry point (src/index.ts) out of src/hooks/useTween.ts: easeInOutCubic, interpolateValues, useTween, usePrefersReducedMotion, with the constants REDUCED_MOTION_QUERY."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -418,10 +390,7 @@ application.applicationservice.lane-layout:
   type: applicationservice
   layer_id: application
   name: Lane Layout
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/laneLayout.ts: layoutLanes, laneLinkCurve, laneBundleCurve,
-    laneBundler, laneTagRoom, laneTagSize, routeLaneGutters, retraceLaneGutters,
-    laneGutterGapTracks."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/laneLayout.ts: layoutLanes, laneLinkCurve, laneBundleCurve, laneBundler, laneTagRoom, laneTagSize, routeLaneGutters, retraceLaneGutters, laneGutterGapTracks."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -440,9 +409,7 @@ application.applicationservice.layered-graph-control-helpers:
   type: applicationservice
   layer_id: application
   name: Layered Graph Control Helpers
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/components/LayeredGraphControls.tsx: followOptionLabel,
-    categoryDisplayLabel, useLayeredGraphProp."
+  description: "Exported from the package entry point (src/index.ts) out of src/components/LayeredGraphControls.tsx: followOptionLabel, categoryDisplayLabel, useLayeredGraphProp."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -461,8 +428,7 @@ application.applicationservice.reach-relationship-helpers:
   type: applicationservice
   layer_id: application
   name: Reach Relationship Helpers
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/components/ReachInspector.tsx: reachRelationships, reachSummaryText."
+  description: "Exported from the package entry point (src/index.ts) out of src/components/ReachInspector.tsx: reachRelationships, reachSummaryText."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -481,10 +447,7 @@ application.applicationservice.layered-graph-explorer-snapshot:
   type: applicationservice
   layer_id: application
   name: Layered Graph Explorer Snapshot
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/components/LayeredGraphExplorer.tsx:
-    sanitizeLayeredGraphExplorerSnapshot, with the constants
-    LAYERED_GRAPH_VIEWS, LAYERED_GRAPH_VIEW_LABELS."
+  description: "Exported from the package entry point (src/index.ts) out of src/components/LayeredGraphExplorer.tsx: sanitizeLayeredGraphExplorerSnapshot, with the constants LAYERED_GRAPH_VIEWS, LAYERED_GRAPH_VIEW_LABELS."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -503,9 +466,7 @@ application.applicationservice.force-layout:
   type: applicationservice
   layer_id: application
   name: Force Layout
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/graphLayout.ts: forceLayout, clusteredForceLayout,
-    boundingCirclesByGroup."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/graphLayout.ts: forceLayout, clusteredForceLayout, boundingCirclesByGroup."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -524,8 +485,7 @@ application.applicationservice.galaxy-layout:
   type: applicationservice
   layer_id: application
   name: Galaxy Layout
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/galaxyLayout.ts: galaxyLayout."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/galaxyLayout.ts: galaxyLayout."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -544,8 +504,7 @@ application.applicationservice.organic-layout:
   type: applicationservice
   layer_id: application
   name: Organic Layout
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/organicLayout.ts: organicLayout."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/organicLayout.ts: organicLayout."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -564,8 +523,7 @@ application.applicationservice.orthogonal-layout:
   type: applicationservice
   layer_id: application
   name: Orthogonal Layout
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/orthogonalLayout.ts: orthogonalLayout."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/orthogonalLayout.ts: orthogonalLayout."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -584,8 +542,7 @@ application.applicationservice.ux-navigation-layout:
   type: applicationservice
   layer_id: application
   name: UX Navigation Layout
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/uxNavLayout.ts: uxNavLayout."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/uxNavLayout.ts: uxNavLayout."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -604,8 +561,7 @@ application.applicationservice.radial-tree-layout:
   type: applicationservice
   layer_id: application
   name: Radial Tree Layout
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/radialTreeLayout.ts: radialTreeLayout."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/radialTreeLayout.ts: radialTreeLayout."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -624,8 +580,7 @@ application.applicationservice.ux-navigation-edge-visibility:
   type: applicationservice
   layer_id: application
   name: UX Navigation Edge Visibility
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/uxNavEdgeVisibility.ts: visibleNavigationEdgeIds."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/uxNavEdgeVisibility.ts: visibleNavigationEdgeIds."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -644,8 +599,7 @@ application.applicationservice.structural-hierarchy:
   type: applicationservice
   layer_id: application
   name: Structural Hierarchy
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/graphHierarchy.ts: buildStructuralForest, structuralDescendants."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/graphHierarchy.ts: buildStructuralForest, structuralDescendants."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -664,8 +618,7 @@ application.applicationservice.louvain-clustering:
   type: applicationservice
   layer_id: application
   name: Louvain Clustering
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/graphClustering.ts: louvainCluster."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/graphClustering.ts: louvainCluster."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -684,8 +637,7 @@ application.applicationservice.cluster-packing:
   type: applicationservice
   layer_id: application
   name: Cluster Packing
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/graphPacking.ts: packClusters."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/graphPacking.ts: packClusters."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -704,9 +656,7 @@ application.applicationservice.edge-geometry:
   type: applicationservice
   layer_id: application
   name: Edge Geometry
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/graph.ts: bezierPath, rectEdgePoint, rectEdgeDirection,
-    edgeLabelSize, findClearLabelPosition."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/graph.ts: bezierPath, rectEdgePoint, rectEdgeDirection, edgeLabelSize, findClearLabelPosition."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -725,8 +675,7 @@ application.applicationservice.pan-and-zoom-hook:
   type: applicationservice
   layer_id: application
   name: Pan and Zoom Hook
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/hooks/usePanZoom.ts: usePanZoom."
+  description: "Exported from the package entry point (src/index.ts) out of src/hooks/usePanZoom.ts: usePanZoom."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -745,10 +694,7 @@ application.applicationservice.layered-graph-state-hooks:
   type: applicationservice
   layer_id: application
   name: Layered Graph State Hooks
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/hooks/useLayeredGraph.ts: layeredGraphSnapshotDefaults, useLayeredGraph,
-    useLayeredGraphContext, with the constants ASYNC_LAYOUT_MIN_NODES,
-    LayeredGraphContext."
+  description: "Exported from the package entry point (src/index.ts) out of src/hooks/useLayeredGraph.ts: layeredGraphSnapshotDefaults, useLayeredGraph, useLayeredGraphContext, with the constants ASYNC_LAYOUT_MIN_NODES, LayeredGraphContext."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -767,25 +713,7 @@ application.applicationservice.layered-graph-utilities:
   type: applicationservice
   layer_id: application
   name: Layered Graph Utilities
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/layered/index.ts: buildLayeredIndex, readLayerValues,
-    layerPairKey, layerPaletteColor, assignPredicateCodes, isNodeVisible,
-    isLinkVisible, isLinkTraversable, visiblePredicates, layerPairNodeIds,
-    computeReach, reachPath, sanitizeLayeredGraphSnapshot, linkEmphasis,
-    nodeEmphasis, linkCategoryStyle, linkCategoryStyleAt, layoutLayers,
-    layoutLayersAsync, mixLayerPositions, orderWithinLayers, orderAcrossLayers,
-    rankWithinLayers, linkPredicateLabel, arrowHeadPoints, placeEdgeLabels,
-    edgeLabelPriority, lineCurve, quadCurve, cubicCurve, defaultPillSize,
-    hiveLayout, hiveLinkGeometry, hivePoint, hiveAxisAngles, clampSplitAngle,
-    hiveLabelSide, hiveAxisGroups, cameraFromPreset, presetLayerGap,
-    clampCamera, wrapAngle, nearestYaw, lerpCamera, createProjector,
-    projectPoint, depthSort, stackPlaneY, planeCorners, planeGridLines,
-    ringPoints, svgPoints, leftmostPoint, screenBounds, fitZoom, titleRail, with
-    the constants LAYER_PALETTE_SIZE, DEFAULT_LINK_FILTERS,
-    LINK_CATEGORY_PALETTE_SIZE, HOP_COLORS, DEFAULT_LABEL_TS,
-    HIVE_MIN_LOOP_BULGE, CAMERA_PRESETS, CAMERA_PRESET_NAMES, PITCH_RANGE,
-    ZOOM_RANGE, DEFAULT_CAMERA_DISTANCE, TOP_VIEW_PITCH,
-    PRESET_GAP_FULL_LAYERS."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/layered/index.ts: buildLayeredIndex, readLayerValues, layerPairKey, layerPaletteColor, assignPredicateCodes, isNodeVisible, isLinkVisible, isLinkTraversable, visiblePredicates, layerPairNodeIds, computeReach, reachPath, sanitizeLayeredGraphSnapshot, linkEmphasis, nodeEmphasis, linkCategoryStyle, linkCategoryStyleAt, layoutLayers, layoutLayersAsync, mixLayerPositions, orderWithinLayers, orderAcrossLayers, rankWithinLayers, linkPredicateLabel, arrowHeadPoints, placeEdgeLabels, edgeLabelPriority, lineCurve, quadCurve, cubicCurve, defaultPillSize, hiveLayout, hiveLinkGeometry, hivePoint, hiveAxisAngles, clampSplitAngle, hiveLabelSide, hiveAxisGroups, cameraFromPreset, presetLayerGap, clampCamera, wrapAngle, nearestYaw, lerpCamera, createProjector, projectPoint, depthSort, stackPlaneY, planeCorners, planeGridLines, ringPoints, svgPoints, leftmostPoint, screenBounds, fitZoom, titleRail, with the constants LAYER_PALETTE_SIZE, DEFAULT_LINK_FILTERS, LINK_CATEGORY_PALETTE_SIZE, HOP_COLORS, DEFAULT_LABEL_TS, HIVE_MIN_LOOP_BULGE, CAMERA_PRESETS, CAMERA_PRESET_NAMES, PITCH_RANGE, ZOOM_RANGE, DEFAULT_CAMERA_DISTANCE, TOP_VIEW_PITCH, PRESET_GAP_FULL_LAYERS."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -804,8 +732,7 @@ application.applicationservice.media-query-hook:
   type: applicationservice
   layer_id: application
   name: Media Query Hook
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/hooks/useMediaQuery.ts: useMediaQuery."
+  description: "Exported from the package entry point (src/index.ts) out of src/hooks/useMediaQuery.ts: useMediaQuery."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -824,8 +751,7 @@ application.applicationservice.controllable-state-hook:
   type: applicationservice
   layer_id: application
   name: Controllable State Hook
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/hooks/useControllable.ts: useControllable."
+  description: "Exported from the package entry point (src/index.ts) out of src/hooks/useControllable.ts: useControllable."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -844,11 +770,7 @@ application.applicationservice.trace-viewer-model:
   type: applicationservice
   layer_id: application
   name: Trace Viewer Model
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/components/traceViewerModel.ts: buildTraceModel, selfTime, visibleRows,
-    createTimeScale, niceTicks, fmtTraceMs, resolveServiceColor,
-    resolveServiceLabel, paletteColor, with the constants
-    DEFAULT_SERVICE_PALETTE."
+  description: "Exported from the package entry point (src/index.ts) out of src/components/traceViewerModel.ts: buildTraceModel, selfTime, visibleRows, createTimeScale, niceTicks, fmtTraceMs, resolveServiceColor, resolveServiceLabel, paletteColor, with the constants DEFAULT_SERVICE_PALETTE."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -867,8 +789,7 @@ application.applicationservice.otlp-trace-adapter:
   type: applicationservice
   layer_id: application
   name: OTLP Trace Adapter
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/otlpTrace.ts: fromOTLP."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/otlpTrace.ts: fromOTLP."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -887,8 +808,7 @@ application.applicationservice.x-ray-trace-adapter:
   type: applicationservice
   layer_id: application
   name: X-Ray Trace Adapter
-  description: "Exported from the package entry point (src/index.ts) out of
-    src/utils/xrayTrace.ts: fromXRay."
+  description: "Exported from the package entry point (src/index.ts) out of src/utils/xrayTrace.ts: fromXRay."
   attributes:
     serviceType: synchronous
   source_reference:
@@ -899,4 +819,22 @@ application.applicationservice.x-ray-trace-adapter:
   metadata:
     created_at: 2026-11-24T19:01:20.528Z
     updated_at: 2026-11-24T19:01:20.528Z
+    version: 1
+application.applicationservice.branch-map-layout:
+  id: a8e4c971-82cf-4393-9415-21739b08c45c
+  path: application.applicationservice.branch-map-layout
+  spec_node_id: application.applicationservice
+  type: applicationservice
+  layer_id: application
+  name: Branch Map Layout
+  description: "Exported from the package entry point out of src/utils/branchMap/: layoutBranchMap (placement and label placement), routeBranchMap (line and link routing) and branchMapScene (both, memoizable), with the BranchMap* types."
+  attributes:
+    serviceType: synchronous
+  source_reference:
+    provenance: manual
+    locations:
+      - file: src/utils/branchMap/index.ts
+  metadata:
+    created_at: 2026-11-25T17:41:12.932Z
+    updated_at: 2026-11-25T17:41:12.932Z
     version: 1

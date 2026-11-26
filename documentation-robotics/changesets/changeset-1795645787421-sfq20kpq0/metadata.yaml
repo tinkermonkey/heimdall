@@ -1,0 +1,299 @@
+id: changeset-1795645787421-sfq20kpq0
+name: extract-6190a49..f7429a9
+description: As-built record of the branch map POC (pieces 0 to 3) since main, to verify the branch-map-poc plan against the build.
+created: 2026-11-25T22:29:47.433Z
+modified: 2026-11-25T23:11:00.258Z
+status: staged
+baseSnapshot: v2:sha256:5fd5c92961fe57efafd93591e0b1155d87748161008e8257a820df0ca6b40872
+origin:
+  kind: extract
+purpose: verification
+verifies: changeset-1795628359757-v0v6gnap1
+scope:
+  since: main
+  codeCommit: f7429a993a96ffa3a7101601d35ca2df28f26192
+stats:
+  additions: 143
+  modifications: 0
+  deletions: 0
+lastSequence: 164
+unstaged:
+  - sequence: 92
+    removedAt: 102
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-data
+      layerName: data-model
+      after:
+        id: 49a3ffe0-d6eb-4a2e-87a1-3e40264562e4
+        path: data-model.schemadefinition.branch-map-data
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapData
+        attributes:
+          title: BranchMapData
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapData
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 93
+    removedAt: 103
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-group
+      layerName: data-model
+      after:
+        id: 88b45e8f-1725-424c-a301-8643e8c70d23
+        path: data-model.schemadefinition.branch-map-group
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapGroup
+        attributes:
+          title: BranchMapGroup
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapGroup
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 94
+    removedAt: 104
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-station
+      layerName: data-model
+      after:
+        id: be5f0939-dd93-4d92-9b44-01cb06a4f421
+        path: data-model.schemadefinition.branch-map-station
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapStation
+        attributes:
+          title: BranchMapStation
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapStation
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 95
+    removedAt: 105
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-line
+      layerName: data-model
+      after:
+        id: d66ef22e-33e7-4acd-a5fa-5a2a5f7727e7
+        path: data-model.schemadefinition.branch-map-line
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapLine
+        attributes:
+          title: BranchMapLine
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapLine
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 96
+    removedAt: 106
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-link
+      layerName: data-model
+      after:
+        id: 9631feb3-a266-4b19-9d0d-1876876a8f3d
+        path: data-model.schemadefinition.branch-map-link
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapLink
+        attributes:
+          title: BranchMapLink
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapLink
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 97
+    removedAt: 107
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-options
+      layerName: data-model
+      after:
+        id: f1265315-acdf-4a46-83c8-b787c072dc5b
+        path: data-model.schemadefinition.branch-map-options
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapOptions
+        attributes:
+          title: BranchMapOptions
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapOptions
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 98
+    removedAt: 108
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-layout
+      layerName: data-model
+      after:
+        id: 21b09725-7290-40a2-8e6f-d11ff13b46fa
+        path: data-model.schemadefinition.branch-map-layout
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapLayout
+        attributes:
+          title: BranchMapLayout
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapLayout
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 99
+    removedAt: 109
+    change:
+      type: add
+      elementId: data-model.schemadefinition.branch-map-scene
+      layerName: data-model
+      after:
+        id: c10e219f-9451-42d8-9f29-e326685a185f
+        path: data-model.schemadefinition.branch-map-scene
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: BranchMapScene
+        attributes:
+          title: BranchMapScene
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/branchMap/types.ts
+              symbol: BranchMapScene
+        metadata:
+          created_at: 2026-11-25T22:30:42.367Z
+          updated_at: 2026-11-25T22:30:42.367Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 100
+    removedAt: 110
+    change:
+      type: add
+      elementId: data-model.schemadefinition.house-organizing-snapshot
+      layerName: data-model
+      after:
+        id: b63d2e95-276b-4126-b6a0-d902dc80143d
+        path: data-model.schemadefinition.house-organizing-snapshot
+        spec_node_id: data-model.schemadefinition
+        type: schemadefinition
+        layer_id: data-model
+        name: HouseOrganizingSnapshot
+        attributes:
+          title: HouseOrganizingSnapshot
+          type: object
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/test-pages/fixtures/houseOrganizingTypes.ts
+              symbol: HouseOrganizingSnapshot
+        metadata:
+          created_at: 2026-11-25T22:30:42.368Z
+          updated_at: 2026-11-25T22:30:42.368Z
+          version: 1
+      timestamp: 2026-11-25T22:30:42.470Z
+  - sequence: 29
+    removedAt: 163
+    change:
+      type: add
+      elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
+      layerName: testing
+      after:
+        id: 89afa2dc-9504-4481-a29a-c6e8b966479f
+        path: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
+        spec_node_id: testing.testcasesketch
+        type: testcasesketch
+        layer_id: testing
+        name: "layoutBranchMap > trunk > a stated trunk wins: exactly those stations on lane 0"
+        attributes:
+          status: automated
+        source_reference:
+          provenance: extracted
+          locations:
+            - file: src/utils/__tests__/branchMap.test.ts
+              symbol: "layoutBranchMap > trunk > a stated trunk wins: exactly those stations on lane 0"
+        metadata:
+          created_at: 2026-11-25T22:29:47.343Z
+          updated_at: 2026-11-25T22:29:47.343Z
+          version: 1
+      timestamp: 2026-11-25T22:29:47.439Z
+      origin:
+        by: tier0
+        rule: js_test_case_call
+  - sequence: 84
+    removedAt: 164
+    change:
+      type: relationship-add
+      elementId: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0::tests::application.applicationfunction.layout-branch-map
+      layerName: testing
+      after:
+        source: testing.testcasesketch.layout-branch-map-trunk-a-stated-trunk-wins-exactly-those-stations-on-lane-0
+        target: application.applicationfunction.layout-branch-map
+        predicate: tests
+        layer: testing
+        targetLayer: application
+        category: structural
+      timestamp: 2026-11-25T22:30:21.263Z
+      origin:
+        by: tier0
+        rule: js_test_case_call
