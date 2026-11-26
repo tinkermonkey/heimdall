@@ -1,0 +1,15 @@
+id: changeset-1795703114219-7iyyr7dnj
+name: branch-map-poc-milestone-reached
+description: "Mirror House: the Branch map POC milestone was reached on 2026-11-26 when PR #415 merged, so product.milestone.branch-map-poc moves from active to completed."
+created: 2026-11-26T14:25:14.251Z
+modified: 2026-11-26T14:25:36.516Z
+status: committed
+baseSnapshot: v2:sha256:441e15c5458110c71cd90a7d9207461ea2d862448ebcd78e48c41362d5b40afe
+origin:
+  kind: plan
+purpose: plan
+stats:
+  additions: 0
+  modifications: 1
+  deletions: 0
+lastSequence: 0

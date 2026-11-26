@@ -713,9 +713,9 @@ The Metro bands branch map proof of concept: generic model, hardened layout, Bra
 
 #### Attributes
 
-| Name   | Value  |
-| ------ | ------ |
-| status | active |
+| Name   | Value     |
+| ------ | --------- |
+| status | completed |
 
 #### Relationships
 
@@ -1355,4 +1355,4 @@ Shipped capability: page-tree + view-fan layout for visualizing page/view naviga
 
 ---
 
-Generated: 2026-11-26T13:40:58.223Z | Model Version: 0.1.0
+Generated: 2026-11-26T14:25:36.520Z | Model Version: 0.1.0
